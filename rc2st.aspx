@@ -249,6 +249,20 @@
 							_btnDele();
 						}
 						break;
+					case 'GetNewUno':
+						var as = _q_appendData("view_uccb", "", true);
+						if(needNewUnoFields.length > 0){
+	                        for (var i = 0; i < as.length; i++) {
+	                            UnoArray.push(as[i].uno);
+	                        }
+	                        for (var i = 0; i < needNewUnoFields.length; i++) {
+	                            setNewUno(UnoArray, needNewUnoFields[i]);
+	                        }
+	                        btnOk_checkUno($('#cmbTypea').val()!='2'?q_bbsCount-1:-1);
+						}else{
+							btnOk_checkUno($('#cmbTypea').val()!='2'?q_bbsCount-1:-1);
+						}
+						break;
 					default:
 						if(t_name.substring(0,9)=='checkUno_'){
 							var n = t_name.split('_')[1];
@@ -273,6 +287,24 @@
 						break;
 				} 
 			}
+			
+            function setNewUno(w_unoArray, idno, IndexNum, IndexEng) {
+                var newIndexNum = (dec(IndexNum) > 0 ? dec(IndexNum) + 1 : 1);
+                var newIndexEng = (dec(IndexEng) > 0 ? dec(IndexEng) : 65);
+                if (newIndexNum > 999) {
+                    newIndexNum = 1;
+                    newIndexEng = dec(IndexEng) + 1;
+                }
+                var t_date = trim($('#txtDatea').val());
+                var newUno = replaceAll(t_date,'/','') + padL(newIndexNum,'0',3) + String.fromCharCode(newIndexEng);
+                if (w_unoArray.indexOf(newUno) == -1) {
+                    $('#txtUno_' + idno).val(newUno);
+                    UnoArray.push(newUno);
+                } else {
+                    setNewUno(UnoArray, idno, newIndexNum, newIndexEng);
+                }
+            }
+
 			function lblOrdc() {
 				var t_tggno = trim($('#txtTggno').val());
 				var t_where = '';
@@ -316,16 +348,32 @@
 				}
 				//檢查批號
 				for(var i=0;i<q_bbsCount;i++){
+					//如果品號且批號空白則產生新批號
+					if($.trim($('#txtUno_'+i).val()).length==0 && $.trim($('#txtProductno_'+i).val()).length>0){
+						needNewUnoFields.push(i.toString());
+					}
 					for(var j=i+1;j<q_bbsCount;j++){
 						if($.trim($('#txtUno_'+i).val()).length>0 && $.trim($('#txtUno_'+i).val()) == $.trim($('#txtUno_'+j).val())){
 							alert('【'+$.trim($('#txtUno_'+i).val())+'】'+q_getMsg('lblUno_st')+'重覆。\n'+(i+1)+', '+(j+1));
+							UnoArray = new Array;
+							needNewUnoFields = new Array;
 							Unlock(1);
 							return;
+						}else{
+							UnoArray.push($.trim($('#txtUno_'+i).val()));
 						}
 					}					
 				}
-				btnOk_checkUno($('#cmbTypea').val()!='2'?q_bbsCount-1:-1);
+				var t_date = trim($('#txtDatea').val());
+				var t_where = "where=^^ left(noa,7)='" + replaceAll(t_date,'/','')+ "'";
+				if($('#cmbTypea').val()!='2'){
+					q_gt('view_uccb', t_where,0,0,0,'GetNewUno');
+				}else{
+					btnOk_checkUno($('#cmbTypea').val()!='2'?q_bbsCount-1:-1);
+				}
 			}
+			var UnoArray = new Array;
+			var needNewUnoFields = new Array;
 			function btnOk_checkUno(n){
 				if(n<0){
 					if (q_cur == 1)
