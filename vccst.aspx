@@ -183,8 +183,11 @@
                         if (q_cur > 0 && q_cur < 4) {
                             if (!b_ret || b_ret.length == 0)
                                 return;
-                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price', '');
+                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style', '');
                             //get ordes.price <Start>
+	                        for(var i = 0;i<AddRet.length;i++){
+	                        	$('#txtStyle_' + AddRet[i]).blur();
+	                        }
                             var distinctArray = new Array;
                             var inStr = '';
                             for (var i = 0; i < b_ret.length; i++) {
@@ -685,6 +688,9 @@
 
             function refresh(recno) {
                 _refresh(recno);
+                if(r_rank < 9){
+                	$('#btnImportVcce').css('display','none');
+                }
                 size_change();
                 $('input[id*="txtProduct_"]').each(function() {
                     t_IdSeq = -1;
@@ -1182,7 +1188,7 @@
 						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbCoin" style="float:left;width:80px;" ></select></td>
 						<td></td>
 						<td colspan="2">
-						<input id="btnImportVcce" type="button" />
+						<input id="btnImportVcce" type="button"/>
 						<input id="btnVcceImport" type="button" title="cut cubu"/>
 						</td>
 					</tr>
@@ -1265,7 +1271,7 @@
 					<BR>
 					代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblMemos_st'></a></td>
+					<td align="center" style="width:170px;"><a id='lblMemos_st'></a></td>
 					<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -1341,8 +1347,8 @@
 					</td>
 					<td>
 					<input id="txtMemo.*" type="text" class="txt" style="width:95%;"/>
-					<input id="txtOrdeno.*" type="text" style="width:80px;" />
-					<input id="txtNo2.*" type="text" style="width:20px;" />
+					<input id="txtOrdeno.*" type="text" style="width:70%;" />
+					<input id="txtNo2.*" type="text" style="width:20%;" />
 					<input id="recno.*" type="hidden" />
 					</td>
 					<td>

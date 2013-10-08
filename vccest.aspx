@@ -112,9 +112,12 @@
                         if (q_cur > 0 && q_cur < 4) {
                             if (!b_ret || b_ret.length == 0)
                                 return;
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price', '');
+                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style', '');
                             /// 最後 aEmpField 不可以有【數字欄位】
                             size_change();
+                        }
+                        for(var i = 0;i<ret.length;i++){
+                        	$('#txtStyle_' + ret[i]).blur();
                         }
                         sum();
                         break;

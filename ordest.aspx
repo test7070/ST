@@ -44,9 +44,10 @@
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'no2'];
                 bbtKey = ['noa', 'no2'];
-                /*$('#btnBBTShow').click(function() {
-                 $('#dbbt').toggle();
-                 });*/
+                $('#dbbt').hide();
+                $('#btnBBTShow').click(function() {
+					$('#dbbt').toggle();
+				});
 
                 q_brwCount();
                 // 計算 合適  brwCount
@@ -402,6 +403,7 @@
 
             function btnIns() {
                 _btnIns();
+                $('#dbbt').hide();
                 $('#txtNoa').val('AUTO');
                 $('#cmbKind').val(q_getPara('vcc.kind'));
                 size_change();
@@ -413,6 +415,7 @@
                 if (emp($('#txtNoa').val()))
                     return;
                 _btnModi();
+                $('#dbbt').hide();
                 size_change();
                 $('#txtOdate').focus();
             }
@@ -432,6 +435,7 @@
                     xmlSql = q_preXml();
 
                 _btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
+                $('#dbbt').hide();
             }
 
             function bbtSave(as) {
@@ -704,6 +708,7 @@
 
             function btnCancel() {
                 _btnCancel();
+                $('#dbbt').hide();
             }
 
             function size_change() {
@@ -1041,7 +1046,7 @@
 						
 						<td><input id="btnOrdei" type="button" /></td>
 						<td align="center">
-						<input id="btnBBTShow" type="button" STYLE="display: none;" />
+						<input id="btnBBTShow" type="button" />
 						<input id="btnOrdem" type="button"/>
 						</td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
