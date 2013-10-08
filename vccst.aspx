@@ -34,7 +34,12 @@
             brwNowPage = 0;
             brwKey = 'noa';
             //ajaxPath = "";
-            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'], ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'], ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'], ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,class,spec,style,product,radius,width,dime,lengthb', 'txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtRadius_,txtWidth_,txtDime_,txtLengthb_', 'uccc_seek_b.aspx', '95%', '60%'], ['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'], ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']);
+            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx']
+            , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
+            , ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
+            , ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,class,spec,style,product,radius,width,dime,lengthb', 'txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtRadius_,txtWidth_,txtDime_,txtLengthb_', 'uccc_seek_b.aspx', '95%', '60%']
+            , ['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx']
+            , ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']);
             brwCount2 = 12;
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -490,12 +495,12 @@
 
             function btnIns() {
                 _btnIns();
-                for (var j = 0; j < aPop.length; j++) {
+                /*for (var j = 0; j < aPop.length; j++) {
                     if (aPop[j][0].length > 6 && aPop[j][0].substr(0, 7) == 'txtUno_') {
                         aPop[j][8] = '';
                         break;
                     }
-                }
+                }*/
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
                 $('#txtDatea').val(q_date());
                 $('#txtMon').val(q_date().substring(0, 6));
@@ -507,7 +512,7 @@
                 if (emp($('#txtNoa').val()))
                     return;
                 _btnModi();
-                var s1 = '';
+               /* var s1 = '';
                 for (var j = 0; j < aPop.length; j++) {
                     if (aPop[j][0].length > 6 && aPop[j][0].substr(0, 7) == 'txtUno_') {
                         aPop[j][8] = '';
@@ -525,7 +530,7 @@
 
                         break;
                     }
-                }
+                }*/
 
                 $('#txtDatea').focus();
                 size_change();
