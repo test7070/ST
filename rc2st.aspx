@@ -72,7 +72,7 @@
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
 				$('#lblAccno').click(function() {
-					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('btnAccc'), true);
+					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "95%", q_getMsg('btnAccc'), true);
 				});
 				$('#lblOrdc').click(function() {
 					lblOrdc();
@@ -430,6 +430,18 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#btnCert_' + j).click(function(){
+							t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							btnCert_Seq = b_seq;
+							t_where = '';
+							t_uno = $('#txtUno_' + b_seq).val();
+							if(t_uno.length > 0){
+								t_where = "noa='" + t_uno + "'";
+								q_box("cert_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'cert', "95%", "95%", q_getMsg('popCert'));
+							}
+						});
 						$('#txtUno_'+j).change(function(e){
 							if($('#cmbTypea').val()!='2'){
 								var n = $(this).attr('id').replace('txtUno_','');
