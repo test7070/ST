@@ -345,7 +345,7 @@
 
             function distinct(arr1) {
                 for (var i = 0; i < arr1.length; i++) {
-                    if ((arr1.indexOf(arr1[i]) != arr1.lastIndexOf(arr1[i])) || arr1[i] == '') {
+                    if (($.inArray(arr1[i],arr1) != arr1.lastIndexOf(arr1[i])) || arr1[i] == '') {
                         arr1.splice(i, 1);
                         i--;
                     }
@@ -1040,7 +1040,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 1560px;
+                width: 1600px;
             }
             .tbbs a {
                 font-size: medium;
@@ -1347,7 +1347,7 @@
 					</td>
 					<td>
 					<input id="txtMemo.*" type="text" class="txt" style="width:95%;"/>
-					<input id="txtOrdeno.*" type="text" style="width:70%;" />
+					<input id="txtOrdeno.*" type="text" style="width:65%;" />
 					<input id="txtNo2.*" type="text" style="width:20%;" />
 					<input id="recno.*" type="hidden" />
 					</td>
