@@ -408,7 +408,7 @@
             }
             .tbbm tr td .lbl {
                 float: right;
-                color: blue;
+                color: black;
                 font-size: medium;
             }
             .tbbm tr td .lbl.btn {
