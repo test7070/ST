@@ -37,7 +37,8 @@
 			, ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			, ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
 			, ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-			, ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']);
+			, ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
+			, ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']);
 			//, ['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx', '95%', '60%']);
 			brwCount2 = 12;
 			$(document).ready(function() {
@@ -46,7 +47,6 @@
 				q_brwCount();
 				q_gt('style', '', 0, 0, 0, '');
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-
 			});
 
 			function main() {
@@ -1003,7 +1003,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 1570px;
+				width: 1750px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1237,6 +1237,8 @@
 					<td align="center" style="width:120px;"><a id='lblCert_st'></a><br><a id='lblMemos_st'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblOrdenos_st'> </a><br><a id='lblOrdcnos_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
+					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -1309,6 +1311,15 @@
 					</td>
 					<td>
 					<input id="txtSize.*" type="text" style="width:95%;"/>
+					</td>
+					<td>
+					<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
+					<input type="text" id="txtStoreno.*"  style="width:70px; float:left;"/>
+					<span style="display:block; width:20px;float:left;"> </span>
+					<input type="text" id="txtStore.*"  style="width:70px; float:left;"/>
+					</td>
+					<td>
+					<input id="txtPlace.*" type="text" style="width:90%;"/>
 					</td>
 				</tr>
 			</table>

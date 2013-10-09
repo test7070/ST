@@ -409,6 +409,10 @@
                 size_change();
                 $('#txtOdate').val(q_date());
                 $('#txtOdate').focus();
+                if ($('#cmbStype').find("option:selected").text() == '外銷')
+                    $('#btnOrdei').show();
+                else
+	                    $('#btnOrdei').hide();
             }
 
             function btnModi() {
@@ -418,6 +422,10 @@
                 $('#dbbt').hide();
                 size_change();
                 $('#txtOdate').focus();
+                if ($('#cmbStype').find("option:selected").text() == '外銷')
+                    $('#btnOrdei').show();
+                else
+	                    $('#btnOrdei').hide();
             }
 
             function btnPrint() {
@@ -584,7 +592,7 @@
                 if ($('#cmbStype').find("option:selected").text() == '外銷')
                     $('#btnOrdei').show();
                 else
-                    $('#btnOrdei').hide();
+	                    $('#btnOrdei').hide();
                 size_change();
                 $('input[id*="txtProduct_"]').each(function() {
                     t_IdSeq = -1;
