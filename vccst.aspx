@@ -181,7 +181,7 @@
                     case 'view_vcce_import':
                         if (q_cur > 0 && q_cur < 4) {
                             if (!b_ret || b_ret.length == 0)
-                                return;
+                                break;
                             AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style', '');
                             //get ordes.price <Start>
                             var distinctArray = new Array;
@@ -194,7 +194,6 @@
                                 inStr += "'" + distinctArray[i] + "',";
                             }
                             inStr = inStr.substring(0, inStr.length - 1);
-                            console.log(b_pop);
                             var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
                             q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
                             //get ordes.price <End>
@@ -208,7 +207,7 @@
                             b_ret = getb_ret();
                             ///  q_box() 執行後，選取的資料
                             if (!b_ret || b_ret.length == 0)
-                                return;
+                                break;
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             }
@@ -226,7 +225,6 @@
                                 inStr += "'" + distinctArray[i] + "',";
                             }
                             inStr = inStr.substring(0, inStr.length - 1);
-                            console.log(b_pop);
                             var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
                             q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
                             /// 最後 aEmpField 不可以有【數字欄位】
