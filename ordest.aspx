@@ -265,13 +265,18 @@
                     Unlock(1);
                     return;
                 }
+                for(var i=0;i<q_bbsCount;i++){
+                	if(q_float('txtMount_'+i)!=0 && !$('#chkIssale_'+i).prop('checked') && !$('#chkIscut_'+i).prop('checked')){
+                		$('#chkIscut_'+i).prop('checked',true);
+                	}	
+                }
                 if (q_cur == 1)
                     $('#txtWorker').val(r_name);
                 else
                     $('#txtWorker2').val(r_name);
                 sum();
 
-                var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+                var s1 = $('#txtNoa').val();
                 if (s1.length == 0 || s1 == "AUTO")/// 自動產生編號
                     q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
                 else
