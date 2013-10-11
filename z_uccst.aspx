@@ -59,6 +59,12 @@
 						},{
 							type : '1', //[15][16]
 							name : 'xlengthb'
+						},{
+							type : '2', //[17] [18]
+							name : 'xstoreno',
+							dbf : 'store',
+							index : 'noa,store',
+							src : 'store_b.aspx'
 						}
 					]
 				});
