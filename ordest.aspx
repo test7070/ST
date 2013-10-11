@@ -78,7 +78,7 @@
             function mainPost() {// 載入資料完，未 refresh 前
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
-                bbsMask = [['txtDatea', r_picd]];
+                bbsMask = [['txtDatea', r_picd],['txtStyle','A']];
                 q_mask(bbmMask);
                 q_cmbParse("cmbKind", q_getPara('sys.stktype'));
                 q_cmbParse("cmbStype", q_getPara('orde.stype'));
