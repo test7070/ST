@@ -28,7 +28,7 @@
             var q_readonlyt = ['txtTotal', 'txtQuatno', 'txtNo2', 'txtNo3', 'txtTheory'];
             var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1]];
             // 允許 key 小數
-            var bbsNum = [['txtPrice', 12, 2, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,2,1]];
+            var bbsNum = [['txtPrice', 12, 2, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,0,1]];
             var bbtNum = [['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
@@ -332,6 +332,112 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+                    	$('#txtSize_' + j).change(function() {
+                    		var n = $(this).attr('id').replace('txtSize_','');
+                    		var t_size = $.trim($(this).val());
+                    		var t_kind = $('#cmbKind').val().substr(0, 1);
+                    		var t_patt1 = /^(.+)[\',\"][\*,x,X](.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_patt2 = /^(.+)[\',\"](.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_patt3 = /^(.+)[\*,x,X](.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_patt4 = /^(.+)[\',\"][\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_patt5 = /^(.+)[\',\"](.+)[\*,x,X](.+)$/g;
+                    		var t_patt6 = /^(.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_radius = '', t_dime = '', t_width='', t_length='';
+                            var t_pattA = /^([1-9])\-([1-9])\/([1-9])[\',\"]*$/g;
+                            var t_pattB = /^([1-9])\/([1-9])[\',\"]*$/g;
+                            var t_pattC = /^([1-9])[\',\"]*$/g;
+                            var t_mm = 25.4;
+                            if(t_patt1.test(t_size)){
+                            	//管 ONLY
+                            	t_radius = t_size.replace(t_patt1,'$1');
+                            	t_width = t_size.replace(t_patt1,'$2');
+                            	t_dime = t_size.replace(t_patt1,'$3');
+                            	t_length = t_size.replace(t_patt1,'$4');
+                            }else if(t_patt2.test(t_size)){
+                            	//管 ONLY
+                            	t_radius = t_size.replace(t_patt2,'$1');
+                            	t_width = t_size.replace(t_patt2,'$2');
+                            	t_dime = t_size.replace(t_patt2,'$3');
+                            	t_length = t_size.replace(t_patt2,'$4');
+                            }else if(t_patt3.test(t_size)){
+                            	//管 ONLY
+                            	t_radius = t_size.replace(t_patt3,'$1');
+                            	t_width = t_size.replace(t_patt3,'$2');
+                            	t_dime = t_size.replace(t_patt3,'$3');
+                            	t_length = t_size.replace(t_patt3,'$4');
+                            }else if(t_patt4.test(t_size)){
+                            	if(t_kind=='A'){
+                            		t_dime = t_size.replace(t_patt4,'$1');
+	                            	t_width = t_size.replace(t_patt4,'$2');
+	                            	t_length = t_size.replace(t_patt4,'$3');	
+                            	}else if(t_kind='B'){
+	                            	t_radius = t_size.replace(t_patt4,'$1');
+	                            	t_dime = t_size.replace(t_patt4,'$2');
+	                            	t_length = t_size.replace(t_patt4,'$3');
+                            	}else{
+                            		alert(q_getMsg('lblKind')+'不符。\n【'+(n+1)+'】格式異常。');
+                            	}
+                            }else if(t_patt5.test(t_size)){
+                            	if(t_kind=='A'){
+                            		t_dime = t_size.replace(t_patt5,'$1');
+	                            	t_width = t_size.replace(t_patt5,'$2');
+	                            	t_length = t_size.replace(t_patt5,'$3');	
+                            	}else if(t_kind='B'){
+	                            	t_radius = t_size.replace(t_patt5,'$1');
+	                            	t_dime = t_size.replace(t_patt5,'$2');
+	                            	t_length = t_size.replace(t_patt5,'$3');
+                            	}else{
+                            		alert(q_getMsg('lblKind')+'不符。\n【'+(n+1)+'】格式異常。');
+                            	}
+                            }else if(t_patt6.test(t_size)){
+                            	if(t_kind=='A'){
+                            		t_dime = t_size.replace(t_patt6,'$1');
+	                            	t_width = t_size.replace(t_patt6,'$2');
+	                            	t_length = t_size.replace(t_patt6,'$3');	
+                            	}else if(t_kind='B'){
+	                            	t_radius = t_size.replace(t_patt6,'$1');
+	                            	t_dime = t_size.replace(t_patt6,'$2');
+	                            	t_length = t_size.replace(t_patt6,'$3');
+                            	}else{
+                            		alert(q_getMsg('lblKind')+'不符。\n【'+(n+1)+'】格式異常。');
+                            	}
+                            }
+                            if(t_pattA.test(t_radius)){
+                        		a = parseFloat(t_radius.replace(t_pattA,'$1'));
+                        		b = parseFloat(t_radius.replace(t_pattA,'$2'));
+                        		c = parseFloat(t_radius.replace(t_pattA,'$3'));
+                        		if(c==0)
+                        			t_radius = 0 ;
+                        		else 
+                        			t_radius = a.add(b.div(c)).mul(t_mm);
+                        	}else if(t_pattB.test(t_radius)){
+                        		a = parseFloat(t_radius.replace(t_pattB,'$1'));
+                        		b = parseFloat(t_radius.replace(t_pattB,'$2'));
+                        		if(b==0)
+                        			t_radius = 0 ;
+                        		else 
+                        			t_radius = a.div(b).mul(t_mm);
+                        	}else if(t_pattC.test(t_radius)){
+                        		t_radius = parseFloat(t_radius.replace(t_pattC,'$1')).mul(t_mm);
+                        	}
+                            if(t_kind=='A'){
+                        		$('#textSize1_'+n).val(t_dime);
+                        		$('#textSize2_'+n).val(t_width);
+                        		$('#textSize3_'+n).val(t_length);
+                        		$('#textSize4_'+n).val(0);
+                        	}else if(t_kind='B'){
+                        		$('#textSize1_'+n).val(t_radius);
+                        		$('#textSize2_'+n).val(t_width);
+                        		$('#textSize3_'+n).val(t_dime);
+                        		$('#textSize4_'+n).val(t_length);
+                        	}else{
+                        		$('#textSize1_'+n).val(0);
+                        		$('#textSize2_'+n).val(0);
+                        		$('#textSize3_'+n).val(t_length);
+                        		$('#textSize4_'+n).val(0);
+                        	}
+                        	sum();
+                        });
                         $('#txtUnit_' + j).focusout(function() {
                             sum();
                         });
@@ -1208,6 +1314,7 @@
 					<td align="center" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblWeights'> </a></td>
@@ -1219,7 +1326,6 @@
 					<td align="center" style="width:120px;"><a id='lblMemos'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblssale_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1262,6 +1368,7 @@
 					<input id="txtLengthb.*" type="text" style="display:none;"/>
 					<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
+					<td><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td >
 					<input  id="txtUnit.*" type="text" style="width:90%;"/>
 					</td>
@@ -1298,9 +1405,6 @@
 					</td>
 					<td align="center">
 					<input id="chkIscut.*" type="checkbox"/>
-					</td>
-					<td>
-					<input class="txt " id="txtSize.*" type="text" style="width:95%;"/>
 					</td>
 					<td align="center">
 					<input class="btn"  id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" />
