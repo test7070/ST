@@ -176,8 +176,7 @@
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
-                var
-                ret;
+                var ret;
                 switch (b_pop) {
                     case 'view_vcce_import':
                         if (q_cur > 0 && q_cur < 4) {
@@ -185,9 +184,6 @@
                                 return;
                             AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style', '');
                             //get ordes.price <Start>
-	                        for(var i = 0;i<AddRet.length;i++){
-	                        	$('#txtStyle_' + AddRet[i]).blur();
-	                        }
                             var distinctArray = new Array;
                             var inStr = '';
                             for (var i = 0; i < b_ret.length; i++) {
@@ -198,6 +194,7 @@
                                 inStr += "'" + distinctArray[i] + "',";
                             }
                             inStr = inStr.substring(0, inStr.length - 1);
+                            console.log(b_pop);
                             var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
                             q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
                             //get ordes.price <End>
@@ -215,9 +212,25 @@
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             }
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight', b_ret.length, b_ret, 'productno,product,dime,width,lengthb,unit,noa,no3,uno,mount,weight', 'txtProductno,txtProduct');
+                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight', b_ret.length, b_ret, 'productno,product,dime,width,lengthb,unit,noa,no3,uno,mount,weight', 'txtProductno');
+	                        for(var i = 0;i<AddRet.length;i++){
+	                        	$('#txtStyle_' + AddRet[i]).blur();
+	                        }
+                            var distinctArray = new Array;
+                            var inStr = '';
+                            for (var i = 0; i < b_ret.length; i++) {
+                                distinctArray.push(b_ret[i].noa);
+                            }
+                            distinctArray = distinct(distinctArray);
+                            for (var i = 0; i < distinctArray.length; i++) {
+                                inStr += "'" + distinctArray[i] + "',";
+                            }
+                            inStr = inStr.substring(0, inStr.length - 1);
+                            console.log(b_pop);
+                            var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
+                            q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
                             /// 最後 aEmpField 不可以有【數字欄位】
-                            for (var i = 0; i < ret.length; i++) {
+                            for (var i = 0; i < AddRet.length; i++) {
                                 $('#txtMount_' + i).change();
                             }
                             sum();
@@ -315,10 +328,14 @@
                                     var t_no2 = $('#txtNo2_' + j).val();
                                     if (ordes_as[i].noa == t_ordeno && ordes_as[i].no2 == t_no2) {
                                         $('#txtPrice_' + j).val(ordes_as[i].price);
+                                        $('#txtSize_' + j).val(ordes_as[i].size);
+                                        $('#txtStyle_' + j).val(ordes_as[i].style);
+                                        $('#txtStyle_' + j).blur();
                                     }
                                 }
                             }
                         }
+                        
                         AddRet = new Array;
                         break;
                     case q_name:
