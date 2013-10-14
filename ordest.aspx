@@ -1443,7 +1443,7 @@
 					<td class="td1" align="center">
 					<input class="btn"  id="btnMinut..*" type="button" value='-' style="font-weight: bold; "  />
 					</td>
-					<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td class="td2">
 					<input class="btn" id="btnUno..*" type="button" value='.' style="float:left;width:1%;"/>
 					<input class="txt c1" id="txtUno..*" type="text" style="float:left;width:85%;" />

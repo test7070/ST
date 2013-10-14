@@ -22,8 +22,8 @@
             q_desc = 1;
             q_tables = 's';
             var q_name = "quat";
-            var q_readonly = ['txtComp', 'txtAcomp', 'txtSales', 'txtWorker', 'txtNoa'];
-            var q_readonlys = ['txtNo3', 'txtNo2'];
+            var q_readonly = ['txtComp', 'txtAcomp', 'txtSales', 'txtWorker', 'txtNoa','txtTotal','txtTax','txtMoney'];
+            var q_readonlys = ['txtNo3', 'txtNo2','txtTheory'];
             var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtFloata', 15, 3, 1], ['txtWeight', 15, 0, 1], ['txtGweight', 10, 2, 1], ['txtEweight', 15, 0, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
             var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtWeight', 15, 0, 1], ['txtPrice', 10, 2, 1], ['txtTotal', 15, 0, 1], ['txtTheory', 15, 0, 1], ['txtGweight', 10, 2, 1], ['txtEweight', 15, 0, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
             var bbmMask = [];
@@ -136,6 +136,13 @@
                         q_gt('cust', t_where, 0, 0, 0, "");
                     }
                 });
+                $("#cmbTaxtype").change(function(e) {
+                    sum();
+                });
+                
+                $('#txtTax').change(function() {
+                    sum();
+                });
             }
 
             function q_funcPost(t_func, result) {
@@ -246,7 +253,114 @@
 
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
+                	$('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+                    	$('#txtSize_' + j).change(function() {
+                    		var n = $(this).attr('id').replace('txtSize_','');
+                    		var t_size = $.trim($(this).val());
+                    		var t_kind = $('#cmbKind').val().substr(0, 1);
+                    		var t_patt1 = /^(.+)[\',\"][\*,x,X](.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_patt2 = /^(.+)[\',\"](.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_patt3 = /^(.+)[\*,x,X](.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_patt4 = /^(.+)[\',\"][\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_patt5 = /^(.+)[\',\"](.+)[\*,x,X](.+)$/g;
+                    		var t_patt6 = /^(.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
+                    		var t_radius = '', t_dime = '', t_width='', t_length='';
+                            var t_pattA = /^([1-9])\-([1-9])\/([1-9])[\',\"]*$/g;
+                            var t_pattB = /^([1-9])\/([1-9])[\',\"]*$/g;
+                            var t_pattC = /^([1-9])[\',\"]*$/g;
+                            var t_mm = 25.4;
+                            if(t_patt1.test(t_size)){
+                            	//管 ONLY
+                            	t_radius = t_size.replace(t_patt1,'$1');
+                            	t_width = t_size.replace(t_patt1,'$2');
+                            	t_dime = t_size.replace(t_patt1,'$3');
+                            	t_length = t_size.replace(t_patt1,'$4');
+                            }else if(t_patt2.test(t_size)){
+                            	//管 ONLY
+                            	t_radius = t_size.replace(t_patt2,'$1');
+                            	t_width = t_size.replace(t_patt2,'$2');
+                            	t_dime = t_size.replace(t_patt2,'$3');
+                            	t_length = t_size.replace(t_patt2,'$4');
+                            }else if(t_patt3.test(t_size)){
+                            	//管 ONLY
+                            	t_radius = t_size.replace(t_patt3,'$1');
+                            	t_width = t_size.replace(t_patt3,'$2');
+                            	t_dime = t_size.replace(t_patt3,'$3');
+                            	t_length = t_size.replace(t_patt3,'$4');
+                            }else if(t_patt4.test(t_size)){
+                            	if(t_kind=='A'){
+                            		t_dime = t_size.replace(t_patt4,'$1');
+	                            	t_width = t_size.replace(t_patt4,'$2');
+	                            	t_length = t_size.replace(t_patt4,'$3');	
+                            	}else if(t_kind='B'){
+	                            	t_radius = t_size.replace(t_patt4,'$1');
+	                            	t_dime = t_size.replace(t_patt4,'$2');
+	                            	t_length = t_size.replace(t_patt4,'$3');
+                            	}else{
+                            		alert(q_getMsg('lblKind')+'不符。\n【'+(n+1)+'】格式異常。');
+                            	}
+                            }else if(t_patt5.test(t_size)){
+                            	if(t_kind=='A'){
+                            		t_dime = t_size.replace(t_patt5,'$1');
+	                            	t_width = t_size.replace(t_patt5,'$2');
+	                            	t_length = t_size.replace(t_patt5,'$3');	
+                            	}else if(t_kind='B'){
+	                            	t_radius = t_size.replace(t_patt5,'$1');
+	                            	t_dime = t_size.replace(t_patt5,'$2');
+	                            	t_length = t_size.replace(t_patt5,'$3');
+                            	}else{
+                            		alert(q_getMsg('lblKind')+'不符。\n【'+(n+1)+'】格式異常。');
+                            	}
+                            }else if(t_patt6.test(t_size)){
+                            	if(t_kind=='A'){
+                            		t_dime = t_size.replace(t_patt6,'$1');
+	                            	t_width = t_size.replace(t_patt6,'$2');
+	                            	t_length = t_size.replace(t_patt6,'$3');	
+                            	}else if(t_kind='B'){
+	                            	t_radius = t_size.replace(t_patt6,'$1');
+	                            	t_dime = t_size.replace(t_patt6,'$2');
+	                            	t_length = t_size.replace(t_patt6,'$3');
+                            	}else{
+                            		alert(q_getMsg('lblKind')+'不符。\n【'+(n+1)+'】格式異常。');
+                            	}
+                            }
+                            if(t_pattA.test(t_radius)){
+                        		a = parseFloat(t_radius.replace(t_pattA,'$1'));
+                        		b = parseFloat(t_radius.replace(t_pattA,'$2'));
+                        		c = parseFloat(t_radius.replace(t_pattA,'$3'));
+                        		if(c==0)
+                        			t_radius = 0 ;
+                        		else 
+                        			t_radius = a.add(b.div(c)).mul(t_mm);
+                        	}else if(t_pattB.test(t_radius)){
+                        		a = parseFloat(t_radius.replace(t_pattB,'$1'));
+                        		b = parseFloat(t_radius.replace(t_pattB,'$2'));
+                        		if(b==0)
+                        			t_radius = 0 ;
+                        		else 
+                        			t_radius = a.div(b).mul(t_mm);
+                        	}else if(t_pattC.test(t_radius)){
+                        		t_radius = parseFloat(t_radius.replace(t_pattC,'$1')).mul(t_mm);
+                        	}
+                            if(t_kind=='A'){
+                        		$('#textSize1_'+n).val(t_dime);
+                        		$('#textSize2_'+n).val(t_width);
+                        		$('#textSize3_'+n).val(t_length);
+                        		$('#textSize4_'+n).val(0);
+                        	}else if(t_kind='B'){
+                        		$('#textSize1_'+n).val(t_radius);
+                        		$('#textSize2_'+n).val(t_width);
+                        		$('#textSize3_'+n).val(t_dime);
+                        		$('#textSize4_'+n).val(t_length);
+                        	}else{
+                        		$('#textSize1_'+n).val(0);
+                        		$('#textSize2_'+n).val(0);
+                        		$('#textSize3_'+n).val(t_length);
+                        		$('#textSize4_'+n).val(0);
+                        	}
+                        	sum();
+                        });
                         $('#txtStyle_' + j).blur(function() {
                             t_IdSeq = -1;
                             /// 要先給  才能使用 q_bodyId()
@@ -256,81 +370,25 @@
                         });
                         //將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
                         $('#textSize1_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            if ($('#cmbKind').val().substr(0, 1) == 'A') {
-                                q_tr('txtDime_' + b_seq, q_float('textSize1_' + b_seq));
-                                //厚度$('#txtDime_'+b_seq).val($('#textSize1_' + b_seq).val());
-                            } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-                                q_tr('txtRadius_' + b_seq, q_float('textSize1_' + b_seq));
-                                //短徑$('#txtRadius_'+b_seq).val($('#textSize1_' + b_seq).val());
-                            }
-                            getTheory(b_seq);
+                            sum();
                         });
                         $('#textSize2_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            if ($('#cmbKind').val().substr(0, 1) == 'A') {
-                                q_tr('txtWidth_' + b_seq, q_float('textSize2_' + b_seq));
-                                //寬度$('#txtWidth_'+b_seq).val($('#textSize2_' + b_seq).val());
-                            } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-                                q_tr('txtWidth_' + b_seq, q_float('textSize2_' + b_seq));
-                                //長徑$('#txtWidth_'+b_seq).val($('#textSize2_' + b_seq).val());
-                            }
-                            getTheory(b_seq);
+                            sum();
                         });
                         $('#textSize3_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            if ($('#cmbKind').val().substr(0, 1) == 'A') {
-                                q_tr('txtLengthb_' + b_seq, q_float('textSize3_' + b_seq));
-                                //長度$('#txtLengthb_'+b_seq).val($('#textSize3_' + b_seq).val());
-                            } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-                                q_tr('txtDime_' + b_seq, q_float('textSize3_' + b_seq));
-                                //厚度$('#txtDime_'+b_seq).val($('#textSize3_' + b_seq).val());
-                            } else {//鋼筋、胚
-                                q_tr('txtLengthb_' + b_seq, q_float('textSize3_' + b_seq));
-                            }
-                            getTheory(b_seq);
+                            sum();
                         });
                         $('#textSize4_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            if ($('#cmbKind').val().substr(0, 1) == 'A') {
-                                q_tr('txtRadius_' + b_seq, q_float('textSize4_' + b_seq));
-                                //短徑為0 $('#txtRadius_'+b_seq).val($('#textSize4_' + b_seq).val());
-                            } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-                                q_tr('txtLengthb_' + b_seq, q_float('textSize4_' + b_seq));
-                                //長度$('#txtLengthb_'+b_seq).val($('#textSize4_' + b_seq).val());
-                            }
-                            getTheory(b_seq);
+                            sum();
                         });
                         $('#txtMount_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            getTheory(b_seq);
                             sum();
                         });
                         //-------------------------------------------------------------------------------------
 
                         $('#txtSpec_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            getTheory(b_seq);
+                            sum();
                         });
-
                         $('#txtWeight_' + j).change(function() {
                             sum();
                         });
@@ -338,9 +396,6 @@
                             sum();
                         });
                         $('#txtTotal_' + j).change(function() {
-                            sum();
-                        });
-                        $('#txtWeight_' + j).change(function() {
                             sum();
                         });
                     }
@@ -389,17 +444,114 @@
             }
 
             function sum() {
-                var t1 = 0, t_unit, t_mount, t_weight = 0, t_total = 0;
+                if (!(q_cur == 1 || q_cur == 2))
+                    return;
+                $('#txtMoney').attr('readonly', true);
+                $('#txtTax').attr('readonly', true);
+                $('#txtTotal').attr('readonly', true);
+                $('#txtMoney').css('background-color', 'rgb(237,237,238)').css('color', 'green');
+                $('#txtTax').css('background-color', 'rgb(237,237,238)').css('color', 'green');
+                $('#txtTotal').css('background-color', 'rgb(237,237,238)').css('color', 'green');
+
+                var t_mount = 0, t_price = 0, t_money = 0, t_moneyus=0, t_weight = 0, t_total = 0, t_tax = 0;
+                var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
+                var t_unit = '';
+                var t_float = q_float('txtFloata');
+
                 for (var j = 0; j < q_bbsCount; j++) {
-                    q_tr('txtTotal_' + j, round(q_float('txtWeight_' + j) * q_float('txtPrice_' + j), 0));
-                    t_total += q_float('txtTotal_' + j);
-                    t_weight += q_float('txtWeight_' + j);
-                }// j
-                q_tr('txtMoney', t_total);
-                q_tr('txtWeight', t_weight);
-                q_tr('txtTotal', t_total);
-                calTax();
-                q_tr('txtTotalus', q_float('txtTotal') * q_float('txtFloata'));
+                    t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
+                    t_product = $.trim($('#txtProduct_' + j).val());
+                    if(t_unit.length==0 && t_product.length>0){
+                    	if(t_product.indexOf('管')>0)
+                    		t_unit = '支';
+                    	else
+                    		t_unit = 'KG';
+                    	$('#txtUnit_' + j).val(t_unit);
+                    }
+                    //---------------------------------------
+                    if ($('#cmbKind').val().substr(0, 1) == 'A') {
+                        q_tr('txtDime_' + j, q_float('textSize1_' + j));
+                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
+                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                        q_tr('txtRadius_' + j, q_float('textSize4_' + j));
+                    } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+                        q_tr('txtRadius_' + j, q_float('textSize1_' + j));
+                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
+                        q_tr('txtDime_' + j, q_float('textSize3_' + j));
+                        q_tr('txtLengthb_' + j, q_float('textSize4_' + j));
+                    } else {//鋼筋、胚
+                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                    }
+                    getTheory(j);
+                    //---------------------------------------
+                    t_weights = q_float('txtWeight_' + j);
+                    t_prices = q_float('txtPrice_' + j);
+                    t_mounts = q_float('txtMount_' + j);
+                    if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
+                    	t_moneys = t_prices.mul(t_weights);
+                    }else{
+                    	t_moneys = t_prices.mul(t_mounts);
+                    }
+                    if(t_float==0){
+                    	t_moneys = t_moneys.round(0);
+                    }else{
+                    	t_moneyus = t_moneyus.add(t_moneys.round(2));
+                    	t_moneys = t_moneys.mul(t_float).round(0);
+                    }
+                    t_weight = t_weight.add(t_weights);
+                    t_mount = t_mount.add(t_mounts);
+                    t_money = t_money.add(t_moneys);
+                    $('#txtTotal_' + j).val(FormatNumber(t_moneys));
+                }
+                t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
+                switch ($('#cmbTaxtype').val()) {
+                    case '1':
+                        // 應稅
+                        t_tax = round(t_money * t_taxrate, 0);
+                        t_total = t_money + t_tax;
+                        break;
+                    case '2':
+                        //零稅率
+                        t_tax = 0;
+                        t_total = t_money + t_tax;
+                        break;
+                    case '3':
+                        // 內含
+                        t_tax = round(t_money / (1 + t_taxrate) * t_taxrate, 0);
+                        t_total = t_money;
+                        t_money = t_total - t_tax;
+                        break;
+                    case '4':
+                        // 免稅
+                        t_tax = 0;
+                        t_total = t_money + t_tax;
+                        break;
+                    case '5':
+                        // 自定
+                        $('#txtTax').attr('readonly', false);
+                        $('#txtTax').css('background-color', 'white').css('color', 'black');
+                        t_tax = round(q_float('txtTax'), 0);
+                        t_total = t_money + t_tax;
+                        break;
+                    case '6':
+                        // 作廢-清空資料
+                        t_money = 0, t_tax = 0, t_total = 0;
+                        break;
+                    default:
+                }
+                t_price = q_float('txtPrice');
+                if (t_price != 0) {
+                    $('#txtTranmoney').val(FormatNumber(t_weight.mul(t_price).round(0)));
+                }
+                $('#txtWeight').val(FormatNumber(t_weight));
+
+                $('#txtMoney').val(FormatNumber(t_money));
+                $('#txtTax').val(FormatNumber(t_tax));
+                $('#txtTotal').val(FormatNumber(t_total));
+                if(t_float==0)
+                	$('#txtTotalus').val(0);
+                else
+                	$('#txtTotalus').val(FormatNumber(t_moneyus));
             }
 
             function refresh(recno) {
@@ -556,6 +708,99 @@
                         $('#txtRadius_' + j).val(0);
                     }
                 }
+            }
+            function FormatNumber(n) {
+                var xx = "";
+                if (n < 0) {
+                    n = Math.abs(n);
+                    xx = "-";
+                }
+                n += "";
+                var arr = n.split(".");
+                var re = /(\d{1,3})(?=(\d{3})+$)/g;
+                return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
+            }
+
+
+            Number.prototype.round = function(arg) {
+                return Math.round(this.mul(Math.pow(10, arg))).div(Math.pow(10, arg));
+            };
+            Number.prototype.div = function(arg) {
+                return accDiv(this, arg);
+            };
+            function accDiv(arg1, arg2) {
+                var t1 = 0, t2 = 0, r1, r2;
+                try {
+                    t1 = arg1.toString().split(".")[1].length;
+                } catch (e) {
+                }
+                try {
+                    t2 = arg2.toString().split(".")[1].length;
+                } catch (e) {
+                }
+                with (Math) {
+                    r1 = Number(arg1.toString().replace(".", ""));
+                    r2 = Number(arg2.toString().replace(".", ""));
+                    return (r1 / r2) * pow(10, t2 - t1);
+                }
+            }
+
+
+            Number.prototype.mul = function(arg) {
+                return accMul(arg, this);
+            };
+            function accMul(arg1, arg2) {
+                var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+                try {
+                    m += s1.split(".")[1].length;
+                } catch (e) {
+                }
+                try {
+                    m += s2.split(".")[1].length;
+                } catch (e) {
+                }
+                return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+            }
+
+
+            Number.prototype.add = function(arg) {
+                return accAdd(arg, this);
+            };
+            function accAdd(arg1, arg2) {
+                var r1, r2, m;
+                try {
+                    r1 = arg1.toString().split(".")[1].length;
+                } catch (e) {
+                    r1 = 0;
+                }
+                try {
+                    r2 = arg2.toString().split(".")[1].length;
+                } catch (e) {
+                    r2 = 0;
+                }
+                m = Math.pow(10, Math.max(r1, r2));
+                return (Math.round(arg1 * m) + Math.round(arg2 * m)) / m;
+            }
+
+
+            Number.prototype.sub = function(arg) {
+                return accSub(this, arg);
+            };
+            function accSub(arg1, arg2) {
+                var r1, r2, m, n;
+                try {
+                    r1 = arg1.toString().split(".")[1].length;
+                } catch (e) {
+                    r1 = 0;
+                }
+                try {
+                    r2 = arg2.toString().split(".")[1].length;
+                } catch (e) {
+                    r2 = 0;
+                }
+                m = Math.pow(10, Math.max(r1, r2));
+                n = (r1 >= r2) ? r1 : r2;
+                return parseFloat(((Math.round(arg1 * m) - Math.round(arg2 * m)) / m).toFixed(n));
             }
 		</script>
 		<style type="text/css">
@@ -832,7 +1077,7 @@
 						<td class="td5">
 						<input id="txtTax" type="text"  class="txt num c1" />
 						</td>
-						<td class="td6"><select id="cmbTaxtype" class="txt c1" onchange='calTax()'></select></td>
+						<td class="td6"><select id="cmbTaxtype" class="txt c1"></select></td>
 						<td class="td7"><span> </span><a id='lblTotal' class="lbl"></a></td>
 						<td class="td8">
 						<input id="txtTotal" type="text"  class="txt num c1" />
@@ -903,6 +1148,7 @@
 						<td align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  />
 						</td>
+						<td align="center" style="width:20px;"></td>
 						<td align="center" style="width:8%;"><a id='lblProductno_st'></a></td>
 						<td align="center" style="width:30px;"><a id='lblStyle_st'></a></td>
 						<td align="center" style="width:10%;"><a id='lblProduct_st'></a></td>
@@ -927,6 +1173,7 @@
 						<td >
 						<input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
 						</td>
+						<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 						<td>
 						<input class="btn"  id="btnProduct.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
 						<input type="text" id="txtProductno.*"  style="width:76%; float:left;"/>
