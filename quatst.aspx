@@ -25,7 +25,7 @@
             var q_readonly = ['txtComp', 'txtAcomp', 'txtSales', 'txtWorker', 'txtNoa','txtTotal','txtTax','txtMoney'];
             var q_readonlys = ['txtNo3', 'txtNo2','txtTheory'];
             var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtFloata', 15, 3, 1], ['txtWeight', 15, 0, 1], ['txtGweight', 10, 2, 1], ['txtEweight', 15, 0, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
-            var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtWeight', 15, 0, 1], ['txtPrice', 10, 2, 1], ['txtTotal', 15, 0, 1], ['txtTheory', 15, 0, 1], ['txtGweight', 10, 2, 1], ['txtEweight', 15, 0, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
+            var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtWeight', 15, 0, 1], ['txtPrice', 15, 3, 1], ['txtTotal', 15, 0, 1], ['txtTheory', 15, 0, 1], ['txtGweight', 10, 2, 1], ['txtEweight', 15, 0, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
             q_sqlCount = 6;
