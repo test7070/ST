@@ -310,7 +310,10 @@
                             }
                         }
                         if (vcces_as[0] != undefined) {
-                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,textSize1,textSize2,textSize3,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtStyle,txtOrdeno,txtNo2', vcces_as.length, vcces_as, 'uno,productno,product,spec,dime,width,lengthb,dime,width,lengthb,mount,weight,price,style,ordeno,no2', 'txtUno');
+                        	for(var i=0;i<q_bbsCount;i++){$('#btnMinus_'+i).click();};
+                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtStyle,txtOrdeno,txtNo2', vcces_as.length, vcces_as, 'uno,productno,product,spec,radius,dime,width,lengthb,mount,weight,price,style,ordeno,no2', 'txtUno');
+                            size_change();
+                            sum();
                             //get ordes.price <Start>
                             var distinctArray = new Array;
                             var inStr = '';
