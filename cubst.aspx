@@ -125,8 +125,10 @@
                 switch (b_pop) {
 					case 'ordes':
 	                    if (q_cur > 0 && q_cur < 4) {
-	                        if (!b_ret || b_ret.length == 0)
-	                            return;
+	                        iif (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
+								return;
+							}
 							for(var j = 0;j < b_ret.length;j++){
 								for(var i = 0;i<q_bbtCount;i++){
 									var t_ordeno = $('#txtOrdeno_' + i).val();
@@ -150,8 +152,10 @@
 	                    }
 						break;
 					case 'uccc':
-	                    if (!b_ret || b_ret.length == 0)
-	                   		return;
+	                    if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
+								return;
+						}
 	                    if (q_cur > 0 && q_cur < 4) {
 							for(var j = 0;j < b_ret.length;j++){
 								for(var i = 0;i<q_bbtCount;i++){

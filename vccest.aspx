@@ -110,26 +110,29 @@
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
-                var
-                ret;
+                var ret;
                 switch (b_pop) {
                     case 'view_vcce_import':
                         if (q_cur > 0 && q_cur < 4) {
-                            if (!b_ret || b_ret.length == 0)
-                                return;
+                            if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
+								return;
+							}
                             ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style', '');
                             /// 最後 aEmpField 不可以有【數字欄位】
                             size_change();
+	                        for(var i = 0;i<ret.length;i++){
+	                        	$('#txtStyle_' + ret[i]).blur();
+	                        }
+	                        sum();
                         }
-                        for(var i = 0;i<ret.length;i++){
-                        	$('#txtStyle_' + ret[i]).blur();
-                        }
-                        sum();
                         break;
                     case 'ordet':
                         if (q_cur > 0 && q_cur < 4) {
-                            if (!b_ret || b_ret.length == 0)
-                                return;
+                            if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
+								return;
+							}
 							for(var i=0;i<q_bbsCount;i++){$('#btnMinus_'+i).click();}
                             ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtWeight,txtMount', b_ret.length, b_ret,
                             												'uno,noa,no3,productno,product,radius,dime,width,lengthb,weight,mount', 'txtProductno');

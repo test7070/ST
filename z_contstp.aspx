@@ -141,8 +141,10 @@
 							var new_str = '';
 							var now_str = $('#txtXcustno').val();
 							b_ret = getb_ret();
-							if (!b_ret || b_ret.length == 0)
+							if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
 								return;
+							}
 							for(var i = 0;i < b_ret.length;i++){
 								new_str = new_str + b_ret[i].noa + '.';
 							}
@@ -157,8 +159,10 @@
 							var new_str = '';
 							var now_str = $('#txtXcno').val();
 							b_ret = getb_ret();
-							if (!b_ret || b_ret.length == 0)
+							if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
 								return;
+							}
 							for(var i = 0;i < b_ret.length;i++){
 								new_str = new_str + b_ret[i].noa + '.';
 							}

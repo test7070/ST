@@ -82,8 +82,10 @@
 				case 'ordes':
 					if (q_cur > 0 && q_cur < 4) {
 						b_ret = getb_ret();
-						if (!b_ret || b_ret.length == 0)
-							return;
+						if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
+								return;
+						}
 						var i, j = 0;
 						ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2', b_ret.length, b_ret
 															, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2'

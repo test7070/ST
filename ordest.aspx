@@ -170,8 +170,10 @@
                     case 'quats':
                         if (q_cur > 0 && q_cur < 4) {
                             b_ret = getb_ret();
-                            if (!b_ret || b_ret.length == 0)
-                                return;
+                            if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
+								return;
+							}
                             var i, j = 0;
                             for(var i=0;i<q_bbsCount;i++){$('#btnMinus_'+i).click();}
                             $('#txtQuatno').val(b_ret[0].noa);
@@ -184,8 +186,10 @@
                     case 'uccc':
                         if (q_cur > 0 && q_cur < 4) {
                             b_ret = getb_ret();
-                            if (!b_ret || b_ret.length == 0)
-                                return;
+                            if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
+								return;
+							}
                             for (var j = 0; j < b_ret.length; j++) {
                                 for (var i = 0; i < q_bbtCount; i++) {
                                     var t_uno = $('#txtUno__' + i).val();

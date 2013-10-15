@@ -181,8 +181,10 @@
                 switch (b_pop) {
                     case 'view_vcce_import':
                         if (q_cur > 0 && q_cur < 4) {
-                            if (!b_ret || b_ret.length == 0)
-                                break;
+                            if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
+								return;
+							}
                             AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style', '');
                             //get ordes.price <Start>
                             var distinctArray = new Array;
@@ -207,8 +209,10 @@
                         if (q_cur > 0 && q_cur < 4) {//  q_cur： 0 = 瀏覽狀態  1=新增  2=修改 3=刪除  4=查詢
                             b_ret = getb_ret();
                             ///  q_box() 執行後，選取的資料
-                            if (!b_ret || b_ret.length == 0)
-                                break;
+                            if (!b_ret || b_ret.length == 0){
+                            	b_pop = '';
+								return;
+							}
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             }
