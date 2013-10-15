@@ -195,7 +195,7 @@
                                 }
                             }
                             if (b_ret[0] != undefined) {
-                                ret = q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtProduct,txtProductno,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtSource', b_ret.length, b_ret, 'uno,product,productno,dime,width,lengthb,mount,weight,source', 'txtUno,txtProduct,txtProductno', '__');
+                                ret = q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtProduct,txtProductno,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtSource', b_ret.length, b_ret, 'uno,product,productno,radius,dime,width,lengthb,mount,weight,source', 'txtUno,txtProduct,txtProductno', '__');
                                 /// 最後 aEmpField 不可以有【數字欄位】
                                 if (qBoxNo3id != -1) {
                                     for (var i = 0; i < ret.length; i++) {
@@ -855,6 +855,7 @@
                 }
                 if ($('#cmbKind').val().substr(0, 1) == 'A') {
                     $('#lblSize_help').text(q_getPara('sys.lblSizea'));
+                    $('#lblWidth_t').text('寬度');
                     for (var j = 0; j < q_bbsCount; j++) {
                         $('#textSize1_' + j).show();
                         $('#textSize2_' + j).show();
@@ -873,6 +874,7 @@
                     }
                 } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
                     $('#lblSize_help').text(q_getPara('sys.lblSizeb'));
+                    $('#lblWidth_t').text('長徑');
                     for (var j = 0; j < q_bbsCount; j++) {
                         $('#textSize1_' + j).show();
                         $('#textSize2_' + j).show();
@@ -890,6 +892,7 @@
                     }
                 } else {//鋼筋和鋼胚
                     $('#lblSize_help').text(q_getPara('sys.lblSizec'));
+                    $('#lblWidth_t').text('寬度');
                     for (var j = 0; j < q_bbsCount; j++) {
                         $('#textSize1_' + j).hide();
                         $('#textSize2_' + j).hide();
@@ -1428,11 +1431,12 @@
 					</td>
 					<td align="center" style="width:20px;"></td>
 					<td class="td2" align="center" style="width:15%;"><a id='lblUno_t'></a></td>
-					<td class="td3" align="center" style="width:15%;"><a id='lblProduct_t'></a></td>
+					<td class="td3" align="center" style="width:12%;"><a id='lblProduct_t'></a></td>
 					<td class="td4" align="center" style="width:10%;"><a id='lblProductno_t'></a></td>
-					<td class="td5" align="center" style="width:8%;"><a id='lblDime_t'></a></td>
-					<td class="td6" align="center" style="width:8%;"><a id='lblWidth_t'></a></td>
-					<td class="td7" align="center" style="width:8%;"><a id='lblLengthb_t'></a></td>
+					<td class="td5" align="center" style="width:6%;"><a id='lblRadius_t'></a></td>
+					<td class="td5" align="center" style="width:6%;"><a id='lblDime_t'></a></td>
+					<td class="td6" align="center" style="width:6%;"><a id='lblWidth_t'></a></td>
+					<td class="td7" align="center" style="width:6%;"><a id='lblLengthb_t'></a></td>
 					<td class="td8" align="center" style="width:8%;"><a id='lblMount_t'></a></td>
 					<td class="td9" align="center" style="width:8%;"><a id='lblWeight_t'></a></td>
 					<td class="td9" align="center" style="width:2%;"><a id='lblIssale_t'></a></td>
@@ -1454,6 +1458,9 @@
 					</td>
 					<td class="td4">
 					<input class="txt" id="txtProductno..*" type="text" style="width:95%;"  />
+					</td>
+					<td class="td5">
+					<input class="txt" id="txtRadius..*" type="text" style="width:95%; text-align: right;"  />
 					</td>
 					<td class="td5">
 					<input class="txt" id="txtDime..*" type="text" style="width:95%; text-align: right;"  />

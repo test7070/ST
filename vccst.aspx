@@ -212,7 +212,7 @@
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             }
-                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight', b_ret.length, b_ret, 'productno,product,dime,width,lengthb,unit,noa,no3,uno,mount,weight', 'txtProductno');
+                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight', b_ret.length, b_ret, 'productno,product,radius,dime,width,lengthb,unit,noa,no3,uno,mount,weight', 'txtProductno');
 	                        for(var i = 0;i<AddRet.length;i++){
 	                        	$('#txtStyle_' + AddRet[i]).blur();
 	                        }

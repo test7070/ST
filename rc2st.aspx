@@ -487,6 +487,7 @@
 				_btnIns();
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date());
+				$('#txtMon').val(q_date().substring(0,6));
 				$('#txtDatea').focus();
 				size_change();
 			}
