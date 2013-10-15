@@ -197,8 +197,10 @@
                                 inStr += "'" + distinctArray[i] + "',";
                             }
                             inStr = inStr.substring(0, inStr.length - 1);
-                            var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
-                            q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
+                            if(trim(inStr).length > 0){
+	                            var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
+	                            q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
+                            }
                             //get ordes.price <End>
                             /// 最後 aEmpField 不可以有【數字欄位】
                             size_change();
@@ -230,8 +232,10 @@
                                 inStr += "'" + distinctArray[i] + "',";
                             }
                             inStr = inStr.substring(0, inStr.length - 1);
-                            var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
-                            q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
+                            if(trim(inStr).length > 0){
+	                            var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
+	                            q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
+							}
                             /// 最後 aEmpField 不可以有【數字欄位】
                             for (var i = 0; i < AddRet.length; i++) {
                                 $('#txtMount_' + i).change();
@@ -282,8 +286,10 @@
                                 inStr += "'" + distinctArray[i] + "',";
                             }
                             inStr = inStr.substring(0, inStr.length - 1);
-                            var t_where = "where=^^ ordeno in(" + inStr + ") and (isnull(ordeno,'') != '') ^^";
-                            q_gt('vccs', t_where, 0, 0, 0, "", r_accy);
+                            if(trim(inStr).length > 0){
+	                            var t_where = "where=^^ ordeno in(" + inStr + ") and (isnull(ordeno,'') != '') ^^";
+	                            q_gt('vccs', t_where, 0, 0, 0, "", r_accy);
+							}
                         }
                         sum();
                         break;
@@ -316,8 +322,10 @@
                                 inStr += "'" + distinctArray[i] + "',";
                             }
                             inStr = inStr.substring(0, inStr.length - 1);
-                            var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
-                            q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
+                            if(trim(inStr).length > 0){
+	                            var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
+	                            q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
+							}
                             //get ordes.price <End>
                         }
                         vcces_as = new Array;
