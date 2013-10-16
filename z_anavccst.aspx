@@ -25,7 +25,7 @@
 			});
 			function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_anavcc',
+					fileName : 'z_anavccst',
 					options : [{
 						type : '0', //[1]
 						name : 'accy',
@@ -98,7 +98,7 @@
                         for ( i = 0; i < as.length; i++) {
                             uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa +' . '+as[i].namea;
                         }
-						q_gf('', 'z_anavcc');
+						q_gf('', 'z_anavccst');
                         break;
 				}
 			}
