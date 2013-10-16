@@ -304,6 +304,19 @@
 			function bbtAssign() {
 				for (var i = 0; i < q_bbtCount; i++) {
 					$('#lblNo__' + i).text(i + 1);
+					$('#textSize1__' + j).change(function() {
+						sum();
+					});
+						$('#textSize2__' + j).change(function() {
+							sum();
+						});
+						$('#textSize3__' + j).change(function() {
+							sum();
+						});
+						$('#textSize4__' + j).change(function() {
+							sum();
+						});
+
 				}
 				_bbtAssign();
 			}
@@ -667,6 +680,22 @@
 					t_money = t_money.add(t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 				}
+				for (var j = 0; j < q_bbtCount; j++) {
+					if ($('#cmbKind').val().substr(0, 1) == 'A') {
+						q_tr('txtDime__' + j, q_float('textSize1__' + j));
+						q_tr('txtWidth__' + j, q_float('textSize2__' + j));
+						q_tr('txtLengthb__' + j, q_float('textSize3__' + j));
+						q_tr('txtRadius__' + j, q_float('textSize4__' + j));
+					} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+						q_tr('txtRadius__' + j, q_float('textSize1__' + j));
+						q_tr('txtWidth__' + j, q_float('textSize2__' + j));
+						q_tr('txtDime__' + j, q_float('textSize3__' + j));
+						q_tr('txtLengthb__' + j, q_float('textSize4__' + j));
+					} else {//鋼筋、胚
+						q_tr('txtLengthb__' + j, q_float('textSize3__' + j));
+					}
+				}
+				
 				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
 				switch ($('#cmbTaxtype').val()) {
 					case '1':
