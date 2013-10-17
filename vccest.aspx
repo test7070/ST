@@ -194,7 +194,7 @@
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
 
-                q_box('vccest_s.aspx', q_name + '_s', "500px", "360px", q_getMsg("popSeek"));
+                q_box('vccest_s.aspx', q_name + '_s', "520px", "450px", q_getMsg("popSeek"));
             }
 
             function getTheory(b_seq) {
