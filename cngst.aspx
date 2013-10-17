@@ -132,7 +132,7 @@
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
 
-                q_box('cng_s.aspx', q_name + '_s', "500px", "330px", q_getMsg("popSeek"));
+                q_box('cng_s.aspx', q_name + '_s', "500px", "420px", q_getMsg("popSeek"));
             }
             function sum(){
             	if (!(q_cur == 1 || q_cur == 2))
