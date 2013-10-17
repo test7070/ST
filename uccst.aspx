@@ -137,12 +137,13 @@
 
 			function btnOk() {
 				var t_err = '';
-				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')]]);
+				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa_st')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
 				}
 				var t_noa = trim($('#txtNoa').val());
+				$('#txtUno').val(t_noa);
 				if (t_noa.length == 0)
 					q_gtnoa(q_name, t_noa);
 				else
@@ -368,6 +369,7 @@
 						<td><span> </span><a id='lblNoa_st' class="lbl"> </a></td>
 						<td>
 							<input id="txtNoa"  type="text" class="txt c1" />
+							<input id="txtUno"  type="text" style="display:none;"/>
 						</td>
 						<td>.
 							<input id="Copy" type="checkbox" />
