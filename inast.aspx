@@ -830,7 +830,7 @@
 						<input id="txtStationno" type="text"  class="txt c2"/>
 						<input id="txtStation" type="text"  class="txt c3"/>
 					</td>
-					<td class='td5'><input type="button" id="btnRc2st" class="txt c1 "></td>
+					<td class='td5'><input type="button" id="btnRc2st" class="txt c1 " style="display:none;"></td>
 				</tr>
 				<tr class="tr4">
 					<td class='td1'><span> </span><a id="lblTgg" class="lbl btn"> </a></td>
