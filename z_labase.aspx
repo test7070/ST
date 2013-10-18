@@ -31,77 +31,42 @@
             function q_gfPost() {
                $('#q_report').q_report({
 					fileName : 'z_labase',
-                        options : [{
-	                        type : '2',
+                        options : [{//[1]
+	                        type : '0',
+	                        name : 'accy',
+	                        value : r_accy
+	                    },{
+	                        type : '2',//[2][3]
 	                        name : 'xsssno',
 	                        dbf : 'sssall',
 	                        index : 'noa,namea',
 	                        src : 'sssall_b.aspx'
                         },{
-	                        type : '2',
+	                        type : '2',//[4][5]
 	                        name : 'xcno',
 	                        dbf : 'acomp',
 	                        index : 'noa,acomp',
 	                        src : 'acomp_b.aspx'
                         },{
-	                        type : '2',
+	                        type : '2',//[6][7]
 	                        name : 'xcustno',
 	                        dbf : 'cust',
 	                        index : 'noa,comp',
 	                        src : 'cust_b.aspx'
                         }, {
-	                        type : '6',
+	                        type : '6',//[8]
 	                        name : 'xyear'
 	                    }, {
-	                        type : '6',
-	                        name : 'cmon'
-	                    }, {
-                            type : '2',
-                            name : 'carownerno',
-                            dbf : 'carowner',
-                            index : 'noa,namea',
-                            src : 'carowner_b.aspx'
-                        },{
-	                        type : '0',
-	                        name : 'accy',
-	                        value : r_accy
-	                    },{
-	                        type : '8',
-	                        name : 'xtypea',
-	                        value : (('').concat(new Array("監理部","非監理部","全部"))).split(',')
-	                    }, {
-							type : '2',
-							name : 'sssall',
-							dbf : 'sssall',
-							index : 'noa,namea',
-							src : 'sssall_b.aspx'
-						}, {
-							type : '2',
-							name : 'xxsssall',
-							dbf : 'sssall',
-							index : 'noa,namea',
-							src : 'sssall_b.aspx'
-						}, {
-	                        type : '1',
+	                        type : '1',//[9][10]
 	                        name : 'xmon'
 	                    }, {
-							type : '5', //select
+							type : '5', //select[11]
 							name : 'xlab',
 							value : ('全部,投保,退保').split(',')
 						}, {
-		                        type : '1',
-	                       		name : 'salary'
-		                    }, {
-		                        type : '5', //select
-		                        name : 'xorder',
-		                        value : ('員工編號,投保公司').split(',')
-		                    },{
-		                        type : '2',
-		                        name : 'partno',
-		                        dbf : 'part',
-		                        index : 'noa,part',
-		                        src : 'part_b.aspx'
-                        }]
+							type : '1',//[12][13]
+							name : 'salary'
+						}]
                     });
                 q_popAssign();
                 
