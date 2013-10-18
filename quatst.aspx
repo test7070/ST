@@ -22,9 +22,9 @@
             q_desc = 1;
             q_tables = 's';
             var q_name = "quat";
-            var q_readonly = ['txtComp', 'txtAcomp', 'txtSales', 'txtWorker', 'txtNoa','txtTotal','txtTax','txtMoney'];
+            var q_readonly = ['txtComp', 'txtAcomp', 'txtSales', 'txtWorker', 'txtNoa','txtTotal','txtTax','txtMoney','txtOrdgweight','txtOrdeweight'];
             var q_readonlys = ['txtNo3', 'txtNo2','txtTheory'];
-            var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtFloata', 15, 3, 1], ['txtWeight', 15, 0, 1], ['txtGweight', 10, 2, 1], ['txtEweight', 15, 0, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
+            var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtFloata', 15, 3, 1], ['txtWeight', 15, 0, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
             var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtWeight', 15, 0, 1], ['txtPrice', 15, 3, 1], ['txtTotal', 15, 0, 1], ['txtTheory', 15, 0, 1], ['txtGweight', 10, 2, 1], ['txtEweight', 15, 0, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
@@ -962,7 +962,6 @@
 		<div style="overflow: auto;display:block;">
 			<!--#include file="../inc/toolbar.inc"-->
 		</div>
-		<div style="overflow: auto;display:block;width:1280px;">
 			<div class="dview" id="dview">
 				<table class="tview" id="tview"   border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
@@ -987,16 +986,16 @@
 						<td class="td1"><span> </span><a id='lblStype' class="lbl"></a></td>
 						<td class="td2"><select id="cmbStype" class="txt c1"></select></td>
 						<td class="td5">
-						<input id="txtOdate" type="text"  class="txt c1"/>
+							<select id="cmbKind" class="txt c1"></select>
 						</td>
-						<td class="td4"><span> </span><a id='lblDatea' class="lbl"></a></td>
-						<td class="td5">
-						<input id="txtDatea" type="text"  class="txt c1"/>
-						</td>
-						<td></td>
 						<td class="td7"><span> </span><a id='lblNoa' class="lbl"></a></td>
 						<td class="td8">
 						<input id="txtNoa" type="text" class="txt c1"/>
+						</td>
+						<td></td>
+						<td class="td1"><span> </span><a id='lblOdate' class="lbl"></a></td>
+						<td class="td2">
+							<input id="txtOdate" type="text"  class="txt c1"/>
 						</td>
 					</tr>
 					<tr class="tr2">
@@ -1010,9 +1009,9 @@
 						<td class="td6">
 						<input id="txtFloata"  type="text"  class="txt num c1" />
 						</td>
-						<td class="td7"><span> </span><a id='lblContract' class="lbl btn"></a></td>
-						<td class="td8">
-						<input id="txtContract"  type="text"  class="txt c1"/>
+						<td class="td4"><span> </span><a id='lblDatea' class="lbl"></a></td>
+						<td class="td5">
+						<input id="txtDatea" type="text"  class="txt c1"/>
 						</td>
 					</tr>
 					<tr class="tr3">
@@ -1065,8 +1064,10 @@
 						<td class="td3" colspan='4'>
 						<input id="txtAddr2"  type="text"  class="txt c1"/>
 						</td>
-						<td class='td7'><span> </span><a id="lblKind" class="lbl"> </a></td>
-						<td class="td8"><select id="cmbKind" class="txt c1"></select></td>
+						<td class="td7"><span> </span><a id='lblContract' class="lbl btn"></a></td>
+						<td class="td8">
+						<input id="txtContract"  type="text"  class="txt c1"/>
+						</td>
 					</tr>
 					<tr class="tr7">
 						<td class="td1"><span> </span><a id='lblMoney' class="lbl"></a></td>
@@ -1092,29 +1093,8 @@
 						<td class="td5" colspan='2' >
 						<input id="txtWeight"  type="text"  class="txt num c1" />
 						</td>
-						<td class="td7"><span> </span><a id='lblApv' class="lbl"></a></td>
-						<td class="td8">
-						<input id="txtApv"  type="text"  class="txt c1" disabled="disabled"/>
-						</td>
-					</tr>
-					<tr style="display: none;">
-						<td class="tdZ trX" colspan="8"><span> </span><a id='lblTweight_st' class="trTitle"> </a></td>
-						<td class="tdZ trX"></td>
-					</tr>
-					<tr style="display: none;">
-						<td class="trX"><span> </span><a id='lblGweight' class="lbl"> </a></td>
-						<td class="trX">
-						<input id="txtGweight" type="text" class="txt c1 num" />
-						</td>
-						<td class="trX"><span> </span><a id='lblEweight' class="lbl"> </a></td>
-						<td class="trX">
-						<input id="txtEweight" type="text" class="txt c1 num" />
-						</td>
-						<td class="tdZ trX"></td>
-						<td class="tdZ trX"></td>
-						<td class="tdZ trX"></td>
-						<td class="tdZ trX"></td>
-						<td class="tdZ trX"></td>
+						<td></td>
+						<td></td>
 					</tr>
 					<tr>
 						<td class="trX"><span> </span><a id='lblOrdgweight' class="lbl"> </a></td>
@@ -1173,12 +1153,12 @@
 						<td >
 						<input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
 						</td>
-						<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 						<td>
 						<input class="btn"  id="btnProduct.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
 						<input type="text" id="txtProductno.*"  style="width:76%; float:left;"/>
 						<span style="display:block; width:1%;float:left;"> </span>
-						<input type="text" id="txtNo3.*"  style="width:76%; float:left;"/>
+						<input type="text" id="txtNo3.*"  style="width:76%; float:left;display:none;"/>
 						</td>
 						<td >
 						<input id="txtStyle.*" type="text" class="txt c6"/>
@@ -1250,7 +1230,6 @@
 					</tr>
 				</table>
 			</div>
-		</div>
 		<input id="q_sys" type="hidden" />
 	</body>
 </html>
