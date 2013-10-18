@@ -161,6 +161,11 @@
 						q_gt('cust', t_where, 0, 0, 0, "");
 					}
 				});
+				$('#btnCredit').click(function(){
+					if(!emp($('#txtCustno').val())){
+						q_box("z_credit.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" + $('#txtCustno').val() + "';"+r_accy+";" + q_cur, 'ordei', "95%", "95%", q_getMsg('btnCredit'));
+					}
+				});
 			}
 
 			function q_boxClose(s2) {///   q_boxClose 2/4 /// 查詢視窗、客戶視窗、訂單視窗  關閉時執行
@@ -1260,10 +1265,7 @@
 						<td><select id="cmbStype" class="txt c1"></select></td>
 						
 						<td><input id="btnOrdei" type="button" /></td>
-						<td align="center">
-						<input id="btnBBTShow" type="button" />
-						<input id="btnOrdem" type="button"/>
-						</td>
+						<td align="center"></td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"></select></td>
 					</tr>
@@ -1342,9 +1344,8 @@
 						</td>
 						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbCoin" style="float:left;width:80px;" > </select></td>
 						<td><span> </span><a id='lblWeight' class="lbl"> </a></td>
-						<td>
-						<input id="txtWeight"  type="text" class="txt num c1"/>
-						</td>
+						<td><input id="txtWeight"  type="text" class="txt num c1"/></td>
+						<td align="center" ><input id="btnBBTShow" type="button" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
@@ -1360,12 +1361,14 @@
 						<td>
 						<input id="txtTotal" type="text" class="txt num c1" />
 						</td>
+						<td align="center"><input id="btnOrdem" type="button"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
-						<td colspan="7">
+						<td colspan="6">
 						<input id="txtMemo" type="text" class="txt c1"/>
 						</td>
+						<td align="center"><input id="btnCredit" type="button" value='' /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
