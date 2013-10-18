@@ -21,7 +21,7 @@
 			q_tables = 's';
 			var q_name = "rc2";
 			var q_readonly = ['txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2','txtMoney','txtWeight','txtTotal','txtTax','txtTotalus'];
-			var q_readonlys = ['txtMoney', 'txtOrdeno', 'txtNo2','txtOrdcno','txtNo3'];
+			var q_readonlys = ['txtMoney', 'txtOrdeno', 'txtNo2'];
 			var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1]];
 			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,2,1]];
 			var bbmMask = [];
@@ -165,7 +165,7 @@
 			function GetOrdcnoList(){
 				var ReturnStr = new Array;
 				for(var i=0;i<q_bbsCount;i++){
-					ReturnStr.push(trim($('#txtOrdcno_'+i).val()));
+					ReturnStr.push(trim($('#txtOrdeno_'+i).val()));
 				}
 				ReturnStr = distinct(ReturnStr).sort();
 				return ReturnStr.toString();
@@ -188,7 +188,7 @@
 									inStr += "'"+distinctArray[i]+"',";
 								}
 								inStr = inStr.substring(0,inStr.length-1);
-								var t_where = "where=^^ ordcno in("+inStr+") ^^";
+								var t_where = "where=^^ ordeno in("+inStr+") ^^";
 								q_gt('rc2s', t_where , 0, 0, 0, "", r_accy);
 							}
 						}
@@ -197,7 +197,7 @@
 						var as = _q_appendData("rc2s", "", true);
 						for(var i = 0;i<as.length;i++){
 							for(var j=0;j<ordcsArray.length;j++){
-								if(as[i].ordcno == ordcsArray[j].noa && as[i].no3 == ordcsArray[j].no2){
+								if(as[i].ordeno == ordcsArray[j].noa && as[i].no2 == ordcsArray[j].no2){
 									ordcsArray[j].mount = dec(ordcsArray[j].mount)-dec(as[i].mount);
 									ordcsArray[j].weight = dec(ordcsArray[j].weight)-dec(as[i].weight);
 								}
@@ -211,7 +211,7 @@
 						}
 						if (ordcsArray[0] != undefined){
 							for(var i=0;i<q_bbsCount;i++){$('#btnMinus_'+i).click();}
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdcno,txtNo3,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit',
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit',
 														 ordcsArray.length, ordcsArray, 
 														 'uno,productno,product,spec,size,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,class,style,unit', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
@@ -1231,7 +1231,7 @@
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblCert_st'></a><br><a id='lblMemos_st'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblOrdenos_st'> </a><br><a id='lblOrdcnos_st'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblOrdcnos_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
@@ -1302,8 +1302,6 @@
 					<td>
 					<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
 					<input id="txtNo2.*" type="text"  style="width:40px;float:left;"/>
-					<input id="txtOrdcno.*" type="text"  style="width:140px;float:left;"/>
-					<input id="txtNo3.*" type="text"  style="width:40px;float:left;"/>
 					</td>
 					<td>
 					<input id="txtSize.*" type="text" style="width:95%;"/>
