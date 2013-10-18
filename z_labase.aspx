@@ -47,24 +47,15 @@
 	                        dbf : 'acomp',
 	                        index : 'noa,acomp',
 	                        src : 'acomp_b.aspx'
-                        },{
-	                        type : '2',//[6][7]
-	                        name : 'xcustno',
-	                        dbf : 'cust',
-	                        index : 'noa,comp',
-	                        src : 'cust_b.aspx'
                         }, {
-	                        type : '6',//[8]
-	                        name : 'xyear'
-	                    }, {
-	                        type : '1',//[9][10]
+	                        type : '1',//[6][7]
 	                        name : 'xmon'
 	                    }, {
-							type : '5', //select[11]
+							type : '5', //select[8]
 							name : 'xlab',
 							value : ('全部,投保,退保').split(',')
 						}, {
-							type : '1',//[12][13]
+							type : '1',//[9][10]
 							name : 'salary'
 						}]
                     });
