@@ -312,12 +312,63 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							ProductAddStyle(b_seq);
+							sum();
 						});
 						//計算理論重
 						$('#textSize1_' + j).change(function() {sum();});
 						$('#textSize2_' + j).change(function() {sum();});
 						$('#textSize3_' + j).change(function() {sum();});
 						$('#textSize4_' + j).change(function() {sum();});
+						$('#txtSize_'+j).change(function(e){
+							var n = $(this).attr('id').replace('txtSize_','');
+							var data = tranSize($.trim($(this).val()));
+							$('#textSize1_'+n).val('');
+							$('#textSize2_'+n).val('');
+							$('#textSize3_'+n).val('');
+							$('#textSize4_'+n).val('');
+							if($('#cmbKind').val()=='A1'){//鋼捲鋼板
+								if(!(data.length==2 || data.length==3)){
+									alert(q_getPara('transize.error01'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+								$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+								$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+								sum();
+							}else if($('#cmbKind').val()=='A4'){//鋼胚
+								if(!(data.length==2 || data.length==3)){
+									alert(q_getPara('transize.error04'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+								$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+								$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+							}else if($('#cmbKind').val()=='B2'){//鋼管
+								if(!(data.length==3 || data.length==4)){
+									alert(q_getPara('transize.error02'));
+									return;
+								}
+								if(data.length==3){
+									$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+									$('#textSize3_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+									$('#textSize4_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+								}else{
+									$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+									$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+									$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+									$('#textSize4_'+n).val((data[3]!=undefined?(data[3].toString().length>0?(isNaN(parseFloat(data[3]))?0:parseFloat(data[3])):0):0));
+								}
+							}else if($('#cmbKind').val()=='C3'){//鋼筋
+								if(data.length!=1){
+									alert(q_getPara('transize.error03'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+							}else{
+								//nothing
+							}
+							sum();
+						});
 					}
 				}
 				_bbsAssign();
@@ -1035,6 +1086,7 @@
 					<td align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
@@ -1043,7 +1095,6 @@
 					<td align="center" style="width:80px;"><a id='lblC1_st'> </a><br><a id='lblNotv_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblUno_st'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -1084,7 +1135,9 @@
 					<input id="txtLengthb.*" type="text" style="display:none;"/>
 					<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
-					
+					<td>
+					<input id="txtSize.*" type="text" style="width:95%;"/>
+					</td>
 					<td >
 					<input id="txtUnit.*" type="text" style="width:90%;"/>
 					</td>
@@ -1113,9 +1166,6 @@
 					<td>
 						<input id="btnUno.*" type="button" value='.' style="float:left;width:20px;"/>
 						<input id="txtUno.*" type="text" style="float:left;width:110px;" />
-					</td>
-					<td>
-					<input id="txtSize.*" type="text" style="width:95%;"/>
 					</td>
 				</tr>
 			</table>
