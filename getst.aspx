@@ -885,9 +885,9 @@
 					<td align="center" style="width:10%;"><a id='lblProductno_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:15%;"><a id='lblProduct_st'> </a></td>
-					<td align="center" id='Size'><a id='lblSize_st'> </a>
+					<td align="center" id='Size'><a id='lblSize_help'> </a>
 					<BR>
-					<a id='lblSize_help'> </a></td>
+					<a id='lblSize_st'> </a></td>
 					<td align="center" style="width:6%;"><a id='lblGmount_st'> </a></td>
 					<td align="center" style="width:6%;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:6%;"><a id='lblWeight_st'> </a></td>
