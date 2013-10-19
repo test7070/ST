@@ -361,112 +361,6 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-						$('#txtSize_' + j).change(function() {
-							var n = $(this).attr('id').replace('txtSize_','');
-							var t_size = $.trim($(this).val());
-							var t_kind = $('#cmbKind').val().substr(0, 1);
-							var t_patt1 = /^(.+)[\',\"][\*,x,X](.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
-							var t_patt2 = /^(.+)[\',\"](.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
-							var t_patt3 = /^(.+)[\*,x,X](.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
-							var t_patt4 = /^(.+)[\',\"][\*,x,X](.+)[\*,x,X](.+)$/g;
-							var t_patt5 = /^(.+)[\',\"](.+)[\*,x,X](.+)$/g;
-							var t_patt6 = /^(.+)[\*,x,X](.+)[\*,x,X](.+)$/g;
-							var t_radius = '', t_dime = '', t_width='', t_length='';
-							var t_pattA = /^([1-9])\-([1-9])\/([1-9])[\',\"]*$/g;
-							var t_pattB = /^([1-9])\/([1-9])[\',\"]*$/g;
-							var t_pattC = /^([1-9])[\',\"]*$/g;
-							var t_mm = 25.4;
-							if(t_patt1.test(t_size)){
-								//管 ONLY
-								t_radius = t_size.replace(t_patt1,'$1');
-								t_width = t_size.replace(t_patt1,'$2');
-								t_dime = t_size.replace(t_patt1,'$3');
-								t_length = t_size.replace(t_patt1,'$4');
-							}else if(t_patt2.test(t_size)){
-								//管 ONLY
-								t_radius = t_size.replace(t_patt2,'$1');
-								t_width = t_size.replace(t_patt2,'$2');
-								t_dime = t_size.replace(t_patt2,'$3');
-								t_length = t_size.replace(t_patt2,'$4');
-							}else if(t_patt3.test(t_size)){
-								//管 ONLY
-								t_radius = t_size.replace(t_patt3,'$1');
-								t_width = t_size.replace(t_patt3,'$2');
-								t_dime = t_size.replace(t_patt3,'$3');
-								t_length = t_size.replace(t_patt3,'$4');
-							}else if(t_patt4.test(t_size)){
-								if(t_kind=='A'){
-									t_dime = t_size.replace(t_patt4,'$1');
-									t_width = t_size.replace(t_patt4,'$2');
-									t_length = t_size.replace(t_patt4,'$3');	
-								}else if(t_kind='B'){
-									t_radius = t_size.replace(t_patt4,'$1');
-									t_dime = t_size.replace(t_patt4,'$2');
-									t_length = t_size.replace(t_patt4,'$3');
-								}else{
-									alert(q_getMsg('lblKind')+'不符。\n【'+(n+1)+'】格式異常。');
-								}
-							}else if(t_patt5.test(t_size)){
-								if(t_kind=='A'){
-									t_dime = t_size.replace(t_patt5,'$1');
-									t_width = t_size.replace(t_patt5,'$2');
-									t_length = t_size.replace(t_patt5,'$3');	
-								}else if(t_kind='B'){
-									t_radius = t_size.replace(t_patt5,'$1');
-									t_dime = t_size.replace(t_patt5,'$2');
-									t_length = t_size.replace(t_patt5,'$3');
-								}else{
-									alert(q_getMsg('lblKind')+'不符。\n【'+(n+1)+'】格式異常。');
-								}
-							}else if(t_patt6.test(t_size)){
-								if(t_kind=='A'){
-									t_dime = t_size.replace(t_patt6,'$1');
-									t_width = t_size.replace(t_patt6,'$2');
-									t_length = t_size.replace(t_patt6,'$3');	
-								}else if(t_kind='B'){
-									t_radius = t_size.replace(t_patt6,'$1');
-									t_dime = t_size.replace(t_patt6,'$2');
-									t_length = t_size.replace(t_patt6,'$3');
-								}else{
-									alert(q_getMsg('lblKind')+'不符。\n【'+(n+1)+'】格式異常。');
-								}
-							}
-							if(t_pattA.test(t_radius)){
-								a = parseFloat(t_radius.replace(t_pattA,'$1'));
-								b = parseFloat(t_radius.replace(t_pattA,'$2'));
-								c = parseFloat(t_radius.replace(t_pattA,'$3'));
-								if(c==0)
-									t_radius = 0 ;
-								else 
-									t_radius = a.add(b.div(c)).mul(t_mm);
-							}else if(t_pattB.test(t_radius)){
-								a = parseFloat(t_radius.replace(t_pattB,'$1'));
-								b = parseFloat(t_radius.replace(t_pattB,'$2'));
-								if(b==0)
-									t_radius = 0 ;
-								else 
-									t_radius = a.div(b).mul(t_mm);
-							}else if(t_pattC.test(t_radius)){
-								t_radius = parseFloat(t_radius.replace(t_pattC,'$1')).mul(t_mm);
-							}
-							if(t_kind=='A'){
-								$('#textSize1_'+n).val(t_dime);
-								$('#textSize2_'+n).val(t_width);
-								$('#textSize3_'+n).val(t_length);
-								$('#textSize4_'+n).val(0);
-							}else if(t_kind='B'){
-								$('#textSize1_'+n).val(t_radius);
-								$('#textSize2_'+n).val(t_width);
-								$('#textSize3_'+n).val(t_dime);
-								$('#textSize4_'+n).val(t_length);
-							}else{
-								$('#textSize1_'+n).val(0);
-								$('#textSize2_'+n).val(0);
-								$('#textSize3_'+n).val(t_length);
-								$('#textSize4_'+n).val(0);
-							}
-							sum();
-						});
 						$('#txtUnit_' + j).focusout(function() {
 							sum();
 						});
@@ -497,16 +391,58 @@
 							ProductAddStyle(n);
 						});
 						//計算理論重
-						$('#textSize1_' + j).change(function() {
-							sum();
-						});
-						$('#textSize2_' + j).change(function() {
-							sum();
-						});
-						$('#textSize3_' + j).change(function() {
-							sum();
-						});
-						$('#textSize4_' + j).change(function() {
+						$('#textSize1_' + j).change(function() {sum();});
+						$('#textSize2_' + j).change(function() {sum();});
+						$('#textSize3_' + j).change(function() {sum();});
+						$('#textSize4_' + j).change(function() {sum();});
+						$('#txtSize_'+j).change(function(e){
+							var n = $(this).attr('id').replace('txtSize_','');
+							var data = tranSize($.trim($(this).val()));
+							$('#textSize1_'+n).val('');
+							$('#textSize2_'+n).val('');
+							$('#textSize3_'+n).val('');
+							$('#textSize4_'+n).val('');
+							if($('#cmbKind').val()=='A1'){//鋼捲鋼板
+								if(!(data.length==2 || data.length==3)){
+									alert(q_getPara('transize.error01'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+								$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+								$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+								sum();
+							}else if($('#cmbKind').val()=='A4'){//鋼胚
+								if(!(data.length==2 || data.length==3)){
+									alert(q_getPara('transize.error04'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+								$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+								$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+							}else if($('#cmbKind').val()=='B2'){//鋼管
+								if(!(data.length==3 || data.length==4)){
+									alert(q_getPara('transize.error02'));
+									return;
+								}
+								if(data.length==3){
+									$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+									$('#textSize3_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+									$('#textSize4_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+								}else{
+									$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+									$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+									$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+									$('#textSize4_'+n).val((data[3]!=undefined?(data[3].toString().length>0?(isNaN(parseFloat(data[3]))?0:parseFloat(data[3])):0):0));
+								}
+							}else if($('#cmbKind').val()=='C3'){//鋼筋
+								if(data.length!=1){
+									alert(q_getPara('transize.error03'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+							}else{
+								//nothing
+							}
 							sum();
 						});
 
