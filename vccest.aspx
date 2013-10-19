@@ -230,70 +230,62 @@
                             ProductAddStyle(b_seq);
                         });
                         //將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
-                        $('#textSize1_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            if ($('#cmbKind').val().substr(0, 1) == 'A') {
-                                q_tr('txtDime_' + b_seq, q_float('textSize1_' + b_seq));
-                                //厚度$('#txtDime_'+b_seq).val($('#textSize1_' + b_seq).val());
-                            } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-                                q_tr('txtRadius_' + b_seq, q_float('textSize1_' + b_seq));
-                                //短徑$('#txtRadius_'+b_seq).val($('#textSize1_' + b_seq).val());
-                            }
-                            q_tr('txtWeight_' + b_seq, getTheory(b_seq));
-                        });
-                        $('#textSize2_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            if ($('#cmbKind').val().substr(0, 1) == 'A') {
-                                q_tr('txtWidth_' + b_seq, q_float('textSize2_' + b_seq));
-                                //寬度$('#txtWidth_'+b_seq).val($('#textSize2_' + b_seq).val());
-                            } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-                                q_tr('txtWidth_' + b_seq, q_float('textSize2_' + b_seq));
-                                //長徑$('#txtWidth_'+b_seq).val($('#textSize2_' + b_seq).val());
-                            }
-                            q_tr('txtWeight_' + b_seq, getTheory(b_seq));
-                        });
-                        $('#textSize3_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            if ($('#cmbKind').val().substr(0, 1) == 'A') {
-                                q_tr('txtLengthb_' + b_seq, q_float('textSize3_' + b_seq));
-                                //長度$('#txtLengthb_'+b_seq).val($('#textSize3_' + b_seq).val());
-                            } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-                                q_tr('txtDime_' + b_seq, q_float('textSize3_' + b_seq));
-                                //厚度$('#txtDime_'+b_seq).val($('#textSize3_' + b_seq).val());
-                            } else {//鋼筋、胚
-                                q_tr('txtLengthb_' + b_seq, q_float('textSize3_' + b_seq));
-                            }
-                            q_tr('txtWeight_' + b_seq, getTheory(b_seq));
-                        });
-                        $('#textSize4_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            if ($('#cmbKind').val().substr(0, 1) == 'A') {
-                                q_tr('txtRadius_' + b_seq, q_float('textSize4_' + b_seq));
-                                //短徑為0 $('#txtRadius_'+b_seq).val($('#textSize4_' + b_seq).val());
-                            } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-                                q_tr('txtLengthb_' + b_seq, q_float('textSize4_' + b_seq));
-                                //長度$('#txtLengthb_'+b_seq).val($('#textSize4_' + b_seq).val());
-                            }
-                            q_tr('txtWeight_' + b_seq, getTheory(b_seq));
-                        });
+                        $('#textSize1_' + j).change(function() {sum();});
+						$('#textSize2_' + j).change(function() {sum();});
+						$('#textSize3_' + j).change(function() {sum();});
+						$('#textSize4_' + j).change(function() {sum();});
+						$('#txtSize_'+j).change(function(e){
+							var n = $(this).attr('id').replace('txtSize_','');
+							var data = tranSize($.trim($(this).val()));
+							$('#textSize1_'+n).val('');
+							$('#textSize2_'+n).val('');
+							$('#textSize3_'+n).val('');
+							$('#textSize4_'+n).val('');
+							if($('#cmbKind').val()=='A1'){//鋼捲鋼板
+								if(!(data.length==2 || data.length==3)){
+									alert(q_getPara('transize.error01'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+								$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+								$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+								sum();
+							}else if($('#cmbKind').val()=='A4'){//鋼胚
+								if(!(data.length==2 || data.length==3)){
+									alert(q_getPara('transize.error04'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+								$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+								$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+							}else if($('#cmbKind').val()=='B2'){//鋼管
+								if(!(data.length==3 || data.length==4)){
+									alert(q_getPara('transize.error02'));
+									return;
+								}
+								if(data.length==3){
+									$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+									$('#textSize3_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+									$('#textSize4_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+								}else{
+									$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+									$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+									$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+									$('#textSize4_'+n).val((data[3]!=undefined?(data[3].toString().length>0?(isNaN(parseFloat(data[3]))?0:parseFloat(data[3])):0):0));
+								}
+							}else if($('#cmbKind').val()=='C3'){//鋼筋
+								if(data.length!=1){
+									alert(q_getPara('transize.error03'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+							}else{
+								//nothing
+							}
+							sum();
+						});
                         $('#txtMount_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            q_tr('txtWeight_' + b_seq, getTheory(b_seq));
+                            sum();
                         });
                         $('#txtWeight_' + j).change(function() {
                             sum();
@@ -345,7 +337,25 @@
 
             function sum() {
                 var t1 = 0, t_unit, t_mount, t_weight = 0;
+                var t_unit = '';
                 for (var j = 0; j < q_bbsCount; j++) {
+                	t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
+                    //---------------------------------------
+                    if ($('#cmbKind').val().substr(0, 1) == 'A') {
+                        q_tr('txtDime_' + j, q_float('textSize1_' + j));
+                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
+                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                        q_tr('txtRadius_' + j, q_float('textSize4_' + j));
+                    } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+                        q_tr('txtRadius_' + j, q_float('textSize1_' + j));
+                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
+                        q_tr('txtDime_' + j, q_float('textSize3_' + j));
+                        q_tr('txtLengthb_' + j, q_float('textSize4_' + j));
+                    } else {//鋼筋、胚
+                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                    }
+                    getTheory(j);
+                    //---------------------------------------
                     t_weight += q_float('txtWeight_' + j);
                 }// j
                 q_tr('txtWeight', t_weight);

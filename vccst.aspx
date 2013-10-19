@@ -483,18 +483,60 @@
                             sum();
                         });
                         //將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
-                        $('#textSize1_' + j).change(function() {
-                            sum();
-                        });
-                        $('#textSize2_' + j).change(function() {
-                            sum();
-                        });
-                        $('#textSize3_' + j).change(function() {
-                            sum();
-                        });
-                        $('#textSize4_' + j).change(function() {
-                            sum();
-                        });
+                        $('#textSize1_' + j).change(function() {sum();});
+						$('#textSize2_' + j).change(function() {sum();});
+						$('#textSize3_' + j).change(function() {sum();});
+						$('#textSize4_' + j).change(function() {sum();});
+						$('#txtSize_'+j).change(function(e){
+							var n = $(this).attr('id').replace('txtSize_','');
+							var data = tranSize($.trim($(this).val()));
+							$('#textSize1_'+n).val('');
+							$('#textSize2_'+n).val('');
+							$('#textSize3_'+n).val('');
+							$('#textSize4_'+n).val('');
+							if($('#cmbKind').val()=='A1'){//鋼捲鋼板
+								if(!(data.length==2 || data.length==3)){
+									alert(q_getPara('transize.error01'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+								$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+								$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+								sum();
+							}else if($('#cmbKind').val()=='A4'){//鋼胚
+								if(!(data.length==2 || data.length==3)){
+									alert(q_getPara('transize.error04'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+								$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+								$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+							}else if($('#cmbKind').val()=='B2'){//鋼管
+								if(!(data.length==3 || data.length==4)){
+									alert(q_getPara('transize.error02'));
+									return;
+								}
+								if(data.length==3){
+									$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+									$('#textSize3_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+									$('#textSize4_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+								}else{
+									$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+									$('#textSize2_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+									$('#textSize3_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+									$('#textSize4_'+n).val((data[3]!=undefined?(data[3].toString().length>0?(isNaN(parseFloat(data[3]))?0:parseFloat(data[3])):0):0));
+								}
+							}else if($('#cmbKind').val()=='C3'){//鋼筋
+								if(data.length!=1){
+									alert(q_getPara('transize.error03'));
+									return;
+								}
+								$('#textSize1_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+							}else{
+								//nothing
+							}
+							sum();
+						});
                         //-------------------------------------------------
                         $('#txtSpec_' + j).change(function() {
                             t_IdSeq = -1;
@@ -1290,6 +1332,7 @@
 					<td align="center" id="Size"><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>
 					<td align="center" style="width:30px;"><a id='lblUnit'></a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
 					<td align="center" style="width:80px;"><a id='lblWeight_st'></a></td>
@@ -1303,7 +1346,7 @@
 					代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
 					<td align="center" style="width:170px;"><a id='lblMemos_st'></a></td>
-					<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>
+					
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -1350,6 +1393,9 @@
 					<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
 					<td>
+					<input id="txtSize.*" type="text" style="width:95%;" />
+					</td>
+					<td>
 					<input id="txtUnit.*" type="text" class="txt num" style="width:95%;text-align: center;"/>
 					</td>
 					<td>
@@ -1382,9 +1428,7 @@
 					<input id="txtNo2.*" type="text" style="width:20%;" />
 					<input id="recno.*" type="hidden" />
 					</td>
-					<td>
-					<input id="txtSize.*" type="text" style="width:95%;" />
-					</td>
+					
 				</tr>
 			</table>
 		</div>
