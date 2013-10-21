@@ -345,8 +345,8 @@
                 $('#cmbKind').val(q_getPara('vcc.kind'));
                 size_change();
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
-                $('#txtDatea').val(q_date());
-                $('#txtDatea').focus();
+                $('#txtOdate').val(q_date());
+                $('#txtDatea').val(q_date()).focus();
             }
 
             function btnModi() {
