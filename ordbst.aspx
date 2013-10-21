@@ -931,23 +931,12 @@
 						<td colspan="4" >
 							<input id="txtPost"  type="text" style="float:left; width:25%;"/>
 							<input id="txtAddr"  type="text" style="float:left; width:75%;"/></td>
-						<td>
-							<span> </span><a id='lblTrantype' class="lbl"> </a>
-						</td>
-						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>
-						
-						
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
-						<input id="txtPaytype" type="text" style="float:left; width:165px;"/>
-						<select id="combPaytype" style="float:left; width:20px;"></select></td>
+							<input id="txtPaytype" type="text" style="float:left; width:120px;"/>
+							<select id="combPaytype" style="float:left; width:20px;"></select>
+							<select id="cmbTrantype" class="txt" name="D1" style="float:left; width:60px;"></select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
@@ -1025,7 +1014,7 @@
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblC1s'> </a><br><a id='lblNotvs'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblUno_st'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1094,7 +1083,6 @@
 					<input id="txtNo2.*" type="text"  style="width:30px;float:left;"/>
 					</td>
 					<td>
-						<input id="btnUno.*" type="button" value='.' style="float:left;width:20px;"/>
 						<input id="txtUno.*" type="text" style="float:left;width:110px;" />
 					</td>
 					<td>

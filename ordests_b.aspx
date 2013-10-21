@@ -107,7 +107,7 @@
 					</td>
 					<td align="center" style="width:3%;"> </td>
 					<td align="center" style="width:12%;"><a id='lblProductno'></a>/<a id='lblProduct'></a></td>
-					<td align="center" style="width:18%;"><a id='lblUno'></a>/<a id='lblSize'></a></td>
+					<td align="center" style="width:23%;"><a id='lblUno'></a>/<a id='lblSize'></a></td>
 					<td align="center" style="width:6%;"><a id='lblUnit'></a><br><a id='lblSpec'></a></td>
 					<td align="center" style="width:8%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:8%;"><a id='lblWeight'></a></td>
@@ -148,13 +148,15 @@
 						<input class="txt"  id="txtProductno.*" type="text" style="width:98%;" />
 						<input class="txt" id="txtProduct.*" type="text" style="width:98%;" />
 					</td>
-					<td style="width:18%;">
+					<td style="width:23%;">
 						<input class="txt" id="txtUno.*" type="text"  style="width:98%;" />
-						<input class="txt" id="txtDime.*" type="text"  style="width:25%;text-align:right;" />
+						<input class="txt" id="txtRadius.*" type="text"  style="width:20%;text-align:right;" />
 						x
-						<input class="txt" id="txtWidth.*" type="text"  style="width:25%;text-align:right;" />
+						<input class="txt" id="txtWidth.*" type="text"  style="width:20%;text-align:right;" />
 						x
-						<input class="txt" id="txtLengthb.*" type="text"  style="width:25%;text-align:right;" />
+						<input class="txt" id="txtDime.*" type="text"  style="width:20%;text-align:right;" />
+						x
+						<input class="txt" id="txtLengthb.*" type="text"  style="width:20%;text-align:right;" />
 					</td>
 					<td style="width:6%;">
 						<input class="txt" id="txtUnit.*" type="text" style="width:94%;text-align:center;"/>
