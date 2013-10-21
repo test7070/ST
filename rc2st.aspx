@@ -471,6 +471,8 @@
 						$('#textSize3_' + j).change(function() {sum();});
 						$('#textSize4_' + j).change(function() {sum();});
 						$('#txtSize_'+j).change(function(e){
+							if($.trim($(this).val).length==0)
+								return;
 							var n = $(this).attr('id').replace('txtSize_','');
 							var data = tranSize($.trim($(this).val()));
 							$('#textSize1_'+n).val('');
@@ -594,6 +596,14 @@
 
                 for (var j = 0; j < q_bbsCount; j++) {
                     t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
+					t_product = $.trim($('#txtProduct_' + j).val());
+					if(t_unit.length==0 && t_product.length>0){
+						if(t_product.indexOf('管')>0)
+							t_unit = '支';
+						else
+							t_unit = 'KG';
+						$('#txtUnit_' + j).val(t_unit);
+					}
                     //---------------------------------------
                     if ($('#cmbKind').val().substr(0, 1) == 'A') {
                         q_tr('txtDime_' + j, q_float('textSize1_' + j));
