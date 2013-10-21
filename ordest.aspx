@@ -396,6 +396,8 @@
 						$('#textSize3_' + j).change(function() {sum();});
 						$('#textSize4_' + j).change(function() {sum();});
 						$('#txtSize_'+j).change(function(e){
+							if($.trim($(this).val).length==0)
+								return;
 							var n = $(this).attr('id').replace('txtSize_','');
 							var data = tranSize($.trim($(this).val()));
 							$('#textSize1_'+n).val('');
