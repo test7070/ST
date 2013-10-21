@@ -1343,16 +1343,17 @@
 					<a id='lblSize_st'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblWeights'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblPrices'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblOrdet_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblGemounts'> </a><br><a id='lblNotv'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMemos'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblssale_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblEnda_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1433,6 +1434,9 @@
 					</td>
 					<td align="center">
 					<input id="chkIscut.*" type="checkbox"/>
+					</td>
+					<td align="center">
+					<input id="chkEnda.*" type="checkbox"/>
 					</td>
 					<td align="center">
 					<input class="btn"  id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" />
