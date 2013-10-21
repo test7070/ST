@@ -51,8 +51,16 @@
                 }
                 mainForm(0);
             }
+ 
+            function sum() {
+            	for(var j = 0;j < q_bbsCount;j++){
+            		var t_dime = dec($('#txtDime_' + j).val());
+           			$('#txtBdime_'+j).val(round(q_mul(t_dime,0.93),2));
+            		$('#txtEdime_'+j).val(round(q_mul(t_dime,1.07),2));
+            	}
+            }
 
-            function mainPost() {
+			function mainPost() {
             	q_getFormat();
 				bbmMask = [['txtDatea',r_picd],['txtBdate',r_picd],['txtEdate',r_picd]];
 				bbsMask = [['txtDate2',r_picd],['txtDatea',r_picd]];
@@ -125,7 +133,7 @@
                 switch (b_pop) {
 					case 'ordes':
 	                    if (q_cur > 0 && q_cur < 4) {
-	                        iif (!b_ret || b_ret.length == 0){
+	                        if (!b_ret || b_ret.length == 0){
                             	b_pop = '';
 								return;
 							}
@@ -329,14 +337,6 @@
                     }
                 }
                 _bbtAssign();
-            }
-
-            function sum() {
-            	for(var j = 0;j < q_bbsCount;j++){
-            		var t_dime = dec($('#txtDime_' + j).val());
-           			$('#txtBdime_'+j).val(round(t_dime*0.93,2));
-            		$('#txtEdime_'+j).val(round(t_dime*1.07,2));
-            	}
             }
 
             function q_appendData(t_Table) {

@@ -51,6 +51,18 @@
 
                 mainForm(1);
             }
+            
+            function sum(){
+            	if (!(q_cur == 1 || q_cur == 2))
+                    return;
+            	var t_weight=0,t_mount=0;
+            	for(var i=0;i<q_bbsCount;i++){
+            		t_weight = q_add(t_weight,q_float('txtWeight_'+i));
+            		t_mount = q_add(t_mount,q_float('txtMount_'+i));
+            	}
+            	$('#txtWeight').val(FormatNumber(t_weight));
+            	$('#txtMount').val(FormatNumber(t_mount));
+            }
 
             function mainPost() {
                 q_getFormat();
@@ -62,16 +74,13 @@
                 $('#cmbKind').change(function() {
                     size_change();
                 });
-
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
-                var
-                ret;
+                var ret;
                 switch (b_pop) {
                     case q_name + '_s':
                         q_boxClose2(s2);
-                        ///   q_boxClose 3/4
                         break;
                 }/// end Switch
                 b_pop = '';
@@ -91,7 +100,6 @@
                         size_change();
                         break;
                 }
-
             }
 
             function q_stPost() {
@@ -131,19 +139,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-
                 q_box('cng_s.aspx', q_name + '_s', "500px", "420px", q_getMsg("popSeek"));
-            }
-            function sum(){
-            	if (!(q_cur == 1 || q_cur == 2))
-                    return;
-            	var t_weight=0,t_mount=0;
-            	for(var i=0;i<q_bbsCount;i++){
-            		t_weight = t_weight.add(q_float('txtWeight_'+i));
-            		t_mount = t_mount.add(q_float('txtMount_'+i));
-            	}
-            	$('#txtWeight').val(FormatNumber(t_weight));
-            	$('#txtMount').val(FormatNumber(t_mount));
             }
 
             function bbsAssign() {
@@ -161,7 +157,6 @@
                             /// 要先給  才能使用 q_bodyId()
                             q_bodyId($(this).attr('id'));
                             b_seq = t_IdSeq;
-
                             if ($('#cmbKind').val().substr(0, 1) == 'A') {
                                 q_tr('txtDime_' + b_seq, q_float('textSize1_' + b_seq));
                                 //厚度$('#txtDime_'+b_seq).val($('#textSize1_' + b_seq).val());
@@ -169,14 +164,12 @@
                                 q_tr('txtRadius_' + b_seq, q_float('textSize1_' + b_seq));
                                 //短徑$('#txtRadius_'+b_seq).val($('#textSize1_' + b_seq).val());
                             }
-
                         });
                         $('#textSize2_' + j).change(function() {
                             t_IdSeq = -1;
                             /// 要先給  才能使用 q_bodyId()
                             q_bodyId($(this).attr('id'));
                             b_seq = t_IdSeq;
-
                             if ($('#cmbKind').val().substr(0, 1) == 'A') {
                                 q_tr('txtWidth_' + b_seq, q_float('textSize2_' + b_seq));
                                 //寬度$('#txtWidth_'+b_seq).val($('#textSize2_' + b_seq).val());
@@ -184,14 +177,12 @@
                                 q_tr('txtWidth_' + b_seq, q_float('textSize2_' + b_seq));
                                 //長徑$('#txtWidth_'+b_seq).val($('#textSize2_' + b_seq).val());
                             }
-
                         });
                         $('#textSize3_' + j).change(function() {
                             t_IdSeq = -1;
                             /// 要先給  才能使用 q_bodyId()
                             q_bodyId($(this).attr('id'));
                             b_seq = t_IdSeq;
-
                             if ($('#cmbKind').val().substr(0, 1) == 'A') {
                                 q_tr('txtLengthb_' + b_seq, q_float('textSize3_' + b_seq));
                                 //長度$('#txtLengthb_'+b_seq).val($('#textSize3_' + b_seq).val());
@@ -201,14 +192,12 @@
                             } else {//鋼筋、胚
                                 q_tr('txtLengthb_' + b_seq, q_float('textSize3_' + b_seq));
                             }
-
                         });
                         $('#textSize4_' + j).change(function() {
                             t_IdSeq = -1;
                             /// 要先給  才能使用 q_bodyId()
                             q_bodyId($(this).attr('id'));
                             b_seq = t_IdSeq;
-
                             if ($('#cmbKind').val().substr(0, 1) == 'A') {
                                 q_tr('txtRadius_' + b_seq, q_float('textSize4_' + b_seq));
                                 //短徑為0 $('#txtRadius_'+b_seq).val($('#textSize4_' + b_seq).val());
@@ -216,7 +205,6 @@
                                 q_tr('txtLengthb_' + b_seq, q_float('textSize4_' + b_seq));
                                 //長度$('#txtLengthb_'+b_seq).val($('#textSize4_' + b_seq).val());
                             }
-
                         });
                         //-------------------------------------------------------------------------------------
                     }
@@ -248,7 +236,6 @@
 
             function wrServer(key_value) {
                 var i;
-
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
                 _btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
             }
@@ -258,7 +245,6 @@
                     as[bbsKey[1]] = '';
                     return;
                 }
-
                 q_nowf();
                 as['date'] = abbm2['date'];
                 return true;
@@ -388,36 +374,6 @@
                 }
             }
 
-            function checkId(str) {
-                if ((/^[a-z,A-Z][0-9]{9}$/g).test(str)) {//身分證字號
-                    var key = 'ABCDEFGHJKLMNPQRSTUVWXYZIO';
-                    var s = (key.indexOf(str.substring(0, 1)) + 10) + str.substring(1, 10);
-                    var n = parseInt(s.substring(0, 1)) * 1 + parseInt(s.substring(1, 2)) * 9 + parseInt(s.substring(2, 3)) * 8 + parseInt(s.substring(3, 4)) * 7 + parseInt(s.substring(4, 5)) * 6 + parseInt(s.substring(5, 6)) * 5 + parseInt(s.substring(6, 7)) * 4 + parseInt(s.substring(7, 8)) * 3 + parseInt(s.substring(8, 9)) * 2 + parseInt(s.substring(9, 10)) * 1 + parseInt(s.substring(10, 11)) * 1;
-                    if ((n % 10) == 0)
-                        return 1;
-                } else if ((/^[0-9]{8}$/g).test(str)) {//統一編號
-                    var key = '12121241';
-                    var n = 0;
-                    var m = 0;
-                    for (var i = 0; i < 8; i++) {
-                        n = parseInt(str.substring(i, i + 1)) * parseInt(key.substring(i, i + 1));
-                        m += Math.floor(n / 10) + n % 10;
-                    }
-                    if ((m % 10) == 0 || ((str.substring(6, 7) == '7' ? m + 1 : m) % 10) == 0)
-                        return 2;
-                } else if ((/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/g).test(str)) {//西元年
-                    var regex = new RegExp("^(?:(?:([0-9]{4}(-|\/)(?:(?:0?[1,3-9]|1[0-2])(-|\/)(?:29|30)|((?:0?[13578]|1[02])(-|\/)31)))|([0-9]{4}(-|\/)(?:0?[1-9]|1[0-2])(-|\/)(?:0?[1-9]|1\\d|2[0-8]))|(((?:(\\d\\d(?:0[48]|[2468][048]|[13579][26]))|(?:0[48]00|[2468][048]00|[13579][26]00))(-|\/)0?2(-|\/)29))))$");
-                    if (regex.test(str))
-                        return 3;
-                } else if ((/^[0-9]{3}\/[0-9]{2}\/[0-9]{2}$/g).test(str)) {//民國年
-                    str = (parseInt(str.substring(0, 3)) + 1911) + str.substring(3);
-                    var regex = new RegExp("^(?:(?:([0-9]{4}(-|\/)(?:(?:0?[1,3-9]|1[0-2])(-|\/)(?:29|30)|((?:0?[13578]|1[02])(-|\/)31)))|([0-9]{4}(-|\/)(?:0?[1-9]|1[0-2])(-|\/)(?:0?[1-9]|1\\d|2[0-8]))|(((?:(\\d\\d(?:0[48]|[2468][048]|[13579][26]))|(?:0[48]00|[2468][048]00|[13579][26]00))(-|\/)0?2(-|\/)29))))$");
-                    if (regex.test(str))
-                        return 4;
-                }
-                return 0;
-                //錯誤
-            }
             function FormatNumber(n) {
                 var xx = "";
                 if (n < 0) {
@@ -428,88 +384,6 @@
                 var arr = n.split(".");
                 var re = /(\d{1,3})(?=(\d{3})+$)/g;
                 return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
-            }
-
-
-            Number.prototype.round = function(arg) {
-                return Math.round(this.mul(Math.pow(10, arg))).div(Math.pow(10, arg));
-            };
-            Number.prototype.div = function(arg) {
-                return accDiv(this, arg);
-            };
-            function accDiv(arg1, arg2) {
-                var t1 = 0, t2 = 0, r1, r2;
-                try {
-                    t1 = arg1.toString().split(".")[1].length;
-                } catch (e) {
-                }
-                try {
-                    t2 = arg2.toString().split(".")[1].length;
-                } catch (e) {
-                }
-                with (Math) {
-                    r1 = Number(arg1.toString().replace(".", ""));
-                    r2 = Number(arg2.toString().replace(".", ""));
-                    return (r1 / r2) * pow(10, t2 - t1);
-                }
-            }
-
-
-            Number.prototype.mul = function(arg) {
-                return accMul(arg, this);
-            };
-            function accMul(arg1, arg2) {
-                var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
-                try {
-                    m += s1.split(".")[1].length;
-                } catch (e) {
-                }
-                try {
-                    m += s2.split(".")[1].length;
-                } catch (e) {
-                }
-                return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
-            }
-
-
-            Number.prototype.add = function(arg) {
-                return accAdd(arg, this);
-            };
-            function accAdd(arg1, arg2) {
-                var r1, r2, m;
-                try {
-                    r1 = arg1.toString().split(".")[1].length;
-                } catch (e) {
-                    r1 = 0;
-                }
-                try {
-                    r2 = arg2.toString().split(".")[1].length;
-                } catch (e) {
-                    r2 = 0;
-                }
-                m = Math.pow(10, Math.max(r1, r2));
-                return (Math.round(arg1 * m) + Math.round(arg2 * m)) / m;
-            }
-
-
-            Number.prototype.sub = function(arg) {
-                return accSub(this, arg);
-            };
-            function accSub(arg1, arg2) {
-                var r1, r2, m, n;
-                try {
-                    r1 = arg1.toString().split(".")[1].length;
-                } catch (e) {
-                    r1 = 0;
-                }
-                try {
-                    r2 = arg2.toString().split(".")[1].length;
-                } catch (e) {
-                    r2 = 0;
-                }
-                m = Math.pow(10, Math.max(r1, r2));
-                n = (r1 >= r2) ? r1 : r2;
-                return parseFloat(((Math.round(arg1 * m) - Math.round(arg2 * m)) / m).toFixed(n));
             }
 		</script>
 		<style type="text/css">
