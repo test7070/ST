@@ -57,8 +57,8 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbItype", q_getPara('ina.typea'));
-				q_cmbParse("cmbTypea", q_getPara('uccc.itype'));
+				q_cmbParse("cmbTypea", q_getPara('ina.typea'));
+				q_cmbParse("cmbItype", q_getPara('uccc.itype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
 				q_cmbParse("cmbTrantype", q_getPara('rc2.tran'));
 				/* 若非本會計年度則無法存檔 */
@@ -809,12 +809,12 @@
 		<div class='dbbm' style="width: 68%;float:left">
 			<table class="tbbm"  id="tbbm" border="0" cellpadding='2' cellspacing='0'>
 				<tr class="tr1">
+					<td class='td3'><span> </span><a id="lblDatea" class="lbl"> </a></td>
+					<td class="td4"><input id="txtDatea" type="text" class="txt c3"/></td>
 					<td class='td1'><span> </span><a id="lblItype" class="lbl"> </a></td>
 					<td class="td2"><select id="cmbItype" class="txt c1"> </select></td>
 					<td class='td1'><span> </span><a id="lblType" class="lbl"> </a></td>
 					<td class="td2"><select id="cmbTypea" class="txt c1"> </select></td>
-					<td class='td3'><span> </span><a id="lblDatea" class="lbl"> </a></td>
-					<td class="td4"><input id="txtDatea" type="text" class="txt c3"/></td>
 				</tr>
 				<tr class="tr2">
 					<td class='td1'><span> </span><a id="lblKind" class="lbl"> </a></td>

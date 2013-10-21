@@ -36,35 +36,45 @@
 							name : 'xstktype',
 							value : [q_getPara('report.all')].concat(q_getPara('sys.stktype').split(','))
 						}, {
-							type : '2', //[5][6]
+							type : '5', //[5]
+							name : 'xitype',
+							value : q_getPara('uccc.itype').split(',')
+						}, {
+							type : '2', //[6][7]
 							name : 'xproduct',
 							dbf : 'ucaucc',
 							index : 'noa,product',
 							src : 'ucaucc_b.aspx'
 						},{
-							type : '6', //[7]
+							type : '6', //[8]
 							name : 'xstyle'
 						},{
-							type : '6', //[8]
+							type : '6', //[9]
 							name : 'xwaste'
 						},{
-							type : '1', //[9][10]
+							type : '1', //[10][11]
 							name : 'xradius'
 						},{
-							type : '1', //[11][12]
+							type : '1', //[12][13]
 							name : 'xwidth'
 						},{
-							type : '1', //[13][14]
+							type : '1', //[14][15]
 							name : 'xdime'
 						},{
-							type : '1', //[15][16]
+							type : '1', //[16][17]
 							name : 'xlengthb'
 						},{
-							type : '2', //[17] [18]
+							type : '2', //[18] [19]
 							name : 'xstoreno',
 							dbf : 'store',
 							index : 'noa,store',
 							src : 'store_b.aspx'
+						},{
+							type : '2', //[20] [21]
+							name : 'xtggno',
+							dbf : 'tgg',
+							index : 'noa,comp',
+							src : 'tgg_b.aspx'
 						}
 					]
 				});
@@ -77,6 +87,11 @@
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();
+				$('#Xtggno').hide()
+				$('#Xitype .label').css('width','5px');
+				$('#Xstktype .label').css('width','5px');
+				$('#Xitype').css('width','120px');
+				$('#Xstktype').css('width','120px');
 				
 				$('#txtXedate').mask('999/99/99');
 				$('#txtXedate').val(q_date());
@@ -86,6 +101,16 @@
 				$('#Xstktype select').val('A1');
 				setDefaultValue();
 				size_change();
+				
+				$('#Xitype .cmb')
+				
+				$('#Xitype .cmb').change(function() {
+					if($('#Xitype .cmb').val()=='1'){
+						$('#Xtggno').hide()
+					}else{
+						$('#Xtggno').show()
+					}
+				});
 			}
 
 			function q_boxClose(s2) {
