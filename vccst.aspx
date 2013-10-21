@@ -173,6 +173,7 @@
                 bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
+                q_cmbParse("cmbStype", q_getPara('vccst.stype'));
                 q_cmbParse("cmbCoin", q_getPara('sys.coin'));
                 q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
                 q_cmbParse("cmbTrantype", q_getPara('rc2.tran'));
@@ -1061,7 +1062,7 @@
             }
             .dbbm {
                 float: left;
-                width: 800px;
+                width: 900px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -1184,7 +1185,10 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblType' class="lbl"> </a></td>
-						<td><select id="cmbTypea" class="txt c1"></select></td>
+						<td>
+							<select id="cmbTypea" class="txt" style="width:40%;"></select>
+							<select id="cmbStype" class="txt" style="width:60%;"></select>
+						</td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"></select></td>
 						<td></td>

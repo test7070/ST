@@ -220,14 +220,14 @@
 		<table id="tFixedTitle" class='tFixedTitle'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'  >
 			<tr style='color:White; background:#003366;' >
 				<td align="center" style="width:1%;"><input type="checkbox" id="checkAllCheckbox"/></td>
-				<td align="center" style="width:8%;"><a id='lblProductno_st'></a></td>
-				<td align="center" style="width:10%;"><a id='lblProduct'></a></td>
+				<td align="center" style="width:6%;"><a id='lblProductno_st'></a></td>
+				<td align="center" style="width:8%;"><a id='lblProduct'></a></td>
 				<td align="center" style="width:10%;"><a id='lblSpec'></a></td>
 				<td align="center" id='FixedSize'><a id='lblSize'></a><BR><a id='lblSize_help'> </a></td>
 				<td align="center" style="width:7%;"><a id='lblMount'></a></td>
 				<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
 				<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
-				<td align="center" style="width:10%;"><a id='lblNoa'></a></td>
+				<td align="center" style="width:14%;"><a id='lblNoa'></a></td>
 				<td align="center"><a id='lblMemo'></a></td>
 			</tr>
 		</table>
@@ -238,20 +238,20 @@
 				<td align="center" style="width:1%;">
 					<input type="checkbox" id="checkAllCheckbox"/>
 				</td>
-				<td align="center" style="width:8%;"><a id='lblProductno_st'></a></td>
-				<td align="center" style="width:10%;"><a id='lblProduct'></a></td>
+				<td align="center" style="width:6%;"><a id='lblProductno_st'></a></td>
+				<td align="center" style="width:8%;"><a id='lblProduct'></a></td>
 				<td align="center" style="width:10%;"><a id='lblSpec'></a></td>
 				<td align="center" id='FixedSize'><a id='lblSize'></a><BR><a id='lblSize_help'> </a></td>
 				<td align="center" style="width:7%;"><a id='lblMount'></a></td>
 				<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
 				<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
-				<td align="center" style="width:10%;"><a id='lblNoa'></a></td>
+				<td align="center" style="width:14%;"><a id='lblNoa'></a></td>
 				<td align="center"><a id='lblMemo'></a></td>
 			</tr>
 			<tr style='background:#cad3ff;'>
 				<td align="center" style="width:1%;"><input id="chkSel.*" type="checkbox"	/></td>
-				<td style="width:8%;"><input class="txt c1"	id="txtProductno.*" type="text" /></td>
-				<td style="width:10%;"><input class="txt c1" id="txtProduct.*" type="text"/></td>
+				<td style="width:6%;"><input class="txt c1"	id="txtProductno.*" type="text" /></td>
+				<td style="width:8%;"><input class="txt c1" id="txtProduct.*" type="text"/></td>
 				 <td style="width:10%;"><input class="txt c1" id="txtSpec.*" type="text" /></td>
 				<td id="FixedSize">
 					<input class="txt num c8" id="txtSize1.*" type="text"/><div id="x1" style="float: left"> x</div>
@@ -267,7 +267,7 @@
 				<td style="width:7%;"><input class="txt num c1" id="txtMount.*" type="text"/></td>
 				<td style="width:7%;"><input class="txt num c1" id="txtWeight.*" type="text" /></td>
 				<td style="width:7%;"><input class="txt num c1" id="txtPrice.*" type="text"/></td>
-				<td style="width:10%;"><input class="txt c1" id="txtNoa.*" type="text"/><input class="txt c1" id="txtNo3.*" type="text" /></td>
+				<td style="width:14%;"><input class="txt c1" id="txtNoa.*" type="text"/><input class="txt c1" id="txtNo3.*" type="text" /></td>
 				<td><input class="txt c1" id="txtMemo.*" type="text"/><input id="txtKind.*" type="hidden" /><input id="recno.*" type="hidden" /></td>
 			</tr>
 		</table>

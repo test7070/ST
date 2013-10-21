@@ -42,37 +42,10 @@
 					}]
 				});
 				q_popAssign();
-				$('#txtXdate1').mask('999/99/99');
-				$('#txtXdate1').datepicker();
-				$('#txtXdate2').mask('999/99/99');
-				$('#txtXdate2').datepicker();	
-				
 				var t_noa=typeof(q_getId()[5])=='undefined'?'':q_getId()[5];
 				t_noa =	t_noa.replace('noa=','');
-                $('#txtXnoa1').val(t_noa).css('width','90px');
-                $('#txtXnoa2').val(t_noa).css('width','90px');
-				
-				var t_date,t_year,t_month,t_day;
-					t_date = new Date();
-					t_date.setDate(1);
-					t_year = t_date.getUTCFullYear()-1911;
-					t_year = t_year>99?t_year+'':'0'+t_year;
-					t_month = t_date.getUTCMonth()+1;
-					t_month = t_month>9?t_month+'':'0'+t_month;
-					t_day = t_date.getUTCDate();
-					t_day = t_day>9?t_day+'':'0'+t_day;
-					$('#txtXdate1').val(t_year+'/'+t_month+'/'+t_day);
-					
-					t_date = new Date();
-					t_date.setDate(35);
-					t_date.setDate(0);
-					t_year = t_date.getUTCFullYear()-1911;
-					t_year = t_year>99?t_year+'':'0'+t_year;
-					t_month = t_date.getUTCMonth()+1;
-					t_month = t_month>9?t_month+'':'0'+t_month;
-					t_day = t_date.getUTCDate();
-					t_day = t_day>9?t_day+'':'0'+t_day;
-					$('#txtXdate2').val(t_year+'/'+t_month+'/'+t_day);
+                $('#txtXnoa1').val(t_noa);
+                $('#txtXnoa2').val(t_noa);
 			}
 
 			function q_boxClose(s2) {

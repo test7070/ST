@@ -65,6 +65,10 @@
 							type : '0', //[13]
 							name : 's_fax',
 							value : s_fax
+						}, {
+							type : '5', //[14]
+							name : 'xstype',
+							value : [q_getPara('report.all')].concat(q_getPara('vccst.stype').split(','))
 						}]
 					});
 				q_popAssign();
