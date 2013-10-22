@@ -136,7 +136,7 @@
 					case 'ordcs':
 						if (q_cur > 0 && q_cur < 4) {
 							ordcsArray = getb_ret();
-							if (ordcsArray[0] != undefined) {
+							if (ordcsArray && ordcsArray[0] != undefined) {
 								var distinctArray = new Array;
 								var inStr = '';
 								for(var i=0;i<ordcsArray.length;i++){distinctArray.push(ordcsArray[i].noa);}
@@ -192,7 +192,7 @@
 							}
 						}
 						for(var i=0;i<ordcsArray.length;i++){
-							if (ordcsArray[i].mount <=0 || ordcsArray[i].weight <=0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].inmount_text)==0) {
+							if (ordcsArray[i].mount <=0 || ordcsArray[i].weight <=0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt)==0) {
 									ordcsArray.splice(i, 1);
 									i--;
 							}
@@ -201,8 +201,18 @@
 							for(var i=0;i<q_bbsCount;i++){$('#btnMinus_'+i).click();}
 							var newB_ret = new Array;
 							for(var j=0;j<ordcsArray.length;j++){
-								if(dec(ordcsArray[j].inmount_text) > 1){
-									
+								if(dec(ordcsArray[j].cnt) > 1){
+									console.log(ordcsArray[j]);
+									var n_mount = round(q_div(dec(ordcsArray[j].notv),dec(ordcsArray[j].cnt)),0);
+									var n_weight = round(divide0(q_mul(dec(ordcsArray[j].weight),n_mount),q_mul(dec(ordcsArray[j].mount),dec(ordcsArray[j].cnt))),0);
+									ordcsArray[j].mount = n_mount;
+									ordcsArray[j].weight = n_weight;
+									ordcsArray[j].uno = '';
+									for(var i=0;i<dec(ordcsArray[j].cnt);i++){
+										newB_ret.push(ordcsArray[j]);
+									}
+									ordcsArray.splice(j, 1);
+									j--;
 								}else{
 									newB_ret.push(ordcsArray[j]);
 								}

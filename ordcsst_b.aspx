@@ -15,7 +15,7 @@
 		    var isBott = false;  /// 是否已按過 最後一頁
 		    var txtfield = [], afield, t_data, t_htm;
 		    var i, s1;
-		
+			var bbsNum = [['txtCnt', 2, 0, 1]];
 		    $(document).ready(function () {
 		        main();
 		    });
@@ -31,19 +31,38 @@
 					height : "750px"
 				});
    				for(var i=0;i<q_bbsCount;i++){
-					$('#txtInmount_text_'+i).val(1).removeAttr('readonly').css('color','black').css('background','white');
+					$('#txtCnt_'+i).val(1).removeAttr('readonly').css('color','black').css('background','white');
 				}
 		    }
 		    function bbsAssign() {  /// checked 
 		        _bbsAssign();
+				for (var j = 0; j < q_bbsCount; j++) {
+					$('#txtCnt_'+j).change(function(){
+						t_IdSeq = -1;
+						q_bodyId($(this).attr('id'));
+						var thisVal = dec($(this).val());
+						if(thisVal > 0){
+							$('#chkSel_'+t_IdSeq).attr('checked',true);
+						}else{
+							$('#chkSel_'+t_IdSeq).attr('checked',false);
+						}
+					});
+				}
 		    }
 		
 		    function q_gtPost() { 
 		    	
 		    }
+			var maxAbbsCount = 0;
 		    function refresh() {
 		        _refresh();
-
+		        for(var i = 0;i<abbs.length;i++){
+					if (abbs[i].mount <= 0 || abbs[i].weight <= 0) {
+						abbs.splice(i, 1);
+						i--;
+					}
+		        }
+		        _refresh();
 				$('#checkAllCheckbox').click(function(){
 					$('input[type=checkbox][id^=chkSel]').each(function(){
 						var t_id = $(this).attr('id').split('_')[1];
@@ -170,7 +189,7 @@
 					<td style="width:7%;"><input class="txt num c1" id="txtMount.*" type="text"/></td>
 					<td style="width:7%;"><input class="txt num c1" id="txtWeight.*" type="text" /></td>
 					<td style="width:7%;"><input class="txt num c1" id="txtPrice.*" type="text"/></td>
-					<td style="width:8%;"><input class="txt num c1" id="txtInmount_text.*" type="text"/></td>
+					<td style="width:8%;"><input class="txt num c1" id="txtCnt.*" type="text"/></td>
 					<td style="width:10%;">
 						<input class="txt c1" id="txtNoa.*" type="text"/>
 						<input class="txt c1" id="txtNo2.*" type="text" />
