@@ -386,19 +386,19 @@
                     t_prices = q_float('txtPrice_' + j);
                     t_mounts = q_float('txtMount_' + j);
                     if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
-                    	t_moneys = t_prices.mul(t_weights);
+                    	t_moneys = q_mul(t_prices,t_weights);
                     }else{
-                    	t_moneys = t_prices.mul(t_mounts);
+                    	t_moneys = q_mul(t_prices,t_mounts);
                     }
                     if(t_float==0){
-                    	t_moneys = t_moneys.round(0);
+                    	t_moneys = round(t_moneys,0);
                     }else{
-                    	t_moneyus = t_moneyus.add(t_moneys.round(2));
-                    	t_moneys = t_moneys.mul(t_float).round(0);
+                    	t_moneyus = q_add(t_moneyus,round(t_moneys,2));
+                    	t_moneys = round(q_mul(t_moneys,t_float),0);
                     }
-                    t_weight = t_weight.add(t_weights);
-                    t_mount = t_mount.add(t_mounts);
-                    t_money = t_money.add(t_moneys);
+                    t_weight = q_add(t_weight,t_weights);
+                    t_mount = q_add(t_mount,t_mounts);
+                    t_money = q_add(t_money,t_moneys);
                     $('#txtTotal_' + j).val(FormatNumber(t_moneys));
                 }
                 t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
@@ -439,7 +439,7 @@
                 }
                 t_price = q_float('txtPrice');
                 if (t_price != 0) {
-                    $('#txtTranmoney').val(FormatNumber(t_weight.mul(t_price).round(0)));
+                    $('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight,t_price),0)));
                 }
                 $('#txtWeight').val(FormatNumber(t_weight));
 
@@ -628,87 +628,6 @@
 				return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
 			}
 
-
-			Number.prototype.round = function(arg) {
-				return Math.round(this.mul(Math.pow(10, arg))).div(Math.pow(10, arg));
-			};
-			Number.prototype.div = function(arg) {
-				return accDiv(this, arg);
-			};
-			function accDiv(arg1, arg2) {
-				var t1 = 0, t2 = 0, r1, r2;
-				try {
-					t1 = arg1.toString().split(".")[1].length;
-				} catch (e) {
-				}
-				try {
-					t2 = arg2.toString().split(".")[1].length;
-				} catch (e) {
-				}
-				with (Math) {
-					r1 = Number(arg1.toString().replace(".", ""));
-					r2 = Number(arg2.toString().replace(".", ""));
-					return (r1 / r2) * pow(10, t2 - t1);
-				}
-			}
-
-
-			Number.prototype.mul = function(arg) {
-				return accMul(arg, this);
-			};
-			function accMul(arg1, arg2) {
-				var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
-				try {
-					m += s1.split(".")[1].length;
-				} catch (e) {
-				}
-				try {
-					m += s2.split(".")[1].length;
-				} catch (e) {
-				}
-				return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
-			}
-
-
-			Number.prototype.add = function(arg) {
-				return accAdd(arg, this);
-			};
-			function accAdd(arg1, arg2) {
-				var r1, r2, m;
-				try {
-					r1 = arg1.toString().split(".")[1].length;
-				} catch (e) {
-					r1 = 0;
-				}
-				try {
-					r2 = arg2.toString().split(".")[1].length;
-				} catch (e) {
-					r2 = 0;
-				}
-				m = Math.pow(10, Math.max(r1, r2));
-				return (Math.round(arg1 * m) + Math.round(arg2 * m)) / m;
-			}
-
-
-			Number.prototype.sub = function(arg) {
-				return accSub(this, arg);
-			};
-			function accSub(arg1, arg2) {
-				var r1, r2, m, n;
-				try {
-					r1 = arg1.toString().split(".")[1].length;
-				} catch (e) {
-					r1 = 0;
-				}
-				try {
-					r2 = arg2.toString().split(".")[1].length;
-				} catch (e) {
-					r2 = 0;
-				}
-				m = Math.pow(10, Math.max(r1, r2));
-				n = (r1 >= r2) ? r1 : r2;
-				return parseFloat(((Math.round(arg1 * m) - Math.round(arg2 * m)) / m).toFixed(n));
-			}
 		</script>
 		<style type="text/css">
 			#dmain {
