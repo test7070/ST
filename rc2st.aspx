@@ -133,17 +133,22 @@
 			function q_boxClose(s2) {///   q_boxClose 2/4 /// 查詢視窗、廠商視窗、訂單視窗  關閉時執行
 				var ret;
 				switch (b_pop) {/// 重要：不可以直接 return ，最後需執行 originalClose();
-					case 'ordc':
-						b_ret = getb_ret();
-						var inStr = '';
-						if (!b_ret || b_ret.length == 0)
-							return;
-						for(var i=0;i<b_ret.length;i++){
-							inStr += "'"+b_ret[i].noa+"',";
+					case 'ordcs':
+						if (q_cur > 0 && q_cur < 4) {
+							ordcsArray = getb_ret();
+							if (ordcsArray[0] != undefined) {
+								var distinctArray = new Array;
+								var inStr = '';
+								for(var i=0;i<ordcsArray.length;i++){distinctArray.push(ordcsArray[i].noa);}
+								distinctArray = distinct(distinctArray);
+								for(var i=0;i<distinctArray.length;i++){
+									inStr += "'"+distinctArray[i]+"',";
+								}
+								inStr = inStr.substring(0,inStr.length-1);
+								var t_where = "where=^^ ordeno in("+inStr+") ^^";
+								q_gt('rc2s', t_where , 0, 0, 0, "", r_accy);
+							}
 						}
-						inStr = inStr.substring(0,inStr.length-1);
-						var t_where = "where=^^ noa in("+inStr+") ^^";
-						q_gt('ordcs', t_where, 0, 0, 0, "", r_accy);
 						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
@@ -176,23 +181,6 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
-					case 'ordcs':
-						if (q_cur > 0 && q_cur < 4) {
-							ordcsArray = _q_appendData("ordcs", "", true);
-							if (ordcsArray[0] != undefined) {
-								var distinctArray = new Array;
-								var inStr = '';
-								for(var i=0;i<ordcsArray.length;i++){distinctArray.push(ordcsArray[i].noa);}
-								distinctArray = distinct(distinctArray);
-								for(var i=0;i<distinctArray.length;i++){
-									inStr += "'"+distinctArray[i]+"',";
-								}
-								inStr = inStr.substring(0,inStr.length-1);
-								var t_where = "where=^^ ordeno in("+inStr+") ^^";
-								q_gt('rc2s', t_where , 0, 0, 0, "", r_accy);
-							}
-						}
-						break;
 					case 'rc2s':
 						var as = _q_appendData("rc2s", "", true);
 						for(var i = 0;i<as.length;i++){
@@ -204,15 +192,23 @@
 							}
 						}
 						for(var i=0;i<ordcsArray.length;i++){
-							if (ordcsArray[i].mount <=0 || ordcsArray[i].weight <=0 || ordcsArray[i].noa == '') {
+							if (ordcsArray[i].mount <=0 || ordcsArray[i].weight <=0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].inmount_text)==0) {
 									ordcsArray.splice(i, 1);
 									i--;
 							}
 						}
 						if (ordcsArray[0] != undefined){
 							for(var i=0;i<q_bbsCount;i++){$('#btnMinus_'+i).click();}
+							var newB_ret = new Array;
+							for(var j=0;j<ordcsArray.length;j++){
+								if(dec(ordcsArray[j].inmount_text) > 1){
+									
+								}else{
+									newB_ret.push(ordcsArray[j]);
+								}
+							}
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit',
-														 ordcsArray.length, ordcsArray, 
+														 newB_ret.length, newB_ret, 
 														 'uno,productno,product,spec,size,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,class,style,unit', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							bbsAssign();
@@ -310,7 +306,7 @@
 				var t_tggno = trim($('#txtTggno').val());
 				var t_where = '';
 				t_where = "enda=0 and kind='"+$('#cmbKind').val()+"' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
-				q_box("ordcst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordc', "95%", "95%", q_getMsg('popOrdcs'));
+				q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
 			}
 			function q_stPost() {
 				if (!(q_cur == 1 || q_cur == 2))
@@ -378,7 +374,7 @@
 					sum();
 					var t_noa = trim($('#txtNoa').val());
 					var t_date = trim($('#txtDatea').val());
-					if (t_noa.length == 0 || t_noa == "AUTO")
+					if (t_noa.length == 0 || t_noa == "AUTO")	 
 						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_rc2') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
 					else
 						wrServer(t_noa);

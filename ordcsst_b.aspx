@@ -18,8 +18,8 @@
 		
 		    $(document).ready(function () {
 		        main();
-		    });         /// end ready
-		
+		    });
+		    		
 		    function main() {
 		        if (dataErr)  /// 載入資料錯誤
 		        {
@@ -27,6 +27,12 @@
 		            return;
 		        }
 		        mainBrow(6, t_content, t_sqlname, t_postname,r_accy);
+				parent.$.fn.colorbox.resize({
+					height : "750px"
+				});
+   				for(var i=0;i<q_bbsCount;i++){
+					$('#txtInmount_text_'+i).val(1).removeAttr('readonly').css('color','black').css('background','white');
+				}
 		    }
 		    function bbsAssign() {  /// checked 
 		        _bbsAssign();
@@ -37,6 +43,7 @@
 		    }
 		    function refresh() {
 		        _refresh();
+
 				$('#checkAllCheckbox').click(function(){
 					$('input[type=checkbox][id^=chkSel]').each(function(){
 						var t_id = $(this).attr('id').split('_')[1];
@@ -46,13 +53,14 @@
 				});
 		        size_change();
 		    }
+		    
 		    function size_change () {
 				if(dec($('#txtRadius_0').val())<=0){
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					for (var j = 0; j < brwCount2 ; j++) {
 						$('#txtSize4_'+j).attr('hidden', 'true');
 						$('#x3_'+j).attr('hidden', 'true');
-						$('#Size').css('width','222px');
+						$('*[id="FixedSize"').css('width','222px');
 						q_tr('txtSize1_'+ j ,q_float('txtDime_'+j));
 						q_tr('txtSize2_'+ j ,q_float('txtWidth_'+j));
 						q_tr('txtSize3_'+ j ,q_float('txtLengthb_'+j));
@@ -64,7 +72,7 @@
 					for (var j = 0; j < brwCount2 ; j++) {
 						$('#txtSize4_'+j).removeAttr('hidden');
 						$('#x3_'+j).removeAttr('hidden');
-						$('#Size').css('width','297px');
+						$('*[id="FixedSize"').css('width','297px');
 						q_tr('txtSize1_'+ j ,q_float('txtRadius_'+j));
 						q_tr('txtSize2_'+ j ,q_float('txtWidth_'+j));
 						q_tr('txtSize3_'+ j ,q_float('txtDime_'+j));
@@ -109,28 +117,46 @@
 		</style>
 	</head>
 	<body>
-		<div id="dbbs">
-			<table id="tbbs" class='tbbs'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'>
+		<div  id="dFixedTitle" style="overflow-y: scroll;">
+			<table id="tFixedTitle" class='tFixedTitle'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'  >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;">
 						<input type="checkbox" id="checkAllCheckbox"/>
 					</td>
-					<td align="center" style="width:8%;"><a id='lblProductno_st'></a></td>
-					<td align="center" style="width:10%;"><a id='lblProduct'></a></td>
-					<td align="center" style="width:10%;"><a id='lblSpec'></a></td>
+					<td align="center" style="width:6%;"><a id='lblProductno_st'></a></td>
+					<td align="center" style="width:8%;"><a id='lblProduct'></a></td>
+					<td align="center" style="width:8%;"><a id='lblSpec'></a></td>
+					<td align="center" id='FixedSize'><a id='lblSize'></a><BR><a id='lblSize_help'> </a></td>
+					<td align="center" style="width:7%;"><a id='lblMount'></a></td>
+					<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
+					<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
+					<td align="center" style="width:8%;"><a id='lblInmount_text'></a></td>
+					<td align="center" style="width:10%;"><a id='lblNoa'></a></td>
+					<td align="center"><a id='lblMemo'></a></td>
+				</tr>
+			</table>
+		</div>
+		<div id="dbbs" style="overflow: scroll;height:550px;" >
+			<table id="tbbs" class='tbbs'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'>
+				<tr style='color:White; background:#003366;display:none;' >
+					<td align="center" style="width:1%;"><input type="checkbox" id="checkAllCheckbox"/></td>
+					<td align="center" style="width:6%;"><a id='lblProductno_st'></a></td>
+					<td align="center" style="width:8%;"><a id='lblProduct'></a></td>
+					<td align="center" style="width:8%;"><a id='lblSpec'></a></td>
 					<td align="center" id='Size'><a id='lblSize'></a><BR><a id='lblSize_help'> </a></td>
 					<td align="center" style="width:7%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
 					<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
+					<td align="center" style="width:8%;"><a id='lblInmount_text'></a></td>
 					<td align="center" style="width:10%;"><a id='lblNoa'></a></td>
 					<td align="center"><a id='lblMemo'></a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
-					<td align="center"><input id="chkSel.*" type="checkbox"/></td>
-					<td><input class="txt c1"  id="txtProductno.*" type="text" /></td>
-					<td><input class="txt c1" id="txtProduct.*" type="text"/></td>
-					<td><input class="txt c1" id="txtSpec.*" type="text" /></td>
-					<td>
+					<td style="width:1%;" align="center"><input id="chkSel.*" type="checkbox"/></td>
+					<td style="width:6%;"><input class="txt c1"  id="txtProductno.*" type="text" /></td>
+					<td style="width:8%;"><input class="txt c1" id="txtProduct.*" type="text"/></td>
+					<td style="width:8%;"><input class="txt c1" id="txtSpec.*" type="text" /></td>
+					<td id="FixedSize">
 						<input class="txt num c8" id="txtSize1.*" type="text"/><div id="x1" style="float: left"> x</div>
 						<input class="txt num c8" id="txtSize2.*" type="text"/><div id="x2" style="float: left"> x</div>
 						<input class="txt num c8" id="txtSize3.*" type="text"/><div id="x3.*" style="float: left"> x</div>
@@ -141,10 +167,11 @@
 						<input  id="txtDime.*" type="hidden"/>
 						<input id="txtLengthb.*" type="hidden"/>
 					</td>
-					<td><input class="txt num c1" id="txtMount.*" type="text"/></td>
-					<td><input class="txt num c1" id="txtWeight.*" type="text" /></td>
-					<td><input class="txt num c1" id="txtPrice.*" type="text"/></td>
-					<td>
+					<td style="width:7%;"><input class="txt num c1" id="txtMount.*" type="text"/></td>
+					<td style="width:7%;"><input class="txt num c1" id="txtWeight.*" type="text" /></td>
+					<td style="width:7%;"><input class="txt num c1" id="txtPrice.*" type="text"/></td>
+					<td style="width:8%;"><input class="txt num c1" id="txtInmount_text.*" type="text"/></td>
+					<td style="width:10%;">
 						<input class="txt c1" id="txtNoa.*" type="text"/>
 						<input class="txt c1" id="txtNo2.*" type="text" />
 					</td>
@@ -155,7 +182,7 @@
 					</td>
 				</tr>
 			</table>
-			<!--#include file="../inc/pop_ctrl.inc"--> 
 		</div>
+			<!--#include file="../inc/pop_ctrl.inc"--> 
 	</body>
 </html>

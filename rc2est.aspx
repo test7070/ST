@@ -35,8 +35,7 @@
           
             q_brwCount();   
 			q_gt('style','',0,0,0,'');
-            q_gt(q_name, q_content, q_sqlCount, 1)
-
+            q_gt(q_name, q_content, q_sqlCount, 1,r_accy);
         });
 
         //////////////////   end Ready

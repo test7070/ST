@@ -98,18 +98,18 @@
 				$('#Xstktype select').change(function(){
 					size_change();
 				});
-				$('#Xstktype select').val('A1');
+				$('#Xstktype select').val('A1').change();
 				setDefaultValue();
 				size_change();
-				
-				$('#Xitype .cmb')
-				
 				$('#Xitype .cmb').change(function() {
 					if($('#Xitype .cmb').val()=='1'){
-						$('#Xtggno').hide()
+						$('#Xtggno').hide();
 					}else{
-						$('#Xtggno').show()
+						$('#Xtggno').show();
 					}
+				});
+				$('.report').click(function(){
+					size_change();
 				});
 			}
 
@@ -187,6 +187,7 @@
 							break;
 					}
 					setDefaultValue();
+					$('#Xitype .cmb').change();
 				}
 			}
 			
