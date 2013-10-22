@@ -49,6 +49,9 @@
                 q_mask(bbmMask);
             }
 
+            function sum() {
+            }
+
             function q_gtPost(t_name) {
 
             }
@@ -74,9 +77,6 @@
 
             function refresh() {
                 _refresh();
-            }
-
-            function sum() {
             }
 
             function readonly(t_para, empty) {

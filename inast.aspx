@@ -53,6 +53,21 @@
 				mainForm(1);
 			}
 
+			function sum() {
+				var t_weight = 0;
+				for (var j = 0; j < q_bbsCount; j++) {
+					t_weight += dec($('#txtWeight_' + j).val());
+					// 重量合計
+					t_unit = $('#txtUnit_' + j).val();
+					t_mount = (!t_unit || emp(t_unit) || trim(t_unit).toLowerCase() == 'kg' ? $('#txtWeight_' + j).val() : $('#txtMount_' + j).val());
+					// 計價量
+					$('#txtTotal_' + j).val(round($('#txtPrice_' + j).val() * dec(t_mount), 0));
+				}// j
+				$('#txtTotal').val(round(t_weight, 0));
+				if (!emp($('#txtPrice').val()))
+					$('#txtTranmoney').val(round(t_weight * dec($('#txtPrice').val()), 0));
+			}
+
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd]];
@@ -440,21 +455,6 @@
 				as['date'] = abbm2['date'];
 
 				return true;
-			}
-
-			function sum() {
-				var t_weight = 0;
-				for (var j = 0; j < q_bbsCount; j++) {
-					t_weight += dec($('#txtWeight_' + j).val());
-					// 重量合計
-					t_unit = $('#txtUnit_' + j).val();
-					t_mount = (!t_unit || emp(t_unit) || trim(t_unit).toLowerCase() == 'kg' ? $('#txtWeight_' + j).val() : $('#txtMount_' + j).val());
-					// 計價量
-					$('#txtTotal_' + j).val(round($('#txtPrice_' + j).val() * dec(t_mount), 0));
-				}// j
-				$('#txtTotal').val(round(t_weight, 0));
-				if (!emp($('#txtPrice').val()))
-					$('#txtTranmoney').val(round(t_weight * dec($('#txtPrice').val()), 0));
 			}
 
 			function refresh(recno) {

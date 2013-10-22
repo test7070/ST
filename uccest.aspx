@@ -47,6 +47,14 @@
 
             mainForm(1); 
         }  
+        
+        function sum() {
+            var t1 = 0, t_unit, t_mount, t_weight = 0;
+            for (var j = 0; j < q_bbsCount; j++) {
+				q_tr('txtTotal_'+j,q_mul(q_float('txtPrice_'+j),q_float('txtMount_'+j)));
+            }  // j
+        }
+
         function mainPost() { 
             q_getFormat();
             bbmMask = [['txtDatea', r_picd]];
@@ -221,14 +229,6 @@
 
             
             return true;
-        }
-
-        function sum() {
-            var t1 = 0, t_unit, t_mount, t_weight = 0;
-            for (var j = 0; j < q_bbsCount; j++) {
-				q_tr('txtTotal_'+j,q_float('txtPrice_'+j)*q_float('txtMount_'+j));
-            }  // j
-
         }
 
         ///////////////////////////////////////////////////  

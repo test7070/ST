@@ -56,6 +56,40 @@
                 mainForm(1);
             }
 
+            function sum() {
+                var t1 = 0, t_unit, t_mount, t_weight = 0;
+                var t_unit = '';
+                for (var j = 0; j < q_bbsCount; j++) {
+                	t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
+					t_product = $.trim($('#txtProduct_' + j).val());
+					if(t_unit.length==0 && t_product.length>0){
+						if(t_product.indexOf('管')>0)
+							t_unit = '支';
+						else
+							t_unit = 'KG';
+						$('#txtUnit_' + j).val(t_unit);
+					}
+                    //---------------------------------------
+                    if ($('#cmbKind').val().substr(0, 1) == 'A') {
+                        q_tr('txtDime_' + j, q_float('textSize1_' + j));
+                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
+                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                        q_tr('txtRadius_' + j, q_float('textSize4_' + j));
+                    } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+                        q_tr('txtRadius_' + j, q_float('textSize1_' + j));
+                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
+                        q_tr('txtDime_' + j, q_float('textSize3_' + j));
+                        q_tr('txtLengthb_' + j, q_float('textSize4_' + j));
+                    } else {//鋼筋、胚
+                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                    }
+                    getTheory(j);
+                    //---------------------------------------
+                    t_weight += q_float('txtWeight_' + j);
+                }// j
+                q_tr('txtWeight', t_weight);
+            }
+
             function mainPost() {
                 q_getFormat();
                 q_cmbParse("cmbKind", q_getPara('sys.stktype'));
@@ -335,40 +369,6 @@
                 q_nowf();
                 as['date'] = abbm2['date'];
                 return true;
-            }
-
-            function sum() {
-                var t1 = 0, t_unit, t_mount, t_weight = 0;
-                var t_unit = '';
-                for (var j = 0; j < q_bbsCount; j++) {
-                	t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
-					t_product = $.trim($('#txtProduct_' + j).val());
-					if(t_unit.length==0 && t_product.length>0){
-						if(t_product.indexOf('管')>0)
-							t_unit = '支';
-						else
-							t_unit = 'KG';
-						$('#txtUnit_' + j).val(t_unit);
-					}
-                    //---------------------------------------
-                    if ($('#cmbKind').val().substr(0, 1) == 'A') {
-                        q_tr('txtDime_' + j, q_float('textSize1_' + j));
-                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
-                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
-                        q_tr('txtRadius_' + j, q_float('textSize4_' + j));
-                    } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-                        q_tr('txtRadius_' + j, q_float('textSize1_' + j));
-                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
-                        q_tr('txtDime_' + j, q_float('textSize3_' + j));
-                        q_tr('txtLengthb_' + j, q_float('textSize4_' + j));
-                    } else {//鋼筋、胚
-                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
-                    }
-                    getTheory(j);
-                    //---------------------------------------
-                    t_weight += q_float('txtWeight_' + j);
-                }// j
-                q_tr('txtWeight', t_weight);
             }
 
             ///////////////////////////////////////////////////

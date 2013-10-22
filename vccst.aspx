@@ -122,31 +122,31 @@
                 switch ($('#cmbTaxtype').val()) {
                     case '1':
                         // 應稅
-                        t_tax = round(t_money * t_taxrate, 0);
-                        t_total = t_money + t_tax;
+                        t_tax = round(q_mul(t_money,t_taxrate), 0);
+                        t_total = q_add(t_money,t_tax);
                         break;
                     case '2':
                         //零稅率
                         t_tax = 0;
-                        t_total = t_money + t_tax;
+                        t_total = q_add(t_money,t_tax);
                         break;
                     case '3':
                         // 內含
-                        t_tax = round(t_money / (1 + t_taxrate) * t_taxrate, 0);
+                        t_tax = round(q_div(t_money,q_mul(q_add(1,t_taxrate),t_taxrate)), 0);
                         t_total = t_money;
-                        t_money = t_total - t_tax;
+                        t_money = q_sub(t_total,t_tax);
                         break;
                     case '4':
                         // 免稅
                         t_tax = 0;
-                        t_total = t_money + t_tax;
+                        t_total = q_add(t_money,t_tax);
                         break;
                     case '5':
                         // 自定
                         $('#txtTax').attr('readonly', false);
                         $('#txtTax').css('background-color', 'white').css('color', 'black');
                         t_tax = round(q_float('txtTax'), 0);
-                        t_total = t_money + t_tax;
+                        t_total = q_add(t_money,t_tax);
                         break;
                     case '6':
                         // 作廢-清空資料
@@ -168,6 +168,7 @@
                 else
                     $('#txtTotalus').val(FormatNumber(t_moneyus));
             }
+
             function mainPost() {// 載入資料完，未 refresh 前
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];

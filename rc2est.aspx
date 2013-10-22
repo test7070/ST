@@ -48,6 +48,22 @@
 
             mainForm(1); 
         }  
+        
+        function sum() {
+        	var tot_Weight = 0;
+        	var tot_Money = 0;
+        	var t_Weight,t_Mount,t_Price;
+            for (var j = 0; j < q_bbsCount; j++) {
+            	t_Weight = dec($('#txtWeight_' + j).val());
+            	t_Mount = dec($('#txtMount_' + j).val());
+            	t_Price = dec($('#txtPrice_' + j).val());
+				tot_Weight += dec($('#txtWeight_' + j).val());
+				tot_Money += round((q_mul(q_mul(t_Weight,t_Mount),t_Price)),0);
+            }
+			$('#txtWeight').val(tot_Weight);
+			$('#txtTotal').val(tot_Money);
+        }
+
         function mainPost() { 
             q_getFormat();
             bbmMask = [['txtDatea', r_picd]];
@@ -244,21 +260,6 @@
             q_nowf();
             as['date'] = abbm2['date'];
             return true;
-        }
-
-        function sum() {
-        	var tot_Weight = 0;
-        	var tot_Money = 0;
-        	var t_Weight,t_Mount,t_Price;
-            for (var j = 0; j < q_bbsCount; j++) {
-            	t_Weight = dec($('#txtWeight_' + j).val());
-            	t_Mount = dec($('#txtMount_' + j).val());
-            	t_Price = dec($('#txtPrice_' + j).val());
-				tot_Weight += dec($('#txtWeight_' + j).val());
-				tot_Money += round((t_Weight*t_Mount*t_Price),0);
-            }
-			$('#txtWeight').val(tot_Weight);
-			$('#txtTotal').val(tot_Money);
         }
 
         ///////////////////////////////////////////////////  

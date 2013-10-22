@@ -50,6 +50,23 @@
 
                 mainForm(1);
             }
+
+            function sum() {
+                var t1 = 0, t_unit, t_mount, t_weight = 0;
+                var t_money=0;
+                for(var j = 0; j < q_bbsCount; j++) {
+                	if($('#txtUnit_' + j).val().toUpperCase() == 'KG'){
+                		q_tr('txtTotal_'+j ,q_float('txtWeight_'+j)*q_float('txtPrice_'+j));
+                	}else{
+                		q_tr('txtTotal_'+j ,q_float('txtMount_'+j)*q_float('txtPrice_'+j));
+                	}
+					t_money+=q_float('txtTotal_'+j);
+                }  // j
+				q_tr('txtMoney' ,t_money);
+				q_tr('txtTotal' ,q_float('txtMoney')+q_float('txtTax'));
+				q_tr('txtTotalus' ,q_float('txtTotal')*q_float('txtFloata'));
+            }
+
             function mainPost() {
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
@@ -257,22 +274,6 @@
                 q_nowf();
                 as['date'] = abbm2['date'];
                 return true;
-            }
-
-            function sum() {
-                var t1 = 0, t_unit, t_mount, t_weight = 0;
-                var t_money=0;
-                for(var j = 0; j < q_bbsCount; j++) {
-                	if($('#txtUnit_' + j).val().toUpperCase() == 'KG'){
-                		q_tr('txtTotal_'+j ,q_float('txtWeight_'+j)*q_float('txtPrice_'+j));
-                	}else{
-                		q_tr('txtTotal_'+j ,q_float('txtMount_'+j)*q_float('txtPrice_'+j));
-                	}
-					t_money+=q_float('txtTotal_'+j);
-                }  // j
-				q_tr('txtMoney' ,t_money);
-				q_tr('txtTotal' ,q_float('txtMoney')+q_float('txtTax'));
-				q_tr('txtTotalus' ,q_float('txtTotal')*q_float('txtFloata'));
             }
 
             function refresh(recno) {
