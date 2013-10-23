@@ -623,6 +623,8 @@
 					<tr>
 						<td><span> </span><a id='lblTypea' class="lbl"> </a></td>
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
+						<td><input id="chkIssales" type="checkbox" style="float: right;"/></td>
+						<td><a id='vewIssales'> </a></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblIndate' class="lbl"> </a></td>
