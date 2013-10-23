@@ -23,14 +23,15 @@
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_ordestp',
-                    options : [{
+                    options : [{//[1]
 						type : '0',
 						name : 'accy',
-                        value : q_getId()[4] //[1]
-                    },{
-                        type : '1',
-                        name : 'date'
-                    },{
+                        value : q_getId()[4] 
+                    },{//[2]
+						type : '0',
+						name : 'xkind',
+                        value : q_getPara('sys.stktype')
+                    },{//2  [3][4]
                         type : '1',
                         name : 'xnoa'
                     }]
