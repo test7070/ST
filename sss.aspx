@@ -625,6 +625,8 @@
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
 						<td><input id="chkIssales" type="checkbox" style="float: right;"/></td>
 						<td><a id='vewIssales'> </a></td>
+						<td><span> </span><a id='lblSalesgroup' class="lbl"> </a></td>
+						<td><input id="txtSalesgroup"  type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblIndate' class="lbl"> </a></td>
