@@ -309,7 +309,6 @@
 							var newB_ret = new Array;
 							for(var j=0;j<ordcsArray.length;j++){
 								if(dec(ordcsArray[j].cnt) > 1){
-									console.log(ordcsArray[j]);
 									var n_mount = round(q_div(dec(ordcsArray[j].notv),dec(ordcsArray[j].cnt)),0);
 									var n_weight = round(divide0(q_mul(dec(ordcsArray[j].weight),n_mount),q_mul(dec(ordcsArray[j].mount),dec(ordcsArray[j].cnt))),0);
 									ordcsArray[j].mount = n_mount;
