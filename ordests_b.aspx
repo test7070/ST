@@ -44,14 +44,33 @@
 				}
 			}
 
-			function q_gtPost() {
-
+			function q_gtPost(t_name) {
+				switch(t_name){
+					case 'ordes2cut':
+						var as = _q_appendData("ordes2cut", "", true);
+						DetailValue(as);
+						break;
+				}
 			}
 
-			var maxAbbsCount = 0;
-			function refresh() {
-				_refresh();
+			function DetailValue(gtArray){
 				var w = window.parent;
+				switch(w.q_name){
+					case 'cut':
+						if(gtArray.length > 0){
+							for(var i = 0;i < abbs.length;i++){
+								for(var k= 0;k<gtArray.length;k++){
+									if((abbs[i].noa = gtArray[k].ordeno) && (abbs[i].no2 = gtArray[k].no2)){
+										abbs[i].mount = dec(abbs[i].mount) - dec(gtArray[k].mount);
+										abbs[i].weight = dec(abbs[i].weight) - dec(gtArray[k].weight);
+									}
+								}
+							}
+						}
+						break;
+					default:
+						break;
+				}
 				if (maxAbbsCount < abbs.length) {
 					for (var i = (abbs.length - (abbs.length - maxAbbsCount)); i < abbs.length; i++) {
 						for (var j = 0; j < w.q_bbsCount; j++) {
@@ -79,6 +98,45 @@
 							$(this).attr('checked', $('#checkAllCheckbox').is(':checked'));
 					});
 				});
+			}
+
+			var maxAbbsCount = 0;
+			function refresh() {
+				_refresh();
+				var w = window.parent;
+				switch(w.q_name){
+					case 'cut':
+						var distinctArray = new Array;
+						var inStr = '';
+						for(var i=0;i<abbs.length;i++){distinctArray.push(abbs[i].noa);}
+						distinctArray = distinct(distinctArray);
+						for(var i=0;i<distinctArray.length;i++){
+							inStr += "'"+distinctArray[i]+"',";
+						}
+						inStr = inStr.substring(0,inStr.length-1);
+						var t_noa = trim(w.$('#txtNoa').val());
+						var t_where = "where=^^ ";
+						t_where += " ordeno in("+inStr+") ";
+						if(w.q_name == 'cut'){
+							t_where += "and noa !='"+t_noa+"'";
+						}
+						t_where += " ^^";						
+						q_gt('ordes2cut', t_where, 0, 0, 0, "", r_accy);
+						break;
+					default:
+						DetailValue();
+						break;
+				}
+			}
+			
+			function distinct(arr1) {
+				for (var i = 0; i < arr1.length; i++) {
+					if ((arr1.indexOf(arr1[i]) != arr1.lastIndexOf(arr1[i])) || arr1[i] == '') {
+						arr1.splice(i, 1);
+						i--;
+					}
+				}
+				return arr1;
 			}
 
 		</script>
