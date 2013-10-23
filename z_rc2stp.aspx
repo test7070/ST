@@ -25,31 +25,30 @@
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_rc2stp',
-                    options : [{
+                    options : [{//[1]
                         type : '0',
                         name : 'accy',
                         value : r_accy
-                    }, {
+                    },{//[2]
+						type : '0',
+						name : 'xkind',
+                        value : q_getPara('sys.stktype')
+                    }, {//[3]
                         type : '1',
                         name : 'xnoa'
-                    }, {
+                    }, {//[4]
                         type : '1',
                         name : 'date'
-                    }, {
+                    }, {//[5]
                         type : '2',
                         name : 'cust',
                         dbf : 'cust',
                         index : 'noa,comp',
                         src : 'cust_b.aspx'
-                    }, {
-                        type : '1',
-                        name : 'xmon'
                     }]
                 });
                 q_popAssign();
 
-                $('#txtXmon1').mask('999/99');
-                $('#txtXmon2').mask('999/99');
                 $('#txtDate1').mask('999/99/99');
                 $('#txtDate1').datepicker();
                 $('#txtDate2').mask('999/99/99');
