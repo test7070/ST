@@ -25,27 +25,28 @@
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_vccestp',
-                    options : [{
+                    options : [{//[1]
                         type : '0',
                         name : 'accy',
                         value : r_accy
-                    },{
+                    }, {//[2]
+                        type : '0',
+                        name : 'xkind',
+                        value : q_getPara('sys.stktype')
+                    }, {//[3]
                         type : '0',
                         name : 'worker',
                         value : r_name
-                    }, {
+                    }, {//[4][5]
                         type : '1',
                         name : 'xnoa'
                     }]
                 });
                 q_popAssign();
 
-                //$('#txtXdate1').mask('999/99/99');
-                //$('#txtXdate1').datepicker();
-
-                if(q_getId()[5]!=undefined){
-                    $('#txtXnoa1').val(q_getId()[5].replace('noa=',''));
-                    $('#txtXnoa2').val(q_getId()[5].replace('noa=',''));
+                if (q_getId()[5] != undefined) {
+                    $('#txtXnoa1').val(q_getId()[5].replace('noa=', ''));
+                    $('#txtXnoa2').val(q_getId()[5].replace('noa=', ''));
                 }
             }
 
