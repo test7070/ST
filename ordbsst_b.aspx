@@ -215,7 +215,10 @@
 	{color:white; text-align:center; font-weight:bold;BACKGROUND-COLOR: #76a2fe}
 </style>
 </head>
-<body>
+	<body ondragstart="return false" draggable="false"
+	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
+	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
+	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 	<div  id="dFixedTitle" style="overflow-y: scroll;">
 		<table id="tFixedTitle" class='tFixedTitle'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'  >
 			<tr style='color:White; background:#003366;' >
