@@ -26,8 +26,8 @@
                 var sInfo = (q_getPara('sys.tel')).toUpperCase();
                 var s_tel = sInfo.substring(0, sInfo.indexOf('FAX'));
                 var s_fax = sInfo.substring(sInfo.indexOf('FAX') + 3);
-                s_tel = (emp(s_tel) ? ' ' : s_tel);
-                s_fax = (emp(s_fax) ? ' ' : s_fax);
+                s_tel = (emp(s_tel) ? '　' : s_tel);
+                s_fax = (emp(s_fax) ? '　' : s_fax);
                 
                 $('#q_report').q_report({
                     fileName : 'z_vccstp',
