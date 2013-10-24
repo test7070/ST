@@ -35,37 +35,37 @@
                         type : '0', //[1]
                         name : 'accy',
                         value : r_accy
-                    }, {//[2]
-                        type : '0',
-                        name : 'xkind',
-                        value : q_getPara('sys.stktype')
-                    }, {//[3]
-                        type : '0',
-                        name : 'xtaxtype',
-                        value : q_getPara('sys.taxtype')
                     }, {
-                        type : '1', //[4][5]
-                        name : 'xnoa'
-                    }, {
-                        type : '8', //[6]
-                        name : 'xshowprice',
-                        value : "1@".split(',')
-                    }, {
-                        type : '5', //[7]
-                        name : 'xstype',
-                        value : [q_getPara('report.all')].concat(q_getPara('vccst.stype').split(','))
-                    }, {
-                        type : '0', //[8]
+                        type : '0', //[2]
                         name : 's_addr',
                         value : q_getPara('sys.addr')
                     }, {
-                        type : '0', //[9]
+                        type : '0', //[3]
                         name : 's_tel',
                         value : s_tel
                     }, {
-                        type : '0', //[10]
+                        type : '0', //[4]
                         name : 's_fax',
                         value : s_fax
+                    }, {//[2]
+                        type : '0', //[5]
+                        name : 'xkind',
+                        value : q_getPara('sys.stktype')
+                    }, {//[3]
+                        type : '0',//[6]
+                        name : 'xtaxtype',
+                        value : q_getPara('sys.taxtype')
+                    }, {
+                        type : '1', //[7][8]
+                        name : 'xnoa'
+                    }, {
+                        type : '8', //[9]
+                        name : 'xshowprice',
+                        value : "1@".split(',')
+                    }, {
+                        type : '5', //[10]
+                        name : 'xstype',
+                        value : [q_getPara('report.all')].concat(q_getPara('vccst.stype').split(','))
                     }]
                 });
                 q_popAssign();
