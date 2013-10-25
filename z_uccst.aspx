@@ -38,7 +38,7 @@
 						}, {
 							type : '5', //[5]
 							name : 'xitype',
-							value : q_getPara('uccc.itype').split(',')
+							value : [q_getPara('report.all')].concat(q_getPara('uccc.itype').split(','))
 						}, {
 							type : '2', //[6][7]
 							name : 'xproduct',
