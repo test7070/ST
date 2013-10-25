@@ -102,7 +102,7 @@
 
 			var maxAbbsCount = 0;
 			function refresh() {
-				_refresh();
+				//_refresh();
 				var w = window.parent;
 				switch(w.q_name){
 					case 'cut':
@@ -115,8 +115,10 @@
 						}
 						inStr = inStr.substring(0,inStr.length-1);
 						var t_noa = trim(w.$('#txtNoa').val());
-						var t_where = "where=^^ ";
-						t_where += " ordeno in("+inStr+") ";
+						var t_where = "where=^^ 1=1 ";
+						if(trim(inStr).length > 0){
+							t_where += " and ordeno in("+inStr+") ";
+						}
 						if(w.q_name == 'cut'){
 							t_where += "and noa !='"+t_noa+"'";
 						}
