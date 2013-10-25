@@ -887,6 +887,7 @@
                 } else {
                     $('input[id*="textSize"]').attr('disabled', 'disabled');
                 }
+                alert($('#cmbKind').length);
                 if ($('#cmbKind').val().substr(0, 1) == 'A') {
                     $('#lblSize_help').text(q_getPara('sys.lblSizea'));
                     for (var j = 0; j < q_bbsCount; j++) {
