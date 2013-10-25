@@ -882,7 +882,6 @@
             }
 
             function size_change() {
-            	try{
                 if (q_cur == 1 || q_cur == 2) {
                     $('input[id*="textSize"]').removeAttr('disabled');
                 } else {
@@ -945,10 +944,6 @@
                         $('#textSize4_' + j).val(0);
                         $('#txtRadius_' + j).val(0);
                     }
-                }
-                }catch(e){
-                debugger;
-                	console.log(e.stack);
                 }
             }
 
