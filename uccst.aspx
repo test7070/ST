@@ -15,7 +15,6 @@
 			function onPageError(error) {
 				alert("An error occurred:\r\n" + error.Message);
 			}
-
 			var q_name = "ucc";
 			var q_readonly = [];
 			var bbmNum = [];
@@ -248,8 +247,6 @@
 			.dbbm {
 				float: left;
 				width: 550px;
-				/*margin: -1px;		
-				border: 1px black solid;*/
 				border-radius: 5px;
 			}
 			.tbbm {
@@ -282,19 +279,8 @@
 				color: black;
 				font-size: medium;
 			}
-			.tbbm tr td .lbl.btn {
-				color: #4297D7;
-				font-weight: bolder;
-			}
-			.tbbm tr td .lbl.btn:hover {
-				color: #FF8F19;
-			}
 			.txt.c1 {
 				width: 100%;
-				float: left;
-			}
-			.c2 {
-				width: 55%;
 				float: left;
 			}
 			.txt.num {
@@ -315,17 +301,8 @@
 				padding: 0px;
 				margin: -1px;
 			}
-			.tbbs input[type="text"] {
-				width: 98%;
-			}
-			.tbbs a {
-				font-size: medium;
-			}
 			.num {
 				text-align: right;
-			}
-			.bbs {
-				float: left;
 			}
 			input[type="text"], input[type="button"] {
 				font-size: medium;
