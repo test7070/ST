@@ -692,16 +692,14 @@
 			<div class="dview" id="dview">
 				<table class="tview" id="tview"	>
 					<tr>
-						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
-						<td align="center" style="width:20%"><a id='vewDatea'> </a></td>
-						<td align="center" style="width:25%"><a id='vewComp'> </a></td>
+						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewDatea'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewNick'> </a></td>
 					</tr>
 					<tr>
-						<td >
-						<input id="chkBrow.*" type="checkbox" style=' '/>
-						</td>
+						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td align="center" id='datea'>~datea</td>
-						<td align="center" id='comp,4'>~comp,4</td>
+						<td align="center" id='nick'>~nick</td>
 					</tr>
 				</table>
 			</div>
