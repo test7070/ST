@@ -882,12 +882,14 @@
             }
 
             function size_change() {
+            	try{
                 if (q_cur == 1 || q_cur == 2) {
                     $('input[id*="textSize"]').removeAttr('disabled');
                 } else {
                     $('input[id*="textSize"]').attr('disabled', 'disabled');
                 }
-                alert($('#cmbKind').length);
+                if(!$('#cmbKind').val())
+                	$('#cmbKind').val(q_getPara('vcc.kind'));
                 if ($('#cmbKind').val().substr(0, 1) == 'A') {
                     $('#lblSize_help').text(q_getPara('sys.lblSizea'));
                     for (var j = 0; j < q_bbsCount; j++) {
@@ -943,6 +945,10 @@
                         $('#textSize4_' + j).val(0);
                         $('#txtRadius_' + j).val(0);
                     }
+                }
+                }catch(e){
+                debugger;
+                	console.log(e.stack);
                 }
             }
 
