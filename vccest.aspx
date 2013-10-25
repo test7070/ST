@@ -579,7 +579,7 @@
             }
             .dview {
                 float: left;
-                width: 300px;
+                width: 210px;
                 border-width: 0px;
             }
             .tview {
