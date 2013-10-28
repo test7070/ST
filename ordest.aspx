@@ -529,8 +529,9 @@
 						$('#txtSize_'+j).change(function(e){
 							if($.trim($(this).val).length==0)
 								return;
-							var n = $(this).attr('id').replace('txtSize_','');
+							var n = $(this).attr('id').replace('txtSize_','');			
 							var data = tranSize($.trim($(this).val()));
+							$(this).val(tranSize($.trim($(this).val()),'getsize'));
 							$('#textSize1_'+n).val('');
 							$('#textSize2_'+n).val('');
 							$('#textSize3_'+n).val('');
