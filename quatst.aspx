@@ -61,6 +61,7 @@
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
+				$('#cmbTaxtype').val((($('#cmbTaxtype').val())?$('#cmbTaxtype').val():'1'));
                 $('#txtMoney').attr('readonly', true);
                 $('#txtTax').attr('readonly', true);
                 $('#txtTotal').attr('readonly', true);
@@ -85,12 +86,12 @@
                     	$('#txtUnit_' + j).val(t_unit);
                     }
                     //---------------------------------------
-                    if ($('#cmbKind').val().substr(0, 1) == 'A') {
+                    if (t_kind == 'A') {
                         q_tr('txtDime_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
                         q_tr('txtRadius_' + j, q_float('textSize4_' + j));
-                    } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+                    } else if (t_kind == 'B') {
                         q_tr('txtRadius_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtDime_' + j, q_float('textSize3_' + j));

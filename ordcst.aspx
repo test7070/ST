@@ -61,6 +61,7 @@
 			function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
+				$('#cmbTaxtype').val((($('#cmbTaxtype').val())?$('#cmbTaxtype').val():'1'));
                 $('#txtMoney').attr('readonly', true);
                 $('#txtTax').attr('readonly', true);
                 $('#txtTotal').attr('readonly', true);
