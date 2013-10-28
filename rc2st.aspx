@@ -1113,8 +1113,8 @@
 							<input id="txtAddr"  type="text" style="float:left; width:75%;"/></td>
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
-						<input id="txtPaytype" type="text" style="float:left; width:165px;"/>
-						<select id="combPaytype" style="float:left; width:20px;"></select></td>
+						<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
+						<select id="combPaytype" style="float:left; width:26px;"> </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblCardeal' class="lbl btn"> </a></td>
