@@ -591,7 +591,7 @@
                     $('#txtWorker').val(r_name);
                 else
                     $('#txtWorker2').val(r_name);
-                
+                var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtDatea').val());
                 if (t_noa.length == 0 || t_noa == "AUTO")
                     q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
