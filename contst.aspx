@@ -380,7 +380,10 @@
 			}else{
 				$('input[id*="textSize"]').attr('disabled', 'disabled');
 			}
-		  	if( $('#cmbKind').val().substr(0,1)=='A'){
+			$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
+			var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+			t_kind = t_kind.substr(0, 1);				
+		  	if(t_kind=='A'){
 				$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#textSize1_'+j).show();
@@ -390,14 +393,14 @@
 					$('#x1_'+j).show();
 					$('#x2_'+j).show();
 					$('#x3_'+j).hide();
-					$('#Size').css('width','222px');
+					$('#Size').css('width','230px');
 					$('#textSize1_'+j).val($('#txtDime_'+j).val());
 					$('#textSize2_'+j).val($('#txtWidth_'+j).val());
 					$('#textSize3_'+j).val($('#txtLengthb_'+j).val());
 					$('#textSize4_'+j).val(0);
 					$('#txtRadius_'+j).val(0);
 				}
-			}else if( $('#cmbKind').val().substr(0,1)=='B'){
+			}else if(t_kind=='B'){
 				$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#textSize1_'+j).show();
@@ -407,7 +410,7 @@
 					$('#x1_'+j).show();
 					$('#x2_'+j).show();
 					$('#x3_'+j).show();
-					$('#Size').css('width','297px');
+					$('#Size').css('width','310px');
 					$('#textSize1_'+j).val($('#txtRadius_'+j).val());
 					$('#textSize2_'+j).val($('#txtWidth_'+j).val());
 					$('#textSize3_'+j).val($('#txtDime_'+j).val());
@@ -505,7 +508,7 @@
 			float: left;
 		}
 		.txt.c6 {
-			width: 90%;
+			width: 85%;
 			text-align:center;
 		}
 		.txt.c7 {
@@ -750,7 +753,7 @@
 					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  /> </td>
 					<td align="center" style="width:8%;"><a id='lblProductno_st_s'></a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st_s'></a></td>
-					<td align="center" style="width:10%;"><a id='lblUno_st_s'></a></td>
+					<td align="center" style="width:5%;"><a id='lblProduct_st_s'></a></td>
 					<td align="center" id='Size'><a id='lblSize_st_s'> </a><BR><a id='lblSize_help'> </a></td>
 					<td align="center" style="width:4%;"><a id='lblUnit_st_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblMount_st_s'></a></td>
@@ -763,7 +766,7 @@
 					<td align="center" style="width:5%;"><a id='lblEweight_st_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblOrdgweight_st_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblOrdeweight_st_s'></a></td>
-					<td align="center" style="width:4%;"><a id='lblEnda_st_s'></a></td>
+					<td align="center" style="width:3%;"><a id='lblEnda_st_s'></a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td ><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
@@ -801,7 +804,7 @@
 					<td ><input id="txtClass.*" type="text" class="txt c7" /></td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c7"/>
-						<input class="txt" id="txtOrdeno.*" type="text" style="width:65%;" />
+						<input class="txt" id="txtOrdeno.*" type="text" style="width:70%;" />
 						<input class="txt" id="txtNo2.*" type="text" style="width:20%;" />
 						<input id="txtNo3.*" type="hidden" />
 						<input id="recno.*" type="hidden" />

@@ -314,7 +314,9 @@
 				} else {
 					$('input[id*="textSize"]').attr('disabled', 'disabled');
 				}
-				if ($('#cmbKind').val().substr(0, 1) == 'A') {
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);
+				if (t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -331,7 +333,7 @@
 						$('#textSize4_' + j).val(0);
 						$('#txtRadius_' + j).val(0);
 					}
-				} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+				} else if (t_kind == 'B') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -341,7 +343,7 @@
 						$('#x1_' + j).show();
 						$('#x2_' + j).show();
 						$('#x3_' + j).show();
-						$('#Size').css('width', '297px');
+						$('#Size').css('width', '310px');
 						$('#textSize1_' + j).val($('#txtRadius_' + j).val());
 						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
 						$('#textSize3_' + j).val($('#txtDime_' + j).val());
@@ -592,7 +594,7 @@
 					<td align="center">
 						<input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width: 12%;"><a id='lblUno_st'> </a></td>
+					<td align="center" style="width: 15%;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width: 10%;"><a id='lblProductno_st'> </a></td>
 					<td align="center" style="width: 12%;"><a id='lblProduct_st'> </a></td>
 					<td align="center" style="width: 4%;"><a id='lblUnit_st'> </a></td>
@@ -607,11 +609,11 @@
 					</td>
 					<td>
 						<input class="btn"  id="btnUno.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-						<input id="txtUno.*" type="text" style="width:83%;"/>
+						<input id="txtUno.*" type="text" style="width:80%;"/>
 					</td>
 					<td >
 						<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-						<input id="txtProductno.*" type="text" style="width:80%;" />
+						<input id="txtProductno.*" type="text" style="width:75%;" />
 						<input id="txtClass.*" type="text" style="width: 95%;"/>
 					</td>
 					<td ><input class="txt c1" id="txtProduct.*" type="text"/></td>
