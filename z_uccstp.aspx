@@ -23,7 +23,14 @@
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_uccstp',
-                    options : []
+                    options : [{
+                        type : '0', //[1]
+                        name : 'accy',
+                        value : q_getId()[4]
+                    },{
+						type : '1',
+						name : 'xnoa'
+					}]
                 });
                 q_popAssign();
                 q_getFormat();
