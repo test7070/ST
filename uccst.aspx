@@ -131,7 +131,7 @@
 			}
 
 			function btnPrint() {
-
+				q_box("z_uccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + r_accy, 'z_uccstp', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function btnOk() {
