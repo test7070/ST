@@ -856,8 +856,8 @@
 							<input id="txtAddr"  type="text" style="float:left; width:75%;"/></td>
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
-							<input id="txtPaytype" type="text" style="float:left; width:120px;"/>
-							<select id="combPaytype" style="float:left; width:20px;"></select>
+							<input id="txtPaytype" type="text" style="float:left; width:115px;"/>
+							<select id="combPaytype" style="float:left; width:26px;"></select>
 							<select id="cmbTrantype" class="txt" name="D1" style="float:left; width:60px;"></select>
 						</td>
 					</tr>
