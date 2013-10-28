@@ -71,7 +71,8 @@
                 var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
                 var t_unit = '';
                 var t_float = q_float('txtFloata');
-
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);
                 for (var j = 0; j < q_bbsCount; j++) {
                     t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
                     t_product = $.trim($('#txtProduct_' + j).val());
@@ -593,7 +594,10 @@
                 } else {
                     $('input[id*="textSize"]').attr('disabled', 'disabled');
                 }
-                if ($('#cmbKind').val().substr(0, 1) == 'A') {
+				$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);				
+                if (t_kind == 'A') {
                     $('#lblSize_help').text(q_getPara('sys.lblSizea'));
                     for (var j = 0; j < q_bbsCount; j++) {
                         $('#textSize1_' + j).show();
@@ -603,14 +607,14 @@
                         $('#x1_' + j).show();
                         $('#x2_' + j).show();
                         $('#x3_' + j).hide();
-                        $('#Size').css('width', '222px');
+                        $('#Size').css('width', '230px');
                         $('#textSize1_' + j).val($('#txtDime_' + j).val());
                         $('#textSize2_' + j).val($('#txtWidth_' + j).val());
                         $('#textSize3_' + j).val($('#txtLengthb_' + j).val());
                         $('#textSize4_' + j).val(0);
                         $('#txtRadius_' + j).val(0);
                     }
-                } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+                } else if (t_kind == 'B') {
                     $('#lblSize_help').text(q_getPara('sys.lblSizeb'));
                     for (var j = 0; j < q_bbsCount; j++) {
                         $('#textSize1_' + j).show();
@@ -620,7 +624,7 @@
                         $('#x1_' + j).show();
                         $('#x2_' + j).show();
                         $('#x3_' + j).show();
-                        $('#Size').css('width', '297px');
+                        $('#Size').css('width', '308px');
                         $('#textSize1_' + j).val($('#txtRadius_' + j).val());
                         $('#textSize2_' + j).val($('#txtWidth_' + j).val());
                         $('#textSize3_' + j).val($('#txtDime_' + j).val());
@@ -747,7 +751,7 @@
                 float: left;
             }
             .txt.c6 {
-                width: 90%;
+                width: 85%;
                 text-align: center;
             }
             .txt.c7 {
@@ -880,7 +884,7 @@
 						<td class="td5">
 						<input id="txtPaytype" type="text" class="txt c1" />
 						</td>
-						<td class="td6"><select id="combPaytype" class="txt c1"  onchange='combPaytype_chg()'></select></td>
+						<td class="td6"><select id="combPaytype" class="txt c1"  onchange='combPaytype_chg()'> </select></td>
 						<td class="td7"></td>
 						<td class="td8">
 						<input id="btnQuatst2Contst" type="button"/>

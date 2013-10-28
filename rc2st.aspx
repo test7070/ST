@@ -72,6 +72,8 @@
                 var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
                 var t_unit = '';
                 var t_float = q_float('txtFloata');
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);
 
                 for (var j = 0; j < q_bbsCount; j++) {
                     t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
@@ -84,12 +86,12 @@
 						$('#txtUnit_' + j).val(t_unit);
 					}
                     //---------------------------------------
-                    if ($('#cmbKind').val().substr(0, 1) == 'A') {
+                    if (t_kind == 'A') {
                         q_tr('txtDime_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
                         q_tr('txtRadius_' + j, q_float('textSize4_' + j));
-                    } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+                    } else if (t_kind == 'B') {
                         q_tr('txtRadius_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtDime_' + j, q_float('textSize3_' + j));
@@ -816,9 +818,12 @@
 				} else {
 					$('input[id*="textSize"]').attr('disabled', 'disabled');
 				}
-				if ($('#cmbKind').val().substring(0, 1) == 'A') {
+				$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);				
+				if (t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
-					$('#Size').css('width', '240px');
+					$('#Size').css('width', '220px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
 						$('#textSize2_' + j).show();
@@ -834,9 +839,9 @@
 						$('#textSize4_' + j).val(0);
 						$('#txtRadius_' + j).val(0);
 					}
-				} else if ($('#cmbKind').val().substring(0, 1) == 'B') {
+				} else if (t_kind == 'B') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
-					$('#Size').css('width', '340px');
+					$('#Size').css('width', '300px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
 						$('#textSize2_' + j).show();
@@ -845,7 +850,7 @@
 						$('#x1_' + j).show();
 						$('#x2_' + j).show();
 						$('#x3_' + j).show();
-						$('#txtSpec_'+j).css('width', '320px');
+						$('#txtSpec_'+j).css('width', '300px');
 						$('#textSize1_' + j).val($('#txtRadius_' + j).val());
 						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
 						$('#textSize3_' + j).val($('#txtDime_' + j).val());
@@ -853,7 +858,7 @@
 					}
 				} else {//鋼筋和鋼胚
 					$('#lblSize_help').text(q_getPara('sys.lblSizec'));
-					$('#Size').css('width', '200px');
+					$('#Size').css('width', '55px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).hide();
 						$('#textSize2_' + j).hide();
@@ -862,7 +867,7 @@
 						$('#x1_' + j).hide();
 						$('#x2_' + j).hide();
 						$('#x3_' + j).hide();
-						$('#txtSpec_'+j).css('width', '180px');
+						$('#txtSpec_'+j).css('width', '55px');
 						$('#textSize1_' + j).val(0);
 						$('#txtDime_' + j).val(0);
 						$('#textSize2_' + j).val(0);
@@ -1225,12 +1230,12 @@
 					</td>
 					<td>
 					<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
-					<input type="text" id="txtProductno.*"  style="width:70px; float:left;"/>
+					<input type="text" id="txtProductno.*"  style="width:70%; float:left;"/>
 					<span style="display:block; width:20px;float:left;"> </span>
-					<input type="text" id="txtClass.*"  style="width:70px; float:left;"/>
+					<input type="text" id="txtClass.*"  style="width:93%; float:left;"/>
 					</td>
 					<td>
-					<input id="txtStyle.*" type="text" style="width:90%;" />
+					<input id="txtStyle.*" type="text" style="width:90%;text-align:center;" />
 					</td>
 					<td>
 					<input id="txtProduct.*" type="text" style="width:90%;" />

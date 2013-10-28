@@ -54,18 +54,19 @@
 			}
 
 			function sum() {
-				var t_weight = 0;
+				var t_weight = 0,t_unit='',t_mount=0;
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_weight += dec($('#txtWeight_' + j).val());
 					// 重量合計
 					t_unit = $('#txtUnit_' + j).val();
 					t_mount = (!t_unit || emp(t_unit) || trim(t_unit).toLowerCase() == 'kg' ? $('#txtWeight_' + j).val() : $('#txtMount_' + j).val());
 					// 計價量
-					$('#txtTotal_' + j).val(round($('#txtPrice_' + j).val() * dec(t_mount), 0));
+					t_price = dec($('#txtPrice_' + j).val());
+					$('#txtTotal_' + j).val(round(q_mul(t_price,dec(t_mount)), 0));
 				}// j
 				$('#txtTotal').val(round(t_weight, 0));
 				if (!emp($('#txtPrice').val()))
-					$('#txtTranmoney').val(round(t_weight * dec($('#txtPrice').val()), 0));
+					$('#txtTranmoney').val(round(q_mul(t_weight,dec($('#txtPrice').val())), 0));
 			}
 
 			function mainPost() {
@@ -559,7 +560,10 @@
 				} else {
 					$('input[id*="textSize"]').attr('disabled', 'disabled');
 				}
-				if ($('#cmbKind').val().substr(0, 1) == 'A') {
+				$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);				
+				if (t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -569,14 +573,14 @@
 						$('#x1_' + j).show();
 						$('#x2_' + j).show();
 						$('#x3_' + j).hide();
-						$('#Size').css('width', '222px');
+						$('#Size').css('width', '232px');
 						$('#textSize1_' + j).val($('#txtDime_' + j).val());
 						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
 						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
 						$('#textSize4_' + j).val(0);
 						$('#txtRadius_' + j).val(0);
 					}
-				} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+				} else if (t_kind == 'B') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -586,7 +590,7 @@
 						$('#x1_' + j).show();
 						$('#x2_' + j).show();
 						$('#x3_' + j).show();
-						$('#Size').css('width', '297px');
+						$('#Size').css('width', '310px');
 						$('#textSize1_' + j).val($('#txtRadius_' + j).val());
 						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
 						$('#textSize3_' + j).val($('#txtDime_' + j).val());
@@ -855,8 +859,8 @@
 					<td><input class="txt c1" id="txtUno.*" type="text" /></td>
 					<td>
 						<input class="btn" id="btnProductno.*" type="button" value='.' style=" font-weight: bold;float:left;width:1%;" />
-						<input id="txtProductno.*" type="text" style="width:80%;" />
-						<input id="txtClass.*" type="text" style="width: 80%;" />
+						<input id="txtProductno.*" type="text" style="width:75%;" />
+						<input id="txtClass.*" type="text" style="width: 95%;" />
 					</td>
 					<td><input id="txtStyle.*" type="text" class="txt c6" /></td>
 					<td><input class="txt c1" id="txtProduct.*" type="text" /></td>

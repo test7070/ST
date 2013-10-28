@@ -374,7 +374,10 @@
 			}else{
 				$('input[id*="textSize"]').attr('disabled', 'disabled');
 			}
-		  	if( $('#cmbKind').val().substr(0,1)=='A'){
+			$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
+			var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+			t_kind = t_kind.substr(0, 1);				
+		  	if(t_kind=='A'){
             	$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 	        	for (var j = 0; j < q_bbsCount; j++) {
 	            	$('#textSize1_'+j).show();
@@ -384,14 +387,14 @@
 			        $('#x1_'+j).show();
 			        $('#x2_'+j).show();
 			        $('#x3_'+j).hide();
-			        $('#Size').css('width','222px');
+			        $('#Size').css('width','230px');
 			        $('#textSize1_'+j).val($('#txtDime_'+j).val());
 			        $('#textSize2_'+j).val($('#txtWidth_'+j).val());
 			        $('#textSize3_'+j).val($('#txtLengthb_'+j).val());
 			        $('#textSize4_'+j).val(0);
-			        $('#txtRadius_'+j).val(0)
+			        $('#txtRadius_'+j).val(0);
 				}
-			}else if( $('#cmbKind').val().substr(0,1)=='B'){
+			}else if(t_kind=='B'){
 				$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 			    for (var j = 0; j < q_bbsCount; j++) {
 			    	$('#textSize1_'+j).show();
@@ -401,7 +404,7 @@
 			        $('#x1_'+j).show();
 			        $('#x2_'+j).show();
 			        $('#x3_'+j).show();
-			        $('#Size').css('width','297px');
+			        $('#Size').css('width','310px');
 			        $('#textSize1_'+j).val($('#txtRadius_'+j).val());
 			        $('#textSize2_'+j).val($('#txtWidth_'+j).val());
 			        $('#textSize3_'+j).val($('#txtDime_'+j).val());
@@ -419,7 +422,7 @@
 			        $('#x3_'+j).hide();
 			        $('#Size').css('width','70px');
 			        $('#textSize1_'+j).val(0);
-			        $('#txtDime_'+j).val(0)
+			        $('#txtDime_'+j).val(0);
 			        $('#textSize2_'+j).val(0);
 			        $('#txtWidth_'+j).val(0);
 			        $('#textSize3_' + j).val($('#txtLengthb_'+j).val());
@@ -431,7 +434,7 @@
         </script> 
    <style type="text/css">
         #dmain {
-                overflow: hidden;
+                /*overflow: auto;*/
             }
             .dview {
                 float: left;
@@ -518,6 +521,7 @@
                 float: left;
             }
             .txt.c6 {
+            	float:left;
                 width: 90%;
                 text-align:center;
             }
@@ -552,7 +556,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 100%;
+                width: 1500px;
                 float:left;
             }
             .tbbs a {
@@ -574,7 +578,7 @@
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 <!--#include file="../inc/toolbar.inc"-->
-        <div id='dmain' style="overflow:hidden;">
+        <div id='dmain'>
         <div class="dview" id="dview">
            <table class="tview" id="tview"   border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
             <tr>
@@ -674,11 +678,11 @@
         <table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
               <tr style='color:White; background:#003366;' >
                 <td align="center"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  /> </td>
-                <td align="center" style="width:10%;"><a id='lblUno_st'></a></td>
-                <td align="center" style="width:9%;"><a id='lblProductno_st'></a></td>
+                <td align="center" style="width:13%;"><a id='lblUno_st'></a></td>
+                <td align="center" style="width:8%;"><a id='lblProductno_st'></a></td>
                 <td align="center" style="width:30px;"><a id='lblStyle_st'></a></td>
                 <td align="center" style="width:12%;"><a id='lblProduct_st'></a></td>
-                <td align="center" style="width:16%;" id='Size'><a id='lblSize_st'> </a><BR><a id='lblSize_help'> </a></td>
+                <td align="center" style="width:16%;" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
                 <td align="center" style="width:4%;"><a id='lblUnit_st'></a></td>
                 <td align="center" style="width:5%;"><a id='lblMount_st'></a></td>
                 <td align="center" style="width:8%;"><a id='lblWeight_st'></a></td>
@@ -688,14 +692,15 @@
             </tr>
             <tr  style='background:#cad3ff;'>
                 <td style="width:1%;"><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
-                <td><input class="txt c5" id="txtUno.*" type="text" style="width:80%;" />
+                <td>
+                	<input class="txt c5" id="txtUno.*" type="text" style="width:80%;" />
                 	<input class="btn" id="btnUno.*" type="button" value='.' style="width:1%;"/>
-                	<input type="text" id="txtNo3.*"  class="txt c7"/>
+                	<input type="text" id="txtNo3.*"  class="txt c7" style="display:none;" />
                 </td>
                 <td>
 					<input class="btn"  id="btnProduct.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-                    <input type="text" id="txtProductno.*"  style="width:80%; float:left;"/>
-                    <input id="txtClass.*" type="text" style="width: 80%;"/>
+                    <input type="text" id="txtProductno.*"  style="width:70%; float:left;"/>
+                    <input id="txtClass.*" type="text" style="width: 93%;"/>
 				</td>
                 <td ><input id="txtStyle.*" type="text" class="txt c6"/></td>
                 <td ><input id="txtProduct.*" type="text" class="txt c7"/></td>
@@ -718,7 +723,7 @@
                                       <input id="txtTheory.*" type="text" class="txt num c7" /></td>
                 
                 <td><input id="txtMemo.*" type="text" class="txt c7"/>
-                <input class="txt" id="txtOrdeno.*" type="text"style="width:65%;" />
+                <input class="txt" id="txtOrdeno.*" type="text" style="width:65%;" />
                 <input class="txt" id="txtNo2.*" type="text" style="width:20%;" />
                 <input id="txtNoq.*" type="hidden" /><input id="recno.*" type="hidden" /></td>
             </tr>

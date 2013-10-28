@@ -55,6 +55,8 @@
             function sum() {
                 var t1 = 0, t_unit, t_mount, t_weight = 0;
                 var t_unit = '';
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);
                 for (var j = 0; j < q_bbsCount; j++) {
                     t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
                     t_product = $.trim($('#txtProduct_' + j).val());
@@ -66,12 +68,12 @@
                         $('#txtUnit_' + j).val(t_unit);
                     }
                     //---------------------------------------
-                    if ($('#cmbKind').val().substr(0, 1) == 'A') {
+                    if (t_kind == 'A') {
                         q_tr('txtDime_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
                         q_tr('txtRadius_' + j, q_float('textSize4_' + j));
-                    } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+                    } else if (t_kind == 'B') {
                         q_tr('txtRadius_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtDime_' + j, q_float('textSize3_' + j));
@@ -582,7 +584,10 @@
                 } else {
                     $('input[id*="textSize"]').attr('disabled', 'disabled');
                 }
-                if ($('#cmbKind').val().substr(0, 1) == 'A') {
+				$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);				
+                if (t_kind == 'A') {
                     $('#lblSize_help').text(q_getPara('sys.lblSizea'));
                     for (var j = 0; j < q_bbsCount; j++) {
                         $('#textSize1_' + j).show();
@@ -592,15 +597,15 @@
                         $('#x1_' + j).show();
                         $('#x2_' + j).show();
                         $('#x3_' + j).hide();
-                        $('#Size').css('width', '230px');
-                        $('#txtSpec_' + j).css('width', '229px');
+                        $('#Size').css('width', '220px');
+                        $('#txtSpec_' + j).css('width', '220px');
                         $('#textSize1_' + j).val($('#txtDime_' + j).val());
                         $('#textSize2_' + j).val($('#txtWidth_' + j).val());
                         $('#textSize3_' + j).val($('#txtLengthb_' + j).val());
                         $('#textSize4_' + j).val(0);
                         $('#txtRadius_' + j).val(0);
                     }
-                } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+                } else if (t_kind == 'B') {
                     $('#lblSize_help').text(q_getPara('sys.lblSizeb'));
                     for (var j = 0; j < q_bbsCount; j++) {
                         $('#textSize1_' + j).show();
@@ -610,8 +615,8 @@
                         $('#x1_' + j).show();
                         $('#x2_' + j).show();
                         $('#x3_' + j).show();
-                        $('#Size').css('width', '313px');
-                        $('#txtSpec_' + j).css('width', '311px');
+                        $('#Size').css('width', '300px');
+                        $('#txtSpec_' + j).css('width', '300px');
                         $('#textSize1_' + j).val($('#txtRadius_' + j).val());
                         $('#textSize2_' + j).val($('#txtWidth_' + j).val());
                         $('#textSize3_' + j).val($('#txtDime_' + j).val());
@@ -627,8 +632,8 @@
                         $('#x1_' + j).hide();
                         $('#x2_' + j).hide();
                         $('#x3_' + j).hide();
-                        $('#Size').css('width', '65px');
-                        $('#txtSpec_' + j).css('width', '60px');
+                        $('#Size').css('width', '55px');
+                        $('#txtSpec_' + j).css('width', '55px');
                         $('#textSize1_' + j).val(0);
                         $('#txtDime_' + j).val(0);
                         $('#textSize2_' + j).val(0);
@@ -731,7 +736,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 1600px;
+                width: 1700px;
             }
             .tbbs a {
                 font-size: medium;
@@ -887,8 +892,8 @@
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-					<input class="btn" id="btnUno.*" type="button" value='.' style="width:15px;"/>
-					<input id="txtUno.*" type="text" style="width:170px;"/>
+					<input class="btn" id="btnUno.*" type="button" value='.' style="width:1%;"/>
+					<input id="txtUno.*" type="text" style="width:83%;"/>
 					</td>
 					<td>
 					<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:15px;float:left;" />
@@ -897,7 +902,7 @@
 					<input id="txtClass.*" type="text" style='width: 85px;'/>
 					</td>
 					<td>
-					<input type="text" id="txtStyle.*" style="width:90%;text-align:center;" />
+					<input type="text" id="txtStyle.*" style="float:left;width:80%;text-align:center;" />
 					</td>
 					<td>
 					<input type="text" id="txtProduct.*" style="width:95%;" />

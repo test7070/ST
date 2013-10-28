@@ -297,7 +297,10 @@
 			}else{
 				$('input[id*="textSize"]').attr('disabled', 'disabled');
 			}
-		  	if( $('#cmbKind').val().substr(0,1)=='A'){
+			$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
+			var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+			t_kind = t_kind.substr(0, 1);				
+		  	if(t_kind=='A'){
             	$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 	        	for (var j = 0; j < q_bbsCount; j++) {
 	            	$('#textSize1_'+j).show();
@@ -307,14 +310,14 @@
 			        $('#x1_'+j).show();
 			        $('#x2_'+j).show();
 			        $('#x3_'+j).hide();
-			        $('#Size').css('width','222px');
+			        $('#Size').css('width','230px');
 			        $('#textSize1_'+j).val($('#txtDime_'+j).val());
 			        $('#textSize2_'+j).val($('#txtWidth_'+j).val());
 			        $('#textSize3_'+j).val($('#txtLengthb_'+j).val());
 			        $('#textSize4_'+j).val(0);
 			        $('#txtRadius_'+j).val(0);
 				}
-			}else if( $('#cmbKind').val().substr(0,1)=='B'){
+			}else if(t_kind=='B'){
 				$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 			    for (var j = 0; j < q_bbsCount; j++) {
 			    	$('#textSize1_'+j).show();
@@ -324,7 +327,7 @@
 			        $('#x1_'+j).show();
 			        $('#x2_'+j).show();
 			        $('#x3_'+j).show();
-			        $('#Size').css('width','297px');
+			        $('#Size').css('width','310px');
 			        $('#textSize1_'+j).val($('#txtRadius_'+j).val());
 			        $('#textSize2_'+j).val($('#txtWidth_'+j).val());
 			        $('#textSize3_'+j).val($('#txtDime_'+j).val());
@@ -556,15 +559,15 @@
                 <td><input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" /></td>
                 <td>
 					<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-                    <input type="text" id="txtStoreno.*"  style="width:80%; float:left;"/>
+                    <input type="text" id="txtStoreno.*"  style="width:70%; float:left;"/>
                     <span style="display:block; width:1%;float:left;"> </span>
-					<input type="text" id="txtStore.*"  style="width:80%; float:left;"/>
+					<input type="text" id="txtStore.*"  style="width:92%; float:left;"/>
 				</td>
                 <td ><input class="txt c1" id="txtUno.*" type="text" /></td>
                 <td>
 					<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-                    <input type="text" id="txtProductno.*"  style="width:75%;"/>
-                    <input id="txtClass.*" type="text" style="width: 75%;"/>
+                    <input type="text" id="txtProductno.*"  style="width:70%;"/>
+                    <input id="txtClass.*" type="text" style="width: 92%;"/>
 				</td>
 				<td><input type="text" id="txtProduct.*"  class="txt c1"/></td>
 				 <td><input class="txt num c8" id="textSize1.*" type="text" disabled="disabled"/><div id="x1.*" style="float: left"> x</div>

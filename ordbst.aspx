@@ -70,16 +70,17 @@
                 var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
                 var t_unit = '';
                 var t_float = q_float('txtFloata');
-
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);
                 for (var j = 0; j < q_bbsCount; j++) {
                     t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
                     //---------------------------------------
-                    if ($('#cmbKind').val().substr(0, 1) == 'A') {
+                    if (t_kind == 'A') {
                         q_tr('txtDime_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
                         q_tr('txtRadius_' + j, q_float('textSize4_' + j));
-                    } else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+                    } else if (t_kind == 'B') {
                         q_tr('txtRadius_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtDime_' + j, q_float('textSize3_' + j));
@@ -558,7 +559,10 @@
 				} else {
 					$('input[id*="textSize"]').attr('disabled', 'disabled');
 				}
-				if ($('#cmbKind').val().substr(0, 1) == 'A') {
+				$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);				
+				if (t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					$('#Size').css('width', '240px');
 					for (var j = 0; j < q_bbsCount; j++) {
@@ -576,7 +580,7 @@
 						$('#textSize4_' + j).val(0);
 						$('#txtRadius_' + j).val(0);
 					}
-				} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+				} else if (t_kind == 'B') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 					$('#Size').css('width', '340px');
 					for (var j = 0; j < q_bbsCount; j++) {

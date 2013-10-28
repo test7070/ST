@@ -23,6 +23,8 @@
         var bbsNum = [['textSize1', 10, 3, 1],['textSize2', 10, 2, 1],['textSize3', 10, 3, 1],['textSize4', 10, 2, 1],['txtMount', 10, 0, 1],['txtWeight', 15, 3, 1],['txtPrice', 10, 2, 1]];
         var bbmMask = [];
         var bbsMask = [['txtStyle','A']];
+        var bbmKey = ['noa'];
+        var bbsKey = ['noa', 'noq'];
         q_sqlCount = 6; brwCount = 6; brwList = []; brwNowPage = 0; brwKey = 'Datea';
          aPop = new Array(['txtCustno', 'lblCustno', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'],
         ['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx'],
@@ -113,15 +115,13 @@
         }
 
         function btnOk() {
-            t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')]]);  
+            var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')]]);  
             if (t_err.length > 0) {
                 alert(t_err);
                 return;
             }
-
-            $('#txtWorker').val(r_name)
+            $('#txtWorker').val(r_name);
             sum();
-
             var s1 = $('#txt' + bbmKey[0].substr( 0,1).toUpperCase() + bbmKey[0].substr(1)).val();
             if (s1.length == 0 || s1 == "AUTO")   
                 q_gtnoa(q_name, replaceAll('G' + $('#txtDatea').val(), '/', ''));
@@ -359,7 +359,10 @@
 			}else{
 				$('input[id*="textSize"]').attr('disabled', 'disabled');
 			}
-		  	if( $('#cmbKind').val().substr(0,1)=='A'){
+			$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
+            var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+			t_kind = t_kind.substr(0, 1);				
+		  	if(t_kind=='A'){
             	$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 	        	for (var j = 0; j < q_bbsCount; j++) {
 	            	$('#textSize1_'+j).show();
@@ -369,14 +372,14 @@
 			        $('#x1_'+j).show();
 			        $('#x2_'+j).show();
 			        $('#x3_'+j).hide();
-			        $('#Size').css('width','222px');
+			        $('#Size').css('width','230px');
 			        $('#textSize1_'+j).val($('#txtDime_'+j).val());
 			        $('#textSize2_'+j).val($('#txtWidth_'+j).val());
 			        $('#textSize3_'+j).val($('#txtLengthb_'+j).val());
 			        $('#textSize4_'+j).val(0);
-			        $('#txtRadius_'+j).val(0)
+			        $('#txtRadius_'+j).val(0);
 				}
-			}else if( $('#cmbKind').val().substr(0,1)=='B'){
+			}else if(t_kind=='B'){
 				$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 			    for (var j = 0; j < q_bbsCount; j++) {
 			    	$('#textSize1_'+j).show();
@@ -386,13 +389,13 @@
 			        $('#x1_'+j).show();
 			        $('#x2_'+j).show();
 			        $('#x3_'+j).show();
-			        $('#Size').css('width','297px');
+			        $('#Size').css('width','308px');
 			        $('#textSize1_'+j).val($('#txtRadius_'+j).val());
 			        $('#textSize2_'+j).val($('#txtWidth_'+j).val());
 			        $('#textSize3_'+j).val($('#txtDime_'+j).val());
 			        $('#textSize4_'+j).val($('#txtLengthb_'+j).val());
 				}
-			}else{//鋼筋和鋼胚
+			}else{
 				$('#lblSize_help').text(q_getPara('sys.lblSizec'));
 	            for (var j = 0; j < q_bbsCount; j++) {
 	            	$('#textSize1_'+j).hide();
@@ -404,7 +407,7 @@
 			        $('#x3_'+j).hide();
 			        $('#Size').css('width','70px');
 			        $('#textSize1_'+j).val(0);
-			        $('#txtDime_'+j).val(0)
+			        $('#txtDime_'+j).val(0);
 			        $('#textSize2_'+j).val(0);
 			        $('#txtWidth_'+j).val(0);
 			        $('#textSize3_' + j).val($('#txtLengthb_'+j).val());
@@ -548,7 +551,7 @@
             .tbbs tr.error input[type="text"] {
                 color: red;
             }
-            input[type="text"], input[type="button"] {
+            input[type="text"], input[type="button"],select {
                 font-size: medium;
             }
         .tbbs
@@ -668,7 +671,10 @@
                 <td align="center"><a id='lblDescr_st'> </a></td>
             </tr>
             <tr  style='background:#cad3ff;'>
-                <td ><input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" /></td>
+                <td >
+                	<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+                	<input id="txtNoq.*" type="text" style="display:none;" />
+                </td>
                 <td ><input class="txt c1" id="txtStoreno.*" type="text" /></td>
                 <td ><input class="txt c1" id="txtUno.*" type="text" style="width:80%;" />
                 	<input class="btn" id="btnUno.*" type="button" value='.' style="width:1%;"/></td>

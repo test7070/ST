@@ -89,6 +89,8 @@
 				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
 				var t_unit = '';
 				var t_float = q_float('txtFloata');
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);
 
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
@@ -101,12 +103,12 @@
 						$('#txtUnit_' + j).val(t_unit);
 					}
 					//---------------------------------------
-					if ($('#cmbKind').val().substr(0, 1) == 'A') {
+					if (t_kind == 'A') {
 						q_tr('txtDime_' + j, q_float('textSize1_' + j));
 						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
 						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
 						q_tr('txtRadius_' + j, q_float('textSize4_' + j));
-					} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+					} else if (t_kind == 'B') {
 						q_tr('txtRadius_' + j, q_float('textSize1_' + j));
 						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
 						q_tr('txtDime_' + j, q_float('textSize3_' + j));
@@ -826,7 +828,9 @@
 				} else {
 					$('input[id*="textSize"]').attr('disabled', 'disabled');
 				}
-				if ($('#cmbKind').val().substr(0, 1) == 'A') {
+                var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);				
+				if (t_kind == 'A') {
 					$('*[id="lblSize_help"]').text(q_getPara('sys.lblSizea'));
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -836,8 +840,8 @@
 						$('#x1_' + j).show();
 						$('#x2_' + j).show();
 						$('#x3_' + j).hide();
-						$('*[id="Size"]').css('width', '230px');
-						$('#txtSpec_' + j).css('width', '229px');
+						$('*[id="Size"]').css('width', '220px');
+						$('#txtSpec_' + j).css('width', '220px');
 						$('#textSize1_' + j).val($('#txtDime_' + j).val());
 						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
 						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
@@ -852,14 +856,14 @@
 						$('#x1__' + j).show();
 						$('#x2__' + j).show();
 						$('#x3__' + j).hide();
-						$('*[id="Size"]').css('width', '230px');
+						$('*[id="Sizet"]').css('width', '230px');
 						$('#textSize1__' + j).val($('#txtDime__' + j).val());
 						$('#textSize2__' + j).val($('#txtWidth__' + j).val());
 						$('#textSize3__' + j).val($('#txtLengthb__' + j).val());
 						$('#textSize4__' + j).val(0);
 						$('#txtRadius__' + j).val(0);
 					}
-				} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
+				} else if (t_kind == 'B') {
 					$('*[id="lblSize_help"]').text(q_getPara('sys.lblSizeb'));
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -869,8 +873,8 @@
 						$('#x1_' + j).show();
 						$('#x2_' + j).show();
 						$('#x3_' + j).show();
-						$('*[id="Size"]').css('width', '313px');
-						$('#txtSpec_' + j).css('width', '311px');
+						$('*[id="Size"]').css('width', '300px');
+						$('#txtSpec_' + j).css('width', '300px');
 						$('#textSize1_' + j).val($('#txtRadius_' + j).val());
 						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
 						$('#textSize3_' + j).val($('#txtDime_' + j).val());
@@ -884,7 +888,7 @@
 						$('#x1__' + j).show();
 						$('#x2__' + j).show();
 						$('#x3__' + j).show();
-						$('*[id="Size"]').css('width', '313px');
+						$('*[id="Sizet"]').css('width', '310px');
 						$('#textSize1__' + j).val($('#txtRadius__' + j).val());
 						$('#textSize2__' + j).val($('#txtWidth__' + j).val());
 						$('#textSize3__' + j).val($('#txtDime__' + j).val());
@@ -900,8 +904,8 @@
 						$('#x1_' + j).hide();
 						$('#x2_' + j).hide();
 						$('#x3_' + j).hide();
-						$('*[id="Size"]').css('width', '230px');
-						$('#txtSpec_' + j).css('width', '200px');
+						$('*[id="Size"]').css('width', '55px');
+						$('#txtSpec_' + j).css('width', '55px');
 						$('#textSize1_' + j).val(0);
 						$('#txtDime_' + j).val(0);
 						$('#textSize2_' + j).val(0);
@@ -918,7 +922,7 @@
 						$('#x1__' + j).hide();
 						$('#x2__' + j).hide();
 						$('#x3__' + j).hide();
-						$('*[id="Size"]').css('width', '230px');
+						$('*[id="Sizet"]').css('width', '55px');
 						$('#textSize1__' + j).val(0);
 						$('#txtDime__' + j).val(0);
 						$('#textSize2__' + j).val(0);
@@ -1033,7 +1037,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 1550px;
+				width: 1600px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1048,7 +1052,7 @@
 				font-size: medium;
 			}
 			#dbbt {
-				width: 1450px;
+				width: 1250px;
 			}
 			#tbbt {
 				margin: 0;
@@ -1253,9 +1257,7 @@
 					<td align="center" style="width:35px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:140px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
-					<td align="center" id='Size'><a id='lblSize_help'> </a>
-					<BR>
-					<a id='lblSize_st'> </a></td>
+					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
@@ -1273,8 +1275,8 @@
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
-					<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-					<input id="txtNo2.*" type="text" style="display: none;" />
+						<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+						<input id="txtNo2.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
@@ -1282,12 +1284,13 @@
 					<input type="text" id="txtProductno.*"  style="width:75px; float:left;"/>
 					</td>
 					<td>
-					<input id="txtStyle.*" type="text" style="width:90%;text-align:center;"/>
+					<input id="txtStyle.*" type="text" style="width:85%;text-align:center;"/>
 					</td>
-					<td><span style="width:20px;height:1px;display:block;float:left;"> </span>
-					<input id="txtProduct.*" type="text" style="float:left;width:100px;"/>
-					<input class="btn" id="btnUno.*" type="button" value='' style="display:none;float:left;width:20px;height:25px;"/>
-					<input id="txtUno.*" type="text" style="display:none;float:left;width:100px;" />
+					<td>
+						<span style="width:20px;height:1px;display:none;float:left;"> </span>
+						<input id="txtProduct.*" type="text" style="float:left;width:93%;"/>
+						<input class="btn" id="btnUno.*" type="button" value='' style="display:none;float:left;width:20px;height:25px;"/>
+						<input id="txtUno.*" type="text" style="display:none;float:left;width:100px;" />
 					</td><td >
 					<input id="txtClass.*" type="text" style="width:90%;text-align:center;"/>
 					</td>
@@ -1362,15 +1365,15 @@
 		<div id="dbbt">
 			<table id="tbbt" class='tbbt'  border="2"  cellpadding='2' cellspacing='1'>
 				<tr style='color:white; background:#003366;' >
-					<input class="txt c1"  id="txtNoa..*" type="hidden"  />
 					<td class="td1" align="center" style="width:1%; max-width:20px;">
+					<input class="txt c1"  id="txtNoa..*" type="hidden"  />
 					<input class="btn"  id="btnPlut" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"></td>
-					<td class="td2" align="center" style="width:15%;"><a id='lblUno_t'></a></td>
+					<td class="td2" align="center"><a id='lblUno_t'></a></td>
 					<td class="td3" align="center" style="width:12%;"><a id='lblProduct_t'></a></td>
 					<td class="td4" align="center" style="width:10%;"><a id='lblProductno_t'></a></td>
-					<td align="center" id='Size'><a id='lblSize_help'> </a></td>
+					<td align="center" id='Sizet'><a id='lblSize_help'> </a></td>
 					<td class="td8" align="center" style="width:8%;"><a id='lblMount_t'></a></td>
 					<td class="td9" align="center" style="width:8%;"><a id='lblWeight_t'></a></td>
 					<td class="td9" align="center" style="width:2%;"><a id='lblIssale_t'></a></td>
@@ -1384,11 +1387,11 @@
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td class="td2">
 					<input class="btn" id="btnUno..*" type="button" value='.' style="float:left;width:1%;"/>
-					<input class="txt c1" id="txtUno..*" type="text" style="float:left;width:85%;" />
+					<input class="txt c1" id="txtUno..*" type="text" style="float:left;width:80%;" />
 					</td>
 					<td class="td3">
 					<input type="button" id="btnProductno..*" value="." style="width:1%;">
-					<input class="txt" id="txtProduct..*" type="text" style="width:85%;"  />
+					<input class="txt" id="txtProduct..*" type="text" style="width:75%;"  />
 					</td>
 					<td class="td4">
 					<input class="txt" id="txtProductno..*" type="text" style="width:95%;"  />

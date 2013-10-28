@@ -55,7 +55,9 @@
 			}
 			function size_change () {
 				var w = window.parent;
-				if(w.$('#cmbKind').val().substr(0, 1) == 'A'){
+				var t_Kind = (w.$('#cmbKind').val()?w.$('#cmbKind').val():'');
+				t_Kind = t_Kind.substring(0, 1);
+				if(t_Kind){
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					for (var j = 0; j < brwCount2 ; j++) {
 						$('#txtSize4_'+j).attr('hidden', 'true');
