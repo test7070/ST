@@ -27,7 +27,10 @@
                         type : '0', //[1]
                         name : 'accy',
                         value : q_getId()[4]
-                    }]
+                    },{
+						type : '1',
+						name : 'xnoa'
+					}]
                 });
                 q_popAssign();
                 q_getFormat();
