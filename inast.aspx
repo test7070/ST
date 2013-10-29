@@ -21,10 +21,10 @@
 
             q_tables = 's';
             var q_name = "ina";
-            var q_readonly = ['txtWorker', 'txtWorker2', 'txtNoa'];
+            var q_readonly = ['txtWorker', 'txtWorker2', 'txtNoa','txtWeight'];
             var q_readonlys = [];
-            var bbmNum = [['txtTotal', 10, 1, 1]];
-            var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtRadius', 10, 3, 1], ['txtWidth', 10, 2, 1], ['txtDime', 10, 3, 1], ['txtLengthb', 10, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 1, 1]];
+            var bbmNum = [['txtWeight', 10, 2, 1]];
+            var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,0,1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
             q_sqlCount = 6;
@@ -520,6 +520,7 @@
                 size_change();
                 uccb_readonly = true;
                 bbs_readonly(0);
+            	sum();
             }
 
             function btnPrint() {
@@ -978,9 +979,9 @@
 							<input id="txtTggno" type="text" style="float:left;width:30%;"/>
 							<input id="txtComp" type="text" style="float:left;width:70%;"/>
 						</td>
-						<td><span> </span><a id="lblTotal" class="lbl"> </a></td>
+						<td><span> </span><a id="lblWeight" class="lbl"> </a></td>
 						<td>
-						<input id="txtTotal" type="text" class="txt c1 num" />
+						<input id="txtWeight" type="text" class="txt c1 num" />
 						</td>
 					</tr>
 					<tr>
