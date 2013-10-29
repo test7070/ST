@@ -51,7 +51,7 @@
 		        if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 		       	if(t_uno.length>0)
-		       		t_where += " and exists(select noa from ordet"+r_accy+" where ordet"+r_accy+".noa=orde"+r_accy+".noa and ordet"+r_accy+".uno='"+t_uno+"')";
+		       		t_where += " and exists(select noa from inas"+r_accy+" where inas"+r_accy+".noa=ina"+r_accy+".noa and inas"+r_accy+".uno='"+t_uno+"')";
 		       	
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
