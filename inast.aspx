@@ -411,7 +411,11 @@
                     style : t_Style,
                     productno : t_Productno
                 };
-                return theory_st(theory_setting);
+                if ($('#cmbKind').val().substr(1, 1) == '4') {//鋼胚
+					q_tr('txtTheory_' + b_seq, round(t_Mount * theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), t_Dime, t_Width, t_Lengthb), 0));
+				} else {
+					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
+				}
             }
 
             function bbsAssign() {
