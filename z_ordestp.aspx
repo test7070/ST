@@ -34,6 +34,10 @@
                     },{//2  [3][4]
                         type : '1',
                         name : 'xnoa'
+                    }, {//3  [5]
+                        type : '5',
+                        name : 'showtype',
+                        value : q_getMsg('showtype').split('&')
                     }]
                 });
                 q_popAssign();

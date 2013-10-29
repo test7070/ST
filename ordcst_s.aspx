@@ -28,7 +28,7 @@
                 q_langShow();
                 bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd],['txtBodate', r_picd], ['txtEodate', r_picd]];
                 q_mask(bbmMask);
-                q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype'));
+                q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype')+',1@物料');
                 q_cmbParse("cmbEnda", '@全部,1@已結案,0@未結案');
                 $('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
