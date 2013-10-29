@@ -37,7 +37,7 @@
                     }, {//3  [5]
                         type : '5',
                         name : 'showtype',
-                        value : ['1@尺寸','2@厚寬長']
+                        value : q_getMsg('showtype').split('&')
                     }]
                 });
                 q_popAssign();
