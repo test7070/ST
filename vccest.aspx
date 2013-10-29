@@ -246,9 +246,9 @@
                     			}
                     		}
                     		for(var i=0;i<q_bbsCount;i++){
-                    				if($.trim($('#txtOrdeno_'+t_sel).val())==t_ordeno && $.trim($('#txtNo2_'+t_sel).val())==t_no2){
-                    					tot_mount2 = q_add(tot_mount2,q_float('txtMount_'+t_sel));
-                    					tot_weight2 = q_add(tot_weight2,q_float('txtWeight_'+t_sel));
+                    				if($.trim($('#txtOrdeno_'+i).val())==t_ordeno && $.trim($('#txtNo2_'+i).val())==t_no2){
+                    					tot_mount2 = q_add(tot_mount2,q_float('txtMount_'+i));
+                    					tot_weight2 = q_add(tot_weight2,q_float('txtWeight_'+i));
                     				}
                     			}
                     			if($('#cmbKind').val()=='B2'){
@@ -383,7 +383,7 @@
                                 return;
                             var n = $(this).attr('id').replace('txtSize_', '');
                             var data = tranSize($.trim($(this).val()));
-                            $(this).val(tranSize($.trim($(this).val()),'getsize'));
+							$(this).val(tranSize($.trim($(this).val()),'getsize'));
                             $('#textSize1_' + n).val('');
                             $('#textSize2_' + n).val('');
                             $('#textSize3_' + n).val('');
