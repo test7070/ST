@@ -22,7 +22,7 @@
             q_tables = 's';
             var q_name = "ina";
             var q_readonly = ['txtWorker', 'txtWorker2', 'txtNoa','txtWeight'];
-            var q_readonlys = [];
+            var q_readonlys = ['txtTotal','txtTheory'];
             var bbmNum = [['txtWeight', 10, 2, 1]];
             var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,0,1]];
             var bbmMask = [];
