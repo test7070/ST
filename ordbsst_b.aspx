@@ -10,7 +10,7 @@
 		<script src="../script/qbox.js" type="text/javascript"> </script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-			var q_name = 'view_ordbs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,dime,width,lengthb,radius,mount,weight,noa,no3,price,total,theory,memo,kind,style,class,uno,size,acoin,afloata,amemo order=odate ", afilter = [], bbsKey = ['noa', 'no3'], t_count = 0, as;
+			var q_name = 'view_ordbs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,dime,width,lengthb,radius,mount,weight,noa,no3,price,total,theory,memo,kind,style,class,uno,size,acoin,afloata,amemo,unit order=odate ", afilter = [], bbsKey = ['noa', 'no3'], t_count = 0, as;
 			var t_sqlname = 'ordbs_load2'; t_postname = q_name; brwCount2 = 12;
 			var isBott = false;	/// 是否已按過 最後一頁
 			var txtfield = [], afield, t_data, t_htm;
@@ -257,7 +257,10 @@
 				<td align="center" style="width:1%;"><input id="chkSel.*" type="checkbox"	/></td>
 				<td style="width:6%;"><input class="txt c1"	id="txtProductno.*" type="text" /></td>
 				<td style="width:8%;"><input class="txt c1" id="txtProduct.*" type="text"/></td>
-				 <td style="width:10%;"><input class="txt c1" id="txtSpec.*" type="text" /></td>
+				 <td style="width:10%;">
+				 	<input class="txt c1" id="txtSpec.*" type="text" />
+				 	<input class="txt c1" id="txtUnit.*" type="hidden" />
+				 </td>
 				<td id="FixedSize">
 					<input class="txt num c8" id="txtSize1.*" type="text"/><div id="x1" style="float: left"> x</div>
 					<input class="txt num c8" id="txtSize2.*" type="text"/><div id="x2" style="float: left"> x</div>
