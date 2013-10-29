@@ -975,8 +975,8 @@
 					<tr>
 						<td><span> </span><a id="lblStore" class="lbl btn" > </a></td>
 						<td colspan="3">
-							<input id="txtStoreno" style="float:left;width:20%;"/>
-							<input id="txtStore" style="float:left;width:80%;"/>
+							<input id="txtStoreno" style="float:left;width:30%;"/>
+							<input id="txtStore" style="float:left;width:70%;"/>
 						</td>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td>
