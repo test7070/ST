@@ -64,6 +64,7 @@
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				// q_sqlCount=最前面 top=筆數， q_init 為載入 q_sys.xml 與 q_LIST
 				$('#txtOdate').focus();
+				OrdenoAndNo2On_Change();
 			});
 
 			function main() {
@@ -74,6 +75,7 @@
 				}
 				mainForm(1);
 				// 1=最後一筆  0=第一筆
+				OrdenoAndNo2On_Change();
 			}//  end Main()
 
 			function sum() {
@@ -204,6 +206,7 @@
 					$('#txtTotalus').val(0);
 				else
 					$('#txtTotalus').val(FormatNumber(t_moneyus));
+				OrdenoAndNo2On_Change();
 			}
 
 			var t_spec;
@@ -297,11 +300,11 @@
 						q_box("z_credit.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" + $('#txtCustno').val() + "';"+r_accy+";" + q_cur, 'ordei', "95%", "95%", q_getMsg('btnCredit'));
 					}
 				});
+				OrdenoAndNo2On_Change();
 			}
 
 			function q_boxClose(s2) {///   q_boxClose 2/4 /// 查詢視窗、客戶視窗、訂單視窗  關閉時執行
-				var
-				ret;
+				var ret;
 				switch (b_pop) {/// 重要：不可以直接 return ，最後需執行 originalClose();
 					case 'quats':
 						if (q_cur > 0 && q_cur < 4) {
@@ -354,6 +357,7 @@
 						break;
 				}/// end Switch
 				b_pop = '';
+				OrdenoAndNo2On_Change();
 			}
 
 			var focus_addr = '';
@@ -382,6 +386,7 @@
 							q_Seek_gtPost();
 						break;
 				}  /// end switch
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnQuat() {
@@ -399,6 +404,7 @@
 			}
 
 			function btnOk() {
+				OrdenoAndNo2On_Change();
 				Lock(1, {
 					opacity : 0
 				});
@@ -429,6 +435,7 @@
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
 				Unlock(1);
+				OrdenoAndNo2On_Change();
 			}
 
 			function _btnSeek() {
@@ -455,6 +462,7 @@
 
 				}
 				_bbtAssign();
+				OrdenoAndNo2On_Change();
 			}
 
 			function getTheory(b_seq) {
@@ -610,6 +618,7 @@
 				}
 				_bbsAssign();
 				size_change();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnIns() {
@@ -624,6 +633,7 @@
 					$('#btnOrdei').show();
 				else
 					$('#btnOrdei').hide();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnModi() {
@@ -638,6 +648,7 @@
 				else
 					$('#btnOrdei').hide();
 				sum();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnPrint() {
@@ -653,6 +664,7 @@
 					xmlSql = q_preXml();
 				_btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
 				$('#dbbt').hide();
+				OrdenoAndNo2On_Change();
 			}
 
 			function bbtSave(as) {
@@ -691,7 +703,39 @@
 				}
 				return true;
 			}
-
+			
+			function OrdenoAndNo2On_Change(){
+				for(var idno=0;idno<q_bbsCount;idno++){
+					var thisQuatno = trim($('#txtQuatno_'+idno).val());
+					var thisNo3 = trim($('#txtNo3_'+idno).val());
+					if(thisQuatno.length > 0 && thisNo3.length > 0){
+						$('#textSize1_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+						$('#textSize2_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+						$('#textSize3_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+						$('#textSize4_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+						$('#txtRadius_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+						$('#textWidth_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+						$('#textDime_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+						$('#textLengthb_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+						$('#txtProduct_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+						$('#txtSize_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+					}else{
+						if(q_cur==1 || q_cur ==2){
+							$('#textSize1_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+							$('#textSize2_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+							$('#textSize3_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+							$('#textSize4_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+							$('#txtRadius_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+							$('#textWidth_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+							$('#textDime_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+							$('#textLengthb_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+							$('#txtProduct_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+							$('#txtSize_'+idno).attr('readonly', false).css('background-color', 'white').css('color', 'black');
+						}
+					}
+				}
+			}
+			
 			///////////////////////////////////////////////////  以下提供事件程式，有需要時修改
 			function refresh(recno) {
 				_refresh(recno);
@@ -719,6 +763,7 @@
 					}
 					$(this).attr('OldValue', OldValue);
 				});
+				OrdenoAndNo2On_Change();
 			}
 
 			function q_popPost(s1) {
@@ -758,6 +803,7 @@
 						$('#txtPaytype').focus();
 						break;
 				}
+				OrdenoAndNo2On_Change();
 			}
 
 			function readonly(t_para, empty) {
@@ -773,65 +819,80 @@
 					$('#btnOrdem').attr('disabled', 'disabled');
 				else
 					$('#btnOrdem').removeAttr('disabled');
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnMinus(id) {
 				_btnMinus(id);
 				sum();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnPlus(org_htm, dest_tag, afield) {
 				_btnPlus(org_htm, dest_tag, afield);
 				size_change();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnPlut(org_htm, dest_tag, afield) {
 				_btnPlus(org_htm, dest_tag, afield);
+				OrdenoAndNo2On_Change();
 			}
 
 			function q_appendData(t_Table) {
 				return _q_appendData(t_Table);
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnSeek() {
 				_btnSeek();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnTop() {
 				_btnTop();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnPrev() {
 				_btnPrev();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnPrevPage() {
 				_btnPrevPage();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnNext() {
 				_btnNext();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnNextPage() {
 				_btnNextPage();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnBott() {
 				_btnBott();
+				OrdenoAndNo2On_Change();
 			}
 
 			function q_brwAssign(s1) {
 				_q_brwAssign(s1);
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnDele() {
 				_btnDele();
+				OrdenoAndNo2On_Change();
 			}
 
 			function btnCancel() {
 				_btnCancel();
 				$('#dbbt').hide();
+				OrdenoAndNo2On_Change();
 			}
 
 			function size_change() {

@@ -991,8 +991,8 @@
 					<tr>
 						<td><span> </span><a id="lblStore" class="lbl btn" > </a></td>
 						<td colspan="3">
-							<input id="txtStoreno" style="float:left;width:30%;"/>
-							<input id="txtStore" style="float:left;width:70%;"/>
+							<input type="text" id="txtStoreno" style="float:left;width:30%;"/>
+							<input type="text" id="txtStore" style="float:left;width:70%;"/>
 						</td>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td>
@@ -1049,7 +1049,8 @@
 					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblMemo_st'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblUno2_st'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblMemo_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -1112,6 +1113,9 @@
 					<td>
 					<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
 					<input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/>
+					</td>
+					<td>
+					<input class="txt c1" id="txtUno2.*" type="text" />
 					</td>
 					<td>
 					<input class="txt c1" id="txtMemo.*" type="text" />

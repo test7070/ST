@@ -481,7 +481,7 @@
 					}					
 				}
 				var t_date = trim($('#txtDatea').val());
-				var t_where = "where=^^ left(noa,7)='" + replaceAll(t_date,'/','')+ "'";
+				var t_where = "where=^^ left(uno,7)='" + replaceAll(t_date,'/','')+ "'";
 				if($('#cmbTypea').val()!='2'){
 					q_gt('view_uccb', t_where,0,0,0,'GetNewUno');
 				}else{
@@ -1221,8 +1221,9 @@
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblCert_st'></a><br><a id='lblMemos_st'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblOrdcnos_st'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblMemos_st'> </a><br><a id='lblCert_st'></a></td>
+					<td align="center" style="width:150px;"><a id='lblUno2_st'> </a></td>
+					<td align="center" style="width:220px;"><a id='lblOrdcnos_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
 				</tr>
@@ -1289,8 +1290,11 @@
 						<input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/>
 					</td>
 					<td>
-						<input id="btnCert.*" class="btnCert" type="button" style="width:95%;"/>
 						<input id="txtMemo.*" type="text" style="width:95%;"/>
+						<input id="btnCert.*" class="btnCert" type="button" style="width:95%;"/>
+					</td>
+					<td >
+						<input id="txtUno2.*" type="text" style="width:90%;"/>
 					</td>
 					<td>
 					<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
