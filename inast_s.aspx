@@ -36,7 +36,7 @@
             function q_seekStr() {
             	t_kind = $.trim($('#cmbKind').val());
                 t_noa = $.trim($('#txtNoa').val());
-		        t_custno = $.trim($('#txtCustno').val());
+		        t_tggno = $.trim($('#txtTggno').val());
 		        t_comp = $.trim($('#txtComp').val());
 		        t_uno = $.trim($('#txtUno').val());
 
@@ -47,7 +47,7 @@
 		        + q_sqlPara2("kind", t_kind)
 		        + q_sqlPara2("noa", t_noa) 
 		        + q_sqlPara2("datea", t_bdate, t_edate) 		     
-		        + q_sqlPara2("custno", t_custno);
+		        + q_sqlPara2("tggno", t_tggno);
 		        if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 		       	if(t_uno.length>0)
@@ -92,9 +92,9 @@
 					</td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblCustno'></a></td>
+					<td class='seek'  style="width:20%;"><a id='lblTggno'></a></td>
 					<td>
-					<input class="txt" id="txtCustno" type="text" style="width:215px; font-size:medium;" />
+					<input class="txt" id="txtTggno" type="text" style="width:215px; font-size:medium;" />
 					</td>
 				</tr>
 				<tr class='seek_tr'>
