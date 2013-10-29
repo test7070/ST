@@ -34,6 +34,10 @@
                     },{//2  [3][4]
                         type : '1',
                         name : 'xnoa'
+                    }, {//3  [5]
+                        type : '5',
+                        name : 'showtype',
+                        value : ['1@尺寸','2@厚寬長']
                     }]
                 });
                 q_popAssign();
