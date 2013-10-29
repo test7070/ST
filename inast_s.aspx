@@ -39,6 +39,7 @@
 		        t_tggno = $.trim($('#txtTggno').val());
 		        t_comp = $.trim($('#txtComp').val());
 		        t_uno = $.trim($('#txtUno').val());
+		        t_uno2 = $.trim($('#txtUno2').val());
 
 		        t_bdate = $('#txtBdate').val();
 		        t_edate = $('#txtEdate').val();
@@ -52,7 +53,8 @@
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 		       	if(t_uno.length>0)
 		       		t_where += " and exists(select noa from inas"+r_accy+" where inas"+r_accy+".noa=ina"+r_accy+".noa and inas"+r_accy+".uno='"+t_uno+"')";
-		       	
+		       	if(t_uno2.length>0)
+		       		t_where += " and exists(select noa from inas"+r_accy+" where inas"+r_accy+".noa=ina"+r_accy+".noa and inas"+r_accy+".uno2='"+t_uno2+"')";
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
             }
@@ -107,6 +109,12 @@
 					<td class='seek'  style="width:20%;"><a id='lblUno'></a></td>
 					<td>
 					<input class="txt" id="txtUno" type="text" style="width:215px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblUno2'></a></td>
+					<td>
+					<input class="txt" id="txtUno2" type="text" style="width:215px; font-size:medium;" />
 					</td>
 				</tr>
 			</table>
