@@ -386,7 +386,8 @@
 								return;
 							var n = $(this).attr('id').replace('txtSize_','');
 							var data = tranSize($.trim($(this).val()));
-							$(this).val(tranSize($.trim($(this).val()),'getsize'));
+							if(q_getPara('sys.comp').substring(0, 3) == '裕承隆')
+								$(this).val(tranSize($.trim($(this).val()),'getsize'));
 							$('#textSize1_'+n).val('');
 							$('#textSize2_'+n).val('');
 							$('#textSize3_'+n).val('');
