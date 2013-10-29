@@ -463,7 +463,8 @@
                 size_change();
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
                 $('#txtOdate').val(q_date());
-                $('#txtDatea').val(q_date()).focus();
+                $('#txtDatea').val(q_date());
+                $('#txtCno').focus();
             }
 
             function btnModi() {
@@ -528,6 +529,18 @@
                         });
                         ProductAddStyle(b_seq);
                         $('#txtStyle_' + b_seq).focus();
+                        break;
+                    case 'txtCustno':
+                        $('#txtPaytype').focus();
+                        break;
+                    case 'txtSalesno':
+                        $('#txtTel').focus();
+                        break;
+                    case 'txtAddr':
+                        $('#txtPost2').focus();
+                        break;
+                    case 'txtAddr2':
+                        $('#txtContract').focus();
                         break;
                 }
             }
