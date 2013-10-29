@@ -313,7 +313,7 @@
 							var i, j = 0;
 							for(var i=0;i<q_bbsCount;i++){$('#btnMinus_'+i).click();}
 							$('#txtQuatno').val(b_ret[0].noa);
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtQuatno,txtNo3,txtPrice,txtMount,txtWeight,txtClass,txtTheory', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no3,price,mount,weight,class,theory', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtQuatno,txtNo3,txtPrice,txtMount,txtWeight,txtClass,txtTheory,txtStyle', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no3,price,mount,weight,class,theory,style', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							bbsAssign();
 							sum();
@@ -619,7 +619,7 @@
 				$('#cmbKind').val(q_getPara('vcc.kind'));
 				size_change();
 				$('#txtOdate').val(q_date());
-				$('#txtOdate').focus();
+				$('#txtCno').focus();
 				if ($('#cmbStype').find("option:selected").text() == '外銷')
 					$('#btnOrdei').show();
 				else
@@ -747,6 +747,15 @@
 						});
 						ProductAddStyle(b_seq);
 						$('#txtStyle_' + b_seq).focus();
+						break;
+					case 'txtCustno':
+						$('#txtContract').focus();
+						break;
+					case 'txtAddr':
+						$('#txtPost2').focus();
+						break;
+					case 'txtAddr2':
+						$('#txtPaytype').focus();
 						break;
 				}
 			}
@@ -1270,7 +1279,7 @@
 					<td align="center" style="width:50px;"><a id='lblOrdet_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblGemounts'> </a><br><a id='lblNotv'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblDateas'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblMemos'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblMemos'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblssale_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblEnda_st'> </a></td>
@@ -1346,9 +1355,9 @@
 					<input class="txt " id="txtDatea.*" type="text" style="width:95%;"/>
 					</td>
 					<td >
-					<input id="txtMemo.*" type="text" style="width:110px; float:left;"/>
-					<input id="txtQuatno.*" type="text"  style="width:80px;float:left;"/>
-					<input id="txtNo3.*" type="text"  style="width:20px;float:left;"/>
+					<input id="txtMemo.*" type="text" style="width:95%; float:left;"/>
+					<input id="txtQuatno.*" type="text"  style="width:70%;float:left;"/>
+					<input id="txtNo3.*" type="text"  style="width:20%;float:left;"/>
 					</td>
 					<td align="center">
 					<input id="chkIssale.*" type="checkbox"/>

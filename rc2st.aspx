@@ -406,19 +406,24 @@
 			}
 			
             function setNewUno(w_unoArray, idno, IndexNum, IndexEng) {
-                var newIndexNum = (dec(IndexNum) > 0 ? dec(IndexNum) + 1 : 1);
-                var newIndexEng = (dec(IndexEng) > 0 ? dec(IndexEng) : 65);
-                if (newIndexNum > 999) {
-                    newIndexNum = 1;
-                    newIndexEng = dec(IndexEng) + 1;
-                }
-                var t_date = trim($('#txtDatea').val());
-                var newUno = replaceAll(t_date,'/','') + padL(newIndexNum,'0',3) + String.fromCharCode(newIndexEng);
-                if (w_unoArray.indexOf(newUno) == -1) {
-                    $('#txtUno_' + idno).val(newUno);
-                    UnoArray.push(newUno);
-                } else {
-                    setNewUno(UnoArray, idno, newIndexNum, newIndexEng);
+            	var nowUno = trim($('#txtUno_' + idno).val());
+            	var nowMount = dec(trim($('#txtMount_' + idno).val()));
+            	var nowWeight = dec(trim($('#txtWeight_' + idno).val()));
+            	if(nowUno.length==0 && nowMount>0 && nowWeight>0){
+	                var newIndexNum = (dec(IndexNum) > 0 ? dec(IndexNum) + 1 : 1);
+	                var newIndexEng = (dec(IndexEng) > 0 ? dec(IndexEng) : 65);
+	                if (newIndexNum > 999) {
+	                    newIndexNum = 1;
+	                    newIndexEng = dec(IndexEng) + 1;
+	                }
+	                var t_date = trim($('#txtDatea').val());
+	                var newUno = replaceAll(t_date,'/','') + padL(newIndexNum,'0',3) + String.fromCharCode(newIndexEng);
+	                if (w_unoArray.indexOf(newUno) == -1) {
+	                    $('#txtUno_' + idno).val(newUno);
+	                    UnoArray.push(newUno);
+	                } else {
+	                    setNewUno(UnoArray, idno, newIndexNum, newIndexEng);
+	                }
                 }
             }
 
