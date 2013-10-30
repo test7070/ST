@@ -24,8 +24,13 @@
             });
             function q_gfPost() {
                 var sInfo = (q_getPara('sys.tel')).toUpperCase();
-                var s_tel = sInfo.substring(0, sInfo.indexOf('FAX'));
-                var s_fax = sInfo.substring(sInfo.indexOf('FAX') + 3);
+                var s_tel = (sInfo.indexOf('FAX') > 0?sInfo.substring(0, sInfo.indexOf('FAX')):sInfo);
+                var s_fax = (sInfo.indexOf('FAX') > 0?sInfo.substring(sInfo.indexOf('FAX') + 4):'');
+                s_tel = (emp(s_tel) ? '　' : s_tel);
+                s_fax = (emp(s_fax) ? '　' : s_fax);
+                var tInfo = (q_getPara('sys.tel2')).toUpperCase();
+                var t_tel = (tInfo.indexOf('FAX') > 0?tInfo.substring(0, tInfo.indexOf('FAX')):tInfo);
+                var t_fax = (tInfo.indexOf('FAX') > 0?tInfo.substring(tInfo.indexOf('FAX') + 4):'');
                 s_tel = (emp(s_tel) ? '　' : s_tel);
                 s_fax = (emp(s_fax) ? '　' : s_fax);
                 
@@ -47,23 +52,35 @@
                         type : '0', //[4]
                         name : 's_fax',
                         value : s_fax
-                    }, {//[2]
+                    }, {
                         type : '0', //[5]
+                        name : 't_addr',
+                        value : q_getPara('sys.addr2')
+                    }, {
+                        type : '0', //[6]
+                        name : 't_tel',
+                        value : t_tel
+                    }, {
+                        type : '0', //[7]
+                        name : 't_fax',
+                        value : t_fax
+                    }, {//[2]
+                        type : '0', //[8]
                         name : 'xkind',
                         value : q_getPara('sys.stktype')
                     }, {//[3]
-                        type : '0',//[6]
+                        type : '0',//[9]
                         name : 'xtaxtype',
                         value : q_getPara('sys.taxtype')
                     }, {
-                        type : '1', //[7][8]
+                        type : '1', //[10][11]
                         name : 'xnoa'
                     }, {
-                        type : '8', //[9]
+                        type : '8', //[12]
                         name : 'xshowprice',
                         value : "1@".split(',')
                     }, {
-                        type : '5', //[10]
+                        type : '5', //[13]
                         name : 'xstype',
                         value : [q_getPara('report.all')].concat(q_getPara('vccst.stype').split(','))
                     }]
