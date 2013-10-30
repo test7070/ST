@@ -410,7 +410,7 @@
 				});
 				if ($('#txtOdate').val().length == 0 || !q_cd($('#txtOdate').val())) {
 					alert(q_getMsg('lblOdate') + '錯誤。');
-					Unlock(1);
+					
 					return;
 				}
 				for(var i=0;i<q_bbsCount;i++){
@@ -423,21 +423,41 @@
 				else
 					$('#txtWorker2').val(r_name);
 				sum();
-
+				if($('#txtCustno').val().length==0){
+					alert('請輸入'+q_getPara('lblCust'));
+					Unlock(1);
+					return;
+				}
+				q_func('qtxt.query.orde', 'credit.txt,orde,'+ encodeURI($('#txtCustno').val()) + ';' + encodeURI($('#txtNoa').val()));
+				
+				
+			}
+			function save(){
 				var s1 = $('#txtNoa').val();
 				if (s1.length == 0 || s1 == "AUTO")/// 自動產生編號
 					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
 				else
 					wrServer(s1);
 			}
-
 			function q_stPost() {
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
 				Unlock(1);
 				OrdenoAndNo2On_Change();
 			}
-
+			function q_funcPost(t_func, result) {
+                switch(t_func) {
+                    case 'qtxt.query.orde':
+                        var as = _q_appendData("tmp0", "", true, true);
+                        if(as[0]!=undefined){
+                        	
+                        }else{
+                        	
+                        }
+                        save();
+                        break;
+                }
+            }
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
