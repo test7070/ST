@@ -429,8 +429,6 @@
 					return;
 				}
 				q_func('qtxt.query.orde', 'credit.txt,orde,'+ encodeURI($('#txtCustno').val()) + ';' + encodeURI($('#txtNoa').val()));
-				
-				
 			}
 			function save(){
 				var s1 = $('#txtNoa').val();
@@ -448,11 +446,23 @@
 			function q_funcPost(t_func, result) {
                 switch(t_func) {
                     case 'qtxt.query.orde':
-                        var as = _q_appendData("tmp0", "", true, true);
+                        var as = _q_appendData("tmp0", "", true, true);                     
                         if(as[0]!=undefined){
-                        	
-                        }else{
-                        	
+                        	var total = parseFloat(as[0].total.length==0?"0":as[0].total);
+                        	if(total<0){
+                        		var t_space = char(32)+char(32)+char(32)+char(32)+char(32)+char(32)+char(32)+char(32)+char(32)+char(32);
+                        		var msg = as[0].custno+'-'+as[0].comp+'\n'
+                        		+'基本額度：'+(t_space+as[0].credit).replace(/^.*(.{10})$/,'$1')
+                        		+'應收票據：'+(t_space+as[0].gqbmoney).replace(/^.*(.{10})$/,'$1')
+                        		+'應收帳款：'+(t_space+as[0].vccmoney).replace(/^.*(.{10})$/,'$1')
+                        		+'未出訂單：'+(t_space+as[0].ordemoney).replace(/^.*(.{10})$/,'$1')
+                        		+'預收貨款：'+(t_space+as[0].ummmoney).replace(/^.*(.{10})$/,'$1')
+                        		+'-----------------'
+                        		+'額度餘額：'+(t_space+as[0].total).replace(/^.*(.{10})$/,'$1');
+                        		alert(msg);
+                        		Unlock(1);
+                        		return;
+                        	}                 
                         }
                         save();
                         break;
