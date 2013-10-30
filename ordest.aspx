@@ -452,12 +452,12 @@
                         	if(total<0){
                         		var t_space = '          ';
                         		var msg = as[0].custno+'-'+as[0].comp+'\n'
-                        		+'基本額度：'+(t_space+as[0].credit).replace(/^.*(.{10})$/,'$1')
-                        		+'應收票據：'+(t_space+as[0].gqbMoney).replace(/^.*(.{10})$/,'$1')
-                        		+'應收帳款：'+(t_space+as[0].vccMoney).replace(/^.*(.{10})$/,'$1')
-                        		+'未出訂單：'+(t_space+as[0].ordeMoney).replace(/^.*(.{10})$/,'$1')
-                        		+'預收貨款：'+(t_space+as[0].ummMoney).replace(/^.*(.{10})$/,'$1')
-                        		+'-----------------'
+                        		+'基本額度：'+(t_space+as[0].credit).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'應收票據：'+(t_space+as[0].gqbMoney).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'應收帳款：'+(t_space+as[0].vccMoney).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'未出訂單：'+(t_space+as[0].ordeMoney).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'預收貨款：'+(t_space+as[0].ummMoney).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'----------------------------'+'\n'
                         		+'額度餘額：'+(t_space+as[0].total).replace(/^.*(.{10})$/,'$1');
                         		alert(msg);
                         		Unlock(1);
