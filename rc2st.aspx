@@ -23,7 +23,7 @@
 			var q_readonly = ['txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2','txtMoney','txtWeight','txtTotal','txtTax','txtTotalus'];
 			var q_readonlys = ['txtMoney', 'txtOrdeno', 'txtNo2'];
 			var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1]];
-			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,2,1]];
+			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,2,1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
 			q_desc = 1;
@@ -192,6 +192,10 @@
 				$('#cmbKind').change(function() {
 					size_change();
 				});
+				$('#txtAddr').change(function(){
+					var t_where = "where=^^ noa='" + trim($(this).val()) + "' ^^";
+					q_gt('cust', t_where , 0, 0, 0, "", r_accy);
+				});
 				$('#lblInvono').click(function() {
 					t_where = '';
 					t_invo = $('#txtInvono').val();
@@ -315,9 +319,14 @@
 								if(dec(ordcsArray[j].cnt) > 1){
 									var n_mount = round(q_div(dec(ordcsArray[j].notv),dec(ordcsArray[j].cnt)),0);
 									var n_weight = round(divide0(q_mul(dec(ordcsArray[j].weight),n_mount),q_mul(dec(ordcsArray[j].mount),dec(ordcsArray[j].cnt))),0);
-									ordcsArray[j].mount = n_mount;
-									ordcsArray[j].weight = n_weight;
-									ordcsArray[j].uno = '';
+									if((ordcsArray[j].product).indexOf('捲') == -1){
+										ordcsArray[j].mount = n_mount;
+										ordcsArray[j].weight = n_weight;
+									}else{
+										ordcsArray[j].mount = 1;
+										ordcsArray[j].weight = q_div(ordcsArray[j].weight,dec(ordcsArray[j].cnt));
+									}
+										ordcsArray[j].uno = '';
 									for(var i=0;i<dec(ordcsArray[j].cnt);i++){
 										newB_ret.push(ordcsArray[j]);
 									}
@@ -341,6 +350,16 @@
 						var as = _q_appendData("style", "", true);
 						StyleList = new Array();
 						StyleList = as;
+						break;
+					case 'cust' :
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							var CustAddr = trim(as[0].addr_fact);
+							if(CustAddr.length>0){
+								$('#txtAddr').val(CustAddr);
+								$('#txtPost').val(as[0].zip_fact);
+							}
+						}
 						break;
 					case q_name:
 						t_uccArray = _q_appendData("ucc", "", true);
@@ -1221,11 +1240,11 @@
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblMemos_st'> </a><br><a id='lblCert_st'></a></td>
+					<td align="center" style="width:220px;"><a id='lblMemos_st'> </a><br><a id='lblCert_st'></a></td>
 					<td align="center" style="width:150px;"><a id='lblUno2_st'> </a></td>
-					<td align="center" style="width:220px;"><a id='lblOrdcnos_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
+					<td align="center" style="width:220px;"><a id='lblOrdcnos_st'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -1297,10 +1316,6 @@
 						<input id="txtUno2.*" type="text" style="width:90%;"/>
 					</td>
 					<td>
-					<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
-					<input id="txtNo2.*" type="text"  style="width:40px;float:left;"/>
-					</td>
-					<td>
 					<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
 					<input type="text" id="txtStoreno.*"  style="width:70px; float:left;"/>
 					<span style="display:block; width:20px;float:left;"> </span>
@@ -1308,6 +1323,10 @@
 					</td>
 					<td>
 					<input id="txtPlace.*" type="text" style="width:90%;"/>
+					</td>
+					<td>
+					<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
+					<input id="txtNo2.*" type="text"  style="width:40px;float:left;"/>
 					</td>
 				</tr>
 			</table>
