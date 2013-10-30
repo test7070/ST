@@ -166,6 +166,10 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if(q_cur=='1')
+					$('#txtNoa').removeAttr('readonly').css('color','black').css('background','white');
+				else
+					$('#txtNoa').attr('readonly','readonly').css('color','green').css('background','RGB(237,237,237)');
 			}
 
 			function btnMinus(id) {
