@@ -449,16 +449,29 @@
                         var as = _q_appendData("tmp0", "", true, true);                     
                         if(as[0]!=undefined){
                         	var total = parseFloat(as[0].total.length==0?"0":as[0].total);
-                        	if(total<0){
+                        	var credit = parseFloat(as[0].credit.length==0?"0":as[0].credit);
+                        	var gqb = parseFloat(as[0].gqbMoney.length==0?"0":as[0].gqbMoney);
+                        	var vcc = parseFloat(as[0].vccMoney.length==0?"0":as[0].vccMoney);
+                        	var orde = parseFloat(as[0].ordeMoney.length==0?"0":as[0].ordeMoney);
+                        	var umm = parseFloat(as[0].ummMoney.length==0?"0":as[0].ummMoney);
+                        	var curorde = 0;
+                        	var curtotal = 0;
+                        	
+                        	for(var i=0;i<q_bbsCount;i++){
+                        		curorde = q_add(curorde,q_float('txtTotal_'+i));                     
+                        	}
+                        	curtotal = credit - gqb - vcc -orde - umm - curorde;
+                        	if(curtotal<0){
                         		var t_space = '          ';
-                        		var msg = as[0].custno+'-'+as[0].comp+'\n'
-                        		+'基本額度：'+(t_space+as[0].credit).replace(/^.*(.{10})$/,'$1')+'\n'
-                        		+'應收票據：'+(t_space+as[0].gqbMoney).replace(/^.*(.{10})$/,'$1')+'\n'
-                        		+'應收帳款：'+(t_space+as[0].vccMoney).replace(/^.*(.{10})$/,'$1')+'\n'
-                        		+'未出訂單：'+(t_space+as[0].ordeMoney).replace(/^.*(.{10})$/,'$1')+'\n'
-                        		+'預收貨款：'+(t_space+as[0].ummMoney).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		var msg = as[0].custno+'-'+as[0].cust+'\n'
+                        		+' 基本額度：'+(t_space+q_trv(credit)).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'-應收票據：'+(t_space+q_trv(gqb)).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'-應收帳款：'+(t_space+q_trv(vcc)).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'-未出訂單：'+(t_space+q_trv(orde)).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'-預收貨款：'+(t_space+q_trv(umm)).replace(/^.*(.{10})$/,'$1')+'\n'
+                        		+'-本張訂單：'+(t_space+q_trv(curorde)).replace(/^.*(.{10})$/,'$1')+'\n'
                         		+'----------------------------'+'\n'
-                        		+'額度餘額：'+(t_space+as[0].total).replace(/^.*(.{10})$/,'$1');
+                        		+'額度餘額：'+(t_space+q_trv(curtotal)).replace(/^.*(.{10})$/,'$1');
                         		alert(msg);
                         		Unlock(1);
                         		return;
