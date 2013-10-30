@@ -623,6 +623,7 @@
 
 			function btnIns() {
 				_btnIns();
+				$('#chkIsproj').attr('checked',true);
 				$('#dbbt').hide();
 				$('#txtNoa').val('AUTO');
 				$('#cmbKind').val(q_getPara('vcc.kind'));
@@ -1194,8 +1195,11 @@
 						</td>
 						<td><select id="cmbStype" class="txt c1"></select></td>
 						
+						<td align="center">
+							<input id="chkIsproj" type="checkbox"/>
+							<span> </span><a id='lblIsproj'> </a>
+						</td>
 						<td><input id="btnOrdei" type="button" /></td>
-						<td align="center"></td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"></select></td>
 					</tr>

@@ -459,6 +459,7 @@
 
             function btnIns() {
                 _btnIns();
+				$('#chkIsproj').attr('checked',true);
                 $('#cmbKind').val(q_getPara('vcc.kind'));
                 size_change();
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
@@ -868,7 +869,10 @@
 						<td class="td8">
 						<input id="txtNoa" type="text" class="txt c1"/>
 						</td>
-						<td></td>
+						<td>
+						<input id="chkIsproj" type="checkbox"/>
+						<span> </span><a id='lblIsproj'> </a>
+						</td>
 						<td class="td1"><span> </span><a id='lblOdate' class="lbl"></a></td>
 						<td class="td2">
 							<input id="txtOdate" type="text"  class="txt c1"/>

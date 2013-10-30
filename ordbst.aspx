@@ -180,11 +180,9 @@
 					if (q_cur == 1 || q_cur == 2)
 						$('#txtPaytype').val($('#combPaytype').find(":selected").text());
 				});
-				$("#combAddr").change(function(e) {
-					if (q_cur == 1 || q_cur == 2){
-						$('#txtAddr').val($('#combAddr').find("option:selected").text());
-						$('#txtPost').val($('#combAddr').find("option:selected").val());
-					}
+				$('#txtAddr').change(function(){
+					var t_where = "where=^^ noa='" + trim($(this).val()) + "' ^^";
+					q_gt('cust', t_where , 0, 0, 0, "", r_accy);
 				});
 				$("#txtPaytype").focus(function(e) {
 					var n = $(this).val().match(/[0-9]+/g);
@@ -290,6 +288,16 @@
 						var as = _q_appendData("style", "", true);
 						StyleList = new Array();
 						StyleList = as;
+						break;
+					case 'cust' :
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							var CustAddr = trim(as[0].addr_fact);
+							if(CustAddr.length>0){
+								$('#txtAddr').val(CustAddr);
+								$('#txtPost').val(as[0].zip_fact);
+							}
+						}
 						break;
 					case q_name:
 						t_uccArray = _q_appendData("ucc", "", true);
@@ -418,6 +426,7 @@
 
 			function btnIns() {
 				_btnIns();
+				$('#chkIsproj').attr('checked',true);
 				$('#txtNoa').val('AUTO');
 				$('#txtOdate').val(q_date());
 				$('#txtOdate').focus();
@@ -829,7 +838,7 @@
 						<td><input id="txtOdate" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
-						<td><a id='lblAeno' class="lbl" style="float:right;"> </a><span> </span><input id="chkAeno" type="checkbox" style="float:right;"/></td>
+						<td><a id='lblIsproj' class="lbl" style="float:right;"> </a><span> </span><input id="chkIsproj" type="checkbox" style="float:right;"/></td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"> </select></td>
 					</tr>
