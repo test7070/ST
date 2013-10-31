@@ -53,7 +53,6 @@
 					dataErr = false;
 					return;
 				}
-
 				mainForm(1);
 			}
 
@@ -173,7 +172,24 @@
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				
 				$('#lblOrde').click(function() {
-					var t_where = " 1=1 and enda='0' and kind='"+$('#cmbKind').val()+"'";
+					var t_where = " 1=1 and enda='0' and kind='"+$('#cmbKind').val()+"' ";
+					var t_ordeno_where = ' and ( 1=0 or ';
+					var t_ordeno = trim($('#txtOrdeno').val());
+					t_ordeno = t_ordeno.split(',');
+					for(var i=0;i<t_ordeno.length;i++){
+						if(trim(t_ordeno[i]).length > 0){
+							var t_no2 = t_ordeno[i].split('-');
+							if(t_no2.length>0 && t_no2[1]){
+								for(var j=0;j<t_no2.length;j++){
+									t_ordeno_where+= " (noa='"+t_no2[0]+"' and no2='" + t_no2[1] + "') or";
+								}
+							}else{
+									t_ordeno_where+= " (noa='"+t_ordeno[i]+ "') or";
+							}
+						}
+					}
+					t_ordeno_where = t_ordeno_where.substring(0,t_ordeno_where.length-2) + ' )';
+					t_where += t_ordeno_where;
 					q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 				});
 				$("#combPaytype").change(function(e) {
@@ -583,7 +599,7 @@
 				if (t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					$('.dbbs').css('width', '1530px');
-					$('#Size').css('width', '240px');
+					$('#Size').css('width', '220px');
 					$('.st').show();$('.bcc').hide();
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -603,7 +619,7 @@
 				} else if (t_kind == 'B') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 					$('.dbbs').css('width', '1530px');
-					$('#Size').css('width', '340px');
+					$('#Size').css('width', '300px');
 					$('.st').show();$('.bcc').hide();
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -613,7 +629,7 @@
 						$('#x1_' + j).show();
 						$('#x2_' + j).show();
 						$('#x3_' + j).show();
-						$('#txtSpec_'+j).css('width', '320px');
+						$('#txtSpec_'+j).css('width', '300px');
 						$('#textSize1_' + j).val($('#txtRadius_' + j).val());
 						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
 						$('#textSize3_' + j).val($('#txtDime_' + j).val());
@@ -622,7 +638,7 @@
 				} else  if (t_kind == 'C'){//鋼筋和鋼胚
 					$('#lblSize_help').text(q_getPara('sys.lblSizec'));
 					$('.dbbs').css('width', '1530px');
-					$('#Size').css('width', '200px');
+					$('#Size').css('width', '55px');
 					$('.st').show();$('.bcc').hide();
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).hide();
@@ -632,7 +648,7 @@
 						$('#x1_' + j).hide();
 						$('#x2_' + j).hide();
 						$('#x3_' + j).hide();
-						$('#txtSpec_'+j).css('width', '180px');
+						$('#txtSpec_'+j).css('width', '55px');
 						$('#textSize1_' + j).val(0);
 						$('#txtDime_' + j).val(0);
 						$('#textSize2_' + j).val(0);
@@ -948,8 +964,8 @@
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblC1s'> </a><br><a id='lblNotvs'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblUno_st'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblUno_st'> </a></td>
 					<td class="st" align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -960,12 +976,12 @@
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
 						<input class="btn st"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
-						<input class="st" type="text" id="txtProductno.*"  style="width:70px; float:left;"/>
+						<input class="st" type="text" id="txtProductno.*"  style="width:70%; float:left;"/>
 						<span class="st" style="display:block; width:20px;float:left;"> </span>
-						<input class="st" type="text" id="txtClass.*"  style="width:70px; float:left;"/>
+						<input class="st" type="text" id="txtClass.*"  style="width:90%; float:left;"/>
 						<!--下面為物料使用-->
 						<input class="btn bcc"  id="btnProductno1.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-						<input class="bcc" type="text" id="txtProductno1.*"  style="width:80%; float:left;"/>
+						<input class="bcc" type="text" id="txtProductno1.*"  style="width:75%; float:left;"/>
 					</td>
 					<td class="st"><input id="txtStyle.*" type="text" style="width:90%;" /></td>
 					<td><input id="txtProduct.*" type="text" style="width:97%;" /></td>
@@ -1003,9 +1019,9 @@
 						<input id="txtNotv.*" type="text" class="txt num" style="width:97%;"/>
 					</td>
 					<td >
-						<input id="txtMemo.*" type="text" style="width:97%; float:left;"/>
-						<input id="txtOrdeno.*" type="text"  style="width:70%;float:left;"/>
-						<input id="txtNo2.*" type="text"  style="width:20%;float:left;"/>
+						<input id="txtMemo.*" type="text" style="width:95%; float:left;"/>
+						<input id="txtOrdeno.*" type="text"  style="width:65%;float:left;"/>
+						<input id="txtNo2.*" type="text"  style="width:25%;float:left;"/>
 					</td>
 					<td>
 						<input id="txtUno.*" type="text" style="float:left;width:97%;" />

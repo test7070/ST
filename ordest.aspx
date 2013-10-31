@@ -424,7 +424,7 @@
 					$('#txtWorker2').val(r_name);
 				sum();
 				if($('#txtCustno').val().length==0){
-					alert('請輸入'+q_getPara('lblCust'));
+					alert('請輸入'+q_getMsg('lblCust'));
 					Unlock(1);
 					return;
 				}
