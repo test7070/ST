@@ -1059,7 +1059,7 @@
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotal_st'> </a><br><a class="st" id='lblTheory_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblC1_st'> </a><br><a id='lblNotv_st'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblUno_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1075,7 +1075,7 @@
 						<input class="st" type="text" id="txtClass.*"  style="width:70px; float:left;"/>
 						<!--下面為物料使用-->
 						<input class="btn bcc"  id="btnProductno1.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-						<input class="bcc" type="text" id="txtProductno1.*"  style="width:80%; float:left;"/>
+						<input class="bcc" type="text" id="txtProductno1.*"  style="width:75%; float:left;"/>
 					</td>
 					<td class="st">	<input id="txtStyle.*" type="text" style="width:90%;" /></td>
 					<td><input id="txtProduct.*" type="text" style="width:97%;" /></td>
