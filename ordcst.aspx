@@ -1061,6 +1061,7 @@
 					<td align="center" style="width:80px;"><a id='lblC1_st'> </a><br><a id='lblNotv_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblUno_st'> </a></td>
+					<td align="center" style="width:30px;"><a id='lblEnda_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -1121,6 +1122,9 @@
 					<td>
 						<input id="btnUno.*" type="button" value='.' style="float:left;width:1%;"/>
 						<input id="txtUno.*" type="text" style="float:left;width:80%;" />
+					</td>
+					<td>
+						<input id="chkEnda.*" type="checkbox"/>
 					</td>
 				</tr>
 			</table>
