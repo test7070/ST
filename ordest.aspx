@@ -1087,7 +1087,7 @@
 				tip($('#btnOrdet_0'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:200px;display:block;">指定庫存，若要直接出貨需另外勾選【售】</a>');
 				tip($('#chkEnda'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:500px;display:block;">手動結案後將不會再匯到裁剪、製管、派車、出貨。</a>');
 				tip($('#btnBorn_0'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:200px;display:block;">顯示該訂單的歷史記錄。</a>');
-				tip($('#btnCredit'),'<a style="color:red;font-size:12px;font-weight:bold;width:200px;display:block;">額度不足，訂單將無法存檔。</a>');
+				tip($('#btnCredit'),'<a style="color:red;font-size:20px;font-weight:bold;width:200px;display:block;">額度不足，訂單將無法存檔。</a>');
 			}
 			function tip(obj,msg,x,y){
 				x = x==undefined?0:x;
