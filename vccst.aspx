@@ -1033,6 +1033,55 @@
                 var re = /(\d{1,3})(?=(\d{3})+$)/g;
                 return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
             }
+            function tipShow(){
+				Lock(1);
+				tipInit();
+				var t_set = $('body');
+				t_set.find('.tip').eq(0).show();//tipClose
+				for(var i=1;i<t_set.data('tip').length;i++){
+					index = t_set.data('tip')[i].index;
+					obj = t_set.data('tip')[i].ref;
+					msg = t_set.data('tip')[i].msg;
+					shiftX = t_set.data('tip')[i].shiftX;
+					shiftY = t_set.data('tip')[i].shiftY;
+					if(obj.is(":visible")){
+						t_set.find('.tip').eq(index).show().offset({top:round(obj.offset().top+shiftY,0),left:round(obj.offset().left+obj.width()+shiftX,0)}).html(msg);
+					}else{
+						t_set.find('.tip').eq(index).hide();
+					}
+				}
+			}
+			function tipInit(){
+				tip($('#lblOrdeno'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">點擊【'+q_getMsg('lblOrdeno')+'】匯入訂單</a>',0,-15);
+				tip($('#btnImportVcce'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">↓匯入派車單資料，需先輸入車牌。</a>',-20,-15);
+				tip($('#btnVcceImport'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:350px;display:block;">↑匯入裁剪、製管資料，需有訂單(未結案)。</a>',-20,20);
+			}
+			function tip(obj,msg,x,y){
+				x = x==undefined?0:x;
+				y = y==undefined?0:y;
+				var t_set = $('body');
+				if($('#tipClose').length==0){
+					t_set.data('tip',new Array());
+					t_set.append('<input type="button" id="tipClose" class="tip" value="關閉"/>');
+					$('#tipClose').css('top','20px').css('left','20px')
+					.css('position','absolute')
+					.css('z-index','1000')
+					.css('color','red')
+					.css('font-size','18px')
+					.css('display','none')
+					.click(function(e){
+						$('body').find('.tip').css('display','none');
+						Unlock(1);
+					});
+					t_set.data('tip').push({index:0,ref:$('#tipClose')});
+				}
+				if(obj.data('tip')==undefined){
+					t_index = t_set.find('.tip').length;
+					obj.data('tip',t_index);
+					t_set.append('<div class="tip" style="position: absolute;z-index:1000;display:none;"> </div>');
+					t_set.data('tip').push({index:t_index,ref:obj,msg:msg,shiftX:x,shiftY:y});
+				}			
+			}
 		</script>
 		<style type="text/css">
             #dmain {
@@ -1191,6 +1240,7 @@
 						<td colspan="2">
 						<input id="txtNoa"   type="text" class="txt c1"/>
 						</td>
+						<td class="tdZ"><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
