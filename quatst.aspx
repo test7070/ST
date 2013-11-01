@@ -58,6 +58,57 @@
                 mainForm(1);
             }
 
+			function currentData() {}
+			currentData.prototype = {
+				data : [],
+				exclude : ['txtNoa','chkEnda'],  //bbm
+				excludes : ['chkEnda'], //bbs
+				copy : function() {
+					this.data = new Array();
+					for (var i in fbbm) {
+						var isExclude = false;
+						for (var j in this.exclude) {
+							if (fbbm[i] == this.exclude[j] ) {
+								isExclude = true;
+								break;
+							}
+						}
+						if (!isExclude ) {
+							this.data.push({
+								field : fbbm[i],
+								value : $('#' + fbbm[i]).val()
+							});
+						}
+					}
+					//bbs
+					for (var i in fbbs) {
+						for(var j = 0; j < q_bbsCount; j++) {
+							var isExcludes = false;
+							for (var k in this.excludes) {
+								if (fbbs[i] == this.excludes[k] ) {
+									isExcludes = true;
+									break;
+								}
+							}
+							if (!isExcludes ) {
+								this.data.push({
+									field : fbbs[i]+'_'+j,
+									value : $('#' + fbbs[i]+'_'+j).val()
+								});
+							}
+						}
+					}
+				},
+				/*貼上資料*/
+				paste : function() {
+					for (var i in this.data) {
+					   	$('#' + this.data[i].field).val(this.data[i].value);
+				   	}
+				}
+			};
+			var curData = new currentData();
+
+
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
@@ -458,13 +509,16 @@
             }
 
             function btnIns() {
+            	curData.copy();
                 _btnIns();
+                curData.paste();
 				$('#chkIsproj').attr('checked',true);
                 $('#cmbKind').val(q_getPara('vcc.kind'));
                 size_change();
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
                 $('#txtOdate').val(q_date());
                 $('#txtDatea').val(q_date());
+                sum();
                 $('#txtCno').focus();
             }
 
