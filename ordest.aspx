@@ -1065,19 +1065,35 @@
 			function tipShow(){
 				Lock(1);
 				tipInit();
-				$('body').find('.tip').show();
+				var t_set = $('body');
+				t_set.find('.tip').eq(0).show();//tipClose
+				for(var i=1;i<t_set.data('tip').length;i++){
+					index = t_set.data('tip')[i].index;
+					obj = t_set.data('tip')[i].ref;
+					msg = t_set.data('tip')[i].msg;
+					shiftX = t_set.data('tip')[i].shiftX;
+					shiftY = t_set.data('tip')[i].shiftY;
+					if(obj.is(":visible")){
+						t_set.find('.tip').eq(index).show().offset({top:round(obj.offset().top+shiftY,0),left:round(obj.offset().left+obj.width()+shiftX,0)}).html(msg);
+					}else{
+						t_set.find('.tip').eq(index).hide();
+					}
+				}
 			}
 			function tipInit(){
 				tip($('#lblIsproj'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">勾選後達到重量、數量將自動結案，否則需手動結案。</a>');
 				tip($('#lblQuat'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">點擊【'+q_getMsg('lblQuat')+'】匯入報價</a>');
 				tip($('#btnBBTShow'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:500px;display:block;">顯示選料的項目</a>');
 				tip($('#btnOrdet_0'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:200px;display:block;">指定庫存，若要直接出貨需另外勾選【售】</a>');
-				tip($('#chkEnda'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:200px;display:block;">手動結案後將不會再匯到裁剪、製管、派車、出貨。</a>');
+				tip($('#chkEnda'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:500px;display:block;">手動結案後將不會再匯到裁剪、製管、派車、出貨。</a>');
 				tip($('#btnBorn_0'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:200px;display:block;">顯示該訂單的歷史記錄。</a>');
 			}
-			function tip(obj,msg){
+			function tip(obj,msg,x,y){
+				x = x==undefined?0:x;
+				y = y==undefined?0:y;
 				var t_set = $('body');
 				if($('#tipClose').length==0){
+					t_set.data('tip',new Array());
 					t_set.append('<input type="button" id="tipClose" class="tip" value="關閉"/>');
 					$('#tipClose').css('top','20px').css('left','20px')
 					.css('position','absolute')
@@ -1089,17 +1105,14 @@
 						$('body').find('.tip').css('display','none');
 						Unlock(1);
 					});
+					t_set.data('tip').push({index:0,ref:$('#tipClose')});
 				}
-				var t_index;
 				if(obj.data('tip')==undefined){
 					t_index = t_set.find('.tip').length;
 					obj.data('tip',t_index);
 					t_set.append('<div class="tip" style="position: absolute;z-index:1000;display:none;"> </div>');
-				}
-				if(obj.length>0){
-					t_index = obj.data('tip');
-					t_set.find('.tip').eq(t_index).offset({top:round(obj.offset().top+5,0),left:round(obj.offset().left+obj.width(),0)}).html(msg);				
-				}
+					t_set.data('tip').push({index:t_index,ref:obj,msg:msg,shiftX:x,shiftY:y});
+				}			
 			}
 		</script>
 		<style type="text/css">
