@@ -1062,10 +1062,50 @@
 				var re = /(\d{1,3})(?=(\d{3})+$)/g;
 				return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
 			}
+			function tipShow(){
+				Lock(1);
+				tipInit();
+				$('body').find('.tip').show();
+			}
+			function tipInit(){
+				tip($('#lblIsproj'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">勾選後達到重量、數量將自動結案，否則需手動結案。</a>');
+				tip($('#lblQuat'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">點擊【'+q_getMsg('lblQuat')+'】匯入報價</a>');
+				tip($('#btnBBTShow'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:500px;display:block;">顯示選料的項目</a>');
+				tip($('#btnOrdet_0'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:200px;display:block;">指定庫存，若要直接出貨需另外勾選【售】</a>');
+				tip($('#chkEnda'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:200px;display:block;">手動結案後將不會再匯到裁剪、製管、派車、出貨。</a>');
+				tip($('#btnBorn_0'),'<a style="color:darkblue;font-size:12px;font-weight:bold;width:200px;display:block;">顯示該訂單的歷史記錄。</a>');
+			}
+			function tip(obj,msg){
+				var t_set = $('body');
+				if($('#tipClose').length==0){
+					t_set.append('<input type="button" id="tipClose" class="tip" value="關閉"/>');
+					$('#tipClose').css('top','20px').css('left','20px')
+					.css('position','absolute')
+					.css('z-index','1000')
+					.css('color','red')
+					.css('font-size','18px')
+					.css('display','none')
+					.click(function(e){
+						$('body').find('.tip').css('display','none');
+						Unlock(1);
+					});
+				}
+				var t_index;
+				if(obj.data('tip')==undefined){
+					t_index = t_set.find('.tip').length;
+					obj.data('tip',t_index);
+					t_set.append('<div class="tip" style="position: absolute;z-index:1000;display:none;"> </div>');
+				}
+				if(obj.length>0){
+					t_index = obj.data('tip');
+					t_set.find('.tip').eq(t_index).offset({top:round(obj.offset().top+5,0),left:round(obj.offset().left+obj.width(),0)}).html(msg);				
+				}
+			}
 		</script>
 		<style type="text/css">
 			#dmain {
 				/*overflow: hidden;*/
+				
 			}
 			.dview {
 				float: left;
@@ -1245,6 +1285,7 @@
 						<td><input id="btnOrdei" type="button" /></td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"></select></td>
+						<td><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
