@@ -509,9 +509,11 @@
             }
 
             function btnIns() {
-            	curData.copy();
+            	if($('#checkCopy').is(':checked'))
+            		curData.copy();
                 _btnIns();
-                curData.paste();
+            	if($('#checkCopy').is(':checked'))
+	                curData.paste();
 				$('#chkIsproj').attr('checked',true);
                 $('#cmbKind').val(q_getPara('vcc.kind'));
                 size_change();
@@ -914,7 +916,11 @@
 			<div class='dbbm' >
 				<table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='0'>
 					<tr class="tr1">
-						<td class="td1"><span> </span><a id='lblStype' class="lbl"></a></td>
+						<td class="td1">
+							<input id="checkCopy" type="checkbox" style="float:left;"/>
+							<span> </span><a id='lblCopy' class="lbl" style="float:left;"></a>
+							<span> </span><a id='lblStype' class="lbl"></a>
+						</td>
 						<td class="td2"><select id="cmbStype" class="txt c1"></select></td>
 						<td class="td5">
 							<select id="cmbKind" class="txt c1"></select>

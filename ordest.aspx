@@ -316,7 +316,7 @@
 							var i, j = 0;
 							for(var i=0;i<q_bbsCount;i++){$('#btnMinus_'+i).click();}
 							$('#txtQuatno').val(b_ret[0].noa);
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtQuatno,txtNo3,txtPrice,txtMount,txtWeight,txtClass,txtTheory,txtStyle', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no3,price,mount,weight,class,theory,style', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtQuatno,txtNo3,txtPrice,txtMount,txtWeight,txtClass,txtTheory,txtStyle', b_ret.length, b_ret, 'productno,product,spec,size,radius,dime,width,lengthb,unit,noa,no3,price,mount,weight,class,theory,style', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							bbsAssign();
 							sum();
@@ -391,15 +391,16 @@
 
 			function btnQuat() {
 				var t_custno = trim($('#txtCustno').val());
-				var t_where = '';
+				var t_where = '1=1 ';
 				if (t_custno.length > 0) {
-					t_where = (t_custno.length > 0 ? q_sqlPara("custno", t_custno) : "");
+					t_where += (t_custno.length > 0 ? q_sqlPara2("custno", t_custno) : "");
 					////  sql AND 語法，請用 &&
 					t_where = t_where;
 				} else {
 					alert(q_getMsg('msgCustEmp'));
 					return;
 				}
+				t_where += " and kind='" +$('#cmbKind').val()+ "'";
 				q_box("quatst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'quats', "95%", "95%", q_getMsg('popQuats'));
 			}
 
@@ -1541,7 +1542,6 @@
 			<table id="tbbt" class='tbbt'  border="2"  cellpadding='2' cellspacing='1'>
 				<tr style='color:white; background:#003366;' >
 					<td class="td1" align="center" style="width:1%; max-width:20px;">
-					<input class="txt c1"  id="txtNoa..*" type="hidden"  />
 					<input class="btn"  id="btnPlut" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"></td>
@@ -1557,6 +1557,7 @@
 				</tr>
 				<tr>
 					<td class="td1" align="center">
+					<input class="txt c1"  id="txtNoa..*" style="display:none;"/>
 					<input class="btn"  id="btnMinut..*" type="button" value='-' style="font-weight: bold; "  />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>

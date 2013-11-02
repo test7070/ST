@@ -60,7 +60,7 @@
 						if(gtArray.length > 0){
 							for(var i = 0;i < abbs.length;i++){
 								for(var k= 0;k<gtArray.length;k++){
-									if((abbs[i].noa = gtArray[k].ordeno) && (abbs[i].no2 = gtArray[k].no2)){
+									if((abbs[i].noa == gtArray[k].ordeno) && (abbs[i].no2 == gtArray[k].no2)){
 										abbs[i].mount = dec(abbs[i].mount) - dec(gtArray[k].mount);
 										abbs[i].weight = dec(abbs[i].weight) - dec(gtArray[k].weight);
 									}
@@ -171,10 +171,9 @@
 					<td align="center" style="width:3%;"> </td>
 					<td align="center" style="width:12%;"><a id='lblProductno'></a>/<a id='lblProduct'></a></td>
 					<td align="center" style="width:23%;"><a id='lblUno'></a>/<a id='lblSize'></a></td>
-					<td align="center" style="width:6%;"><a id='lblUnit'></a><br><a id='lblSpec'></a></td>
-					<td align="center" style="width:8%;"><a id='lblMount'></a></td>
+					<td align="center" style="width:6%;"><a id='lblSpec'></a></td>
+					<td align="center" style="width:6%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:8%;"><a id='lblWeight'></a></td>
-					<td align="center" style="width:8%;"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblNotv'></a></td>
 					<td align="center" style="width:11%;"><a id='lblNoa'></a></td>
 					<td align="center" style="width:8%;"><a id='lblCust'></a></td>
@@ -190,11 +189,10 @@
 					</td>
 					<td align="center"> </td>
 					<td align="center"><a id='lblProductno'></a>/<a id='lblProduct'></a></td>
+					<td align="center"><a id='lblUno'></a></td>
 					<td align="center"><a id='lblSpec'></a></td>
-					<td align="center"><a id='lblUnit'></a></td>
 					<td align="center"><a id='lblMount'></a></td>
 					<td align="center"><a id='lblWeight'></a></td>
-					<td align="center"><a id='lblPrice'></a></td>
 					<td align="center"><a id='lblNotv'></a></td>
 					<td align="center"><a id='lblNoa'></a></td>
 					<td align="center"><a id='lblCust'></a></td>
@@ -222,17 +220,13 @@
 						<input class="txt" id="txtLengthb.*" type="text"  style="width:20%;text-align:right;" />
 					</td>
 					<td style="width:6%;">
-						<input class="txt" id="txtUnit.*" type="text" style="width:94%;text-align:center;"/>
 						<input class="txt" id="txtSpec.*" type="text"  style="width:94%;text-align:center;" />
 					</td>
-					<td style="width:8%;">
+					<td style="width:6%;">
 						<input class="txt" id="txtMount.*" type="text" style="width:94%; text-align:right;"/>
 					</td>
 					<td style="width:8%;">
 						<input class="txt" id="txtWeight.*" type="text" style="width:96%; text-align:right;"/>
-					</td>
-					<td style="width:8%;">
-						<input class="txt" id="txtPrice.*" type="text" style="width:96%; text-align:right;"/>
 					</td>
 					<td style="width:8%;">
 						<input class="txt" id="txtNotv.*" type="text" style="width:96%; text-align:right;"/>
