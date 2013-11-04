@@ -177,7 +177,7 @@
 				
 				$('#lblOrde').click(function() {
 					var t_where = " 1=1 and enda='0' and kind='"+$('#cmbKind').val()+"' ";
-					var t_ordeno_where = ' and ( 1=0 or ';
+					var t_ordeno_where = ' and (  ';
 					var t_ordeno = trim($('#txtOrdeno').val());
 					t_ordeno = t_ordeno.split(',');
 					for(var i=0;i<t_ordeno.length;i++){
@@ -193,7 +193,7 @@
 						}
 					}
 					t_ordeno_where = t_ordeno_where.substring(0,t_ordeno_where.length-2) + ' )';
-					t_where += t_ordeno_where;
+					t_where += (t_ordeno_where.indexOf('noa') == -1?'':t_ordeno_where);
 					q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 				});
 				$("#combPaytype").change(function(e) {
@@ -334,13 +334,13 @@
 			}
 			
 			function distinct(arr1) {
-				for(var i = 0;i<arr1.length;i++){
-					if((arr1.indexOf(arr1[i]) != arr1.lastIndexOf(arr1[i])) || arr1[i] == ''){
-						arr1.splice(i, 1);
-							i--;
+				var nonDupes = [];
+				arr1.forEach(function(value) {
+					if (nonDupes.indexOf(value) == -1) {
+						nonDupes.push(value);
 					}
-				}
-				return arr1;
+				});
+				return nonDupes;
 			}
 
 			function GetOrdenoList(){

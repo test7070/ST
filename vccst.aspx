@@ -546,16 +546,6 @@
                 q_box("ordet_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordet', "95%", "650px", q_getMsg('popOrde'));
             }/// q_box()  開 視窗
 
-            function distinct(arr1) {
-                for (var i = 0; i < arr1.length; i++) {
-                    if (($.inArray(arr1[i], arr1) != arr1.lastIndexOf(arr1[i])) || arr1[i] == '') {
-                        arr1.splice(i, 1);
-                        i--;
-                    }
-                }
-                return arr1;
-            }
-
             function GetOrdenoList() {
                 var ReturnStr = new Array;
                 for (var i = 0; i < q_bbsCount; i++) {

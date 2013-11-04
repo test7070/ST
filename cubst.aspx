@@ -312,13 +312,13 @@
                 _bbsAssign();
             }
 			function distinct(arr1) {
-				for(var i = 0;i<arr1.length;i++){
-					if((arr1.indexOf(arr1[i]) != arr1.lastIndexOf(arr1[i])) || arr1[i] == ''){
-						arr1.splice(i, 1);
-							i--;
+				var nonDupes = [];
+				arr1.forEach(function(value) {
+					if (nonDupes.indexOf(value) == -1) {
+						nonDupes.push(value);
 					}
-				}
-				return arr1;
+				});
+				return nonDupes;
 			}
 			function getBBTWhere(objname){
 				var tempArray = new Array();

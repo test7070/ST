@@ -239,13 +239,13 @@
 			}
 			
 			function distinct(arr1) {
-				for(var i = 0;i<arr1.length;i++){
-					if((arr1.indexOf(arr1[i]) != arr1.lastIndexOf(arr1[i])) || arr1[i] == ''){
-						arr1.splice(i, 1);
-							i--;
+				var nonDupes = [];
+				arr1.forEach(function(value) {
+					if (nonDupes.indexOf(value) == -1) {
+						nonDupes.push(value);
 					}
-				}
-				return arr1;
+				});
+				return nonDupes;
 			}
 
 			var ordbsArray = new Array;
@@ -1063,7 +1063,7 @@
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotal_st'> </a><br><a class="st" id='lblTheory_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblC1_st'> </a><br><a id='lblNotv_st'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblEnda_st'> </a></td>
 				</tr>

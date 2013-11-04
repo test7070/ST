@@ -57,7 +57,7 @@
 				var w = window.parent;
 				var t_Kind = (w.$('#cmbKind').val()?w.$('#cmbKind').val():'');
 				t_Kind = t_Kind.substring(0, 1);
-				if(t_Kind){
+				if(t_Kind != 'B'){
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					for (var j = 0; j < brwCount2 ; j++) {
 						$('#txtSize4_'+j).attr('hidden', 'true');
@@ -69,7 +69,7 @@
 						$('#txtSize4_'+j).val(0);
 						$('#txtRadius_'+j).val(0);
 					 }
-				 }else{
+				 }else if(t_Kind=='B'){
 					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 					 for (var j = 0; j < brwCount2 ; j++) {
 						$('#txtSize4_'+j).removeAttr('hidden');
