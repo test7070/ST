@@ -442,7 +442,8 @@
 	                    newIndexEng = dec(IndexEng) + 1;
 	                }
 	                var t_date = trim($('#txtDatea').val());
-	                var newUno = replaceAll(t_date,'/','') + padL(newIndexNum,'0',3) + String.fromCharCode(newIndexEng);
+	                var t_deli = ($('#cmbKind').val().toUpperCase().substring(0,1)=='B'?9:3);
+	                var newUno = replaceAll(t_date,'/','') + padL(newIndexNum,'0',t_deli) + String.fromCharCode(newIndexEng);
 	                if (w_unoArray.indexOf(newUno) == -1) {
 	                    $('#txtUno_' + idno).val(newUno);
 	                    UnoArray.push(newUno);
