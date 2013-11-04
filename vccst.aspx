@@ -255,11 +255,11 @@
                 });
                 $('#btnImportVcce').click(function() {
                     if (q_cur == 1 || q_cur == 2) {
-                        var t_carno = $('#txtCarno').val();
-                        if (emp(t_carno)) {
-                            alert('請輸入 : 【' + q_getMsg('lblCarno') + '】');
+                        var t_custno = $('#txtCustno').val();
+                        if (t_custno.length==0) {
+                            alert('請輸入 : 【' + q_getMsg('lblCust') + '】');
                         } else {
-                            t_where = "where=^^ carno='" + t_carno + "' ^^";
+                            t_where = "where=^^ custno='" + t_custno + "' ^^";
                             q_gt('vcce', t_where, 0, 0, 0, "", r_accy);
                         }
                     }
