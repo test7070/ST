@@ -823,16 +823,6 @@
 				_btnCancel();
 			}
 
-			function distinct(arr1) {
-				for (var i = 0; i < arr1.length; i++) {
-					if ((arr1.indexOf(arr1[i]) != arr1.lastIndexOf(arr1[i])) || arr1[i] == '') {
-						arr1.splice(i, 1);
-						i--;
-					}
-				}
-				return arr1;
-			}
-
 			function getBBSWhere(objname) {
 				var tempArray = new Array();
 				for (var j = 0; j < q_bbsCount; j++) {
