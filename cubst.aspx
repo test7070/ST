@@ -311,14 +311,15 @@
                 }
                 _bbsAssign();
             }
-			function distinct(arr1) {
-				var nonDupes = [];
-				arr1.forEach(function(value) {
-					if (nonDupes.indexOf(value) == -1) {
-						nonDupes.push(value);
+			function distinct(arr1){
+				var uniArray = [];
+				for(var i=0;i<arr1.length;i++){
+					var val = arr1[i];
+					if($.inArray(val, uniArray)===-1){
+						uniArray.push(val);
 					}
-				});
-				return nonDupes;
+				}
+				return uniArray;
 			}
 			function getBBTWhere(objname){
 				var tempArray = new Array();

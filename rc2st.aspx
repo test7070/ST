@@ -276,14 +276,16 @@
 				}/// end Switch
 				b_pop = '';
 			}
-			function distinct(arr1) {
-				var nonDupes = [];
-				arr1.forEach(function(value) {
-					if (nonDupes.indexOf(value) == -1) {
-						nonDupes.push(value);
+
+			function distinct(arr1){
+				var uniArray = [];
+				for(var i=0;i<arr1.length;i++){
+					var val = arr1[i];
+					if($.inArray(val, uniArray)===-1){
+						uniArray.push(val);
 					}
-				});
-				return nonDupes;
+				}
+				return uniArray;
 			}
 
 			function GetOrdcnoList(){
@@ -1234,7 +1236,7 @@
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
-					<td align="center" style="width:220px;"><a id='lblMemos_st'> </a><br><a id='lblCert_st'></a></td>
+					<td align="center" style="width:220px;"><a id='lblMemos_st'> </a><br><a id='lblCert_st' style="display:none;"></a></td>
 					<td align="center" style="width:150px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
