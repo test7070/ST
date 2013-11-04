@@ -87,7 +87,7 @@
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();
-				$('#Xtggno').hide()
+				$('#Xtggno').hide();
 				$('#Xitype .label').css('width','5px');
 				$('#Xstktype .label').css('width','5px');
 				$('#Xitype').css('width','120px');
@@ -161,7 +161,8 @@
 						case 'A':
 							$('#Xradius').hide();
 							$('#Xwidth').show();
-							$('#lblXwidth').text('寬度');
+							$('#lblXwidth').text('厚度');
+							$('#lblXdime').text('寬度');
 							$('#Xdime').show();
 							$('#Xlengthb').show();
 							break;
@@ -169,6 +170,7 @@
 							$('#Xradius').show();
 							$('#Xwidth').show();
 							$('#lblXwidth').text('長徑');
+							$('#lblXdime').text('厚度');
 							$('#Xdime').show();
 							$('#Xlengthb').show();
 							break;
@@ -182,6 +184,7 @@
 							$('#Xradius').show();
 							$('#Xwidth').show();
 							$('#lblXwidth').text('長徑');
+							$('#lblXdime').text('厚度');
 							$('#Xdime').show();
 							$('#Xlengthb').show();
 							break;
