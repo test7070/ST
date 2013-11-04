@@ -367,6 +367,16 @@
                 }/// end Switch
                 b_pop = '';
             }
+			function distinct(arr1){
+				var uniArray = [];
+				for(var i=0;i<arr1.length;i++){
+					var val = arr1[i];
+					if($.inArray(val, uniArray)===-1){
+						uniArray.push(val);
+					}
+				}
+				return uniArray;
+			}
 
             var focus_addr = '';
             var StyleList = '';
@@ -1411,7 +1421,7 @@
 					<BR>
 					代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
-					<td align="center" style="width:170px;"><a id='lblMemos_st'></a></td>
+					<td align="center" style="width:180px;"><a id='lblMemos_st'></a></td>
 
 				</tr>
 				<tr  style='background:#cad3ff;'>
