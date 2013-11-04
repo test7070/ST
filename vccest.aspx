@@ -675,11 +675,12 @@
 				y = y==undefined?0:y;
 				var t_set = $('body');
 				if($('#tipClose').length==0){
+					//顯示位置在btnTip上
 					t_set.data('tip',new Array());
 					t_set.append('<input type="button" id="tipClose" class="tip" value="關閉"/>');
-					$('#tipClose').css('top','20px').css('left','20px')
+					$('#tipClose')
 					.css('position','absolute')
-					.css('z-index','1000')
+					.css('z-index','1001')
 					.css('color','red')
 					.css('font-size','18px')
 					.css('display','none')
@@ -687,6 +688,7 @@
 						$('body').find('.tip').css('display','none');
 						Unlock(1);
 					});
+					$('#tipClose').offset({top:round($('#btnTip').offset().top-2,0),left:round($('#btnTip').offset().left-15,0)});
 					t_set.data('tip').push({index:0,ref:$('#tipClose')});
 				}
 				if(obj.data('tip')==undefined){

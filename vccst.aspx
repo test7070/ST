@@ -263,11 +263,11 @@
                 });
                 $('#btnImportVcce').click(function() {
                     if (q_cur == 1 || q_cur == 2) {
-                        var t_carno = $('#txtCarno').val();
-                        if (emp(t_carno)) {
-                            alert('請輸入 : 【' + q_getMsg('lblCarno') + '】');
+                        var t_custno = $('#txtCustno').val();
+                        if (t_custno.length==0) {
+                            alert('請輸入 : 【' + q_getMsg('lblCust') + '】');
                         } else {
-                            t_where = "where=^^ carno='" + t_carno + "' ^^";
+                            t_where = "where=^^ custno='" + t_custno + "' ^^";
                             q_gt('vcce', t_where, 0, 0, 0, "", r_accy);
                         }
                     }
@@ -1061,7 +1061,7 @@
 			}
 			function tipInit(){
 				tip($('#lblOrdeno'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">點擊【'+q_getMsg('lblOrdeno')+'】匯入訂單</a>',0,-15);
-				tip($('#btnImportVcce'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">↓匯入派車單資料，需先輸入車牌。</a>',-20,-15);
+				tip($('#btnImportVcce'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">↓匯入派車單資料。</a>',-20,-15);
 				tip($('#btnVcceImport'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:350px;display:block;">↑匯入裁剪、製管資料，需有訂單(未結案)。</a>',-20,20);
 			}
 			function tip(obj,msg,x,y){
@@ -1069,11 +1069,12 @@
 				y = y==undefined?0:y;
 				var t_set = $('body');
 				if($('#tipClose').length==0){
+					//顯示位置在btnTip上
 					t_set.data('tip',new Array());
 					t_set.append('<input type="button" id="tipClose" class="tip" value="關閉"/>');
-					$('#tipClose').css('top','20px').css('left','20px')
+					$('#tipClose')
 					.css('position','absolute')
-					.css('z-index','1000')
+					.css('z-index','1001')
 					.css('color','red')
 					.css('font-size','18px')
 					.css('display','none')
@@ -1081,6 +1082,7 @@
 						$('body').find('.tip').css('display','none');
 						Unlock(1);
 					});
+					$('#tipClose').offset({top:round($('#btnTip').offset().top-2,0),left:round($('#btnTip').offset().left-15,0)});
 					t_set.data('tip').push({index:0,ref:$('#tipClose')});
 				}
 				if(obj.data('tip')==undefined){
