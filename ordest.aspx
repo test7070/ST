@@ -536,6 +536,10 @@
 					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
 					q_tr('txtWeight_' + b_seq, theory_st(theory_setting));
 				}
+				var t_Product = $('#txtProduct_' + b_seq).val();
+				if(t_Product.indexOf('管') > -1){
+					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+				}
 			}
 
 			function bbsAssign() {/// 表身運算式

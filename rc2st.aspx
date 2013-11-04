@@ -102,6 +102,10 @@
                         q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
                     }
                     getTheory(j);
+					var t_Product = $('#txtProduct_' + b_seq).val();
+					if(t_Product.indexOf('管') > -1){
+						$('#txtWeight_' + b_seq).val(getTheory(j));
+					}
                     //---------------------------------------
                     t_weights = q_float('txtWeight_' + j);
                     t_prices = q_float('txtPrice_' + j);

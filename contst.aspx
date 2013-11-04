@@ -195,6 +195,10 @@
 								q_tr('txtRadius_'+b_seq ,q_float('textSize1_'+b_seq));//短徑$('#txtRadius_'+b_seq).val($('#textSize1_' + b_seq).val());	
 							}
 							q_tr('txtTheory_'+b_seq ,getTheory(b_seq));
+							var t_Product = $('#txtProduct_' + b_seq).val();
+							if(t_Product.indexOf('管') > -1){
+								$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+							}
 						});
 						$('#textSize2_' + j).change(function () {
 							t_IdSeq = -1;
@@ -206,6 +210,10 @@
 								q_tr('txtWidth_'+b_seq ,q_float('textSize2_'+b_seq));//長徑$('#txtWidth_'+b_seq).val($('#textSize2_' + b_seq).val());	
 							}
 							q_tr('txtTheory_'+b_seq ,getTheory(b_seq));
+							var t_Product = $('#txtProduct_' + b_seq).val();
+							if(t_Product.indexOf('管') > -1){
+								$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+							}
 						});
 						$('#textSize3_' + j).change(function () {
 							t_IdSeq = -1;
@@ -219,6 +227,10 @@
 								q_tr('txtLengthb_'+b_seq ,q_float('textSize3_'+b_seq));
 							}
 							q_tr('txtTheory_'+b_seq ,getTheory(b_seq));
+							var t_Product = $('#txtProduct_' + b_seq).val();
+							if(t_Product.indexOf('管') > -1){
+								$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+							}
 						});
 						$('#textSize4_' + j).change(function () {
 							t_IdSeq = -1;
@@ -230,12 +242,20 @@
 								q_tr('txtLengthb_'+b_seq ,q_float('textSize4_'+b_seq));//長度$('#txtLengthb_'+b_seq).val($('#textSize4_' + b_seq).val());	
 							}
 							q_tr('txtTheory_'+b_seq ,getTheory(b_seq));
+							var t_Product = $('#txtProduct_' + b_seq).val();
+							if(t_Product.indexOf('管') > -1){
+								$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+							}
 						});
 						$('#txtMount_' + j).change(function () {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							q_tr('txtTheory_'+b_seq ,getTheory(b_seq));
+							var t_Product = $('#txtProduct_' + b_seq).val();
+							if(t_Product.indexOf('管') > -1){
+								$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+							}
 						});
 						//-------------------------------------------------------------------------------------
 					}
