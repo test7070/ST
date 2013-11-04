@@ -227,7 +227,7 @@
 				$('#lblOrdb').click(function() {
 					var t_tggno = trim($('#txtTggno').val());
 					var t_ordbno = trim($('#txtOrdbno').val());
-					var t_where = "enda=0 ";
+					var t_where = "enda=0 and notv >0 ";
 					if (t_tggno.length > 0) {
 						t_where += (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "") + " && kind='" + $('#cmbKind').val() + "'";
 					} else {

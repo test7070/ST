@@ -337,7 +337,7 @@
 									}
 								}
 							}
-							if (b_ret[0] != undefined) {
+							if (b_ret && b_ret[0] != undefined) {
 								ret = q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtProduct,txtProductno,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtSource', b_ret.length, b_ret, 'uno,product,productno,radius,dime,width,lengthb,mount,weight,source', 'txtUno,txtProduct,txtProductno', '__');
 								/// 最後 aEmpField 不可以有【數字欄位】
 								if (qBoxNo3id != -1) {

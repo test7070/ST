@@ -240,7 +240,7 @@
 					case 'ordes':
 						b_ret = getb_ret();
 						ordesArray = b_ret;
-						if (ordesArray[0] != undefined) {
+						if (ordesArray && ordesArray[0] != undefined) {
 							var distinctArray = new Array;
 							var inStr = '';
 							for(var i=0;i<ordesArray.length;i++){distinctArray.push(ordesArray[i].noa);}

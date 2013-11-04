@@ -146,7 +146,7 @@
 									}
 								}
 							}
-							if(b_ret[0] != undefined){
+							if(b_ret && b_ret[0] != undefined){
 	                        	ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtCustno,txtClass,txtProductno,txtProduct,txtUnit,txtDime,txtWidth,txtLengthb,txtSpec,txtOrdeno,txtNo2,txtWeight,txtMount,txtTheory,txtSize,txtUno,txtMemo', b_ret.length, b_ret, 'custno,class,productno,product,unit,dime,width,lengthb,spec,noa,no2,weight,mount,theory,size,uno,memo','txtProductno');   /// 最後 aEmpField 不可以有【數字欄位】
 								var t_where = 'where=^^ 1=0 ';
 								for(var i = 0;i < ret.length;i++){
