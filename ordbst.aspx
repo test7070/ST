@@ -967,7 +967,7 @@
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td class="st" align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblTotals'> </a><br><a id='lblTheorys' class="st"> </a></td>
 					<td align="center" style="width:80px;"><a id='lblC1s'> </a><br><a id='lblNotvs'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblUno_st'> </a></td>
