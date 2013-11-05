@@ -349,7 +349,7 @@
 				for(var i=0;i<q_bbsCount;i++){
 					var thisVal = trim($('#txtOrdeno_'+i).val());
 					if(thisVal.length > 0)
-						ReturnStr.push();
+						ReturnStr.push(thisVal);
 				}
 				ReturnStr = distinct(ReturnStr).sort();
 				return ReturnStr.toString();
