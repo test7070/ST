@@ -347,7 +347,9 @@
 			function GetOrdenoList(){
 				var ReturnStr = new Array;
 				for(var i=0;i<q_bbsCount;i++){
-					ReturnStr.push(trim($('#txtOrdeno_'+i).val()));
+					var thisVal = trim($('#txtOrdeno_'+i).val());
+					if(thisVal.length > 0)
+						ReturnStr.push();
 				}
 				ReturnStr = distinct(ReturnStr).sort();
 				return ReturnStr.toString();

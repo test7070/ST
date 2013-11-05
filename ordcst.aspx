@@ -367,7 +367,9 @@
 			function GetOrdbnoList(){
 				var ReturnStr = new Array;
 				for(var i=0;i<q_bbsCount;i++){
-					ReturnStr.push(trim($('#txtOrdbno_'+i).val()));
+					var thisVal = trim($('#txtOrdbno_'+i).val());
+					if(thisVal.length > 0)
+						ReturnStr.push(thisVal);
 				}
 				ReturnStr = distinct(ReturnStr).sort();
 				return ReturnStr.toString();
