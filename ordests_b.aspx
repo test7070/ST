@@ -98,6 +98,7 @@
 							$(this).attr('checked', $('#checkAllCheckbox').is(':checked'));
 					});
 				});
+				size_change();
 			}
 
 			var maxAbbsCount = 0;
@@ -141,6 +142,64 @@
 				}
 				return uniArray;
 			}
+			function size_change() {
+				var w = window.parent;
+                var t_kind = ((w.$('#cmbKind').val())?w.$('#cmbKind').val():'');
+                t_kind = t_kind.substr(0, 1);				
+				if (t_kind == 'A') {
+					$('*[id="sizeTd"]').css('width','208px');
+					for (var j = 0; j < q_bbsCount; j++) {
+						$('#textSize1_' + j).show();
+						$('#textSize2_' + j).show();
+						$('#textSize3_' + j).show();
+						$('#textSize4_' + j).hide();
+						$('#x1_' + j).show();
+						$('#x2_' + j).show();
+						$('#x3_' + j).hide();
+						$('#txtUno_'+j).css('width','208px');
+						$('#textSize1_' + j).val($('#txtDime_' + j).val());
+						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
+						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
+						$('#textSize4_' + j).val(0);
+						$('#txtRadius_' + j).val(0);
+					}
+				} else if (t_kind == 'B') {
+					$('*[id="sizeTd"]').css('width','280px');
+					for (var j = 0; j < q_bbsCount; j++) {
+						$('#textSize1_' + j).show();
+						$('#textSize2_' + j).show();
+						$('#textSize3_' + j).show();
+						$('#textSize4_' + j).show();
+						$('#x1_' + j).show();
+						$('#x2_' + j).show();
+						$('#x3_' + j).show();
+						$('#txtUno_'+j).css('width','280px');
+						$('#textSize1_' + j).val($('#txtRadius_' + j).val());
+						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
+						$('#textSize3_' + j).val($('#txtDime_' + j).val());
+						$('#textSize4_' + j).val($('#txtLengthb_' + j).val());
+					}
+				} else if (t_kind == 'C'){//鋼筋和鋼胚
+					$('*[id="sizeTd"]').css('width','55px');
+					for (var j = 0; j < q_bbsCount; j++) {
+						$('#textSize1_' + j).hide();
+						$('#textSize2_' + j).hide();
+						$('#textSize3_' + j).show();
+						$('#textSize4_' + j).hide();
+						$('#x1_' + j).hide();
+						$('#x2_' + j).hide();
+						$('#x3_' + j).hide();
+						$('#txtUno_'+j).css('width','55px');
+						$('#textSize1_' + j).val(0);
+						$('#txtDime_' + j).val(0);
+						$('#textSize2_' + j).val(0);
+						$('#txtWidth_' + j).val(0);
+						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
+						$('#textSize4_' + j).val(0);
+						$('#txtRadius_' + j).val(0);
+					}
+				}
+			}
 
 		</script>
 		<style type="text/css">
@@ -171,7 +230,7 @@
 					</td>
 					<td align="center" style="width:3%;"> </td>
 					<td align="center" style="width:12%;"><a id='lblProductno'></a>/<a id='lblProduct'></a></td>
-					<td align="center" style="width:23%;"><a id='lblUno'></a>/<a id='lblSize'></a></td>
+					<td align="center" id="sizeTd" ><a id='lblUno'></a>/<a id='lblSize'></a></td>
 					<td align="center" style="width:6%;"><a id='lblSpec'></a></td>
 					<td align="center" style="width:6%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:8%;"><a id='lblWeight'></a></td>
@@ -190,7 +249,7 @@
 					</td>
 					<td align="center"> </td>
 					<td align="center"><a id='lblProductno'></a>/<a id='lblProduct'></a></td>
-					<td align="center"><a id='lblUno'></a></td>
+					<td align="center" id="sizeTd" ><a id='lblUno'></a></td>
 					<td align="center"><a id='lblSpec'></a></td>
 					<td align="center"><a id='lblMount'></a></td>
 					<td align="center"><a id='lblWeight'></a></td>
@@ -210,15 +269,26 @@
 						<input class="txt"  id="txtProductno.*" type="text" style="width:98%;" />
 						<input class="txt" id="txtProduct.*" type="text" style="width:98%;" />
 					</td>
-					<td style="width:23%;">
+					<td id="sizeTd">
 						<input class="txt" id="txtUno.*" type="text"  style="width:98%;" />
-						<input class="txt" id="txtRadius.*" type="text"  style="width:20%;text-align:right;" />
-						x
-						<input class="txt" id="txtWidth.*" type="text"  style="width:20%;text-align:right;" />
-						x
-						<input class="txt" id="txtDime.*" type="text"  style="width:20%;text-align:right;" />
-						x
-						<input class="txt" id="txtLengthb.*" type="text"  style="width:20%;text-align:right;" />
+						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
+						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
+							x
+						</div>
+						<input class="txt num" id="textSize2.*" type="text" style="float: left;width:55px;"  disabled="disabled"/>
+						<div id="x2.*" style="float: left;display:block;width:20px;padding-top: 4px;">
+							x
+						</div>
+						<input class="txt num" id="textSize3.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
+						<div id="x3.*" style="float: left;display:block;width:20px;padding-top: 4px;">
+							x
+						</div>
+						<input class="txt num" id="textSize4.*" type="text"  style="float: left;width:55px;" disabled="disabled"/>
+						<!--上為虛擬下為實際-->
+						<input id="txtRadius.*" type="text" style="display:none;"/>
+						<input id="txtWidth.*" type="text" style="display:none;"/>
+						<input id="txtDime.*" type="text" style="display:none;"/>
+						<input id="txtLengthb.*" type="text" style="display:none;"/>
 					</td>
 					<td style="width:6%;">
 						<input class="txt" id="txtSpec.*" type="text"  style="width:94%;text-align:center;" />

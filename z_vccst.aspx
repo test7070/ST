@@ -67,7 +67,7 @@
                     }]
                 });
                 q_popAssign();
-                
+                q_langShow();
                 $('#txtXmon1').mask('999/99');
                 $('#txtXmon2').mask('999/99');
                 $('#txtDate1').mask('999/99/99');

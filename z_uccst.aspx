@@ -210,6 +210,7 @@
 		<style type="text/css">
 			.num{
 				text-align:right;
+				padding-right:2px;
 			}
 		</style>
 	</head>
