@@ -75,8 +75,11 @@
 							dbf : 'tgg',
 							index : 'noa,comp',
 							src : 'tgg_b.aspx'
-						}
-					]
+						}, {
+							type : '5', //[22]
+							name : 'xorderstatus',
+							value : [q_getPara('report.all')].concat('1@已受訂,2@未受訂'.split(','))
+					}]
 				});
 				q_popAssign();
 				q_getFormat();
@@ -110,6 +113,15 @@
 				});
 				$('.report').click(function(){
 					size_change();
+					$('#Xorderstatus select').change();
+				});
+				$('#Xorderstatus select').change(function(){
+					var nowReport = $('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report;
+					if($(this).val() == '1'){
+						$('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0,8) + 'A';
+					}else{
+						$('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0,8);
+					}
 				});
 			}
 
@@ -140,9 +152,9 @@
 					$(this).val(dec($(this).val()));
 					if($(this).val() == 'NaN') $(this).val(0);
 				});
-				$('#txtXdime2').val(999.99).addClass('num').focusout(function(){
+				$('#txtXdime2').val(9999.99).addClass('num').focusout(function(){
 					$(this).val(dec($(this).val()));
-					if($(this).val() == 'NaN') $(this).val(999.99);
+					if($(this).val() == 'NaN') $(this).val(9999.99);
 				});
 				$('#txtXlengthb1').val(0).addClass('num').focusout(function(){
 					$(this).val(dec($(this).val()));
