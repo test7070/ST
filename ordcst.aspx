@@ -225,6 +225,8 @@
 				});
 
 				$('#lblOrdb').click(function() {
+					if(!(q_cur==1 || q_cur ==2))
+						return;
 					var t_tggno = trim($('#txtTggno').val());
 					var t_ordbno = trim($('#txtOrdbno').val());
 					var t_where = "enda=0 and notv >0 ";

@@ -105,12 +105,6 @@
                     size_change();
                     sum();
                 });
-                $("#cmbTrantype").focus(function() {
-                    var len = $(this).children().length > 0 ? $(this).children().length : 1;
-                    $(this).attr('size', len + "");
-                }).blur(function() {
-                    $(this).attr('size', '1');
-                });
                 /* 若非本會計年度則無法存檔 */
                 $('#txtDatea').focusout(function() {
                     if ($(this).val().substr(0, 3) != r_accy) {

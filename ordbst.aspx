@@ -176,6 +176,8 @@
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				
 				$('#lblOrde').click(function() {
+					if(!(q_cur==1 || q_cur ==2))
+						return;
 					var t_where = " 1=1 and enda='0' and kind='"+$('#cmbKind').val()+"' ";
 					var t_ordeno_where = ' and (  ';
 					var t_ordeno = trim($('#txtOrdeno').val());

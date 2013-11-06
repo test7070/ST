@@ -201,12 +201,6 @@
                     size_change();
                     sum();
                 });
-                $("#cmbTrantype").focus(function() {
-                    var len = $(this).children().length > 0 ? $(this).children().length : 1;
-                    $(this).attr('size', len + "");
-                }).blur(function() {
-                    $(this).attr('size', '1');
-                });
                 $("#cmbTaxtype").change(function(e) {
                     sum();
                 });
@@ -247,6 +241,8 @@
                     q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "95%", "95%", q_getMsg('popVcceImport'));
                 });
                 $('#lblOrdeno').click(function() {
+					if(!(q_cur==1 || q_cur ==2))
+						return;
                     btnOrdes();
                 });
                 $('#lblAccno').click(function() {

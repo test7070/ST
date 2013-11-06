@@ -254,6 +254,8 @@
                     sum();
                 });
                 $('#lblContract').click(function() {
+					if(!(q_cur==1 || q_cur ==2))
+						return;
                     var t_contract = $.trim($('#txtContract').val());
                     q_box("contst.aspx?;;;contract='" + t_contract + "';" + r_accy, 'cont', "95%", "95%", q_getMsg("popContst"));
                 });

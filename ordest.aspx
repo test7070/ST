@@ -230,6 +230,8 @@
 				
 				q_gt('spec', '', 0, 0, 0, "", r_accy);
 				$('#lblQuat').click(function() {
+					if(!(q_cur==1 || q_cur ==2))
+						return;
 					btnQuat();
 				});
 				$('#btnOrdem').click(function() {

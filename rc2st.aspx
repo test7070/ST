@@ -191,6 +191,8 @@
 					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "95%", q_getMsg('btnAccc'), true);
 				});
 				$('#lblOrdc').click(function() {
+					if(!(q_cur==1 || q_cur ==2))
+						return;
 					lblOrdc();
 				});
 				$('#cmbKind').change(function() {
