@@ -71,14 +71,18 @@
 							src : 'store_b.aspx'
 						},{
 							type : '2', //[20] [21]
-							name : 'xtggno',
-							dbf : 'tgg',
+							name : 'xcustno',
+							dbf : 'cust',
 							index : 'noa,comp',
-							src : 'tgg_b.aspx'
+							src : 'cust_b.aspx'
 						}, {
 							type : '5', //[22]
 							name : 'xorderstatus',
 							value : [q_getPara('report.all')].concat('1@已受訂,2@未受訂'.split(','))
+						}, {
+							type : '8',//[23]
+							name : 'xisordermemo',
+							value : "1@顯示已受訂明細".split(',')
 					}]
 				});
 				q_popAssign();
@@ -96,6 +100,9 @@
 				$('#Xitype').css('width','120px');
 				$('#Xstktype').css('width','120px');
 				
+				$('#Xisordermemo').css('width','300px').css('height','30px');
+				$('#Xisordermemo .label').css('width','0px');
+				$('#chkXisordermemo').css('padding-top','5px');
 				$('#txtXedate').mask('999/99/99');
 				$('#txtXedate').val(q_date());
 				$('#Xstktype select').change(function(){
@@ -115,14 +122,23 @@
 					size_change();
 					$('#Xorderstatus select').change();
 				});
+				$('#chkXisordermemo input[type="checkbox"]').click(function(){
+					$('#Xorderstatus select').change();
+				});
 				$('#Xorderstatus select').change(function(){
+					var showMemo = $('#chkXisordermemo input[type="checkbox"]').is(':checked');
 					var nowReport = $('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report;
-					if($(this).val() == '1'){
+					if(($(this).val() == '1') || ($(this).val() == '#non' && showMemo==true)){
 						$('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0,8) + 'A';
+						if($(this).val() == '1'){
+							$('#chkXisordermemo input[type="checkbox"]').attr('checked',false);
+						}
 					}else{
+						$('#chkXisordermemo input[type="checkbox"]').attr('checked',false);
 						$('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0,8);
 					}
 				});
+				$('#Xitype .cmb').change();
 			}
 
 			function q_boxClose(s2) {
