@@ -525,6 +525,8 @@
                 $('#txtOdate').val(q_date());
                 $('#txtDatea').val(q_date());
                 sum();
+				$('#txtCno').val('A');
+				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
                 $('#txtCno').focus();
             }
 

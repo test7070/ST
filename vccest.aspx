@@ -528,6 +528,14 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                var WantDisabledArray = ['btnOrdeimport','btnVcceImport'];
+                for(var k=0;k<WantDisabledArray.length;k++){
+                	if(q_cur==1 || q_cur ==2){
+                		$("#"+WantDisabledArray[k]).removeAttr('disabled','disabled');
+                	}else{
+                		$("#"+WantDisabledArray[k]).attr('disabled','disabled');
+                	}
+                }
                 size_change();
             }
 
@@ -886,10 +894,10 @@
 						<td><span> </span><a id="lblStype" class="lbl"> </a></td>
 						<td><input id="txtStype"  type="text" class="txt c1"/></td>
 						<td>
-						<input id="btnSearchuno" type="button" />
+						<input id="btnSearchuno" type="button" style="display:none;"/>
 						</td>
 						<td>
-						<input id="btnSearchstk" type="button" />
+						<input id="btnSearchstk" type="button" style="display:none;" />
 						</td>
 					</tr>
 					<tr>

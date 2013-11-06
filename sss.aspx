@@ -335,6 +335,14 @@
             }
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                var WantDisabledArray = ['btnSsspart','btnSaladjust','btnLabases'];
+                for(var k=0;k<WantDisabledArray.length;k++){
+                	if(q_cur==1 || q_cur ==2){
+                		$("#"+WantDisabledArray[k]).removeAttr('disabled','disabled');
+                	}else{
+                		$("#"+WantDisabledArray[k]).attr('disabled','disabled');
+                	}
+                }
             }
 
             function btnMinus(id) {

@@ -778,12 +778,8 @@
 
             function btnIns() {
                 _btnIns();
-                /*for (var j = 0; j < aPop.length; j++) {
-                 if (aPop[j][0].length > 6 && aPop[j][0].substr(0, 7) == 'txtUno_') {
-                 aPop[j][8] = '';
-                 break;
-                 }
-                 }*/
+				$('#txtCno').val('A');
+				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
                 $('#txtDatea').val(q_date());
                 $('#txtMon').val(q_date().substring(0, 6));
@@ -910,6 +906,14 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                var WantDisabledArray = ['btnImportVcce','btnVcceImport'];
+                for(var k=0;k<WantDisabledArray.length;k++){
+                	if(q_cur==1 || q_cur ==2){
+                		$("#"+WantDisabledArray[k]).removeAttr('disabled','disabled');
+                	}else{
+                		$("#"+WantDisabledArray[k]).attr('disabled','disabled');
+                	}
+                }
                 size_change();
             }
 
@@ -1388,6 +1392,7 @@
 						<td>
 						<input id="txtWorker2"  type="text" class="txt c1"/>
 						</td>
+						<td></td>
 						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
 						<td>
 						<input id="txtAccno" type="text"  class="txt c1"/>

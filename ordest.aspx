@@ -678,6 +678,8 @@
 				$('#cmbKind').val(q_getPara('vcc.kind'));
 				size_change();
 				$('#txtOdate').val(q_date());
+				$('#txtCno').val('A');
+				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
 				$('#txtCno').focus();
 				if ($('#cmbStype').find("option:selected").text() == '外銷')
 					$('#btnOrdei').show();
@@ -865,7 +867,7 @@
 				else
 					$('#btnOrdei').attr('disabled', 'disabled');
 
-				if (q_cur == 1)
+				if (q_cur == 1 || q_cur==0)
 					$('#btnOrdem').attr('disabled', 'disabled');
 				else
 					$('#btnOrdem').removeAttr('disabled');
