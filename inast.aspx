@@ -33,7 +33,13 @@
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
-            aPop = new Array(['txtStationno', 'lblStation', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'], ['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'], ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'], ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'], ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
+            aPop = new Array(['txtStationno', 'lblStation', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'], 
+	            ['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'], 
+	            ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'], 
+	            ['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtCust', 'cust_b.aspx'], 
+	            ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'], 
+	            ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
+            );
             brwCount2 = 7;
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -993,6 +999,15 @@
 						</td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblCust" class="lbl btn"> </a></td>
+						<td colspan="3">
+							<input id="txtCustno" type="text" style="float:left;width:30%;"/>
+							<input id="txtCust" type="text" style="float:left;width:70%;"/>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblStore" class="lbl btn" > </a></td>
 						<td colspan="3">
 							<input type="text" id="txtStoreno" style="float:left;width:30%;"/>
@@ -1007,8 +1022,8 @@
 					<tr>
 						<td><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
 						<td colspan="3">
-							<input id="txtCardealno" type="text" style="float:left;width:50%;"/>
-							<input id="txtCardeal" type="text" style="float:left;width:50%;"/>
+							<input id="txtCardealno" type="text" style="float:left;width:30%;"/>
+							<input id="txtCardeal" type="text" style="float:left;width:70%;"/>
 						</td>
 						<td><span> </span><a id="lblCarno" class="lbl"> </a></td>
 						<td>
