@@ -670,7 +670,6 @@
 				}
 			}
 			function tipInit(){
-				tip($('#txtCarno'),'<a style="color:red;font-size:16px;font-weight:bold;width:350px;display:block;">需輸入車牌，否則無法匯到出貨單。</a>',-20,0);
 				tip($('#btnOrdeimport'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:350px;display:block;">↑匯入訂單資料，需已先選料，且勾【售】。</a>',-20,25);
 				tip($('#btnVcceImport'),'<a style="color:darkblue;font-size:16px;font-weight:bold;width:350px;display:block;">←匯入裁剪、製管資料，需有訂單(未結案)。</a>',15,0);
 			}
