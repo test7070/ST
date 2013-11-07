@@ -318,7 +318,18 @@
 							var i, j = 0;
 							for(var i=0;i<q_bbsCount;i++){$('#btnMinus_'+i).click();}
 							$('#txtQuatno').val(b_ret[0].noa);
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtQuatno,txtNo3,txtPrice,txtMount,txtWeight,txtClass,txtTheory,txtStyle', b_ret.length, b_ret, 'productno,product,spec,size,radius,dime,width,lengthb,unit,noa,no3,price,mount,weight,class,theory,style', 'txtProductno,txtProduct,txtSpec');
+							for(var k=0;k<b_ret.length;k++){
+								var t_notv = dec(b_ret[k].notv);
+								var t_mount = dec(b_ret[k].mount);
+								var t_weight = dec(b_ret[k].weight);
+								var t_kind = trim(b_ret[k].kind).toUpperCase();
+								if(t_notv != t_mount)
+									t_weight = round(q_mul(q_div(t_weight,t_mount),t_notv),0);
+								t_mount = t_notv;
+								b_ret[k].mount = t_mount;
+								b_ret[k].weight = t_weight;
+							}
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtQuatno,txtNo3,txtPrice,txtMount,txtWeight,txtClass,txtTheory,txtStyle', b_ret.length, b_ret, 'productno,product,spec,size,radius,dime,width,lengthb,unit,noa,no3,price,notv,weight,class,theory,style', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							bbsAssign();
 							sum();
@@ -390,6 +401,16 @@
 				}  /// end switch
 				OrdenoAndNo2On_Change();
 			}
+			function distinct(arr1){
+				var uniArray = [];
+				for(var i=0;i<arr1.length;i++){
+					var val = arr1[i];
+					if($.inArray(val, uniArray)===-1){
+						uniArray.push(val);
+					}
+				}
+				return uniArray;
+			}
 
 			function btnQuat() {
 				var t_custno = trim($('#txtCustno').val());
@@ -402,7 +423,20 @@
 					alert(q_getMsg('msgCustEmp'));
 					return;
 				}
-				t_where += " and kind='" +$('#cmbKind').val()+ "' and (enda='0') and (notv > 0)";
+				var distinctArray = new Array;
+				var inStr = '';
+				var t_noa = $('#txtNoa').val();
+				for(var i=0;i<abbs.length;i++){
+					if(abbs[i].noa == t_noa)
+						distinctArray.push(abbs[i].quatno+abbs[i].no3);
+				}
+				distinctArray = distinct(distinctArray);
+				for(var i=0;i<distinctArray.length;i++){
+					if(trim(distinctArray[i]) != '')
+						inStr += "'"+distinctArray[i]+"',";
+				}
+				inStr = inStr.substring(0,inStr.length-1);
+				t_where += " and kind='" +$('#cmbKind').val()+ "' and (((enda='0') and (notv > 0))"+(trim(inStr).length>0?" or noa+no3 in("+inStr+") ":'')+")";
 				q_box("quatst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'quats', "95%", "95%", q_getMsg('popQuats'));
 			}
 

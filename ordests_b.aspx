@@ -163,7 +163,7 @@
 						$('#textSize4_' + j).val(0);
 						$('#txtRadius_' + j).val(0);
 					}
-				} else if (t_kind == 'B') {
+				} else if (t_kind == 'B' || w.q_name=='cub') {
 					$('*[id="sizeTd"]').css('width','280px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
