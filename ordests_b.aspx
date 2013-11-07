@@ -50,6 +50,10 @@
 						var as = _q_appendData("ordes2cut", "", true);
 						DetailValue(as);
 						break;
+					case 'cubs':
+						var as = _q_appendData("cubs", "", true);
+						DetailValue(as);
+						break;
 				}
 			}
 
@@ -57,6 +61,18 @@
 				var w = window.parent;
 				switch(w.q_name){
 					case 'cut':
+						if(gtArray.length > 0){
+							for(var i = 0;i < abbs.length;i++){
+								for(var k= 0;k<gtArray.length;k++){
+									if((abbs[i].noa == gtArray[k].ordeno) && (abbs[i].no2 == gtArray[k].no2)){
+										abbs[i].mount = dec(abbs[i].mount) - dec(gtArray[k].mount);
+										abbs[i].weight = dec(abbs[i].weight) - dec(gtArray[k].weight);
+									}
+								}
+							}
+						}
+						break;
+					case 'cub':
 						if(gtArray.length > 0){
 							for(var i = 0;i < abbs.length;i++){
 								for(var k= 0;k<gtArray.length;k++){
@@ -125,6 +141,26 @@
 						}
 						t_where += " ^^";						
 						q_gt('ordes2cut', t_where, 0, 0, 0, "", r_accy);
+						break;
+					case 'cub':
+						var distinctArray = new Array;
+						var inStr = '';
+						for(var i=0;i<abbs.length;i++){distinctArray.push(abbs[i].noa+abbs[i].no2);}
+						distinctArray = distinct(distinctArray);
+						for(var i=0;i<distinctArray.length;i++){
+							inStr += "'"+distinctArray[i]+"',";
+						}
+						inStr = inStr.substring(0,inStr.length-1);
+						var t_noa = trim(w.$('#txtNoa').val());
+						var t_where = "where=^^ 1=1 ";
+						if(trim(inStr).length > 0){
+							t_where += " and (ordeno+no2)in("+inStr+") ";
+						}
+						if(w.q_name == 'cut' || w.q_name == 'cub'){
+							t_where += "and noa !='"+t_noa+"'";
+						}
+						t_where += " ^^";						
+						q_gt('cubs', t_where, 0, 0, 0, "", r_accy);
 						break;
 					default:
 						DetailValue();
@@ -215,6 +251,9 @@
 			.txt.c1 {
 				width: 98%;
 				float: left;
+			}
+			.num{
+				text-align:right;
 			}
 		</style>
 	</head>

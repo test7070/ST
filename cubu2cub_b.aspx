@@ -57,7 +57,7 @@
 				$('#checkAllCheckbox').click(function() {
 					$('input[type=checkbox][id^=chkSel]').each(function() {
 						var t_id = $(this).attr('id').split('_')[1];
-						if (!emp($('#txtNoa_' + t_id).val()))
+						if (!emp($('#txtOrdeno_' + t_id).val()))
 							$(this).attr('checked', $('#checkAllCheckbox').is(':checked'));
 					});
 				});
@@ -77,6 +77,27 @@
 			select {
 				font-size: medium;
 			}
+			#dbbs,#dFixedTitle{
+				width:1900px;
+			}
+			.txt{
+				float:left;
+			}
+			.c1{
+				width:90%;
+			}
+			.c2{
+				width:85%;
+			}
+			.c3{
+				width:71%;
+			}
+			.num{
+				text-align: right;
+			}
+			.btn{
+				font-weight: bold;
+			}
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -87,14 +108,14 @@
 			<table id="tFixedTitle" class='tFixedTitle'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'  >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;"><input type="checkbox" id="checkAllCheckbox"/></td>
-					<td align="center" style="width:2%;"><a id='lblPrt'></a></td>
+					<td align="center" style="width:3%;"><a id='lblPrt'></a></td>
 					<td align="center" style="width:2%;"><a id='lblStyle'></a></td>
 					<td align="center" style="width:10%;"><a id='lblUno'></a></td>
 					<td align="center" style="width:10%;"><a id='lblOrdeno'></a></td>
 					<td align="center" style="width:6%;"><a id='lblCustno'></a></td>
 					<td align="center" style="width:5%;"><a id='lblDatea'></a></td>
 					<td align="center" style="width:6%;"><a id='lblStoreno'></a></td>
-					<td align="center" style="width:3%;"><a id='lblClass'></a></td>
+					<td align="center" style="width:4%;"><a id='lblClass'></a></td>
 					<td align="center" style="width:6%;"><a id='lblProductno'></a></td>
 					<td align="center" style="width:260px;"><a id='lblSizea'></a></td>
 					<td align="center" style="width:4%;"><a id='lblMount'></a></td>
@@ -110,65 +131,65 @@
 			<table id="tbbs" class='tbbs'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'  >
 				<tr style='color:White; background:#003366;display:none;' >
 					<td align="center"><input type="checkbox" id="checkAllCheckbox"/></td>
-					<td align="center" style="width:2%;"><a id='lblPrt'></a></td>
-					<td align="center" style="width:2%;"><a id='lblStyle'></a></td>
-					<td align="center" style="width:10%;"><a id='lblUno'></a></td>
-					<td align="center" style="width:10%;"><a id='lblOrdeno'></a></td>
-					<td align="center" style="width:6%;"><a id='lblCustno'></a></td>
-					<td align="center" style="width:5%;"><a id='lblDatea'></a></td>
-					<td align="center" style="width:6%;"><a id='lblStoreno'></a></td>
-					<td align="center" style="width:3%;"><a id='lblClass'></a></td>
-					<td align="center" style="width:6%;"><a id='lblProductno'></a></td>
-					<td align="center" style="width:260px;"><a id='lblSizea'></a></td>
-					<td align="center" style="width:4%;"><a id='lblMount'></a></td>
-					<td align="center" style="width:4%;"><a id='lblWeight'></a></td>
-					<td align="center" style="width:4%;"><a id='lblInweight'></a></td>
-					<td align="center" style="width:4%;"><a id='lblWaste'></a></td>
-					<td align="center" style="width:4%;"><a id='lblGmount'></a></td>
+					<td align="center"><a id='lblPrt'></a></td>
+					<td align="center"><a id='lblStyle'></a></td>
+					<td align="center"><a id='lblUno'></a></td>
+					<td align="center"><a id='lblOrdeno'></a></td>
+					<td align="center"><a id='lblCustno'></a></td>
+					<td align="center"><a id='lblDatea'></a></td>
+					<td align="center"><a id='lblStoreno'></a></td>
+					<td align="center"><a id='lblClass'></a></td>
+					<td align="center"><a id='lblProductno'></a></td>
+					<td align="center"><a id='lblSizea'></a></td>
+					<td align="center"><a id='lblMount'></a></td>
+					<td align="center"><a id='lblWeight'></a></td>
+					<td align="center"><a id='lblInweight'></a></td>
+					<td align="center"><a id='lblWaste'></a></td>
+					<td align="center"><a id='lblGmount'></a></td>
 					<td align="center"><a id='lblMemo'></a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center" style="width:1%;">
 						<input id="chkSel.*" type="checkbox"/>
 					</td>
-					<td><input type="text" id="txtPrt.*" class="txt c1" style="text-align: center;"/></td>
-					<td><input type="text" id="txtStyle.*" class="txt c1" style="text-align: center;"/></td>
-					<td><input type="text" id="txtUno.*" class="txt c1"/></td>
-					<td>
+					<td style="width:3%;"><input type="text" id="txtPrt.*" class="txt c1" style="text-align: center;"/></td>
+					<td style="width:2%;"><input type="text" id="txtStyle.*" class="txt c1" style="text-align: center;"/></td>
+					<td style="width:10%;"><input type="text" id="txtUno.*" class="txt c1"/></td>
+					<td style="width:10%;">
 						<input type="text" id="txtOrdeno.*" class="txt" style="width:65%;"/>
 						<input type="text" id="txtNo2.*" class="txt" style="width:25%;"/>
 					</td>
-					<td>
+					<td style="width:6%;">
 						<input id="btnCustno.*" type="button" value="." class="txt btn" style="width:1%;"/>
 						<input type="text" id="txtCustno.*" class="txt c3"/>
 						<input type="text" id="txtComp.*" class="txt c1"/>
 					</td>
-					<td><input type="text" id="txtDatea.*" class="txt c1"/></td>
-					<td>
+					<td style="width:5%;"><input type="text" id="txtDatea.*" class="txt c1"/></td>
+					<td style="width:6%;">
 						<input id="btnStoreno.*" type="button" value="." class="txt btn" style="width:1%;"/>
 						<input type="text" id="txtStoreno.*" class="txt c3"/>
 						<input type="text" id="txtStore.*" class="txt c1"/>
 					</td>
-					<td>
+					<td style="width:4%;">
 						<input type="text" id="txtClass.*" class="txt c1"/>
 						<input type="text" id="txtSpec.*" class="txt c1"/>
 					</td>
-					<td>
+					<td style="width:6%;">
 						<input id="btnProductno.*" type="button" value="." class="txt btn" style="width:1%;"/>
 						<input type="text" id="txtProductno.*" class="txt c3"/>
 						<input type="text" id="txtProduct.*" class="txt c1"/>
 					</td>
-					<td>
+					<td style="width:260px;">
 						<input type="text" id="txtRadius.*" class="num" style="width:19%;"/>x
 						<input type="text" id="txtWidth.*" class="num" style="width:19%;"/>x
 						<input type="text" id="txtDime.*" class="num" style="width:19%;"/>x
 						<input type="text" id="txtLengthb.*" class="num" style="width:19%;"/>
 					</td>
-					<td><input type="text" id="txtMount.*" class="txt c1 num"/></td>
-					<td><input type="text" id="txtWeight.*" class="txt c1 num"/></td>
-					<td><input type="text" id="txtInweight.*" class="txt c1 num"/></td>
-					<td><input type="text" id="txtWaste.*" class="txt c1 num"/></td>
-					<td><input type="text" id="txtGmount.*" class="txt c1 num"/></td>
+					<td style="width:4%;"><input type="text" id="txtMount.*" class="txt c1 num"/></td>
+					<td style="width:4%;"><input type="text" id="txtWeight.*" class="txt c1 num"/></td>
+					<td style="width:4%;"><input type="text" id="txtInweight.*" class="txt c1 num"/></td>
+					<td style="width:4%;"><input type="text" id="txtWaste.*" class="txt c1 num"/></td>
+					<td style="width:4%;"><input type="text" id="txtGmount.*" class="txt c1 num"/></td>
 					<td><input type="text" id="txtMemo.*" class="txt c1"/></td>
 				</tr>
 			</table>

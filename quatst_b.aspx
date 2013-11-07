@@ -38,21 +38,26 @@
 		var maxAbbsCount = 0;
 		function refresh() {
 			var w = window.parent;
-			if (maxAbbsCount < abbs.length) {
-				for (var i = (abbs.length - (abbs.length - maxAbbsCount)); i < abbs.length; i++) {
-					for (var j = 0; j < w.abbsNow.length; j++) {
-						if (w.abbsNow[j].quatno == abbs[i].noa && w.abbsNow[j].no3 == abbs[i].no3) {
-							abbs[i].notv = dec(abbs[i].notv)+dec(w.abbsNow[j].mount);
-							abbs[i]['sel'] = "true";
-							$('#chkSel_' + abbs[i].rec).attr('checked', true);
+			var wq_name = w.q_name;
+			switch(wq_name){
+				case 'orde':
+					if (maxAbbsCount < abbs.length) {
+						for (var i = (abbs.length - (abbs.length - maxAbbsCount)); i < abbs.length; i++) {
+							for (var j = 0; j < w.abbsNow.length; j++) {
+								if (w.abbsNow[j].quatno == abbs[i].noa && w.abbsNow[j].no3 == abbs[i].no3) {
+									abbs[i].notv = dec(abbs[i].notv)+dec(w.abbsNow[j].mount);
+									abbs[i]['sel'] = "true";
+									$('#chkSel_' + abbs[i].rec).attr('checked', true);
+								}
+							}
+							if (abbs[i].mount <= 0 || abbs[i].weight <= 0 || abbs[i].notv <=0) {
+								abbs.splice(i, 1);
+								i--;
+							}
 						}
+						maxAbbsCount = abbs.length;
 					}
-					if (abbs[i].mount <= 0 || abbs[i].weight <= 0 || abbs[i].notv <=0) {
-						abbs.splice(i, 1);
-						i--;
-					}
-					}
-				maxAbbsCount = abbs.length;
+					break;
 			}
 			_refresh();
 			$('#checkAllCheckbox').click(function(){
