@@ -381,6 +381,19 @@
             var AddRet = new Array;
             function q_gtPost(t_name) {/// 資料下載後 ...
                 switch (t_name) {
+                	case 'getAcomp':
+						var as = _q_appendData("acomp", "", true);
+						if(as[0]!=undefined){
+							$('#txtCno').val(as[0].noa);
+							$('#txtAcomp').val(as[0].nick);
+						}
+						Unlock(1);
+						$('#txtNoa').val('AUTO');
+						$('#txtDatea').val(q_date());
+						$('#txtMon').val(q_date().substring(0,6));
+						$('#txtDatea').focus();
+						size_change();
+						break;
                     case 'spec':
                         t_spec = _q_appendData("spec", "", true);
                         break;
@@ -774,13 +787,10 @@
 
             function btnIns() {
                 _btnIns();
-				$('#txtCno').val('1');
-				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
-                $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
-                $('#txtDatea').val(q_date());
-                $('#txtMon').val(q_date().substring(0, 6));
-                $('#txtDatea').focus();
-                size_change();
+                Lock(1, {
+					opacity : 0
+				});
+                q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
             }
 
             function btnModi() {

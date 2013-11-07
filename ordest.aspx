@@ -378,6 +378,26 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
+					case 'getAcomp':
+						var as = _q_appendData("acomp", "", true);
+						if(as[0]!=undefined){
+							$('#txtCno').val(as[0].noa);
+							$('#txtAcomp').val(as[0].nick);
+						}
+						Unlock(1);
+						$('#chkIsproj').attr('checked',true);
+						$('#dbbt').hide();
+						$('#txtNoa').val('AUTO');
+						$('#cmbKind').val(q_getPara('vcc.kind'));
+						size_change();
+						$('#txtOdate').val(q_date());
+						if ($('#cmbStype').find("option:selected").text() == '外銷')
+							$('#btnOrdei').show();
+						else
+							$('#btnOrdei').hide();
+						OrdenoAndNo2On_Change();
+						$('#txtCno').focus();
+						break;
 					case 'spec':
 						t_spec = _q_appendData("spec", "", true);
 						break;
@@ -708,20 +728,10 @@
 
 			function btnIns() {
 				_btnIns();
-				$('#chkIsproj').attr('checked',true);
-				$('#dbbt').hide();
-				$('#txtNoa').val('AUTO');
-				$('#cmbKind').val(q_getPara('vcc.kind'));
-				size_change();
-				$('#txtOdate').val(q_date());
-				$('#txtCno').val('1');
-				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
-				$('#txtCno').focus();
-				if ($('#cmbStype').find("option:selected").text() == '外銷')
-					$('#btnOrdei').show();
-				else
-					$('#btnOrdei').hide();
-				OrdenoAndNo2On_Change();
+				Lock(1, {
+					opacity : 0
+				});
+				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
 			}
 
 			function btnModi() {
