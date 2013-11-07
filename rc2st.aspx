@@ -685,7 +685,7 @@
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date());
 				$('#txtMon').val(q_date().substring(0,6));
-				$('#txtCno').val('A');
+				$('#txtCno').val('1');
 				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
 				$('#txtDatea').focus();
 				size_change();

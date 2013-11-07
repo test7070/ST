@@ -402,7 +402,7 @@
 					alert(q_getMsg('msgCustEmp'));
 					return;
 				}
-				t_where += " and kind='" +$('#cmbKind').val()+ "'";
+				t_where += " and kind='" +$('#cmbKind').val()+ "' and (enda='0') and (notv > 0)";
 				q_box("quatst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'quats', "95%", "95%", q_getMsg('popQuats'));
 			}
 
@@ -680,7 +680,7 @@
 				$('#cmbKind').val(q_getPara('vcc.kind'));
 				size_change();
 				$('#txtOdate').val(q_date());
-				$('#txtCno').val('A');
+				$('#txtCno').val('1');
 				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
 				$('#txtCno').focus();
 				if ($('#cmbStype').find("option:selected").text() == '外銷')

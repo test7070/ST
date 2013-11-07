@@ -454,7 +454,7 @@
 				$('#chkIsproj').attr('checked',true);
 				$('#txtNoa').val('AUTO');
 				$('#txtOdate').val(q_date());
-				$('#txtCno').val('A');
+				$('#txtCno').val('1');
 				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
 				$('#txtOdate').focus();
 				size_change();

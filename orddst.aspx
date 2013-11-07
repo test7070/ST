@@ -246,7 +246,7 @@
                 _btnIns();
             	size_change();
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
-				$('#txtCno').val('A');
+				$('#txtCno').val('1');
 				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
                 $('#txtDatea').val(q_date());
                 $('#txtDatea').focus();
