@@ -24,7 +24,7 @@
             var q_readonly = ['txtWorker', 'txtWorker2', 'txtNoa','txtWeight'];
             var q_readonlys = ['txtTotal','txtTheory'];
             var bbmNum = [['txtWeight', 10, 2, 1]];
-            var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,0,1]];
+            var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,0,1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
             q_sqlCount = 6;
@@ -216,6 +216,29 @@
                 });
             }
 
+            function setNewUno(w_unoArray, idno, IndexNum, IndexEng) {
+            	var nowUno = trim($('#txtUno_' + idno).val());
+            	var nowMount = dec(trim($('#txtMount_' + idno).val()));
+            	var nowWeight = dec(trim($('#txtWeight_' + idno).val()));
+            	if(nowUno.length==0 && nowMount>0 && nowWeight>0){
+	                var newIndexNum = (dec(IndexNum) > 0 ? dec(IndexNum) + 1 : 1);
+	                var newIndexEng = (dec(IndexEng) > 0 ? dec(IndexEng) : 65);
+	                if (newIndexNum > 999) {
+	                    newIndexNum = 1;
+	                    newIndexEng = dec(IndexEng) + 1;
+	                }
+	                var t_date = trim($('#txtDatea').val());
+	                var t_deli = ($('#cmbKind').val().toUpperCase().substring(0,1)=='B'?9:3);
+	                var newUno = replaceAll(t_date,'/','') + padL(newIndexNum,'0',t_deli) + String.fromCharCode(newIndexEng);
+	                if (w_unoArray.indexOf(newUno) == -1) {
+	                    $('#txtUno_' + idno).val(newUno);
+	                    UnoArray.push(newUno);
+	                } else {
+	                    setNewUno(UnoArray, idno, newIndexNum, newIndexEng);
+	                }
+                }
+            }
+
             function q_boxClose(s2) {///  q_boxClose 2/4
                 var ret;
                 switch (b_pop) {
@@ -239,6 +262,19 @@
                             size_change();
                         }
                         break;
+					case 'GetNewUno':
+						var as = _q_appendData("view_uccb", "", true);
+						if(needNewUnoFields.length > 0){
+	                        for (var i = 0; i < as.length; i++) {
+	                            UnoArray.push(as[i].uno);
+	                        }
+	                        for (var i = 0; i < needNewUnoFields.length; i++) {
+	                            setNewUno(UnoArray, needNewUnoFields[i]);
+	                        }
+	                        btnOk_checkUno(q_bbsCount-1);
+						}
+	                    btnOk_checkUno(-1);
+						break;
                     case 'uccb':
                         var as = _q_appendData("uccb", "", true);
                         if (uccb_readonly) {
@@ -359,37 +395,49 @@
                     return;
                 }
                 //檢查批號
-                for (var i = 0; i < q_bbsCount; i++) {
-                    for (var j = i + 1; j < q_bbsCount; j++) {
-                        if ($.trim($('#txtUno_' + i).val()).length > 0 && $.trim($('#txtUno_' + i).val()) == $.trim($('#txtUno_' + j).val())) {
-                            alert('【' + $.trim($('#txtUno_' + i).val()) + '】' + q_getMsg('lblUno_st') + '重覆。\n' + (i + 1) + ', ' + (j + 1));
-                            Unlock(1);
-                            return;
-                        }
-                    }
-                }
-                btnOk_checkUno(q_bbsCount - 1);
+				for(var i=0;i<q_bbsCount;i++){
+					//如果品號且批號空白則產生新批號
+					if($.trim($('#txtUno_'+i).val()).length==0 && $.trim($('#txtProductno_'+i).val()).length>0){
+						needNewUnoFields.push(i.toString());
+					}
+					for(var j=i+1;j<q_bbsCount;j++){
+						if($.trim($('#txtUno_'+i).val()).length>0 && $.trim($('#txtUno_'+i).val()) == $.trim($('#txtUno_'+j).val())){
+							alert('【'+$.trim($('#txtUno_'+i).val())+'】'+q_getMsg('lblUno_st')+'重覆。\n'+(i+1)+', '+(j+1));
+							UnoArray = new Array;
+							needNewUnoFields = new Array;
+							Unlock(1);
+							return;
+						}else{
+							UnoArray.push($.trim($('#txtUno_'+i).val()));
+						}
+					}					
+				}
+				var t_date = trim($('#txtDatea').val());
+				var t_where = "where=^^ left(uno,7)='" + replaceAll(t_date,'/','')+ "'";
+                q_gt('view_uccb', t_where,0,0,0,'GetNewUno');
             }
 
-            function btnOk_checkUno(n) {
-                if (n < 0) {
-                    if (q_cur == 1)
-                        $('#txtWorker').val(r_name);
-                    else
-                        $('#txtWorker2').val(r_name);
-                    sum();
-                    var t_noa = trim($('#txtNoa').val());
-                    var t_date = trim($('#txtDatea').val());
-                    if (t_noa.length == 0 || t_noa == "AUTO")
-                        q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ina') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-                    else
-                        wrServer(t_noa);
-                } else {
-                    var t_uno = $.trim($('#txtUno_' + n).val());
-                    var t_noa = $.trim($('#txtNoa').val());
-                    q_gt('view_uccb', "where=^^uno='" + t_uno + "' and not(accy='" + r_accy + "' and tablea='inas' and noa='" + t_noa + "')^^", 0, 0, 0, 'btnOkcheckUno_' + n);
-                }
-            }
+			var UnoArray = new Array;
+			var needNewUnoFields = new Array;
+			function btnOk_checkUno(n){
+				if(n<0){
+					if (q_cur == 1)
+						$('#txtWorker').val(r_name);
+					else
+						$('#txtWorker2').val(r_name);
+					sum();
+					var t_noa = trim($('#txtNoa').val());
+					var t_date = trim($('#txtDatea').val());
+					if (t_noa.length == 0 || t_noa == "AUTO")	 
+						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ina') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+					else
+						wrServer(t_noa);
+				}else{
+					var t_uno = $.trim($('#txtUno_'+n).val());
+					var t_noa = $.trim($('#txtNoa').val());
+					q_gt('view_uccb', "where=^^uno='"+t_uno+"' and not(accy='"+r_accy+"' and tablea='inas' and noa='"+t_noa+"')^^", 0, 0, 0, 'btnOkcheckUno_'+n);
+				}
+			}
 
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
@@ -587,7 +635,7 @@
                             $(this).attr('OldValue', $(this).val());
                         });
                         ProductAddStyle(b_seq);
-                        $('#txtClass_' + b_seq).focus();
+                        $('#txtStyle_' + b_seq).focus();
                         break;
                 }
             }
@@ -945,12 +993,12 @@
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id="vewChk"> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id="vewDatea"> </a></td>
-						<td align="center" style="width:100px; color:black;"><a id="vewStation"> </a></td>
+						<td align="center" style="width:100px; color:black;"><a id="vewStoreno"> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
 						<td id="datea" style="text-align: center;">~datea</td>
-						<td id="station" style="text-align: center;">~station</td>
+						<td id="storeno store,4" style="text-align: center;">~storeno ~store,4</td>
 					</tr>
 				</table>
 			</div>
@@ -1081,7 +1129,7 @@
 					<input id="txtUno.*" type="text" style="width:95%;"/>
 					</td>
 					<td>
-					<input class="btn"  id="btnProduct.*" type="button" value='' style=" font-weight: bold;width:15px;height:25px;float:left;" />
+					<input class="btn"  id="btnProductno.*" type="button" value='' style=" font-weight: bold;width:15px;height:25px;float:left;" />
 					<input type="text" id="txtProductno.*"  style="width:75px; float:left;"/>
 					</td>
 					<td>
