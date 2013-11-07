@@ -286,6 +286,19 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'getAcomp':
+						var as = _q_appendData("acomp", "", true);
+						if(as[0]!=undefined){
+							$('#txtCno').val(as[0].noa);
+							$('#txtAcomp').val(as[0].nick);
+						}
+						Unlock(1);
+						$('#chkIsproj').attr('checked',true);
+						$('#txtNoa').val('AUTO');
+						$('#txtOdate').val(q_date());
+						$('#txtOdate').focus();
+						size_change();
+						break;
 					case 'ordcs':
 						var as = _q_appendData("ordcs", "", true);
 						for(var i = 0;i<as.length;i++){
@@ -525,13 +538,10 @@
 
 			function btnIns() {
 				_btnIns();
-				$('#chkIsproj').attr('checked',true);
-				$('#txtNoa').val('AUTO');
-				$('#txtOdate').val(q_date());
-				$('#txtCno').val('1');
-				$('#txtAcomp').val((q_getPara('sys.comp').substring(0,3)=='裕承隆'?q_getPara('sys.comp').substring(0,3):q_getPara('sys.comp').substring(0,2)));
-				$('#txtOdate').focus();
-				size_change();
+				Lock(1, {
+					opacity : 0
+				});
+				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
 			}
 
 			function btnModi() {
