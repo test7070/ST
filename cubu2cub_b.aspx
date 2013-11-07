@@ -127,7 +127,7 @@
 				</tr>
 			</table>
 		</div>
-		<div  id="dbbs" style="overflow: scroll;height:550px;" >
+		<div  id="dbbs" style="overflow-y: scroll;height:550px;">
 			<table id="tbbs" class='tbbs'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'  >
 				<tr style='color:White; background:#003366;display:none;' >
 					<td align="center"><input type="checkbox" id="checkAllCheckbox"/></td>
