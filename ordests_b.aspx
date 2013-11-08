@@ -103,7 +103,7 @@
 								$('#chkSel_' + abbs[i].rec).attr('checked', true);
 							}
 						}
-						if (abbs[i].mount <= 0 || abbs[i].weight <= 0) {
+						if (abbs[i].mount <= 0 || abbs[i].weight <= 0 || abbs[i].notv <=0) {
 							abbs.splice(i, 1);
 							i--;
 						}
@@ -118,7 +118,7 @@
 				$('#checkAllCheckbox').click(function() {
 					$('input[type=checkbox][id^=chkSel]').each(function() {
 						var t_id = $(this).attr('id').split('_')[1];
-						if (!emp($('#txtProductno_' + t_id).val()))
+						if (!emp($('#txtProduct_' + t_id).val()))
 							$(this).attr('checked', $('#checkAllCheckbox').is(':checked'));
 					});
 				});
