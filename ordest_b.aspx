@@ -41,6 +41,7 @@
 					t_content +=" and ((select isnull(sum(weight),0) from ordes"+r_accy+" b where orde.noa = b.noa)-(select isnull(sum(weight),0) from "+w.q_name+"s"+r_accy+" a where orde.noa=a.ordeno) >0) ^^";
 				}
 				mainBrow(6, t_content, t_sqlname, t_postname, r_accy);
+				w.$('#cboxTitle').text('若沒有找到相關資料，請注意類別的選取。').css('color','red').css('font-size','initial');
 				parent.$.fn.colorbox.resize({
 					height : "750px"
 				});

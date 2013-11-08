@@ -33,6 +33,8 @@
 					return;
 				}
 				mainBrow(6, t_content, t_sqlname, t_postname, r_accy);
+				var w = window.parent;
+				w.$('#cboxTitle').text('若沒有找到相關資料，請注意類別的選取。').css('color','red').css('font-size','initial');
 				parent.$.fn.colorbox.resize({
 					height : "750px"
 				});
