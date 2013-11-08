@@ -84,6 +84,14 @@
 							}
 						}
 						break;
+					case 'vcc':
+							for(var i = 0;i < abbs.length;i++){
+								for(var k= 0;k<w.abbsNow.length;k++){
+									if((abbs[i].noa == w.abbsNow[k].ordeno) && (abbs[i].no2 == w.abbsNow[k].no2)){
+										abbs[i].notv = dec(abbs[i].notv) + dec(w.abbsNow[k].mount);
+									}
+								}
+							}
 					default:
 						break;
 				}
@@ -269,7 +277,7 @@
 					</td>
 					<td align="center" style="width:3%;"> </td>
 					<td align="center" style="width:12%;"><a id='lblProductno'></a>/<a id='lblProduct'></a></td>
-					<td align="center" id="sizeTd" ><a id='lblUno'></a>/<a id='lblSize'></a></td>
+					<td align="center" id="sizeTd" ><a id='lblSize'></a></td>
 					<td align="center" style="width:6%;"><a id='lblSpec'></a></td>
 					<td align="center" style="width:6%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:8%;"><a id='lblWeight'></a></td>
@@ -309,7 +317,6 @@
 						<input class="txt" id="txtProduct.*" type="text" style="width:98%;" />
 					</td>
 					<td id="sizeTd">
-						<input class="txt" id="txtUno.*" type="text"  style="width:98%;" />
 						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
 							x
@@ -328,6 +335,7 @@
 						<input id="txtWidth.*" type="text" style="display:none;"/>
 						<input id="txtDime.*" type="text" style="display:none;"/>
 						<input id="txtLengthb.*" type="text" style="display:none;"/>
+						<input class="txt" id="txtSize.*" type="text"  style="width:98%;" />
 					</td>
 					<td style="width:6%;">
 						<input class="txt" id="txtSpec.*" type="text"  style="width:94%;text-align:center;" />

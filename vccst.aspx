@@ -289,8 +289,7 @@
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
-                var
-                ret;
+                var ret;
                 switch (b_pop) {
                     case 'view_vcce_import':
                         if (q_cur > 0 && q_cur < 4) {
@@ -320,7 +319,7 @@
                         }
                         sum();
                         break;
-                    case 'ordet':
+                    case 'ordes':
                         if (q_cur > 0 && q_cur < 4) {//  q_cur： 0 = 瀏覽狀態  1=新增  2=修改 3=刪除  4=查詢
                             b_ret = getb_ret();
                             ///  q_box() 執行後，選取的資料
@@ -331,24 +330,18 @@
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             }
-                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight', b_ret.length, b_ret, 'productno,product,radius,dime,width,lengthb,unit,noa,no3,uno,mount,weight', 'txtProductno');
-                            for (var i = 0; i < AddRet.length; i++) {
-                                $('#txtStyle_' + AddRet[i]).blur();
-                            }
-                            var distinctArray = new Array;
-                            var inStr = '';
-                            for (var i = 0; i < b_ret.length; i++) {
-                                distinctArray.push(b_ret[i].noa);
-                            }
-                            distinctArray = distinct(distinctArray);
-                            for (var i = 0; i < distinctArray.length; i++) {
-                                inStr += "'" + distinctArray[i] + "',";
-                            }
-                            inStr = inStr.substring(0, inStr.length - 1);
-                            if (trim(inStr).length > 0) {
-                                var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
-                                q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
-                            }
+							for(var k=0;k<b_ret.length;k++){
+								var t_notv = dec(b_ret[k].notv);
+								var t_mount = dec(b_ret[k].mount);
+								var t_weight = dec(b_ret[k].weight);
+								var t_kind = trim(b_ret[k].kind).toUpperCase();
+								if(t_notv != t_mount)
+									t_weight = round(q_mul(q_div(t_weight,t_mount),t_notv),0);
+								t_mount = t_notv;
+								b_ret[k].mount = t_mount;
+								b_ret[k].weight = t_weight;
+							}                            
+                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
                             /// 最後 aEmpField 不可以有【數字欄位】
                             for (var i = 0; i < AddRet.length; i++) {
                                 $('#txtMount_' + i).change();
@@ -471,25 +464,6 @@
                         }
                         vcces_as = new Array;
                         break;
-                    case 'ordes':
-                        var ordes_as = _q_appendData("ordes", "", true);
-                        if (AddRet[0] != undefined && ordes_as[0] != undefined) {
-                            for (var i = 0; i < ordes_as.length; i++) {
-                                for (var j = 0; j < AddRet.length; j++) {
-                                    var t_ordeno = $('#txtOrdeno_' + j).val();
-                                    var t_no2 = $('#txtNo2_' + j).val();
-                                    if (ordes_as[i].noa == t_ordeno && ordes_as[i].no2 == t_no2) {
-                                        $('#txtPrice_' + j).val(ordes_as[i].price);
-                                        $('#txtSize_' + j).val(ordes_as[i].size);
-                                        $('#txtStyle_' + j).val(ordes_as[i].style);
-                                        $('#txtStyle_' + j).blur();
-                                    }
-                                }
-                            }
-                        }
-
-                        AddRet = new Array;
-                        break;
                     case q_name:
                         t_uccArray = _q_appendData("ucc", "", true);
                         if (q_cur == 4)// 查詢
@@ -553,7 +527,7 @@
             function btnOrdes() {
                 var t_custno = trim($('#txtCustno').val());
                 var t_kind = $('#cmbKind').val();
-                var t_where = " 1=1 and issale='1' and kind='" + t_kind + "' ";
+                var t_where = " 1=1 and kind='" + t_kind + "'";
                 if (t_custno.length > 0) {
                     t_where += (t_custno.length > 0 ? q_sqlPara2("custno", t_custno) : "");
                     ////  sql AND 語法，請用 &&
@@ -562,7 +536,19 @@
                     alert(q_getMsg('msgCustEmp'));
                     return;
                 }
-                q_box("ordet_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordet', "95%", "650px", q_getMsg('popOrde'));
+				var distinctArray = new Array;
+				var inStr = '';
+				for(var i=0;i<abbsNow.length;i++){
+						distinctArray.push(abbsNow[i].ordeno+abbsNow[i].no2);
+				}
+				distinctArray = distinct(distinctArray);
+				for(var i=0;i<distinctArray.length;i++){
+					if(trim(distinctArray[i]) != '')
+						inStr += "'"+distinctArray[i]+"',";
+				}
+				inStr = inStr.substring(0,inStr.length-1);
+				t_where += " and (((enda='0') and (notv > 0))"+(trim(inStr).length>0?" or noa+no2 in("+inStr+") ":'')+")";
+                q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
             }/// q_box()  開 視窗
 
             function GetOrdenoList() {
