@@ -23,7 +23,7 @@
             var q_name = "ina";
             var q_readonly = ['txtWorker', 'txtWorker2', 'txtNoa','txtWeight'];
             var q_readonlys = ['txtTotal','txtTheory'];
-            var bbmNum = [['txtWeight', 10, 2, 1]];
+            var bbmNum = [['txtWeight', 10, 2, 1],['txtPrice', 10, 2, 1],[txtTranmoney,10,0,1]];
             var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,0,1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
@@ -1093,7 +1093,7 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="3"><input id="txtMemo" type="text" class="txt c1" /></td>
+						<td colspan="5"><input id="txtMemo" type="text" class="txt c1" /></td>
 					</tr>
 				</table>
 			</div>
