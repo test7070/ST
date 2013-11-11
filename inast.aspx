@@ -71,7 +71,7 @@
 
 				var t_mount = 0, t_price = 0, t_money = 0, t_moneyus=0, t_weight = 0, t_total = 0, t_tax = 0;
 				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
-				var t_unit = '';
+				var t_unit = '',t_style = '';
 				var t_float = q_float('txtFloata');
                 var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
                 t_kind = t_kind.substr(0, 1);
@@ -79,6 +79,11 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
 					t_product = $.trim($('#txtProduct_' + j).val());
+					t_style = $.trim($('#txtStyle_' + j).val());
+					if(t_product.length == 0 && t_style.length > 0){
+						$('#txtStyle_' + j).blur();
+						t_product = $.trim($('#txtProduct_' + j).val());
+					}
 					if(t_unit.length==0 && t_product.length>0){
 						if(t_product.indexOf('管')>0)
 							t_unit = '支';
@@ -436,7 +441,7 @@
 					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
 				}
 				var t_Product = $('#txtProduct_' + b_seq).val();
-				if(t_Product.indexOf('管') > -1){
+				if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0){
 					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
             }
@@ -446,9 +451,9 @@
                 	$('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
                         $('#txtStyle_' + j).blur(function() {
-                            t_IdSeq = -1;
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
                             ProductAddStyle(b_seq);
                         });
                         $('#txtUno_' + j).change(function() {
@@ -1071,7 +1076,7 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"></td>
-					<td align="center" style="width:150px;"><a id="lblUno_st" > </a></td>
+					<td align="center" style="width:250px;"><a id="lblUno_st" > </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno'> </a></td>
 					<td align="center" style="width:35px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:140px;"><a id='lblProduct_s'> </a></td>
@@ -1083,7 +1088,7 @@
 					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblUno2_st'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblMemo_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1105,8 +1110,6 @@
 					<td>
 						<span style="width:20px;height:1px;display:none;float:left;"> </span>
 						<input id="txtProduct.*" type="text" style="float:left;width:93%;"/>
-						<input class="btn" id="btnUno.*" type="button" value='' style="display:none;float:left;width:20px;height:25px;"/>
-						<input id="txtUno.*" type="text" style="display:none;float:left;width:100px;" />
 					</td><td >
 					<input id="txtClass.*" type="text" style="width:90%;text-align:center;"/>
 					</td>

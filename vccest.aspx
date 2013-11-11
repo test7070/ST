@@ -85,7 +85,7 @@
                     }
                     getTheory(j);
 					var t_Product = $('#txtProduct_' + j).val();
-					if(t_Product.indexOf('管') > -1){
+					if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0){
 						$('#txtWeight_' + j).val($('#txtTheory_' + j).val());
 					}
                     //---------------------------------------
@@ -928,7 +928,7 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"></td>
-					<td align="center" style="width:200px;"><a id='lblUno_s'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblUno_s'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
 					<td align="center" style="width:20px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProduct_st'> </a></td>

@@ -657,7 +657,7 @@
                     q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
                 }
 				var t_Product = $('#txtProduct_' + b_seq).val();
-				if(t_Product.indexOf('管') > -1){
+				if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0){
 					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
             }

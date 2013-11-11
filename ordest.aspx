@@ -593,7 +593,7 @@
 					q_tr('txtWeight_' + b_seq, theory_st(theory_setting));
 				}
 				var t_Product = $('#txtProduct_' + b_seq).val();
-				if(t_Product.indexOf('管') > -1){
+				if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0){
 					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
 			}
@@ -1279,7 +1279,7 @@
 				font-size: medium;
 			}
 			#dbbt {
-				width: 1250px;
+				width: 1400px;
 			}
 			#tbbt {
 				margin: 0;
@@ -1600,15 +1600,15 @@
 					<input class="btn"  id="btnPlut" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"></td>
-					<td class="td2" align="center"><a id='lblUno_t'></a></td>
-					<td class="td3" align="center" style="width:12%;"><a id='lblProduct_t'></a></td>
-					<td class="td4" align="center" style="width:10%;"><a id='lblProductno_t'></a></td>
+					<td class="td2" align="center" style="width:250px;"><a id='lblUno_t'></a></td>
+					<td class="td3" align="center" style="width:120px;"><a id='lblProduct_t'></a></td>
+					<td class="td4" align="center" style="width:120px;"><a id='lblProductno_t'></a></td>
 					<td align="center" id='Sizet'><a id='lblSize_help'> </a></td>
-					<td class="td8" align="center" style="width:8%;"><a id='lblMount_t'></a></td>
-					<td class="td9" align="center" style="width:8%;"><a id='lblWeight_t'></a></td>
-					<td class="td9" align="center" style="width:2%;"><a id='lblIssale_t'></a></td>
-					<td class="td10" align="center" style="width:10%;"><a id='lblSource_t'></a></td>
-					<td class="td11" align="center" style="width:8%;"><a id='lblNo2_t'></a></td>
+					<td class="td8" align="center" style="width:80px;"><a id='lblMount_t'></a></td>
+					<td class="td9" align="center" style="width:120px;"><a id='lblWeight_t'></a></td>
+					<td class="td9" align="center" style="width:30px;"><a id='lblIssale_t'></a></td>
+					<td class="td10" align="center" style="width:150px;"><a id='lblSource_t'></a></td>
+					<td class="td11" align="center" style="width:80px;"><a id='lblNo2_t'></a></td>
 				</tr>
 				<tr>
 					<td class="td1" align="center">

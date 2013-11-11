@@ -103,7 +103,7 @@
                     }
                     getTheory(j);
 					var t_Product = $('#txtProduct_' + j).val();
-					if(t_Product.indexOf('管') > -1){
+					if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0){
 						$('#txtWeight_' + b_seq).val(getTheory(j));
 					}
                     //---------------------------------------
@@ -1017,7 +1017,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 1750px;
+				width: 2150px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1236,7 +1236,7 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:240px;"><a id='lblUno_st'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblProduct_st'> </a></td>
@@ -1250,7 +1250,7 @@
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
 					<td align="center" style="width:220px;"><a id='lblMemos_st'> </a><br><a id='lblCert_st' style="display:none;"></a></td>
-					<td align="center" style="width:150px;"><a id='lblUno2_st'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
 					<td align="center" style="width:220px;"><a id='lblOrdcnos_st'> </a></td>

@@ -91,7 +91,7 @@
                     }
                     $('#txtTheory_'+j).val(getTheory(j));
 					var t_Product = $('#txtProduct_' + j).val();
-					if(t_Product.indexOf('管') > -1){
+					if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + j).val()) == 0){
 						$('#txtWeight_' + j).val($('#txtTheory_' + j).val());
 					}
                     //---------------------------------------
@@ -976,7 +976,7 @@
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a><br><a id='lblTheorys' class="st"> </a></td>
 					<td align="center" style="width:80px;"><a id='lblC1s'> </a><br><a id='lblNotvs'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblUno_st'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td class="st" align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>

@@ -251,6 +251,8 @@
 					q_box("contst.aspx?;;;contract='" + t_contract + "';" + r_accy, 'cont', "95%", "95%", q_getMsg("popContst"));
 				});
 				$('#btnQuatst2Contst').click(function() {
+					if(r_rank <=8)
+						return;
 					//動作執行順序 : 確認系統參數 > 確認欄位是否留空 > 產生對話框詢問是否執行 > 如選市則執行func否則跳出
 					if ((q_cur == 0 || q_cur == 4) && !emp($.trim($('#txtNoa').val()))) {
 						var t_quatstnoa = encodeURI($.trim($('#txtNoa').val()));
@@ -421,7 +423,7 @@
 					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
 				}
 				var t_Product = $('#txtProduct_' + b_seq).val();
-				if(t_Product.indexOf('管') > -1){
+				if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0){
 					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
 			}
@@ -605,6 +607,10 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if(r_rank >8)
+					$('#btnQuatst2Contst').css('display','');
+				else
+					$('#btnQuatst2Contst').css('display','none');
 				size_change();
 			}
 

@@ -102,7 +102,7 @@
                     }
                     $('#txtTheory_'+j).val(getTheory(j));
 					var t_Product = $('#txtProduct_' + j).val();
-					if(t_Product.indexOf('管') > -1){
+					if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + j).val()) == 0){
 						$('#txtWeight_' + j).val($('#txtTheory_' + j).val());
 					}
                     //---------------------------------------
@@ -1081,7 +1081,7 @@
 					<td align="center" style="width:100px;"><a id='lblTotal_st'> </a><br><a class="st" id='lblTheory_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblC1_st'> </a><br><a id='lblNotv_st'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblUno_st'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblEnda_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1142,7 +1142,7 @@
 					</td>
 					<td>
 						<input id="btnUno.*" type="button" value='.' style="float:left;width:1%;"/>
-						<input id="txtUno.*" type="text" style="float:left;width:80%;" />
+						<input id="txtUno.*" type="text" style="float:left;width:85%;" />
 					</td>
 					<td>
 						<input id="chkEnda.*" type="checkbox"/>
