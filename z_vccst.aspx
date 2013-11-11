@@ -70,6 +70,12 @@
 					},{
 						type : '1', //[19][20]4
 						name : 'xlengthb'
+					}, {
+						type : '2', //[21][22]8
+						name : 'xsales',
+						dbf : 'sss',
+						index : 'noa,namea',
+						src : 'sss_b.aspx'
 					}]
 				});
 				q_popAssign();

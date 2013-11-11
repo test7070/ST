@@ -483,7 +483,7 @@
                                 q_gt('view_vccs', t_where, 0, 0, 0, 'checkOrde2_' + t_sel + '_' + t_ordeno + '_' + t_no2 + '_' + t_mount + '_' + t_weight, r_accy);
                             } else {
                                 alert('查無訂單資料【' + t_ordeno + '-' + t_no2 + '】');
-                                Unlock();
+                                Unlock(1);
                             }
                         } else if (t_name.substring(0, 11) == 'checkOrde2_') {
                             var t_sel = parseInt(t_name.split('_')[1]);
