@@ -812,6 +812,9 @@
 				text-align: center;
 				border: 2px pink double;
 			}
+			.trX {
+				background: pink;
+			}
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -939,14 +942,25 @@
 						</td>
 					</tr>
 					<tr>
+						<td class="trX"><span> </span><a id='lblOrdgweight' class="lbl"> </a></td>
+						<td class="trX"><input id="txtOrdgweight" type="text" class="txt c1 num" /></td>
+						<td class="trX"><span> </span><a id='lblOrdeweight' class="lbl"> </a></td>
+						<td class="trX"><input id="txtOrdeweight" type="text" class="txt c1 num" /></td>
+						<td class="trX"><span> </span><a id='lblCtrlweight' class="lbl"> </a></td>
+						<td class="trX"><input id="chkIsctrlweight" type="checkbox"/></td>
+						<td class="trX"><span> </span><a id='lblEnd' class="lbl"> </a></td>
+						<td class="trX"><input id="chkEnda" type="checkbox"/></td>
+						<td class="tdZ trX"> </td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblApv" class="lbl"> </a></td>
 						<td><input id="txtApv" type="text"  class="txt c1" disabled="disabled"/></td>
-						<td><span> </span><a id='lblEnd' class="lbl"> </a></td>
-						<td><input id="chkEnda" type="checkbox"/></td>
+						<!--<td><span> </span><a id='lblEnd' class="lbl"> </a></td>
+						<td><input id="chkEnda" type="checkbox"/></td>-->
 					</tr>
 				</table>
 			</div>
