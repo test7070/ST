@@ -1040,7 +1040,7 @@
 						<input id="txtOrdeweight" type="text" class="txt c1 num" />
 						</td>
 						<td class="trX" colspan="2" align="center"><span> </span><a id='lblCtrlweight'> </a>
-						<input id="chkCtrlweight" type="checkbox"/>
+						<input id="chkIsctrlweight" type="checkbox"/>
 						<span> </span><a id='lblEnda'> </a>
 						<input id="chkEnda" type="checkbox"/>
 						</td>
