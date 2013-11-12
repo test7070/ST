@@ -298,7 +298,7 @@
                                 b_pop = '';
                                 return;
                             }
-                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style', '');
+                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style,size', '');
                             //get ordes.price <Start>
                             var distinctArray = new Array;
                             var inStr = '';
@@ -443,7 +443,7 @@
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             };
-                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtStyle,txtOrdeno,txtNo2', vcces_as.length, vcces_as, 'uno,productno,product,spec,radius,dime,width,lengthb,mount,weight,price,style,ordeno,no2', 'txtUno');
+                            AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtStyle,txtOrdeno,txtNo2,txtSize', vcces_as.length, vcces_as, 'uno,productno,product,spec,radius,dime,width,lengthb,mount,weight,price,style,ordeno,no2,size', 'txtUno');
                             size_change();
                             sum();
                             //get ordes.price <Start>
