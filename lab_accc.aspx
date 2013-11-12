@@ -53,7 +53,7 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtBdate', r_picd], ['txtEdate', r_picd],['txtMon', r_picm]];
                 q_mask(bbmMask);
-                if(q_getPara('sys.comp').indexOf('英特瑞')>-1)
+                if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
 					q_cmbParse("cmbTypea", q_getPara('lab_accc.typea_it'));	//IR
 				else
 					q_cmbParse("cmbTypea", q_getPara('lab_accc.typea')); //20130601

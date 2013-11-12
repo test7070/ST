@@ -63,7 +63,7 @@
                 bbmMask = [['txtBirthday', r_picd], ['txtIndate', r_picd], ['txtOutdate', r_picd], ['txtMobile1', '9999999999'], ['txtMobile2', '9999999999'], ['txtHealth_bdate', r_picd], ['txtHealth_edate', r_picd], ['txtLabor1_bdate', r_picd], ['txtLabor1_edate', r_picd], ['txtLabor2_bdate', r_picd], ['txtLabor2_edate', r_picd]];
                 q_mask(bbmMask);
                 
-				if(q_getPara('sys.comp').indexOf('英特瑞')>-1)
+				if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
                 	q_cmbParse("cmbTypea", q_getPara('sss.typea_it'));
                 else
                 	q_cmbParse("cmbTypea", q_getPara('sss.typea'));
