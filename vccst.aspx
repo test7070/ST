@@ -1421,7 +1421,7 @@
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-					<input class="btn" id="btnUno.*" type="button" value='.' style="width:1%;"/>
+					<input class="btn" id="btnUno.*" type="button" value='.' style="width:10%;"/>
 					<input id="txtUno.*" type="text" style="width:80%;"/>
 					</td>
 					<td>
