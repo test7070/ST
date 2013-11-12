@@ -618,15 +618,12 @@
 							sum();
 						});
 						$('#btnBorn_' + j).click(function() {
-							t_IdSeq = -1;
-							/// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							t_noa = trim($('#txtNoa').val());
 							if (t_noa.length == 0 || t_noa.toUpperCase() == 'AUTO') {
 								return;
 							} else {
-								t_where = "noa='" + $('#txtNoa').val() + "' and no2='" + $('#txtNo2_' + b_seq).val() + "'";
+								t_where = "noa='" + $('#txtNoa').val() + "' and no2='" + $('#txtNo2_' + n).val() + "'";
 								q_box("z_bornst.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'born', "95%", "95%", q_getMsg('lblBorn'));
 							}
 						});
@@ -843,12 +840,9 @@
 						$('#btnOrdei').hide();
 				size_change();
 				$('input[id*="txtProduct_"]').each(function() {
-					t_IdSeq = -1;
-					/// 要先給  才能使用 q_bodyId()
-					q_bodyId($(this).attr('id'));
-					b_seq = t_IdSeq;
+					var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 					OldValue = $(this).val();
-					nowStyle = $('#txtStyle_' + b_seq).val();
+					nowStyle = $('#txtStyle_' + n).val();
 					if (!emp(nowStyle) && (StyleList[0] != undefined)) {
 						for (var i = 0; i < StyleList.length; i++) {
 							if (StyleList[i].noa.toUpperCase() == nowStyle) {

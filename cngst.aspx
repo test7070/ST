@@ -151,54 +151,37 @@
 						});
 						//將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
 						$('#textSize1_' + j).change(function() {
-							t_IdSeq = -1;
-							/// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if ($('#cmbKind').val().substr(0, 1) == 'A') {
-								q_tr('txtDime_' + b_seq, q_float('textSize1_' + b_seq));
-								//厚度$('#txtDime_'+b_seq).val($('#textSize1_' + b_seq).val());
+								q_tr('txtDime_' + n, q_float('textSize1_' + n));
 							} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-								q_tr('txtRadius_' + b_seq, q_float('textSize1_' + b_seq));
-								//短徑$('#txtRadius_'+b_seq).val($('#textSize1_' + b_seq).val());
+								q_tr('txtRadius_' + n, q_float('textSize1_' + n));
 							}
 						});
 						$('#textSize2_' + j).change(function() {
-							t_IdSeq = -1;
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if ($('#cmbKind').val().substr(0, 1) == 'A') {
-								q_tr('txtWidth_' + b_seq, q_float('textSize2_' + b_seq));
-								//寬度$('#txtWidth_'+b_seq).val($('#textSize2_' + b_seq).val());
+								q_tr('txtWidth_' + n, q_float('textSize2_' + n));
 							} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-								q_tr('txtWidth_' + b_seq, q_float('textSize2_' + b_seq));
-								//長徑$('#txtWidth_'+b_seq).val($('#textSize2_' + b_seq).val());
+								q_tr('txtWidth_' + n, q_float('textSize2_' + n));
 							}
 						});
 						$('#textSize3_' + j).change(function() {
-							t_IdSeq = -1;
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if ($('#cmbKind').val().substr(0, 1) == 'A') {
-								q_tr('txtLengthb_' + b_seq, q_float('textSize3_' + b_seq));
-								//長度$('#txtLengthb_'+b_seq).val($('#textSize3_' + b_seq).val());
+								q_tr('txtLengthb_' + n, q_float('textSize3_' + n));
 							} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-								q_tr('txtDime_' + b_seq, q_float('textSize3_' + b_seq));
-								//厚度$('#txtDime_'+b_seq).val($('#textSize3_' + b_seq).val());
+								q_tr('txtDime_' + n, q_float('textSize3_' + n));
 							} else {//鋼筋、胚
-								q_tr('txtLengthb_' + b_seq, q_float('textSize3_' + b_seq));
+								q_tr('txtLengthb_' + n, q_float('textSize3_' + n));
 							}
 						});
 						$('#textSize4_' + j).change(function() {
-							t_IdSeq = -1;
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if ($('#cmbKind').val().substr(0, 1) == 'A') {
-								q_tr('txtRadius_' + b_seq, q_float('textSize4_' + b_seq));
-								//短徑為0 $('#txtRadius_'+b_seq).val($('#textSize4_' + b_seq).val());
+								q_tr('txtRadius_' + n, q_float('textSize4_' + n));
 							} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
-								q_tr('txtLengthb_' + b_seq, q_float('textSize4_' + b_seq));
-								//長度$('#txtLengthb_'+b_seq).val($('#textSize4_' + b_seq).val());
+								q_tr('txtLengthb_' + n, q_float('textSize4_' + n));
 							}
 						});
 						//-------------------------------------------------------------------------------------

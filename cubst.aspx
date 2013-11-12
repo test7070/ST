@@ -278,31 +278,27 @@
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
                     	$('#txtDime_' +i).change(function(){
-							t_IdSeq = -1; 
-		                    q_bodyId($(this).attr('id'));
-		                    b_seq = t_IdSeq;
-            				var t_dime = dec($('#txtDime_' + b_seq).val());
-		           			$('#txtBdime_'+b_seq).val(round(t_dime*0.93,2));
-		            		$('#txtEdime_'+b_seq).val(round(t_dime*1.07,2));
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+            				var t_dime = dec($('#txtDime_' + n).val());
+		           			$('#txtBdime_'+n).val(round(t_dime*0.93,2));
+		            		$('#txtEdime_'+n).val(round(t_dime*1.07,2));
                     	});
 						$('#btnUccc_' + i).click(function(){
-							t_IdSeq = -1; 
-		                    q_bodyId($(this).attr('id'));
-		                    b_seq = t_IdSeq;
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 		                	var t_where = ' 1=1 and radius=0 ';
-							var t_productno = trim($('#txtProductno_' + b_seq).val());
-							var t_bdime = dec($('#txtBdime_' + b_seq).val());
-		                	var t_edime = dec($('#txtEdime_' + b_seq).val());
-		                	var t_width = dec($('#txtWidth_' + b_seq).val());
-		                	var t_blengthb = round(dec($('#txtLengthb_' + b_seq).val()) * 0.88,2);
-		                	var t_elengthb = round(dec($('#txtLengthb_' + b_seq).val()) * 1.12,2);
+							var t_productno = trim($('#txtProductno_' + n).val());
+							var t_bdime = dec($('#txtBdime_' + n).val());
+		                	var t_edime = dec($('#txtEdime_' + n).val());
+		                	var t_width = dec($('#txtWidth_' + n).val());
+		                	var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88,2);
+		                	var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12,2);
 		                	if(t_bdime == 0 && t_edime == 0){
 		                		t_edime = Number.MAX_VALUE;
 		                	}
 		                	t_where += " and width >=" + t_width;
 		                	t_where += q_sqlPara2('productno',t_productno);
 		                	t_where += " and (dime between " + t_bdime + " and " + t_edime + ") ";
-		                	if(dec($('#txtLengthb_' + b_seq).val()) > 0)
+		                	if(dec($('#txtLengthb_' + n).val()) > 0)
 		                		t_where += " and (lengthb between " + t_blengthb + " and " + t_elengthb + ") ";
 		                    q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'uccc', "95%", "95%", q_getMsg('popUccc'));
                 		});

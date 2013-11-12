@@ -586,12 +586,10 @@
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#btnCert_' + j).click(function(){
-							t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							btnCert_Seq = b_seq;
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							btnCert_Seq = n;
 							t_where = '';
-							t_uno = $('#txtUno_' + b_seq).val();
+							t_uno = $('#txtUno_' + n).val();
 							if(t_uno.length > 0){
 								t_where = "noa='" + t_uno + "'";
 								q_box("cert_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'cert', "95%", "95%", q_getMsg('popCert'));
@@ -618,11 +616,8 @@
 							sum();
 						});
 						$('#txtStyle_' + j).blur(function() {
-							t_IdSeq = -1;
-							/// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							ProductAddStyle(b_seq);
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							ProductAddStyle(n);
 							sum();
 						});
 						//計算理論重
@@ -743,12 +738,9 @@
 				_refresh(recno);
 				size_change();
 				$('input[id*="txtProduct_"]').each(function() {
-					t_IdSeq = -1;
-					/// 要先給  才能使用 q_bodyId()
-					q_bodyId($(this).attr('id'));
-					b_seq = t_IdSeq;
+					var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 					OldValue = $(this).val();
-					nowStyle = $('#txtStyle_' + b_seq).val();
+					nowStyle = $('#txtStyle_' + n).val();
 					if (!emp(nowStyle) && (StyleList[0] != undefined)) {
 						for (var i = 0; i < StyleList.length; i++) {
 							if (StyleList[i].noa.toUpperCase() == nowStyle) {

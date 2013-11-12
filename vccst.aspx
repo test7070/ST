@@ -667,11 +667,8 @@
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
                         $('#txtStyle_' + j).blur(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-                            ProductAddStyle(b_seq);
+                            var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+                            ProductAddStyle(n);
                             sum();
                         });
                         //將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
@@ -742,13 +739,9 @@
                         });
                         //-------------------------------------------------
                         $('#txtSpec_' + j).change(function() {
-                            t_IdSeq = -1;
-                            /// 要先給  才能使用 q_bodyId()
-                            q_bodyId($(this).attr('id'));
-                            b_seq = t_IdSeq;
-
+                            var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
                             if ($('#cmbKind').val().substr(1, 1) == '4') {//鋼胚
-                                q_tr('txtTheory_' + b_seq, theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), dec($('#txtDime_' + b_seq).val()), dec($('#txtWidth_' + b_seq).val()), dec($('#txtLengthb_' + b_seq).val())));
+                                q_tr('txtTheory_' + n, theory_bi(t_spec, $('#txtSpec_' + n).val(), dec($('#txtDime_' + n).val()), dec($('#txtWidth_' + n).val()), dec($('#txtLengthb_' + n).val())));
                             }
                         });
                         $('#txtUnit_' + j).focusout(function() {
@@ -860,12 +853,9 @@
                 }
                 size_change();
                 $('input[id*="txtProduct_"]').each(function() {
-                    t_IdSeq = -1;
-                    /// 要先給  才能使用 q_bodyId()
-                    q_bodyId($(this).attr('id'));
-                    b_seq = t_IdSeq;
+                    var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
                     OldValue = $(this).val();
-                    nowStyle = $('#txtStyle_' + b_seq).val();
+                    nowStyle = $('#txtStyle_' + n).val();
                     if (!emp(nowStyle) && (StyleList[0] != undefined)) {
                         for (var i = 0; i < StyleList.length; i++) {
                             if (StyleList[i].noa.toUpperCase() == nowStyle) {

@@ -40,13 +40,12 @@
 		        _bbsAssign();
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#txtCnt_'+j).change(function(){
-						t_IdSeq = -1;
-						q_bodyId($(this).attr('id'));
+						var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 						var thisVal = dec($(this).val());
 						if(thisVal > 0){
-							$('#chkSel_'+t_IdSeq).attr('checked',true);
+							$('#chkSel_'+n).attr('checked',true);
 						}else{
-							$('#chkSel_'+t_IdSeq).attr('checked',false);
+							$('#chkSel_'+n).attr('checked',false);
 						}
 					});
 				}

@@ -466,10 +466,8 @@
 						$('#txtTotal_' + j).change(function() {sum();});
 						$('#txtC1_' + j).change(function() {sum();});
 						$('#txtStyle_' + j).blur(function() {
-							t_IdSeq = -1;
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							ProductAddStyle(b_seq);
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							ProductAddStyle(n);
 							sum();
 						});
 						//計算理論重
@@ -585,12 +583,9 @@
 				_refresh(recno);
 				size_change();
 				$('input[id*="txtProduct_"]').each(function() {
-					t_IdSeq = -1;
-					/// 要先給  才能使用 q_bodyId()
-					q_bodyId($(this).attr('id'));
-					b_seq = t_IdSeq;
+					var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 					OldValue = $(this).val();
-					nowStyle = $('#txtStyle_' + b_seq).val();
+					nowStyle = $('#txtStyle_' + n).val();
 					if (!emp(nowStyle) && (StyleList[0] != undefined)) {
 						for (var i = 0; i < StyleList.length; i++) {
 							if (StyleList[i].noa.toUpperCase() == nowStyle) {

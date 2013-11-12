@@ -451,10 +451,8 @@
                 	$('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
                         $('#txtStyle_' + j).blur(function() {
-							t_IdSeq = -1;
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-                            ProductAddStyle(b_seq);
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+                            ProductAddStyle(n);
                         });
                         $('#txtUno_' + j).change(function() {
                             var n = $(this).attr('id').replace('txtUno_', '');
@@ -581,11 +579,9 @@
                 _refresh(recno);
                 size_change();
                 $('input[id*="txtProduct_"]').each(function() {
-                    t_IdSeq = -1;
-                    q_bodyId($(this).attr('id'));
-                    b_seq = t_IdSeq;
+                    var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
                     OldValue = $(this).val();
-                    nowStyle = $('#txtStyle_' + b_seq).val();
+                    nowStyle = $('#txtStyle_' + n).val();
                     if (!emp(nowStyle) && (StyleList[0] != undefined)) {
                         for (var i = 0; i < StyleList.length; i++) {
                             if (StyleList[i].noa.toUpperCase() == nowStyle) {
