@@ -125,6 +125,10 @@
 					<td align="center" style="width:4%;"><a id='lblInweight'></a></td>
 					<td align="center" style="width:4%;"><a id='lblWaste'></a></td>
 					<td align="center" style="width:4%;"><a id='lblGmount'></a></td>
+					<td align="center" style="width:1%;"><a id='lblCut'></a></td>
+					<td align="center" style="width:1%;"><a id='lblSlit'></a></td>
+					<td align="center" style="width:1%;"><a id='lblSale'></a></td>
+					<td align="center" style="width:1%;"><a id='lblOrdc'></a></td>
 					<td align="center"><a id='lblMemo'></a></td>
 				</tr>
 			</table>
@@ -148,6 +152,10 @@
 					<td align="center"><a id='lblInweight'></a></td>
 					<td align="center"><a id='lblWaste'></a></td>
 					<td align="center"><a id='lblGmount'></a></td>
+					<td align="center"><a id='lblCut'></a></td>
+					<td align="center"><a id='lblSlit'></a></td>
+					<td align="center"><a id='lblSale'></a></td>
+					<td align="center"><a id='lblOrdc'></a></td>
 					<td align="center"><a id='lblMemo'></a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -192,6 +200,10 @@
 					<td style="width:4%;"><input type="text" id="txtInweight.*" class="txt c1 num"/></td>
 					<td style="width:4%;"><input type="text" id="txtWaste.*" class="txt c1 num"/></td>
 					<td style="width:4%;"><input type="text" id="txtGmount.*" class="txt c1 num"/></td>
+					<td><input type="checkbox" id="chkCut.*" class="txt c1"/></td>
+					<td><input type="checkbox" id="chkSlit.*" class="txt c1"/></td>
+					<td><input type="checkbox" id="chkSale.*" class="txt c1"/></td>
+					<td><input type="checkbox" id="chkOrdc.*" class="txt c1"/></td>
 					<td><input type="text" id="txtMemo.*" class="txt c1"/></td>
 				</tr>
 			</table>
