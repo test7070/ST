@@ -335,14 +335,6 @@
 						break;
 					case 'rc2s':
 						var as = _q_appendData("rc2s", "", true);
-						for(var i = 0;i<as.length;i++){
-							for(var j=0;j<ordcsArray.length;j++){
-								if(as[i].ordeno == ordcsArray[j].noa && as[i].no2 == ordcsArray[j].no2){
-									ordcsArray[j].mount = dec(ordcsArray[j].mount)-dec(as[i].mount);
-									ordcsArray[j].weight = dec(ordcsArray[j].weight)-dec(as[i].weight);
-								}
-							}
-						}
 						for(var i=0;i<ordcsArray.length;i++){
 							if (ordcsArray[i].mount <=0 || ordcsArray[i].weight <=0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt)==0) {
 									ordcsArray.splice(i, 1);
@@ -354,8 +346,8 @@
 							var newB_ret = new Array;
 							for(var j=0;j<ordcsArray.length;j++){
 								if(dec(ordcsArray[j].cnt) > 1){
-									var n_mount = round(q_div(dec(ordcsArray[j].notv),dec(ordcsArray[j].cnt)),0);
-									var n_weight = round(q_mul(q_div(ordcsArray[j].weight,dec(ordcsArray[j].mount)).ordcsArray[j].cnt),0);
+									var n_mount = round(q_div(dec(ordcsArray[j].mount),dec(ordcsArray[j].cnt)),0);
+									var n_weight = round(q_mul(q_div(ordcsArray[j].weight,dec(ordcsArray[j].mount)),ordcsArray[j].cnt),0);
 									if((ordcsArray[j].product).indexOf('捲') == -1){
 										ordcsArray[j].mount = n_mount;
 										ordcsArray[j].weight = n_weight;
@@ -450,7 +442,8 @@
 			function lblOrdc() {
 				var t_tggno = trim($('#txtTggno').val());
 				var t_where = '';
-				t_where = "enda=0 and kind='"+$('#cmbKind').val()+"' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
+				t_where = "notv > 0 and enda='0' and kind='"+$('#cmbKind').val()+"' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
+				t_where += " and (select enda from ordc"+r_accy+" where ordc"+r_accy+".noa=ordcs"+r_accy+".noa)='0'";
 				q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
 			}
 			function q_stPost() {

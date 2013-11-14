@@ -11,14 +11,27 @@
     	<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 		    var q_name = 'ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
-		    var t_sqlname = 'ordcs_load2'; t_postname = q_name; brwCount2 = 12;
+		    var t_sqlname = 'ordcs_load2'; t_postname = q_name;
 		    var isBott = false;  /// 是否已按過 最後一頁
 		    var txtfield = [], afield, t_data, t_htm;
 		    var i, s1;
 			var bbsNum = [['txtCnt', 2, 0, 1]];
+			var q_readonlys = ['txtProductno', 'txtProduct', 'txtSpec','txtRadius','txtWidth','txtDime','txtLengthb','txtMount','txtWeight','txtPrice','txtNoa','txtNo2','txtMemo'];
+		    brwCount=-1;
+			brwCount2 = 0;
 		    $(document).ready(function () {
 		        main();
 		    });
+			function distinct(arr1){
+				var uniArray = [];
+				for(var i=0;i<arr1.length;i++){
+					var val = arr1[i];
+					if($.inArray(val, uniArray)===-1){
+						uniArray.push(val);
+					}
+				}
+				return uniArray;
+			}
 		    		
 		    function main() {
 		        if (dataErr)  /// 載入資料錯誤
@@ -32,9 +45,6 @@
 				parent.$.fn.colorbox.resize({
 					height : "750px"
 				});
-   				for(var i=0;i<q_bbsCount;i++){
-					$('#txtCnt_'+i).val(1).removeAttr('readonly').css('color','black').css('background','white');
-				}
 		    }
 		    function bbsAssign() {  /// checked 
 		        _bbsAssign();
@@ -51,33 +61,76 @@
 				}
 		    }
 		
-		    function q_gtPost() { 
-		    	
+		    function q_gtPost(t_name) { 
+		    	switch(t_name){
+		    		case 'rc2s':
+		    			var as = _q_appendData("rc2s", "", true);
+		    			for(var k=0;k<as.length;k++){
+		    				for(var i = 0;i<abbs.length;i++){
+		    					if(as[k].ordeno==abbs[i].noa && as[k].no2==abbs[i].no2){
+		    						abbs[i].mount = dec(abbs[i].mount)-dec(as[k].mount);
+		    						abbs[i].weight = dec(abbs[i].weight)-dec(as[k].weight);
+		    					}
+		    				}
+		    			}
+				        for(var i = 0;i<abbs.length;i++){
+							if (abbs[i].mount <= 0 || abbs[i].weight <= 0) {
+								abbs.splice(i, 1);
+								i--;
+							}
+				        }
+				        _refresh();
+						$('#checkAllCheckbox').click(function(){
+							$('input[type=checkbox][id^=chkSel]').each(function(){
+								var t_id = $(this).attr('id').split('_')[1];
+								if(!emp($('#txtProductno_' + t_id).val()))
+									$(this).attr('checked',$('#checkAllCheckbox').is(':checked'));
+							});
+						});
+						q_bbsCount = abbs.length;
+						if (q_bbsCount == 0) q_bbsCount = 1;
+		   				for(var i=0;i<q_bbsCount;i++){
+		   					if($.trim($('#txtNoa_'+i).val()).length > 0)
+								$('#txtCnt_'+i).val(1).removeAttr('readonly').css('color','black').css('background','white');
+						}
+				        size_change();
+		    			break;
+		    	}
 		    }
 			var maxAbbsCount = 0;
 		    function refresh() {
-		        _refresh();
-		        for(var i = 0;i<abbs.length;i++){
-					if (abbs[i].mount <= 0 || abbs[i].weight <= 0) {
-						abbs.splice(i, 1);
-						i--;
-					}
-		        }
-		        _refresh();
-				$('#checkAllCheckbox').click(function(){
-					$('input[type=checkbox][id^=chkSel]').each(function(){
-						var t_id = $(this).attr('id').split('_')[1];
-						if(!emp($('#txtProductno_' + t_id).val()))
-							$(this).attr('checked',$('#checkAllCheckbox').is(':checked'));
-					});
-				});
-		        size_change();
+				var distinctArray = new Array;
+				var inStr = '';
+				for(var i=0;i<abbs.length;i++){distinctArray.push(abbs[i].noa);}
+				distinctArray = distinct(distinctArray);
+				for(var i=0;i<distinctArray.length;i++){
+					inStr += "'"+distinctArray[i]+"',";
+				}
+				var t_where = '';
+				inStr = inStr.substring(0,inStr.length-1);
+				if(trim(inStr)!='')
+					t_where = "where=^^ ordeno in("+inStr+") ^^";
+				q_gt('rc2s', t_where , 0, 0, 0, "", r_accy);
 		    }
 		    
 		    function size_change () {
-				if(dec($('#txtRadius_0').val())<=0){
+		    	var w = window.parent;
+		    	var t_kind = (w.$('#cmbKind')?trim(w.$('#cmbKind').val()):'');
+		    	t_kind = t_kind.substring(0,1);
+				if(t_kind == 'B'){
+					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
+					for (var j = 0; j < q_bbsCount ; j++) {
+						$('#txtSize4_'+j).removeAttr('hidden');
+						$('#x3_'+j).removeAttr('hidden');
+						$('*[id="FixedSize"').css('width','297px');
+						q_tr('txtSize1_'+ j ,q_float('txtRadius_'+j));
+						q_tr('txtSize2_'+ j ,q_float('txtWidth_'+j));
+						q_tr('txtSize3_'+ j ,q_float('txtDime_'+j));
+						q_tr('txtSize4_'+ j ,q_float('txtLengthb_'+j));
+					}
+				}else{
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
-					for (var j = 0; j < brwCount2 ; j++) {
+					for (var j = 0; j < q_bbsCount ; j++) {
 						$('#txtSize4_'+j).attr('hidden', 'true');
 						$('#x3_'+j).attr('hidden', 'true');
 						$('*[id="FixedSize"').css('width','222px');
@@ -86,17 +139,6 @@
 						q_tr('txtSize3_'+ j ,q_float('txtLengthb_'+j));
 						$('#txtSize4_'+j).val(0);
 						$('#txtRadius_'+j).val(0);
-					}
-				}else{
-					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
-					for (var j = 0; j < brwCount2 ; j++) {
-						$('#txtSize4_'+j).removeAttr('hidden');
-						$('#x3_'+j).removeAttr('hidden');
-						$('*[id="FixedSize"').css('width','297px');
-						q_tr('txtSize1_'+ j ,q_float('txtRadius_'+j));
-						q_tr('txtSize2_'+ j ,q_float('txtWidth_'+j));
-						q_tr('txtSize3_'+ j ,q_float('txtDime_'+j));
-						q_tr('txtSize4_'+ j ,q_float('txtLengthb_'+j));
 					}
 				}
 			}
