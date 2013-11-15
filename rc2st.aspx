@@ -39,6 +39,7 @@
 			, ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			, ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 			, ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx']
+			, ['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx']
 			, ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
 			, ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']);
 			//, ['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx', '95%', '60%']);
@@ -1136,6 +1137,13 @@
 						<td colspan="2">
 						<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
 						<select id="combPaytype" style="float:left; width:26px;"> </select></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td colspan="4" >
+							<input id="txtPost2"  type="text" style="float:left; width:25%;"/>
+							<input id="txtAddr2"  type="text" style="float:left; width:75%;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblCardeal' class="lbl btn"> </a></td>

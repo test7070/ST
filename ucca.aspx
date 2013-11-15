@@ -47,26 +47,29 @@
 
 
         function mainPost() {
-        	bbmMask = [['txtMon', r_picm]];
+        	bbsMask = [['txtMon', r_picm]];
             q_mask(bbmMask);
             if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
 				q_cmbParse("cmbTypea", q_getPara('ucc.typea_it'));	//IT
 			else
 				q_cmbParse("cmbTypea", q_getPara('ucc.typea'));
+				
+			q_gt('acomp', '', 0, 0, 0, "",r_accy);
+			
             $('#txtNoa').change(function(e){
-                	$(this).val($.trim($(this).val()).toUpperCase());    	
-					if($(this).val().length>0){
-						if((/^(\w+|\w+\u002D\w+)$/g).test($(this).val())){
-							t_where="where=^^ noa='"+$(this).val()+"'^^";
-                    		q_gt('ucca', t_where, 0, 0, 0, "checkUccano_change", r_accy);
-						}else{
-							Lock();
-							alert('編號只允許 英文(A-Z)、數字(0-9)及dash(-)。'+String.fromCharCode(13)+'EX: A01、A01-001');
-							Unlock();
-						}
+                $(this).val($.trim($(this).val()).toUpperCase());    	
+				if($(this).val().length>0){
+					if((/^(\w+|\w+\u002D\w+)$/g).test($(this).val())){
+						t_where="where=^^ noa='"+$(this).val()+"'^^";
+                    	q_gt('ucca', t_where, 0, 0, 0, "checkUccano_change", r_accy);
+					}else{
+						Lock();
+						alert('編號只允許 英文(A-Z)、數字(0-9)及dash(-)。'+String.fromCharCode(13)+'EX: A01、A01-001');
+						Unlock();
 					}
-                });
-                     } 
+				}
+			});
+		} 
         function q_boxClose(s2) { 
             var ret;
             switch (b_pop) {   
@@ -79,6 +82,17 @@
 
         function q_gtPost(t_name) {  
             switch (t_name) {
+            	case 'acomp':
+		                var as = _q_appendData("acomp", "", true);
+		                if (as[0] != undefined) {
+		                    var t_item = "@";
+		                    for (i = 0; i < as.length; i++) {
+		                        t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
+		                    }
+		                    q_cmbParse("cmbCno", t_item, 's');
+		                    refresh(q_recno);  /// 第一次需要重新載入
+		                }
+		                break;
             	case 'checkUccano_change':
                 		var as = _q_appendData("ucca", "", true);
                         if (as[0] != undefined){
@@ -109,10 +123,27 @@
         }
         
         function bbsAssign() {
-		        for (var i = 0; i < q_bbsCount; i++) {
-		        }
-		        _bbsAssign();
-		    }
+			for (var i = 0; i < q_bbsCount; i++) {
+				if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+					$('#btnMinus_' + i).click(function (e) {
+		                   t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							
+							$('#cmbCno_'+b_seq).val('');
+					});
+					$('#cmbCno_' + i).change(function (e) {
+		                   t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							
+							$('#txtBeginmount_'+b_seq).val(0)
+							$('#txtBeginmoney_'+b_seq).val(0)
+					});
+				}
+			}
+			_bbsAssign();
+		}
 
         function btnIns() {
             _btnIns();
@@ -138,26 +169,49 @@
         function btnPrint() {
 			q_box('z_ucca.aspx?;;;'+r_accy, '', "95%", "95%", q_getMsg("popPrint"));
         }
+        
         function q_stPost() {
-                if (!(q_cur == 1 || q_cur == 2))
-                    return false;
+			if (!(q_cur == 1 || q_cur == 2))
+				return false;
                 Unlock();
-            }
+		}
+            
         function btnOk() {
  			Lock(); 
-            	$('#txtNoa').val($.trim($('#txtNoa').val()));   	
-            	if((/^(\w+|\w+\u002D\w+)$/g).test($('#txtNoa').val())){
-				}else{
-					alert('編號只允許 英文(A-Z)、數字(0-9)及dash(-)。'+String.fromCharCode(13)+'EX: A01、A01-001');
-					Unlock();
-					return;
+            $('#txtNoa').val($.trim($('#txtNoa').val()));   	
+            if((/^(\w+|\w+\u002D\w+)$/g).test($('#txtNoa').val())){
+			}else{
+				alert('編號只允許 英文(A-Z)、數字(0-9)及dash(-)。'+String.fromCharCode(13)+'EX: A01、A01-001');
+				Unlock();
+				return;
+			}
+			
+			var repeats=false;
+			for (var i = 0; i < q_bbsCount; i++) {
+				if(!emp($('#cmbCno_'+i).val())){
+					for (var j = i+1; j < q_bbsCount; j++) {
+						if($('#cmbCno_'+i).val()==$('#cmbCno_'+j).val()){
+							repeats=true;
+							break;
+						}
+					}
 				}
-				if(q_cur==1){
-                	t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
-                    q_gt('ucca', t_where, 0, 0, 0, "checkUccano_btnOk", r_accy);
-                }else{
-                	wrServer($('#txtNoa').val());
-                }
+				if(repeats){
+					alert('所屬公司重覆!!');
+					break;
+				}
+			}
+			if(repeats){
+				Unlock();
+				return;
+			}
+			
+			if(q_cur==1){
+				t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
+				q_gt('ucca', t_where, 0, 0, 0, "checkUccano_btnOk", r_accy);
+			}else{
+				wrServer($('#txtNoa').val());
+			}
         }
 
         function wrServer(key_value) {
@@ -172,7 +226,7 @@
         }
         
         function bbsSave(as) {
-			if (!as['acc1']) {
+			if (!as['cno']) {
 				as[bbsKey[1]] = '';
 				return;
 			}
@@ -443,34 +497,20 @@
 					<td  align="center" style="width:30px;">
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:80px;"><a id='lblPart_s'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblAcc_s'> </a></td>
-					<td align="center" style="width:300px;"><a id='lblMemo_s'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblAcomp'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblMon'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblBeginmount'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblBeginmoney'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
-					<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-					<input id="txtNoq.*" type="text" style="display: none;" />
+						<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
-					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td>
-						<select id="cmbPartno.*" class="txt c1"> </select>
-						<input id="txtPart.*"  type="text" style="display: none;"/>
-					</td>
-					<td>
-					<input class="btn"  id="btnAcc.*" type="button" value='.' style=" font-weight: bold;width:1%;" />
-					<input type="text" id="txtAcc1.*"  style="width:35%;"/>
-					<input type="text" id="txtAcc2.*"  style="width:45%;"/>
-					</td>
-					<td >
-					<input type="text" id="txtMemo.*" style="width:95%;" />
-					</td>
-					<td>
-					<input type="text" id="txtMoney.*" style="width:95%;text-align: right;" />
-					</td>
-
+					<td><select id="cmbCno.*" class="txt c1" style="font-size: medium;"> </select></td>
+					<td><input type="text" id="txtMon.*" style="width:97%;" /></td>
+					<td ><input type="text" id="txtBeginmount.*" style="width:97%;text-align: right;" /></td>
+					<td><input type="text" id="txtBeginmoney.*" style="width:97%;text-align: right;" /></td>
 				</tr>
 			</table>
 		</div>
