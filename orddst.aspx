@@ -74,7 +74,7 @@
                 q_cmbParse("cmbStype", q_getPara('orde.stype')); 
                 q_cmbParse("cmbCoin", q_getPara('sys.coin'));     
                 q_cmbParse("combPaytype", q_getPara('vcc.paytype'));  
-                q_cmbParse("cmbTrantype", q_getPara('vcc.tran'));
+                q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));  
                 q_cmbParse("cmbKind", q_getPara('sys.stktype')); 
                 $('#txtFloata').change(function () {sum();});

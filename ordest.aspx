@@ -223,7 +223,7 @@
 				/// q_cmbParse 會加入 fbbm
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				// comb 未連結資料庫
-				q_cmbParse("cmbTrantype", q_getPara('vcc.tran'));
+				q_cmbParse("cmbTrantype",q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				$('#btnOrdei').hide();
 				//外銷訂單按鈕隱藏

@@ -200,7 +200,7 @@
                 q_cmbParse("cmbTypea", q_getPara('ina.typea'));
                 q_cmbParse("cmbItype", q_getPara('uccc.itype'));
                 q_cmbParse("cmbKind", q_getPara('sys.stktype'));
-                q_cmbParse("cmbTrantype", q_getPara('rc2.tran'));
+                q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
                 /* 若非本會計年度則無法存檔 */
                 $('#txtDatea').focusout(function() {
                     if ($(this).val().substr(0, 3) != r_accy) {

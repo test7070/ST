@@ -97,7 +97,7 @@
             function mainPost() {
                 q_getFormat();
                 q_cmbParse("cmbKind", q_getPara('sys.stktype'));
-                q_cmbParse("cmbTrantype", q_getPara('rc2.tran'));
+                q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
                 bbmMask = [['txtDatea', r_picd], ['txtCldate', r_picd]];
                 q_mask(bbmMask);
                 

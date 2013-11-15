@@ -67,7 +67,7 @@
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('cng.typea'));
-				q_cmbParse("cmbTrantype", q_getPara('rc2.tran'));
+				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
 				$('#cmbKind').change(function() {
 					size_change();
