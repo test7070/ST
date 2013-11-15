@@ -348,13 +348,13 @@
 							for(var j=0;j<ordcsArray.length;j++){
 								if(dec(ordcsArray[j].cnt) > 1){
 									var n_mount = round(q_div(dec(ordcsArray[j].mount),dec(ordcsArray[j].cnt)),0);
-									var n_weight = round(q_mul(q_div(ordcsArray[j].weight,dec(ordcsArray[j].mount)),ordcsArray[j].cnt),0);
+									var n_weight = round(q_div(ordcsArray[j].weight,dec(ordcsArray[j].cnt)),0);
 									if((ordcsArray[j].product).indexOf('捲') == -1){
 										ordcsArray[j].mount = n_mount;
 										ordcsArray[j].weight = n_weight;
 									}else{
-										ordcsArray[j].mount = 1;
 										ordcsArray[j].weight = round(q_div(ordcsArray[j].weight,dec(ordcsArray[j].mount)),0);
+										ordcsArray[j].mount = 1;
 									}
 										ordcsArray[j].uno = '';
 									for(var i=0;i<dec(ordcsArray[j].cnt);i++){
