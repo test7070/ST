@@ -590,10 +590,9 @@
 					q_tr('txtTheory_' + b_seq, round(t_Mount * theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), t_Dime, t_Width, t_Lengthb), 0));
 				} else {
 					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
-					q_tr('txtWeight_' + b_seq, theory_st(theory_setting));
 				}
 				var t_Product = $('#txtProduct_' + b_seq).val();
-				if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0){
+				if(dec($('#txtWeight_' + b_seq).val()) == 0){
 					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
 			}
