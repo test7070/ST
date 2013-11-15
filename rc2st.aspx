@@ -39,6 +39,7 @@
 			, ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			, ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 			, ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx']
+			, ['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx']
 			, ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
 			, ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']);
 			//, ['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx', '95%', '60%']);
@@ -347,13 +348,13 @@
 							for(var j=0;j<ordcsArray.length;j++){
 								if(dec(ordcsArray[j].cnt) > 1){
 									var n_mount = round(q_div(dec(ordcsArray[j].mount),dec(ordcsArray[j].cnt)),0);
-									var n_weight = round(q_mul(q_div(ordcsArray[j].weight,dec(ordcsArray[j].mount)),ordcsArray[j].cnt),0);
+									var n_weight = round(q_div(ordcsArray[j].weight,dec(ordcsArray[j].cnt)),0);
 									if((ordcsArray[j].product).indexOf('捲') == -1){
 										ordcsArray[j].mount = n_mount;
 										ordcsArray[j].weight = n_weight;
 									}else{
-										ordcsArray[j].mount = 1;
 										ordcsArray[j].weight = round(q_div(ordcsArray[j].weight,dec(ordcsArray[j].mount)),0);
+										ordcsArray[j].mount = 1;
 									}
 										ordcsArray[j].uno = '';
 									for(var i=0;i<dec(ordcsArray[j].cnt);i++){
@@ -442,7 +443,7 @@
 			function lblOrdc() {
 				var t_tggno = trim($('#txtTggno').val());
 				var t_where = '';
-				t_where = "notv > 0 and enda='0' and kind='"+$('#cmbKind').val()+"' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
+				t_where = " enda='0' and kind='"+$('#cmbKind').val()+"' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
 				t_where += " and (select enda from ordc"+r_accy+" where ordc"+r_accy+".noa=ordcs"+r_accy+".noa)='0'";
 				q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
 			}
@@ -1136,6 +1137,13 @@
 						<td colspan="2">
 						<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
 						<select id="combPaytype" style="float:left; width:26px;"> </select></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td colspan="4" >
+							<input id="txtPost2"  type="text" style="float:left; width:25%;"/>
+							<input id="txtAddr2"  type="text" style="float:left; width:75%;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblCardeal' class="lbl btn"> </a></td>
