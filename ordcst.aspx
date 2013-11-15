@@ -39,6 +39,7 @@
 			, ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			, ['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx', '95%', '60%']
 			, ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx']
+			, ['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx']
 			, ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
 			, ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,fax,addr_fact,zip_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,txtFax,txtAddr,txtPost', 'tgg_b.aspx']);
 			brwCount2 = 10;
@@ -995,9 +996,21 @@
 						</td>
 						<td colspan="2">
 							<input id="txtPaytype" type="text" style="float:left; width:115px;"/>
-							<select id="combPaytype" style="float:left; width:26px;"></select>
-							<select id="cmbTrantype" class="txt" name="D1" ></select>
-							</td>
+							<select id="combPaytype" style="float:left; width:25px;"></select>
+						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td colspan="4" >
+							<input id="txtPost2"  type="text" style="float:left; width:25%;"/>
+							<input id="txtAddr2"  type="text" style="float:left; width:75%;"/>
+						</td>
+						<td>
+							<span> </span><a id='lblTrantype' class="lbl"> </a>
+						</td>
+						<td>
+							<select id="cmbTrantype" class="txt" style="float:left; width:100%;"></select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
