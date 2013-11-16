@@ -19,55 +19,54 @@
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
-				if(uccgaItem.length == 0){
-					q_gt('uccga', '', 0, 0, 0, "");
-				}
+				
+				q_gf('', 'z_anavccst');
+						
 			});
 			function q_gfPost() {
+				q_gt('uccga', '', 0, 0, 0, "");	
+			}
+			function q_gtPost(t_name) {
+				switch (t_name) {
+					case 'uccga':
+						var as = _q_appendData("uccga", "", true);
+						if (as[0] != undefined) {
+						 	uccgaItem = ' @未設定';
+							for (var i = 0; i < as.length; i++) {
+								uccgaItem += (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
+							}
+						}
+						loadFinish();
+						break;
+				} 
+			}
+			function loadFinish(){
 				$('#q_report').q_report({
 					fileName : 'z_anavccst',
 					options : [{
-						type : '0', //[1]
-						name : 'accy',
-						value : q_getId()[4]
-					}, {
-						type : '1', //[2][3]
+						type : '1', //[1][2]
 						name : 'xdate'
 					}, {
-						type : '1', //[4][5]
-						name : 'xmon'
-					}, {
-						type : '2', //[6][7]
+						type : '2', //[3][4]
 						name : 'xcust',
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
 					}, {
-						type : '2', //[8][9]
-						name : 'xsales',
+						type : '2', //[5][6]
+						name : 'xsss',
 						dbf : 'sss',
 						index : 'noa,namea',
 						src : 'sss_b.aspx'
 					}, {
-						type : '2', //[10][11]
-						name : 'xproduct',
-						dbf : 'ucaucc',
-						index : 'noa,product',
-						src : 'ucaucc_b.aspx'
-					}, {
-						type : '1', //[12][13]
-						name : 'xbmon'
-					}, {
-						type : '1', //[14][15]
-						name : 'xemon'
-					}, {
-						type : '6', //[16]
-						name : 'xyear'
-					}, {
-                        type : '5', //[17]
-                        name : 'xgroupano',
+                        type : '8',//7
+                        name : 'xitem',
                         value : uccgaItem.split(',')
-					}]
+                    }, {
+                        type : '8',//8
+                        name : 'xoption01',
+                        value : q_getMsg('xoption01').split('&')
+                    }]
 				});
 				q_popAssign();
 				q_getFormat();
@@ -76,31 +75,9 @@
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();
-				$('#txtXmon1').mask('999/99');
-				$('#txtXmon2').mask('999/99');
-				$('#txtXyear').mask('999');
-				$('#txtXyear').val(r_accy.substring(0,3));
-				$('#txtXbmon1').val(r_accy+'/01').mask('999/99');
-				$('#txtXbmon2').val(r_accy+'/12').mask('999/99');
-				$('#txtXemon1').val(r_accy+'/01').mask('999/99');
-				$('#txtXemon2').val(r_accy+'/12').mask('999/99');
-				$('#Xgroupano select').css('width','150px');
+				$('#chkXitem').children('input').attr('checked', 'checked');
 			}
-
 			function q_boxClose(s2) {
-			}
-
-			function q_gtPost(t_name) {
-				switch (t_name) {
-					case 'uccga':
-                        var as = _q_appendData("uccga", "", true);
-                        uccgaItem = " @全部";
-                        for ( i = 0; i < as.length; i++) {
-                            uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa +' . '+as[i].namea;
-                        }
-						q_gf('', 'z_anavccst');
-                        break;
-				}
 			}
 		</script>
 	</head>
