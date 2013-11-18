@@ -33,7 +33,7 @@
                         t_style = '';
                         var as = _q_appendData("style", "", true);
                         for ( i = 0; i < as.length; i++) {
-                            t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].product;
+                            t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' +as[i].noa+'.'+ as[i].product;
                         }
                         q_gt('ucc', '', 0, 0, 0, "");
                         break;
@@ -41,7 +41,7 @@
                         t_ucc = '';
                         var as = _q_appendData("ucc", "", true);
                         for ( i = 0; i < as.length; i++) {
-                            t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].product;
+                            t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+'.'+as[i].product;
                         }
                         loadFinish();
                         break;
