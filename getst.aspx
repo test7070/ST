@@ -20,7 +20,7 @@
 			var q_readonly = ['txtNoa', 'txtWorker'];
 			var q_readonlys = ['txtOrdeno', 'txtNo2'];
 			var bbmNum = [['txtTotal', 10, 3, 1]];
-			var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtRadius', 10, 3, 1], ['txtWidth', 10, 2, 1], ['txtDime', 10, 3, 1], ['txtLengthb', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtGweight', 10, 2, 1], ['txtWeight', 10, 1, 1]];
+			var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtRadius', 10, 3, 1], ['txtWidth', 10, 2, 1], ['txtDime', 10, 3, 1], ['txtLengthb', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtGweight', 10, 3, 1], ['txtWeight', 10, 3, 1]];
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
 			q_desc = 1;
@@ -176,7 +176,8 @@
 					lengthb : t_Lengthb,
 					mount : t_Mount,
 					style : t_Style,
-					productno : t_Productno
+					productno : t_Productno,
+					round:3
 				};
 				return theory_st(theory_setting);
 			}
