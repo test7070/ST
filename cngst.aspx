@@ -23,7 +23,7 @@
 			var q_name = "cng";
 			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2','txtWeight','txtMount'];
 			var q_readonlys = [];
-			var bbmNum = [['txtTax', 10, 0, 1], ['txtMoney', 15, 0, 1], ['txtPrice', 10, 2, 1], ['txtWeight', 15, 2, 1], ['txtTotal', 15, 0, 1]];
+			var bbmNum = [['txtTax', 10, 0, 1], ['txtMoney', 15, 0, 1], ['txtPrice', 10, 2, 1], ['txtWeight', 15, 3, 1], ['txtTotal', 15, 0, 1]];
 			var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtWeight', 15, 2, 1]];
 			var bbmMask = [];
 			var bbsMask = [];

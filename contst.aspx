@@ -19,11 +19,11 @@
 			var q_name = "cont";
 			var q_readonly = ['txtNoa', 'txtWorker', 'txtApv', 'txtWorker2'];
 			var q_readonlys = ['txtNoq'];
-			var bbmNum = [['txtGweight', 10, 2, 1],['txtEweight', 15, 0, 1],['txtOrdgweight', 15, 3, 1],['txtOrdeweight', 15, 3, 1]];
+			var bbmNum = [['txtGweight', 10, 3, 1],['txtEweight', 15, 3, 1],['txtOrdgweight', 15, 3, 1],['txtOrdeweight', 15, 3, 1]];
 			var bbsNum = [['textSize1', 10, 3, 1],['textSize2', 10, 2, 1],['textSize3', 10, 3, 1],
 							  ['textSize4', 10, 2, 1],['txtMount', 10, 0, 1],['txtWeight', 15, 3, 1],
 							  ['txtPrice', 10, 2, 1],['txtTotal', 15, 0, 1],['txtTheory', 15, 3, 1],
-							  ['txtGweight', 10, 2, 1],['txtEweight', 15, 0, 1],['txtOrdgweight', 15, 3, 1],
+							  ['txtGweight', 10, 3, 1],['txtEweight', 15, 3, 1],['txtOrdgweight', 15, 3, 1],
 							  ['txtOrdeweight', 15, 3, 1]
 						 ];
 			var bbmMask = [];
@@ -170,7 +170,8 @@
 					lengthb:t_Lengthb,
 					mount:t_Mount,
 					style:t_Style,
-					productno:t_Productno
+					productno:t_Productno,
+					round:3
 				};
 				return theory_st(theory_setting);
 			}

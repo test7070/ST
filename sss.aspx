@@ -43,7 +43,7 @@
 				else
 					q_content = "where=^^noa='" + r_userno + "'^^";
 
-				q_gt(q_name, q_content, q_sqlCount, 1)
+				q_gt(q_name, q_content, q_sqlCount, 1);
                 
 
                 //q_gt('authority', "where=^^a.noa='sss' and a.sssno='" + r_userno + "'^^", q_sqlCount, 1)

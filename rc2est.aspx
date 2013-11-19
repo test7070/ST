@@ -153,7 +153,8 @@
 				lengthb:t_Lengthb,
 				mount:t_Mount,
 				style:t_Style,
-				productno:t_Productno
+				productno:t_Productno,
+				round:3
 			};
 			return theory_st(theory_setting);
 		}

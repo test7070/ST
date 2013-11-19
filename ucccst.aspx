@@ -26,7 +26,7 @@
         $(document).ready(function () {
             bbmKey = ['uno'];
             q_brwCount();
-            q_gt(q_name, q_content, q_sqlCount, 1)
+            q_gt(q_name, q_content, q_sqlCount, 1);
             $('#txtUno').focus();
         });
 
