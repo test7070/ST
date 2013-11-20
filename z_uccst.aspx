@@ -16,13 +16,29 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
             var bbmNum = [['txtXradius1', 3, 0]];
+            var t_style = '';
             $(document).ready(function() {
                 _q_boxClose();
                 q_getId();
                 q_gf('', 'z_uccst');
             });
             function q_gfPost() {
-                $('#q_report').q_report({
+                q_gt('style', '', 0, 0, 0, "");
+            }
+            function q_gtPost(t_name) {
+            	switch (t_name) {
+                    case 'style':
+                        t_style = '';
+                        var as = _q_appendData("style", "", true);
+                        for ( i = 0; i < as.length; i++) {
+                            t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' +as[i].noa+'.'+ as[i].product;
+                        }
+                        loadFinish();
+                        break;
+            	}
+            }
+            function loadFinish(){
+            	$('#q_report').q_report({
                     fileName : 'z_uccst',
                     options : [{
                         type : '0', //[1]
@@ -46,8 +62,9 @@
                         index : 'noa,product',
                         src : 'ucaucc_b.aspx'
                     }, {
-                        type : '6', //[8] 5
-                        name : 'xstyle'
+                        type : '5', //[5] 3
+                        name : 'xstyle', 
+                        value : [q_getPara('report.all')].concat(t_style.split(','))
                     }, {
                         type : '6', //[9] 6
                         name : 'xwaste'
@@ -151,12 +168,12 @@
                 });
                 $('#Xitype .cmb').change();
             }
+            
 
             function q_boxClose(s2) {
             }
 
-            function q_gtPost(s2) {
-            }
+            
 
             function setDefaultValue() {
                 $('#txtXradius1').val(0).addClass('num').focusout(function() {
