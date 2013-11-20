@@ -303,6 +303,21 @@
 				$('#txtTax').change(function() {
 					sum();
 				});
+				$("#txtPaytype").focus(function(e) {
+					var n = $(this).val().match(/[0-9]+/g);
+					var input = document.getElementById("txtPaytype");
+					if ( typeof (input.selectionStart) != 'undefined' && n != null) {
+						input.selectionStart = $(this).val().indexOf(n);
+						input.selectionEnd = $(this).val().indexOf(n) + (n + "").length;
+					}
+				}).click(function(e) {
+					var n = $(this).val().match(/[0-9]+/g);
+					var input = document.getElementById("txtPaytype");
+					if ( typeof (input.selectionStart) != 'undefined' && n != null) {
+						input.selectionStart = $(this).val().indexOf(n);
+						input.selectionEnd = $(this).val().indexOf(n) + (n + "").length;
+					}
+				});
 			}
 
 			function q_funcPost(t_func, result) {
@@ -587,6 +602,8 @@
 						$('#txtStyle_' + b_seq).focus();
 						break;
 					case 'txtCustno':
+						$('#txtPost2').val($('#txtPost').val());
+						$('#txtAddr2').val($('#txtAddr').val());
 						$('#txtPaytype').focus();
 						break;
 					case 'txtSalesno':
