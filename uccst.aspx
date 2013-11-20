@@ -352,7 +352,7 @@
 							<input id="txtNoa"  type="text" class="txt c1" />
 							<input id="txtUno"  type="text" style="display:none;"/>
 						</td>
-						<td>.
+						<td>
 							<input id="Copy" type="checkbox" />
 							<span> </span><a id="lblCopy"></a>
 						</td>
