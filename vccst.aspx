@@ -1178,7 +1178,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 1700px;
+                width: 1740px;
             }
             .tbbs a {
                 font-size: medium;
@@ -1402,12 +1402,12 @@
 					<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>
 					<td align="center" style="width:30px;"><a id='lblUnit'></a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
-					<td align="center" style="width:80px;"><a id='lblWeight_st'></a></td>
+					<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'></a></td>
 					<td align="center" style="width:80px;">合計
 					<br>
 					理論重</td>
-					<td align="center" style="width:80px;"><a id='lblGweight_st'></a></td>
+					<td align="center" style="width:100px;"><a id='lblGweight_st'></a></td>
 					<td align="center" style="width:60px;">寄Y
 					<BR>
 					代Z</td>
