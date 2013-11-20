@@ -45,7 +45,7 @@
 			, ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			, ['txtUno_', 'btnUno_', 'view_uccc', 'uno,class,spec,unit', 'txtUno_,txtClass_,txtSpec_,txtUnit_', 'uccc_seek_b.aspx', '95%', '95%']
 			, ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
-			, ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx']
+			, ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx']
 			, ['txtUno__', 'btnUno__', 'view_uccc', 'uno', 'txtUno__', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
 			, ['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']);
 			brwCount2 = 10;
@@ -886,6 +886,8 @@
 						$('#txtStyle_' + b_seq).focus();
 						break;
 					case 'txtCustno':
+						$('#txtPost2').val($('#txtPost').val());
+						$('#txtAddr2').val($('#txtAddr').val());
 						$('#txtContract').focus();
 						break;
 					case 'txtAddr':
@@ -1273,7 +1275,7 @@
 				font-size: medium;
 			}
 			#dbbt {
-				width: 1400px;
+				width: 1480px;
 			}
 			#tbbt {
 				margin: 0;
@@ -1483,7 +1485,7 @@
 					<td align="center" style="width:140px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblSizea_st'> </a></td>
+					<td align="center" style="width:240px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
@@ -1491,7 +1493,7 @@
 					<td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblOrdet_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblGemounts'> </a><br><a id='lblNotv'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblDateas'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblMemos'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblssale_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
