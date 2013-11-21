@@ -151,8 +151,7 @@
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
-                var
-                ret;
+                var ret;
                 switch (b_pop) {
                     case 'view_vcce_import':
                         if (q_cur > 0 && q_cur < 4) {
@@ -178,6 +177,8 @@
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             }
+							var t_where = "where=^^ noa='"+b_ret[0].noa+"'";
+							q_gt('orde', t_where, 0, 0, 0, "",r_accy);                            
                             ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtWeight,txtMount', b_ret.length, b_ret, 'uno,noa,no3,productno,product,radius,dime,width,lengthb,weight,mount', 'txtProductno');
                             /// 最後 aEmpField 不可以有【數字欄位】
                         }
@@ -208,6 +209,14 @@
                             focus_addr = '';
                         }
                         break;
+					case 'orde':
+						var as = _q_appendData("orde", "", true);
+						if (as[0] != undefined) {
+							(trim($('#txtTel').val())==''?$('#txtTel').val(as[0].tel):'');
+							(trim($('#txtAddr_post').val())==''?$('#txtAddr_post').val(as[0].addr):'');
+							$('#cmbTrantype').val(as[0].trantype);
+						}
+						break;
                     case q_name:
                         t_uccArray = _q_appendData("ucc", "", true);
                         if (q_cur == 4)

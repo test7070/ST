@@ -329,6 +329,8 @@
 								b_ret[k].mount = t_mount;
 								b_ret[k].weight = t_weight;
 							}
+							var t_where = "where=^^ noa='"+b_ret[0].noa+"'";
+							q_gt('quat', t_where, 0, 0, 0, "",r_accy);
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtQuatno,txtNo3,txtPrice,txtMount,txtWeight,txtClass,txtTheory,txtStyle', b_ret.length, b_ret, 'productno,product,spec,size,radius,dime,width,lengthb,unit,noa,no3,price,notv,weight,class,theory,style', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							bbsAssign();
@@ -413,6 +415,22 @@
 							focus_addr = '';
 						}
 						break;
+					case 'quat':
+						var as = _q_appendData("quat", "", true);
+						if (as[0] != undefined) {
+							(trim($('#txtTel').val())==''?$('#txtTel').val(as[0].tel):'');
+							(trim($('#txtFax').val())==''?$('#txtFax').val(as[0].fax):'');
+							(trim($('#txtPost').val())==''?$('#txtPost').val(as[0].post):'');
+							(trim($('#txtAddr').val())==''?$('#txtAddr').val(as[0].addr):'');
+							(trim($('#txtPost2').val())==''?$('#txtPost2').val(as[0].post2):'');
+							(trim($('#txtAddr2').val())==''?$('#txtAddr2').val(as[0].addr2):'');
+							(trim($('#txtSalesno').val())==''?$('#txtSalesno').val(as[0].salesno):'');
+							(trim($('#txtSales').val())==''?$('#txtSales').val(as[0].sales):'');
+							(trim($('#txtPaytype').val())==''?$('#txtPaytype').val(as[0].paytype):'');
+							$('#cmbTrantype').val(as[0].trantype);
+							(trim($('#txtFloata').val())==''?$('#txtFloata').val(as[0].floata):'');
+							$('#cmbCoin').val(as[0].coin);
+						}						
 					case q_name:
 						t_uccArray = _q_appendData("ucc", "", true);
 						if (q_cur == 4)// 查詢

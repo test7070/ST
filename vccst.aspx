@@ -342,6 +342,8 @@
 								b_ret[k].mount = t_mount;
 								b_ret[k].weight = t_weight;
 							}                            
+							var t_where = "where=^^ noa='"+b_ret[0].noa+"'";
+							q_gt('orde', t_where, 0, 0, 0, "",r_accy);
                             AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
                             /// 最後 aEmpField 不可以有【數字欄位】
                             for (var i = 0; i < AddRet.length; i++) {
@@ -375,6 +377,21 @@
             var AddRet = new Array;
             function q_gtPost(t_name) {/// 資料下載後 ...
                 switch (t_name) {
+					case 'orde':
+						var as = _q_appendData("orde", "", true);
+						if (as[0] != undefined) {
+							(trim($('#txtTel').val())==''?$('#txtTel').val(as[0].tel):'');
+							(trim($('#txtFax').val())==''?$('#txtFax').val(as[0].fax):'');
+							(trim($('#txtPost').val())==''?$('#txtPost').val(as[0].post):'');
+							(trim($('#txtAddr').val())==''?$('#txtAddr').val(as[0].addr):'');
+							(trim($('#txtSalesno').val())==''?$('#txtSalesno').val(as[0].salesno):'');
+							(trim($('#txtSales').val())==''?$('#txtSales').val(as[0].sales):'');
+							(trim($('#txtPaytype').val())==''?$('#txtPaytype').val(as[0].paytype):'');
+							$('#cmbTrantype').val(as[0].trantype);
+							(trim($('#txtFloata').val())==''?$('#txtFloata').val(as[0].floata):'');
+							$('#cmbCoin').val(as[0].coin);
+						}						
+						break;
                 	case 'getAcomp':
 						var as = _q_appendData("acomp", "", true);
 						if(as[0]!=undefined){
