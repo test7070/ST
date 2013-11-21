@@ -30,10 +30,12 @@
                 s_fax = (emp(s_fax) ? '　' : s_fax);
                 var tInfo = (q_getPara('sys.tel2')).toUpperCase();
                 var t_tel = (tInfo.indexOf('FAX') > 0?tInfo.substring(0, tInfo.indexOf('FAX')):tInfo);
-                var t_fax = (tInfo.indexOf('FAX') > 0?tInfo.substring(tInfo.indexOf('FAX') + 4):'');
+                if(t_tel.length ==0) t_tel = '#non';
+                var t_fax = (tInfo.indexOf('FAX') > 0?tInfo.substring(tInfo.indexOf('FAX') + 4):'#non');
                 s_tel = (emp(s_tel) ? '　' : s_tel);
                 s_fax = (emp(s_fax) ? '　' : s_fax);
-                
+                var s_addr2 = q_getPara('sys.addr2');
+                if(s_addr2.length == 0) s_addr2 = '#non';
                 $('#q_report').q_report({
                     fileName : 'z_vccstp',
                     options : [{
@@ -55,7 +57,7 @@
                     }, {
                         type : '0', //[5]
                         name : 't_addr',
-                        value : q_getPara('sys.addr2')
+                        value : s_addr2
                     }, {
                         type : '0', //[6]
                         name : 't_tel',
