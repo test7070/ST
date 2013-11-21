@@ -62,54 +62,58 @@
                         index : 'noa,product',
                         src : 'ucaucc_b.aspx'
                     }, {
-                        type : '5', //[5] 3
+                        type : '5', //[5] 1
                         name : 'xstyle', 
                         value : [q_getPara('report.all')].concat(t_style.split(','))
                     }, {
-                        type : '6', //[9] 6
+                        type : '6', //[9] 2
                         name : 'xwaste'
                     }, {
-                        type : '1', //[10][11] 7
+                        type : '1', //[10][11] 3
                         name : 'xradius'
                     }, {
-                        type : '1', //[12][13] 8
+                        type : '1', //[12][13] 4
                         name : 'xwidth'
                     }, {
-                        type : '1', //[14][15] 9
+                        type : '1', //[14][15] 1
                         name : 'xdime'
                     }, {
-                        type : '1', //[16][17] 10
+                        type : '1', //[16][17] 2
                         name : 'xlengthb'
                     }, {
-                        type : '2', //[18] [19] 11
+                        type : '2', //[18] [19] 3
                         name : 'xstoreno',
                         dbf : 'store',
                         index : 'noa,store',
                         src : 'store_b.aspx'
                     }, {
-                        type : '2', //[20] [21] 12
+                        type : '2', //[20] [21] 4
                         name : 'xcustno',
                         dbf : 'cust',
                         index : 'noa,comp',
                         src : 'cust_b.aspx'
                     }, {
-                        type : '5', //[22] 13
+                        type : '5', //[22] 1
                         name : 'xorderstatus',
                         value : [q_getPara('report.all')].concat('1@已受訂,2@未受訂'.split(','))
                     }, {
-                        type : '8', //[23] 14
+                        type : '8', //[23] 2
                         name : 'xisordermemo',
                         value : "1@顯示已受訂明細".split(',')
                     }, {
-                        type : '2', //[24][25] 15
+                        type : '2', //[24][25] 3
                         name : 'xtggno',
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
                     }, {
-                        type : '8', //[26] 16
+                        type : '8', //[26] 4
                         name : 'xoption01',
                         value : q_getMsg('xoption01').split('&')
+                    }, {
+                        type : '5', //[27] 1
+                        name : 'xsortby', 
+                        value : 'datea@依日期,pno@依品號,sizea@依尺寸'.split(',')
                     }]
                 });
                 q_popAssign();
@@ -156,7 +160,7 @@
                 $('#Xorderstatus select').change(function() {
                     var showMemo = $('#chkXisordermemo input[type="checkbox"]').is(':checked');
                     var nowReport = $('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report;
-                    if (($(this).val() == '1') || ($(this).val() == '#non' && showMemo == true)) {
+                    if ((($(this).val() == '1') || ($(this).val() == '#non' && showMemo == true)) && (dec(nowReport.substr(-1)) <=3)) {
                         $('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0, 8) + 'A';
                         if ($(this).val() == '1') {
                             $('#chkXisordermemo input[type="checkbox"]').attr('checked', false);
