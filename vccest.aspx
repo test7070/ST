@@ -85,7 +85,7 @@
                     }
                     getTheory(j);
 					var t_Product = $('#txtProduct_' + j).val();
-					if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0){
+					if(t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + j).val()) == 0){
 						$('#txtWeight_' + j).val($('#txtTheory_' + j).val());
 					}
                     //---------------------------------------
