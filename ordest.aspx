@@ -371,6 +371,7 @@
 						///   q_boxClose 3/4
 						break;
 				}/// end Switch
+				size_change();
 				b_pop = '';
 				OrdenoAndNo2On_Change();
 			}

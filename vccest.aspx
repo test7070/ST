@@ -128,7 +128,8 @@
                 $('#btnVcceImport').click(function() {
                     var t_ordeno = $('#txtOrdeno').val();
                     var t_custno = $('#txtCustno').val();
-                    var t_where = '1=1 ';
+                    var t_where = "1=1 and kind='"+$('#cmbKind').val()+"' ";
+                    
                     t_where += q_sqlPara2('ordeno', t_ordeno) + q_sqlPara2('custno', t_custno) + " and ((len(gmemo)=0) or gmemo='cubu')";
                     q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "95%", "95%", q_getMsg('popVcceImport'));
                 });
