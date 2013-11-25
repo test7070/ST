@@ -46,7 +46,7 @@
 			, ['txtUno_', 'btnUno_', 'view_uccc', 'uno,class,spec,unit', 'txtUno_,txtClass_,txtSpec_,txtUnit_', 'uccc_seek_b.aspx', '95%', '95%']
 			, ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
 			, ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx']
-			, ['txtUno__', 'btnUno__', 'view_uccc', 'uno', 'txtUno__', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
+			, ['txtUno__', 'btnUno__', 'view_uccc', 'uno,product,productno,radius,width,dime,lengthb,mount,weight', 'txtUno__,txtProduct__,txtProductno__,txtRadius__,txtWidth__,txtDime__,txtLengthb__,txtMount__,txtWeight__', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
 			, ['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']);
 			brwCount2 = 10;
 			$(document).ready(function() {
@@ -323,9 +323,15 @@
 								var t_mount = dec(b_ret[k].mount);
 								var t_weight = dec(b_ret[k].weight);
 								var t_kind = trim(b_ret[k].kind).toUpperCase();
-								if(t_notv != t_mount)
-									t_weight = round(q_mul(q_div(t_weight,t_mount),t_notv),0);
-								t_mount = t_notv;
+								if(t_kind=='B'){
+									if(t_notv != t_mount)
+										t_weight = round(q_mul(q_div(t_weight,t_mount),t_notv),0);
+									t_mount = t_notv;
+								}else{
+									if(t_notv != t_weight)
+										t_mount = round(q_mul(q_div(t_mount,t_weight),t_notv),0);
+									t_weight = t_notv;
+								}
 								b_ret[k].mount = t_mount;
 								b_ret[k].weight = t_weight;
 							}
@@ -914,6 +920,10 @@
 						break;
 					case 'txtAddr2':
 						$('#txtPaytype').focus();
+						break;
+					case 'txtUno__':
+						size_change();
+						$('#chkIssale__'+b_seq).prop('checked',true);
 						break;
 				}
 				OrdenoAndNo2On_Change();

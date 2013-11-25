@@ -336,9 +336,17 @@
 								var t_mount = dec(b_ret[k].mount);
 								var t_weight = dec(b_ret[k].weight);
 								var t_kind = trim(b_ret[k].kind).toUpperCase();
-								if(t_notv != t_mount)
-									t_weight = round(q_mul(q_div(t_weight,t_mount),t_notv),0);
-								t_mount = t_notv;
+								if(t_kind.substring(0,1)=='B'){
+									if(t_notv != t_mount){
+										t_weight = round(q_mul(q_div(t_weight,t_mount),t_notv),0);
+									}
+									t_mount = t_notv;
+								}else{
+									if(t_notv != t_weight){
+										t_mount = round(q_mul(q_div(t_mount,t_weight),t_notv),0);
+									}
+									t_weight = t_notv;
+								}
 								b_ret[k].mount = t_mount;
 								b_ret[k].weight = t_weight;
 							}                            
