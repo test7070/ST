@@ -114,6 +114,10 @@
                         type : '5', //[27] 1
                         name : 'xsortby', 
                         value : 'datea@依日期,pno@依品號,sizea@依尺寸'.split(',')
+                    }, {
+                        type : '5', //[28] 2
+                        name : 'xstype',
+                        value : [q_getPara('report.all')].concat('A@製成品,B@再製品'.split(','))
                     }]
                 });
                 q_popAssign();
