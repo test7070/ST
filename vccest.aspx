@@ -160,7 +160,7 @@
                                 b_pop = '';
                                 return;
                             }
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style', '');
+                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style,size', '');
                             /// 最後 aEmpField 不可以有【數字欄位】
                             size_change();
                             for (var i = 0; i < ret.length; i++) {
@@ -904,9 +904,12 @@
 						<td colspan="3">
 						<input id="txtDeivery_addr"  type="text" class="txt c1"/>
 						</td>
+						<!--*
 						<td><span> </span><a id="lblOrdeno" class="lbl"> </a></td>
 						<td><input id="txtOrdeno"  type="text" class="txt c1"/></td>
 						<td><input id="btnOrdeimport" type="button" title="only ordet"/></td>
+						-->
+						<td></td>
 						<td><input id="btnVcceImport" type="button" title="cut cubu"/></td>
 					</tr>
 					<tr>
