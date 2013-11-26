@@ -141,7 +141,7 @@
                         break;
                     case '3':
                         // 內含
-                        t_tax = round(q_div(t_money,q_mul(q_add(1,t_taxrate),t_taxrate)), 0);
+                        t_tax = q_sub(t_money,round(q_div(t_money, q_add(1, t_taxrate)), 0));
                         t_total = t_money;
                         t_money = q_sub(t_total,t_tax);
                         break;

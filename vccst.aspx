@@ -124,6 +124,8 @@
                     t_money = q_add(t_money, t_moneys);
                     $('#txtTotal_' + j).val(FormatNumber(t_moneys));
                 }
+                t_money = q_add(t_money,t_tranmoney);
+
                 t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
                 switch ($('#cmbTaxtype').val()) {
                     case '1':
@@ -138,7 +140,7 @@
                         break;
                     case '3':
                         // 內含
-                        t_tax = round(q_div(t_money, q_mul(q_add(1, t_taxrate), t_taxrate)), 0);
+                        t_tax = q_sub(t_money,round(q_div(t_money, q_add(1, t_taxrate)), 0));
                         t_total = t_money;
                         t_money = q_sub(t_total, t_tax);
                         break;
@@ -165,8 +167,6 @@
                     $('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
                 }
                 $('#txtWeight').val(FormatNumber(t_weight));
-				t_money = t_money + t_tranmoney;
-				t_total = t_total + t_tranmoney;
                 $('#txtMoney').val(FormatNumber(t_money));
                 $('#txtTax').val(FormatNumber(t_tax));
                 $('#txtTotal').val(FormatNumber(t_total));
