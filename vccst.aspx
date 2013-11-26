@@ -24,7 +24,7 @@
             var q_name = "vcc";
             var q_readonly = ['txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
             var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtTheory'];
-            var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
+            var bbmNum = [['txtMoney', 10, 0, 1],['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
             var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1], ['txtMount', 10, 2, 1], ['txtTheory', 12,3, 1], ['txtGweight', 10, 3, 1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
@@ -76,6 +76,7 @@
                 var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
                 var t_unit = '';
                 var t_float = q_float('txtFloata');
+                var t_tranmoney = dec($('#txtTranmoney').val());
                 var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
                 t_kind = t_kind.substr(0, 1);
                 for (var j = 0; j < q_bbsCount; j++) {
@@ -164,7 +165,8 @@
                     $('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
                 }
                 $('#txtWeight').val(FormatNumber(t_weight));
-
+				t_money = t_money + t_tranmoney;
+				t_total = t_total + t_tranmoney;
                 $('#txtMoney').val(FormatNumber(t_money));
                 $('#txtTax').val(FormatNumber(t_tax));
                 $('#txtTotal').val(FormatNumber(t_total));
@@ -273,6 +275,9 @@
                     sum();
                 });
                 $('#txtTax').change(function() {
+                    sum();
+                });
+                $('#txtTranmoney').change(function() {
                     sum();
                 });
                 $('#txtPrice').change(function() {
@@ -645,8 +650,13 @@
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
-                abbm[q_recno]['accno'] = xmlString;
-                $('#txtAccno').val(xmlString);
+                var strSplit = xmlString.split(';');
+                if(strSplit.length>=2){
+                	abbm[q_recno]['accno'] = strSplit[0];
+                	$('#txtAccno').val(strSplit[0]);
+               		abbm[q_recno]['invono'] = strSplit[1];
+                	$('#txtInvono').val(strSplit[1]);
+                }
                 Unlock(1);
             }
 
@@ -1376,11 +1386,14 @@
 						<td>
 						<input id="txtWeight" type="text" class="txt num c1" />
 						</td>
+						<!--
 						<td><span> </span><a id='lblPrice' class="lbl"> </a></td>
 						<td>
 						<input id="txtPrice" type="text" class="txt num c1" />
 						</td>
+						
 						<td></td>
+						-->
 						<td><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
 						<td>
 						<input id="txtTranmoney" type="text" class="txt num c1" />
