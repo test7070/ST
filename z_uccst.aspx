@@ -106,10 +106,10 @@
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
-                    }, {
+                    }, {//因選項位置調整,已不使用
                         type : '8', //[26] 4
-                        name : 'xoption01',
-                        value : q_getMsg('xoption01').split('&')
+                        name : 'xxxxx',
+                        value : new Array()
                     }, {
                         type : '5', //[27] 1
                         name : 'xsortby', 
@@ -118,6 +118,16 @@
                         type : '5', //[28] 2
                         name : 'xstype',
                         value : [q_getPara('report.all')].concat('A@製成品,B@再製品'.split(','))
+                    }, {
+                        type : '2', //[29][30] 3
+                        name : 'xstoreno2',
+                        dbf : 'store',
+                        index : 'noa,store',
+                        src : 'store_b.aspx'
+                    }, {
+                        type : '8', //[31] 4
+                        name : 'xoption01',
+                        value : q_getMsg('xoption01').split('&')
                     }]
                 });
                 q_popAssign();
