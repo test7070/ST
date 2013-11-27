@@ -1059,7 +1059,6 @@
 
 			function btnCancel() {
 				_btnCancel();
-				$('#dbbt').hide();
 				OrdenoAndNo2On_Change();
 			}
 
