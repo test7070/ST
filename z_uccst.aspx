@@ -117,7 +117,7 @@
                     }, {
                         type : '5', //[28] 2
                         name : 'xstype',
-                        value : [q_getPara('report.all')].concat('A@製成品,B@再製品'.split(','))
+                        value : [q_getPara('report.all')].concat('A@製成品,B@在製品'.split(','))
                     }, {
                         type : '2', //[29][30] 3
                         name : 'xstoreno2',
