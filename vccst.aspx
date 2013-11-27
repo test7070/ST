@@ -40,7 +40,7 @@
             ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'], 
             ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'], 
             ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'], 
-            ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,class,spec,style,product,radius,width,dime,lengthb,emount,eweight', 'txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtMount_,txtWeight_', 'uccc_seek_b.aspx', '95%', '60%'], 
+            ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,class,spec,style,product,radius,width,dime,lengthb,emount,eweight', '0txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtMount_,txtWeight_', 'uccc_seek_b.aspx', '95%', '60%'], 
             ['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'], 
             ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
            	);
@@ -390,6 +390,31 @@
             var AddRet = new Array;
             function q_gtPost(t_name) {/// 資料下載後 ...
                 switch (t_name) {
+                	case 'check_memos':
+                		var as = _q_appendData("ordes", "", true);
+                		var err_log = '';
+                		for(var j=0;j<q_bbsCount;j++){
+                			var t_memo = trim($('#txtMemo_'+j).val());
+                			var OrdenoIndex = t_memo.search(/[E]+[0-9]{10}\x2d[0-9]{3}/g);
+                			var bbsOrdeno = t_memo.substr(OrdenoIndex,15);
+                			var t_productno = trim($('#txtProductno_'+j).val());
+                			for(var k=0;k<as.length;k++){
+                				var asOrdeno = as[k].noa+'-'+as[k].no2;
+                				if(bbsOrdeno == asOrdeno){
+                					if(t_productno != as[k].productno){
+                						err_log += '表身第 ' + (j+1)+ ' 筆訂單資料異常，訂單品號：'+as[k].productno+' 表身品號：'+t_productno+'\n';
+                					}
+                					$('#txtOrdeno_'+j).val(bbsOrdeno.split('-')[0]);
+                					$('#txtNo2_'+j).val(bbsOrdeno.split('-')[1]);
+                					break;
+                				}
+                			}
+                		}
+                		if(trim(err_log).length > 0){
+                			alert('Warning：\n'+err_log);
+                		}
+                		checkOrde(q_bbsCount - 1);
+                		break;
 					case 'orde':
 						var as = _q_appendData("orde", "", true);
 						if (as[0] != undefined) {
@@ -618,15 +643,52 @@
                 if ($.trim($('#txtNick').val()).length == 0 && $.trim($('#txtComp').val()).length > 0)
                     $('#txtNick').val($.trim($('#txtComp').val()).substring(0, 4));
                 sum();
-                checkOrde(q_bbsCount - 1);
+                
+				var distinctArray = new Array;
+				for(var k=0;k<q_bbsCount;k++){
+					var t_memo = trim($('#txtMemo_'+k).val());
+					var OrdenoIndex = t_memo.search(/[E]+[0-9]{10}\x2d[0-9]{3}/g);
+					if(OrdenoIndex > -1){
+						var x_ordeno = t_memo.substr(OrdenoIndex,15);
+						distinctArray.push(x_ordeno);
+					}
+				}
+				var inStr = '';
+				distinctArray = distinct(distinctArray);
+				for(var i=0;i<distinctArray.length;i++){
+					if(trim(distinctArray[i]) != '')
+						inStr += "'"+distinctArray[i]+"',";
+				}
+				inStr = inStr.substring(0,inStr.length-1);
+				if(trim(inStr).length == 0){
+                	checkOrde(q_bbsCount - 1);
+				}else{
+					var t_where = "where=^^ noa+'-'+no2 in(" + inStr + ")^^";
+					q_gt('ordes', t_where, 0, 0, 0, "check_memos", r_accy);
+				}
             }
-
+			
+			function chkOrdenoEmp(){
+				var err_log = '';
+				for(var i = 0;i<q_bbsCount;i++){
+					var t_ordeno = trim($('#txtOrdeno_'+i).val());
+					var t_no2 = trim($('#txtNo2_'+i).val());
+					if((t_ordeno.length==0) || (t_no2.length==0)){
+						err_log += '表身第 ' + (i+1)+ ' 筆訂單編號或訂序為空\n';
+					}
+				}
+				if(trim(err_log).length > 0){
+					alert('Warning：\n'+err_log);
+				}
+			}
+			
             function checkOrde(n) {
                 if (n < 0) {
                     if (q_cur == 1)
                         $('#txtWorker').val(r_name);
                     else
-                        $('#txtWorker2').val(r_name);
+						$('#txtWorker2').val(r_name);
+					chkOrdenoEmp();
                     var t_noa = trim($('#txtNoa').val());
                     var t_date = trim($('#txtDatea').val());
                     if (t_noa.length == 0 || t_noa == "AUTO")
@@ -795,6 +857,9 @@
                         $('#txtTotal_' + j).focusout(function() {
                             sum();
                         });
+                        $('#txtUno_'+j).click(function(){
+                        	x_bseq = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+                        });
                     }
                 }//j
                 _bbsAssign();
@@ -905,7 +970,7 @@
                     $(this).attr('OldValue', OldValue);
                 });
             }
-
+			var x_bseq = 0;
             function q_popPost(s1) {
                 switch (s1) {
                     case 'txtProductno_':
@@ -916,8 +981,18 @@
                         $('#txtStyle_' + b_seq).focus();
                         break;
                     case 'txtUno_':
+                    	var ret = getb_ret();
                         size_change();
-                        $('#txtMount_' + b_seq).focus();
+                        var t_uno = trim($('#txtUno_'+b_seq).val()).toUpperCase().substring(0,1);
+                        if('XYZ'.indexOf(t_uno)>-1 && trim(t_uno) != ''){
+                        	$('#txtProductno_' + b_seq).focus();
+                        }else{
+                        	if(trim(t_uno) == '') b_seq = x_bseq;
+                        	if(ret.length >=1){
+                        		$('#txtUno_'+b_seq).val(ret[0].uno);
+                        	}
+                        	$('#txtMount_' + b_seq).focus();
+                        }
                         break;
                 }
 
