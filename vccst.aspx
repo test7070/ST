@@ -395,7 +395,7 @@
                 		var err_log = '';
                 		for(var j=0;j<q_bbsCount;j++){
                 			var t_memo = trim($('#txtMemo_'+j).val());
-                			var OrdenoIndex = t_memo.search(/[E]+[0-9]{10}\x2d[0-9]{3}/g);
+                			var OrdenoIndex = t_memo.search(/^[E]+[0-9]{10}\x2d[0-9]{3}/g);
                 			var bbsOrdeno = t_memo.substr(OrdenoIndex,15);
                 			var t_productno = trim($('#txtProductno_'+j).val());
                 			for(var k=0;k<as.length;k++){
@@ -404,8 +404,11 @@
                 					if(t_productno != as[k].productno){
                 						err_log += '表身第 ' + (j+1)+ ' 筆訂單資料異常，訂單品號：'+as[k].productno+' 表身品號：'+t_productno+'\n';
                 					}
-                					$('#txtOrdeno_'+j).val(bbsOrdeno.split('-')[0]);
-                					$('#txtNo2_'+j).val(bbsOrdeno.split('-')[1]);
+                					$('#txtMemo_'+j).val('');
+                					var t_ordeno = trim($('#txtOrdeno_'+j).val());
+                					var t_no2 = trim($('#txtNo2_'+j).val());
+                					if(t_ordeno.length == 0) $('#txtOrdeno_'+j).val(bbsOrdeno.split('-')[0]);
+                					if(t_no2.length == 0) $('#txtNo2_'+j).val(bbsOrdeno.split('-')[1]);
                 					break;
                 				}
                 			}
@@ -647,7 +650,7 @@
 				var distinctArray = new Array;
 				for(var k=0;k<q_bbsCount;k++){
 					var t_memo = trim($('#txtMemo_'+k).val());
-					var OrdenoIndex = t_memo.search(/[E]+[0-9]{10}\x2d[0-9]{3}/g);
+					var OrdenoIndex = t_memo.search(/^[E]+[0-9]{10}\x2d[0-9]{3}/g);
 					if(OrdenoIndex > -1){
 						var x_ordeno = t_memo.substr(OrdenoIndex,15);
 						distinctArray.push(x_ordeno);

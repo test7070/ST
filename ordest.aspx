@@ -322,7 +322,7 @@
 								var t_notv = dec(b_ret[k].notv);
 								var t_mount = dec(b_ret[k].mount);
 								var t_weight = dec(b_ret[k].weight);
-								var t_kind = trim(b_ret[k].kind).toUpperCase();
+								var t_kind = trim(b_ret[k].kind).toUpperCase().substring(0,1);
 								if(t_kind=='B'){
 									if(t_notv != t_mount)
 										t_weight = round(q_mul(q_div(t_weight,t_mount),t_notv),0);
