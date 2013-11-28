@@ -40,7 +40,7 @@
             ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'], 
             ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'], 
             ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'], 
-            ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,class,spec,style,product,radius,width,dime,lengthb,emount,eweight', '0txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtMount_,txtWeight_', 'uccc_seek_b.aspx', '95%', '60%'], 
+            ['txtUno_', 'btnUno_', 'view_uccc', 'uno,uno,productno,class,spec,style,product,radius,width,dime,lengthb,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtMount_,txtWeight_', 'uccc_seek_b.aspx', '95%', '60%'], 
             ['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'], 
             ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
            	);
@@ -860,9 +860,6 @@
                         $('#txtTotal_' + j).focusout(function() {
                             sum();
                         });
-                        $('#txtUno_'+j).click(function(){
-                        	x_bseq = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-                        });
                     }
                 }//j
                 _bbsAssign();
@@ -986,16 +983,6 @@
                     case 'txtUno_':
                     	var ret = getb_ret();
                         size_change();
-                        var t_uno = trim($('#txtUno_'+b_seq).val()).toUpperCase().substring(0,1);
-                        if('XYZ'.indexOf(t_uno)>-1 && trim(t_uno) != ''){
-                        	$('#txtProductno_' + b_seq).focus();
-                        }else{
-                        	if(trim(t_uno) == '') b_seq = x_bseq;
-                        	if(ret.length >=1){
-                        		$('#txtUno_'+b_seq).val(ret[0].uno);
-                        	}
-                        	$('#txtMount_' + b_seq).focus();
-                        }
                         break;
                 }
 
