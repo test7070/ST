@@ -17,6 +17,7 @@
 			brwCount = -1;
 			var isBott = false;
 			var txtfield = [], afield, t_data, t_htm;
+			var q_readonly = ['textProduct','textCust'];
 			var i, s1;
 			aPop = new Array(
 				['textProductno', '', 'ucc', 'noa,product', 'textProductno,textProduct', 'ucc_b.aspx'],
