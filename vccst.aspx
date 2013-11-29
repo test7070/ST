@@ -40,7 +40,7 @@
             ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'], 
             ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'], 
             ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'], 
-            ['txtUno_', 'btnUno_', 'view_uccc', 'uno,uno,productno,class,spec,style,product,radius,width,dime,lengthb,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtMount_,txtWeight_', 'uccc_seek_b.aspx', '95%', '60%'], 
+            ['txtUno_', 'btnUno_', 'view_uccc', 'uno,uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b.aspx', '95%', '60%'], 
             ['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'], 
             ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
            	);
@@ -267,7 +267,7 @@
                             alert('請輸入 : 【' + q_getMsg('lblCust') + '】');
                         } else {
                             t_where = "where=^^ custno='" + t_custno + "' ^^";
-                            q_gt('vcce', t_where, 0, 0, 0, "", r_accy);
+                            q_gt('view_vcces', t_where, 0, 0, 0, "", r_accy);
                         }
                     }
                 });
@@ -461,8 +461,8 @@
                             focus_addr = '';
                         }
                         break;
-                    case 'vcce':
-                        vcces_as = _q_appendData("vcces", "", true);
+                    case 'view_vcces':
+                        vcces_as = _q_appendData("view_vcces", "", true);
                         if (vcces_as[0] != undefined) {
                             var distinctArray = new Array;
                             var inStr = '';
@@ -476,13 +476,13 @@
                             inStr = inStr.substring(0, inStr.length - 1);
                             if (trim(inStr).length > 0) {
                                 var t_where = "where=^^ ordeno in(" + inStr + ") and (isnull(ordeno,'') != '') ^^";
-                                q_gt('vccs', t_where, 0, 0, 0, "", r_accy);
+                                q_gt('view_vccs', t_where, 0, 0, 0, "", r_accy);
                             }
                         }
                         sum();
                         break;
-                    case 'vccs':
-                        var vccs_as = _q_appendData("vccs", "", true);
+                    case 'view_vccs':
+                        var vccs_as = _q_appendData("view_vccs", "", true);
                         for (var i = 0; i < vccs_as.length; i++) {
                             for (var j = 0; j < vcces_as.length; j++) {
                                 if ((vcces_as[j].ordeno == vccs_as[i].ordeno) && (vcces_as[j].no2 == vccs_as[i].no2)) {
@@ -579,6 +579,36 @@
                                     Unlock(1);
                                 }
                             }
+                        }else if(t_name.substring(0, 19) == 'afterPopProductno1_'){
+                        	var t_sel = parseInt(t_name.split('_')[1]); 
+	                		var as = _q_appendData("view_ordes", "", true);
+	                		if (as[0] != undefined) {
+	                			$('#txtDime_'+t_sel).val(as[0].dime);
+	                			$('#txtWidth_'+t_sel).val(as[0].width);
+	                			$('#txtLengthb_'+t_sel).val(as[0].lengthb);
+	                			$('#txtRadius_'+t_sel).val(as[0].radius);
+	                			$('#txtSize_'+t_sel).val(as[0].size);
+	                			size_change();	
+	                		}else{//找不到訂單 回view_uccb找尺寸
+	                			q_gt('view_uccb',"where=^^ uno='"+t_uno+"'^^", 0, 0, 0, 'afterPopProductno2_'+t_sel, r_accy);
+	                		}         		
+                        }else if(t_name.substring(0, 19) == 'afterPopProductno2_'){
+                        	var t_sel = parseInt(t_name.split('_')[1]); 
+                        	var as = _q_appendData("view_uccb", "", true);
+	                		if (as[0] != undefined) {
+	                			$('#txtDime_'+t_sel).val(as[0].dime);
+	                			$('#txtWidth_'+t_sel).val(as[0].width);
+	                			$('#txtLengthb_'+t_sel).val(as[0].lengthb);
+	                			$('#txtRadius_'+t_sel).val(as[0].radius);
+	                			$('#txtSize_'+t_sel).val(as[0].size);
+	                		}else{
+	                			$('#txtDime_'+t_sel).val('');
+	                			$('#txtWidth_'+t_sel).val('');
+	                			$('#txtLengthb_'+t_sel).val('');
+	                			$('#txtRadius_'+t_sel).val('');
+	                			$('#txtSize_'+t_sel).val('');
+	                		}
+	                		size_change();          	
                         }
                 }  /// end switch
             }
@@ -674,9 +704,10 @@
 			function chkOrdenoEmp(){
 				var err_log = '';
 				for(var i = 0;i<q_bbsCount;i++){
+					var t_uno = trim($('#txtUno_'+i).val());
 					var t_ordeno = trim($('#txtOrdeno_'+i).val());
 					var t_no2 = trim($('#txtNo2_'+i).val());
-					if((t_ordeno.length==0) || (t_no2.length==0)){
+					if(t_uno.length>0 && (t_ordeno.length==0) || (t_no2.length==0)){
 						err_log += '表身第 ' + (i+1)+ ' 筆訂單編號或訂序為空\n';
 					}
 				}
@@ -974,15 +1005,21 @@
             function q_popPost(s1) {
                 switch (s1) {
                     case 'txtProductno_':
-                        $('input[id*="txtProduct_"]').each(function() {
-                            $(this).attr('OldValue', $(this).val());
+                    	$('input[id*="txtProduct_"]').each(function() {
+                       		$(this).attr('OldValue', $(this).val());
                         });
                         ProductAddStyle(b_seq);
                         $('#txtStyle_' + b_seq).focus();
                         break;
-                    case 'txtUno_':
-                    	var ret = getb_ret();
-                        size_change();
+                    case 'txtUno_':    	
+                        var t_ordeno = $.trim($('#txtOrdeno_'+b_seq).val());
+                    	var t_no2 = $.trim($('#txtNo2_'+b_seq).val());
+                    	var t_uno = $.trim($('#txtUno_'+b_seq).val());
+                    	if(t_ordeno.length>0 && t_no2>0){
+                    		q_gt('view_ordes',"where=^^ noa='"+t_ordeno+"' and no2='"+t_no2+"'^^", 0, 0, 0, 'afterPopProductno1_'+b_seq, r_accy);
+                    	}else if(t_uno.length>0){
+                    		q_gt('view_uccb',"where=^^ uno='"+t_uno+"'^^", 0, 0, 0, 'afterPopProductno2_'+b_seq, r_accy);
+                    	}
                         break;
                 }
 
