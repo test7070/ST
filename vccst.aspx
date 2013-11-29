@@ -591,7 +591,7 @@
 	                			size_change();	
 	                		}else{//找不到訂單 回view_uccb找尺寸
 	                			alert('警告：查無訂單【'+$('#txtOrdeno_'+t_sel).val()+'-'+$('#txtNo2_'+t_sel).val()+'】');
-	                			q_gt('view_uccb',"where=^^ uno='"+t_uno+"'^^", 0, 0, 0, 'afterPopUno2_'+t_sel, r_accy);
+	                			q_gt('view_uccb',"where=^^ uno='"+$.trim($('#txtUno_'+t_sel).val())+"'^^", 0, 0, 0, 'afterPopUno2_'+t_sel, r_accy);
 	                		}         		
                         }else if(t_name.substring(0, 13) == 'afterPopUno2_'){
                         	var t_sel = parseInt(t_name.split('_')[1]); 
