@@ -579,7 +579,7 @@
                                     Unlock(1);
                                 }
                             }
-                        }else if(t_name.substring(0, 19) == 'afterPopProductno1_'){
+                        }else if(t_name.substring(0, 13) == 'afterPopUno1_'){
                         	var t_sel = parseInt(t_name.split('_')[1]); 
 	                		var as = _q_appendData("view_ordes", "", true);
 	                		if (as[0] != undefined) {
@@ -590,9 +590,9 @@
 	                			$('#txtSize_'+t_sel).val(as[0].size);
 	                			size_change();	
 	                		}else{//找不到訂單 回view_uccb找尺寸
-	                			q_gt('view_uccb',"where=^^ uno='"+t_uno+"'^^", 0, 0, 0, 'afterPopProductno2_'+t_sel, r_accy);
+	                			q_gt('view_uccb',"where=^^ uno='"+t_uno+"'^^", 0, 0, 0, 'afterPopUno2_'+t_sel, r_accy);
 	                		}         		
-                        }else if(t_name.substring(0, 19) == 'afterPopProductno2_'){
+                        }else if(t_name.substring(0, 13) == 'afterPopUno2_'){
                         	var t_sel = parseInt(t_name.split('_')[1]); 
                         	var as = _q_appendData("view_uccb", "", true);
 	                		if (as[0] != undefined) {
@@ -1016,9 +1016,9 @@
                     	var t_no2 = $.trim($('#txtNo2_'+b_seq).val());
                     	var t_uno = $.trim($('#txtUno_'+b_seq).val());
                     	if(t_ordeno.length>0 && t_no2>0){
-                    		q_gt('view_ordes',"where=^^ noa='"+t_ordeno+"' and no2='"+t_no2+"'^^", 0, 0, 0, 'afterPopProductno1_'+b_seq, r_accy);
+                    		q_gt('view_ordes',"where=^^ noa='"+t_ordeno+"' and no2='"+t_no2+"'^^", 0, 0, 0, 'afterPopUno1_'+b_seq, r_accy);
                     	}else if(t_uno.length>0){
-                    		q_gt('view_uccb',"where=^^ uno='"+t_uno+"'^^", 0, 0, 0, 'afterPopProductno2_'+b_seq, r_accy);
+                    		q_gt('view_uccb',"where=^^ uno='"+t_uno+"'^^", 0, 0, 0, 'afterPopUno2_'+b_seq, r_accy);
                     	}
                         break;
                 }
