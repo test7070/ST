@@ -128,6 +128,10 @@
                         type : '8', //[31] 4
                         name : 'xoption01',
                         value : q_getMsg('xoption01').split('&')
+                    }, {
+                        type : '8', //[32] 1
+                        name : 'xshowprice',
+                        value : "1@顯示單價".split(',')
                     }]
                 });
                 q_popAssign();
