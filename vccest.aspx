@@ -179,7 +179,7 @@
                                 $('#btnMinus_' + i).click();
                             }
 							var t_where = "where=^^ noa='"+b_ret[0].noa+"'";
-							q_gt('orde', t_where, 0, 0, 0, "",r_accy);                            
+							q_gt('view_orde', t_where, 0, 0, 0, "",r_accy);                            
                             ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtWeight,txtMount', b_ret.length, b_ret, 'uno,noa,no3,productno,product,radius,dime,width,lengthb,weight,mount', 'txtProductno');
                             /// 最後 aEmpField 不可以有【數字欄位】
                         }
@@ -210,7 +210,7 @@
                             focus_addr = '';
                         }
                         break;
-					case 'orde':
+					case 'view_orde':
 						var as = _q_appendData("orde", "", true);
 						if (as[0] != undefined) {
 							(trim($('#txtTel').val())==''?$('#txtTel').val(as[0].tel):'');

@@ -317,7 +317,7 @@
                             inStr = inStr.substring(0, inStr.length - 1);
                             if (trim(inStr).length > 0) {
                                 var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
-                                q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
+                                q_gt('view_ordes', t_where, 0, 0, 0, "", r_accy);
                             }
                             //get ordes.price <End>
                             /// 最後 aEmpField 不可以有【數字欄位】
@@ -356,7 +356,7 @@
 								b_ret[k].weight = t_weight;
 							}                            
 							var t_where = "where=^^ noa='"+b_ret[0].noa+"'";
-							q_gt('orde', t_where, 0, 0, 0, "",r_accy);
+							q_gt('view_orde', t_where, 0, 0, 0, "",r_accy);
                             AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
                             /// 最後 aEmpField 不可以有【數字欄位】
                             for (var i = 0; i < AddRet.length; i++) {
@@ -391,7 +391,7 @@
             function q_gtPost(t_name) {/// 資料下載後 ...
                 switch (t_name) {
                 	case 'check_memos':
-                		var as = _q_appendData("ordes", "", true);
+                		var as = _q_appendData("view_ordes", "", true);
                 		var err_log = '';
                 		for(var j=0;j<q_bbsCount;j++){
                 			var t_memo = trim($('#txtMemo_'+j).val());
@@ -418,8 +418,8 @@
                 		}
                 		checkOrde(q_bbsCount - 1);
                 		break;
-					case 'orde':
-						var as = _q_appendData("orde", "", true);
+					case 'view_orde':
+						var as = _q_appendData("view_orde", "", true);
 						if (as[0] != undefined) {
 							(trim($('#txtTel').val())==''?$('#txtTel').val(as[0].tel):'');
 							(trim($('#txtFax').val())==''?$('#txtFax').val(as[0].fax):'');
@@ -517,7 +517,7 @@
                             inStr = inStr.substring(0, inStr.length - 1);
                             if (trim(inStr).length > 0) {
                                 var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
-                                q_gt('ordes', t_where, 0, 0, 0, "", r_accy);
+                                q_gt('view_ordes', t_where, 0, 0, 0, "", r_accy);
                             }
                             //get ordes.price <End>
                         }
@@ -667,7 +667,7 @@
                 	checkOrde(q_bbsCount - 1);
 				}else{
 					var t_where = "where=^^ noa+'-'+no2 in(" + inStr + ")^^";
-					q_gt('ordes', t_where, 0, 0, 0, "check_memos", r_accy);
+					q_gt('view_ordes', t_where, 0, 0, 0, "check_memos", r_accy);
 				}
             }
 			
