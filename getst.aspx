@@ -324,7 +324,7 @@
                         if('XYZ'.indexOf(t_uno)>-1 && trim(t_uno) != ''){
                         	$('#txtProductno_' + b_seq).focus();
                         }else{
-                        	if(trim(t_uno) == '') b_seq = x_bseq;
+                        	//if(trim(t_uno) == '') b_seq = x_bseq;
                         	if(ret.length >=1){
                         		$('#txtUno_'+b_seq).val(ret[0].uno);
                         	}
