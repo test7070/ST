@@ -85,6 +85,10 @@
                         type : '5', //[13]
                         name : 'xstype',
                         value : [q_getPara('report.all')].concat(q_getPara('vccst.stype').split(','))
+                    }, {//3  [14]
+                        type : '5',
+                        name : 'showtype',
+                        value : q_getMsg('showtype').split('&')
                     }]
                 });
                 q_popAssign();
