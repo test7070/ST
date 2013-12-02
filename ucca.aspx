@@ -21,7 +21,7 @@
         var q_readonlys = [];
         var bbmNum = [];  
         var bbsNum = [['txtMount', 10, 0,1],['txtMoney', 10, 0,1]];
-        var bbmMask = []; 
+        var bbmMask = [['txtBeginmount', 15, 0,1],['txtBeginmoney', 15, 0,1]]; 
         var bbsMask = [];
         q_sqlCount = 6; brwCount = 6; brwList = []; brwNowPage = 0; brwKey = 'noa';
         aPop = new Array(['txtNou', 'lblNou', 'ucc', 'noa,product', 'txtNou', 'ucc_b.aspx']);
