@@ -141,7 +141,7 @@
                         break;
                     case '3':
                         // 內含
-                        t_tax = round(q_div(t_money,q_mul(q_add(1,t_taxrate),t_taxrate)), 0);
+                        t_tax = q_sub(t_money,round(q_div(t_money, q_add(1, t_taxrate)), 0));
                         t_total = t_money;
                         t_money = q_sub(t_total,t_tax);
                         break;
@@ -754,7 +754,8 @@
 				switch (s1) {
 					case 'txtProductno_':
 						$('input[id*="txtProduct_"]').each(function() {
-							$(this).attr('OldValue', $(this).val());
+							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+		                	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
 						});
 						ProductAddStyle(b_seq);
 						$('#txtStyle_' + b_seq).focus();

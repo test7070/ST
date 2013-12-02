@@ -160,7 +160,7 @@
                                 b_pop = '';
                                 return;
                             }
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style', '');
+                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style,size', '');
                             /// 最後 aEmpField 不可以有【數字欄位】
                             size_change();
                             for (var i = 0; i < ret.length; i++) {
@@ -179,7 +179,7 @@
                                 $('#btnMinus_' + i).click();
                             }
 							var t_where = "where=^^ noa='"+b_ret[0].noa+"'";
-							q_gt('orde', t_where, 0, 0, 0, "",r_accy);                            
+							q_gt('view_orde', t_where, 0, 0, 0, "",r_accy);                            
                             ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtWeight,txtMount', b_ret.length, b_ret, 'uno,noa,no3,productno,product,radius,dime,width,lengthb,weight,mount', 'txtProductno');
                             /// 最後 aEmpField 不可以有【數字欄位】
                         }
@@ -210,7 +210,7 @@
                             focus_addr = '';
                         }
                         break;
-					case 'orde':
+					case 'view_orde':
 						var as = _q_appendData("orde", "", true);
 						if (as[0] != undefined) {
 							(trim($('#txtTel').val())==''?$('#txtTel').val(as[0].tel):'');
@@ -514,7 +514,8 @@
                 switch (s1) {
                     case 'txtProductno_':
                         $('input[id*="txtProduct_"]').each(function() {
-                            $(this).attr('OldValue', $(this).val());
+							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+		                	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
                         });
                         ProductAddStyle(b_seq);
                         $('#txtStyle_' + b_seq).focus();
@@ -904,9 +905,12 @@
 						<td colspan="3">
 						<input id="txtDeivery_addr"  type="text" class="txt c1"/>
 						</td>
+						<!--*
 						<td><span> </span><a id="lblOrdeno" class="lbl"> </a></td>
 						<td><input id="txtOrdeno"  type="text" class="txt c1"/></td>
 						<td><input id="btnOrdeimport" type="button" title="only ordet"/></td>
+						-->
+						<td></td>
 						<td><input id="btnVcceImport" type="button" title="cut cubu"/></td>
 					</tr>
 					<tr>

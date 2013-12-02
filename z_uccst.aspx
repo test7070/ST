@@ -106,14 +106,32 @@
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
-                    }, {
+                    }, {//因選項位置調整,已不使用
                         type : '8', //[26] 4
-                        name : 'xoption01',
-                        value : q_getMsg('xoption01').split('&')
+                        name : 'xxxxx',
+                        value : new Array()
                     }, {
                         type : '5', //[27] 1
                         name : 'xsortby', 
                         value : 'datea@依日期,pno@依品號,sizea@依尺寸'.split(',')
+                    }, {
+                        type : '5', //[28] 2
+                        name : 'xstype',
+                        value : [q_getPara('report.all')].concat('A@製成品,B@在製品'.split(','))
+                    }, {
+                        type : '2', //[29][30] 3
+                        name : 'xstoreno2',
+                        dbf : 'store',
+                        index : 'noa,store',
+                        src : 'store_b.aspx'
+                    }, {
+                        type : '8', //[31] 4
+                        name : 'xoption01',
+                        value : q_getMsg('xoption01').split('&')
+                    }, {
+                        type : '8', //[32] 1
+                        name : 'xshowprice',
+                        value : "1@顯示單價".split(',')
                     }]
                 });
                 q_popAssign();
