@@ -36,7 +36,7 @@
             aPop = new Array(['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'], ['txtStorinno', 'lblStorein', 'store', 'noa,store', 'txtStorinno,txtStorin', 'store_b.aspx']
             , ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']
             , ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-            , ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,class,product,unit,radius,width,dime,lengthb,spec', '0txtUno_,txtProductno_,txtClass_,txtProduct_,txtUnit_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtSpec_', 'uccc_seek_b.aspx', '95%', '60%'], ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
+            , ['txtUno_', 'btnUno_', 'view_uccc', 'uno,uno,productno,class,product,unit,radius,width,dime,lengthb,spec,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtProduct_,txtUnit_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtSpec_,txtMount_,txtWeight_', 'uccc_seek_b.aspx', '95%', '60%'], ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
