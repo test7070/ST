@@ -188,6 +188,8 @@
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
                 q_cmbParse("cmbKind", q_getPara('sys.stktype'));
                 q_gt('spec', '', 0, 0, 0, "", r_accy);
+                var t_where = "where=^^ 1=1  group by post,addr^^";
+				q_gt('custaddr', t_where, 0, 0, 0, "");
                 //=======================================================
                 $("#cmbTypea").focus(function() {
                     var len = $(this).children().length > 0 ? $(this).children().length : 1;
@@ -292,6 +294,22 @@
                         q_gt('cust', t_where, 0, 0, 0, "");
                     }
                 });
+                
+                $('#txtAddr2').change(function(){
+					var t_custno = trim($(this).val());
+					if(!emp(t_custno)){
+						focus_addr = $(this).attr('id');
+						var t_where = "where=^^ noa='" + t_custno + "' ^^";
+						q_gt('cust', t_where, 0, 0, 0, "");
+					}  
+				});
+                
+                $('#txtCustno').change(function(){
+					if(!emp($('#txtCustno').val())){
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+						q_gt('custaddr', t_where, 0, 0, 0, "");
+					}
+				});
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
@@ -523,6 +541,17 @@
                         }
                         vcces_as = new Array;
                         break;
+                    case 'custaddr':
+						var as = _q_appendData("custaddr", "", true);
+						var t_item = " @ ";
+						if(as[0]!=undefined){
+	                        for ( i = 0; i < as.length; i++) {
+	                            t_item = t_item + (t_item.length > 0 ? ',' : '') +as[i].post +'@'+ as[i].addr;
+	                        }
+                       }
+						document.all.combAddr.options.length = 0; 
+						q_cmbParse("combAddr", t_item);
+						break;
                     case q_name:
                         t_uccArray = _q_appendData("ucc", "", true);
                         if (q_cur == 4)// 查詢
@@ -907,6 +936,8 @@
 					opacity : 0
 				});
                 q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
+                var t_where = "where=^^ 1=1  group by post,addr^^";
+				q_gt('custaddr', t_where, 0, 0, 0, "");
             }
 
             function btnModi() {
@@ -1008,6 +1039,12 @@
 			var x_bseq = 0;
             function q_popPost(s1) {
                 switch (s1) {
+                	case 'txtCustno':
+			   			if(!emp($('#txtCustno').val())){
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+							q_gt('custaddr', t_where, 0, 0, 0, "");
+						}
+			        break;
                     case 'txtProductno_':
                     	$('input[id*="txtProduct_"]').each(function() {
 							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
@@ -1041,6 +1078,11 @@
                 	}
                 }
                 size_change();
+                if(t_para){
+					$('#combAddr').attr('disabled','disabled');
+				}else{
+					$('#combAddr').removeAttr('disabled');
+				}
             }
 
             function btnMinus(id) {
