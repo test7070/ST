@@ -538,6 +538,7 @@
 
 			function btnIns() {
 				_btnIns();
+				$('#cmbTaxtype').val(1);
 				Lock(1, {
 					opacity : 0
 				});

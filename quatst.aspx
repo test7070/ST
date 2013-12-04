@@ -538,6 +538,7 @@
 				_btnIns();
 				if($('#checkCopy').is(':checked'))
 					curData.paste();
+				$('#cmbTaxtype').val(1);
 				Lock(1, {
 					opacity : 0
 				});
