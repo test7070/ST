@@ -1463,7 +1463,7 @@
 						<input id="txtCno" type="text" style="float:left;width:25%;"/>
 						<input id="txtAcomp" type="text" style="float:left;width:75%;"/>
 						</td>
-						<td><span> </span><a id='lblInvono' class="lbl"> </a></td>
+						<td><span> </span><a id='lblInvono' class="lbl btn"> </a></td>
 						<td colspan="2">
 						<input id="txtInvono" type="text" class="txt c1"/>
 						</td>
