@@ -1227,6 +1227,13 @@
 					t_set.data('tip').push({index:t_index,ref:obj,msg:msg,shiftX:x,shiftY:y});
 				}			
 			}
+			
+			function combAddr_chg() {   /// 只有 comb 開頭，才需要寫 onChange()   ，其餘 cmb 連結資料庫
+	            if (q_cur==1 || q_cur==2){
+	                $('#txtAddr2').val($('#combAddr').find("option:selected").text());
+	                $('#txtPost2').val($('#combAddr').find("option:selected").val());
+	            }
+	        }
 		</script>
 		<style type="text/css">
             #dmain {
@@ -1444,6 +1451,14 @@
 						<td colspan="2">
 						<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
 						<select id="combPaytype" style="float:left; width:26px;"></select></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td colspan="4" >
+						<input id="txtPost2"  type="text" style="float:left; width:15%;"/>
+						<input id="txtAddr2"  type="text" style="float:left; width:75%;"/>
+						<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblCardeal' class="lbl btn"> </a></td>
