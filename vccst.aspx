@@ -1445,8 +1445,8 @@
 					<tr>
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td colspan="4" >
-						<input id="txtPost"  type="text" style="float:left; width:25%;"/>
-						<input id="txtAddr"  type="text" style="float:left; width:75%;"/>
+						<input id="txtPost"  type="text" style="float:left; width:70px;"/>
+						<input id="txtAddr"  type="text" style="float:left; width:369px;"/>
 						</td>
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
@@ -1456,8 +1456,8 @@
 					<tr>
 						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
 						<td colspan="4" >
-						<input id="txtPost2"  type="text" style="float:left; width:15%;"/>
-						<input id="txtAddr2"  type="text" style="float:left; width:75%;"/>
+						<input id="txtPost2"  type="text" style="float:left; width:70px;"/>
+						<input id="txtAddr2"  type="text" style="float:left; width:347px;"/>
 						<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
 					</tr>
