@@ -45,12 +45,15 @@
             ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
            	);
             brwCount2 = 12;
+            var isinvosystem=false;//購買發票系統
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
                 q_gt('style', '', 0, 0, 0, '');
                 q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+                
+                q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
             });
             function main() {
                 if (dataErr) {
@@ -125,43 +128,46 @@
                     $('#txtTotal_' + j).val(FormatNumber(t_moneys));
                 }
                 t_money = q_add(t_money,t_tranmoney);
-
+                t_total=t_money;
+				t_tax=0;
                 t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
-                switch ($('#cmbTaxtype').val()) {
-                    case '1':
-                        // 應稅
-                        t_tax = round(q_mul(t_money, t_taxrate), 0);
-                        t_total = q_add(t_money, t_tax);
-                        break;
-                    case '2':
-                        //零稅率
-                        t_tax = 0;
-                        t_total = q_add(t_money, t_tax);
-                        break;
-                    case '3':
-                        // 內含
-                        t_tax = q_sub(t_money,round(q_div(t_money, q_add(1, t_taxrate)), 0));
-                        t_total = t_money;
-                        t_money = q_sub(t_total, t_tax);
-                        break;
-                    case '4':
-                        // 免稅
-                        t_tax = 0;
-                        t_total = q_add(t_money, t_tax);
-                        break;
-                    case '5':
-                        // 自定
-                        $('#txtTax').attr('readonly', false);
-                        $('#txtTax').css('background-color', 'white').css('color', 'black');
-                        t_tax = round(q_float('txtTax'), 0);
-                        t_total = q_add(t_money, t_tax);
-                        break;
-                    case '6':
-                        // 作廢-清空資料
-                        t_money = 0, t_tax = 0, t_total = 0;
-                        break;
-                    default:
-                }
+                if(!isinvosystem){
+	                switch ($('#cmbTaxtype').val()) {
+	                    case '1':
+	                        // 應稅
+	                        t_tax = round(q_mul(t_money, t_taxrate), 0);
+	                        t_total = q_add(t_money, t_tax);
+	                        break;
+	                    case '2':
+	                        //零稅率
+	                        t_tax = 0;
+	                        t_total = q_add(t_money, t_tax);
+	                        break;
+	                    case '3':
+	                        // 內含
+	                        t_tax = q_sub(t_money,round(q_div(t_money, q_add(1, t_taxrate)), 0));
+	                        t_total = t_money;
+	                        t_money = q_sub(t_total, t_tax);
+	                        break;
+	                    case '4':
+	                        // 免稅
+	                        t_tax = 0;
+	                        t_total = q_add(t_money, t_tax);
+	                        break;
+	                    case '5':
+	                        // 自定
+	                        $('#txtTax').attr('readonly', false);
+	                        $('#txtTax').css('background-color', 'white').css('color', 'black');
+	                        t_tax = round(q_float('txtTax'), 0);
+	                        t_total = q_add(t_money, t_tax);
+	                        break;
+	                    case '6':
+	                        // 作廢-清空資料
+	                        t_money = 0, t_tax = 0, t_total = 0;
+	                        break;
+	                    default:
+	                }
+				}
                 t_price = q_float('txtPrice');
                 if (t_price != 0) {
                     $('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
@@ -305,6 +311,9 @@
 					if($('#txtInvono').val().length>0)
                     	q_pop('txtInvono', "vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtInvono').val() + "';" + r_accy, 'vcca', 'noa', 'datea', "95%", "95%px", q_getMsg('lblInvono'), true);
                 });
+                
+                if(isinvosystem)
+					$('#txtTax').hide();
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
@@ -403,6 +412,15 @@
             var AddRet = new Array;
             function q_gtPost(t_name) {/// 資料下載後 ...
                 switch (t_name) {
+                	case 'ucca_invo':
+						var as = _q_appendData("ucca", "", true);
+	            		if (as[0] != undefined) {
+	            			isinvosystem=true;
+							$('#txtTax').hide();
+	           			}else{
+	            			isinvosystem=false;
+	            		}
+		            	break;
                 	case 'check_memos':
                 		var as = _q_appendData("view_ordes", "", true);
                 		var err_log = '';
