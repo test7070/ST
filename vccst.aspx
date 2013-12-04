@@ -730,16 +730,18 @@
 			
 			function chkOrdenoEmp(){
 				var err_log = '';
-				for(var i = 0;i<q_bbsCount;i++){
-					var t_uno = $.trim($('#txtUno_'+i).val());
-					var t_ordeno = $.trim($('#txtOrdeno_'+i).val());
-					var t_no2 = $.trim($('#txtNo2_'+i).val());
-					if(t_uno.length>0 && ((t_ordeno.length==0) || (t_no2.length==0))){
-						err_log += '表身第 ' + (i+1)+ ' 筆訂單編號或訂序為空\n';
+				if(q_getPara('sys.comp').substring(0,3)=='裕承隆'){
+					for(var i = 0;i<q_bbsCount;i++){
+						var t_uno = $.trim($('#txtUno_'+i).val());
+						var t_ordeno = $.trim($('#txtOrdeno_'+i).val());
+						var t_no2 = $.trim($('#txtNo2_'+i).val());
+						if(t_uno.length>0 && ((t_ordeno.length==0) || (t_no2.length==0))){
+							err_log += '表身第 ' + (i+1)+ ' 筆訂單編號或訂序為空\n';
+						}
 					}
-				}
-				if(trim(err_log).length > 0){
-					alert('Warning：\n'+err_log);
+					if(trim(err_log).length > 0){
+						alert('Warning：\n'+err_log);
+					}
 				}
 			}
 			
