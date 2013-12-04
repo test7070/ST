@@ -253,15 +253,6 @@
                 $('#lblAccno').click(function() {
                     q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('btnAccc'), true);
                 });
-
-                $('#lblInvono').click(function() {
-                    t_where = '';
-                    t_invo = $('#txtInvono').val();
-                    if (t_invo.length > 0) {
-                        t_where = "noa='" + t_invo + "'";
-                        q_box("invoice.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'invo', "95%", "95%", q_getMsg('popInvo'));
-                    }
-                });
                 $('#btnImportVcce').click(function() {
                     if (q_cur == 1 || q_cur == 2) {
                         var t_custno = $('#txtCustno').val();
