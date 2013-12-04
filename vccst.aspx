@@ -1446,10 +1446,11 @@
 						<td>
 						<input id="txtMon" type="text" class="txt c1"/>
 						</td>
-						<td></td>
-						<td><span> </span><a id='lblInvono' class="lbl"> </a></td>
+						<td> </td>
+						<td> </td>
 						<td colspan="2">
-						<input id="txtInvono" type="text" class="txt c1"/>
+							<input type="checkbox" id="chkIsgenvcca" style="float:left;"/>
+							<a id='lblIsgenvcca' class="lbl" style="float:left;"> </a>
 						</td>
 					</tr>
 					<tr>
@@ -1458,9 +1459,9 @@
 						<input id="txtCno" type="text" style="float:left;width:25%;"/>
 						<input id="txtAcomp" type="text" style="float:left;width:75%;"/>
 						</td>
-						<td><span> </span><a id='lblOrdeno' class="lbl btn"> </a></td>
+						<td><span> </span><a id='lblInvono' class="lbl"> </a></td>
 						<td colspan="2">
-						<input id="txtOrdeno" type="text" class="txt c1" />
+						<input id="txtInvono" type="text" class="txt c1"/>
 						</td>
 					</tr>
 					<tr>
@@ -1470,10 +1471,9 @@
 						<input id="txtComp"  type="text" style="float:left;width:75%;"/>
 						<input id="txtNick"  type="text" style="display:none;"/>
 						</td>
-						<td><span> </span><a id="lblSales" class="lbl btn"> </a></td>
+						<td><span> </span><a id='lblOrdeno' class="lbl btn"> </a></td>
 						<td colspan="2">
-						<input id="txtSalesno" type="text" style="float:left;width:50%;"/>
-						<input id="txtSales" type="text" style="float:left;width:50%;"/>
+						<input id="txtOrdeno" type="text" class="txt c1" />
 						</td>
 					</tr>
 					<tr>
@@ -1481,8 +1481,11 @@
 						<td colspan="4">
 						<input id="txtTel"  type="text"  class="txt c1"/>
 						</td>
-						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>
+						<td><span> </span><a id="lblSales" class="lbl btn"> </a></td>
+						<td colspan="2">
+						<input id="txtSalesno" type="text" style="float:left;width:50%;"/>
+						<input id="txtSales" type="text" style="float:left;width:50%;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
@@ -1490,10 +1493,8 @@
 						<input id="txtPost"  type="text" style="float:left; width:70px;"/>
 						<input id="txtAddr"  type="text" style="float:left; width:369px;"/>
 						</td>
-						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
-						<td colspan="2">
-						<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
-						<select id="combPaytype" style="float:left; width:26px;"></select></td>
+						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
+						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
@@ -1509,9 +1510,10 @@
 						<input id="txtCardealno" type="text" style="float:left;width:25%;"/>
 						<input id="txtCardeal" type="text" style="float:left;width:75%;" />
 						</td>
-						<td><span> </span><a id='lblCarno' class="lbl"> </a></td>
+						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
-						<input id="txtCarno" type="text" class="txt c1" />
+						<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
+						<select id="combPaytype" style="float:left; width:26px;"></select>
 						</td>
 					</tr>
 					<tr>
@@ -1524,10 +1526,9 @@
 						<input id="txtFloata" type="text" class="txt num c1" />
 						</td>
 						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbCoin" style="float:left;width:80px;" ></select></td>
-						<td></td>
+						<td><span> </span><a id='lblCarno' class="lbl"> </a></td>
 						<td colspan="2">
-						<input id="btnImportVcce" type="button"/>
-						<input id="btnVcceImport" type="button" title="cut cubu"/>
+						<input id="txtCarno" type="text" class="txt c1" />
 						</td>
 					</tr>
 					<tr>
@@ -1550,17 +1551,14 @@
 						<td>
 						<input id="txtWeight" type="text" class="txt num c1" />
 						</td>
-						<!--
-						<td><span> </span><a id='lblPrice' class="lbl"> </a></td>
-						<td>
-						<input id="txtPrice" type="text" class="txt num c1" />
-						</td>
-						
-						<td></td>
-						-->
 						<td><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
 						<td>
 						<input id="txtTranmoney" type="text" class="txt num c1" />
+						</td>
+						<td colspan="2"> </td>
+						<td colspan="2">
+						<input id="btnImportVcce" type="button"/>
+						<input id="btnVcceImport" type="button" title="cut cubu"/>
 						</td>
 					</tr>
 					<tr>
