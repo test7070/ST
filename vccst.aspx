@@ -313,7 +313,7 @@
                 });
                 
                 if(isinvosystem)
-					$('#txtTax').hide();
+					$('.istax').hide();
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
@@ -416,7 +416,7 @@
 						var as = _q_appendData("ucca", "", true);
 	            		if (as[0] != undefined) {
 	            			isinvosystem=true;
-							$('#txtTax').hide();
+							$('.istax').hide();
 	           			}else{
 	            			isinvosystem=false;
 	            		}
@@ -1050,6 +1050,8 @@
                     }
                     $(this).attr('OldValue', OldValue);
                 });
+                if(isinvosystem)
+					$('.istax').hide();
             }
 			var x_bseq = 0;
             function q_popPost(s1) {
@@ -1558,12 +1560,12 @@
 						</td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
-						<input id="txtTax" type="text" class="txt num c1" />
+						<input id="txtTax" type="text" class="txt num c1 istax" />
 						</td>
 						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbTaxtype" style="float:left;width:80px;" ></select></td>
-						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
+						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
 						<td>
-						<input id="txtTotal" type="text" class="txt num c1" />
+						<input id="txtTotal" type="text" class="txt num c1 istax" />
 						</td>
 					</tr>
 					<tr>
