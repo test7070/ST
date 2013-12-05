@@ -45,13 +45,15 @@
 		        t_uno = $.trim($('#txtUno').val());
 		        t_bdate = $('#txtBdate').val();
 		        t_edate = $('#txtEdate').val();
+		        t_invono = $('#txtInvono').val();
 
 		        var t_where = " 1=1 " 
 		        + q_sqlPara2("kind", t_kind)
 		        + q_sqlPara2("typea", t_typea)
 		        + q_sqlPara2("noa", t_noa) 
 		        + q_sqlPara2("datea", t_bdate, t_edate) 		     
-		        + q_sqlPara2("custno", t_custno);
+		        + q_sqlPara2("custno", t_custno)
+		        + q_sqlPara2("invono", t_invono);
 		        if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 		       	if(t_uno.length>0)
@@ -115,6 +117,12 @@
 					<td class='seek'  style="width:20%;"><a id='lblUno'></a></td>
 					<td>
 					<input class="txt" id="txtUno" type="text" style="width:215px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblInvono'> </a></td>
+					<td>
+					<input class="txt" id="txtInvono" type="text" style="width:215px; font-size:medium;" />
 					</td>
 				</tr>
 			</table>
