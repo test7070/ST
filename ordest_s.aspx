@@ -52,16 +52,17 @@
 		        + q_sqlPara2("stype", t_stype)
 		        + q_sqlPara2("enda", t_enda)
 		        + q_sqlPara2("noa", t_noa) 
-		        + q_sqlPara2("datea", t_bdate, t_edate) 		     
-		        + q_sqlPara2("custno", t_custno);
+		        + q_sqlPara2("datea", t_bdate, t_edate)     
+		        + q_sqlPara2("custno", t_custno)
 		        if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',comp)>0";
-		       	if(t_uno.length>0)
+				if(t_uno.length>0)
 		       		t_where += " and exists(select noa from ordet"+r_accy+" where ordet"+r_accy+".noa=orde"+r_accy+".noa and ordet"+r_accy+".uno='"+t_uno+"')";
 		       	
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
             }
+
 		</script>
 		<style type="text/css">
             .seek_tr {

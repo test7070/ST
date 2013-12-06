@@ -37,8 +37,8 @@
 				if(w.q_name == 'orde' || emp(w.q_name) ){
 					t_content = '';
 				}else{
-					t_content = "where=^^ ((select isnull(sum(mount),0) from ordes"+r_accy+" b where orde.noa = b.noa)-(select isnull(sum(mount),0) from "+w.q_name+"s"+r_accy+" a where orde.noa=a.ordeno ) >0) ";
-					t_content +=" and ((select isnull(sum(weight),0) from ordes"+r_accy+" b where orde.noa = b.noa)-(select isnull(sum(weight),0) from "+w.q_name+"s"+r_accy+" a where orde.noa=a.ordeno) >0) ^^";
+					t_content = "where=^^ ((select isnull(sum(mount),0) from ordes"+r_accy+" b where orde"+r_accy+".noa = b.noa)-(select isnull(sum(mount),0) from "+w.q_name+"s"+r_accy+" a where orde"+r_accy+".noa=a.ordeno ) >0) ";
+					t_content +=" and ((select isnull(sum(weight),0) from ordes"+r_accy+" b where orde"+r_accy+".noa = b.noa)-(select isnull(sum(weight),0) from "+w.q_name+"s"+r_accy+" a where orde"+r_accy+".noa=a.ordeno) >0) ^^";
 				}
 				mainBrow(6, t_content, t_sqlname, t_postname, r_accy);
 				w.$('#cboxTitle').text('若沒有找到相關資料，請注意類別的選取。').css('color','red').css('font-size','initial');
