@@ -319,6 +319,10 @@
 					}
 				});
 			}
+			function showSizeInfo(){
+				$('#sizeInfo').toggle();
+				$('#sizeInfo').offset({top:100,left:150});
+			}
 
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
@@ -906,6 +910,74 @@
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
+		<div id="sizeInfo" style="position: absolute;display:none;width:200px;height:300px;">
+			<table style="background:#8ADF39;border: 2px white double;"> 
+				<tr>
+					<td align="center" style="width:100px;"><a>編號</a></td>
+					<td align="center" style="width:100px;"><a>尺寸</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>A</a></td>
+					<td align="center"><a>1/2"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>B</a></td>
+					<td align="center"><a>3/4"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>C</a></td>
+					<td align="center"><a>1"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>D</a></td>
+					<td align="center"><a>1-1/4"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>F</a></td>
+					<td align="center"><a>2"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>G</a></td>
+					<td align="center"><a>2-1/2"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>H</a></td>
+					<td align="center"><a>3"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>I</a></td>
+					<td align="center"><a>3-1/2"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>J</a></td>
+					<td align="center"><a>4"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>K</a></td>
+					<td align="center"><a>5"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>L</a></td>
+					<td align="center"><a>6"</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>W</a></td>
+					<td align="center"><a>125*75</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>X</a></td>
+					<td align="center"><a>100*100</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>Y</a></td>
+					<td align="center"><a>150*100</a></td>
+				</tr>
+				<tr>
+					<td align="center"><a>Z</a></td>
+					<td align="center"><a>125*125</a></td>
+				</tr>
+			</table>
+		</div>
 		<div style="overflow: auto;display:block;">
 			<!--#include file="../inc/toolbar.inc"-->
 		</div>
@@ -1088,7 +1160,7 @@
 						<td align="center" style="width:10%;"><a id='lblProduct_st'></a></td>
 						<td align="center" style="width:60px;"><a id='lblClass_st'></a></td>
 						<td align="center" id='Size'><a id='lblSize_help'> </a></br><a id='lblSize_st'> </a></td>
-						<td align="center" style="width:10%;"><a id='lblSizea_st'></a></td>
+						<td align="center" style="width:10%;"><a id='lblSizea_st'></a><input id="btnShowInfo" type="button" value="代碼列表" onclick="showSizeInfo()"></td>
 						<td align="center" style="width:3%;"><a id='lblUnit_st'></a></td>
 						<td align="center" style="width:5%;"><a id='lblMount_st'></a></td>
 						<td align="center" style="width:7%;"><a id='lblWeight_st'></a></td>

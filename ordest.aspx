@@ -1632,7 +1632,7 @@
 					<td align="center" style="width:140px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
-					<td align="center" style="width:240px;"><a id='lblSizea_st' style="float:left;"> </a><input id="btnShowInfo" type="button" style="float:left;" value="代碼列表" onclick="showSizeInfo()"></td>
+					<td align="center" style="width:240px;"><a id='lblSizea_st'> </a><input id="btnShowInfo" type="button" value="代碼列表" onclick="showSizeInfo()"></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
