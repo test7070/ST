@@ -390,11 +390,29 @@
 														 newB_ret.length, newB_ret, 
 														 'uno,productno,product,spec,size,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,class,style,unit', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
+							t_where = "where=^^ noa='" + newB_ret[0].noa + "'";
+							q_gt('ordc', t_where , 0, 0, 0, "", r_accy);
 							bbsAssign();
 							size_change();
 							sum();
 						}
 						ordcsArray = new Array;
+						break;
+					case 'ordc':
+						var as = _q_appendData("ordc", "", true);
+						if (as[0] != undefined) {
+							$('#txtTggno').val(as[0].tggno);
+							$('#txtTgg').val(as[0].tgg);
+							$('#txtSalesno').val(as[0].salesno);
+							$('#txtSales').val(as[0].sales);
+							$('#txtTel').val(as[0].tel);
+							$('#cmbTrantype').val(as[0].trantype);
+							$('#txtPost').val(as[0].post);
+							$('#txtAddr').val(as[0].addr);
+							$('#txtPaytype').val(as[0].paytype);
+							$('#txtPost2').val(as[0].post2);
+							$('#txtAddr2').val(as[0].addr2);
+						}
 						break;
 					case 'style' :
 						var as = _q_appendData("style", "", true);
