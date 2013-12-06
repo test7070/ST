@@ -79,6 +79,10 @@
                     }, {
                         type : '6', //[20]
                         name : 'paytype'
+                    }, {//[21]
+                        type : '8',
+                        name : 'xoption01',
+                        value : q_getMsg('toption01').split('&')
                     }]
                 });
                 q_popAssign();
