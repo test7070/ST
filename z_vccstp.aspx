@@ -89,6 +89,10 @@
                         type : '5',
                         name : 'showtype',
                         value : q_getMsg('showtype').split('&')
+                    }, {
+                        type : '8', //[15]
+                        name : 'xmerga',
+                        value : "1@".split(',')
                     }]
                 });
                 q_popAssign();
@@ -152,6 +156,7 @@
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
                 $('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
                 $('#chkXshowprice').children('input').attr('checked', 'checked');
+                $('#chkXmerga input[type="checkbox"]').prop('checked',true);
             }
 
             function q_boxClose(s2) {
