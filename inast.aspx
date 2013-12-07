@@ -38,7 +38,7 @@
 	            ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'], 
 	            ['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtCust', 'cust_b.aspx'], 
 	            ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'], 
-	            ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
+	            ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
 	            , ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
             );
             brwCount2 = 7;
@@ -605,7 +605,8 @@
 							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 		                	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
                         });
-                        ProductAddStyle(b_seq);
+                        if(trim($('#txtStyle_' + b_seq).val()).length != 0)
+                        	ProductAddStyle(b_seq);
                         $('#txtStyle_' + b_seq).focus();
                         break;
                 }

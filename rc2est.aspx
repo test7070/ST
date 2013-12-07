@@ -29,7 +29,7 @@
          aPop = new Array(['txtCustno', 'lblCustno', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'],
         ['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx'],
         ['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx','95%','60%'],
-        ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
+        ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']);
 
         $(document).ready(function () {
             bbmKey = ['noa'];
@@ -280,7 +280,8 @@
 							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 		                	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
 		                });
-		                ProductAddStyle(b_seq);
+                        if(trim($('#txtStyle_' + b_seq).val()).length != 0)
+                        	ProductAddStyle(b_seq);
 		                $('#txtStyle_' + b_seq).focus();
 		                break;
                 }

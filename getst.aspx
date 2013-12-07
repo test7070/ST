@@ -30,7 +30,7 @@
 			brwNowPage = 0;
 			brwKey = 'Datea';
 			aPop = new Array(['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
-			['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,spec,radius,width,dime,lengthb,style,class,eweight,emount', '0txtUno_,txtProductno_,txtProduct_,txtSpec_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtStyle_,txtClass_,txtGweight_,txtGmount_', 'uccc_seek_b.aspx', '95%', '60%']
+			['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,spec,radius,width,dime,lengthb,style,class,eweight,emount', '0txtUno_,txtProductno_,txtSpec_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtStyle_,txtClass_,txtGweight_,txtGmount_', 'uccc_seek_b.aspx', '95%', '60%']
 			, ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
 			, ['txtCustno', 'lblCustno', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx']
 			, ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']);
@@ -315,7 +315,8 @@
 							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 		                	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
 						});
-						ProductAddStyle(b_seq);
+                        if(trim($('#txtStyle_' + b_seq).val()).length != 0)
+                        	ProductAddStyle(b_seq);
 						$('#txtStyle_' + b_seq).focus();
 						break;
 					case 'txtUno_':
