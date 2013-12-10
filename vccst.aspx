@@ -131,7 +131,7 @@
                     t_money = q_add(t_money, t_moneys);
                     $('#txtTotal_' + j).val(FormatNumber(t_moneys));
                 }
-                t_money = q_add(t_money,t_tranmoney);
+                /*t_money = q_add(t_money,t_tranmoney);*/
                 t_total=t_money;
 				t_tax=0;
                 t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
