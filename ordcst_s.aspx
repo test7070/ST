@@ -50,13 +50,15 @@
 
 		        var t_where = " 1=1 " 
 		        + q_sqlPara2("kind", t_kind)
-		        + q_sqlPara2("enda", t_enda)
 		        + q_sqlPara2("noa", t_noa) 
 		        + q_sqlPara2("datea", t_bdate, t_edate) 
 		        + q_sqlPara2("odate", t_bodate, t_eodate) 		     
 		        + q_sqlPara2("tggno", t_tggno);
 		        if (t_tgg.length>0)
                     t_where += " and charindex('" + t_tgg + "',tgg)>0";
+		       	if(t_enda.length>0){
+		       		t_where += " and (enda="+t_enda+" or exists(select noa from ordcs"+r_accy+" where ordcs"+r_accy+".noa=ordc"+r_accy+".noa and ordcs"+r_accy+".enda="+t_enda+"))";
+		       	}
 		       	
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
