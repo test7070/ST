@@ -179,6 +179,10 @@
 				        $('#txtPrice_' + j).change(function () {sum();});
 				        $('#txtTotal_' + j).change(function () {sum();});
 						$('#txtStyle_' + j).blur(function(){
+							$('input[id*="txtProduct_"]').each(function() {
+								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+				               	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
+							});
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							ProductAddStyle(n);
 						});
@@ -274,22 +278,7 @@
             function refresh(recno) {
                 _refresh(recno);
                 size_change();
-				$('input[id*="txtProduct_"]').each(function(){
-					var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-					OldValue = $(this).val();
-					nowStyle = $('#txtStyle_'+n).val();
-					if(!emp(nowStyle) && (StyleList[0] != undefined)){
-						for(var i = 0;i < StyleList.length;i++){
-		               		if(StyleList[i].noa.toUpperCase() == nowStyle){
-		              			styleProduct = StyleList[i].product;
-								if(OldValue.substr(OldValue.length-styleProduct.length) == styleProduct){
-									OldValue = OldValue.substr(0,OldValue.length-styleProduct.length);
-								}
-		               		}
-		               	}
-		            }
-					$(this).attr('OldValue',OldValue);
-				});
+				q_popPost('txtProductno_');
             }
 			function q_popPost(s1) {
 				switch (s1) {
