@@ -111,7 +111,11 @@
 						$('#txtWeight_' + b_seq).val(getTheory(j));
 					}
                     //---------------------------------------
-                    t_weights = q_float('txtWeight_' + j);
+                    var t_styles = $.trim($('#txtStyle_'+j).val());
+                    var t_unos = $.trim($('#txtUno_'+j).val());
+                    var t_dimes = $.trim($('#txtDime_'+j).val());
+					if(!(t_styles=='' && t_unos=='' && t_dimes==0))
+	                    t_weights = q_float('txtWeight_' + j);
                     t_prices = q_float('txtPrice_' + j);
                     t_mounts = q_float('txtMount_' + j);
                     if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){

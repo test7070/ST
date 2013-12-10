@@ -158,7 +158,6 @@
                     size_change();
                 });
                 $('#Xstktype select').val('A1').change();
-                $('#Xitype select').val('1').change();
                 setDefaultValue();
                 size_change();
                 $('#Xitype .cmb').change(function() {

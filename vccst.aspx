@@ -122,7 +122,11 @@
                         t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
                         t_moneys = round(q_mul(t_moneys, t_float), 0);
                     }
-                    t_weight = q_add(t_weight, t_weights);
+                    var t_styles = $.trim($('#txtStyle_'+j).val());
+                    var t_unos = $.trim($('#txtUno_'+j).val());
+                    var t_dimes = $.trim($('#txtDime_'+j).val());
+					if(!(t_styles=='' && t_unos=='' && t_dimes==0))
+                    	t_weight = q_add(t_weight, t_weights);
                     t_mount = q_add(t_mount, t_mounts);
                     t_money = q_add(t_money, t_moneys);
                     $('#txtTotal_' + j).val(FormatNumber(t_moneys));
