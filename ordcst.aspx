@@ -287,6 +287,30 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'refreshEnds':
+						var as = _q_appendData("ordc", "", true);
+						if(as[0]!=undefined){
+							for(var i=0;i<abbm.length;i++){
+								if(abbm[i].noa==as[0].noa){
+									if(as[0].ends!='1'){
+										if($('#chkEnda').prop('checked'))
+											abbm[i].ends='2';
+										else if(!$('#chkEnda').prop('checked') && as[0].ends==2)
+											abbm[i].ends='0';
+										else
+											abbm[i].ends=as[0].ends;
+									}
+									break;
+								}	
+							}
+						}
+						var t_noa = trim($('#txtNoa').val());
+						var t_date = trim($('#txtOdate').val());
+						if (t_noa.length == 0 || t_noa == "AUTO")
+							q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ordc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+						else
+							wrServer(t_noa);
+						break;
 					case 'getAcomp':
 						var as = _q_appendData("acomp", "", true);
 						if(as[0]!=undefined){
@@ -420,12 +444,8 @@
 				else
 					$('#txtWorker2').val(r_name);
 				sum();
-				var t_noa = trim($('#txtNoa').val());
-				var t_date = trim($('#txtOdate').val());
-				if (t_noa.length == 0 || t_noa == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ordc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-				else
-					wrServer(t_noa);
+				
+				q_gt('ordc',"where=^^ noa='"+$.trim($('#txtNoa').val())+"'^^", 0, 0, 0, 'refreshEnds', r_accy);
 			}
 
 			function _btnSeek() {
@@ -588,6 +608,24 @@
 
 			function refresh(recno) {
 				_refresh(recno);
+				var obj = $('.control_enda');
+				for(var i=0;i<obj.length;i++){
+					switch(obj.eq(i).html()){
+						case '1':
+							obj.eq(i).parent().children().css('color','darkred');
+							break;
+						case '2':
+							obj.eq(i).parent().children().css('color','darkred');
+							break;
+						case '3':
+							obj.eq(i).parent().children().css('color','darkgreen');
+							break;
+						default:
+							obj.eq(i).parent().children().css('color','blue');
+					}
+
+				}
+				
 				size_change();
 				q_popPost('txtProductno_');
 			}
@@ -907,6 +945,7 @@
 						<td align="center" style="width:80px; color:black;"><a id="vewOdate"> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id="vewNoa"> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
+						<td align="center" style="width:20px; color:black;display:none;"><a id="vewEnds"> </a></td>
 					</tr>
 					<tr>
 						<td >
@@ -915,6 +954,7 @@
 						<td align="center" id='odate'>~odate</td>
 						<td align="center" id='noa'>~noa</td>
 						<td align="center" id='nick'>~nick</td>
+						<td id="ends" class="control_enda" style="text-align: center;display:none;">~ends</td>
 					</tr>
 				</table>
 			</div>
