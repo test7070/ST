@@ -57,8 +57,11 @@
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 				if(t_uno.length>0)
 		       		t_where += " and exists(select noa from ordet"+r_accy+" where ordet"+r_accy+".noa=orde"+r_accy+".noa and ordet"+r_accy+".uno='"+t_uno+"')";
-		       	if(t_enda.length>0){
-		       		t_where += " and (enda="+t_enda+" or exists(select noa from ordes"+r_accy+" where ordes"+r_accy+".noa=orde"+r_accy+".noa and ordes"+r_accy+".enda="+t_enda+"))";
+		       	if(t_enda=='0'){
+		       		t_where += " and (enda=0 and exists(select noa from ordes"+r_accy+" where ordes"+r_accy+".noa=orde"+r_accy+".noa and ordes"+r_accy+".enda=0))";
+		       	}
+		       	if(t_enda=='1'){
+		       		t_where += " and (enda=1 or exists(select noa from ordes"+r_accy+" where ordes"+r_accy+".noa=orde"+r_accy+".noa and ordes"+r_accy+".enda=1))";
 		       	}
 		       	
 		       	
