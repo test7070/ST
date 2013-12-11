@@ -391,6 +391,25 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
+					case 'refreshEnds':
+						var as = _q_appendData("orde", "", true);
+						if(as[0]!=undefined){
+							for(var i=0;i<abbm.length;i++){
+								if(abbm[i].noa==as[0].noa){
+									if(as[0].ends!='2'){
+										if($('#chkEnda').prop('checked'))
+											abbm[i].ends='1';
+										else if(!$('#chkEnda').prop('checked') && as[0].ends==1)
+											abbm[i].ends='0';
+										else
+											abbm[i].ends=as[0].ends;
+									}
+									break;
+								}	
+							}
+						}
+						save();
+						break;
 					case 'getAcomp':
 						var as = _q_appendData("acomp", "", true);
 						if(as[0]!=undefined){
@@ -586,7 +605,7 @@
                         		return;
                         	}                 
                         }
-                        save();
+                        q_gt('orde',"where=^^ noa='"+$.trim($('#txtNoa').val())+"'^^", 0, 0, 0, 'refreshEnds', r_accy);
                         break;
                 }
             }
@@ -904,6 +923,25 @@
 			///////////////////////////////////////////////////  以下提供事件程式，有需要時修改
 			function refresh(recno) {
 				_refresh(recno);
+				var obj = $('.control_enda');
+				for(var i=0;i<obj.length;i++){
+					switch(obj.eq(i).html()){
+						case '1':
+							obj.eq(i).parent().children().css('color','darkred');
+							break;
+						case '2':
+							obj.eq(i).parent().children().css('color','darkred');
+							break;
+						case '3':
+							obj.eq(i).parent().children().css('color','darkgreen');
+							break;
+						default:
+							obj.eq(i).parent().children().css('color','blue');
+					}
+
+				}
+				
+				
 				if ($('#cmbStype').find("option:selected").text() == '外銷')
 					$('#btnOrdei').show();
 				else
@@ -1449,14 +1487,14 @@
 						<td align="center" style="width:80px; color:black;"><a id="vewOdate"> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id="vewNoa"> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
+						<td align="center" style="width:20px; color:black;display:none;"><a id="vewEnds"> </a></td>
 					</tr>
 					<tr>
-						<td >
-						<input id="chkBrow.*" type="checkbox"/>
-						</td>
+						<td><input id="chkBrow.*" type="checkbox"/></td>
 						<td id="odate" style="text-align: center;">~odate</td>
 						<td id="noa" style="text-align: center;">~noa</td>
 						<td id="nick" style="text-align: center;">~nick</td>
+						<td id="ends" class="control_enda" style="text-align: center;display:none;">~ends</td>
 					</tr>
 				</table>
 			</div>
