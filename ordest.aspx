@@ -396,10 +396,10 @@
 						if(as[0]!=undefined){
 							for(var i=0;i<abbm.length;i++){
 								if(abbm[i].noa==as[0].noa){
-									if(as[0].ends!='2'){
+									if(as[0].ends!='1'){
 										if($('#chkEnda').prop('checked'))
-											abbm[i].ends='1';
-										else if(!$('#chkEnda').prop('checked') && as[0].ends==1)
+											abbm[i].ends='2';
+										else if(!$('#chkEnda').prop('checked') && as[0].ends==2)
 											abbm[i].ends='0';
 										else
 											abbm[i].ends=as[0].ends;
