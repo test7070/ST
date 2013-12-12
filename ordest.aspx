@@ -1431,6 +1431,10 @@
 					<td align="center"><a>1-1/4"</a></td>
 				</tr>
 				<tr>
+					<td align="center"><a>E</a></td>
+					<td align="center"><a>1-1/2"</a></td>
+				</tr>
+				<tr>
 					<td align="center"><a>F</a></td>
 					<td align="center"><a>2"</a></td>
 				</tr>
