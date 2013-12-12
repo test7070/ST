@@ -22,9 +22,9 @@
             q_desc = 1;
             q_tables = 's';
             var q_name = "vcc";
-            var q_readonly = ['txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
+            var q_readonly = ['txtVccatax','txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
             var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtTheory'];
-            var bbmNum = [['txtMoney', 10, 0, 1],['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
+            var bbmNum = [['txtVccatax', 10, 0, 1],['txtMoney', 10, 0, 1],['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
             var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1], ['txtMount', 10, 2, 1], ['txtTheory', 12,3, 1], ['txtGweight', 10, 3, 1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
@@ -50,8 +50,6 @@
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt('style', '', 0, 0, 0, '');
-                q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
                 
                 q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
             });
@@ -316,8 +314,11 @@
                     	q_pop('txtInvono', "vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtInvono').val() + "';" + r_accy, 'vcca', 'noa', 'datea', "95%", "95%px", q_getMsg('lblInvono'), true);
                 });
                 
-                if(isinvosystem)
-					$('.istax').hide();
+                if(isinvosystem){
+                	$('.istax').hide();
+                	$('#txtVccatax').show();
+                }
+					
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
@@ -416,6 +417,19 @@
             var AddRet = new Array;
             function q_gtPost(t_name) {/// 資料下載後 ...
                 switch (t_name) {
+                	case 'getVccatax':
+						var as = _q_appendData("vcca", "", true);
+	            		if (as[0] != undefined) {
+	            			$('#txtVccatax').val(q_trv(as[0].tax,0,1));
+	            			var t_noa = $('#txtNoa').val();
+	            			for(var i=0;i<abbm.length;i++){
+	            				if(abbm[i].noa==t_noa){
+	            					abbm[i].vccatax=as[0].tax;
+	            					break;
+	            				}
+	            			}    			
+	           			}
+		            	break;
                 	case 'ucca_invo':
 						var as = _q_appendData("ucca", "", true);
 	            		if (as[0] != undefined) {
@@ -424,6 +438,7 @@
 	           			}else{
 	            			isinvosystem=false;
 	            		}
+	            		q_gt('style', '', 0, 0, 0, '');
 		            	break;
                 	case 'check_memos':
                 		var as = _q_appendData("view_ordes", "", true);
@@ -488,6 +503,7 @@
                         var as = _q_appendData("style", "", true);
                         StyleList = new Array();
                         StyleList = as;
+                        q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
                         break;
                     case 'cust':
                         var as = _q_appendData("cust", "", true);
@@ -797,12 +813,22 @@
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
+                $('#txtVccatax').val(0);
+    			var t_noa = $('#txtNoa').val();
+    			for(var i=0;i<abbm.length;i++){
+    				if(abbm[i].noa==t_noa){
+    					abbm[i].vccatax=0;
+    					break;
+    				}
+    			} 
                 var strSplit = xmlString.split(';');
                 if(strSplit.length>=2){
                 	abbm[q_recno]['accno'] = strSplit[0];
                 	$('#txtAccno').val(strSplit[0]);
                		abbm[q_recno]['invono'] = strSplit[1];
                 	$('#txtInvono').val(strSplit[1]);
+                	if(strSplit[1].length>0)
+                		q_gt('vcca',"where=^^noa='"+strSplit[1]+"'^^", 0, 0, 0, 'getVccatax', r_accy);
                 }
                 Unlock(1);
             }
@@ -1554,7 +1580,8 @@
 						</td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
-						<input id="txtTax" type="text" class="txt num c1 istax" />
+							<input id="txtTax" type="text" class="txt num c1 istax" />
+							<input id="txtVccatax" type="text" class="txt num c1 " style="display:none;" />
 						</td>
 						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbTaxtype" style="float:left;width:80px;" ></select></td>
 						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
