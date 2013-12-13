@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -20,9 +20,9 @@
 			}
 			q_tables = 's';
 			var q_name = "rc2";
-			var q_readonly = ['txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2','txtMoney','txtWeight','txtTotal','txtTax','txtTotalus'];
+			var q_readonly = ['txtRc2atax','txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2','txtMoney','txtWeight','txtTotal','txtTax','txtTotalus'];
 			var q_readonlys = ['txtMoney'];
-			var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
+			var bbmNum = [['txtRc2atax', 10, 0, 1],['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
 			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1],['txtTheory',10,3,1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
@@ -49,10 +49,7 @@
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
-				q_gt('style', '', 0, 0, 0, '');
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-				
-				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
+				q_gt('rc2a', 'stop=1 ', 0, 0, 0, "isinvosystem");//判斷是否有買發票系統
 			});
 
 			function main() {
@@ -263,8 +260,10 @@
 					}
 				});
 				
-				if(isinvosystem)
+				if(isinvosystem){
 					$('.istax').hide();
+					$('#txtRc2atax').show();
+				}
 			}
 
 			function q_boxClose(s2) {///   q_boxClose 2/4 /// 查詢視窗、廠商視窗、訂單視窗  關閉時執行
@@ -322,14 +321,28 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
-					case 'ucca_invo':
-	            		var as = _q_appendData("ucca", "", true);
+					case 'getRc2atax':
+						var as = _q_appendData("rc2a", "", true);
+	            		if (as[0] != undefined) {
+	            			$('#txtRc2atax').val(q_trv(as[0].tax,0,1));
+	            			var t_noa = $('#txtNoa').val();
+	            			for(var i=0;i<abbm.length;i++){
+	            				if(abbm[i].noa==t_noa){
+	            					abbm[i].rc2atax=as[0].tax;
+	            					break;
+	            				}
+	            			}    			
+	           			}
+		            	break;
+					case 'isinvosystem':
+	            		var as = _q_appendData("rc2a", "", true);
 	            		if (as[0] != undefined) {
 	            			isinvosystem=true;
 	            			$('.istax').hide();
 	            		}else{
 	            			isinvosystem=false;
 	            		}
+	            		q_gt('style', '', 0, 0, 0, '');
 	            	break;
                     case 'btnOk_checkuno':
                     	var as = _q_appendData("view_uccb", "", true);
@@ -422,6 +435,7 @@
 						var as = _q_appendData("style", "", true);
 						StyleList = new Array();
 						StyleList = as;
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 						break;
 					case 'cust' :
 						var as = _q_appendData("cust", "", true);
@@ -492,9 +506,19 @@
 			function q_stPost() {
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
+				$('#txtRc2atax').val(0);
+    			var t_noa = $('#txtNoa').val();
+    			for(var i=0;i<abbm.length;i++){
+    				if(abbm[i].noa==t_noa){
+    					abbm[i].rc2atax=0;
+    					break;
+    				}
+    			} 
 				var s1 = xmlString.split(';');
 				abbm[q_recno]['accno'] = s1[0];
 				$('#txtAccno').val(s1[0]);
+				if($.trim($('#txtInvono').val()).length>0)
+            		q_gt('rc2a',"where=^^noa='"+$.trim($('#txtInvono').val())+"'^^", 0, 0, 0, 'getRc2atax', r_accy);
 				Unlock(1);
 			}
 			function btnOk() {
@@ -1213,7 +1237,8 @@
 						</td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
-						<input id="txtTax" type="text" class="txt num c1 istax" />
+							<input id="txtTax" type="text" class="txt num c1 istax" />
+							<input id="txtRc2atax" type="text" class="txt num c1 " style="display:none;" />
 						</td>
 						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbTaxtype" style="float:left;width:80px;" > </select></td>
 						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
