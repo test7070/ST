@@ -22,6 +22,7 @@
 				if (!q_paraChk())
 					return;
 				main();
+				setTimeout('parent.$.fn.colorbox.resize({innerHeight : "750px"})', 300);
 			});
 			function main() {
 				if (dataErr) {

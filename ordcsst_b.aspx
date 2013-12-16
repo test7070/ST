@@ -21,6 +21,7 @@
 			brwCount2 = 0;
 		    $(document).ready(function () {
 		        main();
+		        setTimeout('parent.$.fn.colorbox.resize({innerHeight : "750px"})', 300);
 		    });
 			function distinct(arr1){
 				var uniArray = [];
