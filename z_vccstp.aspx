@@ -109,6 +109,7 @@
                     if (t_no.length > 0) {
                         $('#txtXnoa1').val(t_no);
                         $('#txtXnoa2').val(t_no);
+                        $('#btnOk').click();
                     }
                 }
 

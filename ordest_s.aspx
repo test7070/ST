@@ -34,6 +34,10 @@
                 $('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
                 $('#txtNoa').focus();
+                $('#txtEdime').val(99.9);
+                $('#txtEwidth').val(9999);
+                $('#txtElengthb').val(9999);
+                $('#txtEradius').val(999.9);
             }
             function q_seekStr() {
             	t_kind = $.trim($('#cmbKind').val());
@@ -46,13 +50,23 @@
 
 		        t_bdate = $('#txtBdate').val();
 		        t_edate = $('#txtEdate').val();
-
+		        
+		        t_bdime = q_float('txtBdime');
+		        t_edime = q_float('txtEdime');
+				t_bwidth = q_float('txtBwidth');
+				t_ewidth = q_float('txtEwidth');
+				t_blengthb = q_float('txtBlengthb');
+				t_elengthb = q_float('txtElengthb');
+				t_bradius = q_float('txtBradius');
+		        t_eradius = q_float('txtEradius');
+				
 		        var t_where = " 1=1 " 
 		        + q_sqlPara2("kind", t_kind)
 		        + q_sqlPara2("stype", t_stype)
 		        + q_sqlPara2("noa", t_noa) 
 		        + q_sqlPara2("datea", t_bdate, t_edate)     
 		        + q_sqlPara2("custno", t_custno);
+		        
 		        if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 				if(t_uno.length>0)
@@ -63,7 +77,11 @@
 		       	if(t_enda=='1'){
 		       		t_where += " and (enda=1 or exists(select noa from ordes"+r_accy+" where ordes"+r_accy+".noa=orde"+r_accy+".noa and ordes"+r_accy+".enda=1))";
 		       	}
-		       	
+		       	t_where += " and exists (select * from ordes"+r_accy+" where orde"+r_accy+".noa=ordes"+r_accy+".noa "
+		       		+" and ordes"+r_accy+".dime between "+t_bdime+" and "+t_edime
+		       		+" and ordes"+r_accy+".width between "+t_bwidth+" and "+t_ewidth
+		       		+" and ordes"+r_accy+".lengthb between "+t_blengthb+" and "+t_elengthb
+		       		+" and ordes"+r_accy+".radius between "+t_bradius+" and "+t_eradius+")";
 		       	
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
@@ -128,6 +146,38 @@
 					<td class='seek'  style="width:20%;"><a id='lblUno'></a></td>
 					<td>
 					<input class="txt" id="txtUno" type="text" style="width:215px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td   style="width:35%;" ><a id='lblDime'></a></td>
+					<td style="width:65%;  ">
+					<input class="txt" id="txtBdime" type="text" style="width:90px; font-size:medium;" />
+					<span style="display:inline-block; vertical-align:middle">&sim;</span>
+					<input class="txt" id="txtEdime" type="text" style="width:93px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td   style="width:35%;" ><a id='lblWidth'></a></td>
+					<td style="width:65%;  ">
+					<input class="txt" id="txtBwidth" type="text" style="width:90px; font-size:medium;" />
+					<span style="display:inline-block; vertical-align:middle">&sim;</span>
+					<input class="txt" id="txtEwidth" type="text" style="width:93px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td   style="width:35%;" ><a id='lblLengthb'></a></td>
+					<td style="width:65%;  ">
+					<input class="txt" id="txtBlengthb" type="text" style="width:90px; font-size:medium;" />
+					<span style="display:inline-block; vertical-align:middle">&sim;</span>
+					<input class="txt" id="txtElengthb" type="text" style="width:93px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td   style="width:35%;" ><a id='lblRadius'></a></td>
+					<td style="width:65%;  ">
+					<input class="txt" id="txtBradius" type="text" style="width:90px; font-size:medium;" />
+					<span style="display:inline-block; vertical-align:middle">&sim;</span>
+					<input class="txt" id="txtEradius" type="text" style="width:93px; font-size:medium;" />
 					</td>
 				</tr>
 			</table>
