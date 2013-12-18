@@ -103,15 +103,6 @@
                 $('#txtDate2').mask('999/99/99');
                 $('#txtDate2').datepicker();
 
-                var t_no = typeof (q_getId()[3]) == 'undefined' ? '' : q_getId()[3];
-                if (t_no.indexOf('noa=') >= 0) {
-                    t_no = t_no.replace('noa=', '');
-                    if (t_no.length > 0) {
-                        $('#txtXnoa1').val(t_no);
-                        $('#txtXnoa2').val(t_no);
-                        $('#btnOk').click();
-                    }
-                }
 
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
@@ -158,6 +149,15 @@
                 $('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
                 $('#chkXshowprice').children('input').attr('checked', 'checked');
                 $('#chkXmerga input[type="checkbox"]').prop('checked',true);
+                var t_no = typeof (q_getId()[3]) == 'undefined' ? '' : q_getId()[3];
+                if (t_no.indexOf('noa=') >= 0) {
+                    t_no = t_no.replace('noa=', '');
+                    if (t_no.length > 0) {
+                        $('#txtXnoa1').val(t_no);
+                        $('#txtXnoa2').val(t_no);
+                        $('#btnOk').click();
+                    }
+                }
             }
 
             function q_boxClose(s2) {
