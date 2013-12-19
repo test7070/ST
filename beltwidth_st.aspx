@@ -711,7 +711,7 @@
 					</tr>
 					<tr class="trcontent">
 						<td class="td1">2.3</td>
-						<td class="td2">238.5</td>
+						<td class="td2">236.5</td>
 						<td class="td3">226.5</td>
 						<td class="td4">236.0</td>
 						<td class="td5">235.0</td>
@@ -725,12 +725,12 @@
 					<tr class="trcontent">
 						<td class="td1">2.6</td>
 						<td class="td2">236.0</td>
-						<td class="td3">228.0</td>
+						<td class="td3">226.0</td>
 						<td class="td4">235.0</td>
 						<td class="td5">235.0</td>
 						<td class="noborder"></td>
 						<td class="td1">3.2</td>
-						<td class="td2">276.0</td>
+						<td class="td2">275.0</td>
 						<td class="td3">274.5</td>
 						<td class="td4">274.0</td>
 						<td class="td5">272.5</td>
