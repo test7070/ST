@@ -132,11 +132,11 @@
 			margin-top: -15px;
 		}
 		.out{
-			border-top:40px #D6D3D6 solid;/*上邊框寬度等於表格第一行行高*/
-			width:0px;/*讓容器寬度為0*/
-			height:0px;/*讓容器高度為0*/
-			border-left:80px #BDBABD solid;/*左邊框寬度等於表格第一行第一格寬度*/
-			position:relative;/*讓裡面的兩個子容器絕對定位*/
+			border-top:40px #D6D3D6 solid;
+			width:0px;
+			height:0px;
+			border-left:80px #BDBABD solid;
+			position:relative;
 		}
 		.sA{
 			font-style:normal;
