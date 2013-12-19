@@ -124,13 +124,6 @@
 		}
 		.trcontent{
 		}
-		.subdiv{
-			margin-top: -15px;
-			margin-left: 7.8px;
-		}
-		.nonsubdiv{
-			margin-top: -15px;
-		}
 		.out{
 			border-top:40px #D6D3D6 solid;
 			width:0px;
@@ -169,11 +162,11 @@
 				<table class="stList" border="0" cellpadding='0' cellspacing='0'>
 					<tr class="trhead1">
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter"><sup><u>1</u></sup><div class="nonsubdiv"><sub>2</sub></div></td>
+						<td class="tdcenter">1/2"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 						<td class="noborder"></td>
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter"><sup><u>3</u></sup><div class="nonsubdiv"><sub>4</sub></div></td>
+						<td class="tdcenter">3/4"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 					</tr>
 					<tr class="trhead2">
@@ -317,7 +310,7 @@
 						<td class="tdright" colspan="2">單位：m/m</td>
 						<td class="noborder"></td>
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter">1<sup><u>1</u></sup><div class="subdiv"><sub>4</sub></div></td>
+						<td class="tdcenter">1 1/4"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 					</tr>
 					<tr class="trhead2">
@@ -483,7 +476,7 @@
 					<tr class="trsepart"><td class="noborder" colspan="11"><hr></td></tr>
 					<tr class="trhead1">
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter">1<sup><u>1</u></sup><div class="subdiv"><sub>2</sub></div></td>
+						<td class="tdcenter">1 1/2"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 						<td class="noborder"></td>
 						<td class="tdleft" colspan="2">±公差1mm</td>
@@ -653,7 +646,7 @@
 					<tr class="trsepart"><td class="noborder" colspan="11"><hr></td></tr>
 					<tr class="trhead1">
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter">2<sup><u>1</u></sup><div class="subdiv"><sub>2</sub></div></td>
+						<td class="tdcenter">2 1/2"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 						<td class="noborder"></td>
 						<td class="tdleft" colspan="2">±公差1mm</td>
@@ -810,7 +803,7 @@
 					<tr class="trsepart"><td class="noborder" colspan="11"><hr></td></tr>
 					<tr class="trhead1">
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter">3<sup><u>1</u></sup><div class="subdiv"><sub>2</sub></div></td>
+						<td class="tdcenter">3 1/2"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 						<td class="noborder"></td>
 						<td class="tdleft" colspan="2">±公差1mm</td>
