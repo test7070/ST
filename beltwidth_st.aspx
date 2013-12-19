@@ -310,7 +310,7 @@
 						<td class="tdright" colspan="2">單位：m/m</td>
 						<td class="noborder"></td>
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter">1 1/4"</td>
+						<td class="tdcenter">1-1/4"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 					</tr>
 					<tr class="trhead2">
@@ -476,7 +476,7 @@
 					<tr class="trsepart"><td class="noborder" colspan="11"><hr></td></tr>
 					<tr class="trhead1">
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter">1 1/2"</td>
+						<td class="tdcenter">1-1/2"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 						<td class="noborder"></td>
 						<td class="tdleft" colspan="2">±公差1mm</td>
@@ -646,7 +646,7 @@
 					<tr class="trsepart"><td class="noborder" colspan="11"><hr></td></tr>
 					<tr class="trhead1">
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter">2 1/2"</td>
+						<td class="tdcenter">2-1/2"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 						<td class="noborder"></td>
 						<td class="tdleft" colspan="2">±公差1mm</td>
@@ -803,7 +803,7 @@
 					<tr class="trsepart"><td class="noborder" colspan="11"><hr></td></tr>
 					<tr class="trhead1">
 						<td class="tdleft" colspan="2">±公差1mm</td>
-						<td class="tdcenter">3 1/2"</td>
+						<td class="tdcenter">3-1/2"</td>
 						<td class="tdright" colspan="2">單位：m/m</td>
 						<td class="noborder"></td>
 						<td class="tdleft" colspan="2">±公差1mm</td>
