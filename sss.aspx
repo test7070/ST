@@ -267,7 +267,8 @@
             }
 
             function btnPrint() {
-            	//q_box('z_sssp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
+            	if(q_getPara('sys.comp').indexOf('永勝')>-1)
+            		q_box('z_sssp_uu.aspx', '', "95%", "95%", q_getMsg("popPrint"));
             }
 			function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
