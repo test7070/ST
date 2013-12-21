@@ -302,6 +302,11 @@
 						q_box("z_credit.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" + $('#txtCustno').val() + "';"+r_accy+";" + q_cur, 'ordei', "95%", "95%", q_getMsg('btnCredit'));
 					}
 				});
+				$('#btnApv').click(function(e){
+					if($.trim($('#txtApv').val()).length>0)
+						return;
+					//q_gt('nhpe', "where=^^ noa='"+r_userno+"'^^", 0, 0, 0, "getUserCredit");
+				});
 				OrdenoAndNo2On_Change();
 			}
 			function showSizeInfo(){
@@ -1020,6 +1025,11 @@
 					$('#btnOrdem').attr('disabled', 'disabled');
 				else
 					$('#btnOrdem').removeAttr('disabled');
+					
+				if(q_cur==1 || q_cur=='2')
+					$('#btnApv').attr('disabled', 'disabled');
+				else
+					$('#btnApv').removeAttr('disabled');
 				OrdenoAndNo2On_Change();
 			}
 
@@ -1642,10 +1652,8 @@
 						<td>
 						<input id="txtWorker2"  type="text" class="txt c1"/>
 						</td>
-						<td><span> </span><a id="lblApv" class="lbl"> </a></td>
-						<td>
-						<input id="txtApv" type="text"  class="txt c1" disabled="disabled"/>
-						</td>
+						<td><input id="btnApv" type="button" style="width:70%;float:right;" value="核准"/></td>
+						<td><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>
 						<td><span> </span><a id='lblEnd' class="lbl"> </a></td>
 						<td><input id="chkEnda" type="checkbox"/></td>
 					</tr>
