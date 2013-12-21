@@ -132,6 +132,14 @@
                         type : '8', //[32] 1
                         name : 'xshowprice',
                         value : "1@顯示單價".split(',')
+                    }, {
+                        type : '5', //[33]2
+                        name : 'showtype',
+                        value : q_getMsg('showtype').split('&')
+                     }, {
+                        type : '8', //[34]3
+                        name : 'xmerga',
+                        value : "1@".split(',')
                     }]
                 });
                 q_popAssign();
