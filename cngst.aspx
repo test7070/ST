@@ -24,7 +24,7 @@
             var q_name = "cng";
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtWeight', 'txtMount'];
             var q_readonlys = [];
-            var bbmNum = [['txtTax', 10, 0, 1], ['txtMoney', 15, 0, 1], ['txtPrice', 10, 2, 1], ['txtWeight', 15, 3, 1], ['txtTotal', 15, 0, 1]];
+            var bbmNum = [['txtWeight', 15, 3, 1],['txtTranmoney', 10, 0, 1]];
             var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtWeight', 15, 2, 1]];
             var bbmMask = [];
             var bbsMask = [];
@@ -559,29 +559,13 @@
 						<input id="txtCarno" type="text" class="txt c1"/>
 						</td>
 					</tr>
-					<tr class="tr5">
-						<td class='td1'><span> </span><a id="lblTax" class="lbl" > </a></td>
-						<td class="td2">
-						<input id="txtTax" type="text" class="txt c1 num"/>
-						</td>
-						<td class='td3'><span> </span><a id="lblMoney" class="lbl" > </a></td>
-						<td class="td4">
-						<input id="txtMoney" type="text" class="txt c1 num"/>
-						</td>
-						<td class='td5'><span> </span><a id="lblPrice" class="lbl" > </a></td>
-						<td class="td6">
-						<input id="txtPrice"   type="text" class="txt c1 num"/>
-						</td>
-					</tr>
 					<tr class="tr6">
 						<td class='td1'><span> </span><a id="lblWeight" class="lbl" > </a></td>
 						<td class="td2">
 						<input id="txtWeight"   type="text" class="txt c1 num"/>
 						</td>
-						<td class='td3'><span> </span><a id="lblTotal" class="lbl" > </a></td>
-						<td class="td4">
-						<input id="txtTotal"   type="text" class="txt c1 num"/>
-						</td>
+						<td><span> </span><a id="lblTranmoney" class="lbl" > </a></td>
+						<td><input id="txtTranmoney"   type="text" class="txt c1 num"/></td>
 					</tr>
 					<tr class="tr7">
 						<td class='td1'><span> </span><a id="lblMemo" class="lbl"> </a></td>
