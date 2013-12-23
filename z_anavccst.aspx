@@ -87,6 +87,7 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 		<div id="q_menu"> </div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
+			<div>需先執行【庫存成本表】，進貨成本才會重新計算‧</div>
 			<div id="container">
 				<div id="q_report"> </div>
 			</div>
