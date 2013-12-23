@@ -156,7 +156,9 @@
                 $('#Xstktype .label').css('width', '5px');
                 $('#Xitype').css('width', '120px');
                 $('#Xstktype').css('width', '120px');
-
+				$('#Xshowprice').css('width','300px').css('height','30px');
+				$('#Xshowprice .label').css('width','0px');
+				$('#chkXshowprice').css('padding-top','5px');
                 $('#Xisordermemo').css('width', '300px').css('height', '30px');
                 $('#Xisordermemo .label').css('width', '0px');
                 $('#chkXisordermemo').css('padding-top', '5px');
@@ -196,6 +198,7 @@
                     }
                 });
                 $('#Xitype .cmb').change();
+                
             }
             
 
