@@ -67,6 +67,10 @@
 						type : '5', //[15]
 						name : 'xend',
 						value : [q_getPara('report.all')].concat(new Array('1@Y', '0@N'))
+                    }, {
+                        type : '5', //[16] 1
+                        name : 'xsortby', 
+                        value : 'custno@依客戶,sizea@依尺寸'.split(',')
 					}]
 				});
 				q_popAssign();
