@@ -1318,7 +1318,7 @@
 			}
 			.dview {
 				float: left;
-				width: 300px;
+				width: 380px;
 				border-width: 0px;
 			}
 			.tview {
@@ -1528,6 +1528,7 @@
 						<td align="center" style="width:80px; color:black;"><a id="vewOdate"> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id="vewNoa"> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id="vewApv"> </a></td>
 						<td align="center" style="width:20px; color:black;display:none;"><a id="vewEnds"> </a></td>
 					</tr>
 					<tr>
@@ -1535,6 +1536,7 @@
 						<td id="odate" style="text-align: center;">~odate</td>
 						<td id="noa" style="text-align: center;">~noa</td>
 						<td id="nick" style="text-align: center;">~nick</td>
+						<td id="apv" style="text-align: center;">~apv</td>
 						<td id="ends" class="control_enda" style="text-align: center;display:none;">~ends</td>
 					</tr>
 				</table>

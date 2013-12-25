@@ -31,6 +31,7 @@
                 q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype'));
                 q_cmbParse("cmbStype", '@全部,'+q_getPara('orde.stype'));
                 q_cmbParse("cmbEnda", '@全部,1@已結案,0@未結案');
+                q_cmbParse("cmbApv", '@全部,1@已核准,0@未核准');
                 $('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
                 $('#txtNoa').focus();
@@ -43,6 +44,7 @@
             	t_kind = $.trim($('#cmbKind').val());
             	t_stype = $.trim($('#cmbStype').val());
             	t_enda = $.trim($('#cmbEnda').val());
+            	t_apv = $.trim($('#cmbApv').val());
                 t_noa = $.trim($('#txtNoa').val());
 		        t_custno = $.trim($('#txtCustno').val());
 		        t_comp = $.trim($('#txtComp').val());
@@ -67,6 +69,10 @@
 		        + q_sqlPara2("datea", t_bdate, t_edate)     
 		        + q_sqlPara2("custno", t_custno);
 		        
+		        if(t_apv=='1')
+		        	t_where += " and len(isnull(apv,''))>0";
+		        if(t_apv=='0')
+		        	t_where += " and len(isnull(apv,''))=0";
 		        if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 				if(t_uno.length>0)
@@ -77,11 +83,12 @@
 		       	if(t_enda=='1'){
 		       		t_where += " and (enda=1 or exists(select noa from ordes"+r_accy+" where ordes"+r_accy+".noa=orde"+r_accy+".noa and ordes"+r_accy+".enda=1))";
 		       	}
-		       	t_where += " and exists (select * from ordes"+r_accy+" where orde"+r_accy+".noa=ordes"+r_accy+".noa "
-		       		+" and ordes"+r_accy+".dime between "+t_bdime+" and "+t_edime
-		       		+" and ordes"+r_accy+".width between "+t_bwidth+" and "+t_ewidth
-		       		+" and ordes"+r_accy+".lengthb between "+t_blengthb+" and "+t_elengthb
-		       		+" and ordes"+r_accy+".radius between "+t_bradius+" and "+t_eradius+")";
+		       	t_where += " and ( not exists(select top 1 noa from ordes"+r_accy+" where orde"+r_accy+".noa=ordes"+r_accy+".noa) or " 
+		       		+" (exists (select * from ordes"+r_accy+" where orde"+r_accy+".noa=ordes"+r_accy+".noa "
+		       		+" and isnull(ordes"+r_accy+".dime,0) between "+t_bdime+" and "+t_edime
+		       		+" and isnull(ordes"+r_accy+".width,0) between "+t_bwidth+" and "+t_ewidth
+		       		+" and isnull(ordes"+r_accy+".lengthb,0) between "+t_blengthb+" and "+t_elengthb
+		       		+" and isnull(ordes"+r_accy+".radius,0) between "+t_bradius+" and "+t_eradius+")))";
 		       	
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
@@ -115,6 +122,10 @@
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblEnda'> </a></td>
 					<td><select id="cmbEnda" style="width:215px; font-size:medium;" > </select></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblApv'> </a></td>
+					<td><select id="cmbApv" style="width:215px; font-size:medium;" > </select></td>
 				</tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
