@@ -597,6 +597,14 @@
                 						break;
                 					}
                 				}
+                				var obj = $('#tview').find('#noa');
+                				alert(obj.length);
+                				for(var i=0;i<obj.length;i++){
+                					if(obj.html()==ordeno){
+										$('#tview').find('#apv').eq(i).html(namea);
+										break;                						
+                					}
+                				}
                 			}else{
                 				alert(msg);	
                 			}
