@@ -532,6 +532,30 @@
                         }
                         sum();
                         break;
+					case 'checkApv':
+						var as = _q_appendData("view_orde", "", true);
+						var ErrStr = '';
+						if(as[0]!=undefined){
+							for(var i=0;i<as.length;i++){
+								if($.trim(as[i].apv).length == 0){
+									ErrStr += '訂單編號：' + as[i].noa + '未經過核准!!\n';
+								}
+							}
+						}
+						if($.trim(ErrStr).length == 0){
+							var t_noa = trim($('#txtNoa').val());
+							var t_date = trim($('#txtDatea').val());
+		                    if (t_noa.length == 0 || t_noa == "AUTO")
+		                        q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+		                    else
+								wrServer(t_noa);
+						}else{
+							ErrStr += '禁止存檔!!';
+							alert(ErrStr);
+							Unlock(1);
+							return;
+						}
+						break; 
                     case 'view_vccs':
                         var vccs_as = _q_appendData("view_vccs", "", true);
                         for (var i = 0; i < vccs_as.length; i++) {
@@ -790,12 +814,15 @@
                     else
 						$('#txtWorker2').val(r_name);
 					chkOrdenoEmp();
-                    var t_noa = trim($('#txtNoa').val());
-                    var t_date = trim($('#txtDatea').val());
-                    if (t_noa.length == 0 || t_noa == "AUTO")
-                        q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-                    else
-                        wrServer(t_noa);
+					var OrdenoList = GetOrdenoList().split(',');
+					var ReturnStr = '';
+					for(var k=0;k<OrdenoList.length;k++){
+						ReturnStr += "'" + OrdenoList[k] + "'";
+						if(k<((OrdenoList.length)-1))
+							ReturnStr += ',';
+					}
+					var t_where = "where=^^ noa in ("+ReturnStr+")^^";
+					q_gt('view_orde', t_where, 0, 0, 0, "checkApv", r_accy);
                 } else {
                     //
                     var t_noa = $.trim($('#txtNoa').val());
