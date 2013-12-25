@@ -38,7 +38,9 @@
 			brwNowPage = 0;
 			brwKey = 'noa';
 			//ajaxPath = ""; // 只在根目錄執行，才需設定
-			aPop = new Array(['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_', 'ucaucc_b.aspx']
+			aPop = new Array(
+			['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_', 'ucaucc_b.aspx']
+			, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
 			, ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 			, ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx']
 			, ['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx']
@@ -1669,7 +1671,7 @@
 					<td align="center" style="width:20px;"></td>
 					<td align="center" style="width:60px;"><a id='lblNo2'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:35px;"><a id='lblStyle_st'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:140px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
@@ -1699,7 +1701,8 @@
 					<input type="text" id="txtProductno.*"  style="width:75px; float:left;"/>
 					</td>
 					<td>
-					<input id="txtStyle.*" type="text" style="width:85%;text-align:center;"/>
+						<input id="btnStyle.*" type="button" style="width:1%;text-align:center;" value="."/>
+						<input id="txtStyle.*" type="text" style="width:45%;text-align:center;"/>
 					</td>
 					<td>
 						<span style="width:20px;height:1px;display:none;float:left;"> </span>
