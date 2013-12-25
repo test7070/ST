@@ -599,7 +599,7 @@
                 				}
                 				var obj = $('#tview').find('#noa');
                 				for(var i=0;i<obj.length;i++){
-                					if(obj.html()==ordeno){
+                					if(obj.eq(i).html()==ordeno){
 										$('#tview').find('#apv').eq(i).html(namea);
 										break;                						
                 					}
