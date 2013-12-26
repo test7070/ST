@@ -215,6 +215,9 @@
                 $('#cmbKind').change(function() {
                     size_change();
                 });
+                $('#txtPrice').change(function() {
+                    sum();
+                });
             }
 
             function q_boxClose(s2) {///  q_boxClose 2/4
@@ -1013,8 +1016,10 @@
 							<input id="txtCustno" type="text" style="float:left;width:30%;"/>
 							<input id="txtCust" type="text" style="float:left;width:70%;"/>
 						</td>
-						<td></td>
-						<td></td>
+						<td><span> </span><a id="lblPrice" class="lbl"> </a></td>
+						<td>
+						<input id="txtPrice" type="text" class="txt c1 num" />
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblStore" class="lbl btn" > </a></td>
@@ -1022,10 +1027,9 @@
 							<input type="text" id="txtStoreno" style="float:left;width:30%;"/>
 							<input type="text" id="txtStore" style="float:left;width:70%;"/>
 						</td>
-						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
+						<td><span> </span><a id="lblTranmoney" class="lbl"> </a></td>
 						<td>
-						<input id="txtWorker" type="text" style="float:left;width:50%;"/>
-						<input id="txtWorker2" type="text" style="float:left;width:50%;"/>
+						<input id="txtTranmoney" type="text" class="txt c1 num" />
 						</td>
 					</tr>
 					<tr>
@@ -1042,13 +1046,12 @@
 					<tr>
 						<td><span> </span><a id="lblTrantype" class="lbl"> </a></td>
 						<td><select id="cmbTrantype" class="txt c1"></select></td>
-						<td><span> </span><a id="lblPrice" class="lbl"> </a></td>
+						<td></td>
+						<td></td>
+						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td>
-						<input id="txtPrice" type="text" class="txt c1 num" />
-						</td>
-						<td><span> </span><a id="lblTranmoney" class="lbl"> </a></td>
-						<td>
-						<input id="txtTranmoney" type="text" class="txt c1 num" />
+						<input id="txtWorker" type="text" style="float:left;width:50%;"/>
+						<input id="txtWorker2" type="text" style="float:left;width:50%;"/>
 						</td>
 					</tr>
 					<tr>
