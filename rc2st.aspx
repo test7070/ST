@@ -553,11 +553,13 @@
 						}
 					}					
 				}
-				if($.trim($('#txtStroeno').val()).length>0)
-				for(var i=0;i<q_bbsCount;i++){
-				    $('#txtStoreno_'+i).val($.trim($('#txtStroeno').val()));
-				    $('#txtStore_'+i).val($.trim($('#txtStroe').val()));
-				}				 
+				if($.trim($('#txtStoreno').val()).length>0){
+				    for(var i=0;i<q_bbsCount;i++){
+                        $('#txtStoreno_'+i).val($.trim($('#txtStoreno').val()));
+                        $('#txtStore_'+i).val($.trim($('#txtStore').val()));
+                        
+                    }
+				}
  				var t_where = '';
  				for(var i=0;i<q_bbsCount;i++){
  					if($.trim($('#txtUno_'+i).val()).length>0)
@@ -1211,8 +1213,8 @@
 							<input id="txtPost2"  type="text" style="float:left; width:25%;"/>
 							<input id="txtAddr2"  type="text" style="float:left; width:75%;"/>
 						</td>
-						<td><span> </span><a id='lblStoreno' class="lbl"> </a></td>
-                        <td>
+						<td><span> </span><a id='lblStoreno' class="lbl btn"> </a></td>
+                        <td colspan="2">
                             <input id="txtStoreno"  type="text" style="float:left; width:40%;"/>
                             <input id="txtStore"  type="text" style="float:left; width:60%;"/>
                         </td>
