@@ -17,10 +17,10 @@
 
 			q_tables = 's';
 			var q_name = "get";
-			var q_readonly = ['txtNoa', 'txtWorker'];
+			var q_readonly = ['txtNoa', 'txtWorker','txtTotal'];
 			var q_readonlys = ['txtOrdeno', 'txtNo2'];
-			var bbmNum = [['txtTotal', 10, 3, 1]];
-			var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtRadius', 10, 3, 1], ['txtWidth', 10, 2, 1], ['txtDime', 10, 3, 1], ['txtLengthb', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtGweight', 10, 3, 1], ['txtWeight', 10, 3, 1]];
+			var bbmNum = [['txtPrice', 15, 3, 1],['txtTranmoney', 10, 0, 1],['txtTotal', 10, 3, 1]];
+			var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtRadius', 10, 3, 1], ['txtWidth', 10, 2, 1], ['txtDime', 10, 3, 1], ['txtLengthb', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtGmount', 10, 0, 1], ['txtGweight', 10, 3, 1], ['txtWeight', 10, 3, 1]];
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
 			q_desc = 1;
@@ -88,7 +88,9 @@
 				$('#cmbKind').change(function() {
 					size_change();
 				});
-
+				$('#txtPrice').change(function(){
+					sum();
+				});
 			}
 
 			function q_boxClose(s2) {
@@ -657,14 +659,10 @@
 					<tr class="tr5">
 						<td class="td1"><span> </span><a id="lblTrantype" class="lbl"> </a></td>
 						<td class="td2"><select id="cmbTrantype" class="txt c1"></select></td>
-						<td class="td3"><span> </span><a id="lblPrice" class="lbl"> </a></td>
-						<td class="td4">
-						<input id="txtPrice" type="text" class="txt c1 num" />
-						</td>
 						<td class="td3"><span> </span><a id="lblCarno" class="lbl"> </a></td>
-						<td class="td4">
-						<input id="txtCarno" type="text" class="txt c1" />
-						</td>
+						<td class="td4"><input id="txtCarno" type="text" class="txt c1" /></td>
+						<td class="td5"><span> </span><a id="lblPrice" class="lbl"> </a></td>
+						<td class="td6"><input id="txtPrice" type="text" class="txt c1 num" /></td>
 					</tr>
 					<tr class="tr6">
 						<td class="td1"><span> </span><a id="lblTotal" class="lbl"> </a></td>

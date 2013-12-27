@@ -530,6 +530,7 @@
 							sum();
 						});
                         $('#txtMount_' + j).change(function() {sum();});
+                        $('#txtWeight_' + j).change(function() {sum();});
                         $('#txtPrice_' + j).change(function() {sum();});
 
                         //-------------------------------------------------------------------------------------
