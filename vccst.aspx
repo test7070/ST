@@ -278,9 +278,6 @@
                 $('#txtTax').change(function() {
                     sum();
                 });
-                $('#txtTranmoney').change(function() {
-                    sum();
-                });
                 $('#txtPrice').change(function() {
                     sum();
                 });
