@@ -178,6 +178,7 @@
                         t_money = 0, t_tax = 0, t_total = 0;
                         break;
                     default:
+                    	break;
                 }
 				t_price = q_float('txtPrice');
 				if (t_price != 0) {
