@@ -41,7 +41,8 @@
 			, ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx']
 			, ['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx']
 			, ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
-			, ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']);
+			, ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
+			, ['txtStoreno', 'lblStoreno', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx']);
 			//, ['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx', '95%', '60%']);
 			brwCount2 = 12;
 			var isinvosystem=false;//購買發票系統
@@ -552,6 +553,11 @@
 						}
 					}					
 				}
+				if($.trim($('#txtStroeno').val()).length>0)
+				for(var i=0;i<q_bbsCount;i++){
+				    $('#txtStoreno_'+i).val($.trim($('#txtStroeno').val()));
+				    $('#txtStore_'+i).val($.trim($('#txtStroe').val()));
+				}				 
  				var t_where = '';
  				for(var i=0;i<q_bbsCount;i++){
  					if($.trim($('#txtUno_'+i).val()).length>0)
@@ -1205,6 +1211,11 @@
 							<input id="txtPost2"  type="text" style="float:left; width:25%;"/>
 							<input id="txtAddr2"  type="text" style="float:left; width:75%;"/>
 						</td>
+						<td><span> </span><a id='lblStoreno' class="lbl"> </a></td>
+                        <td>
+                            <input id="txtStoreno"  type="text" style="float:left; width:40%;"/>
+                            <input id="txtStore"  type="text" style="float:left; width:60%;"/>
+                        </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblCardeal' class="lbl btn"> </a></td>
