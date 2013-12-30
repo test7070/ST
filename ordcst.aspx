@@ -554,6 +554,11 @@
 							}
 							sum();
 						});
+						$('#btnOrdcrecord_'+j).click(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							var t_where = "noa='" + $('#txtNoa').val() + "' and no2='"+$('#txtNo2_'+n).val()+"'";
+							q_box("z_ordcstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+						});
 					}
 				}
 				_bbsAssign();
@@ -1124,6 +1129,7 @@
 					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblEnda_st'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblOrdcrecord'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -1187,6 +1193,9 @@
 					</td>
 					<td>
 						<input id="chkEnda.*" type="checkbox"/>
+					</td>
+					<td>
+						<input class="btn"  id="btnOrdcrecord.*" type="button" value='.' style=" font-weight: bold;" />
 					</td>
 				</tr>
 			</table>
