@@ -44,10 +44,7 @@
 					q_content = "where=^^noa='" + r_userno + "'^^";
 
 				q_gt(q_name, q_content, q_sqlCount, 1);
-                
-
                 //q_gt('authority', "where=^^a.noa='sss' and a.sssno='" + r_userno + "'^^", q_sqlCount, 1)
-
             });
    
             function main() {
@@ -72,6 +69,14 @@
                 q_cmbParse("cmbPerson", q_getPara('person.typea'));
                 //q_cmbParse("cmbRecord", ('').concat(new Array('國小', '國中', '高中', '高職', '大專', '大學', '碩士', '博士')));
                 q_cmbParse("cmbBlood", ('').concat(new Array('A', 'B', 'AB', 'O')));
+                
+                 if(q_getPara('sys.comp').indexOf('祥興')>-1){
+                	$('#btnSsspart').show();
+                }else{
+                	$('#btnSsspart').hide();
+                }
+                if(q_getPara('sys.comp').indexOf('永勝')>-1)
+					$('#btnLabases').hide();
                 
                 $('#txtNoa').change(function(e){
                 	$(this).val($.trim($(this).val()).toUpperCase());    	
@@ -692,9 +697,10 @@
 					</tr>
 					<tr>
 						<td> </td>
-						<td><input id='btnSsspart' type="button"/></td>
-						<td><input id='btnSaladjust' type="button"/></td>
-						<td><input id='btnLabases' type="button" />	</td>
+						<td colspan="5"><input id='btnSsspart' type="button"/>
+							<span> </span><input id='btnSaladjust' type="button"/>
+							<span> </span><input id='btnLabases' type="button" />
+						</td>
 					</tr>
 				</table>
 			</div>
