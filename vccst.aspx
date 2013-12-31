@@ -558,25 +558,26 @@
 						}
 						break;
 					case 'unostk':
-						console.log(_q_appendData("view_uccb", "", true));
-						console.log(_q_appendData("view_uccb", "", true));
-						var unostkList = _q_appendData("view_uccb", "", true);
-						var unostkList_Tmp = unostkList;
-						console.log(_q_appendData("view_uccb", "", true));
-						console.log(unostkList);
+						var unostkList = _q_appendData("unostktmp", "", true);
+						var unostkList_Tmp=new Array();;
 						var ErrStr='';
 						if(unostkList.length > 0 && unostkList[0] != undefined){
+							for(var j=0;j<unostkList.length;j++){
+								unostkList_Tmp.push({
+									uno:unostkList[j].uno,
+									mount:unostkList[j].mount,
+									weight:unostkList[j].weight
+								});
+							}
 							for(var i=0;i<q_bbsCount;i++){
 								bbsUno=$.trim($('#txtUno_'+i).val());
 								bbsMount=dec($('#txtMount_'+i).val());
 								for(var k=0;k<unostkList_Tmp.length;k++){
 									if(bbsUno==$.trim(unostkList_Tmp[k].uno)){
 										unostkList_Tmp[k].mount = dec(unostkList_Tmp[k].mount)-bbsMount;
-										break;
 									}
 								}
 							}
-						console.log(unostkList);
 							for(var k=0;k<unostkList_Tmp.length;k++){
 								if(dec(unostkList_Tmp[k].mount) < 0){
 									ErrStr+='批號：'+unostkList_Tmp[k].uno+' 庫存量：'+dec(unostkList[k].mount)+' 本次出貨量：' + (dec(unostkList[k].mount)-dec(unostkList_Tmp[k].mount)) + '\n';
