@@ -75,8 +75,10 @@
                 }else{
                 	$('#btnSsspart').hide();
                 }
-                if(q_getPara('sys.comp').indexOf('永勝')>-1)
+                if(q_getPara('sys.comp').indexOf('永勝')>-1){
 					$('#btnLabases').hide();
+					$('#btnSaladjust').hide();
+				}
                 
                 $('#txtNoa').change(function(e){
                 	$(this).val($.trim($(this).val()).toUpperCase());    	
