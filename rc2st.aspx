@@ -500,8 +500,8 @@
 			function lblOrdc() {
 				var t_tggno = trim($('#txtTggno').val());
 				var t_where = '';
-				t_where = " enda='0' and kind='"+$('#cmbKind').val()+"' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
-				t_where += " and (select enda from ordc"+r_accy+" where ordc"+r_accy+".noa=ordcs"+r_accy+".noa)='0'";
+				t_where = " view_ordcs.enda='0' and kind='"+$('#cmbKind').val()+"' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
+				t_where += " and b.enda='0'";
 				q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
 			}
 			function q_stPost() {
