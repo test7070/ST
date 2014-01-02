@@ -10,7 +10,7 @@
 		<script src="../script/qbox.js" type="text/javascript"> </script>
     	<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-		    var q_name = 'ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,size,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
+		    var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,size,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
 		    var t_sqlname = 'ordcs_load2'; t_postname = q_name;
 		    var isBott = false;  /// 是否已按過 最後一頁
 		    var txtfield = [], afield, t_data, t_htm;
