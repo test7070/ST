@@ -64,8 +64,8 @@
 		
 		    function q_gtPost(t_name) { 
 		    	switch(t_name){
-		    		case 'rc2s':
-		    			var as = _q_appendData("rc2s", "", true);
+		    		case 'view_rc2s':
+		    			var as = _q_appendData("view_rc2s", "", true);
 		    			for(var k=0;k<as.length;k++){
 		    				for(var i = 0;i<abbs.length;i++){
 		    					if(as[k].ordeno==abbs[i].noa && as[k].no2==abbs[i].no2){
@@ -111,7 +111,7 @@
 				inStr = inStr.substring(0,inStr.length-1);
 				if(trim(inStr)!='')
 					t_where = "where=^^ ordeno in("+inStr+") ^^";
-				q_gt('rc2s', t_where , 0, 0, 0, "", r_accy);
+				q_gt('view_rc2s', t_where , 0, 0, 0, "",r_accy);
 		    }
 		    
 		    function size_change () {
