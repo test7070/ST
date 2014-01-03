@@ -19,8 +19,6 @@
 				_q_boxClose();
 				q_getId();
 				q_gf('', 'pipespec');
-				//$('#q_report').hide();
-				//$('.prt').hide();
 			});
 			function q_gfPost() {
 				$('#q_report').q_report({
@@ -31,9 +29,6 @@
 				$('#container').css('display', 'none');
 				$('.prt').children().children().css('display', 'none');
 				$('#btnAuthority').css('display', '').offset({top:10,left:50});
-				/*$('#btnXauthority').click(function(e) {
-				 $('#btnAuthority').click();
-				 });*/
 			}
 			function q_gtPost(t_name) {
 				switch (t_name) {
