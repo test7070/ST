@@ -68,7 +68,7 @@
                 q_cmbParse("cmbSex", q_getPara('sss.sex'));
                 q_cmbParse("cmbPerson", q_getPara('person.typea'));
                 //q_cmbParse("cmbRecord", ('').concat(new Array('國小', '國中', '高中', '高職', '大專', '大學', '碩士', '博士')));
-                q_cmbParse("cmbBlood", ('').concat(new Array('A', 'B', 'AB', 'O')));
+                q_cmbParse("cmbBlood", ('').concat(new Array('','A', 'B', 'AB', 'O')));
                 
                  if(q_getPara('sys.comp').indexOf('祥興')>-1){
                 	$('#btnSsspart').show();
