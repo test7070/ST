@@ -474,6 +474,22 @@
 						if (q_cur == 4)// 查詢
 							q_Seek_gtPost();
 						break;
+					default:
+						if (t_name.substring(0, 15) == 'checkUccbMount_') {
+							var t_seq = parseInt(t_name.split('_')[1]);
+							var as = _q_appendData("view_uccb", "", true);
+							if (as[0] != undefined) {
+								var t_weight = q_div(dec(as[0].weight),dec(dec(as[0].mount)));
+								if(isNaN(t_weight) || t_weight==Infinity ){
+									return;
+								}else{
+									var t_mount = dec($('#txtMount__'+t_seq).val());
+									$('#txtWeight__'+t_seq).val(q_mul(t_weight,t_mount));
+								}
+							}
+						}
+					
+						break;
 				}  /// end switch
 				OrdenoAndNo2On_Change();
 			}
@@ -653,21 +669,24 @@
 			}
 
 			function bbtAssign() {
-				for (var i = 0; i < q_bbtCount; i++) {
-					$('#lblNo__' + i).text(i + 1);
+				for (var j = 0; j < q_bbtCount; j++) {
+					$('#lblNo__' + j).text(j + 1);
 					$('#textSize1__' + j).change(function() {
 						sum();
 					});
-						$('#textSize2__' + j).change(function() {
-							sum();
-						});
-						$('#textSize3__' + j).change(function() {
-							sum();
-						});
-						$('#textSize4__' + j).change(function() {
-							sum();
-						});
-
+					$('#textSize2__' + j).change(function() {
+						sum();
+					});
+					$('#textSize3__' + j).change(function() {
+						sum();
+					});
+					$('#textSize4__' + j).change(function() {
+						sum();
+					});
+					$('#txtMount__'+j).change(function(){
+						var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+						q_gt('view_uccb',"where=^^ uno='"+$.trim($('#txtUno__'+n).val())+"'^^", 0, 0, 0, 'checkUccbMount_'+n, r_accy);
+					});
 				}
 				_bbtAssign();
 				OrdenoAndNo2On_Change();

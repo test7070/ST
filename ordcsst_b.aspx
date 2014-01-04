@@ -10,7 +10,7 @@
 		<script src="../script/qbox.js" type="text/javascript"> </script>
     	<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-		    var q_name = 'ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,size,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
+		    var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,size,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
 		    var t_sqlname = 'ordcs_load2'; t_postname = q_name;
 		    var isBott = false;  /// 是否已按過 最後一頁
 		    var txtfield = [], afield, t_data, t_htm;
@@ -64,8 +64,8 @@
 		
 		    function q_gtPost(t_name) { 
 		    	switch(t_name){
-		    		case 'rc2s':
-		    			var as = _q_appendData("rc2s", "", true);
+		    		case 'view_rc2s':
+		    			var as = _q_appendData("view_rc2s", "", true);
 		    			for(var k=0;k<as.length;k++){
 		    				for(var i = 0;i<abbs.length;i++){
 		    					if(as[k].ordeno==abbs[i].noa && as[k].no2==abbs[i].no2){
@@ -111,7 +111,7 @@
 				inStr = inStr.substring(0,inStr.length-1);
 				if(trim(inStr)!='')
 					t_where = "where=^^ ordeno in("+inStr+") ^^";
-				q_gt('rc2s', t_where , 0, 0, 0, "", r_accy);
+				q_gt('view_rc2s', t_where , 0, 0, 0, "",r_accy);
 		    }
 		    
 		    function size_change () {
