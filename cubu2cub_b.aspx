@@ -196,8 +196,8 @@
 						<input type="text" id="txtDime.*" class="num" style="width:19%;"/>x
 						<input type="text" id="txtLengthb.*" class="num" style="width:19%;"/>
 					</td>
-					<td style="width:4%;"><input type="text" id="txtMount.*" class="txt c1 num"/></td>
-					<td style="width:4%;"><input type="text" id="txtWeight.*" class="txt c1 num"/></td>
+					<td style="width:4%;"><input type="text" id="txtEmount.*" class="txt c1 num"/></td>
+					<td style="width:4%;"><input type="text" id="txtEweight.*" class="txt c1 num"/></td>
 					<td style="width:4%; display:none;"><input type="text" id="txtInweight.*" class="txt c1 num"/></td>
 					<td style="width:4%; display:none;"><input type="text" id="txtWaste.*" class="txt c1 num"/></td>
 					<td style="width:4%; display:none;"><input type="text" id="txtGmount.*" class="txt c1 num"/></td>
