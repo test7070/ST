@@ -23,6 +23,29 @@
                 q_gf('', 'z_vccstp');
             });
             function q_gfPost() {
+                q_gt('style', '', 0, 0, 0, "");
+            }
+            function q_gtPost(t_name) {
+                switch (t_name) {
+                    case 'style':
+                        t_style = '';
+                        var as = _q_appendData("style", "", true);
+                        for ( i = 0; i < as.length; i++) {
+                            t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' +as[i].noa+'.'+ as[i].product;
+                        }
+                        q_gt('ucc', '', 0, 0, 0, "");
+                        break;
+                    case 'ucc':
+                        t_ucc = '';
+                        var as = _q_appendData("ucc", "", true);
+                        for ( i = 0; i < as.length; i++) {
+                            t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+'.'+as[i].product;
+                        }
+                        loadFinish();
+                        break;
+                }
+            }
+            function loadFinish(){
                 var sInfo = (q_getPara('sys.tel')).toUpperCase();
                 var s_tel = (sInfo.indexOf('FAX') > 0?sInfo.substring(0, sInfo.indexOf('FAX')):sInfo);
                 var s_fax = (sInfo.indexOf('FAX') > 0?sInfo.substring(sInfo.indexOf('FAX') + 4):'');
@@ -75,34 +98,53 @@
                         name : 'xtaxtype',
                         value : q_getPara('sys.taxtype')
                     }, {
-                        type : '1', //[10][11]
+                        type : '1', //[10][11]   1
                         name : 'xnoa'
                     }, {
-                        type : '8', //[12]
+                        type : '8', //[12]   2
                         name : 'xshowprice',
                         value : "1@".split(',')
                     }, {
-                        type : '5', //[13]
+                        type : '5', //[13]  3
                         name : 'xstype',
                         value : [q_getPara('report.all')].concat(q_getPara('vccst.stype').split(','))
-                    }, {//3  [14]
+                    }, {//3  [14]  4
                         type : '5',
                         name : 'showtype',
                         value : q_getMsg('showtype').split('&')
                     }, {
-                        type : '8', //[15]
-                        name : 'xmerga',
+                        type : '8', //[15]  5
+                        name : 'xmerga', 
                         value : "1@".split(',')
+                    },{
+                        type : '1', //[16][17]  6
+                        name : 'xdate'
+                    }, {
+                        type : '2',//[18][19] 7
+                        name : 'xcust',
+                        dbf : 'cust',
+                        index : 'noa,comp',
+                        src : 'cust_b.aspx'
+                    }, {// [20]                 8
+                        type : '5',
+                        name : 'xproductno',
+                        value : [q_getPara('report.all')].concat(t_ucc.split(','))
+                    }, {// [21]                  9
+                        type : '8',
+                        name : 'xstyle',
+                        value : t_style.split(',')
+                    },{//[22]                      10
+                        type : '8', 
+                        name : 'xoption03',
+                        value : q_getMsg('toption03').split('&')
                     }]
                 });
                 q_popAssign();
-                $('#txtXmon1').mask('999/99');
-                $('#txtXmon2').mask('999/99');
-                $('#txtDate1').mask('999/99/99');
-                $('#txtDate1').datepicker();
-                $('#txtDate2').mask('999/99/99');
-                $('#txtDate2').datepicker();
-
+                q_langShow();
+                $('#txtXdate1').mask('999/99/99');
+                $('#txtXdate1').datepicker();
+                $('#txtXdate2').mask('999/99/99');
+                $('#txtXdate2').datepicker();
 
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
@@ -113,7 +155,7 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtXmon1').val(t_year + '/' + t_month);
+                $('#txtXdate1').val(t_year + '/' + t_month + '/' + t_day);
 
                 t_date = new Date();
                 t_date.setDate(35);
@@ -124,31 +166,10 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtXmon2').val(t_year + '/' + t_month);
-
-                var t_date, t_year, t_month, t_day;
-                t_date = new Date();
-                t_date.setDate(1);
-                t_year = t_date.getUTCFullYear() - 1911;
-                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-                t_month = t_date.getUTCMonth() + 1;
-                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-                t_day = t_date.getUTCDate();
-                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);
-
-                t_date = new Date();
-                t_date.setDate(35);
-                t_date.setDate(0);
-                t_year = t_date.getUTCFullYear() - 1911;
-                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-                t_month = t_date.getUTCMonth() + 1;
-                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-                t_day = t_date.getUTCDate();
-                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
+                $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
                 $('#chkXshowprice').children('input').attr('checked', 'checked');
                 $('#chkXmerga input[type="checkbox"]').prop('checked',true);
+                $('#chkXstyle input[type="checkbox"]').prop('checked',true);
                 var t_no = typeof (q_getId()[3]) == 'undefined' ? '' : q_getId()[3];
                 if (t_no.indexOf('noa=') >= 0) {
                     t_no = t_no.replace('noa=', '');
@@ -159,12 +180,9 @@
                     }
                 }
             }
-
             function q_boxClose(s2) {
             }
 
-            function q_gtPost(s2) {
-            }
 		</script>
 	</head>
 	<body ondragstart="return false" draggable="false"
