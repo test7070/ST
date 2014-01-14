@@ -22,6 +22,10 @@
             function main() {
                 mainSeek();
                 q_gf('', q_name);
+                $('#txtDime').val(0);
+                $('#txtWidth').val(0);
+                $('#txtLengthb').val(0);
+                $('#txtRadius').val(0);
             }
 
             function q_gfPost() {
