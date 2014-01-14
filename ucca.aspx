@@ -59,14 +59,14 @@
             $('#txtNoa').change(function(e){
                 $(this).val($.trim($(this).val()).toUpperCase());    	
 				if($(this).val().length>0){
-					if((/^(\w+|\w+\u002D\w+)$/g).test($(this).val())){
-						t_where="where=^^ noa='"+$(this).val()+"'^^";
-                    	q_gt('ucca', t_where, 0, 0, 0, "checkUccano_change", r_accy);
+					t_where="where=^^ noa='"+$(this).val()+"'^^";
+                    q_gt('ucca', t_where, 0, 0, 0, "checkUccano_change", r_accy);
+					/*if((/^(\w+|\w+\u002D\w+)$/g).test($(this).val())){
 					}else{
 						Lock();
 						alert('編號只允許 英文(A-Z)、數字(0-9)及dash(-)。'+String.fromCharCode(13)+'EX: A01、A01-001');
 						Unlock();
-					}
+					}*/
 				}
 			});
 		} 
@@ -179,12 +179,12 @@
         function btnOk() {
  			Lock(); 
             $('#txtNoa').val($.trim($('#txtNoa').val()));   	
-            if((/^(\w+|\w+\u002D\w+)$/g).test($('#txtNoa').val())){
+            /*if((/^(\w+|\w+\u002D\w+)$/g).test($('#txtNoa').val())){
 			}else{
 				alert('編號只允許 英文(A-Z)、數字(0-9)及dash(-)。'+String.fromCharCode(13)+'EX: A01、A01-001');
 				Unlock();
 				return;
-			}
+			}*/
 			
 			var repeats=false;
 			for (var i = 0; i < q_bbsCount; i++) {
@@ -310,7 +310,7 @@
             }
             .dview {
                 float: left;
-                width: 98%;
+                width: 1024px;
             }
             .tview {
                 margin: 0;
@@ -329,7 +329,7 @@
             }
             .dbbm {
                 float: left;
-                width: 98%;
+                width: 1024px;
                 margin: -1px;
                 border: 1px black solid;
                 border-radius: 5px;
@@ -373,7 +373,7 @@
                 color: #FF8F19;
             }
             .txt.c1 {
-                width: 95%;
+                width: 98%;
                 float: left;
             }
             .txt.c2 {
@@ -452,8 +452,8 @@
             </tr>
              <tr>
                    <td ><input id="chkBrow.*" type="checkbox" style=''/> </td>
-                   <td align="center" id='noa'>~noa</td>
-                   <td align="center" id='product'>~product</td>
+                   <td align="center" id='noa' style="text-align: left;">~noa</td>
+                   <td align="center" id='product' style="text-align: left;">~product</td>
                    <td align="center" id='unit'>~unit</td>
                    <td align="center" id='typea=ucc.typea' class="normal">~typea=ucc.typea</td>
                    <td align="center" id='typea=ucc.typea_it' class="it">~typea=ucc.typea_it</td>
@@ -465,16 +465,20 @@
             <tr>
                <td class="td1"><span> </span><a id='lblNoa' class="lbl"> </a></td>
                <td class="td2"><input id="txtNoa"  type="text" class="txt c1" /></td>
-               <td class="td3"><span> </span><a id='lblProduct' class="lbl"> </a></td>
-               <td class="td4"><input id="txtProduct" type="text" class="txt c1" /></td>
-               <td class="td5"><span> </span><a id='lblUnit' class="lbl"> </a></td>
-               <td class="td6"><input id="txtUnit"  type="text" class="txt c1" /></td>
-               <td class="td7"><span> </span><a id='lblType' class="lbl"> </a></td>
-               <td class="td8"><select id="cmbTypea" class="txt c1"> </select></td>
-            </tr>
-            <tr>
                <td class="td1"><span> </span><a id='lblNou' class="lbl btn"> </a></td>
                <td class="td2"><input id="txtNou"  type="text" class="txt c1" /></td>
+            </tr>
+            <tr>
+               <td class="td1"><span> </span><a id='lblProduct' class="lbl"> </a></td>
+               <td class="td2" colspan='3'><input id="txtProduct" type="text" class="txt c1" /></td>
+            </tr>
+            <tr>
+               <td class="td1"><span> </span><a id='lblUnit' class="lbl"> </a></td>
+               <td class="td2"><input id="txtUnit"  type="text" class="txt c1" /></td>
+               <td class="td3"><span> </span><a id='lblType' class="lbl"> </a></td>
+               <td class="td4"><select id="cmbTypea" class="txt c1"> </select></td>
+            </tr>
+            <tr>
  				<td class="td1"><span> </span><a id='lblVccacc' class="lbl"> </a></td>
                <td class="td2"><input id="txtVccacc"  type="text" class="txt c1" /></td>
                <td class="td1"><span> </span><a id='lblRc2acc' class="lbl"> </a></td>
