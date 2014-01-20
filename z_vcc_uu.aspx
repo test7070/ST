@@ -2,24 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title> </title>
-		<script src="../script/jquery.min.js" type="text/javascript"> </script>
-		<script src='../script/qj2.js' type="text/javascript"> </script>
-		<script src='qset.js' type="text/javascript"> </script>
-		<script src='../script/qj_mess.js' type="text/javascript"> </script>
-		<script src="../script/qbox.js" type="text/javascript"> </script>
-		<script src='../script/mask.js' type="text/javascript"> </script>
+		<title></title>
+		<script src="../script/jquery.min.js" type="text/javascript"></script>
+		<script src='../script/qj2.js' type="text/javascript"></script>
+		<script src='qset.js' type="text/javascript"></script>
+		<script src='../script/qj_mess.js' type="text/javascript"></script>
+		<script src="../script/qbox.js" type="text/javascript"></script>
+		<script src='../script/mask.js' type="text/javascript"></script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-		<script src="css/jquery/ui/jquery.ui.core.js"> </script>
-		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
-		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
+		<script src="css/jquery/ui/jquery.ui.core.js"></script>
+		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
+		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			var uccgaItem = '';
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
-				if(uccgaItem.length == 0){
+				if (uccgaItem.length == 0) {
 					q_gf('', 'z_vcc_uu');
 				}
 			});
@@ -63,6 +63,13 @@
 					}, {
 						type : '6', //[16]
 						name : 'xyear'
+					}, {
+						type : '6', //[17]
+						name : 'xsdate'
+					}, {
+						type : '0', //[18]
+						name : 'xstype',
+						value : q_getPara('vcc.stype_uu')
 					}]
 				});
 				q_popAssign();
@@ -74,12 +81,14 @@
 				$('#txtXdate2').datepicker();
 				$('#txtXmon1').mask('999/99');
 				$('#txtXmon2').mask('999/99');
+				$('#txtXsdate').mask('999/99/99');
+				$('#txtXsdate').val(q_date());
 				$('#txtXyear').mask('999');
-				$('#txtXyear').val(r_accy.substring(0,3));
-				$('#txtXbmon1').val(r_accy+'/01').mask('999/99');
-				$('#txtXbmon2').val(r_accy+'/12').mask('999/99');
-				$('#txtXemon1').val(r_accy+'/01').mask('999/99');
-				$('#txtXemon2').val(r_accy+'/12').mask('999/99');
+				$('#txtXyear').val(r_accy.substring(0, 3));
+				$('#txtXbmon1').val(r_accy + '/01').mask('999/99');
+				$('#txtXbmon2').val(r_accy + '/12').mask('999/99');
+				$('#txtXemon1').val(r_accy + '/01').mask('999/99');
+				$('#txtXemon2').val(r_accy + '/12').mask('999/99');
 			}
 
 			function q_boxClose(s2) {
@@ -93,10 +102,10 @@
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
-		<div id="q_menu"> </div>
+		<div id="q_menu"></div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
-				<div id="q_report"> </div>
+				<div id="q_report"></div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->

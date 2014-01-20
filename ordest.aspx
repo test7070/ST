@@ -545,7 +545,8 @@
 				for(var i=0;i<q_bbsCount;i++){
 					if(q_float('txtMount_'+i)!=0 && !$('#chkIssale_'+i).prop('checked') && !$('#chkIscut_'+i).prop('checked')){
 						$('#chkIscut_'+i).prop('checked',true);
-					}	
+					}
+					getTheory(i);
 				}
 				var t_chk;
 				for(var i=0;i<q_bbtCount;i++){
@@ -1059,6 +1060,9 @@
 					case 'txtUno__':
 						size_change();
 						$('#chkIssale__'+b_seq).prop('checked',true);
+						break;
+					case 'txtStyle_':
+						$('#txtStyle_'+b_seq).blur();
 						break;
 				}
 				OrdenoAndNo2On_Change();
