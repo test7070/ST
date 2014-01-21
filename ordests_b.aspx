@@ -279,11 +279,12 @@
 						<input type="checkbox" id="checkAllCheckbox"/>
 					</td>
 					<td align="center" style="width:3%;"> </td>
-					<td align="center" style="width:12%;"><a id='lblProductno'></a>/<a id='lblProduct'></a></td>
+					<td align="center" style="width:8%;"><a id='lblProductno'></a>/<a id='lblProduct'></a></td>
 					<td align="center" id="sizeTd" ><a id='lblSize'></a></td>
 					<td align="center" style="width:6%;"><a id='lblSpec'></a></td>
 					<td align="center" style="width:6%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:8%;"><a id='lblWeight'></a></td>
+					<td align="center" style="width:8%;"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblNotv'></a></td>
 					<td align="center" style="width:11%;"><a id='lblNoa'></a></td>
 					<td align="center" style="width:8%;"><a id='lblCust'></a></td>
@@ -303,6 +304,7 @@
 					<td align="center"><a id='lblSpec'></a></td>
 					<td align="center"><a id='lblMount'></a></td>
 					<td align="center"><a id='lblWeight'></a></td>
+					<td align="center"><a id='lblPrice'></a></td>
 					<td align="center"><a id='lblNotv'></a></td>
 					<td align="center"><a id='lblNoa'></a></td>
 					<td align="center"><a id='lblCust'></a></td>
@@ -315,7 +317,7 @@
 					<td style="width:3%;">
 						<a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a>
 					</td>
-					<td style="width:12%;">
+					<td style="width:8%;">
 						<input class="txt"  id="txtProductno.*" type="text" style="width:98%;" />
 						<input class="txt" id="txtProduct.*" type="text" style="width:98%;" />
 					</td>
@@ -348,6 +350,9 @@
 					</td>
 					<td style="width:8%;">
 						<input class="txt" id="txtWeight.*" type="text" style="width:96%; text-align:right;"/>
+					</td>
+					<td style="width:8%;">
+						<input class="txt" id="txtPrice.*" type="text" style="width:96%; text-align:right;"/>
 					</td>
 					<td style="width:8%;">
 						<input class="txt" id="txtNotv.*" type="text" style="width:96%; text-align:right;"/>

@@ -70,6 +70,9 @@
 						type : '0', //[18]
 						name : 'xstype',
 						value : q_getPara('vcc.stype_uu')
+					}, {
+						type : '6', //[19]
+						name : 'xweek'
 					}]
 				});
 				q_popAssign();
@@ -84,6 +87,8 @@
 				$('#txtXsdate').mask('999/99/99');
 				$('#txtXsdate').val(q_date());
 				$('#txtXyear').mask('999');
+				$('#txtXweek').mask('99');
+				$('#txtXweek').val(padL((new Date(q_date())).getWeekOfYear(), '0', 2));
 				$('#txtXyear').val(r_accy.substring(0, 3));
 				$('#txtXbmon1').val(r_accy + '/01').mask('999/99');
 				$('#txtXbmon2').val(r_accy + '/12').mask('999/99');
@@ -91,6 +96,18 @@
 				$('#txtXemon2').val(r_accy + '/12').mask('999/99');
 			}
 
+
+			Date.prototype.getWeekOfYear = function(weekStart) {
+				weekStart = (weekStart || 0) - 0;
+				if (isNaN(weekStart) || weekStart > 6)
+					weekStart = 0;
+				var year = this.getFullYear();
+				var firstDay = new Date(year, 0, 1);
+				var firstWeekDays = 7 - firstDay.getDay() + weekStart;
+				var dayOfYear = (((new Date(year, this.getMonth(), this.getDate())) - firstDay) / (24 * 3600 * 1000)) + 1;
+				return Math.ceil((dayOfYear - firstWeekDays) / 7) + 1;
+			};
+			
 			function q_boxClose(s2) {
 			}
 
