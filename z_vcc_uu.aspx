@@ -20,7 +20,7 @@
 				_q_boxClose();
 				q_getId();
 				if (uccgaItem.length == 0) {
-					q_gf('', 'z_vcc_uu');
+					q_gt('uccga', '', 0, 0, 0, "");
 				}
 			});
 			function q_gfPost() {
@@ -31,11 +31,20 @@
 						name : 'accy',
 						value : q_getId()[4]
 					}, {
-						type : '1', //[2][3]
-						name : 'xdate'
+						type : '0', //[2]
+						name : 'xrstype',
+						value : q_getPara('vcc.stype_uu')
 					}, {
-						type : '1', //[4][5]
-						name : 'xmon'
+						type : '5', //[3]
+						name : 'xstype',
+						value : [q_getPara('report.all')].concat(q_getPara('vcc.stype_uu').split(','))
+					}, {
+						type : '5', //[4]/
+						name : 'xgroupano',
+						value : uccgaItem.split(',')
+					}, {
+						type : '6', //[5]
+						name : 'salesgroup'
 					}, {
 						type : '2', //[6][7]
 						name : 'xcust',
@@ -55,24 +64,20 @@
 						index : 'noa,product',
 						src : 'ucaucc_b.aspx'
 					}, {
-						type : '1', //[12][13]
-						name : 'xbmon'
-					}, {
-						type : '1', //[14][15]
-						name : 'xemon'
-					}, {
-						type : '6', //[16]
+						type : '6', //[12]
 						name : 'xyear'
 					}, {
-						type : '6', //[17]
-						name : 'xsdate'
-					}, {
-						type : '0', //[18]
-						name : 'xstype',
-						value : q_getPara('vcc.stype_uu')
-					}, {
-						type : '6', //[19]
+						type : '6', //[13]
 						name : 'xweek'
+					}, {
+						type : '1', //[14][15]
+						name : 'xmon'
+					}, {
+						type : '1', //[16][17]
+						name : 'xdate'
+					}, {
+						type : '6', //[18]
+						name : 'xsdate'
 					}]
 				});
 				q_popAssign();
@@ -82,8 +87,8 @@
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();
-				$('#txtXmon1').mask('999/99');
-				$('#txtXmon2').mask('999/99');
+				$('#txtXmon1').val(q_date().substring(0,6)).mask('999/99');
+				$('#txtXmon2').val(q_date().substring(0,6)).mask('999/99');
 				$('#txtXsdate').mask('999/99/99');
 				$('#txtXsdate').val(q_date());
 				$('#txtXyear').mask('999');
@@ -107,11 +112,23 @@
 				var dayOfYear = (((new Date(year, this.getMonth(), this.getDate())) - firstDay) / (24 * 3600 * 1000)) + 1;
 				return Math.ceil((dayOfYear - firstWeekDays) / 7) + 1;
 			};
-			
+
 			function q_boxClose(s2) {
 			}
 
 			function q_gtPost(t_name) {
+				switch (t_name) {
+					case 'uccga':
+						var as = _q_appendData("uccga", "", true);
+						uccgaItem = "#non@全部";
+						for ( i = 0; i < as.length; i++) {
+							uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
+						}
+						break;
+				}
+				if (uccgaItem.length > 0) {
+					q_gf('', 'z_vcc_uu');
+				}
 			}
 		</script>
 	</head>
