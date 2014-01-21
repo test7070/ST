@@ -43,7 +43,11 @@
 					},{
 						type : '1',
 						name : 'xnoa'
-					}]
+					},{
+                        type : '0',
+                        name : 'yitype',
+                        value : q_getPara('uccc.itype')
+                    }]
 				});
 				q_popAssign();
 				q_langShow();
