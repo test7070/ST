@@ -14,7 +14,8 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
             var q_name = "ordest_s";
-			aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,nick', 'txtCustno', 'cust_b.aspx']);
+			aPop = new Array(['txtCustno', 'lblCustno', 'cust', 'noa,nick', 'txtCustno', 'cust_b.aspx']
+			 ,['txtSalesno', 'lblSalesno', 'sss', 'noa,namea', 'txtSalesno', 'sss_b.aspx']);
             $(document).ready(function() {
                 main();
             });
@@ -49,6 +50,7 @@
 		        t_custno = $.trim($('#txtCustno').val());
 		        t_comp = $.trim($('#txtComp').val());
 		        t_uno = $.trim($('#txtUno').val());
+		        t_salesno = $.trim($('#txtSalesno').val());
 
 		        t_bdate = $('#txtBdate').val();
 		        t_edate = $('#txtEdate').val();
@@ -67,7 +69,8 @@
 		        + q_sqlPara2("stype", t_stype)
 		        + q_sqlPara2("noa", t_noa) 
 		        + q_sqlPara2("datea", t_bdate, t_edate)     
-		        + q_sqlPara2("custno", t_custno);
+		        + q_sqlPara2("custno", t_custno)
+		        + q_sqlPara2("salesno", t_salesno);
 		        
 		        if(t_apv=='1')
 		        	t_where += " and len(isnull(apv,''))>0";
@@ -153,6 +156,12 @@
 					<input class="txt" id="txtComp" type="text" style="width:215px; font-size:medium;" />
 					</td>
 				</tr>
+				<tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblSalesno'></a></td>
+                    <td>
+                    <input class="txt" id="txtSalesno" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblUno'></a></td>
 					<td>
