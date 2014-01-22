@@ -16,11 +16,13 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			var uccgaItem = '';
+			var firstRun = false;
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
 				if (uccgaItem.length == 0) {
 					q_gt('uccga', '', 0, 0, 0, "");
+					firstRun = true;
 				}
 			});
 			function q_gfPost() {
@@ -103,6 +105,7 @@
 				$('#txtXbmon2').val(r_accy + '/12').mask('999/99');
 				$('#txtXemon1').val(r_accy + '/01').mask('999/99');
 				$('#txtXemon2').val(r_accy + '/12').mask('999/99');
+				firstRun = false;
 			}
 
 
@@ -130,7 +133,7 @@
 						}
 						break;
 				}
-				if (uccgaItem.length > 0) {
+				if ((uccgaItem.length > 0) && firstRun) {
 					q_gf('', 'z_vcc_uu');
 				}
 			}
