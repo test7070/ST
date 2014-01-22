@@ -78,6 +78,9 @@
 					}, {
 						type : '6', //[18]
 						name : 'xsdate'
+					}, {
+						type : '6', //[19]
+						name : 'xsmon'
 					}]
 				});
 				q_popAssign();
@@ -89,6 +92,7 @@
 				$('#txtXdate2').datepicker();
 				$('#txtXmon1').val(q_date().substring(0,6)).mask('999/99');
 				$('#txtXmon2').val(q_date().substring(0,6)).mask('999/99');
+				$('#txtXsmon').val(q_date().substring(0,6)).mask('999/99');
 				$('#txtXsdate').mask('999/99/99');
 				$('#txtXsdate').val(q_date());
 				$('#txtXyear').mask('999');
