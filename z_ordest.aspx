@@ -70,7 +70,7 @@
                     }, {
                         type : '5', //[16] 1
                         name : 'xsortby', 
-                        value : 'custno@依客戶,sizea@依尺寸'.split(',')
+                        value : 'custno@依客戶,sizea@依尺寸,dime@依厚度'.split(',')
 					}]
 				});
 				q_popAssign();
