@@ -89,6 +89,12 @@
 						type : '5', //[21]/
 						name : 'xpartno',
 						value : t_part.split(',')
+					}, {
+						type : '2', //[22][23]
+						name : 'xtgg',
+						dbf : 'tgg',
+						index : 'noa,comp',
+						src : 'tgg_b.aspx'
 					}]
 				});
 				q_popAssign();
@@ -98,9 +104,9 @@
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();
-				$('#txtXmon1').val(q_date().substring(0,6)).mask('999/99');
-				$('#txtXmon2').val(q_date().substring(0,6)).mask('999/99');
-				$('#txtXsmon').val(q_date().substring(0,6)).mask('999/99');
+				$('#txtXmon1').val(q_date().substring(0, 6)).mask('999/99');
+				$('#txtXmon2').val(q_date().substring(0, 6)).mask('999/99');
+				$('#txtXsmon').val(q_date().substring(0, 6)).mask('999/99');
 				$('#txtXsdate').mask('999/99/99');
 				$('#txtXsdate').val(q_date());
 				$('#txtXyear').mask('999');
@@ -138,17 +144,17 @@
 							uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
 						}
 						break;
-                    case 'part':
-                        t_part = '#non@全部';
-                        var as = _q_appendData("part", "", true);
-                        for ( i = 0; i < as.length; i++) {
-                            t_part += (t_part.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
-                        }
+					case 'part':
+						t_part = '#non@全部';
+						var as = _q_appendData("part", "", true);
+						for ( i = 0; i < as.length; i++) {
+							t_part += (t_part.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
+						}
 						if (uccgaItem.length == 0) {
 							q_gt('uccga', '', 0, 0, 0, "");
 							firstRun = true;
 						}
-                        break;
+						break;
 				}
 				if ((uccgaItem.length > 0) && firstRun) {
 					q_gf('', 'z_vcc_uu');
