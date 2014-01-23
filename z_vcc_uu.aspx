@@ -17,13 +17,11 @@
 		<script type="text/javascript">
 			var uccgaItem = '';
 			var firstRun = false;
+			var t_part = '';
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
-				if (uccgaItem.length == 0) {
-					q_gt('uccga', '', 0, 0, 0, "");
-					firstRun = true;
-				}
+				q_gt('part', '', 0, 0, 0);
 			});
 			function q_gfPost() {
 				$('#q_report').q_report({
@@ -83,6 +81,14 @@
 					}, {
 						type : '6', //[19]
 						name : 'xsmon'
+					}, {
+						type : '5', //[20]/
+						name : 'xshowvalue',
+						value : '1@數量,2@金額,3@數量+金額'.split(',')
+					}, {
+						type : '5', //[21]/
+						name : 'xpartno',
+						value : t_part.split(',')
 					}]
 				});
 				q_popAssign();
@@ -132,6 +138,17 @@
 							uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
 						}
 						break;
+                    case 'part':
+                        t_part = '#non@全部';
+                        var as = _q_appendData("part", "", true);
+                        for ( i = 0; i < as.length; i++) {
+                            t_part += (t_part.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
+                        }
+						if (uccgaItem.length == 0) {
+							q_gt('uccga', '', 0, 0, 0, "");
+							firstRun = true;
+						}
+                        break;
 				}
 				if ((uccgaItem.length > 0) && firstRun) {
 					q_gf('', 'z_vcc_uu');
