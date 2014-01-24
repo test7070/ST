@@ -50,7 +50,7 @@
 					}, {
 						type : '5', //[6]/
 						name : 'xgroupbno',
-						value : uccgaItem.split(',')
+						value : uccgbItem.split(',')
 					/*#####################*/				
 					}, {
 						type : '2', //[7][8]
