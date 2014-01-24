@@ -35,7 +35,7 @@
 						type : '0', //[2]
 						name : 'xrstype',
 						value : q_getPara('vcc.stype_uu')
-					/*#####################*/				
+						/*#####################*/
 					}, {
 						type : '5', //[3]
 						name : 'xstype',
@@ -51,7 +51,7 @@
 						type : '5', //[6]/
 						name : 'xgroupbno',
 						value : uccgbItem.split(',')
-					/*#####################*/				
+						/*#####################*/
 					}, {
 						type : '2', //[7][8]
 						name : 'xcust',
@@ -76,7 +76,7 @@
 						dbf : 'tgg',
 						index : 'noa,comp',
 						src : 'tgg_b.aspx'
-					/*#####################*/				
+						/*#####################*/
 					}, {
 						type : '5', //[15]/
 						name : 'xpartno',
@@ -91,7 +91,7 @@
 					}, {
 						type : '6', //[18]
 						name : 'xweek'
-					/*#####################*/				
+						/*#####################*/
 					}, {
 						type : '6', //[19]
 						name : 'xsdate'
@@ -159,7 +159,9 @@
 						break;
 					case 'uccgb':
 						var as = _q_appendData("uccgb", "", true);
-						as.sort(function(x,y){return x.noa-y.noa;});
+						as.sort(function(x, y) {
+							return x.noa - y.noa;
+						});
 						uccgbItem = "#non@全部";
 						for ( i = 0; i < as.length; i++) {
 							uccgbItem = uccgbItem + (uccgbItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
@@ -181,6 +183,11 @@
 				}
 			}
 		</script>
+		<style>
+			#Xgroupbno .c4 {
+				width: 150px;
+			}
+		</style>
 	</head>
 	<body id="z_accc" ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
