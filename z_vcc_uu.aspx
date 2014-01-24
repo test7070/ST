@@ -93,17 +93,17 @@
 						name : 'xweek'
 					/*#####################*/				
 					}, {
-						type : '1', //[19][20]
-						name : 'xmon'
-					}, {
-						type : '1', //[21][22]
-						name : 'xdate'
-					}, {
-						type : '6', //[23]
+						type : '6', //[19]
 						name : 'xsdate'
 					}, {
-						type : '6', //[24]
+						type : '6', //[20]
 						name : 'xsmon'
+					}, {
+						type : '1', //[21][22]
+						name : 'xmon'
+					}, {
+						type : '1', //[23][24]
+						name : 'xdate'
 					}]
 				});
 				q_popAssign();
