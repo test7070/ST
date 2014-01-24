@@ -16,6 +16,7 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			var uccgaItem = '';
+			var uccgbItem = '';
 			var firstRun = false;
 			var t_part = '';
 			$(document).ready(function() {
@@ -34,6 +35,7 @@
 						type : '0', //[2]
 						name : 'xrstype',
 						value : q_getPara('vcc.stype_uu')
+					/*#####################*/				
 					}, {
 						type : '5', //[3]
 						name : 'xstype',
@@ -46,55 +48,62 @@
 						type : '6', //[5]
 						name : 'salesgroup'
 					}, {
-						type : '2', //[6][7]
+						type : '5', //[6]/
+						name : 'xgroupbno',
+						value : uccgaItem.split(',')
+					/*#####################*/				
+					}, {
+						type : '2', //[7][8]
 						name : 'xcust',
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
 					}, {
-						type : '2', //[8][9]
+						type : '2', //[9][10]
 						name : 'xsales',
 						dbf : 'sss',
 						index : 'noa,namea',
 						src : 'sss_b.aspx'
 					}, {
-						type : '2', //[10][11]
+						type : '2', //[11][12]
 						name : 'xproduct',
 						dbf : 'ucaucc',
 						index : 'noa,product',
 						src : 'ucaucc_b.aspx'
 					}, {
-						type : '6', //[12]
-						name : 'xyear'
-					}, {
-						type : '6', //[13]
-						name : 'xweek'
-					}, {
-						type : '1', //[14][15]
-						name : 'xmon'
-					}, {
-						type : '1', //[16][17]
-						name : 'xdate'
-					}, {
-						type : '6', //[18]
-						name : 'xsdate'
-					}, {
-						type : '6', //[19]
-						name : 'xsmon'
-					}, {
-						type : '5', //[20]/
-						name : 'xshowvalue',
-						value : '1@數量,2@金額,3@數量+金額'.split(',')
-					}, {
-						type : '5', //[21]/
-						name : 'xpartno',
-						value : t_part.split(',')
-					}, {
-						type : '2', //[22][23]
+						type : '2', //[13][14]
 						name : 'xtgg',
 						dbf : 'tgg',
 						index : 'noa,comp',
 						src : 'tgg_b.aspx'
+					/*#####################*/				
+					}, {
+						type : '5', //[15]/
+						name : 'xpartno',
+						value : t_part.split(',')
+					}, {
+						type : '5', //[16]/
+						name : 'xshowvalue',
+						value : '1@數量,2@金額,3@數量+金額'.split(',')
+					}, {
+						type : '6', //[17]
+						name : 'xyear'
+					}, {
+						type : '6', //[18]
+						name : 'xweek'
+					/*#####################*/				
+					}, {
+						type : '1', //[19][20]
+						name : 'xmon'
+					}, {
+						type : '1', //[21][22]
+						name : 'xdate'
+					}, {
+						type : '6', //[23]
+						name : 'xsdate'
+					}, {
+						type : '6', //[24]
+						name : 'xsmon'
 					}]
 				});
 				q_popAssign();
@@ -143,6 +152,18 @@
 						for ( i = 0; i < as.length; i++) {
 							uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
 						}
+						if (uccgbItem.length == 0) {
+							q_gt('uccgb', '', 0, 0, 0, "");
+							firstRun = true;
+						}
+						break;
+					case 'uccgb':
+						var as = _q_appendData("uccgb", "", true);
+						as.sort(function(x,y){return x.noa-y.noa;});
+						uccgbItem = "#non@全部";
+						for ( i = 0; i < as.length; i++) {
+							uccgbItem = uccgbItem + (uccgbItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
+						}
 						break;
 					case 'part':
 						t_part = '#non@全部';
@@ -152,11 +173,10 @@
 						}
 						if (uccgaItem.length == 0) {
 							q_gt('uccga', '', 0, 0, 0, "");
-							firstRun = true;
 						}
 						break;
 				}
-				if ((uccgaItem.length > 0) && firstRun) {
+				if ((uccgaItem.length > 0) && (uccgbItem.length > 0) && firstRun) {
 					q_gf('', 'z_vcc_uu');
 				}
 			}
