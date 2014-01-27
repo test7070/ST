@@ -765,7 +765,7 @@
 				}
 				inStr = inStr.substring(0, inStr.length - 1);
 				t_where += " and (select enda from view_orde where view_orde.noa=view_ordes" + r_accy + ".noa)='0' ";
-				t_where += " and (((enda='0') and (notv > 0))" + (trim(inStr).length > 0 ? " or noa+no2 in(" + inStr + ") " : '') + ")";
+				t_where += " and (((enda!=1) and (notv > 0))" + (trim(inStr).length > 0 ? " or noa+no2 in(" + inStr + ") " : '') + ")";
 				q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
 			}/// q_box()  開 視窗
 
