@@ -126,19 +126,38 @@
 				$('#txtXbmon2').val(r_accy + '/12').mask('999/99');
 				$('#txtXemon1').val(r_accy + '/01').mask('999/99');
 				$('#txtXemon2').val(r_accy + '/12').mask('999/99');
+				var t_date,t_year,t_month,t_day;
+				t_date = new Date();
+				t_date.setDate(35);
+				t_date.setDate(0);
+				t_year = t_date.getUTCFullYear() - 1911;
+				t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+				t_month = t_date.getUTCMonth() + 1;
+				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+				t_day = t_date.getUTCDate();
+				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+				$('#txtXdate1').val(t_year + '/' + t_month + '/01');
+				$('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
+				$('#txtXsmon').focusout(function(){
+					var thisDate = $.trim($(this).val())+'/01';
+					$('#txtXweek').val(padL((new Date(thisDate)).getWeekOfYear(), '0', 2));
+				});
 				firstRun = false;
 			}
 
-
 			Date.prototype.getWeekOfYear = function(weekStart) {
-				weekStart = (weekStart || 0) - 0;
-				if (isNaN(weekStart) || weekStart > 6)
-					weekStart = 0;
-				var year = this.getFullYear();
-				var firstDay = new Date(year, 0, 1);
-				var firstWeekDays = 7 - firstDay.getDay() + weekStart;
-				var dayOfYear = (((new Date(year, this.getMonth(), this.getDate())) - firstDay) / (24 * 3600 * 1000)) + 1;
-				return Math.ceil((dayOfYear - firstWeekDays) / 7) + 1;
+				try{
+					weekStart = (weekStart || 0) - 0;
+					if (isNaN(weekStart) || weekStart > 6)
+						weekStart = 0;
+					var year = this.getFullYear();
+					var firstDay = new Date(year, 0, 1);
+					var firstWeekDays = 7 - firstDay.getDay() + weekStart;
+					var dayOfYear = (((new Date(year, this.getMonth(), this.getDate())) - firstDay) / (24 * 3600 * 1000)) + 1;
+					return Math.ceil((dayOfYear - firstWeekDays) / 7) + 1;
+				}catch(e){
+					return 0;
+				}
 			};
 
 			function q_boxClose(s2) {
