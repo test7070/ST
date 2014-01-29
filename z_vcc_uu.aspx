@@ -19,6 +19,7 @@
 			var uccgbItem = '';
 			var firstRun = false;
 			var t_part = '';
+			var sssAs;
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
@@ -142,6 +143,10 @@
 					var thisDate = $.trim($(this).val())+'/01';
 					$('#txtXweek').val(padL((new Date(thisDate)).getWeekOfYear(), '0', 2));
 				});
+				if(sssAs[0] != undefined){
+					$('#txtSalesgroup').val(sssAs[0].salesgroup);
+					$('#txtSalesgroup').attr('disabled','disabled');
+				}
 				firstRun = false;
 			}
 
@@ -173,7 +178,6 @@
 						}
 						if (uccgbItem.length == 0) {
 							q_gt('uccgb', '', 0, 0, 0, "");
-							firstRun = true;
 						}
 						break;
 					case 'uccgb':
@@ -185,6 +189,13 @@
 						for ( i = 0; i < as.length; i++) {
 							uccgbItem = uccgbItem + (uccgbItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
 						}
+						var t_where = "where=^^ issales=1 and noa='"+r_userno+"' ^^";
+						q_gt('sss', t_where, 0, 0, 0, "");
+						break;
+					case 'sss':
+						var as = _q_appendData("sss", "", true);
+						sssAs = as;
+						firstRun = true;
 						break;
 					case 'part':
 						t_part = '#non@全部';
