@@ -293,30 +293,25 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					case 'refreshEnds':
-						var as = _q_appendData("ordc", "", true);
-						if (as[0] != undefined) {
-							for (var i = 0; i < abbm.length; i++) {
-								if (abbm[i].noa == as[0].noa) {
-									if (as[0].ends != '1') {
-										if ($('#chkEnda').prop('checked'))
-											abbm[i].ends = '2';
-										else if (!$('#chkEnda').prop('checked') && as[0].ends == 2)
-											abbm[i].ends = '0';
-										else
-											abbm[i].ends = as[0].ends;
-									}
-									break;
-								}
-							}
-						}
-						var t_noa = trim($('#txtNoa').val());
-						var t_date = trim($('#txtOdate').val());
-						if (t_noa.length == 0 || t_noa == "AUTO")
-							q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ordc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-						else
-							wrServer(t_noa);
-						break;
+					case 'refreshEnd2':
+                        var as = _q_appendData("ordc", "", true);
+                        var obj = $('.control_noa');
+                        if(as[0]!=undefined){
+                            for(var i=0;i<abbm.length;i++){
+                                if(abbm[i].noa==as[0].noa){
+                                    abbm[i].end2 = as[0].end2;
+                                    break;
+                                }   
+                            }
+                            for(var j=0;j<obj.length;j++){
+                                if(obj.eq(j).html()==as[0].noa){
+                                    $('.control_end2').eq(j).html(as[0].end2);
+                                    break;
+                                }
+                            }
+                        }
+                        refresh(q_recno);
+                        break;
 					case 'getAcomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
@@ -412,6 +407,7 @@
 			function q_stPost() {
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
+				q_gt('ordc', "where=^^ noa='" + $.trim($('#txtNoa').val()) + "'^^", 0, 0, 0, 'refreshEnd2', r_accy);
 				Unlock(1);
 			}
 
@@ -427,16 +423,15 @@
 			}
 
 			function btnOk() {
+			    Lock(1, {
+                    opacity : 0
+                });
 				//物料品名欄位寫入
 				if ($('#cmbKind').val() == '1') {
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#txtProductno_' + j).val($('#txtProductno1_' + j).val());
 					}
 				}
-
-				Lock(1, {
-					opacity : 0
-				});
 				$('#txtOrdbno').val(GetOrdbnoList());
 				//日期檢查
 				if ($('#txtOdate').val().length == 0 || !q_cd($('#txtOdate').val())) {
@@ -454,8 +449,12 @@
 				else
 					$('#txtWorker2').val(r_name);
 				sum();
-
-				q_gt('ordc', "where=^^ noa='" + $.trim($('#txtNoa').val()) + "'^^", 0, 0, 0, 'refreshEnds', r_accy);
+                var t_noa = trim($('#txtNoa').val());
+                var t_date = trim($('#txtOdate').val());
+                if (t_noa.length == 0 || t_noa == "AUTO")
+                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ordc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                else
+                    wrServer(t_noa);
 			}
 
 			function _btnSeek() {
@@ -640,24 +639,27 @@
 			}
 
 			function refresh(recno) {
-				_refresh(recno);
-				var obj = $('.control_enda');
-				for (var i = 0; i < obj.length; i++) {
-					switch(obj.eq(i).html()) {
-						case '1':
-							obj.eq(i).parent().children().css('color', 'darkred');
-							break;
-						case '2':
-							obj.eq(i).parent().children().css('color', 'darkred');
-							break;
-						case '3':
-							obj.eq(i).parent().children().css('color', 'darkgreen');
-							break;
-						default:
-							obj.eq(i).parent().children().css('color', 'blue');
-					}
+                _refresh(recno);
+                var obj = $('.control_end2');
+                for(var i=0;i<obj.length;i++){
+                    switch(obj.eq(i).html()){
+                        case '':
+                            obj.eq(i).parent().children().css('color','blue');
+                            break;
+                        case '0':
+                            obj.eq(i).parent().children().css('color','blue');
+                            break;
+                        case '1':
+                            obj.eq(i).parent().children().css('color','darkred');
+                            break;
+                        case '2':
+                            obj.eq(i).parent().children().css('color','green');
+                            break;
+                        default:
+                            obj.eq(i).parent().children().css('color','pink');
+                    }
 
-				}
+                }
 
 				size_change();
 				q_popPost('txtProductno_');
@@ -981,16 +983,16 @@
 						<td align="center" style="width:80px; color:black;"><a id="vewOdate"> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id="vewNoa"> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
-						<td align="center" style="width:20px; color:black;display:none;"><a id="vewEnds"> </a></td>
+						<td align="center" style="width:20px; color:black;display:none;"><a id="vewEnd2"> </a></td>
 					</tr>
 					<tr>
 						<td >
 						<input id="chkBrow.*" type="checkbox" style=''/>
 						</td>
 						<td align="center" id='odate'>~odate</td>
-						<td align="center" id='noa'>~noa</td>
+						<td align="center" class="control_noa" id='noa'>~noa</td>
 						<td align="center" id='nick'>~nick</td>
-						<td id="ends" class="control_enda" style="text-align: center;display:none;">~ends</td>
+						<td id="end2" class="control_end2" style="text-align: center;display:none;">~end2</td>
 					</tr>
 				</table>
 			</div>
