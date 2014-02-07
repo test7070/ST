@@ -76,10 +76,8 @@
 							for(var i=0;i<as.length;i++){
 								var thisStkType = as[i].stktype;
 								var thisMount = dec(as[i].mount);
-								if(as[i].tablea=='model'){
-									trueMount = trueMount+thisMount;
-								}else if(as[i].tablea=='moout'){
-									trueMount = trueMount+(thisMount*(-1));
+								if(as[i].tablea=='moget'){
+									trueMount = trueMount+(thisMount*(thisStkType=='1'?(-1):1));
 								}
 								t_mount = t_mount+(thisMount*(thisStkType=='1'?(1):(-1)));
 							}
@@ -88,10 +86,9 @@
 							if(t_mount < 0){
 								t_err += '庫存量不足，無法領用。\n';
 								t_err += '當前庫存：'+s_stkmount+'。';
-							}else if(t_mount > trueMount){
+							}else if(((trueMount+t_outmount) < t_inmount)){
 								t_err += '歸還數量異常。\n';
-								t_err += '當前庫存：'+s_stkmount+'。\n';
-								t_err += '該模具實際數量(取得-報廢)：'+trueMount+'。';
+								t_err += '已借用量：'+trueMount+'。';
 							}
 						}else{
 							t_err += '該模具不存在\n';
@@ -146,9 +143,39 @@
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
-				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtModelno', q_getMsg('lblModelno')]]);
-				if (t_err.length > 0) {
-					alert(t_err);
+				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtModelno', q_getMsg('lblModelno')]]);
+				var t_err2 = '';
+				var t_outsno = $.trim($('#txtOutsno').val());
+				var t_outdate = $.trim($('#txtOutdate').val());
+				var t_outmount = dec($('#txtOutmount').val());
+				var t_insno = $.trim($('#txtInsno').val());
+				var t_indate = $.trim($('#txtIndate').val());
+				var t_inmount = dec($('#txtInmount').val());
+				if(t_outmount==0 && t_inmount==0){
+					t_err2 += '請輸入['+q_getMsg('lblOutmount')+']或['+q_getMsg('lblInmount') + ']\n';
+				}else{
+					if(t_outmount > 0 && (t_outsno.length==0 || t_outdate.length==0)){
+						if(t_outsno.length==0){
+							t_err2 += '請輸入['+q_getMsg('lblOutsno')+']\n';
+						}else{
+							t_err2 += '請輸入['+q_getMsg('lblOutdate')+']\n';
+						}
+					}else if(t_outmount == 0 && (t_outsno.length>0 || t_outdate.length>0)){
+						t_err2 += '請輸入['+q_getMsg('lblOutmount')+']\n';
+					}
+					
+					if(t_inmount > 0 && (t_insno.length==0 || t_indate.length==0)){
+						if(t_insno.length==0){
+							t_err2 += '請輸入['+q_getMsg('lblInsno')+']\n';
+						}else{
+							t_err2 += '請輸入['+q_getMsg('lblIndate')+']\n';
+						}
+					}else if(t_inmount == 0 && (t_insno.length>0 || t_indate.length>0)){
+						t_err2 += '請輸入['+q_getMsg('lblInmount')+']\n';
+					}
+				}
+				if (t_err.length > 0 || t_err2.length > 0) {
+					alert(t_err+t_err2);
 					Unlock();
 					return;
 				}
