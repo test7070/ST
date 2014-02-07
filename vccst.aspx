@@ -41,7 +41,7 @@
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'], 
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'], 
 				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'], 
-				['txtUno_', 'btnUno_', 'view_uccc', 'uno,uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'], 
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'], 
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'], 
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
@@ -1150,7 +1150,7 @@
 				if (isinvosystem)
 					$('.istax').hide();
 			}
-
+			var ret; //勿刪
 			var x_bseq = 0;
 			function q_popPost(s1) {
 				switch (s1) {
@@ -1173,10 +1173,12 @@
 						var t_ordeno = $.trim($('#txtOrdeno_' + b_seq).val());
 						var t_no2 = $.trim($('#txtNo2_' + b_seq).val());
 						var t_uno = $.trim($('#txtUno_' + b_seq).val());
-						if (t_ordeno.length > 0 && t_no2 > 0) {
-							q_gt('view_ordes', "where=^^ noa='" + t_ordeno + "' and no2='" + t_no2 + "'^^", 0, 0, 0, 'afterPopUno1_' + b_seq, r_accy);
-						} else if (t_uno.length > 0) {
-							q_gt('view_uccb', "where=^^ uno='" + t_uno + "'^^", 0, 0, 0, 'afterPopUno2_' + b_seq, r_accy);
+						if(ret != undefined && ret.length > 0){
+							if (t_ordeno.length > 0 && t_no2 > 0) {
+								q_gt('view_ordes', "where=^^ noa='" + t_ordeno + "' and no2='" + t_no2 + "'^^", 0, 0, 0, 'afterPopUno1_' + b_seq, r_accy);
+							} else if (t_uno.length > 0) {
+								q_gt('view_uccb', "where=^^ uno='" + t_uno + "'^^", 0, 0, 0, 'afterPopUno2_' + b_seq, r_accy);
+							}
 						}
 						break;
 				}
