@@ -45,7 +45,10 @@
 						}
 					});
 				});
-				t_noa = $.trim($('#txtXnoa').val());
+			}
+
+			function q_getPrintPost(){
+				var t_noa = $.trim($('#txtXnoa').val());
 				if(t_noa.length > 0){
 					$('#btnOk').click();
 				}
