@@ -328,6 +328,8 @@
 			function refresh(recno) {
 				_refresh(recno);
 				refreshBbm();
+				if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
+					$('.it').css('text-align','left');
 			}
 
 			function refreshBbm() {
@@ -572,7 +574,7 @@
 						<input id="chkBrow.*" type="checkbox" style=' '/>
 						</td>
 						<td id='noa' style="text-align: center;">~noa</td>
-						<td id='namea' style="text-align: center;">~namea</td>
+						<td id='namea' style="text-align: center;" class="it">~namea</td>
 					</tr>
 				</table>
 			</div>
