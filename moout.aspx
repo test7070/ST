@@ -26,6 +26,7 @@
 			brwNowPage = 0;
 			brwKey = 'noa';
 			brwCount2 = 15;
+			q_desc = 1;
 			aPop = new Array(['txtModelno', 'lblModelno', 'model', 'noa,model', 'txtModelno,txtModel', 'model_b.aspx']);
 			$(document).ready(function() {
 				bbmKey = ['noa'];

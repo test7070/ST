@@ -29,6 +29,7 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'Noa';
+			q_desc = 1;
 			aPop = new Array(['txtStationno', 'lblStationno', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx']);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
