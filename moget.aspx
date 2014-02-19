@@ -15,25 +15,30 @@
 			function onPageError(error) {
 				alert("An error occurred:\r\n" + error.Message);
 			}
-
+			q_tables = 's';
 			var q_name = "moget";
 			var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtModel','txtOutnamea','txtInnamea'];
+			var q_readonlys = [];
 			var bbmNum = [['txtOutmount',10,0,1],['txtInmount',10,0,1]];
+			var bbsNum = [['txtOrdmount',10,0,1],['txtMomount',10,0,1]];
 			var bbmMask = [];
+			var bbsMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'noa';
-			brwCount2 = 15;
+			brwCount2 = 7;
 			q_desc = 1;
 			aPop = new Array(
 				['txtModelno', 'lblModelno', 'model', 'noa,model', 'txtModelno,txtModel', 'model_b.aspx'],
 				['txtOutsno', 'lblOutsno', 'sss', 'noa,namea', 'txtOutsno,txtOutnamea', 'sss_b.aspx'],
-				['txtInsno', 'lblInsno', 'sss', 'noa,namea', 'txtInsno,txtInnamea', 'sss_b.aspx']
+				['txtInsno', 'lblInsno', 'sss', 'noa,namea', 'txtInsno,txtInnamea', 'sss_b.aspx'],
+				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
+				bbsKey = ['noa','noq'];
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1);
 			});
@@ -136,6 +141,23 @@
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
 				Unlock();
+			}
+
+			function bbsAssign(){
+				for (var i = 0; i < q_bbsCount ; i++) {
+					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+					}
+				}
+				_bbsAssign();
+			}
+
+			function bbsSave(as) {
+				if (!as['ordeno']) {
+					as[bbsKey[1]] = '';
+					return;
+				}
+				q_nowf();
+				return true;
 			}
 
 			function btnOk() {
@@ -360,6 +382,24 @@
 			select {
 				font-size: medium;
 			}
+			.dbbs .tbbs {
+				margin: 0;
+				padding: 2px;
+				border: 2px lightgrey double;
+				border-spacing: 1px;
+				border-collapse: collapse;
+				font-size: medium;
+				color: blue;
+				background: #cad3ff;
+				width: 740px;
+			}
+			.dbbs .tbbs tr {
+				height: 35px;
+			}
+			.dbbs .tbbs tr td {
+				text-align: center;
+				border: 2px lightgrey double;
+			}
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -448,6 +488,39 @@
 				</table>
 			</div>
 		</div>
+			<div class='dbbs' >
+				<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
+					<tr style='color:White; background:#003366;' >
+						<td align="center" style="width:1%;">
+							<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
+						</td>
+						<td align="center" style="width:120px;"><a id='lblOrdeno_s'> </a></td>
+						<td align="center" style="width:30px;"><a id='lblNo2_s'> </a></td>
+						<td align="center" style="width:120px;"><a id='lblProductno_s'> </a></td>
+						<td align="center" style="width:120px;"><a id='lblProduct_s'> </a></td>
+						<td align="center" style="width:80px;"><a id='lblOrdmount_s'> </a></td>
+						<td align="center" style="width:80px;"><a id='lblMomount_s'> </a></td>
+					</tr>
+					<tr style='background:#cad3ff;'>
+						<td>
+						<input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+						</td>
+						<td><input class="txt c1" id="txtOrdeno.*" type="text" /></td>
+						<td><input class="txt c1" id="txtNo2.*" type="text" /></td>
+						<td>
+							<input class="btn" id="btnProductno.*" type="button" value='.' style="float:left;font-weight: bold;width:1%;" />
+							<input id="txtProductno.*" type="text" style="width:80%;" />
+						</td>
+						<td><input class="txt c1" id="txtProduct.*" type="text" /></td>
+						<td><input class="txt c1 num" id="txtOrdmount.*" type="text" /></td>
+						<td><input class="txt c1 num" id="txtMomount.*" type="text" /></td>
+						<td style="display:none;">
+							<input id="txtNoq.*" type="hidden" />
+							<input id="recno.*" type="hidden" />
+						</td>
+					</tr>
+				</table>
+			</div>
 		<input id="q_sys" type="hidden" />
 	</body>
 </html>
