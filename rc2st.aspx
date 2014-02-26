@@ -74,6 +74,7 @@
 				t_kind = t_kind.substr(0, 1);
 
 				for (var j = 0; j < q_bbsCount; j++) {
+				    t_weights = 0;
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
 					t_product = $.trim($('#txtProduct_' + j).val());
 					if (t_unit.length == 0 && t_product.length > 0) {
@@ -126,7 +127,6 @@
 					t_money = q_add(t_money, t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 				}
-
 				t_total = t_money;
 				t_tax = 0;
 				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;

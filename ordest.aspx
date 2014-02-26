@@ -310,6 +310,12 @@
                     });
                     q_func('qtxt.query.apv', 'orde.txt,apv,'+ encodeURI(r_userno) + ';' + encodeURI($('#txtNoa').val()));
                 });
+                $('#btnConform').click(function(e){
+                    Lock(1, {
+                        opacity : 0
+                    });
+                    q_func('qtxt.query.conform', 'orde.txt,conform,'+ encodeURI(r_userno) + ';' + encodeURI($('#txtNoa').val()));
+                });
                 OrdenoAndNo2On_Change();
             }
             function showSizeInfo(){
@@ -599,6 +605,35 @@
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
+                    case 'qtxt.query.conform':
+                        var as = _q_appendData("tmp0", "", true, true);
+                        if(as[0]!=undefined){
+                            var err = as[0].err;
+                            var msg = as[0].msg;
+                            var ordeno = as[0].ordeno;  
+                            var userno = as[0].userno;  
+                            var namea = '*';//as[0].namea;
+                            if(err=='1'){
+                                $('#txtConform').val(namea);
+                                for(var i=0;i<abbm.length;i++){
+                                    if(abbm[i].noa==ordeno){
+                                        abbm[i].conform=namea;
+                                        break;
+                                    }
+                                }
+                                var obj = $('#tview').find('#noa');
+                                for(var i=0;i<obj.length;i++){
+                                    if(obj.eq(i).html()==ordeno){
+                                        $('#tview').find('#conform').eq(i).html(namea);
+                                        break;                                      
+                                    }
+                                }
+                            }else{
+                                alert(msg); 
+                            }
+                        }
+                        Unlock(1);
+                        break;
                     case 'qtxt.query.apv':
                         var as = _q_appendData("tmp0", "", true, true);
                         if(as[0]!=undefined){
@@ -1352,7 +1387,7 @@
             }
             .dview {
                 float: left;
-                width: 380px;
+                width: 420px;
                 border-width: 0px;
             }
             .tview {
@@ -1563,6 +1598,7 @@
                         <td align="center" style="width:100px; color:black;"><a id="vewNoa"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewApv"> </a></td>
+                        <td align="center" style="width:40px; color:black;"><a id="vewConform"> </a></td>
                         <td align="center" style="width:20px; color:black; display:none;"><a id="vewEnd2"> </a></td>
                     </tr>
                     <tr>
@@ -1571,6 +1607,7 @@
                         <td id="noa" class="control_noa" style="text-align: center;">~noa</td>
                         <td id="nick" style="text-align: center;">~nick</td>
                         <td id="apv" style="text-align: center;">~apv</td>
+                        <td id="conform" style="text-align: center;">~conform</td>
                         <td id="end2" class="control_end2" style="text-align: center;display:none;">~end2</td>
                     </tr>
                 </table>
@@ -1717,7 +1754,11 @@
                         <td><input id="btnApv" type="button" style="width:70%;float:right;" value="核准"/></td>
                         <td><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>
                         <td><span> </span><a id='lblEnd' class="lbl"> </a></td>
-                        <td><input id="chkEnda" type="checkbox"/></td>
+                        <td>
+                            <input id="chkEnda" type="checkbox"/>
+                            <input id="btnConform" type="button" style="width:70%;float:right;" value="簽回"/>
+                            <input id="txtConform" type="text" class="txt c1" style="display:none;"/>
+                        </td>
                     </tr>
                 </table>
             </div>
