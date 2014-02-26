@@ -144,8 +144,19 @@
 					$('#txtXweek').val(padL((new Date(thisDate)).getWeekOfYear(), '0', 2));
 				});
 				if(sssAs[0] != undefined){
-					$('#txtSalesgroup').val(sssAs[0].salesgroup);
-					$('#txtSalesgroup').attr('disabled','disabled');
+					if(sssAs[0].noa=='31'){ //產品經理
+						$('#txtXtgg1a').val('S03');
+						$('#txtXtgg2a').val('S03');
+						$('#txtXtgg1b').val('Teknimed SAS');
+						$('#txtXtgg2b').val('Teknimed SAS');		
+						$('#txtXtgg1a').attr('disabled','disabled');
+						$('#txtXtgg2a').attr('disabled','disabled');
+						$('#btnXtgg1').hide();
+						$('#btnXtgg2').hide();
+					}else{ //業務經理
+						$('#txtSalesgroup').val(sssAs[0].salesgroup);
+						$('#txtSalesgroup').attr('disabled','disabled');
+					}
 				}
 				firstRun = false;
 			}
