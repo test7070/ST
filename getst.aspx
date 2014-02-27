@@ -314,17 +314,19 @@
 						$('#txtStyle_' + b_seq).focus();
 						break;
 					case 'txtUno_':
-						var ret = getb_ret();
+						var thisRet = getb_ret();
 						size_change();
-						var t_uno = trim($('#txtUno_' + b_seq).val()).toUpperCase().substring(0, 1);
-						if ('XYZ'.indexOf(t_uno) > -1 && trim(t_uno) != '') {
-							$('#txtProductno_' + b_seq).focus();
-						} else {
-							//if(trim(t_uno) == '') b_seq = x_bseq;
-							if (ret.length >= 1) {
-								$('#txtUno_' + b_seq).val(ret[0].uno);
+						if(thisRet){
+							var t_uno = trim($('#txtUno_' + b_seq).val()).toUpperCase().substring(0, 1);
+							if ('XYZ'.indexOf(t_uno) > -1 && trim(t_uno) != '') {
+								$('#txtProductno_' + b_seq).focus();
+							} else {
+								//if(trim(t_uno) == '') b_seq = x_bseq;
+								if (thisRet.length >= 1) {
+									$('#txtUno_' + b_seq).val(thisRet[0].uno);
+								}
+								$('#txtMount_' + b_seq).focus();
 							}
-							$('#txtMount_' + b_seq).focus();
 						}
 						break;
 				}
