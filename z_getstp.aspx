@@ -26,19 +26,12 @@
 				$('#q_report').q_report({
 					fileName : 'z_getstp',
 					options : [{
-						type : '0',
-						name : 'accy',
-						value : r_accy
-					},{
+                        type : '0',
+                        name : 'xkind',
+                        value : q_getPara('sys.stktype')
+                    },{
 						type : '1',
 						name : 'xnoa'
-					},{
-						type : '5',
-						name : 'itype',
-						value : [q_getPara('report.all')].concat(q_getPara('get.typea').split(','))
-					},{
-						type : '1',
-						name : 'xdate'
 					}]
 				});
 				q_popAssign();
