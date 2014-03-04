@@ -19,7 +19,7 @@
 			var q_name = "model";
 			var q_readonly = ['txtWorker', 'txtWorker2'];
 			var q_readonlys = [];
-			var bbmNum = [['txtYearmount', 10, 0, 1], ['txtUsecount', 10, 0, 1], ['txtInmount', 10, 0, 1], ['txtMount', 10, 0, 1]];
+			var bbmNum = [['txtYearmount', 10, 0, 1], ['txtUsemount', 10, 0, 1], ['txtInmount', 10, 0, 1], ['txtInmoney', 10, 0, 1], ['txtMount', 10, 0, 1]];
 			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -387,15 +387,15 @@
 					<tr>
 						<td><span> </span><a id='lblYearmount' class="lbl"> </a></td>
 						<td><input id="txtYearmount" type="text" class="txt c1 num"/></td>
-						<td><span> </span><a id='lblUsecount' class="lbl"> </a></td>
-						<td><input id="txtUsecount" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblUsemount' class="lbl"> </a></td>
+						<td><input id="txtUsemount" type="text" class="txt c1 num"/></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoldingcycle' class="lbl"> </a></td>
 						<td><input id="txtMoldingcycle" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblStationno' class="lbl btn"> </a></td>
-						<td colspan="2">
+						<td colspan="3">
 							<input id="txtStationno" type="text" style="width:35%" class="txt"/>
 							<input id="txtStation" type="text" style="width:65%" class="txt"/>
 						</td>
@@ -406,8 +406,8 @@
 						<td><input id="txtIndate" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblInmount' class="lbl"> </a></td>
 						<td><input id="txtInmount" type="text" class="txt c1 num"/></td>
-						<td><span> </span><a id='lblMount' class="lbl"> </a></td>
-						<td><input id="txtMount" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblInmoney' class="lbl"> </a></td>
+						<td><input id="txtInmoney" type="text" class="txt c1 num"/></td>
 						<td></td>
 					</tr>
 					<tr>
@@ -415,7 +415,8 @@
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
-						<td></td>
+						<td><span> </span><a id='lblMount' class="lbl"> </a></td>
+						<td><input id="txtMount" type="text" class="txt c1 num"/></td>
 					</tr>
 				</table>
 			</div>
