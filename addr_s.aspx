@@ -8,55 +8,50 @@
 		<script src='qset.js' type="text/javascript"></script>
 		<script src='../script/qj_mess.js' type="text/javascript"></script>
 		<script src='../script/mask.js' type="text/javascript"></script>
-        <link href="../qbox.css" rel="stylesheet" type="text/css" />
+		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-            aPop = new Array(
-            	['txtProductno', '', 'ucc', 'noa,product', 'txtProductno', 'ucc_b.aspx'],
-            	['txtNoa', '', 'addr', 'noa,addr', 'txtNoa', 'addr_b.aspx'],
-            	['txtCustno', '', 'cust', 'noa,comp', 'txtCustno', 'cust_b.aspx']            	
-            );
-            var q_name = "addr_s";
+			aPop = new Array(['txtProductno', '', 'ucc', 'noa,product', 'txtProductno', 'ucc_b.aspx'], ['txtNoa', '', 'addr', 'noa,addr', 'txtNoa', 'addr_b.aspx'], ['txtCustno', '', 'cust', 'noa,comp', 'txtCustno', 'cust_b.aspx']);
+			var q_name = "addr_s";
 
-            $(document).ready(function() {
-                main();
-            });
+			$(document).ready(function() {
+				main();
+			});
 
-            function main() {
-                mainSeek();
-                q_gf('', q_name);
-                $('#txtNoa').focus();
-            }
+			function main() {
+				mainSeek();
+				q_gf('', q_name);
+				$('#txtNoa').focus();
+			}
 
-            function q_gfPost() {
-                q_getFormat();
-                q_langShow();
+			function q_gfPost() {
+				q_getFormat();
+				q_langShow();
 
-                /* bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
-                 q_mask(bbmMask);
+				/* bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
+				 q_mask(bbmMask);
 
-                 $('#txtBdate').focus();*/
-            }
+				 $('#txtBdate').focus();*/
+			}
 
-            function q_seekStr() {
-                t_noa = $('#txtNoa').val();
-                t_addr = $.trim($('#txtAddr').val());
-                t_productno = $('#txtProductno').val();
+			function q_seekStr() {
+				t_noa = $('#txtNoa').val();
+				t_addr = $.trim($('#txtAddr').val());
+				t_productno = $('#txtProductno').val();
 				t_custno = $.trim($('#txtCustno').val());
-                var t_where = " 1=1 " + q_sqlPara2("noa", t_noa) + q_sqlPara2("productno", t_productno) 
-                					 + q_sqlPara2("noa", t_custno);
-                if (t_addr.length > 0)
-                    t_where += " and charindex('" + t_addr + "',addr)>0";
-                t_where = ' where=^^' + t_where + '^^ ';
-                return t_where;
-            }
+				var t_where = " 1=1 " + q_sqlPara2("noa", t_noa) + q_sqlPara2("productno", t_productno) + q_sqlPara2("noa", t_custno);
+				if (t_addr.length > 0)
+					t_where += " and charindex('" + t_addr + "',addr)>0";
+				t_where = ' where=^^' + t_where + '^^ ';
+				return t_where;
+			}
 		</script>
 		<style type="text/css">
-            .seek_tr {
-                color: white;
-                text-align: center;
-                font-weight: bold;
-                BACKGROUND-COLOR: #76a2fe
-            }
+			.seek_tr {
+				color: white;
+				text-align: center;
+				font-weight: bold;
+				BACKGROUND-COLOR: #76a2fe
+			}
 		</style>
 	</head>
 	<body>
@@ -69,11 +64,11 @@
 					</td>
 				</tr>
 				<tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblCustno'></a></td>
-                    <td>
-                    <input class="txt" id="txtCustno" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
+					<td class='seek'  style="width:20%;"><a id='lblCustno'></a></td>
+					<td>
+					<input class="txt" id="txtCustno" type="text" style="width:215px; font-size:medium;" />
+					</td>
+				</tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblAddr'></a></td>
 					<td>
@@ -81,11 +76,11 @@
 					</td>
 				</tr>
 				<tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblProductno'></a></td>
-                    <td>
-                    <input class="txt" id="txtProductno" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
+					<td class='seek'  style="width:20%;"><a id='lblProductno'></a></td>
+					<td>
+					<input class="txt" id="txtProductno" type="text" style="width:215px; font-size:medium;" />
+					</td>
+				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->
 		</div>
