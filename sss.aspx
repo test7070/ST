@@ -342,6 +342,12 @@
 				} else {
 					$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				}
+				var isBarCode = (dec(q_getPara('sss.isbarcode'))==1?true:false);
+				if(isBarCode== true){
+					$('.isBarCode').show();
+				}else{
+					$('.isBarCode').hide();
+				}
 			}
 
 			function readonly(t_para, empty) {
@@ -555,10 +561,6 @@
 			select {
 				font-size: medium;
 			}
-			.lbl2{
-				color: blue;
-				font-size: medium;
-			}
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -660,9 +662,8 @@
 						<td><input id="txtIndate" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblOutdate' class="lbl"> </a></td>
 						<td><input id="txtOutdate" type="text" class="txt c1" /></td>
-						<td colspan="2" style="text-align:center;">
-							<span> </span><a id='lblBarcode' class="lbl2"> </a>
-						</td>
+						<td class="isBarCode"><span> </span><a id='lblBarcode' class="lbl"> </a></td>
+						<td class="isBarCode"><input id="txtBarcode" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblPart" class="lbl btn"> </a></td>
@@ -675,7 +676,6 @@
 							<select id="cmbJobno" class="txt c1"></select>
 							<input id="txtJob" type="text" style="display: none;"/>
 						</td>
-						<td rowspan="2" colspan="2" style="text-align:center;"><div id="BarcodeShow"></div></td>						
 					</tr>
 					<tr style="display: none;">
 						<!--公司-->
