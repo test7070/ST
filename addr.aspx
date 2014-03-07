@@ -18,7 +18,7 @@
 			isEditTotal = false;
 			q_tables = 's';
 			var q_name = "addr";
-			var q_readonly = ['txtCustprice', 'txtDriverprice', 'txtDriverprice2', 'txtCommission', 'txtCommission2', 'txtSalesno', 'txtSales'];
+			var q_readonly = ['txtCardeal','txtCustprice', 'txtDriverprice', 'txtDriverprice2', 'txtCommission', 'txtCommission2', 'txtSalesno', 'txtSales'];
 			var q_readonlys = [];
 			var bbmNum = [
 				['txtCustprice', 10, 3], ['txtDriverprice', 10, 3], ['txtDriverprice2', 10, 3],
@@ -36,7 +36,8 @@
 			brwNowPage = 0;
 			brwKey = 'Datea';
 			aPop = new Array(
-				['txtSalesno_', '', 'sss', 'noa,namea', 'txtSalesno_,txtSales_', 'sss_b.aspx']
+				['txtSalesno_', '', 'sss', 'noa,namea', 'txtSalesno_,txtSales_', 'sss_b.aspx'],
+				['txtCardealno', 'lblCardealno', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
 			
 			$(document).ready(function() {
@@ -57,20 +58,8 @@
 				q_getFormat();
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
+				q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_gt('carspec', '', 0, 0, 0, "");
-				$('#txtNoa').change(function(e) {
-					$(this).val($.trim($(this).val()).toUpperCase());
-					if ($(this).val().length > 0) {
-						if ((/^(\w+|\w+\u002D\w+)$/g).test($(this).val())) {
-							t_where = "where=^^ noa='" + $(this).val() + "'^^";
-							q_gt('addr', t_where, 0, 0, 0, "checkAddrno_change", r_accy);
-						} else {
-							Lock();
-							alert('編號只允許 英文(A-Z)、數字(0-9)及dash(-)。' + String.fromCharCode(13) + 'EX: A01、A01-001');
-							Unlock();
-						}
-					}
-				});
 				$('#btnPrint').bind('contextmenu', function(e) {
 					e.preventDefault();
 					q_box("z_addr2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + r_accy, 'z_addr2', "95%", "95%", q_getMsg("popPrint"));
@@ -99,22 +88,6 @@
 							return;
 						}
 						q_box("z_addr2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + r_accy, 'z_addr2', "95%", "95%", q_getMsg("popPrint"));
-						break;
-					case 'checkAddrno_change':
-						var as = _q_appendData("addr", "", true);
-						if (as[0] != undefined) {
-							alert('已存在 ' + as[0].noa + ' ' + as[0].addr);
-						}
-						break;
-					case 'checkAddrno_btnOk':
-						var as = _q_appendData("addr", "", true);
-						if (as[0] != undefined) {
-							alert('已存在 ' + as[0].noa + ' ' + as[0].addr);
-							Unlock();
-							return;
-						} else {
-							wrServer($('#txtNoa').val());
-						}
 						break;
 					case 'carspec':
 						var as = _q_appendData("carspec", "", true);
@@ -154,47 +127,35 @@
 					}
 				}
 				Lock();
-				$('#txtNoa').val($.trim($('#txtNoa').val()));
-				if ((/^(\w+|\w+\u002D\w+)$/g).test($('#txtNoa').val())) {
-				} else {
-					alert('編號只允許 英文(A-Z)、數字(0-9)及dash(-)。' + String.fromCharCode(13) + 'EX: A01、A01-001');
-					Unlock();
-					return;
-				}
-				if (q_cur == 1) {
-					t_where = "where=^^ noa='" + $('#txtNoa').val() + "'^^";
-					q_gt('addr', t_where, 0, 0, 0, "checkAddrno_btnOk", r_accy);
-				} else {
-					wrServer($('#txtNoa').val());
-				}
+				var t_noa = trim($('#txtNoa').val());
+				if (t_noa.length == 0 || t_noa == "AUTO")
+					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_addr') + q_date(), '/', ''));
+				else
+					wrServer(t_noa);
 			}
 
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-
 				q_box('addr_s.aspx', q_name + '_s', "500px", "330px", q_getMsg("popSeek"));
 			}
 
 			function bbsAssign() {
 				for (var i = 0; i < q_bbsCount; i++) {
-
 				}
 				_bbsAssign();
 			}
 
 			function btnIns() {
 				_btnIns();
-				refreshBbm();
-				$('#txtNoa').focus();
+				$('#txtNoa').val('AUTO');
+				
 			}
 
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
-				refreshBbm();
-				$('#txtNoa').attr('readonly', 'readonly');
 				$('#txtAddr').focus();
 			}
 
@@ -226,15 +187,6 @@
 
 			function refresh(recno) {
 				_refresh(recno);
-				refreshBbm();
-			}
-
-			function refreshBbm() {
-				if (q_cur == 1) {
-					$('#txtNoa').css('color', 'black').css('background', 'white').removeAttr('readonly');
-				} else {
-					$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-				}
 			}
 
 			function readonly(t_para, empty) {
@@ -299,7 +251,7 @@
 			}
 			.dview {
 				float: left;
-				width: 500px;
+				width: 350px;
 				border-width: 0px;
 			}
 			.tview {
@@ -370,6 +322,14 @@
 				width: 95%;
 				float: left;
 			}
+			.txt.c2 {
+				width: 25%;
+				float: left;
+			}
+			.txt.c3 {
+				width: 74%;
+				float: left;
+			}
 			.txt.num {
 				text-align: right;
 			}
@@ -417,7 +377,6 @@
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewNoa'> </a></td>
 						<td align="center" style="width:200px; color:black;"><a id='vewAddr'> </a></td>
-						<td align="center" style="width:150px; color:black;"><a id='vewProductno'> </a></td>
 					</tr>
 					<tr>
 						<td>
@@ -425,7 +384,6 @@
 						</td>
 						<td style="text-align: center;" id='noa'>~noa</td>
 						<td style="text-align: left;" id='addr'>~addr</td>
-						<td style="text-align: left;" id='product'>~product</td>
 					</tr>
 				</table>
 			</div>
@@ -438,21 +396,32 @@
 						<td></td>
 						<td class="tdZ"></td>
 					</tr>
-					<tr>
+					<tr style="display:none;">
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa" type="text" class="txt c1" /></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblPost' class="lbl"> </a></td>
+						<td><input id="txtPost" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td colspan="3"><input id="txtAddr" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
+						<td class="td1"><span> </span><a id='lblCardealno' class="lbl btn"></a></td>
+						<td class="td2" colspan="3">
+							<input id="txtCardealno" type="text" class="txt c2"/>
+							<input id="txtCardeal" type="text" class="txt c3"/>
+						</td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblCarspecno' class="lbl"> </a></td>
 						<td><select id="cmbCarspecno" class="txt c1"> </select></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblIsdouble' class="lbl"> </a></td>
-						<td><input id="chkIsdouble" type="checkbox" class="c1"/></td>
+						<td><span> </span><a id='lblTranstyle' class="lbl"> </a></td>
+						<td><select id="cmbTranstyle" class="txt c1"> </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMiles' class="lbl"> </a></td>
