@@ -542,6 +542,13 @@
 					Unlock(1);
 					return;
 				}
+				if ($.trim($('#txtStoreno').val()).length > 0) {
+                    for (var i = 0; i < q_bbsCount; i++) {
+                        $('#txtStoreno_' + i).val($.trim($('#txtStoreno').val()));
+                        $('#txtStore_' + i).val($.trim($('#txtStore').val()));
+
+                    }
+                }
 				//檢查批號
 				for (var i = 0; i < q_bbsCount; i++) {
 					for (var j = i + 1; j < q_bbsCount; j++) {
@@ -550,13 +557,6 @@
 							Unlock(1);
 							return;
 						}
-					}
-				}
-				if ($.trim($('#txtStoreno').val()).length > 0) {
-					for (var i = 0; i < q_bbsCount; i++) {
-						$('#txtStoreno_' + i).val($.trim($('#txtStoreno').val()));
-						$('#txtStore_' + i).val($.trim($('#txtStore').val()));
-
 					}
 				}
 				var t_where = '';
