@@ -29,7 +29,7 @@
 			brwNowPage = 0;
 			brwKey = 'noa';
 			brwCount2 = 15;
-			//ajaxPath = ""; //  execute in Root
+			//ajaxPath = ""; // execute in Root
 			aPop = new Array(
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtComp', 'acomp_b.aspx'],
 				['txtAddr_home', '', 'view_road', 'memo', '0txtAddr_home', 'road_b.aspx'],
@@ -179,9 +179,9 @@
 				switch (b_pop) {
 					case q_name + '_s':
 						q_boxClose2(s2);
-						///   q_boxClose 3/4
+						/// q_boxClose 3/4
 						break;
-				}   /// end Switch
+				} /// end Switch
 			}
 
 			function q_gtPost(t_name) {
@@ -328,6 +328,10 @@
 			function refresh(recno) {
 				_refresh(recno);
 				refreshBbm();
+				if(q_cur==0 || q_cur==4){
+					var t_noa = $.trim($('#txtNoa').val()).toUpperCase();
+					$('#BarcodeShow').html('<img height="40px" src="http://barcode.tec-it.com/barcode.ashx?code=Code39&amp;modulewidth=fit&amp;data='+t_noa+'&amp;dpi=96&amp;imagetype=gif&amp;rotation=0&amp;color=&amp;bgcolor=&amp;fontcolor=&amp;quiet=0&amp;qunit=mm&amp;download=true">')
+				}
 				if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
 					$('.it').css('text-align','left');
 			}
@@ -551,6 +555,10 @@
 			select {
 				font-size: medium;
 			}
+			.lbl2{
+				color: blue;
+				font-size: medium;
+			}
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -579,7 +587,7 @@
 				</table>
 			</div>
 			<div class='dbbm'>
-				<table class="tbbm"  id="tbbm">
+				<table class="tbbm" id="tbbm">
 					<tr style="height:1px;">
 						<td></td>
 						<td></td>
@@ -591,7 +599,7 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td><input id="txtNoa"  type="text" class="txt c1"/></td>
+						<td><input id="txtNoa" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblNamea' class="lbl"> </a></td>
 						<td><input id="txtNamea" type="text" class="txt c1" /></td>
 						<td><span> </span><a id="lblPerson" class="lbl"> </a></td>
@@ -599,9 +607,9 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblId' class="lbl"> </a></td>
-						<td><input id="txtId"  type="text"  class="txt c1"/></td>
+						<td><input id="txtId" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblBirthday' class="lbl"> </a></td>
-						<td><input id="txtBirthday"  type="text" class="txt c1"/></td>
+						<td><input id="txtBirthday" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblBlood' class="lbl"> </a></td>
 						<td><select id="cmbBlood" class="txt c1"></select></td>
 					</tr>
@@ -609,7 +617,7 @@
 						<td><span> </span><a id='lblSex' class="lbl"> </a></td>
 						<td><select id="cmbSex" class="txt c1"></select></td>
 						<td><span> </span><a id='lblTel' class="lbl"> </a></td>
-						<td><input id="txtTel" type="text"  class="txt c1"/></td>
+						<td><input id="txtTel" type="text" class="txt c1"/></td>
 						<td><input id="chkMarried" type="checkbox" style="float: right;"/></td>
 						<td><a id='vewMarried'> </a></td>
 					</tr>
@@ -617,27 +625,27 @@
 						<td><span> </span><a id='lblMobile1' class="lbl"> </a></td>
 						<td><input id="txtMobile1" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblMobile2' class="lbl"> </a></td>
-						<td><input id="txtMobile2"  type="text"  class="txt c1"/></td>
+						<td><input id="txtMobile2" type="text" class="txt c1"/></td>
 						<td><input id="chkIswelfare" type="checkbox" style="float: right;"/></td>
 						<td><a id='vewIswelfare'> </a></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblAddr_home" class="lbl"> </a></td>
-						<td colspan="5"><input id="txtAddr_home"  type="text" class="txt c1"/></td>
+						<td colspan="5"><input id="txtAddr_home" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblAddr_conn" class="lbl"> </a></td>
-						<td colspan="5"><input id="txtAddr_conn"  type="text"  class="txt c1"/></td>
+						<td colspan="5"><input id="txtAddr_conn" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblEmail" class="lbl"> </a></td>
-						<td colspan="5"><input id="txtEmail"  type="text"  class="txt c1"/></td>
+						<td colspan="5"><input id="txtEmail" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblRecord' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtSchool" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblAccount' class="lbl"> </a></td>
-						<td colspan="2"><input id="txtAccount"  type="text" class="txt c1" /></td>
+						<td colspan="2"><input id="txtAccount" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTypea' class="lbl"> </a></td>
@@ -645,43 +653,47 @@
 						<td><input id="chkIssales" type="checkbox" style="float: right;"/></td>
 						<td><a id='vewIssales'> </a></td>
 						<td><span> </span><a id='lblSalesgroup' class="lbl"> </a></td>
-						<td><input id="txtSalesgroup"  type="text" class="txt c1" /></td>
+						<td><input id="txtSalesgroup" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblIndate' class="lbl"> </a></td>
 						<td><input id="txtIndate" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblOutdate' class="lbl"> </a></td>
-						<td><input id="txtOutdate"  type="text" class="txt c1" /></td>
+						<td><input id="txtOutdate" type="text" class="txt c1" /></td>
+						<td colspan="2" style="text-align:center;">
+							<span> </span><a id='lblBarcode' class="lbl2"> </a>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblPart" class="lbl btn"> </a></td>
 						<td>
 							<select id="cmbPartno" class="txt c1"></select>
-							<input id="txtPart"  type="text" style="display: none;"/>
+							<input id="txtPart" type="text" style="display: none;"/>
 						</td>
 						<td><span> </span><a id="lblJob" class="lbl btn"> </a></td>
 						<td>
 							<select id="cmbJobno" class="txt c1"></select>
-							<input id="txtJob"  type="text" style="display: none;"/>
+							<input id="txtJob" type="text" style="display: none;"/>
 						</td>
+						<td rowspan="2" colspan="2" style="text-align:center;"><div id="BarcodeShow"></div></td>						
 					</tr>
 					<tr style="display: none;">
 						<!--公司-->
 						<td><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
 						<td colspan="3">
-							<input id="txtCno"  type="text" class="txt c2"/>
-							<input id="txtComp"  type="text" class="txt c3"/>
+							<input id="txtCno" type="text" class="txt c2"/>
+							<input id="txtComp" type="text" class="txt c3"/>
 						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblConn" class="lbl"> </a></td>
-						<td><input id="txtConn"  type="text"  class="txt c1"/></td>
+						<td><input id="txtConn" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblConntel" class="lbl"> </a></td>
-						<td><input id="txtConntel"  type="text"  class="txt c1"/></td>
+						<td><input id="txtConntel" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="5"><input id="txtMemo"  type="text"  class="txt c1"/></td>
+						<td colspan="5"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td></td>
