@@ -58,7 +58,7 @@
 				q_getFormat();
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
-				q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
+				q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle2'));
 				q_gt('carspec', '', 0, 0, 0, "");
 				$('#btnPrint').bind('contextmenu', function(e) {
 					e.preventDefault();
@@ -81,6 +81,19 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'checkAddrno_btnOk':
+						var as = _q_appendData("addr", "", true);
+						if (as[0] != undefined){
+							var t_Msg = '已存在\n';
+							t_Msg += q_getMsg('lblCardealno') + as[0].cardealno;
+							t_Msg += q_getMsg('lblPost') + as[0].post;
+							alert(t_Msg);
+							Unlock();
+							return;
+						}else{
+							wrServer($.trim($('#txtNoa').val()));
+						}
+						break;
 					case 'z_addr':
 						var as = _q_appendData("authority", "", true);
 						if (as[0] != undefined && (as[0].pr_run == "1" || as[0].pr_run == "true")) {
@@ -126,12 +139,24 @@
 						$('#txtSales').val($('#txtSales_' + i).val());
 					}
 				}
+				var t_err = q_chkEmpField([
+					['txtCardealno', q_getMsg('lblCardealno')],
+					['txtPost', q_getMsg('lblPost')]
+				]);
+				if(t_err.length > 0){
+					alert(t_err);
+					Unlock();
+					return;
+				}
 				Lock();
-				var t_noa = trim($('#txtNoa').val());
-				if (t_noa.length == 0 || t_noa == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_addr') + q_date(), '/', ''));
-				else
-					wrServer(t_noa);
+				var newNoa = $.trim($('#txtCardealno').val())+'_'+$.trim($('#txtPost').val());
+				$('#txtNoa').val(newNoa);
+				if(q_cur==1){
+					t_where="where=^^ noa='"+$.trim($('#txtNoa').val())+"'^^";
+					q_gt('addr', t_where, 0, 0, 0, "checkAddrno_btnOk", r_accy);
+				}else{
+					wrServer($.trim($('#txtNoa').val()));
+				}
 			}
 
 			function _btnSeek() {
@@ -251,7 +276,7 @@
 			}
 			.dview {
 				float: left;
-				width: 350px;
+				width: 450px;
 				border-width: 0px;
 			}
 			.tview {
@@ -375,14 +400,14 @@
 				<table class="tview" id="tview">
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
-						<td align="center" style="width:100px; color:black;"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:150px; color:black;"><a id='vewCardealno'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewPost'> </a></td>
 						<td align="center" style="width:200px; color:black;"><a id='vewAddr'> </a></td>
 					</tr>
 					<tr>
-						<td>
-						<input id="chkBrow.*" type="checkbox" />
-						</td>
-						<td style="text-align: center;" id='noa'>~noa</td>
+						<td><input id="chkBrow.*" type="checkbox" /></td>
+						<td style="text-align: center;" id='cardealno cardeal,5'>~cardealno ~cardeal,5</td>
+						<td style="text-align: center;" id='post'>~post</td>
 						<td style="text-align: left;" id='addr'>~addr</td>
 					</tr>
 				</table>
@@ -401,19 +426,19 @@
 						<td colspan="2"><input id="txtNoa" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
+						<td class="td1"><span> </span><a id='lblCardealno' class="lbl btn"></a></td>
+						<td class="td2" colspan="3">
+							<input id="txtCardealno" type="text" class="txt c2"/>
+							<input id="txtCardeal" type="text" class="txt c3"/>
+						</td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblPost' class="lbl"> </a></td>
 						<td><input id="txtPost" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td colspan="3"><input id="txtAddr" type="text" class="txt c1" /></td>
-					</tr>
-					<tr>
-						<td class="td1"><span> </span><a id='lblCardealno' class="lbl btn"></a></td>
-						<td class="td2" colspan="3">
-							<input id="txtCardealno" type="text" class="txt c2"/>
-							<input id="txtCardeal" type="text" class="txt c3"/>
-						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblCarspecno' class="lbl"> </a></td>
