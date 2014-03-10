@@ -1045,7 +1045,9 @@
 							sum();
 						});
 						$('#txtMount_' + j).focusout(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							sum();
+							$('#txtWeight_'+n).val($('#txtTheory_'+n).val());
 						});
 						$('#txtTotal_' + j).focusout(function() {
 							sum();
