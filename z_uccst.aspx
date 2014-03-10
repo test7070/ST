@@ -201,6 +201,7 @@
 				});
 				$('#Xitype .cmb').change();
 				$('#Xstype select').val('A');
+				$('#Xitype select').val('1');
 			}
 
 			function q_boxClose(s2) {
