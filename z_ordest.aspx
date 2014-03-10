@@ -24,29 +24,29 @@
 				$('#q_report').q_report({
 					fileName : 'z_ordest',
 					options : [{
-						type : '0',//[1]
+						type : '0', //[1]
 						name : 'accy',
 						value : q_getId()[4]
 					}, {
-						type : '1',//[2][3]
+						type : '1', //[2][3]
 						name : 'xdate'
-					},{
-						type : '1',//[4][5]
+					}, {
+						type : '1', //[4][5]
 						name : 'xodate'
 					}, {
-						type : '2',//[6][7]
+						type : '2', //[6][7]
 						name : 'xcust',
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
 					}, {
-						type : '2',//[8][9]
+						type : '2', //[8][9]
 						name : 'xsales',
 						dbf : 'sss',
 						index : 'noa,namea',
 						src : 'sss_b.aspx'
 					}, {
-						type : '2',//[10][11]
+						type : '2', //[10][11]
 						name : 'xproduct',
 						dbf : 'ucc',
 						index : 'noa,product',
@@ -54,7 +54,7 @@
 					}, {
 						type : '5', //[12]
 						name : 'xstype',
-						value : [q_getPara('report.all')].concat(q_getPara('ordc.stype').split(','))
+						value : [q_getPara('report.all')].concat(q_getPara('orde.stype').split(','))
 					}, {
 						type : '5', //[13]
 						name : 'xtran',
@@ -67,10 +67,26 @@
 						type : '5', //[15]
 						name : 'xend',
 						value : [q_getPara('report.all')].concat(new Array('1@Y', '0@N'))
-                    }, {
-                        type : '5', //[16] 1
-                        name : 'xsortby', 
-                        value : 'custno@依客戶,sizea@依尺寸,dime@依厚度'.split(',')
+					}, {
+						type : '5', //[16]
+						name : 'xsortby',
+						value : 'custno@依客戶,sizea@依尺寸,dime@依厚度'.split(',')
+					}, {
+						type : '5', //[17]
+						name : 'xstktype',
+						value : [q_getPara('report.all')].concat(q_getPara('sys.stktype').split(','))
+					}, {
+						type : '1', //[18][19]
+						name : 'xradius'
+					}, {
+						type : '1', //[20][21]
+						name : 'xwidth'
+					}, {
+						type : '1', //[22][23]
+						name : 'xdime'
+					}, {
+						type : '1', //[24][25]
+						name : 'xlengthb'
 					}]
 				});
 				q_popAssign();
@@ -80,9 +96,98 @@
 				$('#txtXodate1').datepicker();
 				$('#txtXodate2').mask('999/99/99');
 				$('#txtXodate2').datepicker();
+				$('#Xstktype select').val('A1').change();
+				setDefaultValue();
+				size_change();
+				$('#Xstktype select').change(function() {
+					size_change();
+				});
 				var t_key = q_getHref();
-				if(t_key[1] != undefined)
+				if (t_key[1] != undefined)
 					$('#txtXnoa').val(t_key[1]);
+			}
+			
+			function setDefaultValue() {
+				$('#txtXradius1').val(0).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(0);
+				});
+				$('#txtXradius2').val(9999.99).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(9999.99);
+				});
+				$('#txtXwidth1').val(0).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(0);
+				});
+				$('#txtXwidth2').val(9999.99).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(9999.99);
+				});
+				$('#txtXdime1').val(0).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(0);
+				});
+				$('#txtXdime2').val(9999.99).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(9999.99);
+				});
+				$('#txtXlengthb1').val(0).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(0);
+				});
+				$('#txtXlengthb2').val(99999.9).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(99999.9);
+				});
+			}
+
+			function size_change() {
+				var SelectedVal = $('#Xstktype select').val().toUpperCase();
+				if (!($('#Xstktype').is(":hidden"))) {
+					switch (SelectedVal.substring(0,1)) {
+						case 'A':
+							$('#Xradius').hide();
+							$('#Xwidth').show();
+							$('#lblXwidth').text('厚度');
+							$('#lblXdime').text('寬度');
+							$('#Xdime').show();
+							$('#Xlengthb').show();
+							break;
+						case 'B':
+							$('#Xradius').show();
+							$('#Xwidth').show();
+							$('#lblXwidth').text('長徑');
+							$('#lblXdime').text('厚度');
+							$('#Xdime').show();
+							$('#Xlengthb').show();
+							break;
+						case 'C':
+							$('#Xradius').hide();
+							$('#Xwidth').hide();
+							$('#Xdime').hide();
+							$('#Xlengthb').show();
+							break;
+						default:
+							$('#Xradius').show();
+							$('#Xwidth').show();
+							$('#lblXwidth').text('長徑');
+							$('#lblXdime').text('厚度');
+							$('#Xdime').show();
+							$('#Xlengthb').show();
+							break;
+					}
+					setDefaultValue();
+					$('#Xitype .cmb').change();
+				}
 			}
 
 			function q_boxClose(s2) {
@@ -91,12 +196,18 @@
 			function q_gtPost(s2) {
 			}
 		</script>
+		<style type="text/css">
+			.num {
+				text-align: right;
+				padding-right: 2px;
+			}
+		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
-		<div id="q_menu"> </div>
+		<div id="q_menu"></div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
 				<div id="q_report"></div>
