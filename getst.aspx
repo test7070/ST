@@ -213,7 +213,7 @@
 							} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
 								q_tr('txtRadius_' + n, q_float('textSize1_' + n));
 							}
-							q_tr('txtWeight_' + n, getTheory(n));
+							q_tr('txtGweight_' + n, getTheory(n));
 						});
 						$('#textSize2_' + j).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
@@ -222,7 +222,7 @@
 							} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
 								q_tr('txtWidth_' + n, q_float('textSize2_' + n));
 							}
-							q_tr('txtWeight_' + n, getTheory(n));
+							q_tr('txtGweight_' + n, getTheory(n));
 						});
 						$('#textSize3_' + j).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
@@ -233,7 +233,7 @@
 							} else {//鋼筋、胚
 								q_tr('txtLengthb_' + n, q_float('textSize3_' + n));
 							}
-							q_tr('txtWeight_' + n, getTheory(n));
+							q_tr('txtGweight_' + n, getTheory(n));
 						});
 						$('#textSize4_' + j).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
@@ -242,11 +242,11 @@
 							} else if ($('#cmbKind').val().substr(0, 1) == 'B') {
 								q_tr('txtLengthb_' + n, q_float('textSize4_' + n));
 							}
-							q_tr('txtWeight_' + n, getTheory(n));
+							q_tr('txtGweight_' + n, getTheory(n));
 						});
 						$('#txtGmount_' + j).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							q_tr('txtWeight_' + n, getTheory(n));
+							q_tr('txtGweight_' + n, getTheory(n));
 						});
 						//-------------------------------------------------------------------------------------
 					}
