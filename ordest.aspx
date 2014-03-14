@@ -237,7 +237,7 @@
                     btnQuat();
                 });
                 $('#btnOrdem').click(function() {
-                    q_box("ordem_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtNoa').val() + "';" + r_accy + ";" + q_cur, 'ordem', "95%", "95%", q_getMsg('popOrdem'));
+                    q_box("ordem_b_st.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtNoa').val() + "';" + r_accy + ";" + q_cur, 'ordem', "95%", "95%", q_getMsg('popOrdem'));
                 });
                 $('#cmbKind').change(function() {
                     size_change();
