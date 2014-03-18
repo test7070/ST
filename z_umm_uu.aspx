@@ -56,12 +56,71 @@
 					}, {
 						type : '6', //[10]
 						name : 'salesgroup'
-					}]
+					}, {
+						type : '1', //[11][12]
+						name : 'vdate'
+					}, {
+						type : '1', //[13][14]
+						name : 'vmon'
+					}, {
+                        type : '2', //[15][16]
+                        name : 'product',
+                        dbf : 'ucaucc',
+                        index : 'noa,product',
+                        src : 'ucaucc_b.aspx'
+                    },{
+						type : '0', //[17] //判斷vcc是內含或應稅 內含不抓vcca
+						name : 'vcctax',
+						value : q_getPara('sys.d4taxtype')
+					},{
+                        type : '6', //[18]
+                        name : 'xmemo'
+                    },{
+						type : '6', //[19]
+						name : 'xzip'
+					},{
+						type : '5', //[20]
+						name : 'xcity',
+						value : (' @全部,基隆市,台北市,新北市,桃園縣,新竹市,新竹縣,苗栗縣,台中市,彰化縣,南投縣,雲林縣,嘉義市,嘉義縣,台南市,高雄市,屏東縣,台東縣,花蓮縣,宜蘭縣,澎湖縣,金門縣,連江縣').split(',')
+					}, {
+                        type : '8', //[21]
+                        name : 'showunpay', //只顯示未收
+                        value : "1@只顯示未收".split(',')
+	                }]
 				});
 				q_popAssign();
 				q_langShow();
 				$('#txtXmon1').val(q_date().substring(0,6)).mask('999/99');
 				$('#txtXmon2').val(q_date().substring(0,6)).mask('999/99');
+				$('#txtVdate1').mask('999/99/99');
+				$('#txtVdate2').mask('999/99/99');
+				
+				$('#Xmemo').removeClass('a2').addClass('a1');
+                $('#txtXmemo').css('width', '85%');
+                
+                var t_date, t_year, t_month, t_day;
+                t_date = new Date();
+                t_date.setDate(1);
+                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtVdate1').val(t_year + '/' + t_month + '/' + t_day);
+
+                t_date = new Date();
+                t_date.setDate(35);
+                t_date.setDate(0);
+                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtVdate2').val(t_year + '/' + t_month + '/' + t_day);
+                
+                
 			}
 
 			function q_boxClose(s2) {
