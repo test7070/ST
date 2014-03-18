@@ -115,7 +115,7 @@
 					}, {
 						type : '5', //[27] 1
 						name : 'xsortby',
-						value : 'datea@依日期,pno@依品號,sizea@依尺寸,dime@依厚度'.split(',')
+						value : 'datea@依日期,pno@依品號,sizea@依尺寸,dime@依厚度,memo@依備註'.split(',')
 					}, {
 						type : '5', //[28] 2
 						name : 'xstype',
