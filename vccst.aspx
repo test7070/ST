@@ -961,20 +961,37 @@
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							ProductAddStyle(n);
 							sum();
+							$('#txtWeight_'+n).val($('#txtTheory_'+n).val());
 						});
 						//將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
-						$('#textSize1_' + j).change(function() {
-							sum();
-						});
-						$('#textSize2_' + j).change(function() {
-							sum();
-						});
-						$('#textSize3_' + j).change(function() {
-							sum();
-						});
-						$('#textSize4_' + j).change(function() {
-							sum();
-						});
+						$('#textSize1_' + j).focusout(function() {
+                            if(q_cur==1 || q_cur==2){
+                                var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+                                sum();
+                                $('#txtWeight_'+n).val($('#txtTheory_'+n).val());
+                            }
+                        });
+						$('#textSize2_' + j).focusout(function() {
+                            if(q_cur==1 || q_cur==2){
+                                var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+                                sum();
+                                $('#txtWeight_'+n).val($('#txtTheory_'+n).val());
+                            }
+                        });
+						$('#textSize3_' + j).focusout(function() {
+                            if(q_cur==1 || q_cur==2){
+                                var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+                                sum();
+                                $('#txtWeight_'+n).val($('#txtTheory_'+n).val());
+                            }
+                        });
+						$('#textSize4_' + j).focusout(function() {
+                            if(q_cur==1 || q_cur==2){
+                                var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+                                sum();
+                                $('#txtWeight_'+n).val($('#txtTheory_'+n).val());
+                            }
+                        });
 						$('#txtSize_' + j).change(function(e) {
 							if ($.trim($(this).val()).length == 0)
 								return;
@@ -1027,6 +1044,7 @@
 								//nothing
 							}
 							sum();
+							$('#txtWeight_'+n).val($('#txtTheory_'+n).val());
 						});
 						//-------------------------------------------------
 						$('#txtSpec_' + j).change(function() {
@@ -1036,21 +1054,24 @@
 							}
 						});
 						$('#txtUnit_' + j).focusout(function() {
-							sum();
+						    if(q_cur==1 || q_cur==2)
+							    sum();
 						});
 						$('#txtWeight_' + j).focusout(function() {
-							sum();
+							if(q_cur==1 || q_cur==2)
+                                sum();
 						});
 						$('#txtPrice_' + j).focusout(function() {
-							sum();
+							if(q_cur==1 || q_cur==2){
+							    sum();
+							}
 						});
 						$('#txtMount_' + j).focusout(function() {
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							sum();
-							$('#txtWeight_'+n).val($('#txtTheory_'+n).val());
-						});
-						$('#txtTotal_' + j).focusout(function() {
-							sum();
+							if(q_cur==1 || q_cur==2){
+							    var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+                                sum();
+                                $('#txtWeight_'+n).val($('#txtTheory_'+n).val());
+							}
 						});
 					}
 				}//j
