@@ -29,6 +29,15 @@
 						type : '0', //[1]
 						name : 'accy',
 						value : q_getId()[4]
+					}, {
+						type : '1', //[2][3]
+						name : 'xnoa'
+					}, {
+                        type : '2', //[4][5]
+                        name : 'xproduct',
+                        dbf : 'ucaucc',
+                        index : 'noa,product',
+                        src : 'ucaucc_b.aspx'
 					}]
 				});
 				q_popAssign();
