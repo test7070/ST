@@ -29,10 +29,30 @@
 						type : '0', //[1]
 						name : 'accy',
 						value : q_getId()[4]
+					}, {
+						type : '1', //[2][3]
+						name : 'xnoa'
+					}, {
+                        type : '2', //[4][5]
+                        name : 'xproduct',
+                        dbf : 'ucaucc',
+                        index : 'noa,product',
+                        src : 'ucaucc_b.aspx'
+					}, {
+                        type : '2', //[6][7]
+                        name : 'xtggno',
+                        dbf : 'tgg',
+                        index : 'noa,comp',
+                        src : 'tgg_b.aspx'
 					}]
 				});
 				q_popAssign();
 				q_langShow();
+				var t_key = q_getHref();
+				if (t_key != undefined){
+					$('#txtXnoa1').val(t_key[1]);
+					$('#txtXnoa2').val(t_key[1]);
+				}
 			}
 
 			function q_boxClose(s2) {
