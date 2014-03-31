@@ -42,6 +42,11 @@
 				});
 				q_popAssign();
 				q_langShow();
+				var t_key = q_getHref();
+				if (t_key != undefined){
+					$('#txtXnoa1').val(t_key[1]);
+					$('#txtXnoa2').val(t_key[1]);
+				}
 			}
 
 			function q_boxClose(s2) {
