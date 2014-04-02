@@ -110,7 +110,6 @@
 		<div  id="dFixedTitle" style="overflow-y: scroll;">
 			<table id="tFixedTitle" class='tFixedTitle'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'  >
 				<tr style='color:White; background:#003366;' >
-					<td align="center" style="width:1%;"><input type="checkbox" id="checkAllCheckbox"/></td>
 					<td align="center" style="width:3%;"><a id='lblPrt'></a></td>
 					<td align="center" style="width:2%;"><a id='lblStyle'></a></td>
 					<td align="center" style="width:10%;"><a id='lblUno'></a></td>
@@ -123,6 +122,7 @@
 					<td align="center" style="width:260px;"><a id='lblSizea'></a></td>
 					<td align="center" style="width:4%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:4%;"><a id='lblWeight'></a></td>
+					<td align="center" style="width:1%;background:#FFC0CB;"><input type="checkbox" id="checkAllCheckbox"/></td>
 					<td align="center" style="width:4%;display:none;"><a id='lblInweight'></a></td>
 					<td align="center" style="width:4%;display:none;"><a id='lblWaste'></a></td>
 					<td align="center" style="width:4%;display:none;"><a id='lblGmount'></a></td>
@@ -137,7 +137,6 @@
 		<div  id="dbbs" style="overflow-y: scroll;height:550px;">
 			<table id="tbbs" class='tbbs'  border="2"  cellpadding='2' cellspacing='1' style='width:100%'  >
 				<tr style='color:White; background:#003366;display:none;' >
-					<td align="center"><input type="checkbox" id="checkAllCheckbox"/></td>
 					<td align="center"><a id='lblPrt'></a></td>
 					<td align="center"><a id='lblStyle'></a></td>
 					<td align="center"><a id='lblUno'></a></td>
@@ -150,6 +149,7 @@
 					<td align="center"><a id='lblSizea'></a></td>
 					<td align="center"><a id='lblMount'></a></td>
 					<td align="center"><a id='lblWeight'></a></td>
+					<td align="center"><input type="checkbox" id="checkAllCheckbox"/></td>
 					<td align="center" style="display:none;"><a id='lblInweight'></a></td>
 					<td align="center" style="display:none;"><a id='lblWaste'></a></td>
 					<td align="center" style="display:none;"><a id='lblGmount'></a></td>
@@ -160,9 +160,6 @@
 					<td align="center"><a id='lblMemo'></a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
-					<td align="center" style="width:1%;">
-						<input id="chkSel.*" type="checkbox"/>
-					</td>
 					<td style="width:3%;"><input type="text" id="txtPrt.*" class="txt c1" style="text-align: center;"/></td>
 					<td style="width:2%;"><input type="text" id="txtStyle.*" class="txt c1" style="text-align: center;"/></td>
 					<td style="width:10%;"><input type="text" id="txtUno.*" class="txt c1"/></td>
@@ -198,6 +195,9 @@
 					</td>
 					<td style="width:4%;"><input type="text" id="txtEmount.*" class="txt c1 num"/></td>
 					<td style="width:4%;"><input type="text" id="txtEweight.*" class="txt c1 num"/></td>
+					<td align="center" style="width:1%;background:#FFC0CB;">
+						<input id="chkSel.*" type="checkbox"/>
+					</td>
 					<td style="width:4%; display:none;"><input type="text" id="txtInweight.*" class="txt c1 num"/></td>
 					<td style="width:4%; display:none;"><input type="text" id="txtWaste.*" class="txt c1 num"/></td>
 					<td style="width:4%; display:none;"><input type="text" id="txtGmount.*" class="txt c1 num"/></td>

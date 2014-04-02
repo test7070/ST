@@ -1740,7 +1740,7 @@
                     <tr>
                         <td><span> </span><a id='lblMemo' class="lbl"> </a></td>
                         <td colspan="6">
-                        <input id="txtMemo" type="text" class="txt c1"/>
+                            <textarea id="txtMemo" cols="10" rows="5" style="height: 50px;" class="txt c1"> </textarea>
                         </td>
                         <td align="center"><input id="btnCredit" type="button" value='' /></td>
                     </tr>
