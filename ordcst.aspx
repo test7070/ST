@@ -1122,7 +1122,7 @@
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
 						<td colspan="7">
-						<input id="txtMemo" type="text" class="txt c1"/>
+						<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea>
 						</td>
 					</tr>
 					<tr>
