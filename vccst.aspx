@@ -1169,7 +1169,7 @@
 					$('#btnImportVcce').css('display', 'none');
 				}
 				size_change();
-				q_popPost('txtProductno_');
+			//	q_popPost('txtProductno_');
 				if (isinvosystem)
 					$('.istax').hide();
 			}
