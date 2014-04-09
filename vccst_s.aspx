@@ -54,6 +54,8 @@
                 t_width = $('#txtWidth').val();
                 t_lengthb = $('#txtLengthb').val();
                 t_radius = $('#txtRadius').val();
+                t_ordeno = $.trim($('#txtOrdeno').val());
+                t_no2 = $.trim($('#txtNo2').val());
                 try{
                     t_dime = parseFloat(t_dime);
                 }catch(e){
@@ -90,6 +92,8 @@
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 		       	if(t_uno.length>0)
 		       		t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".uno='"+t_uno+"')";
+		       	if(t_ordeno.length>0)
+                    t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".ordeno='"+t_ordeno+"' "+(t_no2.length>0?"vccs"+r_accy+".no2='"+t_no2+"'":"")+")";
 		       	if(t_dime!=0 && !isNaN(t_dime))
                     t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".dime="+t_dime+")";
                 if(t_width!=0 && !isNaN(t_width))
@@ -140,6 +144,13 @@
 					<input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
 					</td>
 				</tr>
+				<tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblOrdeno'></a></td>
+                    <td>
+                        <input class="txt" id="txtOrdeno" type="text" style="width:150px; font-size:medium;" />
+                        <input class="txt" id="txtNo2" type="text" style="width:50px; font-size:medium;" />
+                    </td>
+                </tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblCustno'></a></td>
 					<td>
