@@ -18,7 +18,8 @@
 			isEditTotal = false;
 			q_tables = 's';
 			var q_name = "addr";
-			var q_readonly = ['txtCardeal','txtCustprice', 'txtDriverprice', 'txtDriverprice2', 'txtCommission', 'txtCommission2', 'txtSalesno', 'txtSales'];
+			var q_readonly = ['txtCardeal','txtCustprice', 'txtDriverprice', 'txtDriverprice2', 'txtCommission'
+			, 'txtCommission2', 'txtSalesno', 'txtSales','txtTranstart','txtAddr'];
 			var q_readonlys = [];
 			var bbmNum = [
 				['txtCustprice', 10, 3], ['txtDriverprice', 10, 3], ['txtDriverprice2', 10, 3],
@@ -37,7 +38,9 @@
 			brwKey = 'Datea';
 			aPop = new Array(
 				['txtSalesno_', '', 'sss', 'noa,namea', 'txtSalesno_,txtSales_', 'sss_b.aspx'],
-				['txtCardealno', 'lblCardealno', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
+				['txtCardealno', 'lblCardealno', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
+				['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],
+				['txtPost', 'lblPost', 'addr2', 'noa,post','txtPost,txtAddr', 'addr2_b.aspx']
 			);
 			
 			$(document).ready(function() {
@@ -426,19 +429,21 @@
 						<td colspan="2"><input id="txtNoa" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id='lblCardealno' class="lbl btn"></a></td>
-						<td class="td2" colspan="3">
-							<input id="txtCardealno" type="text" class="txt c2"/>
-							<input id="txtCardeal" type="text" class="txt c3"/>
+						<td class="td1"><span> </span><a id='lblCardealno' class="lbl btn"> </a></td>
+						<td><input id="txtCardealno" type="text" class="txt c1"/></td>
+						<td class="td2" colspan="2">
+							<input id="txtCardeal" type="text" class="txt c1"/>
 						</td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblPost' class="lbl"> </a></td>
-						<td><input id="txtPost" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblTranstart' class="lbl btn"> </a></td>
+						<td><input id="txtTranstartno" type="text" class="txt c1" /></td>
+						<td colspan="2"><input id="txtTranstart" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
-						<td colspan="3"><input id="txtAddr" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblPost' class="lbl btn"> </a></td>
+						<td><input id="txtPost" type="text" class="txt c1" /></td>
+						<td colspan="2"><input id="txtAddr" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblCarspecno' class="lbl"> </a></td>
