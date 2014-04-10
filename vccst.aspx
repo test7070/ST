@@ -915,7 +915,7 @@
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
 
-				q_box('vccst_s.aspx', q_name + '_s', "550px", "600px", q_getMsg("popSeek"));
+				q_box('vccst_s.aspx', q_name + '_s', "550px", "640px", q_getMsg("popSeek"));
 			}
 
 			function getTheory(b_seq) {
@@ -1169,7 +1169,11 @@
 					$('#btnImportVcce').css('display', 'none');
 				}
 				size_change();
-				q_popPost('txtProductno_');
+				//q_popPost('txtProductno_');
+				$('input[id*="txtProduct_"]').each(function() {
+					thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+					$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
+				});
 				if (isinvosystem)
 					$('.istax').hide();
 			}
