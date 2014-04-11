@@ -152,7 +152,7 @@
 					return;
 				}
 				Lock();
-				var newNoa = $.trim($('#txtCardealno').val())+'_'+$.trim($('#txtPost').val());
+				var newNoa = $.trim($('#txtCardealno').val())+'_'+$.trim($('#txtPost').val())+'_'+$.trim($('#txtTranstartno').val());
 				$('#txtNoa').val(newNoa);
 				if(q_cur==1){
 					t_where="where=^^ noa='"+$.trim($('#txtNoa').val())+"'^^";
@@ -404,14 +404,14 @@
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td align="center" style="width:150px; color:black;"><a id='vewCardealno'> </a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewPost'> </a></td>
-						<td align="center" style="width:200px; color:black;"><a id='vewAddr'> </a></td>
+						<td align="center" style="width:140px; color:black;"><a id='vewTranstart'> </a></td>
+						<td align="center" style="width:140px; color:black;"><a id='vewPost'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
 						<td style="text-align: center;" id='cardealno cardeal,5'>~cardealno ~cardeal,5</td>
-						<td style="text-align: center;" id='post'>~post</td>
-						<td style="text-align: left;" id='addr'>~addr</td>
+						<td style="text-align: left;" id='transtartno transtart'>~transtartno ~transtart</td>
+						<td style="text-align: left;" id='post addr'>~post ~addr</td>
 					</tr>
 				</table>
 			</div>
