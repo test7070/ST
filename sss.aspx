@@ -31,7 +31,6 @@
 			brwCount2 = 15;
 			//ajaxPath = ""; // execute in Root
 			aPop = new Array(
-				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtComp', 'acomp_b.aspx'],
 				['txtAddr_home', '', 'view_road', 'memo', '0txtAddr_home', 'road_b.aspx'],
 				['txtAddr_conn', '', 'view_road', 'memo', '0txtAddr_conn', 'road_b.aspx']
 			);
@@ -67,6 +66,10 @@
 				q_cmbParse("cmbSex", q_getPara('sss.sex'));
 				q_cmbParse("cmbPerson", q_getPara('person.typea'));
 				q_cmbParse("cmbBlood", ('').concat(new Array('', 'A', 'B', 'AB', 'O')));
+				
+				q_gt('acomp', '', 0, 0, 0, "");
+				q_gt('part', '', 0, 0, 0, "");
+				q_gt('salm', '', 0, 0, 0, "");
 
 				if (q_getPara('sys.comp').indexOf('祥興') > -1) {
 					$('#btnSsspart').show();
@@ -122,10 +125,7 @@
 				}).blur(function() {
 					$(this).attr('size', '1');
 				});
-
-				q_gt('acomp', '', 0, 0, 0, "");
-				q_gt('part', '', 0, 0, 0, "");
-				q_gt('salm', '', 0, 0, 0, "");
+				
 				$("#cmbPartno").focus(function() {
 					var len = $(this).children().length > 0 ? $(this).children().length : 1;
 					$(this).attr('size', len + "");
@@ -186,6 +186,18 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'acomp':
+		                var as = _q_appendData("acomp", "", true);
+		                if (as[0] != undefined) {
+		                    var t_item = "";
+		                    for (i = 0; i < as.length; i++) {
+		                        t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].nick;
+		                    }
+		                    q_cmbParse("cmbCno", t_item);
+		                    if(abbm[q_recno])
+		                    	$("#cmbCno").val(abbm[q_recno].cno);
+		                }
+		                break;
 					case 'checkSssno_change':
 						var as = _q_appendData("sss", "", true);
 						if (as[0] != undefined) {
@@ -302,7 +314,7 @@
 					return;
 				}
 
-				//$('#txtAcomp').val($('#cmbCno').find(":selected").text());
+				$('#txtComp').val($('#cmbCno').find(":selected").text());
 				$('#txtPart').val($('#cmbPartno').find(":selected").text());
 				$('#txtJob').val($('#cmbJobno').find(":selected").text());
 
@@ -666,23 +678,20 @@
 						<td class="isBarCode"><input id="txtBarcode" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblPart" class="lbl btn"> </a></td>
+						<td><span> </span><a id="lblPart" class="lbl"> </a></td>
 						<td>
 							<select id="cmbPartno" class="txt c1"></select>
 							<input id="txtPart" type="text" style="display: none;"/>
 						</td>
-						<td><span> </span><a id="lblJob" class="lbl btn"> </a></td>
+						<td><span> </span><a id="lblJob" class="lbl"> </a></td>
 						<td>
 							<select id="cmbJobno" class="txt c1"></select>
 							<input id="txtJob" type="text" style="display: none;"/>
 						</td>
-					</tr>
-					<tr style="display: none;">
-						<!--公司-->
-						<td><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
-						<td colspan="3">
-							<input id="txtCno" type="text" class="txt c2"/>
-							<input id="txtComp" type="text" class="txt c3"/>
+						<td><span> </span><a id="lblCno" class="lbl"> </a></td>
+						<td>
+							<select id="cmbCno" class="txt c1"></select>
+							<input id="txtComp" type="text" style="display: none;"/>
 						</td>
 					</tr>
 					<tr>
