@@ -210,7 +210,7 @@
             }
 
             function btnPrint() {
-				q_box('z_cub.aspx', '', "95%", "95%", q_getMsg("popPrint"));
+				q_box('z_cub.aspx'+ "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
             }
 
             function btnOk() {
