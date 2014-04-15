@@ -33,7 +33,9 @@
 			brwKey = 'noa';
 			q_desc = 1;
 			brwCount2 = 5;
-			aPop = new Array(['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx']);
+			aPop = new Array(
+				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx']
+			);
 
 			$(document).ready(function() {
 				bbmKey = ['noa'];
