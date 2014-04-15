@@ -192,6 +192,19 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+				
+				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
+				$('#txtMemo').change(function(){
+					if ($('#txtMemo').val().substr(0,1)=='*')
+						$('#txtMon').removeAttr('readonly');
+					else
+						$('#txtMon').attr('readonly', 'readonly');
+				});
+				$('#txtMon').click(function(){
+					if ($('#txtMon').attr("readonly")=="readonly" && (q_cur==1 || q_cur==2))
+						q_msg($('#txtMon'), "月份要另外設定，請在"+q_getMsg('lblMemo')+"的第一個字打'*'字");
+				});
+				
 				$('#lblAccno').click(function() {
 					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "95%", q_getMsg('btnAccc'), true);
 				});
@@ -365,7 +378,7 @@
 						Unlock(1);
 						$('#txtNoa').val('AUTO');
 						$('#txtDatea').val(q_date());
-						$('#txtMon').val(q_date().substring(0, 6));
+						//$('#txtMon').val(q_date().substring(0, 6));
 						$('#txtDatea').focus();
 						size_change();
 						break;
@@ -469,6 +482,24 @@
 							_btnDele();
 						}
 						break;
+					case 'startdate':
+						var as = _q_appendData('tgg', '', true);
+						var t_startdate='';
+						if (as[0] != undefined) {
+							t_startdate=as[0].startdate;
+						}
+						if(t_startdate.length==0 || ('00'+t_startdate).substr(-2)=='00' || $('#txtDatea').val().substr(7, 2)<('00'+t_startdate).substr(-2)){
+							$('#txtMon').val($('#txtDatea').val().substr(0, 6));
+						}else{
+							var t_date=$('#txtDatea').val();
+							var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,dec(t_date.substr(7,2)));
+				    		nextdate.setMonth(nextdate.getMonth() +1)
+				    		t_date=''+(nextdate.getFullYear()-1911)+'/'+(nextdate.getMonth()<9?'0':'')+(nextdate.getMonth()+1);
+							$('#txtMon').val(t_date);
+						}
+						check_startdate=true;
+						btnOk();
+						break;
 					default:
 						if (t_name.substring(0, 9) == 'checkUno_') {
 							var n = t_name.split('_')[1];
@@ -520,11 +551,20 @@
 					q_gt('rc2a', "where=^^noa='" + $.trim($('#txtInvono').val()) + "'^^", 0, 0, 0, 'getRc2atax', r_accy);
 				Unlock(1);
 			}
-
+			
+			var check_startdate=false;
 			function btnOk() {
+				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtTggno', q_getMsg('lblTgg')], ['txtCno', q_getMsg('lblAcomp')]]);
+				// 檢查空白
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}
+				
 				Lock(1, {
 					opacity : 0
 				});
+				
 				$('#txtOrdcno').val(GetOrdcnoList());
 				//日期檢查
 				if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
@@ -537,11 +577,22 @@
 					Unlock(1);
 					return;
 				}
-				if ($('#txtMon').val().length > 0 && !q_cd($('#txtMon').val() + '/01')) {
-					alert(q_getMsg('lblMon') + '錯誤。');
+				
+				//判斷起算日,寫入帳款月份
+				if(!check_startdate&&emp($('#txtMon').val())){
+					var t_where = "where=^^ noa='"+$('#txtTggno').val()+"' ^^";
+					q_gt('tgg', t_where, 0, 0, 0, "startdate", r_accy);
 					Unlock(1);
 					return;
 				}
+				check_startdate=false;
+				
+				/*if ($('#txtMon').val().length > 0 && !q_cd($('#txtMon').val() + '/01')) {
+					alert(q_getMsg('lblMon') + '錯誤。');
+					Unlock(1);
+					return;
+				}*/
+				
 				if ($.trim($('#txtStoreno').val()).length > 0) {
                     for (var i = 0; i < q_bbsCount; i++) {
                         $('#txtStoreno_' + i).val($.trim($('#txtStoreno').val()));
@@ -849,6 +900,11 @@
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				size_change();
+				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
+				if ($('#txtMemo').val().substr(0,1)=='*')
+					$('#txtMon').removeAttr('readonly');
+				else
+					$('#txtMon').attr('readonly', 'readonly');
 			}
 
 			function btnMinus(id) {

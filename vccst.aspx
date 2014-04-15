@@ -205,10 +205,15 @@
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
 					if ($('#txtMemo').val().substr(0,1)=='*')
-						$('#txtMon').removeAttr('disabled');
+						$('#txtMon').removeAttr('readonly');
 					else
-						$('#txtMon').attr('disabled', 'disabled');
+						$('#txtMon').attr('readonly', 'readonly');
 				});
+				$('#txtMon').click(function(){
+					if ($('#txtMon').attr("readonly")=="readonly" && (q_cur==1 || q_cur==2))
+						q_msg($('#txtMon'), "月份要另外設定，請在"+q_getMsg('lblMemo')+"的第一個字打'*'字");
+				});
+				
 				$("#cmbTypea").focus(function() {
 					var len = $(this).children().length > 0 ? $(this).children().length : 1;
 					$(this).attr('size', len + "");
@@ -818,27 +823,20 @@
 			
 			var check_startdate=false;
 			function btnOk() {
+				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')]]);
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}
+				
 				Lock(1, {
 					opacity : 0
 				});
+				
 				$('#txtOrdeno').val(GetOrdenoList());
+				
 				if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
 					alert(q_getMsg('lblDatea') + '錯誤。');
-					Unlock(1);
-					return;
-				}
-				//判斷起算日,寫入帳款月份
-				if(!check_startdate&&emp($('#txtMon').val())){
-					var t_where = "where=^^ noa='"+$('#txtCustno').val()+"' ^^";
-					q_gt('cust', t_where, 0, 0, 0, "startdate", r_accy);
-					return;
-				}
-				check_startdate=false;
-				/*if ($('#txtMon').val().length == 0)
-					$('#txtMon').val($('#txtDatea').val().substring(0, 6));*/
-					
-				if (!q_cd($('#txtMon').val() + '/01')) {
-					alert(q_getMsg('lblMon') + '錯誤。');
 					Unlock(1);
 					return;
 				}
@@ -847,6 +845,23 @@
 					Unlock(1);
 					return;
 				}
+				
+				//判斷起算日,寫入帳款月份
+				if(!check_startdate&&emp($('#txtMon').val())){
+					var t_where = "where=^^ noa='"+$('#txtCustno').val()+"' ^^";
+					q_gt('cust', t_where, 0, 0, 0, "startdate", r_accy);
+					return;
+				}
+				check_startdate=false;
+				/*if ($('#txtMon').val().length == 0)
+					$('#txtMon').val($('#txtDatea').val().substring(0, 6));
+					
+				if (!q_cd($('#txtMon').val() + '/01')) {
+					alert(q_getMsg('lblMon') + '錯誤。');
+					Unlock(1);
+					return;
+				}*/
+				
 				if ($.trim($('#txtNick').val()).length == 0 && $.trim($('#txtComp').val()).length > 0)
 					$('#txtNick').val($.trim($('#txtComp').val()).substring(0, 4));
 				sum();
@@ -1265,9 +1280,9 @@
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
 				if ($('#txtMemo').val().substr(0,1)=='*')
-					$('#txtMon').removeAttr('disabled');
+					$('#txtMon').removeAttr('readonly');
 				else
-					$('#txtMon').attr('disabled', 'disabled');
+					$('#txtMon').attr('readonly', 'readonly');
 			}
 
 			function btnMinus(id) {
