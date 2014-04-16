@@ -128,6 +128,12 @@
 								}
 							}
 						}
+						var t_where = "where=^^ (charindex('"+$.trim($('#txtProcess').val())+"',memo2)>0) and (isnull(enda,'0')='0') ^^ ";
+						q_gt('view_orde', t_where, 0, 0, 0, 'GetOrde_A');
+						break;
+					case 'GetOrde_A':
+						var as = _q_appendData("view_orde", "", true);
+						console.log(as);
 						break;
 					case 'process':
 						var as = _q_appendData("process", "", true);
@@ -179,6 +185,9 @@
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
+						else if(q_cur==0){
+							$('#btnIns').click();
+						}
 						break;
 				}
 			}
@@ -331,9 +340,6 @@
 			var toIns = true;
 			function refresh(recno) {
 				_refresh(recno);
-				if(toIns){
-					$('#btnIns').click();
-				}
 				$('#cmbProcessno').change();
 				//清除勾選
 				for (var j = 0; j < memo2number; j++) {
@@ -357,6 +363,9 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if(toIns){
+					q_gt(q_name);
+				}
 				if (t_para) {
 					for (var i = 0; i < memo2number; i++) {
 						$('#checkMemo2' + i).attr('disabled', 'disabled');
