@@ -17,8 +17,8 @@
 			this.errorHandler = null;
 			q_tables = 't';
 			var q_name = "cub";
-			var q_readonly = ['txtNoa'];
-			var q_readonlys = ['txtComp', 'txtOrdeno', 'txtNo2'];
+			var q_readonly = ['txtNoa','txtComp'];
+			var q_readonlys = ['txtComp'];
 			var q_readonlyt = [];
 			var bbmNum = [];
 			var bbsNum = [['txtHard',10,0,1]];
@@ -35,7 +35,8 @@
 			brwCount2 = 5;
 			aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx'],
-				['txtCno_', 'btnCno_', 'acomp', 'noa,acomp', 'txtCno_,txtComp_', 'acomp_b.aspx']
+				['txtCno_', 'btnCno_', 'acomp', 'noa,acomp', 'txtCno_,txtComp_', 'acomp_b.aspx'],
+				['txtCno', 'lblCno', 'acomp', 'noa,acomp', 'txtCno,txtComp', 'acomp_b.aspx']
 			);
 			var isFirst = true;
 			$(document).ready(function() {
@@ -88,7 +89,6 @@
 					$('#txtProcess').val($(this).find("option:selected").text());
 					for(var k=0;k<processList.length;k++){
 						if(($.trim(processList[k].noa)==$.trim($(this).val())) || $.trim($(this).val())==''){
-							console.log(1);
 							var t_where = "where=^^ cno='" + processList[k].stationgno + "' ^^";
 							q_gt('sss', t_where, 0, 0, 0, 'GetSSS');
 							break;
@@ -290,7 +290,12 @@
 				}
 				sum();
 				$('#txtWorker').val(r_name);
-
+				var thisCno = $.trim($('#txtCno').val());
+				var thisComp = $.trim($('#txtComp').val());
+				for(var k=0;k<q_bbsCount;k++){
+					$('#txtCno_' + k).val(thisCno);
+					$('#txtComp_' + k).val(thisComp);
+				}
 				var t_noa = trim($('#txtNoa').val());
 				var t_date = trim($('#txtDatea').val());
 				if (t_noa.length == 0 || t_noa == "AUTO")
@@ -306,7 +311,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['ordeno']) {
+				if (!as['custno']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -744,6 +749,13 @@
 						</td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblCno" class="lbl btn"> </a></td>
+						<td colspan="2">
+							<input id="txtCno" type="text" style="width:25%;"/>
+							<input id="txtComp" type="text" style="width:70%;"/>
+						</td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblMemo2" class="lbl" ></a></td>
 						<td style="display:none;"><input id="txtMemo2" type="text"/></td>
 						<td class="td2" colspan="4" id="memo2"></td>
@@ -757,7 +769,7 @@
 							<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"></td>
-						<td style="width:250px;"><a id='lbl_cnos'> </a></td>
+						<td style="width:250px; display:none;"><a id='lbl_cnos'> </a></td>
 						<td style="width:200px;"><a id='lbl_custno'> </a></td>
 						<td style="width:120px;"><a id='lbl_productno'> </a></td>
 						<td style="width:60px;"><a id='lbl_class'> </a></td>
@@ -767,6 +779,14 @@
 						<td style="width:120px;"><a id='lbl_lengthb'> </a></td>
 						<td style="width:80px;"><a id='lbl_mount'> </a></td>
 						<td style="width:150px;"><a id='lbl_weight'> </a></td>
+						<td style="width:20px; text-align: center;">開工</td>
+						<td style="width:20px; text-align: center;">完工</td>
+						<td style="width:150px; text-align: center;">加工日期</td>
+						<td style="width:150px; text-align: center;">開工時間</td>
+						<td style="width:150px; text-align: center;">完工日期</td>
+						<td style="width:150px; text-align: center;">完工時間</td>
+						<td style="width:150px; text-align: center;">工時(分)</td>
+						<td style="width:150px; text-align: center;">工作人員</td>
 						<td style="width:120px;"><a id='lbl_bdime'> </a></td>
 						<td style="width:120px;"><a id='lbl_edime'> </a></td>
 						<td style="width:60px;"><a id='lblOrdet_st'> </a></td>
@@ -782,15 +802,7 @@
 						<td style="width:150px;"><a id='lbl_datea'> </a></td>
 						<td style="width:250px;"><a id='lbl_product'> </a></td>
 						<td style="width:30px;"><a id='lbl_prt'> </a></td>
-						<td style="width:20px; text-align: center;">開工</td>
-						<td style="width:20px; text-align: center;">完工</td>
-						<td style="width:150px; text-align: center;">加工日期</td>
-						<td style="width:150px; text-align: center;">開工時間</td>
 						<td style="width:60px;"><a id='lbl_hend'> </a></td>
-						<td style="width:150px; text-align: center;">完工日期</td>
-						<td style="width:150px; text-align: center;">完工時間</td>
-						<td style="width:150px; text-align: center;">工時(分)</td>
-						<td style="width:150px; text-align: center;">工作人員</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center">
@@ -798,7 +810,7 @@
 							<input id="txtNoq.*" type="text" style="display: none;"/>
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						<td>
+						<td style=" display:none;">
 							<input id="btnCno.*" type="button" style="width:5%;font-weight:bold;" value="."/>
 							<input id="txtCno.*" type="text" style="width:20%;"/>
 							<input id="txtComp.*" type="text" style="width:60%;"/>
@@ -812,6 +824,14 @@
 						<td><input id="txtLengthb.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtWeight.*" type="text" class="txt c1 num"/></td>
+						<td><input id="chkSlit.*" type="checkbox"/></td>
+						<td><input id="chkCut.*" type="checkbox"/></td>
+						<td><input id="txtDate2.*" type="text" class="txt c1"/></td>
+						<td><input id="txtBtime.*" type="text" class="txt c1"/></td>
+						<td><input id="txtDate3.*" type="text" class="txt c1"/></td>
+						<td><input id="txtEtime.*" type="text" class="txt c1"/></td>
+						<td><input id="txtHard.*" type="text" class="txt c1 num"/></td>
+						<td><input id="txtProduct2.*" type="text" class="txt c1"/></td>
 						<td><input id="txtBdime.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtEdime.*" type="text" class="txt c1 num"/></td>
 						<td align="center"><input id="btnUccc.*" type="button" value="選料"/></td>
@@ -827,15 +847,7 @@
 						<td><input id="txtDatea.*" type="text" class="txt c1"/></td>
 						<td><input id="txtProduct.*" type="text" class="txt c1"/></td>
 						<td><input id="chkPrt.*" type="checkbox"/></td>
-						<td><input id="chkSlit.*" type="checkbox"/></td>
-						<td><input id="chkCut.*" type="checkbox"/></td>
-						<td><input id="txtDate2.*" type="text" class="txt c1"/></td>
-						<td><input id="txtBtime.*" type="text" class="txt c1"/></td>
 						<td><input id="chkHend.*" type="checkbox"/></td>
-						<td><input id="txtDate3.*" type="text" class="txt c1"/></td>
-						<td><input id="txtEtime.*" type="text" class="txt c1"/></td>
-						<td><input id="txtHard.*" type="text" class="txt c1 num"/></td>
-						<td><input id="txtProduct2.*" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>

@@ -317,6 +317,7 @@
                     q_func('qtxt.query.conform', 'orde.txt,conform,'+ encodeURI(r_userno) + ';' + encodeURI($('#txtNoa').val()));
                 });
                 OrdenoAndNo2On_Change();
+				q_gt('process', '', 0, 0, 0, 'GetProcess');
             }
             function showSizeInfo(){
                 $('#sizeInfo').toggle();
@@ -422,7 +423,7 @@
 						$('#memo2').append(xmemo2);
 						if (abbm[q_recno]) {
 							//更新勾選
-							var xmemo2no = abbm[q_recno].memo2.split(',');
+							var xmemo2no = abbm[q_recno].memo2.split(';');
 							for (var j = 0; j < memo2number; j++) {
 								for (var i = 0; i < xmemo2no.length; i++) {
 									if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
@@ -576,10 +577,11 @@
 				var memo2no = '';
 				for (var i = 0; i < memo2number; i++) {
 					if ($('#checkMemo2'+i)[0].checked) {
-						memo2no += "," + $('#checkMemo2' + i).val();
+						memo2no += ";" + $('#checkMemo2' + i).val();
 					}
 				}
 				memo2no = memo2no.substr(1, memo2no.length);
+				$('#txtMemo2').val(memo2no);
                 if ($('#txtOdate').val().length == 0 || !q_cd($('#txtOdate').val())) {
                     alert(q_getMsg('lblOdate') + '錯誤。');
                     Unlock(1);
@@ -1082,7 +1084,7 @@
 				}
 				if (abbm[q_recno]) {
 					//更新勾選
-					var xmemo2no = abbm[q_recno].memo2.split(',');
+					var xmemo2no = abbm[q_recno].memo2.split(';');
 					for (var j = 0; j < memo2number; j++) {
 						for (var i = 0; i < xmemo2no.length; i++) {
 							if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
@@ -1812,7 +1814,7 @@
                         <td align="center"><input id="btnCredit" type="button" value='' /></td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id='lblMemo' class="lbl"> </a></td>
+                        <td><span> </span><a id='lblMemo2' class="lbl"> </a></td>
                         <td colspan="6" style="display:none;">
                              <input id="txtMemo2" type="text" class="txt c1" />
                         </td>
