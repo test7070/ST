@@ -400,11 +400,41 @@
                 OrdenoAndNo2On_Change();
             }
 
+			var xmemo2 = '';
+			var memo2number = 0;
             var focus_addr = '';
             var StyleList = '';
             var t_uccArray = new Array;
             function q_gtPost(t_name) {/// 資料下載後 ...
                 switch (t_name) {
+					case 'GetProcess':
+						var as = _q_appendData("process", "", true);
+						memo2number = as.length;
+						xmemo2 += "<table style='width:100%;'>"
+						for (var i = 0; i < as.length; i++) {
+							if (i % 4 == 0)
+								xmemo2 += "<tr style='height: 20px;'>";
+							xmemo2 += "<td><input id='checkMemo2" + i + "' type='checkbox' style='float: left;' value='" + as[i].noa + "' disabled='disabled'/><a class='lbl'  id='memo2no" + i + "' style='float: left;'>" + as[i].process + "</a></td>"
+							if (i % 4 == 3)
+								xmemo2 += "</tr>";
+						}
+						xmemo2 += "</table>"
+						$('#memo2').append(xmemo2);
+						if (abbm[q_recno]) {
+							//更新勾選
+							var xmemo2no = abbm[q_recno].memo2.split(',');
+							for (var j = 0; j < memo2number; j++) {
+								for (var i = 0; i < xmemo2no.length; i++) {
+									if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
+										$('#checkMemo2'+j)[0].checked = true;
+										break;
+									} else {
+										$('#checkMemo2'+j)[0].checked = false;
+									}
+								}
+							}
+						}
+						break;
                     case 'refreshEnd2':
                         var as = _q_appendData("orde", "", true);
                         var obj = $('.control_noa');
@@ -543,6 +573,13 @@
                 Lock(1, {
                     opacity : 0
                 });
+				var memo2no = '';
+				for (var i = 0; i < memo2number; i++) {
+					if ($('#checkMemo2'+i)[0].checked) {
+						memo2no += "," + $('#checkMemo2' + i).val();
+					}
+				}
+				memo2no = memo2no.substr(1, memo2no.length);
                 if ($('#txtOdate').val().length == 0 || !q_cd($('#txtOdate').val())) {
                     alert(q_getMsg('lblOdate') + '錯誤。');
                     Unlock(1);
@@ -1040,6 +1077,23 @@
                     }
 
                 }
+				for (var j = 0; j < memo2number; j++) {
+					$('#checkMemo2'+j)[0].checked = false;
+				}
+				if (abbm[q_recno]) {
+					//更新勾選
+					var xmemo2no = abbm[q_recno].memo2.split(',');
+					for (var j = 0; j < memo2number; j++) {
+						for (var i = 0; i < xmemo2no.length; i++) {
+							if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
+								$('#checkMemo2'+j)[0].checked = true;
+								break;
+							} else {
+								$('#checkMemo2'+j)[0].checked = false;
+							}
+						}
+					}
+				}
                 
                 
                 if ($('#cmbStype').find("option:selected").text() == '外銷')
@@ -1132,6 +1186,15 @@
                 else
                     $('#btnApv').removeAttr('disabled');
                 OrdenoAndNo2On_Change();
+				if (t_para) {
+					for (var i = 0; i < memo2number; i++) {
+						$('#checkMemo2' + i).attr('disabled', 'disabled');
+					}
+				} else {
+					for (var i = 0; i < memo2number; i++) {
+						$('#checkMemo2' + i).removeAttr('disabled');
+					}
+				}
             }
 
             function btnMinus(id) {
@@ -1747,6 +1810,13 @@
                             <textarea id="txtMemo" cols="10" rows="5" style="height: 50px;" class="txt c1"> </textarea>
                         </td>
                         <td align="center"><input id="btnCredit" type="button" value='' /></td>
+                    </tr>
+                    <tr>
+                        <td><span> </span><a id='lblMemo' class="lbl"> </a></td>
+                        <td colspan="6" style="display:none;">
+                             <input id="txtMemo2" type="text" class="txt c1" />
+                        </td>
+						<td class="td2" colspan="6" id="memo2"></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id='lblWorker' class="lbl"> </a></td>

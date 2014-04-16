@@ -87,7 +87,8 @@
 				$("#cmbProcessno").change(function(){
 					$('#txtProcess').val($(this).find("option:selected").text());
 					for(var k=0;k<processList.length;k++){
-						if(processList[k].noa==$(this).val()){
+						if(($.trim(processList[k].noa)==$.trim($(this).val())) || $.trim($(this).val())==''){
+							console.log(1);
 							var t_where = "where=^^ cno='" + processList[k].stationgno + "' ^^";
 							q_gt('sss', t_where, 0, 0, 0, 'GetSSS');
 							break;
@@ -255,10 +256,10 @@
 
 			function btnIns() {
 				_btnIns();
+				$('#cmbProcessno').change();
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
-				$('#cmbProcessno').change();
 			}
 
 			function btnModi() {
