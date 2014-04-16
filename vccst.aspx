@@ -1122,6 +1122,9 @@
                                 $('#txtWeight_'+n).val($('#txtTheory_'+n).val());
 							}
 						});
+						$('#txtOrdeno_' + j).click(function(){
+							q_box("ordest.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + r_accy, 'ordest', "95%", "95%", q_getMsg("popOrdest"));
+						});
 					}
 				}//j
 				_bbsAssign();

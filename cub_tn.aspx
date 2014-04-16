@@ -18,7 +18,7 @@
 			q_tables = 't';
 			var q_name = "cub";
 			var q_readonly = ['txtNoa','txtComp'];
-			var q_readonlys = ['txtComp'];
+			var q_readonlys = ['txtComp','txtOrdeno','txtNo2'];
 			var q_readonlyt = [];
 			var bbmNum = [];
 			var bbsNum = [['txtHard',10,0,1]];
@@ -36,6 +36,7 @@
 			aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx'],
 				['txtCno_', 'btnCno_', 'acomp', 'noa,acomp', 'txtCno_,txtComp_', 'acomp_b.aspx'],
+				['txtCustno_', 'btnCustno_', 'cust', 'noa,nick', 'txtCustno_', 'cust_b.aspx'],
 				['txtCno', 'lblCno', 'acomp', 'noa,acomp', 'txtCno,txtComp', 'acomp_b.aspx']
 			);
 			var isFirst = true;
@@ -98,6 +99,7 @@
 			}
 			var xmemo2 = '';
 			var memo2number = 0;
+			var OrdeList_A = [];
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'GetSSS':
@@ -133,8 +135,36 @@
 						break;
 					case 'GetOrde_A':
 						var as = _q_appendData("view_orde", "", true);
-						console.log(as);
+						OrdeList_A = as;
+						var InStr = '';
+						if(as.length>0){
+							for(var k=0;k<as.length;k++){
+								InStr += ",'" + as[k].noa + "'";
+							}
+							InStr = InStr.substring(1,InStr.length);
+							var t_where = "where=^^ (noa in (" + InStr + ")) and (isnull(enda,'0')='0') and (notv>0) ^^";
+							q_gt('view_ordes', t_where, 0, 0, 0, 'GetOrde_B');
+						}
 						break;
+					case 'GetOrde_B':
+						var as = _q_appendData("view_ordes", "", true);
+						if(as.length > 0){
+							var ret = q_gridAddRow(bbsHtm, 'tbbs',
+								'txtProductno,txtClass,txtSpec,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtSize,txtMemo,txtOrdeno,txtNo2,txtPrice,txtProduct',
+								as.length, as,
+								'productno,class,spec,dime,width,lengthb,mount,weight,size,memo,noa,no2,price,product',
+								'txtProductno');
+							for(var k=0;k<ret.length;k++){
+								var t_ordeno = $.trim($('#txtOrdeno_'+k).val());
+								for(var j=0;j<OrdeList_A.length;j++){
+									if(OrdeList_A[j].noa==t_ordeno){
+										$('#txtCustno_'+ret[k]).val(OrdeList_A[j].custno);
+										break;
+									}
+								}
+							}
+						}
+						break
 					case 'process':
 						var as = _q_appendData("process", "", true);
 						if (as[0] != undefined) {
@@ -364,7 +394,7 @@
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				if(toIns){
-					q_gt(q_name);
+					q_gt(q_name, '', 0, 0, 0, '', r_accy);
 				}
 				if (t_para) {
 					for (var i = 0; i < memo2number; i++) {
@@ -717,7 +747,6 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id='dmain'>
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview" >
 					<tr>
@@ -824,7 +853,10 @@
 							<input id="txtCno.*" type="text" style="width:20%;"/>
 							<input id="txtComp.*" type="text" style="width:60%;"/>
 						</td>
-						<td><input id="txtCustno.*" type="text" class="txt c1"/></td>
+						<td>
+							<input id="btnCustno.*" type="button" style="width:5%;"/>
+							<input id="txtCustno.*" type="text" class="txt" style="width:80%;"/>
+						</td>
 						<td><input id="txtProductno.*" type="text" class="txt c1"/></td>
 						<td><input id="txtClass.*" type="text" class="txt c1"/></td>
 						<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
@@ -860,7 +892,6 @@
 					</tr>
 				</table>
 			</div>
-		</div>
 		<input id="q_sys" type="hidden" />
 		<div id="dbbt" class='dbbt'>
 			<table id="tbbt" class="tbbt">
