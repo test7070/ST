@@ -21,7 +21,7 @@
 			var q_readonlys = ['txtComp', 'txtOrdeno', 'txtNo2'];
 			var q_readonlyt = [];
 			var bbmNum = [];
-			var bbsNum = [];
+			var bbsNum = [['txtHard',10,0,1]];
 			var bbtNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -46,7 +46,7 @@
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, 'LoadFirst', r_accy);
 				q_gt('process', '', 0, 0, 0, "");
 			});
-
+			var processList = [];
 			function main() {
 				if (dataErr) {
 					dataErr = false;
@@ -86,22 +86,60 @@
 				});
 				$("#cmbProcessno").change(function(){
 					$('#txtProcess').val($(this).find("option:selected").text());
+					for(var k=0;k<processList.length;k++){
+						if(processList[k].noa==$(this).val()){
+							var t_where = "where=^^ cno='" + processList[k].stationgno + "' ^^";
+							q_gt('sss', t_where, 0, 0, 0, 'GetSSS');
+							break;
+						}
+					}
 				});
 			}
-
+			var xmemo2 = '';
+			var memo2number = 0;
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'GetSSS':
+						var as = _q_appendData("sss", "", true);
+						memo2number = as.length;
+						xmemo2 = '';
+						xmemo2 += "<table style='width:100%;'>"
+						for (var i = 0; i < as.length; i++) {
+							if (i % 4 == 0)
+								xmemo2 += "<tr style='height: 20px;'>";
+							xmemo2 += "<td><input id='checkMemo2" + i + "' type='checkbox' style='float: left;' value='" + as[i].noa + "' " + (q_cur==0 || q_cur==4?"disabled='disabled'":'') + "/><a class='lbl'  id='memo2no" + i + "' style='float: left;'>" + as[i].namea + "</a></td>"
+							if (i % 4 == 3)
+								xmemo2 += "</tr>";
+						}
+						xmemo2 += "</table>"
+						$('#memo2').html(xmemo2);
+						if (abbm[q_recno]) {
+							//更新勾選
+							var xmemo2no = abbm[q_recno].memo2.split(',');
+							for (var j = 0; j < memo2number; j++) {
+								for (var i = 0; i < xmemo2no.length; i++) {
+									if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
+										$('#checkMemo2'+j)[0].checked = true;
+										break;
+									} else {
+										$('#checkMemo2'+j)[0].checked = false;
+									}
+								}
+							}
+						}
+						break;
 					case 'process':
-		                var as = _q_appendData("process", "", true);
-		                if (as[0] != undefined) {
-		                    var t_item = "@";
-		                    for (i = 0; i < as.length; i++) {
-		                        t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].process;
-		                    }
+						var as = _q_appendData("process", "", true);
+						if (as[0] != undefined) {
+							var t_item = "@";
+							for (i = 0; i < as.length; i++) {
+								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].process;
+							}
 							q_cmbParse("cmbProcessno", t_item);
 							if(abbm[q_recno]!= undefined)
-		                   		$("#cmbProcessno").val(abbm[q_recno].partno);
-		                }
+						   		$("#cmbProcessno").val(abbm[q_recno].partno);
+							processList = as;
+						}
 						break;
 					case 'deleUccy':
 						var as = _q_appendData("uccy", "", true);
@@ -220,6 +258,7 @@
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
+				$('#cmbProcessno').change();
 			}
 
 			function btnModi() {
@@ -236,6 +275,14 @@
 
 			function btnOk() {
 				toIns = false;
+				var memo2no = '';
+				for (var i = 0; i < memo2number; i++) {
+					if ($('#checkMemo2'+i)[0].checked) {
+						memo2no += "," + $('#checkMemo2' + i).val();
+					}
+				}
+				memo2no = memo2no.substr(1, memo2no.length);
+				$('#txtMemo2').val(memo2no);
 				if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
 					alert(q_getMsg('lblDatea') + '錯誤。');
 					return;
@@ -281,10 +328,38 @@
 				if(toIns){
 					$('#btnIns').click();
 				}
+				$('#cmbProcessno').change();
+				//清除勾選
+				for (var j = 0; j < memo2number; j++) {
+					$('#checkMemo2'+j)[0].checked = false;
+				}
+				if (abbm[q_recno]) {
+					//更新勾選
+					var xmemo2no = abbm[q_recno].memo2.split(',');
+					for (var j = 0; j < memo2number; j++) {
+						for (var i = 0; i < xmemo2no.length; i++) {
+							if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
+								$('#checkMemo2'+j)[0].checked = true;
+								break;
+							} else {
+								$('#checkMemo2'+j)[0].checked = false;
+							}
+						}
+					}
+				}
 			}
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if (t_para) {
+					for (var i = 0; i < memo2number; i++) {
+						$('#checkMemo2' + i).attr('disabled', 'disabled');
+					}
+				} else {
+					for (var i = 0; i < memo2number; i++) {
+						$('#checkMemo2' + i).removeAttr('disabled');
+					}
+				}
 			}
 
 			function btnMinus(id) {
@@ -336,32 +411,59 @@
 								var tHours = timeDate.getHours();
 								var tMinutes = timeDate.getMinutes();
 								$('#txtBtime_' + n).val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+								CountHard(n);
 							}
 						});
 						$('#chkHend_' + i).change(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if($(this).prop('checked')){
-								$('#txtDate3_' + n).val(q_date());
-								var timeDate= new Date();
-								var tHours = timeDate.getHours();
-								var tMinutes = timeDate.getMinutes();
-								$('#txtEtime_' + n).val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
-								var bdatea = $.trim($('#txtDate2_'+n).val());
-								bdatea = (parseInt(bdatea.substring(0,3))+1911)+bdatea.substring(3);
-								var edatea = $.trim($('#txtDate3_'+n).val());
-								edatea = (parseInt(edatea.substring(0,3))+1911)+edatea.substring(3);
-								var btimea = $.trim($('#txtBtime_'+n).val());
-								var etimea = $.trim($('#txtEtime_'+n).val());
-								var oldtime=Date.parse(bdatea+' ' + btimea);
-								var newtime=Date.parse(edatea+' ' + etimea);
-								$('#txtHard_'+n).val(dec(q_div(q_div(q_sub(newtime,oldtime),1000),60)));
+								var thisDate3 = $.trim($('#txtDate3_' + n).val());
+								if(thisDate3.length == 0){
+									$('#txtDate3_' + n).val(q_date());
+								}
+								var thisEtime = $.trim($('#txtEtime_' + n).val());
+								if(thisEtime.length==0){
+									var timeDate= new Date();
+									var tHours = timeDate.getHours();
+									var tMinutes = timeDate.getMinutes();
+									$('#txtEtime_' + n).val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+								}
+								CountHard(n);
 							}
+						});
+						$('#txtDate2_'+i).focusout(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							CountHard(n);
+						});
+						$('#txtBtime_'+i).focusout(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							CountHard(n);
+						});
+						$('#txtDate3_'+i).focusout(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							CountHard(n);
+						});
+						$('#txtEtime_'+i).focusout(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							CountHard(n);
 						});
 					}
 				}
 				_bbsAssign();
 			}
 
+			function CountHard(n){
+				var bdatea = $.trim($('#txtDate2_'+n).val());
+				bdatea = (parseInt(bdatea.substring(0,3))+1911)+bdatea.substring(3);
+				var edatea = $.trim($('#txtDate3_'+n).val());
+				edatea = (parseInt(edatea.substring(0,3))+1911)+edatea.substring(3);
+				var btimea = $.trim($('#txtBtime_'+n).val());
+				var etimea = $.trim($('#txtEtime_'+n).val());
+				var oldtime=Date.parse(bdatea+' ' + btimea);
+				var newtime=Date.parse(edatea+' ' + etimea);
+				$('#txtHard_'+n).val(dec(q_div(q_div(q_sub(newtime,oldtime),1000),60)));
+			}
+			
 			function distinct(arr1) {
 				var uniArray = [];
 				for (var i = 0; i < arr1.length; i++) {
@@ -437,6 +539,7 @@
 			function btnCancel() {
 				toIns = false;
 				_btnCancel();
+				$('#cmbProcessno').change();
 			}
 
 			function onPageError(error) {
@@ -638,6 +741,11 @@
 							<select id="cmbProcessno" class="txt c1"></select>
 							<input id="txtProcess" type="text" style="display:none;"/>
 						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblMemo2" class="lbl" ></a></td>
+						<td style="display:none;"><input id="txtMemo2" type="text"/></td>
+						<td class="td2" colspan="4" id="memo2"></td>
 					</tr>
 				</table>
 			</div>
