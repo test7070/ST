@@ -24,70 +24,82 @@
 				$('#q_report').q_report({
 					fileName : 'z_ordest',
 					options : [{
-						type : '0', //[1]
+						type : '0', //[1]    
 						name : 'accy',
 						value : q_getId()[4]
 					}, {
-						type : '1', //[2][3]
+						type : '1', //[2][3]   1
 						name : 'xdate'
 					}, {
-						type : '1', //[4][5]
+						type : '1', //[4][5]   2
 						name : 'xodate'
 					}, {
-						type : '2', //[6][7]
+						type : '2', //[6][7]   3
 						name : 'xcust',
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
 					}, {
-						type : '2', //[8][9]
+						type : '2', //[8][9]   4
 						name : 'xsales',
 						dbf : 'sss',
 						index : 'noa,namea',
 						src : 'sss_b.aspx'
 					}, {
-						type : '2', //[10][11]
+						type : '2', //[10][11]  5
 						name : 'xproduct',
 						dbf : 'ucc',
 						index : 'noa,product',
 						src : 'ucc_b.aspx'
 					}, {
-						type : '5', //[12]
+						type : '5', //[12]  6
 						name : 'xstype',
 						value : [q_getPara('report.all')].concat(q_getPara('orde.stype').split(','))
 					}, {
-						type : '5', //[13]
+						type : '5', //[13]  7
 						name : 'xtran',
 						value : [q_getPara('report.all')].concat(q_getPara('sys.tran').split(','))
 					}, {
-						type : '5', //[14]
+						type : '5', //[14]  8
 						name : 'xcancel',
 						value : [q_getPara('report.all')].concat(new Array('1@Y', '0@N'))
 					}, {
-						type : '5', //[15]
+						type : '5', //[15]  9
 						name : 'xend',
 						value : [q_getPara('report.all')].concat(new Array('1@Y', '0@N'))
 					}, {
-						type : '5', //[16]
+						type : '5', //[16]  10
 						name : 'xsortby',
 						value : 'custno@依客戶,sizea@依尺寸,dime@依厚度'.split(',')
 					}, {
-						type : '5', //[17]
+						type : '5', //[17]  11
 						name : 'xstktype',
 						value : [q_getPara('report.all')].concat(q_getPara('sys.stktype').split(','))
 					}, {
-						type : '1', //[18][19]
+						type : '1', //[18][19]  12
 						name : 'xradius'
 					}, {
-						type : '1', //[20][21]
+						type : '1', //[20][21]  13
 						name : 'xwidth'
 					}, {
-						type : '1', //[22][23]
+						type : '1', //[22][23]   14
 						name : 'xdime'
 					}, {
-						type : '1', //[24][25]
+						type : '1', //[24][25]   15
 						name : 'xlengthb'
-					}]
+					}, {
+                        type : '1', //[26][27]  16
+                        name : 'yradius'
+                    }, {
+                        type : '1', //[28][29]  17
+                        name : 'ywidth'
+                    }, {
+                        type : '1', //[30][31]   18
+                        name : 'ydime'
+                    }, {
+                        type : '1', //[32][33]   19
+                        name : 'ylengthb'
+                    }]
 				});
 				q_popAssign();
 				q_getFormat();
