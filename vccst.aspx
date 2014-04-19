@@ -276,7 +276,7 @@
 					t_where += q_sqlPara2('ordeno', t_ordeno) + q_sqlPara2('custno', t_custno) + " and ((len(gmemo)=0) or gmemo='cubu') and kind='" + $('#cmbKind').val() + "'";
 					q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "95%", "95%", q_getMsg('popVcceImport'));
 				});
-				$('#lblOrdeno').click(function() {
+				$('#btnOrdeno').click(function() {
 					if (!(q_cur == 1 || q_cur == 2))
 						return;
 					btnOrdes();
@@ -1466,7 +1466,7 @@
 			}
 
 			function tipInit() {
-				tip($('#lblOrdeno'), '<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">點擊【' + q_getMsg('lblOrdeno') + '】匯入訂單</a>', 0, -15);
+				tip($('#btnOrdeno'), '<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">點擊【' + q_getMsg('btnOrdeno') + '】匯入訂單</a>', 0, -15);
 				tip($('#btnImportVcce'), '<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">↓匯入派車單資料。</a>', -20, -15);
 				tip($('#btnVcceImport'), '<a style="color:darkblue;font-size:16px;font-weight:bold;width:350px;display:block;">↑匯入裁剪、製管資料，需有訂單(未結案)。</a>', -20, 20);
 			}
@@ -1701,7 +1701,10 @@
 							<input id="txtComp" type="text" style="float:left;width:75%;"/>
 							<input id="txtNick" type="text" style="display:none;"/>
 						</td>
-						<td><span> </span><a id='lblOrdeno' class="lbl btn"> </a></td>
+						<td>
+							<input id="btnOrdeno" type="button" class="lbl"/>
+							<!--<span> </span><a id='lblOrdeno' class="lbl btn"> </a>-->
+						</td>
 						<td colspan="2"><input id="txtOrdeno" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
