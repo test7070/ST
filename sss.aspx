@@ -342,7 +342,7 @@
 				refreshBbm();
 				if(q_cur==0 || q_cur==4){
 					var t_noa = $.trim($('#txtNoa').val()).toUpperCase();
-					$('#BarcodeShow').html('<img height="40px" src="http://barcode.tec-it.com/barcode.ashx?code=Code39&amp;modulewidth=fit&amp;data='+t_noa+'&amp;dpi=96&amp;imagetype=gif&amp;rotation=0&amp;color=&amp;bgcolor=&amp;fontcolor=&amp;quiet=0&amp;qunit=mm&amp;download=true">')
+					$('#BarcodeShow').html('<img width="100px" src="https://chart.googleapis.com/chart?chs=100x100&cht=qr&chl='+t_noa+'&chld=L|4">');
 				}
 				if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
 					$('.it').css('text-align','left');
