@@ -189,7 +189,7 @@
 				$('#Xorderstatus select').change(function() {
 					var showMemo = $('#chkXisordermemo input[type="checkbox"]').is(':checked');
 					var nowReport = $('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report;
-					if ((($(this).val() == '1') || ($(this).val() == '#non' && showMemo == true)) && (dec(nowReport.substr(-1)) <= 3)) {
+					if ((($(this).val() == '1') || ($(this).val() == '#non' && showMemo == true)) && (dec(nowReport.slice(-1)) <= 3)) {
 						$('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0, 8) + 'A';
 						if ($(this).val() == '1') {
 							$('#chkXisordermemo input[type="checkbox"]').attr('checked', false);
