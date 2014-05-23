@@ -23,7 +23,7 @@
 			q_tables = 't';
 			var q_name = "orde";
 			var q_readonly = ['txtApv', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWeight', 'txtSales'];
-			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv'];
+			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv','textComp','textComp2'];
 			var q_readonlyt = ['txtTotal', 'txtQuatno', 'txtTheory'];
 			var bbmNum = [
 				['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -58,7 +58,9 @@
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
 				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
 				['txtUno__', 'btnUno__', 'view_uccc', 'uno,product,productno,radius,width,dime,lengthb,mount,weight', 'txtUno__,txtProduct__,txtProductno__,txtRadius__,txtWidth__,txtDime__,txtLengthb__,txtMount__,txtWeight__', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
-				['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
+				['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx'],
+				['textCno_', 'btnCno_', 'acomp', 'noa,acomp', 'textCno_,textComp_', 'acomp_b.aspx'],
+				['textCno2_', 'btnCno2_', 'acomp', 'noa,acomp', 'textCno2_,textComp2_', 'acomp_b.aspx']
 			);
 			brwCount2 = 10;
 			$(document).ready(function() {
@@ -219,7 +221,6 @@
 					$('#txtTotalus').val(FormatNumber(t_moneyus));
 				OrdenoAndNo2On_Change();
 			}
-			//20140523 bbs用sizea的欄位來存 工廠+加工方式 分割方法 工廠編號:工廠名稱@加工方式編號:名稱(逗號分隔);工廠編號2:工廠名稱2@加工方式編號2:名稱2(逗號分隔)
 			var t_spec;
 			//儲存spec陣列
 			function mainPost() {// 載入資料完，未 refresh 前
@@ -415,7 +416,65 @@
 				b_pop = '';
 				OrdenoAndNo2On_Change();
 			}
-
+			//20140523 bbs用sizea的欄位來存 工廠+加工方式 分割方法 工廠編號:工廠名稱@加工方式(逗號分隔);工廠編號2:工廠名稱2@加工方式2(逗號分隔)
+			function SetChoice(){
+				for(var k=0;k<q_bbsCount;k++){
+					//初始化<<Start>>
+					$('#checkXmemo_'+k).html(xmemo2);
+					$('#checkXmemo2_'+k).html(xmemo2);
+					if(q_cur==1 || q_cur==2){
+						$('#btnChoiceok_'+k).removeAttr('disabled');
+						$('#checkXmemo_'+k + ' input[type="checkbox"]').prop('checked',false).removeAttr('disabled');
+						$('#textCno_'+k).val('').removeAttr('disabled');
+						$('#textComp_'+k).val('');
+						$('#checkXmemo2_'+k + ' input[type="checkbox"]').prop('checked',false).removeAttr('disabled');
+						$('#textCno2_'+k).val('').removeAttr('disabled');
+						$('#textComp2_'+k).val('')
+					}else{
+						$('#btnChoiceok_'+k).attr('disabled','disabled');
+						$('#checkXmemo_'+k + ' input[type="checkbox"]').prop('checked',false).attr('disabled','disabled');
+						$('#textCno_'+k).val('').attr('disabled','disabled');
+						$('#textComp_'+k).val('');
+						$('#checkXmemo2_'+k + ' input[type="checkbox"]').prop('checked',false).attr('disabled','disabled');
+						$('#textCno2_'+k).val('').attr('disabled','disabled');
+						$('#textComp2_'+k).val('')
+					}
+					//初始化<<End>>
+					try{
+					var thisSizea = $.trim($('#txtSizea_'+k).val());
+					var x1 = $.trim(thisSizea.split(';')[0]);
+					var x2 = $.trim(thisSizea.split(';')[1]);
+					var thisChoice = '';
+					if((x1 != undefined) && (x1.length > 0)){
+						var thisComp = x1.split('@')[0];
+						$('#textCno_'+k).val($.trim(thisComp.split(':')[0]));
+						$('#textComp_'+k).val($.trim(thisComp.split(':')[1]));
+						thisChoice = $.trim(x1.split('@')[1]);
+						var Choice_Xmemo = thisChoice.split(',');
+						$('#checkXmemo_'+k + ' input[type="checkbox"]').each(function(){
+							if($.inArray($(this).val(),Choice_Xmemo) !== -1){
+								$(this).prop('checked',true);
+							}
+						});
+					}
+					if((x2 != undefined) && (x2.length > 0)){
+						var thisComp = x2.split('@')[0];
+						$('#textCno2_'+k).val($.trim(thisComp.split(':')[0]));
+						$('#textComp2_'+k).val($.trim(thisComp.split(':')[1]));
+						thisChoice = $.trim(x2.split('@')[1]);
+						var Choice_Xmemo = thisChoice.split(',');
+						$('#checkXmemo2_'+k + ' input[type="checkbox"]').each(function(){
+							if($.inArray($(this).val(),Choice_Xmemo) !== -1){
+								$(this).prop('checked',true);
+							}
+						});
+					}
+					}catch(e){
+						console.log(e.message);
+					}
+				}
+			}
+			
 			var xmemo2 = '';
 			var memo2number = 0;
 			var focus_addr = '';
@@ -428,28 +487,14 @@
 						memo2number = as.length;
 						xmemo2 += "<table style='width:100%;'>"
 						for (var i = 0; i < as.length; i++) {
-							if (i % 4 == 0)
+							if (i % 3 == 0)
 								xmemo2 += "<tr style='height: 20px;'>";
-							xmemo2 += "<td><input id='checkMemo2" + i + "' type='checkbox' style='float: left;' value='" + as[i].process + "' disabled='disabled'/><a class='lbl' id='memo2no" + i + "' style='float: left;'>" + as[i].process + "</a></td>"
-							if (i % 4 == 3)
+							xmemo2 += "<td><input id='checkMemo2" + i + "' type='checkbox' style='float: left;' value='" + as[i].process +"'/><a class='lbl' id='memo2no" + i + "' style='float: left;'>" + as[i].process + "</a></td>"
+							if (i % 3 == 3)
 								xmemo2 += "</tr>";
 						}
 						xmemo2 += "</table>"
-						$('#memo2').append(xmemo2);
-						if (abbm[q_recno]) {
-							//更新勾選
-							var xmemo2no = abbm[q_recno].memo2.split(';');
-							for (var j = 0; j < memo2number; j++) {
-								for (var i = 0; i < xmemo2no.length; i++) {
-									if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
-										$('#checkMemo2'+j)[0].checked = true;
-										break;
-									} else {
-										$('#checkMemo2'+j)[0].checked = false;
-									}
-								}
-							}
-						}
+						SetChoice();
 						break;
 					case 'refreshEnd2':
 						var as = _q_appendData("orde", "", true);
@@ -579,14 +624,6 @@
 				Lock(1, {
 					opacity : 0
 				});
-				var memo2no = '';
-				for (var i = 0; i < memo2number; i++) {
-					if ($('#checkMemo2'+i)[0].checked) {
-						memo2no += ";" + $('#checkMemo2' + i).val();
-					}
-				}
-				memo2no = memo2no.substr(1, memo2no.length);
-				$('#txtMemo2').val(memo2no);
 				if ($('#txtOdate').val().length == 0 || !q_cd($('#txtOdate').val())) {
 					alert(q_getMsg('lblOdate') + '錯誤。');
 					Unlock(1);
@@ -850,7 +887,7 @@
 						});
 						$('#txtStyle_' + j).blur(function() {
 							$('input[id*="txtProduct_"]').each(function() {
-								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+								var thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
 							});
 							var n = $(this).attr('id').replace('txtStyle_', '');
@@ -949,11 +986,48 @@
 							qBoxNo3id = b_seq;
 							q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'uccc', "95%", "80%", q_getMsg('popOrdet'));
 						});
+						$('#btnChoice_'+j).click(function(){
+							SetChoice();
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							var isShow = $('#Choice_'+n).is(':visible');
+							$('div[id*="Choice_"]').each(function(){
+								$(this).hide();
+							});
+							if(isShow){
+								$('#Choice_'+n).hide();
+							}else{
+								$('#Choice_'+n).show();
+							}
+						});
+						$('#btnChoiceok_'+j).click(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							var SaveStr = "";
+							var t_cno = $.trim($('#textCno_'+n).val());
+							var t_comp = $.trim($('#textComp_'+n).val());
+							var t_choice = '';
+							$('#checkXmemo_'+n + ' input[type="checkbox"]').each(function(){
+								if($(this).prop('checked')){
+									t_choice += $.trim($(this).val())+',';
+								}
+							});
+							var t_cno2 = $.trim($('#textCno2_'+n).val());
+							var t_comp2 = $.trim($('#textComp2_'+n).val());
+							var t_choice2 = '';
+							$('#checkXmemo2_'+n + ' input[type="checkbox"]').each(function(){
+								if($(this).prop('checked')){
+									t_choice2 += $.trim($(this).val())+',';
+								}
+							});
+							SaveStr = t_cno+':'+t_comp+'@'+t_choice+';'+t_cno2+':'+t_comp2+'@'+t_choice2;
+							$('#txtSizea_'+n).val(SaveStr);
+							$('#Choice_'+n).hide();
+						});
 					}
 				}
 				_bbsAssign();
 				size_change();
 				OrdenoAndNo2On_Change();
+				SetChoice();
 			}
 
 			function btnIns() {
@@ -1086,30 +1160,13 @@
 					}
 
 				}
-				for (var j = 0; j < memo2number; j++) {
-					$('#checkMemo2'+j)[0].checked = false;
-				}
-				if (abbm[q_recno]) {
-					var xmemo2no = abbm[q_recno].memo2.split(';');
-					for (var j = 0; j < memo2number; j++) {
-						for (var i = 0; i < xmemo2no.length; i++) {
-							if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
-								$('#checkMemo2'+j)[0].checked = true;
-								break;
-							} else {
-								$('#checkMemo2'+j)[0].checked = false;
-							}
-						}
-					}
-				}
-
 				if ($('#cmbStype').find("option:selected").text() == '外銷')
 					$('#btnOrdei').show();
 				else
 					$('#btnOrdei').hide();
 				size_change();
 				$('input[id*="txtProduct_"]').each(function() {
-					thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+					var thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 					$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
 				});
 				OrdenoAndNo2On_Change();
@@ -1144,7 +1201,7 @@
 						break;
 					case 'txtProductno_':
 						$('input[id*="txtProduct_"]').each(function() {
-							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							var thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
 						});
 						if (trim($('#txtStyle_' + b_seq).val()).length != 0)
@@ -1192,15 +1249,6 @@
 				else
 					$('#btnApv').removeAttr('disabled');
 				OrdenoAndNo2On_Change();
-				if (t_para) {
-					for (var i = 0; i < memo2number; i++) {
-						$('#checkMemo2' + i).attr('disabled', 'disabled');
-					}
-				} else {
-					for (var i = 0; i < memo2number; i++) {
-						$('#checkMemo2' + i).removeAttr('disabled');
-					}
-				}
 			}
 
 			function btnMinus(id) {
@@ -1815,13 +1863,6 @@
 						<td align="center"><input id="btnCredit" type="button" value='' /></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblMemo2' class="lbl"> </a></td>
-						<td colspan="6" style="display:none;">
-							<input id="txtMemo2" type="text" class="txt c1" />
-						</td>
-						<td class="td2" colspan="6" id="memo2"></td>
-					</tr>
-					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
@@ -1847,8 +1888,7 @@
 						<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
 					</td>
 					<td align="center" style="width:20px;"></td>
-					<td align="center" style="width:180px;"></td>
-					<td align="center" style="width:60px;"></td>
+					<td align="center" style="width:40px;"><a id='lblChoice_s'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblNo2'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblStyle_st'> </a></td>
@@ -1878,8 +1918,35 @@
 						<input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td><input class="txt" id="txtSizea.*" type="text" style="width:95%;"/></td>
-					<td><input id="btnChoice.*" type="button" style="width:95%;"/></td>
+					<td>
+						<input class="txt" id="txtSizea.*" type="text" style="width:95%;display:none;"/>
+						<input id="btnChoice.*" type="button" style="text-weight:bold;" value="+"/>
+						<div id="Choice.*" style="width:450px;border:1px solid #000;float:left;position: absolute;display:none;">
+							<div style="float:left;background-color:#F8D463;">
+								<div style="width:149px;display:block;float:left;">工廠</div>
+								<div style="border-left:1px solid #000;width:300px;display:block;float:left;">加工方式</div>
+							</div>
+							<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
+								<div style="width:149px;display:block;float:left;">
+									<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnCno.*">
+									<input type="text" class="txt c1" style="width:80%;" id="textCno.*">
+									<input type="text" class="txt c1" style="width:95%;" id="textComp.*">
+								</div>
+								<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkXmemo.*"></div>
+							</div>
+							<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
+								<div style="width:149px;display:block;float:left;">
+									<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnCno2.*">
+									<input type="text" class="txt c1" style="width:80%;" id="textCno2.*">
+									<input type="text" class="txt c1" style="width:95%;" id="textComp2.*">
+								</div>
+								<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkXmemo2.*"></div>
+							</div>
+							<div style="text-align:center;width:100%;float:left;border-top:1px solid #000;background-color:#CDFFCE;">
+								<input type="button" value="確定" id="btnChoiceok.*">
+							</div>
+						</div>
+					</td>
 					<td><input class="txt" id="txtNo2.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input class="btn" id="btnProduct.*" type="button" value='' style=" font-weight: bold;width:15px;height:25px;float:left;" />
