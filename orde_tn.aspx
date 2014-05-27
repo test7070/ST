@@ -676,6 +676,7 @@
 					if (q_float('txtMount_' + i) != 0 && !$('#chkIssale_' + i).prop('checked') && !$('#chkIscut_' + i).prop('checked')) {
 						$('#chkIscut_' + i).prop('checked', true);
 					}
+					$('#btnChoiceok_'+i).click();
 					getTheory(i);
 				}
 				var t_chk;
@@ -1058,9 +1059,9 @@
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							var SaveStr = "";
 							var t_cno = $.trim($('#textCno_'+n).val());
-							var t_comp = $.trim($('#textComp_'+n).val());
+							var t_comp = (t_cno.length==0?'':$.trim($('#textComp_'+n).val()));
 							var t_outcno = $.trim($('#textOutcno_'+n).val());
-							var t_outcomp = $.trim($('#textOutcomp_'+n).val());
+							var t_outcomp = (t_outcno.length==0?'':$.trim($('#textOutcomp_'+n).val()));
 							var t_choice = '';
 							var t_outchoice = '';
 							$('#checkXmemo_'+n + ' input[type="checkbox"]').each(function(){
@@ -1074,10 +1075,10 @@
 								}
 							});
 							var t_cno2 = $.trim($('#textCno2_'+n).val());
-							var t_comp2 = $.trim($('#textComp2_'+n).val());
+							var t_comp2 = (t_cno2.length==0?'':$.trim($('#textComp2_'+n).val()));
 							var t_choice2 = '';
 							var t_outcno2 = $.trim($('#textOutcno2_'+n).val());
-							var t_outcomp2 = $.trim($('#textOutcomp2_'+n).val());
+							var t_outcomp2 = (t_outcno2.length==0?'':$.trim($('#textOutcomp2_'+n).val()));
 							var t_outchoice2 = '';
 							$('#checkXmemo2_'+n + ' input[type="checkbox"]').each(function(){
 								if($(this).prop('checked')){

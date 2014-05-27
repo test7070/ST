@@ -88,6 +88,19 @@
 					t_where += ' and (iscut=1)';
 					q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 				});
+				$('#btnOrde_tn').click(function(){
+					if(q_cur==1 || q_cur==2){
+						var t_cno = $.trim($('#txtCno').val());
+						var t_tggno = $.trim($('#txtTggno').val());
+						var t_process = $.trim($('#cmbProcessno :selected').text());
+						var t_where = "(1=1) ";
+						t_where += "and (charindex(N'"+t_cno+"',substring(sizea,0,charindex('^$^',sizea))) > 0) "; //判斷廠別
+						t_where += "and (charindex(N'^$^"+t_tggno+":',sizea) > 0) "; //判斷委外廠商
+						t_where += "and (charindex(N'^$^"+t_process+":',sizea) > 0) "; //判斷加工方式
+						t_where += " ";
+						q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
+					}
+				});
 			}
 			var OrdeList_A = [];
 			function q_gtPost(t_name) {
