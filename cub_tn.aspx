@@ -174,8 +174,9 @@
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
-						else if(q_cur==0){
+						else if(q_cur==0 && toIns){
 							$('#btnIns').click();
+							toIns = false;
 						}
 						break;
 				}
@@ -728,6 +729,8 @@
 							<input id="txtMechno" type="text" style="width:30%;"/>
 							<input id="txtMech" type="text" style="width:65%;"/>
 						</td>
+						<td></td>
+						<td><input type="button" id="btnOrde_tn"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
