@@ -1978,6 +1978,8 @@
 					<td align="center" style="width:120px;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblMemos'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblChoice_s'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblSlit_tn'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblIscut_tn'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblEnda_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
 				</tr>
@@ -2072,6 +2074,8 @@
 							</div>
 						</div>
 					</td>
+					<td align="center"><input id="chkSlit.*" type="checkbox"/></td>
+					<td align="center"><input id="chkIscut.*" type="checkbox"/></td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 					<td align="center">
 						<input class="btn" id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" />
