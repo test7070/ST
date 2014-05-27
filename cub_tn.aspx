@@ -86,53 +86,10 @@
 					t_where += ' and (iscut=1)';
 					q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 				});
-				$("#cmbProcessno").change(function(){
-					$('#txtProcess').val($(this).find("option:selected").text());
-					for(var k=0;k<processList.length;k++){
-						if(($.trim(processList[k].noa)==$.trim($(this).val())) || $.trim($(this).val())==''){
-							var t_where = "where=^^ cno='" + processList[k].stationgno + "' ^^";
-							q_gt('sss', t_where, 0, 0, 0, 'GetSSS');
-							break;
-						}
-					}
-				});
 			}
-			var xmemo2 = '';
-			var memo2number = 0;
 			var OrdeList_A = [];
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					case 'GetSSS':
-						var as = _q_appendData("sss", "", true);
-						memo2number = as.length;
-						xmemo2 = '';
-						xmemo2 += "<table style='width:100%;'>"
-						for (var i = 0; i < as.length; i++) {
-							if (i % 4 == 0)
-								xmemo2 += "<tr style='height: 20px;'>";
-							xmemo2 += "<td><input id='checkMemo2" + i + "' type='checkbox' style='float: left;' value='" + as[i].noa + "' " + (q_cur==0 || q_cur==4?"disabled='disabled'":'') + "/><a class='lbl'  id='memo2no" + i + "' style='float: left;'>" + as[i].namea + "</a></td>"
-							if (i % 4 == 3)
-								xmemo2 += "</tr>";
-						}
-						xmemo2 += "</table>"
-						$('#memo2').html(xmemo2);
-						if (abbm[q_recno]) {
-							//更新勾選
-							var xmemo2no = abbm[q_recno].memo2.split(',');
-							for (var j = 0; j < memo2number; j++) {
-								for (var i = 0; i < xmemo2no.length; i++) {
-									if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
-										$('#checkMemo2'+j)[0].checked = true;
-										break;
-									} else {
-										$('#checkMemo2'+j)[0].checked = false;
-									}
-								}
-							}
-						}
-						var t_where = "where=^^ (charindex('"+$.trim($('#txtProcess').val())+"',memo2)>0) and (isnull(enda,'0')='0') ^^ ";
-						q_gt('view_orde', t_where, 0, 0, 0, 'GetOrde_A');
-						break;
 					case 'GetOrde_A':
 						var as = _q_appendData("view_orde", "", true);
 						OrdeList_A = as;
@@ -315,14 +272,6 @@
 
 			function btnOk() {
 				toIns = false;
-				var memo2no = '';
-				for (var i = 0; i < memo2number; i++) {
-					if ($('#checkMemo2'+i)[0].checked) {
-						memo2no += "," + $('#checkMemo2' + i).val();
-					}
-				}
-				memo2no = memo2no.substr(1, memo2no.length);
-				$('#txtMemo2').val(memo2no);
 				if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
 					alert(q_getMsg('lblDatea') + '錯誤。');
 					return;
@@ -371,39 +320,12 @@
 			function refresh(recno) {
 				_refresh(recno);
 				$('#cmbProcessno').change();
-				//清除勾選
-				for (var j = 0; j < memo2number; j++) {
-					$('#checkMemo2'+j)[0].checked = false;
-				}
-				if (abbm[q_recno]) {
-					//更新勾選
-					var xmemo2no = abbm[q_recno].memo2.split(',');
-					for (var j = 0; j < memo2number; j++) {
-						for (var i = 0; i < xmemo2no.length; i++) {
-							if ($('#checkMemo2' + j).val() == xmemo2no[i]) {
-								$('#checkMemo2'+j)[0].checked = true;
-								break;
-							} else {
-								$('#checkMemo2'+j)[0].checked = false;
-							}
-						}
-					}
-				}
 			}
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				if(toIns){
 					q_gt(q_name, '', 0, 0, 0, '', r_accy);
-				}
-				if (t_para) {
-					for (var i = 0; i < memo2number; i++) {
-						$('#checkMemo2' + i).attr('disabled', 'disabled');
-					}
-				} else {
-					for (var i = 0; i < memo2number; i++) {
-						$('#checkMemo2' + i).removeAttr('disabled');
-					}
 				}
 			}
 
@@ -792,11 +714,11 @@
 							<input id="txtCno" type="text" style="width:25%;"/>
 							<input id="txtComp" type="text" style="width:70%;"/>
 						</td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblMemo2" class="lbl" ></a></td>
-						<td style="display:none;"><input id="txtMemo2" type="text"/></td>
-						<td class="td2" colspan="4" id="memo2"></td>
+						<td><span> </span><a id="lblTggno" class="lbl btn"> </a></td>
+						<td colspan="2">
+							<input id="txtTggno" type="text" style="width:25%;"/>
+							<input id="txtTgg" type="text" style="width:70%;"/>
+						</td>
 					</tr>
 				</table>
 			</div>
