@@ -21,7 +21,7 @@
 			var q_readonlys = ['txtComp','txtOrdeno','txtNo2'];
 			var q_readonlyt = [];
 			var bbmNum = [];
-			var bbsNum = [['txtHard',10,0,1]];
+			var bbsNum = [['txtHard',10,0,1],['txtLengthb',10,2,1],['txtLengthc',10,2,1],['txtWidth',10,2,1],['txtMount',10,2,1],['txtPrice',10,2,1],['txtWeight',10,2,1]];
 			var bbtNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -72,22 +72,6 @@
 				bbmMask = [['txtDatea', r_picd], ['txtBdate', r_picd], ['txtEdate', r_picd]];
 				bbsMask = [['txtDate2', r_picd],['txtDate3', r_picd], ['txtDatea', r_picd], ['txtBtime', '99:99'], ['txtEtime', '99:99']];
 				q_mask(bbmMask);
-				//q_cmbParse("cmbTypea", q_getPara('cub.typea'));
-				$('#btnOrdeImport').click(function() {
-					var t_bdate = trim($('#txtBdate').val());
-					var t_edate = trim($('#txtEdate').val());
-					var t_bdime = dec($('#txtBdime').val());
-					var t_edime = dec($('#txtEdime').val());
-					var t_where = ' 1=1 ';
-					t_bdate = (emp(t_bdate) ? '' : t_bdate);
-					t_edate = (emp(t_edate) ? 'char(255)' : t_edate);
-					t_where += " and (datea between '" + t_bdate + "' and '" + t_edate + "') ";
-					t_bdime = (emp(t_bdime) ? 0 : t_bdime);
-					t_edime = (t_edime == 0 ? Number.MAX_VALUE : t_edime);
-					t_where += " and (dime between " + t_bdime + " and " + t_edime + ")";
-					t_where += ' and (iscut=1)';
-					q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
-				});
 				$('#btnOrde_tn').click(function(){
 					if(q_cur==1 || q_cur==2){
 						var t_cno = $.trim($('#txtCno').val());
@@ -361,31 +345,6 @@
 				for (var i = 0; i < q_bbsCount; i++) {
 					$('#lblNo_' + i).text(i + 1);
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
-						$('#txtDime_' + i).change(function() {
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							var t_dime = dec($('#txtDime_' + n).val());
-							$('#txtBdime_' + n).val(round(t_dime * 0.93, 2));
-							$('#txtEdime_' + n).val(round(t_dime * 1.07, 2));
-						});
-						$('#btnUccc_' + i).click(function() {
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							var t_where = ' 1=1 and radius=0 ';
-							var t_productno = trim($('#txtProductno_' + n).val());
-							var t_bdime = dec($('#txtBdime_' + n).val());
-							var t_edime = dec($('#txtEdime_' + n).val());
-							var t_width = dec($('#txtWidth_' + n).val());
-							var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
-							var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
-							if (t_bdime == 0 && t_edime == 0) {
-								t_edime = Number.MAX_VALUE;
-							}
-							t_where += " and width >=" + t_width;
-							t_where += q_sqlPara2('productno', t_productno);
-							t_where += " and (dime between " + t_bdime + " and " + t_edime + ") ";
-							if (dec($('#txtLengthb_' + n).val()) > 0)
-								t_where += " and (lengthb between " + t_blengthb + " and " + t_elengthb + ") ";
-							q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'uccc', "95%", "95%", q_getMsg('popUccc'));
-						});
 						$('#chkSlit_' + i).change(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if($(this).prop('checked')){
@@ -763,9 +722,9 @@
 						<td style="width:120px;"><a id='lbl_productno'> </a></td>
 						<td style="width:60px;"><a id='lbl_class'> </a></td>
 						<td style="width:200px;"><a id='lbl_spec'> </a></td>
-						<td style="width:120px;"><a id='lbl_dime'> </a></td>
-						<td style="width:120px;"><a id='lbl_width'> </a></td>
 						<td style="width:120px;"><a id='lbl_lengthb'> </a></td>
+						<td style="width:120px;"><a id='lbl_width'> </a></td>
+						<td style="width:120px;"><a id='lbl_lengthc'> </a></td>
 						<td style="width:80px;"><a id='lbl_mount'> </a></td>
 						<td style="width:150px;"><a id='lbl_weight'> </a></td>
 						<td style="width:20px; text-align: center;">開工</td>
@@ -776,9 +735,6 @@
 						<td style="width:150px; text-align: center;">完工時間</td>
 						<td style="width:150px; text-align: center;">工時(分)</td>
 						<td style="width:150px; text-align: center;">工作人員</td>
-						<td style="width:120px;"><a id='lbl_bdime'> </a></td>
-						<td style="width:120px;"><a id='lbl_edime'> </a></td>
-						<td style="width:60px;"><a id='lblOrdet_st'> </a></td>
 						<td style="width:150px;"><a id='lbl_hweight'> </a></td>
 						<td style="width:200px;"><a id='lbl_size'> </a></td>
 						<td style="width:200px;"><a id='lbl_uno'> </a></td>
@@ -811,9 +767,9 @@
 						<td><input id="txtProductno.*" type="text" class="txt c1"/></td>
 						<td><input id="txtClass.*" type="text" class="txt c1"/></td>
 						<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
-						<td><input id="txtDime.*" type="text" class="txt c1 num"/></td>
-						<td><input id="txtWidth.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtLengthb.*" type="text" class="txt c1 num"/></td>
+						<td><input id="txtWidth.*" type="text" class="txt c1 num"/></td>
+						<td><input id="txtLengthc.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtWeight.*" type="text" class="txt c1 num"/></td>
 						<td><input id="chkSlit.*" type="checkbox"/></td>
@@ -824,9 +780,6 @@
 						<td><input id="txtEtime.*" type="text" class="txt c1"/></td>
 						<td><input id="txtHard.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtProduct2.*" type="text" class="txt c1"/></td>
-						<td><input id="txtBdime.*" type="text" class="txt c1 num"/></td>
-						<td><input id="txtEdime.*" type="text" class="txt c1 num"/></td>
-						<td align="center"><input id="btnUccc.*" type="button" value="選料"/></td>
 						<td><input id="txtHweight.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtSize.*" type="text" class="txt c1"/></td>
 						<td><input id="txtUno.*" type="text" class="txt c1"/></td>
