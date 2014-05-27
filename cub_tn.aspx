@@ -17,7 +17,7 @@
 			this.errorHandler = null;
 			q_tables = 't';
 			var q_name = "cub";
-			var q_readonly = ['txtNoa','txtComp'];
+			var q_readonly = ['txtNoa','txtComp','txtTgg','txtMech'];
 			var q_readonlys = ['txtComp','txtOrdeno','txtNo2'];
 			var q_readonlyt = [];
 			var bbmNum = [];
@@ -37,7 +37,9 @@
 				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx'],
 				['txtCno_', 'btnCno_', 'acomp', 'noa,acomp', 'txtCno_,txtComp_', 'acomp_b.aspx'],
 				['txtCustno_', 'btnCustno_', 'cust', 'noa,nick', 'txtCustno_', 'cust_b.aspx'],
-				['txtCno', 'lblCno', 'acomp', 'noa,acomp', 'txtCno,txtComp', 'acomp_b.aspx']
+				['txtCno', 'lblCno', 'acomp', 'noa,acomp', 'txtCno,txtComp', 'acomp_b.aspx'],
+				['txtMechno', 'lblMechno', 'mech', 'noa,mech', 'txtMechno,txtMech', 'mech_b.aspx'],
+				['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']
 			);
 			var isFirst = true;
 			$(document).ready(function() {
@@ -711,14 +713,25 @@
 					<tr>
 						<td><span> </span><a id="lblCno" class="lbl btn"> </a></td>
 						<td colspan="2">
-							<input id="txtCno" type="text" style="width:25%;"/>
-							<input id="txtComp" type="text" style="width:70%;"/>
+							<input id="txtCno" type="text" style="width:30%;"/>
+							<input id="txtComp" type="text" style="width:65%;"/>
 						</td>
 						<td><span> </span><a id="lblTggno" class="lbl btn"> </a></td>
 						<td colspan="2">
-							<input id="txtTggno" type="text" style="width:25%;"/>
-							<input id="txtTgg" type="text" style="width:70%;"/>
+							<input id="txtTggno" type="text" style="width:30%;"/>
+							<input id="txtTgg" type="text" style="width:65%;"/>
 						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblMechno" class="lbl btn"> </a></td>
+						<td colspan="2">
+							<input id="txtMechno" type="text" style="width:30%;"/>
+							<input id="txtMech" type="text" style="width:65%;"/>
+						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
+						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
