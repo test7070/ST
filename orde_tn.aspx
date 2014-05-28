@@ -23,7 +23,7 @@
 			q_tables = 't';
 			var q_name = "orde";
 			var q_readonly = ['txtApv', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWeight', 'txtSales'];
-			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv','textComp','textComp2'];
+			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv','textComp','textComp2','textOutcomp','textOutcomp2'];
 			var q_readonlyt = ['txtTotal', 'txtQuatno', 'txtTheory'];
 			var bbmNum = [
 				['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -60,7 +60,9 @@
 				['txtUno__', 'btnUno__', 'view_uccc', 'uno,product,productno,radius,width,dime,lengthb,mount,weight', 'txtUno__,txtProduct__,txtProductno__,txtRadius__,txtWidth__,txtDime__,txtLengthb__,txtMount__,txtWeight__', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
 				['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx'],
 				['textCno_', 'btnCno_', 'acomp', 'noa,acomp', 'textCno_,textComp_', 'acomp_b.aspx'],
-				['textCno2_', 'btnCno2_', 'acomp', 'noa,acomp', 'textCno2_,textComp2_', 'acomp_b.aspx']
+				['textCno2_', 'btnCno2_', 'acomp', 'noa,acomp', 'textCno2_,textComp2_', 'acomp_b.aspx'],
+				['textOutcno_', 'btnOutcno_', 'tgg', 'noa,comp', 'textOutcno_,textOutcomp_', 'tgg_b.aspx'],
+				['textOutcno2_', 'btnOutcno2_', 'tgg', 'noa,comp', 'textOutcno2_,textOutcomp2_', 'tgg_b.aspx']
 			);
 			brwCount2 = 10;
 			$(document).ready(function() {
@@ -422,6 +424,8 @@
 					//初始化<<Start>>
 					$('#checkXmemo_'+k).html(xmemo2);
 					$('#checkXmemo2_'+k).html(xmemo2);
+					$('#checkOutxmemo_'+k).html(xmemo2);
+					$('#checkOutxmemo2_'+k).html(xmemo2);
 					if(q_cur==1 || q_cur==2){
 						$('#btnChoiceok_'+k).removeAttr('disabled');
 						$('#checkXmemo_'+k + ' input[type="checkbox"]').prop('checked',false).removeAttr('disabled');
@@ -430,6 +434,11 @@
 						$('#checkXmemo2_'+k + ' input[type="checkbox"]').prop('checked',false).removeAttr('disabled');
 						$('#textCno2_'+k).val('').removeAttr('disabled');
 						$('#textComp2_'+k).val('')
+						$('#textOutcno_'+k).val('').removeAttr('disabled');
+						$('#textOutcomp_'+k).val('');
+						$('#checkOutxmemo2_'+k + ' input[type="checkbox"]').prop('checked',false).removeAttr('disabled');
+						$('#textOutcno2_'+k).val('').removeAttr('disabled');
+						$('#textOutcomp2_'+k).val('')
 					}else{
 						$('#btnChoiceok_'+k).attr('disabled','disabled');
 						$('#checkXmemo_'+k + ' input[type="checkbox"]').prop('checked',false).attr('disabled','disabled');
@@ -438,37 +447,71 @@
 						$('#checkXmemo2_'+k + ' input[type="checkbox"]').prop('checked',false).attr('disabled','disabled');
 						$('#textCno2_'+k).val('').attr('disabled','disabled');
 						$('#textComp2_'+k).val('')
+						$('#checkOutxmemo_'+k + ' input[type="checkbox"]').prop('checked',false).attr('disabled','disabled');
+						$('#textOutcno_'+k).val('').attr('disabled','disabled');
+						$('#textOutcomp_'+k).val('');
+						$('#checkOutxmemo2_'+k + ' input[type="checkbox"]').prop('checked',false).attr('disabled','disabled');
+						$('#textOutcno2_'+k).val('').attr('disabled','disabled');
+						$('#textOutcomp2_'+k).val('')
 					}
 					//初始化<<End>>
 					try{
-					var thisSizea = $.trim($('#txtSizea_'+k).val());
-					var x1 = $.trim(thisSizea.split(';')[0]);
-					var x2 = $.trim(thisSizea.split(';')[1]);
-					var thisChoice = '';
-					if((x1 != undefined) && (x1.length > 0)){
-						var thisComp = x1.split('@')[0];
-						$('#textCno_'+k).val($.trim(thisComp.split(':')[0]));
-						$('#textComp_'+k).val($.trim(thisComp.split(':')[1]));
-						thisChoice = $.trim(x1.split('@')[1]);
-						var Choice_Xmemo = thisChoice.split(',');
-						$('#checkXmemo_'+k + ' input[type="checkbox"]').each(function(){
-							if($.inArray($(this).val(),Choice_Xmemo) !== -1){
-								$(this).prop('checked',true);
-							}
-						});
-					}
-					if((x2 != undefined) && (x2.length > 0)){
-						var thisComp = x2.split('@')[0];
-						$('#textCno2_'+k).val($.trim(thisComp.split(':')[0]));
-						$('#textComp2_'+k).val($.trim(thisComp.split(':')[1]));
-						thisChoice = $.trim(x2.split('@')[1]);
-						var Choice_Xmemo = thisChoice.split(',');
-						$('#checkXmemo2_'+k + ' input[type="checkbox"]').each(function(){
-							if($.inArray($(this).val(),Choice_Xmemo) !== -1){
-								$(this).prop('checked',true);
-							}
-						});
-					}
+						var thisSizea = $.trim($('#txtSizea_'+k).val());
+						var xa = $.trim(thisSizea.split('^$^')[0]);
+						var xa1 = $.trim(xa.split(';')[0]);
+						var xa2 = $.trim(xa.split(';')[1]);
+						var xb = $.trim(thisSizea.split('^$^')[1]);
+						var xb1 = $.trim(xb.split(';')[0]);
+						var xb2 = $.trim(xb.split(';')[1]);
+						var thisChoice = '';
+						if((xa1 != undefined) && (xa1.length > 0)){
+							var thisComp = xa1.split('@')[0];
+							$('#textCno_'+k).val($.trim(thisComp.split(':')[0]));
+							$('#textComp_'+k).val($.trim(thisComp.split(':')[1]));
+							thisChoice = $.trim(xa1.split('@')[1]);
+							var Choice_Xmemo = thisChoice.split(',');
+							$('#checkXmemo_'+k + ' input[type="checkbox"]').each(function(){
+								if($.inArray($(this).val(),Choice_Xmemo) !== -1){
+									$(this).prop('checked',true);
+								}
+							});
+						}
+						if((xa2 != undefined) && (xa2.length > 0)){
+							var thisComp = xa2.split('@')[0];
+							$('#textCno2_'+k).val($.trim(thisComp.split(':')[0]));
+							$('#textComp2_'+k).val($.trim(thisComp.split(':')[1]));
+							thisChoice = $.trim(xa2.split('@')[1]);
+							var Choice_Xmemo = thisChoice.split(',');
+							$('#checkXmemo2_'+k + ' input[type="checkbox"]').each(function(){
+								if($.inArray($(this).val(),Choice_Xmemo) !== -1){
+									$(this).prop('checked',true);
+								}
+							});
+						}
+						if((xb1 != undefined) && (xb1.length > 0)){
+							var thisComp = xb1.split('@')[0];
+							$('#textOutcno_'+k).val($.trim(thisComp.split(':')[0]));
+							$('#textOutcomp_'+k).val($.trim(thisComp.split(':')[1]));
+							thisChoice = $.trim(xb1.split('@')[1]);
+							var Choice_Xmemo = thisChoice.split(',');
+							$('#checkOutxmemo_'+k + ' input[type="checkbox"]').each(function(){
+								if($.inArray($(this).val(),Choice_Xmemo) !== -1){
+									$(this).prop('checked',true);
+								}
+							});
+						}
+						if((xb2 != undefined) && (xb2.length > 0)){
+							var thisComp = xb2.split('@')[0];
+							$('#textOutcno2_'+k).val($.trim(thisComp.split(':')[0]));
+							$('#textOutcomp2_'+k).val($.trim(thisComp.split(':')[1]));
+							thisChoice = $.trim(xb2.split('@')[1]);
+							var Choice_Xmemo = thisChoice.split(',');
+							$('#checkOutxmemo2_'+k + ' input[type="checkbox"]').each(function(){
+								if($.inArray($(this).val(),Choice_Xmemo) !== -1){
+									$(this).prop('checked',true);
+								}
+							});
+						}
 					}catch(e){
 						console.log(e.message);
 					}
@@ -633,6 +676,7 @@
 					if (q_float('txtMount_' + i) != 0 && !$('#chkIssale_' + i).prop('checked') && !$('#chkIscut_' + i).prop('checked')) {
 						$('#chkIscut_' + i).prop('checked', true);
 					}
+					$('#btnChoiceok_'+i).click();
 					getTheory(i);
 				}
 				var t_chk;
@@ -989,6 +1033,7 @@
 						$('#btnChoice_'+j).click(function(){
 							SetChoice();
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+
 							var isShow = $('#Choice_'+n).is(':visible');
 							$('div[id*="Choice_"]').each(function(){
 								$(this).hide();
@@ -998,27 +1043,56 @@
 							}else{
 								$('#Choice_'+n).show();
 							}
+							var t_width = 0;
+							$('#Choice_'+n+'>div').each(function(){
+								if($(this).attr('id')!=('ChoiceOkDiv_'+n)){
+									t_width = q_add(t_width,$(this).width());
+								}
+							});
+							$('#ChoiceOkDiv_'+n).css('width',t_width+2);
+							$('#choicehr_'+n).css('height',$('#ChoiceBase1_'+n).height());
+							var t_left = $('#btnChoice_'+n).offset().left-t_width-5;
+							var t_top = $('#btnChoice_'+n).offset().top-18;
+							$('#Choice_'+n).css({left:t_left,top:t_top});
 						});
 						$('#btnChoiceok_'+j).click(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							var SaveStr = "";
 							var t_cno = $.trim($('#textCno_'+n).val());
-							var t_comp = $.trim($('#textComp_'+n).val());
+							var t_comp = (t_cno.length==0?'':$.trim($('#textComp_'+n).val()));
+							var t_outcno = $.trim($('#textOutcno_'+n).val());
+							var t_outcomp = (t_outcno.length==0?'':$.trim($('#textOutcomp_'+n).val()));
 							var t_choice = '';
+							var t_outchoice = '';
 							$('#checkXmemo_'+n + ' input[type="checkbox"]').each(function(){
 								if($(this).prop('checked')){
 									t_choice += $.trim($(this).val())+',';
 								}
 							});
+							$('#checkOutxmemo_'+n + ' input[type="checkbox"]').each(function(){
+								if($(this).prop('checked')){
+									t_outchoice += $.trim($(this).val())+',';
+								}
+							});
 							var t_cno2 = $.trim($('#textCno2_'+n).val());
-							var t_comp2 = $.trim($('#textComp2_'+n).val());
+							var t_comp2 = (t_cno2.length==0?'':$.trim($('#textComp2_'+n).val()));
 							var t_choice2 = '';
+							var t_outcno2 = $.trim($('#textOutcno2_'+n).val());
+							var t_outcomp2 = (t_outcno2.length==0?'':$.trim($('#textOutcomp2_'+n).val()));
+							var t_outchoice2 = '';
 							$('#checkXmemo2_'+n + ' input[type="checkbox"]').each(function(){
 								if($(this).prop('checked')){
 									t_choice2 += $.trim($(this).val())+',';
 								}
 							});
-							SaveStr = t_cno+':'+t_comp+'@'+t_choice+';'+t_cno2+':'+t_comp2+'@'+t_choice2;
+							$('#checkOutxmemo2_'+n + ' input[type="checkbox"]').each(function(){
+								if($(this).prop('checked')){
+									t_outchoice2 += $.trim($(this).val())+',';
+								}
+							});
+							SaveStr = t_cno+':'+t_comp+'@'+t_choice+';'+t_cno2+':'+t_comp2+'@'+t_choice2+
+									  '^$^'+
+									  t_outcno+':'+t_outcomp+'@'+t_outchoice+';'+t_outcno2+':'+t_outcomp2+'@'+t_outchoice2;
 							$('#txtSizea_'+n).val(SaveStr);
 							$('#Choice_'+n).hide();
 						});
@@ -1323,8 +1397,9 @@
 				_btnCancel();
 				OrdenoAndNo2On_Change();
 			}
-
+			
 			function size_change() {
+				return;
 				if (q_cur == 1 || q_cur == 2) {
 					$('input[id*="textSize"]').removeAttr('disabled');
 				} else {
@@ -1888,28 +1963,24 @@
 						<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
 					</td>
 					<td align="center" style="width:20px;"></td>
-					<td align="center" style="width:40px;"><a id='lblChoice_s'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblNo2'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblStyle_st'> </a></td>
-					<td align="center" style="width:140px;"><a id='lblProduct_s'> </a></td>
-					<td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
-					<td align="center" id='Size'><!--<a id='lblSize_help'> </a><BR>--><a id='lblSize_st'> </a></td>
+					<td align="center" style="width:170px;"><a id='lblProductno'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="display:none;width:240px;">
 						<a id='lblSizea_st'> </a>
 						<input id="btnShowInfo" type="button" value="代碼列表" onclick="showSizeInfo()">
 					</td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
+					<td align="center" style="width:120px;display:none;"><a id='lblWeights'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
-					<td align="center" style="width:50px;"><a id='lblOrdet_st'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblTotals'> </a><!--<br><a id='lblTheorys'> </a>--></td>
 					<td align="center" style="width:80px;"><a id='lblGemounts'> </a><br><a id='lblNotv'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblMemos'> </a></td>
-					<td align="center" style="width:40px;"><a id='lblssale_st'> </a></td>
-					<td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblChoice_s'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblSlit_tn'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblIscut_tn'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblEnda_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
 				</tr>
@@ -1918,79 +1989,26 @@
 						<input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td>
-						<input class="txt" id="txtSizea.*" type="text" style="width:95%;display:none;"/>
-						<input id="btnChoice.*" type="button" style="text-weight:bold;" value="+"/>
-						<div id="Choice.*" style="width:450px;border:1px solid #000;float:left;position: absolute;display:none;">
-							<div style="float:left;background-color:#F8D463;">
-								<div style="width:149px;display:block;float:left;">工廠</div>
-								<div style="border-left:1px solid #000;width:300px;display:block;float:left;">加工方式</div>
-							</div>
-							<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
-								<div style="width:149px;display:block;float:left;">
-									<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnCno.*">
-									<input type="text" class="txt c1" style="width:80%;" id="textCno.*">
-									<input type="text" class="txt c1" style="width:95%;" id="textComp.*">
-								</div>
-								<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkXmemo.*"></div>
-							</div>
-							<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
-								<div style="width:149px;display:block;float:left;">
-									<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnCno2.*">
-									<input type="text" class="txt c1" style="width:80%;" id="textCno2.*">
-									<input type="text" class="txt c1" style="width:95%;" id="textComp2.*">
-								</div>
-								<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkXmemo2.*"></div>
-							</div>
-							<div style="text-align:center;width:100%;float:left;border-top:1px solid #000;background-color:#CDFFCE;">
-								<input type="button" value="確定" id="btnChoiceok.*">
-							</div>
-						</div>
-					</td>
 					<td><input class="txt" id="txtNo2.*" type="text" style="width:95%;"/></td>
 					<td>
-						<input class="btn" id="btnProduct.*" type="button" value='' style=" font-weight: bold;width:15px;height:25px;float:left;" />
-						<input type="text" id="txtProductno.*" style="width:75px; float:left;"/>
-					</td>
-					<td>
-						<input id="btnStyle.*" type="button" style="width:1%;text-align:center;" value="."/>
-						<input id="txtStyle.*" type="text" style="width:45%;text-align:center;"/>
+						<input class="btn" id="btnProduct.*" type="button" value='' style=" font-weight: bold;width:15px;float:left;" />
+						<input type="text" id="txtProductno.*" style="width:145px; float:left;"/>
 					</td>
 					<td>
 						<span style="width:20px;height:1px;display:none;float:left;"> </span>
 						<input id="txtProduct.*" type="text" style="float:left;width:93%;"/>
+						<input id="txtSpec.*" type="text" style="float:left;width:93%;"/>
 						<input class="btn" id="btnUno.*" type="button" value='' style="display:none;float:left;width:20px;height:25px;"/>
 						<input id="txtUno.*" type="text" style="display:none;float:left;width:100px;" />
 					</td>
-					<td><input id="txtClass.*" type="text" style="width:90%;text-align:center;"/></td>
-					<!----
-					<td>
-						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
-						<input class="txt num" id="textSize2.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-						<div id="x2.*" style="float: left;display:block;width:20px;padding-top: 4px;">x</div>
-						<input class="txt num" id="textSize3.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-						<div id="x3.*" style="float: left;display:block;width:20px;padding-top: 4px;">x</div>
-						<input class="txt num" id="textSize4.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-						//上為虛擬下為實際
-						<input id="txtRadius.*" type="text" style="display:none;"/>
-						<input id="txtWidth.*" type="text" style="display:none;"/>
-						<input id="txtDime.*" type="text" style="display:none;"/>
-						<input id="txtLengthb.*" type="text" style="display:none;"/>
-						<input id="txtSpec.*" type="text" style="float:left;"/>
-					</td>
-					---->
-					<td><input id="txtSpec.*" type="text" style="float:left;"/></td>
-					<td style="display:none;"><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" style="width:90%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;"><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
-						<input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/>
+						<input id="txtTheory.*" type="text" class="txt num" style="width:95%;display:none;"/>
 					</td>
-					<td align="center"><input id="btnOrdet.*" type="button"/></td>
 					<td>
 						<input class="txt num " id="txtC1.*" type="text" style="width:95%;"/>
 						<input class="txt num " id="txtNotv.*" type="text" style="width:95%;"/>
@@ -2001,7 +2019,63 @@
 						<input id="txtQuatno.*" type="text" style="width:70%;float:left;"/>
 						<input id="txtNo3.*" type="text" style="width:20%;float:left;"/>
 					</td>
-					<td align="center"><input id="chkIssale.*" type="checkbox"/></td>
+					<td>
+						<input class="txt" id="txtSizea.*" type="text" style="width:95%;display:none;"/>
+						<input id="btnChoice.*" type="button" style="text-weight:bold;" value="+"/>
+						<div id="Choice.*" style="position: absolute;display:none;">
+							<div id="ChoiceOkDiv.*" style="text-align:center;float:left;border:1px solid #000;border-bottom:none;background-color:#CDFFCE;">
+								<input type="button" value="確定" id="btnChoiceok.*">
+							</div>
+							<div id="ChoiceBase1.*" style="width:450px;border:1px solid #000;float:left">
+								<div style="float:left;background-color:#F8D463;">
+									<div style="width:149px;display:block;float:left;">工廠</div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;">加工方式</div>
+								</div>
+								<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
+									<div style="width:149px;display:block;float:left;">
+										<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnCno.*">
+										<input type="text" class="txt c1" style="width:80%;" id="textCno.*">
+										<input type="text" class="txt c1" style="width:95%;" id="textComp.*">
+									</div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkXmemo.*"></div>
+								</div>
+								<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
+									<div style="width:149px;display:block;float:left;">
+										<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnCno2.*">
+										<input type="text" class="txt c1" style="width:80%;" id="textCno2.*">
+										<input type="text" class="txt c1" style="width:95%;" id="textComp2.*">
+									</div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkXmemo2.*"></div>
+								</div>
+							</div>
+							<div id="choicehr.*" style="float:left;width:35px;border-top:1px solid #000;border-bottom:1px solid #000;background-color:#CDFFCE;">
+								委<br>外<br>廠<br>商<br>→
+							</div>
+							<div id="ChoiceBase2.*" style="width:450px;border:1px solid #000;float:left;">
+								<div style="float:left;background-color:#F8D463;">
+									<div style="width:149px;display:block;float:left;">委外工廠</div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;">委外加工方式</div>
+								</div>
+								<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
+									<div style="width:149px;display:block;float:left;">
+										<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnOutcno.*">
+										<input type="text" class="txt c1" style="width:80%;" id="textOutcno.*">
+										<input type="text" class="txt c1" style="width:95%;" id="textOutcomp.*">
+									</div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkOutxmemo.*"></div>
+								</div>
+								<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
+									<div style="width:149px;display:block;float:left;">
+										<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnOutcno2.*">
+										<input type="text" class="txt c1" style="width:80%;" id="textOutcno2.*">
+										<input type="text" class="txt c1" style="width:95%;" id="textOutcomp2.*">
+									</div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkOutxmemo2.*"></div>
+								</div>
+							</div>
+						</div>
+					</td>
+					<td align="center"><input id="chkSlit.*" type="checkbox"/></td>
 					<td align="center"><input id="chkIscut.*" type="checkbox"/></td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 					<td align="center">
@@ -2023,7 +2097,7 @@
 					<td class="td4" align="center" style="width:120px;"><a id='lblProductno_t'></a></td>
 					<td align="center" id='Sizet' style="display:none;"><a id='lblSize_help'> </a></td>
 					<td class="td8" align="center" style="width:80px;"><a id='lblMount_t'></a></td>
-					<td class="td9" align="center" style="width:120px;"><a id='lblWeight_t'></a></td>
+					<td class="td9" align="center" style="width:120px;display:none;"><a id='lblWeight_t'></a></td>
 					<td class="td9" align="center" style="width:30px;"><a id='lblIssale_t'></a></td>
 					<td class="td10" align="center" style="width:150px;"><a id='lblSource_t'></a></td>
 				</tr>
@@ -2065,7 +2139,7 @@
 					<td class="td8">
 						<input class="txt" id="txtMount..*" type="text" style="width:95%; text-align: right;" />
 					</td>
-					<td class="td9">
+					<td class="td9" style="display:none;">
 						<input class="txt" id="txtWeight..*" type="text" style="width:95%; text-align: right;" />
 					</td>
 					<td align="center"><input id="chkIssale..*" type="checkbox"/></td>
