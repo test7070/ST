@@ -61,8 +61,8 @@
 				['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx'],
 				['textCno_', 'btnCno_', 'acomp', 'noa,acomp', 'textCno_,textComp_', 'acomp_b.aspx'],
 				['textCno2_', 'btnCno2_', 'acomp', 'noa,acomp', 'textCno2_,textComp2_', 'acomp_b.aspx'],
-				['textOutcno_', 'btnOutcno_', 'acomp', 'noa,acomp', 'textOutcno_,textOutcomp_', 'acomp_b.aspx'],
-				['textOutcno2_', 'btnOutcno2_', 'acomp', 'noa,acomp', 'textOutcno2_,textOutcomp2_', 'acomp_b.aspx']
+				['textOutcno_', 'btnOutcno_', 'tgg', 'noa,comp', 'textOutcno_,textOutcomp_', 'tgg_b.aspx'],
+				['textOutcno2_', 'btnOutcno2_', 'tgg', 'noa,comp', 'textOutcno2_,textOutcomp2_', 'tgg_b.aspx']
 			);
 			brwCount2 = 10;
 			$(document).ready(function() {
@@ -1972,9 +1972,9 @@
 					</td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
+					<td align="center" style="width:120px;display:none;"><a id='lblWeights'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblTotals'> </a><!--<br><a id='lblTheorys'> </a>--></td>
 					<td align="center" style="width:80px;"><a id='lblGemounts'> </a><br><a id='lblNotv'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblMemos'> </a></td>
@@ -2003,11 +2003,11 @@
 					</td>
 					<td><input id="txtUnit.*" type="text" style="width:90%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;"><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
-						<input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/>
+						<input id="txtTheory.*" type="text" class="txt num" style="width:95%;display:none;"/>
 					</td>
 					<td>
 						<input class="txt num " id="txtC1.*" type="text" style="width:95%;"/>
@@ -2053,8 +2053,8 @@
 							</div>
 							<div id="ChoiceBase2.*" style="width:450px;border:1px solid #000;float:left;">
 								<div style="float:left;background-color:#F8D463;">
-									<div style="width:149px;display:block;float:left;">工廠</div>
-									<div style="border-left:1px solid #000;width:300px;display:block;float:left;">加工方式</div>
+									<div style="width:149px;display:block;float:left;">委外工廠</div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;">委外加工方式</div>
 								</div>
 								<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
 									<div style="width:149px;display:block;float:left;">
@@ -2097,7 +2097,7 @@
 					<td class="td4" align="center" style="width:120px;"><a id='lblProductno_t'></a></td>
 					<td align="center" id='Sizet' style="display:none;"><a id='lblSize_help'> </a></td>
 					<td class="td8" align="center" style="width:80px;"><a id='lblMount_t'></a></td>
-					<td class="td9" align="center" style="width:120px;"><a id='lblWeight_t'></a></td>
+					<td class="td9" align="center" style="width:120px;display:none;"><a id='lblWeight_t'></a></td>
 					<td class="td9" align="center" style="width:30px;"><a id='lblIssale_t'></a></td>
 					<td class="td10" align="center" style="width:150px;"><a id='lblSource_t'></a></td>
 				</tr>
@@ -2139,7 +2139,7 @@
 					<td class="td8">
 						<input class="txt" id="txtMount..*" type="text" style="width:95%; text-align: right;" />
 					</td>
-					<td class="td9">
+					<td class="td9" style="display:none;">
 						<input class="txt" id="txtWeight..*" type="text" style="width:95%; text-align: right;" />
 					</td>
 					<td align="center"><input id="chkIssale..*" type="checkbox"/></td>
