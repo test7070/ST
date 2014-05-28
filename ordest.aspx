@@ -550,7 +550,7 @@
                 }
                 for(var i=0;i<q_bbsCount;i++){
                     if(q_float('txtMount_'+i)!=0 && !$('#chkIssale_'+i).prop('checked') && !$('#chkIscut_'+i).prop('checked')){
-                        $('#chkIscut_'+i).prop('checked',true);
+                        $('#chkCut_'+i).prop('checked',true);
                     }
                     getTheory(i);
                 }
@@ -1876,7 +1876,7 @@
                     <input id="chkIssale.*" type="checkbox"/>
                     </td>
                     <td align="center">
-                    <input id="chkIscut.*" type="checkbox"/>
+                    <input id="chkCut.*" type="checkbox"/>
                     </td>
                     <td align="center">
                     <input id="chkEnda.*" type="checkbox"/>

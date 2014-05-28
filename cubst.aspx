@@ -79,7 +79,7 @@
 					t_bdime = (emp(t_bdime) ? 0 : t_bdime);
 					t_edime = (t_edime == 0 ? Number.MAX_VALUE : t_edime);
 					t_where += " and (dime between " + t_bdime + " and " + t_edime + ")";
-					t_where += ' and (iscut=1)';
+					t_where += ' and (cut=1)';
 					q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 				});
 			}
