@@ -910,7 +910,7 @@
 
 			function btnPrint() {
 				//q_box('z_vccstp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
-				//q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
+				q_box("z_vccp_tn.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccp_tn', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {
@@ -921,7 +921,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['product'] && !as['uno'] && parseFloat(as['mount'].length == 0 ? "0" : as['mount']) == 0 && parseFloat(as['weight'].length == 0 ? "0" : as['weight']) == 0) {
+				if (!as['product'] && !as['uno'] && parseFloat(as['mount'].length == 0 ? "0" : as['mount']) == 0 ) {
 					as[bbsKey[1]] = '';
 					return;
 				}
