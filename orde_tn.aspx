@@ -669,8 +669,8 @@
 			}
 
 			function btnPrint() {
-				t_where = "noa='" + $('#txtNoa').val() + "'";
-				q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				//t_where = "noa='" + $('#txtNoa').val() + "'";
+				//q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {
