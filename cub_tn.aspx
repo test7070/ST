@@ -172,7 +172,10 @@
 						if (q_cur == 4)
 							q_Seek_gtPost();
 						else if(q_cur==0 && toIns){
-							$('#btnIns').click();
+							var t_h1 = q_getHref();
+							if($.trim(t_h1[0])==''){
+								$('#btnIns').click();
+							}
 							toIns = false;
 						}
 						break;
@@ -356,10 +359,13 @@
 								var tHours = timeDate.getHours();
 								var tMinutes = timeDate.getMinutes();
 								$('#txtBtime_' + n).val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
-								CountHard(n);
+							}else{
+								$('#txtDate2_' + n).val('');
+								$('#txtBtime_' + n).val('');
 							}
+							CountHard(n);
 						});
-						$('#chkHend_' + i).change(function(){
+						$('#chkCut_' + i).change(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if($(this).prop('checked')){
 								var thisDate3 = $.trim($('#txtDate3_' + n).val());
@@ -373,8 +379,11 @@
 									var tMinutes = timeDate.getMinutes();
 									$('#txtEtime_' + n).val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
 								}
-								CountHard(n);
+							}else{
+								$('#txtDate3_' + n).val('');
+								$('#txtEtime_' + n).val('');
 							}
+							CountHard(n);
 						});
 						$('#txtDate2_'+i).focusout(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
@@ -399,11 +408,13 @@
 
 			function CountHard(n){
 				var bdatea = $.trim($('#txtDate2_'+n).val());
-				bdatea = (parseInt(bdatea.substring(0,3))+1911)+bdatea.substring(3);
 				var edatea = $.trim($('#txtDate3_'+n).val());
-				edatea = (parseInt(edatea.substring(0,3))+1911)+edatea.substring(3);
 				var btimea = $.trim($('#txtBtime_'+n).val());
 				var etimea = $.trim($('#txtEtime_'+n).val());
+				if((bdatea.length==0) || (edatea.length==0) || (btimea.length==0) || (etimea.length==0))
+					return;
+				bdatea = (parseInt(bdatea.substring(0,3))+1911)+bdatea.substring(3);
+				edatea = (parseInt(edatea.substring(0,3))+1911)+edatea.substring(3);
 				var oldtime=Date.parse(bdatea+' ' + btimea);
 				var newtime=Date.parse(edatea+' ' + etimea);
 				$('#txtHard_'+n).val(dec(q_div(q_div(q_sub(newtime,oldtime),1000),60)));
@@ -729,16 +740,14 @@
 						<td style="width:80px;"><a id='lbl_width'> </a></td>
 						<td style="width:80px;"><a id='lbl_lengthc'> </a></td>
 						<td style="width:80px;"><a id='lbl_mount'> </a></td>
-						<td style="width:80px;display:none;"><a id='lbl_weight'> </a></td>
 						<td style="width:20px; text-align: center;">開工</td>
 						<td style="width:20px; text-align: center;">完工</td>
-						<td style="width:150px; text-align: center;">加工日期</td>
+						<td style="width:150px; text-align: center;">開工日期</td>
 						<td style="width:150px; text-align: center;">開工時間</td>
 						<td style="width:150px; text-align: center;">完工日期</td>
 						<td style="width:150px; text-align: center;">完工時間</td>
 						<td style="width:80px; text-align: center;">工時(分)</td>
 						<td style="width:150px; text-align: center;">工作人員</td>
-						<td style="width:80px;display:none;"><a id='lbl_hweight'> </a></td>
 						<td style="width:200px;"><a id='lbl_size'> </a></td>
 						<td style="width:200px;"><a id='lbl_uno'> </a></td>
 						<td style="width:200px;"><a id='lbl_need'> </a></td>
@@ -774,7 +783,6 @@
 						<td><input id="txtWidth.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtLengthc.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
-						<td style="display:none;"><input id="txtWeight.*" type="text" class="txt c1 num"/></td>
 						<td><input id="chkSlit.*" type="checkbox"/></td>
 						<td><input id="chkCut.*" type="checkbox"/></td>
 						<td><input id="txtDate2.*" type="text" class="txt c1"/></td>
@@ -783,7 +791,6 @@
 						<td><input id="txtEtime.*" type="text" class="txt c1"/></td>
 						<td><input id="txtHard.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtProduct2.*" type="text" class="txt c1"/></td>
-						<td style="display:none;"><input id="txtHweight.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtSize.*" type="text" class="txt c1"/></td>
 						<td><input id="txtUno.*" type="text" class="txt c1"/></td>
 						<td><input id="txtNeed.*" type="text" class="txt c1"/></td>
@@ -809,19 +816,16 @@
 					<td style="width:20px;"></td>
 					<td style="width:120px; text-align: center;">原批號</td>
 					<td style="width:120px; text-align: center;">原批號領料數</td>
-					<td style="width:120px; text-align: center;display:none;">領料重</td>
 					<td style="width:120px; text-align: center;">餘料寬</td>
 					<td style="width:120px; text-align: center;">餘料長</td>
 					<td style="width:30px; text-align: center;">型</td>
 					<td style="width:80px; text-align: center;">數量</td>
-					<td style="width:120px; text-align: center;display:none;">入庫重</td>
 					<td style="width:120px; text-align: center;">餘料編號</td>
 					<td style="width:120px; text-align: center;">餘料客戶</td>
 					<td style="width:120px; text-align: center;">廢料</td>
 					<td style="width:120px; text-align: center;">倉庫</td>
 					<td style="width:120px; text-align: center;">儲位</td>
 					<td style="width:120px; text-align: center;">餘料備註</td>
-					<td style="width:120px; text-align: center;display:none;">餘料毛重</td>
 					<td style="width:120px; text-align: center;">餘料品名</td>
 					<td style="width:120px; text-align: center;">餘料板面</td>
 					<td style="width:120px; text-align: center;">餘料硬度</td>
@@ -841,19 +845,16 @@
 					<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td><input id="txtUno..*" type="text" class="txt c1"/></td>
 					<td><input id="txtGmount..*" type="text" class="txt c1 num"/></td>
-					<td style="display:none;"><input id="txtGweight..*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtWidth..*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtLengthb..*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtStyle..*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount..*" type="text" class="txt c1 num"/></td>
-					<td style="display:none;"><input id="txtWeight..*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtBno..*" type="text" class="txt c1"/></td>
 					<td><input id="txtCustno..*" type="text" class="txt c1"/></td>
 					<td><input id="txtXbutt..*" type="text" class="txt c1"/></td>
 					<td><input id="txtStoreno..*" type="text" class="txt c1"/></td>
 					<td><input id="txtPlace..*" type="text" class="txt c1"/></td>
 					<td><input id="txtMemo..*" type="text" class="txt c1"/></td>
-					<td style="display:none;"><input id="txtMweight..*" type="text" class="txt c1"/></td>
 					<td><input id="txtProductno..*" type="text" class="txt c1"/></td>
 					<td><input id="txtSpec..*" type="text" class="txt c1"/></td>
 					<td><input id="txtHard..*" type="text" class="txt c1 num"/></td>
