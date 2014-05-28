@@ -359,10 +359,13 @@
 								var tHours = timeDate.getHours();
 								var tMinutes = timeDate.getMinutes();
 								$('#txtBtime_' + n).val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
-								CountHard(n);
+							}else{
+								$('#txtDate2_' + n).val('');
+								$('#txtBtime_' + n).val('');
 							}
+							CountHard(n);
 						});
-						$('#chkHend_' + i).change(function(){
+						$('#chkCut_' + i).change(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if($(this).prop('checked')){
 								var thisDate3 = $.trim($('#txtDate3_' + n).val());
@@ -376,8 +379,11 @@
 									var tMinutes = timeDate.getMinutes();
 									$('#txtEtime_' + n).val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
 								}
-								CountHard(n);
+							}else{
+								$('#txtDate3_' + n).val('');
+								$('#txtEtime_' + n).val('');
 							}
+							CountHard(n);
 						});
 						$('#txtDate2_'+i).focusout(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
@@ -402,11 +408,13 @@
 
 			function CountHard(n){
 				var bdatea = $.trim($('#txtDate2_'+n).val());
-				bdatea = (parseInt(bdatea.substring(0,3))+1911)+bdatea.substring(3);
 				var edatea = $.trim($('#txtDate3_'+n).val());
-				edatea = (parseInt(edatea.substring(0,3))+1911)+edatea.substring(3);
 				var btimea = $.trim($('#txtBtime_'+n).val());
 				var etimea = $.trim($('#txtEtime_'+n).val());
+				if((bdatea.length==0) || (edatea.length==0) || (btimea.length==0) || (etimea.length==0))
+					return;
+				bdatea = (parseInt(bdatea.substring(0,3))+1911)+bdatea.substring(3);
+				edatea = (parseInt(edatea.substring(0,3))+1911)+edatea.substring(3);
 				var oldtime=Date.parse(bdatea+' ' + btimea);
 				var newtime=Date.parse(edatea+' ' + etimea);
 				$('#txtHard_'+n).val(dec(q_div(q_div(q_sub(newtime,oldtime),1000),60)));
@@ -734,7 +742,7 @@
 						<td style="width:80px;"><a id='lbl_mount'> </a></td>
 						<td style="width:20px; text-align: center;">開工</td>
 						<td style="width:20px; text-align: center;">完工</td>
-						<td style="width:150px; text-align: center;">加工日期</td>
+						<td style="width:150px; text-align: center;">開工日期</td>
 						<td style="width:150px; text-align: center;">開工時間</td>
 						<td style="width:150px; text-align: center;">完工日期</td>
 						<td style="width:150px; text-align: center;">完工時間</td>
