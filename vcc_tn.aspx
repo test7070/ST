@@ -385,10 +385,13 @@
 						break;
 					case 'view_orde':
 						var as = _q_appendData("view_orde", "", true);
-						if (as[0] != undefined) {(trim($('#txtTel').val()) == '' ? $('#txtTel').val(as[0].tel) : '');
+						if (as[0] != undefined) {
+							(trim($('#txtTel').val()) == '' ? $('#txtTel').val(as[0].tel) : '');
 							(trim($('#txtFax').val()) == '' ? $('#txtFax').val(as[0].fax) : '');
 							(trim($('#txtPost').val()) == '' ? $('#txtPost').val(as[0].post) : '');
 							(trim($('#txtAddr').val()) == '' ? $('#txtAddr').val(as[0].addr) : '');
+							(trim($('#txtPost2').val()) == '' ? $('#txtPost2').val(as[0].post2) : '');
+							(trim($('#txtAddr2').val()) == '' ? $('#txtAddr2').val(as[0].addr2) : '');
 							(trim($('#txtSalesno').val()) == '' ? $('#txtSalesno').val(as[0].salesno) : '');
 							(trim($('#txtSales').val()) == '' ? $('#txtSales').val(as[0].sales) : '');
 							(trim($('#txtPaytype').val()) == '' ? $('#txtPaytype').val(as[0].paytype) : '');
@@ -610,7 +613,7 @@
 				var t_custno = trim($('#txtCustno').val());
 				var t_where = '';
 				if (t_custno.length > 0) {
-					t_where = "noa in (select noa from view_orde where enda!='1') && " + (t_custno.length > 0 ? q_sqlPara("custno", t_custno) : "");
+					t_where = "noa in (select noa from view_orde where isnull(enda,0)!='1') && " + (t_custno.length > 0 ? q_sqlPara("custno", t_custno) : "");
 					if (!emp($('#txtOrdeno').val()))
 						t_where += " && charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
 					t_where = t_where;
@@ -719,6 +722,7 @@
 
 				if ($.trim($('#txtNick').val()).length == 0 && $.trim($('#txtComp').val()).length > 0)
 					$('#txtNick').val($.trim($('#txtComp').val()).substring(0, 4));
+					
 				sum();
 
 				var distinctArray = new Array;
@@ -769,7 +773,15 @@
 					else
 						$('#txtWorker2').val(r_name);
 					chkOrdenoEmp();
-					var OrdenoList = GetOrdenoList().split(',');
+					
+					var t_noa = trim($('#txtNoa').val());
+					var t_date = trim($('#txtDatea').val());
+					if (t_noa.length == 0 || t_noa == "AUTO")
+						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+					else
+						wrServer(t_noa);
+						
+					/*var OrdenoList = GetOrdenoList().split(',');
 					var ReturnStr = '';
 					for (var k = 0; k < OrdenoList.length; k++) {
 						ReturnStr += "'" + OrdenoList[k] + "'";
@@ -777,7 +789,7 @@
 							ReturnStr += ',';
 					}
 					var t_where = "where=^^ noa in (" + ReturnStr + ")^^";
-					q_gt('view_orde', t_where, 0, 0, 0, "checkApv", r_accy);
+					q_gt('view_orde', t_where, 0, 0, 0, "checkApv", r_accy);*/
 				} else {
 					//
 					var t_noa = $.trim($('#txtNoa').val());
@@ -860,6 +872,12 @@
 							}
 						});
 						$('#txtWidth_' + j).focusout(function() {
+							if (q_cur == 1 || q_cur == 2) {
+								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+								GetLengthc(n);
+							}
+						});
+						$('#txtStyle_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								GetLengthc(n);
