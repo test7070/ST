@@ -248,7 +248,7 @@
 						$('#textOutcomp_'+k).val('');
 						$('#checkOutxmemo2_'+k + ' input[type="checkbox"]').prop('checked',false).removeAttr('disabled');
 						$('#textOutcno2_'+k).val('').removeAttr('disabled');
-						$('#textOutcomp2_'+k).val('')
+						$('#textOutcomp2_'+k).val('');
 					}else{
 						$('#btnChoiceok_'+k).attr('disabled','disabled');
 						$('#checkXmemo_'+k + ' input[type="checkbox"]').prop('checked',false).attr('disabled','disabled');
@@ -262,7 +262,7 @@
 						$('#textOutcomp_'+k).val('');
 						$('#checkOutxmemo2_'+k + ' input[type="checkbox"]').prop('checked',false).attr('disabled','disabled');
 						$('#textOutcno2_'+k).val('').attr('disabled','disabled');
-						$('#textOutcomp2_'+k).val('')
+						$('#textOutcomp2_'+k).val('');
 					}
 					//初始化<<End>>
 					try{
@@ -614,7 +614,6 @@
 			function GetLengthc(n) {
 				if(emp($('#txtStyle_'+n).val())) //自己KEY才數
 					return;
-					
 				var t_style=$('#txtStyle_'+n).val();
 				var t_lengthb=dec($('#txtLengthb_'+n).val());
 				var t_width=dec($('#txtWidth_'+n).val());
@@ -738,7 +737,6 @@
 						break;
 					case 'txtAddr2':
 						$('#txtPaytype').focus();
-						break;
 						break;
 				}
 			}
@@ -907,8 +905,6 @@
 			.dbbm {
 				float: left;
 				width: 800px;
-				/*margin: -1px;
-				 border: 1px black solid;*/
 				border-radius: 5px;
 			}
 			.tbbm {
@@ -1272,7 +1268,6 @@
 				</tr>
 			</table>
 		</div>
-		
 		<input id="q_sys" type="hidden" />
 	</body>
 </html>
