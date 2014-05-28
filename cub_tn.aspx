@@ -21,7 +21,7 @@
 			var q_readonlys = ['txtComp','txtOrdeno','txtNo2'];
 			var q_readonlyt = [];
 			var bbmNum = [];
-			var bbsNum = [['txtHard',10,0,1],['txtLengthb',10,2,1],['txtLengthc',10,2,1],['txtWidth',10,2,1],['txtMount',10,2,1],['txtPrice',10,2,1],['txtWeight',10,2,1]];
+			var bbsNum = [['txtHard',10,0,1],['txtHweight',10,2,1],['txtLengthb',10,2,1],['txtLengthc',10,2,1],['txtWidth',10,2,1],['txtMount',10,2,1],['txtPrice',10,2,1],['txtWeight',10,2,1]];
 			var bbtNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -80,7 +80,7 @@
 						var t_where = "(1=1) ";
 						t_where += "and (charindex(N'"+t_cno+"',substring(isnull(sizea,''),0,charindex('^$^',isnull(sizea,'')))) > 0) "; //判斷廠別
 						t_where += "and (charindex(N'^$^"+t_tggno+":',isnull(sizea,'')) > 0) "; //判斷委外廠商
-						t_where += "and (charindex(N'^$^"+t_process+":',isnull(sizea,'')) > 0) "; //判斷加工方式
+						t_where += "and (charindex(N'"+t_process+"',isnull(sizea,'')) > 0) "; //判斷加工方式
 						t_where += " ";
 						q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 					}
@@ -277,7 +277,10 @@
 					return;
 				}
 				sum();
-				$('#txtWorker').val(r_name);
+				var t_worker = $.trim($('#txtWorker').val());
+				if(t_worker.length == 0){
+					$('#txtWorker').val(r_name);
+				}
 				var thisCno = $.trim($('#txtCno').val());
 				var thisComp = $.trim($('#txtComp').val());
 				for(var k=0;k<q_bbsCount;k++){
@@ -719,23 +722,23 @@
 						<td style="width:20px;"></td>
 						<td style="width:250px; display:none;"><a id='lbl_cnos'> </a></td>
 						<td style="width:200px;"><a id='lbl_custno'> </a></td>
-						<td style="width:120px;"><a id='lbl_productno'> </a></td>
+						<td style="width:180px;"><a id='lbl_productno'> </a></td>
 						<td style="width:60px;"><a id='lbl_class'> </a></td>
 						<td style="width:200px;"><a id='lbl_spec'> </a></td>
-						<td style="width:120px;"><a id='lbl_lengthb'> </a></td>
-						<td style="width:120px;"><a id='lbl_width'> </a></td>
-						<td style="width:120px;"><a id='lbl_lengthc'> </a></td>
+						<td style="width:80px;"><a id='lbl_lengthb'> </a></td>
+						<td style="width:80px;"><a id='lbl_width'> </a></td>
+						<td style="width:80px;"><a id='lbl_lengthc'> </a></td>
 						<td style="width:80px;"><a id='lbl_mount'> </a></td>
-						<td style="width:150px;"><a id='lbl_weight'> </a></td>
+						<td style="width:80px;"><a id='lbl_weight'> </a></td>
 						<td style="width:20px; text-align: center;">開工</td>
 						<td style="width:20px; text-align: center;">完工</td>
 						<td style="width:150px; text-align: center;">加工日期</td>
 						<td style="width:150px; text-align: center;">開工時間</td>
 						<td style="width:150px; text-align: center;">完工日期</td>
 						<td style="width:150px; text-align: center;">完工時間</td>
-						<td style="width:150px; text-align: center;">工時(分)</td>
+						<td style="width:80px; text-align: center;">工時(分)</td>
 						<td style="width:150px; text-align: center;">工作人員</td>
-						<td style="width:150px;"><a id='lbl_hweight'> </a></td>
+						<td style="width:80px;"><a id='lbl_hweight'> </a></td>
 						<td style="width:200px;"><a id='lbl_size'> </a></td>
 						<td style="width:200px;"><a id='lbl_uno'> </a></td>
 						<td style="width:200px;"><a id='lbl_need'> </a></td>
@@ -743,7 +746,7 @@
 						<td style="width:30px;"><a id='lbl_enda'> </a></td>
 						<td style="width:200px;"><a id='lbl_ordeno'> </a></td>
 						<td style="width:60px;"><a id='lbl_no2'> </a></td>
-						<td style="width:150px;"><a id='lbl_price'> </a></td>
+						<td style="width:80px;"><a id='lbl_price'> </a></td>
 						<td style="width:150px;"><a id='lbl_datea'> </a></td>
 						<td style="width:250px;"><a id='lbl_product'> </a></td>
 						<td style="width:30px;"><a id='lbl_prt'> </a></td>
