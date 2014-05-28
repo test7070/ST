@@ -172,7 +172,10 @@
 						if (q_cur == 4)
 							q_Seek_gtPost();
 						else if(q_cur==0 && toIns){
-							$('#btnIns').click();
+							var t_h1 = q_getHref();
+							if($.trim(t_h1[0])==''){
+								$('#btnIns').click();
+							}
 							toIns = false;
 						}
 						break;
