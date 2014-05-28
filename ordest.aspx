@@ -549,7 +549,7 @@
                     return;
                 }
                 for(var i=0;i<q_bbsCount;i++){
-                    if(q_float('txtMount_'+i)!=0 && !$('#chkIssale_'+i).prop('checked') && !$('#chkIscut_'+i).prop('checked')){
+                    if(q_float('txtMount_'+i)!=0 && !$('#chkSale_'+i).prop('checked') && !$('#chkIscut_'+i).prop('checked')){
                         $('#chkCut_'+i).prop('checked',true);
                     }
                     getTheory(i);
@@ -1104,7 +1104,7 @@
                         break;
                     case 'txtUno__':
                         size_change();
-                        $('#chkIssale__'+b_seq).prop('checked',true);
+                        $('#chkSale__'+b_seq).prop('checked',true);
                         break;
                     case 'txtStyle_':
                         $('#txtStyle_'+b_seq).blur();
@@ -1873,7 +1873,7 @@
                     <input id="txtNo3.*" type="text"  style="width:20%;float:left;"/>
                     </td>
                     <td align="center">
-                    <input id="chkIssale.*" type="checkbox"/>
+                    <input id="chkSale.*" type="checkbox"/>
                     </td>
                     <td align="center">
                     <input id="chkCut.*" type="checkbox"/>
@@ -1946,7 +1946,7 @@
                     <input class="txt" id="txtWeight..*" type="text" style="width:95%; text-align: right;"  />
                     </td>
                     <td align="center">
-                    <input id="chkIssale..*" type="checkbox"/>
+                    <input id="chkSale..*" type="checkbox"/>
                     </td>
                     <td class="td10">
                     <input class="txt" id="txtSource..*" type="text" style="width:95%;"  />
