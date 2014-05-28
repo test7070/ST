@@ -1236,29 +1236,29 @@
 									<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkXmemo2.*"> </div>
 								</div>
 							</div>
-							<div class="ChoiceDiv" id="choicehr.*" style="float:left;width:35px;border-top:1px solid #000;border-bottom:1px solid #000;background-color:#CDFFCE;">
+							<div id="choicehr.*" style="float:left;width:35px;border-top:1px solid #000;border-bottom:1px solid #000;background-color:#CDFFCE;">
 								委<br>外<br>廠<br>商<br>→
 							</div>
-							<div class="ChoiceDiv" id="ChoiceBase2.*" style="width:450px;border:1px solid #000;float:left;">
-								<div class="ChoiceDiv" style="float:left;background-color:#F8D463;">
-									<div class="ChoiceDiv" style="width:149px;display:block;float:left;">委外工廠</div>
-									<div class="ChoiceDiv" style="border-left:1px solid #000;width:300px;display:block;float:left;">委外加工方式</div>
+							<div id="ChoiceBase2.*" style="width:450px;border:1px solid #000;float:left;">
+								<div style="float:left;background-color:#F8D463;">
+									<div style="width:149px;display:block;float:left;">委外工廠</div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;">委外加工方式</div>
 								</div>
-								<div class="ChoiceDiv" style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
-									<div class="ChoiceDiv" style="width:149px;display:block;float:left;">
+								<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
+									<div style="width:149px;display:block;float:left;">
 										<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnOutcno.*">
 										<input type="text" class="txt c1" style="width:80%;" id="textOutcno.*">
 										<input type="text" class="txt c1" style="width:95%;" id="textOutcomp.*">
 									</div>
-									<div class="ChoiceDiv" style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkOutxmemo.*"> </div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkOutxmemo.*"> </div>
 								</div>
-								<div class="ChoiceDiv" style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
-									<div class="ChoiceDiv" style="width:149px;display:block;float:left;">
+								<div style="float:left;border-top:1px solid #000;background-color:#CDFFCE;">
+									<div style="width:149px;display:block;float:left;">
 										<input type="button" value="." style="width:15%;float:left;text-weight:bold;" id="btnOutcno2.*">
 										<input type="text" class="txt c1" style="width:80%;" id="textOutcno2.*">
 										<input type="text" class="txt c1" style="width:95%;" id="textOutcomp2.*">
 									</div>
-									<div class="ChoiceDiv" style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkOutxmemo2.*"> </div>
+									<div style="border-left:1px solid #000;width:300px;display:block;float:left;" id="checkOutxmemo2.*"> </div>
 								</div>
 							</div>
 						</div>
