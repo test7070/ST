@@ -88,8 +88,8 @@
 				var t_tranmoney = dec($('#txtTranmoney').val());
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_prices = q_float('txtPrice_' + j);
-					t_lengthc = q_float('txtLengthc_' + j);
-					t_moneys = round(q_mul(t_prices, t_lengthc), 0);
+					t_mount = q_float('txtMount_' + j);
+					t_moneys = round(q_mul(t_prices, t_mount), 0);
 					t_money = q_add(t_money, t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 				}
@@ -630,12 +630,12 @@
 					return;
 					
 				var t_style=$('#txtStyle_'+n).val();
-				var t_lengthb=dec($('#txtLengthb_'+n).val());
-				var t_width=dec($('#txtWidth_'+n).val());
-				var t_mount=dec($('#txtMount_'+n).val());
+				var t_lengthb=dec($('#txtLengthb_'+n).val());//長
+				var t_width=dec($('#txtWidth_'+n).val());//寬
+				var t_lengthc=dec($('#txtLengthc_'+n).val());//片數
 				
-				if(t_lengthb<=0 || t_width<=0 || t_mount<=0){
-					$('#txtLengthc_'+n).val(0);	
+				if(t_lengthb<=0 || t_width<=0 || t_lengthc<=0){
+					$('#txtMount_'+n).val(0);	
 					return;
 				}
 				
@@ -643,26 +643,33 @@
 					case '*':
 						//(長*寬)>3 下一尺
 						//100   125   150   175   200 以25跳
-						var t_lengthc=q_mul(t_lengthb,t_width);
+						var t_meter=q_mul(t_lengthb,t_width);
 						
-						if(t_lengthc%25>=3){
-							t_lengthc=q_mul(Math.ceil(t_lengthc/25),25)
+						if(t_meter%25>=3){
+							t_meter=q_mul(Math.ceil(t_meter/25),25)
 						}else{
-							t_lengthc=q_mul(Math.floor(t_lengthc/25),25)
+							t_meter=q_mul(Math.floor(t_meter/25),25)
+							if(t_meter==0)
+								t_meter=25;
 						}
-						$('#txtLengthc_'+n).val(q_mul(t_lengthc,t_mount));	
+						$('#txtMount_'+n).val(q_mul(t_meter,t_lengthc));	
+						$('#txtUnit_'+n).val('才');	
 						break;
 					case '+':
 						//(長+寬)*2
-						var t_lengthc=q_mul(q_mul(q_add(t_lengthb,t_width),2),t_mount);
-						$('#txtLengthc_'+n).val(t_lengthc);	
+						var t_meter=q_mul(q_mul(q_add(t_lengthb,t_width),2),t_lengthc);
+						$('#txtMount_'+n).val(t_meter);	
+						$('#txtUnit_'+n).val('才');	
 						break;
 					case '-':
 						//(長*寬)
-						var t_lengthc=q_mul(q_mul(t_lengthb,t_width),t_mount);
-						$('#txtLengthc_'+n).val(t_lengthc);	
+						var t_meter=q_mul(q_mul(t_lengthb,t_width),t_lengthc);
+						$('#txtMount_'+n).val(t_meter);	
+						$('#txtUnit_'+n).val('才');	
 						break;
 				}/// end Switch
+				
+				sum();
 			}
 
 			function GetOrdenoList() {
@@ -854,9 +861,7 @@
 						});
 						$('#txtMount_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
-								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#txtOrdeno_' + j).click(function() {
@@ -872,6 +877,13 @@
 							}
 						});
 						$('#txtWidth_' + j).focusout(function() {
+							if (q_cur == 1 || q_cur == 2) {
+								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+								GetLengthc(n);
+							}
+						});
+						
+						$('#txtLengthc_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								GetLengthc(n);
@@ -1428,13 +1440,13 @@
 					<td align="center" style="width:170px;"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblProduct_s'> </a>/<a id='lblSpec_s'> </a></td>
 					<!--<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>-->
-					<td align="center" style="width:40px;"><a id='lblUnit'></a></td>
-					<td align="center" style="width:40px;">型</td>
-					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
+					<td align="center" style="width:40px;">型</td>					
 					<td align="center" style="width:80px;">長</td>
 					<td align="center" style="width:80px;">寬</td>
-					<td align="center" style="width:80px;">總才數</td>
+					<td align="center" style="width:80px;">片數</td>
 					<!--<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>-->
+					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
+					<td align="center" style="width:40px;"><a id='lblUnit'></a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'></a></td>
 					<td align="center" style="width:100px;">合計</td>
 					<!--<td align="center" style="width:100px;"><a id='lblGweight_st'></a></td>-->
@@ -1461,13 +1473,13 @@
 						<input class="txt c1" id="txtSpec.*" type="text"/>
 					</td>
 					<!--<td><input id="txtSize.*" type="text" style="width:95%;" /></td>-->
-					<td><input id="txtUnit.*" type="text" class="txt" style="width:95%;text-align: center;"/></td>
 					<td><input id="txtStyle.*" type="text" class="txt" style="width:95%;text-align: center;"/></td>
-					<td>	<input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtLengthb.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td>	<input id="txtWidth.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<!--<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>-->
+					<td>	<input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtUnit.*" type="text" class="txt" style="width:95%;text-align: center;"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
