@@ -15,17 +15,14 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			this.errorHandler = null;
-			q_tables = 't';
+			q_tables = 's';
 			var q_name = "cub";
-			var q_readonly = ['txtNoa','txtComp','txtTgg','txtMech'];
+			var q_readonly = ['txtNoa','txtComp','txtTgg','txtMech','txtWorker'];
 			var q_readonlys = ['txtComp','txtOrdeno','txtNo2'];
-			var q_readonlyt = [];
 			var bbmNum = [];
 			var bbsNum = [['txtHard',10,0,1],['txtHweight',10,2,1],['txtLengthb',10,2,1],['txtLengthc',10,2,1],['txtWidth',10,2,1],['txtMount',10,2,1],['txtPrice',10,2,1],['txtWeight',10,2,1]];
-			var bbtNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
-			var bbtMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwList = [];
@@ -45,7 +42,6 @@
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
-				bbtKey = ['noa', 'noq'];
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, 'LoadFirst', r_accy);
 				q_gt('process', '', 0, 0, 0, "");
@@ -134,40 +130,6 @@
 							processList = as;
 						}
 						break;
-					case 'deleUccy':
-						var as = _q_appendData("uccy", "", true);
-						var err_str = '';
-						if (as[0] != undefined) {
-							for (var i = 0; i < as.length; i++) {
-								if (dec(as[i].gweight) > 0) {
-									err_str += as[i].uno + '已領料，不能刪除!!\n';
-								}
-							}
-							if (trim(err_str).length > 0) {
-								alert(err_str);
-								return;
-							} else {
-								_btnDele();
-							}
-						} else {
-							_btnDele();
-						}
-						break;
-					case 'ordet':
-						var as = _q_appendData("ordet", "", true);
-						for (var j = 0; j < as.length; j++) {
-							for (var i = 0; i < q_bbtCount; i++) {
-								var t_uno = $('#txtUno__' + i).val();
-								if (as[j] && as[j].noa == t_uno) {
-									b_ret.splice(j, 1);
-								}
-							}
-						}
-						if (as[0] != undefined) {
-							q_gridAddRow(bbtHtm, 'tbbt', 'txtUno', as.length, as, 'uno', 'txtUno', '__');
-							/// 最後 aEmpField 不可以有【數字欄位】
-						}
-						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -196,15 +158,6 @@
 								b_pop = '';
 								return;
 							}
-							for (var j = 0; j < b_ret.length; j++) {
-								for (var i = 0; i < q_bbtCount; i++) {
-									var t_ordeno = $('#txtOrdeno_' + i).val();
-									var t_no2 = $('#txtNo2_' + i).val();
-									if (b_ret[j] && b_ret[j].noa == t_ordeno && b_ret[j].no2 == t_no2) {
-										b_ret.splice(j, 1);
-									}
-								}
-							}
 							if (b_ret && b_ret[0] != undefined) {
 								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtCustno,txtClass,txtProductno,txtProduct,txtUnit,txtDime,txtWidth,txtLengthb,txtSpec,txtOrdeno,txtNo2,txtWeight,txtMount,txtTheory,txtSize,txtUno,txtMemo', b_ret.length, b_ret, 'custno,class,productno,product,unit,dime,width,lengthb,spec,noa,no2,weight,mount,theory,size,uno,memo', 'txtProductno');
 								/// 最後 aEmpField 不可以有【數字欄位】
@@ -214,28 +167,6 @@
 								}
 								t_where += ' ^^';
 								q_gt('ordet', t_where, 0, 0, 0, '', r_accy);
-							}
-							sum();
-							b_ret = '';
-						}
-						break;
-					case 'uccc':
-						if (!b_ret || b_ret.length == 0) {
-							b_pop = '';
-							return;
-						}
-						if (q_cur > 0 && q_cur < 4) {
-							for (var j = 0; j < b_ret.length; j++) {
-								for (var i = 0; i < q_bbtCount; i++) {
-									var t_uno = $('#txtUno__' + i).val();
-									if (b_ret[j] && b_ret[j].noa == t_uno) {
-										b_ret.splice(j, 1);
-									}
-								}
-							}
-							if (b_ret[0] != undefined) {
-								ret = q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtGmount,txtGweight,txtWidth,txtLengthb', b_ret.length, b_ret, 'uno,eordmount,eordweight,width,lengthb', 'txtUno', '__');
-								/// 最後 aEmpField 不可以有【數字欄位】
 							}
 							sum();
 							b_ret = '';
@@ -270,7 +201,7 @@
 			}
 
 			function btnPrint() {
-				q_box('z_cub.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				q_box('z_cubp_tn.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function btnOk() {
@@ -314,14 +245,6 @@
 				return true;
 			}
 
-			function bbtSave(as) {
-				if (!as['uno']) {
-					as[bbtKey[1]] = '';
-					return;
-				}
-				q_nowf();
-				return true;
-			}
 			var toIns = true;
 			function refresh(recno) {
 				_refresh(recno);
@@ -431,25 +354,6 @@
 				return uniArray;
 			}
 
-			function getBBTWhere(objname) {
-				var tempArray = new Array();
-				for (var j = 0; j < q_bbtCount; j++) {
-					tempArray.push($('#txt' + objname + '__' + j).val());
-				}
-				var TmpStr = distinct(tempArray).sort();
-				TmpStr = TmpStr.toString().replace(/,/g, "','").replace(/^/, "'").replace(/$/, "'");
-				return TmpStr;
-			}
-
-			function bbtAssign() {
-				for (var i = 0; i < q_bbtCount; i++) {
-					$('#lblNo__' + i).text(i + 1);
-					if (!$('#btnMinut__' + i).hasClass('isAssign')) {
-					}
-				}
-				_bbtAssign();
-			}
-
 			function q_appendData(t_Table) {
 				return _q_appendData(t_Table);
 			}
@@ -488,8 +392,6 @@
 
 			function btnDele() {
 				toIns = false;
-				var t_where = 'where=^^ uno in(' + getBBTWhere('Uno') + ') ^^';
-				q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
 			}
 
 			function btnCancel() {
@@ -628,27 +530,6 @@
 				padding: 0px;
 				margin: -1px;
 				font-size: medium;
-			}
-			#dbbt {
-				width: 2500px;
-			}
-			#tbbt {
-				margin: 0;
-				padding: 2px;
-				border: 2px pink double;
-				border-spacing: 1;
-				border-collapse: collapse;
-				font-size: medium;
-				color: blue;
-				background: pink;
-				width: 100%;
-			}
-			#tbbt tr {
-				height: 35px;
-			}
-			#tbbt tr td {
-				text-align: center;
-				border: 2px pink double;
 			}
 		</style>
 	</head>
@@ -807,66 +688,5 @@
 				</table>
 			</div>
 		<input id="q_sys" type="hidden" />
-		<div id="dbbt" class='dbbt'>
-			<table id="tbbt" class="tbbt">
-				<tr class="head" style="color:white; background:#003366;">
-					<td style="width:20px;">
-						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
-					</td>
-					<td style="width:20px;"></td>
-					<td style="width:120px; text-align: center;">原批號</td>
-					<td style="width:120px; text-align: center;">原批號領料數</td>
-					<td style="width:120px; text-align: center;">餘料寬</td>
-					<td style="width:120px; text-align: center;">餘料長</td>
-					<td style="width:30px; text-align: center;">型</td>
-					<td style="width:80px; text-align: center;">數量</td>
-					<td style="width:120px; text-align: center;">餘料編號</td>
-					<td style="width:120px; text-align: center;">餘料客戶</td>
-					<td style="width:120px; text-align: center;">廢料</td>
-					<td style="width:120px; text-align: center;">倉庫</td>
-					<td style="width:120px; text-align: center;">儲位</td>
-					<td style="width:120px; text-align: center;">餘料備註</td>
-					<td style="width:120px; text-align: center;">餘料品名</td>
-					<td style="width:120px; text-align: center;">餘料板面</td>
-					<td style="width:120px; text-align: center;">餘料硬度</td>
-					<td style="width:120px; text-align: center;">裁剪單號</td>
-					<td style="width:20px; text-align: center;">印</td>
-					<td style="width:120px; text-align: center;">原批號<br>儲位異動</td>
-					<td style="width:120px; text-align: center;">外加成本</td>
-					<td style="width:120px; text-align: center;">原批號餘毛重</td>
-					<td style="width:80px; text-align: center;">成本單價</td>
-					<td style="width:120px; text-align: center;">尺寸</td>
-				</tr>
-				<tr>
-					<td>
-						<input id="btnMinut..*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
-						<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
-					</td>
-					<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td><input id="txtUno..*" type="text" class="txt c1"/></td>
-					<td><input id="txtGmount..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWidth..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtLengthb..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtStyle..*" type="text" class="txt c1"/></td>
-					<td><input id="txtMount..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtBno..*" type="text" class="txt c1"/></td>
-					<td><input id="txtCustno..*" type="text" class="txt c1"/></td>
-					<td><input id="txtXbutt..*" type="text" class="txt c1"/></td>
-					<td><input id="txtStoreno..*" type="text" class="txt c1"/></td>
-					<td><input id="txtPlace..*" type="text" class="txt c1"/></td>
-					<td><input id="txtMemo..*" type="text" class="txt c1"/></td>
-					<td><input id="txtProductno..*" type="text" class="txt c1"/></td>
-					<td><input id="txtSpec..*" type="text" class="txt c1"/></td>
-					<td><input id="txtHard..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtCutno..*" type="text" class="txt c1"/></td>
-					<td><input id="chkPrt..*" type="checkbox"/></td>
-					<td><input id="txtPlace2..*" type="text" class="txt c1"/></td>
-					<td><input id="txtPrice2..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtMweight2..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtMprice..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtSize..*" type="text" class="txt c1"/></td>
-				</tr>
-			</table>
-		</div>
 	</body>
 </html>
