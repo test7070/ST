@@ -294,9 +294,10 @@
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
 							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
 							
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtOrdeno,txtNo2,txtMount,txtPrice,txtSpec'
+							AddRet = q_gridAddRow(bbsHtm
+							, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtOrdeno,txtNo2,txtMount,txtPrice,txtSpec,txtStyle,txtLengthb,txtWidth,txtLengthc'
 							, b_ret.length, b_ret
-							, 'productno,product,unit,noa,no2,mount,price,spec', 'txtProductno');
+							, 'productno,product,unit,noa,no2,mount,price,spec,style,lengthb,width,lengthc', 'txtProductno');
 							
 							/// 最後 aEmpField 不可以有【數字欄位】
 							for (var i = 0; i < AddRet.length; i++) {
@@ -625,7 +626,7 @@
 				
 			}/// q_box() 開 視窗
 			
-			function GetLengthc(n) {
+			function GetMount(n) {
 				if(emp($('#txtStyle_'+n).val())) //自己KEY才數
 					return;
 					
@@ -873,26 +874,26 @@
 						$('#txtLengthb_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetLengthc(n);
+								GetMount(n);
 							}
 						});
 						$('#txtWidth_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetLengthc(n);
+								GetMount(n);
 							}
 						});
 						
 						$('#txtLengthc_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetLengthc(n);
+								GetMount(n);
 							}
 						});
 						$('#txtStyle_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetLengthc(n);
+								GetMount(n);
 							}
 						});
 					}
