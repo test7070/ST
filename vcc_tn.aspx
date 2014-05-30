@@ -52,7 +52,7 @@
 				['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
-			brwCount2 = 12;
+			brwCount2 = 10;
 			var isinvosystem = false;
 			//購買發票系統
 			$(document).ready(function() {
@@ -1233,7 +1233,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 1450px;
+				width: 1550px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1434,8 +1434,8 @@
 					</td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="display: none;"><a id="lblUno_st" > </a></td>
-					<td align="center" style="width:170px;"><a id='lblProductno_s'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblProduct_s'> </a>/<a id='lblSpec_s'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:300px;"><a id='lblProduct_s'> </a>/<a id='lblSpec_s'> </a></td>
 					<!--<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>-->
 					<td align="center" style="width:40px;">型</td>					
 					<td align="center" style="width:80px;">長</td>
