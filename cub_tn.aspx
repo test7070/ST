@@ -449,7 +449,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 2660px;
+				width: 1730px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -558,9 +558,7 @@
 						<td style="width:20px;"></td>
 						<td style="width:100px;"><a id='lbl_custno'> </a></td>
 						<td style="width:120px;"><a id='lbl_productno'> </a></td>
-						<td style="width:150px;"><a id='lbl_product'> </a></td>
-						<td style="width:60px;"><a id='lbl_class'> </a></td>
-						<td style="width:150px;"><a id='lbl_spec'> </a></td>
+						<td style="width:300px;"><a id='lbl_product'> </a>/<a id='lbl_spec'> </a></td>
 						<td style="width:80px;"><a id='lbl_lengthb'> </a></td>
 						<td style="width:80px;"><a id='lbl_width'> </a></td>
 						<td style="width:80px;"><a id='lbl_lengthc'> </a></td>
@@ -568,20 +566,13 @@
 						<td style="width:20px; text-align: center;">開工</td>
 						<td style="width:20px; text-align: center;">完工</td>
 						<td style="width:80px; text-align: center;">開工日期</td>
-						<td style="width:60px; text-align: center;">開工時間</td>
+						<td style="width:80px; text-align: center;">開工時間</td>
 						<td style="width:80px; text-align: center;">完工日期</td>
-						<td style="width:60px; text-align: center;">完工時間</td>
+						<td style="width:80px; text-align: center;">完工時間</td>
 						<td style="width:80px; text-align: center;">工時(分)</td>
 						<td style="width:80px; text-align: center;">工作人員</td>
-						<td style="width:150px;"><a id='lbl_size'> </a></td>
-						<td style="width:150px;"><a id='lbl_uno'> </a></td>
-						<td style="width:150px;"><a id='lbl_need'> </a></td>
 						<td style="width:150px;"><a id='lbl_memo'> </a></td>
-						<td style="width:30px;"><a id='lbl_enda'> </a></td>
-						<td style="width:150px;"><a id='lbl_ordeno'> </a></td>
-						<td style="width:100px;"><a id='lbl_datea'> </a></td>
-						<td style="width:30px;"><a id='lbl_prt'> </a></td>
-						<td style="width:30px;"><a id='lbl_hend'> </a></td>
+						<td style="width:180px;"><a id='lbl_ordeno'> </a></td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center">
@@ -594,9 +585,10 @@
 							<input id="txtCustno.*" type="text" class="txt" style="width:70%;"/>
 						</td>
 						<td><input id="txtProductno.*" type="text" class="txt c1"/></td>
-						<td><input id="txtProduct.*" type="text" class="txt c1"/></td>
-						<td><input id="txtClass.*" type="text" class="txt c1"/></td>
-						<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
+						<td>
+							<input id="txtProduct.*" type="text" class="txt c1"/>
+							<input id="txtSpec.*" type="text" class="txt c1"/>
+						</td>
 						<td><input id="txtLengthb.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtWidth.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtLengthc.*" type="text" class="txt c1 num"/></td>
@@ -609,18 +601,11 @@
 						<td><input id="txtEtime.*" type="text" class="txt c1"/></td>
 						<td><input id="txtHard.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtProduct2.*" type="text" class="txt c1"/></td>
-						<td><input id="txtSize.*" type="text" class="txt c1"/></td>
-						<td><input id="txtUno.*" type="text" class="txt c1"/></td>
-						<td><input id="txtNeed.*" type="text" class="txt c1"/></td>
 						<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
-						<td><input id="chkEnda.*" type="checkbox"/></td>
 						<td>
 							<input id="txtOrdeno.*" type="text" class="txt" style="width:65%;"/>
 							<input id="txtNo2.*" type="text" class="txt" style="width:25%;"/>
 						</td>
-						<td><input id="txtDatea.*" type="text" class="txt c1"/></td>
-						<td><input id="chkPrt.*" type="checkbox"/></td>
-						<td><input id="chkHend.*" type="checkbox"/></td>
 					</tr>
 				</table>
 			</div>

@@ -981,7 +981,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 1860px;
+				width: 1960px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1159,7 +1159,7 @@
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:60px;"><a id='lblNo2'> </a></td>
 					<td align="center" style="width:170px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblProduct_s'> </a>/規格</td>
+					<td align="center" style="width:300px;"><a id='lblProduct_s'> </a>/規格</td>
 					<td align="center" style="width:40px;">型</td>
 					<td align="center" style="width:80px;">長</td>
 					<td align="center" style="width:80px;">寬</td>
