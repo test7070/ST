@@ -591,7 +591,7 @@
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 						<td>
 							<input id="btnCustno.*" type="button" style="float:left;width:5%;"/>
-							<input id="txtCustno.*" type="text" class="txt" style="width:80%;"/>
+							<input id="txtCustno.*" type="text" class="txt" style="width:70%;"/>
 						</td>
 						<td><input id="txtProductno.*" type="text" class="txt c1"/></td>
 						<td><input id="txtProduct.*" type="text" class="txt c1"/></td>
