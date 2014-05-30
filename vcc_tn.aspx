@@ -1187,7 +1187,7 @@
 				height: 35px;
 			}
 			.tbbm tr td {
-				width: 10%;
+				/*width: 10%;*/
 			}
 			.tbbm .tdZ {
 				width: 1%;
@@ -1275,46 +1275,42 @@
 			<div class="dbbm">
 				<table class="tbbm" id="tbbm">
 					<tr style="height:1px;">
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td class="tdZ"> </td>
+						<td style="width: 107px;"> </td>
+						<td style="width: 110px;"> </td>
+						<td style="width: 110px;"> </td>
+						<td style="width: 110px;"> </td>
+						<td style="width: 110px;"> </td>
+						<td style="width: 107px;"> </td>
+						<td style="width: 107px;"> </td>
+						<td style="width: 107px;"> </td>
+						<td class="tdZ" style="width: 31px;"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblType' class="lbl"> </a></td>
 						<td>
 							<select id="cmbTypea" class="txt" style="width:40%;"> </select>
 							<select id="cmbStype" class="txt" style="width:60%;"> </select>
-						</td>						
+						</td>
+						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
+						<td colspan="2">
+							<input id="txtDatea" type="text" class="txt c1" style="width:80px;"/>
+							<span style="float: left;"> </span>
+							<a id='lblMon' class="lbl" style="float: left;"> </a>
+							<span style="float: left;"> </span>
+							<input id="txtMon" type="text" class="txt c1" style="width:65px;"/>
+						</td>				
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td><input id="txtNoa" type="text" class="txt c1"/></td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
+						<td colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
 						<td class="tdZ">
 							<input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/>
 						</td>
 					</tr>
-					<tr>
-						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
-						<td><input id="txtDatea" type="text" class="txt c1"/></td>
-						<td><span> </span><a id='lblMon' class="lbl"> </a></td>
-						<td><input id="txtMon" type="text" class="txt c1"/></td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<!--<td colspan="2">
+					<!--<tr>
+						<td colspan="2">
 							<input type="checkbox" id="chkIsgenvcca" style="float:left;"/>
 							<a id='lblIsgenvcca' class="lbl" style="float:left;"> </a>
-						</td>-->
-					</tr>
+						</td>
+					</tr>-->
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
 						<td colspan="4">
@@ -1364,8 +1360,8 @@
 						</td>
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
-							<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
-							<select id="combPaytype" style="float:left; width:26px;"> </select>
+							<input id="txtPaytype" type="text" style="float:left; width:190px;"/>
+							<select id="combPaytype" style="float:left; width:25px;"> </select>
 						</td>
 					</tr>
 					<tr>
@@ -1403,9 +1399,9 @@
 							<select id="cmbTaxtype" style="float:left;width:80px;" > </select>
 						</td>
 						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
-						<td><input id="txtTotal" type="text" class="txt num c1 istax" /></td>
+						<td colspan="2"><input id="txtTotal" type="text" class="txt num c1 istax" /></td>
 					</tr>
-					<tr>
+					<tr style="display: none;">
 						<td><span> </span><a id='lblWeight' class="lbl"> </a></td>
 						<td><input id="txtWeight" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblPrices' class="lbl"> </a></td>
@@ -1424,8 +1420,8 @@
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td> </td>
-						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
-						<td><input id="txtAccno" type="text" class="txt c1"/></td>
+						<!--<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
+						<td><input id="txtAccno" type="text" class="txt c1"/></td>-->
 					</tr>
 				</table>
 			</div>
