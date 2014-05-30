@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+<!DOCTYPE html>
+<html>
 	<head>
 		<title></title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
@@ -16,11 +16,15 @@
 		<script type="text/javascript">
 			this.errorHandler = null;
 			q_tables = 's';
+			var toIns = true;
 			var q_name = "cub";
 			var q_readonly = ['txtNoa','txtComp','txtTgg','txtMech','txtWorker'];
 			var q_readonlys = ['txtComp','txtOrdeno','txtNo2'];
 			var bbmNum = [];
-			var bbsNum = [['txtHard',10,0,1],['txtHweight',10,2,1],['txtLengthb',10,2,1],['txtLengthc',10,2,1],['txtWidth',10,2,1],['txtMount',10,2,1]];
+			var bbsNum = [
+				['txtHard',10,0,1],['txtHweight',10,2,1],['txtLengthb',10,2,1],
+				['txtLengthc',10,2,1],['txtWidth',10,2,1],['txtMount',10,2,1]
+			];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_sqlCount = 6;
@@ -37,7 +41,6 @@
 				['txtMechno', 'lblMechno', 'mech', 'noa,mech', 'txtMechno,txtMech', 'mech_b.aspx'],
 				['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']
 			);
-			var isFirst = true;
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
@@ -45,7 +48,6 @@
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, 'LoadFirst', r_accy);
 				q_gt('process', '', 0, 0, 0, "");
 			});
-			var processList = [];
 			function main() {
 				if (dataErr) {
 					dataErr = false;
@@ -56,9 +58,6 @@
 
 			function sum() {
 				for (var j = 0; j < q_bbsCount; j++) {
-					var t_dime = dec($('#txtDime_' + j).val());
-					$('#txtBdime_' + j).val(round(q_mul(t_dime, 0.93), 2));
-					$('#txtEdime_' + j).val(round(q_mul(t_dime, 1.07), 2));
 				}
 			}
 
@@ -80,7 +79,7 @@
 					}
 				});
 			}
-			var OrdeList_A = [];
+
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'process':
@@ -93,7 +92,6 @@
 							q_cmbParse("cmbProcessno", t_item);
 							if(abbm[q_recno]!= undefined)
 						   		$("#cmbProcessno").val(abbm[q_recno].partno);
-							processList = as;
 						}
 						break;
 					case q_name:
@@ -129,7 +127,6 @@
 										'txtCustno,txtClass,txtProductno,txtProduct,txtUnit,txtWidth,txtLengthb,txtSpec,txtOrdeno,txtNo2,txtMount',
 										b_ret.length, b_ret,
 										'custno,class,productno,product,unit,width,lengthb,spec,noa,no2,mount', 'txtProductno');
-								/// 最後 aEmpField 不可以有【數字欄位】
 							}
 							sum();
 							b_ret = '';
@@ -140,11 +137,6 @@
 						break;
 				}
 				b_pop = '';
-			}
-
-			function _btnSeek() {
-				if (q_cur > 0 && q_cur < 4)
-					return;
 			}
 
 			function btnIns() {
@@ -207,7 +199,6 @@
 				return true;
 			}
 
-			var toIns = true;
 			function refresh(recno) {
 				_refresh(recno);
 			}
@@ -217,18 +208,6 @@
 				if(toIns){
 					q_gt(q_name, '', 0, 0, 0, '', r_accy);
 				}
-			}
-
-			function btnMinus(id) {
-				_btnMinus(id);
-			}
-
-			function btnPlus(org_htm, dest_tag, afield) {
-				_btnPlus(org_htm, dest_tag, afield);
-			}
-
-			function btnPlut(org_htm, dest_tag, afield) {
-				_btnPlus(org_htm, dest_tag, afield);
 			}
 
 			function bbsAssign() {
@@ -303,17 +282,6 @@
 				var newtime=Date.parse(edatea+' ' + etimea);
 				$('#txtHard_'+n).val(dec(q_div(q_div(q_sub(newtime,oldtime),1000),60)));
 			}
-			
-			function distinct(arr1) {
-				var uniArray = [];
-				for (var i = 0; i < arr1.length; i++) {
-					var val = arr1[i];
-					if ($.inArray(val, uniArray) === -1) {
-						uniArray.push(val);
-					}
-				}
-				return uniArray;
-			}
 
 			function q_appendData(t_Table) {
 				return _q_appendData(t_Table);
@@ -321,6 +289,11 @@
 
 			function btnSeek() {
 				_btnSeek();
+			}
+
+			function _btnSeek() {
+				if (q_cur > 0 && q_cur < 4)
+					return;
 			}
 
 			function btnTop() {
@@ -363,6 +336,18 @@
 
 			function onPageError(error) {
 				alert("An error occurred:\r\n" + error.Message);
+			}
+			
+			function btnMinus(id) {
+				_btnMinus(id);
+			}
+
+			function btnPlus(org_htm, dest_tag, afield) {
+				_btnPlus(org_htm, dest_tag, afield);
+			}
+
+			function btnPlut(org_htm, dest_tag, afield) {
+				_btnPlus(org_htm, dest_tag, afield);
 			}
 
 			function q_popPost(id) {
@@ -447,7 +432,6 @@
 				width: 95%;
 				float: left;
 			}
-
 			.num {
 				text-align: right;
 			}
@@ -475,7 +459,6 @@
 				border-collapse: collapse;
 				font-size: medium;
 				color: blue;
-				/*background: #cad3ff;*/
 				background: lightgrey;
 				width: 100%;
 			}
