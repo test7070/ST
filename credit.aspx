@@ -16,14 +16,15 @@
 			}
 
 			var q_name = "credit";
-			var q_readonly = ['txtNoa','txtCredit'];
-			var bbmNum = [];
+			var q_readonly = ['txtCredit','txtRefv'];
+			var bbmNum = [['txtRefv',15,2,1],['txtBasev',15,2,1],['txtMul',15,2,1],['txtCredit',15,2,1]];
 			var bbmMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'noa';
+			q_desc = 1;
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				q_brwCount();
@@ -38,9 +39,27 @@
 				mainForm(0);
 			}
 
+			function sum(){
+				var t_refv=0,t_basev=0,t_mul=0,t_credit=0;
+				t_refv = dec($('#txtRefv').val());
+				t_basev = dec($('#txtBasev').val());
+				t_mul = dec($('#txtMul').val());
+				t_credit = q_mul(q_div(t_refv,(t_basev==0?1:t_basev)),t_mul);
+				$('#txtCredit').val(t_credit);
+			}
+			
 			function mainPost() {
 				q_getFormat();
 				q_mask(bbmMask);
+				$('#txtBasev').change(function(){
+					sum();
+				});
+				$('#txtBasev').change(function(){
+					sum();
+				});
+				$('#txtMul').change(function(){
+					sum();
+				});
 			}
 
 			function q_boxClose(s2) {
@@ -67,8 +86,7 @@
 
 			function btnIns() {
 				_btnIns();
-				$('#txtNoa').val('AUTO');
-				$('#txtKdate').val(q_date());
+				$('#txtNoa').focus();
 			}
 
 			function btnModi() {
@@ -82,7 +100,7 @@
 			}
 
 			function btnOk() {
-				var t_err = q_chkEmpField(['txtNoa', q_getMsg('lblNoa')]);
+				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')]]);
 				if($.trim(t_err).length > 0){
 					alert(t_err);
 					return;
@@ -262,12 +280,12 @@
 	<body>
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' style="overflow:hidden;">
-			<div class="dview" id="dview" style="float: left; width:30%;" >
+			<div class="dview" id="dview" style="float: left; width:50%;" >
 				<table class="tview" id="tview" border="1" cellpadding='2' cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
 						<td align="center" style="width:20%"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:25%"><a id='vewNamea'> </a></td>
+						<td align="center" style="width:75%"><a id='vewNamea'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
@@ -291,19 +309,19 @@
 						<td colspan="3"><input id="txtNamea" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblRefv" class="lbl btn"> </a></td>
+						<td><span> </span><a id="lblRefv" class="lbl"> </a></td>
 						<td><input id="txtRefv" type="text" class="txt c1 num"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblBasev" class="lbl btn"> </a></td>
+						<td><span> </span><a id="lblBasev" class="lbl"> </a></td>
 						<td><input id="txtBasev" type="text" class="txt c1 num"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblMul" class="lbl btn"> </a></td>
+						<td><span> </span><a id="lblMul" class="lbl"> </a></td>
 						<td><input id="txtMul" type="text" class="txt c1 num"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblCredit" class="lbl btn"> </a></td>
+						<td><span> </span><a id="lblCredit" class="lbl"> </a></td>
 						<td><input id="txtCredit" type="text" class="txt c1 num"/></td>
 					</tr>
 				</table>
