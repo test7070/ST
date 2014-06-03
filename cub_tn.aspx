@@ -124,9 +124,9 @@
 							}
 							if (b_ret && b_ret[0] != undefined) {
 								ret = q_gridAddRow(bbsHtm, 'tbbs', 
-										'txtCustno,txtClass,txtProductno,txtProduct,txtUnit,txtWidth,txtLengthb,txtSpec,txtOrdeno,txtNo2,txtMount',
+										'txtCustno,txtClass,txtProductno,txtProduct,txtUnit,txtWidth,txtLengthb,txtLengthc,txtSpec,txtOrdeno,txtNo2,txtMount',
 										b_ret.length, b_ret,
-										'custno,class,productno,product,unit,width,lengthb,spec,noa,no2,mount', 'txtProductno');
+										'custno,class,productno,product,unit,width,lengthb,lengthc,spec,noa,no2,mount', 'txtProductno');
 							}
 							sum();
 							b_ret = '';

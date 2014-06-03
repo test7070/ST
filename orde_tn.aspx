@@ -31,7 +31,7 @@
 			var bbsNum = [
 				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
 				['txtMount', 10, 2, 1], ['txtLengthc', 10, 3, 1], ['txtLengthb', 10, 3, 1],
-				['txtWidth', 10, 3, 1]
+				['txtWidth', 10, 3, 1],['txtC1', 10, 2, 1],['txtNotv', 10, 2, 1]
 			];
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
@@ -53,7 +53,7 @@
 				['textOutcno_', 'btnOutcno_', 'tgg', 'noa,comp', 'textOutcno_,textOutcomp_', 'tgg_b.aspx'],
 				['textOutcno2_', 'btnOutcno2_', 'tgg', 'noa,comp', 'textOutcno2_,textOutcomp2_', 'tgg_b.aspx']
 			);
-			brwCount2 = 10;
+			brwCount2 = 9;
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'no2'];
@@ -399,9 +399,9 @@
 					return;
 				}
 				for (var i = 0; i < q_bbsCount; i++) {
-					if (q_float('txtMount_' + i) != 0 && !$('#chkCut_' + i).prop('checked')) {
+					/*if (q_float('txtMount_' + i) != 0 && !$('#chkCut_' + i).prop('checked')) {
 						$('#chkCut_' + i).prop('checked', true);
-					}
+					}*/
 					$('#btnChoiceok_'+i).click();
 				}
 				var t_chk;
@@ -468,7 +468,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('ordest_s.aspx', q_name + '_s', "550px", "700px", q_getMsg("popSeek"));
+				q_box('orde_tn_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
 			}
 
 			function bbsAssign() {
@@ -707,6 +707,8 @@
 				as['noa'] = abbm2['noa'];
 				as['odate'] = abbm2['odate'];
 				as['custno'] = abbm2['custno'];
+				as['comp'] = abbm2['comp'];
+
 				if (!as['enda'])
 					as['enda'] = '0';
 				t_err = '';
@@ -898,7 +900,7 @@
 			}
 			.dview {
 				float: left;
-				width: 300px;
+				width: 410px;
 				border-width: 0px;
 			}
 			.tview {
@@ -1012,7 +1014,7 @@
 						<td align="center" style="width:20px; color:black;"><a id="vewChk"> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id="vewOdate"> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id="vewNoa"> </a></td>
-						<td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
+						<td align="center" style="width:160px; color:black;"><a id="vewNick"> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox"/></td>
@@ -1165,12 +1167,12 @@
 					<td align="center" style="width:80px;">寬</td>
 					<td align="center" style="width:80px;">片數</td>
 					<!--<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>-->
-					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblTotals'> </a><!--<br><a id='lblTheorys'> </a>--></td>
-					<td align="center" style="width:80px;"><a id='lblGemounts'> </a><br><a id='lblNotv'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblDateas'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblPrices'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblTotals'> </a><!--<br><a id='lblTheorys'> </a>--></td>
+					<td align="center" style="width:100px;"><a id='lblGemounts'> </a><br><a id='lblNotv'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblChoice_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblSlit_tn'> </a></td>
