@@ -256,6 +256,13 @@
 						q_gt('cust', t_where, 0, 0, 0, "");
 					}
 				});
+				
+				$('#txtCardealno').change(function(){
+					//取得車號下拉式選單
+					var thisVal = $(this).val();
+					var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
+					q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
+				});
 
 				$('#txtCustno').change(function() {
 					if (!emp($('#txtCustno').val())) {
@@ -557,6 +564,35 @@
 						}
 						check_startdate = true;
 						btnOk();
+						break;
+					case 'getCardealCarno' :
+						var as = _q_appendData("cardeals", "", true);
+						carnoList = as;
+						var t_item = " @ ";
+						if (as[0] != undefined) {
+							for ( i = 0; i < as.length; i++) {
+								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].carno + '@' + as[i].carno;
+							}
+						}
+						for(var k=0;k<carnoList.length;k++){
+							if(carnoList[k].carno==$('#txtCarno').val()){
+								thisCarSpecno = carnoList[k].carspecno;
+								break;
+							}
+						}
+						document.all.combCarno.options.length = 0;
+						q_cmbParse("combCarno", t_item);
+						$('#combCarno').unbind('change').change(function(){
+							if (q_cur == 1 || q_cur == 2) {
+								$('#txtCarno').val($('#combCarno').find("option:selected").text());
+							}
+							for(var k=0;k<carnoList.length;k++){
+								if(carnoList[k].carno==$('#txtCarno').val()){
+									thisCarSpecno = carnoList[k].carspecno;
+									break;
+								}
+							}
+						});
 						break;
 					case q_name:
 						t_uccArray = _q_appendData("ucc", "", true);
@@ -916,6 +952,10 @@
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
+				//取得車號下拉式選單
+				var thisVal = $('#txtCardealno').val();
+				var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
+				q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
 				
 				$('#cmbTypea').focus();
 				sum();
@@ -985,6 +1025,12 @@
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
+						break;
+					case 'txtCardealno':
+						//取得車號下拉式選單
+						var thisVal = $('#txtCardealno').val();
+						var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
+						q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
 						break;
 				}
 			}
@@ -1355,13 +1401,13 @@
 						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
 						<td colspan="4" >
 							<input id="txtPost2" type="text" style="float:left; width:70px;"/>
-							<input id="txtAddr2" type="text" style="float:left; width:347px;"/>
+							<input id="txtAddr2" type="text" style="float:left; width:352px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
-							<input id="txtPaytype" type="text" style="float:left; width:190px;"/>
-							<select id="combPaytype" style="float:left; width:25px;"> </select>
+							<input id="txtPaytype" type="text" style="float:left; width:195px;"/>
+							<select id="combPaytype" style="float:left; width:20px;"> </select>
 						</td>
 					</tr>
 					<tr>
@@ -1371,7 +1417,10 @@
 							<input id="txtCardeal" type="text" style="float:left;width:75%;" />
 						</td>
 						<td><span> </span><a id='lblCarno' class="lbl"> </a></td>
-						<td colspan="2"><input id="txtCarno" type="text" class="txt c1" /></td>
+						<td colspan="2">
+							<input id="txtCarno" type="text" style="float:left; width:195px;" />
+							<select id="combCarno" style="float:left; width:20px;"> </select>
+						</td>
 					</tr>
 					<tr style="display: none;">
 						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
