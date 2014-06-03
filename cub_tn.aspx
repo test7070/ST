@@ -91,7 +91,7 @@
 							}
 							q_cmbParse("cmbProcessno", t_item);
 							if(abbm[q_recno]!= undefined)
-						   		$("#cmbProcessno").val(abbm[q_recno].partno);
+						   		$("#cmbProcessno").val(abbm[q_recno].processno);
 						}
 						break;
 					case q_name:
@@ -175,6 +175,10 @@
 					$('#txtCno_' + k).val(thisCno);
 					$('#txtComp_' + k).val(thisComp);
 				}
+				
+				var t_process = $.trim($('#cmbProcessno :selected').text());
+				$('#txtProcess').val(t_process);
+				
 				var t_noa = trim($('#txtNoa').val());
 				var t_date = trim($('#txtDatea').val());
 				if (t_noa.length == 0 || t_noa == "AUTO")
@@ -439,6 +443,9 @@
 				margin: 0 -1px;
 				padding: 0;
 			}
+			.tbbm select {
+				font-size: medium;
+			}
 			.tbbm td input[type="text"] {
 				border-width: 1px;
 				padding: 0px;
@@ -502,24 +509,24 @@
 			<div class='dbbm'>
 				<table class="tbbm" id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td class="tdZ"></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>
-						<td><span> </span><a id="lblProcessno" class="lbl" ></a></td>
+						<td><span> </span><a id="lblProcessno" class="lbl" > </a></td>
 						<td>
-							<select id="cmbProcessno" class="txt c1"></select>
-							<input id="txtProcess" type="text" style="display:none;"/>
+							<select id="cmbProcessno" class="txt c1"> </select>
+							<input id="txtProcess" type="hidden"/>
 						</td>
 					</tr>
 					<tr>
@@ -555,7 +562,7 @@
 						<td style="width:20px;">
 							<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
-						<td style="width:20px;"></td>
+						<td style="width:20px;"> </td>
 						<td style="width:100px;"><a id='lbl_custno'> </a></td>
 						<td style="width:120px;"><a id='lbl_productno'> </a></td>
 						<td style="width:300px;"><a id='lbl_product'> </a>/<a id='lbl_spec'> </a></td>
