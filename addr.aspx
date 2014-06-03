@@ -33,6 +33,7 @@
 			var bbsMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
+			brwCount2 = 13;
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'Datea';

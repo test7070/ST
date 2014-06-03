@@ -11,7 +11,9 @@
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 			aPop = new Array(
-				['txtNoa', '', 'addr', 'noa,addr', 'txtNoa', 'addr_b.aspx']
+				['txtCardealno', 'lblCardealno', 'cardeal', 'noa,comp', 'txtCardealno', 'cardeal_b.aspx'],
+				['txtTranstartno', 'lblTranstartno', 'addr2', 'noa,post','txtTranstartno', 'addr2_b.aspx'],
+				['txtPost', 'lblPost', 'addr2', 'noa,post','txtPost', 'addr2_b.aspx']
 			);
 			var q_name = "addr_s";
 
@@ -31,11 +33,12 @@
 			}
 
 			function q_seekStr() {
-				t_noa = $('#txtNoa').val();
-				t_addr = $.trim($('#txtAddr').val());
-				var t_where = " 1=1 " + q_sqlPara2("noa", t_noa);
-				if (t_addr.length > 0)
-					t_where += " and charindex('" + t_addr + "',addr)>0";
+				t_cardealno = $('#txtCardealno').val();
+				t_transtartno = $.trim($('#txtTranstartno').val());
+				t_post = $.trim($('#txtPost').val());
+				
+				var t_where = " 1=1 " + q_sqlPara2("cardealno", t_cardealno)+ q_sqlPara2("transtartno", t_transtartno)+ q_sqlPara2("post", t_post);
+				
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
 			}
@@ -53,12 +56,16 @@
 		<div style='width:400px; text-align:center;padding:15px;' >
 			<table id="seek" border="1" cellpadding='3' cellspacing='2' style='width:100%;' >
 				<tr class='seek_tr'>
-					<td class='seek' style="width:20%;"><a id='lblNoa'></a></td>
-					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
+					<td class='seek' style="width:20%;"><a id='lblCardealno'> </a></td>
+					<td><input class="txt" id="txtCardealno" type="text" style="width:215px; font-size:medium;" /> </td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek' style="width:20%;"><a id='lblAddr'></a></td>
-					<td><input class="txt" id="txtAddr" type="text" style="width:215px; font-size:medium;" />					</td>
+					<td class='seek' style="width:20%;"><a id='lblTranstartno'> </a></td>
+					<td><input class="txt" id="txtTranstartno" type="text" style="width:215px; font-size:medium;" />	</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek' style="width:20%;"><a id='lblPost'> </a></td>
+					<td><input class="txt" id="txtPost" type="text" style="width:215px; font-size:medium;" /> </td>
 				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->
