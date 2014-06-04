@@ -173,6 +173,10 @@
 				}
 				var thisCno = $.trim($('#txtCno').val());
 				var thisComp = $.trim($('#txtComp').val());
+				if((thisCno.length ==0) && (thisComp.length==0)){
+					alert('請輸入[' + q_getMsg('lblCno') + '] 或 [' + q_getMsg('lblTggno') + ']');
+					return;
+				}
 				for(var k=0;k<q_bbsCount;k++){
 					$('#txtCno_' + k).val(thisCno);
 					$('#txtComp_' + k).val(thisComp);
