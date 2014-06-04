@@ -76,10 +76,12 @@
 				} else {
 					$('#btnSsspart').hide();
 				}
-				if (q_getPara('sys.comp').indexOf('永勝') > -1) {
+				if (q_getPara('sys.comp').indexOf('永勝') > -1 || q_getPara('sys.comp').indexOf('楊家') > -1) {
+					$('#sbutton').hide();
 					$('#btnLabases').hide();
 					$('#btnSaladjust').hide();
 				}
+				
 
 				$('#txtNoa').change(function(e) {
 					$(this).val($.trim($(this).val()).toUpperCase());
@@ -704,8 +706,8 @@
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td colspan="5"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
-					<tr>
-						<td></td>
+					<tr id='sbutton'>
+						<td> </td>
 						<td colspan="5">
 							<input id='btnSsspart' type="button"/>
 							<span> </span>
