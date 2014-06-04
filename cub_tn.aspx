@@ -73,9 +73,36 @@
 						var t_process = $.trim($('#cmbProcessno :selected').text());
 						var t_where = "(1=1) ";
 						t_where += "and (";
-						t_where += "((charindex(N'"+t_cno+":',substring(isnull(sizea,''),0,charindex('^$^',isnull(sizea,'')))) > 0) and (charindex(N'"+t_process+"',substring(isnull(sizea,''),0,charindex('^$^',isnull(sizea,'')))) > 0)) "; //判斷廠別及加工方式
+						t_where += "((isnull(slit,0)=0) and (isnull(cut,0)=0) and (isnull(enda,0)=0)) ";
 						t_where += " or ";
-						t_where += "((charindex(N'"+t_tggno+":',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0)) and (charindex(N'"+t_process+"',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0) "; //判斷委外廠商及加工方式
+						var t_ordenoList = [];
+						for(var k=0;k<abbsNow.length;k++){
+							var thisOrdeno = $.trim(abbsNow[k].ordeno);
+							var thisNo2 = $.trim(abbsNow[k].no2);
+							t_ordenoList.push("'" + thisOrdeno+'-'+thisNo2+"'");
+						}
+						t_ordenoList = t_ordenoList.toString();
+						if((q_cur==2) && (t_ordenoList.length > 0)){
+							t_where += "((isnull(noa,'')+'-'+isnull(no2,'')) in ("+t_ordenoList+")) ";
+						}else{
+							t_where += "(1=0) ";
+						}
+						t_where += ")";
+						t_where += "and (";
+						if((t_cno.length >0)){
+							t_where += "((charindex(N'"+t_cno+":',substring(isnull(sizea,''),0,charindex('^$^',isnull(sizea,'')))) > 0) and (charindex(N'"+t_process+"',substring(isnull(sizea,''),0,charindex('^$^',isnull(sizea,'')))) > 0)) "; //判斷廠別及加工方式
+						}
+						if((t_cno.length >0) && (t_tggno.length >0)){
+							t_where += " and ";
+						}else{
+							t_where += "";
+						}
+						if((t_tggno.length >0)){
+							t_where += "((charindex(N'"+t_tggno+":',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0)) and (charindex(N'"+t_process+"',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0) "; //判斷委外廠商及加工方式
+						}
+						if((t_cno.length==0) && (t_tggno.length==0)){
+							t_where += " (1=0) ";
+						}
 						t_where += ") ";
 						q_box("ordes_tn_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 					}
@@ -124,11 +151,14 @@
 								b_pop = '';
 								return;
 							}
+							for(var k=0;k<q_bbsCount;k++){
+								$('#btnMinus_'+k).click();
+							}
 							if (b_ret && b_ret[0] != undefined) {
 								ret = q_gridAddRow(bbsHtm, 'tbbs', 
 										'txtCustno,txtClass,txtProductno,txtProduct,txtUnit,txtWidth,txtLengthb,txtLengthc,txtSpec,txtOrdeno,txtNo2,txtMount',
 										b_ret.length, b_ret,
-										'custno,class,productno,product,unit,width,lengthb,lengthc,spec,noa,no2,mount', 'txtProductno');
+										'custno,class,productno,product,unit,width,lengthb,lengthc,spec,noa,no2,mount', 'txtOrdeno,txtNo2');
 							}
 							sum();
 							b_ret = '';
@@ -173,7 +203,8 @@
 				}
 				var thisCno = $.trim($('#txtCno').val());
 				var thisComp = $.trim($('#txtComp').val());
-				if((thisCno.length ==0) && (thisComp.length==0)){
+				var thisTggno = $.trim($('#txtTggno').val());
+				if((thisCno.length ==0) && (thisTggno.length==0)){
 					alert('請輸入[' + q_getMsg('lblCno') + '] 或 [' + q_getMsg('lblTggno') + ']');
 					return;
 				}
@@ -304,6 +335,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
+				q_box('cub_tn_s.aspx', q_name + '_s', "500px", "350px", q_getMsg("popSeek"));
 			}
 
 			function btnTop() {
