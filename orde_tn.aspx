@@ -42,12 +42,12 @@
 			brwKey = 'noa';
 			//ajaxPath = ""; // 只在根目錄執行，才需設定
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtStyle_', 'ucaucc_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucaucc_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,salesno,sales', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtSalesno,txtSales', 'cust_b.aspx'],
 				['textCno_', 'btnCno_', 'acomp', 'noa,acomp', 'textCno_,textComp_', 'acomp_b.aspx'],
 				['textCno2_', 'btnCno2_', 'acomp', 'noa,acomp', 'textCno2_,textComp2_', 'acomp_b.aspx'],
 				['textOutcno_', 'btnOutcno_', 'tgg', 'noa,comp', 'textOutcno_,textOutcomp_', 'tgg_b.aspx'],
@@ -900,7 +900,7 @@
 			}
 			.dview {
 				float: left;
-				width: 410px;
+				width: 390px;
 				border-width: 0px;
 			}
 			.tview {
