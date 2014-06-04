@@ -72,9 +72,11 @@
 						var t_tggno = $.trim($('#txtTggno').val());
 						var t_process = $.trim($('#cmbProcessno :selected').text());
 						var t_where = "(1=1) ";
-						t_where += "and ((charindex(N'"+t_cno+"',substring(isnull(sizea,''),0,charindex('^$^',isnull(sizea,'')))) > 0) or (charindex(N'^$^"+t_tggno+":',isnull(sizea,'')) > 0)) "; //判斷廠別
-						t_where += "and (charindex(N'"+t_process+"',isnull(sizea,'')) > 0) "; //判斷加工方式
-						t_where += " ";
+						t_where += "and (";
+						t_where += "((charindex(N'"+t_cno+":',substring(isnull(sizea,''),0,charindex('^$^',isnull(sizea,'')))) > 0) and (charindex(N'"+t_process+"',substring(isnull(sizea,''),0,charindex('^$^',isnull(sizea,'')))) > 0)) "; //判斷廠別及加工方式
+						t_where += " or ";
+						t_where += "((charindex(N'"+t_tggno+":',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0)) and (charindex(N'"+t_process+"',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0) "; //判斷委外廠商及加工方式
+						t_where += ") ";
 						q_box("ordes_tn_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 					}
 				});
