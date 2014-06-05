@@ -94,11 +94,9 @@
 						}
 						if((t_cno.length >0) && (t_tggno.length >0)){
 							t_where += " and ";
+							t_where += "((charindex(N'"+t_tggno+":',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0)) and (charindex(N'"+t_process+"',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0) "; //判斷委外廠商及加工方式
 						}else{
 							t_where += "";
-						}
-						if((t_tggno.length >0)){
-							t_where += "((charindex(N'"+t_tggno+":',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0)) and (charindex(N'"+t_process+"',substring(sizea,charindex(N'^$^',isnull(sizea,'')),len(sizea))) > 0) "; //判斷委外廠商及加工方式
 						}
 						if((t_cno.length==0) && (t_tggno.length==0)){
 							t_where += " (1=0) ";
