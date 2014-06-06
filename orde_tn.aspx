@@ -470,7 +470,9 @@
 					return;
 				q_box('orde_tn_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
 			}
-
+			
+			var keyupstyle=false;
+			
 			function bbsAssign() {
 				var maxNo2 = 0;
 				var tmpNo2 = 0;
@@ -504,7 +506,7 @@
 						$('#txtMount_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2)
 								sum();
-						});
+						})
 						
 						$('#txtLengthb_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
@@ -527,6 +529,49 @@
 							}
 						});
 						
+						$('#txtStyle_' + j).focusout(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							
+							if (q_cur == 1 || q_cur == 2) {
+								if($('#txtStyle_'+n).val()=='*' || $('#txtStyle_'+n).val()=='+' || $('#txtStyle_'+n).val()=='-'){
+									$('#tn_style_'+n).show();
+									if($('#txtStyle_'+n).val()=='+'){
+										$('.tn_dime').show();
+									}else{
+										$('.tn_dime').hide();
+									}
+																		
+									var SeekF= new Array();
+									$('#tn_style_'+n+' div').children("input:text").each(function() {
+										if($(this).attr('disabled')!='disabled')
+											SeekF.push($(this).attr('id'));
+									});
+									SeekF.push('btnStyleok_'+n);
+									$('#tn_style_'+n+' div').children("input:text").each(function() {
+										$(this).keydown(function(event) {
+											if( event.which == 13 ) {
+												$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
+												$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
+											}
+										});
+									});
+									keyupstyle=true;
+									$('#textLengthb_'+n).select();
+								}else{
+									$('#tn_style_'+n).hide();
+								}
+							}
+							//$('#txtStyle_' + n).unbind('keyup').unbind('keydown');
+							//$('#textLengthb_'+n).focus();
+						});
+						
+						$('#btnStyleok_' + j).click(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							$('#tn_style_'+n).hide();
+							$('#txtMount_'+n).focus();
+							$('#txtMount_'+n).select();
+						});
+						
 						$('#btnBorn_' + j).click(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							t_noa = trim($('#txtNoa').val());
@@ -538,12 +583,6 @@
 							}
 						});
 						
-						$('#txtStyle_' + j).blur(function() {
-							if (q_cur == 1 || q_cur == 2) {
-								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetMount(n);
-							}
-						});
 						
 						$('#btnChoice_'+j).click(function(){
 							SetChoice();
@@ -1163,9 +1202,6 @@
 					<td align="center" style="width:170px;"><a id='lblProductno'> </a></td>
 					<td align="center" style="width:300px;"><a id='lblProduct_s'> </a>/規格</td>
 					<td align="center" style="width:40px;">型</td>
-					<td align="center" style="width:80px;">長</td>
-					<td align="center" style="width:80px;">寬</td>
-					<td align="center" style="width:80px;">片數</td>
 					<!--<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>-->
 					<td align="center" style="width:100px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
@@ -1197,11 +1233,32 @@
 						<input class="btn" id="btnUno.*" type="button" value='' style="display:none;float:left;width:20px;height:25px;"/>
 						<input id="txtUno.*" type="text" style="display:none;float:left;width:100px;" />
 					</td>
-					<td><input id="txtStyle.*" type="text" class="txt" style="width:95%;text-align: center;"/></td>
+					<td>
+						<input id="txtStyle.*" type="text" class="txt" style="width:95%;text-align: center;"/>
+						<div id="tn_style.*" style="position: absolute;display: none;border:1px solid #000;">
+							<div style="width:150px;display:block;float:left;background-color:#CDFFCE;">
+								<div style="height: 30px;">長<span> </span><input id="textLengthb.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;">寬<span> </span><input id="textWidth.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;">片<span> </span><input id="textLengthc.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div class="tn_dime" style="height: 30px;">厚<span> </span><input id="textDime.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+							</div>
+							<div class="tn_dime" style="width:150px;display:block;float:left;background-color:#CDFFCE;">
+								<div style="height: 30px;">長<span> </span><input id="textLength1.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;"><input id="textLength2.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;">短<span> </span><input id="textShort1.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;"><input id="textShort2.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+							</div>
+							<div style="display:block;background-color:#CDFFCE;">
+								<input type="button" value="確定" id="btnStyleok.*">
+							</div>
+						</div>
+						<input id="txtLengthb.*" type="hidden" class="txt" style="width:95%;"/>
+						<input id="txtWidth.*" type="hidden" class="txt" style="width:95%;"/>
+						<input id="txtLengthc.*" type="hidden" class="txt" style="width:95%;"/>
+						<input id="txtDime.*" type="hidden" class="txt" style="width:95%;"/>
+						<input id="txtClass.*" type="hidden" class="txt" style="width:95%;"/>
+					</td>
 					<!--<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>-->
-					<td><input id="txtLengthb.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td>	<input id="txtWidth.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td><input id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" style="width:90%;"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num" style="width:95%;"/></td>
