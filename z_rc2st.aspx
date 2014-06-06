@@ -26,34 +26,46 @@
                 $('#q_report').q_report({
                     fileName : 'z_rc2st',
                     options : [
-                    {
+                    {// [1]
                         type : '0',
                         name : 'accy',
                         value : r_accy
-                    },{
+                    },{//1  [2][3]
                         type : '1',
                         name : 'date'
-                    }, {
+                    }, {//2 [4][5]
                         type : '1',
                         name : 'mon'
-                    }, {
+                    }, {//3 [6][7]
                         type : '2',
                         name : 'tgg',
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
-                    }, {
+                    }, {//4 [8][9]
                         type : '2',
                         name : 'sales',
                         dbf : 'sss',
                         index : 'noa,namea',
                         src : 'sss_b.aspx'
-                    }, {
+                    }, {//5 [10][11]
                         type : '2',
                         name : 'product',
                         dbf : 'ucc',
                         index : 'noa,product',
                         src : 'ucc_b.aspx'
+                    }, {//6 [12][13]
+                        type : '1',
+                        name : 'xdime'
+                    }, {//7 [14][15]
+                        type : '1',
+                        name : 'xwidth'
+                    }, {//8 [16][17]
+                        type : '1',
+                        name : 'xlength'
+                    }, {//9 [18][19]
+                        type : '1',
+                        name : 'xradius'
                     }]
                 });
                 q_popAssign();

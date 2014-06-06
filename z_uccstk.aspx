@@ -110,6 +110,7 @@
 		<div id="q_menu"></div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
+			    <a style="color:darkred;">製管派令有輸入【代工】，單價一律為0。</a>
 				<div id="q_report"></div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
