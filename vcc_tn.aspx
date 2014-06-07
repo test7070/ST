@@ -24,15 +24,18 @@
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTax'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory'];
+			if(r_rank<8){
+				q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtPrice'];
+			}
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]
 			];
 			var bbsNum = [
-				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
+				['txtPrice', 15, 1, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
 				['txtMount', 10, 2, 1], ['txtTheory', 12, 3, 1], ['txtGweight', 10, 3, 1],
-				['txtLengthb', 10, 3, 1], ['txtWidth', 10, 3, 1], ['txtLengthc', 10, 3, 1]
+				['txtWidth', 10, 0, 1], ['txtLengthc', 10, 0, 1], ['txtLengthb', 10, 0, 1], ['txtDime', 10, 0, 1],
 			];
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
@@ -43,12 +46,12 @@
 			brwKey = 'noa';
 			//ajaxPath = "";
 			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_comp,addr_comp,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
+				['txtCno', 'lblAcomp', 'acomp', 'noa,nick,addr', 'txtCno,txtAcomp,txtAddr2,txtInvono', 'acomp_b.aspx'],
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_,txtStyle_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,spec,unit,saleprice', '0txtProductno_,txtProduct_,txtSpec_,txtUnit_,txtPrice_,txtStyle_', 'ucc_b.aspx'],
+				//['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
@@ -871,30 +874,175 @@
 								q_box("ordest.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + thisVal + "';" + r_accy, 'ordest', "95%", "95%", q_getMsg("popOrdest"));
 							}
 						});
-						$('#txtLengthb_' + j).focusout(function() {
-							if (q_cur == 1 || q_cur == 2) {
-								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetMount(n);
+						
+						//控制尺寸光標與div顯示與隱藏
+						$('#tbbs td').children("input:text").each(function() {
+							$(this).focusin(function() {
+								if(!($(this).attr('id').split('_')[0]=='txtStyle' || $(this).attr('id').split('_')[0]=='txtMount'))
+									$('.tn_style').hide();
+							});
+						});
+						
+						$('#txtMount_' + j).select(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							if (q_cur == 1 || q_cur == 2){
+								$('#textLengthb_'+n).focus();
+								$('#textLengthb_'+n).select();	
 							}
 						});
-						$('#txtWidth_' + j).focusout(function() {
-							if (q_cur == 1 || q_cur == 2) {
-								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetMount(n);
+						$('#txtMount_' + j).focus(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							if (q_cur == 1 || q_cur == 2){
+								$('#textLengthb_'+n).focus();
+								$('#textLengthb_'+n).select();	
 							}
 						});
 						
-						$('#txtLengthc_' + j).focusout(function() {
+						$('#txtStyle_' + j).focusout(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							if (q_cur == 1 || q_cur == 2) {
-								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetMount(n);
+								if($('#txtStyle_'+n).val()=='*' || $('#txtStyle_'+n).val()=='+' || $('#txtStyle_'+n).val()=='-'){
+									$('.tn_style').hide();//關閉全部
+									//代入暫存欄位
+									$('#textLengthb_'+n).val($('#txtLengthb_'+n).val());//長
+									$('#textWidth_'+n).val($('#txtWidth_'+n).val());//寬
+									$('#textLengthc_'+n).val($('#txtLengthc_'+n).val());//片數
+									$('#textDime_'+n).val($('#txtDime_'+n).val());//厚
+									
+									if($('#txtClass_'+n).val().indexOf(',')>0){
+										var t_class=$('#txtClass_'+n).val().split('&');
+										$('#textLength1_'+n).val(t_class[0]);
+										$('#textLength2_'+n).val(t_class[1]);
+										$('#textShort1_'+n).val(t_class[2]);
+										$('#textShort2_'+n).val(t_class[3]);
+									}
+									
+									$('#tn_style_'+n).show();
+									if($('#txtStyle_'+n).val()=='+'){
+										$('.tn_dime').show();
+									}else{
+										$('.tn_dime').hide();
+									}
+																		
+									var SeekF= new Array();
+									$('#tn_style_'+n+' div').children("input:text").each(function() {
+										if($(this).css("display") != 'none')
+											SeekF.push($(this).attr('id'));
+									});
+									SeekF.push('btnStyleok_'+n);
+									$('#tn_style_'+n+' div').children("input:text").each(function() {
+										$(this).keydown(function(event) {
+											if( event.which == 13 ) {
+												$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
+												$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
+											}
+										});
+										/*$(this).keyup(function() {
+											var tmp=$(this).val();
+											tmp=tmp.match(/\d{1,}\.{0,1}\d{0,}/);
+											$(this).val(tmp);
+										});*/
+									});
+									$('#textLengthb_'+n).focus();
+									$('#textLengthb_'+n).select();
+								}else{
+									$('#tn_style_'+n).hide();
+									$('#txtMount_'+n).focus();
+									$('#txtMount_'+n).select();
+								}
 							}
 						});
-						$('#txtStyle_' + j).focusout(function() {
-							if (q_cur == 1 || q_cur == 2) {
-								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetMount(n);
+						
+						$('#textLengthb_' + j).change(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							if (q_cur == 1 || q_cur == 2){
+								if($('#txtStyle_'+n).val()=='+'){
+									$('#textLength1_'+n).val($('#textLengthb_' + n).val());
+									$('#textLength2_'+n).val($('#textLengthb_' + n).val());
+								}
 							}
+						});
+						
+						$('#textWidth_' + j).change(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							if (q_cur == 1 || q_cur == 2){
+								if($('#txtStyle_'+n).val()=='+'){
+									$('#textShort1_'+n).val($('#textWidth_' + n).val());
+									$('#textShort2_'+n).val($('#textWidth_' + n).val());
+								}
+							}
+						});
+						
+						$('#btnStyleok_' + j).click(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							var t_style=$('#txtStyle_'+n).val();
+							var t_lengthb=dec($('#textLengthb_'+n).val());//長
+							var t_width=dec($('#textWidth_'+n).val());//寬
+							var t_lengthc=dec($('#textLengthc_'+n).val());//片數
+							var t_dime=dec($('#textDime_'+n).val());//厚
+							
+							var t_length1=dec($('#textLength1_'+n).val());//長1
+							var t_length2=dec($('#textLength2_'+n).val());//長2
+							var t_short1=dec($('#textShort1_'+n).val());//短1
+							var t_short2=dec($('#textShort2_'+n).val());//短2
+							
+							//寫入隱藏txt
+							$('#txtLengthb_'+n).val(t_lengthb);
+							$('#txtWidth_'+n).val(t_width);
+							$('#txtLengthc_'+n).val(t_lengthc);
+							$('#txtDime_'+n).val(t_dime);
+							$('#txtClass_'+n).val(t_length1+'&'+t_length2+'&'+t_short1+'&'+t_short2);
+							
+							switch (t_style) {
+								case '*':
+									$('#txtUnit_'+n).val('才');
+									$('#txtSpec_'+n).val(t_lengthb+'*'+t_width+'共'+t_lengthc+'片');
+									//(長和寬)>3 下一尺 虛才
+									//100 125 150 175 200 以25跳
+									if(t_lengthb%25>=3){
+										t_lengthb=q_mul(Math.ceil(t_lengthb/25),25)
+									}else{
+										t_lengthb=q_mul(Math.floor(t_lengthb/25),25)
+										if(t_lengthb==0)
+											t_lengthb=25;
+									}
+									if(t_width%25>=3){
+										t_width=q_mul(Math.ceil(t_width/25),25)
+									}else{
+										t_width=q_mul(Math.floor(t_width/25),25)
+										if(t_width==0)
+											t_width=25;
+									}
+									
+									$('#txtMount_'+n).val(q_mul(round(q_mul(q_div(t_lengthb,100),q_div(t_width,100)),1),t_lengthc));	
+									break;
+								case '+':
+									//(長+寬)*2
+									var t_meter=q_mul(q_mul(q_add(q_div(t_lengthb,100),q_div(t_width,100)),2),t_lengthc);
+									$('#txtMount_'+n).val(t_meter);	
+									$('#txtUnit_'+n).val('尺');	
+									
+									var t_length=0,t_short=0;
+									if(t_length1>0) t_length++;
+									if(t_length2>0) t_length++;
+									if(t_short1>0) t_short++;
+									if(t_short2>0) t_short++;
+									$('#txtMemo_'+n).val(t_length+'長'+t_short+'短');
+									$('#txtSpec_'+n).val(t_dime+'mm'+t_lengthb+'*'+t_width+'共'+t_lengthc+'片');
+									break;
+								case '-':
+									//(長*寬)
+									var t_meter=q_mul(q_mul(q_div(t_lengthb,100),q_div(t_width,100)),t_lengthc);
+									$('#txtMount_'+n).val(t_meter);	
+									$('#txtUnit_'+n).val('才');
+									$('#txtSpec_'+n).val(t_lengthb+'*'+t_width+'共'+t_lengthc+'片');
+									break;
+							}/// end Switch
+							
+							sum();
+							$('#tn_style_'+n).hide();
+							$('#txtMount_'+n).focus();
+							$('#txtMount_'+n).select();
 						});
 					}
 				}//j
@@ -1148,7 +1296,7 @@
 			}
 			.dview {
 				float: left;
-				width: 300px;
+				width: 350px;
 				border-width: 0px;
 			}
 			.tview {
@@ -1262,7 +1410,7 @@
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id='vewDatea'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewNick'> </a></td>
+						<td align="center" style="width:120px; color:black;"><a id='vewNick'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
@@ -1438,13 +1586,10 @@
 					<td align="center" style="width:300px;"><a id='lblProduct_s'> </a>/<a id='lblSpec_s'> </a></td>
 					<!--<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>-->
 					<td align="center" style="width:40px;">型</td>					
-					<td align="center" style="width:80px;">長</td>
-					<td align="center" style="width:80px;">寬</td>
-					<td align="center" style="width:80px;">片數</td>
 					<!--<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>-->
-					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
-					<td align="center" style="width:40px;"><a id='lblUnit'></a></td>
-					<td align="center" style="width:80px;"><a id='lblPrices_st'></a></td>
+					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblUnit'></a> </td>
+					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;">合計</td>
 					<!--<td align="center" style="width:100px;"><a id='lblGweight_st'></a></td>-->
 					<td align="center" style="width:120px;"><a id='lblStore_s'> </a></td>
@@ -1470,10 +1615,33 @@
 						<input class="txt c1" id="txtSpec.*" type="text"/>
 					</td>
 					<!--<td><input id="txtSize.*" type="text" style="width:95%;" /></td>-->
-					<td><input id="txtStyle.*" type="text" class="txt" style="width:95%;text-align: center;"/></td>
-					<td><input id="txtLengthb.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td>	<input id="txtWidth.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td><input id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td>
+						<input id="txtStyle.*" type="text" class="txt" style="width:95%;text-align: center;"/>
+						<div id="tn_style.*" class="tn_style" style="position: absolute;display: none;border:1px solid #000;">
+							<div style="width:150px;display:block;float:left;background-color:#CDFFCE;">
+								<div style="height: 30px;">長<span> </span><input id="textLengthb.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;">寬<span> </span><input id="textWidth.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;">片<span> </span><input id="textLengthc.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div class="tn_dime" style="height: 30px;">厚<span> </span><input id="textDime.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
+							</div>
+							<div style="width:10px;display:block;float:left;background-color:#CDFFCE;">
+							</div>
+							<div class="tn_dime" style="width:150px;display:block;float:left;background-color:#CDFFCE;">
+								<div style="height: 30px;">長<span> </span><input id="textLength1.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;"><input id="textLength2.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;">短<span> </span><input id="textShort1.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;"><input id="textShort2.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
+							</div>
+							<div style="display:block;background-color:#CDFFCE;">
+								<input type="button" value="確定" id="btnStyleok.*">
+							</div>
+						</div>
+						<input id="txtLengthb.*" type="hidden" class="txt" style="width:95%;"/>
+						<input id="txtWidth.*" type="hidden" class="txt" style="width:95%;"/>
+						<input id="txtLengthc.*" type="hidden" class="txt" style="width:95%;"/>
+						<input id="txtDime.*" type="hidden" class="txt" style="width:95%;"/>
+						<input id="txtClass.*" type="hidden" class="txt" style="width:95%;"/>
+					</td>
 					<!--<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>-->
 					<td>	<input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt" style="width:95%;text-align: center;"/></td>
