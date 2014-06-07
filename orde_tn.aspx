@@ -23,15 +23,18 @@
 			var q_name = "orde";
 			var q_readonly = ['txtApv', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWeight', 'txtSales'];
 			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv','textComp','textComp2','textOutcomp','textOutcomp2'];
+			if(r_rank<8){
+				q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv','textComp','textComp2','textOutcomp','textOutcomp2,txtPrice'];
+			}
 			var bbmNum = [
 				['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1]
 			];
 			// 允許 key 小數
 			var bbsNum = [
-				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
-				['txtMount', 10, 2, 1], ['txtLengthc', 10, 3, 1], ['txtLengthb', 10, 3, 1],
-				['txtWidth', 10, 3, 1],['txtC1', 10, 2, 1],['txtNotv', 10, 2, 1]
+				['txtPrice', 15, 1, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
+				['txtMount', 10, 2, 1], ['txtLengthc', 10, 0, 1], ['txtLengthb', 10, 0, 1], ['txtDime', 10, 0, 1],
+				['txtWidth', 10, 0, 1],['txtC1', 10, 2, 1],['txtNotv', 10, 2, 1]
 			];
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
@@ -42,11 +45,11 @@
 			brwKey = 'noa';
 			//ajaxPath = ""; // 只在根目錄執行，才需設定
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucaucc_b.aspx'],
-				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
-				['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx'],
-				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,spec,unit,saleprice', '0txtProductno_,txtProduct_,txtSpec_,txtUnit_,txtPrice_', 'ucc_b.aspx'],
+				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales,txtPost', 'sss_b.aspx'],
+				//['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
+				//['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx'],
+				['txtCno', 'lblAcomp', 'acomp', 'noa,nick,addr', 'txtCno,txtAcomp,txtAddr2,txtCustno', 'acomp_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,salesno,sales', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtSalesno,txtSales', 'cust_b.aspx'],
 				['textCno_', 'btnCno_', 'acomp', 'noa,acomp', 'textCno_,textComp_', 'acomp_b.aspx'],
 				['textCno2_', 'btnCno2_', 'acomp', 'noa,acomp', 'textCno2_,textComp2_', 'acomp_b.aspx'],
@@ -365,6 +368,7 @@
 						if (as[0] != undefined) {
 							$('#txtCno').val(as[0].noa);
 							$('#txtAcomp').val(as[0].nick);
+							$('#txtAddr2').val(as[0].addr);
 						}
 						Unlock(1);
 						$('#chkIsproj').attr('checked', true);
@@ -410,22 +414,21 @@
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
+					
 				sum();
 				if ($('#txtCustno').val().length == 0) {
 					alert('請輸入' + q_getMsg('lblCust'));
 					Unlock(1);
 					return;
 				}
-				q_func('qtxt.query.orde', 'credit.txt,orde,' + encodeURI($('#txtCustno').val()) + ';' + encodeURI($('#txtNoa').val()));
-			}
-
-			function save() {
+				
 				var s1 = $('#txtNoa').val();
 				if (s1.length == 0 || s1 == "AUTO")
 					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
 				else
 					wrServer(s1);
 			}
+
 
 			function q_stPost() {
 				if (!(q_cur == 1 || q_cur == 2))
@@ -434,44 +437,11 @@
 				Unlock(1);
 			}
 
-			function q_funcPost(t_func, result) {
-				switch(t_func) {
-					case 'qtxt.query.orde':
-						var as = _q_appendData("tmp0", "", true, true);
-						if (as[0] != undefined) {
-							var total = parseFloat(as[0].total.length == 0 ? "0" : as[0].total);
-							var credit = parseFloat(as[0].credit.length == 0 ? "0" : as[0].credit);
-							var gqb = parseFloat(as[0].gqbMoney.length == 0 ? "0" : as[0].gqbMoney);
-							var vcc = parseFloat(as[0].vccMoney.length == 0 ? "0" : as[0].vccMoney);
-							var orde = parseFloat(as[0].ordeMoney.length == 0 ? "0" : as[0].ordeMoney);
-							var umm = parseFloat(as[0].ummMoney.length == 0 ? "0" : as[0].ummMoney);
-							var curorde = 0;
-							var curtotal = 0;
-
-							for (var i = 0; i < q_bbsCount; i++) {
-								curorde = q_add(curorde, q_float('txtTotal_' + i));
-							}
-							curtotal = credit - gqb - vcc - orde - umm - curorde;
-							if (curtotal < 0) {
-								var t_space = ' ';
-								var msg = as[0].custno + '-' + as[0].cust + '\n' + ' 基本額度：' + (t_space + q_trv(credit)).replace(/^.*(.{10})$/, '$1') + '\n' + '-應收票據：' + (t_space + q_trv(gqb)).replace(/^.*(.{10})$/, '$1') + '\n' + '-應收帳款：' + (t_space + q_trv(vcc)).replace(/^.*(.{10})$/, '$1') + '\n' + '-未出訂單：' + (t_space + q_trv(orde)).replace(/^.*(.{10})$/, '$1') + '\n' + '-預收貨款：' + (t_space + q_trv(umm)).replace(/^.*(.{10})$/, '$1') + '\n' + '-本張訂單：' + (t_space + q_trv(curorde)).replace(/^.*(.{10})$/, '$1') + '\n' + '----------------------------' + '\n' + '額度餘額：' + (t_space + q_trv(curtotal)).replace(/^.*(.{10})$/, '$1');
-								alert(msg);
-								Unlock(1);
-								return;
-							}
-						}
-						save();
-						break;
-				}
-			}
-
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
 				q_box('orde_tn_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
 			}
-			
-			var keyupstyle=false;
 			
 			function bbsAssign() {
 				var maxNo2 = 0;
@@ -506,70 +476,6 @@
 						$('#txtMount_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2)
 								sum();
-						})
-						
-						$('#txtLengthb_' + j).focusout(function() {
-							if (q_cur == 1 || q_cur == 2) {
-								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetMount(n);
-							}
-						});
-						
-						$('#txtWidth_' + j).focusout(function() {
-							if (q_cur == 1 || q_cur == 2) {
-								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetMount(n);
-							}
-						});
-						
-						$('#txtLengthc_' + j).focusout(function() {
-							if (q_cur == 1 || q_cur == 2) {
-								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								GetMount(n);
-							}
-						});
-						
-						$('#txtStyle_' + j).focusout(function() {
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							
-							if (q_cur == 1 || q_cur == 2) {
-								if($('#txtStyle_'+n).val()=='*' || $('#txtStyle_'+n).val()=='+' || $('#txtStyle_'+n).val()=='-'){
-									$('#tn_style_'+n).show();
-									if($('#txtStyle_'+n).val()=='+'){
-										$('.tn_dime').show();
-									}else{
-										$('.tn_dime').hide();
-									}
-																		
-									var SeekF= new Array();
-									$('#tn_style_'+n+' div').children("input:text").each(function() {
-										if($(this).attr('disabled')!='disabled')
-											SeekF.push($(this).attr('id'));
-									});
-									SeekF.push('btnStyleok_'+n);
-									$('#tn_style_'+n+' div').children("input:text").each(function() {
-										$(this).keydown(function(event) {
-											if( event.which == 13 ) {
-												$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
-												$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
-											}
-										});
-									});
-									keyupstyle=true;
-									$('#textLengthb_'+n).select();
-								}else{
-									$('#tn_style_'+n).hide();
-								}
-							}
-							//$('#txtStyle_' + n).unbind('keyup').unbind('keydown');
-							//$('#textLengthb_'+n).focus();
-						});
-						
-						$('#btnStyleok_' + j).click(function() {
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							$('#tn_style_'+n).hide();
-							$('#txtMount_'+n).focus();
-							$('#txtMount_'+n).select();
 						});
 						
 						$('#btnBorn_' + j).click(function() {
@@ -579,10 +485,9 @@
 								return;
 							} else {
 								t_where = "noa='" + $('#txtNoa').val() + "' and no2='" + $('#txtNo2_' + n).val() + "'";
-								q_box("z_bornst.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'born', "95%", "95%", q_getMsg('lblBorn'));
+								q_box("z_born.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'born', "95%", "95%", q_getMsg('lblBorn'));
 							}
 						});
-						
 						
 						$('#btnChoice_'+j).click(function(){
 							SetChoice();
@@ -609,6 +514,7 @@
 							var t_top = $('#btnChoice_'+n).offset().top-18;
 							$('#Choice_'+n).css({left:t_left,top:t_top});
 						});
+						
 						$('#btnChoiceok_'+j).click(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							var SaveStr = "";
@@ -650,6 +556,183 @@
 							$('#txtSizea_'+n).val(SaveStr);
 							$('#Choice_'+n).hide();
 						});
+						
+						$('#btnChoiceclose_'+j).click(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							$('#Choice_'+n).hide();
+						});
+						
+						
+						//控制尺寸光標與div顯示與隱藏
+						$('#tbbs td').children("input:text").each(function() {
+							$(this).focusin(function() {
+								if(!($(this).attr('id').split('_')[0]=='txtStyle' || $(this).attr('id').split('_')[0]=='txtMount'))
+									$('.tn_style').hide();
+							});
+						});
+						
+						$('#txtMount_' + j).select(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							if (q_cur == 1 || q_cur == 2){
+								$('#textLengthb_'+n).focus();
+								$('#textLengthb_'+n).select();	
+							}
+						});
+						$('#txtMount_' + j).focus(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							if (q_cur == 1 || q_cur == 2){
+								$('#textLengthb_'+n).focus();
+								$('#textLengthb_'+n).select();	
+							}
+						});
+						
+						$('#txtStyle_' + j).focusout(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							if (q_cur == 1 || q_cur == 2) {
+								if($('#txtStyle_'+n).val()=='*' || $('#txtStyle_'+n).val()=='+' || $('#txtStyle_'+n).val()=='-'){
+									$('.tn_style').hide();//關閉全部
+									//代入暫存欄位
+									$('#textLengthb_'+n).val($('#txtLengthb_'+n).val());//長
+									$('#textWidth_'+n).val($('#txtWidth_'+n).val());//寬
+									$('#textLengthc_'+n).val($('#txtLengthc_'+n).val());//片數
+									$('#textDime_'+n).val($('#txtDime_'+n).val());//厚
+									
+									if($('#txtClass_'+n).val().indexOf(',')>0){
+										var t_class=$('#txtClass_'+n).val().split('&');
+										$('#textLength1_'+n).val(t_class[0]);
+										$('#textLength2_'+n).val(t_class[1]);
+										$('#textShort1_'+n).val(t_class[2]);
+										$('#textShort2_'+n).val(t_class[3]);
+									}
+									
+									$('#tn_style_'+n).show();
+									if($('#txtStyle_'+n).val()=='+'){
+										$('.tn_dime').show();
+									}else{
+										$('.tn_dime').hide();
+									}
+																		
+									var SeekF= new Array();
+									$('#tn_style_'+n+' div').children("input:text").each(function() {
+										if($(this).css("display") != 'none')
+											SeekF.push($(this).attr('id'));
+									});
+									SeekF.push('btnStyleok_'+n);
+									$('#tn_style_'+n+' div').children("input:text").each(function() {
+										$(this).keydown(function(event) {
+											if( event.which == 13 ) {
+												$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
+												$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
+											}
+										});
+										/*$(this).keyup(function() {
+											var tmp=$(this).val();
+											tmp=tmp.match(/\d{1,}\.{0,1}\d{0,}/);
+											$(this).val(tmp);
+										});*/
+									});
+									$('#textLengthb_'+n).focus();
+									$('#textLengthb_'+n).select();
+								}else{
+									$('#tn_style_'+n).hide();
+									$('#txtMount_'+n).focus();
+									$('#txtMount_'+n).select();
+								}
+							}
+						});
+						
+						$('#textLengthb_' + j).change(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							if (q_cur == 1 || q_cur == 2){
+								if($('#txtStyle_'+n).val()=='+'){
+									$('#textLength1_'+n).val($('#textLengthb_' + n).val());
+									$('#textLength2_'+n).val($('#textLengthb_' + n).val());
+								}
+							}
+						});
+						
+						$('#textWidth_' + j).change(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							if (q_cur == 1 || q_cur == 2){
+								if($('#txtStyle_'+n).val()=='+'){
+									$('#textShort1_'+n).val($('#textWidth_' + n).val());
+									$('#textShort2_'+n).val($('#textWidth_' + n).val());
+								}
+							}
+						});
+						
+						$('#btnStyleok_' + j).click(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							var t_style=$('#txtStyle_'+n).val();
+							var t_lengthb=dec($('#textLengthb_'+n).val());//長
+							var t_width=dec($('#textWidth_'+n).val());//寬
+							var t_lengthc=dec($('#textLengthc_'+n).val());//片數
+							var t_dime=dec($('#textDime_'+n).val());//厚
+							
+							var t_length1=dec($('#textLength1_'+n).val());//長1
+							var t_length2=dec($('#textLength2_'+n).val());//長2
+							var t_short1=dec($('#textShort1_'+n).val());//短1
+							var t_short2=dec($('#textShort2_'+n).val());//短2
+							
+							//寫入隱藏txt
+							$('#txtLengthb_'+n).val(t_lengthb);
+							$('#txtWidth_'+n).val(t_width);
+							$('#txtLengthc_'+n).val(t_lengthc);
+							$('#txtDime_'+n).val(t_dime);
+							$('#txtClass_'+n).val(t_length1+'&'+t_length2+'&'+t_short1+'&'+t_short2);
+							
+							switch (t_style) {
+								case '*':
+									$('#txtUnit_'+n).val('才');
+									$('#txtSpec_'+n).val(t_lengthb+'*'+t_width+'共'+t_lengthc+'片');
+									//(長和寬)>3 下一尺 虛才
+									//100 125 150 175 200 以25跳
+									if(t_lengthb%25>=3){
+										t_lengthb=q_mul(Math.ceil(t_lengthb/25),25)
+									}else{
+										t_lengthb=q_mul(Math.floor(t_lengthb/25),25)
+										if(t_lengthb==0)
+											t_lengthb=25;
+									}
+									if(t_width%25>=3){
+										t_width=q_mul(Math.ceil(t_width/25),25)
+									}else{
+										t_width=q_mul(Math.floor(t_width/25),25)
+										if(t_width==0)
+											t_width=25;
+									}
+									
+									$('#txtMount_'+n).val(q_mul(round(q_mul(q_div(t_lengthb,100),q_div(t_width,100)),1),t_lengthc));	
+									break;
+								case '+':
+									//(長+寬)*2
+									var t_meter=q_mul(q_mul(q_add(q_div(t_lengthb,100),q_div(t_width,100)),2),t_lengthc);
+									$('#txtMount_'+n).val(t_meter);	
+									$('#txtUnit_'+n).val('尺');	
+									
+									var t_length=0,t_short=0;
+									if(t_length1>0) t_length++;
+									if(t_length2>0) t_length++;
+									if(t_short1>0) t_short++;
+									if(t_short2>0) t_short++;
+									$('#txtMemo_'+n).val(t_length+'長'+t_short+'短');
+									$('#txtSpec_'+n).val(t_dime+'mm'+t_lengthb+'*'+t_width+'共'+t_lengthc+'片');
+									break;
+								case '-':
+									//(長*寬)
+									var t_meter=q_mul(q_mul(q_div(t_lengthb,100),q_div(t_width,100)),t_lengthc);
+									$('#txtMount_'+n).val(t_meter);	
+									$('#txtUnit_'+n).val('才');
+									$('#txtSpec_'+n).val(t_lengthb+'*'+t_width+'共'+t_lengthc+'片');
+									break;
+							}/// end Switch
+							
+							sum();
+							$('#tn_style_'+n).hide();
+							$('#txtMount_'+n).focus();
+							$('#txtMount_'+n).select();
+						});
+						
 					}
 				}
 				_bbsAssign();
@@ -1235,18 +1318,20 @@
 					</td>
 					<td>
 						<input id="txtStyle.*" type="text" class="txt" style="width:95%;text-align: center;"/>
-						<div id="tn_style.*" style="position: absolute;display: none;border:1px solid #000;">
+						<div id="tn_style.*" class="tn_style" style="position: absolute;display: none;border:1px solid #000;">
 							<div style="width:150px;display:block;float:left;background-color:#CDFFCE;">
 								<div style="height: 30px;">長<span> </span><input id="textLengthb.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
 								<div style="height: 30px;">寬<span> </span><input id="textWidth.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
 								<div style="height: 30px;">片<span> </span><input id="textLengthc.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
-								<div class="tn_dime" style="height: 30px;">厚<span> </span><input id="textDime.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div class="tn_dime" style="height: 30px;">厚<span> </span><input id="textDime.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
+							</div>
+							<div style="width:10px;display:block;float:left;background-color:#CDFFCE;">
 							</div>
 							<div class="tn_dime" style="width:150px;display:block;float:left;background-color:#CDFFCE;">
-								<div style="height: 30px;">長<span> </span><input id="textLength1.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
-								<div style="height: 30px;"><input id="textLength2.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
-								<div style="height: 30px;">短<span> </span><input id="textShort1.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
-								<div style="height: 30px;"><input id="textShort2.*" type="text" class="txt num" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;">長<span> </span><input id="textLength1.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;"><input id="textLength2.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;">短<span> </span><input id="textShort1.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
+								<div style="height: 30px;"><input id="textShort2.*" type="text" class="txt num tn_dime" style="width:60%;float: right;"/></div>
 							</div>
 							<div style="display:block;background-color:#CDFFCE;">
 								<input type="button" value="確定" id="btnStyleok.*">
@@ -1282,6 +1367,7 @@
 						<div id="Choice.*" style="position: absolute;display:none;">
 							<div id="ChoiceOkDiv.*" style="text-align:center;float:left;border:1px solid #000;border-bottom:none;background-color:#CDFFCE;">
 								<input type="button" value="確定" id="btnChoiceok.*">
+								<input type="button" value="關閉" id="btnChoiceclose.*">
 							</div>
 							<div id="ChoiceBase1.*" style="width:450px;border:1px solid #000;float:left">
 								<div style="float:left;background-color:#F8D463;">
