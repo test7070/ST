@@ -16,7 +16,7 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			var bbmNum = [['txtXradius1', 3, 0]];
-			var t_style = '';
+			var t_style = '',t_ucc='';
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
@@ -34,8 +34,16 @@
 						for ( i = 0; i < as.length; i++) {
 							t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + '.' + as[i].product;
 						}
-						loadFinish();
+						q_gt('ucc', '', 0, 0, 0, "");
 						break;
+					case 'style':
+                        t_ucc = '';
+                        var as = _q_appendData("ucc", "", true);
+                        for ( i = 0; i < as.length; i++) {
+                            t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa;
+                        }
+                        loadFinish();
+                        break;
 				}
 			}
 
@@ -142,7 +150,15 @@
 						type : '8', //[34]3
 						name : 'xmerga',
 						value : "1@".split(',')
-					}]
+					}, {
+                        type : '8', //[35]4
+                        name : 'ystyle',
+                        value : t_style.split(',')
+                    }, {
+                        type : '8', //[36]1
+                        name : 'yproductno',
+                        value : t_ucc.split(',')
+                    }]
 				});
 				q_popAssign();
 				q_getFormat();
