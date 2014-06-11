@@ -36,7 +36,7 @@
 						}
 						q_gt('ucc', '', 0, 0, 0, "");
 						break;
-					case 'style':
+					case 'ucc':
                         t_ucc = '';
                         var as = _q_appendData("ucc", "", true);
                         for ( i = 0; i < as.length; i++) {
@@ -151,11 +151,15 @@
 						name : 'xmerga',
 						value : "1@".split(',')
 					}, {
-                        type : '8', //[35]4
+                        type : '8', //[35] 4
+                        name : 'yitype',
+                        value : q_getPara('uccc.itype').split(',')
+                    }, {
+                        type : '8', //[36]1
                         name : 'ystyle',
                         value : t_style.split(',')
                     }, {
-                        type : '8', //[36]1
+                        type : '8', //[37]2
                         name : 'yproductno',
                         value : t_ucc.split(',')
                     }]
