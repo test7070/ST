@@ -636,53 +636,6 @@
 				
 			}/// q_box() 開 視窗
 			
-			function GetMount(n) {
-				if(emp($('#txtStyle_'+n).val())) //自己KEY才數
-					return;
-					
-				var t_style=$('#txtStyle_'+n).val();
-				var t_lengthb=dec($('#txtLengthb_'+n).val());//長
-				var t_width=dec($('#txtWidth_'+n).val());//寬
-				var t_lengthc=dec($('#txtLengthc_'+n).val());//片數
-				
-				if(t_lengthb<=0 || t_width<=0 || t_lengthc<=0){
-					$('#txtMount_'+n).val(0);	
-					return;
-				}
-				
-				switch (t_style) {
-					case '*':
-						//(長*寬)>3 下一尺
-						//100   125   150   175   200 以25跳
-						var t_meter=q_mul(t_lengthb,t_width);
-						
-						if(t_meter%25>=3){
-							t_meter=q_mul(Math.ceil(t_meter/25),25)
-						}else{
-							t_meter=q_mul(Math.floor(t_meter/25),25)
-							if(t_meter==0)
-								t_meter=25;
-						}
-						$('#txtMount_'+n).val(q_mul(t_meter,t_lengthc));	
-						$('#txtUnit_'+n).val('才');	
-						break;
-					case '+':
-						//(長+寬)*2
-						var t_meter=q_mul(q_mul(q_add(t_lengthb,t_width),2),t_lengthc);
-						$('#txtMount_'+n).val(t_meter);	
-						$('#txtUnit_'+n).val('才');	
-						break;
-					case '-':
-						//(長*寬)
-						var t_meter=q_mul(q_mul(t_lengthb,t_width),t_lengthc);
-						$('#txtMount_'+n).val(t_meter);	
-						$('#txtUnit_'+n).val('才');	
-						break;
-				}/// end Switch
-				
-				sum();
-			}
-
 			function GetOrdenoList() {
 				var ReturnStr = new Array;
 				for (var i = 0; i < q_bbsCount; i++) {
