@@ -721,16 +721,26 @@
 							var as = _q_appendData("view_vccs", "", true);
 							var tot_mount = 0, tot_weight = 0;
 							var tot_mount2 = 0, tot_weight2 = 0;
-							if (as[0] != undefined) {
+							if (as[0] != undefined) {  
 								for (var i = 0; i < as.length; i++) {
-									tot_mount = q_add(tot_mount, parseFloat(as[i].mount.length == 0 ? "0" : as[i].mount));
-									tot_weight = q_add(tot_weight, parseFloat(as[i].weight.length == 0 ? "0" : as[i].weight));
+								    if(as[i].typea=='1'){
+								        tot_mount = q_add(tot_mount, parseFloat(as[i].mount.length == 0 ? "0" : as[i].mount));
+                                        tot_weight = q_add(tot_weight, parseFloat(as[i].weight.length == 0 ? "0" : as[i].weight));
+								    }else{
+								        tot_mount = q_sub(tot_mount, parseFloat(as[i].mount.length == 0 ? "0" : as[i].mount));
+                                        tot_weight = q_sub(tot_weight, parseFloat(as[i].weight.length == 0 ? "0" : as[i].weight));
+								    }
 								}
 							}
 							for (var i = 0; i < q_bbsCount; i++) {
 								if ($.trim($('#txtOrdeno_' + i).val()) == t_ordeno && $.trim($('#txtNo2_' + i).val()) == t_no2) {
-									tot_mount2 = q_add(tot_mount2, q_float('txtMount_' + i));
-									tot_weight2 = q_add(tot_weight2, q_float('txtWeight_' + i));
+									if(('#cmbTypea')=='1'){
+									    tot_mount2 = q_add(tot_mount2, q_float('txtMount_' + i));
+                                        tot_weight2 = q_add(tot_weight2, q_float('txtWeight_' + i));
+									}else{
+									    tot_mount2 = q_sub(tot_mount2, q_float('txtMount_' + i));
+                                        tot_weight2 = q_sub(tot_weight2, q_float('txtWeight_' + i));
+									}
 								}
 							}
 							if ($('#cmbKind').val() == 'B2') {
