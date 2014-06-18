@@ -96,14 +96,14 @@
             	}
             	
             	//取得勞退薪資等級表
-            	var t_where = "where=^^ 1=1 ^^ top=1";
+            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
             	q_gt('labretire', t_where, 0, 0, 0, "", r_accy);
             	//取得勞保薪資等級表
-            	var t_where = "where=^^ 1=1 ^^ top=1";
+            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
             	q_gt('labsal', t_where, 0, 0, 0, "", r_accy);
             	if(q_cur!=1)
             		sum();//計算家屬
-            	var t_where = "where=^^ 1=1 ^^ top=1";
+            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
             	q_gt('labhealth', t_where, 0, 0, 0, "", r_accy);
             });
             
@@ -119,21 +119,21 @@
             	}
             	
             	//取得勞退薪資等級表
-            	var t_where = "where=^^ 1=1 ^^ top=1";
+            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
             	q_gt('labretire', t_where, 0, 0, 0, "", r_accy);
             	//取得勞保薪資等級表
-            	var t_where = "where=^^ 1=1 ^^ top=1";
+            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
             	q_gt('labsal', t_where, 0, 0, 0, "", r_accy);
             	if(q_cur!=1)
             		sum();//計算家屬
-            	var t_where = "where=^^ 1=1 ^^ top=1";
+            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
             	q_gt('labhealth', t_where, 0, 0, 0, "", r_accy);
             });
             
             $('#txtMount').change(function () {
             	//取得健保薪資等級表
             	//sum();//計算家屬
-            	var t_where = "where=^^ 1=1 ^^ top=1";
+            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
             	q_gt('labhealth', t_where, 0, 0, 0, "", r_accy);
             });
             
@@ -150,7 +150,7 @@
 	            		return;
 	            	}
 	            	//重新計算取得勞保薪資等級表
-	            	var t_where = "where=^^ 1=1 ^^ top=1";
+	            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 	            	q_gt('labsal', t_where, 0, 0, 0, "", r_accy);
 	          });
 	            
@@ -159,7 +159,7 @@
 	            		return;
 	            	}
 	            	//重新計算取得勞保薪資等級表
-	            	var t_where = "where=^^ 1=1 ^^ top=1";
+	            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 	          		q_gt('labsal', t_where, 0, 0, 0, "", r_accy);
 	          });
 	          //---------------------各自判斷投保新增----------------------
@@ -169,7 +169,7 @@
 	            	}
 	            	cal=true;
 	            	//取得勞退薪資等級表
-	            	var t_where = "where=^^ 1=1 ^^ top=1";
+	            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 	            	q_gt('labretire', t_where, 0, 0, 0, "", r_accy);
 	          });
 	          $('#lblSa_retire').click(function () {
@@ -178,7 +178,7 @@
 	            	}
 	            	cal=true;
 	            	//取得勞退薪資等級表
-	            	var t_where = "where=^^ 1=1 ^^ top=1";
+	            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 	            	q_gt('labretire', t_where, 0, 0, 0, "", r_accy);
 	          });
 	          
@@ -188,7 +188,7 @@
 	            	}
 	            	cal=true;
 	            	//重新計算取得勞保薪資等級表
-	            	var t_where = "where=^^ 1=1 ^^ top=1";
+	            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 	          		q_gt('labsal', t_where, 0, 0, 0, "", r_accy);
 	          });
 	          $('#lblSa_labor').click(function () {
@@ -197,7 +197,7 @@
 	            	}
 	            	cal=true;
 	            	//重新計算取得勞保薪資等級表
-	            	var t_where = "where=^^ 1=1 ^^ top=1";
+	            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 	          		q_gt('labsal', t_where, 0, 0, 0, "", r_accy);
 	          });
 	          $('#txtSa_health').change(function () {
@@ -207,7 +207,7 @@
 	            	cal=true;
 	            	sum();//計算家屬
 	            	//取得健保薪資等級表
-	            	var t_where = "where=^^ 1=1 ^^ top=1";
+	            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 	            	q_gt('labhealth', t_where, 0, 0, 0, "", r_accy);
 	          });
 	          $('#lblSa_health').click(function () {
@@ -217,7 +217,7 @@
 	            	cal=true;
 	            	sum();//計算家屬
 	            	//取得健保薪資等級表
-	            	var t_where = "where=^^ 1=1 ^^ top=1";
+	            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 	            	q_gt('labhealth', t_where, 0, 0, 0, "", r_accy);
 	          });
             //----------------------------------------
@@ -571,7 +571,7 @@
 	            		cal=true;
 	            		sum();//計算家屬
 		            	//取得健保薪資等級表
-		            	var t_where = "where=^^ 1=1 ^^ top=1";
+		            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 		            	q_gt('labhealth', t_where, 0, 0, 0, "", r_accy);
 				    });
 				    
@@ -582,7 +582,7 @@
 	            		cal=true;
 	            		sum();//計算家屬
 		            	//取得健保薪資等級表
-		            	var t_where = "where=^^ 1=1 ^^ top=1";
+		            	var t_where = "where=^^ 1=1 and noa<='"+q_date()+"' ^^ top=1";
 		            	q_gt('labhealth', t_where, 0, 0, 0, "", r_accy);
 				    });
 				}
