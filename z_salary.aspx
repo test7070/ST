@@ -26,39 +26,42 @@
                $('#q_report').q_report({
                         fileName : 'z_salary',
                         options : [{
-                        type : '6',
-                        name : 'xmon'
-                    },{
-                        type : '5',
-                        name : 'xperson',
-                        value : (('').concat(new Array("本國","日薪"))).split(',')
-                    },{
-                        type : '5',
-                        name : 'xkind',
-                        value : (('').concat(new Array("本月","上期","下期"))).split(',')
-                    },{
-                        type : '2',
-                        name : 'sssno',
-                        dbf : 'sss',
-                        index : 'noa,namea',
-                        src : 'sss_b.aspx'
-                        },{
-                        type : '1',
-                        name : 'date'
-                    },{
-                        type : '5',
-                        name : 'xorder',
-                        value : (('').concat(new Array("部門","員工編號"))).split(',')
-                    },{
-                        type : '2',
-                        name : 'xpartno',
-                        dbf : 'part',
-                        index : 'noa,part',
-                        src : 'part_b.aspx'
-					},{
-                        type : '6',
-                        name : 'xyear'
-                    }]
+	                        type : '6',
+	                        name : 'xmon'
+	                    },{
+	                        type : '5',
+	                        name : 'xperson',
+	                        value : (('').concat(new Array("本國","日薪"))).split(',')
+	                    },{
+	                        type : '5',
+	                        name : 'xkind',
+	                        value : (('').concat(new Array("本月","上期","下期"))).split(',')
+	                    },{
+	                        type : '2',
+	                        name : 'sssno',
+	                        dbf : 'sss',
+	                        index : 'noa,namea',
+	                        src : 'sss_b.aspx'
+						},{
+	                        type : '1',
+	                        name : 'date'
+	                    },{
+	                        type : '5',
+	                        name : 'xorder',
+	                        value : (('').concat(new Array("部門","員工編號"))).split(',')
+	                    },{
+	                        type : '2',
+	                        name : 'xpartno',
+	                        dbf : 'part',
+	                        index : 'noa,part',
+	                        src : 'part_b.aspx'
+						},{
+	                        type : '6',
+	                        name : 'xyear'
+	                    },{
+	                        type : '6',
+	                        name : 'xnoa'
+	                    }]
                     });
                 q_popAssign();
                 $('#txtXmon').mask('999/99');
@@ -90,10 +93,17 @@
 	                t_day = t_date.getUTCDate();
 	                t_day = t_day>9?t_day+'':'0'+t_day;
 	                $('#txtDate2').val(t_year+'/'+t_month+'/'+t_day);
-            
-                
-                
-	                }
+            	
+            	if(q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1){
+            		if (window.parent.q_name == 'salary') {
+						var wParent = window.parent.document;
+						$('#txtXnoa').val(wParent.getElementById("txtNoa").value);
+					}
+            	}else{
+            		$('#Xnoa').hide();
+            		$('#txtXnoa').val('');
+            	}
+			}
 
             function q_boxClose(s2) {
             }
