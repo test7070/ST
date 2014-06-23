@@ -93,7 +93,7 @@
 		       	if(t_uno.length>0)
 		       		t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".uno='"+t_uno+"')";
 		       	if(t_ordeno.length>0)
-                    t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".ordeno='"+t_ordeno+"' "+(t_no2.length>0?"vccs"+r_accy+".no2='"+t_no2+"'":"")+")";
+                    t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".ordeno='"+t_ordeno+"' "+(t_no2.length>0?" and vccs"+r_accy+".no2='"+t_no2+"'":"")+")";
 		       	if(t_dime!=0 && !isNaN(t_dime))
                     t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".dime="+t_dime+")";
                 if(t_width!=0 && !isNaN(t_width))
