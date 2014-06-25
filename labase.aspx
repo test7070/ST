@@ -230,7 +230,7 @@
 	            //計算職災
 	            $('#lblDisaster').click(function () {
 	            	if(q_cur==1||q_cur==2){
-		            	q_tr('txtDisaster',Math.round(dec($('#txtSalary').val())*dec($('#txtInsur_fund').val())/100)+Math.round(dec($('#txtSalary').val())*dec($('#txtInsur_disaster').val())/100));
+		            	q_tr('txtDisaster',Math.round(dec($('#txtSa_labor').val())*dec($('#txtInsur_fund').val())/100)+Math.round(dec($('#txtSa_labor').val())*dec($('#txtInsur_disaster').val())/100));
 		            	q_tr('txtSa_labor',0);
 		            	q_tr('txtAs_labor',0);
 		            	q_tr('txtLa_person',0);
