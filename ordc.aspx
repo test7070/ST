@@ -18,7 +18,7 @@
 			q_tables = 's';
 			var q_name = "ordc";
 			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2'];
-			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda'];
+			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount'];
 			var bbmNum = [
 				['txtFloata', 10, 5, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],
 				['txtTotal', 10, 0, 1], ['txtTotalus', 10, 0, 1]
@@ -34,7 +34,7 @@
 			brwKey = 'Odate';
 			aPop = new Array(
 				['txtProductno1_', 'btnProduct1_', 'bcc', 'noa,product,unit', 'txtProductno1_,txtProduct_,txtUnit_,txtMount_', 'bcc_b.aspx'],
-				['txtProductno2_', 'btnProduct2_', 'ucaucc', 'noa,product,spec,unit', 'txtProductno2_,txtProduct_,txtSpec_,txtUnit_,txtMount_', 'ucaucc_b.aspx'],
+				['txtProductno2_', 'btnProduct2_', 'ucaucc2', 'noa,product,unit,spec,stdmount', 'txtProductno2_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_,txtMount_', 'ucaucc2_b.aspx'],
 				['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_,txtMount_', 'fixucc_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp,addr', 'txtCno,txtAcomp,txtAddr2', 'acomp_b.aspx'],
@@ -897,7 +897,7 @@
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyles'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMount_st'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblOmounts'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblOmount_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTrandates'> </a></td>
@@ -927,7 +927,10 @@
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
-					<td><input id="txtOmount.*" type="text" class="txt num c1" /></td>
+					<td>
+						<input id="txtOmount.*" type="text" class="txt num c1" />
+						<input id="txtStdmount.*" type="text" class="txt c1 num"/>
+					</td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtTotal.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtTrandate.*" type="text" class="txt c1"/></td>
