@@ -53,7 +53,7 @@
                 if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',tgg)>0";
                 if(t_ordbno.length>0)
-                    t_where += " and exists(select noa from ordcs"+r_accy+" where ordcs"+r_accy+".noa=ordc"+r_accy+".noa and ordcs"+r_accy+".ordbno='"+t_ordbno+"')";
+                    t_where += " and exists(select noa from ordct"+r_accy+" where ordct"+r_accy+".noa=ordc"+r_accy+".noa and ordct"+r_accy+".ordbno='"+t_ordbno+"')";
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
             }
