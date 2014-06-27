@@ -1,31 +1,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
-	<head>
-		<title></title>
-		<script src="../script/jquery.min.js" type="text/javascript"></script>
-		<script src='../script/qj2.js' type="text/javascript"></script>
-		<script src='qset.js' type="text/javascript"></script>
-		<script src='../script/qj_mess.js' type="text/javascript"></script>
-		<script src="../script/qbox.js" type="text/javascript"></script>
-		<script src='../script/mask.js' type="text/javascript"></script>
-		<link href="../qbox.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript">
+    <head>
+        <title> </title>
+        <script src="../script/jquery.min.js" type="text/javascript"></script>
+        <script src='../script/qj2.js' type="text/javascript"></script>
+        <script src='qset.js' type="text/javascript"></script>
+        <script src='../script/qj_mess.js' type="text/javascript"></script>
+        <script src="../script/qbox.js" type="text/javascript"></script>
+        <script src='../script/mask.js' type="text/javascript"></script>
+        <link href="../qbox.css" rel="stylesheet" type="text/css" />
+        <link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+        <script src="css/jquery/ui/jquery.ui.core.js"></script>
+        <script src="css/jquery/ui/jquery.ui.widget.js"></script>
+        <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
+        <script type="text/javascript">
 			this.errorHandler = null;
 			function onPageError(error) {
 				alert("An error occurred:\r\n" + error.Message);
 			}
 			q_desc = 1;
-			q_tables = 's';
+			q_tables = 't';
 			var q_name = "ordc";
 			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount'];
+			var q_readonlyt = [];
+
 			var bbmNum = [
 				['txtFloata', 10, 5, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],
 				['txtTotal', 10, 0, 1], ['txtTotalus', 10, 0, 1]
 			];
 			var bbsNum = [['txtMount', 10, 0, 1], ['txtPrice', 10, 3, 1], ['txtTotal', 10, 0, 1], ['txtOmount', 10, 0, 1]];
+			var bbtNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
+			var bbtMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwCount2 = 14;
@@ -44,6 +52,7 @@
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'no2'];
+				bbtKey = ['noa', 'noq'];
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
@@ -273,10 +282,20 @@
 						if($('#chkEnda').prop('checked'))
 							$('#chkEnda_'+j).prop('checked','true');
 						if($('#chkCancel').prop('checked'))
-							$('#chkCancel_'+j).prop('checked','true')
+							$('#chkCancel_'+j).prop('checked','true');
 					}
 				}
-				
+				//(BBS,BBT) 【取消】  同步
+				for(var i=0;i<q_bbsCount;i++){
+				    t_cancel = $('#chkCancel_'+i).prop('checked');
+				    t_no2 = $.trim($('#txtNo2_'+i).val());
+			        if(t_no2.length>0){
+			            for(var j=0;j<q_bbtCount;j++){
+			                if($.trim($('#txtNo2__'+j).val())== t_no2)
+			                    $('#chkCancel__'+j).prop('checked',t_cancel);
+			            }
+			        }
+				}
 				sum();
 				
 				if ($('#cmbKind').val() == '1') {
@@ -363,6 +382,14 @@
 				_bbsAssign();
 				product_change();
 			}
+			function bbtAssign() {
+                for (var i = 0; i < q_bbtCount; i++) {
+                    $('#lblNo__' + i).text(i + 1);
+                    if (!$('#btnMinut__' + i).hasClass('isAssign')) {
+                    }
+                }
+                _bbtAssign();
+            }
 
 			function btnIns() {
 				_btnIns();
@@ -469,6 +496,9 @@
 				if (q_tables == 's')
 					bbsAssign();
 			}
+			function btnPlut(org_htm, dest_tag, afield) {
+                _btnPlus(org_htm, dest_tag, afield);
+            }
 
 			function q_appendData(t_Table) {
 				return _q_appendData(t_Table);
@@ -730,6 +760,27 @@
 			.import {
 				background: #FFAA33;
 			}
+			#dbbt {
+                width: 800px;
+            }
+            #tbbt {
+                margin: 0;
+                padding: 2px;
+                border: 2px pink double;
+                border-spacing: 1;
+                border-collapse: collapse;
+                font-size: medium;
+                color: blue;
+                background: pink;
+                width: 100%;
+            }
+            #tbbt tr {
+                height: 35px;
+            }
+            #tbbt tr td {
+                text-align: center;
+                border: 2px pink double;
+            }
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -953,5 +1004,42 @@
 			</table>
 		</div>
 		<input id="q_sys" type="hidden" />
+		<div id="dbbt" style="display:none;">
+            <table id="tbbt">
+                <tbody>
+                    <tr class="head" style="color:white; background:#003366;">
+                        <td style="width:90px;">
+                        <input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
+                        </td>
+                        <td style="width:20px;"> </td>
+                        <td style="width:100px; text-align: center;">no2</td>
+                        <td style="width:100px; text-align: center;">ordbaccy</td>
+                        <td style="width:200px; text-align: center;">ordbno</td>
+                        <td style="width:100px; text-align: center;">no3</td>
+                        <td style="width:200px; text-align: center;">productno</td>
+                        <td style="width:100px; text-align: center;">unit</td>
+                        <td style="width:100px; text-align: center;">mount</td>
+                        <td style="width:100px; text-align: center;">weight</td>
+                        <td style="width:100px; text-align: center;">cancel</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+                            <input id="txtNoq..*" type="text" style="display:none;"/>
+                        </td>
+                        <td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+                        <td><input id="txtNo2..*" type="text" style="width:95%;"/></td>
+                        <td><input id="txtOrdbaccy..*" type="text" style="width:95%;"/></td>
+                        <td><input id="txtOrdbno..*" type="text" style="width:95%;"/></td>
+                        <td><input id="txtNo3..*" type="text" style="width:95%;"/></td>
+                        <td><input id="txtProductno..*" type="text" style="width:95%;"/></td>
+                        <td><input id="txtUnit..*" type="text" style="width:95%;"/></td>
+                        <td><input id="txtMount..*"  type="text" style="width:95%; text-align: right;"/></td>
+                        <td><input id="txtWeight..*"  type="text" style="width:95%; text-align: right;"/></td>
+                        <td align="center"><input class="btn" id="chkCancel..*" type="checkbox"/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 	</body>
 </html>
