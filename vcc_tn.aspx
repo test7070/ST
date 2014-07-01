@@ -24,9 +24,7 @@
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTax'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtStore'];
-			if(r_rank<8){
-				q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtStore','txtPrice'];
-			}
+			
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -148,6 +146,9 @@
 			}
 
 			function mainPost() {// 載入資料完，未 refresh 前
+				if(r_rank<8){
+					q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtStore','txtPrice'];
+				}
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);

@@ -23,9 +23,7 @@
 			var q_name = "orde";
 			var q_readonly = ['txtApv', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWeight', 'txtSales'];
 			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv','textComp','textComp2','textOutcomp','textOutcomp2'];
-			if(r_rank<8){
-				q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv','textComp','textComp2','textOutcomp','textOutcomp2,txtPrice'];
-			}
+			
 			var bbmNum = [
 				['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1]
@@ -146,6 +144,9 @@
 			}
 			
 			function mainPost() {// 載入資料完，未 refresh 前
+				if(r_rank<8){
+					q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv','textComp','textComp2','textOutcomp','textOutcomp2,txtPrice'];
+				}
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				bbsMask = [['txtDatea', r_picd], ['txtStyle', 'A']];
