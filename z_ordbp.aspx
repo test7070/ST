@@ -118,6 +118,18 @@
 						type : '8',
 						name : 'isdetails',
 						value : '1@明細'.split(',')
+					}, {/*22[35]*/
+						type : '8',
+						name : 'unrprice',
+						value : '1@只顯示廠商未回報'.split(',')
+					},{/* [36]*/
+						type : '0',
+						name : 'mount_precision',
+						value : q_getPara('vcc.mountPrecision')
+					},{/* [37]*/
+						type : '0',
+						name : 'price_precision',
+						value : q_getPara('vcc.pricePrecision')
 					}]
 				});
 				q_popAssign();

@@ -29,7 +29,7 @@
 				['txtFloata', 10, 5, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],
 				['txtTotal', 10, 0, 1], ['txtTotalus', 10, 0, 1]
 			];
-			var bbsNum = [['txtMount', 10, 0, 1], ['txtPrice', 10, 3, 1], ['txtTotal', 10, 0, 1], ['txtOmount', 10, 0, 1]];
+			var bbsNum = [];
 			var bbtNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -85,6 +85,8 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd], ['txtTrandate', r_picd], ['txtEtd', r_picd], ['txtEta', r_picd], ['txtOnboarddate', r_picd]];
 				bbsMask = [['txtTrandate', r_picd]];
+				bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1], ['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTotal', 10, 0, 1], ['txtOmount', 10, q_getPara('vcc.mountPrecision'), 1]	,
+								['txtStdmount', 10, q_getPara('vcc.mountPrecision'), 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1],['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbKind", q_getPara('ordc.kind'));
 				q_cmbParse("cmbCoin", q_getPara('sys.coin'));

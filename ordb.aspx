@@ -23,10 +23,7 @@
 				['txtFloata', 10, 5, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],
 				['txtTotal', 10, 0, 1], ['txtTotalus', 10, 0, 1]
 			];
-			var bbsNum = [
-				['txtMount', 10, 0, 1], ['txtOmount', 10, 0, 1], ['txtPrice', 10, 2, 1],
-				['txtTotal', 10, 0, 1], ['txtC1', 10, 2, 1], ['txtNotv', 10, 2, 1]
-			];
+			var bbsNum = [];
 			var bbtNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -139,9 +136,10 @@
 
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [
-					['txtDatea', r_picd], ['txtOdate', r_picd]
-				];
+				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
+				bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1], ['txtOmount', 10, q_getPara('vcc.mountPrecision'), 1], ['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1],
+										['txtTotal', 10, 0, 1], ['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1], ['txtStdmount', 10, q_getPara('vcc.mountPrecision'), 1]];
+				
 				bbsMask = [['txtLdate', r_picd]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbKind", q_getPara('ordb.kind'));
@@ -1099,9 +1097,9 @@
 						<input id="txtProductno3.*" type="text" class="txt c1" style="width:97%;float:left;"/>
 						<input id="txtProductno.*" style="display:none;" />
 						<input id="txtNo3.*" type="text" style="width:80px;float:left;"/>
-						<input id="btnProduct1.*" type="button" value='...' style="font-weight: bold;float:left;" />
-						<input id="btnProduct2.*" type="button" value='...' style="font-weight: bold;float:left;" />
-						<input id="btnProduct3.*" type="button" value='...' style="font-weight: bold;float:left;" />
+						<input id="btnProduct1.*" type="button" value='.' style="font-weight: bold;float:left;" />
+						<input id="btnProduct2.*" type="button" value='.' style="font-weight: bold;float:left;" />
+						<input id="btnProduct3.*" type="button" value='.' style="font-weight: bold;float:left;" />
 					</td>
 					<td>
 						<input id="txtProduct.*" type="text" class="txt c2"/>
