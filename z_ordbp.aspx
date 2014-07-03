@@ -124,10 +124,10 @@
 						value : '1@只顯示廠商未回報'.split(',')
 					},{/* [36]*/
 						type : '0',
-						name : 'mount_precision',
+						name : 'mount_precision',//數量的小數位數
 						value : q_getPara('vcc.mountPrecision')
 					},{/* [37]*/
-						type : '0',
+						type : '0',//價格的小數位數
 						name : 'price_precision',
 						value : q_getPara('vcc.pricePrecision')
 					}]
