@@ -126,27 +126,12 @@
                     //---------------------------------------
                     t_weights = q_float('txtWeight_' + j);                    
                     t_mounts = q_float('txtMount_' + j);
-                    t_sprices = q_float('txtSprice_' + j);
-                    if(t_sprices>0){
-                            
-                        if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
-                            t_moneys = round(q_mul(t_weights,t_sprices),0);
-                            t_prices = t_mounts==0?0: round(q_div(t_moneys,t_weights),3);                
-                        }else{
-                            t_moneys = round(q_mul(t_weights,t_sprices),0);
-                            t_prices = t_mounts==0?0: round(q_div(t_moneys,t_mounts),3);
-                        }
+                    t_prices = q_float('txtPrice_' + j);
+                    if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
+                        t_moneys = round(q_mul(t_weights,t_prices),0);              
                     }else{
-                        t_prices = q_float('txtPrice_' + j);
-                        if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
-                            t_moneys = q_mul(t_prices,t_weights);
-                        }else{
-                            t_moneys = q_mul(t_prices,t_mounts);
-                        }
-                        t_sprices = t_weights==0?0: round(q_div(t_moneys,t_weights),3);
+                        t_moneys = round(q_mul(t_mounts,t_prices),0);
                     }
-                    $('#txtPrice_'+j).val(t_prices);
-                    $('#txtSprice_'+j).val(t_sprices);
                     if(t_float==0){
                         t_moneys = round(t_moneys,0);
                     }else{
@@ -806,9 +791,50 @@
                             sum();
                         });
                         $('#txtPrice_' + j).focusout(function() {
+                            var n = $(this).attr('id').replace('txtPrice_','');
+                            t_unit = $.trim($('#txtUnit_' + n).val()).toUpperCase();
+                            t_product = $.trim($('#txtProduct_' + n).val());
+                            t_weights = q_float('txtWeight_' + n);                    
+                            t_mounts = q_float('txtMount_' + n);
+                            if(t_unit.length==0 && t_product.length>0){
+                                if(t_product.indexOf('管')>0)
+                                    t_unit = '支';
+                                else
+                                    t_unit = 'KG';
+                                $('#txtUnit_' + n).val(t_unit);
+                            }                 
+                            t_prices = q_float('txtPrice_' + n);    
+                            if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
+                                t_moneys = q_mul(t_prices,t_weights);
+                            }else{
+                                t_moneys = q_mul(t_prices,t_mounts);
+                            }
+                            t_sprices = t_weights==0?0: round(q_div(t_moneys,t_weights),3);
+                            $('#txtSprice_'+n).val(t_sprices);
                             sum();
                         });
                         $('#txtSprice_' + j).focusout(function() {
+                            var n = $(this).attr('id').replace('txtSprice_','');
+                            t_unit = $.trim($('#txtUnit_' + n).val()).toUpperCase();
+                            t_product = $.trim($('#txtProduct_' + n).val());
+                            t_weights = q_float('txtWeight_' + n);                    
+                            t_mounts = q_float('txtMount_' + n);
+                            if(t_unit.length==0 && t_product.length>0){
+                                if(t_product.indexOf('管')>0)
+                                    t_unit = '支';
+                                else
+                                    t_unit = 'KG';
+                                $('#txtUnit_' + n).val(t_unit);
+                            }                 
+                            t_sprices = q_float('txtSprice_' + n);   
+                            if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
+                                t_moneys = round(q_mul(t_weights,t_sprices),0);
+                                t_prices = t_weights==0?0: round(q_div(t_moneys,t_weights),3);                
+                            }else{
+                                t_moneys = round(q_mul(t_weights,t_sprices),0);
+                                t_prices = t_mounts==0?0: round(q_div(t_moneys,t_mounts),3);
+                            }
+                            $('#txtPrice_'+n).val(t_prices);
                             sum();
                         });
                         $('#txtMount_' + j).focusout(function() {
