@@ -137,14 +137,14 @@
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
-				bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1], ['txtOmount', 10, q_getPara('vcc.mountPrecision'), 1], ['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1],
-										['txtTotal', 10, 0, 1], ['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1], ['txtStdmount', 10, q_getPara('vcc.mountPrecision'), 1]];
+				bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtOmount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtPrice', 10, q_getPara('rc2.pricePrecision'), 1],
+										['txtTotal', 10, 0, 1], ['txtC1', 10, q_getPara('rc2.mountPrecision'), 1], ['txtNotv', 10, q_getPara('rc2.mountPrecision'), 1], ['txtStdmount', 10, q_getPara('rc2.mountPrecision'), 1]];
 				
 				bbsMask = [['txtLdate', r_picd]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbKind", q_getPara('ordb.kind'));
 				q_cmbParse("cmbCoin", q_getPara('sys.coin'));
-				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
+				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 
