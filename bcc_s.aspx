@@ -34,7 +34,7 @@
                 	case 'bcctype':
 						var as = _q_appendData("bcctype", "", true);
 						if (as[0] != undefined) {
-							var t_item = "@全部,";
+							var t_item = "@全部";
 							for (i = 0; i < as.length; i++) {
 								t_item = t_item + (t_item.length > 0 ? ',' : '') + $.trim(as[i].noa) + '@' + $.trim(as[i].namea);
 							}

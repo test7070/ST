@@ -130,6 +130,10 @@
 						type : '0',//價格的小數位數
 						name : 'price_precision',
 						value : q_getPara('vcc.pricePrecision')
+					}, {/*23[38]*/
+						type : '5',
+						name : 'xenda',
+						value : '#non@全部,1@Y,0@N'.split(',')
 					}]
 				});
 				q_popAssign();
