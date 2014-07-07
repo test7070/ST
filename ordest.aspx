@@ -28,7 +28,7 @@
             var q_readonlyt = ['txtTotal', 'txtQuatno', 'txtTheory'];
             var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1]];
             // 允許 key 小數
-            var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1], ['txtMount', 10, 2, 1],['txtTheory',10,3,1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
+            var bbsNum = [['txtPrice', 15, 3, 1],['txtSprice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1], ['txtMount', 10, 2, 1],['txtTheory',10,3,1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbtNum = [['txtMount', 10, 2, 1], ['txtWeight', 10, 3, 1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
@@ -124,13 +124,13 @@
                     }
                     getTheory(j);
                     //---------------------------------------
-                    t_weights = q_float('txtWeight_' + j);
-                    t_prices = q_float('txtPrice_' + j);
+                    t_weights = q_float('txtWeight_' + j);                    
                     t_mounts = q_float('txtMount_' + j);
+                    t_prices = q_float('txtPrice_' + j);
                     if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
-                        t_moneys = q_mul(t_prices,t_weights);
+                        t_moneys = round(q_mul(t_weights,t_prices),0);              
                     }else{
-                        t_moneys = q_mul(t_prices,t_mounts);
+                        t_moneys = round(q_mul(t_mounts,t_prices),0);
                     }
                     if(t_float==0){
                         t_moneys = round(t_moneys,0);
@@ -791,6 +791,50 @@
                             sum();
                         });
                         $('#txtPrice_' + j).focusout(function() {
+                            var n = $(this).attr('id').replace('txtPrice_','');
+                            t_unit = $.trim($('#txtUnit_' + n).val()).toUpperCase();
+                            t_product = $.trim($('#txtProduct_' + n).val());
+                            t_weights = q_float('txtWeight_' + n);                    
+                            t_mounts = q_float('txtMount_' + n);
+                            if(t_unit.length==0 && t_product.length>0){
+                                if(t_product.indexOf('管')>0)
+                                    t_unit = '支';
+                                else
+                                    t_unit = 'KG';
+                                $('#txtUnit_' + n).val(t_unit);
+                            }                 
+                            t_prices = q_float('txtPrice_' + n);    
+                            if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
+                                t_moneys = q_mul(t_prices,t_weights);
+                            }else{
+                                t_moneys = q_mul(t_prices,t_mounts);
+                            }
+                            t_sprices = t_weights==0?0: round(q_div(t_moneys,t_weights),3);
+                            $('#txtSprice_'+n).val(t_sprices);
+                            sum();
+                        });
+                        $('#txtSprice_' + j).focusout(function() {
+                            var n = $(this).attr('id').replace('txtSprice_','');
+                            t_unit = $.trim($('#txtUnit_' + n).val()).toUpperCase();
+                            t_product = $.trim($('#txtProduct_' + n).val());
+                            t_weights = q_float('txtWeight_' + n);                    
+                            t_mounts = q_float('txtMount_' + n);
+                            if(t_unit.length==0 && t_product.length>0){
+                                if(t_product.indexOf('管')>0)
+                                    t_unit = '支';
+                                else
+                                    t_unit = 'KG';
+                                $('#txtUnit_' + n).val(t_unit);
+                            }                 
+                            t_sprices = q_float('txtSprice_' + n);   
+                            if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
+                                t_moneys = round(q_mul(t_weights,t_sprices),0);
+                                t_prices = t_weights==0?0: round(q_div(t_moneys,t_weights),3);                
+                            }else{
+                                t_moneys = round(q_mul(t_weights,t_sprices),0);
+                                t_prices = t_mounts==0?0: round(q_div(t_moneys,t_mounts),3);
+                            }
+                            $('#txtPrice_'+n).val(t_prices);
                             sum();
                         });
                         $('#txtMount_' + j).focusout(function() {
@@ -1786,6 +1830,7 @@
                     <td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
                     <td align="center" style="width:120px;"><a id='lblMount'> </a></td>
                     <td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
+                    <td align="center" style="width:120px;"><a id='lblSprices'>單價(KG)</a></td>
                     <td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
                     <td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
                     <td align="center" style="width:50px;"><a id='lblOrdet_st'> </a></td>
@@ -1849,6 +1894,9 @@
                     </td>
                     <td>
                     <input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/>
+                    </td>
+                    <td>
+                    <input id="txtSprice.*" type="text"  class="txt num" style="width:95%;"/>
                     </td>
                     <td>
                     <input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>
