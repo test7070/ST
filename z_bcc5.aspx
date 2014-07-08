@@ -67,14 +67,6 @@
 							type : '8',
 							name : 'xpart',
 							value : t_part.split(',')
-						},{/*5 大昌用*/
-							type : '5',
-							name : 'xall',
-							value : ('全部,剩餘量,無存量').split(',')
-						},{/*6 大昌用*/
-							type : '5',
-							name : 'typea',
-							value : ('#non@全部,'+q_getPara('bcc.type')).split(',')
 						}]
                     });
                     q_popAssign();
