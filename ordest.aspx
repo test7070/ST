@@ -828,10 +828,10 @@
                             }                 
                             t_sprices = q_float('txtSprice_' + n);   
                             if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
-                                t_moneys = round(q_mul(t_weights,t_sprices),0);
+                                t_moneys = round(q_mul(t_weights,t_sprices),3);
                                 t_prices = t_weights==0?0: round(q_div(t_moneys,t_weights),3);                
                             }else{
-                                t_moneys = round(q_mul(t_weights,t_sprices),0);
+                                t_moneys = round(q_mul(t_weights,t_sprices),3);
                                 t_prices = t_mounts==0?0: round(q_div(t_moneys,t_mounts),3);
                             }
                             $('#txtPrice_'+n).val(t_prices);
