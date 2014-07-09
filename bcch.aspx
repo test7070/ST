@@ -1,4 +1,3 @@
-<%@ Page Language="C#" AutoEventWireup="true" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 <head>
@@ -19,10 +18,10 @@
         var q_name = "bcch";
         var decbbs = ['price', 'sprice'];
         var decbbm = [];
-        var q_readonly = [];
+        var q_readonly = ['txtNoa'];
         var q_readonlys = [];
         var bbmNum = [];  
-        var bbsNum = [['txtMount', 15, 4], ['txtGmount', 15, 4], ['txtEmount', 15, 4]];
+        var bbsNum = [];
         var bbmMask = [];
         var bbsMask = [];
         q_sqlCount = 6; brwCount = 6; brwList =[] ; brwNowPage = 0 ; brwKey = 'Datea';
@@ -51,25 +50,11 @@
             
         }  ///  end Main()
 
-       
-
         function mainPost() { 
-            fbbm[fbbm.length] = 'txtMemo'; 
             q_getFormat();
-            bbmMask = [['txtDatea', r_picd], ['txtCucdate', r_picd]];
             q_mask(bbmMask);
-
-           
-
-            $('#btnStore').click(function () { pop('store'); }); 
-            $('#btnStore').mouseenter(function () { $(this).css('cursor', 'pointer') });
-            $("#txtStoreno").change(function () { q_change($(this), 'store', 'noa', 'noa,store'); }); 
-
-            $('#btnStation').click(function () { pop('station'); });
-            $('#btnStation').mouseenter(function () { $(this).css('cursor', 'pointer') });
-            $("#txtStationno").change(function () { q_change($(this), 'station', 'noa', 'noa,station'); }); 
-
-            $('#btnquat').click(function () { btnquat(); });
+            bbsMask = [['txtDatea', r_picd], ['txtOdate', r_picd], ['txtQdate', r_picd]];
+            bbsNum = [['txtPrice', 10, q_getPara('rc2.pricePrecision') ,1], ['txtSprice', 15, q_getPara('rc2.pricePrecision'),1], ['txtQday', 5, 0,1]];
         }
 
         function q_boxClose( s2) { 
@@ -526,20 +511,24 @@
                 <td align="center"><a id='lblDatea'> </a></td>
                 <td align="center"><a id='lblPrice'> </a></td>
                 <td align="center"><a id='lblUnit'> </a></td>
-                <td align="center"><a id='lblMemos'> </a></td>
                 <td align="center"><a id='lblSprice'> </a></td>
+                <td align="center"><a id='lblMemos'> </a></td>
                 <td align="center"><a id='lblOdate'> </a></td>
                 <td align="center"><a id='lblChkname'> </a></td>
+                <td align="center"><a id='lblQdate'> </a></td>
+                <td align="center"><a id='lblQday'> </a></td>
             </tr>
             <tr  style='background:#cad3ff;'>
                 <td style="width:1%;"><input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" /></td>
                 <td ><input class="txt c1" id="txtDatea.*"type="text" /></td>
-                <td ><input class="txt c1" id="txtPrice.*" type="text"/></td>
+                <td ><input class="txt c1 num" id="txtPrice.*" type="text"/></td>
                 <td ><input class="txt c1" id="txtUnit.*" type="text" /></td>
+                <td ><input class="txt c1 num" id="txtSprice.*"type="text" /></td>
                 <td ><input class="txt c1" id="txtMemo.*" type="text" /></td>
-                <td ><input class="txt c1" id="txtSprice.*"type="text" /></td>
                 <td ><input class="txt c1" id="txtOdate.*" type="text" /></td>
                 <td ><input class="txt c1" id="txtChkname.*" type="text" />
+                <td ><input class="txt c1" id="txtQdate.*" type="text" /></td>
+                <td ><input class="txt c1 num" id="txtQday.*" type="text" /></td>
                 <input id="txtNoq.*" type="hidden" /><input id="recno.*" type="hidden"/> </td>
             </tr>
         </table>

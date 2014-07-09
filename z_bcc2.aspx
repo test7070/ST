@@ -41,7 +41,15 @@
             function loadFinish() {
                 $('#q_report').q_report({
                     fileName : 'z_bcc2',
-                    options : [{
+                    options : [{/* [1]*/
+						type : '0',//數量的小數位數
+						name : 'mount_precision',
+						value : q_getPara('rc2.mountPrecision')
+					},{/* [2]*/
+						type : '0',//價格的小數位數
+						name : 'price_precision',
+						value : q_getPara('rc2.pricePrecision')
+					},{
                         type : '1',
                         name : 'date'
                     }, {

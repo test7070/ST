@@ -53,6 +53,9 @@
             }
 
             function mainPost() {
+            	if(q_getPara('sys.comp').indexOf('裕承隆')>-1)
+            		q_readonly = ['txtNoa', 'txtApprover','txtWorker','txtMech'];
+            		
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
