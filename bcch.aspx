@@ -60,51 +60,6 @@
         function q_boxClose( s2) { 
             var ret; 
             switch (b_pop) {   
-                case 'tgg': 
-                    q_changeFill(t_name, 'txtTggno,txtComp,txtTel,txtPost,txtAddr,txtPay,cmbTrantype', 'noa,comp,tel,post_fact,addr_fact,pay,trantype');
-                    break;
-
-                case 'ucc':
-                    ret = getb_ret();
-                    if (q_cur > 0 && q_cur < 4) q_browFill('txtProductno_' + b_seq + ',txtProduct_' + b_seq, ret, 'noa,product');
-                    break;
-
-                case 'store':
-                    ret = getb_ret();
-                    if (q_cur > 0 && q_cur < 4) q_browFill('txtStoreno,txtStore', ret, 'noa,store');
-                    break;
-
-                case 'station':
-                    ret = getb_ret();
-                    if (q_cur > 0 && q_cur < 4) q_browFill('txtStationno,txtStation', ret, 'noa,station');
-                    break;
-
-                case 'ordes':
-                    if (q_cur > 0 && q_cur < 4) {
-                        b_ret = getb_ret();
-                        if (!b_ret || b_ret.length == 0)
-                            return;
-                        var i, j = 0;
-                        ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2', b_ret.length, b_ret
-                                                           , 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2'
-                                                           , 'txtProductno,txtProduct,txtSpec');  
-                        bbsAssign();
-
-                        for (i = 0; i < ret.length; i++) {
-                            k = ret[i];  
-                            if (!b_ret[i]['unit'] || b_ret[i]['unit'].toUpperCase() == 'KG') {
-                                $('#txtMount_' + k).val(b_ret[i]['notv']);
-                                $('#txtWeight_' + k).val(divide0(b_ret[i]['weight'] * b_ret[i]['notv'], b_ret[i]['mount']));
-                            }
-                            else {
-                                $('#txtWeight_' + k).val(b_ret[i]['notv']);
-                                $('#txtMount_' + k).val(divide0(b_ret[i]['mount'] * b_ret[i]['notv'], b_ret[i]['weight']));
-                            }
-
-                        }  /// for i
-                    }
-                    break;
-                
                 case q_name + '_s':
                     q_boxClose2(s2); ///   q_boxClose 3/4
                     break;
