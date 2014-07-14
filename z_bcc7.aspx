@@ -28,15 +28,23 @@
                     case 'store':
                         t_store = '';
                         var as = _q_appendData("store", "", true);
-                        t_store += '99@全部';
+                        t_store += '#non@全部';
                         for ( i = 0; i < as.length; i++) {
                             t_store += (t_store.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
                         }
                         break;
                 }
                $('#q_report').q_report({
-                        fileName : 'z_bcc7',
-                        options : [{
+					fileName : 'z_bcc7',
+					options : [{/* [1]*/
+						type : '0',//數量的小數位數
+						name : 'mount_precision',
+						value : q_getPara('rc2.mountPrecision')
+					},{/* [2]*/
+						type : '0',//價格的小數位數
+						name : 'price_precision',
+						value : q_getPara('rc2.pricePrecision')
+					},{
                         type : '6',
                         name : 'xyear'
                     },{
@@ -68,6 +76,11 @@
             function q_boxClose(s2) {
             }
 		</script>
+		<style type="text/css">
+			#frameReport table{
+					border-collapse: collapse;
+				}
+		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"

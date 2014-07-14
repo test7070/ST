@@ -563,6 +563,8 @@
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td><input id="txtNoa"  type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblContract" class="lbl"> </a></td>
+						<td><input id="txtContract"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
