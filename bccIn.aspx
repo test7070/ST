@@ -21,7 +21,7 @@
             var q_readonly = ['txtNoa', 'txtWorker','txtMoney','txtTax','txtTotal'];
             var q_readonlys = ['txtTotal'];
             var bbmNum = [['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtDiscount', 10, 0, 1]];
-            var bbsNum = [['txtMount', 10, 0, 1], ['txtMount2', 10, 0, 1], ['txtPrice', 15, 3, 1], ['txtDiscount', 15, 0, 1], ['txtMoney', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtErrmount', 15, 0, 1]];
+            var bbsNum = [];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -41,6 +41,7 @@
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1);
             });
+            
             function main() {
                 if (dataErr) {
                     dataErr = false;
@@ -50,9 +51,12 @@
             }
 
             function mainPost() {
+            	bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtMount2', 10, q_getPara('rc2.mountPrecision'), 1]
+           						,['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1], ['txtMoney', 15, 0, 1], ['txtTotal', 15, 0, 1]
+           						, ['txtErrmount', 15, q_getPara('rc2.mountPrecision'), 1],['txtWeight', 15, q_getPara('rc2.weightPrecision'), 1]];
+            	
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
-
                 q_mask(bbmMask);
                 q_gt('store', '', 0, 0, 0, "");
                 q_gt('part', '', 0, 0, 0, "");
@@ -639,11 +643,12 @@
 					<td align="center" style="width: 13%;"><a id='lblBccname'> </a></td>
 					<td align="center" style="width: 5%;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width: 5%;"><a id='lblMount'> </a></td>
+					<td align="center" style="width: 5%;"><a id='lblWeight'> </a></td>
 					<td align="center" style="width: 5%;"><a id='lblMount2'> </a></td>	
 					<td align="center" style="width: 5%;"><a id='lblPrice'> </a></td>
 					<td align="center" style="width: 5%;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width: 6%;"><a id='lblErrmount'> </a></td>
-					<td align="center" style="width: 10%;"><a id='lblUno'> </a></td>
+					<td align="center" style="width: 8%;"><a id='lblUno'> </a></td>
 					<td align="center" style="width: 10%;"><a id='lblMemos'> </a>/<a id='lblOrdcnos'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -660,6 +665,7 @@
 					<td><input id="txtBccname.*" type="text" style="width: 95%;" /></td>
 					<td><input id="txtUnit.*" type="text" style="width: 95%;"/></td>
 					<td><input id="txtMount.*" type="text" style="width: 95%; text-align: right;"/></td>
+					<td><input id="txtWeight.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtMount2.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtPrice.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtTotal.*" type="text" style="width: 95%; text-align: right;"/></td>

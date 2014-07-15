@@ -36,8 +36,8 @@
 			//q_xchg = 1;
 			brwCount2 = 10;
 			aPop = new Array(
-				['txtProductno1_', 'btnProduct1_', 'bcc', 'noa,product,unit', 'txtProductno1_,txtProduct_,txtUnit_', 'bcc_b.aspx'],
-				['txtProductno2_', 'btnProduct2_', 'ucaucc2', 'noa,product,unit,spec,stdmount', 'txtProductno2_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_', 'ucaucc2_b.aspx'],
+				['txtProductno1_', 'btnProduct1_', 'ucaucc2', 'noa,product,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_', 'ucaucc2_b.aspx'],
+				['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_', 'bcc_b.aspx'],
 				['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_', 'fixucc_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],

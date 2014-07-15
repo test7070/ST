@@ -20,7 +20,7 @@
             var q_readonly = ['txtNoa', 'txtApprover','txtWorker','txtMech','txtSname'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtMount', 10, 0, 1], ['txtBkbcc', 10, 0, 1]];
+            var bbsNum = [];
             var bbmMask = [];
             var bbsMask = [];
             q_desc = 1;
@@ -55,6 +55,8 @@
             function mainPost() {
             	if(q_getPara('sys.comp').indexOf('裕承隆')>-1)
             		q_readonly = ['txtNoa', 'txtApprover','txtWorker','txtMech'];
+            		
+            	bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtBkbcc', 10, q_getPara('rc2.mountPrecision'), 1]];
             		
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
@@ -490,11 +492,11 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:1%;"> </td>
-					<td align="center" style="width:5%;"><a id='lblBccno'></a></td>
-					<td align="center" style="width:18%;"><a id='lblBccname'></a></td>
-					<td align="center" style="width:5%;"><a id='lblMount'></a></td>
-					<td align="center" style="width:5%;"><a id='lblBkbcc'></a></td>
-					<td align="center"  style="width:10%;"><a id='lblUno'></a></td>
+					<td align="center" style="width:5%;"><a id='lblBccno'> </a></td>
+					<td align="center" style="width:18%;"><a id='lblBccname'> </a></td>
+					<td align="center" style="width:5%;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:5%;"><a id='lblBkbcc'> </a></td>
+					<td align="center"  style="width:10%;"><a id='lblUno'> </a></td>
 					<td align="center" style="width: 10%;"><a id='lblMemos'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>

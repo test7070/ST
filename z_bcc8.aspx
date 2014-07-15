@@ -44,6 +44,10 @@
 						type : '0',//價格的小數位數
 						name : 'price_precision',
 						value : q_getPara('rc2.pricePrecision')
+					},{/* [3]*/
+						type : '0',//重量的小數位數
+						name : 'weight_precision',
+						value : q_getPara('rc2.weightPrecision')
 					},{
                         type : '1',
                         name : 'date'

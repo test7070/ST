@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title></title>
+        <title> </title>
         <script src="../script/jquery.min.js" type="text/javascript"></script>
         <script src='../script/qj2.js' type="text/javascript"></script>
         <script src='qset.js' type="text/javascript"></script>
@@ -53,14 +53,32 @@
             }
             function loadFinish() {
                 $('#q_report').q_report({
-                    fileName : 'z_bcc9', options : [{
-                        type : '1', name : 'date'
+                    fileName : 'z_bcc9', 
+                    options : [{/* [1]*/
+						type : '0',//數量的小數位數
+						name : 'mount_precision',
+						value : q_getPara('rc2.mountPrecision')
+					},{/* [2]*/
+						type : '0',//價格的小數位數
+						name : 'price_precision',
+						value : q_getPara('rc2.pricePrecision')
+					},{
+                        type : '1', 
+                        name : 'date'
                     }, {
-                        type : '2', name : 'bcc', dbf : 'bcc', index : 'noa,product', src : 'bcc_b.aspx'
+                        type : '2', 
+                        name : 'bcc', 
+                        dbf : 'bcc', 
+                        index : 'noa,product', 
+                        src : 'bcc_b.aspx'
                     }, {
-                        type : '8', name : 'xstore', value : t_store.split(',')
+                        type : '8', 
+                        name : 'xstore', 
+                        value : t_store.split(',')
                     }, {
-                        type : '8', name : 'xtype', value : t_bcctype.split(',')
+                        type : '8', 
+                        name : 'xtype', 
+                        value : t_bcctype.split(',')
                     }]
                 });
                 q_popAssign();
@@ -72,6 +90,7 @@
                 $('#txtDate2').datepicker();
                 $('#chkXstore').children('input').attr('checked', 'checked');
                 $('#chkXtype').children('input').attr('checked', 'checked');
+                
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
@@ -82,6 +101,7 @@
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
                 $('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);
+                
                 t_date = new Date();
                 t_date.setDate(35);
                 t_date.setDate(0);

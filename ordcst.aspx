@@ -184,7 +184,7 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',1@物料');
+				q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料');
 				q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
@@ -427,7 +427,7 @@
                     opacity : 0
                 });
 				//物料品名欄位寫入
-				if ($('#cmbKind').val() == '1') {
+				if ($('#cmbKind').val() == '2') {
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#txtProductno_' + j).val($('#txtProductno1_' + j).val());
 					}
@@ -632,7 +632,7 @@
 				as['date'] = abbm2['date'];
 				as['kind'] = abbm2['kind'];
 				as['tggno'] = abbm2['tggno'];
-				as['odate'] = abbm2['kind'];
+				as['odate'] = abbm2['odate'];
 				as['enda'] = abbm2['enda'];
 
 				return true;

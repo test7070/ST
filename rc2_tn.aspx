@@ -654,7 +654,7 @@
 				$('#cmbTaxtype').val(4);
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
-				$('#cmbStype').val('2');
+				$('#cmbStype').val('1');
 				$('#cmbStype').attr('disabled', 'disabled');
 			}
 

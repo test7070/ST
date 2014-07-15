@@ -34,8 +34,8 @@
 			brwNowPage = 0;
 			brwKey = 'Odate';
 			aPop = new Array(
-				['txtProductno1_', 'btnProduct1_', 'bcc', 'noa,product,unit', 'txtProductno1_,txtProduct_,txtUnit_,txtMount_', 'bcc_b.aspx'],
-				['txtProductno2_', 'btnProduct2_', 'ucc', 'noa,product,spec,unit,saleprice', '0txtProductno2_,txtProduct_,txtSpec_,txtUnit_,txtPrice_,txtStyle_', 'ucc_b.aspx'],
+				['txtProductno1_', 'btnProduct1_', 'ucc', 'noa,product,spec,unit,saleprice', '0txtProductno1_,txtProduct_,txtSpec_,txtUnit_,txtPrice_,txtStyle_', 'ucc_b.aspx'],
+				['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_,txtMount_', 'bcc_b.aspx'],
 				['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_,txtMount_', 'fixucc_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales,txtPaytype', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp,addr', 'txtCno,txtAcomp,txtAddr2,txtTggno', 'acomp_b.aspx'],
@@ -588,7 +588,7 @@
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				$('#cmbTaxtype').val(4);
-				$('#cmbKind').val('2').change();
+				$('#cmbKind').val('1').change();
 				$('#cmbKind').attr('disabled', 'disabled');
 			}
 

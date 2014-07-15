@@ -30,7 +30,7 @@
                     case 'store':
                         t_store = '';
                         var as = _q_appendData("store", "", true);
-                        t_store += '99@全部';
+                        t_store += '#non@全部';
                         for ( i = 0; i < as.length; i++) {
                             t_store += (t_store.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
                         }
@@ -40,9 +40,22 @@
                 	t_isInit = true;
                 	var t_noa=typeof(q_getId()[3])=='undefined'?'':q_getId()[3];
                 	t_noa  =  t_noa.replace('noa=','');
+                	
                $('#q_report').q_report({
-                        fileName : 'z_bccin',
-                        options : [{
+					fileName : 'z_bccin',
+					options : [{/* [1]*/
+						type : '0',//數量的小數位數
+						name : 'mount_precision',
+						value : q_getPara('rc2.mountPrecision')
+					},{/* [2]*/
+						type : '0',//價格的小數位數
+						name : 'price_precision',
+						value : q_getPara('rc2.pricePrecision')
+					},{/* [3]*/
+						type : '0',//重量的小數位數
+						name : 'weight_precision',
+						value : q_getPara('rc2.weightPrecision')
+					},{
                         type : '6',
                         name : 'xnoa'
                     },{
@@ -68,7 +81,7 @@
 						name : 'xstore',
 						value : t_store.split(',')
                     }]
-                    });
+				});
                 q_popAssign();
                 q_langShow();
                  $('#txtDate1').mask('999/99/99');
