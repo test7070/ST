@@ -54,6 +54,12 @@
 						dbf : 'ucc',
 						index : 'noa,product',
 						src : 'ucc_b.aspx'
+					}, {
+						type : '2', //[12][13]
+						name : 'xcustno',
+						dbf : 'cust',
+						index : 'noa,comp',
+						src : 'cust_b.aspx'
 					},{
 						type : '5',
 						name : 'iscut',
