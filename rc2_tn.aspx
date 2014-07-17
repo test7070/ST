@@ -344,7 +344,8 @@
 						t_where = "isnull(b.enda,0)=0 && isnull(view_ordcs.enda,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "") + "&& " + (t_ordeno.length > 0 ? q_sqlPara("noa", t_ordeno) : "");
 					else
 						t_where = "isnull(b.enda,0)=0 && isnull(view_ordcs.enda,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "");
-					t_where = t_where;
+					t_where = t_where+" and isnull(cancel,0)=0 and noa in (select noa from view_ordcs where isnull(enda,0)!=1 and isnull(cancel,0)!=1 )";
+					t_where = t_where+" and datea>='"+q_date()+"'";
 				} else {
 					alert(q_getMsg('msgTggEmp'));
 					return;

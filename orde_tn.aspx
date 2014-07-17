@@ -957,7 +957,7 @@
 				tip($('#lblIsproj'), '<a style="color:red;font-size:16px;font-weight:bold;width:500px;display:block;">'+q_getMsg('lblIsproj')+'勾選後達到重量、數量將自動結案，否則需手動結案。</a>',-50,20);
 				tip($('#lblEnd'), '<a style="color:red;font-size:16px;font-weight:bold;width:500px;display:block;">手動結案後將不會再匯到裁剪、製管、派車、出貨。</a>',0,-10);
 				tip($('#btnBorn_0'), '<a style="color:red;font-size:16px;font-weight:bold;width:200px;display:block;">顯示該訂單的歷史記錄。</a>');
-				tip($('#btnCredit'), '<a style="color:red;font-size:16px;font-weight:bold;width:250px;display:block;">額度不足，訂單將無法存檔。</a>', 15);
+				tip($('#btnCredit'), '<a style="color:red;font-size:16px;font-weight:bold;width:250px;display:block;">查看目前客戶額度。</a>', 15);
 			}
 
 			function tip(obj, msg, x, y) {

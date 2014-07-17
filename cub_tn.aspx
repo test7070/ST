@@ -261,9 +261,11 @@
 								var tHours = timeDate.getHours();
 								var tMinutes = timeDate.getMinutes();
 								$('#txtBtime_' + n).val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+								$('#txtProduct2_'+n).val(r_name);
 							}else{
 								$('#txtDate2_' + n).val('');
 								$('#txtBtime_' + n).val('');
+								$('#txtProduct2_'+n).val('');
 							}
 							CountHard(n);
 						});
