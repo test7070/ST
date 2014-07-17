@@ -22,7 +22,7 @@
             var bbmNum = [];
             var bbsNum = [['txtQday', 10, 0, 1]];
             var bbmMask = [];
-            var bbsMask = [['txtQdate', '999/99/99']];
+            var bbsMask = [['txtQdate', '999/99/99'],['txtQtime', '99:99']];
 
             $(document).ready(function() {
                 bbmKey = [];
@@ -78,10 +78,12 @@
 							var w_Hours = padL(NowTime.getHours(),'0',2); 
 							var w_Minutes = padL(NowTime.getMinutes(),'0',2);
 							$('#txtChkname_'+b_seq).val(r_name);
-							$('#txtQdate_'+b_seq).val(q_date()+' '+w_Hours+':'+w_Minutes);
+							$('#txtQdate_'+b_seq).val(q_date());
+							$('#txtQtime_'+b_seq).val(w_Hours+':'+w_Minutes);
 						}else{
 							$('#txtChkname_'+b_seq).val('');
 							$('#txtQdate_'+b_seq).val('');
+							$('#txtQtime_'+b_seq).val('');
 						}				
 					});
                 }
@@ -178,6 +180,7 @@
 						<input class="txt" id="txtNoa.*" type="text" style="width:95%; text-align: center;"  />
 						<input class="txt" id="txtNoq.*" type="hidden"/>
 						<input class="txt" id="txtQdate.*" type="hidden"/>
+						<input class="txt" id="txtQtime.*" type="hidden"/>
 						<input class="txt" id="txtChkname.*" type="hidden"/>
 					</td>
 				</tr>

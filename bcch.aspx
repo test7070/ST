@@ -20,7 +20,7 @@
             var decbbs = ['price', 'sprice'];
             var decbbm = [];
             var q_readonly = ['txtNoa','txtBccname','txtTgg','txtUnit'];
-            var q_readonlys = ['txtChkname', 'txtQdate', 'txtQday'];
+            var q_readonlys = ['txtChkname', 'txtQdate', 'txtQday', 'txtQtime'];
             var bbmNum = [];
             var bbsNum = [];
             var bbmMask = [];
@@ -142,7 +142,7 @@
             }
 
             function btnPrint() {
-
+				q_box("z_bcch.aspx", 'bcch', "95%", "95%", q_getMsg("popPrint"));
             }
 
             function wrServer(key_value) {
@@ -197,6 +197,7 @@
 							$('#txtPrice_'+i).css('background','RGB(237,237,237)').attr('readonly','readonly');
 							$('#txtSprice_'+i).css('background','RGB(237,237,237)').attr('readonly','readonly');
 							$('#txtOdate_'+i).css('background','RGB(237,237,237)').attr('readonly','readonly');
+							$('#btnMinus_'+i).attr('disabled','disabled');
 						}
                 	} // j
                 }
@@ -471,6 +472,7 @@
 					<td align="center"><a id='lblOdate'> </a></td>
 					<td align="center"><a id='lblChkname'> </a></td>
 					<td align="center"><a id='lblQdate'> </a></td>
+					<td align="center"><a id='lblQtime'> </a></td>
 					<td align="center"><a id='lblQday'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -481,6 +483,7 @@
 					<td ><input class="txt c1" id="txtOdate.*" type="text" /></td>
 					<td ><input class="txt c1" id="txtChkname.*" type="text" /></td>
 					<td ><input class="txt c1" id="txtQdate.*" type="text" /></td>
+					<td ><input class="txt c1" id="txtQtime.*" type="text" /></td>
 					<td>
 						<input class="txt c1 num" id="txtQday.*" type="text" />
 						<input id="txtNoq.*" type="hidden" />
