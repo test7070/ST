@@ -149,6 +149,16 @@
                         q_box("rc2a.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'rc2a', "95%", "95%", q_getMsg('popRc2a'));
                     }
                 });
+                
+                $('#lblInvo').click(function() {
+					t_where = '';
+					t_invo = $('#txtInvo').val();
+					if (t_invo.length > 0) {
+						t_where = "noa='" + t_invo + "'";
+						q_box("invoi.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'invoi', "95%", "95%", $('#lblInvo').val());
+					}
+				});
+                
                 $('#lblLcno').click(function() {
                     t_where = '';
                     t_lcno = $('#txtLcno').val();
@@ -215,6 +225,10 @@
                 $('#txtTranadd').change(function(){
                     sum();
                 });
+                
+                $('#cmbStype').change(function() {
+					stype_chang();
+				});
             }
 
             function GetTranPrice() {
@@ -646,6 +660,7 @@
                 if (isinvosystem)
                     $('.istax').hide();
                 HiddenTreat();
+                stype_chang();
             }
 
             function HiddenTreat(returnType){
@@ -664,6 +679,16 @@
                     return (hasRackComp.toString()=='1');
                 }
             }
+            
+            function stype_chang(){
+				if($('#cmbStype').val()=='7'){
+					$('.invo').show();
+					$('.vcca').hide();
+				}else{
+					$('.invo').hide();
+					$('.vcca').show();
+				}
+			}
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
@@ -1008,8 +1033,15 @@
                         <td class="td3" colspan="2"><input id="txtAcomp" type="text" class="txt c1"/></td>
                         <td class="td7" ><span> </span><a id='lblMon' class="lbl"> </a></td>
                         <td class="td8"><input id="txtMon" type="text" class="txt c1"/></td>
-                        <td class="td7"><span> </span><a id='lblInvono' class="lbl btn"> </a></td>
-                        <td class="td8"><input id="txtInvono" type="text" class="txt c1"/></td>
+                        <td class="td7">
+                        	<span> </span>
+                        	<a id='lblInvono' class="lbl btn vcca"> </a>
+							<a id='lblInvo' class="lbl btn invo"> </a>
+                        </td>
+                        <td class="td8">
+							<input id="txtInvono" type="text" class="txt c1 vcca"/>
+							<input id="txtInvo" type="text" class="txt c1 invo"/>
+						</td>
                     </tr>
                     <tr class="tr3">
                         <td class="td1"><span> </span><a id='lblTgg' class="lbl btn"> </a></td>
