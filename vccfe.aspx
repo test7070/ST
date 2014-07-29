@@ -71,20 +71,28 @@
             }
 
             function sum() {
-                var t1 = 0, t_unit, t_mount, t_weight = 0;
+                var t1 = 0, t_unit,t_price, t_mount,t_weight, t_weights = 0,t_total,t_totals=0;
                 for (var j = 0; j < q_bbsCount; j++) {
                     t_unit = $('#txtUnit_' + j).val();
+                    t_price = q_float('txtPrice_' + j);
                     t_mount = q_float('txtMount_' + j);
-                    t_weight= q_add(t_weight,q_float('txtWeight_' + j));
-                    $('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
-                    t1 = q_add(t1, dec(q_float('txtTotal_' + j)));
+                    t_weight = q_float('txtWeight_' + j);
+                    t_weights= q_add(t_weights,t_weight);
+                    
+                    if(t_unit=='公斤' || t_unit.toUpperCase()=='KG'){
+                        t_total = round(q_mul(t_price, t_weight), 0);
+                    }else{
+                        t_total = round(q_mul(t_price, t_mount), 0);
+                    }
+                    t_totals = q_add(t_totals,t_total);
+                    $('#txtTotal_' + j).val(t_total);
                 }
-                $('#txtMoney').val(round(t1, 0));
-                $('#txtWeight').val(t_weight);
+                $('#txtMoney').val(t_totals);
+                $('#txtWeight').val(t_weights);
                 var price = dec($('#txtPrice').val());
                 var addMoney = dec(q_getPara('sys.tranadd'));
                 var addMul = dec($('#txtTranadd').val());
-                var total = 0
+                var total = 0;
                 var transtyle = $.trim($('#cmbTranstyle').val());
                 if(transtyle=='4' || transtyle=='9'){
                     price = 0;
