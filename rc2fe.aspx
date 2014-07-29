@@ -1138,7 +1138,7 @@
                 </table>
             </div>
         </div>
-        <div class='dbbs' style="width: 1300px;">
+        <div class='dbbs' style="width: 1550px;">
             <table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
                 <tr style='color:White; background:#003366;' >
                     <td align="center" style="width:1%;">
@@ -1174,7 +1174,7 @@
                         <input type="text" id="txtProduct.*" class="txt c1"/>
                         <input type="text" id="txtSpec.*" class="txt c1 isSpec"/>
                     </td>
-                    <td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1"/></td>
+                    <td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
                     <td><input id="txtUnit.*" type="text" class="txt c1"/></td>
                     <td><input id="txtMount.*" type="text" class="txt num c1" /></td>
                     <td><input id="txtWeight.*" type="text" class="txt num c1"/></td>
@@ -1187,7 +1187,7 @@
                     </td>
                     <td class="isRack">
                         <input class="btn" id="btnRackno.*" type="button" value='.' style="float:left;" />
-                        <input id="txtRackno.*" type="text" class="txt c1" style="width: 65%"/>
+                        <input id="txtRackno.*" type="text" class="txt c1 isRack" style="width: 65%"/>
                     </td>
                     <td>
                         <input id="txtMemo.*" type="text" class="txt c1"/>
