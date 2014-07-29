@@ -697,6 +697,7 @@
             var mouse_point;
             function bbsAssign() {
                 for (var i = 0; i < q_bbsCount; i++) {
+                    $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
                         $('#combOrdelist_'+i).change(function(){
                             var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
@@ -1340,11 +1341,12 @@
         </div>
         <div class='dbbs' style="width: 1400px;">
             <table id="tbbs" class='tbbs'>
-                <tr style='color:White; background:#003366;' >
+                <tr style='color:white; background:#003366;' >
                     <td align="center" style="width:40px;">
                         <input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;width:" />
                     </td>
-                    <td align="center" style="width:180px"><a id='lblProductno_s'> </a></td>
+                    <td align="center" style="width:20px;"></td>
+                    <td align="center" style="width:100px"><a id='lblProductno_s'> </a></td>
                     <td align="center" style="width:180px;"><a id='lblProduct_s'> </a></td>
                     <td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
@@ -1361,11 +1363,12 @@
                 <tr style='background:#cad3ff;'>
                     <td>
                         <input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
+                        <input id="txtNoq.*" type="text" style="display:none;"/>
                     </td>
+                    <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                     <td align="center">
-                        <input class="txt c1"  id="txtProductno.*" type="text" />
-                        <input id="txtNoq.*" type="text" class="txt c6"/>
-                        <input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;" />
+                        <input class="btn"  id="btnProductno.*" type="button" value='' style="width:5%;font-weight: bold;float:left;" />
+                        <input id="txtProductno.*" type="text" class="txt" style="width:80%;float:left;"/>                   
                     </td>
                     <td>
                         <input id="txtProduct.*" type="text" class="txt c1" />
