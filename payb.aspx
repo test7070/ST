@@ -58,6 +58,7 @@
             function mainPost() {
                 q_getFormat();
                 bbmMask = [['txtIndate', r_picd],['txtDatea', r_picd], ['txtMon', r_picm], ['txtVbdate', r_picd], ['txtVedate', r_picd], ['txtPaydate', r_picd]];
+                bbsMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
                 q_gt('acomp', '', 0, 0, 0, "");
                 q_gt('part', '', 0, 0, 0, "");
@@ -543,7 +544,7 @@
             }
 
             function bbsSave(as) {
-                if (as['payinvo'] =='' && as['chgitemno'] =='' && as['memo'] =='' && as['acc1'] =='') {
+                if (as['payno'] =='' && as['chgitem'] =='' && as['memo'] =='' && as['acc1'] =='') {
                     as[bbsKey[1]] = '';
                     return;
                 }
@@ -934,7 +935,6 @@
 						<td><input id="txtVccno"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
 						<td><input id="txtAccno"  type="text" class="txt c1"/></td>
-						
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblPic' class="lbl"> </a></td>
@@ -964,12 +964,13 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:120px;"><a id='lblPayinvo'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblPayno'> </a></td>
+					<td align="center" style="width:90px;"><a id='lblDatea_s'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblChgitem'> </a></td>
 					<!--<td align="center" style="width:60px;">#<a id='lblKind'> </a></td>-->
 					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMoneys'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblInvonos'> </a>/<a id='lblTaxs'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblInvonos'> </a><BR><a id='lblTaxs'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblBal'> </a></td>
@@ -980,7 +981,8 @@
 						<input id="txtNoq.*"  style="display:none;"/>
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td><input id="txtPayinvo.*" type="text"  style="width: 95%;"/></td>
+					<td><input id="txtPayno.*" type="text"  style="width: 95%;"/></td>
+					<td><input id="txtDatea.*" type="text"  style="width: 95%;"/></td>
 					<td>
 						<input id="txtChgitemno.*" type="text" style="text-align: left; width: 80%;" />
 						<input class="btn"  id="btnChgitemno.*" type="button" value='.' style=" font-weight: bold;width: 1%;" />
