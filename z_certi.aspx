@@ -23,10 +23,13 @@
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_certi',
-                    options : [ {/*1*/
+                    options : [ {/*1 [1]*/
+                        type : '6',
+                        name : 'xnoa'
+                    },{/*2 [2][3]*/
                         type : '1',
                         name : 'xdate'
-                    },{/*2 [2],[3]*/
+                    },{/*3 [4],[5]*/
                         type : '2',
                         name : 'xcustno',
                         dbf : 'cust',
