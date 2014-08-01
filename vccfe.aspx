@@ -812,12 +812,7 @@
             }
 
             function btnPrint() {
-                var hasStyle = q_getPara('sys.isstyle');
-                if(hasStyle=='1'){
-                    q_box('z_vcc_ra.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-                }else{
-                    q_box('z_vccp.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-                }
+            	q_box("z_vccfep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'umm', "95%", "95%", m_print);
             }
 
             function wrServer(key_value) {
