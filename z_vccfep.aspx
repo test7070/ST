@@ -38,10 +38,10 @@
 				});
 				q_popAssign();
                 	
-				$('#txtDate1').mask('999/99/99');
-				$('#txtDate1').datepicker();
-				$('#txtDate2').mask('999/99/99');
-				$('#txtDate2').datepicker();  
+				$('#txtXdate1').mask('999/99/99');
+				$('#txtXdate1').datepicker();
+				$('#txtXdate2').mask('999/99/99');
+				$('#txtXdate2').datepicker();  
 	              
 	            var t_para = new Array();
 	            try{
