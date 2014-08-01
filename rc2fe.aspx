@@ -678,6 +678,11 @@
                 }else if(returnType=='rack'){
                     return (hasRackComp.toString()=='1');
                 }
+                
+                if(q_getPara('sys.menu').substr(0,3)=='qfe')
+                	$('.isFe').show()
+                else
+                	$('.isFe').hide()
             }
             
             function stype_chang(){
@@ -1018,10 +1023,10 @@
                         <td class="td1"><span> </span><a id='lblType' class="lbl"> </a></td>
                         <td class="td2">
                             <input id="txtType" type="text" style='display:none;'/>
-                            <select id="cmbTypea" class="txt c1"></select>
+                            <select id="cmbTypea" class="txt c1"> </select>
                         </td>
                         <td class="td3"><span> </span><a id='lblStype' class="lbl"> </a></td>
-                        <td class="td4"><select id="cmbStype" class="txt c1"></select></td>
+                        <td class="td4"><select id="cmbStype" class="txt c1"> </select></td>
                         <td class="td5"><span> </span><a id='lblDatea' class="lbl"> </a></td>
                         <td class="td6"><input id="txtDatea" type="text" class="txt c1 ime"/></td>
                         <td class="td7"><span> </span><a id='lblNoa' class="lbl"> </a></td>
@@ -1069,7 +1074,7 @@
                             <select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
                         </td>
                         <td class="td4"><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-                        <td class="td5"><select id="cmbTrantype" class="txt c1"></select></td>
+                        <td class="td5"><select id="cmbTrantype" class="txt c1"> </select></td>
                     </tr>
                     <tr class="tr6">
                         <td class="td4"><span> </span><a id='lblPaytype' class="lbl"> </a></td>
@@ -1138,17 +1143,18 @@
                 </table>
             </div>
         </div>
-        <div class='dbbs' style="width: 1550px;">
+        <div class='dbbs' style="width: 1630px;">
             <table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
                 <tr style='color:White; background:#003366;' >
                     <td align="center" style="width:1%;">
                         <input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" />
                     </td>
-                    <td align="center" style="width:20px;"></td>
+                    <td align="center" style="width:20px;"> </td>
                     <td align="center" style="width:150px;"><a id='lblUno_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblProductno'> </a></td>
                     <td align="center" style="width:180px;"><a id='lblProduct'> </a></td>
                     <td align="center" style="width:95px;" class="isStyle"><a id='lblStyle'> </a></td>
+                    <td align="center" style="width:80px;" class="isFe"><a id='lblLengthb_fe_s'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblUnit'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblMount'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblWeight_s'> </a></td>
@@ -1175,6 +1181,7 @@
                         <input type="text" id="txtSpec.*" class="txt c1 isSpec"/>
                     </td>
                     <td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
+                    <td class="isFe"><input id="txtLengthb.*" type="text" class="txt c1 isFe"/></td>
                     <td><input id="txtUnit.*" type="text" class="txt c1"/></td>
                     <td><input id="txtMount.*" type="text" class="txt num c1" /></td>
                     <td><input id="txtWeight.*" type="text" class="txt num c1"/></td>

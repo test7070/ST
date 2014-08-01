@@ -884,6 +884,11 @@
                 }else if(returnType=='rack'){
                     return (hasRackComp.toString()=='1');
                 }
+                
+                if(q_getPara('sys.menu').substr(0,3)=='qfe')
+                	$('.isFe').show()
+                else
+                	$('.isFe').hide()
             }
             
             function stype_chang(){
@@ -1238,7 +1243,7 @@
                         <td class="td6" style="width: 108px;"> </td>
                         <td class="td7" style="width: 108px;"><span> </span><a id='lblNoa' class="lbl"> </a></td>
                         <td class="td8" style="width: 108px;"><input id="txtNoa" type="text" class="txt c1" /></td>
-                        <td style="width: 5px;"></td>
+                        <td style="width: 5px;"> </td>
                     </tr>
                     <tr>
                         <td class="td1"><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
@@ -1348,17 +1353,18 @@
                 </table>
             </div>
         </div>
-        <div class='dbbs' style="width: 1650px;">
+        <div class='dbbs' style="width: 1730px;">
             <table id="tbbs" class='tbbs'>
                 <tr style='color:white; background:#003366;' >
                     <td align="center" style="width:40px;">
                         <input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;width:" />
                     </td>
-                    <td align="center" style="width:20px;"></td>
+                    <td align="center" style="width:20px;"> </td>
                     <td align="center" style="width:150px;"><a id='lblUno_s'> </a></td>
                     <td align="center" style="width:100px"><a id='lblProductno_s'> </a></td>
                     <td align="center" style="width:180px;"><a id='lblProduct_s'> </a></td>
                     <td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
+                    <td align="center" style="width:80px;" class="isFe"><a id='lblLengthb_fe_s'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblWeight_s'> </a></td>
@@ -1386,6 +1392,7 @@
                         <input id="txtSpec.*" type="text" class="txt c1 isSpec" />
                     </td>
                     <td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
+                    <td class="isFe"><input id="txtLengthb.*" type="text" class="txt c1 isFe"/></td>
                     <td><input id="txtUnit.*" type="text" class="txt c1"/></td>
                     <td><input id="txtMount.*" type="text" class="txt num c1"/></td>
                     <td><input id="txtWeight.*" type="text" class="txt num c1"/></td>
