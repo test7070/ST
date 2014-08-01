@@ -18,7 +18,7 @@
             q_tables = 's';
             var q_name = "vcc";
             var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2','txtTranstart','txtWeight'];
-            var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
+            var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq','txtProfit','txtChecker'];
             var bbmNum = [];
             var bbsNum = [];
             var bbmMask = [];
@@ -47,7 +47,8 @@
                 ['txtPost', 'lblAddr', 'addr2', 'noa,post', 'txtPost', 'addr2_b.aspx'],
                 ['txtPost2', 'lblAddr2', 'addr2', 'noa,post', 'txtPost2', 'addr2_b.aspx'],
                 ['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
-                ['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx']
+                ['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],
+                ['txtDriverno', 'lblDriver', 'driver', 'noa,driver','txtDriverno,txtDriver', 'driver_b.aspx']
             );
 
             var isinvosystem = false;
@@ -109,7 +110,8 @@
                 bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
                 q_mask(bbmMask);
                 bbmNum = [  ['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtWeight', 9, q_getPara('vcc.weightPrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1], ['txtTranadd', 11, 2, 1]];
-                bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtWeight', 9, q_getPara('vcc.weightPrecision'), 1], ['txtTotal', 15, 0, 1]];
+                bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtWeight', 9, q_getPara('vcc.weightPrecision'), 1], ['txtTotal', 15, 0, 1],
+                					['txtWcost', 12, 2, 1],['txtTranmoney', 12, 0, 1],['txtProfit', 12, q_getPara('vcc.pricePrecision'), 1],['txtSprice', 12, q_getPara('vcc.pricePrecision'), 1],['txtSprice2', 12, q_getPara('vcc.pricePrecision'), 1]];
                 q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
                 q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
                 q_cmbParse("cmbStype", q_getPara('vcc.stype'));
@@ -1315,6 +1317,25 @@
                         <td class="td8"><input id="txtTranadd" type="text" class="txt num c1"/></td>
                     </tr>
                     <tr>
+                        <td class="td1"><span> </span><a id='lblDriver' class="lbl btn"> </a></td>
+                        <td class="td2"><input id="txtDriverno" type="text" class="txt c1"/></td>
+                        <td class="td3"><input id="txtDriver" type="text" class="txt c1"/></td>
+                        <td class="td4"><span> </span><a id='lblCartrips' class="lbl"> </a></td>
+                        <td class="td5"><input id="txtCartrips" type="text" class="txt num c1"/></td>
+                        <td class="td6"> </td>
+                        <td class="td7"><span> </span><a id='lblWeight' class="lbl"> </a></td>
+                        <td class="td8"><input id="txtWeight" type="text" class="txt num c1"/></td>
+                    </tr>
+                    <tr>
+                        <td class="td1"><span> </span><a id='lblApv' class="lbl"> </a></td>
+                        <td class="td2" colspan='2'>
+                        	<input id="txtApv" type="text" class="txt c4"/>
+                        	<input id="txtApvname" type="text" class="txt c4"/>
+                        </td>
+                        <td class="td3"><span> </span><a id='lblApvmemo' class="lbl"> </a></td>
+                        <td class="td4" colspan='4'><input id="txtApvmemo" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr>
                         <td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
                         <td class="td2" colspan='2'><input id="txtMoney" type="text" class="txt num c1"/></td>
                         <td class="td4"><span> </span><a id='lblTax' class="lbl"> </a></td>
@@ -1331,8 +1352,6 @@
                         <td class="td3"><input id="txtFloata" type="text" class="txt num c1"/></td>
                         <td class="td4"><span> </span><a id="lblTotalus" class="lbl"> </a></td>
                         <td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-                        <td class="td7"><span> </span><a id='lblWeight' class="lbl"> </a></td>
-                        <td class="td8"><input id="txtWeight" type="text" class="txt num c1"/></td>
                     </tr>
                     <tr>
                         <td class="td1"><span> </span><a id="lblWorker" class="lbl"> </a></td>
@@ -1348,7 +1367,7 @@
                 </table>
             </div>
         </div>
-        <div class='dbbs' style="width: 1730px;">
+        <div class='dbbs' style="width: 2200px;">
             <table id="tbbs" class='tbbs'>
                 <tr style='color:white; background:#003366;' >
                     <td align="center" style="width:40px;">
@@ -1365,6 +1384,12 @@
                     <td align="center" style="width:100px;"><a id='lblWeight_s'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblTotal_s'> </a></td>
+                    <td align="center" style="width:80px;"><a id='lblWcost_s'> </a></td>
+                    <td align="center" style="width:80px;"><a id='lblTranmoney_s'> </a></td>
+                    <td align="center" style="width:80px;"><a id='lblProfit_s'> </a></td>
+                    <td align="center" style="width:60px;"><a id='lblChecker_s'> </a></td>
+                    <td align="center" style="width:80px;"><a id='lblSprice_s'> </a></td>
+                    <td align="center" style="width:80px;"><a id='lblSprice2_s'> </a></td>
                     <td align="center" style="width:120px;"><a id='lblStore_s'> </a></td>
                     <td align="center" style="width:100px;" class="isRack"><a id='lblRackno_s'> </a></td>
                     <td align="center" style="width:150px;"><a id='lblMemo_s'> </a></td>
@@ -1393,6 +1418,12 @@
                     <td><input id="txtWeight.*" type="text" class="txt num c1"/></td>
                     <td><input id="txtPrice.*" type="text" class="txt num c1"/></td>
                     <td><input id="txtTotal.*" type="text" class="txt num c1"/></td>
+                    <td><input id="txtWcost.*" type="text" class="txt num c1"/></td>
+                    <td><input id="txtTranmoney.*" type="text" class="txt num c1"/></td>
+                    <td><input id="txtProfit.*" type="text" class="txt num c1"/></td>
+                    <td><input id="txtChecker.*" type="text" class="txt num c1"/></td>
+                    <td><input id="txtSprice.*" type="text" class="txt num c1"/></td>
+                    <td><input id="txtSprice2.*" type="text" class="txt num c1"/></td>
                     <td>
                         <input id="txtStoreno.*" type="text" class="txt c1" style="width: 75%"/>
                         <input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;" />
