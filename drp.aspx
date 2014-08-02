@@ -56,6 +56,10 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
+                
+                $('#btnImport').click(function(e){
+                	
+                });
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
@@ -356,6 +360,9 @@
                     <tr>
                         <td><span> </span><a id="lblNoa" class="lbl"> </a></td>
                         <td><input id="txtNoa" type="text" class="txt c1"/></td>
+                        <td></td>
+                        <td></td>
+                        <td><input type="button" id="btnImport" value="匯入" class="txt c1"></td>
                     </tr>
                     <tr>
                     	<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
