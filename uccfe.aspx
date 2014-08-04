@@ -95,7 +95,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)
                     return;
-                q_box('drp_s.aspx', q_name + '_s', "600px", "530px", q_getMsg("popSeek"));
+                q_box('uccfe_s.aspx', q_name + '_s', "600px", "530px", q_getMsg("popSeek"));
             }
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
@@ -128,7 +128,7 @@
           		$('#txtNoa').focus();
             }
             function btnPrint() {
-                q_box("z_drp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'drp', "95%", "95%", m_print);
+                q_box("z_uccfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'drp', "95%", "95%", m_print);
             }
             function wrServer(key_value) {
                 var i;
