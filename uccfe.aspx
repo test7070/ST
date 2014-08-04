@@ -69,11 +69,17 @@
                 Lock(1, {
                     opacity : 0
                 });
-                if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
+                if($$.trim($('#txtNoa').val()).length==0){
+                	alert('請輸入物品編號。');
+                	Unlock(1);
+                	return
+                }
+                
+               /* if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
                     alert(q_getMsg('lblDatea') + '錯誤。');
                     Unlock(1);
                     return;
-                }
+                }*/
                 if (q_cur == 1) {
                     $('#txtWorker').val(r_name);
                 } else
@@ -112,14 +118,14 @@
             }
             function btnIns() {
                 _btnIns();
-                $('#txtNoa').val('AUTO');
-                $('#txtDatea').focus();
+                $('#txtNoa').focus();
             }
             function btnModi() {
                 if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
-				$('#txtDatea').focus();
+				$('#txtNoa').attr('readonly','readonly').css('background-color','RGB(237,237,237)').css('color','green');
+          		$('#txtNoa').focus();
             }
             function btnPrint() {
                 q_box("z_drp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'drp', "95%", "95%", m_print);
