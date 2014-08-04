@@ -43,6 +43,9 @@
 
                 var t_where = " 1=1 " 
                 + q_sqlPara2("noa", t_noa);  
+                
+              //  alert(t_where);
+                
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
             }
