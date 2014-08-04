@@ -13,7 +13,7 @@
         <script src="css/jquery/ui/jquery.ui.widget.js"> </script>
         <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
         <script type="text/javascript">
-            var q_name = "uccef_s";
+            var q_name = "uccfe_s";
             aPop = new Array();
             $(document).ready(function() {
                 main();
@@ -33,10 +33,10 @@
                 $('#txtNoa').focus();
             }
 
-        /*    function q_gtPost(t_name) {
+            function q_gtPost(t_name) {
                 switch (t_name) {
                 }
-            }*/
+            }
 
             function q_seekStr() {
                 t_noa = $.trim($('#txtNoa').val());

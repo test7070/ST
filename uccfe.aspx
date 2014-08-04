@@ -26,7 +26,7 @@
             brwCount = 6;
             brwList = [];
             brwNowPage = 0;
-            brwKey = 'noa';
+            brwKey = 'Noa';
             brwCount2 = 10;
             aPop = new Array();
             $(document).ready(function() {
