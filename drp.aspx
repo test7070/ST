@@ -22,8 +22,8 @@
             var q_name = "drp";
             var q_readonly = ['txtWorker2', 'txtWorker','txtNoa'];
             var q_readonlys = [];
-            var bbmNum = [];
-            var bbsNum = [];
+            var bbmNum = [['txtPrice',10,0,1]];
+            var bbsNum = [['txtPrice',10,0,1]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -374,6 +374,10 @@
                         </td>
                     </tr>
                     <tr>
+                    	<td><span> </span><a id="lblPrice" class="lbl"> </a></td>
+                        <td><input id="txtPrice" type="text"  class="txt c1 num" /></td>
+                    </tr>
+                    <tr>
                     	<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
                         <td colspan="4"><input id="txtMemo" type="text"  class="txt c1"/></td>
                     </tr>
@@ -420,7 +424,7 @@
                     <td><input type="text" id="txtMount.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtCost.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtWeight.*" style="width:95%;"/></td>
-                    <td><input type="text" id="txtPrice.*" style="width:95%;"/></td>
+                    <td><input type="text" id="txtPrice.*" style="width:95%;text-align: right;"/></td>
                 </tr>
             </table>
         </div>
