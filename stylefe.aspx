@@ -109,11 +109,11 @@
                     return;
                 _btnModi();
                 refreshBbm();
-                $('#txtComp').focus();
+                $('#txtStyle').focus();
             }
 
             function btnPrint() {
-                q_box('z_cust_ds.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
+                q_box('z_stylefe.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
             }
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
@@ -123,17 +123,6 @@
             function btnOk() {    
             	Lock(1,{opacity:0}); 
             	$('#txtNoa').val($.trim($('#txtNoa').val()));   	
-            	if((/^(\w+|\w+\u002D\w+)$/g).test($('#txtNoa').val())){
-				}else{
-					alert('編號只允許 英文(A-Z)、數字(0-9)及連字號(-)。'+String.fromCharCode(13)+'EX: A01、A01-001');
-					Unlock(1);
-					return;
-				}
-            	if ($('#txtSerial').val().length > 0 && checkId($('#txtSerial').val())!=2){
-            		alert(q_getMsg('lblSerial')+'錯誤。');
-            		Unlock(1);
-            		return;
-            	}
                 if(q_cur ==1){
                 	$('#txtWorker').val(r_name);
                 }else if(q_cur ==2){
@@ -144,7 +133,7 @@
                 //------------------------------------
                 if(q_cur==1){
                 	t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
-                    q_gt('cust', t_where, 0, 0, 0, "checkCustno_btnOk", r_accy);
+                    q_gt('style', t_where, 0, 0, 0, "checkNoa_btnOk", r_accy);
                 }else{
                 	wrServer($('#txtNoa').val());
                 }
@@ -377,7 +366,7 @@
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id="vewChk"> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id="vewNoa"> </a></td>
-						<td align="center" style="width:120px; color:black;"><a id="vewStyle"> </a></td>
+						<td align="center" style="width:120px; color:black;"><a>樣</a></td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox"/></td>
@@ -393,102 +382,23 @@
 						<td> </td>
 						<td> </td>
 						<td> </td>
-						<td> </td>
-						<td> </td>
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
-						<td><input id="txtNoa"  type="text" class="txt c1"/></td>
-						<td><span> </span><a id="lblSerial" class="lbl"> </a></td>
-						<td><input id="txtSerial"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblTypea" class="lbl" style="display:none;"> </a></td>
-						<td><select id="cmbTypea"  class="txt c1" style="display:none;"> </select></td>
+						<td colspan="3"><input id="txtNoa"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblComp" class="lbl"> </a></td>
-						<td colspan="3"><input id="txtComp" type="text" class="txt c1"/></td>
-						<td><span> </span><a id="lblNick" class="lbl"> </a></td>
-						<td><input id="txtNick" type="text"  class="txt c1"/></td>
+						<td><span> </span><a class="lbl">樣式</a></td>
+						<td colspan="3"><input id="txtStyle"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblBoss" class="lbl"> </a></td>
-						<td><input id="txtboss" type="text" class="txt c1"/> </td>
-						<td><span> </span><a id="lblHead" class="lbl"> </a></td>
-						<td><input id="txthead" type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblTel" class="lbl"> </a></td>
-						<td colspan="2"><input id="txtTel" type="text" class="txt c1"/></td>
-						<td><span> </span><a id="lblFax" class="lbl"> </a></td>
-						<td colspan="2"><input id="txtFax" type="text" class="txt c1"/></td>
-						
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblMobile" class="lbl"> </a></td>
-						<td colspan="2"><input id="txtMobile" type="text" class="txt c1"/></td>
-						<td><span> </span><a id="lblEmail" class="lbl"> </a></td>
-						<td colspan="2"><input id="txtEmail" type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
-						<td> </td>
-						<td><input id="btnDetail" type="button" /></td>
-						<td><input id="btnConn" type="button" /></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblAddr_fact" class="lbl"> </a></td>
-						<td colspan="5">
-							<input id="txtZip_fact" type="text" style="float:left; width:10%;"/>
-							<input id="txtAddr_fact"  type="text" style="float:left; width:90%;"/>
-						</td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblAddr_comp" class="lbl"> </a></td>
-						<td colspan="5">
-							<input id="txtZip_comp" type="text" style="float:left; width:10%;"/>
-							<input id="txtAddr_comp"  type="text" style="float:left; width:90%;"/>
-						</td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblAddr_invo" class="lbl"> </a></td>
-						<td colspan="5">
-							<input id="txtZip_invo" type="text" style="float:left; width:10%;"/>
-							<input id="txtAddr_invo"  type="text" style="float:left; width:90%;"/>
-						</td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblAddr_home" class="lbl"> </a></td>
-						<td colspan="5">
-							<input id="txtZip_home" type="text" style="float:left; width:10%;"/>
-							<input id="txtAddr_home"  type="text" style="float:left; width:90%;"/>
-						</td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblSales" class="lbl btn" > </a></td>
-						<td colspan="2">
-							<input id="txtSalesno" type="text" style="float:left; width:40%;"/>
-							<input id="txtSales" type="text" style="float:left; width:60%;"/>
-						</td>
-					</tr>
-					<tr style="display:none;">
-						<td><span> </span><a id="lblUacc4" class="lbl"> </a></td>
-						<td><input id="txtUacc4" type="text" class="txt c1"/></td>
-					</tr>
-					<tr style="display:none;">
-						<td><span> </span><a id="lblUacc1" class="lbl"> </a></td>
-						<td><input id="txtUacc1"    type="text" class="txt c1"/></td>
-					</tr>
-					<tr style="display:none;">
-						<td><span> </span><a id="lblUacc2" class="lbl"> </a></td>
-						<td><input id="txtUacc2" type="text" class="txt c1"/></td>
-					</tr>
-					<tr style="display:none;">
-						<td><span> </span><a id="lblUacc3" class="lbl"> </a></td>
-						<td><input id="txtUacc3"  type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblCalc" class="lbl"> </a></td>
+						<td colspan="3"><input id="txtCalc"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="5"><textarea id="txtMemo" style="width:100%; height:100px;"> </textarea></td>
+						<td colspan="3"><textarea id="txtMemo" style="width:100%; height:100px;"> </textarea></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
