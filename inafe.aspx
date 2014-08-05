@@ -59,7 +59,7 @@
 				bbmMask = [['txtDatea', r_picd]];
 				bbsMask = [['txtTimea', '99:99']];
 				bbmNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1], ['txtWeight', 15, q_getPara('rc2.weightPrecision'), 1]];
-				bbsNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1], ['txtWeight', 15, q_getPara('rc2.weightPrecision'), 1]];
+				bbsNum = [['txtLengthb', 15, 2, 1],['txtMount', 15, q_getPara('rc2.mountPrecision'), 1], ['txtWeight', 15, q_getPara('rc2.weightPrecision'), 1]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbItype", q_getPara('inafe.typea'));
 			}
@@ -468,7 +468,7 @@
 					</td>
 					<td><input class="txt c1" id="txtProduct.*" type="text" /></td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
-					<td class="isFe"><input id="txtLengthb.*" type="text" class="txt c1 isFe"/></td>
+					<td class="isFe"><input id="txtLengthb.*" type="text" class="txt c1 num isFe"/></td>
 					<td><input class="txt c1" id="txtUnit.*" type="text"/></td>
 					<td><input class="txt num c1" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtWeight.*" type="text" /></td>
