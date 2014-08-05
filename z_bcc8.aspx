@@ -17,12 +17,13 @@
 		<script type="text/javascript">
             t_store = '';
             $(document).ready(function() {
-            	q_getId();
-            	q_gf('', 'z_bcc8');
+                q_getId();
+                q_gf('', 'z_bcc8');
             });
             function q_gfPost() {
                 q_gt('store', '', 0, 0, 0);
             }
+
             function q_gtPost(t_name) {
                 switch (t_name) {
                     case 'store':
@@ -32,78 +33,82 @@
                         for ( i = 0; i < as.length; i++) {
                             t_store += (t_store.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
                         }
+                        LoadFinish();
                         break;
                 }
-               $('#q_report').q_report({
-					fileName : 'z_bcc8',
-					options : [{/* [1]*/
-						type : '0',//數量的小數位數
-						name : 'mount_precision',
-						value : q_getPara('rc2.mountPrecision')
-					},{/* [2]*/
-						type : '0',//價格的小數位數
-						name : 'price_precision',
-						value : q_getPara('rc2.pricePrecision')
-					},{/* [3]*/
-						type : '0',//重量的小數位數
-						name : 'weight_precision',
-						value : q_getPara('rc2.weightPrecision')
-					},{
+            }
+
+            function LoadFinish() {
+                $('#q_report').q_report({
+                    fileName : 'z_bcc8',
+                    options : [{/* [1]*/
+                        type : '0', //數量的小數位數
+                        name : 'mount_precision',
+                        value : q_getPara('rc2.mountPrecision')
+                    }, {/* [2]*/
+                        type : '0', //價格的小數位數
+                        name : 'price_precision',
+                        value : q_getPara('rc2.pricePrecision')
+                    }, {/* [3]*/
+                        type : '0', //重量的小數位數
+                        name : 'weight_precision',
+                        value : q_getPara('rc2.weightPrecision')
+                    }, {
                         type : '1',
                         name : 'date'
-                    },{
+                    }, {
                         type : '1',
                         name : 'mon'
-                    },{
+                    }, {
                         type : '2',
                         name : 'tgg',
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
-                    },{/*3*/
-						type : '5',
-						name : 'xstore',
-						value : t_store.split(',')
+                    }, {/*3*/
+                        type : '5',
+                        name : 'xstore',
+                        value : t_store.split(',')
                     }]
-                    });
+                });
                 q_popAssign();
                 q_getFormat();
                 q_langShow();
-                
+
                 $('#txtDate1').mask('999/99/99');
                 $('#txtDate1').datepicker();
                 $('#txtDate2').mask('999/99/99');
                 $('#txtDate2').datepicker();
                 $('#txtMon1').mask('999/99');
                 $('#txtMon2').mask('999/99');
-                
-                $('#txtMon1').val(q_date().substr(0,6));
-                $('#txtMon2').val(q_date().substr(0,6));
-                
-                var t_date,t_year,t_month,t_day;
-	                t_date = new Date();
-	                t_date.setDate(1);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate1').val(t_year+'/'+t_month+'/'+t_day);
-	                
-	                t_date = new Date();
-	                t_date.setDate(35);
-	                t_date.setDate(0);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate2').val(t_year+'/'+t_month+'/'+t_day);
-	                
-	                $('.report ').css('width','450px');
-	                $('.q_report .report div ').css('width','225px');
+
+                $('#txtMon1').val(q_date().substr(0, 6));
+                $('#txtMon2').val(q_date().substr(0, 6));
+
+                var t_date, t_year, t_month, t_day;
+                t_date = new Date();
+                t_date.setDate(1);
+                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);
+
+                t_date = new Date();
+                t_date.setDate(35);
+                t_date.setDate(0);
+                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
+
+                $('.report ').css('width', '450px');
+                $('.q_report .report div ').css('width', '225px');
             }
 
             function q_boxClose(s2) {
@@ -114,10 +119,10 @@
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
-		<div id="q_menu"> </div>
+		<div id="q_menu"></div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
-				<div id="q_report"> </div>
+				<div id="q_report"></div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->
