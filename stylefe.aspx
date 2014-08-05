@@ -406,6 +406,30 @@
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
+					<tr>
+						<td></td>
+						<td colspan="3"><a style="color:darkred;">【運費計算說明】</a></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="3"><a style="color:black;">進貨單使用進價，出貨單使用基價</a></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="3"><a style="color:black;">型態A-H=數量*單位重量</a></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="3"><a style="color:black;">型態I-N=單價*數量</a></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="3"><a style="color:black;">型態O-T，0-9=單價*(數量或重量，以單位決定)</a></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="3"><a style="color:black;">型態U-Z=重量</a></td>
+					</tr>
 				</table>
 			</div>
 		</div>
