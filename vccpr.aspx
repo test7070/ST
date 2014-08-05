@@ -218,7 +218,7 @@
             }
             .dview {
                 float: left;
-                width: 350px;
+                width: 200px;
                 border-width: 0px;
             }
             .tview {
@@ -238,7 +238,7 @@
             }
             .dbbm {
                 float: left;
-                width: 600px;
+                width: 800px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -363,8 +363,35 @@
                         <td><input type="button" id="btnImport" value="匯入" class="txt c1"></td>
                     </tr>
                     <tr>
-                    	<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-                        <td colspan="4"><input id="txtMemo" type="text"  class="txt c1"/></td>
+                    	<td><span> </span><a id="lblProfit" class="lbl">毛利合計</a></td>
+                        <td><input id="txtlblProfit" type="text" class="txt c1 num"/></td>
+                        <td><span> </span><a id="lblTotal" class="lbl">銷售合計</a></td>
+                        <td><input id="txtTotal" type="text" class="txt c1 num"/></td>
+                    </tr>
+                    <tr>
+                      	<td><span> </span><a id="lblSprice" class="lbl">基價成本</a></td>
+                        <td><input id="txtSprice" type="text" class="txt c1 num"/></td>
+                        <td><span> </span><a id="lblWcost" class="lbl">加工費</a></td>
+                        <td><input id="txtWcost" type="text" class="txt c1 num"/></td>
+                    </tr>
+                    <tr>
+                        <td><span> </span><a id="lblTranmoney" class="lbl">運費</a></td>
+                        <td><input id="txtTranmoney" type="text" class="txt c1 num"/></td>
+                        <td><span> </span><a id="lblTranmoney2" class="lbl">補運費</a></td>
+                        <td><input id="txtTranmoney2" type="text" class="txt c1 num"/></td>
+                    </tr>
+                    <td><span> </span><a id="lblTnterest" class="lbl">預估利息</a></td>
+                        <td><input id="txtTnterest" type="text" class="txt c1 num"/>
+                    </td>
+                    <tr>
+                        <td><span> </span><a id="lblCost_a" class="lbl">佣金合計</a></td>
+                        <td><input id="txtCost_a" type="text" class="txt c1 num"/></td>
+                        <td><span> </span><a id="lblCost_b" class="lbl">其他費用</a></td>
+                        <td><input id="txtCost_b" type="text" class="txt c1 num"/></td>
+                    </tr>
+                    <tr>
+                    	<td><span> </span><a id="lblMemo" class="lbl"></a></td>
+                        <td colspan="4"><input 2id="txtMemo" type="text"  class="txt c1"/></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblWorker" class="lbl"> </a></td>
