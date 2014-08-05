@@ -31,9 +31,8 @@
 			aPop = new Array(
 				['txtStoreno', 'lblStoreno', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
 				['txtStoreno2', 'lblStore2', 'store', 'noa,store', 'txtStoreno2,txtStore2', 'store_b.aspx'],
-				['txtProductno1_', 'btnProduct1_', 'ucaucc', 'noa,product,unit', 'txtProductno1_,txtProduct_,txtUnit_', 'ucaucc_b.aspx'],
-				['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_', 'bcc_b.aspx'],
-				['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_', 'fixucc_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx'],
+				['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,unit', 'txtUno_,txtProductno_,txtProduct_,txtUnit_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
 			);
 
@@ -69,9 +68,6 @@
 					}
 					product_change();
 				});
-				
-				$('#lblKind').hide();
-				$('#cmbKind').hide();
 			}
 
 			function q_boxClose(s2) {
@@ -111,19 +107,6 @@
 				}
 				$('#txtWorker').val(r_name);
 				//sum();
-				if ($('#cmbKind').val() == '1') {
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#txtProductno_' + j).val($('#txtProductno1_' + j).val());
-					}
-				} else if ($('#cmbKind').val() == '2') {
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#txtProductno_' + j).val($('#txtProductno2_' + j).val());
-					}
-				} else {
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#txtProductno_' + j).val($('#txtProductno3_' + j).val());
-					}
-				}
 
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
@@ -192,7 +175,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno1'] && !as['productno2'] && !as['productno3']) {
+				if (!as['productno'] ) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -273,53 +256,11 @@
 			}
 
 			function product_change() {
-				if (q_cur == 1 || q_cur == 2) {
-					if ($('#cmbKind').val() == '1') {
-						for (var j = 0; j < q_bbsCount; j++) {
-							$('#txtProductno_' + j).val($('#txtProductno1_' + j).val());
-						}
-					} else if ($('#cmbKind').val() == '2') {
-						for (var j = 0; j < q_bbsCount; j++) {
-							$('#txtProductno_' + j).val($('#txtProductno2_' + j).val());
-						}
-					} else {
-						for (var j = 0; j < q_bbsCount; j++) {
-							$('#txtProductno_' + j).val($('#txtProductno3_' + j).val());
-						}
-					}
-				}
-
-				if ($('#cmbKind').val() == '1') {
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#btnProduct1_' + j).show();
-						$('#btnProduct2_' + j).hide();
-						$('#btnProduct3_' + j).hide();
-						$('#txtProductno1_' + j).show();
-						$('#txtProductno2_' + j).hide();
-						$('#txtProductno3_' + j).hide();
-						$('#txtProductno1_' + j).val($('#txtProductno_' + j).val());
-					}
-				} else if ($('#cmbKind').val() == '2') {
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#btnProduct1_' + j).hide();
-						$('#btnProduct2_' + j).show();
-						$('#btnProduct3_' + j).hide();
-						$('#txtProductno1_' + j).hide();
-						$('#txtProductno2_' + j).show();
-						$('#txtProductno3_' + j).hide();
-						$('#txtProductno2_' + j).val($('#txtProductno_' + j).val());
-					}
-				} else {
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#btnProduct1_' + j).hide();
-						$('#btnProduct2_' + j).hide();
-						$('#btnProduct3_' + j).show();
-						$('#txtProductno1_' + j).hide();
-						$('#txtProductno2_' + j).hide();
-						$('#txtProductno3_' + j).show();
-						$('#txtProductno3_' + j).val($('#txtProductno_' + j).val());
-					}
-				}
+				
+				if(q_getPara('sys.menu').substr(0,3)=='qfe')
+                	$('.isFe').show()
+                else
+                	$('.isFe').hide()
 			}
 		</script>
 		<style type="text/css">
@@ -464,13 +405,21 @@
 			</div>
 			<div class='dbbm' style="width: 68%;float:left">
 				<table class="tbbm" id="tbbm" border="0" cellpadding='2' cellspacing='0'>
+					<tr class="tr0" style="height: 0px;">
+						<td class='td1'> </td>
+						<td class='td2'> </td>
+						<td class='td3'> </td>
+						<td class='td4'> </td>
+						<td class='td5'> </td>
+						<td class='td6'> </td>
+					</tr>
 					<tr class="tr1">
 						<td class='td1'><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td class='td2'><input id="txtNoa" type="text" class="txt c1"/></td>
 						<td class='td3'><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td class='td4'><input id="txtDatea" type="text" class="txt c1"/></td>
-						<td class='td5'><span> </span><a id="lblKind" class="lbl"> </a></td>
-						<td class='td6'><select id="cmbKind" class="txt c1"> </select></td>
+						<td class='td5' style="display: none;"><span> </span><a id="lblKind" class="lbl"> </a></td>
+						<td class='td6' style="display: none;"><select id="cmbKind" class="txt c1"> </select></td>
 					</tr>
 					<tr>
 						<td class='td1'><span> </span><a id="lblStoreno" class="lbl btn"> </a></td>
@@ -493,8 +442,9 @@
 					<td align="center" style="width:1%;">
 						<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
 					</td>
-					<td align="center" style="width:15%;"><a id='lblStoreno_s'> </a></td>
-					<td align="center" style="width:20%;"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:13%;"><a id='lblStoreno_s'> </a></td>
+					<td align="center" style="width:13%;"><a id='lblUno_s'> </a></td>
+					<td align="center" style="width:15%;"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:80px;" class="isFe"><a id='lblLengthb_fe_s'> </a></td>
 					<td align="center" style="width:5%;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:8%;"><a id='lblEmount_s'> </a></td>
@@ -514,14 +464,10 @@
 						<BR>
 						<input class="txt c1" id="txtStore.*" type="text" />
 					</td>
+					<td><input class="txt c1" id="txtUno.*" type="text"/></td>
 					<td>
-						<input id="btnProduct1.*" type="button" value='.' style="float:left;width:1%;" />
-						<input id="btnProduct2.*" type="button" value='.' style="float:left;width:1%;" />
-						<input id="btnProduct3.*" type="button" value='.' style="float:left;width:1%;" />
-						<input id="txtProductno1.*" type="text" style="float:left;width:80%;"/>
-						<input id="txtProductno2.*" type="text" style="float:left;width:80%;"/>
-						<input id="txtProductno3.*" type="text" style="float:left;width:80%;"/>
-						<input id="txtProductno.*" style="display:none;" />
+						<input id="btnProduct.*" type="button" value='.' style="float:left;width:1%;" />
+						<input id="txtProductno.*" type="text" style="float:left;width:80%;"/>
 						<BR>
 						<input class="txt c1" id="txtProduct.*" type="text" />
 					</td>
