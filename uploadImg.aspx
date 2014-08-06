@@ -3,53 +3,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 <head>
-    <title>圖片上傳作業</title>
+    <title>upload</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script src="../script/jquery.min.js" type="text/javascript"></script>
-    <script src='../script/qj2.js' type="text/javascript"></script>
-    <script src='qset.js' type="text/javascript"></script>
-    <script src='../script/qj_mess.js' type="text/javascript"></script>
-    <script src="../script/qbox.js" type="text/javascript"></script>
-    <script src='../script/mask.js' type="text/javascript"></script>
-    <link href="../qbox.css" rel="stylesheet" type="text/css" />
-
-        <script type="text/javascript">
-            var q_name = 'uploadimg';
-            $(document).ready(function () {
-                _q_boxClose();
-                q_getId();
-                q_gf('', 'uploadimg');
-                
-                $('#btnAuthority').click(function () {
-                    btnAuthority(q_name);
-                });
-            });
-
-            function q_gfPost() {
-                q_langShow();
-            }
-
-           
-        </script>
-
     <script language="c#" runat="server">
         public void Page_Load()
         {
             Encoding encoding = System.Text.Encoding.UTF8;
             Response.ContentEncoding = encoding;
-            int formSize = Request.TotalBytes,i;
+            int formSize = Request.TotalBytes;
             byte[] formData = Request.BinaryRead(formSize);
             byte[] bCrLf = { 0xd, 0xa };// \r\n
+   
+            string savepath = "D:\\D\\web\\upload\\";
 
-            string savepath = "D:\\t";
-
-            var tmp = Request.Form["btnAuthority"];
-
+            Response.Write("<form name=\"form1\" method=\"post\" action=\"uploadImg.aspx\" enctype=\"multipart/form-data\" style=\"width:200px;\">");
+            Response.Write("<input type=\"file\" name=\"btnFile1\"/>");
+            Response.Write("<input type=\"file\" name=\"btnFile2\"/>");
+            Response.Write("<input type=\"file\" name=\"btnFile3\"/>");
+            Response.Write("<input type=\"file\" name=\"btnFile4\"/>");
+            Response.Write("<input type=\"file\" name=\"btnFile5\"/>");
+            Response.Write("<input type=\"file\" name=\"btnFile6\"/>");
+            Response.Write("<input type=\"submit\" name=\"btnUpload\" value=\"upload\"/>");
+            Response.Write("</form>");
+            
             if (formSize == 0)
             {
                 return;
-            }
-
+            }       
             //origin
             string origin = encoding.GetString(formData);
             // sign
@@ -66,18 +46,18 @@
             Array.ConstrainedCopy(sign, 0, signStr, 0, nSign);
             Array.ConstrainedCopy(bCrLf, 0, signStr, nSign, 2);
             string cSignStr = encoding.GetString(signStr);
-            byte[] signEnd = new byte[nSign + 2];
+            byte[] signEnd = new byte[nSign+2];
             Array.ConstrainedCopy(sign, 0, signEnd, 0, nSign);
-            Array.ConstrainedCopy((new byte[] { 0x2d, 0x2d }), 0, signEnd, nSign, 2);//add --
+            Array.ConstrainedCopy((new byte[] {0x2d, 0x2d}), 0, signEnd, nSign, 2);//add --
             string cSignEnd = encoding.GetString(signEnd);
-
+            
             Array[] item = new Array[2];
             ArrayList items = new ArrayList();
-
+            
             byte[] temp = new byte[formData.Length];
             byte[] temp2 = null;
             byte[] temp3 = null;
-            int str, end;
+            int str,end;
             Array.ConstrainedCopy(formData, 0, temp, 0, temp.Length);
             try
             {
@@ -93,9 +73,9 @@
                             //Response.Write("<br>end</br>");     
                             break;
                         }
-
+                        
                         temp2 = new byte[temp.Length - (str + signStr.Length)];
-                        Array.ConstrainedCopy(temp, str + signStr.Length, temp2, 0, temp2.Length);
+                        Array.ConstrainedCopy(temp, str + signStr.Length,temp2, 0, temp2.Length);
                         end = IndexOf(temp2, signStr);
                         end = (end == -1 ? IndexOf(temp2, signEnd) : end);
                         if (end == -1)
@@ -109,16 +89,17 @@
                         str = IndexOf(temp3, (new byte[] { 0xd, 0xa, 0xd, 0xa }));
                         item[0] = new byte[str];
                         Array.ConstrainedCopy(temp3, 0, item[0], 0, item[0].Length);
-                        item[1] = new byte[temp3.Length - (str + 4) -2];
+                        item[1] = new byte[temp3.Length - (str + 4)-2];
                         Array.ConstrainedCopy(temp3, str + 4, item[1], 0, item[1].Length);
                         items.Add(item);
-
-                        temp = new byte[temp2.Length - end];
-                        Array.ConstrainedCopy(temp2, end, temp, 0, temp.Length);
+                        
+                        temp = new byte[temp2.Length-end];
+                        Array.ConstrainedCopy(temp2, end, temp, 0, temp.Length);                  
                     }
                 }
-
+                
                 IEnumerator e = items.GetEnumerator();
+                int nCount = 0;
                 while (e.MoveNext())
                 {
                     Array[] obj = (Array[])e.Current;
@@ -126,10 +107,12 @@
                     int nFileNameStr = header.IndexOf("filename=\"") + 10;
                     if (nFileNameStr >= 10)
                     {
+                    	nCount++;
                         string path = header.Substring(nFileNameStr, header.IndexOf("\"", nFileNameStr) - nFileNameStr);
                         string filename = System.IO.Path.GetFileName(path);
                         if (filename.Length != 0)
                         {
+                        	filename = "("+nCount+")"+System.IO.Path.GetFileName(path);
                             try
                             {
                                 System.IO.FileStream fs = new System.IO.FileStream(savepath + filename, System.IO.FileMode.OpenOrCreate);
@@ -139,10 +122,6 @@
                                 fs.Close();
 
                                 Response.Write("<br>" + filename + "  upload finish!" + "</br>");
-                                string url = Request.UrlReferrer.ToString();
-                                i = url.IndexOf("?");
-                                Response.Redirect("uploadimg_post.aspx"+ ( i > 0 ?  url.Substring( i) : ""));   /// 
-                                
                             }
                             catch (System.Exception se)
                             {
@@ -155,7 +134,7 @@
             catch (System.Exception e)
             {
                 Response.Write("<br>" + e.Message + "</br>");
-            }
+            }  
         }
 
         public int IndexOf(byte[] ByteArrayToSearch, byte[] ByteArrayToFind)
@@ -166,34 +145,8 @@
             int result = toSearch.IndexOf(toFind, StringComparison.Ordinal);
             return result;
         }
-
     </script>
-    <style type="text/css">
-        .style1
-        {
-            font-family: 標楷體;
-            color: #0066FF;
-            font-size: x-large;
-        }
-    </style>
 </head>
 <body>
-<div id='q_menu'></div>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<input type='button' id='btnAuthority' name='btnAuthority' style='font-size:16px;' value='權限'/>
-<p>&nbsp;</p>
-<div>
-<form name='form1' method='post' action='uploadimg.aspx' runat="server" enctype='multipart/form-data' style='width:525px'>  
-<input type='file' name='btnFile1' style='font-size:16px;'/>
-<input type='file' name='btnFile2' style='font-size:16px;'/>
-<input type='file' name='btnFile3' style='font-size:16px;'/>
-<input type='file' name='btnFile4' style='font-size:16px;'/>
-<input type='file' name='btnFile5' style='font-size:16px;'/>
-<input type='file' name='btnFile6' style='font-size:16px;'/>
-<input type='submit' name='btnUpload' value='上傳' style='font-size:16px;'/>
-    <p class='style1'></p>
-</form>
-</div>
-
 </body>
 </html>
