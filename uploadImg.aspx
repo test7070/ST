@@ -5,6 +5,29 @@
 <head>
     <title>upload</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../script/jquery.min.js" type="text/javascript"></script>
+    <script src='../script/qj2.js' type="text/javascript"></script>
+        <script src='qset.js' type="text/javascript"></script>
+    <script src='../script/qj_mess.js' type="text/javascript"></script>
+    <script src="../script/qbox.js" type="text/javascript"></script>
+    <script src='../script/mask.js' type="text/javascript"></script>
+    <link href="../qbox.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+            var q_name = 'uploadimg';
+            $(document).ready(function () {
+                _q_boxClose();
+                q_getId();
+                q_gf('', 'uploadimg');
+                
+                $('#btnAuthority').click(function () {
+                    btnAuthority(q_name);
+                });
+            });
+
+            function q_gfPost() {
+                q_langShow();
+            }
+	</script>
     <script language="c#" runat="server">
         public void Page_Load()
         {
@@ -15,8 +38,13 @@
             byte[] bCrLf = { 0xd, 0xa };// \r\n
    
             string savepath = "D:\\t\\";
-
-            Response.Write("<form name=\"form1\" method=\"post\" action=\"uploadImg.aspx\" enctype=\"multipart/form-data\" style=\"width:200px;\">");
+			
+			Response.Write("<div id='q_menu'></div>");
+			Response.Write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			Response.Write("<input type='button' id='btnAuthority' name='btnAuthority' style='font-size:16px;' value='權限'/>");
+			Response.Write("<p>&nbsp;</p>");
+            Response.Write("<div>");
+            Response.Write("<form name=\"form1\" method=\"post\" enctype=\"multipart/form-data\" style=\"width:200px;\">");
             Response.Write("<input type=\"file\" name=\"btnFile1\"/>");
             Response.Write("<input type=\"file\" name=\"btnFile2\"/>");
             Response.Write("<input type=\"file\" name=\"btnFile3\"/>");
@@ -25,6 +53,10 @@
             Response.Write("<input type=\"file\" name=\"btnFile6\"/>");
             Response.Write("<input type=\"submit\" name=\"btnUpload\" value=\"upload\"/>");
             Response.Write("</form>");
+            Response.Write("</div>");
+        	string uri = Request.Url.ToString();
+        	string noa =uri.Split(';')[3].Split('=')[1].Replace("'","");   
+            //Response.Write(noa);
             
             if (formSize == 0)
             {
@@ -112,16 +144,19 @@
                         string filename = System.IO.Path.GetFileName(path);
                         if (filename.Length != 0)
                         {
-                        	filename = "("+nCount+")"+System.IO.Path.GetFileName(path);
+                        	filename =System.IO.Path.GetFileName(path);
+                        	string extension = filename.Split('.')[filename.Split('.').Length-1];
+                        	string filename2 = noa+"_"+("00"+nCount).Substring(("00"+nCount).Length-2)+"."+extension;
+                        	
                             try
                             {
-                                System.IO.FileStream fs = new System.IO.FileStream(savepath + filename, System.IO.FileMode.OpenOrCreate);
+                                System.IO.FileStream fs = new System.IO.FileStream(savepath + filename2, System.IO.FileMode.OpenOrCreate);
                                 System.IO.BinaryWriter w = new System.IO.BinaryWriter(fs);
                                 w.Write((byte[])obj[1]);
                                 w.Close();
                                 fs.Close();
 
-                                Response.Write("<br>" + filename + "  upload finish!" + "</br>");
+                                Response.Write("<br>" + filename2 + "  upload finish!" + "</br>");
                             }
                             catch (System.Exception se)
                             {
@@ -130,6 +165,9 @@
                         }
                     }
                 }
+                
+                string url = Request.UrlReferrer.ToString();
+				Response.Redirect("uploadimg_post.aspx"+ ( url.IndexOf("?") > 0 ?  url.Substring( url.IndexOf("?")) : ""));   ///
             }
             catch (System.Exception e)
             {
@@ -148,5 +186,6 @@
     </script>
 </head>
 <body>
+
 </body>
 </html>

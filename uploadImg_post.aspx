@@ -19,7 +19,7 @@
                 q_func('etc.watch', "a")
 		    });
 		    function q_funcPost( func,result) {
-		        $('#txtMessage').text(result + " 已轉入資料庫");
+		        $('#txtMessage').text("已上傳!!");
 		    }
 		    function q_gfPost() {
 		        q_langShow();
@@ -30,7 +30,7 @@
     <div id='q_menu'></div>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
-    <span id='txtMessage' style="font-weight: 700; font-size: x-large; color: #0000FF">資料處理中.....預估三分鐘，請勿再上傳檔案，會容易造成當機</span>
+    <span id='txtMessage' style="font-weight: 700; font-size: x-large; color: #0000FF">圖片上傳中.....，請勿再上傳檔案，會容易造成當機</span>
     <p>&nbsp;</p>
 </body>
 </html>
