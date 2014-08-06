@@ -14,7 +14,7 @@
             byte[] formData = Request.BinaryRead(formSize);
             byte[] bCrLf = { 0xd, 0xa };// \r\n
    
-            string savepath = "D:\\D\\web\\upload\\";
+            string savepath = "D:\\t\\";
 
             Response.Write("<form name=\"form1\" method=\"post\" action=\"uploadImg.aspx\" enctype=\"multipart/form-data\" style=\"width:200px;\">");
             Response.Write("<input type=\"file\" name=\"btnFile1\"/>");
