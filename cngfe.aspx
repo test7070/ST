@@ -33,7 +33,7 @@
 				['txtRackno', 'lblRackno', 'rack', 'noa,rack,storeno,store', 'txtRackno', 'rack_b.aspx'],
 				['txtStoreinno', 'lblStorein', 'store', 'noa,store', 'txtStoreinno,txtStorein', 'store_b.aspx'],
 				['txtRackinno', 'lblRackinno', 'rack', 'noa,rack,storeno,store', 'txtRackinno', 'rack_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel', 'txtCustno,txtComp,txtTel', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel,salesno,sales', 'txtCustno,txtComp,txtTel,txtSssno,txtNamea', 'cust_b.aspx'],
 				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
 				['txtMemo', '', 'qphr', 'noa,phr', '0,txtMemo', ''],
 				['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,unit,style,lengthb,spec', 'txtUno_,txtProductno_,txtProduct_,txtUnit_,txtStyle_,txtLengthb_,txtSpec_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
@@ -220,12 +220,7 @@
 			}
 
 			function btnPrint() {
-				var hasStyle = q_getPara('sys.isstyle');
-				if(hasStyle=='1'){
-					q_box('z_cng_ra.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-				}else{
-					q_box('z_cngp.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-				}
+				q_box('z_cngfep.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
