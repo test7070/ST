@@ -66,6 +66,10 @@
                         type : '8',//8
                         name : 'xoption01',
                         value : q_getMsg('xoption01').split('&')
+                    }, {
+                        type : '5',//9
+                        name : 'xkind',
+                        value : '全部,鋼捲,鋼管'.split(',')
                     }]
 				});
 				q_popAssign();
