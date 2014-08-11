@@ -15,23 +15,21 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
-			aPop = new Array(['txtXcno', '', 'acomp', 'noa,acomp', 'txtXcno', 'acomp_b.aspx']);
-			
-            if (location.href.indexOf('?') < 0) {
-                location.href = location.href + "?;;;;"+((new Date()).getUTCFullYear()-1911);
-            }
+           if (location.href.indexOf('?') < 0) {
+				location.href = location.href + "?;;;;" + ((new Date()).getUTCFullYear() - 1911);
+			}
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_rc2fe');
+                q_gf('', 'z_inafe');
             });
             function q_gfPost() {
-               $('#q_report').q_report({
-                        fileName : 'z_rc2fe',
+				$('#q_report').q_report({
+					fileName : 'z_inafe',
                         options : [{
-	                        type : '0',//[1]
-	                        name : 'accy',
-	                        value : r_accy
-	                    },{
+							type : '0',
+							name : 'accy',
+							value : r_accy
+						},{
 	                        type : '0',//[2]
 	                        name : 'mountprecision',
 	                        value : q_getPara('rc2.mountPrecision')
@@ -44,73 +42,26 @@
 	                        name : 'priceprecision',
 	                        value : q_getPara('rc2.pricePrecision')
 	                    },{
-							type : '6', //[5]	1
-							name : 'xcno'
-						},{
-	                        type : '2', //[6][7]	2
-	                        name : 'xtgg',
-	                        dbf : 'tgg',
-	                        index : 'noa,comp',
-	                        src : 'tgg_b.aspx'
-						}, {
-	                        type : '2', //[8][9]	4
-	                        name : 'xucc',
-	                        dbf : 'ucc',
-	                        index : 'noa,product',
-	                        src : 'ucc_b.aspx'
-						},{
-							type : '1', //[10][11]	8
-							name : 'xmon'
-						},{
-							type : '1', //[12][13]	1
+	                        type : '5',
+	                        name : 'itype',
+	                        value : [q_getPara('report.all')].concat(q_getPara('inafe.typea').split(','))
+	                    },{
+							type : '1',
 							name : 'xdate'
-						},{
-							type : '6', //[14]	2
-							name : 'xopaydate'
-						},{
-							type : '0', //[15]	
-							name : 'worker',
-							value : r_name
 						}]
                     });
                 q_popAssign();
-                	
-                	$('#txtXmon1').mask('999/99');
-	                $('#txtXmon2').mask('999/99');
-	                $('#txtXdate1').mask('999/99/99');
-	                $('#txtXdate1').datepicker();
-	                $('#txtXdate2').mask('999/99/99');
-	                $('#txtXdate2').datepicker();  
-	                
-	            var t_noa=typeof(q_getId()[3])=='undefined'?'':q_getId()[3];
+                 $('#txtXdate1').mask('999/99/99');
+	             $('#txtXdate1').datepicker();
+	             $('#txtXdate2').mask('999/99/99');
+	             $('#txtXdate2').datepicker();  
+               
+                var t_noa=typeof(q_getId()[5])=='undefined'?'':q_getId()[5];
                 t_noa  =  t_noa.replace('noa=','');
-                $('#txtXnoa1').val(t_noa);
-                $('#txtXnoa2').val(t_noa);
-                
+                $('#txtNoa1').val(t_noa);
+                $('#txtNoa2').val(t_noa);
                 
                  var t_date,t_year,t_month,t_day;
-	                t_date = new Date();
-	                t_date.setDate(1);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtXmon1').val(t_year+'/'+t_month);
-	                
-	                t_date = new Date();
-	                t_date.setDate(35);
-	                t_date.setDate(0);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtXmon2').val(t_year+'/'+t_month);
-	                
-	                var t_date,t_year,t_month,t_day;
 	                t_date = new Date();
 	                t_date.setDate(1);
 	                t_year = t_date.getUTCFullYear()-1911;
@@ -131,7 +82,7 @@
 	                t_day = t_date.getUTCDate();
 	                t_day = t_day>9?t_day+'':'0'+t_day;
 	                $('#txtXdate2').val(t_year+'/'+t_month+'/'+t_day);
-            }
+	                }
 
             function q_boxClose(s2) {
             }
@@ -154,3 +105,5 @@
 		</div>
 	</body>
 </html>
+           
+          
