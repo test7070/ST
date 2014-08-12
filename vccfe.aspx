@@ -92,14 +92,12 @@
                 $('#txtMoney').val(t_totals);
                 $('#txtWeight').val(t_weights);
                 var price = dec($('#txtPrice').val());
-                var addMoney = dec(q_getPara('sys.tranadd'));
-                var addMul = dec($('#txtTranadd').val());
                 var total = 0;
                 var transtyle = $.trim($('#cmbTranstyle').val());
                 if(transtyle=='4' || transtyle=='9'){
                     price = 0;
                 }
-                total = q_add(q_mul(addMoney,addMul),price);
+                total = price;
                 q_tr('txtTranmoney', total);
                 calTax();
                 q_tr('txtTotalus', round(q_mul(q_float('txtTotal'), q_float('txtFloata')), 0));
@@ -109,7 +107,7 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
                 q_mask(bbmMask);
-                bbmNum = [  ['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtWeight', 9, q_getPara('vcc.weightPrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1], ['txtTranadd', 11, 2, 1]];
+                bbmNum = [  ['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtWeight', 9, q_getPara('vcc.weightPrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1]];
                 bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtWeight', 9, q_getPara('vcc.weightPrecision'), 1], ['txtTotal', 15, 0, 1],
                 					['txtWcost', 12, 2, 1],['txtTranmoney', 12, 0, 1],['txtProfit', 12, q_getPara('vcc.pricePrecision'), 1],['txtSprice', 12, q_getPara('vcc.pricePrecision'), 1],['txtSprice2', 12, q_getPara('vcc.pricePrecision'), 1]];
                 q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
@@ -221,11 +219,7 @@
                 $('#txtPrice').change(function() {
                     sum();
                 });
-                
-                $('#txtTranadd').change(function() {
-                    sum();
-                });
-                
+                                
                 $('#txtAddr').change(function() {
                     var t_custno = trim($(this).val());
                     if (!emp(t_custno)) {
@@ -1313,8 +1307,6 @@
                         <td class="td4"><span> </span><a id='lblTranstart' class="lbl btn"> </a></td>
                         <td class="td5"><input id="txtTranstartno" type="text" class="txt c1"/></td>
                         <td class="td6"><input id="txtTranstart" type="text" class="txt c1"/></td>
-                        <td class="td7"><span> </span><a id='lblTranadd' class="lbl"> </a></td>
-                        <td class="td8"><input id="txtTranadd" type="text" class="txt num c1"/></td>
                     </tr>
                     <tr>
                         <td class="td1"><span> </span><a id='lblDriver' class="lbl btn"> </a></td>
