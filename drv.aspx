@@ -453,13 +453,8 @@
                 		return;
                 	}
                 	
-                	if(chk_vcce.length==0){
-                		alert('請選擇派車單。');
-                		return;
-                	}
-                	
-                	var t_where = "noa='" + chk_vcce + "'";
-                   q_box("z_drvp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                	var t_where = "where=^^ charindex(ordeno,'"+chk_vcce+"')>0 ^^ ";
+					q_gt('view_vcces', t_where, 0, 0, 0,'check_vcce', '');
                 });
                 
                 $('#btnVcce').click(function(e) {
@@ -686,6 +681,15 @@
 						$('#div_stk').css('top',mouse_point.pageY);
 						$('#div_stk').css('left',mouse_point.pageX);
 						$('#div_stk').toggle();
+						break;
+					case 'check_vcce':
+						var as = _q_appendData("view_vcces", "", true);
+						if(as.length>0){
+							var t_where = "noa='" + chk_vcce + "'";
+                   			q_box("z_drvp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+						}else{
+							alert('請先【轉派車單】，在列印!!');
+						}
 						break;
 					case 'loadcaddr':
                         var GG = _q_appendData("view_orde", "", true);

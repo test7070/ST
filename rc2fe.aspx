@@ -189,10 +189,6 @@
                 $('#txtPrice').change(function(){
                     sum();
                 });
-                $('#txtTranadd').change(function(){
-                    sum();
-                });
-                
             }
 
             function q_boxClose(s2) {
