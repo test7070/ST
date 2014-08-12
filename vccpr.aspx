@@ -33,7 +33,7 @@
             brwKey = 'Noa';
             q_desc = 1;
             brwCount2 = 5;
-            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
+            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno', 'cust_b.aspx']
             , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
             , ['txtStraddrno','','addr2','noa,addr','txtStraddrno,txtStraddr','addr2_b.aspx']
             , ['txtEndaddrno','','addr2','noa,addr','txtEndaddrno,txtEndaddr','addr2_b.aspx']
@@ -363,8 +363,22 @@
                         <td><input type="button" id="btnImport" value="匯入" class="txt c1"></td>
                     </tr>
                     <tr>
+                    	<td><span> </span><a id="lblBdate" class="lbl">出貨日期</a></td>
+                        <td colspan="2">
+                        	<input id="txtBdate" type="text" class="txt" style="width:45%;"/>
+                        	<span style="float:left; display:block; width:20px;">～</span>
+                        	<input id="txtEdate" type="text" class="txt" style="width:45%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td><span> </span><a id="lblCust" class="lbl">客戶</a></td>
+                        <td><input id="txtCustno" type="text" class="txt c1"/></td>
+                    	<td><span> </span><a id="lblSales" class="lbl">業務</a></td>
+                        <td><input id="txtSalesno" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr>
                     	<td><span> </span><a id="lblProfit" class="lbl">毛利合計</a></td>
-                        <td><input id="txtlblProfit" type="text" class="txt c1 num"/></td>
+                        <td><input id="txtProfit" type="text" class="txt c1 num"/></td>
                         <td><span> </span><a id="lblTotal" class="lbl">銷售合計</a></td>
                         <td><input id="txtTotal" type="text" class="txt c1 num"/></td>
                     </tr>
