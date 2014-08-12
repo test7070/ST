@@ -422,7 +422,7 @@
 					<td align="center" style="width:100px;"><a id='lblPprice_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblWcost_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblSprice_s'> </a></td>	
-					<td align="center" style="width:100px;"><a id='lblSprce2_s'> </a></td>	
+					<td align="center" style="width:100px;"><a id='lblSprice2_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblTranmoney2_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblTrantype_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblTranaddr_s'> </a></td>	
