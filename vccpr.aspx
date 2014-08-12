@@ -58,7 +58,15 @@
                 q_mask(bbmMask);
                 
                 $('#btnImport').click(function(e){
-                	
+                	var t_bdate = $('#txtBdatea').val();
+                	var t_edate = $('#txtEdate').val();
+                	var t_custno = $('#txtCustno').val();
+                	var t_salesno = $('#txtSalesno').val();
+                	if(t_bdate.length==0 || t_edate.length==0){
+                		alert('請輸入日期。');
+                		return;
+                	}
+                	q_func('qtxt.query.vccpr', 'vccpr.txt,import,' + encodeURI(t_bdate) + ';' + encodeURI(t_edate)+ ';' + encodeURI(t_custno)+ ';' + encodeURI(t_salesno)); 	
                 });
             }
             function q_gtPost(t_name) {
