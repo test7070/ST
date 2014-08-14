@@ -451,7 +451,7 @@
                     </td>
                     <td align="center" style="width:20px;"></td>
                     <td align="center" style="width:200px;"><a id='lblDatea_s'> </a></td>
-  					<td align="center" style="width:100px;"><a id='lblCust_s'> </a></td>
+  					<td align="center" style="width:150px;"><a id='lblCust_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblLengthb_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblUnit_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>	
@@ -474,7 +474,7 @@
 					<td align="center" style="width:100px;"><a id='lblWorker_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblProfit_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblTotal_s'> </a></td>	
-					<td align="center" style="width:100px;"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblInte_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblDaya_s'> </a></td>		
                 </tr>
@@ -488,8 +488,8 @@
                     <td><input type="text" id="txtDatea.*" style="width:95%;"/></td>
                     <td>
                     	<input type="text" id="txtCustno.*" style="width:95%;"/>
-                    	<input type="text" id="txtCust.*" style="width:95%;"/>
-                    	<input type="text" id="txtNick.*" style="width:95%;"/>
+                    	<input type="text" id="txtCust.*" style="display:none;"/>
+                    	<input type="text" id="txtNick.*" style="display:none;"/>
                     </td>
                     <td><input type="text" id="txtLengthb.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtUnit.*" style="width:95%;"/></td>
