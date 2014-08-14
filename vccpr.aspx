@@ -124,7 +124,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)
                     return;
-                q_box('drp_s.aspx', q_name + '_s', "600px", "530px", q_getMsg("popSeek"));
+                q_box('vccpr_s.aspx', q_name + '_s', "600px", "530px", q_getMsg("popSeek"));
             }
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
@@ -158,7 +158,7 @@
 				$('#txtDatea').focus();
             }
             function btnPrint() {
-                q_box("z_vccpr.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'drp', "95%", "95%", m_print);
+                q_box("z_vccprp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'drp', "95%", "95%", m_print);
             }
             function wrServer(key_value) {
                 var i;
@@ -364,11 +364,13 @@
                 <table class="tview" id="tview">
                     <tr>
                         <td align="center" style="width:20px; color:black;"><a id="vewChk"> </a></td>
-                        <td align="center" style="width:80px; color:black;"><a id="vewDatea"> </a></td>
+                        <td align="center" style="width:80px; color:black;"><a id="vewCust"> </a></td>
+                        <td align="center" style="width:80px; color:black;"><a id="vewSales"> </a></td>
                     </tr>
                     <tr>
                         <td><input id="chkBrow.*" type="checkbox"/></td>
-                        <td id="datea" style="text-align: center;">~datea</td>
+                        <td id="custno" style="text-align: center;">~custno</td>
+                        <td id="salesno" style="text-align: center;">~salesno</td>
                     </tr>
                 </table>
             </div>
