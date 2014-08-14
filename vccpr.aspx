@@ -130,12 +130,13 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                        $('#txtTranno_' + j).bind('contextmenu', function(e) {
+                        $('#txtVccno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtTranno_', '');
-                            var t_accy = $('#txtTranaccy_' + n).val();
-                            q_box("trans_tb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + t_accy, 'trans', "95%", "95%", q_getMsg("popTrans"));
+                            var n = $(this).attr('id').replace('txtVccno_', '');
+                            var t_accy = $('#txtAccy_' + n).val();
+                            var t_tablea = $('#txtTablea_' + n).val();
+                            q_box("vccfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + t_accy, t_tablea, "95%", "95%", q_getMsg("popVcc"));
                             
                         });
                         $('#txtPrice_'+j).change(function(e){
