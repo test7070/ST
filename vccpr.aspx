@@ -158,7 +158,7 @@
 				$('#txtDatea').focus();
             }
             function btnPrint() {
-                q_box("z_vccprp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'drp', "95%", "95%", m_print);
+                q_box("z_vccprp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'vccpr', "95%", "95%", m_print);
             }
             function wrServer(key_value) {
                 var i;
