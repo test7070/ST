@@ -24,8 +24,8 @@
             var q_readonlys = [];
             var bbmNum = [['txtPrice',10,0,1]];
             var bbsNum = [['txtPrice',10,0,1]];
-            var bbmMask = [];
-            var bbsMask = [];
+            var bbmMask = [['txtBdate', '999/99/99'],['txtEdate', '999/99/99']];
+            var bbsMask = [['txtDatea', '999/99/99']];
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
@@ -57,8 +57,10 @@
               //  bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
                 
+                $('#txtBdate').datepicker();
+                $('#txtEdate').datepicker();
                 $('#btnImport').click(function(e){
-                	var t_bdate = $('#txtBdatea').val();
+                	var t_bdate = $('#txtBdate').val();
                 	var t_edate = $('#txtEdate').val();
                 	var t_custno = $('#txtCustno').val();
                 	var t_salesno = $('#txtSalesno').val();
@@ -68,6 +70,22 @@
                 	}
                 	q_func('qtxt.query.vccpr', 'vccpr.txt,import,' + encodeURI(t_bdate) + ';' + encodeURI(t_edate)+ ';' + encodeURI(t_custno)+ ';' + encodeURI(t_salesno)); 	
                 });
+            }
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                    case 'qtxt.query.vccpr':
+                        var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined) {
+                            q_gridAddRow(bbsHtm, 'tbbs', 'txtDatea,txtCustno,txtCust,txtNick,txtLengthb,txtUnit,txtMount,txtWeight,txtApv,txtTranmoney,txtPrice,txtHprice,txtPprice,txtLprice,txtWcost,txtSprice,txtSprice2,txtTranmoney2,txtTrantype,txtTranaddr,txtTranmoney3,txtAccy,txtTablea,txtVccno,txtWorker,txtProfit,txtTotal,txtProductno,txtProduct,txtInte,txtDaya'
+                        	, as.length, as, 'datea,custno,cust,nick,lengthb,unit,mount,weight,apv,tranmoney,price,hprice,pprice,lprice,wcost,sprice,sprice2,tranmoney2,trantype,tranaddr,tranmoney3,accy,tablea,vccno,worker,profit,total,productno,product,inte,daya', '','');
+                        } else {
+                            alert('無資料!');
+                        }
+                        Unlock(1);
+                        break;
+                    default:
+                    	break;
+                }
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
@@ -431,17 +449,19 @@
                     <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
                     <td align="center" style="width:20px;"></td>
-                    <td align="center" style="width:100px;"><a id='lblDatea_s'> </a></td>
+                    <td align="center" style="width:200px;"><a id='lblDatea_s'> </a></td>
   					<td align="center" style="width:100px;"><a id='lblCust_s'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblLengtha_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblLengthb_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblUnit_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblWeight_s'> </a></td>	
+					<td align="center" style="width:100px;"><a id='lblRate_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblApv_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblTranmoney_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblPrice_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblHprice_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblPprice_s'> </a></td>	
+					<td align="center" style="width:100px;"><a id='lblLprice_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblWcost_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblSprice_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblSprice2_s'> </a></td>	
@@ -453,6 +473,9 @@
 					<td align="center" style="width:100px;"><a id='lblWorker_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblProfit_s'> </a></td>	
 					<td align="center" style="width:100px;"><a id='lblTotal_s'> </a></td>	
+					<td align="center" style="width:100px;"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblInte_s'> </a></td>	
+					<td align="center" style="width:100px;"><a id='lblDaya_s'> </a></td>		
                 </tr>
                 
                 <tr style='background:#cad3ff;'>
@@ -467,15 +490,17 @@
                     	<input type="text" id="txtCust.*" style="width:95%;"/>
                     	<input type="text" id="txtNick.*" style="width:95%;"/>
                     </td>
-                    <td><input type="text" id="txtLengtha.*" style="width:95%;"/></td>
+                    <td><input type="text" id="txtLengthb.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtUnit.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtMount.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtWeight.*" style="width:95%;"/></td>
+                    <td><input type="text" id="txtRate.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtApv.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtTranmoney.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtPrice.*" style="width:95%;text-align: right;"/></td>
 					<td><input type="text" id="txtHprice.*" style="width:95%;text-align: right;"/></td>
 					<td><input type="text" id="txtPprice.*" style="width:95%;text-align: right;"/></td>
+					<td><input type="text" id="txtLprice.*" style="width:95%;text-align: right;"/></td>
 					<td><input type="text" id="txtWcost.*" style="width:95%;text-align: right;"/></td>
 					<td><input type="text" id="txtSprice.*" style="width:95%;text-align: right;"/></td>
 					<td><input type="text" id="txtSprice2.*" style="width:95%;text-align: right;"/></td>
@@ -491,6 +516,13 @@
 					<td><input type="text" id="txtWorker.*" style="width:95%;"/></td>
 					<td><input type="text" id="txtProfit.*" style="width:95%;"/></td>
 					<td><input type="text" id="txtTotal.*" style="width:95%;"/></td>
+					
+					<td>
+						<input type="text" id="txtProductno.*" style="width:95%;"/>
+						<input type="text" id="txtProduct.*" style="width:95%;"/>
+					</td>
+					<td><input type="text" id="txtInte.*" style="width:95%;"/></td>
+					<td><input type="text" id="txtDaya.*" style="width:95%;"/></td>
                 </tr>
             </table>
         </div>
