@@ -134,9 +134,9 @@
 				});
 
 				$('#btnCredit').click(function() {
-					if (!emp($('#txtCustno').val())) {
-						q_box("z_credit.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" + $('#txtCustno').val() + "';" + r_accy + ";" + q_cur, 'ordei', "95%", "95%", q_getMsg('btnCredit'));
-					}
+					if(!emp($('#txtCustno').val())){
+                        q_box("z_credit.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" + $('#txtCustno').val() + "';"+r_accy+";" + q_cur, 'ordei', "95%", "95%", q_getMsg('btnCredit'));
+                    }
 				});
 				////-----------------以下為addr2控制事件---------------
 				$('#btnAddr2').mousedown(function(e) {
@@ -444,13 +444,116 @@
 				else
 					$('#txtWorker2').val(r_name);
 				sum();
-
-				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-				if (s1.length == 0 || s1 == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
-				else
-					wrServer(s1);
+				if($('#txtCustno').val().length==0){
+                    alert('請輸入'+q_getMsg('lblCust'));
+                    Unlock(1);
+                    return;
+                }
+                q_func('qtxt.query.orde', 'credit.txt,orde,'+ encodeURI($('#txtCustno').val()) + ';' + encodeURI($('#txtNoa').val()));
 			}
+			function save(){
+                var s1 = $('#txtNoa').val();
+                if (s1.length == 0 || s1 == "AUTO")/// 自動產生編號
+                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
+                else
+                    wrServer(s1);
+            }
+			function q_funcPost(t_func, result) {
+                switch(t_func) {
+                    case 'qtxt.query.conform':
+                        var as = _q_appendData("tmp0", "", true, true);
+                        if(as[0]!=undefined){
+                            var err = as[0].err;
+                            var msg = as[0].msg;
+                            var ordeno = as[0].ordeno;  
+                            var userno = as[0].userno;  
+                            var namea = '*';//as[0].namea;
+                            if(err=='1'){
+                                $('#txtConform').val(namea);
+                                for(var i=0;i<abbm.length;i++){
+                                    if(abbm[i].noa==ordeno){
+                                        abbm[i].conform=namea;
+                                        break;
+                                    }
+                                }
+                                var obj = $('#tview').find('#noa');
+                                for(var i=0;i<obj.length;i++){
+                                    if(obj.eq(i).html()==ordeno){
+                                        $('#tview').find('#conform').eq(i).html(namea);
+                                        break;                                      
+                                    }
+                                }
+                            }else{
+                                alert(msg); 
+                            }
+                        }
+                        Unlock(1);
+                        break;
+                    case 'qtxt.query.apv':
+                        var as = _q_appendData("tmp0", "", true, true);
+                        if(as[0]!=undefined){
+                            var err = as[0].err;
+                            var msg = as[0].msg;
+                            var ordeno = as[0].ordeno;  
+                            var userno = as[0].userno;  
+                            var namea = as[0].namea;
+                            if(err=='1'){
+                                $('#txtApv').val(namea);
+                                for(var i=0;i<abbm.length;i++){
+                                    if(abbm[i].noa==ordeno){
+                                        abbm[i].apv=namea;
+                                        break;
+                                    }
+                                }
+                                var obj = $('#tview').find('#noa');
+                                for(var i=0;i<obj.length;i++){
+                                    if(obj.eq(i).html()==ordeno){
+                                        $('#tview').find('#apv').eq(i).html(namea);
+                                        break;                                      
+                                    }
+                                }
+                            }else{
+                                alert(msg); 
+                            }
+                        }
+                        Unlock(1);
+                        break;
+                    case 'qtxt.query.orde':
+                        var as = _q_appendData("tmp0", "", true, true);                     
+                        if(as[0]!=undefined){
+                            var total = parseFloat(as[0].total.length==0?"0":as[0].total);
+                            var credit = parseFloat(as[0].credit.length==0?"0":as[0].credit);
+                            var gqb = parseFloat(as[0].gqbMoney.length==0?"0":as[0].gqbMoney);
+                            var vcc = parseFloat(as[0].vccMoney.length==0?"0":as[0].vccMoney);
+                            var orde = parseFloat(as[0].ordeMoney.length==0?"0":as[0].ordeMoney);
+                            var umm = parseFloat(as[0].ummMoney.length==0?"0":as[0].ummMoney);
+                            var curorde = 0;
+                            var curtotal = 0;
+                            
+                            for(var i=0;i<q_bbsCount;i++){
+                                curorde = q_add(curorde,q_float('txtTotal_'+i));                     
+                            }
+                            curtotal = credit - gqb - vcc -orde - umm - curorde;
+                            if(curtotal<0){
+                                var t_space = '          ';
+                                var msg = as[0].custno+'-'+as[0].cust+'\n'
+                                +' 基本額度：'+(t_space+q_trv(credit)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'-應收票據：'+(t_space+q_trv(gqb)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'-應收帳款：'+(t_space+q_trv(vcc)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'-未出訂單：'+(t_space+q_trv(orde)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'-預收貨款：'+(t_space+q_trv(umm)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'-本張訂單：'+(t_space+q_trv(curorde)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'----------------------------'+'\n'
+                                +'額度餘額：'+(t_space+q_trv(curtotal)).replace(/^.*(.{10})$/,'$1');
+                                alert(msg);
+                                Unlock(1);
+                                return;
+                            }                 
+                        }
+                        save();
+                        break;
+                }
+            }
 
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
