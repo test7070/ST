@@ -978,9 +978,9 @@
 							<input id="txtWorkqno" type="hidden" />
 						</td>
 						<td colspan='2'>
-							<input type="button" id="btnWork">
-							<input type="button" id="btnWorks">
-							<input type="button" id="btnOrdes">
+							<input type="button" id="btnWork" style="display:none;">
+							<input type="button" id="btnWorks" style="display:none;">
+							<input type="button" id="btnOrdes" style="display:none;">
 						</td>
 					</tr>
 					<tr>
