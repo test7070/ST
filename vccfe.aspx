@@ -7,8 +7,12 @@
         <script src='qset.js' type="text/javascript"></script>
         <script src='../script/qj_mess.js' type="text/javascript"></script>
         <script src="../script/qbox.js" type="text/javascript"></script>
-        <script src='../script/mask.js' type="text/javascript"></script> 
+        <script src='../script/mask.js' type="text/javascript"></script>
         <link href="../qbox.css" rel="stylesheet" type="text/css" />
+        <link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+        <script src="css/jquery/ui/jquery.ui.core.js"></script>
+        <script src="css/jquery/ui/jquery.ui.widget.js"></script>
+        <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
         <script type="text/javascript">
             this.errorHandler = null;
             function onPageError(error) {
@@ -48,7 +52,7 @@
                 ['txtPost2', 'lblAddr2', 'addr2', 'noa,post', 'txtPost2', 'addr2_b.aspx'],
                 ['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
                 ['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],
-                ['txtDriverno', 'lblDriver', 'driver', 'noa,driver','txtDriverno,txtDriver', 'driver_b.aspx']
+                ['txtDriverno', 'lblDriver', 'driver', 'noa,namea','txtDriverno,txtDriver', 'driver_b.aspx']
             );
 
             var isinvosystem = false;
