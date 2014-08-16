@@ -7,8 +7,12 @@
         <script src='qset.js' type="text/javascript"></script>
         <script src='../script/qj_mess.js' type="text/javascript"></script>
         <script src="../script/qbox.js" type="text/javascript"></script>
-        <script src='../script/mask.js' type="text/javascript"></script> 
+        <script src='../script/mask.js' type="text/javascript"></script>
         <link href="../qbox.css" rel="stylesheet" type="text/css" />
+        <link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+        <script src="css/jquery/ui/jquery.ui.core.js"></script>
+        <script src="css/jquery/ui/jquery.ui.widget.js"></script>
+        <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
         <script type="text/javascript">
             this.errorHandler = null;
             function onPageError(error) {
@@ -48,7 +52,7 @@
                 ['txtPost2', 'lblAddr2', 'addr2', 'noa,post', 'txtPost2', 'addr2_b.aspx'],
                 ['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
                 ['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],
-                ['txtDriverno', 'lblDriver', 'driver', 'noa,driver','txtDriverno,txtDriver', 'driver_b.aspx']
+                ['txtDriverno', 'lblDriver', 'driver', 'noa,namea','txtDriverno,txtDriver', 'driver_b.aspx']
             );
 
             var isinvosystem = false;
@@ -1366,7 +1370,7 @@
                         <input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;width:" />
                     </td>
                     <td align="center" style="width:20px;"> </td>
-                    <td align="center" style="width:150px;"><a id='lblUno_s'> </a></td>
+                    
                     <td align="center" style="width:100px"><a id='lblProductno_s'> </a></td>
                     <td align="center" style="width:180px;"><a id='lblProduct_s'> </a></td>
                     <td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
@@ -1387,6 +1391,7 @@
                     <td align="center" style="width:150px;"><a id='lblMemo_s'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblRecord_s'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblStk_s'> </a></td>
+                    <td align="center" style="width:150px;"><a id='lblUno_s'> </a></td>
                 </tr>
                 <tr style='background:#cad3ff;'>
                     <td>
@@ -1394,7 +1399,7 @@
                         <input id="txtNoq.*" type="text" style="display:none;"/>
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-                    <td><input id="txtUno.*" type="text" class="txt c1"/></td>
+                    
                     <td>
                         <input class="btn"  id="btnProductno.*" type="button" value='' style="width:5%;font-weight: bold;float:left;" />
                         <input id="txtProductno.*" type="text" class="txt" style="width:80%;float:left;"/>                   
@@ -1435,6 +1440,7 @@
                         <input class="btn"  id="btnRecord.*" type="button" value='.' style=" font-weight: bold;" />
                     </td>
                     <td align="center"><input class="btn"  id="btnStk.*" type="button" value='.' style="width:1%;"/></td>
+                	<td><input id="txtUno.*" type="text" class="txt c1"/></td>
                 </tr>
             </table>
         </div>

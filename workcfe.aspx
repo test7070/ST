@@ -686,7 +686,7 @@
 			}
 
 			function btnPrint() {
-				q_box("z_workcfep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'workc', "95%", "95%", m_print);
+				q_box("z_workfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'workc', "95%", "95%", m_print);
 			}
 
 			function wrServer(key_value) {
@@ -978,9 +978,9 @@
 							<input id="txtWorkqno" type="hidden" />
 						</td>
 						<td colspan='2'>
-							<input type="button" id="btnWork">
-							<input type="button" id="btnWorks">
-							<input type="button" id="btnOrdes">
+							<input type="button" id="btnWork" style="display:none;">
+							<input type="button" id="btnWorks" style="display:none;">
+							<input type="button" id="btnOrdes" style="display:none;">
 						</td>
 					</tr>
 					<tr>

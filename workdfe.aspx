@@ -488,7 +488,7 @@
 			}
 
 			function btnPrint() {
-				q_box("z_workdfep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'workd', "95%", "95%", m_print);
+				q_box("z_workfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'workd', "95%", "95%", m_print);
 			}
 
 			function wrServer(key_value) {
@@ -840,14 +840,14 @@
 					</td>
 					<td><span> </span><a id='lblWorkno' class="lbl"> </a></td>
 					<td ><input id="txtWorkno" type="text" class="txt c1"/></td>
-					<td><input type="button" id="btnWork"></td>
+					<td><input type="button" id="btnWork" style="display:none;"></td>
 				</tr>
 				<tr>
 					<td><span> </span><a id='lblInvono' class="lbl"> </a></td>
 					<td><input id="txtInvono" type="text" class="txt c1"/></td>
 					<td><span> </span><a id='lblMon' class="lbl"> </a></td>
 					<td><input id="txtMon" type="text" class="txt c1"/></td>
-					<td><input type="button" id="btnOrdes"> </td>
+					<td><input type="button" id="btnOrdes" style="display:none;"> </td>
 				</tr>
 				<tr>
 					<td><span> </span><a id='lblTax' class="lbl"> </a></td>
@@ -857,7 +857,7 @@
 					</td>
 					<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
 					<td><input id="txtMoney" type="text" class="txt c1 num"/></td>
-					<td><input type="button" id="btnWorkq"> </td>
+					<td><input type="button" id="btnWorkq" style="display:none;"> </td>
 				</tr>
 				<tr>
 					<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
@@ -890,10 +890,11 @@
 					<td style="width:95px;" align="center" class="isStyle"><a id='lblStyle'></a></td>
 					<td style="width:30px;" align="center"><a id='lblUnit'></a></td>
 					<td style="width:100px;" align="center"><a id='lblBorn'></a></td>
-					<td style="width:80px;" align="center"><a id='lblWk_mounts'></a></td>
-					<td style="width:80px" align="center"><a id='lblWk_inmounts'></a></td>
-					<td style="width:80px;" align="center"><a id='lblWk_unmounts'></a></td>
+					<td style="width:80px;display:none;" align="center"><a id='lblWk_mounts'></a></td>
+					<td style="width:80px;display:none;" align="center"><a id='lblWk_inmounts'></a></td>
+					<td style="width:80px;display:none;" align="center"><a id='lblWk_unmounts'></a></td>
 					<td style="width:80px;" align="center"><a id='lblMounts'></a></td>
+					<td style="width:80px;" align="center"><a id='lblWeights'></a></td>
 					<td style="width:150px;" align="center"><a id='lblStores'></a></td>
 					<td style="width:100px;;" align="center"><a id='lblWmounts'></a></td>
 					<td style="width:100px;" align="center"><a id='lblPrice_s'></a></td>
@@ -920,10 +921,11 @@
 					<td class="isStyle"><input class="txt c1" id="txtStyle.*" type="text"/></td>
 					<td><input class="txt c1" id="txtUnit.*" type="text"/></td>
 					<td><input class="txt c1 num" id="txtBorn.*" type="text"/></td>
-					<td><input id="txtWk_mount.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWk_inmount.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWk_unmount.*" type="text" class="txt c1 num"/></td>
+					<td style="display:none;"><input id="txtWk_mount.*" type="text" class="txt c1 num"/></td>
+					<td style="display:none;"><input id="txtWk_inmount.*" type="text" class="txt c1 num"/></td>
+					<td style="display:none;"><input id="txtWk_unmount.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWeight.*" type="text" class="txt c1 num"/></td>
 					<td>
 						<input class="btn" id="btnStore.*" type="button" value='.' style="width:1%;float: left;" />
 						<input id="txtStoreno.*" type="text" class="txt c2" style="width: 30%;"/>

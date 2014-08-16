@@ -37,7 +37,8 @@
             , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
             , ['txtStraddrno','','addr2','noa,addr','txtStraddrno,txtStraddr','addr2_b.aspx']
             , ['txtEndaddrno','','addr2','noa,addr','txtEndaddrno,txtEndaddr','addr2_b.aspx']
-            , ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']);
+            , ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']
+            , ['txtDriverno', 'lblDriver', 'driver', 'noa,namea','txtDriverno,txtDriver', 'driver_b.aspx']);
             $(document).ready(function() {
                 q_bbsShow = -1;
                 bbmKey = ['noa'];
@@ -58,8 +59,38 @@
                 q_mask(bbmMask);
                 
                 $('#btnImport').click(function(e){
-                	
+                	var t_date = $('#txtDatea').val();
+                	var t_driverno = $('#txtDriverno').val();
+                	if(t_date.length==0){
+                		alert('請輸入日期。');
+                		return;
+                	}
+                	if(t_driverno.length==0){
+                		alert('請輸入司機。');
+                		return;
+                	}
+                	q_func('qtxt.query.drp', 'drp.txt,import,' + encodeURI(t_date) + ';' + encodeURI(t_driverno)); 	
                 });
+            }
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                    case 'qtxt.query.drp':
+                        var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined) {
+                           /* q_gridAddRow(bbsHtm, 'tbbs', 'txtMoney,txtTranmoney,txtTranmoney2,txtOuttime,txtBacktime,txtMount,txtCost,txtWeight,txtPrice'
+                        	, as.length, as, 'money,tranmoney,tranmoney2,outtime,backtime,mount,cost,weight,price', '','');
+                        	*/
+                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtCarno,txtMoney'
+                        	, as.length, as, 'carno,money', '','');
+                        } else {
+                            alert('無資料!');
+
+                        }
+                        Unlock(1);
+                        break;
+                    default:
+                    	break;
+                }
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
@@ -397,6 +428,7 @@
                     <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
                     <td align="center" style="width:20px;"></td>
+                    <td align="center" style="width:100px;"><a id='lblCarno_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblTranmoney_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTranmoney2_s'> </a></td>
@@ -416,6 +448,7 @@
 	                    <input id="txtNo2.*" type="text" style="display: none;"/>
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+                    <td><input type="text" id="txtCarno.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtMoney.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtTranmoney.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtTranmoney2.*" style="width:95%;"/></td>
