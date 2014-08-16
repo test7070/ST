@@ -34,6 +34,25 @@
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
+					},{
+						type : '0',//[6]
+						name : 'mountprecision',
+						value : q_getPara('vcc.mountPrecision')
+					},{
+						type : '0',//[7]
+						name : 'weightprecision',
+						value : q_getPara('vcc.weightPrecision')
+					},{
+						type : '0',//[8]
+						name : 'priceprecision',
+						value : q_getPara('vcc.pricePrecision')
+					},{
+						type : '1',//[9][10]
+						name : 'ynoa'
+					},{
+						type : '8', //[11]
+						name : 'showprice',
+						value : "1@顯示單價".split(',')
 					}]
 				});
 				q_popAssign();
@@ -72,6 +91,8 @@
 	                $('#txtXdate2').val(t_year+'/'+t_month+'/'+t_day);
 	            }else{
 	            	$('#txtXnoa').val(t_para.noa);
+	            	$('#txtYnoa1').val(t_para.noa);
+	            	$('#txtYnoa2').val(t_para.noa);
 	            }
                 
             }

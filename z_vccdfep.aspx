@@ -20,50 +20,31 @@
             }
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_drvp');
+                q_gf('', 'z_vccdfep');
             });
             
-            /*var t_ordeno=typeof(q_getId()[3])=='undefined'?'':q_getId()[3];
-            t_ordeno  =  t_ordeno.replace('noa=','');*/
-           var t_ordeno='#non#',t_handle='#non#',t_handle2='#non#',t_store='#non#';
-           var chk_vcce,chk_handle,chk_handle2,chk_store;
-           
-           if (window.parent.q_name == 'drv') {
-           		t_ordeno+=window.parent.chk_vcce;
-           		chk_handle=window.parent.chk_handle;
-           		chk_handle2=window.parent.chk_handle2;
-           		chk_store=window.parent.chk_store;
-           		
-                for(var i =0 ;i<chk_handle.length;i++){
-                	t_handle+=chk_handle[i].noa+"^"+chk_handle[i].handle+"#"
-                }
-                for(var i =0 ;i<chk_handle2.length;i++){
-                	t_handle2+=chk_handle2[i].noa+"^"+chk_handle2[i].handle+"#"
-                }
-                for(var i =0 ;i<chk_store.length;i++){
-                	t_store+=chk_store[i].noa+"-"+chk_store[i].no2+"^"+chk_store[i].store+"#"
-                }
-           }
-            
+            var t_noa=typeof(q_getId()[3])=='undefined'?'':q_getId()[3];
+            t_noa  =  t_noa.replace('noa=','');
+                       
             function q_gfPost() {
                $('#q_report').q_report({
-					fileName : 'z_drvp',
+					fileName : 'z_vccdfep',
 					options : [{
 						type : '0', //[1]
-						name : 'xordeno',
-						value : t_ordeno
+						name : 'xnoa',
+						value : t_noa
 					},{
-						type : '0', //[2]
-						name : 'xhandle',
-						value : t_handle
+						type : '0',//[2]
+						name : 'mountprecision',
+						value : q_getPara('vcc.mountPrecision')
 					},{
-						type : '0', //[3]
-						name : 'xhandle2',
-						value : t_handle2
+						type : '0',//[3]
+						name : 'weightprecision',
+						value : q_getPara('vcc.weightPrecision')
 					},{
-						type : '0', //[4]
-						name : 'xstore',
-						value : t_store
+						type : '0',//[4]
+						name : 'priceprecision',
+						value : q_getPara('vcc.pricePrecision')
 					}]
 				});
                 q_popAssign();

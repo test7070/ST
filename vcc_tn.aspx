@@ -342,18 +342,42 @@
 			var AddRet = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
-					case 'getVccatax':
-						var as = _q_appendData("vcca", "", true);
+					case 'btnDele':
+						var as = _q_appendData("umms", "", true);
 						if (as[0] != undefined) {
-							$('#txtVccatax').val(q_trv(as[0].tax, 0, 1));
-							var t_noa = $('#txtNoa').val();
-							for (var i = 0; i < abbm.length; i++) {
-								if (abbm[i].noa == t_noa) {
-									abbm[i].vccatax = as[0].tax;
-									break;
-								}
+							var z_msg = "", t_paysale = 0;
+							for (var i = 0; i < as.length; i++) {
+								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								if (t_paysale != 0)
+									z_msg += String.fromCharCode(13) + '收款單號【' + as[i].noa + '】 ' + FormatNumber(t_paysale);
+							}
+							if (z_msg.length > 0) {
+								alert('已沖帳:' + z_msg);
+								Unlock(1);
+								return;
 							}
 						}
+						_btnDele();
+						Unlock(1);
+						break;
+					case 'btnModi':
+						var as = _q_appendData("umms", "", true);
+						if (as[0] != undefined) {
+							var z_msg = "", t_paysale = 0;
+							for (var i = 0; i < as.length; i++) {
+								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								if (t_paysale != 0)
+									z_msg += String.fromCharCode(13) + '收款單號【' + as[i].noa + '】 ' + FormatNumber(t_paysale);
+							}
+							if (z_msg.length > 0) {
+								alert('已沖帳:' + z_msg);
+								Unlock(1);
+								return;
+							}
+						}
+						_btnModi();
+						Unlock(1);
+						$('#txtDatea').focus();
 						break;
 					case 'ucca_invo':
 						var as = _q_appendData("ucca", "", true);
@@ -364,36 +388,6 @@
 							isinvosystem = false;
 						}
 						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-						break;
-					case 'check_memos':
-						var as = _q_appendData("view_ordes", "", true);
-						var err_log = '';
-						for (var j = 0; j < q_bbsCount; j++) {
-							var t_memo = trim($('#txtMemo_' + j).val());
-							var OrdenoIndex = t_memo.search(/^[E]+[0-9]{10}\x2d[0-9]{3}/g);
-							var bbsOrdeno = t_memo.substr(OrdenoIndex, 15);
-							var t_productno = trim($('#txtProductno_' + j).val());
-							for (var k = 0; k < as.length; k++) {
-								var asOrdeno = as[k].noa + '-' + as[k].no2;
-								if (bbsOrdeno == asOrdeno) {
-									if (t_productno != as[k].productno) {
-										err_log += '表身第 ' + (j + 1) + ' 筆訂單資料異常，訂單品號：' + as[k].productno + ' 表身品號：' + t_productno + '\n';
-									}
-									$('#txtMemo_' + j).val('');
-									var t_ordeno = trim($('#txtOrdeno_' + j).val());
-									var t_no2 = trim($('#txtNo2_' + j).val());
-									if (t_ordeno.length == 0)
-										$('#txtOrdeno_' + j).val(bbsOrdeno.split('-')[0]);
-									if (t_no2.length == 0)
-										$('#txtNo2_' + j).val(bbsOrdeno.split('-')[1]);
-									break;
-								}
-							}
-						}
-						if (trim(err_log).length > 0) {
-							alert('Warning：\n' + err_log);
-						}
-						checkOrde(q_bbsCount - 1);
 						break;
 					case 'view_orde':
 						var as = _q_appendData("view_orde", "", true);
@@ -431,115 +425,6 @@
 							focus_addr = '';
 						}
 						break;
-					case 'checkApv':
-						var as = _q_appendData("view_orde", "", true);
-						var ErrStr = '';
-						if (as[0] != undefined) {
-							for (var i = 0; i < as.length; i++) {
-								if ($.trim(as[i].apv).length == 0) {
-									ErrStr += '訂單編號：' + as[i].noa + '未經過核准!!\n';
-								}
-							}
-						}
-						if ($.trim(ErrStr).length == 0) {
-							var unostkWhere = "where[1]=^^ 1=1 ^^where[2]=^^ 1=1 ^^where[4]=^^ 1=1 ^^";
-							var UnoList = GetUnoList().split(',');
-							var ReturnStr = '';
-							for (var k = 0; k < UnoList.length; k++) {
-								ReturnStr += "'" + UnoList[k] + "'";
-								if (k < ((UnoList.length) - 1))
-									ReturnStr += ',';
-							}
-							unostkWhere = unostkWhere + "where=^^ a.uno in (" + ReturnStr + ")^^";
-							unostkWhere = unostkWhere + "where[3]=^^ noa != '" + $.trim($('#txtNoa').val()) + "'^^";
-							q_gt('unostk', unostkWhere, 0, 0, 0, "", r_accy);
-						} else {
-							ErrStr += '禁止存檔!!';
-							alert(ErrStr);
-							Unlock(1);
-							return;
-						}
-						break;
-					case 'unostk':
-						var unostkList = _q_appendData("unostktmp", "", true);
-						var unostkList_Tmp = new Array();
-						;
-						var ErrStr = '';
-						if (unostkList.length > 0 && unostkList[0] != undefined) {
-							for (var j = 0; j < unostkList.length; j++) {
-								unostkList_Tmp.push({
-									uno : unostkList[j].uno,
-									mount : unostkList[j].mount,
-									weight : unostkList[j].weight
-								});
-							}
-							for (var i = 0; i < q_bbsCount; i++) {
-								bbsUno = $.trim($('#txtUno_' + i).val());
-								bbsMount = dec($('#txtMount_' + i).val());
-								for (var k = 0; k < unostkList_Tmp.length; k++) {
-									if (bbsUno == $.trim(unostkList_Tmp[k].uno)) {
-										unostkList_Tmp[k].mount = dec(unostkList_Tmp[k].mount) - bbsMount;
-									}
-								}
-							}
-							for (var k = 0; k < unostkList_Tmp.length; k++) {
-								if (dec(unostkList_Tmp[k].mount) < 0) {
-									ErrStr += '批號：' + unostkList_Tmp[k].uno + ' 庫存量：' + dec(unostkList[k].mount) + ' 本次出貨量：' + (dec(unostkList[k].mount) - dec(unostkList_Tmp[k].mount)) + '\n';
-								}
-							}
-							if ($.trim(ErrStr).length > 0) {
-								ErrStr = '警告：\n' + ErrStr;
-								alert(ErrStr);
-							}
-						}
-						var t_noa = trim($('#txtNoa').val());
-						var t_date = trim($('#txtDatea').val());
-						if (t_noa.length == 0 || t_noa == "AUTO")
-							q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-						else
-							wrServer(t_noa);
-						break;
-					case 'view_vccs':
-						var vccs_as = _q_appendData("view_vccs", "", true);
-						for (var i = 0; i < vccs_as.length; i++) {
-							for (var j = 0; j < vcces_as.length; j++) {
-								if ((vcces_as[j].ordeno == vccs_as[i].ordeno) && (vcces_as[j].no2 == vccs_as[i].no2)) {
-									vcces_as[j].mount = dec(vcces_as[j].mount) - dec(vccs_as[i].mount);
-									vcces_as[j].weight = dec(vcces_as[j].weight) - dec(vccs_as[i].weight);
-								}
-							}
-						}
-						for (var i = 0; i < vcces_as.length; i++) {
-							if (vcces_as[i].mount <= 0 || vcces_as[i].weight <= 0 || vcces_as[i].ordeno == '') {
-								vcces_as.splice(i, 1);
-								i--;
-							}
-						}
-						if (vcces_as[0] != undefined) {
-							for (var i = 0; i < q_bbsCount; i++) {
-								$('#btnMinus_' + i).click();
-							};
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtStyle,txtOrdeno,txtNo2,txtSize', vcces_as.length, vcces_as, 'uno,productno,product,spec,radius,dime,width,lengthb,mount,weight,price,style,ordeno,no2,size', 'txtUno');
-							sum();
-							//get ordes.price <Start>
-							var distinctArray = new Array;
-							var inStr = '';
-							for (var i = 0; i < vcces_as.length; i++) {
-								distinctArray.push(vcces_as[i].ordeno);
-							}
-							distinctArray = distinct(distinctArray);
-							for (var i = 0; i < distinctArray.length; i++) {
-								inStr += "'" + distinctArray[i] + "',";
-							}
-							inStr = inStr.substring(0, inStr.length - 1);
-							if (trim(inStr).length > 0) {
-								var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
-								q_gt('view_ordes', t_where, 0, 0, 0, "", r_accy);
-							}
-							//get ordes.price <End>
-						}
-						vcces_as = new Array;
-						break;
 					case 'custaddr':
 						var as = _q_appendData("custaddr", "", true);
 						var t_item = " @ ";
@@ -574,50 +459,6 @@
 						if (q_cur == 4)// 查詢
 							q_Seek_gtPost();
 						break;
-					default:
-						if (t_name.substring(0, 11) == 'checkOrde1_') {
-							var t_sel = parseInt(t_name.split('_')[1]);
-							var t_ordeno = t_name.split('_')[2];
-							var t_no2 = t_name.split('_')[3];
-							var as = _q_appendData("view_ordes", "", true);
-							if (as[0] != undefined) {
-								var t_mount = parseFloat(as[0].mount.length == 0 ? "0" : as[0].mount);
-								var t_weight = parseFloat(as[0].weight.length == 0 ? "0" : as[0].weight);
-								var t_where = "where=^^ ordeno='" + t_ordeno + "' and no2='" + t_no2 + "' and noa!='" + $.trim($('#txtNoa').val()) + "'^^";
-								q_gt('view_vccs', t_where, 0, 0, 0, 'checkOrde2_' + t_sel + '_' + t_ordeno + '_' + t_no2 + '_' + t_mount + '_' + t_weight, r_accy);
-							} else {
-								alert('查無訂單資料【' + t_ordeno + '-' + t_no2 + '】');
-								Unlock(1);
-							}
-						} else if (t_name.substring(0, 11) == 'checkOrde2_') {
-							var t_sel = parseInt(t_name.split('_')[1]);
-							var t_ordeno = t_name.split('_')[2];
-							var t_no2 = t_name.split('_')[3];
-							var t_mount = parseFloat(t_name.split('_')[4]);
-							var t_weight = parseFloat(t_name.split('_')[5]);
-							var as = _q_appendData("view_vccs", "", true);
-							var tot_mount = 0, tot_weight = 0;
-							var tot_mount2 = 0, tot_weight2 = 0;
-							if (as[0] != undefined) {
-								for (var i = 0; i < as.length; i++) {
-									tot_mount = q_add(tot_mount, parseFloat(as[i].mount.length == 0 ? "0" : as[i].mount));
-									tot_weight = q_add(tot_weight, parseFloat(as[i].weight.length == 0 ? "0" : as[i].weight));
-								}
-							}
-							for (var i = 0; i < q_bbsCount; i++) {
-								if ($.trim($('#txtOrdeno_' + i).val()) == t_ordeno && $.trim($('#txtNo2_' + i).val()) == t_no2) {
-									tot_mount2 = q_add(tot_mount2, q_float('txtMount_' + i));
-									tot_weight2 = q_add(tot_weight2, q_float('txtWeight_' + i));
-								}
-							}
-							
-							if (q_mul(t_mount, 1.2) >= q_add(tot_mount, tot_mount2)) {
-								checkOrde(t_sel - 1);
-							} else {
-								alert("訂單【" + t_ordeno + "-" + t_no2 + "】數量異常，超過１２％!\n訂數：" + q_trv(t_mount, 2) + "\n已派：" + q_trv(tot_mount, 2) + "\n本次：" + q_trv(tot_mount2, 2));
-								Unlock(1);
-							}
-						} 
 				} /// end switch
 			}
 
@@ -695,108 +536,25 @@
 				if ($.trim($('#txtNick').val()).length == 0 && $.trim($('#txtComp').val()).length > 0)
 					$('#txtNick').val($.trim($('#txtComp').val()).substring(0, 4));
 					
+				if (q_cur == 1)
+					$('#txtWorker').val(r_name);
+				else
+					$('#txtWorker2').val(r_name);
+					
 				sum();
 
-				var distinctArray = new Array;
-				for (var k = 0; k < q_bbsCount; k++) {
-					var t_memo = trim($('#txtMemo_' + k).val());
-					var OrdenoIndex = t_memo.search(/^[E]+[0-9]{10}\x2d[0-9]{3}/g);
-					if (OrdenoIndex > -1) {
-						var x_ordeno = t_memo.substr(OrdenoIndex, 15);
-						distinctArray.push(x_ordeno);
-					}
-				}
-				var inStr = '';
-				distinctArray = distinct(distinctArray);
-				for (var i = 0; i < distinctArray.length; i++) {
-					if (trim(distinctArray[i]) != '')
-						inStr += "'" + distinctArray[i] + "',";
-				}
-				inStr = inStr.substring(0, inStr.length - 1);
-				if (trim(inStr).length == 0) {
-					checkOrde(q_bbsCount - 1);
-				} else {
-					var t_where = "where=^^ noa+'-'+no2 in(" + inStr + ")^^";
-					q_gt('view_ordes', t_where, 0, 0, 0, "check_memos", r_accy);
-				}
-			}
-
-			function chkOrdenoEmp() {
-				var err_log = '';
-				if (q_getPara('sys.comp').substring(0, 3) == '裕承隆') {
-					for (var i = 0; i < q_bbsCount; i++) {
-						var t_uno = $.trim($('#txtUno_' + i).val());
-						var t_ordeno = $.trim($('#txtOrdeno_' + i).val());
-						var t_no2 = $.trim($('#txtNo2_' + i).val());
-						if (t_uno.length > 0 && ((t_ordeno.length == 0) || (t_no2.length == 0))) {
-							err_log += '表身第 ' + (i + 1) + ' 筆訂單編號或訂序為空\n';
-						}
-					}
-					if (trim(err_log).length > 0) {
-						alert('Warning：\n' + err_log);
-					}
-				}
-			}
-
-			function checkOrde(n) {
-				if (n < 0) {
-					if (q_cur == 1)
-						$('#txtWorker').val(r_name);
-					else
-						$('#txtWorker2').val(r_name);
-					chkOrdenoEmp();
-					
-					var t_noa = trim($('#txtNoa').val());
-					var t_date = trim($('#txtDatea').val());
-					if (t_noa.length == 0 || t_noa == "AUTO")
-						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-					else
-						wrServer(t_noa);
-						
-					/*var OrdenoList = GetOrdenoList().split(',');
-					var ReturnStr = '';
-					for (var k = 0; k < OrdenoList.length; k++) {
-						ReturnStr += "'" + OrdenoList[k] + "'";
-						if (k < ((OrdenoList.length) - 1))
-							ReturnStr += ',';
-					}
-					var t_where = "where=^^ noa in (" + ReturnStr + ")^^";
-					q_gt('view_orde', t_where, 0, 0, 0, "checkApv", r_accy);*/
-				} else {
-					//
-					var t_noa = $.trim($('#txtNoa').val());
-					var t_ordeno = $.trim($('#txtOrdeno_' + n).val());
-					var t_no2 = $.trim($('#txtNo2_' + n).val());
-					if (t_ordeno.length > 0 && ( q_float('txtMount_' + n) != 0 || q_float('txtWeight_' + n) != 0)) {
-						var t_where = "where=^^ noa='" + t_ordeno + "' and no2='" + t_no2 + "'^^";
-						q_gt('view_ordes', t_where, 0, 0, 0, 'checkOrde1_' + n + '_' + t_ordeno + '_' + t_no2, r_accy);
-					} else {
-						checkOrde(n - 1);
-					}
-				}
+				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+				if (s1.length == 0 || s1 == "AUTO")
+					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));
+				else
+					wrServer(s1);
 			}
 
 			function q_stPost() {
-				if (!(q_cur == 1 || q_cur == 2))
-					return false;
-				$('#txtVccatax').val(0);
-				var t_noa = $('#txtNoa').val();
-				for (var i = 0; i < abbm.length; i++) {
-					if (abbm[i].noa == t_noa) {
-						abbm[i].vccatax = 0;
-						break;
-					}
+				if (q_cur == 1 || q_cur == 2) {
+					var s2 = xmlString.split(';');
+					abbm[q_recno]['accno'] = s2[0];
 				}
-				var strSplit = xmlString.split(';');
-				if (strSplit.length >= 2) {
-					abbm[q_recno]['accno'] = strSplit[0];
-					$('#txtAccno').val(strSplit[0]);
-					abbm[q_recno]['invono'] = strSplit[1];
-					$('#txtInvono').val(strSplit[1]);
-					if (strSplit[1].length > 0)
-						q_gt('vcca', "where=^^noa='" + strSplit[1] + "'^^", 0, 0, 0, 'getVccatax', r_accy);
-				}
-				Unlock(1);
 			}
 
 			function _btnSeek() {
@@ -1042,6 +800,9 @@
 					return;
 				_btnModi();
 				
+				var t_where = " where=^^ vccno='" + $('#txtNoa').val() + "'^^";
+				q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
+				
 				$('#cmbTypea').focus();
 				sum();
 			}
@@ -1179,7 +940,13 @@
 			}
 
 			function btnDele() {
-				_btnDele();
+				if (q_chkClose())
+					return;
+				Lock(1, {
+					opacity : 0
+				});
+				var t_where = " where=^^ vccno='" + $('#txtNoa').val() + "'^^";
+				q_gt('umms', t_where, 0, 0, 0, 'btnDele', r_accy);
 			}
 
 			function btnCancel() {
