@@ -83,7 +83,7 @@
 
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [['txtOdate', r_picd]];
+				bbmMask = [['txtOdate', r_picd],['txtDatea', r_picd],['txtGdate', r_picd]];
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
@@ -780,10 +780,14 @@
 					$('#btnOrdei').removeAttr('disabled');
 					$('#combAddr').attr('disabled', 'disabled');
 					$('#txtOdate').datepicker( 'destroy' );
+					$('#txtDatea').datepicker( 'destroy' );
+					$('#txtGdate').datepicker( 'destroy' );
 				} else {
 					$('#btnOrdei').attr('disabled', 'disabled');
 					$('#combAddr').removeAttr('disabled');
 					$('#txtOdate').datepicker();
+					$('#txtDatea').datepicker();
+					$('#txtGdate').datepicker();
 				}	
 				
 				$('#div_addr2').hide();
@@ -1125,6 +1129,14 @@
 						<td class="td2" colspan='7'>
 							<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea>
 						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a class="lbl">交貨日期</a></td>
+						<td><input id="txtDatea" type="text" class="txt c1"/></td>
+						<td><input id="txtTimea" type="text" class="txt c1"/></td>
+						<td><span> </span><a class="lbl">接單日期</a></td>
+						<td><input id="txtGdate" type="text" class="txt c1"/></td>
+						<td><input id="txtGtime" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
