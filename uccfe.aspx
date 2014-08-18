@@ -28,7 +28,7 @@
             brwNowPage = 0;
             brwKey = 'Noa';
             brwCount2 = 10;
-            aPop = new Array();
+           	aPop = new Array(['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']);
             $(document).ready(function() {
                 q_bbsShow = -1;
                 bbmKey = ['noa'];
@@ -369,7 +369,7 @@
                     </tr>
                     <tr>
                     	<td><span> </span><a class="lbl">安全數量</a></td>
-                        <td><input id="txtSave" type="text" class="txt c1"/></td>
+                        <td><input id="txtSafemount" type="text" class="txt c1"/></td>
                         <td><span> </span><a class="lbl">牌價</a></td>
                         <td><input id="txtSaleprice" type="text" class="txt c1"/></td>
                     </tr>
@@ -380,11 +380,9 @@
                         <td><input id="txtStyleno" type="text" class="txt c1"/></td>
                     </tr>
                     <tr>
-                    	<td><span> </span><a class="lbl">供應商</a></td>
-                        <td colspan="3">
-                        	<input id="txtSupplyno" type="text" class="txt" style="float:left;width:40%;"/>
-                        	<input id="txtSupply" type="text" class="txt" style="float:left;width:60%;"/>
-                        </td>
+						<td><span> </span><a id='lblTggno' class="lbl btn"> </a></td>
+						<td><input id="txtTggno" type="text" class="txt c1"/></td>
+						<td colspan='3'><input id="txtTgg"	type="text" class="txt c1" style="width: 95%;"></td>
                     </tr>
                     <tr>
                     	<td><span> </span><a class="lbl">備註</a></td>

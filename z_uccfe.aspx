@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title> </title>
+		<title></title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -15,204 +15,142 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-            var t_carkind = null;
-            var t_carteam = null;
-            var t_calctypes = null;
-            aPop = new Array(['txtXcarno', 'lblXcarno', 'car2', 'a.noa,driverno,driver', 'txtXcarno', 'car2_b.aspx'], ['txtXaddr', 'lblXaddr', 'addr', 'noa,addr', 'txtXaddr', 'addr_b.aspx']);
-            $(document).ready(function() {
-                _q_boxClose();
-                q_getId();
-                q_gt('carteam', '', 0, 0, 0, "load_1");
-                
-            });
-            function q_gfPost() {
-                LoadFinish();
-            }
+		
+			$(document).ready(function() {
+				_q_boxClose();
+				q_getId();
+				q_gf('', 'z_uccfe');
+			});
+			
+			function q_gfPost() {
+				$('#q_report').q_report({
+					fileName : 'z_uccfe',
+					options : [{
+						type : '0',
+						name : 'accy',
+						value : q_getId()[4]
+					},{
+						type : '0',//[2]
+						name : 'mountprecision',
+						value : q_getPara('vcc.mountPrecision')
+					},{
+						type : '0',//[3]
+						name : 'weightprecision',
+						value : q_getPara('vcc.weightPrecision')
+					},{
+						type : '0',//[4]
+						name : 'priceprecision',
+						value : q_getPara('vcc.pricePrecision')
+					}, {
+						type : '1', //1
+						name : 'date' //[5][6]
+					}, {
+						type : '2',//2
+						name : 'product', //[7][8]
+						dbf : 'ucaucc',
+						index : 'noa,product',
+						src : 'ucaucc_b.aspx'
+					}, {
+						type : '2',//4
+						name : 'storeno', //[9][10]
+						dbf : 'store',
+						index : 'noa,store',
+						src : 'store_b.aspx'
+					}, {
+						type : '2', // 8 [11][12]
+						name : 'xtgg',
+						dbf : 'tgg',
+						index : 'noa,comp',
+						src : 'tgg_b.aspx'
+					}, {
+						type : '6', //10
+						name : 'enddate' //[13]
+					}, {
+						type : '1', //20
+						name : 'udate' //[14][15]
+					}, {
+						type : '8',//40
+						name : 'less_safe',//[16]
+						value : '1@僅顯示低於安全存量'.split(',')
+					}, {
+						type : '8',//80
+						name : 'allucc',//[17]
+						value : '1@顯示所有物品'.split(',')
+					}]
+				});
+				q_popAssign();
+				q_getFormat();
+				q_langShow();
 
-            var sssno = '';
-            function q_gtPost(t_name) {
-                switch (t_name) {
-                    case 'load_1':
-                        t_carteam = '';
-                        var as = _q_appendData("carteam", "", true);
-                        for ( i = 0; i < as.length; i++) {
-                            t_carteam += (t_carteam.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].team;
-                        }
-                        q_gt('calctype2', '', 0, 0, 0, "load_2");
-                        break;
-                    case 'load_2':
-                        t_calctypes = '';
-                        var as = _q_appendData("calctypes", "", true);
-                        for ( i = 0; i < as.length; i++) {
-                            t_calctypes += (t_calctypes.length > 0 ? ',' : '') + as[i].noa + as[i].noq + '@' + as[i].typea;
-                        }
-                        q_gt('carkind', '', 0, 0, 0, "load_3");
-                        break;
-                    case 'load_3':
-                        t_carkind = '';
-                        var as = _q_appendData("carkind", "", true);
-                        if (as[0] != undefined) {
-                            for ( i = 0; i < as.length; i++) {
-                                t_carkind += (t_carkind.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].kind;
-                            }
-                        }
-                        q_gf('', 'z_uccfe');
-                        break;
-                    default:
-                        break;
-                }
-            }
+				$('#txtUdate1').mask('999/99/99');
+				$('#txtUdate1').datepicker();
+				$('#txtUdate2').mask('999/99/99');
+				$('#txtUdate2').datepicker();
+				$('#txtDate1').mask('999/99/99');
+				$('#txtDate1').datepicker();
+				$('#txtDate2').mask('999/99/99');
+				$('#txtDate2').datepicker();
 
-            function q_boxClose(t_name) {
-            }
+				$('#txtEnddate').mask('999/99/99');
+				$('#txtEnddate').val(q_date());
+				
+				$('#Allucc').css('width','300px').css('height','30px');
+				$('#Allucc .label').css('width','0px');
+				$('#Less_safe').css('width','300px').css('height','30px');
+				$('#Less_safe .label').css('width','0px');
+				$('#Udate').css('width','300px');
+				$('#txtUdate1').css('width','90px');
+				$('#txtUdate2').css('width','90px');
+			}
 
-            function LoadFinish() {
-                $('#q_report').q_report({
-                    fileName : 'z_uccfe',
-                    options : [, {/*1-[2],[3]-登錄日期*/
-                        type : '1',
-                        name : 'date'
-                    }, {/*4-[8],[9]-廠商*/
-                        type : '2',
-                        name : 'tgg',
-                        dbf : 'tgg',
-                        index : 'noa,comp',
-                        src : 'cust_b.aspx'
-                    }, {/*4-[8],[9]-廠商*/
-                        type : '2',
-                        name : 'ucc',
-                        dbf : 'ucc',
-                        index : 'noa,product',
-                        src : 'ucc_b.aspx'
-                    }]
-                });
-                q_popAssign();
-                q_langShow();
+			function q_boxClose(s2) {
+			}
 
-                $('#txtDate1').mask('999/99/99');
-                $('#txtDate1').datepicker();
-                $('#txtDate2').mask('999/99/99');
-                $('#txtDate2').datepicker();
-                $('#txtTrandate1').mask('999/99/99');
-                $('#txtTrandate1').datepicker();
-                $('#txtTrandate2').mask('999/99/99');
-                $('#txtTrandate2').datepicker();
-
-                $('#txtXcheckrate').val(q_getMsg('trate1'));
-                $('#chkXcarkind').children('input').attr('checked', 'checked');
-                $('#chkXcarteam').children('input').attr('checked', 'checked');
-                $('#chkXcalctype').children('input').attr('checked', 'checked');
-                
-                $('#txtXmon1').mask('999/99');
-                $('#txtXmon2').mask('999/99');
-                $('#textMon').mask('999/99');
-                
-                $('#btnTrans_sum').click(function(e) {
-                    $('#divExport').toggle();
-                });
-                $('#btnDivexport').click(function(e) {
-                    $('#divExport').hide();
-                });
-                $('#btnExport').click(function(e) {
-                    var t_mon = $('#textMon').val();
-                    if (t_mon.length > 0) {
-                        Lock(1, {
-                            opacity : 0
-                        });
-                        q_func('qtxt.query.trans', 'trans.txt,tran_sum,' + encodeURI(t_mon));
-                    } else
-                        alert('請輸入交運月份。');
-                });
-                $('#btnOk').hide();
-                $('#btnOk2').click(function(e) {
-                    switch($('#q_report').data('info').radioIndex) {
-                        case 0:
-                            $('#cmbPaperSize').val('A4');
-                            $('#chkLandScape').prop('checked',true);
-                            break;
-                        case 1:
-                            $('#cmbPaperSize').val('A3');
-                            $('#chkLandScape').prop('checked',true);
-                            break;
-                        case 2:
-                            $('#cmbPaperSize').val('A4');
-                            $('#chkLandScape').prop('checked',true);
-                            break;
-                        case 3:
-                            $('#cmbPaperSize').val('A4');
-                            $('#chkLandScape').prop('checked',true);
-                            break;
-                        case 4:
-                            $('#cmbPaperSize').val('A4');
-                            $('#chkLandScape').prop('checked',false);
-                            break;
-                        case 5:
-                            $('#cmbPaperSize').val('A4');
-                            $('#chkLandScape').prop('checked',false);
-                            break;
-                        case 6:
-                            $('#cmbPaperSize').val('A4');
-                            $('#chkLandScape').prop('checked',false);
-                            break;
-                        case 7:
-                            $('#cmbPaperSize').val('A4');
-                            $('#chkLandScape').prop('checked',false);
-                            break;
-                    }
-                    $('#btnOk').click();
-                });
-            }
-            function q_funcPost(t_func, result) {
-                switch(t_func) {
-                    case 'qtxt.query.trans':
-                        alert('結轉完成。');
-                        Unlock(1);
-                        break;
-                    default:
-                        break;
-                }
-            }
+			function q_gtPost(t_name) {
+				switch (t_name) {
+				}
+			}
 		</script>
+		<style type="text/css">
+			/*.q_report .option {
+			 width: 600px;
+			 }
+			 .q_report .option div.a1 {
+			 width: 580px;
+			 }
+			 .q_report .option div.a2 {
+			 width: 220px;
+			 }
+			 .q_report .option div .label {
+			 font-size:medium;
+			 }
+			 .q_report .option div .text {
+			 font-size:medium;
+			 }
+			 .q_report .option div .cmb{
+			 height: 22px;
+			 font-size:medium;
+			 }
+			 .q_report .option div .c2 {
+			 width: 80px;
+			 }
+			 .q_report .option div .c3 {
+			 width: 110px;
+			 }*/
+		</style>
 	</head>
-	<body ondragstart="return false" draggable="false"
+	<body id="z_accc" ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-	>
+	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 		<div id="q_menu"></div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
-		    <input type="button" id="btnTrans_sum" value="分析表資料結轉"/>
 			<div id="container">
 				<div id="q_report"></div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
-			    <input type="button" id="btnOk2" style="float:left;font-size:16px;font-weight: bold;color: blue;cursor: pointer;width:50px;height:30px;" value="查詢"/>
 				<!--#include file="../inc/print_ctrl.inc"-->
 			</div>
 		</div>
-		<div id="divExport" style="display:none;position:absolute;top:100px;left:600px;width:400px;height:120px;background:RGB(237,237,237);">
-            <table style="border:4px solid gray; width:100%; height: 100%;">
-                <tr style="height:1px;background-color: pink;">
-                    <td style="width:25%;"></td>
-                    <td style="width:25%;"></td>
-                    <td style="width:25%;"></td>
-                    <td style="width:25%;"></td>
-                </tr>
-                <tr>
-                    <td style="padding: 2px;text-align: center;border-width: 0px;background-color: pink;color: blue;"><a>交運月份</a></td>
-                    <td colspan="3" style="padding: 2px;text-align: center;border-width: 0px;background-color: pink;">
-                    <input type="text" id="textMon" style="float:left;width:40%;"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center" style="background-color: pink;">
-                    <input type="button" id="btnExport" value="結轉"/>
-                    </td>
-                    <td colspan="2" align="center" style=" background-color: pink;">
-                    <input type="button" id="btnDivexport" value="關閉"/>
-                    </td>
-                </tr>
-            </table>
-        </div>
 	</body>
 </html>
