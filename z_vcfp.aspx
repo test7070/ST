@@ -50,7 +50,7 @@
 				}catch(e){
 				    
 				}
-			    if($('#txtXnoa1').val().length == 0){ 
+			    if($('#txtXnoa').val().length == 0){ 
     				var t_date, t_year, t_month, t_day;
     				t_date = new Date();
     				t_date.setDate(1);
