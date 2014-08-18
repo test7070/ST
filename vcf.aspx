@@ -27,9 +27,9 @@
             var bbmNum = [['txtMoney', 10, 0, 1],['txtTotal', 10, 0, 1]];
             var bbsNum = [];
             var bbtNum = [];
-            var bbmMask = [];
+            var bbmMask = [['txtDatea', '999/99/99']];
             var bbsMask = [['txtDatea', '999/99/99']];
-            var bbtMask = [];
+            var bbtMask = [['txtDatea', '999/99/99']];
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
@@ -59,7 +59,7 @@
 
             function mainPost() {
                 q_getFormat();
-                bbmMask = [['txtDatea', r_picd],['txtTdate', r_picd]];
+                bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
             }
             function q_boxClose(s2) {
@@ -179,8 +179,8 @@
                     t_iweight = q_add(t_iweight,q_float('txtWeight_'+i));
                 }
                 for (var i = 0; i < q_bbtCount; i++) {
-                    t_omount = q_add(t_imount,q_float('txtMount__'+i));
-                    t_oweight = q_add(t_iweight,q_float('txtWeight__'+i));
+                    t_omount = q_add(t_omount,q_float('txtMount__'+i));
+                    t_oweight = q_add(t_oweight,q_float('txtWeight__'+i));
                 }
                 
                 $('#txtImount').val(t_imount);
