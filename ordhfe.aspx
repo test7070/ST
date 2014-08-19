@@ -40,7 +40,7 @@
 			brwNowPage = 0;
 			brwKey = 'Odate';
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc2_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'],
 				['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax'
 				, 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'tgg_b.aspx']
 			);
@@ -132,6 +132,12 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 				    $('#lblNo_'+j).text(j+1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#txtProductno_' + j).bind('contextmenu', function(e) {
+							/*滑鼠右鍵*/
+							e.preventDefault();
+							var n = $(this).attr('id').replace('txtProductno_', '');
+							$('#btnProduct_'+n).click();
+						});
 						$('#txtUnit_' + j).change(function() {
 							sum();
 						});
@@ -482,7 +488,7 @@
                     <td align="center" style="width:40px;"><a id='lblYn_s'>決</a></td>
                     <td align="center" style="width:80px;"><a id='lblComp_s'>廠商名稱</a></td>
                     <td align="center" style="width:80px;"><a id='lblBrand_s'>廠牌</a></td>
-                    <td align="center" style="width:80px;"><a id='lblProduct_s'>物品</a></td>
+                    <td align="center" style="width:200px;"><a id='lblProduct_s'>物品</a></td>
                     <td align="center" style="width:80px;"><a id='lblLengthb_s'>米</a></td>
                     <td align="center" style="width:80px;"><a id='lblUnit_s'>單位</a></td>
                     <td align="center" style="width:80px;"><a id='lblMount_s'>預定數量</a></td>
@@ -504,6 +510,7 @@
                     <td><input type="text" id="txtComp.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtBrand.*" style="width:95%;"/></td>
 					<td>
+						<input type="button" id="btnProduct.*" style="display:none;"/>
                   		<input type="text" id="txtProductno.*" style="width:40%;"/>
           				<input type="text" id="txtProduct.*" style="width:45%;"/>
           			</td>
