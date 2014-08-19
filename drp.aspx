@@ -25,7 +25,7 @@
             var bbmNum = [['txtPrice',10,0,1]];
             var bbsNum = [['txtPrice',10,0,1]];
             var bbmMask = [];
-            var bbsMask = [];
+            var bbsMask = [['txtOuttime','99:99'],['txtBacktime','99:99']];
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
@@ -146,6 +146,14 @@
                         $('#txtPrice_'+j).change(function(e){
                             sum();
                         });
+                        
+                        $('#txtOuttime_'+j).change(function(e){
+                            sum();
+                        });
+                        $('#txtBacktime_'+j).change(function(e){
+                        	alert('xx');
+                            sum();
+                        });
                     }
                 }
                 _bbsAssign();
@@ -170,7 +178,7 @@
                 _btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
             }
             function bbsSave(as) {
-                if (!as['no2']) {
+                if (!as['carno']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
@@ -180,19 +188,37 @@
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
-                var t_money = 0, t_moneys = 0, t_total = 0;
+                var t_money = 0, t_moneys = 0, t_total = 0,t_outdate,t_backdate;
                 for ( i = 0; i < q_bbsCount; i++) {
-                   // t_money = round(q_mul(q_float('txtMount_'+i),q_float('txtPrice_'+i)),0);
-                    //$('#txtTotal_'+i).val(t_money);
-                    //$('#txtTranmoney_'+i).val(t_money);
-                    t_money = q_float('txtTotal_'+i);
-                    t_moneys += t_money;
+                    t_moneys = q_float('txtTotal_'+i);
+                    t_money += t_moneys;
+                	//-------------------------------------------
+                	//alert($('#txtDatea').val().length+'\n'+$('#txtOuttime_'+i).val().length+'\n'+$('#txtBacktime_'+i).val().length);
+                	if($('#txtDatea').val().length>0 && $('#txtOuttime_'+i).val().length>0 && $('#txtBacktime_'+i).val().length>0){
+                		t_outdate=new Date();
+                		t_outdate.setFullYear(parseInt($('#txtDatea').val().substring(0,3))+1911);
+                		t_outdate.setMonth(parseInt($('#txtDatea').val().substring(5,2))-1);
+                		t_outdate.setDate(parseInt($('#txtDatea').val().substring(8,2)));
+                		t_outdate.setHours(parseInt($('#txtOuttime_'+i).val().substring(0,2)));
+                		t_outdate.setMinutes(parseInt($('#txtOuttime_'+i).val().substring(4,2)));
+                		
+                		t_backdate=new Date();
+                		t_backdate.setFullYear(parseInt($('#txtDatea').val().substring(0,3))+1911);
+                		t_backdate.setMonth(parseInt($('#txtDatea').val().substring(5,2))-1);
+                		t_backdate.setDate(parseInt($('#txtDatea').val().substring(8,2)));
+                		t_backdate.setHours(parseInt($('#txtBacktime_'+i).val().substring(0,2)));
+                		t_backdate.setMinutes(parseInt($('#txtBacktime_'+i).val().substring(4,2)));
+                		
+                		$('#txtMount_'+i).val(t_backdate.getTime()-t_outdate.getTime());
+                		//alert(t_backdate.getTime()-t_outdate.getTime());
+                	}
+                	//-------------------------------------------
                 }
                 t_plusmoney = q_float('txtPlusmoney');
                 t_minusmoney = q_float('txtMinusmoney');
                 t_tax = q_float('txtTax');
-                t_total = t_moneys + t_tax + t_plusmoney - t_minusmoney;
-                $('#txtMoney').val(t_moneys);
+                t_total = t_money + t_tax + t_plusmoney - t_minusmoney;
+                $('#txtMoney').val(t_money);
                 $('#txtTotal').val(t_total);
             }
             function refresh(recno) {
