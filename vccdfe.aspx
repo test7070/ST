@@ -16,8 +16,8 @@
             }
             
             var q_name = "vccd";
-            var q_readonly = ['txtInno','txtWorker','txtWorker2','txtApv'];
-            var bbmNum = [['txtWeight', 10, 3, 1],['txtPrice', 10, 3, 1],['txtTranmoney', 10, 3, 1]];
+            var q_readonly = ['txtWorker','txtWorker2','txtApv'];
+            var bbmNum = [['txtMatcha', 10, 0, 1],['txtEarcha', 10, 0, 1],['txtTotal', 10, 0, 1],['txtCarriage', 10, 0, 1]];
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -29,7 +29,7 @@
 			var aPop = new Array(
 				['txtCno', 'lblCno', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtMechno', 'lblMech', 'mech', 'noa,mech', 'txtMechno,txtMech', 'mech_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtCust', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'],
 				['txtSalesno', 'lblSalesno', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 			);
             $(document).ready(function() {
@@ -61,6 +61,13 @@
 					}
 				});
 				
+				$('#btnApv').click(function() {
+                	var t_noa = $('#txtNoa').val();
+					if (t_noa.length > 0){
+						q_func('qtxt.query.vccd', 'vccd.txt,changeapv,' + encodeURI(t_noa) + ';' + encodeURI(r_accy)); 	
+					}
+				});
+				
 				$('#txtNoa').change(function(e){
                 	$(this).val($.trim($(this).val()).toUpperCase());    	
 					if($(this).val().length>0){
@@ -68,6 +75,18 @@
                    		q_gt('vccd', t_where, 0, 0, 0, "checkVccdno_change", r_accy);
 					}
                 });
+            }
+            
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                    case 'qtxt.query.vccd':
+                        var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined) {
+                           $('#txtApv').val(as[0].apv);
+                           abbm[q_recno]['apv']=as[0].apv;
+                        }
+                        break;
+                }
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
@@ -140,13 +159,15 @@
                 	t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
                     q_gt('vccd', t_where, 0, 0, 0, "checkVccdno_btnOk", r_accy);
                 }else{
+                	Unlock();
                 	wrServer($('#txtNoa').val());
                 }
             }
 
             function _btnSeek() {
-                if (q_cur > 0 && q_cur < 4)// 1-3
-                    return;
+                if (q_cur > 0 && q_cur < 4)
+					return;
+				q_box('vccdfe_s.aspx', q_name + '_s', "500px", "420px", q_getMsg("popSeek"));
             }
 
 
@@ -162,7 +183,7 @@
                     return;
                 _btnModi();
                 $('#txtDatea').focus();
-                sum();
+                //sum();
                 refreshBbm();
             }
 
@@ -189,7 +210,7 @@
 
             function btnMinus(id) {
                 _btnMinus(id);
-                sum();
+                //sum();
             }
 
             function btnPlus(org_htm, dest_tag, afield) {
@@ -440,26 +461,29 @@
 						<td><span> </span><a id="lblApv"  class="lbl"> </a></td>
 						<td>
 							<input id="txtApv"  type="text" class="txt c1" style="width: 20%;"/>
-							<input id="btnVccs" type="button" style="width: 35%;height: 21px;"/>
-							<input id="btnApv" type="button" style="width: 35%;height: 21px;"/>
+							<input id="btnVccs" type="button" style="width: 35%;height: 21px;font-size: 15px;"/>
+							<input id="btnApv" type="button" style="width: 35%;height: 21px;font-size: 15px;"/>
 						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo2"  class="lbl"> </a></td>
-						<td colspan="5"><input id="txtMemo2"  type="text" class="txt c1"/></td>
-						<!--已下為相關資料但不顯示-->
-						<input id="txtCno" type="hidden" class="txt" style="width: 30%"/>
-						<input id="txtAcomp"  type="hidden"  class="txt" style="width: 70%"/>
-						<input id="txtCustno" type="hidden" style="float:left; width:30%;"/>
-						<input id="txtCust" type="hidden" style="float:left; width:70%;"/>
-						<input id="txtSalesno"  type="hidden" style="width:30%; float:left;"/>
-						<input id="txtSales"  type="hidden" style="width:70%; float:left;"/>
-						<input id="txtVdate"  type="hidden" class="txt c1"/>
-						<input id="txtDriverno"  type="hidden" style="width:30%; float:left;"/>
-						<input id="txtDriver"  type="hidden" style="width:70%; float:left;"/>
-						<input id="txtCarno"  type="hidden" class="txt c1"/>
-						<input id="txtWorker"  type="hidden" class="txt c1"/>
-						<input id="txtWorker2"  type="hidden" class="txt c1"/>
+						<td colspan="5">
+							<input id="txtMemo2"  type="text" class="txt c1"/>
+							<!--已下為相關資料但不顯示-->
+							<input id="txtCno" type="hidden" class="txt" style="width: 30%"/>
+							<input id="txtAcomp"  type="hidden"  class="txt" style="width: 70%"/>
+							<input id="txtCustno" type="hidden" style="float:left; width:30%;"/>
+							<input id="txtComp" type="hidden" style="float:left; width:70%;"/>
+							<input id="txtSalesno"  type="hidden" style="width:30%; float:left;"/>
+							<input id="txtSales"  type="hidden" style="width:70%; float:left;"/>
+							<input id="txtVdate"  type="hidden" class="txt c1"/>
+							<input id="txtDriverno"  type="hidden" style="width:30%; float:left;"/>
+							<input id="txtDriver"  type="hidden" style="width:70%; float:left;"/>
+							<input id="txtCarno"  type="hidden" class="txt c1"/>
+							<input id="txtWorker"  type="hidden" class="txt c1"/>
+							<input id="txtWorker2"  type="hidden" class="txt c1"/>
+							
+						</td>
 					</tr>
 				</table>
 			</div>
