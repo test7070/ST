@@ -226,7 +226,7 @@
 				$('#chkYitype').children('input').eq(0).attr('checked', 'checked');
 				$('#chkYitype').children('input').eq(1).attr('checked', 'checked');
 				$('#chkYstyle').children('input').attr('checked', 'checked');
-				$('#chkYproductno').children('input').attr('checked', 'checked');
+				//$('#chkYproductno').children('input').attr('checked', 'checked');
 			}
 
 			function q_boxClose(s2) {
