@@ -27,9 +27,9 @@
             var bbmNum = [['txtMoney', 10, 0, 1],['txtTotal', 10, 0, 1]];
             var bbsNum = [];
             var bbtNum = [];
-            var bbmMask = [];
+            var bbmMask = [['txtDatea', '999/99/99']];
             var bbsMask = [['txtDatea', '999/99/99']];
-            var bbtMask = [];
+            var bbtMask = [['txtDatea', '999/99/99']];
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
@@ -37,8 +37,9 @@
             brwKey = 'Datea';
             brwCount2 = 6;
 
-            aPop = new Array(['txtTcompno_', 'btnTcomp_', 'tgg', 'noa,comp', 'txtTcompno_,txtTcomp_', 'Tgg_b.aspx']
-            , ['txtAcc1__', '', 'acc', 'acc1,acc2', 'txtAcc1__,txtAcc2__', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]);
+            aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax', 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'Tgg_b.aspx']
+            , ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', "ucc_b.aspx?" ]
+            , ['txtProductno__', 'btnProductno__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', "ucc_b.aspx?" ]);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -59,7 +60,7 @@
 
             function mainPost() {
                 q_getFormat();
-                bbmMask = [['txtDatea', r_picd],['txtTdate', r_picd]];
+                bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
             }
             function q_boxClose(s2) {
@@ -179,8 +180,8 @@
                     t_iweight = q_add(t_iweight,q_float('txtWeight_'+i));
                 }
                 for (var i = 0; i < q_bbtCount; i++) {
-                    t_omount = q_add(t_imount,q_float('txtMount__'+i));
-                    t_oweight = q_add(t_iweight,q_float('txtWeight__'+i));
+                    t_omount = q_add(t_omount,q_float('txtMount__'+i));
+                    t_oweight = q_add(t_oweight,q_float('txtWeight__'+i));
                 }
                 
                 $('#txtImount').val(t_imount);
@@ -376,7 +377,7 @@
                 background-color: bisque;
             }
             #dbbt {
-                width: 800px;
+                width: 950px;
             }
             #tbbt {
                 margin: 0;
@@ -501,7 +502,7 @@
                 <tbody>
                     <tr class="head" style="color:white; background:#003366;">
                         <td style="width:30px;">
-                        <input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
+                        <input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="+"/>
                         </td>
                         <td style="width:20px;"> </td>
                         <td style="width:150px; text-align: center;">物品編號</td>
@@ -516,11 +517,14 @@
                     </tr>
                     <tr>
                         <td>
-                            <input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+                            <input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="-"/>
                             <input id="txtNoq..*" type="text" style="display:none;"/>
                         </td>
                         <td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-                        <td><input id="txtProductno..*" type="text" style="float:left;width:95%;"/></td>
+                        <td>
+                        	<input id="btnProductno..*" type="button" style="float:left;width:15px;"/>
+                        	<input id="txtProductno..*" type="text" style="float:left;width:80%;"/>
+                    	</td>
                         <td><input id="txtStoreno..*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtProduct..*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtLengthb..*"  type="text" style="width:95%; text-align: right;"/></td>
@@ -557,7 +561,10 @@
                     <input id="txtNoq.*" type="text" style="display: none;" />
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-                    <td><input id="txtProductno.*" type="text" style="float:left;width:95%;"/></td>
+                    <td>
+                    	<input id="btnProductno.*" type="button" style="float:left;width:15px;"/>
+                    	<input id="txtProductno.*" type="text" style="float:left;width:80%;"/>
+                	</td>
                     <td><input id="txtStoreno.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtLengthb.*"  type="text" style="width:95%; text-align: right;"/></td>
