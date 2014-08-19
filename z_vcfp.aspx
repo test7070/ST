@@ -25,6 +25,8 @@
 			function q_gfPost() {
 				$('#q_report').q_report({
 					fileName : 'z_vcfp', options : [{
+						type : '0', name : 'xworker', value : r_name
+					},{
 						type : '6', name : 'xnoa'
 					}, {
 						type : '1', name : 'date'
