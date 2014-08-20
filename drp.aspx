@@ -40,7 +40,6 @@
             , ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']
             , ['txtDriverno', 'lblDriver', 'driver', 'noa,namea','txtDriverno,txtDriver', 'driver_b.aspx']);
             $(document).ready(function() {
-                q_bbsShow = -1;
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
@@ -135,23 +134,22 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                        $('#txtTranno_' + j).bind('contextmenu', function(e) {
-                            /*滑鼠右鍵*/
+                       /* $('#txtTranno_' + j).bind('contextmenu', function(e) {
+                            //滑鼠右鍵
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtTranno_', '');
                             var t_accy = $('#txtTranaccy_' + n).val();
                             q_box("trans_tb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + t_accy, 'trans', "95%", "95%", q_getMsg("popTrans"));
                             
-                        });
+                        });*/
                         $('#txtPrice_'+j).change(function(e){
                             sum();
                         });
                         
-                        $('#txtOuttime_'+j).change(function(e){
+                        $('#txtOuttime_'+j).focusout(function(e){
                             sum();
                         });
-                        $('#txtBacktime_'+j).change(function(e){
-                        	alert('xx');
+                        $('#txtBacktime_'+j).focusout(function(e){
                             sum();
                         });
                     }
@@ -188,29 +186,37 @@
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
-                var t_money = 0, t_moneys = 0, t_total = 0,t_outdate,t_backdate;
+                var t_money = 0, t_moneys = 0, t_total = 0,t_outdate,t_backdate,t_h,t_m,t_s;
                 for ( i = 0; i < q_bbsCount; i++) {
                     t_moneys = q_float('txtTotal_'+i);
                     t_money += t_moneys;
                 	//-------------------------------------------
-                	//alert($('#txtDatea').val().length+'\n'+$('#txtOuttime_'+i).val().length+'\n'+$('#txtBacktime_'+i).val().length);
+                	if($('#txtBacktime_'+i).val()>'12:00' && $('#txtBacktime_'+i).val()<'13:00' )
+                		$('#txtBacktime_'+i).val('12:00');                 
+                		
                 	if($('#txtDatea').val().length>0 && $('#txtOuttime_'+i).val().length>0 && $('#txtBacktime_'+i).val().length>0){
                 		t_outdate=new Date();
                 		t_outdate.setFullYear(parseInt($('#txtDatea').val().substring(0,3))+1911);
-                		t_outdate.setMonth(parseInt($('#txtDatea').val().substring(5,2))-1);
-                		t_outdate.setDate(parseInt($('#txtDatea').val().substring(8,2)));
+                		t_outdate.setMonth(parseInt($('#txtDatea').val().substring(5,6))-1);
+                		t_outdate.setDate(parseInt($('#txtDatea').val().substring(8,9)));
                 		t_outdate.setHours(parseInt($('#txtOuttime_'+i).val().substring(0,2)));
-                		t_outdate.setMinutes(parseInt($('#txtOuttime_'+i).val().substring(4,2)));
-                		
+                		t_outdate.setMinutes(parseInt($('#txtOuttime_'+i).val().substring(3,5)));
                 		t_backdate=new Date();
                 		t_backdate.setFullYear(parseInt($('#txtDatea').val().substring(0,3))+1911);
-                		t_backdate.setMonth(parseInt($('#txtDatea').val().substring(5,2))-1);
-                		t_backdate.setDate(parseInt($('#txtDatea').val().substring(8,2)));
+                		t_backdate.setMonth(parseInt($('#txtDatea').val().substring(5,6))-1);
+                		t_backdate.setDate(parseInt($('#txtDatea').val().substring(8,9)));
                 		t_backdate.setHours(parseInt($('#txtBacktime_'+i).val().substring(0,2)));
-                		t_backdate.setMinutes(parseInt($('#txtBacktime_'+i).val().substring(4,2)));
-                		
-                		$('#txtMount_'+i).val(t_backdate.getTime()-t_outdate.getTime());
-                		//alert(t_backdate.getTime()-t_outdate.getTime());
+                		t_backdate.setMinutes(parseInt($('#txtBacktime_'+i).val().substring(3,5)));
+
+                		t_s = t_backdate.getTime()-t_outdate.getTime();
+                		t_m = Math.floor(t_s/60000);
+                		t_h = round(t_m/60,2);
+                		//跨中午時間
+                		if($('#txtOuttime_'+i).val()<'12:00' && $('#txtBacktime_'+i).val()>'13:00')
+                			t_h--;
+                		$('#txtMount_'+i).val(t_h);
+                	}else{
+                		$('#txtMount_'+i).val('');
                 	}
                 	//-------------------------------------------
                 }
@@ -475,14 +481,14 @@
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                     <td><input type="text" id="txtCarno.*" style="width:95%;"/></td>
-                    <td><input type="text" id="txtMoney.*" style="width:95%;"/></td>
-                    <td><input type="text" id="txtTranmoney.*" style="width:95%;"/></td>
-                    <td><input type="text" id="txtTranmoney2.*" style="width:95%;"/></td>
-                    <td><input type="text" id="txtOuttime.*" style="width:95%;"/></td>
-                    <td><input type="text" id="txtBacktime.*" style="width:95%;"/></td>
-                    <td><input type="text" id="txtMount.*" style="width:95%;"/></td>
-                    <td><input type="text" id="txtCost.*" style="width:95%;"/></td>
-                    <td><input type="text" id="txtWeight.*" style="width:95%;"/></td>
+                    <td><input type="text" id="txtMoney.*" style="width:95%;text-align: right;"/></td>
+                    <td><input type="text" id="txtTranmoney.*" style="width:95%;text-align: right;"/></td>
+                    <td><input type="text" id="txtTranmoney2.*" style="width:95%;text-align: right;"/></td>
+                    <td><input type="text" id="txtOuttime.*" style="width:95%;text-align: center;"/></td>
+                    <td><input type="text" id="txtBacktime.*" style="width:95%;text-align: center;"/></td>
+                    <td><input type="text" id="txtMount.*" style="width:95%;text-align: right;"/></td>
+                    <td><input type="text" id="txtCost.*" style="width:95%;text-align: right;"/></td>
+                    <td><input type="text" id="txtWeight.*" style="width:95%;text-align: right;"/></td>
                     <td><input type="text" id="txtPrice.*" style="width:95%;text-align: right;"/></td>
                 </tr>
             </table>
