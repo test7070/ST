@@ -210,12 +210,12 @@
 					$('#textDatea').hide();
 					$('#btnOrdc').hide();
 				});
-				$('#q_report .report').find('.radio').eq(7).click(function(e) {
+				$('#q_report .report').find('.radio').eq(1).click(function(e) {
 					$('#lblDatea').show();
 					$('#textDatea').show();
 					$('#btnOrdc').show();
 				});
-				$('#q_report .report').find('.text').eq(7).click(function(e) {
+				$('#q_report .report').find('.text').eq(1).click(function(e) {
 					$('#lblDatea').show();
 					$('#textDatea').show();
 					$('#btnOrdc').show();
