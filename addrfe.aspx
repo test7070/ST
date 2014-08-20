@@ -444,10 +444,10 @@
                 <table class="tview" id="tview">
                     <tr>
                         <td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
-                        <td align="center" style="width:100px; color:black;"><a id='vewNoa'> </a></td>
+                        <td align="center" style="width:150px; color:black;"><a id='vewProductno'> </a></td>
                         <td align="center" style="width:150px; color:black;"><a id='vewStraddr'> </a></td>
                         <td align="center" style="width:150px; color:black;"><a id='vewEndaddr'> </a></td>
-                        <td align="center" style="width:150px; color:black;"><a id='vewProductno'> </a></td>
+                        
                         <td align="center" style="width:120px; color:black;">客戶</td>
                     </tr>
                     <tr>
