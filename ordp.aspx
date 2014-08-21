@@ -18,7 +18,7 @@
 
             q_tables = 't';
             var q_name = "ordp";
-            var q_readonly = ['txtNoa','txtDatea','txtWorker', 'txtWorker2', 'txtWorkgno'];
+            var q_readonly = ['txtNoa','txtWorker', 'txtWorker2', 'txtWorkgno'];
             var q_readonlys = ['txtNoq'];
             var q_readonlyt = ['txtNo2','txtNoq'];
             var bbmNum = [];
@@ -62,7 +62,7 @@
 
             function mainPost() {
                 q_getFormat();
-                bbmMask = [['txtDatea', r_picd]];
+                bbmMask = [['txtDatea', r_picd],['txtBodate', r_picd],['txtEodate', r_picd],['txtBldate', r_picd],['txtEldate', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbKind", q_getPara('report.all')+','+q_getPara('ordb.kind'));
 
@@ -300,10 +300,21 @@
             }
 
             function readonly(t_para, empty) {
-                _readonly(t_para, empty);
-               for(var i=0;i<q_bbsCount;i++){
-               		$('#checkShow_'+i).removeAttr('disabled');
-               }
+			    _readonly(t_para, empty);
+			    for(var i=0;i<q_bbsCount;i++){
+			   		$('#checkShow_'+i).removeAttr('disabled');
+			    }
+			    if(q_cur==1 || q_cur==2){
+					$('#txtBodate').datepicker();
+					$('#txtEodate').datepicker();
+					$('#txtBldate').datepicker();
+					$('#txtEldate').datepicker();		
+			    }else{
+			    	$('#txtBodate').datepicker('destroy');
+					$('#txtEodate').datepicker('destroy');
+					$('#txtBldate').datepicker('destroy');
+					$('#txtEldate').datepicker('destroy');
+			    }
             }
 
             function btnMinus(id) {
