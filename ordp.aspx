@@ -22,8 +22,8 @@
             var q_readonlys = ['txtNoq'];
             var q_readonlyt = ['txtNo2','txtNoq'];
             var bbmNum = [];
-            var bbsNum = [];
-            var bbtNum = [];
+            var bbsNum = [['txtOmount',15,0,1],['txtMount',15,0,1],['txtPrice',15,2,1],['txtTotal',15,0,1]];
+            var bbtNum = [['txtMount',15,0,1],['txtPrice',15,2,1],['txtTotal',15,0,1]];
             var bbmMask = [];
             var bbsMask = [];
             var bbtMask = [];
@@ -147,32 +147,18 @@
                         			});
                         		}
                         	}
-                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq,txtTggno,txtTgg,txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtPrice,txtTotal,txtMemo'
+                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq,txtTggno,txtTgg,txtProductno,txtProduct,txtSpec,txtUnit,txtOmount,txtPrice,txtTotal,txtMemo'
                         	, t_bbs.length, t_bbs, 'noq,tggno,tgg,productno,product,spec,unit,mount,price,total,memo', '','');
                         	for ( i = t_bbs.length; i < q_bbsCount; i++) {
 	                            _btnMinus("btnMinus_" + i);
 	                        }
-	                        /*while(t_bbt.length>q_bbtCount){
-	                        	$('#btnPlut').click();
-	                        }
-	                        for(var i=0;i<t_bbt.length;i++){
-	                        	$('#txtNoq__'+i).val(t_bbt[i].noq);
-	                        	$('#txtOrdbaccy__'+i).val(t_bbt[i].ordbaccy);
-	                        	$('#txtOrdbno__'+i).val(t_bbt[i].ordbno);
-	                        	$('#txtNo3__'+i).val(t_bbt[i].no3);
-	                        	$('#txtMount__'+i).val(t_bbt[i].mount);
-	                        	$('#txtPrice__'+i).val(t_bbt[i].price);
-	                        	$('#txtTotal__'+i).val(t_bbt[i].total);
-	                        }*/
-	                        for ( i = 0; i < q_bbtCount; i++) {
-	                            $("#btnMinut__" + i).click();
-	                        }
+	                        
 	                       	q_gridAddRow(bbtHtm, 'tbbt', 'txtNoq,txtOrdbaccy,txtOrdbno,txtNo3,txtMount,txtPrice,txtTotal,txtMemo'
                         	, t_bbt.length, t_bbt, 'noq,ordbaccy,ordbno,no3,mount,price,total,memo', '','');
-	                        /*for ( i = t_bbt.length; i < q_bbtCount; i++) {
+	                        for ( i = t_bbt.length; i < q_bbtCount; i++) {
 	                            $("#btnMinut__" + i).click();
-	                        }*/
-                        	bbtAssign();
+	                        }
+	                        refreshBbt();
                         } else{
                             alert('無資料!');
                         }
@@ -243,6 +229,7 @@
                     }
                     if(!t_isexist){
                     	$('#txtNoq__'+j).val('');
+                    	$('#txtNo2__'+j).val('');
                         $('#txtOrdbaccy__'+j).val('');
                         $('#txtOrdbno__'+j).val('');
                         $('#txtNo3__'+j).val('');
@@ -292,11 +279,10 @@
                 return true;
             }
 			function refreshBbt(){
-				$('#tbbt').find('tr').not('.head').hide();
+				/*$('#tbbt').find('tr').not('.head').hide();
                 for(var i=0;i<q_bbsCount;i++){
                 	if($('#checkShow_'+i).prop("checked")){
-                		var n = $(this).attr('id').replace(/(.*_+)(.*)/, '$2');
-                		var t_noq = $('#txtNoq_'+n).val();
+                		var t_noq = $('#txtNoq_'+i).val();
                 		for(var j=0;j<q_bbtCount;j++){
                 			if($('#txtNoq__'+j).val()==t_noq){
                 				$('#txtNoq__'+j).parent().parent().show();
@@ -304,7 +290,7 @@
                 		}
                 		break;
                 	}
-                }
+                }*/
 			}
             function refresh(recno) {
                 _refresh(recno);
@@ -348,6 +334,12 @@
 							var n = $(this).attr('id').replace(/(.*_+)(.*)/, '$2');
 							$('#btnTggno_'+n).click();
 						});  
+						$('#checkShow_'+i).click(function(e){
+							var t_show = $(this).prop('checked');
+							$('.checkShow').prop('checked',false);
+							$(this).prop('checked',t_show);
+							refreshBbt();
+						});
                     }
                 }
                 _bbsAssign();
@@ -695,13 +687,13 @@
                         <input id="btnPlus" type="button" style="font-size: medium; font-weight: bold; width:90%; display:none;" value="＋"/>
                         </td>
                         <td style="width:20px;"> </td>
-                        <td style="width:20px;"> </td>
                         <td align="center" style="width:100px;"><a id='lblTggno_s'> </a></td>
                         <td align="center" style="width:160px;"><a id='lblTgg_s'> </a></td>
                         <td align="center" style="width:160px;"><a id='lblProductno_s'> </a></td>
                         <td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblSpec_s'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblUnit_s'> </a></td>
+                        <td align="center" style="width:100px;"><a id='lblOmount_s'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblPrice_s'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblTotal_s'> </a></td>
@@ -709,11 +701,11 @@
                     </tr>
                     <tr style='background:#cad3ff;'>
                         <td align="center">
-                        <input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold; width:90%;" value="－"/>
-                        <input id="txtNoq.*" type="text" style="display: none;"/>
+                        	<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold; width:90%;" value="－"/>
+                        	<input id="txtNoq.*" type="text" style="display:none;"/>
+                        	<input type="checkbox" id="checkShow.*" class="checkShow" style="display:none;"/>
                         </td>
                         <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-                        <td><input type="checkbox" id="checkShow.*"/> </td>
                         <td>
                         	<input id="txtTggno.*" type="text" style="float:left;width:95%;"/>
                         	<input type="button" id="btnTggno.*" style="display:none;"/>
@@ -726,6 +718,7 @@
                         <td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtSpec.*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
+                        <td><input id="txtOmount.*" type="text" style="float:left;width:95%;text-align: right;"/></td>
                         <td><input id="txtMount.*" type="text" style="float:left;width:95%;text-align: right;"/></td>
                         <td><input id="txtPrice.*" type="text" style="float:left;width:95%;text-align: right;"/></td>
                         <td><input id="txtTotal.*" type="text" style="float:left;width:95%;text-align: right;"/></td>
@@ -736,7 +729,7 @@
         </div>
         <input id="q_sys" type="hidden" />
         <div id="dbbt">
-            <table id="tbbt" >
+            <table id="tbbt" style="display:none;">
                 <tbody>
                     <tr class="head" style="color:white; background:#003366;">
                         <td style="width:20px;">
@@ -751,7 +744,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <input id="btnMinut..*"  type="button" style="display:none;font-size: medium; font-weight: bold;" value="－"/>
+                            <input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
                             <input id="txtNo2..*" type="text" style="display:none;"/>
                             <input id="txtNoq..*" type="text" style="display:none;"/>
                         </td>
@@ -761,9 +754,9 @@
                         	<input id="txtOrdbno..*" type="text" style="float:left;width:70%;"/>
                         	<input id="txtNo3..*" type="text" style="float:left;width:20%;"/>
                     	</td>
-                        <td><input id="txtMount..*" type="text" style="width:95%;"/></td>
-                        <td><input id="txtPrice..*" type="text" style="width:95%;"/></td>
-                        <td><input id="txtTotal..*" type="text" style="width:95%;"/></td>
+                        <td><input id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
+                        <td><input id="txtPrice..*" type="text" style="width:95%;text-align: right;"/></td>
+                        <td><input id="txtTotal..*" type="text" style="width:95%;text-align: right;"/></td>
                         <td><input id="txtMemo..*" type="text" style="width:95%;"/></td>
                     </tr>
                 </tbody>
