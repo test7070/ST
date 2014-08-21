@@ -35,7 +35,7 @@
             brwKey = 'noa';
             q_desc = 1;
             //q_xchg = 1;
-            brwCount2 = 10;
+            brwCount2 = 9;
 
             aPop = new Array(['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', 'tgg_b.aspx']
@@ -64,7 +64,8 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
-                
+                q_cmbParse("cmbKind", q_getPara('report.all')+','+q_getPara('ordb.kind'));
+
                 $('#txtBtggno').bind('contextmenu', function(e) {
 					/*滑鼠右鍵*/
 					e.preventDefault();					
@@ -85,9 +86,99 @@
 					e.preventDefault();					
 					$('#btnEproductno').click();
 				}); 
+				$('#btnImport').click(function(e){
+					var t_kind = $('#cmbKind').val();
+					var t_btggno = $.trim($('#txtBtggno').val());
+					var t_etggno = $.trim($('#txtEtggno').val());
+					var t_bproductno = $.trim($('#txtBproductno').val());
+					var t_eproductno = $.trim($('#txtEproductno').val());
+					var t_bodate = $.trim($('#txtBodate').val());
+					var t_eodate = $.trim($('#txtEodate').val());
+					var t_ordbno = $.trim($('#txtOrdbno').val());
+					var t_bldate = $.trim($('#txtBldate').val());
+					var t_eldate = $.trim($('#txtEldate').val());
+					var t_ordbsign = q_getPara('ordb.sign');			
+	
+					q_func('qtxt.query.ordp', 'ordp.txt,import,' + encodeURI(t_kind) 
+						+ ';' + encodeURI(t_btggno)
+						+ ';' + encodeURI(t_etggno)
+						+ ';' + encodeURI(t_bproductno)
+						+ ';' + encodeURI(t_eproductno)
+						+ ';' + encodeURI(t_bodate)
+						+ ';' + encodeURI(t_eodate)
+						+ ';' + encodeURI(t_ordbno)
+						+ ';' + encodeURI(t_bldate)
+						+ ';' + encodeURI(t_eldate)
+						+ ';' + encodeURI(t_ordbsign)); 	
+				});
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
+                	case 'qtxt.query.ordp':
+                        var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined){
+                        	var t_bbs = new Array();
+                    		var t_bbt = new Array();
+                        	for(var i=0;i<as.length;i++){
+                        		if(as[i].k=='bbs'){
+                        			t_bbs.push({
+                        				noq:as[i].noq,
+                        				tggno:as[i].tggno,
+                        				tgg:as[i].tgg,
+                        				productno:as[i].productno,
+                        				product:as[i].product,
+                        				spec:as[i].spec,
+                        				unit:as[i].unit,
+                        				mount:as[i].mount,
+                        				price:as[i].price,
+                        				total:as[i].total,
+                        				memo:as[i].memo
+                        			});
+                        		}else{
+                        			t_bbt.push({
+                        				noq:as[i].noq,
+                        				ordbaccy:as[i].ordbaccy,
+                        				ordbno:as[i].ordbno,
+                        				no3:as[i].no3,
+                        				mount:as[i].mount,
+                        				price:as[i].price,
+                        				total:as[i].total,
+                        				memo:as[i].memo
+                        			});
+                        		}
+                        	}
+                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq,txtTggno,txtTgg,txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtPrice,txtTotal,txtMemo'
+                        	, t_bbs.length, t_bbs, 'noq,tggno,tgg,productno,product,spec,unit,mount,price,total,memo', '','');
+                        	for ( i = t_bbs.length; i < q_bbsCount; i++) {
+	                            _btnMinus("btnMinus_" + i);
+	                        }
+	                        /*while(t_bbt.length>q_bbtCount){
+	                        	$('#btnPlut').click();
+	                        }
+	                        for(var i=0;i<t_bbt.length;i++){
+	                        	$('#txtNoq__'+i).val(t_bbt[i].noq);
+	                        	$('#txtOrdbaccy__'+i).val(t_bbt[i].ordbaccy);
+	                        	$('#txtOrdbno__'+i).val(t_bbt[i].ordbno);
+	                        	$('#txtNo3__'+i).val(t_bbt[i].no3);
+	                        	$('#txtMount__'+i).val(t_bbt[i].mount);
+	                        	$('#txtPrice__'+i).val(t_bbt[i].price);
+	                        	$('#txtTotal__'+i).val(t_bbt[i].total);
+	                        }*/
+	                        for ( i = 0; i < q_bbtCount; i++) {
+	                            $("#btnMinut__" + i).click();
+	                        }
+	                       	q_gridAddRow(bbtHtm, 'tbbt', 'txtNoq,txtOrdbaccy,txtOrdbno,txtNo3,txtMount,txtPrice,txtTotal,txtMemo'
+                        	, t_bbt.length, t_bbt, 'noq,ordbaccy,ordbno,no3,mount,price,total,memo', '','');
+	                        /*for ( i = t_bbt.length; i < q_bbtCount; i++) {
+	                            $("#btnMinut__" + i).click();
+	                        }*/
+                        	bbtAssign();
+                        } else{
+                            alert('無資料!');
+                        }
+                        
+                        Unlock(1);
+                        break;
                     default:
                     break;
                 }
@@ -123,12 +214,14 @@
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
                 $('#txtDatea').focus();
+                refreshBbt();
             }
             function btnModi() {
                 if (emp($('#txtNoa').val()))
                     return;
                 _btnModi();
                 $('#txtDatea').focus();
+                refreshBbt();
             }
             function btnPrint() {
                 q_box("z_ordp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'ordp', "95%", "95%", m_print);
@@ -141,7 +234,6 @@
                 //BBS不存在,刪除BBT
                 for(var j=0;j<q_bbtCount;j++){
                     t_noq = $('#txtNoq__'+j).val();
-                    t_namea = $('#txtNamea__'+j).val();
                     t_isexist = false;
                     for(var i=0;i<q_bbsCount;i++){
                         if(t_noq==$('#txtNoq_'+i).val()){
@@ -150,11 +242,13 @@
                         }
                     }
                     if(!t_isexist){
+                    	$('#txtNoq__'+j).val('');
                         $('#txtOrdbaccy__'+j).val('');
                         $('#txtOrdbno__'+j).val('');
                         $('#txtNo3__'+j).val('');
                         $('#txtMount__'+j).val('');
                         $('#txtPrice__'+j).val('');
+                        $('#txtTotal__'+j).val('');
                         $('#txtMemo__'+j).val('');
                     }
                 }
@@ -197,17 +291,33 @@
                 q_nowf();
                 return true;
             }
-
+			function refreshBbt(){
+				$('#tbbt').find('tr').not('.head').hide();
+                for(var i=0;i<q_bbsCount;i++){
+                	if($('#checkShow_'+i).prop("checked")){
+                		var n = $(this).attr('id').replace(/(.*_+)(.*)/, '$2');
+                		var t_noq = $('#txtNoq_'+n).val();
+                		for(var j=0;j<q_bbtCount;j++){
+                			if($('#txtNoq__'+j).val()==t_noq){
+                				$('#txtNoq__'+j).parent().parent().show();
+                			}
+                		}
+                		break;
+                	}
+                }
+			}
             function refresh(recno) {
                 _refresh(recno);
                 if (q_cur > 0 && q_cur < 4)
                     sum();
-                
+                refreshBbt();
             }
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
-               
+               for(var i=0;i<q_bbsCount;i++){
+               		$('#checkShow_'+i).removeAttr('disabled');
+               }
             }
 
             function btnMinus(id) {
@@ -304,10 +414,12 @@
 
             function btnDele() {
                 _btnDele();
+                refreshBbt();
             }
 
             function btnCancel() {
                 _btnCancel();
+                refreshBbt();
             }
 
             function onPageError(error) {
@@ -510,7 +622,7 @@
                         <td><span> </span><a id='lblKind' class="lbl"> </a></td>
                         <td><select id="cmbKind" class="txt c1"> </select></td>
                         <td> </td>
-                        <td> </td>
+                        <td><input id="btnImport" type="button" class="txt c1"/>  </td>
                         <td class="tdZ"> </td>
                     </tr>
                     <tr style="background-color: tan;">
@@ -564,13 +676,6 @@
                     	</td>
                     	<td class="tdZ"> </td>
                     </tr>
-                    <tr style="background-color: tan;">
-                        <td><span> </span><a id='lblOptiona' class="lbl"> </a></td>
-                        <td><select id="cmbOptiona" class="txt c1"> </select></td>
-                        <td> </td>
-                        <td><input id="btnImport" type="button" class="txt c1"/> </td>
-                        <td class="tdZ"> </td>
-                    </tr>
                     <tr>
                         <td><span> </span><a id='lblWorker' class="lbl"> </a></td>
                         <td><input id="txtWorker" type="text" class="txt c1"/></td>
@@ -590,6 +695,7 @@
                         <input id="btnPlus" type="button" style="font-size: medium; font-weight: bold; width:90%; display:none;" value="＋"/>
                         </td>
                         <td style="width:20px;"> </td>
+                        <td style="width:20px;"> </td>
                         <td align="center" style="width:100px;"><a id='lblTggno_s'> </a></td>
                         <td align="center" style="width:160px;"><a id='lblTgg_s'> </a></td>
                         <td align="center" style="width:160px;"><a id='lblProductno_s'> </a></td>
@@ -598,7 +704,7 @@
                         <td align="center" style="width:100px;"><a id='lblUnit_s'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblPrice_s'> </a></td>
-                        <td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
+                        <td align="center" style="width:100px;"><a id='lblTotal_s'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblMemo_s'> </a></td>
                     </tr>
                     <tr style='background:#cad3ff;'>
@@ -607,6 +713,7 @@
                         <input id="txtNoq.*" type="text" style="display: none;"/>
                         </td>
                         <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+                        <td><input type="checkbox" id="checkShow.*"/> </td>
                         <td>
                         	<input id="txtTggno.*" type="text" style="float:left;width:95%;"/>
                         	<input type="button" id="btnTggno.*" style="display:none;"/>
@@ -621,7 +728,7 @@
                         <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtMount.*" type="text" style="float:left;width:95%;text-align: right;"/></td>
                         <td><input id="txtPrice.*" type="text" style="float:left;width:95%;text-align: right;"/></td>
-                        <td><input id="txtMoney.*" type="text" style="float:left;width:95%;text-align: right;"/></td>
+                        <td><input id="txtTotal.*" type="text" style="float:left;width:95%;text-align: right;"/></td>
                         <td><input id="txtMemo.*" type="text"style="float:left;width:95%;"/></td>
                     </tr>
                 </table>
@@ -639,6 +746,7 @@
                         <td align="center" style="width:150px;"><a id='lblOrdbno_t'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblMount_t'> </a></td>
                         <td align="center" style="width:100px;"><a id='lblPrice_t'> </a></td>
+                        <td align="center" style="width:100px;"><a id='lblTotal_t'> </a></td>
                         <td align="center" style="width:200px;"><a id='lblMemo_t'> </a></td>
                     </tr>
                     <tr>
@@ -649,12 +757,13 @@
                         </td>
                         <td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                         <td>
-                        	<input id="txtOrdbaccy..*" type="text" style="width:95%;"/>
-                        	<input id="txtOrdbno..*" type="text" style="width:95%;"/>
-                        	<input id="txtNo3..*" type="text" style="width:95%;"/>
+                        	<input id="txtOrdbaccy..*" type="text" style="display:none;"/>
+                        	<input id="txtOrdbno..*" type="text" style="float:left;width:70%;"/>
+                        	<input id="txtNo3..*" type="text" style="float:left;width:20%;"/>
                     	</td>
                         <td><input id="txtMount..*" type="text" style="width:95%;"/></td>
                         <td><input id="txtPrice..*" type="text" style="width:95%;"/></td>
+                        <td><input id="txtTotal..*" type="text" style="width:95%;"/></td>
                         <td><input id="txtMemo..*" type="text" style="width:95%;"/></td>
                     </tr>
                 </tbody>
