@@ -29,7 +29,7 @@
             brwKey = 'Noa';
             q_desc = 1;
             brwCount2 = 5;
-            aPop = new Array();
+            aPop = new Array(['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
@@ -117,14 +117,12 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                        $('#txtTranno_' + j).bind('contextmenu', function(e) {
-                            /*滑鼠右鍵*/
-                            e.preventDefault();
-                            var n = $(this).attr('id').replace('txtTranno_', '');
-                            var t_accy = $('#txtTranaccy_' + n).val();
-                            q_box("trans_tb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + t_accy, 'trans', "95%", "95%", q_getMsg("popTrans"));
-                            
-                        });
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
+							/*滑鼠右鍵*/
+							e.preventDefault();
+							var n = $(this).attr('id').replace('txtProductno_', '');
+							$('#btnProductno_'+n).click();
+						});
                         $('#txtPrice_'+j).change(function(e){
                             sum();
                         });
@@ -396,7 +394,10 @@
 	                    <input id="txtNoq.*" type="text" style="display: none;"/>
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-                    <td><input type="text" id="txtProductno.*" style="width:95%;"/></td>
+                    <td>
+                    	<input type="text" id="txtProductno.*" style="width:95%;"/>
+                    	<input type="button" id="btnProductno.*" style="display:none;"/>
+                    </td>
                     <td><input type="text" id="txtProduct.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtSprice.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtLprice.*" style="width:95%;"/></td>
