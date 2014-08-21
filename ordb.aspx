@@ -18,11 +18,12 @@
 			q_tables = 's';
 			var q_name = "ordb";
 			var q_readonly = ['txtOrdcno','txtWorkgno', 'txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTotalus'];
-			var q_readonlys = ['txtNo3','txtStdmount', 'txtNo2', 'txtTotal', 'txtC1', 'txtNotv', 'txtOmount','chkIsnotdeal','chkEnda'];
+			var q_readonlys = ['txtNo3','txtStdmount', 'txtNo2', 'txtTotal', 'txtC1', 'txtNotv', 'txtOmount','chkEnda'];
 			var bbmNum = [
 				['txtFloata', 10, 5, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],
 				['txtTotal', 10, 0, 1], ['txtTotalus', 10, 0, 1]
 			];
+			//chkIsnotdeal 功能未知 先隱藏
 			var bbsNum = [];
 			var bbtNum = [];
 			var bbmMask = [];
@@ -370,6 +371,7 @@
 				$('#txtNoa').val('AUTO');
 				$('#txtOdate').val(q_date());
 				$('#txtOdate').focus();
+				$('#txtDatea').val(q_cdn(q_date(),10));
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
 				product_change();
@@ -1024,7 +1026,7 @@
 						<td><input id="txtMoney" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td><input id="txtTax" type="text" class="txt num c1" /></td>
-						<td><select id="cmbTaxtype" class="txt c1" style="float:left;" ></select></td>
+						<td><select id="cmbTaxtype" class="txt c1" style="float:left;" > </select></td>
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtTotal" type="text" class="txt num c1" /></td>
 					</tr>
@@ -1032,7 +1034,7 @@
 						<td class="td1"><span> </span><a id="lblOrde" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtOrdeno" type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
-						<td><select id="cmbCoin" class="txt c1" ></select></td>
+						<td><select id="cmbCoin" class="txt c1" > </select></td>
 						<td><input id="txtFloata" type="text" class="txt c1 num" /></td>
 						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtTotalus" type="text" class="txt num c1" /></td>
@@ -1082,7 +1084,7 @@
 					<td align="center" style="width:50px;">採購詢<br>建議量</td>
 					<td align="center" style="width:50px;">採購<br>統計</td>
 					<td align="center" style="width:50px;">進貨<br>記錄</td>
-					<td align="center" style="width:50px;">未成交</td>
+					<!--<td align="center" style="width:50px;">未成交</td>-->
 					<td align="center" style="width:50px;">取消</td>
 					<td align="center" style="width:50px;">結案</td>
 				</tr>
@@ -1139,9 +1141,7 @@
 					<td align="center">
 						<input class="btn" id="btnRc2record.*" type="button" value='.' style=" font-weight: bold;" />
 					</td>
-					<td align="center">
-                        <input id="chkIsnotdeal.*" type="checkbox"/>
-                    </td>
+					<!--<td align="center"><input id="chkIsnotdeal.*" type="checkbox"/></td>-->
                     <td align="center">
                         <input id="chkCancel.*" type="checkbox"/>
                     </td>
