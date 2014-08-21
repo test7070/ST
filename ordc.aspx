@@ -115,7 +115,7 @@
 						alert('請輸入' + q_getMsg('lblTgg'));
 						return;
 					}
-					q_box("ordbs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordbs', "95%", "95%", q_getMsg('popOrdbs'));
+					q_box("ordbs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordbs', "95%", "95%", $('#lblOrdb').text());
 				});
 				$('#txtFloata').change(function() {
 					sum();
