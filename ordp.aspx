@@ -123,6 +123,8 @@
                         		if(as[i].k=='bbs'){
                         			t_bbs.push({
                         				noq:as[i].noq,
+                        				cno:as[i].cno,
+                        				kind:as[i].kind,
                         				tggno:as[i].tggno,
                         				tgg:as[i].tgg,
                         				productno:as[i].productno,
@@ -147,8 +149,8 @@
                         			});
                         		}
                         	}
-                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq,txtTggno,txtTgg,txtProductno,txtProduct,txtSpec,txtUnit,txtOmount,txtPrice,txtTotal,txtMemo'
-                        	, t_bbs.length, t_bbs, 'noq,tggno,tgg,productno,product,spec,unit,mount,price,total,memo', '','');
+                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq,txtCno,txtKind,txtTggno,txtTgg,txtProductno,txtProduct,txtSpec,txtUnit,txtOmount,txtPrice,txtTotal,txtMemo'
+                        	, t_bbs.length, t_bbs, 'noq,cno,kind,tggno,tgg,productno,product,spec,unit,mount,price,total,memo', '','');
                         	for ( i = t_bbs.length; i < q_bbsCount; i++) {
 	                            _btnMinus("btnMinus_" + i);
 	                        }
@@ -718,6 +720,8 @@
                         </td>
                         <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                         <td>
+                        	<input id="txtCno.*" type="text" style="display:none;"/>
+                        	<input id="txtKind.*" type="text" style="display:none;"/>
                         	<input id="txtTggno.*" type="text" style="float:left;width:95%;"/>
                         	<input type="button" id="btnTggno.*" style="display:none;"/>
                         </td>
