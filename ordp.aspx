@@ -19,7 +19,7 @@
             q_tables = 't';
             var q_name = "ordp";
             var q_readonly = ['txtNoa','txtWorker', 'txtWorker2', 'txtWorkgno'];
-            var q_readonlys = ['txtNoq'];
+            var q_readonlys = ['txtNoq','txtTotal'];
             var q_readonlyt = ['txtNo2','txtNoq'];
             var bbmNum = [];
             var bbsNum = [['txtOmount',15,0,1],['txtMount',15,0,1],['txtPrice',15,2,1],['txtTotal',15,0,1]];
@@ -149,8 +149,8 @@
                         			});
                         		}
                         	}
-                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq,txtCno,txtKind,txtTggno,txtTgg,txtProductno,txtProduct,txtSpec,txtUnit,txtOmount,txtPrice,txtTotal,txtMemo'
-                        	, t_bbs.length, t_bbs, 'noq,cno,kind,tggno,tgg,productno,product,spec,unit,mount,price,total,memo', '','');
+                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq,txtCno,txtKind,txtTggno,txtTgg,txtProductno,txtProduct,txtSpec,txtUnit,txtOmount,txtMount,txtPrice,txtTotal,txtMemo'
+                        	, t_bbs.length, t_bbs, 'noq,cno,kind,tggno,tgg,productno,product,spec,unit,mount,mount,price,total,memo', '','');
                         	for ( i = t_bbs.length; i < q_bbsCount; i++) {
 	                            _btnMinus("btnMinus_" + i);
 	                        }
@@ -353,6 +353,12 @@
 							$(this).prop('checked',t_show);
 							refreshBbt();
 						});
+						$('#txtMount_'+i).change(function(e){
+							sum();
+						});
+						$('#txtPrice_'+i).change(function(e){
+							sum();
+						});
                     }
                 }
                 _bbsAssign();
@@ -378,7 +384,10 @@
 
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
-                    return;             
+                    return;  
+                for(var i=0;i<q_bbsCount;i++){
+                	$('#txtTotal_'+i).val(round(q_mul(q_float('txtMount_'+i),q_float('txtPrice_'+i)),0));
+                }           
             }
 
             function q_appendData(t_Table) {
