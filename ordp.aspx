@@ -182,6 +182,7 @@
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
+                q_func('sign.q_signForm', 'ordp,,'+  $('#txtNoa').val());
                 refresh(q_recno);    
             }
             function q_boxClose(s2) {
