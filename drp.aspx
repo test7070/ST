@@ -233,6 +233,10 @@
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
                 
+                if(t_para)
+                	$('#btnImport').attr('disabled', 'disabled');
+                else
+                	$('#btnImport').removeAttr('disabled');
             }
             function btnMinus(id) {
                 _btnMinus(id);
@@ -281,7 +285,7 @@
             }
             .dview {
                 float: left;
-                width: 350px;
+                width: 200px;
                 border-width: 0px;
             }
             .tview {
