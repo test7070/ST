@@ -10,7 +10,7 @@
     <script src='../script/mask.js' type="text/javascript"></script>
     <link href="../qbox.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
-    var q_name = "borde_s";
+    var q_name = "ordew_s";
     var aPop = new Array(['txtCustno','','cust','noa,nick','txtCustno,txtComp','cust_b.aspx'],
             			 ['txtSalesno', '', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']);
     $(document).ready(function () {

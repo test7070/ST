@@ -21,7 +21,7 @@
 
             q_desc = 1
             q_tables = 's';
-            var q_name = "borde";
+            var q_name = "ordew";
             var q_readonly = ['txtNoa', 'txtWorker','txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtSales','txtAddr'];
             var q_readonlys = ['txtNo2','txtTotal', 'txtC1', 'txtNotv'];
             var bbmNum = [];
@@ -327,7 +327,7 @@
                 	
                	var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_borde') + $('#txtOdate').val(), '/', ''));
+					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ordew') + $('#txtOdate').val(), '/', ''));
 				else
 					wrServer(s1);
             }
@@ -336,7 +336,7 @@
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
 
-                q_box('borde_s.aspx', q_name + '_s', "500px", "430px", q_getMsg("popSeek"));
+                q_box('ordew_s.aspx', q_name + '_s', "500px", "430px", q_getMsg("popSeek"));
             }
             
             function combPaytype_chg() {
@@ -406,7 +406,7 @@
             }
 
             function btnPrint() {
-                q_box("z_bordep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy + "_" + r_cno, 'borde', "95%", "650px", q_getMsg("popPrint"));
+                q_box("z_ordewp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy + "_" + r_cno, 'ordew', "95%", "650px", q_getMsg("popPrint"));
             }
 
             function wrServer(key_value) {

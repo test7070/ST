@@ -18,11 +18,11 @@
             $(document).ready(function() {
                 _q_boxClose();
                 q_getId();
-                q_gf('', 'z_bordep');
+                q_gf('', 'z_ordewp');
             });
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_bordep',
+                    fileName : 'z_ordewp',
                     options : [{/* [1]*/
                         type : '0', //數量的小數位數
                         name : 'mount_precision',
