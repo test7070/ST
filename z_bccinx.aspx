@@ -36,10 +36,10 @@
                         name : 'weight_precision',
                         value : q_getPara('rc2.weightPrecision')
                     },{
-						type : '1',
+						type : '1',/*[4][5]*/
 						name : 'date'
 					},{
-						type : '2',
+						type : '2',/*[6][7]*/
 						name : 'xbccno',
 						dbf : 'bcc',
 						index : 'noa,product',

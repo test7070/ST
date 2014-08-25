@@ -143,13 +143,12 @@
             }
 
             function bbsSave(as) {
-                if ( !as['bccname']) {
+                if ( !as['bccname']&& !as['bccno']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
 
                 q_nowf();
-                as['storeno'] = abbm2['storeno'];
                 as['datea'] = abbm2['datea'];
                 return true;
             }
