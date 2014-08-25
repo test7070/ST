@@ -55,7 +55,7 @@
 				t_bdate = $.trim($('#txtBdate').val());
 				t_edate = $.trim($('#txtEdate').val());
 				
-				var t_where = " 1=1 "  q_sqlPara2("noa", t_noa) + q_sqlPara2("datea", t_bdate, t_edate) + wbbsSearchStr('txtBccno');
+				var t_where = " 1=1 "+q_sqlPara2("noa", t_noa) + q_sqlPara2("datea", t_bdate, t_edate) + wbbsSearchStr('txtBccno');
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
 			}
@@ -77,7 +77,7 @@
 		<div style='width:400px; text-align:center;padding:15px;' >
 			<table id="seek"  border="1"   cellpadding='3' cellspacing='2' style='width:100%;' >
 				<tr class='seek_tr'>
-					<td   style="width:35%;" ><a id='lblDate'></a></td>
+					<td   style="width:35%;" ><a id='lblDate'> </a></td>
 					<td style="width:65%;  ">
 					<input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
 					<span style="display:inline-block; vertical-align:middle">&sim;</span>
@@ -85,13 +85,13 @@
 					</td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
+					<td class='seek'  style="width:20%;"><a id='lblNoa'> </a></td>
 					<td>
 					<input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" />
 					</td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblBccno'></a></td>
+					<td class='seek'  style="width:20%;"><a id='lblBccno'> </a></td>
 					<td>
 					<input class="txt" id="txtBccno" type="text" style="width:215px; font-size:medium;" />
 					</td>
