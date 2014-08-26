@@ -124,7 +124,7 @@
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
-				q_cmbParse("cmbStype", q_getPara('orde.stype'));
+				q_cmbParse("cmbStype", q_getPara('ordew.stype'));
 				q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
@@ -423,9 +423,11 @@
                 }
 
                 q_nowf();
-                as['datea'] = abbm2['datea'];
+                as['odate'] = abbm2['odate'];
+                as['custno'] = abbm2['custno'];
+                as['comp'] = abbm2['comp'];
                 if(as['datea']=='')
-                	as['odate'] = abbm2['odate'];
+                	as['datea'] = abbm2['datea'];
                 	
                 return true;
             }
