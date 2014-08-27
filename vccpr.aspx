@@ -22,8 +22,8 @@
             var q_name = "vccpr";
             var q_readonly = ['txtWorker2', 'txtWorker','txtNoa'];
             var q_readonlys = [];
-            var bbmNum = [['txtPrice',10,0,1]];
-            var bbsNum = [['txtPrice',10,0,1]];
+            var bbmNum = [];
+            var bbsNum = [['txtPrice',10,2,1]];
             var bbmMask = [['txtBdate', '999/99/99'],['txtEdate', '999/99/99']];
             var bbsMask = [['txtDatea', '999/99/99']];
             q_sqlCount = 6;
@@ -39,7 +39,6 @@
             , ['txtEndaddrno','','addr2','noa,addr','txtEndaddrno,txtEndaddr','addr2_b.aspx']
             , ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']);
             $(document).ready(function() {
-                q_bbsShow = -1;
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
@@ -73,17 +72,21 @@
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
+                    case 'qtxt.query.vccpr_vcc':
+                        //
+                        break;
                     case 'qtxt.query.vccpr':
                         var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
-                            q_gridAddRow(bbsHtm, 'tbbs', 'txtDatea,txtCustno,txtCust,txtNick,txtLengthb,txtUnit,txtMount,txtWeight,txtApv,txtTranmoney,txtPrice,txtHprice,txtPprice,txtLprice,txtWcost,txtSprice,txtSprice2,txtTranmoney2,txtTrantype,txtTranaddr,txtTranmoney3,txtAccy,txtTablea,txtVccno,txtWorker,txtProfit,txtTotal,txtProductno,txtProduct,txtInte,txtDaya,txtRate,txtCash'
-                        	, as.length, as, 'datea,custno,cust,nick,lengthb,unit,mount,weight,apv,tranmoney,price,hprice,pprice,lprice,wcost,sprice,sprice2,tranmoney2,trantype,tranaddr,tranmoney3,accy,tablea,vccno,worker,profit,total,productno,product,inte,daya,rate,cash', '','');
+                            q_gridAddRow(bbsHtm, 'tbbs', 'txtDatea,txtCustno,txtCust,txtNick,txtLengthb,txtUnit,txtMount,txtWeight,txtApv,txtTranmoney,txtPrice,txtHprice,txtPprice,txtLprice,txtWcost,txtSprice,txtSprice2,txtTranmoney2,txtTrantype,txtTranaddr,txtTranmoney3,txtAccy,txtTablea,txtVccno,txtVccnoq,txtWorker,txtProfit,txtTotal,txtProductno,txtProduct,txtInte,txtDaya,txtRate,txtCash'
+                        	, as.length, as, 'datea,custno,cust,nick,lengthb,unit,mount,weight,apv,tranmoney,price,hprice,pprice,lprice,wcost,sprice,sprice2,tranmoney2,trantype,tranaddr,tranmoney3,accy,tablea,vccno,vccnoq,worker,profit,total,productno,product,inte,daya,rate,cash', '','');
                         	sum();
                         } else {
                             alert('無資料!');
                         }
                         Unlock(1);
                         break;
+                    
                     default:
                     	break;
                 }
@@ -99,6 +102,7 @@
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
+                q_func('qtxt.query.vccpr_vcc', 'vccpr.txt,vccpr_vcc,' + encodeURI($('#txtNoa').val())); 
                 Unlock(1);
             }
             function btnOk() {
@@ -131,14 +135,14 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                        $('#txtVccno_' + j).bind('contextmenu', function(e) {
+                        $('#lblNo_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtVccno_', '');
+                            var n = $(this).attr('id').replace('lblNo_', '');
                             var t_accy = $('#txtAccy_' + n).val();
                             var t_tablea = $('#txtTablea_' + n).val();
-                            q_box("vccfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + t_accy, t_tablea, "95%", "95%", q_getMsg("popVcc"));
-                            
+                            var t_noa =  $('#txtVccno_' + n).val();
+                            q_box("vccfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa + "';" + t_accy, t_tablea, "95%", "95%", q_getMsg("popVcc"));
                         });
                         $('#txtPrice_'+j).change(function(e){
                             sum();
@@ -150,7 +154,7 @@
             function btnIns() {
                 _btnIns();
                 $('#txtNoa').val('AUTO');
-                $('#txtDatea').focus();
+                $('#txtDatea').val(q_date).focus();
             }
             function btnModi() {
                 if (emp($('#txtNoa').val()))
@@ -167,7 +171,7 @@
                 _btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
             }
             function bbsSave(as) {
-                if (!as['no2']) {
+                if (!as['vccno']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
@@ -177,12 +181,31 @@
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
-                var t_cash = 0, t_profit=0;
+                var t_cash = 0, t_profit=0, t_inte = 0, t_tranmoney=0, t_tranmoney2=0,t_spricemoney=0,t_wcost=0,t_total=0;
                 for ( i = 0; i < q_bbsCount; i++) {
                     t_cash += q_float('txtCash_'+i);
                     t_profit += q_float('txtProfit_'+i);
+                    t_inte += q_float('txtInte_'+i);
+                    t_tranmoney += q_float('txtTranmoney_'+i);
+                    t_tranmoney2 += q_float('txtTranmoney2_'+i)+q_float('txtTranmoney3_'+i);
+                    t_wcost += q_float('txtWcost_'+i);
+                    
+                    t_mount = $('#txtUnit_'+i).val().toUpperCase()=='KG' || $('#txtUnit_'+i).val().length==0?q_float('txtWeight_'+i):q_float('txtMount_'+i);
+                    t_sprice = q_float('txtSprice2_'+i)>0?q_float('txtSprice2_'+i):q_float('txtSprice_'+i);
+                    t_spricemoney += round(q_mul(t_mount,t_sprice),0)
+                
+                	t_total += q_float('txtTotal_'+i);
                 }
                 $('#txtCash').val(t_cash);
+                $('#txtInte').val(t_inte);
+                $('#txtTranmoney').val(t_tranmoney);
+                $('#txtTranmoney2').val(t_tranmoney2);
+                $('#txtWcost').val(t_wcost);
+                $('#txtSprice').val(t_spricemoney);
+                $('#txtTotal').val(t_total);
+                
+                t_profit = t_total - t_spricemoney - t_tranmoney - t_tranmoney2 - t_wcost - t_inte;
+                
                 $('#txtProfit').val(t_profit);
             }
             function refresh(recno) {
@@ -381,8 +404,8 @@
                     <tr>
                         <td><span> </span><a id="lblNoa" class="lbl"> </a></td>
                         <td><input id="txtNoa" type="text" class="txt c1"/></td>
-                        <td></td>
-                        <td></td>
+                        <td><span> </span><a id="lblDatea" class="lbl">登錄日期</a></td>
+                        <td><input id="txtDatea" type="text" class="txt c1"/></td>
                         <td><input type="button" id="btnImport" value="匯入" class="txt c1"></td>
                     </tr>
                     <tr>
@@ -417,8 +440,8 @@
                         <td><span> </span><a id="lblTranmoney2" class="lbl">補運費</a></td>
                         <td><input id="txtTranmoney2" type="text" class="txt c1 num"/></td>
                     </tr>
-                    <td><span> </span><a id="lblTnterest" class="lbl">預估利息</a></td>
-                        <td><input id="txtTnterest" type="text" class="txt c1 num"/>
+                    <td><span> </span><a id="lblInte" class="lbl">預估利息</a></td>
+                        <td><input id="txtInte" type="text" class="txt c1 num"/>
                     </td>
                     <tr>
                         <td><span> </span><a id="lblCost_a" class="lbl">佣金合計</a></td>
@@ -515,6 +538,7 @@
 						<input type="text" id="txtVccno.*" style="width:95%;"/>
 						<input type="text" id="txtAccy.*" style="display:none;"/>
 						<input type="text" id="txtTablea.*" style="display:none;"/>
+						<input type="text" id="txtVccnoq.*" style="display:none;"/>
 					</td>
 					<td><input type="text" id="txtWorker.*" style="width:95%;"/></td>
 					<td><input type="text" id="txtProfit.*" style="width:95%;"/></td>
