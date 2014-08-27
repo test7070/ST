@@ -29,75 +29,40 @@
 	                        type : '0', //[1]
 	                        name : 'accy',
 	                        value : r_accy
-	                    },  {
-	                        type : '1', //[2][3]
+	                    },{
+							type : '0',//[2]
+							name : 'mountprecision',
+							value : q_getPara('vcc.mountPrecision')
+						},{
+							type : '0',//[3]
+							name : 'weightprecision',
+							value : q_getPara('vcc.weightPrecision')
+						},{
+							type : '0',//[4]
+							name : 'priceprecision',
+							value : q_getPara('vcc.pricePrecision')
+						}, {//[5]
+	                        type : '0',
+	                        name : 'xstype',
+	                        value : q_getPara('ordew.stype')
+	                    },{
+	                        type : '1', //[6][7]
 	                        name : 'xnoa'
 	                    },{
-							type : '8',//[10]
+							type : '8',//[8]
 							name : 'xshowprice',
 							value : "1@".split(',')
 	                    }]
                     });
                 q_popAssign();
                 	
-                	$('#txtXmon1').mask('999/99');
-	                $('#txtXmon2').mask('999/99');
-	                $('#txtDate1').mask('999/99/99');
-	                $('#txtDate1').datepicker();
-	                $('#txtDate2').mask('999/99/99');
-	                $('#txtDate2').datepicker();  
 	                
 	            var t_noa=typeof(q_getId()[3])=='undefined'?'':q_getId()[3];
                 t_noa  =  t_noa.replace('noa=','');
                 $('#txtXnoa1').val(t_noa);
                 $('#txtXnoa2').val(t_noa);
                 
-                
-                 var t_date,t_year,t_month,t_day;
-	                t_date = new Date();
-	                t_date.setDate(1);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtXmon1').val(t_year+'/'+t_month);
-	                
-	                t_date = new Date();
-	                t_date.setDate(35);
-	                t_date.setDate(0);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtXmon2').val(t_year+'/'+t_month);
-	                
-	                var t_date,t_year,t_month,t_day;
-	                t_date = new Date();
-	                t_date.setDate(1);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate1').val(t_year+'/'+t_month+'/'+t_day);
-	                
-	                t_date = new Date();
-	                t_date.setDate(35);
-	                t_date.setDate(0);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate2').val(t_year+'/'+t_month+'/'+t_day);
-	                
-	                 $("input[type='checkbox'][value!='']").attr('checked', true);
+				$("input[type='checkbox'][value!='']").attr('checked', true);
             }
 
             function q_boxClose(s2) {
