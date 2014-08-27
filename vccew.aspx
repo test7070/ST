@@ -19,7 +19,7 @@
 			q_tables = 's';
 			var q_name = "vccew";
 			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtSales','txtWeight','txtCardeal'];
-			var q_readonlys = ['txtStore','txtNoq'];
+			var q_readonlys = ['txtStore','txtNoq','txtOrdewno','txtNo2'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -264,7 +264,7 @@
 			}
 
 			function btnPrint() {
-				t_where = "noa='" + $('#txtNoa').val() + "'";
+				t_where = "noa=" + $('#txtNoa').val() + "";
 				q_box("z_vccewp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
 			}
 
@@ -607,13 +607,6 @@
 						<td class="td6"><span> </span><a id="lblCarno" class="lbl"> </a></td>
 						<td class="td7" colspan="2"><input id="txtCarno"  type="text" class="txt c1"/></td>
 					</tr>
-					<tr class="tr6">
-						<td class="td1"><span> </span><a id="lblSales" class="lbl btn"> </a></td>
-						<td class="td2"><input id="txtSalesno"  type="text" class="txt c1"/></td>
-						<td class="td3"><input id="txtSales"  type="text" class="txt c1"/></td>
-						<td class="td1"><span> </span><a id="lblWeight" class="lbl"> </a></td>
-						<td class="td2"><input id="txtWeight"  type="text" class="txt c1 num"/></td>
-					</tr>
 					<tr class="tr7">
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td class="td2" colspan="8"><textarea id="txtMemo" cols="5" rows="10" style="width: 99%;height: 50px;"> </textarea></td>
@@ -623,6 +616,8 @@
 						<td class="td6"><input id="txtWorker" type="text" class="txt c1" /></td>
 						<td class="td7"><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td class="td8"><input id="txtWorker2" type="text" class="txt c1" /></td>
+						<td class="td1"><span> </span><a id="lblWeight" class="lbl"> </a></td>
+						<td class="td2"><input id="txtWeight"  type="text" class="txt c1 num"/></td>
 					</tr>
 				</table>
 			</div>

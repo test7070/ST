@@ -80,10 +80,10 @@
 						<input class="txt" id="txtCustno" type="text" style="width:90px; font-size:medium;" />	&nbsp;
 						<input class="txt" id="txtComp" type="text" style="width:115px; font-size:medium;" />
 					</td>
-					<tr class='seek_tr'>
-						<td class='seek'  style="width:20%;"><a id='lblCarno'> </a></td>
-						<td><input class="txt" id="txtCarno" type="text" style="width:215px; font-size:medium;" /></td>
-					</tr>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblCarno'> </a></td>
+					<td><input class="txt" id="txtCarno" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->
