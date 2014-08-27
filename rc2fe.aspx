@@ -31,7 +31,7 @@
             brwNowPage = 0;
             brwKey = 'datea';
             aPop = new Array(
-                ['txtTggno', 'lblTgg', 'tgg', 'noa,nick,tel,zip_invo,addr_comp,paytype', 'txtTggno,txtTgg,txtTel,txtPost,txtAddr,txtPaytype', 'tgg_b.aspx'],
+                ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,tel,zip_invo,addr_comp,paytype', 'txtTggno,txtComp,txtTel,txtPost,txtAddr,txtPaytype', 'tgg_b.aspx'],
                 ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
                 ['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
                 ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp,addr', 'txtCno,txtAcomp,txtAddr2', 'acomp_b.aspx'],
@@ -881,7 +881,7 @@
                     <tr class="tr2">
                        <td class="td1"><span> </span><a id='lblTgg' class="lbl btn"> </a></td>
                         <td class="td2"><input id="txtTggno" type="text" class="txt c1" /></td>
-                        <td class="td3" colspan="2"><input id="txtTgg" type="text" class="txt c1"/></td>
+                        <td class="td3" colspan="2"><input id="txtComp" type="text" class="txt c1"/></td>
                         <td class="td7"><span> </span><a id='lblNoa' class="lbl"> </a></td>
                         <td class="td8">
                         	<input id="txtNoa" type="text" class="txt c1"/>
