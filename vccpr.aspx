@@ -76,8 +76,9 @@
                     case 'qtxt.query.vccpr':
                         var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
-                            q_gridAddRow(bbsHtm, 'tbbs', 'txtDatea,txtCustno,txtCust,txtNick,txtLengthb,txtUnit,txtMount,txtWeight,txtApv,txtTranmoney,txtPrice,txtHprice,txtPprice,txtLprice,txtWcost,txtSprice,txtSprice2,txtTranmoney2,txtTrantype,txtTranaddr,txtTranmoney3,txtAccy,txtTablea,txtVccno,txtWorker,txtProfit,txtTotal,txtProductno,txtProduct,txtInte,txtDaya'
-                        	, as.length, as, 'datea,custno,cust,nick,lengthb,unit,mount,weight,apv,tranmoney,price,hprice,pprice,lprice,wcost,sprice,sprice2,tranmoney2,trantype,tranaddr,tranmoney3,accy,tablea,vccno,worker,profit,total,productno,product,inte,daya', '','');
+                            q_gridAddRow(bbsHtm, 'tbbs', 'txtDatea,txtCustno,txtCust,txtNick,txtLengthb,txtUnit,txtMount,txtWeight,txtApv,txtTranmoney,txtPrice,txtHprice,txtPprice,txtLprice,txtWcost,txtSprice,txtSprice2,txtTranmoney2,txtTrantype,txtTranaddr,txtTranmoney3,txtAccy,txtTablea,txtVccno,txtWorker,txtProfit,txtTotal,txtProductno,txtProduct,txtInte,txtDaya,txtRate,txtCash'
+                        	, as.length, as, 'datea,custno,cust,nick,lengthb,unit,mount,weight,apv,tranmoney,price,hprice,pprice,lprice,wcost,sprice,sprice2,tranmoney2,trantype,tranaddr,tranmoney3,accy,tablea,vccno,worker,profit,total,productno,product,inte,daya,rate,cash', '','');
+                        	sum();
                         } else {
                             alert('無資料!');
                         }
@@ -176,20 +177,13 @@
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
-                var t_money = 0, t_moneys = 0, t_total = 0;
+                var t_cash = 0, t_profit=0;
                 for ( i = 0; i < q_bbsCount; i++) {
-                   // t_money = round(q_mul(q_float('txtMount_'+i),q_float('txtPrice_'+i)),0);
-                    //$('#txtTotal_'+i).val(t_money);
-                    //$('#txtTranmoney_'+i).val(t_money);
-                    t_money = q_float('txtTotal_'+i);
-                    t_moneys += t_money;
+                    t_cash += q_float('txtCash_'+i);
+                    t_profit += q_float('txtProfit_'+i);
                 }
-                t_plusmoney = q_float('txtPlusmoney');
-                t_minusmoney = q_float('txtMinusmoney');
-                t_tax = q_float('txtTax');
-                t_total = t_moneys + t_tax + t_plusmoney - t_minusmoney;
-                $('#txtMoney').val(t_moneys);
-                $('#txtTotal').val(t_total);
+                $('#txtCash').val(t_cash);
+                $('#txtProfit').val(t_profit);
             }
             function refresh(recno) {
                 _refresh(recno);
@@ -433,6 +427,10 @@
                         <td><input id="txtCost_b" type="text" class="txt c1 num"/></td>
                     </tr>
                     <tr>
+                        <td><span> </span><a id="lblCash" class="lbl">資金使用率</a></td>
+                        <td><input id="txtCash" type="text" class="txt c1 num"/></td>
+                    </tr>
+                    <tr>
                     	<td><span> </span><a id="lblMemo" class="lbl"></a></td>
                         <td colspan="4"><input 2id="txtMemo" type="text"  class="txt c1"/></td>
                     </tr>
@@ -492,6 +490,8 @@
                     	<input type="text" id="txtCustno.*" style="width:95%;"/>
                     	<input type="text" id="txtCust.*" style="display:none;"/>
                     	<input type="text" id="txtNick.*" style="display:none;"/>
+                    	
+                    	<input type="text" id="txtCash.*" style="display:none;"/>
                     </td>
                     <td><input type="text" id="txtLengthb.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtUnit.*" style="width:95%;"/></td>
