@@ -26,11 +26,23 @@
                         type : '1', //[1][2]
                         name : 'date'
                     }, {
-                        type : '2', //[5][6]
+                        type : '2', //[3][4]
                         name : 'xsss',
                         dbf : 'sss',
                         index : 'noa,namea',
                         src : 'sss_b.aspx'
+                    }, {
+                        type : '2', //[5][6]
+                        name : 'xcust',
+                        dbf : 'cust',
+                        index : 'noa,comp',
+                        src : 'cust_b.aspx'
+                    }, {
+                        type : '2', //[7][8]
+                        name : 'xucc',
+                        dbf : 'ucc',
+                        index : 'noa,product',
+                        src : 'ucc_b.aspx'
                     }]
                 });
                 q_popAssign();
