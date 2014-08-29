@@ -37,9 +37,9 @@
 			//q_xchg = 1;
 			brwCount2 = 10;
 			aPop = new Array(
-				['txtProductno1_', 'btnProduct1_', 'ucaucc2', 'noa,product,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_', 'ucaucc2_b.aspx'],
-				['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_', 'bcc_b.aspx'],
-				['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_', 'fixucc_b.aspx'],
+				['txtProductno1_', 'btnProduct1_', 'ucaucc2', 'noa,product,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', 'ucaucc2_b.aspx'],
+				['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_,txtProduct_', 'bcc_b.aspx'],
+				['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_,txtProduct_', 'fixucc_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype', 'txtTggno,txtTgg,txtNick,txtPaytype', 'tgg_b.aspx']
@@ -289,6 +289,29 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'check_accu':
+						var bbs_total=0,accu_total=0,ordb_total=0;
+						var as = _q_appendData("accu", "", true);
+						if (as[0] != undefined) {
+							accu_total=dec(as[0].accu_total);
+							ordb_total=dec(as[0].ordb_total);
+						}
+						if(!$('#chkCancel').prop('checked')){
+							for(var i=0;i<q_bbsCount;i++){
+								if(!$('#chkCancel_'+i).prop('checked')){
+									bbs_total=q_add(bbs_total,dec($('#txtTotal_'+i).val()));
+								}
+							}
+						}
+						
+						if(accu_total>=q_add(bbs_total,ordb_total)){
+							chack_accu=true;
+							btnOk();
+						}else{
+							alert(' 請購金額累計='+q_trv(ordb_total)+' \r 本次請購金額='+q_trv(bbs_total)+' \r 預估金額='+q_trv(accu_total)+' \r ----------------------------------------- \r差額='+q_trv(Math.abs(q_sub(accu_total,q_add(bbs_total,ordb_total)))));
+						}
+						
+						break;
 					case 'GetTggt':
 						var as = _q_appendData("ordb", "", true);
 						if (as[0] != undefined) {
@@ -410,8 +433,25 @@
 					return false;
 				Unlock(1);
 			}
-
+			
+			//103/08/29根據ordb.accu判斷預估作業
+			var chack_accu=false;
 			function btnOk() {
+				
+				if ($('#txtOdate').val().length == 0 || !q_cd($('#txtOdate').val())) {
+					alert(q_getMsg('lblOdate') + '錯誤。');
+					return;
+				}
+				
+				if(q_getPara('ordb.accu')=='1' && !chack_accu){
+					var t_year = $.trim($('#txtOdate').val()).substr(0,3);
+					var t_where='',t_where1='';
+					t_where="where=^^left(a.datea,3)='"+t_year+"' and isnull(a.cancel,0)=0 and isnull(b.cancel,0)=0 and a.noa!='"+$('#txtNoa').val()+"'^^"
+					t_where1="where[1]=^^left(c.mon,3)='"+t_year+"' ^^"
+					q_gt('accu_ordb', t_where+t_where1, 0, 0, 0, "check_accu",r_accy);
+					return;
+				}
+				
 				Lock(1, {
 					opacity : 0
 				});
@@ -436,7 +476,9 @@
 					if (q_cur == 1 || (q_cur != 1 && q_float('txtOmount_' + i) == 0))
 						$('#txtOmount_' + i).val($('#txtMount_' + i).val());
 				}
+				
 				sum();
+				
 				if ($('#cmbKind').val() == '1') {
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#txtProductno_' + j).val($('#txtProductno1_' + j).val());
@@ -450,6 +492,7 @@
 						$('#txtProductno_' + j).val($('#txtProductno3_' + j).val());
 					}
 				}
+				
 				if (q_cur == 1) {
 					$('#txtWorker').val(r_name);
 				} else if (q_cur == 2) {
@@ -457,8 +500,12 @@
 				} else {
 					alert("error: btnok!");
 				}
+				
+				//清除是否判斷預估
+				chack_accu=false;
+				
 				var t_noa = trim($('#txtNoa').val());
-				var t_date = trim($('#txtDatea').val());
+				var t_date = trim($('#txtOdate').val());
 				if (t_noa.length == 0 || t_noa == "AUTO")
 					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ordb') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
 				else
@@ -831,8 +878,8 @@
 		<div id="exportordc" style="background:pink;display:none; position: absolute;top:200px;left:400px;width:600px;height:400px;">
 			<table style="width:100%;height:100%;border: 2px white double;">
 				<tr style="height:1px;">
-					<td style="width:40%;"></td>
-					<td style="width:60%;"></td>
+					<td style="width:40%;"> </td>
+					<td style="width:60%;"> </td>
 				</tr>
 				<tr>
 					<td colspan="2" style="text-align:center; color:darkblue;"><a>已匯出至採購單的,須先刪除採購單才可重新匯出</a></td>
@@ -936,19 +983,19 @@
 			<div class="dbbm">
 				<table class="tbbm" id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td class="tdZ"></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblKind' class="lbl"> </a></td>
-						<td class="td2"><select id="cmbKind" class="txt c1"></select></td>
+						<td class="td2"><select id="cmbKind" class="txt c1"> </select></td>
 						<td class="td3"><span> </span><a id='lblOdate' class="lbl"> </a></td>
 						<td class="td4"><input id="txtOdate" type="text" class="txt c1"/></td>
 						<td class="td5"><span> </span><a id='lblDatea' class="lbl"> </a></td>
@@ -985,7 +1032,7 @@
 						<td class="td5"><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td class="td6" colspan="2">
 							<input id="txtPaytype" type="text" style="float:left; width:90%;"/>
-							<select id="combPaytype" style="float:left; width:10%;"></select>
+							<select id="combPaytype" style="float:left; width:10%;"> </select>
 						</td>
 						<td class="td8" align="right">
                             <input id="chkCancel" type="checkbox"/>
@@ -1006,11 +1053,11 @@
 						<td class="td2" colspan="7">
 						<input id="txtPost" type="text" style="float:left; width:130px;"/>
 						<input id="txtAddr" type="text" style="float:left; width:550px;"/>
-						<select id="combAddr" style="float:left;width: 20px;"></select></td>
+						<select id="combAddr" style="float:left;width: 20px;"> </select></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-						<td class="td2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>
+						<td class="td2"><select id="cmbTrantype" class="txt c1" name="D1" > </select></td>
 						<td class="td3"><span> </span><a id='lblContract' class="lbl"> </a></td>
 						<td class="td4" colspan="2">
 							<input id="txtContract" type="text" class="txt c1"/>
@@ -1042,7 +1089,7 @@
 					<tr>
 						<td class="td1"><span> </span><a id="lblOrdcno" class="lbl btn"> </a></td>
 						<td class="td2" colspan="4"><input id="txtOrdcno" type="text" class="txt c1" /></td>
-						<td></td>
+						<td> </td>
 						<td><input id="btnOrdc" type="button" class="txt c1" value="批次轉採購單" style="display:none;" /></td>
 					</tr>
 					<tr>
@@ -1077,7 +1124,7 @@
 					<td align="center" style="width:100px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:100px;">已採購量<br>未採購量</td>
-					<td align="center" style="width:200px;">備註<br>訂單號碼/訂序</a></td>
+					<td align="center" style="width:200px;">備註<br>訂單號碼/訂序</td>
 					<td align="center" style="width:100px;"><a id='lblLdates'> </a></td>
 					<td align="center" style="width:50px;">詢價<br>記錄</td>
 					<td align="center" style="width:50px;">歷史詢<br>價記錄</td>
