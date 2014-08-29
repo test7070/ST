@@ -308,7 +308,7 @@
 							chack_accu=true;
 							btnOk();
 						}else{
-							alert(' 請購金額累計='+q_trv(ordb_total)+' \r 本次請購金額='+q_trv(bbs_total)+' \r 預估金額='+q_trv(accu_total)+' \r ----------------------------------------- \r差額='+q_trv(Math.abs(q_sub(accu_total,q_add(bbs_total,ordb_total)))));
+							alert(' 請購預算額度='+q_trv(accu_total)+' \r 已請購金額='+q_trv(ordb_total)+' \r 本次請購金額='+q_trv(bbs_total)+' \r ----------------------------------------- \r可用額度='+q_trv(Math.abs(q_sub(accu_total,q_add(bbs_total,ordb_total)))));
 						}
 						
 						break;
