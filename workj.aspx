@@ -22,9 +22,9 @@
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [];
-            var bbsNum = [];
-            var bbtNum = [];
-            var bbmMask = [];
+            var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
+            var bbtNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
+            var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99']];
             var bbsMask = [];
             var bbtMask = [];
             q_sqlCount = 6;
@@ -33,12 +33,13 @@
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
-            brwCount2 = 10;
+            brwCount2 = 6;
 
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtPicno_', 'btnPicno_', 'img', 'noa', 'txtPicno_', 'img_b.aspx']
             	,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
-            	,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,product,spec,emount,eweight', 'txtUno__,txtProductno__,txtProduct__,,txtMount__,txtWeight__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']);
+            	,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,product,spec,emount,eweight', 'txtUno__,txtProductno__,txtProduct__,,txtMount__,txtWeight__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
+            	,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtNick', 'cust_b.aspx']);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -500,18 +501,21 @@
 				<table class="tview" id="tview" >
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
+						<td style="width:100px; color:black;"><a id='vewCust'> </a></td>
 						<td style="width:100px; color:black;"><a id='vewDatea'> </a></td>
+						<td style="width:100px; color:black;"><a id='vewOdate'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
+						<td id='nick' style="text-align: center;">~nick</td>
 						<td id='datea' style="text-align: center;">~datea</td>
+						<td id='odate' style="text-align: center;">~odate</td>
 					</tr>
 				</table>
 			</div>
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
@@ -532,14 +536,23 @@
 						<td><input id="txtOdate"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblCust" class="lbl btn"> </a></td>
+						<td colspan="2">
+							<input id="txtCustno"  type="text"  class="txt" style="width:45%;float:left;"/>
+							<input id="txtCust"  type="text"  class="txt" style="width:55%;float:left;"/>
+							<input id="txtNick"  type="text"  class="txt" style="display:none;"/>
+						</td>
 						<td><span> </span><a id="lblSite" class="lbl"> </a></td>
 						<td><input id="txtSite"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id="lblTagcolor" class="lbl"> </a></td>
 						<td><input id="txtTagcolor"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblChktype" class="lbl"> </a></td>
-						<td><input id="txtChktype"  type="text"  class="txt c1"/></td>
 					</tr>
-					
+					<tr>
+						<td><span> </span><a id="lblTrantype" class="lbl"> </a></td>
+						<td colspan="2"><input id="txtTrantype"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblChktype" class="lbl"> </a></td>
+						<td colspan="2"><input id="txtChktype"  type="text"  class="txt c1"/></td>
+					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td colspan="6"><input id="txtMemo" type="text" class="txt c1"/></td>
