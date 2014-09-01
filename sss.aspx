@@ -76,7 +76,7 @@
 				} else {
 					$('#btnSsspart').hide();
 				}
-				if (q_getPara('sys.comp').indexOf('永勝') > -1 || q_getPara('sys.comp').indexOf('楊家') > -1) {
+				if (q_getPara('sys.comp').indexOf('永勝') > -1 || q_getPara('sys.comp').indexOf('楊家') > -1 || q_getPara('sys.comp').indexOf('德芳') > -1) {
 					$('#sbutton').hide();
 					$('#btnLabases').hide();
 					$('#btnSaladjust').hide();

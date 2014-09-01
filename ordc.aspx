@@ -466,7 +466,7 @@
 					$('#btnImport').val('進口欄位顯示');
 				}
 				
-				if (q_getPara('sys.comp').indexOf('楊家') > -1){
+				if (q_getPara('sys.comp').indexOf('楊家') > -1 || q_getPara('sys.comp').indexOf('德芳') > -1){
 					$('#lblOrdb').hide();
 					$('#txtOrdbno').hide();
 					$('.floata').hide();
