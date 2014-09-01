@@ -573,7 +573,7 @@
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"></td>
-						<td style="width:80px;"><a id='lbl_product'>品名</a></td>
+						<td style="width:80px;" ><a id='lbl_product'>品名</a></td>
 						<td style="width:150px;"><a id='lbl_pic'>形狀</a></td>
 						<td style="width:80px;"><a id='lbl_picno'>形狀編號</a></td>
 						<td style="width:100px;"><a id='lbl_imgpara'>參數</a></td>
