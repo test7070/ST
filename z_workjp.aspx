@@ -17,19 +17,40 @@
 		<script type="text/javascript">
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_workjp');
+                q_gf('', 'z_workjp');       
             });
+            function getLocation(){
+            	var parser = document.createElement('a');
+				parser.href = document.URL;
+				return parser.protocol+'//'+parser.host;
+				/*
+				parser.href = "http://example.com:3000/pathname/?search=test#hash";
+				parser.protocol; // => "http:"
+				parser.host;     // => "example.com:3000"
+				parser.hostname; // => "example.com"
+				parser.port;     // => "3000"
+				parser.pathname; // => "/pathname/"
+				parser.hash;     // => "#hash"
+				parser.search;   // => "?search=test"*/			
+            }
             function q_gfPost() {
 				$('#q_report').q_report({
 					fileName : 'z_workjp',
 					options : [{
+						type : '0', //[1]
+						name : 'path',
+						value : getLocation()
+					},{
 						type : '6', //[1]
-						name : 'xnoa'
+						name : 'noa'
 					},{
 						type : '1', //[2][3]
 						name : 'xdate'
 					},{
-						type : '2', //[4][5]
+						type : '1', //[4][5]
+						name : 'xodate'
+					},{
+						type : '2', //[6][7]
 						name : 'cust',
 						dbf : 'cust',
 						index : 'noa,comp',
@@ -41,7 +62,11 @@
 				$('#txtXdate1').mask('999/99/99');
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
-				$('#txtXdate2').datepicker();  
+				$('#txtXdate2').datepicker(); 
+				$('#txtXodate1').mask('999/99/99');
+				$('#txtXodate1').datepicker();
+				$('#txtXodate2').mask('999/99/99');
+				$('#txtXodate2').datepicker();  
 	              
 	            var t_para = new Array();
 	            try{
@@ -71,7 +96,7 @@
 	                t_day = t_day>9?t_day+'':'0'+t_day;
 	                $('#txtXdate2').val(t_year+'/'+t_month+'/'+t_day);
 	            }else{
-	            	$('#txtXnoa').val(t_para.noa);
+	            	$('#txtNoa').val(t_para.noa);
 	            }
                 
             }
