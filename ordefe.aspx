@@ -135,7 +135,7 @@
 
 				$('#btnCredit').click(function() {
 					if(!emp($('#txtCustno').val())){
-                        q_box("z_credit.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" + $('#txtCustno').val() + "';"+r_accy+";" + q_cur, 'ordei', "95%", "95%", q_getMsg('btnCredit'));
+                        q_box("z_creditfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({custno:trim($('#txtCustno').val())}) + ";" + r_accy + "_" + r_cno, 'orde', "95%", "95%", m_print);
                     }
 				});
 				////-----------------以下為addr2控制事件---------------
@@ -521,8 +521,15 @@
                     case 'qtxt.query.credit':
                         var as = _q_appendData("tmp0", "", true, true);                     
                         if(as[0]!=undefined){
-                            var total = parseFloat(as[0].total.length==0?"0":as[0].total);
-                            
+                            var credit = parseFloat(as[0].credit.length==0?"0":as[0].credit);
+                            var orde = parseFloat(as[0].orde.length==0?"0":as[0].orde);
+						 	var ordetax = parseFloat(as[0].ordetax.length==0?"0":as[0].ordetax);
+						 	var vcctotal = parseFloat(as[0].vcctotal.length==0?"0":as[0].vcctotal);
+						 	var vcca = parseFloat(as[0].vcca.length==0?"0":as[0].vcca);
+						 	var gqb = parseFloat(as[0].gqb.length==0?"0":as[0].gqb);
+						 	var umm = parseFloat(as[0].umm.length==0?"0":as[0].umm);
+						 	var total = parseFloat(as[0].total.length==0?"0":as[0].total);
+						 	
                             var curorde = 0;
                             var curtotal = 0;
                             
@@ -532,11 +539,16 @@
                             curtotal = total - curorde;
                             if(curtotal<0){
                                 var t_space = '          ';
-                                var msg = as[0].custno+'-'+as[0].cust+'\n'
-                                +'+可用額度：'+(t_space+q_trv(total)).replace(/^.*(.{10})$/,'$1')+'\n'
-                                +'-本張訂單：'+(t_space+q_trv(curorde)).replace(/^.*(.{10})$/,'$1')+'\n'
-                                +'----------------------------'+'\n'
-                                +'額度餘額：'+(t_space+q_trv(curtotal)).replace(/^.*(.{10})$/,'$1');
+                                var msg = as[0].custno+'\n'
+                                +'＋額　　度：'+(t_space+q_trv(credit)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'－未出訂單：'+(t_space+q_trv((orde+ordetax))).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'－應收貨款：'+(t_space+q_trv((vcctotal+vcca-umm))).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'－應收票據：'+(t_space+q_trv(gqb)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'---------------------------------'+'\n' 
+                                +'＋可用額度：'+(t_space+q_trv(total)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'－本張訂單：'+(t_space+q_trv(curorde)).replace(/^.*(.{10})$/,'$1')+'\n'
+                                +'---------------------------------'+'\n'
+                                +'　額度餘額：'+(t_space+q_trv(curtotal)).replace(/^.*(.{10})$/,'$1');
                                 alert(msg);
                                 Unlock(1);
                                 return;
