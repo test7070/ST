@@ -23,20 +23,24 @@
             function q_gfPost() {
 				$('#q_report').q_report({
 					fileName : 'z_bank1',
-					options : [{/* [1]*/
+					options : [{//[1]
+						type : '0',
+						name : 'accy',
+						value : r_accy
+					},{/* [2]*/
                         type : '0', //數量的小數位數
                         name : 'mount_precision',
                         value : q_getPara('rc2.mountPrecision')
-                    }, {/* [2]*/
+                    }, {/* [3]*/
                         type : '0', //價格的小數位數
                         name : 'price_precision',
                         value : q_getPara('rc2.pricePrecision')
-                    }, {/* [3]*/
+                    }, {/* [4]*/
                         type : '0', //重量的小數位數
                         name : 'weight_precision',
                         value : q_getPara('rc2.weightPrecision')
                     },{
-						type : '1',/*[4][5]*/
+						type : '1',/*[5][6]*/
 						name : 'date'
 					}]
 				});
@@ -44,32 +48,12 @@
                 q_popAssign();
                 q_langShow();
                 
-                 $('#txtDate1').mask('999/99/99');
-	             $('#txtDate1').datepicker();
-	             $('#txtDate2').mask('999/99/99');
-	             $('#txtDate2').datepicker();  
-                
-                 var t_date,t_year,t_month,t_day;
-	                t_date = new Date();
-	                t_date.setDate(1);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate1').val(t_year+'/'+t_month+'/'+t_day);
-	                
-	                t_date = new Date();
-	                t_date.setDate(35);
-	                t_date.setDate(0);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate2').val(t_year+'/'+t_month+'/'+t_day);
+                $('#txtDate1').mask('999/99/99');
+	            $('#txtDate1').datepicker();
+	            $('#txtDate2').mask('999/99/99');
+	            $('#txtDate2').datepicker();  
+				$('#txtDate1').val(q_date());
+				$('#txtDate2').val(q_date());
             }
             
             function q_gtPost(t_name) {
