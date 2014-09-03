@@ -135,7 +135,7 @@
 
 				$('#btnCredit').click(function() {
 					if(!emp($('#txtCustno').val())){
-                        q_box("z_credit.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" + $('#txtCustno').val() + "';"+r_accy+";" + q_cur, 'ordei', "95%", "95%", q_getMsg('btnCredit'));
+                        q_box("z_creditfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({custno:trim($('#txtCustno').val())}) + ";" + r_accy + "_" + r_cno, 'orde', "95%", "95%", m_print);
                     }
 				});
 				////-----------------以下為addr2控制事件---------------
