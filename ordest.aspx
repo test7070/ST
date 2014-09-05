@@ -926,24 +926,27 @@
                             sum();
                         });
                         $('#btnOrdet_' + j).click(function() {
-                            var b_seq = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-                            var t_productno = trim($('#txtProductno_' + b_seq).val());
-                            //var t_uno = trim($('#txtUno_' + b_seq).val());
-                            var t_lengthb = dec(trim($('#txtLengthb_' + b_seq).val()));
-                            var t_dime = dec(trim($('#txtDime_' + b_seq).val()));
-                            var t_width = dec(trim($('#txtWidth_' + b_seq).val()));
-                            var t_radius = dec(trim($('#txtRadius_' + b_seq).val()));
-                            var t_unit = trim($('#txtUnit_' + b_seq).val());
-                            var t_where = ' 1=1 ' + q_sqlPara2("productno", t_productno)
-                            // +    q_sqlPara2("noa", t_uno)
-                            + (t_lengthb > 0 ? ' and lengthb >= ' + t_lengthb : '') + (t_width > 0 ? ' and width >= ' + t_width : '') + (t_radius > 0 ? ' and radius >= ' + t_radius : '');
-                            //+ q_sqlPara2("unit", t_unit);
-                            if ($('#cmbKind').val().substr(0, 1) == 'B')
-                                t_where += q_sqlPara2('dime', (t_dime - 0.1), (t_dime + 0.1));
-                            else
-                                t_where += q_sqlPara2('dime', (t_dime * 0.93), (t_dime * 1.07));
-                            qBoxNo3id = b_seq;
-                            q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'uccc', "95%", "80%", q_getMsg('popOrdet'));
+                            
+                            var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+                            qBoxNo3id = n;
+							var t_where = ' 1=1 and radius=0 ';
+							var t_productno = trim($('#txtProductno_' + n).val());
+							var t_bdime = dec($('#txtDime_' + n).val());
+							var t_edime = dec($('#txtDime_' + n).val());
+							var t_width = dec($('#txtWidth_' + n).val());
+							var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
+							var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
+							
+							var t_array = {productno:t_productno
+									,bdime:t_bdime
+									,edime:t_edime
+									,width:t_width
+									,blength:t_blengthb
+									,elength:t_elengthb}
+
+							q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;;" + encodeURIComponent(JSON.stringify(t_array)), 'uccc', "95%", "95%", q_getMsg('popUccc'));
+                        	
+                        
                         });
                     }
                 }

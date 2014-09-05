@@ -151,7 +151,7 @@
 								}
 							}
 							if (b_ret && b_ret[0] != undefined) {
-								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtCustno,txtClass,txtProductno,txtProduct,txtUnit,txtDime,txtWidth,txtLengthb,txtSpec,txtOrdeno,txtNo2,txtWeight,txtMount,txtTheory,txtSize,txtUno,txtMemo', b_ret.length, b_ret, 'custno,class,productno,product,unit,dime,width,lengthb,spec,noa,no2,weight,mount,theory,size,uno,memo', 'txtProductno');
+								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtCustno,txtComp,txtClass,txtProductno,txtProduct,txtUnit,txtDime,txtWidth,txtLengthb,txtSpec,txtOrdeno,txtNo2,txtWeight,txtMount,txtTheory,txtSize,txtUno,txtMemo', b_ret.length, b_ret, 'custno,cust,class,productno,product,unit,dime,width,lengthb,spec,noa,no2,weight,mount,theory,size,uno,memo', 'txtProductno');
 								/// 最後 aEmpField 不可以有【數字欄位】
 								var t_where = 'where=^^ 1=0 ';
 								for (var i = 0; i < ret.length; i++) {
@@ -179,7 +179,7 @@
 								}
 							}
 							if (b_ret[0] != undefined) {
-								ret = q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtGmount,txtGweight,txtWidth,txtLengthb', b_ret.length, b_ret, 'uno,eordmount,eordweight,width,lengthb', 'txtUno', '__');
+								ret = q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtGmount,txtGweight,txtWidth,txtLengthb', b_ret.length, b_ret, 'uno,emount,eweight,width,lengthb', 'txtUno', '__');
 								/// 最後 aEmpField 不可以有【數字欄位】
 							}
 							sum();
@@ -239,7 +239,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['ordeno']) {
+				if (parseFloat(as['mount'].length==0?"0":as['mount'])==0 && parseFloat(as['weight'].length==0?"0":as['weight'])==0) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -296,15 +296,15 @@
 							var t_width = dec($('#txtWidth_' + n).val());
 							var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
 							var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
-							if (t_bdime == 0 && t_edime == 0) {
-								t_edime = Number.MAX_VALUE;
-							}
-							t_where += " and width >=" + t_width;
-							t_where += q_sqlPara2('productno', t_productno);
-							t_where += " and (dime between " + t_bdime + " and " + t_edime + ") ";
-							if (dec($('#txtLengthb_' + n).val()) > 0)
-								t_where += " and (lengthb between " + t_blengthb + " and " + t_elengthb + ") ";
-							q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'uccc', "95%", "95%", q_getMsg('popUccc'));
+							
+							var t_array = {productno:t_productno
+									,bdime:t_bdime
+									,edime:t_edime
+									,width:t_width
+									,blength:t_blengthb
+									,elength:t_elengthb}
+
+							q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;;" + encodeURIComponent(JSON.stringify(t_array)), 'uccc', "95%", "95%", q_getMsg('popUccc'));
 						});
 
 					}
@@ -657,7 +657,10 @@
 							<input id="txtNoq.*" type="text" style="display: none;"/>
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						<td><input id="txtCustno.*" type="text" class="txt c1"/></td>
+						<td>
+							<input id="txtCustno.*" type="text" class="txt c1" style="display:none;"/>
+							<input id="txtComp.*" type="text" class="txt c1"/>
+						</td>
 						<td><input id="txtProductno.*" type="text" class="txt c1"/></td>
 						<td><input id="txtClass.*" type="text" class="txt c1"/></td>
 						<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
