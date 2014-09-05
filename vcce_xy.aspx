@@ -18,8 +18,8 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "vcce";
-			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtSales'];
-			var q_readonlys = ['txtStore'];
+			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtSales','txtDriver','txtCardeal'];
+			var q_readonlys = ['txtCustno','txtComp','txtOrdeno','txtOdate','txtAdjweight'];
 			var bbmNum = [];
 			var bbsNum = [['txtAdjcount', 10, 0, 1], ['txtAdjweight', 10, 0, 1]];
 			var bbmMask = [];
@@ -30,9 +30,10 @@
 			brwNowPage = 0;
 			brwKey = 'Datea';
 			aPop = new Array(
-				['txtOrdeno', '', 'orde', 'noa,custno,comp', 'txtOrdeno,txtCustno,txtComp', ''],
+				//['txtOrdeno', '', 'vcc', 'noa,custno,comp', 'txtOrdeno', ''],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
+				['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
 
@@ -41,7 +42,7 @@
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-
+				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
 			});
 
 			function main() {
@@ -58,25 +59,17 @@
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
 
-				var t_where = "where=^^ 1=1  group by post,addr^^";
-				q_gt('custaddr', t_where, 0, 0, 0, "");
-
-
-				$('#btnOrdeimport').click(function() {
+				$('#btnVccimport').click(function() {
 					var ordeno = $('#txtOrdeno').val();
-					var t_where = " 1=1 and noa in (select noa from view_orde where stype='"+$('#cmbStype').val()+"')";
-					if (ordeno.length > 0)
-						t_where += " and noa='" + ordeno + "'";
-					t_where += q_sqlPara2('custno', $('#txtCustno').val());
-					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'orde', "95%", "95%", q_getMsg('popOrde'));
+					var t_where = "noa in (select noa from view_vccs where isnull(mount,0)-isnull(tranmoney2,0)>0 or isnull(tranmoney3,0)>0 and noa not in(select ordeno from view_vcces where isnull(enda,0)=0 and noa!='"+$('#txtNoa').val()+"' ) group by noa )";
+					q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcc', "95%", "95%", $('#btnVccimport').val());
 				});
-				
 
 				$('#txtOrdeno').change(function() {
 					var t_ordeno = trim($('#txtOrdeno').val());
 					if (!emp(t_ordeno)) {
-						var t_where = "where=^^ noa='" + t_ordeno + "' ^^";
-						q_gt('ordei', t_where, 0, 0, 0, "", r_accy);
+						var t_where = "where=^^ noa='" + t_ordeno + "' and noa in (select noa from view_vccs where isnull(mount,0)-isnull(tranmoney2,0)>0 or isnull(tranmoney3,0)>0 and noa not in(select ordeno from view_vcces where isnull(enda,0)=0 and noa!='"+$('#txtNoa').val()+"' ) group by noa )^^";
+						q_gt('view_vcc', t_where, 0, 0, 0, "", r_accy);
 					}
 				});
 
@@ -85,17 +78,27 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
-					case 'orde':
+					case 'vcc':
 						if (q_cur > 0 && q_cur < 4) {
 							if (!b_ret || b_ret.length == 0){
 								b_pop = '';
 								return;
 							}
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtProductno,txtProduct,txtUnit,txtSpec,txtMount', b_ret.length, b_ret, 'noa,no2,productno,product,unit,spec,mount', 'txtProductno');
-							if (b_ret[0].noa != undefined) {
-								var t_where = "noa='" + b_ret[0].noa + "'";
-								q_gt('orde', t_where, 0, 0, 0, "", r_accy);
-							}
+							//清除已存在bbs的資料
+							for (var i = 0; i < b_ret.length; i++) {
+								for (var j = 0; j < q_bbsCount; j++) {
+	                                if (b_ret[i].noa==$('#txtOrdeno_'+j).val()) {
+	                                    b_ret.splice(i, 1);
+	                                    i--;
+	                                    break;
+	                                }
+                                }
+                                if(b_ret[i].typea=='2'){
+                                	b_ret[i].total=-1*dec(b_ret[i].total);
+                                }
+                            }
+							
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtCustno,txtComp,txtOdate,txtAdjweight', b_ret.length, b_ret, 'noa,custno,comp,datea,total', 'txtOrdeno');
 						}
 						break;
 					case q_name + '_s':
@@ -105,22 +108,36 @@
 				b_pop = '';
 			}
 
-			var focus_addr = '';
+			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					
-					case 'orde':
-						var orde = _q_appendData("orde", "", true);
-						if (orde[0] != undefined)
-							$('#txtCustno').val(orde[0].custno);
-						$('#txtComp').val(orde[0].comp);
-						$('#txtTel').val(orde[0].tel);
-						$('#txtFax').val(orde[0].fax);
-						$('#txtTrantype').val(orde[0].trantype);
-						$('#txtAddr_post').val(orde[0].addr2);
-						$('#txtOrdeno').val(orde[0].noa);
+					case 'cno_acomp':
+						var as = _q_appendData("acomp", "", true);
+						if (as[0] != undefined) {
+							z_cno = as[0].noa;
+							z_acomp = as[0].acomp;
+							z_nick = as[0].nick;
+						}
 						break;
-					
+					case 'view_vcc':
+						var as_vcc = _q_appendData("view_vcc", "", true);
+						if (as_vcc[0] != undefined){
+							//清除已存在bbs的資料
+							for (var i = 0; i < as_vcc.length; i++) {
+								for (var j = 0; j < q_bbsCount; j++) {
+	                                if (as_vcc[i].noa==$('#txtOrdeno_'+j).val()) {
+	                                	alert('出貨資料已存在表身');
+	                                    as_vcc.splice(i, 1);
+	                                    i--;
+	                                    break;
+	                                }
+                                }
+                            }
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtCustno,txtComp,txtOdate,txtAdjweight', as_vcc.length, as_vcc, 'noa,custno,comp,datea,total', 'txtOrdeno');
+						}else{
+							alert('出貨單已派車或無出貨資料!!');
+						}
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -152,7 +169,7 @@
 				if (q_cur > 0 && q_cur < 4)
 					return;
 
-				q_box('vcce_s.aspx', q_name + '_s', "500px", "360px", q_getMsg("popSeek"));
+				q_box('vcce_xy_s.aspx', q_name + '_s', "500px", "460px", q_getMsg("popSeek"));
 			}
 
 			function bbsAssign() {
@@ -169,10 +186,10 @@
 			function btnIns() {
 				_btnIns();
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
+				$('#txtCno').val(z_cno);
+				$('#txtAcomp').val(z_acomp);
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
-				var t_where = "where=^^ 1=1  group by post,addr^^";
-				q_gt('custaddr', t_where, 0, 0, 0, "");
 			}
 
 			function btnModi() {
@@ -185,7 +202,7 @@
 
 			function btnPrint() {
 				t_where = "noa='" + $('#txtNoa').val() + "'";
-				q_box("z_vccep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				q_box("z_vcce_xyp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {
@@ -193,10 +210,13 @@
 
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
 				_btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
+				
+				if (q_cur == 1 || q_cur == 2)
+					q_func('qtxt.query.c0', 'vcce_xy.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val())+ ';0');
 			}
 
 			function bbsSave(as) {
-				if (!as['product']) {
+				if (!as['ordeno']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -265,7 +285,11 @@
 			}
 
 			function btnDele() {
-				_btnDele();
+				//_btnDele();
+				if (!confirm(mess_dele))
+					return;
+				q_cur = 3;
+				q_func('qtxt.query.c2', 'vcce_xy.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val())+ ';0');
 			}
 
 			function btnCancel() {
@@ -274,6 +298,21 @@
 
 			function q_popPost(s1) {
 				switch (s1) {
+				}
+			}
+			
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'qtxt.query.c0':
+						q_func('qtxt.query.c1', 'vcce_xy.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val())+';1');
+						break;
+					case 'qtxt.query.c1':
+						
+						break;
+					case 'qtxt.query.c2':
+						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
+						break;
+						
 				}
 			}
 
@@ -423,19 +462,6 @@
 				width: 100%;
 				height: 98%;
 			}
-
-			.tbbs .td1 {
-				width: 4%;
-			}
-			.tbbs .td2 {
-				width: 6%;
-			}
-			.tbbs .td3 {
-				width: 8%;
-			}
-			.tbbs .td4 {
-				width: 2%;
-			}
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -448,15 +474,17 @@
 				<table class="tview" id="tview"   border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
-						<td align="center" style="width:25%"><a id='vewDatea'> </a></td>
+						<td align="center" style="width:20%"><a id='vewDatea'> </a></td>
 						<td align="center" style="width:30%"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:35%"><a id='vewComp'> </a></td>
+						<td align="center" style="width:25%">司機</td>
+						<td align="center" style="width:20%">車號</td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
 						<td align="center" id='datea'>~datea</td>
 						<td align="center" id='noa'>~noa</td>
-						<td align="center" id='comp,4'>~comp,4</td>
+						<td align="center" id='driver'>~driver</td>
+						<td align="center" id='carno'>~carno</td>
 					</tr>
 				</table>
 			</div>
@@ -465,54 +493,54 @@
 					<tr class="tr0" style="height: 0px;">
 						<td class="td1" style="width: 120px;"> </td>
 						<td class="td2" style="width: 105px;"> </td>
-						<td class="td4" style="width: 105px;"> </td>
-						<td class="td5" style="width: 105px;"> </td>
-						<td class="td5" style="width: 105px;"> </td>
 						<td class="td3" style="width: 105px;"> </td>
 						<td class="td4" style="width: 105px;"> </td>
+						<td class="td5" style="width: 105px;"> </td>
 						<td class="td6" style="width: 105px;"> </td>
+						<td class="td7" style="width: 105px;"> </td>
+						<td class="td8" style="width: 105px;"> </td>
 					</tr>
 					<tr class="tr1">
 						<td class="td1"><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td class="td2"><input id="txtDatea"  type="text" class="txt c1"/></td>
-						<td class="td4"><span> </span><a id="lblNoa" class="lbl"> </a></td>
-						<td class="td5" colspan="2"><input id="txtNoa"  type="text" class="txt c1"/></td>
-						<td class="td3"><span> </span><a id="lblOrdeno" class="lbl"> </a></td>
-						<td class="td4"><input id="txtOrdeno"  type="text" class="txt c1"/></td>
-						<td class="td6"><input id="btnOrdeimport" type="button"/></td>
+						<td class="td3"><span> </span><a id="lblNoa" class="lbl"> </a></td>
+						<td class="td4" colspan="2"><input id="txtNoa"  type="text" class="txt c1"/></td>
+						<td class="td5"><span> </span> <a class="lbl"> 出貨單號</a></td>
+						<td class="td6"><input id="txtOrdeno"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr2">
 						<td class="td1"><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCno"  type="text" class="txt c1"/></td>
 						<td class="td3" colspan="3"><input id="txtAcomp"  type="text" class="txt c7"/></td>
-						
+						<td class="td6"> </td>
+						<td class="td7"><input id="btnVccimport" type="button" value="出貨、寄出匯入"/></td>
 					</tr>
-					
 					<tr class="tr6">
 						<td class="td1"><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCardealno"  type="text" class="txt c1"/></td>
-						<td class="td3" colspan="3"><input id="txtCardeal"  type="text" class="txt c1"/></td>
-						<td class="td6"><span> </span><a id="lblCarno" class="lbl"> </a></td>
-						<td class="td7" colspan="2"><input id="txtCarno"  type="text" class="txt c1"/></td>
+						<td class="td3" colspan="3"><input id="txtCardeal"  type="text" class="txt c7"/></td>
 					</tr>
-					
+					<tr class="tr6">
+						<td class="td1"><span> </span><a id="lblDriver" class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtDriverno"  type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtDriver"  type="text" class="txt c1"/></td>
+						<td class="td4"><span> </span><a id="lblCarno" class="lbl"> </a></td>
+						<td class="td5"><input id="txtCarno"  type="text" class="txt c1"/></td>
+					</tr>
 					<tr class="tr6">
 						<td class="td1"><span> </span><a id="lblSales" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtSalesno"  type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtSales"  type="text" class="txt c1"/></td>
-						<td class="td1"><span> </span><a id="lblDriver" class="lbl btn"> </a></td>
-						<td class="td2"><input id="txtDriverno"  type="text" class="txt c1"/></td>
-						<td class="td3"><input id="txtDriver"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr7">
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td class="td2" colspan="8"><textarea id="txtMemo" cols="5" rows="10" style="width: 99%;height: 50px;"> </textarea></td>
 					</tr>
 					<tr class="tr7">
-						<td class="td5"><span> </span><a id='lblWorker' class="lbl"> </a></td>
-						<td class="td6"><input id="txtWorker" type="text" class="txt c1" /></td>
-						<td class="td7"><span> </span><a id='lblWorker2' class="lbl"> </a></td>
-						<td class="td8"><input id="txtWorker2" type="text" class="txt c1" /></td>
+						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
+						<td class="td2"><input id="txtWorker" type="text" class="txt c1" /></td>
+						<td class="td3"><span> </span><a id='lblWorker2' class="lbl"> </a></td>
+						<td class="td4"><input id="txtWorker2" type="text" class="txt c1" /></td>
 					</tr>
 				</table>
 			</div>
@@ -523,12 +551,12 @@
 							<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 						</td>
 						<td align="center" style="width:10%;">客戶編號</td>
-						<td align="center" style="width:10%;">客戶名稱</td>
+						<td align="center" style="width:18%;">客戶名稱</td>
 						<td align="center" style="width:10%;">出貨單號</td>
-						<td align="center" style="width:20%;">出貨日期</td>
+						<td align="center" style="width:10%;">出貨日期</td>
 						<td align="center" style="width:10%;">出貨金額</td>
-						<td align="center" style="width:4%;">已送貨</td>
-						<td align="center" style="width:7%;">已收金額</td>
+						<td align="center" style="width:5%;">已送貨</td>
+						<td align="center" style="width:10%;">已收金額</td>
 						<td align="center"><a id='lblMemo_s'> </a></td>
 					</tr>
 					<tr style='background:#cad3ff;'>

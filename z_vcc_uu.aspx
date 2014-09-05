@@ -24,6 +24,44 @@
 				_q_boxClose();
 				q_getId();
 				q_gt('part', '', 0, 0, 0);
+				
+				$('#q_report').click(function(e) {
+					if(sssAs[0] != undefined){
+						if(sssAs[0].noa=='31'){ //產品經理
+							$('#txtXtgg1a').val('S03');
+							$('#txtXtgg2a').val('S03');
+							$('#txtXtgg1b').val('Teknimed SAS');
+							$('#txtXtgg2b').val('Teknimed SAS');		
+							$('#txtXtgg1a').attr('disabled','disabled');
+							$('#txtXtgg2a').attr('disabled','disabled');
+							$('#btnXtgg1').hide();
+							$('#btnXtgg2').hide();
+						}else{ //業務經理
+							$('#txtXsales1a').val(sssAs[0].noa);
+							$('#txtXsales1a').attr('disabled','disabled');
+							$('#txtXsales2a').val(sssAs[0].noa);
+							$('#txtXsales2a').attr('disabled','disabled');
+							$('#txtXsales1b').val(sssAs[0].namea);
+							$('#txtXsales2b').val(sssAs[0].namea);
+							
+							$('#Xstype').hide();
+							$('#Xgroupano').hide();
+							$('#Salesgroup').hide();
+							$('#Xgroupbno').hide();
+							$('#Xcust').hide();
+							$('#Xproduct').hide();
+							$('#Xtgg').hide();
+							$('#Xpartno').hide();
+							$('#Xshowvalue').hide();
+							$('#btnXsales1').hide();
+							$('#btnXsales2').hide();
+							
+							//$('#txtSalesgroup').val(sssAs[0].salesgroup);
+							//$('#txtSalesgroup').attr('disabled','disabled');
+						}
+					}
+				});
+				
 			});
 			function q_gfPost() {
 				$('#q_report').q_report({
@@ -154,9 +192,29 @@
 						$('#btnXtgg1').hide();
 						$('#btnXtgg2').hide();
 					}else{ //業務經理
-						$('#txtSalesgroup').val(sssAs[0].salesgroup);
-						$('#txtSalesgroup').attr('disabled','disabled');
+						$('#txtXsales1a').val(sssAs[0].noa);
+						$('#txtXsales1a').attr('disabled','disabled');
+						$('#txtXsales2a').val(sssAs[0].noa);
+						$('#txtXsales2a').attr('disabled','disabled');
+						$('#txtXsales1b').val(sssAs[0].namea);
+						$('#txtXsales2b').val(sssAs[0].namea);
+						
+						$('#Xstype').hide();
+						$('#Xgroupano').hide();
+						$('#Salesgroup').hide();
+						$('#Xgroupbno').hide();
+						$('#Xcust').hide();
+						$('#Xproduct').hide();
+						$('#Xtgg').hide();
+						$('#Xpartno').hide();
+						$('#Xshowvalue').hide();
+						$('#btnXsales1').hide();
+						$('#btnXsales2').hide();
+						
+						//$('#txtSalesgroup').val(sssAs[0].salesgroup);
+						//$('#txtSalesgroup').attr('disabled','disabled');
 					}
+					//1030905 統一業務都只能看自己的其他條件鎖起來 不能選只能選日期
 				}
 				firstRun = false;
 			}
