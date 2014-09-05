@@ -162,7 +162,11 @@
                         type : '8', //[37]2
                         name : 'yproductno',
                         value : t_ucc.split(',')
-                    }]
+                    }, {
+						type : '8', //[38] 3
+						name : 'xaction',
+						value : "rc2s@進貨,inas@入庫,cuts@裁剪,cubu@製管,vccs@出貨".split(',')
+					}]
 				});
 				q_popAssign();
 				q_getFormat();
