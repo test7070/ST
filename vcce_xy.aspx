@@ -31,7 +31,7 @@
 			brwKey = 'Datea';
 			aPop = new Array(
 				//['txtOrdeno', '', 'vcc', 'noa,custno,comp', 'txtOrdeno', ''],
-				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+				['txtSalesno', 'lblSaless', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
@@ -528,7 +528,7 @@
 						<td class="td5"><input id="txtCarno"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr6">
-						<td class="td1"><span> </span><a id="lblSales" class="lbl btn"> </a></td>
+						<td class="td1"><span> </span><a id="lblSaless" class="lbl btn">派車人員 </a></td>
 						<td class="td2"><input id="txtSalesno"  type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtSales"  type="text" class="txt c1"/></td>
 					</tr>

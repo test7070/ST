@@ -17,12 +17,9 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2','txtTranstart'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
-			var bbmNum = [
-				['txtPrice', 10, 3, 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],
-				['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1], ['txtTranadd', 11, 2, 1]
-			];
+			var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1]];
 			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -41,14 +38,12 @@
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-				['txtSalesno2', 'lblSales2', 'sss', 'noa,namea', 'txtSalesno2,txtSales2', 'sss_b.aspx'],
 				['txtCustno2', 'lblCust2', 'cust', 'noa,comp', 'txtCustno2,txtComp2', 'cust_b.aspx'],
 				//['txtPost', 'lblAddr', 'addr', 'post,addr', 'txtPost,txtAddr', 'addr_b.aspx'],
 				//['txtPost2', 'lblAddr2', 'addr', 'post,addr', 'txtPost2,txtAddr2', 'addr_b.aspx'],
 				['txtPost', 'lblAddr', 'addr2', 'noa,post', 'txtPost', 'addr2_b.aspx'],
 				['txtPost2', 'lblAddr2', 'addr2', 'noa,post', 'txtPost2', 'addr2_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
-				['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx']
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx']
 			);
 
 			var isinvosystem = false;
@@ -82,16 +77,7 @@
 					t1 = q_add(t1, dec(q_float('txtTotal_' + j)));
 				}
 				$('#txtMoney').val(round(t1, 0));
-				var price = dec($('#txtPrice').val());
-				var addMoney = dec(q_getPara('sys.tranadd'));
-				var addMul = dec($('#txtTranadd').val());
-				var total = 0
-				var transtyle = $.trim($('#cmbTranstyle').val());
-				if(transtyle=='4' || transtyle=='9'){
-					price = 0;
-				}
-				total = q_add(q_mul(addMoney,addMul),price);
-				q_tr('txtTranmoney', total);
+				
 				calTax();
 				q_tr('txtTotalus', round(q_mul(q_float('txtTotal'), q_float('txtFloata')), 0));
 			}
@@ -100,9 +86,9 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
-				bbmNum = [	['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1], ['txtTranadd', 11, 2, 1]];
+				bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1], ['txtTranmoney2', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTranmoney3', 9, q_getPara('vcc.mountPrecision'), 1]];
-				q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
+				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
@@ -123,26 +109,12 @@
 					if ($('#txtMon').attr("readonly")=="readonly" && (q_cur==1 || q_cur==2))
 						q_msg($('#txtMon'), "月份要另外設定，請在"+q_getMsg('lblMemo')+"的第一個字打'*'字");
 				});
-				
-				$('#txtPost').change(function(){
-					GetTranPrice();
-				});
-				$('#txtPost2').change(function(){
-					GetTranPrice();
-				});
-				$('#txtTranstartno').change(function(){
-					GetTranPrice();
-				});
+								
 				$('#txtCardealno').change(function(){
-					GetTranPrice();
 					//取得車號下拉式選單
 					var thisVal = $(this).val();
 					var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
 					q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
-				});
-				
-				$('#cmbTranstyle').change(function(){
-					GetTranPrice();
 				});
 				
 				$('#btnOrdes').click(function() {
@@ -194,13 +166,6 @@
 					sum();
 				});
 				
-				$('#txtPrice').change(function() {
-					sum();
-				});
-				
-				$('#txtTranadd').change(function() {
-					sum();
-				});
 				
 				$('#txtAddr').change(function() {
 					var t_custno = trim($(this).val());
@@ -234,10 +199,6 @@
 				if (isinvosystem)
 					$('.istax').hide();
 					
-				if (q_getPara('sys.menu').substr(0,3)!='qra'){
-					$('#lblTranadd').hide()
-					$('#txtTranadd').hide()
-				}
 			}
 
 			function bbsGetOrdeList(){
@@ -261,25 +222,6 @@
 						q_gt('view_ordes', t_where, 0, 0, 0, "GetOrdeList");
 					}
 				}
-			}
-			
-			function GetTranPrice(){
-				var Post2 = $.trim($('#txtPost2').val());
-				var Post = $.trim($('#txtPost').val()); 
-				var Transtartno = $.trim($('#txtTranstartno').val()); 
-				var Cardealno = $.trim($('#txtCardealno').val()); 
-				var TranStyle = $.trim($('#cmbTranstyle').val());
-				var Carspecno = $.trim(thisCarSpecno);
-				var t_where = 'where=^^ 1=1 ';
-				t_where += " and post=N'" + (Post2.length>0?Post2:Post) + "' ";
-				t_where += " and transtartno=N'" + Transtartno + "' ";
-				t_where += " and cardealno=N'" + Cardealno + "' ";
-				t_where += " and transtyle=N'" + TranStyle + "' ";
-				if(Carspecno.length > 0){
-					t_where += " and carspecno=N'" + Carspecno + "' ";
-				}
-				t_where += ' ^^';
-				q_gt('addr', t_where, 0, 0, 0, "GetTranPrice");
 			}
 			
 			function q_funcPost(t_func, result) {
@@ -463,7 +405,8 @@
 						for (var i = 0; i < as.length; i++) {
 							stkmount = stkmount + dec(as[i].stkmount);
 						}
-						t_msg = t_msg + "<BR>寄庫量：" + stkmount;
+						if(stkmount!=0)
+							t_msg = t_msg + "<BR>寄庫量：" + stkmount;
 						q_msg($('#txtMount_' + b_seq), t_msg);
 						break;
 					case 'check_store2':
@@ -848,21 +791,13 @@
 				stype_chang();
 			}
 
-			function HiddenTreat(returnType){
-				returnType = $.trim(returnType).toLowerCase();
+			function HiddenTreat(){
 				var hasStyle = q_getPara('sys.isstyle');
 				var isStyle = (hasStyle.toString()=='1'?$('.isStyle').show():$('.isStyle').hide());
 				var hasSpec = q_getPara('sys.isspec');
 				var isSpec = (hasSpec.toString()=='1'?$('.isSpec').show():$('.isSpec').hide());
 				var hasRackComp = q_getPara('sys.rack');
 				var isRack = (hasRackComp.toString()=='1'?$('.isRack').show():$('.isRack').hide());
-				if(returnType=='style'){
-					return (hasStyle.toString()=='1');
-				}else if(returnType=='spec'){
-					return (hasSpec.toString()=='1');
-				}else if(returnType=='rack'){
-					return (hasRackComp.toString()=='1');
-				}
 			}
 			
 			function stype_chang(){
@@ -967,15 +902,6 @@
 						}
 						bbsGetOrdeList();
 						break;
-					case 'txtPost2':
-						GetTranPrice();
-						break;
-					case 'txtPost':
-						GetTranPrice();
-						break;
-					case 'txtTranstartno':
-						GetTranPrice();
-						break;	
 					case 'txtProductno_':
 						bbsGetOrdeList();
 						break;
@@ -1266,31 +1192,20 @@
 							<input id="txtAddr2"  type="text" class="txt c1" style="width: 412px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
-						<td class="td7"><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
-						<td class="td8"><input id="txtTranmoney" type="text" class="txt num c1"/></td>
-					</tr>
-					<tr>
-						<td class="td1"><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
-						<td class="td2"><input id="txtCardealno" type="text" class="txt c1"/></td>
-						<td class="td2"><input id="txtCardeal" type="text" class="txt c1"/></td>
-						<td class="td4"><span> </span><a id='lblCarno' class="lbl"> </a></td>
-						<td class="td5">
-							<input id="txtCarno"  type="text" class="txt" style="width:75%;"/>
-							<select id="combCarno" style="width: 20%;"> </select>
-						</td>
-						<td class="td5"><select id="cmbTranstyle" style="width: 100%;"> </select></td>
-						<td class="td7"><span> </span><a id='lblPrice' class="lbl"> </a></td>
-						<td class="td8"><input id="txtPrice" type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblSales' class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtSalesno" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtSales" type="text" class="txt c1"/></td>
-						<td class="td4"><span> </span><a id='lblTranstart' class="lbl btn"> </a></td>
-						<td class="td5"><input id="txtTranstartno" type="text" class="txt c1"/></td>
-						<td class="td6"><input id="txtTranstart" type="text" class="txt c1"/></td>
-						<td class="td7"><span> </span><a id='lblTranadd' class="lbl"> </a></td>
-						<td class="td8"><input id="txtTranadd" type="text" class="txt num c1"/></td>
+						<td class="td4"><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
+						<td class="td5"><input id="txtCardealno" type="text" class="txt c1"/></td>
+						<td class="td6"><input id="txtCardeal" type="text" class="txt c1"/></td>
+						<td class="td7"><span> </span><a id='lblCarno' class="lbl"> </a></td>
+						<td class="td8">
+							<input id="txtCarno"  type="text" class="txt" style="width:75%;"/>
+							<select id="combCarno" style="width: 20%;"> </select>
+						</td>
+						<!--<td class="td5"><select id="cmbTranstyle" style="width: 100%;"> </select></td>-->
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
