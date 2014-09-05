@@ -54,6 +54,9 @@
                 		alert('請輸入日期。');
                 		return;
                 	}
+                	Lock(1, {
+	                    opacity : 0
+	                });
                 	q_func('qtxt.query.uccp', 'uccp.txt,import,' + encodeURI(t_date) + ';' + encodeURI(t_edate)); 	
                 });
             }
@@ -355,15 +358,16 @@
                         <td><span> </span><a id="lblNoa" class="lbl"> </a></td>
                         <td><input id="txtNoa" type="text" class="txt c1"/></td>
                         <td></td>
-                        <td><input type="button" id="btnImport" value="匯入" class="txt c1"></td>
+                        
                     </tr>
                     <tr>
                     	<td><span> </span><a id="lblDatea" class="lbl">基價日期</a></td>
                         <td><input id="txtDatea" type="text" class="txt c1"/></td>
                     </tr>
                     <tr>
-                    	<td><span> </span><a id="lblEdate" class="lbl">運算截止日</a></td>
+                    	<td><span> </span><a id="lblEdate" class="lbl">庫存運算截止日</a></td>
                         <td><input id="txtEdate" type="text" class="txt c1"/></td>
+                        <td style="text-align: center;"><input type="button" id="btnImport" value="匯入" class="txt" style="width:75%;"></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblWorker" class="lbl"> </a></td>
