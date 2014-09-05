@@ -931,8 +931,8 @@
                             qBoxNo3id = n;
 							var t_where = ' 1=1 and radius=0 ';
 							var t_productno = trim($('#txtProductno_' + n).val());
-							var t_bdime = dec($('#txtDime_' + n).val())-1.5;
-							var t_edime = dec($('#txtDime_' + n).val())+1.5;
+							var t_bdime = dec($('#txtDime_' + n).val())-0.8;
+							var t_edime = dec($('#txtDime_' + n).val())+0.8;
 							var t_width = dec($('#txtWidth_' + n).val());
 							var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
 							var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
