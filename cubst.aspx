@@ -239,7 +239,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['ordeno']) {
+				if (parseFloat(as['mount'].length==0?"0":as['mount'])==0 && parseFloat(as['weight'].length==0?"0":as['weight'])==0) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -296,15 +296,15 @@
 							var t_width = dec($('#txtWidth_' + n).val());
 							var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
 							var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
-							if (t_bdime == 0 && t_edime == 0) {
-								t_edime = Number.MAX_VALUE;
-							}
-							t_where += " and width >=" + t_width;
-							t_where += q_sqlPara2('productno', t_productno);
-							t_where += " and (dime between " + t_bdime + " and " + t_edime + ") ";
-							if (dec($('#txtLengthb_' + n).val()) > 0)
-								t_where += " and (lengthb between " + t_blengthb + " and " + t_elengthb + ") ";
-							q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'uccc', "95%", "95%", q_getMsg('popUccc'));
+							
+							var t_array = {productno:t_productno
+									,bdime:t_bdime
+									,edime:t_edime
+									,width:t_width
+									,blength:t_blengthb
+									,elength:t_elengthb}
+
+							q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + encodeURIComponent(JSON.stringify(t_array)), 'uccc', "95%", "95%", q_getMsg('popUccc'));
 						});
 
 					}
