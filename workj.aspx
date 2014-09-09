@@ -496,7 +496,7 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id='dmain'>
+		<div id='dmain' style="overflow:visible;width: 1200px;">
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview" >
 					<tr>
@@ -562,54 +562,57 @@
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
+						<td></td>
+						<td><input type="button" id="btnOrde" value="轉訂單" /></td>
 					</tr>
 					
 				</table>
 			</div>
-			<div class='dbbs'>
-				<table id="tbbs" class='tbbs'>
-					<tr style='color:white; background:#003366;' >
-						<td style="width:20px;">
-						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
-						</td>
-						<td style="width:20px;"></td>
-						<td style="width:80px;" ><a id='lbl_product'>品名</a></td>
-						<td style="width:150px;"><a id='lbl_pic'>形狀</a></td>
-						<td style="width:80px;"><a id='lbl_picno'>形狀編號</a></td>
-						<td style="width:100px;"><a id='lbl_imgpara'>參數</a></td>
-						<td style="width:80px;"><a id='lbl_lengthb'>單支長</a></td>
-						<td style="width:80px;"><a id='lbl_monnt'>數量</a></td>
-						<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
-						<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
-						<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
-					</tr>
-					<tr  style='background:#cad3ff;'>
-						<td align="center">
-							<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
-							<input id="txtNoq.*" type="text" style="display: none;"/>
-							<input id="txtImgsrc.*"  type="text" style="display: none;"/>
-						</td>
-						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						<td>
-							<input class="txt" id="txtProductno.*" type="text" style="width:95%;"/>
-							<input class="txt" id="txtProduct.*" type="text" style="width:95%;"/>
-							<input id="btnProduct.*" type="button" style="display:none;">
-						</td>
-						<td><img id="imgPic.*" src="" style="width:100px;height:100px;"/></td>
-						<td>
-							<input class="txt" id="txtPicno.*" type="text" style="width:95%;"/>
-							<input id="btnPicno.*" type="button" style="display:none;">
-						</td>
-						<td><input class="txt" id="txtImgpara.*" type="text" style="width:95%;"/></td>
-						<td><input class="txt" id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
-						<td><input class="txt" id="txtMount.*" type="text" style="width:95%;text-align: right;"/></td>
-						<td><input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/></td>
-						<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
-						<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;"/></td>
-					</tr>
-				</table>
-			</div>
 		</div>
+		<div class='dbbs'>
+			<table id="tbbs" class='tbbs'>
+				<tr style='color:white; background:#003366;' >
+					<td style="width:20px;">
+					<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
+					</td>
+					<td style="width:20px;"></td>
+					<td style="width:80px;" ><a id='lbl_product'>品名</a></td>
+					<td style="width:150px;"><a id='lbl_pic'>形狀</a></td>
+					<td style="width:80px;"><a id='lbl_picno'>形狀編號</a></td>
+					<td style="width:100px;"><a id='lbl_imgpara'>參數</a></td>
+					<td style="width:80px;"><a id='lbl_lengthb'>單支長</a></td>
+					<td style="width:80px;"><a id='lbl_monnt'>數量</a></td>
+					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
+					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
+					<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
+				</tr>
+				<tr  style='background:#cad3ff;'>
+					<td align="center">
+						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+						<input id="txtNoq.*" type="text" style="display: none;"/>
+						<input id="txtImgsrc.*"  type="text" style="display: none;"/>
+					</td>
+					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td>
+						<input class="txt" id="txtProductno.*" type="text" style="width:95%;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:95%;"/>
+						<input id="btnProduct.*" type="button" style="display:none;">
+					</td>
+					<td><img id="imgPic.*" src="" style="width:100px;height:100px;"/></td>
+					<td>
+						<input class="txt" id="txtPicno.*" type="text" style="width:95%;"/>
+						<input id="btnPicno.*" type="button" style="display:none;">
+					</td>
+					<td><input class="txt" id="txtImgpara.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt" id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
+					<td><input class="txt" id="txtMount.*" type="text" style="width:95%;text-align: right;"/></td>
+					<td><input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/></td>
+					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;"/></td>
+				</tr>
+			</table>
+		</div>
+		
 		<input id="q_sys" type="hidden" />
 		<div id="dbbt" >
 			<table id="tbbt">

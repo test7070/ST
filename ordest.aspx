@@ -28,7 +28,7 @@
             var q_readonlyt = ['txtTotal', 'txtQuatno', 'txtTheory'];
             var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1]];
             // 允許 key 小數
-            var bbsNum = [['txtPrice', 15, 3, 1],['txtSprice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1], ['txtMount', 10, 2, 1],['txtTheory',10,3,1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
+            var bbsNum = [['txtPrice', 15, 3, 1],['txtSprice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 1, 1], ['txtMount', 10, 2, 1],['txtTheory',10,1,1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbtNum = [['txtMount', 10, 2, 1], ['txtWeight', 10, 3, 1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
@@ -749,7 +749,7 @@
                     style:t_Style,
                     stype:t_Stype,
                     productno:t_Productno,
-                    round:3
+                    round:1
                 };
                 if ($('#cmbKind').val().substr(1, 1) == '4') {//鋼胚
                     q_tr('txtTheory_' + b_seq, round(t_Mount * theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), t_Dime, t_Width, t_Lengthb), 0));
@@ -931,8 +931,8 @@
                             qBoxNo3id = n;
 							var t_where = ' 1=1 and radius=0 ';
 							var t_productno = trim($('#txtProductno_' + n).val());
-							var t_bdime = dec($('#txtDime_' + n).val());
-							var t_edime = dec($('#txtDime_' + n).val());
+							var t_bdime = dec($('#txtDime_' + n).val())-0.8;
+							var t_edime = dec($('#txtDime_' + n).val())+0.8;
 							var t_width = dec($('#txtWidth_' + n).val());
 							var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
 							var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
