@@ -891,8 +891,8 @@
 						<td class="td3"><input id="txtFloata" type="text" class="txt num c1 lef" /></td>
 						<td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td class="td5" colspan="2"><input id="txtTotalus" type="text" class="txt num c1 lef" /></td>
-						<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
-						<td class="td8"><input id="txtApv" type="text" class="txt c1 lef" disabled="disabled" /></td>
+						<!--<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
+						<td class="td8"><input id="txtApv" type="text" class="txt c1 lef" disabled="disabled" /></td>-->
 					</tr>
 					<tr class="tr8 import">
 						<td class="td1"><span> </span><a id='lblLcno' class="lbl"> </a></td>
