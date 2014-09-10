@@ -17,7 +17,7 @@
 			this.errorHandler = null;
 			q_tables = 's';
 			var q_name = "ordb";
-			var q_readonly = ['txtOrdcno','txtWorkgno', 'txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTotalus'];
+			var q_readonly = ['txtOrdcno','txtWorkgno', 'txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTotalus','txtApv'];
 			var q_readonlys = ['txtNo3','txtStdmount', 'txtNo2', 'txtTotal', 'txtC1', 'txtNotv', 'txtOmount','chkEnda'];
 			var bbmNum = [
 				['txtFloata', 10, 5, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],
@@ -255,6 +255,7 @@
                     }
                     q_box("ordc.aspx?"+ r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy + '_' + r_cno, 'ordc', "95%", "95%", q_getMsg("popOrdc"));
                 });
+                
 				$('#chkCancel').click(function(){
 					if($(this).prop('checked')){
 						for(var k=0;k<q_bbsCount;k++){
@@ -262,6 +263,13 @@
 						}
 					}
 				});
+				
+				//判斷核准是否顯示
+				if(q_getPara('sys.project').toUpperCase()=='XY'){
+					$('.apv').show();
+				}else{
+					$('.apv').hide();
+				}
 			}
 
 			function q_funcPost(t_func, result) {
@@ -501,6 +509,11 @@
 					alert("error: btnok!");
 				}
 				
+				//只要修改都會重新送簽核，將核准變回N
+				if(q_getPara('sys.project').toUpperCase()=='XY'){
+					$('#txtApv').val('N');
+				}
+				
 				//清除是否判斷預估
 				chack_accu=false;
 				
@@ -532,6 +545,7 @@
 				}
 				q_nowf();
 				as['noa'] = abbm2['noa'];
+				as['apv'] = abbm2['apv'];
 				return true;
 			}
 
@@ -1051,8 +1065,8 @@
 					<tr>
 						<td class="td1"><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td class="td2" colspan="7">
-						<input id="txtPost" type="text" style="float:left; width:130px;"/>
-						<input id="txtAddr" type="text" style="float:left; width:550px;"/>
+						<input id="txtPost" type="text" style="float:left; width:95px;"/>
+						<input id="txtAddr" type="text" style="float:left; width:520px;"/>
 						<select id="combAddr" style="float:left;width: 20px;"> </select></td>
 					</tr>
 					<tr>
@@ -1089,8 +1103,9 @@
 					<tr>
 						<td class="td1"><span> </span><a id="lblOrdcno" class="lbl btn"> </a></td>
 						<td class="td2" colspan="4"><input id="txtOrdcno" type="text" class="txt c1" /></td>
-						<td> </td>
-						<td><input id="btnOrdc" type="button" class="txt c1" value="批次轉採購單" style="display:none;" /></td>
+						<td><span> </span><a id='lblApv' class="lbl apv"> </a></td>
+						<td><input id="txtApv" type="text" class="txt c1 apv" /></td>
+						<td><input id="btnOrdc" type="button" value="批次轉採購單" style="display:none;" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
