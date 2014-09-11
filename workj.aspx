@@ -60,11 +60,48 @@
             function mainPost() {
                 q_mask(bbmMask);
                 $('#btnCont').click(function(e){
-                	
+                	var t_noa = $('#txtNoa').val();
+                	var t_custno = $('#txtCustno').val();
+                	q_func('qtxt.query.cont', 'workj.txt,cont,' + encodeURI(t_noa) + ';' + encodeURI(t_custno)); 	
                 });
                 $('#btnOrde').click(function(e){
-                	
+                	var t_key = q_getPara('sys.key_orde');
+                	var t_noa = $('#txtNoa').val();
+                	q_func('qtxt.query.orde', 'workj.txt,orde,' + encodeURI(t_key)+ ';' +encodeURI(t_noa)); 	
                 });
+            }
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'imgfe.gen':
+                		if(result.length>0)
+	                		for(var i=0;i<q_bbsCount;i++){
+	                			if($('#txtImgsrc_'+i).val()==result){
+	                				$('#imgPic_'+i).attr('src','../images/fe/'+result+'.jpg?'+(new Date()).getTime());
+	                				break;
+	                			}
+	                		}
+                		break;
+                	case 'qtxt.query.cont':
+                		var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined) {
+                            q_gridAddRow(bbsHtm, 'tbbs', 'txtContno,txtContnoq,txtProductno,txtProduct,txtLengthb,txtMount,txtWeight'
+                        	, as.length, as, 'contno,contnoq,productno,product,lengthb,xmount,xweight', '','');
+                        	sum();
+                        } else {
+                            alert('無資料!');
+                        }
+                		break;
+            		case 'qtxt.query.orde':
+                		var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined) {
+                            alert(as[0].msg);
+                        } else {
+                            alert('匯出訂單錯誤!');
+                        }
+                		break;
+                    default:
+                        break;
+                }
             }
 			function q_popPost(id) {
                 switch (id) {
@@ -84,22 +121,6 @@
                         break;
                 }
             }
-            function q_funcPost(t_func, result) {
-                switch(t_func) {
-                	case 'imgfe.gen':
-                		if(result.length>0)
-	                		for(var i=0;i<q_bbsCount;i++){
-	                			if($('#txtImgsrc_'+i).val()==result){
-	                				$('#imgPic_'+i).attr('src','../images/fe/'+result+'.jpg?'+(new Date()).getTime());
-	                				break;
-	                			}
-	                		}
-                		break;
-                    default:
-                        break;
-                }
-            }
-            
             function q_gtPost(t_name) {
                 switch (t_name) {
                     case q_name:
@@ -257,6 +278,12 @@
 			                	q_func( 'imgfe.gen',t_imgsrc+','+t_picno+','+t_para.replace(/\,/g,'^'));
                     		}
                     	});
+                    	$('#txtContno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var t_noa =  $(this).val();
+                            q_box("contfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa + "';" + r_accy, 'cont', "95%", "95%", q_getMsg("popCont"));
+                        });
                     }
                 }
                 _bbsAssign();
@@ -592,6 +619,7 @@
 					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
 					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
 					<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
+					<td style="width:150px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -616,6 +644,10 @@
 					<td><input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/></td>
 					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;"/></td>
+					<td>
+						<input class="txt" id="txtContno.*" type="text" style="width:95%;"/>
+						<input class="txt" id="txtContnoq.*" type="text" style="display:none;"/>
+					</td>
 				</tr>
 			</table>
 		</div>

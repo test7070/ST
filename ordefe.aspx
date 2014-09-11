@@ -588,7 +588,13 @@
 						$('#btnMinus_' + j).click(function() {
 							btnMinus($(this).attr('id'));
 						});
-						$('#btnProductno_' + j).click(function() {
+						$('#txtProductno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
+                        });
+						/*$('#btnProductno_' + j).click(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
@@ -599,7 +605,7 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							//q_change($(this), 'ucc', 'noa', 'noa,product,unit');
-						});
+						});*/
 
 						$('#txtUnit_' + j).focusout(function() {
 							sum();
@@ -1152,8 +1158,8 @@
 						<input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" />
 					</td>
 					<td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:160px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblNo2'>訂序</a></td>
+					<td align="center" style="width:160px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle'> </a></td>
 					<td align="center" style="width:55px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:85px;"><a >米數</a></td>
@@ -1177,14 +1183,12 @@
 						<input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td><input class="txt c7" id="txtNo2.*" type="text" /></td>
 					<td align="center">
-						<input class="txt c6" id="txtProductno.*" maxlength='30'type="text" style="width:98%;" />
-						<input class="btn" id="btnProduct.*" type="button" value='...' style=" font-weight: bold;" />
-						<input class="txt c6" id="txtNo2.*" type="text" />
-					</td>
-					<td>
+						<input class="txt c7" id="txtProductno.*" type="text" />
 						<input class="txt c7" id="txtProduct.*" type="text" />
-						<input id="txtSpec.*" type="text" class="txt c1 isSpec"/>
+						<input class="btn" id="btnProduct.*" type="button" style="display:none;" />
+						<input id="txtSpec.*" type="text" style="display:none;"/>
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1"/></td>
 					<td align="center"><input class="txt c7" id="txtUnit.*" type="text"/></td>
@@ -1202,6 +1206,8 @@
 						<input class="txt" id="txtQuatno.*" type="text" style="width: 70%;" />
 						<input class="txt" id="txtNo3.*" type="text" style="width: 20%;"/>
 						<input id="recno.*" type="hidden" />
+						<input id="txtTablea.*" type="text" style="display:none;"/>
+						<input id="txtTableaccy.*" type="text" style="display:none;"/>
 					</td>
 					<td><input class="txt c7" id="txtDatea.*" type="text" /></td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
