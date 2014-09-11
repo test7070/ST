@@ -1,14 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title> </title>
-		<script src="../script/jquery.min.js" type="text/javascript"> </script>
-		<script src='../script/qj2.js' type="text/javascript"> </script>
-		<script src='qset.js' type="text/javascript"> </script>
-		<script src='../script/qj_mess.js' type="text/javascript"> </script>
-		<script src="../script/qbox.js" type="text/javascript"> </script>
-		<script src='../script/mask.js' type="text/javascript"> </script>
+		<title></title>
+		<script src="../script/jquery.min.js" type="text/javascript"></script>
+		<script src='../script/qj2.js' type="text/javascript"></script>
+		<script src='qset.js' type="text/javascript"></script>
+		<script src='../script/qj_mess.js' type="text/javascript"></script>
+		<script src='../script/mask.js' type="text/javascript"></script>
+		<script src="../script/qbox.js" type="text/javascript"></script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
+		<link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+		<script src="css/jquery/ui/jquery.ui.core.js"></script>
+		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
+		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			this.errorHandler = null;
 			function onPageError(error) {
@@ -33,7 +37,7 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'Datea';
-			aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
+			aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
 							, ['txtTggno', 'lblTgg', 'custtgg', 'noa,comp,nick,conn', 'txtTggno,txtComp,txtNick', 'custtgg_b.aspx']
 							, ['txtSales', 'lblSales', 'sss', 'namea,noa', 'txtSales,txtSalesno', 'sss_b.aspx']
 							, ['txtAssigner', 'lblAssigner', 'sss', 'namea,noa', 'txtAssigner,txtAssignerno', 'sss_b.aspx']
@@ -178,6 +182,7 @@
 
 			function bbsAssign() {
 				for(var j = 0; j < q_bbsCount; j++) {
+					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						//將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
 						$('#txtStyle_' + j).blur(function(){
@@ -250,6 +255,12 @@
 								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
+						$('#txtProductno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
+                        });
 						//-------------------------------------------------------------------------------------
 					}
 				}
@@ -753,9 +764,9 @@
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				  <tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  /> </td>
-					<td align="center" style="width:8%;"><a id='lblProductno_st_s'></a></td>
+					<td style="width:20px;"></td>
+					<td align="center" style="width:8%;"><a id='lblProduct_st_s'></a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st_s'></a></td>
-					<td align="center" style="width:5%;"><a id='lblProduct_st_s'></a></td>
 					<td align="center" id='Size'><a id='lblSize_st_s'> </a><BR><a id='lblSize_help'> </a></td>
 					<td align="center" style="width:4%;"><a id='lblUnit_st_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblMount_st_s'></a></td>
@@ -772,14 +783,14 @@
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td ><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
+					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-						<input class="btn"  id="btnProduct.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-						<input type="text" id="txtProductno.*"  style="width:76%; float:left;"/>
-						<span style="display:block; width:1%;float:left;"> </span>
-						<input type="text" id="txtNoq.*"  style="width:76%; float:left; display: none;"/>
+						<input type="text" id="txtProductno.*"  style="width:95%; float:left;"/>
+						<input id="txtProduct.*" type="text" class="txt"style="width:95%; float:left;"/>
+						<input type="text" id="txtNoq.*"  style="float:left; display: none;"/>
+						<input class="btn"  id="btnProduct.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;display: none;" />
 					</td> 
 					<td ><input id="txtStyle.*" type="text" class="txt c6"/></td>
-					<td ><input id="txtProduct.*" type="text" class="txt c7"/></td>
 					<td>
 						<input class="txt num c8" id="textSize1.*" type="text" disabled="disabled"/>
 						<div id="x1.*" style="float: left"> x</div>
