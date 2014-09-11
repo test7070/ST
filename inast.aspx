@@ -295,7 +295,7 @@
                         var err_str = '';
                         if (as[0] != undefined) {
                             for (var i = 0; i < as.length; i++) {
-                                if (dec(as[i].gweight) > 0) {
+                                if (dec(as[i].gweight) > 0 && as[i].uno.length>0 && !(as[i].uno.substring(0,1)>='A' && as[i].uno.substring(0,1)<='Z')) {
                                     err_str += as[i].uno + '已領料，不能刪除!!\n';
                                 }
                             }

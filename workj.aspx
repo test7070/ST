@@ -59,6 +59,12 @@
 
             function mainPost() {
                 q_mask(bbmMask);
+                $('#btnCont').click(function(e){
+                	
+                });
+                $('#btnOrde').click(function(e){
+                	
+                });
             }
 			function q_popPost(id) {
                 switch (id) {
@@ -563,6 +569,7 @@
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td></td>
+						<td><input type="button" id="btnCont" value="合約匯入" /></td>
 						<td><input type="button" id="btnOrde" value="轉訂單" /></td>
 					</tr>
 					
