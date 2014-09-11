@@ -36,6 +36,19 @@
 							$('#txtXtgg2a').attr('disabled','disabled');
 							$('#btnXtgg1').hide();
 							$('#btnXtgg2').hide();
+						}else if(sssAs[0].noa=='04'){ //特殊
+							$('#txtSalesgroup').val(sssAs[0].salesgroup);
+							$('#txtSalesgroup').attr('disabled','disabled');
+							$('#Xstype').hide();
+							$('#Xgroupano').hide();
+							$('#Xgroupbno').hide();
+							$('#Xcust').hide();
+							$('#Xproduct').hide();
+							$('#Xtgg').hide();
+							$('#Xpartno').hide();
+							$('#Xshowvalue').hide();
+							$('#Xcity').hide();
+							$('#Xarea').hide();
 						}else{ //業務經理
 							$('#txtXsales1a').val(sssAs[0].noa);
 							$('#txtXsales1a').attr('disabled','disabled');
@@ -55,6 +68,8 @@
 							$('#Xshowvalue').hide();
 							$('#btnXsales1').hide();
 							$('#btnXsales2').hide();
+							$('#Xcity').hide();
+							$('#Xarea').hide();
 							
 							//$('#txtSalesgroup').val(sssAs[0].salesgroup);
 							//$('#txtSalesgroup').attr('disabled','disabled');
@@ -143,6 +158,14 @@
 					}, {
 						type : '1', //[23][24]
 						name : 'xdate'
+						/*#####################*/
+					},{
+						type : '5', //[25]
+						name : 'xcity',
+						value : (' @全部,基隆市,台北市,新北市,桃園縣,新竹市,新竹縣,苗栗縣,台中市,彰化縣,南投縣,雲林縣,嘉義市,嘉義縣,台南市,高雄市,屏東縣,台東縣,花蓮縣,宜蘭縣,澎湖縣,金門縣,連江縣').split(',')
+					},{
+						type : '6', //[26]
+						name : 'xarea'
 					}]
 				});
 				q_popAssign();
@@ -191,6 +214,19 @@
 						$('#txtXtgg2a').attr('disabled','disabled');
 						$('#btnXtgg1').hide();
 						$('#btnXtgg2').hide();
+					}else if(sssAs[0].noa=='04'){ //特殊
+						$('#txtSalesgroup').val(sssAs[0].salesgroup);
+						$('#txtSalesgroup').attr('disabled','disabled');
+						$('#Xstype').hide();
+						$('#Xgroupano').hide();
+						$('#Xgroupbno').hide();
+						$('#Xcust').hide();
+						$('#Xproduct').hide();
+						$('#Xtgg').hide();
+						$('#Xpartno').hide();
+						$('#Xshowvalue').hide();
+						$('#Xcity').hide();
+						$('#Xarea').hide();
 					}else{ //業務經理
 						$('#txtXsales1a').val(sssAs[0].noa);
 						$('#txtXsales1a').attr('disabled','disabled');
@@ -210,6 +246,8 @@
 						$('#Xshowvalue').hide();
 						$('#btnXsales1').hide();
 						$('#btnXsales2').hide();
+						$('#Xcity').hide();
+						$('#Xarea').hide();
 						
 						//$('#txtSalesgroup').val(sssAs[0].salesgroup);
 						//$('#txtSalesgroup').attr('disabled','disabled');

@@ -32,7 +32,7 @@
 			];
 			var bbsNum = [
 				['txtPrice', 15, 1, 1], ['txtTotal', 15, 0, 1], ['txtWeight', 10, 3, 1],
-				['txtMount', 10, 2, 1], ['txtTheory', 12, 3, 1], ['txtGweight', 10, 3, 1],
+				['txtMount', 10, 2, 1],['txtRadius', 10, 2, 1], ['txtTheory', 12, 3, 1], ['txtGweight', 10, 3, 1],
 				['txtWidth', 10, 0, 1], ['txtLengthc', 10, 0, 1], ['txtLengthb', 10, 0, 1], ['txtDime', 10, 0, 1]
 			];
 			var bbmMask = [];
@@ -89,7 +89,8 @@
 				var t_tranmoney = dec($('#txtTranmoney').val());
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_prices = q_float('txtPrice_' + j);
-					t_mount = q_float('txtMount_' + j);
+					//t_mount = q_float('txtMount_' + j);
+					t_mount = q_float('txtRadius_' + j)>0?q_float('txtRadius_' + j):q_float('txtMount_' + j);
 					t_moneys = round(q_mul(t_prices, t_mount), 0);
 					t_money = q_add(t_money, t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
@@ -574,6 +575,10 @@
 							if (q_cur == 1 || q_cur == 2)
 								sum();
 						});
+						$('#txtRadius_' + j).focusout(function() {
+							if (q_cur == 1 || q_cur == 2)
+								sum();
+						});
 						$('#txtWeight_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2)
 								sum();
@@ -728,6 +733,7 @@
 							$('#txtDime_'+n).val(t_dime);
 							$('#txtClass_'+n).val(t_length1+'^'+t_length2+'^'+t_short1+'^'+t_short2);
 							
+							//103/09/11 數量全部取小數點1位,金額取小數點2位放在radius
 							switch (t_style) {
 								case '*':
 									$('#txtUnit_'+n).val('才');
@@ -749,26 +755,34 @@
 											t_width=25;
 									}
 									
-									$('#txtMount_'+n).val(round(q_mul(q_mul(q_div(t_lengthb,100),q_div(t_width,100)),t_lengthc),2));	
+									$('#txtMount_'+n).val(round(q_mul(q_mul(q_div(t_lengthb,100),q_div(t_width,100)),t_lengthc),1));	
+									$('#txtRadius_'+n).val(round(q_mul(q_mul(q_div(t_lengthb,100),q_div(t_width,100)),t_lengthc),2));	
 									break;
 								case '+':
 									//(長+寬)*2
-									var t_meter=q_mul(q_mul(q_add(q_div(t_lengthb,100),q_div(t_width,100)),2),t_lengthc);
-									$('#txtMount_'+n).val(t_meter);	
-									$('#txtUnit_'+n).val('尺');	
+									/*var t_meter=q_mul(q_mul(q_add(q_div(t_lengthb,100),q_div(t_width,100)),2),t_lengthc);*/
+									
+									//103/09/11 直接看長+長和短+短
+									var t_meter=q_mul(q_add(q_add(q_div(t_length1,100),q_div(t_length2,100)),q_add(q_div(t_short1,100),q_div(t_short2,100))),t_lengthc);
 									
 									var t_length=0,t_short=0;
 									if(t_length1>0) t_length++;
 									if(t_length2>0) t_length++;
 									if(t_short1>0) t_short++;
 									if(t_short2>0) t_short++;
+									
+									$('#txtMount_'+n).val(round(t_meter,1));	
+									$('#txtRadius_'+n).val(round(t_meter,2));
+									$('#txtUnit_'+n).val('尺');	
+									
 									$('#txtMemo_'+n).val(t_length+'長'+t_short+'短');
 									$('#txtSpec_'+n).val(t_dime+'mm'+t_lengthb+'*'+t_width+'共'+t_lengthc+'片');
 									break;
 								case '-':
 									//(長*寬)
-									var t_meter=round(q_mul(q_mul(q_div(t_lengthb,100),q_div(t_width,100)),t_lengthc),2);
-									$('#txtMount_'+n).val(t_meter);	
+									var t_meter=q_mul(q_mul(q_div(t_lengthb,100),q_div(t_width,100)),t_lengthc);
+									$('#txtMount_'+n).val(round(t_meter,1));	
+									$('#txtRadius_'+n).val(round(t_meter,2));
 									$('#txtUnit_'+n).val('才');
 									$('#txtSpec_'+n).val(t_lengthb+'*'+t_width+'共'+t_lengthc+'片');
 									break;
@@ -1332,6 +1346,7 @@
 					<td align="center" style="width:40px;">型</td>					
 					<!--<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>-->
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
+					<td align="center" style="width:80px;"><a>計價數量</a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit'> </a> </td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotal_s'> </a></td>
@@ -1388,6 +1403,7 @@
 					</td>
 					<!--<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>-->
 					<td>	<input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtRadius.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt" style="width:95%;text-align: center;"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td>
