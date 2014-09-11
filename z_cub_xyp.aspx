@@ -15,76 +15,53 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
+            if (location.href.indexOf('?') < 0) {
+                location.href = location.href + "?;;;;" + ((new Date()).getUTCFullYear() - 1911);
+            }
             $(document).ready(function() {
                 q_getId();
-                //q_gf('', 'z_bank6');
-                q_gt('bankt', '', 0, 0, 0);
+                q_gf('', 'z_cub_xyp');
             });
-
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_bank6',
+                    fileName : 'z_cub_xyp',
                     options : [{//[1]
                         type : '0',
                         name : 'accy',
                         value : r_accy
-                    },{/*3*/
-                        type : '5',
-                        name : 'xbanktno',
-                        value : t_bankt.split(',')
                     }, {
-                        type : '6', /*[2]*/
-                        name : 'xlcno'
+                        type : '0', //[2]
+                        name : 'mountprecision',
+                        value : q_getPara('vcc.mountPrecision')
                     }, {
-                        type : '2', /*[3][4]*/
-                        name : 'bank2',
-                        dbf : 'bank2',
-                        index : 'noa,bank2',
-                        src : 'bank2_b.aspx'
+                        type : '0', //[3]
+                        name : 'weightprecision',
+                        value : q_getPara('vcc.weightPrecision')
                     }, {
-                        type : '1', /*[5][6]*/
-                        name : 'date'
+                        type : '0', //[4]
+                        name : 'priceprecision',
+                        value : q_getPara('vcc.pricePrecision')
+                    }, {//[5]
+                        type : '0',
+                        name : 'worker',
+                        value : r_name
+                    }, {//[6][7]
+                        type : '1',
+                        name : 'xnoa'
                     }]
                 });
-
                 q_popAssign();
-                q_langShow();
 
-                $('#txtDate1').mask('999/99/99');
-                $('#txtDate1').datepicker();
-                $('#txtDate2').mask('999/99/99');
-                $('#txtDate2').datepicker();
-
-                var t_date, t_year, t_month, t_day;
-                t_date = new Date();
-                t_date.setDate(1);
-                t_year = t_date.getUTCFullYear() - 1911;
-                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-                t_month = t_date.getUTCMonth() + 1;
-                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-                t_day = t_date.getUTCDate();
-                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);
-
-                $('#txtDate2').val(q_date());
-            }
-			
-			var t_bankt='';
-            function q_gtPost(t_name) {
-                switch (t_name) {
-					case 'bankt':
-                        t_bankt = '';
-                        var as = _q_appendData("bankt", "", true);
-                        t_bankt += '#non@全部';
-                        for ( i = 0; i < as.length; i++) {
-                            t_bankt += (t_bankt.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].namea;
-                        }
-                        q_gf('', 'z_bank6');
-                        break;
+                if (q_getId()[3] != undefined) {
+                    $('#txtXnoa1').val(q_getId()[3].replace('noa=', ''));
+                    $('#txtXnoa2').val(q_getId()[3].replace('noa=', ''));
                 }
             }
 
             function q_boxClose(s2) {
+            }
+
+            function q_gtPost(s2) {
             }
 		</script>
 	</head>

@@ -17,31 +17,17 @@
 		<script type="text/javascript">
             $(document).ready(function() {
                 q_getId();
-                //q_gf('', 'z_bank6');
-                q_gt('bankt', '', 0, 0, 0);
+                q_gf('', 'z_bankm');
             });
 
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_bank6',
+                    fileName : 'z_bankm',
                     options : [{//[1]
                         type : '0',
                         name : 'accy',
                         value : r_accy
-                    },{/*3*/
-                        type : '5',
-                        name : 'xbanktno',
-                        value : t_bankt.split(',')
-                    }, {
-                        type : '6', /*[2]*/
-                        name : 'xlcno'
-                    }, {
-                        type : '2', /*[3][4]*/
-                        name : 'bank2',
-                        dbf : 'bank2',
-                        index : 'noa,bank2',
-                        src : 'bank2_b.aspx'
-                    }, {
+                    },{
                         type : '1', /*[5][6]*/
                         name : 'date'
                     }]
@@ -69,18 +55,10 @@
                 $('#txtDate2').val(q_date());
             }
 			
-			var t_bankt='';
+			
             function q_gtPost(t_name) {
                 switch (t_name) {
-					case 'bankt':
-                        t_bankt = '';
-                        var as = _q_appendData("bankt", "", true);
-                        t_bankt += '#non@全部';
-                        for ( i = 0; i < as.length; i++) {
-                            t_bankt += (t_bankt.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].namea;
-                        }
-                        q_gf('', 'z_bank6');
-                        break;
+					
                 }
             }
 
