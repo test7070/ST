@@ -60,17 +60,18 @@
 			}
 
 			function sum() {
-				var t1 = 0, t_unit, t_mount, t_weight = 0;
+				var t1 = 0, t_unit, t_mount, t_weight = 0,t_total;
 				for (var j = 0; j < q_bbsCount; j++) {
-					t_unit = $('#txtUnit_' + j).val();
-					//t_mount = (!t_unit || emp(t_unit) || trim( t_unit).toLowerCase() == 'kg' ? $('#txtWeight_' + j).val() : $('#txtMount_' + j).val()); // 計價量
-					t_mount = $('#txtMount_' + j).val();
+					t_unit = $('#txtUnit_' + j).val().toUpperCase();
+					t_mount = q_float('txtMount_'+j);
+					t_weight = q_float('txtWeight_'+j);
+					t_price = q_float('txtPrice_'+j);
+					t_total = round(q_mul((t_unit.length==0 || t_unit=='KG' || t_unit=='公斤'?t_weight:t_mount),t_price),0)
 					// 計價量
-					//t_weight = t_weight + dec( $('#txtWeight_' + j).val()) ; // 重量合計
-					$('#txtTotal_' + j).val(round(q_mul(dec($('#txtPrice_' + j).val()), dec(t_mount)), 0));
+					$('#txtTotal_' + j).val(t_total);
 
 					q_tr('txtNotv_' + j, q_sub(q_float('txtMount_' + j), q_float('txtC1' + j)));
-					t1 = q_add(t1, dec($('#txtTotal_' + j).val()));
+					t1 = q_add(t1, t_total);
 				}
 				$('#txtMoney').val(round(t1, 0));
 				if (!emp($('#txtPrice').val()))
@@ -743,7 +744,8 @@
 
 			function btnPrint() {
                 var t_where = "noa='" + $.trim($('#txtNoa').val()) + "'";
-                q_box("z_ordefep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                //q_box("z_ordefep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {

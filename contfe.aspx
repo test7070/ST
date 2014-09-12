@@ -50,7 +50,7 @@
 			function sum(){
 				for(var i=0;i<q_bbsCount;i++){
 					t_unit = $('#txtUnit_'+i).val().toUpperCase();
-					t_total = round(q_mul((t_unit=='KG' || t_unit.length==0 ?q_float('txtWeight_'+i) : q_float('txtMount_'+i)),q_float('txtPrice_'+i)),0);
+					t_total = round(q_mul((t_unit=='公斤' || t_unit=='KG' || t_unit.length==0 ?q_float('txtWeight_'+i) : q_float('txtMount_'+i)),q_float('txtPrice_'+i)),0);
 					$('#txtTotal_'+i).val(t_total)
 				}
 			};

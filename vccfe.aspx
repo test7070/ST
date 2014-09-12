@@ -85,7 +85,7 @@
                     t_weight = q_float('txtWeight_' + j);
                     t_weights= q_add(t_weights,t_weight);
                     
-                    if(t_unit=='公斤' || t_unit.toUpperCase()=='KG'){
+                    if(t_unit=='公斤' || t_unit.toUpperCase()=='KG' || t_unit.length==0){
                         t_total = round(q_mul(t_price, t_weight), 0);
                     }else{
                         t_total = round(q_mul(t_price, t_mount), 0);
