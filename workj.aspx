@@ -645,7 +645,7 @@
 						<input class="txt" id="txtPicno.*" type="text" style="width:95%;"/>
 						<input id="btnPicno.*" type="button" style="display:none;">
 					</td>
-					<td><input class="txt" id="txtImgpara.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt" id="txtImgpara.*" type="text" style="width:95%;" title="多個參數用逗號分隔。EX: 10.5,12,13.5"/></td>
 					<td><input class="txt" id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
 					<td><input class="txt" id="txtMount.*" type="text" style="width:95%;text-align: right;"/></td>
 					<td><input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/></td>
