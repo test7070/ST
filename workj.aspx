@@ -19,12 +19,12 @@
             q_tables = 't';
             var q_name = "workj";
             var q_readonly = ['txtNoa'];
-            var q_readonlys = [];
+            var q_readonlys = ['txtContno'];
             var q_readonlyt = [];
             var bbmNum = [];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
             var bbtNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
-            var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99']];
+            var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99'],['txtTimea','99:99']];
             var bbsMask = [];
             var bbtMask = [];
             q_sqlCount = 6;
@@ -222,6 +222,13 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                if(q_cur==1 || q_cur==2){
+                	$('#btnOrde').attr('disabled','disabled');
+                	$('#btnCont').removeAttr('disabled');
+                }else{
+                	$('#btnCont').attr('disabled','disabled');
+                	$('#btnOrde').removeAttr('disabled');
+                }
             }
 
             function btnMinus(id) {

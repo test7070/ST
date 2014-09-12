@@ -258,9 +258,10 @@
 							case 'ordcno':
 								q_box("ordc.aspx?;;;noa='" + noa + "';" + r_accy, 'ordc', "95%", "95%", q_getMsg("popOrdc"));
 								break;
-							case 'quatno':
+							/*case 'quatno':
+								改在bbsAssign
 								q_box("quat.aspx?;;;noa='" + noa + "';" + r_accy, 'quat', "95%", "95%", q_getMsg("popQuat"));
-								break;
+								break;*/
 						}
 					}
 				}
@@ -585,10 +586,23 @@
 				for (var j = 0; j < (q_bbsCount == 0 ? 1 : q_bbsCount); j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#txtQuatno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtQuatno_', '');
+                            var t_accy = $('#txtTableaccy_' + n).val();
+                            var t_tablea = $('#txtTablea_' + n).val();
+                            var t_noa =  $('#txtQuatno_' + n).val();
+                            
+                            if(t_tablea.length==0)
+                            	q_box("quat.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa + "';" + r_accy, 'quat', "95%", "95%", q_getMsg("popQuat"));
+                        	else
+                        		q_box(t_tablea+".aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa + "';" + t_accy, t_tablea, "95%", "95%", "");
+                        });
 						$('#btnMinus_' + j).click(function() {
 							btnMinus($(this).attr('id'));
 						});
-						$('#txtProductno_' + i).bind('contextmenu', function(e) {
+						$('#txtProductno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtProductno_', '');
