@@ -38,7 +38,7 @@
 				['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'],
 				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx'],
 				['txtMechno_', 'btnMechno_', 'mech', 'noa,mech', 'txtMechno_,txtMech_', 'mech_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,unit,style,lengthb,spec', 'txtUno_,txtProductno_,txtProduct_,txtUnit_,txtStyle_,txtLengthb_,txtSpec_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
+				//['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,unit,style,lengthb,spec', 'txtUno_,txtProductno_,txtProduct_,txtUnit_,txtStyle_,txtLengthb_,txtSpec_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
 				['txtSssno_', 'btnSssno_', 'sss', 'noa,namea', 'txtSssno_,txtNamea_', 'sss_b.aspx']
 			);
 			$(document).ready(function() {
@@ -378,7 +378,7 @@
                 font-size:medium;
             }
             .dbbs {
-                width: 1200px;
+                width: 100%;
             }
             .tbbs a {
                 font-size: medium;
@@ -463,8 +463,7 @@
                     <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
                     <td align="center" style="width:20px;"></td>
-					<td align="center" style="width:160px;"><a id='lblUno_s'> </a></td>
-					<td align="center" style="width:160px;"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblUno_s'> </a></td>
 					<td align="center" style="width:200px"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
 					<td align="center" style="width:80px;" class="isFe"><a id='lblLengthb_fe_s'> </a></td>
@@ -488,10 +487,10 @@
 					<td><input class="txt" id="txtUno.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:95%;" />
-						<input class="btn" id="btnProductno.*" type="button" value='.' style="display:none;" />
-						<input type="text" id="txtSpec.*" class="txt c1 isSpec"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:95%;"/>
+						<input class="btn" id="btnProductno.*" type="button" style="display:none;" />
+						<input type="text" id="txtSpec.*" style="display:none;"/>
 					</td>
-					<td><input class="txt" id="txtProduct.*" type="text" style="width:95%;"/></td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt isStyle" style="width:95%;"/></td>
 					<td class="isFe"><input id="txtLengthb.*" type="text" class="txt num isFe" style="width:95%;"/></td>
 					<td><input class="txt" id="txtUnit.*" type="text" style="width:95%;"/></td>

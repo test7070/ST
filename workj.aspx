@@ -668,11 +668,11 @@
 						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"></td>
-						<td style="width:150px; text-align: center;">批號</td>
-						<td style="width:150px; text-align: center;">品名</td>
+						<td style="width:200px; text-align: center;">批號</td>
+						<td style="width:200px; text-align: center;">品名</td>
 						<td style="width:100px; text-align: center;">數量</td>
 						<td style="width:100px; text-align: center;">重量</td>
-						<td style="width:430px; text-align: center;">備註</td>
+						<td style="width:200px; text-align: center;">備註</td>
 					</tr>
 					<tr>
 						<td>
