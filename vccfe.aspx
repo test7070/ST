@@ -50,7 +50,7 @@
                 ['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx'],
                 ['txtPost', 'lblAddr', 'addr2', 'noa,post', 'txtPost', 'addr2_b.aspx'],
                 ['txtPost2', 'lblAddr2', 'addr2', 'noa,post', 'txtPost2', 'addr2_b.aspx'],
-                ['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
+                ['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
                 ['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],
                 ['txtDriverno', 'lblDriver', 'driver', 'noa,namea','txtDriverno,txtDriver', 'driver_b.aspx']
             );
@@ -317,7 +317,7 @@
                             b_ret = getb_ret();
                             if (!b_ret || b_ret.length == 0)
                                 return;
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,mount,memo', 'txtProductno,txtProduct,txtSpec');
+                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtMemo', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,mount,weight,memo', 'txtProductno,txtProduct,txtSpec');
                             //寫入訂單號碼
                             var t_oredeno = '';
                             for (var i = 0; i < b_ret.length; i++) {
@@ -708,6 +708,12 @@
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                        $('#txtProductno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
+                        });
                         $('#combOrdelist_'+i).change(function(){
                             var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
                             var thisVal = $.trim($(this).val());
@@ -1371,8 +1377,7 @@
                     </td>
                     <td align="center" style="width:20px;"> </td>
                     
-                    <td align="center" style="width:100px"><a id='lblProductno_s'> </a></td>
-                    <td align="center" style="width:180px;"><a id='lblProduct_s'> </a></td>
+                    <td align="center" style="width:100px"><a id='lblProduct_s'> </a></td>
                     <td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
                     <td align="center" style="width:80px;" class="isFe"><a id='lblLengthb_fe_s'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
@@ -1398,15 +1403,12 @@
                         <input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
                         <input id="txtNoq.*" type="text" style="display:none;"/>
                     </td>
-                    <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-                    
+                    <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>              
                     <td>
-                        <input class="btn"  id="btnProductno.*" type="button" value='' style="width:5%;font-weight: bold;float:left;" />
-                        <input id="txtProductno.*" type="text" class="txt" style="width:80%;float:left;"/>                   
-                    </td>
-                    <td>
-                        <input id="txtProduct.*" type="text" class="txt c1" />
-                        <input id="txtSpec.*" type="text" class="txt c1 isSpec" />
+                        <input id="txtProductno.*" type="text" class="txt c1" title="編號"/>         
+                        <input id="txtProduct.*" type="text" class="txt c1" title="名稱"/>
+                        <input class="btn"  id="btnProduct.*" type="button" style="display:none;" />          
+                   		<input id="txtSpec.*" type="text" style="display:none;" /> 
                     </td>
                     <td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
                     <td class="isFe"><input id="txtLengthb.*" type="text" class="txt c1 isFe"/></td>

@@ -1185,8 +1185,8 @@
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td><input class="txt c7" id="txtNo2.*" type="text" /></td>
 					<td align="center">
-						<input class="txt c7" id="txtProductno.*" type="text" />
-						<input class="txt c7" id="txtProduct.*" type="text" />
+						<input class="txt c7" id="txtProductno.*" type="text" title="編號"/>
+						<input class="txt c7" id="txtProduct.*" type="text" title="名稱"/>
 						<input class="btn" id="btnProduct.*" type="button" style="display:none;" />
 						<input id="txtSpec.*" type="text" style="display:none;"/>
 					</td>
