@@ -685,6 +685,8 @@
 						<td style="width:200px; text-align: center;">品名</td>
 						<td style="width:100px; text-align: center;">數量</td>
 						<td style="width:100px; text-align: center;">重量</td>
+						<td style="width:100px; text-align: center;">餘料數量</td>
+						<td style="width:100px; text-align: center;">餘料重量</td>
 						<td style="width:200px; text-align: center;">備註</td>
 					</tr>
 					<tr>
@@ -704,6 +706,8 @@
 						</td>
 						<td><input class="txt" id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtEmount..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtEweight..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;"/></td>
 					</tr>
 				</tbody>
