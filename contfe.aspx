@@ -23,7 +23,7 @@
 			var q_name = "cont";
 			var q_readonly = ['txtNoa', 'txtWorker', 'txtApv', 'txtWorker2'];
 			var q_readonlys = ['txtNoq'];
-			var bbmNum = [['txtGweight', 10, 3, 1],['txtEweight', 15, 3, 1],['txtOrdgweight', 15, 3, 1],['txtOrdeweight', 15, 3, 1]];
+			var bbmNum = [];
 			var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtPrice',10,3,1]
 						 ];
 			var bbmMask = [];
@@ -479,12 +479,6 @@
 						<td><select id="cmbKind" class="txt c1"> </select></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblContract' class="lbl"> </a></td>
-						<td colspan="2"><input id="txtContract"  type="text"  class="txt c1"/></td>
-						<td ><span> </span><a id='lblBcontract' class="lbl" style="font-size: 14px"> </a></td>
-						<td colspan="2"><input id="txtBcontract"  type="text"  class="txt c1"/></td>
-					</tr>
-					<tr>
 						<td class="td3"><span> </span><a id='lblBcontdate' class="lbl"> </a></td>
 						<td class="td4"><input id="txtBcontdate" type="text"  class="txt c1"/></td>
 						<td align="center"><a id="lblEcontdate"> </a></td>
@@ -566,32 +560,6 @@
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
 						<td colspan="7"><textarea id="txtMemo" rows="5" cols="10" type="text" class="txt c1"></textarea></td>
 					</tr>
-					<tr>
-						<td class="tdZ trX" colspan="8"><span> </span><a id='lblTweight' class="trTitle"> </a></td>
-						<td class="tdZ trX"> </td>
-					</tr>
-					<tr>
-						<td class="trX"><span> </span><a id='lblGweight' class="lbl"> </a></td>
-						<td class="trX"><input id="txtGweight" type="text" class="txt c1 num" /></td>
-						<td class="trX"><span> </span><a id='lblEweight' class="lbl"> </a></td>
-						<td class="trX"><input id="txtEweight" type="text" class="txt c1 num" /></td>
-						<td class="tdZ trX"> </td>
-						<td class="tdZ trX"> </td>
-						<td class="tdZ trX"> </td>
-						<td class="tdZ trX"> </td>
-						<td class="tdZ trX"> </td>
-					</tr>
-					<tr>
-						<td class="trX"><span> </span><a id='lblOrdgweight' class="lbl"> </a></td>
-						<td class="trX"><input id="txtOrdgweight" type="text" class="txt c1 num" /></td>
-						<td class="trX"><span> </span><a id='lblOrdeweight' class="lbl"> </a></td>
-						<td class="trX"><input id="txtOrdeweight" type="text" class="txt c1 num" /></td>
-						<td class="trX"><span> </span><a id='lblEnda' class="lbl"> </a></td>
-						<td class="trX"><input id="chkEnda" type="checkbox"/></td>
-						<td class="tdZ trX"> </td>
-						<td class="tdZ trX"> </td>
-						<td class="tdZ trX"> </td>
-					</tr>
 					<tr class="tr13">
 						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td class="td2"><input id="txtWorker"  type="text" class="txt c1" /></td>
@@ -599,6 +567,8 @@
 						<td class="td2"><input id="txtWorker2"  type="text" class="txt c1" /></td>
 						<td class="td3"><span> </span><a id='lblApv' class="lbl"> </a></td>
 						<td class="td4"><input id="txtApv"  type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblEnda' class="lbl"> </a></td>
+						<td><input id="chkEnda" type="checkbox"/></td>
 					</tr>
 				</table>
 			</div>

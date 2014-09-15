@@ -62,7 +62,10 @@
                 $('#btnCont').click(function(e){
                 	var t_noa = $('#txtNoa').val();
                 	var t_custno = $('#txtCustno').val();
-                	q_func('qtxt.query.cont', 'workj.txt,cont,' + encodeURI(t_noa) + ';' + encodeURI(t_custno)); 	
+                	//q_func('qtxt.query.cont', 'workj.txt,cont,' + encodeURI(t_noa) + ';' + encodeURI(t_custno)); 	
+                	
+                	var t_where ='';
+                	q_box("contfe_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({workjno:t_noa,custno:t_custno}), "cont_workj", "95%", "95%", '');
                 });
                 $('#btnOrde').click(function(e){
                 	var t_key = q_getPara('sys.key_orde');
@@ -141,6 +144,15 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'cont_workj':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtContno,txtContnoq,txtProductno,txtProduct,txtLengthb,txtMount,txtWeight'
+                        	, as.length, as, 'contno,contnoq,productno,product,lengthb,mount,weight', '','');
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
@@ -289,7 +301,8 @@
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var t_noa =  $(this).val();
-                            q_box("contfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa + "';" + r_accy, 'cont', "95%", "95%", q_getMsg("popCont"));
+                            if(t_noa.length>0)
+                            	q_box("contfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa + "';" + r_accy, 'cont', "95%", "95%", q_getMsg("popCont"));
                         });
                     }
                 }
@@ -672,6 +685,8 @@
 						<td style="width:200px; text-align: center;">品名</td>
 						<td style="width:100px; text-align: center;">數量</td>
 						<td style="width:100px; text-align: center;">重量</td>
+						<td style="width:100px; text-align: center;">餘料數量</td>
+						<td style="width:100px; text-align: center;">餘料重量</td>
 						<td style="width:200px; text-align: center;">備註</td>
 					</tr>
 					<tr>
@@ -691,6 +706,8 @@
 						</td>
 						<td><input class="txt" id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtEmount..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtEweight..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;"/></td>
 					</tr>
 				</tbody>
