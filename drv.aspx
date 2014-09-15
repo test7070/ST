@@ -419,7 +419,7 @@
                 q_popAssign();
                 q_cur=2;
                 
-                t_where="1=1 and isnull(enda,'0')!='1' and isnull(cancel,'0')!='1' ";
+                t_where="where=^^1=1 and isnull(enda,'0')!='1' and isnull(cancel,'0')!='1' ^^";
 				q_gt('view_orde', t_where, 0, 0, 0,'aaa', r_accy);
                 
                 $('#btnOrde_refresh').click(function(e) {

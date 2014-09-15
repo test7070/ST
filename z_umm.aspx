@@ -93,6 +93,14 @@
 						dbf : 'custtype',
 						index : 'noa,namea',
 						src : 'custtype_b.aspx'
+					}, {
+						type : '0', //[25] 
+						name : 'xacomp',
+						value : q_getPara('sys.comp')
+					}, {
+						type : '0', //[26] 
+						name : 'xproject',
+						value : q_getPara('sys.project').toUpperCase()
 					}]
 				});
 				q_popAssign();
