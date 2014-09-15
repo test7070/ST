@@ -69,12 +69,12 @@
 					<td align="center" style="width:25%;"><a id='lblProduct'>品名</a></td>
 					<td align="center" style="width:7%;"><a id='lblUnit'>單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblLengthb'>單支長</a></td>
-					<td align="center" style="width:10%;"><a id='lblMount'>數量</a></td>
-					<td align="center" style="width:10%;"><a id='lblWeight'>重量</a></td>
-					<td align="center" style="width:10%;"><a id='lblPrice'>單價</a></td>
-					<td align="center" style="width:10%;"><a id='lblTotal'>小計</a></td>
-					<td align="center" style="width:10%;"><a id='lblXmount'>未訂數量</a></td>
-					<td align="center" style="width:10%;"><a id='lblXweight'>未訂重量</a></td>
+					<td align="center" style="width:7%;"><a id='lblMount'>數量</a></td>
+					<td align="center" style="width:7%;"><a id='lblWeight'>重量</a></td>
+					<td align="center" style="width:7%;"><a id='lblPrice'>單價</a></td>
+					<td align="center" style="width:7%;"><a id='lblTotal'>小計</a></td>
+					<td align="center" style="width:7%;"><a id='lblXmount'>未訂數量</a></td>
+					<td align="center" style="width:7%;"><a id='lblXweight'>未訂重量</a></td>
 				</tr>
 			</table>
 		</div>
@@ -86,29 +86,29 @@
 					<td align="center" style="width:25%;"><a id='lblProduct'> </a></td>
 					<td align="center" style="width:7%;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:7%;"><a id='lblLengthb'> </a></td>
-					<td align="center" style="width:10%;"><a id='lblMount'> </a></td>
-					<td align="center" style="width:10%;"><a id='lblWeight'> </a></td>
-					<td align="center" style="width:10%;"><a id='lblPrice'> </a></td>
-					<td align="center" style="width:10%;"><a id='lblTotal'> </a></td>
-					<td align="center" style="width:10%;"><a id='lblXmount'> </a></td>
-					<td align="center" style="width:10%;"><a id='lblXweight'> </a></td>
+					<td align="center" style="width:7%;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:7%;"><a id='lblWeight'> </a></td>
+					<td align="center" style="width:7%;"><a id='lblPrice'> </a></td>
+					<td align="center" style="width:7%;"><a id='lblTotal'> </a></td>
+					<td align="center" style="width:7%;"><a id='lblXmount'> </a></td>
+					<td align="center" style="width:7%;"><a id='lblXweight'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td style="width:2%;"><input type="checkbox" id="chkSel.*"/></td>
 					<td style="width:10%;"><input class="txt" id="txtContno.*" type="text" style="width:98%;"  readonly="readonly" />
 						<input class="txt" id="txtContnoq.*" type="text" style="display:none;"  readonly="readonly" />
 					</td>
-					<td style="width:20%;"><input class="txt" id="txtProductno.*" type="text" style="width:35%;"  readonly="readonly" />
+					<td style="width:25%;"><input class="txt" id="txtProductno.*" type="text" style="width:35%;"  readonly="readonly" />
 						<input class="txt" id="txtProduct.*" type="text" style="width:55%;"  readonly="readonly" />
 					</td>
-					<td style="width:10%;"><input class="txt" id="txtUnit.*" type="text" style="width:98%;"  readonly="readonly" /></td>
-					<td style="width:25%;"><input class="txt" id="txtLengthb.*" type="text" style="width:98%;"  readonly="readonly" /></td>
-					<td style="width:7%;"><input class="txt" id="txtMount.*" type="text" style="width:98%;"  readonly="readonly" /></td>
-					<td style="width:7%;"><input class="txt" id="txtWeight.*" type="text" style="width:98%;"  readonly="readonly" /></td>
-					<td style="width:10%;"><input class="txt" id="txtPrice.*" type="text" style="width:98%;"  readonly="readonly" /></td>
-					<td style="width:10%;"><input class="txt" id="txtTotal.*" type="text" style="width:98%;"  readonly="readonly" /></td>
-					<td style="width:10%;"><input class="txt" id="txtXmount.*" type="text" style="width:98%;"  readonly="readonly" /></td>
-					<td style="width:10%;"><input class="txt" id="txtXweight.*" type="text" style="width:98%;"  readonly="readonly" /></td>
+					<td style="width:7%;"><input class="txt" id="txtUnit.*" type="text" style="width:98%;"  readonly="readonly" /></td>
+					<td style="width:7%;"><input class="txt" id="txtLengthb.*" type="text" style="width:98%;text-align: right;"  readonly="readonly" /></td>
+					<td style="width:7%;"><input class="txt" id="txtMount.*" type="text" style="width:98%;text-align: right;"  readonly="readonly" /></td>
+					<td style="width:7%;"><input class="txt" id="txtWeight.*" type="text" style="width:98%;text-align: right;"  readonly="readonly" /></td>
+					<td style="width:7%;"><input class="txt" id="txtPrice.*" type="text" style="width:98%;text-align: right;"  readonly="readonly" /></td>
+					<td style="width:7%;"><input class="txt" id="txtTotal.*" type="text" style="width:98%;text-align: right;"  readonly="readonly" /></td>
+					<td style="width:7%;"><input class="txt" id="txtXmount.*" type="text" style="width:98%;text-align: right;"  readonly="readonly" /></td>
+					<td style="width:7%;"><input class="txt" id="txtXweight.*" type="text" style="width:98%;text-align: right;"  readonly="readonly" /></td>
 				</tr>
 			</table>
 		</div>
