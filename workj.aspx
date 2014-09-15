@@ -19,7 +19,7 @@
             q_tables = 't';
             var q_name = "workj";
             var q_readonly = ['txtNoa'];
-            var q_readonlys = ['txtContno'];
+            var q_readonlys = ['txtContno','txtContnoq'];
             var q_readonlyt = [];
             var bbmNum = [];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
@@ -665,8 +665,8 @@
 					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;"/></td>
 					<td>
-						<input class="txt" id="txtContno.*" type="text" style="width:95%;"/>
-						<input class="txt" id="txtContnoq.*" type="text" style="display:none;"/>
+						<input class="txt" id="txtContno.*" type="text" style="float:left;width:75%;"/>
+						<input class="txt" id="txtContnoq.*" type="text" style="float:left;width:20%;"/>
 					</td>
 				</tr>
 			</table>
