@@ -22,6 +22,23 @@
 			$(document).ready(function() {
 				q_getId();
 				q_gf('', 'z_umm');
+				
+				$('#q_report').click(function(e) {
+					//客戶請款單與應收對帳簡要表>>正常隱藏業務選項>>>不然會造成金額問題
+					if(!(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1 || q_getPara('sys.comp').indexOf('永勝')>-1)){
+						if($('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm13' || $('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm10'){
+							$('#Sales').hide();
+						}
+						//月結客戶刪除業務應收帳款總表>>>月結會不知道帳要沖到哪一個業務
+						var delete_report=0;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_umm12')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('業務應收帳款總表')>-1)
+							$('#q_report div div')[delete_report].remove()
+					}
+				});
 			});
 			function q_gfPost() {
 				$('#q_report').q_report({

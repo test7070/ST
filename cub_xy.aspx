@@ -89,7 +89,8 @@
 					t_where += ' and (cut=1)';
 					q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 				});
-				$('title').text("連續製令單");
+				//$('title').text("連續製令單"); //IE8會有問題
+				document.title='連續製令單'
 			}
 
 			function q_gtPost(t_name) {
