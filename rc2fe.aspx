@@ -860,7 +860,7 @@
                         <td align="center" id='typea=rc2.typea'>~typea=rc2.typea</td>
                         <td align="center" id='datea'>~datea</td>
                         <td align="center" id='noa'>~noa</td>
-                        <td align="center" id='tggno tgg,4' style="text-align: left;">~tggno ~tgg,4</td>
+                        <td align="center" id='nick' style="text-align: left;">~nick</td>
                     </tr>
                 </table>
             </div>
