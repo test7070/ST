@@ -497,7 +497,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 100%;
+                width: 1200px;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -513,7 +513,7 @@
                 font-size: medium;
             }
             #dbbt {
-                width: 100%;
+                width: 1100px;
             }
             #tbbt {
                 margin: 0;
@@ -630,8 +630,8 @@
 					<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"></td>
-					<td style="width:80px;" ><a id='lbl_product'>品名</a></td>
-					<td style="width:150px;"><a id='lbl_pic'>形狀</a></td>
+					<td style="width:180px;" ><a id='lbl_product'>品名</a></td>
+					<td style="width:120px;"><a id='lbl_pic'>形狀</a></td>
 					<td style="width:80px;"><a id='lbl_picno'>形狀編號</a></td>
 					<td style="width:100px;"><a id='lbl_imgpara'>參數</a></td>
 					<td style="width:80px;"><a id='lbl_lengthb'>單支長</a></td>
@@ -639,7 +639,7 @@
 					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
 					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
 					<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
-					<td style="width:150px;"><a id='lbl_cont'>合約單號</a></td>
+					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -665,8 +665,8 @@
 					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;"/></td>
 					<td>
-						<input class="txt" id="txtContno.*" type="text" style="float:left;width:75%;"/>
-						<input class="txt" id="txtContnoq.*" type="text" style="float:left;width:20%;"/>
+						<input class="txt" id="txtContno.*" type="text" style="float:left;width:120px;"/>
+						<input class="txt" id="txtContnoq.*" type="text" style="float:left;width:40px;"/>
 					</td>
 				</tr>
 			</table>
