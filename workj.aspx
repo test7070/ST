@@ -18,8 +18,8 @@
 
             q_tables = 't';
             var q_name = "workj";
-            var q_readonly = ['txtNoa'];
-            var q_readonlys = ['txtContno'];
+            var q_readonly = ['txtNoa','txtOrdeno'];
+            var q_readonlys = ['txtContno','txtContnoq'];
             var q_readonlyt = [];
             var bbmNum = [];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
@@ -72,6 +72,12 @@
                 	var t_noa = $('#txtNoa').val();
                 	q_func('qtxt.query.orde', 'workj.txt,orde,' + encodeURI(t_key)+ ';' +encodeURI(t_noa)); 	
                 });
+                $('#lblOrdeno').click(function(e){
+                	var t_noa= $('#txtOrdeno').val();
+                	var t_accy = $('#txtOrdeaccy').val();
+                	if(t_noa.length>0)
+                		q_box("ordefe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa + "';" + t_accy, 'orde', "95%", "95%", q_getMsg("popOrde"));
+                });
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
@@ -97,7 +103,12 @@
             		case 'qtxt.query.orde':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
-                            alert(as[0].msg);
+                        	if(as[0].ordeno != undefined && as[0].ordeno.length>0){
+                        		$('#txtOrdeno').val(as[0].ordeno);
+                        		$('#txtOrdeaccy').val(as[0].ordeaccy);
+                        	}else{
+                        		alert(as[0].msg);
+                        	}
                         } else {
                             alert('匯出訂單錯誤!');
                         }
@@ -138,6 +149,7 @@
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
+                $('#btnOrde').click();
                 Unlock(1);
             }
 
@@ -497,7 +509,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 100%;
+                width: 1200px;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -513,7 +525,7 @@
                 font-size: medium;
             }
             #dbbt {
-                width: 100%;
+                width: 1100px;
             }
             #tbbt {
                 margin: 0;
@@ -611,13 +623,20 @@
 						<td colspan="6"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblOrdeno" class="lbl btn"> </a></td>
+						<td colspan="2">
+							<input id="txtOrdeno"  type="text"  class="txt c1"/>
+							<input id="txtOrdeaccy"  type="text"  style="display:none;"/>
+						</td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td></td>
 						<td><input type="button" id="btnCont" value="合約匯入" /></td>
-						<td><input type="button" id="btnOrde" value="轉訂單" /></td>
+						<td><input type="button" id="btnOrde" value="轉訂單" style="display:none;"/></td>
 					</tr>
 					
 				</table>
@@ -630,8 +649,8 @@
 					<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"></td>
-					<td style="width:80px;" ><a id='lbl_product'>品名</a></td>
-					<td style="width:150px;"><a id='lbl_pic'>形狀</a></td>
+					<td style="width:180px;" ><a id='lbl_product'>品名</a></td>
+					<td style="width:120px;"><a id='lbl_pic'>形狀</a></td>
 					<td style="width:80px;"><a id='lbl_picno'>形狀編號</a></td>
 					<td style="width:100px;"><a id='lbl_imgpara'>參數</a></td>
 					<td style="width:80px;"><a id='lbl_lengthb'>單支長</a></td>
@@ -639,7 +658,7 @@
 					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
 					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
 					<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
-					<td style="width:150px;"><a id='lbl_cont'>合約單號</a></td>
+					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -665,8 +684,8 @@
 					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;"/></td>
 					<td>
-						<input class="txt" id="txtContno.*" type="text" style="width:95%;"/>
-						<input class="txt" id="txtContnoq.*" type="text" style="display:none;"/>
+						<input class="txt" id="txtContno.*" type="text" style="float:left;width:120px;"/>
+						<input class="txt" id="txtContnoq.*" type="text" style="float:left;width:40px;"/>
 					</td>
 				</tr>
 			</table>
@@ -685,6 +704,7 @@
 						<td style="width:200px; text-align: center;">品名</td>
 						<td style="width:100px; text-align: center;">數量</td>
 						<td style="width:100px; text-align: center;">重量</td>
+						<td style="width:200px; text-align: center;">餘料批號</td>
 						<td style="width:100px; text-align: center;">餘料數量</td>
 						<td style="width:100px; text-align: center;">餘料重量</td>
 						<td style="width:200px; text-align: center;">備註</td>
@@ -706,6 +726,7 @@
 						</td>
 						<td><input class="txt" id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtBno..*" type="text" style="width:95%;"/></td>
 						<td><input class="txt" id="txtEmount..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtEweight..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;"/></td>
