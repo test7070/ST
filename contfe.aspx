@@ -479,6 +479,14 @@
 						<td><select id="cmbKind" class="txt c1"> </select></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id='lblProj' class="lbl"> </a></td>
+						<td colspan="2"><input id="txtProj" type="text"  class="txt c1"/></td>
+						<td><span> </span><a id='lblSite' class="lbl"> </a></td>
+						<td colspan="2"><input id="txtSite" type="text"  class="txt c1"/></td>
+						<td><span> </span><a id='lblChktype' class="lbl"> </a></td>
+						<td><input id="txtChktype" type="text"  class="txt c1"/></td>
+					</tr>
+					<tr>
 						<td class="td3"><span> </span><a id='lblBcontdate' class="lbl"> </a></td>
 						<td class="td4"><input id="txtBcontdate" type="text"  class="txt c1"/></td>
 						<td align="center"><a id="lblEcontdate"> </a></td>

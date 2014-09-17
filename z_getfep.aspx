@@ -25,11 +25,11 @@
             function q_gfPost() {
                $('#q_report').q_report({
                         fileName : 'z_getfep',
-                        options : [{
-							type : '0',//[1]
-							name : 'accy',
-							value : r_accy
-						},{
+                        options : [{//[1]
+	                        type : '0',
+	                        name : 'xkind',
+	                        value : q_getPara('sys.stktype')
+	                    },{
 	                        type : '0',//[2]
 	                        name : 'mountprecision',
 	                        value : q_getPara('vcc.mountPrecision')
