@@ -39,7 +39,9 @@
             	,['txtPicno_', 'btnPicno_', 'img', 'noa', 'txtPicno_', 'img_b.aspx']
             	,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
             	,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,product,spec,emount,eweight', 'txtUno__,txtProductno__,txtProduct__,,txtMount__,txtWeight__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
-            	,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtNick', 'cust_b.aspx']);
+            	,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtNick', 'cust_b.aspx']
+            	,['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
+            	,['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__,txtStore__', 'store_b.aspx']);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -137,6 +139,16 @@
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'btnModi':
+                		var as = _q_appendData("view_vccs", "", true);
+                        if (as[0] != undefined) {
+                        	alert('已訂單已出貨，禁止修改。');
+                        }else{
+                        	_btnModi();
+                			$('#txtDatea').focus();
+                        }
+                        Unlock(1);
+                		break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -188,8 +200,15 @@
             function btnModi() {
                 if (emp($('#txtNoa').val()))
                     return;
-                _btnModi();
-                $('#txtDatea').focus();
+                var t_ordeno = $('#txtOrdeno').val()
+                if(t_ordeno.length>0){
+                	Lock(1,{opacity:0});
+               		q_gt('view_vccs', "where=^^ ordeno='"+t_ordeno+"' ^^ stop=1", 0, 0, 0, 'btnModi'); 
+                }
+                else{
+                	_btnModi();
+                	$('#txtDatea').focus();
+                }    
             }
 
             function btnPrint() {
@@ -277,6 +296,12 @@
                             var n = $(this).attr('id').replace('txtProductno_', '');
                             $('#btnProduct_'+n).click();
                         });
+                        $('#txtStoreno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStoreno_', '');
+                            $('#btnStore_'+n).click();
+                        });
                         $('#txtPicno_' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
@@ -336,6 +361,12 @@
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtProductno__', '');
                             $('#btnProduct__'+n).click();
+                        });
+                        $('#txtStoreno__' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStoreno__', '');
+                            $('#btnStore__'+n).click();
                         });
                         $('#txtUno__' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
@@ -497,7 +528,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 100%;
+                width: 1200px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -525,7 +556,7 @@
                 font-size: medium;
             }
             #dbbt {
-                width: 1100px;
+                width: 1200px;
             }
             #tbbt {
                 margin: 0;
@@ -657,6 +688,7 @@
 					<td style="width:80px;"><a id='lbl_monnt'>數量</a></td>
 					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
 					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
+					<td style="width:100px;"><a id='lbl_store'>入庫倉</a></td>
 					<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
 					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
@@ -682,6 +714,11 @@
 					<td><input class="txt" id="txtMount.*" type="text" style="width:95%;text-align: right;"/></td>
 					<td><input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/></td>
 					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
+					<td>
+						<input class="txt" id="txtStoreno.*" type="text" style="width:30%;float:left;"/>
+						<input class="txt" id="txtStore.*" type="text" style="width:60%;float:left;"/>
+						<input id="btnStore.*" type="button" style="display:none;">
+					</td>
 					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input class="txt" id="txtContno.*" type="text" style="float:left;width:120px;"/>
@@ -707,6 +744,7 @@
 						<td style="width:200px; text-align: center;">餘料批號</td>
 						<td style="width:100px; text-align: center;">餘料數量</td>
 						<td style="width:100px; text-align: center;">餘料重量</td>
+						<td style="width:100px; text-align: center;">餘料倉</td>
 						<td style="width:200px; text-align: center;">備註</td>
 					</tr>
 					<tr>
@@ -729,6 +767,11 @@
 						<td><input class="txt" id="txtBno..*" type="text" style="width:95%;"/></td>
 						<td><input class="txt" id="txtEmount..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtEweight..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td>
+							<input class="txt" id="txtStoreno..*" type="text" style="width:30%;float:left;"/>
+							<input class="txt" id="txtStore..*" type="text" style="width:60%;float:left;"/>
+							<input id="btnStore..*" type="button" style="display:none;">
+						</td>
 						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;"/></td>
 					</tr>
 				</tbody>
