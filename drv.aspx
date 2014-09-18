@@ -130,7 +130,7 @@
                     
                 },
                 init : function(obj) {
-					chk_vcce='';
+					//chk_vcce='';
 					chk_handle=new Array();
 					chk_handle2=new Array();
 					chk_store=new Array();
