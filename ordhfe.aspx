@@ -14,10 +14,6 @@
         <script src="css/jquery/ui/jquery.ui.widget.js"></script>
         <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
         <script type="text/javascript">
-			this.errorHandler = null;
-			function onPageError(error) {
-				alert("An error occurred:\r\n" + error.Message);
-			}
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "ordh";
@@ -60,17 +56,16 @@
 			}
 
 			function sum() {
-				var t1 = 0, t_unit, t_mount, t_weight = 0;
-				/*var t_money = 0;
-				for (var j = 0; j < q_bbsCount; j++) {
-					q_tr('txtTotal_' + j, q_mul(q_float('txtMount_' + j), q_float('txtPrice_' + j)));
-					q_tr('txtNotv_' + j, q_sub(q_float('txtMount_' + j), q_float('txtC1' + j)));
-					t_money = q_add(t_money, q_float('txtTotal_' + j));
+				var t_money = 0;
+				var t_moneys,t_unit,t_count,t_price;
+				for(var i=0;i<q_bbsCount;i++){
+					t_unit = $.trim($('#txtUnit_'+i).val()).toUpperCase();
+					t_count = t_unit.length==0 || t_unit == 'KG' || t_unit == '公斤' ? q_float('txtWeight_'+i):q_float('txtMount_'+i);
+					t_moneys = round(q_mul(t_count,q_float('txtPrice_'+i)),0);
+					t_money += t_moneys;
+					$('#txtMoney_'+i).val(t_moneys);
 				}
-				q_tr('txtMoney', t_money);
-				q_tr('txtTotal', q_add(q_float('txtMoney'), q_float('txtTax')));
-				q_tr('txtTotalus', q_mul(q_float('txtTotal'), q_float('txtFloata')));
-				*/
+				$('#txtMoney').val(t_money);
 				calTax();
 			}
 
@@ -82,6 +77,13 @@
 				q_mask(bbmMask);
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'),'s');
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+				
+				$('#cmbTaxtype').change(function(e){
+					sum();
+				}).click(function(e){
+					if(q_cur==1 || q_cur==2)
+						sum();
+				});
 			}
 
 			function q_boxClose(s2) {
@@ -310,7 +312,7 @@
                 height: 35px;
             }
             .tbbm tr td {
-                width: 20%;
+                width: 19%;
             }
             .tbbm .tdZ {
                 width: 1%;
@@ -467,7 +469,7 @@
                     </tr>
                     <tr>
                     	<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
-                    	<td colspan="4"><input id="txtMemo" type="text" class="txt c1" /></td>
+                    	<td colspan="4"><textarea id="txtMemo" type="text" class="txt c1" rows="3"></textarea></td>
                     </tr>
                     <tr>
                     	<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
@@ -488,16 +490,16 @@
                     <td align="center" style="width:40px;"><a id='lblYn_s'>決</a></td>
                     <td align="center" style="width:80px;"><a id='lblComp_s'>廠商名稱</a></td>
                     <td align="center" style="width:80px;"><a id='lblBrand_s'>廠牌</a></td>
-                    <td align="center" style="width:200px;"><a id='lblProduct_s'>物品</a></td>
+                    <td align="center" style="width:280px;"><a id='lblProduct_s'>物品</a></td>
                     <td align="center" style="width:80px;"><a id='lblLengthb_s'>米</a></td>
                     <td align="center" style="width:80px;"><a id='lblUnit_s'>單位</a></td>
                     <td align="center" style="width:80px;"><a id='lblMount_s'>預定數量</a></td>
                     <td align="center" style="width:80px;"><a id='lblWeight_s'>預定重量</a></td>
                     <td align="center" style="width:80px;"><a id='lblPrice_s'>單價</a></td>
                     <td align="center" style="width:80px;"><a id='lblMoney_s'>金額</a></td>
-                    <td align="center" style="width:80px;"><a id='lblMemo_s'>備註</a></td>
-                    <td align="center" style="width:80px;"><a id='lblIndate_s'>交貨日期</a></td>
-                    <td align="center" style="width:80px;"><a id='lblPaytype_s'>付款方式</a></td>
+                    <td align="center" style="width:100px;"><a id='lblMemo_s'>備註</a></td>
+                    <td align="center" style="width:100px;"><a id='lblIndate_s'>交貨日期</a></td>
+                    <td align="center" style="width:150px;"><a id='lblPaytype_s'>付款方式</a></td>
                 </tr>
                 <tr  style='background:#cad3ff;'>
                     <td align="center">
@@ -511,8 +513,8 @@
                     <td><input type="text" id="txtBrand.*" style="width:95%;"/></td>
 					<td>
 						<input type="button" id="btnProduct.*" style="display:none;"/>
-                  		<input type="text" id="txtProductno.*" style="width:40%;"/>
-          				<input type="text" id="txtProduct.*" style="width:45%;"/>
+                  		<input type="text" id="txtProductno.*" style="width:80px;float:left;"/>
+          				<input type="text" id="txtProduct.*" style="width:160px;float:left;"/>
           			</td>
                     <td><input type="text" id="txtLengthb.*" style="width:95%;text-align:right;"/></td>
                     <td><input type="text" id="txtUnit.*" style="width:95%;"/></td>
@@ -523,7 +525,7 @@
                 	<td><input type="text" id="txtMemo.*" style="width:95%;"/></td>
                 	<td><input type="text" id="txtIndate.*" style="width:95%;"/></td>
                 	<td>
-                		<input type="text" id="txtPaytype.*" style="width:75%;float:left;"/>
+                		<input type="text" id="txtPaytype.*" style="width:120px;float:left;"/>
                 		<select id="combPaytype.*" style="width:15px;float:left;"></select>
             		</td>
                 </tr>

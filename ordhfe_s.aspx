@@ -28,10 +28,12 @@
             function q_gfPost() {
                 q_getFormat();
                 q_langShow();
-                bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
+                bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd],['txtBindate', r_picd], ['txtEindate', r_picd]];
                 q_mask(bbmMask);
                 $('#txtBdate').datepicker();
-				$('#txtEdate').datepicker(); 
+				$('#txtEdate').datepicker();
+				$('#txtBindate').datepicker();
+				$('#txtEindate').datepicker(); 
                 $('#txtNoa').focus();
             }
 
@@ -39,6 +41,8 @@
                 t_noa = $.trim($('#txtNoa').val());
                 t_bdate = $('#txtBdate').val();
 		        t_edate = $('#txtEdate').val();
+		        t_bindate = $('#txtBindate').val();
+		        t_eindate = $('#txtEnidate').val();
 		        t_tggno = $.trim($('#txtTggno').val());
 		        t_tgg = $.trim($('#txtTgg').val());
 		        
@@ -46,7 +50,8 @@
                 
 		        var t_where = " 1=1 " 
 		        + q_sqlPara2("noa", t_noa) 
-		        + q_sqlPara2("datea", t_bdate, t_edate) 		     
+		        + q_sqlPara2("datea", t_bdate, t_edate) 
+		        + q_sqlPara2("indate", t_bindate, t_eindate) 		     
 		        + q_sqlPara2("tggno", t_tggno);		 
 		        if (t_tgg.length>0)
 		        	t_where += " and charindex('"+t_tgg+"',tgg)"	
@@ -85,6 +90,14 @@
 					<input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
 					<span style="display:inline-block; vertical-align:middle">&sim;</span>
 					<input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td   style="width:35%;" ><a id='lblIndate'></a></td>
+					<td style="width:65%;  ">
+					<input class="txt" id="txtBindate" type="text" style="width:90px; font-size:medium;" />
+					<span style="display:inline-block; vertical-align:middle">&sim;</span>
+					<input class="txt" id="txtEindate" type="text" style="width:93px; font-size:medium;" />
 					</td>
 				</tr>
 				<tr class='seek_tr'>
