@@ -32,7 +32,7 @@
 			var bbsMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
-			brwCount2 = 9;
+			brwCount2 = 11;
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'Datea';
@@ -632,14 +632,17 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
-						<td colspan='2'>
-							<input id="txtMoney" type="text" class="txt c1 num" />
-						</td>
+						<td><input id="txtMoney" type="text" class="txt c1 num" /></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td><input id="txtTax" type="text" class="txt c1 num"/></td>
 						<td><select id="cmbTaxtype" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td><input id="txtTotal" type="text" class="txt c1 num"/></td>
+						<td>
+							<span> </span>
+							<input id="chkEnda" type="checkbox"/>
+							<span> </span><a id='lblEnda'> </a>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
@@ -651,8 +654,8 @@
 						<td><input id="txtWorker2" type="text" class="txt c1" /></td>
 						<td>
 							<span> </span>
-							<input id="chkEnda" type="checkbox"/>
-							<span> </span><a id='lblEnda'> </a>
+							<input id="chkCancel" type="checkbox"/>
+							<span> </span><a id='lblCancel'> </a>
 						</td>
 					</tr>
 					<tr>
@@ -660,12 +663,7 @@
 							<span> </span><a id='lblMemo' class="lbl"> </a>
 						</td>
 						<td colspan='6' >
-							<input id="txtMemo" type="text" style="width: 99%;"/>
-						</td>
-						<td>
-							<span> </span>
-							<input id="chkCancel" type="checkbox"/>
-							<span> </span><a id='lblCancel'> </a>
+							<textarea id="txtMemo" class="txt c1" rows="7"> </textarea>
 						</td>
 					</tr>
 				</table>
