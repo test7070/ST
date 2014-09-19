@@ -34,7 +34,7 @@
                 ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,tel,zip_invo,addr_comp,paytype', 'txtTggno,txtComp,txtTel,txtPost,txtAddr,txtPaytype', 'tgg_b.aspx'],
                 ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
                 ['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
-                ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp,addr', 'txtCno,txtAcomp,txtAddr2', 'acomp_b.aspx'],
+                ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
                 ['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
                 //['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,unit,style,lengthb,spec', 'txtUno_,txtProductno_,txtProduct_,txtUnit_,txtStyle_,txtLengthb_,txtSpec_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
                 ['txtCarno', 'lblCar', 'cardeal', 'noa,comp', 'txtCarno,txtCar', 'cardeal_b.aspx'],
@@ -878,6 +878,11 @@
                         <td class="td8"><input id="txtMon" type="text" class="txt c1"/></td>
                         
                     </tr>
+                    <tr>
+                   		<td class="td1"><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
+                        <td class="td2"><input id="txtCno" type="text" class="txt c1" /></td>
+                        <td class="td3" colspan="2"><input id="txtAcomp" type="text" class="txt c1"/></td>
+                    </tr>
                     <tr class="tr2">
                        <td class="td1"><span> </span><a id='lblTgg' class="lbl btn"> </a></td>
                         <td class="td2"><input id="txtTggno" type="text" class="txt c1" /></td>
@@ -885,8 +890,6 @@
                         <td class="td7"><span> </span><a id='lblNoa' class="lbl"> </a></td>
                         <td class="td8">
                         	<input id="txtNoa" type="text" class="txt c1"/>
-                        	<input id="txtCno" type="hidden" class="txt c1"/>
-                        	<input id="txtAcomp" type="hidden" class="txt c1"/>
                         </td>
                     </tr>
                     <tr class="tr3">
