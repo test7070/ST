@@ -37,8 +37,8 @@
 			brwKey = 'Odate';
 			aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'],
-				['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax'
-				, 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'tgg_b.aspx']
+				['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax', 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'tgg_b.aspx']
+				, ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -427,6 +427,13 @@
                         <td colspan="2"><input id="txtNoa" type="text" class="txt c1" /></td>
                         <td><span> </span><a id='lblDatea' class="lbl"> </a></td>
                         <td><input id="txtDatea" type="text" class="txt c1" /></td>
+                    </tr>
+                    <tr>
+                        <td><span> </span><a id='lblAcomp' class="lbl"> </a></td>
+                        <td colspan="2">
+                        	<input id="txtCno" type="text" class="txt" style="width:40%;"/>
+                        	<input id="txtAcomp" type="text" class="txt" style="width:60%;"/>
+                    	</td>
                     </tr>
                     <tr>
                         <td><span> </span><a id='lblTgg' class="lbl"> </a></td>

@@ -38,7 +38,8 @@
 							, ['txtSales', 'lblSales', 'sss', 'namea,noa', 'txtSales,txtSalesno', 'sss_b.aspx']
 							, ['txtAssigner', 'lblAssigner', 'sss', 'namea,noa', 'txtAssigner,txtAssignerno', 'sss_b.aspx']
 							, ['txtAssistant', 'lblAssistant', 'sss', 'namea,noa', 'txtAssistant,txtAssistantno', 'sss_b.aspx']
-							, ['txtBankno', 'lblBankno', 'bank', 'noa,bank', 'txtBankno,txtBank', 'bank_b.aspx']);
+							, ['txtBankno', 'lblBankno', 'bank', 'noa,bank', 'txtBankno,txtBank', 'bank_b.aspx']
+							, ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
@@ -201,7 +202,7 @@
 			}
 
 			function btnPrint() {
-				q_box('z_contstp.aspx', '', "95%", "95%", m_print);
+				q_box("z_contfep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cont', "95%", "95%", m_print);
 			}
 
 			function wrServer(key_value) {
@@ -466,6 +467,13 @@
 						<td><input id="txtDatea" type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblEnddate' class="lbl"> </a></td>
 						<td><input id="txtEnddate" type="text"  class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
+						<td colspan="3">
+							<input id="txtCno"  type="text" class="txt" style="width:30%; float: left;"/>
+							<input id="txtAcomp"  type="text" class="txt" style="width:70%; float: left;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTgg' class="lbl btn"> </a></td>
