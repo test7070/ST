@@ -743,9 +743,7 @@
 			}
 
 			function btnPrint() {
-                var t_where = "noa='" + $.trim($('#txtNoa').val()) + "'";
-                //q_box("z_ordefep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
-                q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+               q_box("z_ordefep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'orde', "95%", "95%", m_print);
 			}
 
 			function wrServer(key_value) {
