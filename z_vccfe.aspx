@@ -15,10 +15,9 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-            var gfrun = false;
+            var acompItem = '';
             var uccgaItem = '';
             var partItem = '';
-            var sss_state = false;
             var issale = '0';
             var job = '';
             var sgroup = '';
@@ -29,16 +28,46 @@
             
             $(document).ready(function() {
                 q_getId();
-                if (uccgaItem.length == 0) {
-                    q_gt('uccga', '', 0, 0, 0, "");
-                }
-                if (partItem.length == 0) {
-                    q_gt('part', '', 0, 0, 0, "");
-                }
-                if (!sss_state) {
-                    q_gt('sss', "where=^^noa='" + r_userno + "'^^", 0, 0, 0, "");
-                }
+      			q_gt('acomp', '', 0, 0, 0, "");
             });
+            
+            function q_gtPost(t_name) {
+                switch (t_name) {
+                    case 'acomp':
+                        var as = _q_appendData("acomp", "", true);
+                        acompItem = " @全部";
+                        for ( i = 0; i < as.length; i++) {
+                            acompItem = acompItem + (acompItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
+                        }
+                        q_gt('uccga', '', 0, 0, 0, "");
+                        break;
+                    case 'uccga':
+                        var as = _q_appendData("uccga", "", true);
+                        uccgaItem = " @全部";
+                        for ( i = 0; i < as.length; i++) {
+                            uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
+                        }
+                        q_gt('part', '', 0, 0, 0, "");
+                        break;
+                     case 'part':
+                        var as = _q_appendData("part", "", true);
+                        partItem = " @全部";
+                        for ( i = 0; i < as.length; i++) {
+                            partItem = partItem + (partItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].part;
+                        }
+                        q_gt('sss', "where=^^noa='" + r_userno + "'^^", 0, 0, 0, "");
+                        break;  
+                    case 'sss':
+                        var as = _q_appendData("sss", "", true);
+                        if (as[0] != undefined) {
+                            issale = as[0].issales;
+                            job = as[0].job;
+                            sgroup = as[0].salesgroup;
+                        }
+                        q_gf('', 'z_vccfe');
+                        break; 
+                }
+            }
             
             function q_gfPost() {
             	var ucctype=q_getPara('ucc.typea') + ',' + q_getPara('uca.typea');
@@ -146,7 +175,11 @@
 						type : '0',//[25]
 						name : 'worker',
 						value : r_name
-					}]
+					},{
+                        type : '5', //[26]//40000
+                        name : 'xcno',
+                        value : acompItem.split(',')
+                    }]
                 });
                 q_popAssign();
                 q_getFormat();
@@ -225,37 +258,7 @@
 				}
 			};
 			
-            function q_gtPost(t_name) {
-                switch (t_name) {
-                    case 'sss':
-                        var as = _q_appendData("sss", "", true);
-                        if (as[0] != undefined) {
-                            issale = as[0].issales;
-                            job = as[0].job;
-                            sgroup = as[0].salesgroup;
-                        }
-                        sss_state = true;
-                        break;
-                    case 'uccga':
-                        var as = _q_appendData("uccga", "", true);
-                        uccgaItem = " @全部";
-                        for ( i = 0; i < as.length; i++) {
-                            uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
-                        }
-                        break;
-                     case 'part':
-                        var as = _q_appendData("part", "", true);
-                        partItem = " @全部";
-                        for ( i = 0; i < as.length; i++) {
-                            partItem = partItem + (partItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].part;
-                        }
-                        break;   
-                }
-                if (uccgaItem.length > 0 && partItem.length > 0 && sss_state && !gfrun) {
-                    gfrun = true;
-                    q_gf('', 'z_vccfe');
-                }
-            }
+            
 		</script>
 	</head>
 	<body ondragstart="return false" draggable="false"
