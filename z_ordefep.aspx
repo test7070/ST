@@ -25,22 +25,10 @@
                     fileName : 'z_ordefep',
                     options : [{//[1]
 						type : '0',
-						name : 'accy',
-                        value : q_getId()[4] 
-                    },{
-						type : '0',//[2]
-						name : 'mountprecision',
-						value : q_getPara('vcc.mountPrecision')
-					},{
-						type : '0',//[3]
-						name : 'weightprecision',
-						value : q_getPara('vcc.weightPrecision')
-					},{
-						type : '0',//[4]
-						name : 'priceprecision',
-						value : q_getPara('vcc.pricePrecision')
-					},{//1  [5]
-                        type : '6',
+						name : 'xkind',
+                        value : q_getPara('sys.stktype')
+                    },{//21 [2][3]
+                        type : '1',
                         name : 'xnoa'
                     }]
                 });
@@ -48,10 +36,16 @@
                 q_getFormat();
                 q_langShow();
                 
-                var t_key = q_getHref();
-                if(t_key[1] != undefined){
-                	$('#txtXnoa').val(t_key[1]);
-                }
+                var t_para = new Array();
+	            try{
+	            	t_para = JSON.parse(q_getId()[3]);
+	            }catch(e){
+	            }    
+	            if(t_para.length==0 || t_para.noa==undefined){
+	            }else{
+	            	$('#txtXnoa1').val(t_para.noa);
+                	$('#txtXnoa2').val(t_para.noa);
+	            }
             }
 
             function q_boxClose(s2) {
