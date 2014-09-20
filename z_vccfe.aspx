@@ -172,11 +172,11 @@
                         type : '6', //[33]//20000
                         name : 'ctitle'
                     },{
-						type : '0',//[25]
+						type : '0',//[34]
 						name : 'worker',
 						value : r_name
 					},{
-                        type : '5', //[26]//40000
+                        type : '5', //[35]//40000
                         name : 'xcno',
                         value : acompItem.split(',')
                     }]
