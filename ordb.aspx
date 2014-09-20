@@ -552,6 +552,7 @@
 			function refresh(recno) {
 				_refresh(recno);
 				product_change();
+				HiddenTreat();
 			}
 
 			function loadCustAddr(t_tggno) {
@@ -572,6 +573,10 @@
 					$('#combAddr').removeAttr('disabled');
 					$('#tmp').find("input[type='text']").removeAttr('disabled');
 				}
+				HiddenTreat();
+			}
+			
+			function HiddenTreat() {
 				var hasStyle = q_getPara('sys.isstyle');
 				var isStyle = (hasStyle.toString()=='1'?$('.isStyle').show():$('.isStyle').hide());
 				var hasSpec = q_getPara('sys.isspec');
@@ -637,6 +642,7 @@
 				}
 				_bbsAssign();
 				product_change();
+				HiddenTreat();
 			}
 
 			function bbtAssign() {
