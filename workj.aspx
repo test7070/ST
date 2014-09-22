@@ -283,7 +283,6 @@
             function btnMinus(id) {
                 _btnMinus(id);
             }
-
             function btnPlus(org_htm, dest_tag, afield) {
                 _btnPlus(org_htm, dest_tag, afield);
             }
