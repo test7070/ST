@@ -22,7 +22,7 @@
 			var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
 			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
 			var bbmMask = [];
-			var bbsMask = [['txtStyle', 'A']];
+			var bbsMask = [['txtStyle', 'A'],['txtIndate','999/99/99']];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwList = [];
@@ -30,7 +30,7 @@
 			brwKey = 'noa';
 			q_desc = 1;
 			aPop = new Array(
-				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
 				['txtProductno1_', 'btnProductno1_', 'bcc', 'noa,product,unit', 'txtProductno1_,txtProduct_,txtUnit_', 'bcc_b.aspx'], 
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'], 
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'], 
@@ -116,59 +116,22 @@
 				});
 			}
 
-			function distinct(arr1) {
-				var uniArray = [];
-				for (var i = 0; i < arr1.length; i++) {
-					var val = arr1[i];
-					if ($.inArray(val, uniArray) === -1) {
-						uniArray.push(val);
-					}
-				}
-				return uniArray;
-			}
-
-			var ordbsArray = new Array;
 			function q_boxClose(s2) {///   q_boxClose 2/4
-				var
-				ret;
 				switch (b_pop) {
-					case 'ordbs':
-						if (q_cur > 0 && q_cur < 4) {
-							ordbsArray = getb_ret();
-							if (!ordbsArray || ordbsArray.length == 0) {
-								return;
-							} else {
-								var distinctArray = new Array;
-								var inStr = '';
-								for (var i = 0; i < ordbsArray.length; i++) {
-									distinctArray.push(ordbsArray[i].noa);
-								}
-								distinctArray = distinct(distinctArray);
-								for (var i = 0; i < distinctArray.length; i++) {
-									inStr += "'" + distinctArray[i] + "',";
-								}
-								inStr = inStr.substring(0, inStr.length - 1);
-								var t_where = "where=^^ ordbno in(" + inStr + ") ^^";
-								q_gt('ordcs', t_where, 0, 0, 0, '', r_accy);
-							}
-						}
-						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
-						///   q_boxClose 3/4
 						break;
-				}/// end Switch
+				}
 				b_pop = '';
 			}
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case q_name:
-						t_uccArray = _q_appendData("ucc", "", true);
 						if (q_cur == 4)
 							q_Seek_gtPost();
 						break;
-				}  /// end switch
+				}
 			}
 
 			function q_stPost() {
@@ -209,30 +172,7 @@
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
 
-				q_box('ordcst_s.aspx', q_name + '_s', "500px", "530px", q_getMsg("popSeek"));
-			}
-
-			function getTheory(b_seq) {
-				t_Radius = $('#txtRadius_' + b_seq).val();
-				t_Width = $('#txtWidth_' + b_seq).val();
-				t_Dime = $('#txtDime_' + b_seq).val();
-				t_Lengthb = $('#txtLengthb_' + b_seq).val();
-				t_Mount = $('#txtMount_' + b_seq).val();
-				t_Style = $('#txtStyle_' + b_seq).val();
-				t_Productno = $('#txtProductno_' + b_seq).val();
-				var theory_setting = {
-					calc : StyleList,
-					ucc : t_uccArray,
-					radius : t_Radius,
-					width : t_Width,
-					dime : t_Dime,
-					lengthb : t_Lengthb,
-					mount : t_Mount,
-					style : t_Style,
-					productno : t_Productno,
-					round : 3
-				};
-				return theory_st(theory_setting);
+				q_box('ordcfe_s.aspx', q_name + '_s', "500px", "530px", q_getMsg("popSeek"));
 			}
 
 			function bbsAssign() {
@@ -245,6 +185,9 @@
                             var n = $(this).attr('id').replace('txtProductno_', '');
                             $('#btnProduct_'+n).click();
                         });
+                        $('#txtUnit_' + j).change(function() {
+							sum();
+						});
 						$('#txtMount_' + j).change(function() {
 							sum();
 						});
