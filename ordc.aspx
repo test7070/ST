@@ -105,11 +105,8 @@
 					var t_tggno = trim($('#txtTggno').val());
 					var t_ordbno = trim($('#txtOrdbno').val());
 					var t_where = '';
-					if (t_tggno.length > 0) {
-						if (t_ordbno.length > 0)
-							t_where = "isnull(b.enda,'0')='0' and isnull(b.cancel,'0')='0' and b.datea>='"+q_date()+"' and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) ) and " + q_sqlPara("a.tggno", t_tggno) + "and " + q_sqlPara("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
-						else
-							t_where = "isnull(b.enda,'0')='0' and isnull(b.cancel,'0')='0' and b.datea>='"+q_date()+"' and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) ) and " + q_sqlPara("a.tggno", t_tggno) + " and a.kind='" + $('#cmbKind').val() + "'";
+					if (t_tggno.length > 0 || q_getPara('sys.project').toUpperCase()=='XY' ) {
+						t_where = "isnull(b.enda,'0')='0' and isnull(b.cancel,'0')='0' and b.datea>='"+q_date()+"' and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
 						t_where = t_where;
 					} else {
 						alert('請輸入' + q_getMsg('lblTgg'));

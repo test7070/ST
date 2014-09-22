@@ -36,7 +36,7 @@
 							$('#txtXtgg2a').attr('disabled','disabled');
 							$('#btnXtgg1').hide();
 							$('#btnXtgg2').hide();
-						}else if(sssAs[0].noa=='04'){ //特殊
+						}else if(sssAs[0].noa=='04' || sssAs[0].job=='業務經理'){ //特殊 //業務經理
 							$('#txtSalesgroup').val(sssAs[0].salesgroup);
 							$('#txtSalesgroup').attr('disabled','disabled');
 							$('#Xstype').hide();
@@ -49,7 +49,7 @@
 							$('#Xshowvalue').hide();
 							$('#Xcity').hide();
 							$('#Xarea').hide();
-						}else{ //業務經理
+						}else{ //其他
 							$('#txtXsales1a').val(sssAs[0].noa);
 							$('#txtXsales1a').attr('disabled','disabled');
 							$('#txtXsales2a').val(sssAs[0].noa);
@@ -214,7 +214,7 @@
 						$('#txtXtgg2a').attr('disabled','disabled');
 						$('#btnXtgg1').hide();
 						$('#btnXtgg2').hide();
-					}else if(sssAs[0].noa=='04'){ //特殊
+					}else if(sssAs[0].noa=='04' || sssAs[0].job=='業務經理'){ //特殊 //業務經理
 						$('#txtSalesgroup').val(sssAs[0].salesgroup);
 						$('#txtSalesgroup').attr('disabled','disabled');
 						$('#Xstype').hide();
@@ -227,7 +227,7 @@
 						$('#Xshowvalue').hide();
 						$('#Xcity').hide();
 						$('#Xarea').hide();
-					}else{ //業務經理
+					}else{ //其他
 						$('#txtXsales1a').val(sssAs[0].noa);
 						$('#txtXsales1a').attr('disabled','disabled');
 						$('#txtXsales2a').val(sssAs[0].noa);
@@ -253,6 +253,7 @@
 						//$('#txtSalesgroup').attr('disabled','disabled');
 					}
 					//1030905 統一業務都只能看自己的其他條件鎖起來 不能選只能選日期
+					//1030922 業務經理 可以看到群組的
 				}
 				firstRun = false;
 			}
