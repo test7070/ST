@@ -221,9 +221,15 @@
                 });
                 if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
                     alert(q_getMsg('lblDatea') + '錯誤。');
-                    Unlock();
+                    Unlock(1);
                     return;
                 }
+                if($.trim($('#txtCustno').val())==0){
+                	alert(q_getMsg('lblCust') + '空白。');
+                    Unlock(1);
+                    return;
+                }
+                
                 if (q_cur == 1) {
                     $('#txtWorker').val(r_name);
                 } else
@@ -277,7 +283,6 @@
             function btnMinus(id) {
                 _btnMinus(id);
             }
-
             function btnPlus(org_htm, dest_tag, afield) {
                 _btnPlus(org_htm, dest_tag, afield);
             }
