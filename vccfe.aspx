@@ -1328,15 +1328,7 @@
                         <td class="td7"><span> </span><a id='lblWeight' class="lbl"> </a></td>
                         <td class="td8"><input id="txtWeight" type="text" class="txt num c1"/></td>
                     </tr>
-                    <tr>
-                        <td class="td1"><span> </span><a id='lblApv' class="lbl"> </a></td>
-                        <td class="td2" colspan='2'>
-                        	<input id="txtApv" type="text" class="txt c4"/>
-                        	<input id="txtApvname" type="text" class="txt c4"/>
-                        </td>
-                        <td class="td3"><span> </span><a id='lblApvmemo' class="lbl"> </a></td>
-                        <td class="td4" colspan='4'><input id="txtApvmemo" type="text" class="txt c1"/></td>
-                    </tr>
+                    
                     <tr>
                         <td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
                         <td class="td2" colspan='2'><input id="txtMoney" type="text" class="txt num c1"/></td>
@@ -1354,17 +1346,27 @@
                         <td class="td3"><input id="txtFloata" type="text" class="txt num c1"/></td>
                         <td class="td4"><span> </span><a id="lblTotalus" class="lbl"> </a></td>
                         <td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-                    </tr>
-                    <tr>
-                        <td class="td1"><span> </span><a id="lblWorker" class="lbl"> </a></td>
-                        <td class="td2"><input id="txtWorker" type="text" class="txt c1"/></td>
-                        <td class="td3"><input id="txtWorker2" type="text" class="txt c1"/></td>
                         <td class="td4"><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
                         <td class="td5" colspan='2'><input id="txtAccno" type="text" class="txt c1"/></td>
                     </tr>
                     <tr>
                         <td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
                         <td class="td2" colspan='7'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea></td>
+                    </tr>
+                    <tr>
+                        <td class="td1"><span> </span><a id="lblWorker" class="lbl"> </a></td>
+                        <td class="td2"><input id="txtWorker" type="text" class="txt c1"/></td>
+                        <td class="td1"><span> </span><a id="lblWorker2" class="lbl"> </a></td>
+                        <td class="td3"><input id="txtWorker2" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr>
+                        <td class="td1"><span> </span><a id='lblApv' class="lbl"> </a></td>
+                        <td class="td2" colspan='2'>
+                        	<input id="txtApv" type="text" class="txt c4"/>
+                        	<input id="txtApvname" type="text" class="txt c4"/>
+                        </td>
+                        <td class="td3"><span> </span><a id='lblApvmemo' class="lbl"> </a></td>
+                        <td class="td4" colspan='4'><input id="txtApvmemo" type="text" class="txt c1"/></td>
                     </tr>
                 </table>
             </div>
@@ -1377,7 +1379,7 @@
                     </td>
                     <td align="center" style="width:20px;"> </td>
                     
-                    <td align="center" style="width:100px"><a id='lblProduct_s'> </a></td>
+                    <td align="center" style="width:150px"><a id='lblProduct_s'> </a></td>
                     <td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
                     <td align="center" style="width:80px;" class="isFe"><a id='lblLengthb_fe_s'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
