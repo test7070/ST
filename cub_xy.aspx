@@ -48,6 +48,8 @@
 				bbtKey = ['noa', 'noq'];
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+				//取得類別
+				//q_gt('cub_typea', '', 0, 0, 0, "cub_typea");
 			});
 
 			function main() {
@@ -74,61 +76,24 @@
 				bbsNum = [['txtMount', 15, q_getPara('vcc.mountPrecision'), 1]];
 				bbtNum = [['txtMount', 15, q_getPara('vcc.mountPrecision'), 1]];
 				
-				$('#btnOrdeImport').click(function() {
-					var t_bdate = trim($('#txtBdate').val());
-					var t_edate = trim($('#txtEdate').val());
-					var t_bdime = dec($('#txtBdime').val());
-					var t_edime = dec($('#txtEdime').val());
-					var t_where = ' 1=1 ';
-					t_bdate = (emp(t_bdate) ? '' : t_bdate);
-					t_edate = (emp(t_edate) ? 'char(255)' : t_edate);
-					t_where += " and (datea between '" + t_bdate + "' and '" + t_edate + "') ";
-					t_bdime = (emp(t_bdime) ? 0 : t_bdime);
-					t_edime = (t_edime == 0 ? Number.MAX_VALUE : t_edime);
-					t_where += " and (dime between " + t_bdime + " and " + t_edime + ")";
-					t_where += ' and (cut=1)';
-					q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
-				});
+				q_cmbParse("combTypea", '西餐紙,火柴,筷子套,刀叉套,比薩盒,蛋糕盒,店卡,名片,餐盒,聯單,背心袋,炸雞盤,薯條杯,雜類,炸雞盒,紙袋,手提紙袋,瓦楞紙,帽子,桌巾紙,紙盒,公文袋,牙千套,紙包吸,紙包可吸,紙包可彩吸,紙包彩吸,紙包白色吸,白色吸,其他');
+				
 				//$('title').text("連續製令單"); //IE8會有問題
 				document.title='連續製令單'
 			}
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					case 'deleUccy':
-						var as = _q_appendData("uccy", "", true);
-						var err_str = '';
+					/*case 'cub_typea':
+						var as = _q_appendData("view_cub", "", true);
 						if (as[0] != undefined) {
-							for (var i = 0; i < as.length; i++) {
-								if (dec(as[i].gweight) > 0) {
-									err_str += as[i].uno + '已領料，不能刪除!!\n';
-								}
-							}
-							if (trim(err_str).length > 0) {
-								alert(err_str);
-								return;
-							} else {
-								_btnDele();
-							}
-						} else {
-							_btnDele();
-						}
-						break;
-					case 'ordet':
-						var as = _q_appendData("ordet", "", true);
-						for (var j = 0; j < as.length; j++) {
-							for (var i = 0; i < q_bbtCount; i++) {
-								var t_uno = $('#txtUno__' + i).val();
-								if (as[j] && as[j].noa == t_uno) {
-									b_ret.splice(j, 1);
-								}
-							}
-						}
-						if (as[0] != undefined) {
-							q_gridAddRow(bbtHtm, 'tbbt', 'txtUno', as.length, as, 'uno', 'txtUno', '__');
-							/// 最後 aEmpField 不可以有【數字欄位】
-						}
-						break;
+		                    var t_item = "";
+		                    for (i = 0; i < as.length; i++) {
+		                        t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].typea;
+		                    }
+		                    q_cmbParse("combTypea", t_item, '');
+		                }
+						break;*/
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -144,57 +109,6 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
-					case 'ordes':
-						if (q_cur > 0 && q_cur < 4) {
-							if (!b_ret || b_ret.length == 0) {
-								b_pop = '';
-								return;
-							}
-							for (var j = 0; j < b_ret.length; j++) {
-								for (var i = 0; i < q_bbtCount; i++) {
-									var t_ordeno = $('#txtOrdeno_' + i).val();
-									var t_no2 = $('#txtNo2_' + i).val();
-									if (b_ret[j] && b_ret[j].noa == t_ordeno && b_ret[j].no2 == t_no2) {
-										b_ret.splice(j, 1);
-									}
-								}
-							}
-							if (b_ret && b_ret[0] != undefined) {
-								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtCustno,txtClass,txtProductno,txtProduct,txtUnit,txtDime,txtWidth,txtLengthb,txtSpec,txtOrdeno,txtNo2,txtWeight,txtMount,txtTheory,txtSize,txtUno,txtMemo', b_ret.length, b_ret, 'custno,class,productno,product,unit,dime,width,lengthb,spec,noa,no2,weight,mount,theory,size,uno,memo', 'txtProductno');
-								/// 最後 aEmpField 不可以有【數字欄位】
-								var t_where = 'where=^^ 1=0 ';
-								for (var i = 0; i < ret.length; i++) {
-									t_where += " or (noa='" + $('#txtOrdeno_' + ret[i]).val() + "' and no3='" + $('#txtNo2_' + ret[i]).val() + "')";
-								}
-								t_where += ' ^^';
-								q_gt('ordet', t_where, 0, 0, 0, '', r_accy);
-							}
-							sum();
-							b_ret = '';
-						}
-						break;
-					case 'uccc':
-						if (!b_ret || b_ret.length == 0) {
-							b_pop = '';
-							return;
-						}
-						if (q_cur > 0 && q_cur < 4) {
-							for (var j = 0; j < b_ret.length; j++) {
-								for (var i = 0; i < q_bbtCount; i++) {
-									var t_uno = $('#txtUno__' + i).val();
-									if (b_ret[j] && b_ret[j].noa == t_uno) {
-										b_ret.splice(j, 1);
-									}
-								}
-							}
-							if (b_ret[0] != undefined) {
-								ret = q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtGmount,txtGweight,txtWidth,txtLengthb', b_ret.length, b_ret, 'uno,eordmount,eordweight,width,lengthb', 'txtUno', '__');
-								/// 最後 aEmpField 不可以有【數字欄位】
-							}
-							sum();
-							b_ret = '';
-						}
-						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
@@ -273,6 +187,8 @@
 
 			function refresh(recno) {
 				_refresh(recno);
+				//取得類別
+				//q_gt('cub_typea', '', 0, 0, 0, "cub_typea");
 			}
 
 			function readonly(t_para, empty) {
@@ -347,8 +263,7 @@
 			}
 
 			function btnDele() {
-				var t_where = 'where=^^ uno in(' + getBBTWhere('Uno') + ') ^^';
-				q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
+				_btnDele();
 			}
 
 			function btnCancel() {
@@ -381,6 +296,15 @@
 			   			
 			        break;
 			   	}
+			}
+			
+			function combTypea_chg() {
+				var cmb = document.getElementById("combTypea");
+				if (!q_cur)
+					cmb.value = '';
+				else
+					$('#txtTypea').val(cmb.value);
+				cmb.value = '';
 			}
 		</script>
 		<style type="text/css">
@@ -468,6 +392,12 @@
 				padding: 0px;
 				margin: -1px;
 				float: left;
+			}
+			.tbbm select {
+				border-width: 1px;
+				padding: 0px;
+				margin: -1px;
+				font-size: medium;
 			}
 			input[type="text"], input[type="button"] {
 				font-size: medium;
@@ -561,6 +491,11 @@
 					<tr>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
+						<td><span> </span><a class="lbl">類別</a></td>
+						<td>
+							<input id="txtTypea" type="text" class="txt c1" style="width: 85%;"/>
+							<select id="combTypea" class="txt" style="width: 15%;" onchange='combTypea_chg()'> </select>
+						</td>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>
 					</tr>

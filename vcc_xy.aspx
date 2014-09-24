@@ -713,7 +713,7 @@
 				$('#txtDatea').val(q_date());
 				$('#cmbTypea').val('1');
 				$('#txtDatea').focus();
-				$('#cmbTaxtype').val('1');
+				$('#cmbTaxtype').val('0');
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 			}
@@ -1274,7 +1274,7 @@
 						<input id="txtProduct.*" type="text" class="txt c1" />
 						<input id="txtSpec.*" type="text" class="txt c1 isSpec" />
 					</td>
-					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1"/></td>
+					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1"/>
@@ -1295,7 +1295,7 @@
 					<td><input id="txtTranmoney3.*" type="text" class="txt num c1"/></td>
 					<td class="isRack">
 						<input class="btn"  id="btnRackno.*" type="button" value='.' style="float:left;" />
-						<input id="txtRackno.*" type="text" class="txt c1" style="width: 70%"/>
+						<input id="txtRackno.*" type="text" class="txt c1 isRack" style="width: 70%"/>
 					</td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c1"/>
