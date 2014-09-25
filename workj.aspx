@@ -314,7 +314,7 @@
 											value = q_float('txtPara'+x_para[0].toLowerCase()+'_'+n);
 											ctx.font = (parseInt(x_para[3])*2)+"px times new roman";
 											ctx.fillStyle = 'red';
-											ctx.fillText(value,parseInt(x_para[1]),parseInt(x_para[2]));
+											ctx.fillText(value,parseInt(x_para[1])+10,parseInt(x_para[2])+25);
 										}
 									}
 								}
