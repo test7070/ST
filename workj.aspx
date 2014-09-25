@@ -84,15 +84,6 @@
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
-                	case 'imgfe.gen':
-                		if(result.length>0)
-	                		for(var i=0;i<q_bbsCount;i++){
-	                			if($('#txtImgsrc_'+i).val()==result){
-	                				$('#imgPic_'+i).attr('src','../images/fe/'+result+'x.jpg?'+(new Date()).getTime());
-	                				break;
-	                			}
-	                		}
-                		break;
                 	case 'qtxt.query.cont':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
@@ -243,7 +234,7 @@
             }
 
             function bbsSave(as) {
-                if (!as['productno'] && !as['imgsrc']) {
+                if (!as['productno'] && !as['imgdata']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
@@ -254,10 +245,12 @@
             function refresh(recno) {
                 _refresh(recno);
                 for(var i=0;i<q_bbsCount;i++){
-                	if($('#imgPic_'+i).attr('src')!=undefined && $('#imgPic_'+i).attr('src').length==0 && $('#txtImgsrc_'+i).val().length>0)
-                		$('#imgPic_'+i).attr('src','../images/fe/'+$('#txtImgsrc_'+i).val()+'x.jpg');
-                	if($('#imgPic_'+i).attr('src')!=undefined && $('#imgPic_'+i).attr('src').length>0 && $('#txtImgsrc_'+i).val().length==0)
-                		$('#imgPic_'+i).attr('src','');
+                	if($('#canvas_'+i).length>0){
+                		var image = new Image();
+						image.src = $('#txtImgdata_'+i).val();
+						$('#canvas_'+i)[0].witdh = $('#canvas_'+i)[0].witdh;
+						$('#canvas_'+i)[0].getContext("2d").drawImage(image, 0, 0);
+                	}
                 }
             }
 
@@ -283,17 +276,81 @@
                 _btnPlus(org_htm, dest_tag, afield);
             }
 			function createImg(n){
+				if (n ==undefined)
+					return;
 				var t_picno = $('#txtPicno_'+n).val();
-        		var t_para = $('#txtPara1_'+n).val()+'^'+$('#txtPara2_'+n).val()+'^'+$('#txtPara3_'+n).val()
-        			+'^'+$('#txtPara4_'+n).val()+'^'+$('#txtPara5_'+n).val()+'^'+$('#txtPara6_'+n).val();
-        		var t_imgsrc = $('#txtImgsrc_'+n).val();
-        		
-        		if(t_imgsrc.length==0){
-        			t_imgsrc = r_userno+'-'+guid();
-        			$('#txtImgsrc_'+n).val(t_imgsrc);
-        		}
-        		if(t_picno.length>0 && t_para.replace(/\^/g,'').length>0){
-                	q_func( 'imgfe.gen',t_imgsrc+','+t_picno+','+t_para);
+        		var t_para = $('#txtParaa_'+n).val()+'^'+$('#txtParab_'+n).val()+'^'+$('#txtParac_'+n).val()
+        			+'^'+$('#txtParad_'+n).val()+'^'+$('#txtParae_'+n).val()+'^'+$('#txtParaf_'+n).val();
+
+        		if(t_picno.length>0 && t_para.replace(/\^/g,'').replace(/0/g,'').length>0){
+                	$.ajax({
+                		picno : t_picno,
+                		n : n,
+	                    url: '..\\images\\feorg\\'+t_picno+'.txt',
+	                    type: 'GET',
+	                    dataType: 'text',
+	                    timeout: 5000,
+	                    success: function(data){
+	                    	var n = this.n;
+	                    	//先用原大小
+	                    	$('#imgPic_'+n).attr('src','../images/feorg/'+this.picno+'.jpg?'+(new Date()).getTime())
+	                       	 	
+	                        $('#imgPic_'+n)[0].onload = function(){
+	                        	var n = $(this).attr('id').replace('imgPic_','');
+	                        	var imgwidth = $('#imgPic_'+n).width();
+		                        var imgheight = $('#imgPic_'+n).height();
+		                        $('#canvas_'+n).width(imgwidth).height(imgheight);
+		                        var c=document.getElementById("canvas_"+n);
+								var ctx=c.getContext("2d");		
+								c.width = imgwidth;
+								c.height = imgheight;
+								ctx.drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight);
+								
+								t_para = data.split('\n');
+								for(var i=1;i<t_para.length;i++){
+									x_para = t_para[i].split(',');
+									if(x_para.length>=4 && x_para[0].toLowerCase()>='a' && x_para[0].toLowerCase()<='z' && $('#txtPara'+x_para[0].toLowerCase()+'_'+n).length>0){
+										if(parseInt(x_para[1])!=0 || parseInt(x_para[2])!=0){
+											value = q_float('txtPara'+x_para[0].toLowerCase()+'_'+n);
+											ctx.font = (parseInt(x_para[3])*2)+"px times new roman";
+											ctx.fillStyle = 'red';
+											ctx.fillText(value,parseInt(x_para[1]),parseInt(x_para[2]));
+										}
+									}
+								}
+								//縮放為150*150
+								$('#imgPic_'+n).attr('src',c.toDataURL());
+								$('#canvas_'+n).width(150).height(150);
+								c.width = 150;
+								c.height = 150;
+								$("#canvas_"+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,150);
+								
+								$('#txtImgdata_'+n).val(c.toDataURL());
+	                        };
+	                        
+	                        
+	                    },
+	                    complete: function(){                    
+	                    },
+	                    error: function(jqXHR, exception) {
+	                        var errmsg = 'Error。\n';
+	                        if (jqXHR.status === 0) {
+	                            alert(errmsg+'Not connect.\n Verify Network.');
+	                        } else if (jqXHR.status == 404) {
+	                            alert(errmsg+'Requested page not found. [404]');
+	                        } else if (jqXHR.status == 500) {
+	                            alert(errmsg+'Internal Server Error [500].');
+	                        } else if (exception === 'parsererror') {
+	                            alert(errmsg+'Requested JSON parse failed.');
+	                        } else if (exception === 'timeout') {
+	                            alert(errmsg+'Time out error.');
+	                        } else if (exception === 'abort') {
+	                            alert(errmsg+'Ajax request aborted.');
+	                        } else {
+	                            alert(errmsg+'Uncaught Error.\n' + jqXHR.responseText);
+	                        }
+	                    }
+	                });
         		}
 			};
             function bbsAssign() {
@@ -328,28 +385,28 @@
                     		var n = $(this).attr('id').replace('txtPicno_', '');
                     		createImg(n);
                     	});
-                    	$('#txtPara1_'+i).change(function(e){
-                    		var n = $(this).attr('id').replace('txtPara1_', '');
+                    	$('#txtParaa_'+i).change(function(e){
+                    		var n = $(this).attr('id').replace('txtParaa_', '');
                     		createImg(n);
                     	});
-                    	$('#txtPara2_'+i).change(function(e){
-                    		var n = $(this).attr('id').replace('txtPara2_', '');
+                    	$('#txtParab_'+i).change(function(e){
+                    		var n = $(this).attr('id').replace('txtParab_', '');
                     		createImg(n);
                     	});
-                    	$('#txtPara3_'+i).change(function(e){
-                    		var n = $(this).attr('id').replace('txtPara3_', '');
+                    	$('#txtParac_'+i).change(function(e){
+                    		var n = $(this).attr('id').replace('txtParac_', '');
                     		createImg(n);
                     	});
-                    	$('#txtPara4_'+i).change(function(e){
-                    		var n = $(this).attr('id').replace('txtPara4_', '');
+                    	$('#txtParad_'+i).change(function(e){
+                    		var n = $(this).attr('id').replace('txtParad_', '');
                     		createImg(n);
                     	});
-                    	$('#txtPara5_'+i).change(function(e){
-                    		var n = $(this).attr('id').replace('txtPara5_', '');
+                    	$('#txtParae_'+i).change(function(e){
+                    		var n = $(this).attr('id').replace('txtParae_', '');
                     		createImg(n);
                     	});
-                    	$('#txtPara6_'+i).change(function(e){
-                    		var n = $(this).attr('id').replace('txtPara6_', '');
+                    	$('#txtParaf_'+i).change(function(e){
+                    		var n = $(this).attr('id').replace('txtParaf_', '');
                     		createImg(n);
                     	});
                     	$('#txtContno_' + i).bind('contextmenu', function(e) {
@@ -701,12 +758,12 @@
 					<td style="width:180px;" ><a id='lbl_product'>品名</a></td>
 					<td style="width:170px;"><a id='lbl_pic'>形狀</a></td>
 					<td style="width:80px;"><a id='lbl_picno'>形狀<br>編號</a></td>
-					<td style="width:60px;"><a id='lbl_imgpara1'>參數A</a></td>
-					<td style="width:60px;"><a id='lbl_imgpara2'>參數B</a></td>
-					<td style="width:60px;"><a id='lbl_imgpara3'>參數C</a></td>
-					<td style="width:60px;"><a id='lbl_imgpara4'>參數D</a></td>
-					<td style="width:60px;"><a id='lbl_imgpara5'>參數E</a></td>
-					<td style="width:60px;"><a id='lbl_imgpara6'>參數F</a></td>
+					<td style="width:60px;"><a id='lbl_imgparaa'>參數A</a></td>
+					<td style="width:60px;"><a id='lbl_imgparab'>參數B</a></td>
+					<td style="width:60px;"><a id='lbl_imgparac'>參數C</a></td>
+					<td style="width:60px;"><a id='lbl_imgparad'>參數D</a></td>
+					<td style="width:60px;"><a id='lbl_imgparae'>參數E</a></td>
+					<td style="width:60px;"><a id='lbl_imgparaf'>參數F</a></td>
 					<td style="width:80px;"><a id='lbl_lengthb'>單支長</a></td>
 					<td style="width:80px;"><a id='lbl_monnt'>數量</a></td>
 					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
@@ -729,28 +786,32 @@
 						<input class="txt" id="txtProduct.*" type="text" style="width:95%;"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
-					<td><img id="imgPic.*" src="" style="width:150px;"/></td>
+					<td>
+						<canvas id="canvas.*" width="150"> </canvas>
+						<img id="imgPic.*" src="" style="display:none;"/>
+						<input id="txtImgdata.*" type="text" style="display:none;">
+					</td>
 					<td>
 						<input class="txt" id="txtPicno.*" type="text" style="width:95%;"/>
 						<input id="btnPicno.*" type="button" style="display:none;">
 					</td>
 					<td>
-						<input class="txt" id="txtPara1.*" type="text" style="width:95%;text-align: right;"/>
+						<input class="txt" id="txtParaa.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
 					<td>
-						<input class="txt" id="txtPara2.*" type="text" style="width:95%;text-align: right;"/>
+						<input class="txt" id="txtParab.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
 					<td>
-						<input class="txt" id="txtPara3.*" type="text" style="width:95%;text-align: right;"/>
+						<input class="txt" id="txtParac.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
 					<td>
-						<input class="txt" id="txtPara4.*" type="text" style="width:95%;text-align: right;"/>
+						<input class="txt" id="txtParad.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
 					<td>
-						<input class="txt" id="txtPara5.*" type="text" style="width:95%;text-align: right;"/>
+						<input class="txt" id="txtParae.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
 					<td>
-						<input class="txt" id="txtPara6.*" type="text" style="width:95%;text-align: right;"/>
+						<input class="txt" id="txtParaf.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
 					<td><input class="txt" id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
 					<td><input class="txt" id="txtMount.*" type="text" style="width:95%;text-align: right;"/></td>
