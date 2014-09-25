@@ -88,7 +88,7 @@
                 		if(result.length>0)
 	                		for(var i=0;i<q_bbsCount;i++){
 	                			if($('#txtImgsrc_'+i).val()==result){
-	                				$('#imgPic_'+i).attr('src','../images/fe/'+result+'.jpg?'+(new Date()).getTime());
+	                				$('#imgPic_'+i).attr('src','../images/fe/'+result+'x.jpg?'+(new Date()).getTime());
 	                				break;
 	                			}
 	                		}
@@ -255,7 +255,7 @@
                 _refresh(recno);
                 for(var i=0;i<q_bbsCount;i++){
                 	if($('#imgPic_'+i).attr('src')!=undefined && $('#imgPic_'+i).attr('src').length==0 && $('#txtImgsrc_'+i).val().length>0)
-                		$('#imgPic_'+i).attr('src','../images/fe/'+$('#txtImgsrc_'+i).val()+'.jpg');
+                		$('#imgPic_'+i).attr('src','../images/fe/'+$('#txtImgsrc_'+i).val()+'x.jpg');
                 	if($('#imgPic_'+i).attr('src')!=undefined && $('#imgPic_'+i).attr('src').length>0 && $('#txtImgsrc_'+i).val().length==0)
                 		$('#imgPic_'+i).attr('src','');
                 }
@@ -558,7 +558,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1550px;
+                width: 1500px;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -574,7 +574,7 @@
                 font-size: medium;
             }
             #dbbt {
-                width: 1550px;
+                width: 1500px;
             }
             #tbbt {
                 margin: 0;
@@ -700,7 +700,7 @@
 					<td style="width:20px;"></td>
 					<td style="width:180px;" ><a id='lbl_product'>品名</a></td>
 					<td style="width:170px;"><a id='lbl_pic'>形狀</a></td>
-					<td style="width:80px;"><a id='lbl_picno'>形狀編號</a></td>
+					<td style="width:80px;"><a id='lbl_picno'>形狀<br>編號</a></td>
 					<td style="width:60px;"><a id='lbl_imgpara1'>參數A</a></td>
 					<td style="width:60px;"><a id='lbl_imgpara2'>參數B</a></td>
 					<td style="width:60px;"><a id='lbl_imgpara3'>參數C</a></td>
@@ -711,7 +711,7 @@
 					<td style="width:80px;"><a id='lbl_monnt'>數量</a></td>
 					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
 					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
-					<td style="width:100px;"><a id='lbl_store'>入庫倉</a></td>
+					<td style="width:80px;"><a id='lbl_store'>入庫倉</a></td>
 					<td style="width:60px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:60px;"><a id='lbl_place'>儲位</a></td>
 					<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
