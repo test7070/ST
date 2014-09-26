@@ -468,7 +468,7 @@
 					<tr>
 						<td><span> </span><a id="lblMemo2"  class="lbl"> </a></td>
 						<td colspan="5">
-							<input id="txtMemo2"  type="text" class="txt c1"/>
+							<textarea id="txtMemo2"  type="text" class="txt c1" rows="3"> </textarea>
 							<!--已下為相關資料但不顯示-->
 							<input id="txtCno" type="hidden" class="txt" style="width: 30%"/>
 							<input id="txtAcomp"  type="hidden"  class="txt" style="width: 70%"/>

@@ -244,12 +244,14 @@
 
             function refresh(recno) {
                 _refresh(recno);
-                for(var i=0;i<q_bbsCount;i++){
-                	if($('#canvas_'+i).length>0){
-                		var image = new Image();
-						image.src = $('#txtImgdata_'+i).val();
-						$('#canvas_'+i)[0].witdh = $('#canvas_'+i)[0].witdh;
-						$('#canvas_'+i)[0].getContext("2d").drawImage(image, 0, 0);
+                for(var n=0;n<q_bbsCount;n++){
+                	if($('#canvas_'+n).length>0){
+
+						$('#imgPic_'+n).attr('src', $('#txtImgdata_'+n).val());
+						var imgwidth = $('#imgPic_'+n).width();
+                        var imgheight = $('#imgPic_'+n).height();
+						//$('#canvas_'+i)[0].witdh = $('#canvas_'+i)[0].witdh;
+						$("#canvas_"+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,150);
                 	}
                 }
             }
