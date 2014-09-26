@@ -54,7 +54,7 @@
 					}, {//[8]
                         type : '8',
                         name : 'xoption01',
-                        value : '明細'
+                        value : ['明細']
                     }]
 				});
 				q_popAssign();
