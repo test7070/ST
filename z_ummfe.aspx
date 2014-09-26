@@ -58,6 +58,8 @@
                     }]
 				});
 				q_popAssign();
+				q_langShow();
+				
 				$('#txtXdate1').mask('999/99/99');
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
