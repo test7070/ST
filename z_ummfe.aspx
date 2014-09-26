@@ -15,17 +15,30 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-			aPop = new Array(['txtXpart', '', 'part', 'noa,part', 'txtXpart', "part_b.aspx"]);
+			var t_acomp = '';
 			$(document).ready(function() {
 				q_getId();
-				q_gf('', 'z_ummfe');
+				q_gt('acomp', '', 0, 0, 0, "");
 			});
+			function q_gtPost(t_name) {
+                switch (t_name) {
+                    case 'acomp':
+                        var as = _q_appendData("acomp", "", true);
+                        t_acomp = " @全部";
+                        for ( i = 0; i < as.length; i++) {
+                            t_acomp = t_acomp + (t_acomp.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
+                        }
+                        q_gf('', 'z_ummfe');
+                        break;
+                }
+            }
 			function q_gfPost() {
 				$('#q_report').q_report({
 					fileName : 'z_ummfe',
 					options : [{
-						type : '6', //[1]
-						name : 'xcno'
+						type : '5', //[1]
+						name : 'xcno',
+						value : t_acomp.split(',')
 					}, {
 						type : '2', //[2][3]
 						name : 'xcust',
@@ -38,19 +51,19 @@
 					}, {
 						type : '1', //[6][7]
 						name : 'xmon'
-					}]
+					}, {//[8]
+                        type : '8',
+                        name : 'xoption01',
+                        value : '明細'
+                    }]
 				});
 				q_popAssign();
 				$('#txtXdate1').mask('999/99/99');
 				$('#txtXdate1').datepicker();
-				$('#txtDate2').mask('999/99/99');
-				$('#txtDate2').datepicker();
-				$('#txtSmon1').mask('999/99');
-				$('#txtSmon2').mask('999/99');
-				$('#Xmemo').removeClass('a2').addClass('a1');
-				$('#txtXmemo').css('width', '85%');
-				$('.q_report .report').css('width', '420px');
-				$('.q_report .report div').css('width', '200px');
+				$('#txtXdate2').mask('999/99/99');
+				$('#txtXdate2').datepicker();
+				$('#txtXmon1').mask('999/99');
+				$('#txtXmon2').mask('999/99');
 
 				var t_date, t_year, t_month, t_day;
 				t_date = new Date();
@@ -61,9 +74,6 @@
 				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
 				t_day = t_date.getUTCDate();
 				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-				$('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);
-				$('#txtSmon1').val(t_year + '/' + t_month);
-				$('#txtSmon2').val(t_year + '/' + t_month);
 				$('#txtXdate1').val(t_month + '/' + t_day);
 
 				t_date = new Date();
@@ -75,30 +85,14 @@
 				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
 				t_day = t_date.getUTCDate();
 				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-				$('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
-				$('#txtXdate2').val(t_month + '/' + t_day);
+				$('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
 
-				var tmp = document.getElementById("txtPaytype");
-				var selectbox = document.createElement("select");
-				selectbox.id = "combPay";
-				selectbox.style.cssText = "width:15px;font-size: medium;";
-				//selectbox.attachEvent('onchange',combPay_chg);
-				//selectbox.onchange="combPay_chg";
-				tmp.parentNode.appendChild(selectbox, tmp);
-				q_cmbParse("combPay", '全部,' + q_getPara('vcc.paytype'));
-				$('#txtPaytype').val('全部');
-
-				$('#combPay').change(function() {
-					var cmb = document.getElementById("combPay")
-					$('#txtPaytype').val(cmb.value);
-				});
 			}
 
 			function q_boxClose(s2) {
 			}
 
-			function q_gtPost(s2) {
-			}
+			
 
 		</script>
 	</head>
