@@ -18,10 +18,10 @@
 
             q_tables = 't';
             var q_name = "workj";
-            var q_readonly = ['txtNoa','txtOrdeno','txtLengthb','txtMount','txtWeight'];
+            var q_readonly = ['txtNoa','txtOrdeno','txtMount','txtWeight'];
             var q_readonlys = ['txtContno','txtContnoq','txtStore','txtMech','txtWeight'];
             var q_readonlyt = [];
-            var bbmNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
+            var bbmNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbtNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
             var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99'],['txtTimea','99:99']];
@@ -394,26 +394,32 @@
                     	$('#txtParaa_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParaa_', '');
                     		createImg(n);
+                    		sum();
                     	});
                     	$('#txtParab_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParab_', '');
                     		createImg(n);
+                    		sum();
                     	});
                     	$('#txtParac_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParac_', '');
                     		createImg(n);
+                    		sum();
                     	});
                     	$('#txtParad_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParad_', '');
                     		createImg(n);
+                    		sum();
                     	});
                     	$('#txtParae_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParae_', '');
                     		createImg(n);
+                    		sum();
                     	});
                     	$('#txtParaf_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParaf_', '');
                     		createImg(n);
+                    		sum();
                     	});
                     	$('#txtContno_' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
@@ -485,6 +491,10 @@
 	            var t_weight=0,t_mount=0,t_length=0,t_weights;
                 for(var i=0;i<q_bbsCount;i++){
                 	t_weights = 0;
+                	if($('#txtMemo_'+i).val().substring(0,1)!='*'){
+                		$('#txtLengthb_'+i).val(q_float('txtParaa_'+i)+q_float('txtParab_'+i)+q_float('txtParac_'+i)
+                		+q_float('txtParad_'+i)+q_float('txtParae_'+i)+q_float('txtParaf_'+i));
+                	}
                 	t_product = $('#txtProduct_'+i).val();
                 	if(t_product.length>0){
                 		for(var j=0;j<calc.length;j++){
@@ -497,11 +507,9 @@
                 	$('#txtWeight_'+i).val(t_weights);
                 	t_weight = q_add(t_weight,t_weights);
                 	t_mount = q_add(t_mount,q_float('txtMount_'+i));
-                	t_length = q_add(t_length,q_float('txtLengthb_'+i));
                 }
                 $('#txtWeight').val(t_weight);
                 $('#txtMount').val(t_mount);
-                $('#txtLengthb').val(t_length);
             }
 
             function q_appendData(t_Table) {
@@ -771,13 +779,13 @@
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td colspan="4" rowspan="2"><textarea id="txtMemo" class="txt c1" rows="3"></textarea></td>
-						<td><span> </span><a id="lblLengthb" class="lbl"> </a></td>
-						<td><input id="txtLengthb"  type="text"  class="num txt c1"/></td>
+						<td><span> </span><a id="lblMount" class="lbl"> </a></td>
+						<td><input id="txtMount"  type="text"  class="num txt c1"/></td>
 					</tr>
 					<tr>
 						<td></td>
-						<td><span> </span><a id="lblMount" class="lbl"> </a></td>
-						<td><input id="txtMount"  type="text"  class="num txt c1"/></td>
+						<td><span> </span><a id="lblWeight" class="lbl"> </a></td>
+						<td><input id="txtWeight"  type="text"  class="num txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblOrdeno" class="lbl btn"> </a></td>
@@ -785,10 +793,6 @@
 							<input id="txtOrdeno"  type="text"  class="txt c1"/>
 							<input id="txtOrdeaccy"  type="text"  style="display:none;"/>
 						</td>
-						<td></td>
-						<td></td>
-						<td><span> </span><a id="lblWeight" class="lbl"> </a></td>
-						<td><input id="txtWeight"  type="text"  class="num txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
@@ -868,7 +872,7 @@
 					<td style="background-color: burlywood;">
 						<input class="txt" id="txtParaf.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
-					<td><input class="txt" id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
+					<td><input class="txt" id="txtLengthb.*" type="text" style="width:95%;text-align: right;" title="備註輸入 * ，單支長可手動輸入。"/></td>
 					<td><input class="txt" id="txtMount.*" type="text" style="width:95%;text-align: right;"/></td>
 					<td><input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/></td>
 					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
@@ -883,7 +887,7 @@
 						<input id="btnMech.*" type="button" style="display:none;">
 					</td>
 					<td><input class="txt" id="txtPlace.*" type="text" style="width:95%;"/></td>
-					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;" title="備註輸入 * ，單支長可手動輸入。"/></td>
 					<td>
 						<input class="txt" id="txtContno.*" type="text" style="float:left;width:120px;"/>
 						<input class="txt" id="txtContnoq.*" type="text" style="float:left;width:35px;"/>
@@ -936,7 +940,7 @@
 							<input class="txt" id="txtStore..*" type="text" style="width:60%;float:left;"/>
 							<input id="btnStore..*" type="button" style="display:none;">
 						</td>
-						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;"/></td>
+						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;" /></td>
 					</tr>
 				</tbody>
 			</table>
