@@ -489,7 +489,7 @@
                 	if(t_product.length>0){
                 		for(var j=0;j<calc.length;j++){
 							if(t_product.indexOf(calc[j].key)>0){
-								t_weights = q_mul(q_mul(calc[j].value,q_float('txtLengthb_'+i)/100),q_float('txtMount_'+i));
+								t_weights = round(q_mul(q_mul(calc[j].value,q_float('txtLengthb_'+i)/100),q_float('txtMount_'+i)),2);
 								break;
 							}                			
                 		}
