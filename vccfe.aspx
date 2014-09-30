@@ -286,25 +286,25 @@
 
             function q_funcPost(t_func, result) {
                 switch(t_func) {
-                    case 'vccfe_apv':
+                    case 'qtxt.query.vccfe_apv':
                         var as = _q_appendData("tmp0", "", true);
                         if (as[0] != undefined) {
                             $('#txtApv').val(as[0].apv);
                             $('#txtApvmemo').val(as[0].apvmemo);
 
                             if (as[0].apv.length == 0)
-                                q_func('sign.q_signForm', 'vccfe.aspx,,' + $('#txtNoa').val());
+                                q_func('sign.q_signForm', 'vcc,'+r_accy+',' + $('#txtNoa').val());
                         }
                         Unlock(1);
                         break;
                     default:
-                        if (result.substr(0, 5) == '<Data') {
+                       /* if (result.substr(0, 5) == '<Data') {
                             var Asss = _q_appendData('sss', '', true);
                             var Acar = _q_appendData('car', '', true);
                             var Acust = _q_appendData('cust', '', true);
                             alert(Asss[0]['namea'] + '^' + Acar[0]['car'] + '^' + Acust[0]['comp']);
                         } else
-                            alert(t_func + '\r' + result);
+                            alert(t_func + '\r' + result);*/
                 }
             }
 
@@ -860,9 +860,9 @@
                 if (q_cur == 1 || q_cur == 2) {
                     var s2 = xmlString.split(';');
                     abbm[q_recno]['accno'] = s2[0];
-
+					var t_noa = $.trim($('#txtNoa').val());
                     q_func('qtxt.query.vccfe_apv', 'vcc.txt,vccfe_apv,' + encodeURI(r_accy) + ';' + encodeURI(t_noa));
-                    //     var t_noa = $.trim($('#txtNoa').val());
+                    //     
                     //	q_gt('vccfe_apv',"where=^^['"+r_accy+"','"+t_noa+"')^^", 0, 0, 0, "vccfe_apv");
                 }
             }
