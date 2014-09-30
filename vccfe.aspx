@@ -859,6 +859,8 @@
                 if (q_cur == 1 || q_cur == 2) {
                     var s2 = xmlString.split(';');
                     abbm[q_recno]['accno'] = s2[0];
+                    
+                 //   q_func('sign.q_signForm', 'ASPX,,'+ $('#txtNOa').val());
                 }
             }
 
