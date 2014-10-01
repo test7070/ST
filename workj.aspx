@@ -772,9 +772,15 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblTrantype" class="lbl"> </a></td>
-						<td colspan="2"><select id="cmbTrantype" class="txt c1"></select></td>
+						<td><select id="cmbTrantype" class="txt c1"></select></td>
+						<td></td>
 						<td><span> </span><a id="lblChktype" class="lbl"> </a></td>
-						<td colspan="2"><input id="txtChktype"  type="text"  class="txt c1"/></td>
+						<td><input id="txtChktype"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblOrdeno" class="lbl btn"> </a></td>
+						<td>
+							<input id="txtOrdeno"  type="text"  class="txt c1"/>
+							<input id="txtOrdeaccy"  type="text"  style="display:none;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
@@ -786,13 +792,6 @@
 						<td></td>
 						<td><span> </span><a id="lblWeight" class="lbl"> </a></td>
 						<td><input id="txtWeight"  type="text"  class="num txt c1"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblOrdeno" class="lbl btn"> </a></td>
-						<td colspan="2">
-							<input id="txtOrdeno"  type="text"  class="txt c1"/>
-							<input id="txtOrdeaccy"  type="text"  style="display:none;"/>
-						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
