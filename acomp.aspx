@@ -71,6 +71,7 @@
 
             function mainPost() {
                 q_mask(bbmMask);
+                q_gf('Taxport.txt', '');
                 $('#txtNoa').change(function(e){
                 	$(this).val($.trim($(this).val()).toUpperCase());    	
 					if($(this).val().length>0){
@@ -179,6 +180,21 @@
             		alert('undefined');
             	}
             }
+            
+            var t_typep='',c_typep=' @ ';
+			function q_gfPost() {
+				if (q_gfTxt=='Taxport.txt'){
+					t_typep = xmlString.split('\r\n');
+					//處理內容
+					for (i=0;i<t_typep.length;i++){
+						var typep=t_typep[i].split('	')[0];
+						c_typep=c_typep+','+typep+"@"+t_typep[i];
+					}
+					
+					q_cmbParse("cmbTaxport", c_typep);
+					refresh(q_recno);  /// 第一次需要重新載入	
+				}
+			}
 
             function q_boxClose(s2) {
                 var ret;
@@ -618,6 +634,14 @@
 						<tr>
 							<td><span> </span><a id='lblInsur_disaster' class="lbl"> </a></td>
 							<td><input id="txtInsur_disaster"  type="text" class="txt c1" /></td>
+							<td><span> </span><a id="lblTaxport" class="lbl"> </a></td>
+							<td><select id="cmbTaxport" class="txt c1"> </select></td>
+						</tr>
+						<tr>
+							<td><span> </span><a id='lblTaxno' class="lbl"> </a></td>
+							<td><input id="txtTaxno"  type="text" class="txt c1" />	</td>
+							<td><span> </span><a id='lblHouseno' class="lbl"> </a></td>
+							<td><input id="txtHouseno"  type="text" class="txt c1" />	</td>
 						</tr>
 						<tr class="obu">
 							<td><span> </span><a id='lblObu' class="lbl"> </a></td>
