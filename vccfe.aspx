@@ -1400,8 +1400,9 @@
 						<td class="td8">
 						<input id="txtTotal" type="text" class="txt num c1 istax"/>
 						</td>
+						
 					</tr>
-					<tr>
+					<tr style="display:none;">
 						<td class="td1"><span> </span><a id='lblFloata' class="lbl"> </a></td>
 						<td class="td2"><select id="cmbCoin" style="width: 100%;"></select></td>
 						<td class="td3">
@@ -1410,10 +1411,6 @@
 						<td class="td4"><span> </span><a id="lblTotalus" class="lbl"> </a></td>
 						<td class="td5" colspan='2'>
 						<input id="txtTotalus" type="text" class="txt num c1"/>
-						</td>
-						<td class="td4"><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
-						<td class="td5" colspan='2'>
-						<input id="txtAccno" type="text" class="txt c1"/>
 						</td>
 					</tr>
 					<tr>
@@ -1429,6 +1426,8 @@
 						<td class="td3">
 						<input id="txtWorker2" type="text" class="txt c1"/>
 						</td>
+						<td><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
+						<td><input id="txtAccno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblApv' class="lbl"> </a></td>

@@ -933,7 +933,7 @@
                         <td class="td7"><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
                         <td class="td8" colspan='2'><input id="txtTotal" type="text" class="txt num c1 istax" /></td>
                     </tr>
-                    <tr class="tr8">
+                    <tr style="display:none;">
                     	<td class="td1"><span> </span><a id='lblCoin' class="lbl"> </a></td>
                         <td class="td2" ><select id="cmbCoin" class="txt c1" > </select></td>
                         <td class="td1"><span> </span><a id='lblFloata' class="lbl"> </a></td>
