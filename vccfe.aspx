@@ -790,7 +790,7 @@
 
             function btnIns() {
                 _btnIns();
-                $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
+                $('#txtNoa').val(r_userno+guid());
                 $('#txtCno').val(z_cno);
                 $('#txtAcomp').val(z_acomp);
                 $('#txtDatea').val(q_date());
@@ -800,7 +800,11 @@
                 var t_where = "where=^^ 1=1  group by post,addr^^";
                 q_gt('custaddr', t_where, 0, 0, 0, "");
             }
-
+			var guid = (function() {
+				function s4() {return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);}
+				return function() {return s4() + s4() + '-' + s4() + '-' + s4() + '-' +s4() + '-' + s4() + s4() + s4();};
+			})();
+			
             function btnModi() {
                 if (emp($('#txtNoa').val()))
                     return;
