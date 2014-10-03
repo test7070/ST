@@ -688,7 +688,6 @@
 				
 				if(q_cur==1){
 					//核准檢查
-					$('#txtNoa').val(r_userno+guid());
 					var t_noa = $.trim($('#txtNoa').val());
 					var t_typea = $.trim($('#cmbTypea').val());
 	                var t_custno = $.trim($('#txtCustno').val())
@@ -704,10 +703,7 @@
 	                	+ ';' + encodeURI(t_mon));
 				}else{
 					var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-	                if (s1.length == 0 || s1 == "AUTO")
-	                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));
-	                else
-	                    wrServer(s1);
+	                wrServer(s1);
 				}
             }
 
@@ -821,7 +817,7 @@
 
             function btnIns() {
                 _btnIns();
-                $('#txtNoa').val('Auto');
+                $('#txtNoa').val(r_userno+q_date()+guid());
                 $('#txtCno').val(z_cno);
                 $('#txtAcomp').val(z_acomp);
                 $('#txtDatea').val(q_date());
