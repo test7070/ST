@@ -336,6 +336,8 @@
 					Unlock();
 					return;
 				}
+				
+				$('#txtTaxportname').val(replaceAll($('#cmbTaxport').find("option:selected").text(),$('#cmbTaxport').val()+'	',''));
         	
                 if(q_cur==1){
                 	t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
@@ -635,13 +637,30 @@
 							<td><span> </span><a id='lblInsur_disaster' class="lbl"> </a></td>
 							<td><input id="txtInsur_disaster"  type="text" class="txt c1" /></td>
 							<td><span> </span><a id="lblTaxport" class="lbl"> </a></td>
-							<td><select id="cmbTaxport" class="txt c1"> </select></td>
+							<td>
+								<select id="cmbTaxport" class="txt c1"> </select>
+								<input id="txtTaxportname"  type="hidden"/>
+							</td>
 						</tr>
 						<tr>
 							<td><span> </span><a id='lblTaxno' class="lbl"> </a></td>
 							<td><input id="txtTaxno"  type="text" class="txt c1" />	</td>
 							<td><span> </span><a id='lblHouseno' class="lbl"> </a></td>
 							<td><input id="txtHouseno"  type="text" class="txt c1" />	</td>
+						</tr>
+						<tr>
+							<td><span> </span><a id='lblAcccomp' class="lbl"> </a></td>
+							<td><input id="txtAcccomp"  type="text" class="txt c1" />	</td>
+							<td><span> </span><a id='lblAccconn' class="lbl"> </a></td>
+							<td><input id="txtAccconn"  type="text" class="txt c1" />	</td>
+						</tr>
+						<tr>
+							<td><span> </span><a id='lblAcctel' class="lbl"> </a></td>
+							<td><input id="txtAcctel"  type="text" class="txt c1" />	</td>
+						</tr>
+						<tr>
+							<td><span> </span><a id='lblAccaddr' class="lbl"> </a></td>
+							<td colspan="3"><input id="txtAccaddr"  type="text" class="txt c1" />	</td>
 						</tr>
 						<tr class="obu">
 							<td><span> </span><a id='lblObu' class="lbl"> </a></td>
