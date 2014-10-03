@@ -70,6 +70,9 @@
 				q_gt('acomp', '', 0, 0, 0, "");
 				q_gt('part', '', 0, 0, 0, "");
 				q_gt('salm', '', 0, 0, 0, "");
+				
+				$('.tax').hide();
+				q_gf('Paytype.txt', '');
 
 				if (q_getPara('sys.comp').indexOf('祥興') > -1) {
 					$('#btnSsspart').show();
@@ -174,6 +177,25 @@
 						$('#txtLabor2_edate').val($('#txtOutdate').val());
 					}
 				});
+				
+				$('#btnTax').click(function(e) {
+                    $('.tax').toggle();
+                });
+			}
+			
+			var t_typep='',c_typep=' @ ';
+			function q_gfPost() {
+				if (q_gfTxt=='Paytype.txt'){
+					t_typep = xmlString.split('\r\n');
+					//處理內容
+					for (i=0;i<t_typep.length;i++){
+						var typep=t_typep[i].split(';')[0];
+						c_typep=c_typep+','+typep.split('.')[0]+"@"+typep;
+					}
+					
+					q_cmbParse("cmbPtype", c_typep);
+					refresh(q_recno);  /// 第一次需要重新載入	
+				}
 			}
 
 			function q_boxClose(s2) {
@@ -361,6 +383,18 @@
 					$('.isBarCode').show();
 				}else{
 					$('.isBarCode').hide();
+				}
+				
+				if($("#cmbPerson").val()=='外勞'){
+					$('#txtPassportno').show();
+					$('#lblPassportno').show();
+					$('#txtId').hide();
+					$('#lblId').hide();
+				}else{
+                   	$('#txtPassportno').hide();
+					$('#lblPassportno').hide();
+					$('#txtId').show();
+					$('#lblId').show();
 				}
 			}
 
@@ -622,8 +656,8 @@
 						<td><select id="cmbPerson" class="txt c1"></select></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblId' class="lbl"> </a></td>
-						<td><input id="txtId" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblId' class="lbl"> </a><a id='lblPassportno' class="lbl"> </a></td>
+						<td><input id="txtId"  type="text"  class="txt c1"/><input id="txtPassportno"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblBirthday' class="lbl"> </a></td>
 						<td><input id="txtBirthday" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblBlood' class="lbl"> </a></td>
@@ -714,7 +748,21 @@
 							<input id='btnSaladjust' type="button"/>
 							<span> </span>
 							<input id='btnLabases' type="button" />
+							<span> </span>
+							<input id='btnTax' type="button" />
 						</td>
+					</tr>
+					<tr class='tax'>
+						<td><span> </span><a id="lblTaxno" class="lbl"> </a></td>
+						<td><input id="txtTaxno"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblPtype" class="lbl"> </a></td>
+						<td><select id="cmbPtype" class="txt c1"> </select></td>
+						<td><input id="chkHouse" type="checkbox" style="float: right;"/></td>
+						<td><a id='lblHouse'> </a></td>
+					</tr>
+					<tr class='tax'>
+						<td><span> </span><a id="lblAddr_rent" class="lbl"> </a></td>
+						<td colspan="5"><input id="txtAddr_rent"  type="text"  class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
