@@ -295,21 +295,11 @@
                         		return;
                         	}else{
                         		$('#txtApv').val(as[0].checker);
+                        		$('#txtApvmemo').val(as[0].memo);
                         		q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));	
                         	}
                         }
                 		break;
-                    case 'qtxt.query.vccfe_apv':
-                        var as = _q_appendData("tmp0", "", true);
-                        if (as[0] != undefined) {
-                            $('#txtApv').val(as[0].apv);
-                            $('#txtApvmemo').val(as[0].apvmemo);
-
-                            if (as[0].apv.length == 0)
-                                q_func('sign.q_signForm', 'vcc,'+r_accy+',' + $('#txtNoa').val());
-                        }
-                        Unlock(1);
-                        break;
                     default:
                        /* if (result.substr(0, 5) == '<Data') {
                             var Asss = _q_appendData('sss', '', true);
@@ -818,7 +808,7 @@
 
             function btnIns() {
                 _btnIns();
-                $('#txtNoa').val(r_userno+q_date()+guid());
+                $('#txtNoa').val(r_userno+(new Date()).getTime());
                 $('#txtCno').val(z_cno);
                 $('#txtAcomp').val(z_acomp);
                 $('#txtDatea').val(q_date());
@@ -892,10 +882,6 @@
                 if (q_cur == 1 || q_cur == 2) {
                     var s2 = xmlString.split(';');
                     abbm[q_recno]['accno'] = s2[0];
-					//var t_noa = $.trim($('#txtNoa').val());
-                    //q_func('qtxt.query.vccfe_apv', 'vcc.txt,vccfe_apv,' + encodeURI(r_accy) + ';' + encodeURI(t_noa));
-                    //     
-                    //	q_gt('vccfe_apv',"where=^^['"+r_accy+"','"+t_noa+"')^^", 0, 0, 0, "vccfe_apv");
                 }
             }
 
