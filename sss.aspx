@@ -71,8 +71,9 @@
 				q_gt('part', '', 0, 0, 0, "");
 				q_gt('salm', '', 0, 0, 0, "");
 				
-				$('.tax').hide();
-				q_gf('Paytype.txt', '');
+				//稅務資料暫時拿掉
+				//$('.tax').hide();
+				//q_gf('Paytype.txt', '');
 
 				if (q_getPara('sys.comp').indexOf('祥興') > -1) {
 					$('#btnSsspart').show();
@@ -183,7 +184,8 @@
                 });
 			}
 			
-			var t_typep='',c_typep=' @ ';
+			//稅務資料暫時拿掉
+			/*var t_typep='',c_typep=' @ ';
 			function q_gfPost() {
 				if (q_gfTxt=='Paytype.txt'){
 					t_typep = xmlString.split('\r\n');
@@ -196,7 +198,7 @@
 					q_cmbParse("cmbPtype", c_typep);
 					refresh(q_recno);  /// 第一次需要重新載入	
 				}
-			}
+			}*/
 
 			function q_boxClose(s2) {
 				var ret;
@@ -748,10 +750,11 @@
 							<input id='btnSaladjust' type="button"/>
 							<span> </span>
 							<input id='btnLabases' type="button" />
-							<span> </span>
-							<input id='btnTax' type="button" />
+							<!--<span> </span>
+							<input id='btnTax' type="button" />-->
 						</td>
 					</tr>
+					<!-- //稅務資料暫時拿掉
 					<tr class='tax'>
 						<td><span> </span><a id="lblTaxno" class="lbl"> </a></td>
 						<td><input id="txtTaxno"  type="text"  class="txt c1"/></td>
@@ -764,6 +767,7 @@
 						<td><span> </span><a id="lblAddr_rent" class="lbl"> </a></td>
 						<td colspan="5"><input id="txtAddr_rent"  type="text"  class="txt c1"/></td>
 					</tr>
+					-->
 				</table>
 			</div>
 		</div>
