@@ -21,7 +21,7 @@
 
             q_tables = 's';
             var q_name = "vcc";
-            var q_readonly = ['txtNoa', 'txtAccno', 'txtComp', 'txtCardeal', 'txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2', 'txtTranstart', 'txtWeight'];
+            var q_readonly = ['txtNoa', 'txtAccno', 'txtComp', 'txtCardeal', 'txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2', 'txtTranstart', 'txtWeight','txtApv','txtApvname','txtApvmemo'];
             var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtNoq', 'txtProfit', 'txtChecker'];
             var bbmNum = [];
             var bbsNum = [];
@@ -158,7 +158,7 @@
                     var t_custno = trim($('#txtCustno').val());
                     var t_where = '';
                     if (t_custno.length > 0) {
-                        t_where = "noa in (select noa from orde" + r_accy + " where enda!='1') && " + (t_custno.length > 0 ? q_sqlPara("custno", t_custno) : "");
+                        t_where = "noa in (select noa from view_orde where enda!='1') && " + (t_custno.length > 0 ? q_sqlPara("custno", t_custno) : "");
                         if (!emp($('#txtOrdeno').val()))
                             t_where += " && charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
                         t_where = t_where;
@@ -929,8 +929,10 @@
                 _readonly(t_para, empty);
                 if (t_para) {
                     $('#combAddr').attr('disabled', 'disabled');
+                    $('#btnOrdes').attr('disabled', 'disabled');
                 } else {
                     $('#combAddr').removeAttr('disabled');
+                    $('#btnOrdes').removeAttr('disabled');
                 }
                 HiddenTreat();
                 //限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
