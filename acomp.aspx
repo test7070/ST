@@ -71,7 +71,8 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                q_gf('Taxport.txt', '');
+                //q_gf('Taxport.txt', ''); //稅務資料暫時拿掉
+                
                 $('#txtNoa').change(function(e){
                 	$(this).val($.trim($(this).val()).toUpperCase());    	
 					if($(this).val().length>0){
@@ -181,7 +182,8 @@
             	}
             }
             
-            var t_typep='',c_typep=' @ ';
+            //稅務資料暫時拿掉
+            /*var t_typep='',c_typep=' @ ';
 			function q_gfPost() {
 				if (q_gfTxt=='Taxport.txt'){
 					t_typep = xmlString.split('\r\n');
@@ -194,7 +196,7 @@
 					q_cmbParse("cmbTaxport", c_typep);
 					refresh(q_recno);  /// 第一次需要重新載入	
 				}
-			}
+			}*/
 
             function q_boxClose(s2) {
                 var ret;
@@ -337,7 +339,8 @@
 					return;
 				}
 				
-				$('#txtTaxportname').val(replaceAll($('#cmbTaxport').find("option:selected").text(),$('#cmbTaxport').val()+'	',''));
+				//稅務資料暫時拿掉
+				//$('#txtTaxportname').val(replaceAll($('#cmbTaxport').find("option:selected").text(),$('#cmbTaxport').val()+'	',''));
         	
                 if(q_cur==1){
                 	t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
@@ -636,6 +639,9 @@
 						<tr>
 							<td><span> </span><a id='lblInsur_disaster' class="lbl"> </a></td>
 							<td><input id="txtInsur_disaster"  type="text" class="txt c1" /></td>
+						</tr>
+						<!--//稅務資料暫時拿掉
+						<tr>
 							<td><span> </span><a id="lblTaxport" class="lbl"> </a></td>
 							<td>
 								<select id="cmbTaxport" class="txt c1"> </select>
@@ -662,6 +668,7 @@
 							<td><span> </span><a id='lblAccaddr' class="lbl"> </a></td>
 							<td colspan="3"><input id="txtAccaddr"  type="text" class="txt c1" />	</td>
 						</tr>
+						-->
 						<tr class="obu">
 							<td><span> </span><a id='lblObu' class="lbl"> </a></td>
 							<td><input id="chkIsobu" type="checkbox" style="float:left;"/></td>
