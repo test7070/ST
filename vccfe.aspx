@@ -21,7 +21,7 @@
 
             q_tables = 's';
             var q_name = "vcc";
-            var q_readonly = ['txtNoa', 'txtAccno', 'txtComp', 'txtCardeal', 'txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2', 'txtTranstart', 'txtWeight'];
+            var q_readonly = ['txtNoa', 'txtAccno', 'txtComp', 'txtCardeal', 'txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2', 'txtTranstart', 'txtWeight','txtApv','txtApvname','txtApvmemo'];
             var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtNoq', 'txtProfit', 'txtChecker'];
             var bbmNum = [];
             var bbsNum = [];
@@ -29,7 +29,7 @@
             var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 12;
+            brwCount2 = 13;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'datea';
@@ -295,21 +295,11 @@
                         		return;
                         	}else{
                         		$('#txtApv').val(as[0].checker);
+                        		$('#txtApvmemo').val(as[0].memo);
                         		q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));	
                         	}
                         }
                 		break;
-                    case 'qtxt.query.vccfe_apv':
-                        var as = _q_appendData("tmp0", "", true);
-                        if (as[0] != undefined) {
-                            $('#txtApv').val(as[0].apv);
-                            $('#txtApvmemo').val(as[0].apvmemo);
-
-                            if (as[0].apv.length == 0)
-                                q_func('sign.q_signForm', 'vcc,'+r_accy+',' + $('#txtNoa').val());
-                        }
-                        Unlock(1);
-                        break;
                     default:
                        /* if (result.substr(0, 5) == '<Data') {
                             var Asss = _q_appendData('sss', '', true);
@@ -693,14 +683,15 @@
 	                var t_custno = $.trim($('#txtCustno').val())
 	                var t_datea = $.trim($('#txtDatea').val());
 	                var t_mon = $.trim($('#txtMon').val())
-	                
+	                var t_total = q_float('txtTotal');
 	                q_func('qtxt.query.vccfe_save', 'vcc.txt,vccfe_save,' 
 	                	+ encodeURI(r_accy) 
 	                	+ ';' + encodeURI(t_noa)
 	                	+ ';' + encodeURI(t_typea)
 	                	+ ';' + encodeURI(t_custno)
 	                	+ ';' + encodeURI(t_datea)
-	                	+ ';' + encodeURI(t_mon));
+	                	+ ';' + encodeURI(t_mon)
+	                	+ ';' + t_total);
 				}else{
 					var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 	                wrServer(s1);
@@ -817,7 +808,7 @@
 
             function btnIns() {
                 _btnIns();
-                $('#txtNoa').val(r_userno+q_date()+guid());
+                $('#txtNoa').val(r_userno+(new Date()).getTime());
                 $('#txtCno').val(z_cno);
                 $('#txtAcomp').val(z_acomp);
                 $('#txtDatea').val(q_date());
@@ -891,10 +882,6 @@
                 if (q_cur == 1 || q_cur == 2) {
                     var s2 = xmlString.split(';');
                     abbm[q_recno]['accno'] = s2[0];
-					//var t_noa = $.trim($('#txtNoa').val());
-                    //q_func('qtxt.query.vccfe_apv', 'vcc.txt,vccfe_apv,' + encodeURI(r_accy) + ';' + encodeURI(t_noa));
-                    //     
-                    //	q_gt('vccfe_apv',"where=^^['"+r_accy+"','"+t_noa+"')^^", 0, 0, 0, "vccfe_apv");
                 }
             }
 
@@ -942,8 +929,10 @@
                 _readonly(t_para, empty);
                 if (t_para) {
                     $('#combAddr').attr('disabled', 'disabled');
+                    $('#btnOrdes').attr('disabled', 'disabled');
                 } else {
                     $('#combAddr').removeAttr('disabled');
+                    $('#btnOrdes').removeAttr('disabled');
                 }
                 HiddenTreat();
                 //限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
