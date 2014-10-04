@@ -29,7 +29,7 @@
             var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 12;
+            brwCount2 = 13;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'datea';
@@ -693,14 +693,15 @@
 	                var t_custno = $.trim($('#txtCustno').val())
 	                var t_datea = $.trim($('#txtDatea').val());
 	                var t_mon = $.trim($('#txtMon').val())
-	                
+	                var t_total = q_float('txtTotal');
 	                q_func('qtxt.query.vccfe_save', 'vcc.txt,vccfe_save,' 
 	                	+ encodeURI(r_accy) 
 	                	+ ';' + encodeURI(t_noa)
 	                	+ ';' + encodeURI(t_typea)
 	                	+ ';' + encodeURI(t_custno)
 	                	+ ';' + encodeURI(t_datea)
-	                	+ ';' + encodeURI(t_mon));
+	                	+ ';' + encodeURI(t_mon)
+	                	+ ';' + t_total);
 				}else{
 					var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 	                wrServer(s1);
