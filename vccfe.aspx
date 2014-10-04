@@ -286,6 +286,19 @@
 
             function q_funcPost(t_func, result) {
                 switch(t_func) {
+                	case 'qtxt.query.vccfe_save':
+                		var as = _q_appendData("tmp0", "", true);
+                        if (as[0] != undefined) {
+                        	if(as[0].msg.length>0){
+                        		q_func('sign.q_signForm', 'adpro,,' + $('#txtNoa').val());
+                        		alert(as[0].msg);
+                        		return;
+                        	}else{
+                        		$('#txtApv').val(as[0].checker);
+                        		q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));	
+                        	}
+                        }
+                		break;
                     case 'qtxt.query.vccfe_apv':
                         var as = _q_appendData("tmp0", "", true);
                         if (as[0] != undefined) {
@@ -672,12 +685,26 @@
                     $('#txtWorker2').val(r_name);
 
                 sum();
-
-                var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-                if (s1.length == 0 || s1 == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));
-                else
-                    wrServer(s1);
+				
+				if(q_cur==1){
+					//核准檢查
+					var t_noa = $.trim($('#txtNoa').val());
+					var t_typea = $.trim($('#cmbTypea').val());
+	                var t_custno = $.trim($('#txtCustno').val())
+	                var t_datea = $.trim($('#txtDatea').val());
+	                var t_mon = $.trim($('#txtMon').val())
+	                
+	                q_func('qtxt.query.vccfe_save', 'vcc.txt,vccfe_save,' 
+	                	+ encodeURI(r_accy) 
+	                	+ ';' + encodeURI(t_noa)
+	                	+ ';' + encodeURI(t_typea)
+	                	+ ';' + encodeURI(t_custno)
+	                	+ ';' + encodeURI(t_datea)
+	                	+ ';' + encodeURI(t_mon));
+				}else{
+					var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+	                wrServer(s1);
+				}
             }
 
             function _btnSeek() {
@@ -790,7 +817,7 @@
 
             function btnIns() {
                 _btnIns();
-                $('#txtNoa').val(r_userno+guid());
+                $('#txtNoa').val(r_userno+q_date()+guid());
                 $('#txtCno').val(z_cno);
                 $('#txtAcomp').val(z_acomp);
                 $('#txtDatea').val(q_date());
@@ -864,8 +891,8 @@
                 if (q_cur == 1 || q_cur == 2) {
                     var s2 = xmlString.split(';');
                     abbm[q_recno]['accno'] = s2[0];
-					var t_noa = $.trim($('#txtNoa').val());
-                    q_func('qtxt.query.vccfe_apv', 'vcc.txt,vccfe_apv,' + encodeURI(r_accy) + ';' + encodeURI(t_noa));
+					//var t_noa = $.trim($('#txtNoa').val());
+                    //q_func('qtxt.query.vccfe_apv', 'vcc.txt,vccfe_apv,' + encodeURI(r_accy) + ';' + encodeURI(t_noa));
                     //     
                     //	q_gt('vccfe_apv',"where=^^['"+r_accy+"','"+t_noa+"')^^", 0, 0, 0, "vccfe_apv");
                 }
