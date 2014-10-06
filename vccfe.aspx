@@ -648,6 +648,31 @@
                         check_startdate = true;
                         btnOk();
                         break;
+                     default:
+                     	try{
+                     		t_para = JSON.parse(t_name);
+                     		if(t_para.action == 'checkprice'){
+                     			var as = _q_appendData('view_ordes', '', true);
+                     			if (as[0] != undefined) {
+                     				t_vccprice = q_float('txtPrice_'+t_para.n);
+                     				t_ordeprice = parseFloat(as[0].price);
+                     				if(t_vccprice<t_ordeprice){
+                     					alert((t_para.n+1)+'：出貨單價【'+t_vccprice+'】小於訂單單價【'+t_ordeprice+'】');
+                     					return;
+                     				}else{
+                     					checkPrice(t_para.n+1);
+                     				}
+                     			}else{
+                     				if((t_para.ordeno+t_para.no2).length==0)
+                     					alert((t_para.n+1)+'：無訂單禁止存檔。')
+                     				else
+                     					alert((t_para.n+1)+'：查無訂單【'+t_para.ordeno+'-'+t_para.no2+'】。')
+                     				return;
+                     			}
+                     		}
+                     	}catch(e){
+                     	}
+                     	break;
                 }
             }
 
@@ -675,27 +700,50 @@
                     $('#txtWorker2').val(r_name);
 
                 sum();
-				
-				if(q_cur==1){
-					//核准檢查
-					var t_noa = $.trim($('#txtNoa').val());
-					var t_typea = $.trim($('#cmbTypea').val());
-	                var t_custno = $.trim($('#txtCustno').val())
-	                var t_datea = $.trim($('#txtDatea').val());
-	                var t_mon = $.trim($('#txtMon').val())
-	                var t_total = q_float('txtTotal');
-	                q_func('qtxt.query.vccfe_save', 'vcc.txt,vccfe_save,' 
-	                	+ encodeURI(r_accy) 
-	                	+ ';' + encodeURI(t_noa)
-	                	+ ';' + encodeURI(t_typea)
-	                	+ ';' + encodeURI(t_custno)
-	                	+ ';' + encodeURI(t_datea)
-	                	+ ';' + encodeURI(t_mon)
-	                	+ ';' + t_total);
-				}else{
-					var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-	                wrServer(s1);
-				}
+				//單價不可低於訂單
+				checkPrice(0);
+            }
+            function checkPrice(n){
+            	if(n<q_bbsCount){
+            		if(r_rank>=8 && false){
+            			checkPrice(q_bbsCount)
+            		}else{
+            			if($('#txtProductno_'+n).val().length>0){
+            				t_ordeno = $('#txtOrdeno_'+n).val();
+            				t_no2 = $('#txtNo2_'+n).val();
+            				q_gt('view_ordes', "where=^^ noa='"+t_ordeno+"' and no2='"+t_no2+"' ^^", 0, 0, 0, JSON.stringify({action:'checkprice',n:n,ordeno:t_ordeno,no2:t_no2})); 
+            			}else{
+            				checkPrice(n+1);
+            			}
+            		}
+            	}else{
+            		if(q_cur==1){
+						//核准檢查
+						var t_noa = $.trim($('#txtNoa').val());
+						var t_typea = $.trim($('#cmbTypea').val());
+		                var t_custno = $.trim($('#txtCustno').val())
+		                var t_datea = $.trim($('#txtDatea').val());
+		                var t_mon = $.trim($('#txtMon').val())
+		                var t_total = q_float('txtTotal');
+		                var t_other = '';
+		                for(var i=0;i<q_bbsCount;i++){
+		                	
+		                	
+		                }
+		                
+		                q_func('qtxt.query.vccfe_save', 'vcc.txt,vccfe_save,' 
+		                	+ encodeURI(r_accy) 
+		                	+ ';' + encodeURI(t_noa)
+		                	+ ';' + encodeURI(t_typea)
+		                	+ ';' + encodeURI(t_custno)
+		                	+ ';' + encodeURI(t_datea)
+		                	+ ';' + encodeURI(t_mon)
+		                	+ ';' + t_total);
+					}else{
+						var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+		                wrServer(s1);
+					}
+            	}
             }
 
             function _btnSeek() {
