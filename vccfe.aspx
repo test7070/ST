@@ -705,7 +705,7 @@
             }
             function checkPrice(n){
             	if(n<q_bbsCount){
-            		if(r_rank>=8 && false){
+            		if(r_rank>=8){
             			checkPrice(q_bbsCount)
             		}else{
             			if($('#txtProductno_'+n).val().length>0){
