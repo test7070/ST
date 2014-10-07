@@ -25,7 +25,7 @@
 			});
 			function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_ucc',
+					fileName : 'z_uccfe',
 					options : [{
 						type : '0',
 						name : 'accy',
@@ -118,7 +118,7 @@
 						for ( i = 0; i < as.length; i++) {
 							uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].namea;
 						}
-						q_gf('', 'z_ucc');
+						q_gf('', 'z_uccfe');
 						break;
 				}
 			}

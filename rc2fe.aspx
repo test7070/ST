@@ -32,10 +32,10 @@
             brwKey = 'datea';
             aPop = new Array(
                 ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,tel,zip_invo,addr_comp,paytype', 'txtTggno,txtComp,txtTel,txtPost,txtAddr,txtPaytype', 'tgg_b.aspx'],
-                ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
+                ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
                 ['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
                 ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-                ['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
+                ['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
                 //['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,unit,style,lengthb,spec', 'txtUno_,txtProductno_,txtProduct_,txtUnit_,txtStyle_,txtLengthb_,txtSpec_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
                 ['txtCarno', 'lblCar', 'cardeal', 'noa,comp', 'txtCarno,txtCar', 'cardeal_b.aspx'],
                 ['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],
@@ -423,6 +423,19 @@
                 for (var j = 0; j < (q_bbsCount == 0 ? 1 : q_bbsCount); j++) {
                 	$('#lblNo_'+j).text(j+1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_' + n).click();
+                        });
+                        $('#txtStoreno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStoreno_', '');
+                            $('#btnStore_' + n).click();
+                        });
+                        
                         $('#btnMinus_' + j).click(function() {
                             btnMinus($(this).attr('id'));
                         });
@@ -991,8 +1004,9 @@
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                     <td><input id="txtUno.*" type="text" class="txt c1"/></td>
                     <td>
-                        <input class="btn"  id="btnProductno.*" type="button" value='' style="width:5%;font-weight: bold;float:left;" />
-                        <input id="txtProductno.*" type="text" class="txt" style="width:80%;float:left;"/>                   
+                        
+                        <input id="txtProductno.*" type="text" class="txt c1"/>      
+                        <input class="btn"  id="btnProduct.*" type="button" style="display:none;" />             
                     </td>
                     <td>
                         <input type="text" id="txtProduct.*" class="txt c1"/>
@@ -1009,8 +1023,8 @@
                     <td><input id="txtBrand.*" type="text" class="txt c1" /></td>
                     <td><input id="txtCounta.*" type="text" class="txt num c1" /></td>
                     <td>
-                        <input id="txtStoreno.*" type="text" class="txt c1" style="width: 65%"/>
-                        <input class="btn" id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;" />
+                        <input id="txtStoreno.*" type="text" class="txt c1"/>
+                        <input class="btn" id="btnStore.*" type="button" style="display:none;" />
                         <input id="txtStore.*" type="text" class="txt c1"/>
                     </td>
                     <td class="isRack">
