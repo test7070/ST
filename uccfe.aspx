@@ -69,7 +69,7 @@
                 Lock(1, {
                     opacity : 0
                 });
-                if($$.trim($('#txtNoa').val()).length==0){
+                if($.trim($('#txtNoa').val()).length==0){
                 	alert('請輸入物品編號。');
                 	Unlock(1);
                 	return
