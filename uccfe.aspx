@@ -215,7 +215,7 @@
             }
             .dview {
                 float: left;
-                width: 350px;
+                width: 400px;
                 border-width: 0px;
             }
             .tview {
@@ -334,8 +334,8 @@
                 <table class="tview" id="tview">
                     <tr>
                         <td align="center" style="width:20px; color:black;"><a id="vewChk"> </a></td>
-                        <td align="center" style="width:80px; color:black;"><a id="vewNoa"> </a></td>
-                        <td align="center" style="width:100px; color:black;"><a id="vewProduct"> </a></td>
+                        <td align="center" style="width:100px; color:black;"><a id="vewNoa"> </a></td>
+                        <td align="center" style="width:200px; color:black;"><a id="vewProduct"> </a></td>
                     </tr>
                     <tr>
                         <td><input id="chkBrow.*" type="checkbox"/></td>

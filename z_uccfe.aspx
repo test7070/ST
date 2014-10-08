@@ -39,9 +39,12 @@
 					}, {
 						type : '6',
 						name : 'edate' //[5]
+					},{
+						type : '1', //[6][7]
+						name : 'xdate'
 					}, {
 						type : '8',
-						name : 'xoption01',//[6]
+						name : 'xoption01',//[8]
 						value : ['明細']
 					}]
 				});
@@ -52,6 +55,11 @@
 				$('#txtEdate').mask('999/99/99');
 				$('#txtEdate').val(q_date());
 				$('#txtEdate').datepicker();
+				
+				$('#txtXdate1').mask('999/99/99');
+				$('#txtXdate1').datepicker();
+				$('#txtXdate2').mask('999/99/99');
+				$('#txtXdate2').datepicker();
 			}
 
 			function q_boxClose(s2) {
