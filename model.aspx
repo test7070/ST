@@ -30,7 +30,10 @@
 			brwNowPage = 0;
 			brwKey = 'Noa';
 			q_desc = 1;
-			aPop = new Array(['txtStationno', 'lblStationno', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx']);
+			aPop = new Array(
+				['txtStationno', 'lblStationno', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'],
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx']
+			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
@@ -334,7 +337,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 960px;
+				width: 1260px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -427,15 +430,22 @@
 					<td  align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width:20%;"><a id='lblSuitproduct_s'></a></td>
-					<td align="center" style="width:40%;"><a id='lblMemo_s'></a></td>
-					<td align="center" style="width:40%;"><a id='lblMemo2_s'></a></td>
+					<td align="center" style="width:15%;"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:25%;"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:15%;"><a id='lblSuitproduct_s'> </a></td>
+					<td align="center" style="width:22%;"><a id='lblMemo_s'> </a></td>
+					<td align="center" style="width:22%;"><a id='lblMemo2_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
 						<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
+					<td>
+						<input id="txtProductno.*" type="text" style="width:80%;" />
+						<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;" />
+					</td>
+					<td><input id="txtProduct.*" type="text" style="width:95%;" /></td>
 					<td><input id="txtSuitproduct.*" type="text" style="width:95%;" /></td>
 					<td><input id="txtMemo.*" type="text" style="width:95%;" /></td>
 					<td><input id="txtMemo2.*" type="text" style="width:95%;" /></td>
