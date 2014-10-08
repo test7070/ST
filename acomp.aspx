@@ -59,6 +59,7 @@
                 bbmKey = ['noa'];
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1);
+                //q_gf('Taxport.txt', ''); //稅務資料暫時拿掉
             });
 
             function main() {
@@ -71,7 +72,6 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                //q_gf('Taxport.txt', ''); //稅務資料暫時拿掉
                 
                 $('#txtNoa').change(function(e){
                 	$(this).val($.trim($(this).val()).toUpperCase());    	
@@ -194,7 +194,7 @@
 					}
 					
 					q_cmbParse("cmbTaxport", c_typep);
-					refresh(q_recno);  /// 第一次需要重新載入	
+					//refresh(q_recno);  /// 第一次需要重新載入	
 				}
 			}*/
 

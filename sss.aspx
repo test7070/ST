@@ -57,7 +57,7 @@
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtBirthday', r_picd], ['txtIndate', r_picd], ['txtOutdate', r_picd], ['txtHealth_bdate', r_picd], ['txtHealth_edate', r_picd], ['txtLabor1_bdate', r_picd], ['txtLabor1_edate', r_picd], ['txtLabor2_bdate', r_picd], ['txtLabor2_edate', r_picd]
-				,['textBmon','99'],['textEmon','99']];
+				,['textBmon','99'],['textEmon','99'],['textYear','999']];
 				q_mask(bbmMask);
 
 				if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1)
@@ -193,7 +193,19 @@
                 });
                 
                 $('#btnInsert_div_salbs').click(function(e) {
-                    $('#div_salbs').hide();
+                	if(!emp($('#textYear').val())){
+                		var t_paras = $('#txtNoa').val()+ ';'+$('#textYear').val()+ ';'+q_getPara('sys.key_salb')+ ';' 
+                		+ $('#combTypea').val()+ ';' + $('#combTypeb').val()+ ';' + $('#combTypec').val()+';';
+                		                		
+                		for (var i=1;i<=12;i++){
+                			t_paras += dec($('#textRmoney_'+i).val())+ '#' +dec($('#textSmoney_'+i).val())+ '#' +dec($('#textTmoney_'+i).val())+ '#' +dec($('#textOmoney_'+i).val())+(i==12?'':'#');
+	                    }
+                		
+	                	q_func('qtxt.query.salbs', 'salb.txt,sss,' + t_paras);
+                    	$('#div_salbs').hide();
+                   }else{
+                   	alert('年度禁止空白!!');
+                   }
                 });
                
                $('#combTypea').change(function(){
@@ -278,6 +290,7 @@
                     }
                 });
                 $('#table_salbs .num').val(0);
+                $('#textYear').val(r_accy);
                 $('#table_salbs .num').keyup(function() {
 					var tmp=$(this).val();
 					tmp=tmp.match(/\d{1,}\.{0,1}\d{0,}/);
@@ -532,7 +545,7 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
-				var WantDisabledArray = ['btnSsspart', 'btnSaladjust', 'btnLabases'];
+				var WantDisabledArray = ['btnSsspart', 'btnSaladjust', 'btnLabases','btnTax'];
 				for (var k = 0; k < WantDisabledArray.length; k++) {
 					if (q_cur == 1 || q_cur == 2) {
 						$("#" + WantDisabledArray[k]).attr('disabled', 'disabled');
@@ -623,6 +636,14 @@
 				}
 				return 0;
 				//錯誤
+			}
+			
+			function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'qtxt.query.salbs':
+						alert('稅務薪資寫入完畢。');
+						break;
+				}
 			}
 		</script>
 		<style type="text/css">
@@ -836,8 +857,14 @@
 					<tr>
 						<td><span> </span><a id='lblTypea' class="lbl"> </a></td>
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
-						<td><input id="chkIssales" type="checkbox" style="float: right;"/></td>
-						<td><a id='vewIssales'> </a></td>
+						<td>
+							<input id="chkIsclerk" type="checkbox" style="float: left;"/>
+							<a id='vewIsclerk' style="float: left;" > </a>
+						</td>
+						<td>
+							<input id="chkIssales" type="checkbox" style="float: left;"/>
+							<a id='vewIssales' style="float: left;"> </a>
+						</td>
 						<td><span> </span><a id='lblSalesgroup' class="lbl"> </a></td>
 						<td><input id="txtSalesgroup" type="text" class="txt c1" /></td>
 					</tr>
@@ -912,7 +939,7 @@
 					<td style="background-color: #C7FAFF;width: 150px;" align="center"><select id="combTypea" class="txt c1"> </select></td>
 					<td style="background-color: #f8d463;width: 56px;" align="center">01月<BR>退休金</td>
 					<td style="background-color: #f8d463;width: 116px;" align="center"><input id="textRmoney_1" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;width: 50px;" align="center">01月<BR>給付</td>
+					<td style="background-color: #f8d463;width: 50px;" align="center">01月<BR>金額</td>
 					<td style="background-color: #f8d463;width: 116px;" align="center"><input id="textSmoney_1" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;width: 50px;" align="center">01月<BR>扣繳</td>
 					<td style="background-color: #f8d463;width: 116px;" align="center"><input id="textTmoney_1" type="text" class="txt num c4"/></td>
@@ -924,7 +951,7 @@
 					<td style="background-color: #C7FAFF;" align="center"><select id="combTypeb" class="txt c1"> </select></td>
 					<td style="background-color: #f8d463;" align="center">02月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_2" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">02月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">02月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_2" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">02月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_2" type="text" class="txt num c4"/></td>
@@ -936,7 +963,7 @@
 					<td style="background-color: #C7FAFF;" align="center"><select id="combTypec" class="txt c1"> </select></td>
 					<td style="background-color: #f8d463;" align="center">03月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_3" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">03月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">03月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_3" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">03月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_3" type="text" class="txt num c4"/></td>
@@ -951,7 +978,7 @@
 					</td>
 					<td style="background-color: #f8d463;" align="center">04月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_4" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">04月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">04月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_4" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">04月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_4" type="text" class="txt num c4"/></td>
@@ -963,7 +990,7 @@
 					<td style="background-color: #C7FAFF;" align="center"><input id="textRmoney" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">05月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_5" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">05月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">05月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_5" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">05月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_5" type="text" class="txt num c4"/></td>
@@ -971,11 +998,11 @@
 					<td style="background-color: #f8d463;" align="center"><input id="textOmoney_5" type="text" class="txt num c4"/></td>
 				</tr>
 				<tr>
-					<td style="background-color: #C7FAFF;" align="center"><input id="btnImport_smoney" type="button" value="填入給付金額"></td>
+					<td style="background-color: #C7FAFF;" align="center"><input id="btnImport_smoney" type="button" value="填入金額"></td>
 					<td style="background-color: #C7FAFF;" align="center"><input id="textSmoney" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">06月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_6" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">06月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">06月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_6" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">06月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_6" type="text" class="txt num c4"/></td>
@@ -987,7 +1014,7 @@
 					<td style="background-color: #C7FAFF;" align="center"><input id="textTmoney" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">07月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_7" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">07月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">07月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_7" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">07月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_7" type="text" class="txt num c4"/></td>
@@ -999,7 +1026,7 @@
 					<td style="background-color: #C7FAFF;" align="center"><input id="textTmoney2" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">08月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_8" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">08月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">08月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_8" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">08月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_8" type="text" class="txt num c4"/></td>
@@ -1011,7 +1038,7 @@
 					<td style="background-color: #C7FAFF;" align="center"><input id="textOmoney" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">09月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_9" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">09月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">09月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_9" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">09月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_9" type="text" class="txt num c4"/></td>
@@ -1023,7 +1050,7 @@
 					<td style="background-color: #C7FAFF;" align="center"> </td>
 					<td style="background-color: #f8d463;" align="center">10月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_10" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">10月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">10月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_10" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">10月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_10" type="text" class="txt num c4"/></td>
@@ -1035,7 +1062,7 @@
 					<td style="background-color: #C7FAFF;" align="center"><input id="textTotal" type="text" class="txt num c4" disabled="disabled" style="background:RGB(237,237,237);color:green;"/></td>
 					<td style="background-color: #f8d463;" align="center">11月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_11" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">11月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">11月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_11" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">11月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_11" type="text" class="txt num c4"/></td>
@@ -1047,7 +1074,7 @@
 					<td style="background-color: #C7FAFF;" align="center"><input id="textTax" type="text" class="txt num c4" disabled="disabled" style="background:RGB(237,237,237);color:green;"/></td>
 					<td style="background-color: #f8d463;" align="center">12月<BR>退休金</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textRmoney_12" type="text" class="txt num c4"/></td>
-					<td style="background-color: #f8d463;" align="center">12月<BR>給付</td>
+					<td style="background-color: #f8d463;" align="center">12月<BR>金額</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textSmoney_12" type="text" class="txt num c4"/></td>
 					<td style="background-color: #f8d463;" align="center">12月<BR>扣繳</td>
 					<td style="background-color: #f8d463;" align="center"><input id="textTmoney_12" type="text" class="txt num c4"/></td>
@@ -1056,6 +1083,7 @@
 				</tr>
 				<tr id='salbs_close'>
 					<td align="center" colspan='10'>
+						<input id="textYear" type="text" style="width: 30px;"/> 年度
 						<input id="btnInsert_div_salbs" type="button" value="寫入稅務薪資表">
 						<input id="btnClose_div_salbs" type="button" value="關閉視窗">
 					</td>
