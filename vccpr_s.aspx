@@ -67,7 +67,7 @@
             function q_seekStr() {
                 t_noa = $.trim($('#txtNoa').val());
                 t_datea = $.trim($('#txDatea').val());
-                t_noa = $.trim($('#txt[money]').val());
+                t_noa = $.trim($('#txtNoa').val());
                 
                 
                 t_ucheckno = $('#txtCheckno').val(),
@@ -107,14 +107,6 @@
     >
         <div style='width:400px; text-align:center;padding:15px;' >
             <table id="seek"  border="1"   cellpadding='3' cellspacing='2' style='width:100%;' >
-                <tr class='seek_tr' style="display:none;">
-                    <td class='seek'  style="width:20%;"><a id='lblCarteam'> </a></td>
-                    <td><select id="cmbCarteam" style="width:215px; font-size:medium;" > </select></td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblCalctype'> </a></td>
-                    <td><select id="cmbCalctype" style="width:215px; font-size:medium;" > </select></td>
-                </tr>
                 <tr class='seek_tr'>
                     <td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
                     <td>
@@ -122,7 +114,7 @@
                     </td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td   style="width:35%;" ><a >發送日期</a></td>
+                    <td   style="width:35%;" ><a id='lblDatea'></a></td>
                     <td style="width:65%;  ">
                     <input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
                     <span style="display:inline-block; vertical-align:middle">&sim;</span>
@@ -130,7 +122,7 @@
                     </td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td   style="width:35%;" ><a >配送日期</a></td>
+                    <td   style="width:35%;" ><a id='lblTrandate'></a></td>
                     <td style="width:65%;  ">
                     <input class="txt" id="txtBtrandate" type="text" style="width:90px; font-size:medium;" />
                     <span style="display:inline-block; vertical-align:middle">&sim;</span>
@@ -159,12 +151,6 @@
                     <td class='seek'  style="width:20%;"><a id='lblCustno'></a></td>
                     <td>
                     <input class="txt" id="txtCustno" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblComp'></a></td>
-                    <td>
-                    <input class="txt" id="txtComp" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
             </table>

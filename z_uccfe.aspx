@@ -45,7 +45,7 @@
 					}, {
 						type : '8',
 						name : 'xoption01',//[8]
-						value : ['明細']
+						value : ['倉庫明細']
 					}]
 				});
 				q_popAssign();
