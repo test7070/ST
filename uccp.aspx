@@ -158,6 +158,7 @@
                     return;
                 }
                 q_nowf();
+                as['datea'] = abbm2['datea'];
                 return true;
             }
             function sum() {
@@ -401,6 +402,7 @@
                     <td>
                     	<input type="text" id="txtProductno.*" style="width:95%;"/>
                     	<input type="button" id="btnProductno.*" style="display:none;"/>
+                    	<input type="text" id="txtDatea.*" style="display:none;"/>
                     </td>
                     <td><input type="text" id="txtProduct.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtSprice.*" style="width:95%;"/></td>
