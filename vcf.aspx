@@ -35,11 +35,13 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Datea';
-            brwCount2 = 6;
+            brwCount2 = 8;
 
             aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax', 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'Tgg_b.aspx']
             , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', "ucc_b.aspx?" ]
-            , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', "ucc_b.aspx?" ]);
+            , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', "ucc_b.aspx?" ]
+            , ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_', "store_b.aspx?" ]
+            , ['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__', "store_b.aspx?" ]);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -117,6 +119,12 @@
 							var n = $(this).attr('id').replace('txtProductno_', '');
 							$('#btnProduct_'+n).click();
 						});
+						$('#txtStoreno_' + i).bind('contextmenu', function(e) {
+							/*滑鼠右鍵*/
+							e.preventDefault();
+							var n = $(this).attr('id').replace('txtStoreno_', '');
+							$('#btnStore_'+n).click();
+						});
                         $('#txtMount_'+i).change(function(e){
                             sum();
                         });
@@ -136,6 +144,12 @@
 							e.preventDefault();
 							var n = $(this).attr('id').replace('txtProductno__', '');
 							$('#btnProduct__'+n).click();
+						});
+						$('#txtStoreno__' + i).bind('contextmenu', function(e) {
+							/*滑鼠右鍵*/
+							e.preventDefault();
+							var n = $(this).attr('id').replace('txtStoreno__', '');
+							$('#btnStore__'+n).click();
 						});
                         $('#txtMount__'+i).change(function(e){
                             sum();
@@ -518,8 +532,8 @@
                         </td>
                         <td style="width:20px;"> </td>
                         <td style="width:150px; text-align: center;">物品編號</td>
-                        <td style="width:80px; text-align: center;">倉庫</td>
                         <td style="width:200px; text-align: center;">物品名稱</td>
+                        <td style="width:80px; text-align: center;">倉庫</td>
                         <td style="width:80px; text-align: center;">米</td>
                         <td style="width:80px; text-align: center;">單位</td>
                         <td style="width:120px; text-align: center;">進貨日</td>
@@ -537,8 +551,11 @@
                         	<input id="btnProduct..*" type="button" style="display:none;"/>
                         	<input id="txtProductno..*" type="text" style="float:left;width:95%;"/>
                     	</td>
-                        <td><input id="txtStoreno..*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtProduct..*" type="text" style="float:left;width:95%;"/></td>
+                        <td>
+                        	<input id="txtStoreno..*" type="text" style="float:left;width:95%;"/>
+                    		<input id="btnStore..*" type="button" style="display:none;"/>
+                    	</td>
                         <td><input id="txtLengthb..*"  type="text" style="width:95%; text-align: right;"/></td>
                         <td><input id="txtUnit..*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtDatea..*" type="text" style="float:left;width:95%;"/></td>
@@ -558,8 +575,8 @@
                     </td>
                     <td align="center" style="width:20px;"></td>
                     <td style="width:150px; text-align: center;">物品編號</td>
-                    <td style="width:80px; text-align: center;">倉庫</td>
                     <td style="width:200px; text-align: center;">物品名稱</td>
+                    <td style="width:80px; text-align: center;">倉庫</td>
                     <td style="width:80px; text-align: center;">米</td>
                     <td style="width:80px; text-align: center;">單位</td>
                     <td style="width:120px; text-align: center;">借出日</td>
@@ -577,8 +594,11 @@
                     	<input id="btnProduct.*" type="button" style="display:none;"/>
                     	<input id="txtProductno.*" type="text" style="float:left;width:95%;"/>
                 	</td>
-                    <td><input id="txtStoreno.*" type="text" style="float:left;width:95%;"/></td>
-                    <td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
+                	<td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
+                    <td>
+                    	<input id="txtStoreno.*" type="text" style="float:left;width:95%;"/>
+                    	<input id="btnStore.*" type="button" style="display:none;"/>
+                    </td>
                     <td><input id="txtLengthb.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtDatea.*" type="text" style="float:left;width:95%;"/></td>
