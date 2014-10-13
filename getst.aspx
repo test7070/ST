@@ -502,7 +502,7 @@
 				height: 35px;
 			}
 			.tbbm tr td {
-				width: 9%;
+				width: 12%;
 			}
 			.tbbm .tdZ {
 				width: 2%;
@@ -624,6 +624,7 @@
 						<td class="td6">
 						<input id="txtNoa" type="text" class="txt c1"/>
 						</td>
+						<td class="tdZ"></td>
 					</tr>
 					<tr class="tr2">
 						<td class='td1'><span> </span><a id="lblCustno" class="lbl btn" > </a></td>
