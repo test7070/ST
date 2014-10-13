@@ -20,7 +20,7 @@
             }
             q_tables = 's';
             var q_name = "vccpr";
-            var q_readonly = ['txtWorker2', 'txtWorker','txtNoa'];
+            var q_readonly = ['txtWorker2', 'txtWorker','txtNoa','txtProfit','txtTotal','txtSprice','txtWcost','txtTranmoney','txtTranmoney2','txtInte','txtCost_a','txtCost_b','txtCash'];
             var q_readonlys = [];
             var bbmNum = [];
             var bbsNum = [['txtPrice',10,2,1]];
@@ -32,12 +32,13 @@
             brwNowPage = 0;
             brwKey = 'Noa';
             q_desc = 1;
-            brwCount2 = 5;
+            brwCount2 = 10;
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno', 'cust_b.aspx']
             , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
             , ['txtStraddrno','','addr2','noa,addr','txtStraddrno,txtStraddr','addr2_b.aspx']
             , ['txtEndaddrno','','addr2','noa,addr','txtEndaddrno,txtEndaddr','addr2_b.aspx']
-            , ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']);
+            , ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']
+            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
@@ -147,6 +148,12 @@
                         $('#txtPrice_'+j).change(function(e){
                             sum();
                         });
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
+							/*滑鼠右鍵*/
+							e.preventDefault();
+							var n = $(this).attr('id').replace('txtProductno_', '');
+							$('#btnProduct_'+n).click();
+						});
                     }
                 }
                 _bbsAssign();
@@ -260,11 +267,12 @@
         </script>
         <style type="text/css">
             #dmain {
-                overflow: hidden;
+                overflow:hidden;
+                width: 100%;
             }
             .dview {
                 float: left;
-                width: 200px;
+                width: 20%;
                 border-width: 0px;
             }
             .tview {
@@ -284,7 +292,7 @@
             }
             .dbbm {
                 float: left;
-                width: 800px;
+                width: 80%;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -457,7 +465,7 @@
                     </tr>
                     <tr>
                     	<td><span> </span><a id="lblMemo" class="lbl"></a></td>
-                        <td colspan="4"><input 2id="txtMemo" type="text"  class="txt c1"/></td>
+                        <td colspan="4"><input id="txtMemo" type="text"  class="txt c1"/></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblWorker" class="lbl"> </a></td>
@@ -550,6 +558,7 @@
 					<td>
 						<input type="text" id="txtProductno.*" style="width:95%;"/>
 						<input type="text" id="txtProduct.*" style="width:95%;"/>
+						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
 					<td><input type="text" id="txtInte.*" style="width:95%;"/></td>
 					<td><input type="text" id="txtDaya.*" style="width:95%;"/></td>
