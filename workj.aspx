@@ -24,8 +24,8 @@
             var bbmNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbtNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
-            var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99'],['txtTime1','99:99'],['txtTime2','99:99'],['txtTime3','99:99'],['txtTime4','99:99']];
-            var bbsMask = [];
+            var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99']];
+            var bbsMask = [['txtTime1','99:99'],['txtTime2','99:99'],['txtTime3','99:99'],['txtTime4','99:99']];
             var bbtMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -195,14 +195,14 @@
 									ctx.fillStyle = 'red';
 									ctx.fillText(value+'',t_para[i].top,t_para[i].left);
 								}
-								//縮放為200*200
+								//縮放為200*50
 								$('#imgPic_'+n).attr('src',c.toDataURL());
 								$('#txtImgdata_'+n).val(c.toDataURL());	
 								
-								$('#canvas_'+n).width(150).height(150);
-								c.width = 150;
-								c.height = 150;
-								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,150);
+								$('#canvas_'+n).width(200).height(50);
+								c.width = 200;
+								c.height = 50;
+								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,200,50);
 								$('#txtImgdata_'+n).val(c.toDataURL());
 							}
                     	}catch(e){
@@ -314,16 +314,6 @@
 
             function refresh(recno) {
                 _refresh(recno);
-               /* for(var n=0;n<q_bbsCount;n++){
-                	if($('#canvas_'+n).length>0){
-
-						$('#imgPic_'+n).attr('src', $('#txtImgdata_'+n).val());
-						var imgwidth = $('#imgPic_'+n).width();
-                        var imgheight = $('#imgPic_'+n).height();
-						//$('#canvas_'+i)[0].witdh = $('#canvas_'+i)[0].witdh;
-						$("#canvas_"+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,150);
-                	}
-                }*/
             }
 
             function readonly(t_para, empty) {
@@ -360,7 +350,7 @@
 						$('#imgPic_'+i).attr('src', $('#txtImgdata_'+i).val());
 						var imgwidth = $('#imgPic_'+i).width();
                         var imgheight = $('#imgPic_'+i).height();
-						$("#canvas_"+i)[0].getContext("2d").drawImage($('#imgPic_'+i)[0],0,0,imgwidth,imgheight,0,0,150,150);
+						$("#canvas_"+i)[0].getContext("2d").drawImage($('#imgPic_'+i)[0],0,0,imgwidth,imgheight,0,0,200,50);
                 	}
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
                     	$('#txtProductno_' + i).bind('contextmenu', function(e) {
@@ -770,11 +760,8 @@
 						<td></td>
 						<td><span> </span><a id="lblChktype" class="lbl"> </a></td>
 						<td><input id="txtChktype"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblOrdeno" class="lbl btn"> </a></td>
-						<td>
-							<input id="txtOrdeno"  type="text"  class="txt c1"/>
-							<input id="txtOrdeaccy"  type="text"  style="display:none;"/>
-						</td>
+						<td><span> </span><a id="lblTolerance" class="lbl"> </a></td>
+						<td><input id="txtTolerance"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
@@ -792,9 +779,13 @@
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
-						<td></td>
 						<td><input type="button" id="btnCont" value="合約匯入" /></td>
-						<td><input type="button" id="btnOrde" value="轉訂單" style="display:none;"/></td>
+						<td><span> </span><a id="lblOrdeno" class="lbl btn"> </a></td>
+						<td>
+							<input id="txtOrdeno"  type="text"  class="txt c1"/>
+							<input id="txtOrdeaccy"  type="text"  style="display:none;"/>
+							<input type="button" id="btnOrde" value="轉訂單" style="display:none;"/>
+						</td>
 					</tr>
 					
 				</table>
@@ -836,7 +827,7 @@
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
 					<td>
-						<canvas id="canvas.*" width="150"> </canvas>
+						<canvas id="canvas.*" width="200" height="50"> </canvas>
 						<img id="imgPic.*" src="" style="display:none;"/>
 						<input id="txtImgdata.*" type="text" style="display:none;"/>
 					</td>
@@ -867,22 +858,28 @@
 						<input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
 					<td>
-						<div style="height:24px;"><select id="cmbMech1.*" style="width:95%;"> </select></div>
-						<div style="height:24px;"><select id="cmbMech2.*" style="width:95%;"> </select></div>
-						<div style="height:24px;"><select id="cmbMech3.*" style="width:95%;"> </select></div>
-						<div style="height:24px;"><select id="cmbMech4.*" style="width:95%;"> </select></div>
+						<select id="cmbMech1.*" style="width:95%; height:28px;"> </select>
+						<select id="cmbMech2.*" style="width:95%; height:28px;"> </select>
+						<select id="cmbMech3.*" style="width:95%; height:28px;"> </select>
+						<select id="cmbMech4.*" style="width:95%; height:28px;"> </select>
 					</td>
 					<td>
-						<div style="height:24px;"><select id="cmbStore1.*" style="width:95%;"> </select></div>
-						<div style="height:24px;"><select id="cmbStore2.*" style="width:95%;"> </select></div>
-						<div style="height:24px;"><select id="cmbStore3.*" style="width:95%;"> </select></div>
-						<div style="height:24px;"><select id="cmbStore4.*" style="width:95%;"> </select></div>
+						<select id="cmbStore1.*" style="width:95%; height:28px;"> </select>
+						<select id="cmbStore2.*" style="width:95%; height:28px;"> </select>
+						<select id="cmbStore3.*" style="width:95%; height:28px;"> </select>
+						<select id="cmbStore4.*" style="width:95%; height:28px;"> </select>
 					</td>
 					<td>
-						<div style="height:24px;"><input class="txt" id="txtTime1.*" type="text" style="width:95%;padding: 0px;"/></div>
-						<div style="height:24px;"><input class="txt" id="txtTime2.*" type="text" style="width:95%;padding: 0px;"/></div>
-						<div style="height:24px;"><input class="txt" id="txtTime3.*" type="text" style="width:95%;padding: 0px;"/></div>
-						<div style="height:24px;"><input class="txt" id="txtTime4.*" type="text" style="width:95%;padding: 0px;"/></div>
+						<input class="txt" id="txtPlace1.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtPlace2.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtPlace3.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtPlace4.*" type="text" style="width:95%;padding: 0px;"/>
+					</td>
+					<td>
+						<input class="txt" id="txtTime1.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtTime2.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtTime3.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtTime4.*" type="text" style="width:95%;padding: 0px;"/>
 					</td>
 					<td>
 						<input class="txt" id="txtContno.*" type="text" style="float:left;width:120px;"/>
