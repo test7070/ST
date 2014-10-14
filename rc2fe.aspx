@@ -995,6 +995,7 @@
                     <td align="center" style="width:80px;" class="isRack"><a id='lblRackno_s'> </a></td>
                     <td align="center" style="width:180px;"><a id='lblMemos'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblRecord_s'> </a></td>
+                    <td align="center" style="width:150px;"><a id='lblUno2s'> </a></td>
                 </tr>
                 <tr style='background:#cad3ff;'>
                     <td>
@@ -1040,6 +1041,7 @@
                     <td align="center">
                         <input class="btn" id="btnRecord.*" type="button" value='.' style=" font-weight: bold;" />
                     </td>
+                    <td><input id="txtUno2.*" type="text" class="txt c1"/></td>
                 </tr>
             </table>
         </div>
