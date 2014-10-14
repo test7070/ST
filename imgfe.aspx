@@ -24,7 +24,7 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
-			brwCount2 = 6;
+			brwCount2 = 5;
 			aPop = new Array();
             				
             $(document).ready(function() {
@@ -101,7 +101,6 @@
 				c.width = imgwidth;
 				c.height = imgheight;
 				ctx.drawImage($('#imgPic')[0],0,0,imgwidth,imgheight);
-				
 				if(!isOrg){
 					t_para = JSON.parse($('#txtPara').val());
 					$('#textPara').val('');
@@ -114,19 +113,19 @@
 						$('#textPara').val($('#textPara').val()+t_para[i].key+','+t_para[i].top+','+t_para[i].left+','+t_para[i].fontsize);
 					}
 				}
-				//縮放為150*150
 				$('#imgPic').attr('src',c.toDataURL());
-				$('#canvas').width(150).height(150);
-				c.width = 150;
-				c.height = 150;
-				$("#canvas")[0].getContext("2d").drawImage($('#imgPic')[0],0,0,imgwidth,imgheight,0,0,150,150);
-				
 				if(isOrg){
+					//縮放為200*200
+					$('#canvas').width(200).height(200);
+					c.width = 200;
+					c.height = 200;
+					$("#canvas")[0].getContext("2d").drawImage($('#imgPic')[0],0,0,imgwidth,imgheight,0,0,200,200);
 					$('#txtOrg').val(c.toDataURL());
 					refreshImg(false);
 				}
 				else
 					$('#txtData').val(c.toDataURL());
+				
 			}
             function q_boxClose(s2) {
                 var ret;
@@ -219,10 +218,6 @@
 
             function refresh(recno) {
                 _refresh(recno);     
-                if(q_cur==1 || q_cur==2)
-                	$('#btnFile').removeAttr('disabled');
-                else
-                	$('#btnFile').attr('disabled','disabled');
                 refreshBbm();
             }
 			function refreshBbm(){
@@ -231,6 +226,10 @@
             	}else{
             		$('#txtNoa').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
             	}
+            	if(q_cur==1 || q_cur==2)
+                	$('#btnFile').removeAttr('disabled');
+                else
+                	$('#btnFile').attr('disabled','disabled');
             	$('#imgPic').attr('src',$('#txtData').val());
                 for(var i=0;i<brwCount2;i++){
                 	$('#vtimg_'+i).children().attr('src',$('#vtdata_'+i).text());

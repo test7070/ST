@@ -10,7 +10,7 @@
 		<script src="../script/qbox.js" type="text/javascript"> </script>
     	<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-            var q_name = 'img', t_content = 'field=noa,namea,src', bbsKey = ['noa'], as ;
+            var q_name = 'img', t_content = 'field=noa,namea,data', bbsKey = ['noa'], as ;
             var isBott = false;
             /// 是否已按過 最後一頁
             var txtfield = [], afield, t_data, t_htm, t_bbsTag = 'tbbs';
@@ -40,7 +40,7 @@
                 $('input:radio').attr('disabled','disabled');
                 for(var i=0;i<q_bbsCount;i++){
                 	if($('#txtNoa_'+i).val().length>0){
-                		$('#imgPic_'+i).attr('src','../images/fe/'+$('#txtNoa_'+i).val()+'.jpg?'+(new Date()).getTime());
+                		$('#imgPic_'+i).attr('src',$('#txtData_'+i).val());
                 		$('#radSel_'+i).removeAttr('disabled');
                 	}
                 }
@@ -64,7 +64,7 @@
 					</td>
 					<td style="width:20%;text-align: center;">
 						<img id="imgPic.*" class="img" src="" style="width:100px;height:100px;"/>
-						<input class="txt" id="txtSrc.*" type="text" style="width:98%;display:none;"  readonly="readonly" />
+						<input class="txt" id="txtData.*" type="text" style="width:98%;display:none;"  readonly="readonly" />
 					</td>
 					<td style="width:20%;">
 						<input class="txt" id="txtNoa.*" type="text" style="width:98%;"  readonly="readonly" />

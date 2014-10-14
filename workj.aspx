@@ -40,16 +40,16 @@
             	,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
             	,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,product,spec,emount,eweight', 'txtUno__,txtProductno__,txtProduct__,,txtMount__,txtWeight__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
             	,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtNick', 'cust_b.aspx']
-            	,['txtMechno_', 'btnMech_', 'mech', 'noa,mech', 'txtMechno_,txtMech_', 'mech_b.aspx']
             	,['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
             	,['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__,txtStore__', 'store_b.aspx']);
-
+			
+			var z_mech = '';
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 bbtKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1);
+                q_gt('mech', "", 0, 0, 0, 'mech'); 
             });
 
             function main() {
@@ -64,6 +64,10 @@
                 q_mask(bbmMask);
                 q_cmbParse("cmbTagcolor", '桃紅色,紫色,天空藍,草綠色,黃色,膚色,白色');
                 q_cmbParse("cmbTrantype", '本廠送達,本廠拖運,本廠自運,指送,其它,廠商拖運,廠商送達,廠商自運');
+                q_cmbParse("cmbMech1", z_mech,'s');
+                q_cmbParse("cmbMech2", z_mech,'s');
+                q_cmbParse("cmbMech3", z_mech,'s');
+                q_cmbParse("cmbMech4", z_mech,'s');
                 $('#btnCont').click(function(e){
                 	var t_noa = $('#txtNoa').val();
                 	var t_custno = $('#txtCustno').val();
@@ -126,6 +130,16 @@
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'mech':
+                		var as = _q_appendData("mech", "", true);
+                		if (as[0] != undefined) {
+                			z_mech = ' @';
+	                		for(var i=0;i<as.length;i++){
+	                			z_mech += (z_mech.length>0?',':'')+as[i].noa+'@'+as[i].mech;
+	                		}
+                		}
+                		q_gt(q_name, q_content, q_sqlCount, 1);
+                		break;
                 	case 'btnModi':
                 		var as = _q_appendData("view_vccs", "", true);
                         if (as[0] != undefined) {
@@ -141,6 +155,44 @@
                             q_Seek_gtPost();
                         break;
                     default:
+                    	try{
+                    		var t_para = JSON.parse(t_name);
+                    		if(t_para.action=="createimg"){
+                    			
+                    			var n = t_para.n;
+                    			as = _q_appendData("img", "", true);
+                    			t_para = JSON.parse(as[0].para);
+                    			//先用原大小
+		                    	$('#imgPic_'+n).attr('src',as[0].org)
+		                    	
+								var imgwidth = $('#imgPic_'+n).width();
+				                var imgheight = $('#imgPic_'+n).height();
+				                $('#canvas_'+n).width(imgwidth).height(imgheight);
+				                var c = document.getElementById("canvas_"+n);
+								var ctx = c.getContext("2d");		
+								c.width = imgwidth;
+								c.height = imgheight;
+								ctx.drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight);
+								for(var i=0;i<t_para.length;i++){
+									/*alert(q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n)
+									+'\n'+t_para[i].top+'\n'+t_para[i].left);*/
+									value = q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n);
+									ctx.font = t_para[i].fontsize+"px times new roman";
+									ctx.fillStyle = 'red';
+									ctx.fillText(value+'',t_para[i].top,t_para[i].left);
+								}
+								//縮放為200*200
+								$('#imgPic_'+n).attr('src',c.toDataURL());
+								$('#txtImgdata_'+n).val(c.toDataURL());	
+								
+								$('#canvas_'+n).width(150).height(150);
+								c.width = 150;
+								c.height = 150;
+								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,150);
+								$('#txtImgdata_'+n).val(c.toDataURL());
+							}
+                    	}catch(e){
+                    	}
                         break;
                 }
             }
@@ -248,7 +300,7 @@
 
             function refresh(recno) {
                 _refresh(recno);
-                for(var n=0;n<q_bbsCount;n++){
+               /* for(var n=0;n<q_bbsCount;n++){
                 	if($('#canvas_'+n).length>0){
 
 						$('#imgPic_'+n).attr('src', $('#txtImgdata_'+n).val());
@@ -257,7 +309,7 @@
 						//$('#canvas_'+i)[0].witdh = $('#canvas_'+i)[0].witdh;
 						$("#canvas_"+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,150);
                 	}
-                }
+                }*/
             }
 
             function readonly(t_para, empty) {
@@ -274,106 +326,34 @@
             function btnMinus(id) {
                 _btnMinus(id);
             }
-            function btnPlus(org_htm, dest_tag, afield) {
+            /*function btnPlus(org_htm, dest_tag, afield) {
                 _btnPlus(org_htm, dest_tag, afield);
             }
-
             function btnPlut(org_htm, dest_tag, afield) {
-                _btnPlus(org_htm, dest_tag, afield);
-            }
+                _btnPlut(org_htm, dest_tag, afield);
+            }*/
 			function createImg(n){
 				if (n ==undefined)
 					return;
 				var t_picno = $('#txtPicno_'+n).val();
-        		var t_para = $('#txtParaa_'+n).val()+'^'+$('#txtParab_'+n).val()+'^'+$('#txtParac_'+n).val()
-        			+'^'+$('#txtParad_'+n).val()+'^'+$('#txtParae_'+n).val()+'^'+$('#txtParaf_'+n).val();
-
-        		if(t_picno.length>0 && t_para.replace(/\^/g,'').replace(/0/g,'').length>0){
-                	$.ajax({
-                		picno : t_picno,
-                		n : n,
-	                    url: '..\\images\\feorg\\'+t_picno+'.txt',
-	                    type: 'GET',
-	                    dataType: 'text',
-	                    timeout: 5000,
-	                    success: function(data){
-	                    	var n = this.n;
-	                    	//先用原大小
-	                    	$('#imgPic_'+n).attr('src','../images/feorg/'+this.picno+'.jpg?'+(new Date()).getTime())
-	                       	 	
-	                        $('#imgPic_'+n)[0].onload = function(){
-	                        	var n = $(this).attr('id').replace('imgPic_','');
-	                        	var imgwidth = $('#imgPic_'+n).width();
-		                        var imgheight = $('#imgPic_'+n).height();
-		                        $('#canvas_'+n).width(imgwidth).height(imgheight);
-		                        var c=document.getElementById("canvas_"+n);
-								var ctx=c.getContext("2d");		
-								c.width = imgwidth;
-								c.height = imgheight;
-								ctx.drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight);
-								
-								t_para = data.split('\n');
-								for(var i=1;i<t_para.length;i++){
-									x_para = t_para[i].split(',');
-									if(x_para.length>=4 && x_para[0].toLowerCase()>='a' && x_para[0].toLowerCase()<='z' && $('#txtPara'+x_para[0].toLowerCase()+'_'+n).length>0){
-										if(parseInt(x_para[1])!=0 || parseInt(x_para[2])!=0){
-											value = q_float('txtPara'+x_para[0].toLowerCase()+'_'+n);
-											ctx.font = (parseInt(x_para[3])*2)+"px times new roman";
-											ctx.fillStyle = 'red';
-											ctx.fillText(value,parseInt(x_para[1])+10,parseInt(x_para[2])+25);
-										}
-									}
-								}
-								//縮放為150*150
-								$('#imgPic_'+n).attr('src',c.toDataURL());
-								$('#canvas_'+n).width(150).height(150);
-								c.width = 150;
-								c.height = 150;
-								$("#canvas_"+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,150);
-								
-								$('#txtImgdata_'+n).val(c.toDataURL());
-	                        };
-	                        
-	                        
-	                    },
-	                    complete: function(){                    
-	                    },
-	                    error: function(jqXHR, exception) {
-	                        var errmsg = 'Error。\n';
-	                        if (jqXHR.status === 0) {
-	                            alert(errmsg+'Not connect.\n Verify Network.');
-	                        } else if (jqXHR.status == 404) {
-	                            alert(errmsg+'Requested page not found. [404]');
-	                        } else if (jqXHR.status == 500) {
-	                            alert(errmsg+'Internal Server Error [500].');
-	                        } else if (exception === 'parsererror') {
-	                            alert(errmsg+'Requested JSON parse failed.');
-	                        } else if (exception === 'timeout') {
-	                            alert(errmsg+'Time out error.');
-	                        } else if (exception === 'abort') {
-	                            alert(errmsg+'Ajax request aborted.');
-	                        } else {
-	                            alert(errmsg+'Uncaught Error.\n' + jqXHR.responseText);
-	                        }
-	                    }
-	                });
-        		}
+				
+				q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg",n:n}));	
 			};
             function bbsAssign() {
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
+                    if($('#canvas_'+i).length>0){
+						$('#imgPic_'+i).attr('src', $('#txtImgdata_'+i).val());
+						var imgwidth = $('#imgPic_'+i).width();
+                        var imgheight = $('#imgPic_'+i).height();
+						$("#canvas_"+i)[0].getContext("2d").drawImage($('#imgPic_'+i)[0],0,0,imgwidth,imgheight,0,0,150,150);
+                	}
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
                     	$('#txtProductno_' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtProductno_', '');
                             $('#btnProduct_'+n).click();
-                        });
-                        $('#txtMechno_' + i).bind('contextmenu', function(e) {
-                            /*滑鼠右鍵*/
-                            e.preventDefault();
-                            var n = $(this).attr('id').replace('txtMechno_', '');
-                            $('#btnMech_'+n).click();
                         });
                         $('#txtStoreno_' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
@@ -813,7 +793,7 @@
 					<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"></td>
-					<td style="width:180px;" ><a id='lbl_product'>品名</a></td>
+					<td style="width:380px;" ><a id='lbl_product'>品名</a><br><a id='lbl_memo'>備註</a></td>
 					<td style="width:170px;"><a id='lbl_pic'>形狀</a></td>
 					<td style="width:80px;"><a id='lbl_picno'>形狀<br>編號</a></td>
 					<td style="width:60px;"><a id='lbl_imgparaa'>參數A</a></td>
@@ -822,14 +802,10 @@
 					<td style="width:60px;"><a id='lbl_imgparad'>參數D</a></td>
 					<td style="width:60px;"><a id='lbl_imgparae'>參數E</a></td>
 					<td style="width:60px;"><a id='lbl_imgparaf'>參數F</a></td>
-					<td style="width:80px;"><a id='lbl_lengthb'>單支長</a></td>
-					<td style="width:80px;"><a id='lbl_monnt'>數量</a></td>
-					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
+					<td style="width:80px;"><a id='lbl_lengthb'>單支長</a><br><a id='lbl_monnt'>數量</a><br><a id='lbl_weight'>重量</a></td>
+					<td style="width:150px;"><a id='lbl_mech'>機台</a></td>
+					<td style="width:100px;"><a id='lbl_store'>倉庫編號</a><br><a id='lbl_store'>倉庫名稱</a><br><a id='lbl_place'>儲位</a></td>
 					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
-					<td style="width:80px;"><a id='lbl_store'>入庫倉</a></td>
-					<td style="width:60px;"><a id='lbl_mech'>機台</a></td>
-					<td style="width:60px;"><a id='lbl_place'>儲位</a></td>
-					<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
 					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -840,14 +816,15 @@
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-						<input class="txt" id="txtProductno.*" type="text" style="width:95%;"/>
-						<input class="txt" id="txtProduct.*" type="text" style="width:95%;"/>
+						<input class="txt" id="txtProductno.*" type="text" style="width:45%; float:left;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:50%;float:left;"/>
+						<input class="txt" id="txtMemo.*" type="text" style="width:95%;" title="備註輸入 * ，單支長可手動輸入。"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
 					<td>
 						<canvas id="canvas.*" width="150"> </canvas>
 						<img id="imgPic.*" src="" style="display:none;"/>
-						<input id="txtImgdata.*" type="text" style="display:none;">
+						<input id="txtImgdata.*" type="text" style="display:none;"/>
 					</td>
 					<td>
 						<input class="txt" id="txtPicno.*" type="text" style="width:95%;"/>
@@ -871,22 +848,23 @@
 					<td style="background-color: burlywood;">
 						<input class="txt" id="txtParaf.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
-					<td><input class="txt" id="txtLengthb.*" type="text" style="width:95%;text-align: right;" title="備註輸入 * ，單支長可手動輸入。"/></td>
-					<td><input class="txt" id="txtMount.*" type="text" style="width:95%;text-align: right;"/></td>
-					<td><input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/></td>
-					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt" id="txtLengthb.*" type="text" style="width:95%;text-align: right;" title="備註輸入 * ，單支長可手動輸入。"/>
+						<input class="txt" id="txtMount.*" type="text" style="width:95%;text-align: right;"/>
+						<input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/>
+					</td>
+					<td>
+						<select id="cmbMech1.*" style="width:95%;"> </select>
+						<select id="cmbMech2.*" style="width:95%;"> </select>
+						<select id="cmbMech3.*" style="width:95%;"> </select>
+						<select id="cmbMech4.*" style="width:95%;"> </select>
+					</td>
 					<td>
 						<input class="txt" id="txtStoreno.*" type="text" style="width:95%;float:left;"/>
 						<input class="txt" id="txtStore.*" type="text" style="width:95%;float:left;"/>
+						<input class="txt" id="txtPlace.*" type="text" style="width:95%;"/>
 						<input id="btnStore.*" type="button" style="display:none;">
 					</td>
-					<td>
-						<input class="txt" id="txtMechno.*" type="text" style="width:95%;float:left;"/>
-						<input class="txt" id="txtMech.*" type="text" style="width:95%;float:left;"/>
-						<input id="btnMech.*" type="button" style="display:none;">
-					</td>
-					<td><input class="txt" id="txtPlace.*" type="text" style="width:95%;"/></td>
-					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;" title="備註輸入 * ，單支長可手動輸入。"/></td>
+					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input class="txt" id="txtContno.*" type="text" style="float:left;width:120px;"/>
 						<input class="txt" id="txtContnoq.*" type="text" style="float:left;width:35px;"/>
