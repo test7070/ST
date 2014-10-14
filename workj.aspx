@@ -24,7 +24,7 @@
             var bbmNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbtNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
-            var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99'],['txtTimea','99:99']];
+            var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99'],['txtTime1','99:99'],['txtTime2','99:99'],['txtTime3','99:99'],['txtTime4','99:99']];
             var bbsMask = [];
             var bbtMask = [];
             q_sqlCount = 6;
@@ -40,10 +40,9 @@
             	,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
             	,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,product,spec,emount,eweight', 'txtUno__,txtProductno__,txtProduct__,,txtMount__,txtWeight__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
             	,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtNick', 'cust_b.aspx']
-            	,['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
             	,['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__,txtStore__', 'store_b.aspx']);
 			
-			var z_mech = '';
+			var z_mech = '', z_store = '';
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
@@ -68,6 +67,11 @@
                 q_cmbParse("cmbMech2", z_mech,'s');
                 q_cmbParse("cmbMech3", z_mech,'s');
                 q_cmbParse("cmbMech4", z_mech,'s');
+                q_cmbParse("cmbStore1", z_store,'s');
+                q_cmbParse("cmbStore2", z_store,'s');
+                q_cmbParse("cmbStore3", z_store,'s');
+                q_cmbParse("cmbStore4", z_store,'s');
+                
                 $('#btnCont').click(function(e){
                 	var t_noa = $('#txtNoa').val();
                 	var t_custno = $('#txtCustno').val();
@@ -136,6 +140,16 @@
                 			z_mech = ' @';
 	                		for(var i=0;i<as.length;i++){
 	                			z_mech += (z_mech.length>0?',':'')+as[i].noa+'@'+as[i].mech;
+	                		}
+                		}
+                		q_gt('store', "", 0, 0, 0, 'store'); 
+                		break;
+                	case 'store':
+                		var as = _q_appendData("store", "", true);
+                		if (as[0] != undefined) {
+                			z_store = ' @';
+	                		for(var i=0;i<as.length;i++){
+	                			z_store += (z_store.length>0?',':'')+as[i].noa+'@'+as[i].store;
 	                		}
                 		}
                 		q_gt(q_name, q_content, q_sqlCount, 1);
@@ -804,7 +818,8 @@
 					<td style="width:60px;"><a id='lbl_imgparaf'>參數F</a></td>
 					<td style="width:80px;"><a id='lbl_lengthb'>單支長</a><br><a id='lbl_monnt'>數量</a><br><a id='lbl_weight'>重量</a></td>
 					<td style="width:150px;"><a id='lbl_mech'>機台</a></td>
-					<td style="width:100px;"><a id='lbl_store'>倉庫編號</a><br><a id='lbl_store'>倉庫名稱</a><br><a id='lbl_place'>儲位</a></td>
+					<td style="width:100px;"><a id='lbl_store'>倉庫</a></td>
+					<td style="width:100px;"><a id='lbl_place'>儲位</a></td>
 					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
 					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
@@ -812,7 +827,6 @@
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 						<input id="txtNoq.*" type="text" style="display: none;"/>
-						<input id="txtImgsrc.*"  type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
@@ -853,18 +867,23 @@
 						<input class="txt" id="txtWeight.*" type="text" style="width:95%;text-align: right;"/>
 					</td>
 					<td>
-						<select id="cmbMech1.*" style="width:95%;"> </select>
-						<select id="cmbMech2.*" style="width:95%;"> </select>
-						<select id="cmbMech3.*" style="width:95%;"> </select>
-						<select id="cmbMech4.*" style="width:95%;"> </select>
+						<div style="height:24px;"><select id="cmbMech1.*" style="width:95%;"> </select></div>
+						<div style="height:24px;"><select id="cmbMech2.*" style="width:95%;"> </select></div>
+						<div style="height:24px;"><select id="cmbMech3.*" style="width:95%;"> </select></div>
+						<div style="height:24px;"><select id="cmbMech4.*" style="width:95%;"> </select></div>
 					</td>
 					<td>
-						<input class="txt" id="txtStoreno.*" type="text" style="width:95%;float:left;"/>
-						<input class="txt" id="txtStore.*" type="text" style="width:95%;float:left;"/>
-						<input class="txt" id="txtPlace.*" type="text" style="width:95%;"/>
-						<input id="btnStore.*" type="button" style="display:none;">
+						<div style="height:24px;"><select id="cmbStore1.*" style="width:95%;"> </select></div>
+						<div style="height:24px;"><select id="cmbStore2.*" style="width:95%;"> </select></div>
+						<div style="height:24px;"><select id="cmbStore3.*" style="width:95%;"> </select></div>
+						<div style="height:24px;"><select id="cmbStore4.*" style="width:95%;"> </select></div>
 					</td>
-					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
+					<td>
+						<div style="height:24px;"><input class="txt" id="txtTime1.*" type="text" style="width:95%;padding: 0px;"/></div>
+						<div style="height:24px;"><input class="txt" id="txtTime2.*" type="text" style="width:95%;padding: 0px;"/></div>
+						<div style="height:24px;"><input class="txt" id="txtTime3.*" type="text" style="width:95%;padding: 0px;"/></div>
+						<div style="height:24px;"><input class="txt" id="txtTime4.*" type="text" style="width:95%;padding: 0px;"/></div>
+					</td>
 					<td>
 						<input class="txt" id="txtContno.*" type="text" style="float:left;width:120px;"/>
 						<input class="txt" id="txtContnoq.*" type="text" style="float:left;width:35px;"/>
