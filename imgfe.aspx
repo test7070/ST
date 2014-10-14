@@ -47,11 +47,87 @@
 					t_where = "where=^^ noa='" + $(this).val() + "'^^";
 					q_gt('img', t_where, 0, 0, 0, "checkNoa_change", r_accy);				
 				});
-				$('#txtSrc').change(function(e){
-					refreshBbm();
+				$('#btnFile').change(function(e){
+					event.stopPropagation(); 
+				    event.preventDefault();
+					file = $('#btnFile')[0].files[0];
+					if(file){
+						fr = new FileReader();
+					    fr.readAsDataURL(file);
+					    fr.onloadend = function(e){
+					    	$('#imgPic').attr('src',fr.result);
+					    	refreshImg(true);
+					    };
+					}
+				});
+				$('#textPara').change(function(e){
+					if(q_cur==1 || q_cur==2){
+						refreshPara();
+					}
+				});
+				$('#textPara').focusout(function(e){
+					if(q_cur==1 || q_cur==2){
+						refreshPara();
+					}
 				});
             }
-
+            function refreshPara(){
+            	var string = $.trim($('#textPara').val());
+				var t_para = new Array();
+				var value = string.split('\n');
+				for(var i=0;i<value.length;i++){
+					if(value[i].split(',').length==4){
+						try{
+							t_para.push({key:value[i].split(',')[0]
+								,top:parseInt(value[i].split(',')[1])
+								,left:parseInt(value[i].split(',')[2])
+								,fontsize:value[i].split(',')[3]});
+						}catch(e){
+						}
+					}
+				}
+				$('#txtPara').val(JSON.stringify(t_para));
+				refreshImg(false);
+            }
+			function refreshImg(isOrg){
+				if(!isOrg){
+					$('#imgPic').attr('src',$('#txtOrg').val());
+				}
+				var imgwidth = $('#imgPic').width();
+                var imgheight = $('#imgPic').height();
+                $('#canvas').width(imgwidth).height(imgheight);
+                var c = document.getElementById("canvas");
+				var ctx = c.getContext("2d");		
+				c.width = imgwidth;
+				c.height = imgheight;
+				ctx.drawImage($('#imgPic')[0],0,0,imgwidth,imgheight);
+				
+				if(!isOrg){
+					t_para = JSON.parse($('#txtPara').val());
+					$('#textPara').val('');
+					for(var i=0;i<t_para.length;i++){
+						ctx.font = t_para[i].fontsize+"px times new roman";
+						ctx.fillStyle = 'red';
+						ctx.fillText(t_para[i].key,t_para[i].top,t_para[i].left);
+						if($('#textPara').val().length>0)
+							$('#textPara').val($('#textPara').val()+'\n');
+						$('#textPara').val($('#textPara').val()+t_para[i].key+','+t_para[i].top+','+t_para[i].left+','+t_para[i].fontsize);
+					}
+				}
+				//縮放為150*150
+				$('#imgPic').attr('src',c.toDataURL());
+				$('#canvas').width(150).height(150);
+				c.width = 150;
+				c.height = 150;
+				$("#canvas")[0].getContext("2d").drawImage($('#imgPic')[0],0,0,imgwidth,imgheight,0,0,150,150);
+				
+				if(isOrg){
+					$('#txtOrg').val(c.toDataURL());
+					refreshImg(false);
+				}
+				else
+					$('#txtData').val(c.toDataURL());
+			}
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
@@ -142,7 +218,11 @@
             }
 
             function refresh(recno) {
-                _refresh(recno);
+                _refresh(recno);     
+                if(q_cur==1 || q_cur==2)
+                	$('#btnFile').removeAttr('disabled');
+                else
+                	$('#btnFile').attr('disabled','disabled');
                 refreshBbm();
             }
 			function refreshBbm(){
@@ -151,9 +231,20 @@
             	}else{
             		$('#txtNoa').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
             	}
-            	$('#imgPic').attr('src',$('#txtSrc').val());
+            	$('#imgPic').attr('src',$('#txtData').val());
                 for(var i=0;i<brwCount2;i++){
-                	$('#vtimg_'+i).children().attr('src',$('#vtsrc_'+i).text());
+                	$('#vtimg_'+i).children().attr('src',$('#vtdata_'+i).text());
+                }
+                try{
+                	t_para = JSON.parse($('#txtPara').val());
+					$('#textPara').val('');
+					for(var i=0;i<t_para.length;i++){
+						if($('#textPara').val().length>0)
+							$('#textPara').val($('#textPara').val()+'\n');
+						$('#textPara').val($('#textPara').val()+t_para[i].key+','+t_para[i].top+','+t_para[i].left+','+t_para[i].fontsize);
+					}
+                }catch(e){
+                	
                 }
             }
 
@@ -340,14 +431,14 @@
 						<td align="center" style="width:120px; color:black;"><a id='vewImg'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewNoa'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewNamea'> </a></td>
-						<td align="center" style="display:none;"><a id='vewImgsrc'> </a></td>
+						<td align="center" style="display:none;"><a id='vewData'> </a></td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=' '/></td>
 						<td id='img' style="text-align: center;"><img src="" style="width:100px;height:100px;"/></td>
 						<td id='noa' style="text-align: center;">~noa</td>
 						<td id='namea' style="text-align: left;">~namea</td>
-						<td id='src' style="display:none;">~src</td>
+						<td id='data' style="display:none;">~data</td>
 					</tr>
 				</table>
 			</div>
@@ -355,7 +446,6 @@
 				<table class="tbbm"  id="tbbm">
 					<tbody>
 						<tr style="height:1px;">
-							<td> </td>
 							<td> </td>
 							<td> </td>
 							<td> </td>
@@ -367,18 +457,42 @@
 						</tr>
 						<tr>
 							<td><span> </span><a id='lblNamea' class="lbl"> </a></td>
-							<td colspan="2"><input id="txtNamea"  type="text" class="txt c1" />	</td>
+							<td colspan="2">
+								<input id="txtNamea"  type="text" class="txt c1" />	
+								<input id="txtData"  type="text" style="display:none;" />
+								<input id="txtOrg"  type="text" style="display:none;"/>
+								<input id="txtPara"  type="text" style="display:none;" />	
+							</td>
 						</tr>
 						<tr>
-							<td><span> </span><a id='lblSrc' class="lbl"> </a></td>
-							<td colspan="2"><input id="txtSrc"  type="text" class="txt c1" /></td>
+							<td></td>
+							<td colspan="2"><a style="color:#8A4B08;">代號,TOP,LEFT,字形大小</a></td>
 						</tr>
+						<tr> 
+							<td><span> </span><a id='lblPara' class="lbl"> </a></td>
+							<td colspan="2"rowspan="3">
+								<textarea id="textPara" class="txt c1" rows="6"> </textarea>
+							</td>
+						</tr>
+						<tr> </tr>
+						<tr> </tr>
 						<tr> </tr>
 						<tr>
 							<td><span> </span><a id='lblImgpci' class="lbl"> </a></td>
-							<td colspan="2"><img id="imgPic" src="" style="width:200px;height:200px;"/></td>
+							<td colspan="2" rowspan="4">
+								<img id="imgPic" src="" style="width:200px;height:200px;"/>
+								<canvas id="canvas" style="display:none"> </canvas>
+							</td>
 						</tr>
 						<tr> </tr>
+						<tr> </tr>
+						<tr> </tr>
+						<tr>
+							<td></td>
+							<td colspan="3">
+								<input type="file" id="btnFile" value="上傳"/>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
