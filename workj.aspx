@@ -42,7 +42,7 @@
             	,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtNick', 'cust_b.aspx']
             	,['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__,txtStore__', 'store_b.aspx']);
 			
-			var z_mech = '', z_store = '';
+			var z_mech = '';
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
@@ -67,10 +67,6 @@
                 q_cmbParse("cmbMech2", z_mech,'s');
                 q_cmbParse("cmbMech3", z_mech,'s');
                 q_cmbParse("cmbMech4", z_mech,'s');
-                q_cmbParse("cmbStore1", z_store,'s');
-                q_cmbParse("cmbStore2", z_store,'s');
-                q_cmbParse("cmbStore3", z_store,'s');
-                q_cmbParse("cmbStore4", z_store,'s');
                 
                 $('#btnCont').click(function(e){
                 	var t_noa = $('#txtNoa').val();
@@ -140,16 +136,6 @@
                 			z_mech = ' @';
 	                		for(var i=0;i<as.length;i++){
 	                			z_mech += (z_mech.length>0?',':'')+as[i].noa+'@'+as[i].mech;
-	                		}
-                		}
-                		q_gt('store', "", 0, 0, 0, 'store'); 
-                		break;
-                	case 'store':
-                		var as = _q_appendData("store", "", true);
-                		if (as[0] != undefined) {
-                			z_store = ' @';
-	                		for(var i=0;i<as.length;i++){
-	                			z_store += (z_store.length>0?',':'')+as[i].noa+'@'+as[i].store;
 	                		}
                 		}
                 		q_gt(q_name, q_content, q_sqlCount, 1);
@@ -809,7 +795,6 @@
 					<td style="width:60px;"><a id='lbl_imgparaf'>參數F</a></td>
 					<td style="width:80px;"><a id='lbl_lengthb'>單支長</a><br><a id='lbl_monnt'>數量</a><br><a id='lbl_weight'>重量</a></td>
 					<td style="width:150px;"><a id='lbl_mech'>機台</a></td>
-					<td style="width:100px;"><a id='lbl_store'>倉庫</a></td>
 					<td style="width:100px;"><a id='lbl_place'>儲位</a></td>
 					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
 					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
@@ -862,12 +847,6 @@
 						<select id="cmbMech2.*" style="width:95%; height:28px;"> </select>
 						<select id="cmbMech3.*" style="width:95%; height:28px;"> </select>
 						<select id="cmbMech4.*" style="width:95%; height:28px;"> </select>
-					</td>
-					<td>
-						<select id="cmbStore1.*" style="width:95%; height:28px;"> </select>
-						<select id="cmbStore2.*" style="width:95%; height:28px;"> </select>
-						<select id="cmbStore3.*" style="width:95%; height:28px;"> </select>
-						<select id="cmbStore4.*" style="width:95%; height:28px;"> </select>
 					</td>
 					<td>
 						<input class="txt" id="txtPlace1.*" type="text" style="width:95%;padding: 0px;"/>
