@@ -25,7 +25,7 @@
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbtNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
             var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99']];
-            var bbsMask = [['txtTime1','99:99'],['txtTime2','99:99'],['txtTime3','99:99'],['txtTime4','99:99']];
+            var bbsMask = [['txtTime1','99:99'],['txtTime2','99:99'],['txtTime3','99:99'],['txtTime4','99:99'],['txtTime5','99:99']];
             var bbtMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -67,6 +67,7 @@
                 q_cmbParse("cmbMech2", z_mech,'s');
                 q_cmbParse("cmbMech3", z_mech,'s');
                 q_cmbParse("cmbMech4", z_mech,'s');
+                q_cmbParse("cmbMech5", z_mech,'s');
                 
                 $('#btnCont').click(function(e){
                 	var t_noa = $('#txtNoa').val();
@@ -806,8 +807,8 @@
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-						<input class="txt" id="txtProductno.*" type="text" style="width:45%; float:left;"/>
-						<input class="txt" id="txtProduct.*" type="text" style="width:50%;float:left;"/>
+						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
 						<input class="txt" id="txtMemo.*" type="text" style="width:95%;" title="備註輸入 * ，單支長可手動輸入。"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
@@ -847,18 +848,21 @@
 						<select id="cmbMech2.*" style="width:95%; height:28px;"> </select>
 						<select id="cmbMech3.*" style="width:95%; height:28px;"> </select>
 						<select id="cmbMech4.*" style="width:95%; height:28px;"> </select>
+						<select id="cmbMech5.*" style="width:95%; height:28px;"> </select>
 					</td>
 					<td>
 						<input class="txt" id="txtPlace1.*" type="text" style="width:95%;padding: 0px;"/>
 						<input class="txt" id="txtPlace2.*" type="text" style="width:95%;padding: 0px;"/>
 						<input class="txt" id="txtPlace3.*" type="text" style="width:95%;padding: 0px;"/>
 						<input class="txt" id="txtPlace4.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtPlace5.*" type="text" style="width:95%;padding: 0px;"/>
 					</td>
 					<td>
 						<input class="txt" id="txtTime1.*" type="text" style="width:95%;padding: 0px;"/>
 						<input class="txt" id="txtTime2.*" type="text" style="width:95%;padding: 0px;"/>
 						<input class="txt" id="txtTime3.*" type="text" style="width:95%;padding: 0px;"/>
 						<input class="txt" id="txtTime4.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtTime5.*" type="text" style="width:95%;padding: 0px;"/>
 					</td>
 					<td>
 						<input class="txt" id="txtContno.*" type="text" style="float:left;width:120px;"/>
