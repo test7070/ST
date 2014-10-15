@@ -781,9 +781,9 @@
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td style="width:20px;">
-					<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
+						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
-					<td style="width:20px;"></td>
+					<td style="width:20px;"> </td>
 					<td style="width:380px;" ><a id='lbl_product'>品名</a><br><a id='lbl_memo'>備註</a></td>
 					<td style="width:170px;"><a id='lbl_pic'>形狀</a></td>
 					<td style="width:80px;"><a id='lbl_picno'>形狀<br>編號</a></td>
