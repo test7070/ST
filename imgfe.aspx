@@ -24,7 +24,7 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
-			brwCount2 =12;
+			brwCount2 =8;
 			aPop = new Array();
             				
             $(document).ready(function() {
@@ -115,11 +115,11 @@
 				}
 				$('#imgPic').attr('src',c.toDataURL());
 				if(isOrg){
-					//縮放為400*100
-					$('#canvas').width(400).height(100);
-					c.width = 400;
+					//縮放為300*100
+					$('#canvas').width(300).height(100);
+					c.width = 300;
 					c.height = 100;
-					$("#canvas")[0].getContext("2d").drawImage($('#imgPic')[0],0,0,imgwidth,imgheight,0,0,400,100);
+					$("#canvas")[0].getContext("2d").drawImage($('#imgPic')[0],0,0,imgwidth,imgheight,0,0,300,100);
 					$('#txtOrg').val(c.toDataURL());
 					refreshImg(false);
 				}
@@ -434,7 +434,7 @@
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=' '/></td>
-						<td id='img' style="text-align: center;"><img src="" style="width:100px;height:25px;"/></td>
+						<td id='img' style="text-align: center;"><img src="" style="width:120px;height:40px;"/></td>
 						<td id='noa' style="text-align: center;">~noa</td>
 						<td id='namea' style="text-align: left;">~namea</td>
 						<td id='data' style="display:none;">~data</td>
@@ -479,7 +479,7 @@
 						<tr>
 							<td><span> </span><a id='lblImgpci' class="lbl"> </a></td>
 							<td colspan="2" rowspan="4">
-								<img id="imgPic" src="" style="width:400px;height:100px;"/>
+								<img id="imgPic" src="" style="width:300px;height:100px;"/>
 								<canvas id="canvas" style="display:none"> </canvas>
 							</td>
 						</tr>

@@ -182,14 +182,14 @@
 									ctx.fillStyle = 'red';
 									ctx.fillText(value+'',t_para[i].left,t_para[i].top);
 								}
-								//縮放為200*50
+								//縮放為150*50
 								$('#imgPic_'+n).attr('src',c.toDataURL());
 								$('#txtImgdata_'+n).val(c.toDataURL());	
 								
-								$('#canvas_'+n).width(200).height(50);
-								c.width = 200;
+								$('#canvas_'+n).width(150).height(50);
+								c.width = 150;
 								c.height = 50;
-								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,200,50);
+								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,50);
 								$('#txtImgdata_'+n).val(c.toDataURL());
 							}
                     	}catch(e){
@@ -337,7 +337,7 @@
 						$('#imgPic_'+i).attr('src', $('#txtImgdata_'+i).val());
 						var imgwidth = $('#imgPic_'+i).width();
                         var imgheight = $('#imgPic_'+i).height();
-						$("#canvas_"+i)[0].getContext("2d").drawImage($('#imgPic_'+i)[0],0,0,imgwidth,imgheight,0,0,200,50);
+						$("#canvas_"+i)[0].getContext("2d").drawImage($('#imgPic_'+i)[0],0,0,imgwidth,imgheight,0,0,150,50);
                 	}
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
                     	$('#txtProductno_' + i).bind('contextmenu', function(e) {
@@ -813,7 +813,7 @@
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
 					<td>
-						<canvas id="canvas.*" width="200" height="50"> </canvas>
+						<canvas id="canvas.*" width="150" height="50"> </canvas>
 						<img id="imgPic.*" src="" style="display:none;"/>
 						<input id="txtImgdata.*" type="text" style="display:none;"/>
 					</td>
