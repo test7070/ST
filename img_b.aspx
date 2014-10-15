@@ -63,7 +63,7 @@
 						<input name="sel"  id="radSel.*" type="radio" />
 					</td>
 					<td style="width:20%;text-align: center;">
-						<img id="imgPic.*" class="img" src="" style="width:100px;height:100px;"/>
+						<img id="imgPic.*" class="img" src="" style="width:160px;height:40px;"/>
 						<input class="txt" id="txtData.*" type="text" style="width:98%;display:none;"  readonly="readonly" />
 					</td>
 					<td style="width:20%;">

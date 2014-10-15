@@ -107,7 +107,7 @@
 					for(var i=0;i<t_para.length;i++){
 						ctx.font = t_para[i].fontsize+"px times new roman";
 						ctx.fillStyle = 'red';
-						ctx.fillText(t_para[i].key,t_para[i].top,t_para[i].left);
+						ctx.fillText(t_para[i].key,t_para[i].left,t_para[i].top);
 						if($('#textPara').val().length>0)
 							$('#textPara').val($('#textPara').val()+'\n');
 						$('#textPara').val($('#textPara').val()+t_para[i].key+','+t_para[i].top+','+t_para[i].left+','+t_para[i].fontsize);

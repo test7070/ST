@@ -179,7 +179,7 @@
 									value = q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n);
 									ctx.font = t_para[i].fontsize+"px times new roman";
 									ctx.fillStyle = 'red';
-									ctx.fillText(value+'',t_para[i].top,t_para[i].left);
+									ctx.fillText(value+'',t_para[i].left,t_para[i].top);
 								}
 								//縮放為200*50
 								$('#imgPic_'+n).attr('src',c.toDataURL());
