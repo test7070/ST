@@ -23,7 +23,7 @@
             var q_readonlyt = [];
             var bbmNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
-            var bbtNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
+            var bbtNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99']];
             var bbsMask = [['txtTime1','99:99'],['txtTime2','99:99'],['txtTime3','99:99'],['txtTime4','99:99'],['txtTime5','99:99']];
             var bbtMask = [];
@@ -794,7 +794,7 @@
 					<td style="width:60px;"><a id='lbl_imgparad'>參數D</a></td>
 					<td style="width:60px;"><a id='lbl_imgparae'>參數E</a></td>
 					<td style="width:60px;"><a id='lbl_imgparaf'>參數F</a></td>
-					<td style="width:80px;"><a id='lbl_lengthb'>單支長</a><br><a id='lbl_monnt'>數量</a><br><a id='lbl_weight'>重量</a></td>
+					<td style="width:80px;"><a id='lbl_lengthb'>長度</a><br><a id='lbl_monnt'>數量</a><br><a id='lbl_weight'>重量</a></td>
 					<td style="width:150px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:100px;"><a id='lbl_place'>儲位</a></td>
 					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
@@ -886,9 +886,10 @@
 						<td style="width:100px; text-align: center;">數量</td>
 						<td style="width:100px; text-align: center;">重量</td>
 						<td style="width:200px; text-align: center;">餘料批號</td>
+						<td style="width:80px; text-align: center;">長度</td>
 						<td style="width:100px; text-align: center;">餘料數量</td>
 						<td style="width:100px; text-align: center;">餘料重量</td>
-						<td style="width:100px; text-align: center;">餘料倉</td>
+						<td style="width:100px; text-align: center;">儲位</td>
 						<td style="width:200px; text-align: center;">備註</td>
 					</tr>
 					<tr>
@@ -909,11 +910,13 @@
 						<td><input class="txt" id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtBno..*" type="text" style="width:95%;"/></td>
+						<td><input class="txt" id="txtLengthb..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtEmount..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtEweight..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td>
-							<input class="txt" id="txtStoreno..*" type="text" style="width:30%;float:left;"/>
-							<input class="txt" id="txtStore..*" type="text" style="width:60%;float:left;"/>
+							<input class="txt" id="txtPlace..*" type="text" style="width:95%;" />
+							<input class="txt" id="txtStoreno..*" type="text" style="display:none;"/>
+							<input class="txt" id="txtStore..*" type="text" style="display:none;"/>
 							<input id="btnStore..*" type="button" style="display:none;">
 						</td>
 						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;" /></td>
