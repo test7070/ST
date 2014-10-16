@@ -18,12 +18,12 @@
 
             q_tables = 't';
             var q_name = "workj";
-            var q_readonly = ['txtNoa','txtOrdeno','txtMount','txtWeight'];
+            var q_readonly = ['txtNoa','txtOrdeno','txtMount','txtWeight','txtWorker','txtWorker2'];
             var q_readonlys = ['txtContno','txtContnoq','txtStore','txtMech','txtWeight'];
             var q_readonlyt = [];
             var bbmNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
-            var bbtNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
+            var bbtNum = [['txtGmount',10,2,1],['txtGweight',10,2,1],['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99']];
             var bbsMask = [['txtTime1','99:99'],['txtTime2','99:99'],['txtTime3','99:99'],['txtTime4','99:99'],['txtTime5','99:99']];
             var bbtMask = [];
@@ -305,6 +305,14 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                if (t_para) {
+                    $('#txtDatea').datepicker('destroy');
+                    $('#txtOdate').datepicker('destroy');
+                } else {
+                    $('#txtDatea').datepicker();
+                    $('#txtOdate').datepicker();
+                }
+                
                 if(q_cur==1 || q_cur==2){
                 	$('#btnOrde').attr('disabled','disabled');
                 	$('#btnCont').removeAttr('disabled');
@@ -736,15 +744,14 @@
 							<input id="txtCust"  type="text"  class="txt" style="width:55%;float:left;"/>
 							<input id="txtNick"  type="text"  class="txt" style="display:none;"/>
 						</td>
-						<td><span> </span><a id="lblSite" class="lbl"> </a></td>
-						<td><input id="txtSite"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblTrantype" class="lbl"> </a></td>
+						<td><select id="cmbTrantype" class="txt c1"></select></td>
 						<td><span> </span><a id="lblTagcolor" class="lbl"> </a></td>
 						<td><select id="cmbTagcolor" class="txt c1"></select></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblTrantype" class="lbl"> </a></td>
-						<td><select id="cmbTrantype" class="txt c1"></select></td>
-						<td></td>
+						<td><span> </span><a id="lblSite" class="lbl"> </a></td>
+						<td colspan="2"><input id="txtSite"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id="lblChktype" class="lbl"> </a></td>
 						<td><input id="txtChktype"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id="lblTolerance" class="lbl"> </a></td>
@@ -907,12 +914,12 @@
 							<input class="txt" id="txtProduct..*" type="text" style="width:45%;float:left;"/>
 							<input id="btnProduct..*" type="button" style="display:none;">
 						</td>
-						<td><input class="txt" id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
-						<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtGmount..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtGweight..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtBno..*" type="text" style="width:95%;"/></td>
 						<td><input class="txt" id="txtLengthb..*" type="text" style="width:95%;text-align: right;"/></td>
-						<td><input class="txt" id="txtEmount..*" type="text" style="width:95%;text-align: right;"/></td>
-						<td><input class="txt" id="txtEweight..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td>
 							<input class="txt" id="txtPlace..*" type="text" style="width:95%;" />
 							<input class="txt" id="txtStoreno..*" type="text" style="display:none;"/>
