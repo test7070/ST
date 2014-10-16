@@ -604,6 +604,9 @@
 					<td align="center" style="width:60px;"><a id='lblTotal_s'>小計</a></td>
 					<td align="center" style="width:200px;"><a id='lblMemo_s'>備註</a></td>
 					<td align="center" style="width:50px;"><a id='lblEnda_s'>結案</a></td>
+					<td align="center" style="width:70px;">議價記錄1</td>
+					<td align="center" style="width:70px;">議價記錄2</td>
+					<td align="center" style="width:70px;">議價記錄3</td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td ><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
@@ -622,6 +625,9 @@
 					<td ><input id="txtTotal.*" type="text" class="txt num c7" /></td>
 					<td><input id="txtMemo.*" type="text" class="txt c7"/></td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
+					<td ><input id="txtGweight.*" type="text" class="txt num c7" /></td>
+					<td ><input id="txtOrdgweight.*" type="text" class="txt num c7" /></td>
+					<td ><input id="txtOrdeweight.*" type="text" class="txt num c7" /></td>
 				</tr>
 			</table>
 		</div>
