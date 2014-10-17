@@ -113,6 +113,8 @@
                         } else {
                             alert('匯出訂單錯誤!');
                         }
+                        //取得餘料編號
+                        q_gt('workj', "where=^^noa='"+$('#txtNoa').val()+"'^^", 0, 0, 0, 'getBno'); 
                 		break;
                     default:
                         break;
@@ -131,6 +133,38 @@
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'getBno':
+                		var as = _q_appendData("workjt", "", true);
+                		if (as[0] != undefined) {
+                			//q_bbtCount
+                			t_noa = $('#txtNoa').val();
+							for(var i=0;i<q_bbtCount.length;i++){
+								if($('#txtBno__'+i).val().length == 0){
+									t_noq = $('#txtNoq__'+i).val();
+									for(var j=0;j<as.length;j++){
+										if(as[j].noa==t_noa && as[j].noq==t_noq){
+											$('#txtBno__'+i).val(as[j].bno);
+											break;
+										}
+									}
+								}
+							}    
+							//abbt       
+							for(var i=0;i<abbt.length;i++){
+								if(abbt[i].bno.length == 0){
+									t_noa = abbt[i].noa;
+									t_noq = abbt[i].noq;
+									for(var j=0;j<as.length;j++){
+										if(as[j].noa==t_noa && as[j].noq==t_noq){
+											abbt[i].bno = as[j].bno;
+											break;
+										}
+									}
+								}
+							}      			
+                		}
+                		Unlock(1);
+                		break;
                 	case 'mech':
                 		var as = _q_appendData("mech", "", true);
                 		if (as[0] != undefined) {
@@ -175,13 +209,14 @@
 								c.height = imgheight;
 								ctx.drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight);
 								for(var i=0;i<t_para.length;i++){
-									/*alert(q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n)
-									+'\n'+t_para[i].top+'\n'+t_para[i].left);*/
 									value = q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n);
-									ctx.font = t_para[i].fontsize+"px times new roman";
-									ctx.fillStyle = 'red';
-									ctx.fillText(value+'',t_para[i].left,t_para[i].top);
+									if(value!=0){
+										ctx.font = t_para[i].fontsize+"px times new roman";
+										ctx.fillStyle = 'red';
+										ctx.fillText(value+'',t_para[i].left,t_para[i].top);
+									}
 								}
+								
 								//縮放為150*50
 								$('#imgPic_'+n).attr('src',c.toDataURL());
 								$('#txtImgdata_'+n).val(c.toDataURL());	
@@ -201,8 +236,10 @@
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
+                Lock(1,{opacity:0});
+                //匯出訂單
+                //餘料編號
                 $('#btnOrde').click();
-                Unlock(1);
             }
 
             function q_boxClose(s2) {
@@ -539,6 +576,7 @@
             function onPageError(error) {
                 alert("An error occurred:\r\n" + error.Message);
             }
+            
 		</script>
 		<style type="text/css">
             #dmain {
