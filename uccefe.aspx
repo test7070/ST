@@ -474,7 +474,6 @@
 					</td>
 					<td style="width:20px;"> </td>
 					<td align="center" style="width:80px;"><a id='lblStoreno_s'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblUno_s'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblLengthb_fe_s'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit_s'> </a></td>
@@ -484,6 +483,7 @@
 					<td align="center" style="width:80px;"><a id='lblEmount2_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblEweight2_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblAdjmount_s'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblUno_s'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td><input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/></td>
@@ -493,23 +493,23 @@
 						<input id="txtStore.*" type="text" style="width:95%;"/>
 						<input id="btnStore.*" type="button" style="display:none;" />
 					</td>
-					<td><input class="txt c1" id="txtUno.*" type="text"/></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:95%;"/>
 						<input id="txtProduct.*" type="text" style="width:95%;"/>
 						<input id="btnProduct.*" type="button" style="display:none;" />
 					</td>
-					<td><input id="txtLengthb.*" type="text" class="txt c1 num"/></td>
-					<td><input class="txt c1" id="txtUnit.*" type="text"/></td>
-					<td><input class="txt num c1" id="txtMount.*" type="text"/></td>
-					<td><input class="txt num c1" id="txtWeight.*" type="text"/></td>
+					<td><input id="txtLengthb.*" type="text" class="txt c1 num" style="width:95%;"/></td>
+					<td><input class="txt c1" id="txtUnit.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt num c1" id="txtMount.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt num c1" id="txtWeight.*" type="text" style="width:95%;"/></td>
 					<td>
-						<input class="txt c1" id="txtMemo.*"type="text" />
+						<input class="txt c1" id="txtMemo.*"type="text" style="width:95%;"/>
 						<input id="txtNoq.*" type="hidden" />
 					</td>
-					<td><input class="txt num c1" id="txtEmount2.*" type="text"/></td>
-					<td><input class="txt num c1" id="txtEweight2.*" type="text"/></td>
-					<td><input class="txt num c1" id="txtAdjmount.*" type="text"/></td>
+					<td><input class="txt num c1" id="txtEmount2.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt num c1" id="txtEweight2.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt num c1" id="txtAdjmount.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt c1" id="txtUno.*" type="text" style="width:95%;"/></td>
 				</tr>
 			</table>
 		</div>
