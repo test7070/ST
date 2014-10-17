@@ -20,7 +20,7 @@
             var q_name = "workj";
             var q_readonly = ['txtNoa','txtOrdeno','txtMount','txtWeight','txtWorker','txtWorker2'];
             var q_readonlys = ['txtContno','txtContnoq','txtStore','txtMech','txtWeight'];
-            var q_readonlyt = [];
+            var q_readonlyt = ['txtBno'];
             var bbmNum = [['txtMount',10,2,1],['txtWeight',10,2,1]];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbtNum = [['txtGmount',10,2,1],['txtGweight',10,2,1],['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
@@ -38,7 +38,7 @@
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtPicno_', 'btnPicno_', 'img', 'noa', 'txtPicno_', 'img_b.aspx']
             	,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
-            	,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,product,spec,emount,eweight', 'txtUno__,txtProductno__,txtProduct__,,txtMount__,txtWeight__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
+            	,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,product,spec,emount,eweight', 'txtUno__,txtProductno__,txtProduct__,,txtGmount__,txtGweight__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
             	,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtNick', 'cust_b.aspx']
             	,['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__,txtStore__', 'store_b.aspx']);
 			
@@ -113,8 +113,9 @@
                         } else {
                             alert('匯出訂單錯誤!');
                         }
+                        Unlock(1);
                         //取得餘料編號
-                        q_gt('workj', "where=^^noa='"+$('#txtNoa').val()+"'^^", 0, 0, 0, 'getBno'); 
+                        //q_gt('workj', "where=^^noa='"+$('#txtNoa').val()+"'^^", 0, 0, 0, 'getBno'); 
                 		break;
                     default:
                         break;
@@ -305,6 +306,18 @@
                 	alert(q_getMsg('lblCust') + '空白。');
                     Unlock(1);
                     return;
+                }
+                
+                for(var i=0;i<q_bbtCount;i++){
+                	t_uno = $.trim($('#txtUno__'+i).val());
+                	t_lengthb = parseInt(round(q_float('txtLengthb__'+i)/10,0)*10);
+                	t_weight = q_float('txtWeight__'+i);
+                	t_mount = q_float('txtMount__'+i);
+                	if(t_uno.length>0 && t_lengthb>0){
+                		t_bno = '0000'+t_lengthb;
+                		t_bno = t_uno +'-' + t_bno.substring(t_bno.length-4,t_bno.length);
+                		$('#txtBno__'+i).val(t_bno);
+                	}
                 }
                 
                 if (q_cur == 1) {
