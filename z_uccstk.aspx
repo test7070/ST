@@ -78,11 +78,27 @@
                     }, {//8 [11][12]
                         type : '1',
                         name : 'radius'
+                    }, {
+						type : '1', //[13][14] 9
+						name : 'ydate'
+					}, {
+                        type : '8', //[15] 10
+                        name : 'yitype',
+                        value : q_getPara('uccc.itype').split(',')
+                    }, {
+                        type : '8', //[16]  11
+                        name : 'yproductno',
+                        value : t_ucc.split(',')
                     }]
                 });
                 q_popAssign();
                 q_langShow();
-
+				
+				$('#txtYdate1').mask('999/99/99');
+				$('#txtYdate1').datepicker();
+				$('#txtYdate2').mask('999/99/99');
+				$('#txtYdate2').datepicker();
+				
                 $('#txtXdate').mask('999/99/99');
                 $('#txtXdate').datepicker();
                 $('#txtXdate').val(q_date());
@@ -96,6 +112,10 @@
                 $('#txtLength2').css('text-align','right').val(9999);
                 $('#txtRadius1').css('text-align','right');
                 $('#txtRadius2').css('text-align','right').val(9999.99);
+                
+                $('#chkYitype').children('input').eq(0).attr('checked', 'checked');
+				$('#chkYitype').children('input').eq(1).attr('checked', 'checked');
+				$('#chkYstyle').children('input').attr('checked', 'checked');
             }
 
             function q_boxClose(s2) {
