@@ -31,7 +31,7 @@
             brwNowPage = 0;
             brwKey = 'datea';
             aPop = new Array(
-                ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,tel,zip_invo,addr_comp,paytype', 'txtTggno,txtComp,txtTel,txtPost,txtAddr,txtPaytype', 'tgg_b.aspx'],
+                ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,tel,paytype', 'txtTggno,txtComp,txtTel,txtPaytype', 'tgg_b.aspx'],
                 ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
                 ['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
                 ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
@@ -650,8 +650,8 @@
                 switch (s1) {
                     case 'txtTggno':
                         if (!emp($('#txtTggno').val())) {
-                            var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
-                            q_gt('custaddr', t_where, 0, 0, 0, "");
+                           // var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
+                           // q_gt('custaddr', t_where, 0, 0, 0, "");
                         }
                         break;
                 }
