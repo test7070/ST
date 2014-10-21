@@ -340,7 +340,7 @@
                             }else{
                             	$('#orde_chk_vcce' + i).prop('checked', false);
                             }
-                            $('#orde_vcce' + i).html('/'+this.data[n+i]['vcce']);
+                            $('#orde_vcce' + i).html('/'+dec(this.data[n+i]['vcce']));
                             $('#orde_datea' + i).html(this.data[n+i]['datea']);
                             $('#orde_timea' + i).html(this.data[n+i]['timea']);
                             $('#orde_comp' + i).html(this.data[n+i]['comp']);
