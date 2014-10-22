@@ -63,6 +63,8 @@
                 q_mask(bbmMask);
                 q_cmbParse("cmbTagcolor", '桃紅色,紫色,天空藍,草綠色,黃色,膚色,白色');
                 q_cmbParse("cmbTrantype", '本廠送達,本廠拖運,本廠自運,指送,其它,廠商拖運,廠商送達,廠商自運');
+                q_cmbParse("cmbTrantype1", '板車-用倒的,板車-買方卸貨,板車+吊車,短板板車,板吊車,10.4噸吊車,15噸吊車,15噸貨車,3.5噸貨車');
+                q_cmbParse("cmbTrantype2", '吊車旁,吊崁腳,吊1樓,吊2樓(1樓頂),吊3樓(2樓頂)');
                 q_cmbParse("cmbMech1", z_mech,'s');
                 q_cmbParse("cmbMech2", z_mech,'s');
                 q_cmbParse("cmbMech3", z_mech,'s');
@@ -797,24 +799,28 @@
 						</td>
 						<td><span> </span><a id="lblTrantype" class="lbl"> </a></td>
 						<td><select id="cmbTrantype" class="txt c1"></select></td>
-						<td><span> </span><a id="lblTagcolor" class="lbl"> </a></td>
-						<td><select id="cmbTagcolor" class="txt c1"></select></td>
+						<td><select id="cmbTrantype1" class="txt c1"></select></td>
+						<td><select id="cmbTrantype2" class="txt c1"></select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblSite" class="lbl"> </a></td>
 						<td colspan="2"><input id="txtSite"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblChktype" class="lbl"> </a></td>
-						<td><input id="txtChktype"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblTagcolor" class="lbl"> </a></td>
+						<td><select id="cmbTagcolor" class="txt c1"></select></td>
 						<td><span> </span><a id="lblTolerance" class="lbl"> </a></td>
 						<td><input id="txtTolerance"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="4" rowspan="2"><textarea id="txtMemo" class="txt c1" rows="3"></textarea></td>
+						<td colspan="2" rowspan="2"><textarea id="txtMemo" class="txt c1" rows="3"></textarea></td>
+						<td><span> </span><a id="lblChktype" class="lbl"> </a></td>
+						<td><input id="txtChktype"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id="lblMount" class="lbl"> </a></td>
 						<td><input id="txtMount"  type="text"  class="num txt c1"/></td>
 					</tr>
 					<tr>
+						<td></td>
+						<td></td>
 						<td></td>
 						<td><span> </span><a id="lblWeight" class="lbl"> </a></td>
 						<td><input id="txtWeight"  type="text"  class="num txt c1"/></td>
