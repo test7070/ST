@@ -687,7 +687,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1200px;
+                width: 1700px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -699,7 +699,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1500px;
+                width: 1700px;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -861,7 +861,8 @@
 					<td style="width:80px;"><a id='lbl_lengthb'>長度</a><br><a id='lbl_monnt'>數量</a><br><a id='lbl_weight'>重量</a></td>
 					<td style="width:150px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:100px;"><a id='lbl_place'>儲位</a></td>
-					<td style="width:80px;"><a id='lbl_timea'>時間</a></td>
+					<td style="width:180px;"><a id='lbl_timea'>入庫時間</a></td>
+					<td style="width:100px;"><a id='lbl_worker'>入庫人員</a></td>
 					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -927,6 +928,13 @@
 						<input class="txt" id="txtTime3.*" type="text" style="width:95%;padding: 0px;"/>
 						<input class="txt" id="txtTime4.*" type="text" style="width:95%;padding: 0px;"/>
 						<input class="txt" id="txtTime5.*" type="text" style="width:95%;padding: 0px;"/>
+					</td>
+					<td>
+						<input class="txt" id="txtWorker1.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtWorker2.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtWorker3.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtWorker4.*" type="text" style="width:95%;padding: 0px;"/>
+						<input class="txt" id="txtWorker5.*" type="text" style="width:95%;padding: 0px;"/>
 					</td>
 					<td>
 						<input class="txt" id="txtContno.*" type="text" style="float:left;width:120px;"/>
