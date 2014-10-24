@@ -44,33 +44,45 @@
 				$('#q_report').q_report({
 					fileName : 'z_anavccst',
 					options : [{
-						type : '1', //[1][2]
+						type : '1', //[1][2]  1
 						name : 'xdate'
 					}, {
-						type : '2', //[3][4]
+						type : '2', //[3][4]  2
 						name : 'xcust',
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
 					}, {
-						type : '2', //[5][6]
+						type : '2', //[5][6]  3
 						name : 'xsss',
 						dbf : 'sss',
 						index : 'noa,namea',
 						src : 'sss_b.aspx'
 					}, {
-                        type : '8',//7
+                        type : '8',//[7]   4
                         name : 'xitem',
                         value : uccgaItem.split(',')
                     }, {
-                        type : '8',//8
+                        type : '8',//[8]  5
                         name : 'xoption01',
                         value : q_getMsg('xoption01').split('&')
                     }, {
-                        type : '5',//9
+                        type : '5',//[9]  6
                         name : 'xkind',
                         value : '全部,鋼捲,鋼管'.split(',')
-                    }]
+                    }, {
+						type : '2', //[10][11] 7
+						name : 'xproduct',
+						dbf : 'ucaucc',
+						index : 'noa,product',
+						src : 'ucaucc_b.aspx'
+					},{
+						type : '1', //[12][13]  8
+						name : 'xdime'
+					},{
+						type : '1', //[14][15]]   9
+						name : 'xwidth'
+					}]
 				});
 				q_popAssign();
 				q_getFormat();
