@@ -92,6 +92,11 @@
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();
 				$('#chkXitem').children('input').attr('checked', 'checked');
+				
+				$('#txtXdime1').css('text-align','right').val('0');
+				$('#txtXdime2').css('text-align','right').val('999');
+				$('#txtXwidth1').css('text-align','right').val('0');
+				$('#txtXwidth2').css('text-align','right').val('9999');
 			}
 			function q_boxClose(s2) {
 			}
