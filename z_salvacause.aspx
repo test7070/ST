@@ -45,7 +45,10 @@
 						type : '0', //換休期限
 						name : 'carryforwards',
 						value : q_getPara('salvacause.carryforwards')
-					}]
+					},{
+                        type : '6',
+                        name : 'xyear'
+                    }]
                 });
                 q_popAssign();
                 q_getFormat();
@@ -55,6 +58,8 @@
                 t_noa  =  t_noa.replace('noa=','');
                 $('#txtXnoa').val(t_noa).width(100);
                 
+                $('#txtXyear').val(q_date().substr(0,3));
+                $('#txtXyear').mask('999');
                 $('#txtXdate1').mask('999/99/99');
                 $('#txtXdate1').datepicker();
                 $('#txtXdate2').mask('999/99/99');
