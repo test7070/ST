@@ -36,26 +36,29 @@
 				$('#q_report').q_report({
 					fileName : 'z_ummfe',
 					options : [{
-						type : '5', //[1]
+						type : '5', //[1]  1
 						name : 'xcno',
 						value : t_acomp.split(',')
 					}, {
-						type : '2', //[2][3]
+						type : '2', //[2][3]   2
 						name : 'xcust',
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
 					}, {
-						type : '1', //[4][5]
+						type : '1', //[4][5]   3
 						name : 'xdate'
 					}, {
-						type : '1', //[6][7]
+						type : '1', //[6][7]   4
 						name : 'xmon'
-					}, {//[8]
+					}, {//[8]                  5
                         type : '8',
                         name : 'xoption01',
                         value : ['明細']
-                    }]
+                    }, {
+						type : '1', //[9][10]   6
+						name : 'ydate'
+					}]
 				});
 				q_popAssign();
 				q_langShow();
@@ -66,7 +69,11 @@
 				$('#txtXdate2').datepicker();
 				$('#txtXmon1').mask('999/99');
 				$('#txtXmon2').mask('999/99');
-
+				$('#txtYdate1').mask('999/99/99');
+				$('#txtYdate1').datepicker();
+				$('#txtYdate2').mask('999/99/99');
+				$('#txtYdate2').datepicker();
+				
 				var t_date, t_year, t_month, t_day;
 				t_date = new Date();
 				t_date.setDate(1);
