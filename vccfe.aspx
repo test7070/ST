@@ -1543,6 +1543,8 @@
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblWeight_s'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblGmount_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblGweight_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblWcost_s'> </a></td>
@@ -1584,6 +1586,12 @@
 					</td>
 					<td>
 					<input id="txtWeight.*" type="text" class="txt num c1"/>
+					</td>
+					<td>
+					<input id="txtGmount.*" type="text" class="txt num c1"/>
+					</td>
+					<td>
+					<input id="txtGweight.*" type="text" class="txt num c1"/>
 					</td>
 					<td>
 					<input id="txtPrice.*" type="text" class="txt num c1"/>
