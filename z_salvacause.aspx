@@ -37,7 +37,15 @@
                         dbf : 'sss',
                         index : 'noa,namea',
                         src : 'sss_b.aspx'
-                    }]
+                    },{
+						type : '8',
+						name : 'xshow',
+						value : ('1@顯示換休明細,2@顯示扣抵明細').split(',')
+					},{
+						type : '0', //換休期限
+						name : 'carryforwards',
+						value : q_getPara('salvacause.carryforwards')
+					}]
                 });
                 q_popAssign();
                 q_getFormat();
