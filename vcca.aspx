@@ -281,7 +281,7 @@
 			}
 
 			function btnPrint() {
-				if (q_getPara('sys.comp').indexOf('英特瑞') > -1) {
+				if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1){
 					q_box('z_vccap_it.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
 				} else {
 					q_box('z_vcca.aspx?;;;' + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
@@ -321,6 +321,9 @@
 					t_prices = q_float('txtPrice_' + k);
 					t_moneys = round(t_mounts * t_prices, 0);
 					$('#txtMoney_' + k).val(t_moneys);
+					if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1){
+						t_moneys = t_mounts * t_prices
+					}
 					t_money += t_moneys;
 					t_mount += t_mounts;
 				}
@@ -401,9 +404,9 @@
 						break;
 					default:
 				}
-				$('#txtMoney').val(t_money);
+				$('#txtMoney').val(round(t_money,0));
 				$('#txtTax').val(t_tax);
-				$('#txtTotal').val(t_total);
+				$('#txtTotal').val(round(t_total,0));
 			}
 
 			function refresh(recno) {
