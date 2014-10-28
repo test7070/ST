@@ -573,6 +573,10 @@
                         break;
                     case 'orde':
                         var as = _q_appendData("orde", "", true);
+                        if (as[0] != undefined){
+                        	$('#cmbTrantype').val(as[0].trantype);
+                        	$('#txtPaytype').val(as[0].paytype);
+                        }
                         var t_memo = $('#txtMemo').val();
                         var t_post2 = '';
                         var t_addr2 = '';
