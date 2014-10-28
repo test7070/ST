@@ -1148,10 +1148,11 @@
 							<span> </span><a id='lblCancel'> </a>
 						</td>
 					</tr>
-					<tr class="tr11">
-						<td class="td1"><span> </span><a id='lblMemo' class='lbl'> </a></td>
-						<td class="td2" colspan='7'>
+					<tr>
+						<td><span> </span><a id='lblMemo' class='lbl'> </a></td>
+						<td colspan='7'>
 							<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea>
+							<input id="txtMemo2" type="text" style="display:none;" titlea="紀錄workj.trantype2"/>
 						</td>
 					</tr>
 					<tr>

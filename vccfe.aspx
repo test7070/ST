@@ -109,7 +109,7 @@
                 q_mask(bbmMask);
                 bbmNum = [['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtWeight', 9, q_getPara('vcc.weightPrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1]];
                 bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtWeight', 9, q_getPara('vcc.weightPrecision'), 1], ['txtTotal', 15, 0, 1], ['txtWcost', 12, 2, 1], ['txtTranmoney', 12, 0, 1], ['txtProfit', 12, q_getPara('vcc.pricePrecision'), 1], ['txtSprice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtSprice2', 12, q_getPara('vcc.pricePrecision'), 1]];
-                q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
+                q_cmbParse("cmbTranstyle", q_getPara('fe.trantype2'));
                 q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
                 q_cmbParse("cmbStype", q_getPara('vcc.stype'));
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
@@ -576,6 +576,7 @@
                         if (as[0] != undefined){
                         	$('#cmbTrantype').val(as[0].trantype);
                         	$('#txtPaytype').val(as[0].paytype);
+                        	$('#cmbTranstyle').val(as[0].memo2);
                         }
                         var t_memo = $('#txtMemo').val();
                         var t_post2 = '';
