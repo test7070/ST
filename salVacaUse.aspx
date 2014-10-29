@@ -16,7 +16,7 @@
             }
 
             var q_name = "salvacause";
-            var q_readonly = ['txtNoa', 'txtHr_special', 'txtTot_special', 'txtJob','txtNamea','txtHname','txtPart','txtId'];
+            var q_readonly = ['txtNoa', 'txtHr_special', 'txtTot_special', 'txtJob','txtNamea','txtHname','txtPart'];
             var bbmNum = [['txtHr_used', 10, 1, 1], ['txtHr_special', 10, 1, 1], ['txtTot_special', 10, 1, 1]];
             var bbmMask = [];
             q_sqlCount = 6;
@@ -26,9 +26,9 @@
             brwKey = 'noa';
             q_desc = 1;
             //ajaxPath = ""; //  execute in Root
-            aPop = new Array(['txtSssno', 'lblSss', 'sss', 'noa,namea,partno,part,id,job,jobno', 'txtSssno,txtNamea,txtPartno,txtPart,txtId,txtJob,txtJobno', 'sss_b.aspx']
-            , ['txtHtype', 'lblHtype', 'salhtype', 'noa,namea', 'txtHtype,txtHname', 'salhtype_b.aspx']
-            ,['txtAgent', '', 'sss', 'noa,namea', '0txtAgent,txtAgent', '']
+            aPop = new Array(['txtSssno', 'lblSss', 'sss', 'noa,namea,partno,part,job,jobno', 'txtSssno,txtNamea,txtPartno,txtPart,txtJob,txtJobno,txtNamea', 'sss_b.aspx']
+	            ,['txtHtype', 'lblHtype', 'salhtype', 'noa,namea', 'txtHtype,txtHname', 'salhtype_b.aspx']
+	            ,['txtAgent', '', 'sss', 'noa,namea', '0txtAgent,txtAgent', '']
             );
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -36,12 +36,15 @@
                 //q_gt(q_name, q_content, q_sqlCount, 1)
                 //$('#txtNoa').focus
                if (r_rank < 8 && q_content==''){
-					q_gt('sss', "where=^^noa='" + r_userno + "'^^", 0, 1);
+					q_gt('sss', "where=^^noa='" + r_userno + "'^^", 0, 0, 0,"", r_accy);
                 }else{
                     q_gt(q_name, q_content, q_sqlCount, 1);
 				}
+				//判斷是否要隱藏休假限制
+				q_gt('salyear', "where=^^1=1^^ stop=1", 0, 0, 0,"", r_accy);
             });
-
+			
+			var issalyear=false;//是否要隱藏休假限制
             //////////////////   end Ready
             function main() {
                 if (dataErr) {
@@ -54,24 +57,29 @@
             var t_tot_special = 0,prevyeartime = 0,limitday = 0,prev_special_outtime=0;
             //存放初始'特休假剩餘天數','去年應補特休時數','去年補特休期限(天)',今年已請補特休時數
             function mainPost() {
-            	if(q_getPara('sys.comp').indexOf('英特瑞')>-1){
-            		$('#lblId').hide();
-                   	$('#txtId').hide();
-                   	aPop = new Array(['txtSssno', 'lblSss', 'sss', 'noa,namea,partno,part,job,jobno', 'txtSssno,txtNamea,txtPartno,txtPart,txtJob,txtJobno', 'sss_b.aspx'], ['txtHtype', 'lblHtype', 'salhtype', 'noa,namea', 'txtHtype,txtHname', 'salhtype_b.aspx']);
-            	}
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtBdate', r_picd], ['txtEdate', r_picd], ['txtBtime', '99:99'], ['txtEtime', '99:99']];
                 q_mask(bbmMask);
                 
                 $('#txtSssno').change(function() {
                     if (!emp($('#txtSssno').val())) {
+                    	var t_year=r_accy;
+                    	if(!emp($('#txtBdate').val()))
+                    		t_year=$('#txtBdate').val().substr(0, 3);
+                    	
                         //找員工的特休假可用天數和特休假剩餘天數
-                        var t_where = "where=^^ noa ='" + $('#txtBdate').val().substr(0, 3) + "' ^^";
+                        var t_where = "where=^^ noa ='" + t_year + "' ^^";
                         q_gt('salvaca', t_where, 0, 0, 0, "", r_accy);
                         
                         //找員工已請的補特休
-                        var t_where = "where=^^ left(bdate,3) ='" + $('#txtBdate').val().substr(0, 3) + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
+                        var t_where = "where=^^ left(bdate,3) ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
                         q_gt('salvacause', t_where, 0, 0, 0, "salvacause_prev_special", r_accy);
+                        
+                        //找員工假別可用天數
+                        if(issalyear){
+                        	var t_where = "where=^^ ['" + t_year + "','" + $('#txtSssno').val() + "','" + $('#txtNoa').val() + "'," + q_getPara('salvacause.carryforwards') + ") ^^";
+                        	q_gt('salyear_vacause', t_where, 0, 0, 0, "", r_accy);
+                        }
                     }
 				});
 
@@ -85,12 +93,16 @@
                     q_msg();
                     
                     if (!emp($('#txtSssno').val())) {
+                    	var t_year=r_accy;
+                    	if(!emp($('#txtBdate').val()))
+                    		t_year=$('#txtBdate').val().substr(0, 3);
+                    		
                         //找員工的特休假可用天數和特休假剩餘天數
-                        var t_where = "where=^^ noa ='" + $('#txtBdate').val().substr(0, 3) + "' ^^";
+                        var t_where = "where=^^ noa ='" + t_year + "' ^^";
                         q_gt('salvaca', t_where, 0, 0, 0, "", r_accy);
                         
                         //找員工已請的補特休
-                        var t_where = "where=^^ left(bdate,3) ='" + $('#txtBdate').val().substr(0, 3) + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
+                        var t_where = "where=^^ left(bdate,3) ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
                         q_gt('salvacause', t_where, 0, 0, 0, "salvacause_prev_special", r_accy);
                     }
                     change_hr_used();
@@ -144,17 +156,12 @@
 						alert(t_err);
 						return;
 					}
-					if(dec($('#txtHr_used').val())<=0){
+					/*if(dec($('#txtHr_used').val())<=0){
 						alert('請先輸入請假時數!!');
 						return;
-					}
+					}*/
 					
-					var t_carryforwards=dec(q_getPara('salvacause.carryforwards'));//換休期限
-					/*t_where=" sssno='"+$('#txtSssno').val()+"' and hr_special>0 and noa<='"+$('#txtBdate').val()+"'";
-					if(t_carryforwards>0)
-						t_where+=" and '"+$('#txtEdate').val()+"' <= dbo.q_cdn(noa,"+t_carryforwards+")";
-					*/
-					
+					var t_carryforwards=dec(q_getPara('salvacause.carryforwards'));//換休期限				
 					t_where="sssno='"+$('#txtSssno').val()+"' and noa in (select datea from dbo.carryforwards("+t_carryforwards+",'"+$('#txtSssno').val()+"','"+$('#txtNoa').val()+"') where ('"+$('#txtEdate').val()+"' between datea and enddate) and  special-used>0)"
 					
                     q_box("salpresents_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where , 'salpresents', "600px", "95%", $('#btnCarryforwards').val());	
@@ -207,22 +214,15 @@
                     case 'authority':
                         var as = _q_appendData('authority', '', true);
                         if (as[0] != undefined) {
-                        	if(q_getPara('sys.comp').indexOf('大昌')>-1){
-	                            if (r_rank >= 7)
-	                                q_content = "";
-	                            else if (as.length > 0 && as[0]["pr_modi"] == "true")
-	                                q_content = "where=^^partno='" + ssspartno + "'^^";
-	                            else
-	                                q_content = "where=^^sssno='" + r_userno + "'^^";
-							}else if(q_getPara('sys.comp').indexOf('英特瑞')>-1){
+                        	if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1){
 								if (r_rank >= 8)
 	                                q_content = "";
-	                             else if (as.length > 0 && as[0]["pr_ins"] == "true"&&sssjob.indexOf('經理')>-1)
+	                             else if (as.length > 0 && as[0]["pr_ins"] == "true" && sssjob.indexOf('經理')>-1)
 	                             	q_content = "where=^^ charindex(sssno,'"+sssgroup+"')>0^^";
 	                             else
 	                             	q_content = "where=^^sssno='" + r_userno + "'^^";
 							}else{
-								if (r_rank >= 8)
+								if (r_rank >= 8 || as[0]["pr_dele"] == "true")
 	                                q_content = "";
 	                            else
 	                                q_content = "where=^^sssno='" + r_userno + "'^^";
@@ -277,6 +277,53 @@
 							prev_special_outtime=q_add(prev_special_outtime,dec(as[i].hr_used));
 						}
 						break;
+					case 'salyear':
+						var as = _q_appendData("salyear", "", true);
+						if (as[0] != undefined) {
+							issalyear=true;
+							$('#cmbSalyear_vacause').show();
+							q_readonly = ['txtNoa', 'txtHr_special', 'txtTot_special', 'txtJob','txtNamea','txtHname','txtPart','txtHtype'];
+							aPop = new Array(['txtSssno', 'lblSss', 'sss', 'noa,namea,partno,part,job,jobno', 'txtSssno,txtNamea,txtPartno,txtPart,txtJob,txtJobno,txtNamea', 'sss_b.aspx']
+					            ,['txtAgent', '', 'sss', 'noa,namea', '0txtAgent,txtAgent', '']);
+						}else{
+							issalyear=false;
+							$('#cmbSalyear_vacause').hide();
+						}
+						break;
+					case 'salyear_vacause':
+						var as = _q_appendData("salyear_vacause", "", true);
+						$('#cmbSalyear_vacause').text('');
+						var t_htype="X@請選擇假別";
+						if (as[0] != undefined) {
+							t_htype=t_htype+","+(q_sub(dec(as[0].personal),dec(as[0].personal_used))>0?'':'X')+"事假@事假(已用/可用時數："+as[0].personal_used+"/"+as[0].personal+")";
+							t_htype=t_htype+","+(q_sub(dec(as[0].sick),dec(as[0].sick_used))>0?'':'X')+"病假@病假(已用/可用時數："+as[0].sick_used+"/"+as[0].sick+")";
+							
+							t_htype=t_htype+","+(q_sub(dec(as[0].special),dec(as[0].special_used))>0?'':'X')+"特休假@特休假(已用/可用時數："+as[0].special_used+"/"+as[0].special+")";
+							t_htype=t_htype+","+(q_sub(dec(as[0].last_special),dec(as[0].last_special_used))>0?'':'X')+"補特休@補特休(已用/可用時數："+as[0].last_special_used+"/"+as[0].last_special+(as[0].last_special_memo!=''?"("+as[0].last_special_memo+")":'')+")";
+							t_htype=t_htype+","+(q_sub(dec(as[0].carry),dec(as[0].carry_used))>0?'':'X')+"抵工時@抵工時(已用/可用時數："+as[0].carry_used+"/"+as[0].carry+")";
+							
+							t_htype=t_htype+","+(q_sub(dec(as[0].maternity),dec(as[0].maternity_used))>0?'':'X')+"產假@產假(已用/可用時數："+as[0].maternity_used+"/"+as[0].maternity+")";
+							t_htype=t_htype+","+(q_sub(dec(as[0].marital),dec(as[0].marital_used))>0?'':'X')+"婚假@婚假(已用/可用時數："+as[0].marital_used+"/"+as[0].marital+")";
+							t_htype=t_htype+","+(q_sub(dec(as[0].funeral),dec(as[0].funeral_used))>0?'':'X')+"喪假@喪假(已用/可用時數："+as[0].funeral_used+"/"+as[0].funeral+")";
+							t_htype=t_htype+","+(q_sub(dec(as[0].other),dec(as[0].other_used))>0?'':'X')+"其他@其他(已用/可用時數："+as[0].other_used+"/"+as[0].other+")";
+						}
+						q_cmbParse("cmbSalyear_vacause", t_htype);
+						break;
+					case 'salhtype':
+						var as = _q_appendData("salhtype", "", true);
+						if (as[0] != undefined) {
+							$('#txtHtype').val(as[0].noa);
+							$('#txtHname').val(as[0].namea);
+						}
+						
+						if ($('#txtHname').val().indexOf('特休') > -1)
+                        q_tr('txtTot_special', t_tot_special - q_float('txtHr_used'));
+                    
+	                    if ($('#txtHname').val().indexOf('抵工時') > -1)
+	                    	$("#btnCarryforwards").removeAttr("disabled");
+	                    else
+	                    	$("#btnCarryforwards").attr("disabled", "disabled");
+						break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -288,13 +335,23 @@
                 switch (s1) {
                     case 'txtSssno':
                         if (!emp($('#txtSssno').val())) {
+                        	var t_year=r_accy;
+	                    	if(!emp($('#txtBdate').val()))
+	                    		t_year=$('#txtBdate').val().substr(0, 3);
+	                    		
 	                        //找員工的特休假可用天數和特休假剩餘天數
-	                        var t_where = "where=^^ noa ='" + $('#txtBdate').val().substr(0, 3) + "' ^^";
+	                        var t_where = "where=^^ noa ='" + t_year + "' ^^";
 	                        q_gt('salvaca', t_where, 0, 0, 0, "", r_accy);
 	                        
 	                        //找員工已請的補特休
-	                        var t_where = "where=^^ left(bdate,3) ='" + $('#txtBdate').val().substr(0, 3) + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0 ^^";
+	                        var t_where = "where=^^ left(bdate,3) ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0 ^^";
 	                        q_gt('salvacause', t_where, 0, 0, 0, "salvacause_prev_special", r_accy);
+	                        
+	                        //找員工假別可用天數
+	                        if(issalyear){
+	                        	var t_where = "where=^^ ['" + t_year + "','" + $('#txtSssno').val() + "','" + $('#txtNoa').val() + "'," + q_getPara('salvacause.carryforwards') + ") ^^";
+	                        	q_gt('salyear_vacause', t_where, 0, 0, 0, "", r_accy);
+	                        }
 	                    }
                         var jobname = $('#txtJob').val();
                         if (jobname.indexOf('副總') != -1)
@@ -308,6 +365,8 @@
                     
 	                    if ($('#txtHname').val().indexOf('抵工時') > -1)
 	                    	$("#btnCarryforwards").removeAttr("disabled");
+	                    else
+	                    	$("#btnCarryforwards").attr("disabled", "disabled");
                         break;
                 }
             }
@@ -339,9 +398,19 @@
                 $('#txtNamea').attr('readonly', true);
                 
                 if (!emp($('#txtSssno').val())) {
+                	var t_year=r_accy;
+	                    if(!emp($('#txtBdate').val()))
+	                    	t_year=$('#txtBdate').val().substr(0, 3);
+	                    		
 					//找員工已請的補特休
-					var t_where = "where=^^ left(bdate,3) ='" + $('#txtBdate').val().substr(0, 3) + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
+					var t_where = "where=^^ left(bdate,3) ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
 					q_gt('salvacause', t_where, 0, 0, 0, "salvacause_prev_special", r_accy);
+					
+					//找員工假別可用天數
+					if(issalyear){
+	                	var t_where = "where=^^ ['" + t_year + "','" + $('#txtSssno').val() + "','" + $('#txtNoa').val() + "'," + q_getPara('salvacause.carryforwards') + ") ^^";
+	                	q_gt('salyear_vacause', t_where, 0, 0, 0, "", r_accy);
+	                }
 				}
             }
 
@@ -412,16 +481,23 @@
 
             function refresh(recno) {
                 _refresh(recno);
+                $('#cmbSalyear_vacause').text('');
             }
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
-                if ((q_cur == 1 || q_cur == 2) && $('#txtHname').val().indexOf('抵工時') > -1) {
-					$("#btnCarryforwards").removeAttr("disabled");
+                if (q_cur == 1 || q_cur == 2) {
+                	$("#cmbSalyear_vacause").removeAttr("disabled");
+                	if($('#txtHname').val().indexOf('抵工時') > -1)
+						$("#btnCarryforwards").removeAttr("disabled");
 				} else {
+					$("#cmbSalyear_vacause").attr("disabled", "disabled");
 					$("#btnCarryforwards").attr("disabled", "disabled");
 				}
-                
+                if(!issalyear)
+                	$('#cmbSalyear_vacause').hide();
+                else
+                	$('#cmbSalyear_vacause').show();
             }
 
             function btnMinus(id) {
@@ -475,6 +551,16 @@
 
             function btnCancel() {
                 _btnCancel();
+            }
+            
+            function cmbSalyear_vacause_chg() {
+            	if($('#cmbSalyear_vacause').val().substr(0,1)=='X' ){
+            		$('#txtHtype').val('');
+					$('#txtHname').val('');
+            	}
+            	//變更假別
+            	var t_where = "where=^^ charindex('"+$('#cmbSalyear_vacause').val()+"',namea)>0 ^^";
+                q_gt('salhtype', t_where, 0, 0, 0, "salhtype", r_accy);
             }
             
             function change_hr_used() {
@@ -588,7 +674,7 @@
                 height: 35px;
             }
             .tbbm tr td {
-                width: 9%;
+                /*width: 9%;*/
             }
             .tbbm .tdZ {
                 width: 2%;
@@ -660,6 +746,7 @@
                 border-width: 1px;
                 padding: 0px;
                 margin: -1px;
+                font-size: medium;
             }
             .num {
                 text-align: right;
@@ -667,6 +754,7 @@
             input[type="text"], input[type="button"] {
                 font-size: medium;
             }
+            
 		</style>
 	</head>
 	<body>
@@ -693,22 +781,16 @@
 			<div class='dbbm' style="width: 68%;float: left;">
 				<table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='5'>
 					<tr>
-						<td class="td1"><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td class="td2"><input id="txtNoa"  type="text"  class="txt c1"/></td>
-						<td class="td3" ><!--<input id="btnAuto"  type="button" />--></td>
-						<td class="td4"> </td>
-						<td class="td5"> </td>
-						<td class="td6"> </td>
+						<td class="td1" style="width: 110px;"><span> </span><a id='lblNoa' class="lbl"> </a></td>
+						<td class="td2" style="width: 170px;"><input id="txtNoa"  type="text"  class="txt c1"/></td>
+						<td class="td3" style="width: 140px;"><!--<input id="btnAuto"  type="button" />--></td>
+						<td class="td4" style="width: 140px;"> </td>
+						<td class="td5" style="width: 140px;"> </td>
+						<td class="td6" style="width: 140px;"> </td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td class="td2"><input id="txtDatea"  type="text" class="txt c1" /></td>
-						<td class="td3" ><span> </span><a id='lblBdate' class="lbl"> </a></td>
-						<td class="td4" colspan="2">
-							<input id="txtBdate"  type="text" class="txt" style="width: 120px;"/>
-							<a style="float:left;">~</a>
-							<input id="txtEdate"  type="text" class="txt" style="width: 120px;"/>
-						</td>
 					</tr>
 					<tr>
 						<td class="td1" ><span> </span><a id='lblSss' class="lbl btn"> </a></td>
@@ -716,21 +798,24 @@
 							<input id="txtSssno"  type="text"  class="txt c2"/>
 							<input id="txtNamea"  type="text"  class="txt c3"/>
 						</td>
-						<td class="td3" ><span> </span><a id='lblPart' class="lbl"> </a></td>
-						<td class="td4">
+						<td class="td3" colspan="2"><select id="cmbSalyear_vacause" style="width: 90%;float: right;" onchange='cmbSalyear_vacause_chg()'> </select></td>
+					</tr>
+					<tr>
+						<td class="td1" ><span> </span><a id='lblPart' class="lbl"> </a></td>
+						<td class="td2">
 							<input id="txtPartno"  type="text"  class="txt c2"/>
 							<input id="txtPart"  type="text"  class="txt c3"/>
 						</td>
-						<td class="td5"><span> </span><a id='lblId' class="lbl"> </a></td>
-						<td class="td6"><input id="txtId"  type="text" class="txt c1" /></td>
-					</tr>
-					<tr>
-						<td class="td1"><span> </span><a id='lblJob' class="lbl"> </a></td>
-						<td class="td2">
-						<input id="txtJob"  type="text" class="txt c1" />
-						<input id="txtJobno"  type="text" style="display:none;" />
-						<input id="txtSendboss"  type="text" style="display:none;" />
+						<td class="td3"><span> </span><a id='lblJob' class="lbl"> </a></td>
+						<td class="td4">
+							<input id="txtJob"  type="text" class="txt c1" />
+							<input id="txtJobno"  type="text" style="display:none;" />
+							<input id="txtSendboss"  type="text" style="display:none;" />
 						</td>
+						<td class="td6"><input id="txtCarryforwards"  type="hidden" class="txt c1"/></td>
+						<td class="td5"><input id="btnCarryforwards"  type="button"/></td>
+						<!--<td class="td5"><span> </span><a id='lblId' class="lbl"> </a></td>
+						<td class="td6"><input id="txtId"  type="text" class="txt c1" /></td>-->
 					</tr>
 					<tr>
 						<td class="td1" ><span> </span><a id='lblHtype' class="lbl btn" > </a></td>
@@ -744,16 +829,20 @@
 						<td class="td6"><input id="txtTot_special"  type="text" class="txt num c1" /></td>
 					</tr>
 					<tr>
-						<td class="td1" ><span> </span><a id='lblBtime' class="lbl"> </a></td>
+						<td class="td1" ><span> </span><a id='lblBdate' class="lbl"> </a></td>
 						<td class="td2">
+							<input id="txtBdate"  type="text" class="txt" style="width: 80px;"/>
+							<a style="float:left;">~</a>
+							<input id="txtEdate"  type="text" class="txt" style="width: 80px;"/>
+						</td>
+						<td class="td3" ><span> </span><a id='lblBtime' class="lbl"> </a></td>
+						<td class="td4">
 							<input id="txtBtime"  type="text" class="txt" style="width: 65px;"/>
 							<a style="float:left;">~</a>
 							<input id="txtEtime"  type="text" class="txt" style="width: 65px;"/>
 						</td>
-						<td class="td3"><span> </span><a id='lblHr_used' class="lbl"> </a></td>
-						<td class="td4"><input id="txtHr_used"  type="text" class="txt num c1"/></td>
-						<td class="td5"><input id="txtCarryforwards"  type="hidden" class="txt c1"/></td>
-						<td class="td6"><input id="btnCarryforwards"  type="button" /></td>
+						<td class="td5"><span> </span><a id='lblHr_used' class="lbl"> </a></td>
+						<td class="td6"><input id="txtHr_used"  type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblMemo' class="lbl"> </a></td>
