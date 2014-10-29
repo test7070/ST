@@ -58,7 +58,14 @@
                     }, {
 						type : '1', //[9][10]   6
 						name : 'ydate'
-					}]
+					}, {
+						type : '6', //[11]     7
+						name : 'ymon'
+					}, {//[12]                 8
+                        type : '8',
+                        name : 'yoption01',
+                        value : ['依業務','僅印異常']
+                    }]
 				});
 				q_popAssign();
 				q_langShow();
@@ -73,6 +80,8 @@
 				$('#txtYdate1').datepicker();
 				$('#txtYdate2').mask('999/99/99');
 				$('#txtYdate2').datepicker();
+				
+				$('#txtYmon').mask('999/99');
 				
 				var t_date, t_year, t_month, t_day;
 				t_date = new Date();

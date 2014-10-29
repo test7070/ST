@@ -62,9 +62,9 @@
             function mainPost() {
                 q_mask(bbmMask);
                 q_cmbParse("cmbTagcolor", '桃紅色,紫色,天空藍,草綠色,黃色,膚色,白色');
-                q_cmbParse("cmbTrantype", '本廠送達,本廠拖運,本廠自運,指送,其它,廠商拖運,廠商送達,廠商自運');
+                q_cmbParse("cmbTrantype", q_getPara('fe.trantype'));
                 q_cmbParse("cmbTrantype1", '板車-用倒的,板車-買方卸貨,板車+吊車,短板板車,板吊車,10.4噸吊車,15噸吊車,15噸貨車,3.5噸貨車');
-                q_cmbParse("cmbTrantype2", '吊車旁,吊崁腳,吊1樓,吊2樓(1樓頂),吊3樓(2樓頂)');
+                q_cmbParse("cmbTrantype2",q_getPara('fe.trantype2'));
                 q_cmbParse("cmbMech1", z_mech,'s');
                 q_cmbParse("cmbMech2", z_mech,'s');
                 q_cmbParse("cmbMech3", z_mech,'s');

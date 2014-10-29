@@ -91,7 +91,7 @@
 				q_cmbParse("cmbStype", q_getPara('orde.stype'));
 				q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
-				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
+				q_cmbParse("cmbTrantype", q_getPara('fe.trantype'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
@@ -1148,10 +1148,11 @@
 							<span> </span><a id='lblCancel'> </a>
 						</td>
 					</tr>
-					<tr class="tr11">
-						<td class="td1"><span> </span><a id='lblMemo' class='lbl'> </a></td>
-						<td class="td2" colspan='7'>
+					<tr>
+						<td><span> </span><a id='lblMemo' class='lbl'> </a></td>
+						<td colspan='7'>
 							<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea>
+							<input id="txtMemo2" type="text" style="display:none;" titlea="紀錄workj.trantype2"/>
 						</td>
 					</tr>
 					<tr>
