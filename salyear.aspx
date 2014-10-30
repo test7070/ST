@@ -21,8 +21,8 @@
             var q_readonlys = [];
             var q_readonlyt = ['txtNamea'];
             var bbmNum = [];
-            var bbsNum = [['txtBseniority', 3, 0, 1], ['txtEseniority', 3, 0, 1], ['txtPersonal', 10, 1, 1], ['txtSick', 10, 1, 1], ['txtOther', 10, 1, 1]];
-            var bbtNum = [['txtMaternity', 10, 1, 1], ['txtMarital', 10, 1, 1], ['txtFuneral', 10, 1, 1], ['txtOthers', 10, 1, 1]];
+            var bbsNum = [['txtBseniority', 3, 0, 1], ['txtEseniority', 3, 0, 1], ['txtPersonal', 10, 1, 1], ['txtSick', 10, 1, 1], ['txtMenstruation', 10, 1, 1], ['txtOther', 10, 1, 1]];
+            var bbtNum = [['txtMaternity', 10, 1, 1], ['txtMarital', 10, 1, 1], ['txtFuneral', 10, 1, 1], ['txtOther', 10, 1, 1]];
             var bbmMask = [];
             var bbsMask = [];
             var bbtMask = [];
@@ -451,13 +451,14 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 500px;">
+		<div class='dbbs' style="width: 600px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width: 30px;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  /></td>
 					<td align="center" style="width: 120px;"><a id='lblSeniority'> </a></td>
 					<td align="center" style="width: 100px;"><a id='lblPersonal'> </a></td>
 					<td align="center" style="width: 100px;"><a id='lblSick'> </a></td>
+					<td align="center" style="width: 100px;"><a id='lblMenstruation'> </a></td>
 					<td align="center" style="width: 100px;"><a id='lblOther'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -472,6 +473,7 @@
 					</td>
 					<td ><input class="txt num c1" id="txtPersonal.*" type="text" /></td>
 					<td ><input class="txt num c1" id="txtSick.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtMenstruation.*" type="text" /></td>
 					<td ><input class="txt num c1" id="txtOther.*" type="text" /></td>
 				</tr>
 			</table>
@@ -501,7 +503,7 @@
 					<td><input id="txtMaternity..*" type="text" class="txt num c1"/></td>
 					<td><input id="txtMarital..*" type="text" class="txt num c1"/></td>
 					<td><input id="txtFuneral..*" type="text" class="txt num c1"/></td>
-					<td><input id="txtOthers..*" type="text" class="txt num c1"/></td>
+					<td><input id="txtOther..*" type="text" class="txt num c1"/></td>
 					<td><input id="txtMemo..*" type="text" class="txt c1"/></td>
 				</tr>
 			</table>
