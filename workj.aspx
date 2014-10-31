@@ -242,12 +242,12 @@
 									}
 								}
 								$('#imgPic_'+n).attr('src',c.toDataURL());
-								//縮放為450*150  條碼列印用
+								//縮放為300*100  條碼列印用
 								//暫由程式控制							
-								$('#canvas_'+n).width(450).height(150);
-								c.width = 450;
-								c.height = 150;
-								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,450,150);
+								$('#canvas_'+n).width(300).height(100);
+								c.width = 300;
+								c.height = 100;
+								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,300,100);
 								$('#txtImgbarcode_'+n).val(c.toDataURL());
 								
 								//縮放為150*50
