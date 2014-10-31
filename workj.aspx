@@ -71,6 +71,21 @@
                 q_cmbParse("cmbMech4", z_mech,'s');
                 q_cmbParse("cmbMech5", z_mech,'s');
                 
+                q_cmbParse("combPrint", 'barfe.gen1@條碼機1,barfe.gen2@條碼機2,barfe.gen3@條碼機3,barfe.gen4@條碼機4');
+                q_cmbParse("combType", '1@成品,2@餘料');
+                $('#btnPrint_d').click(function(e){
+                	Lock(1,{opacity:0});
+                	var t_para = $('#txtNoa').val()+($('#combType').val()=='2'?',workjt':'');
+                	alert(t_para);
+                	q_func( $('#combPrint').val(), t_para); 
+                });
+                $('#btnBarcode').click(function() {
+                    $('#divImport').toggle();
+                });
+                $('#btnCancel_d').click(function() {
+                    $('#divImport').toggle();
+                });
+                //-----------------------------------------------------------------------
                 $('#btnCont').click(function(e){
                 	var t_noa = $('#txtNoa').val();
                 	var t_custno = $('#txtCustno').val();
@@ -93,6 +108,12 @@
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
+                	case 'barfe.gen1':
+                		Unlock(1);
+                		break;
+                	case 'barfe.gen2':
+                		Unlock(1);
+                		break;	
                 	case 'qtxt.query.cont':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
@@ -215,20 +236,25 @@
 									value = q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n);
 									if(value!=0){
 										ctx.font = t_para[i].fontsize+"px times new roman";
-										ctx.fillStyle = 'red';
+										ctx.fillStyle = 'black';
 										ctx.fillText(value+'',t_para[i].left,t_para[i].top);
 									}
 								}
+								$('#imgPic_'+n).attr('src',c.toDataURL());
+								//縮放為450*150  條碼列印用
+								/*暫由程式控制							
+								$('#canvas_'+n).width(450).height(150);
+								c.width = 450;
+								c.height = 150;
+								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,450,150);
+								$('#txtImgbarcode_'+n).val(c.toDataURL());*/
 								
 								//縮放為150*50
-								$('#imgPic_'+n).attr('src',c.toDataURL());
-								$('#txtImgdata_'+n).val(c.toDataURL());	
-								
 								$('#canvas_'+n).width(150).height(50);
 								c.width = 150;
 								c.height = 50;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,50);
-								$('#txtImgdata_'+n).val(c.toDataURL());
+								$('#txtImgdata_'+n).val(c.toDataURL());						
 							}
                     	}catch(e){
                     	}
@@ -367,10 +393,12 @@
                 
                 if(q_cur==1 || q_cur==2){
                 	$('#btnOrde').attr('disabled','disabled');
+                	$('#btnPrint_d').attr('disabled','disabled');
                 	$('#btnCont').removeAttr('disabled');
                 }else{
                 	$('#btnCont').attr('disabled','disabled');
                 	$('#btnOrde').removeAttr('disabled');
+                	$('#btnPrint_d').removeAttr('disabled');
                 }
             }
 
@@ -751,6 +779,32 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
+		<div id="divImport" style="position:absolute; top:100px; left:400px; display:none; width:400px; height:150px; background-color: pink; border: 5px solid gray;">
+			<table style="width:100%;">
+				<tr style="height:1px;">
+					<td style="width:80px;"></td>
+					<td style="width:80px;"></td>
+					<td style="width:80px;"></td>
+				</tr>
+				<tr style="height:35px;"></tr>
+				<tr style="height:35px;">
+					<td><span> </span><a id="lblPrint_d" style="float:right; color: blue; font-size: medium;"> </a></td>
+					<td colspan="4">
+						<select id="combPrint" style="font-size: medium;width:100%;"></select>
+					</td>
+					<td></td>
+					<td><input id="btnPrint_d" type="button" value="列印"/></td>
+				</tr>
+				<tr style="height:35px;">
+					<td><span> </span><a id="lblType_d" style="float:right; color: blue; font-size: medium;"> </a></td>
+					<td colspan="4">
+						<select id="combType" style="font-size: medium;width:100%;"></select>
+					</td>
+					<td></td>
+					<td><input id="btnCancel_d" type="button" value="關閉"/></td>
+				</tr>
+			</table>
+		</div>
 		<div id='dmain' style="overflow:visible;width: 1200px;">
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview" >
@@ -821,7 +875,7 @@
 					<tr>
 						<td></td>
 						<td></td>
-						<td></td>
+						<td><input type="button" id="btnBarcode" value="條碼列印" /></td>
 						<td><span> </span><a id="lblWeight" class="lbl"> </a></td>
 						<td><input id="txtWeight"  type="text"  class="num txt c1"/></td>
 					</tr>
@@ -881,6 +935,7 @@
 						<canvas id="canvas.*" width="150" height="50"> </canvas>
 						<img id="imgPic.*" src="" style="display:none;"/>
 						<input id="txtImgdata.*" type="text" style="display:none;"/>
+						<input id="txtImgbarcode.*" type="text" style="display:none;"/>
 					</td>
 					<td>
 						<input class="txt" id="txtPicno.*" type="text" style="width:95%;"/>
