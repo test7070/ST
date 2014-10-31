@@ -123,7 +123,7 @@
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
 
-                q_box('salyear_s.aspx', q_name + '_s', "500px", "310px", q_getMsg("popSeek"));
+                //q_box('salyear_s.aspx', q_name + '_s', "500px", "310px", q_getMsg("popSeek"));
             }
 
             function combPay_chg() {
@@ -160,7 +160,7 @@
             }
 
             function btnPrint() {
-                q_box("z_salyear.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + $('#txtNoa').val() + ";" + r_accy + "_" + r_cno, 'salvaca', "95%", "95%", q_getMsg("popSalvaca"));
+                //q_box("z_salyear.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + $('#txtNoa').val() + ";" + r_accy + "_" + r_cno, 'salvaca', "95%", "95%", q_getMsg("popSalvaca"));
             }
 
             function wrServer(key_value) {
