@@ -235,19 +235,20 @@
 								for(var i=0;i<t_para.length;i++){
 									value = q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n);
 									if(value!=0){
-										ctx.font = t_para[i].fontsize+"px times new roman";
+										//ctx.font = t_para[i].fontsize+"px times new roman";
+										ctx.font = t_para[i].fontsize+"px Arial";
 										ctx.fillStyle = 'black';
 										ctx.fillText(value+'',t_para[i].left,t_para[i].top);
 									}
 								}
 								$('#imgPic_'+n).attr('src',c.toDataURL());
 								//縮放為450*150  條碼列印用
-								/*暫由程式控制							
+								//暫由程式控制							
 								$('#canvas_'+n).width(450).height(150);
 								c.width = 450;
 								c.height = 150;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,450,150);
-								$('#txtImgbarcode_'+n).val(c.toDataURL());*/
+								$('#txtImgbarcode_'+n).val(c.toDataURL());
 								
 								//縮放為150*50
 								$('#canvas_'+n).width(150).height(50);
