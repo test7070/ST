@@ -297,9 +297,10 @@
 						if (as[0] != undefined) {
 							t_htype=t_htype+","+(q_sub(dec(as[0].personal),dec(as[0].personal_used))>0?'':'X')+"事假@事假(已用/可用時數："+as[0].personal_used+"/"+as[0].personal+")";
 							t_htype=t_htype+","+(q_sub(dec(as[0].sick),dec(as[0].sick_used))>0?'':'X')+"病假@病假(已用/可用時數："+as[0].sick_used+"/"+as[0].sick+")";
+							t_htype=t_htype+","+(q_sub(dec(as[0].sick),dec(as[0].sick_used))>0?'':'X')+"生理假@生理假(已用/可用時數："+as[0].menstruation_used+"/"+as[0].menstruation+")";
 							
 							t_htype=t_htype+","+(q_sub(dec(as[0].special),dec(as[0].special_used))>0?'':'X')+"特休假@特休假(已用/可用時數："+as[0].special_used+"/"+as[0].special+")";
-							t_htype=t_htype+","+(q_sub(dec(as[0].last_special),dec(as[0].last_special_used))>0?'':'X')+"補特休@補特休(已用/可用時數："+as[0].last_special_used+"/"+as[0].last_special+(as[0].last_special_memo!=''?"("+as[0].last_special_memo+")":'')+")";
+							t_htype=t_htype+","+(q_sub(dec(as[0].last_special),dec(as[0].last_special_used))>0 && as[0].last_special_memo=='' ?'':'X')+"補特休@補特休(已用/可用時數："+as[0].last_special_used+"/"+as[0].last_special+(as[0].last_special_memo!=''?"("+as[0].last_special_memo+")":'')+")";
 							t_htype=t_htype+","+(q_sub(dec(as[0].carry),dec(as[0].carry_used))>0?'':'X')+"抵工時@抵工時(已用/可用時數："+as[0].carry_used+"/"+as[0].carry+")";
 							
 							t_htype=t_htype+","+(q_sub(dec(as[0].maternity),dec(as[0].maternity_used))>0?'':'X')+"產假@產假(已用/可用時數："+as[0].maternity_used+"/"+as[0].maternity+")";
