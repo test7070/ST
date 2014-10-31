@@ -915,7 +915,7 @@
 					<td style="width:80px;"><a id='lbl_lengthb'>長度</a><br><a id='lbl_monnt'>數量</a><br><a id='lbl_weight'>重量</a></td>
 					<td style="width:150px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:100px;"><a id='lbl_place'>儲位</a></td>
-					<td style="width:180px;"><a id='lbl_timea'>入庫時間</a></td>
+					<td style="width:180px;"><a id='lbl_timea'>加工時間</a></td>
 					<td style="width:100px;"><a id='lbl_worker'>入庫人員</a></td>
 					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
