@@ -102,7 +102,7 @@
 				c.width = imgwidth;
 				c.height = imgheight;
 				ctx.drawImage($('#imgPic')[0],0,0,imgwidth,imgheight);
-				if(!isOrg){
+				if(!isOrg && $('#textPara').val().length>0){
 					t_para = JSON.parse($('#txtPara').val());
 					$('#textPara').val('');
 					for(var i=0;i<t_para.length;i++){

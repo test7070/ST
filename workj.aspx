@@ -235,19 +235,20 @@
 								for(var i=0;i<t_para.length;i++){
 									value = q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n);
 									if(value!=0){
-										ctx.font = t_para[i].fontsize+"px times new roman";
+										//ctx.font = t_para[i].fontsize+"px times new roman";
+										ctx.font = t_para[i].fontsize+"px Arial";
 										ctx.fillStyle = 'black';
 										ctx.fillText(value+'',t_para[i].left,t_para[i].top);
 									}
 								}
 								$('#imgPic_'+n).attr('src',c.toDataURL());
-								//縮放為450*150  條碼列印用
-								/*暫由程式控制							
-								$('#canvas_'+n).width(450).height(150);
-								c.width = 450;
-								c.height = 150;
-								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,450,150);
-								$('#txtImgbarcode_'+n).val(c.toDataURL());*/
+								//縮放為300*100  條碼列印用
+								//暫由程式控制							
+								$('#canvas_'+n).width(300).height(100);
+								c.width = 300;
+								c.height = 100;
+								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,300,100);
+								$('#txtImgbarcode_'+n).val(c.toDataURL());
 								
 								//縮放為150*50
 								$('#canvas_'+n).width(150).height(50);
@@ -915,7 +916,7 @@
 					<td style="width:80px;"><a id='lbl_lengthb'>長度</a><br><a id='lbl_monnt'>數量</a><br><a id='lbl_weight'>重量</a></td>
 					<td style="width:150px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:100px;"><a id='lbl_place'>儲位</a></td>
-					<td style="width:180px;"><a id='lbl_timea'>入庫時間</a></td>
+					<td style="width:180px;"><a id='lbl_timea'>加工時間</a></td>
 					<td style="width:100px;"><a id='lbl_worker'>入庫人員</a></td>
 					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
