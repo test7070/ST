@@ -248,14 +248,15 @@
 								c.width = 300;
 								c.height = 100;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,300,100);
-								$('#txtImgbarcode_'+n).val(c.toDataURL());
+								//$('#txtImgbarcode_'+n).val(c.toDataURL());
 								
 								//縮放為150*50
 								$('#canvas_'+n).width(150).height(50);
 								c.width = 150;
 								c.height = 50;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,50);
-								$('#txtImgdata_'+n).val(c.toDataURL());						
+								$('#txtImgdata_'+n).val(c.toDataURL());	
+								$('#txtImgbarcode_'+n).val(c.toDataURL());					
 							}
                     	}catch(e){
                     	}
