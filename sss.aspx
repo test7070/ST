@@ -161,6 +161,13 @@
 					}
 					q_box("salAdjust.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'saladjust', "95%", "95%", q_getMsg("popSaladjust"));
 				});
+				
+				$('#btnSssr').click(function(e) {
+					if (q_cur == 1) {
+						return;
+					}
+					q_box("sssr.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'sssr', "500px", "600px", $('#btnSssr').val());
+				});
 
 				$('#txtIndate').change(function(e) {
 					if (!emp($('#txtIndate').val())) {
@@ -545,7 +552,7 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
-				var WantDisabledArray = ['btnSsspart', 'btnSaladjust', 'btnLabases','btnTax'];
+				var WantDisabledArray = ['btnSsspart', 'btnSaladjust', 'btnLabases','btnTax','btnSssr'];
 				for (var k = 0; k < WantDisabledArray.length; k++) {
 					if (q_cur == 1 || q_cur == 2) {
 						$("#" + WantDisabledArray[k]).attr('disabled', 'disabled');
@@ -911,6 +918,8 @@
 							<input id='btnSaladjust' type="button"/>
 							<span> </span>
 							<input id='btnLabases' type="button" />
+							<span> </span>
+							<input id='btnSssr' type="button" />
 							<!--<span> </span>
 							<input id='btnTax' type="button" />-->
 						</td>

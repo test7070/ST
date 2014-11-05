@@ -13,7 +13,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-			var q_name = "cub_xy_s";
+			var q_name = "flor_s";
 			var q_readonly = ['txtNoa', 'txtComp', 'txtTgg', 'txtMech'];
 			aPop = new Array(
 				['txtOrdeno', '', 'view_ordes', 'noa,no2,productno,product,custno,comp', 'txtOrdeno,txtNo2', ''],
@@ -33,7 +33,7 @@
 				q_langShow();
 				bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
                 q_mask(bbmMask);
-				$('#txtNoa').focus();
+				$('#txtBdate').focus();
 				$('.readonly').attr('readonly',true);
 			}
 
@@ -45,16 +45,13 @@
 			function q_seekStr() {
 				var t_bdate = $.trim($('#txtBdate').val());
                 var t_edate = $.trim($('#txtEdate').val());
-				var t_noa = $.trim($('#txtNoa').val());
-				var t_custno = $.trim($('#txtCustno').val());
-				var t_pno = $.trim($('#txtProductno').val());
-				var t_ordeno = $.trim($('#txtOrdeno').val());
-				var t_no2 = $.trim($('#txtNo2').val());
 				
-				var t_where = " 1=1 " + q_sqlPara2("datea", t_bdate,t_edate) + q_sqlPara2("noa", t_noa)+
-										q_sqlPara2("custno", t_custno) +
-										q_sqlPara2("productno", t_pno) +
-										q_sqlPara2("ordeno", t_ordeno)+q_sqlPara2("no2", t_no2) ;
+				var t_where = " 1=1 ";
+				if(t_bdate.length>0 || t_edate.length>0)
+					t_where=t_where+" and ((bdate between '"+t_bdate+"' and '"+t_edate+"') or (edate between '"+t_bdate+"' and '"+t_edate+"') "
+					+" or ('"+t_bdate+"' between bdate and edate)  or ('"+t_edate+"' between bdate and edate))";
+					+")";
+				
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
 			}
@@ -87,34 +84,6 @@
 					<input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
 					<span style="display:inline-block; vertical-align:middle">&sim;</span>
 					<input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
-					</td>
-				</tr>
-				<tr class='seek_tr'>
-					<td class='seek' style="width:90px;"><a id='lblNoa'> </a></td>
-					<td><input class="txt" id="txtNoa" type="text" style="width:220px;" /></td>
-				</tr>
-				<tr class='seek_tr'>
-					<td class='seek' style="width:90px;"><a id='lblCust'> </a></td>
-					<td style="width:215px;">
-						<input class="txt" id="txtCustno" type="text" style="width:90px;" />
-						&nbsp;
-						<input class="txt readonly" id="txtComp" type="text" style="width:120px;" />
-					</td>
-				</tr>
-				<tr class='seek_tr'>
-					<td class='seek' style="width:90px;"><a id='lblProduct'> </a></td>
-					<td style="width:215px;">
-						<input class="txt" id="txtProductno" type="text" style="width:90px;" />
-						&nbsp;
-						<input class="txt readonly" id="txtProduct" type="text" style="width:120px;" />
-					</td>
-				</tr>
-				<tr class='seek_tr'>
-					<td class='seek' style="width:90px;"><a id='lblOrdeno'> </a></td>
-					<td style="width:215px;">
-						<input class="txt" id="txtOrdeno" type="text" style="width:150px;" />
-						&nbsp;
-						<input class="txt" id="txtNo2" type="text" style="width:60px;" />
 					</td>
 				</tr>
 			</table>

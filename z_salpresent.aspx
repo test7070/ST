@@ -134,7 +134,7 @@
 								
 				$('#txtXresthours1').val('12:00');
 				$('#txtXresthours2').val('13:00');
-				q_gt('holiday', '', 0, 0, 0);
+				q_gt('holiday', "where=^^ isnull(iswork,0)=0 ^^", 0, 0, 0);
             }
             
 			function workhours() {
