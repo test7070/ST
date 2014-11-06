@@ -67,6 +67,8 @@
                 // q_sqlCount=最前面 top=筆數， q_init 為載入 q_sys.xml 與 q_LIST
                 $('#txtOdate').focus();
                 OrdenoAndNo2On_Change();
+                
+                q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
             });
 
             function main() {
@@ -221,7 +223,7 @@
                 q_cmbParse("cmbKind", q_getPara('sys.stktype'));
                 q_cmbParse("cmbStype", q_getPara('orde.stype'));
                 // 需在 main_form() 後執行，才會載入 系統參數
-                q_cmbParse("cmbCoin", q_getPara('sys.coin'));
+                //q_cmbParse("cmbCoin", q_getPara('sys.coin'));
                 /// q_cmbParse 會加入 fbbm
                 q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
                 // comb 未連結資料庫
@@ -405,6 +407,26 @@
             var t_uccArray = new Array;
             function q_gtPost(t_name) {/// 資料下載後 ...
                 switch (t_name) {
+                	case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						var z_coin='';
+						for ( i = 0; i < as.length; i++) {
+							z_coin+=','+as[i].coin;
+						}
+						if(z_coin.length==0) z_coin=' ';
+						
+						q_cmbParse("cmbCoin", z_coin);
+						if(abbm[q_recno])
+							$('#cmbCoin').val(abbm[q_recno].coin);
+						
+						break;
+					case 'flors':
+						var as = _q_appendData("flors", "", true);
+						if (as[0] != undefined) {
+							q_tr('txtFloata',as[0].floata);
+							sum();
+						}
+						break;
                     case 'refreshEnd2':
                         var as = _q_appendData("orde", "", true);
                         var obj = $('.control_noa');
@@ -537,6 +559,11 @@
                 t_where += " and kind='" +$('#cmbKind').val()+ "' and (((enda='0') and (notv > 0))"+(trim(inStr).length>0?" or noa+no3 in("+inStr+") ":'')+")";
                 q_box("quatst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'quats', "95%", "95%", q_getMsg('popQuats'));
             }
+            
+            function coin_chg() {
+				var t_where = "where=^^ ('" + $('#txtDatea').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
+				q_gt('flors', t_where, 0, 0, 0, "");
+			}
 
             function btnOk() {
                 OrdenoAndNo2On_Change();
@@ -1767,7 +1794,7 @@
                         <td>
                         <input id="txtFloata" type="text" class="txt num c1" />
                         </td>
-                        <td><span style="float:left;display:block;width:10px;"></span><select id="cmbCoin" style="float:left;width:80px;" > </select></td>
+                        <td><span style="float:left;display:block;width:10px;"></span><select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'> </select></td>
                         <td><span> </span><a id='lblWeight' class="lbl"> </a></td>
                         <td><input id="txtWeight"  type="text" class="txt num c1"/></td>
                         <td align="center" ><input id="btnBBTShow" type="button" /></td>

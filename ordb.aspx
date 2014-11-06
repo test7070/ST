@@ -52,6 +52,7 @@
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
+				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 			});
 			function main() {
 				if (dataErr) {
@@ -144,7 +145,7 @@
 				bbsMask = [['txtLdate', r_picd]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbKind", q_getPara('ordb.kind'));
-				q_cmbParse("cmbCoin", q_getPara('sys.coin'));
+				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
@@ -333,6 +334,26 @@
 							z_cno = as[0].noa;
 							z_acomp = as[0].acomp;
 							z_nick = as[0].nick;
+						}
+						break;
+					case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						var z_coin='';
+						for ( i = 0; i < as.length; i++) {
+							z_coin+=','+as[i].coin;
+						}
+						if(z_coin.length==0) z_coin=' ';
+						
+						q_cmbParse("cmbCoin", z_coin);
+						if(abbm[q_recno])
+							$('#cmbCoin').val(abbm[q_recno].coin);
+						
+						break;
+					case 'flors':
+						var as = _q_appendData("flors", "", true);
+						if (as[0] != undefined) {
+							q_tr('txtFloata',as[0].floata);
+							sum();
 						}
 						break;
 					case 'combAddr':
@@ -536,6 +557,11 @@
 					$('#txtAddr').val($('#combAddr').find("option:selected").text());
 					$('#txtPost').val($('#combAddr').find("option:selected").val());
 				}
+			}
+			
+			function coin_chg() {
+				var t_where = "where=^^ ('" + $('#txtOdate').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
+				q_gt('flors', t_where, 0, 0, 0, "");
 			}
 
 			function bbsSave(as) {
@@ -1101,7 +1127,7 @@
 						<td class="td1"><span> </span><a id="lblOrde" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtOrdeno" type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
-						<td><select id="cmbCoin" class="txt c1" > </select></td>
+						<td><select id="cmbCoin" class="txt c1" onchange='coin_chg()'> </select></td>
 						<td><input id="txtFloata" type="text" class="txt c1 num" /></td>
 						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtTotalus" type="text" class="txt num c1" /></td>
