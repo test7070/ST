@@ -44,6 +44,7 @@
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
 				q_gt('rc2a', 'stop=1 ', 0, 0, 0, "isinvosystem");
+				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 				//判斷是否有買發票系統
 			});
 
@@ -187,7 +188,7 @@
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('rc2.typea'));
-				q_cmbParse("cmbCoin", q_getPara('sys.coin'));
+				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
@@ -382,6 +383,26 @@
 						$('#txtDatea').focus();
 						size_change();
 						break;
+					case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						var z_coin='';
+						for ( i = 0; i < as.length; i++) {
+							z_coin+=','+as[i].coin;
+						}
+						if(z_coin.length==0) z_coin=' ';
+						
+						q_cmbParse("cmbCoin", z_coin);
+						if(abbm[q_recno])
+							$('#cmbCoin').val(abbm[q_recno].coin);
+						
+						break;
+					case 'flors':
+						var as = _q_appendData("flors", "", true);
+						if (as[0] != undefined) {
+							q_tr('txtFloata',as[0].floata);
+							sum();
+						}
+						break;
 					case 'rc2s':
 						var as = _q_appendData("rc2s", "", true);
 						for (var i = 0; i < ordcsArray.length; i++) {
@@ -531,6 +552,11 @@
 				t_where = " view_ordcs.enda='0' and kind='" + $('#cmbKind').val() + "' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
 				t_where += " and b.enda='0'";
 				q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
+			}
+			
+			function coin_chg() {
+				var t_where = "where=^^ ('" + $('#txtDatea').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
+				q_gt('flors', t_where, 0, 0, 0, "");
 			}
 
 			function q_stPost() {
@@ -1323,7 +1349,7 @@
 						<td>
 						<input id="txtFloata" type="text" class="txt num c1" />
 						</td>
-						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbCoin" style="float:left;width:80px;" ></select></td>
+						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'></select></td>
 						<td><span> </span><a id='lblLcno' class="lbl"> </a></td>
 						<td colspan="2">
 						<input id="txtLcno"  type="text" class="txt num c1"/>

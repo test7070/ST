@@ -14,7 +14,7 @@
             function onPageError(error) {
                 alert("An error occurred:\r\n" + error.Message);
             }
-
+			q_tables = 's';
             var q_name = "flor";
             var q_readonly = ['txtNoa', 'txtDatea','txtWorker','txtWorker2'];
             var q_readonlys = [];
@@ -88,7 +88,7 @@
                     dataErr = false;
                     return;
                 }
-                mainForm(0);
+                mainForm(1);
                 // 1=Last  0=Top
             }///  end Main()
 

@@ -51,6 +51,7 @@
                 q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
                 q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
                 q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
+                q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
                 //判斷是否有買發票系統
             });
 
@@ -101,7 +102,7 @@
                 bbsNum = [['txtLengthb', 15, 2, 1],['txtMount', 15, q_getPara('rc2.mountPrecision'), 1],['txtWeight', 15, q_getPara('rc2.weightPrecision'), 1], ['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1], ['txtTotal', 15, 0, 1], ['txtDiscount', 5, 2, 1], ['txtCounta', 5, 0, 1]];
                 
                 q_cmbParse("cmbTypea", q_getPara('rc2.typea'));
-                q_cmbParse("cmbCoin", q_getPara('sys.coin'));
+                //q_cmbParse("cmbCoin", q_getPara('sys.coin'));
                 q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
                 
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
@@ -241,6 +242,26 @@
                             z_nick = as[0].nick;
                         }
                         break;
+					case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						var z_coin='';
+						for ( i = 0; i < as.length; i++) {
+							z_coin+=','+as[i].coin;
+						}
+						if(z_coin.length==0) z_coin=' ';
+						
+						q_cmbParse("cmbCoin", z_coin);
+						if(abbm[q_recno])
+							$('#cmbCoin').val(abbm[q_recno].coin);
+						
+						break;
+					case 'flors':
+						var as = _q_appendData("flors", "", true);
+						if (as[0] != undefined) {
+							q_tr('txtFloata',as[0].floata);
+							sum();
+						}
+						break;
                     case 'tgg':
                         var as = _q_appendData("tgg", "", true);
                         if (as[0] != undefined && focus_addr != '') {
@@ -411,6 +432,11 @@
                     $('#txtPaytype').val(cmb.value);
                 cmb.value = '';
             }
+            
+            function coin_chg() {
+				var t_where = "where=^^ ('" + $('#txtDatea').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
+				q_gt('flors', t_where, 0, 0, 0, "");
+			}
 
             function combAddr_chg() {
                 if (q_cur == 1 || q_cur == 2) {
@@ -948,7 +974,7 @@
                     </tr>
                     <tr style="display:none;">
                     	<td class="td1"><span> </span><a id='lblCoin' class="lbl"> </a></td>
-                        <td class="td2" ><select id="cmbCoin" class="txt c1" > </select></td>
+                        <td class="td2" ><select id="cmbCoin" class="txt c1" onchange='coin_chg()'> </select></td>
                         <td class="td1"><span> </span><a id='lblFloata' class="lbl"> </a></td>
                         <td class="td3" ><input id="txtFloata" type="text" class="txt num c1" /></td>
                         <td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>

@@ -60,8 +60,9 @@
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
-				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
 				//判斷是否有買發票系統
+				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
+				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 			});
 			function main() {
 				if (dataErr) {
@@ -155,7 +156,7 @@
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vccst.stype'));
-				q_cmbParse("cmbCoin", q_getPara('sys.coin'));
+				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
@@ -419,6 +420,26 @@
 						//$('#txtMon').val(q_date().substring(0, 6));
 						$('#cmbTypea').focus();
 						break;
+					case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						var z_coin='';
+						for ( i = 0; i < as.length; i++) {
+							z_coin+=','+as[i].coin;
+						}
+						if(z_coin.length==0) z_coin=' ';
+						
+						q_cmbParse("cmbCoin", z_coin);
+						if(abbm[q_recno])
+							$('#cmbCoin').val(abbm[q_recno].coin);
+						
+						break;
+					case 'flors':
+						var as = _q_appendData("flors", "", true);
+						if (as[0] != undefined) {
+							q_tr('txtFloata',as[0].floata);
+							sum();
+						}
+						break;
 					case 'cust':
 						var as = _q_appendData("cust", "", true);
 						if (as[0] != undefined && focus_addr != '') {
@@ -461,6 +482,11 @@
 							q_Seek_gtPost();
 						break;
 				} /// end switch
+			}
+			
+			function coin_chg() {
+				var t_where = "where=^^ ('" + $('#txtDatea').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
+				q_gt('flors', t_where, 0, 0, 0, "");
 			}
 
 			function btnOrdes() {
@@ -1286,7 +1312,7 @@
 						<td><input id="txtFloata" type="text" class="txt num c1" /></td>
 						<td>
 							<span style="float:left;display:block;width:10px;"> </span>
-							<select id="cmbCoin" style="float:left;width:80px;" > </select>
+							<select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'> </select>
 						</td>
 						<td> </td>
 						<td> </td>
