@@ -98,6 +98,11 @@
 					q_box("uploadimg.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'uploadimg', "680px", "650px", q_getMsg('btnUploadimg'));
 				});
 				
+				$('#btnUcc_fast').click(function() {
+					t_where = "";
+					q_box("ucc_fast.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ucc_fast', "1200px", "880px", q_getMsg('btnUcc_fast'));
+				});
+				
 				$('#btnUcctd').click(function() {
 					t_where = "noa='" + $('#txtNoa').val() + "'";
 					q_box("ucctd_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ucctd', "680px", "650px", q_getMsg('btnUcctd'));
@@ -630,6 +635,7 @@
 							<input id="Copy" type="checkbox" />
 							<span> </span><a id="lblCopy"> </a>
 						</div>
+						<td><input id="btnUcc_fast" type="button"  /></td>
 					</td>
 				</tr>
 				<tr> 
