@@ -39,6 +39,9 @@
 						if($('#q_report div div').text().indexOf('業務應收帳款總表')>-1)
 							$('#q_report div div')[delete_report].remove()
 					}
+					
+					if(q_getPara('sys.isAcccUs')!='1')
+						$('#Xcoin').hide();
 				});
 			});
 			
