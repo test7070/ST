@@ -76,7 +76,6 @@
                 $('#btnPrint_d').click(function(e){
                 	Lock(1,{opacity:0});
                 	var t_para = $('#txtNoa').val()+($('#combType').val()=='2'?',workjt':'');
-                	alert(t_para);
                 	q_func( $('#combPrint').val(), t_para); 
                 });
                 $('#btnBarcode').click(function() {
@@ -248,7 +247,7 @@
 								c.width = 300;
 								c.height = 100;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,300,100);
-								//$('#txtImgbarcode_'+n).val(c.toDataURL());
+								$('#txtImgbarcode_'+n).val(c.toDataURL());
 								
 								//縮放為150*50
 								$('#canvas_'+n).width(150).height(50);
@@ -256,7 +255,7 @@
 								c.height = 50;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,50);
 								$('#txtImgdata_'+n).val(c.toDataURL());	
-								$('#txtImgbarcode_'+n).val(c.toDataURL());					
+								//$('#txtImgbarcode_'+n).val(c.toDataURL());					
 							}
                     	}catch(e){
                     	}
