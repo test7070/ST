@@ -461,7 +461,7 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="5"><textarea id="txtMemo" rows="3" style="width: 99%;"> </textarea></td>
+						<td colspan="5"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
