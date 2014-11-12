@@ -302,12 +302,13 @@
                 		var as = _q_appendData("tmp0", "", true);
                         if (as[0] != undefined) {
                         	if(as[0].msg.length>0){
-                        		q_func('sign.q_signForm', 'adpro,,' + $('#txtNoa').val());
                         		alert(as[0].msg);
+                        		$('#txtApvname').val(as[0].memo);
+                        		$('#txtApv').val('');
                         		return;
                         	}else{
+                        		$('#txtApvname').val(as[0].memo);
                         		$('#txtApv').val(as[0].checker);
-                        		$('#txtApvmemo').val(as[0].memo);
                         		q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));	
                         	}
                         }
@@ -775,6 +776,7 @@
 		                	+ ';' + encodeURI(t_custno)
 		                	+ ';' + encodeURI(t_datea)
 		                	+ ';' + encodeURI(t_mon)
+		                	+ ';' + encodeURI(r_name)
 		                	+ ';' + t_total);
 					}else{
 						var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
@@ -1548,8 +1550,8 @@
 					<tr>
 						<td class="td1"><span> </span><a id='lblApv' class="lbl"> </a></td>
 						<td class="td2" colspan='2'>
-						<input id="txtApv" type="text" class="txt c4"/>
-						<input id="txtApvname" type="text" class="txt c4"/>
+							<input id="txtApvname" type="text" class="txt c4"/>
+							<input id="txtApv" type="text" class="txt c4"/>
 						</td>
 						<td class="td3"><span> </span><a id='lblApvmemo' class="lbl"> </a></td>
 						<td class="td4" colspan='4'>

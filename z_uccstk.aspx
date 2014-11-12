@@ -109,7 +109,7 @@
                 $('#txtWidth1').css('text-align','right');
                 $('#txtWidth2').css('text-align','right').val(9999.99);
                 $('#txtLength1').css('text-align','right');
-                $('#txtLength2').css('text-align','right').val(9999);
+                $('#txtLength2').css('text-align','right').val(99999);
                 $('#txtRadius1').css('text-align','right');
                 $('#txtRadius2').css('text-align','right').val(9999.99);
                 

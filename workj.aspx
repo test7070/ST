@@ -76,7 +76,6 @@
                 $('#btnPrint_d').click(function(e){
                 	Lock(1,{opacity:0});
                 	var t_para = $('#txtNoa').val()+($('#combType').val()=='2'?',workjt':'');
-                	alert(t_para);
                 	q_func( $('#combPrint').val(), t_para); 
                 });
                 $('#btnBarcode').click(function() {
@@ -243,12 +242,14 @@
 								}
 								$('#imgPic_'+n).attr('src',c.toDataURL());
 								//縮放為300*100  條碼列印用
+								xx_width = 355;
+								xx_height = 119;
 								//暫由程式控制							
-								$('#canvas_'+n).width(300).height(100);
-								c.width = 300;
-								c.height = 100;
-								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,300,100);
-								//$('#txtImgbarcode_'+n).val(c.toDataURL());
+								$('#canvas_'+n).width(xx_width).height(xx_height);
+								c.width = xx_width;
+								c.height = xx_height;
+								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,xx_width,xx_height);
+								$('#txtImgbarcode_'+n).val(c.toDataURL());
 								
 								//縮放為150*50
 								$('#canvas_'+n).width(150).height(50);
@@ -256,7 +257,7 @@
 								c.height = 50;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,50);
 								$('#txtImgdata_'+n).val(c.toDataURL());	
-								$('#txtImgbarcode_'+n).val(c.toDataURL());					
+								//$('#txtImgbarcode_'+n).val(c.toDataURL());					
 							}
                     	}catch(e){
                     	}
