@@ -19,6 +19,7 @@
 				_q_boxClose();
 				q_getId();
 				q_gf('', 'z_uccefep');
+				
 			});
 			function q_gfPost() {
 				$('#q_report').q_report({
@@ -42,6 +43,16 @@
 	                    },{
 							type : '1',//[5][6]
 							name : 'xnoa'
+						},{
+							type : '6',//[7]
+							name : 'stkdate'
+						},{
+							type : '6',//[8]
+							name : 'uccedate'
+						},{
+							type : '8',//[8]
+							name : 'xshow',
+							value:"1@顯示庫存差異大於0,2@顯示庫存差異小於0".split(',')
 						}]
 				});
 				q_popAssign();
@@ -53,12 +64,30 @@
                 $('#txtXnoa1').val(t_noa);
                 $('#txtXnoa2').val(t_noa);
 				
+				$('#txtStkdate').mask('999/99/99');
+				$('#txtStkdate').datepicker();
+				$('#txtUccedate').mask('999/99/99');
+				$('#txtUccedate').datepicker();
+				
+				q_gt('ucce', "where=^^1=1^^ stop=1", 0, 0, 0, "ucce", r_accy);
+				$('#chkXshow input').prop('checked',true);
 			}
 
 			function q_boxClose(s2) {
 			}
 
-			function q_gtPost(s2) {
+			function q_gtPost(t_name) {
+                switch (t_name) {
+                	case 'ucce':
+                		var as = _q_appendData("ucce", "", true);                		
+						if(as[0]!=undefined){
+							if(as[0].datea!=''){
+								$('#txtUccedate').val(as[0].datea);
+								$('#txtStkdate').val(q_cdn(as[0].datea,-1));
+							}
+						}
+                		break;
+                }
 			}
 		</script>
 	</head>
