@@ -667,11 +667,11 @@
 								t_IdSeq = -1;
 								q_bodyId($(this).attr('id'));
 								b_seq = t_IdSeq;
-								if (!emp($('#txtProductno_' + b_seq).val())) {
+								/*if (!emp($('#txtProductno_' + b_seq).val())) {
 									//庫存
 									var t_where = "where=^^ ['" + q_date() + "','','"+$('#txtProductno_' + b_seq).val()+"')  ^^";
 									q_gt('calstk', t_where, 0, 0, 0, "msg_stk", r_accy);
-								}
+								}*/
 							}
 						});
 						$('#txtPrice_' + j).focusin(function() {
@@ -679,11 +679,11 @@
 								t_IdSeq = -1;
 								q_bodyId($(this).attr('id'));
 								b_seq = t_IdSeq;
-								if (!emp($('#txtProductno_' + b_seq).val())) {
+								/*if (!emp($('#txtProductno_' + b_seq).val())) {
 									//金額
 									var t_where = "where=^^ noa='" + $('#txtProductno_' + b_seq).val() + "' ^^ stop=1";
 									q_gt('ucc', t_where, 0, 0, 0, "msg_ucc", r_accy);
-								}
+								}*/
 							}
 						});
 
