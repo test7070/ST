@@ -74,6 +74,8 @@
                 q_cmbParse("combPrint", 'barfe.gen1@條碼機1,barfe.gen2@條碼機2,barfe.gen3@條碼機3,barfe.gen4@條碼機4');
                 q_cmbParse("combType", '1@成品,2@餘料');
                 $('#btnPrint_d').click(function(e){
+                	$('#btnPrint_d').attr('disabled','disabled');
+                	setTimeout(function(){$('#btnPrint_d').removeAttr('disabled')}, 3000);
                 	Lock(1,{opacity:0});
                 	var t_para = $('#txtNoa').val()+($('#combType').val()=='2'?',workjt':'');
                 	q_func( $('#combPrint').val(), t_para); 
