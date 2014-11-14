@@ -38,7 +38,7 @@
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtPicno_', 'btnPicno_', 'img', 'noa', 'txtPicno_', 'img_b.aspx']
             	,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
-            	,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,product,spec,emount,eweight', 'txtUno__,txtProductno__,txtProduct__,,txtGmount__,txtGweight__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
+            	,['txtUno__', 'btnUno__', 'view_uccc', 'uno,productno,product,spec,emount,eweight', 'txtUno__,txtProductno__,txtProduct__,,txtGmount__,txtGweight__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
             	,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtNick', 'cust_b.aspx']
             	,['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__,txtStore__', 'store_b.aspx']);
 			
@@ -63,7 +63,7 @@
                 q_mask(bbmMask);
                 q_cmbParse("cmbTagcolor", '桃紅色,紫色,天空藍,草綠色,黃色,膚色,白色');
                 q_cmbParse("cmbTrantype", q_getPara('fe.trantype'));
-                q_cmbParse("cmbTrantype1", '板車-用倒的,板車-買方卸貨,板車+吊車,短板板車,板吊車,10.4噸吊車,15噸吊車,15噸貨車,3.5噸貨車');
+                q_cmbParse("cmbTrantype1", ' ,板車-用倒的,板車-買方卸貨,板車+吊車,短板板車,板吊車,10.4噸吊車,15噸吊車,15噸貨車,3.5噸貨車');
                 q_cmbParse("cmbTrantype2",q_getPara('fe.trantype2'));
                 q_cmbParse("cmbMech1", z_mech,'s');
                 q_cmbParse("cmbMech2", z_mech,'s');
@@ -74,6 +74,8 @@
                 q_cmbParse("combPrint", 'barfe.gen1@條碼機1,barfe.gen2@條碼機2,barfe.gen3@條碼機3,barfe.gen4@條碼機4');
                 q_cmbParse("combType", '1@成品,2@餘料');
                 $('#btnPrint_d').click(function(e){
+                	$('#btnPrint_d').attr('disabled','disabled');
+                	setTimeout(function(){$('#btnPrint_d').removeAttr('disabled')}, 3000);
                 	Lock(1,{opacity:0});
                 	var t_para = $('#txtNoa').val()+($('#combType').val()=='2'?',workjt':'');
                 	q_func( $('#combPrint').val(), t_para); 
