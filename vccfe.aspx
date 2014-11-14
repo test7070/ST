@@ -305,6 +305,7 @@
                         		alert(as[0].msg);
                         		$('#txtApvname').val(as[0].memo);
                         		$('#txtApv').val('');
+                        		$('#txtNoa').val(as[0].noa);
                         		return;
                         	}else{
                         		$('#txtApvname').val(as[0].memo);
@@ -716,11 +717,6 @@
 
             var check_startdate = false;
             function btnOk() {
-                var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')]]);
-                if (t_err.length > 0) {
-                    alert(t_err);
-                    return;
-                }
                 //判斷起算日,寫入帳款月份
                 if (!check_startdate && emp($('#txtMon').val())) {
                     var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
@@ -906,7 +902,7 @@
 
             function btnIns() {
                 _btnIns();
-                $('#txtNoa').val(r_userno+(new Date()).getTime());
+                $('#txtNoa').val('');//一定要空白  //r_userno+(new Date()).getTime()
                 $('#txtCno').val(z_cno);
                 $('#txtAcomp').val(z_acomp);
                 $('#txtDatea').val(q_date());
