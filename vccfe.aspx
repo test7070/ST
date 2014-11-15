@@ -75,10 +75,16 @@
             function sum() {
                 var t_unit, t_price, t_mount, t_weight, t_weights = 0, t_total, t_totals = 0;
                 for (var j = 0; j < q_bbsCount; j++) {
+                	t_productno = $.trim($('#txtProductno_'+j).val());
                     t_unit = $('#txtUnit_' + j).val();
                     t_price = q_float('txtPrice_' + j);
                     t_mount = q_float('txtMount_' + j);
                     t_weight = q_float('txtWeight_' + j);
+                    //----------------------------------------------------------------
+                    if(t_productno.length>0 && t_mount!=0){
+                    	q_gt('ucc', "where=^^noa='"+t_productno+"'^^", 0, 0, 0,JSON.stringify({action:"getWeight",n:j,mount:t_mount}));	
+                    }
+                    //----------------------------------------------------------------
                     t_weights = q_add(t_weights, t_weight);
 
                     if (t_unit == '公斤' || t_unit.toUpperCase() == 'KG' || t_unit.length == 0) {
@@ -707,6 +713,11 @@
                      				else
                      					alert((t_para.n+1)+'：查無訂單【'+t_para.ordeno+'-'+t_para.no2+'】。')
                      				return;
+                     			}
+                     		}else{t_para.action == 'getWeight'
+                     			var as = _q_appendData('ucc', '', true);
+                     			if (as[0] != undefined && parseFloat(as[0].uweight)!=0) {
+                     				$('#txtWeight_'+t_para.n).val(round(parseFloat(as[0].uweight)*t_para.mount,3));
                      			}
                      		}
                      	}catch(e){
