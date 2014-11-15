@@ -44,6 +44,22 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
+                
+                $('#btnFile').change(function(e){
+					event.stopPropagation(); 
+				    event.preventDefault();
+					file = $('#btnFile')[0].files[0];
+					if(file){
+						fr = new FileReader();
+					    fr.readAsDataURL(file);
+					    fr.onloadend = function(e){
+					    	if(fr.result.indexOf(',')>0){
+					    		$('#txtMemo').val(window.atob(fr.result.substring(fr.result.indexOf(',')+1,fr.result.length)));
+					    		$('#btnFile').val('');
+					    	}
+					    };
+					}
+				});
             }
 
             function q_funcPost(t_func, result) {
@@ -130,7 +146,7 @@
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
                 _btnOk(key_value, bbmKey[0], '', '', 2);
                 
-                if (q_cur == 1 || q_cur == 2)
+                if ((q_cur == 1 || q_cur == 2 ) && $.trim($('#txtMemo').val()).length!=0)
 					q_func('qtxt.query.c0', 'cuwfe.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val())+ ';' + encodeURI(q_getPara('sys.key_cub'))+ ';' + encodeURI(r_userno)+ ';0');
             }
 
@@ -140,6 +156,11 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                if (t_para) {
+                    $('#btnFile').attr('disabled','disabled');
+                } else {
+                    $('#btnFile').removeAttr('disabled');
+                }
             }
 
             function btnMinus(id) {
@@ -337,21 +358,24 @@
 						<td> </td>
 						<td> </td>
 						<td> </td>
+						<td> </td>
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
-						<td><input id="txtNoa" type="text" class="txt c1"/></td>
+						<td colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td style="vertical-align: top;"><span> </span><a class="lbl">資料內容</a></td>
-						<td colspan='4'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 290px;"> </textarea></td>
+						<td colspan='5'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 290px;"> </textarea></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
+						<td> </td>
+						<td><input type="file" id="btnFile" value="上傳"/></td>
 					</tr>
 				</table>
 			</div>
