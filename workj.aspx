@@ -71,14 +71,35 @@
                 q_cmbParse("cmbMech4", z_mech,'s');
                 q_cmbParse("cmbMech5", z_mech,'s');
                 
-                q_cmbParse("combPrint", 'barfe.gen1@條碼機1,barfe.gen2@條碼機2,barfe.gen3@條碼機3,barfe.gen4@條碼機4');
-                q_cmbParse("combType", '1@成品,2@餘料');
+                q_cmbParse("combPrint", 'barfe.gen1@條碼機1(成品),barfe.gen2@條碼機2(餘料)');
                 $('#btnPrint_d').click(function(e){
                 	$('#btnPrint_d').attr('disabled','disabled');
                 	setTimeout(function(){$('#btnPrint_d').removeAttr('disabled')}, 3000);
                 	Lock(1,{opacity:0});
-                	var t_para = $('#txtNoa').val()+($('#combType').val()=='2'?',workjt':'');
-                	q_func( $('#combPrint').val(), t_para); 
+                	var t_noq = '';
+                	if($('#combPrint').val()=='barfe.gen2'){
+                		for(var i=0;i<q_bbtCount;i++){
+	                		if($('#checkIsprint__'+i).prop('checked') && $.trim($('#txtBno__'+i).val()).length>0){
+	                			t_noq = t_noq + (t_noq.length>0?'^'.val():'')+$('#txtNoq__'+i);	
+	                		}            
+	                	}        
+	                	if(t_noq.length==0){
+	                		alert('未選擇要列印的資料(餘料)。');
+	                	}else{
+	                		q_func( $('#combPrint').val(), $('#txtNoa').val()+',workjt,'+t_noq); 
+	                	}	
+                	}else{
+                		for(var i=0;i<q_bbsCount;i++){
+	                		if($('#checkIsprint_'+i).prop('checked') && $.trim($('#txtProductno_'+i).val()).length>0){
+	                			t_noq = t_noq + (t_noq.length>0?'^':'')+$('#txtNoq_'+i).val();	
+	                		}            
+	                	}        
+	                	if(t_noq.length==0){
+	                		alert('未選擇要列印的資料(成品)。');
+	                	}else{
+	                		q_func( $('#combPrint').val(), $('#txtNoa').val()+',,'+t_noq); 
+	                	}
+                	}
                 });
                 $('#btnBarcode').click(function() {
                     $('#divImport').toggle();
@@ -384,6 +405,8 @@
 
             function refresh(recno) {
                 _refresh(recno);
+                $('.justPrint').prop('checked',true);	
+                $('.justPrint2').prop('checked',true);	
             }
 
             function readonly(t_para, empty) {
@@ -391,9 +414,13 @@
                 if (t_para) {
                     $('#txtDatea').datepicker('destroy');
                     $('#txtOdate').datepicker('destroy');
-                } else {
+                    $('.justPrint').removeAttr('disabled');
+                    $('.justPrint2').removeAttr('disabled');
+                } else {	
                     $('#txtDatea').datepicker();
                     $('#txtOdate').datepicker();
+                    $('.justPrint').attr('disabled','disabled');
+                    $('.justPrint2').attr('disabled','disabled');
                 }
                 
                 if(q_cur==1 || q_cur==2){
@@ -788,24 +815,27 @@
 			<table style="width:100%;">
 				<tr style="height:1px;">
 					<td style="width:80px;"></td>
-					<td style="width:80px;"></td>
-					<td style="width:80px;"></td>
+					<td style="width:220px;"></td>
+					<td style="width:40px;"></td>
 				</tr>
-				<tr style="height:35px;"></tr>
 				<tr style="height:35px;">
 					<td><span> </span><a id="lblPrint_d" style="float:right; color: blue; font-size: medium;"> </a></td>
 					<td colspan="4">
-						<select id="combPrint" style="font-size: medium;width:100%;"></select>
+						<select id="combPrint" style="font-size: medium;width:80%;"></select>
 					</td>
 					<td></td>
 					<td><input id="btnPrint_d" type="button" value="列印"/></td>
 				</tr>
 				<tr style="height:35px;">
-					<td><span> </span><a id="lblType_d" style="float:right; color: blue; font-size: medium;"> </a></td>
-					<td colspan="4">
-						<select id="combType" style="font-size: medium;width:100%;"></select>
+					<td colspan="7">
+						<a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;【列印】有勾、</a>
 					</td>
-					<td></td>
+				</tr>
+				<tr>
+					<td colspan="7"><a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;(成品)【品名】有輸入的才會印。</a></td>
+				</tr>
+				<tr>
+					<td colspan="6"><a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;(餘料)【餘料批號】有輸入的才會印。</a></td>
 					<td><input id="btnCancel_d" type="button" value="關閉"/></td>
 				</tr>
 			</table>
@@ -908,7 +938,8 @@
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"> </td>
-					<td style="width:380px;" ><a id='lbl_product'>品名</a><br><a id='lbl_memo'>備註</a></td>
+					<td style="width:20px;">列印</td>
+					<td style="width:380px;"><a id='lbl_product'>品名</a><br><a id='lbl_memo'>備註</a></td>
 					<td style="width:170px;"><a id='lbl_pic'>形狀</a></td>
 					<td style="width:80px;"><a id='lbl_picno'>形狀<br>編號</a></td>
 					<td style="width:60px;"><a id='lbl_imgparaa'>參數A</a></td>
@@ -930,6 +961,7 @@
 						<input id="txtNoq.*" type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td align="center"><input id="checkIsprint.*" class="justPrint" type="checkbox"/></td>
 					<td>
 						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
 						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
@@ -1013,6 +1045,7 @@
 						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"></td>
+						<td style="width:20px;">列印</td>
 						<td style="width:200px; text-align: center;">批號</td>
 						<td style="width:200px; text-align: center;">品名</td>
 						<td style="width:100px; text-align: center;">數量</td>
@@ -1030,6 +1063,7 @@
 							<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
 						</td>
 						<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+						<td align="center"><input id="checkIsprint..*" class="justPrint2" type="checkbox"/></td>
 						<td>
 							<input class="txt" id="txtUno..*" type="text" style="width:95%;"/>
 							<input id="btnUno..*" type="button" style="display:none;">
