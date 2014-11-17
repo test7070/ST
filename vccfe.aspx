@@ -1059,9 +1059,11 @@
                 if (t_para) {
                     $('#combAddr').attr('disabled', 'disabled');
                     $('#btnOrdes').attr('disabled', 'disabled');
+                    $('#combPay').attr('disabled', 'disabled');
                 } else {
                     $('#combAddr').removeAttr('disabled');
                     $('#btnOrdes').removeAttr('disabled');
+                    $('#combPay').removeAttr('disabled');
                 }
                 HiddenTreat();
                 //限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
