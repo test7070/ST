@@ -1209,7 +1209,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1600px;">
+		<div class='dbbs' style="width: 1680px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;">
@@ -1225,6 +1225,7 @@
 					<td align="center" style="width:90px;"><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblQcresult_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblStore'> </a></td>
 					<td align="center" style="width:110px;"><a id='lblBkmount'> </a>/<a id='lblBkrea'> </a></td>
 					<td align="center" style="width:110px;"><a id='lblWmount'> </a>/<a id='lblWrea'> </a></td>
 					<td align="center" ><a id='lblMemo_s'> </a></td>
@@ -1251,6 +1252,11 @@
 					<td><input id="txtTotal.*" type="text" class="txt num c1" /></td>
 					<td><select id="cmbQcresult.*" class="txt c1"> </select></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
+					<td>
+						<input id="txtStoreno.*" type="text" class="txt c1" style="width: 65%"/>
+						<input class="btn" id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;" />
+						<input id="txtStore.*" type="text" class="txt c1"/>
+					</td>
 					<td>
 						<input id="txtBkmount.*" type="text" class="txt num c1" />
 						<input id="txtBkrea.*" type="text" class="txt c1" />
