@@ -13,7 +13,7 @@
         <script src="css/jquery/ui/jquery.ui.widget.js"> </script>
         <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
         <script type="text/javascript">
-            var q_name = "uccfe_s";
+            var q_name = "ucc_s";
             aPop = new Array();
             $(document).ready(function() {
                 main();
@@ -40,11 +40,13 @@
 
             function q_seekStr() {
                 t_noa = $.trim($('#txtNoa').val());
-
+				t_product = $.trim($('#txtProduct').val());
+				
                 var t_where = " 1=1 " 
                 + q_sqlPara2("noa", t_noa);  
                 
-              //  alert(t_where);
+              	if(t_product.length>0)
+              		t_where += " and charindex('"+t_product+"',product)>0";
                 
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
@@ -73,7 +75,12 @@
                     <input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
-               
+               	<tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblProduct'></a></td>
+                    <td>
+                    <input class="txt" id="txtProduct" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
             </table>
             <!--#include file="../inc/seek_ctrl.inc"-->
         </div>
