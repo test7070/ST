@@ -91,6 +91,25 @@
 						if (q_cur == 4)
 							q_Seek_gtPost();
 						break;
+					default:
+                     	try{
+                     		t_para = JSON.parse(t_name);
+                     		if(t_para.action == 'getWeight'){
+                     			var as = _q_appendData('ucc', '', true);
+                     			if (as[0] != undefined && parseFloat(as[0].uweight)!=0) {
+                     				$('#txtWeight_'+t_para.n).val(round(parseFloat(as[0].uweight)*t_para.mount,3));
+                     			}
+                     			sum();
+                     		}else if(t_para.action == 'getWeight_sum'){
+                     			var as = _q_appendData('ucc', '', true);
+                     			if (as[0] != undefined && parseFloat(as[0].uweight)!=0) {
+                     				$('#txtWeight_'+t_para.n).val(round(parseFloat(as[0].uweight)*t_para.mount,3));
+                     			}
+                     			btnOk_sum(t_para.n)
+                     		}
+                     	}catch(e){
+                     	}
+                     	break;
 				}
 			}
 
@@ -100,18 +119,31 @@
 					alert(t_err);
 					return;
 				}
-				sum();
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
-					
-				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-				if (s1.length == 0 || s1 == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ina') + $('#txtDatea').val(), '/', ''));
-				else
-					wrServer(s1);
+				btnOk_sum(q_bbsCount); 
 			}
+			function btnOk_sum(n){
+            	if(n==0){
+            		sum();
+					var t_noa = $('#txtNoa').val();
+					if (t_noa.length == 0 || t_noa == "AUTO")
+						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ina') + $('#txtDatea').val(), '/', ''));
+					else
+						wrServer(s1);
+            	}else{
+            		n--;
+            		t_productno = $.trim($('#txtProductno_'+n).val());
+                    t_mount = q_float('txtMount_' + n);
+                    if(t_productno.length>0 && t_mount!=0){
+                    	q_gt('ucc', "where=^^noa='"+t_productno+"'^^", 0, 0, 0,JSON.stringify({action:"getWeight_sum",n:n,mount:t_mount}));	
+                    }else{
+                    	btnOk_sum(n);
+                    }
+            	}           		
+            }
 
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)// 1-3
@@ -142,7 +174,14 @@
 							$('#btnMechno_'+n).click();
 						});
 						$('#txtMount_' + j).change(function() {
-							sum();
+							if (q_cur == 1 || q_cur == 2){
+                            	var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+                            	t_productno = $.trim($('#txtProductno_'+n).val());
+			                    t_mount = q_float('txtMount_' + n);
+			                    if(t_productno.length>0 && t_mount!=0){
+			                    	q_gt('ucc', "where=^^noa='"+t_productno+"'^^", 0, 0, 0,JSON.stringify({action:"getWeight",n:n,mount:t_mount}));	
+			                    }
+                            } 
 						});
 						$('#txtWeight_' + j).change(function() {
 							sum();

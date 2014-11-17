@@ -52,6 +52,14 @@
                 	
                 });
             }
+            function q_boxClose(s2) {
+				var ret;
+				switch (b_pop) {
+					case q_name + 'fe_s':
+						q_boxClose2(s2);
+						break;
+				}  
+			}
             function q_gtPost(t_name) {
                 switch (t_name) {
                     case q_name:
@@ -95,7 +103,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)
                     return;
-                q_box('uccfe_s.aspx', q_name + '_s', "600px", "530px", q_getMsg("popSeek"));
+                q_box('uccfe_s.aspx', q_name + 'fe_s', "600px", "530px", q_getMsg("popSeek"));
             }
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
