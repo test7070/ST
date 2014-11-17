@@ -748,7 +748,7 @@
                 else
                     $('#txtWorker2').val(r_name);
                
-               	btnOk_sum(q_bbsCount)   
+               	btnOk_sum(q_bbsCount);  
             }
             function btnOk_sum(n){
             	if(n==0){
