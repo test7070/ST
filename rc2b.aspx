@@ -425,47 +425,6 @@
 							focus_addr = '';
 						}
 						break;
-					case 'btnDele':
-						var as = _q_appendData("pays", "", true);
-						if (as[0] != undefined) {
-							var t_msg = "", t_paysale = 0;
-							for (var i = 0; i < as.length; i++) {
-								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
-								if (t_paysale != 0)
-									t_msg += String.fromCharCode(13) + '付款單號【' + as[i].noa + '】 ' + FormatNumber(t_paysale);
-							}
-							if (t_msg.length > 0) {
-								alert('已沖帳:' + t_msg);
-								Unlock(1);
-								return;
-							}
-						}
-						_btnDele();
-						Unlock(1);
-						break;
-					case 'btnModi':
-						var as = _q_appendData("pays", "", true);
-						if (as[0] != undefined) {
-							var t_msg = "", t_paysale = 0;
-							for (var i = 0; i < as.length; i++) {
-								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
-								if (t_paysale != 0)
-									t_msg += String.fromCharCode(13) + '付款單號【' + as[i].noa + '】 ' + FormatNumber(t_paysale);
-							}
-							if (t_msg.length > 0) {
-								alert('已沖帳:' + t_msg);
-								Unlock(1);
-								return;
-							}
-						}
-						_btnModi();
-						Unlock(1);
-						$('#txtDatea').focus();
-						if (!emp($('#txtTggno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
-							q_gt('custaddr', t_where, 0, 0, 0, "");
-						}
-						break;
 					case 'ordc':
 						var ordc = _q_appendData("ordc", "", true);
 						if (ordc[0] != undefined) {
@@ -680,15 +639,12 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				Lock(1, {
-					opacity : 0
-				});
 				//取得車號下拉式選單
 				var thisVal = $('#txtCardealno').val();
 				var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
 				q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
-				var t_where = " where=^^ rc2no='" + $('#txtNoa').val() + "'^^";
-				q_gt('pays', t_where, 0, 0, 0, 'btnModi', r_accy);
+				
+				_btnModi();
 			}
 
 			function btnPrint() {
@@ -699,6 +655,11 @@
 				var i;
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
 				_btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
+				
+				if (q_cur == 1 || emp($('#txtRc2no').val()))
+					q_func('qtxt.query.c0', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+				else
+					q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
 			}
 
 			function bbsSave(as) {
@@ -826,11 +787,14 @@
 			}
 
 			function btnDele() {
-				Lock(1, {
-					opacity : 0
-				});
-				var t_where = " where=^^ rc2no='" + $('#txtNoa').val() + "'^^";
-				q_gt('pays', t_where, 0, 0, 0, 'btnDele', r_accy);
+				//_btnDele();
+				if (!confirm(mess_dele))
+					return;
+				q_cur = 3;
+				if(emp($('#txtRc2no').val()))
+					q_func('qtxt.query.c0', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+				else
+					q_func('rc2_post.post.a2', r_accy + ',' + $('#txtRc2no').val() + ',0');
 			}
 
 			function btnCancel() {
@@ -930,6 +894,35 @@
 				$('#txtTax').val(FormatNumber(t_tax));
 				$('#txtTotal').val(FormatNumber(t_total));
 			}
+			
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'rc2_post.post.a1':
+						q_func('qtxt.query.c0', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+						break;
+					case 'rc2_post.post.a2':
+						q_func('qtxt.query.c2', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+						break;
+					case 'qtxt.query.c0':
+						q_func('qtxt.query.c1', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';1;'+q_getPara('sys.key_rc2'));
+						break;
+					case 'qtxt.query.c1':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							abbm[q_recno]['rc2no'] = as[0].rc2no;
+							$('#txtRc2no').val(as[0].rc2no);
+							
+							if(!emp(as[0].workcno))
+								q_func('rc2_post.post', r_accy + ',' + $('#txtRc2no').val() + ',1');
+						}
+						break;
+					case 'qtxt.query.c2':
+						_btnOk($('#txtNoa').val(), bbmKey[0], ( bbsHtm ? bbsKey[1] : ''), '', 3)
+						break;
+						
+				}
+			}
+			
 		</script>
 		<style type="text/css">
 			#dmain {
