@@ -954,6 +954,7 @@
 					<td style="width:20px;"> </td>
 					<td style="width:20px;">列印<input class="checkAll" type="checkbox" onclick="checkAll()"/></td>
 					<td style="width:380px;"><a id='lbl_product'>品名</a><br><a id='lbl_memo'>備註</a></td>
+					<td style="width:80px;"><a id='lbl_pic'>位置</a></td>
 					<td style="width:170px;"><a id='lbl_pic'>形狀</a></td>
 					<td style="width:80px;"><a id='lbl_picno'>形狀<br>編號</a></td>
 					<td style="width:60px;"><a id='lbl_imgparaa'>參數A</a></td>
@@ -981,6 +982,9 @@
 						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
 						<input class="txt" id="txtMemo.*" type="text" style="width:95%;" title="備註輸入 * ，單支長可手動輸入。"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
+					</td>
+					<td>
+						<input class="txt" id="txtPlace.*" type="text" style="width:95%;" title=""/>
 					</td>
 					<td>
 						<canvas id="canvas.*" width="150" height="50"> </canvas>
