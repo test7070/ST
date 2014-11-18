@@ -252,6 +252,11 @@
 
                 if (isinvosystem)
                     $('.istax').hide();
+                    
+                $( '<input type="button" id="btnGweight" value="實際重" />' ).insertBefore( "#q_acDiv" );
+                $("#btnGweight").click(function(e){
+                	$('.isGweight').toggle();
+                });
             }
 
             function bbsGetOrdeList() {
@@ -1374,6 +1379,7 @@
 		</div>
 		<div id="dmain" style="width: 1260px;">
 			<!--#include file="../inc/toolbar.inc"-->
+			
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview">
 					<tr>
@@ -1608,8 +1614,8 @@
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblWeight_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblGmount_s'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblGweight_s'> </a></td>
+					<td align="center" style="width:80px;display:none;" class="isGweight"><a id='lblGmount_s'> </a></td>
+					<td align="center" style="width:100px;display:none;" class="isGweight"><a id='lblGweight_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblWcost_s'> </a></td>
@@ -1652,10 +1658,10 @@
 					<td>
 					<input id="txtWeight.*" type="text" class="txt num c1"/>
 					</td>
-					<td>
+					<td class="isGweight" style="display:none;">
 					<input id="txtGmount.*" type="text" class="txt num c1"/>
 					</td>
-					<td>
+					<td class="isGweight" style="display:none;">
 					<input id="txtGweight.*" type="text" class="txt num c1"/>
 					</td>
 					<td>
