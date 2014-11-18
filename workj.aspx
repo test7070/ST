@@ -128,6 +128,12 @@
                 		q_box("ordefe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa + "';" + t_accy, 'orde', "95%", "95%", q_getMsg("popOrde"));
                 });
             }
+            function checkAll(){
+            	$('.justPrint').prop('checked',$('.checkAll').prop('checked'));
+            }
+            function checkAll2(){
+            	$('.justPrint2').prop('checked',$('.checkAll2').prop('checked'));
+            }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
                 	case 'barfe.gen1':
@@ -152,6 +158,8 @@
                         	if(as[0].ordeno != undefined && as[0].ordeno.length>0){
                         		$('#txtOrdeno').val(as[0].ordeno);
                         		$('#txtOrdeaccy').val(as[0].ordeaccy);
+                        		abbm[q_recno].ordeno = as[0].ordeno;
+                        		abbm[q_recno].ordeaccy = as[0].ordeaccy;
                         	}else{
                         		alert(as[0].msg);
                         	}
@@ -407,6 +415,8 @@
                 _refresh(recno);
                 $('.justPrint').prop('checked',true);	
                 $('.justPrint2').prop('checked',true);	
+                $('.checkAll').prop('checked',true);	
+                $('.checkAll2').prop('checked',true);	
             }
 
             function readonly(t_para, empty) {
@@ -416,11 +426,15 @@
                     $('#txtOdate').datepicker('destroy');
                     $('.justPrint').removeAttr('disabled');
                     $('.justPrint2').removeAttr('disabled');
+                    $('.checkAll').removeAttr('disabled');
+                    $('.checkAll2').removeAttr('disabled');
                 } else {	
                     $('#txtDatea').datepicker();
                     $('#txtOdate').datepicker();
                     $('.justPrint').attr('disabled','disabled');
                     $('.justPrint2').attr('disabled','disabled');
+                    $('.checkAll').attr('disabled','disabled');
+                    $('.checkAll2').attr('disabled','disabled');
                 }
                 
                 if(q_cur==1 || q_cur==2){
@@ -938,7 +952,7 @@
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"> </td>
-					<td style="width:20px;">列印</td>
+					<td style="width:20px;">列印<input class="checkAll" type="checkbox" onclick="checkAll()"/></td>
 					<td style="width:380px;"><a id='lbl_product'>品名</a><br><a id='lbl_memo'>備註</a></td>
 					<td style="width:170px;"><a id='lbl_pic'>形狀</a></td>
 					<td style="width:80px;"><a id='lbl_picno'>形狀<br>編號</a></td>
@@ -1045,7 +1059,7 @@
 						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"></td>
-						<td style="width:20px;">列印</td>
+						<td style="width:20px;">列印<input class="checkAll2" type="checkbox" onclick="checkAll2()"/></td>
 						<td style="width:200px; text-align: center;">批號</td>
 						<td style="width:200px; text-align: center;">品名</td>
 						<td style="width:100px; text-align: center;">數量</td>
