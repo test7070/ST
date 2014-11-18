@@ -1658,10 +1658,10 @@
 					<td>
 					<input id="txtWeight.*" type="text" class="txt num c1"/>
 					</td>
-					<td class="isGweight" style="display:none;">
+					<td class="isGweight" style="display:none;background-color: burlywood;">
 					<input id="txtGmount.*" type="text" class="txt num c1"/>
 					</td>
-					<td class="isGweight" style="display:none;">
+					<td class="isGweight" style="display:none;background-color: burlywood;">
 					<input id="txtGweight.*" type="text" class="txt num c1"/>
 					</td>
 					<td>
