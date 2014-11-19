@@ -671,6 +671,10 @@
 						<td class="td5"><span> </span><a id="lblPrice" class="lbl"> </a></td>
 						<td class="td6"><input id="txtPrice" type="text" class="txt c1 num" /></td>
 					</tr>
+					<tr class="tr8">
+						<td class='td1'><span> </span><a id="lblAddr" class="lbl" > </a></td>
+						<td class="td2" colspan='5'><input type="text" id="txtAddr" class="txt c1"/></td>
+					</tr>
 					<tr class="tr6">
 						<td class="td1"><span> </span><a id="lblTotal" class="lbl"> </a></td>
 						<td class="td2">

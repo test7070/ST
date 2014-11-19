@@ -726,7 +726,13 @@
                      			if (as[0] != undefined && parseFloat(as[0].uweight)!=0) {
                      				$('#txtWeight_'+t_para.n).val(round(parseFloat(as[0].uweight)*t_para.mount,3));
                      			}
-                     			btnOk_sum(t_para.n)
+                     			btnOk_sum(t_para.n);
+                     		}else if(t_para.action == 'vcc_uccps'){
+                     			var as = _q_appendData('uccps', '', true);
+                     			if (as[0] != undefined) {
+                     				$('#txtPrice_'+t_para.n).val(parseFloat(as[0].sprice));
+                     				sum();
+                     			}
                      		}
                      	}catch(e){
                      	}
@@ -1165,7 +1171,14 @@
                         GetTranPrice();
                         break;
                     case 'txtProductno_':
-                        bbsGetOrdeList();
+                    	var n = b_seq;
+                    	var t_productno = $.trim($('#txtProductno_'+n).val());
+                        var t_date = $.trim($('#txtDatea').val());
+                        if(t_productno.length>0 && t_date.length>0)
+                        	q_gt('vcc_uccps',"where=^^ productno='"+t_productno+"' and datea<='"+t_date+"' ^^", 0, 0, 0
+                        	,JSON.stringify({action:'vcc_uccps',n:n}));
+                        
+                        //bbsGetOrdeList();
                         break;
                 }
             }
