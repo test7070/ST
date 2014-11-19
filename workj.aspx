@@ -609,6 +609,18 @@
 							}                			
                 		}
                 	}
+                	//分批
+                	t_length = q_float('txtLengthb_'+i);
+                	if(t_length<=300){
+                		
+                	}else if(t_length<=600){
+                		
+                	}else if(t_length<=1000){
+                		
+                	}else if(t_length<=1600){
+                		
+                	}
+                	
                 	$('#txtWeight_'+i).val(t_weights);
                 	t_weight = q_add(t_weight,t_weights);
                 	t_mount = q_add(t_mount,q_float('txtMount_'+i));
@@ -981,6 +993,8 @@
 						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
 						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
 						<input class="txt" id="txtMemo.*" type="text" style="width:95%;" title="備註輸入 * ，單支長可手動輸入。"/>
+						<input class="txt" id="txtCmount.*" type="text" style="display:none;"/>
+						<input class="txt" id="txtCweight.*" type="text" style="display:none;"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
 					<td>
