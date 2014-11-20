@@ -247,7 +247,6 @@
                     	try{
                     		var t_para = JSON.parse(t_name);
                     		if(t_para.action=="createimg"){
-                    			
                     			var n = t_para.n;
                     			as = _q_appendData("img", "", true);
                     			t_para = JSON.parse(as[0].para);
@@ -262,33 +261,39 @@
 								c.width = imgwidth;
 								c.height = imgheight;
 								ctx.drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight);
+								var t_length = 0;
 								for(var i=0;i<t_para.length;i++){
 									value = q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n);
 									if(value!=0){
+										t_length += value;
 										//ctx.font = t_para[i].fontsize+"px times new roman";
 										ctx.font = t_para[i].fontsize+"px Arial";
 										ctx.fillStyle = 'black';
 										ctx.fillText(value+'',t_para[i].left,t_para[i].top);
 									}
 								}
+								//------------------------------
 								$('#imgPic_'+n).attr('src',c.toDataURL());
-								//縮放為300*100  條碼列印用
+								//條碼用圖形
 								xx_width = 355;
-								xx_height = 119;
-								//暫由程式控制							
+								xx_height = 119;						
 								$('#canvas_'+n).width(xx_width).height(xx_height);
 								c.width = xx_width;
 								c.height = xx_height;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,xx_width,xx_height);
 								$('#txtImgbarcode_'+n).val(c.toDataURL());
 								
-								//縮放為150*50
+								//報表用圖形 縮放為150*50
 								$('#canvas_'+n).width(150).height(50);
 								c.width = 150;
 								c.height = 50;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,50);
 								$('#txtImgdata_'+n).val(c.toDataURL());	
-								//$('#txtImgbarcode_'+n).val(c.toDataURL());					
+								//------------------------------
+								if($('#txtMemo_'+n).val().substring(0,1)!='*'){
+									$('#txtLengthb_'+n).val(t_length);
+                				}
+								sum();					
 							}
                     	}catch(e){
                     	}
@@ -499,32 +504,26 @@
                     	$('#txtParaa_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParaa_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParab_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParab_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParac_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParac_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParad_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParad_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParae_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParae_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParaf_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParaf_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtContno_' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
@@ -580,7 +579,6 @@
                 _bbtAssign();
             }
 
-
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
@@ -593,13 +591,9 @@
 	                ,{key:'9#',value:5.08}
 	                ,{key:'10#',value:6.39}
 	                ,{key:'11#',value:7.9}];
-	            var t_weight=0,t_mount=0,t_length=0,t_weights;
+	            var t_weight=0,t_mount=0,t_weights;
                 for(var i=0;i<q_bbsCount;i++){
-                	t_weights = 0;
-                	if($('#txtMemo_'+i).val().substring(0,1)!='*'){
-                		$('#txtLengthb_'+i).val(q_float('txtParaa_'+i)+q_float('txtParab_'+i)+q_float('txtParac_'+i)
-                		+q_float('txtParad_'+i)+q_float('txtParae_'+i)+q_float('txtParaf_'+i));
-                	}
+                	t_weights = 0;  	
                 	t_product = $('#txtProduct_'+i).val();
                 	if(t_product.length>0){
                 		for(var j=0;j<calc.length;j++){
@@ -610,16 +604,7 @@
                 		}
                 	}
                 	//分批
-                	t_length = q_float('txtLengthb_'+i);
-                	if(t_length<=300){
-                		
-                	}else if(t_length<=600){
-                		
-                	}else if(t_length<=1000){
-                		
-                	}else if(t_length<=1600){
-                		
-                	}
+                	
                 	
                 	$('#txtWeight_'+i).val(t_weights);
                 	t_weight = q_add(t_weight,t_weights);
