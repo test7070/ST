@@ -128,6 +128,12 @@
                 		q_box("ordefe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa + "';" + t_accy, 'orde', "95%", "95%", q_getMsg("popOrde"));
                 });
             }
+            function checkAll(){
+            	$('.justPrint').prop('checked',$('.checkAll').prop('checked'));
+            }
+            function checkAll2(){
+            	$('.justPrint2').prop('checked',$('.checkAll2').prop('checked'));
+            }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
                 	case 'barfe.gen1':
@@ -152,6 +158,8 @@
                         	if(as[0].ordeno != undefined && as[0].ordeno.length>0){
                         		$('#txtOrdeno').val(as[0].ordeno);
                         		$('#txtOrdeaccy').val(as[0].ordeaccy);
+                        		abbm[q_recno].ordeno = as[0].ordeno;
+                        		abbm[q_recno].ordeaccy = as[0].ordeaccy;
                         	}else{
                         		alert(as[0].msg);
                         	}
@@ -239,7 +247,6 @@
                     	try{
                     		var t_para = JSON.parse(t_name);
                     		if(t_para.action=="createimg"){
-                    			
                     			var n = t_para.n;
                     			as = _q_appendData("img", "", true);
                     			t_para = JSON.parse(as[0].para);
@@ -254,33 +261,39 @@
 								c.width = imgwidth;
 								c.height = imgheight;
 								ctx.drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight);
+								var t_length = 0;
 								for(var i=0;i<t_para.length;i++){
 									value = q_float('txtPara'+t_para[i].key.toLowerCase()+'_'+n);
 									if(value!=0){
+										t_length += value;
 										//ctx.font = t_para[i].fontsize+"px times new roman";
 										ctx.font = t_para[i].fontsize+"px Arial";
 										ctx.fillStyle = 'black';
 										ctx.fillText(value+'',t_para[i].left,t_para[i].top);
 									}
 								}
+								//------------------------------
 								$('#imgPic_'+n).attr('src',c.toDataURL());
-								//縮放為300*100  條碼列印用
+								//條碼用圖形
 								xx_width = 355;
-								xx_height = 119;
-								//暫由程式控制							
+								xx_height = 119;						
 								$('#canvas_'+n).width(xx_width).height(xx_height);
 								c.width = xx_width;
 								c.height = xx_height;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,xx_width,xx_height);
 								$('#txtImgbarcode_'+n).val(c.toDataURL());
 								
-								//縮放為150*50
+								//報表用圖形 縮放為150*50
 								$('#canvas_'+n).width(150).height(50);
 								c.width = 150;
 								c.height = 50;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,150,50);
 								$('#txtImgdata_'+n).val(c.toDataURL());	
-								//$('#txtImgbarcode_'+n).val(c.toDataURL());					
+								//------------------------------
+								if($('#txtMemo_'+n).val().substring(0,1)!='*'){
+									$('#txtLengthb_'+n).val(t_length);
+                				}
+								sum();					
 							}
                     	}catch(e){
                     	}
@@ -407,6 +420,8 @@
                 _refresh(recno);
                 $('.justPrint').prop('checked',true);	
                 $('.justPrint2').prop('checked',true);	
+                $('.checkAll').prop('checked',true);	
+                $('.checkAll2').prop('checked',true);	
             }
 
             function readonly(t_para, empty) {
@@ -416,11 +431,15 @@
                     $('#txtOdate').datepicker('destroy');
                     $('.justPrint').removeAttr('disabled');
                     $('.justPrint2').removeAttr('disabled');
+                    $('.checkAll').removeAttr('disabled');
+                    $('.checkAll2').removeAttr('disabled');
                 } else {	
                     $('#txtDatea').datepicker();
                     $('#txtOdate').datepicker();
                     $('.justPrint').attr('disabled','disabled');
                     $('.justPrint2').attr('disabled','disabled');
+                    $('.checkAll').attr('disabled','disabled');
+                    $('.checkAll2').attr('disabled','disabled');
                 }
                 
                 if(q_cur==1 || q_cur==2){
@@ -485,32 +504,26 @@
                     	$('#txtParaa_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParaa_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParab_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParab_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParac_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParac_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParad_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParad_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParae_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParae_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtParaf_'+i).change(function(e){
                     		var n = $(this).attr('id').replace('txtParaf_', '');
                     		createImg(n);
-                    		sum();
                     	});
                     	$('#txtContno_' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
@@ -566,7 +579,6 @@
                 _bbtAssign();
             }
 
-
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
@@ -579,13 +591,9 @@
 	                ,{key:'9#',value:5.08}
 	                ,{key:'10#',value:6.39}
 	                ,{key:'11#',value:7.9}];
-	            var t_weight=0,t_mount=0,t_length=0,t_weights;
+	            var t_weight=0,t_mount=0,t_weights;
                 for(var i=0;i<q_bbsCount;i++){
-                	t_weights = 0;
-                	if($('#txtMemo_'+i).val().substring(0,1)!='*'){
-                		$('#txtLengthb_'+i).val(q_float('txtParaa_'+i)+q_float('txtParab_'+i)+q_float('txtParac_'+i)
-                		+q_float('txtParad_'+i)+q_float('txtParae_'+i)+q_float('txtParaf_'+i));
-                	}
+                	t_weights = 0;  	
                 	t_product = $('#txtProduct_'+i).val();
                 	if(t_product.length>0){
                 		for(var j=0;j<calc.length;j++){
@@ -595,6 +603,9 @@
 							}                			
                 		}
                 	}
+                	//分批
+                	
+                	
                 	$('#txtWeight_'+i).val(t_weights);
                 	t_weight = q_add(t_weight,t_weights);
                 	t_mount = q_add(t_mount,q_float('txtMount_'+i));
@@ -938,8 +949,9 @@
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"> </td>
-					<td style="width:20px;">列印</td>
+					<td style="width:20px;">列印<input class="checkAll" type="checkbox" onclick="checkAll()"/></td>
 					<td style="width:380px;"><a id='lbl_product'>品名</a><br><a id='lbl_memo'>備註</a></td>
+					<td style="width:80px;"><a id='lbl_pic'>位置</a></td>
 					<td style="width:170px;"><a id='lbl_pic'>形狀</a></td>
 					<td style="width:80px;"><a id='lbl_picno'>形狀<br>編號</a></td>
 					<td style="width:60px;"><a id='lbl_imgparaa'>參數A</a></td>
@@ -966,7 +978,12 @@
 						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
 						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
 						<input class="txt" id="txtMemo.*" type="text" style="width:95%;" title="備註輸入 * ，單支長可手動輸入。"/>
+						<input class="txt" id="txtCmount.*" type="text" style="display:none;"/>
+						<input class="txt" id="txtCweight.*" type="text" style="display:none;"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
+					</td>
+					<td>
+						<input class="txt" id="txtPlace.*" type="text" style="width:95%;" title=""/>
 					</td>
 					<td>
 						<canvas id="canvas.*" width="150" height="50"> </canvas>
@@ -1045,7 +1062,7 @@
 						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"></td>
-						<td style="width:20px;">列印</td>
+						<td style="width:20px;">列印<input class="checkAll2" type="checkbox" onclick="checkAll2()"/></td>
 						<td style="width:200px; text-align: center;">批號</td>
 						<td style="width:200px; text-align: center;">品名</td>
 						<td style="width:100px; text-align: center;">數量</td>
