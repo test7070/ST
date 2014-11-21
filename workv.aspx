@@ -237,63 +237,7 @@
                 	t_weights = 0;
                 	t_mounts = q_float('txtMount_'+i);  	
                 	t_product = $('#txtProduct_'+i).val();
-                	//分批
-               		t_cmount = '';
-               		t_cweight = '';
-               		t_n = 0;
-               		t_m = 0;
-                	if(t_product.length>0){
-                		for(var j=0;j<calc.length;j++){
-							if(t_product.indexOf(calc[j].key)>0){
-								t_weights = round(q_mul(q_mul(calc[j].value,t_length/100),t_mounts),2);
-								if(t_length<=300){
-									t_n = Math.floor(t_mounts/calc[j].m300);
-									t_m = t_mounts%calc[j].m300;
-									for(var k=0;k<t_n;k++){
-										t_cmount += (t_cmount.length>0?',':'')+calc[j].m300;
-										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),calc[j].m300),2);
-									}
-									if(t_m>0){
-										t_cmount += (t_cmount.length>0?',':'')+t_m;
-										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_m),2);
-									}
-								}else if(t_length<=600){
-									t_n = Math.floor(t_mounts/calc[j].m600);
-									t_m = t_mounts%calc[j].m600;
-									for(var k=0;k<t_n;k++){
-										t_cmount += (t_cmount.length>0?',':'')+calc[j].m600;
-										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),calc[j].m600),2);
-									}
-									if(t_m>0){
-										t_cmount += (t_cmount.length>0?',':'')+t_m;
-										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_m),2);
-									}
-								}else if(t_length<=1000){
-									t_n = Math.floor(t_mounts/calc[j].m1000);
-									t_m = t_mounts%calc[j].m1000;
-									for(var k=0;k<t_n;k++){
-										t_cmount += (t_cmount.length>0?',':'')+calc[j].m1000;
-										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),calc[j].m1000),2);
-									}
-									if(t_m>0){
-										t_cmount += (t_cmount.length>0?',':'')+t_m;
-										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_m),2);
-									}
-								}else{//1600
-									t_n = Math.floor(t_mounts/calc[j].m1600);
-									t_m = t_mounts%calc[j].m1600;
-									for(var k=0;k<t_n;k++){
-										t_cmount += (t_cmount.length>0?',':'')+calc[j].m1600;
-										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),calc[j].m1600),2);
-									}
-									if(t_m>0){
-										t_cmount += (t_cmount.length>0?',':'')+t_m;
-										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_m),2);
-									}
-								}
-								break;
-							}                			
-                		}
+                	
                 	}              
                 	//-----------------------------------
 					$('#txtCmount_'+i).val(t_cmount);
@@ -624,24 +568,6 @@
 					<td style="width:60px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:60px;"><a id='lbl_avgkg'>平均每人KG</a></td>
 					<td style="width:60px;"><a id='lbl_memo'>備註</a></td>
-					
-					
-					<td style="width:380px;"><a id='lbl_product'>品名</a><br><a id='lbl_memo'>備註</a></td>
-					<td style="width:80px;"><a id='lbl_pic'>位置</a></td>
-					<td style="width:170px;"><a id='lbl_pic'>形狀</a></td>
-					<td style="width:80px;"><a id='lbl_picno'>形狀<br>編號</a></td>
-					<td style="width:60px;"><a id='lbl_imgparaa'>參數A</a></td>
-					<td style="width:60px;"><a id='lbl_imgparab'>參數B</a></td>
-					<td style="width:60px;"><a id='lbl_imgparac'>參數C</a></td>
-					<td style="width:60px;"><a id='lbl_imgparad'>參數D</a></td>
-					<td style="width:60px;"><a id='lbl_imgparae'>參數E</a></td>
-					<td style="width:60px;"><a id='lbl_imgparaf'>參數F</a></td>
-					<td style="width:80px;"><a id='lbl_lengthb'>長度</a><br><a id='lbl_monnt'>數量</a><br><a id='lbl_weight'>重量</a></td>
-					<td style="width:150px;"><a id='lbl_mech'>機台</a></td>
-					<td style="width:100px;"><a id='lbl_place'>儲位</a></td>
-					<td style="width:180px;"><a id='lbl_timea'>加工時間</a></td>
-					<td style="width:100px;"><a id='lbl_worker'>入庫人員</a></td>
-					<td style="width:180px;"><a id='lbl_cont'>合約單號</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
