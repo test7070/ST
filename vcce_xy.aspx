@@ -18,7 +18,7 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "vcce";
-			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtSales','txtDriver','txtCardeal'];
+			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtSales','txtDriver','txtCardeal','txtWeight','txtTotal'];
 			var q_readonlys = ['txtCustno','txtComp','txtOrdeno','txtOdate','txtAdjweight'];
 			var bbmNum = [];
 			var bbsNum = [['txtAdjcount', 10, 0, 1], ['txtAdjweight', 10, 0, 1]];
@@ -93,13 +93,16 @@
 	                                    break;
 	                                }
                                 }
-                                if(b_ret[i].typea=='2'){
-                                	b_ret[i].total=-1*dec(b_ret[i].total);
+                                if(b_ret[i]!=undefined){
+	                                if(b_ret[i].typea=='2'){
+	                                	b_ret[i].total=-1*dec(b_ret[i].total);
+	                                }
                                 }
                             }
 							
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtCustno,txtComp,txtOdate,txtAdjweight', b_ret.length, b_ret, 'noa,custno,comp,datea,total', 'txtOrdeno');
 						}
+						sum();
 						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
@@ -175,7 +178,16 @@
 			function bbsAssign() {
 				for (var j = 0; j < q_bbsCount; j++) {
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-						$('#txtWeight_' + j).change(function() {
+						$('#txtAdjcount_' + j).change(function() {
+							sum();
+						});
+						$('#chkEnda_' + j).click(function() {
+							t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if($(this).prop('checked')){
+								q_tr('txtAdjcount_'+b_seq,q_float('txtAdjweight_'+b_seq));
+							}
 							sum();
 						});
 					}
@@ -228,6 +240,13 @@
 			}
 
 			function sum() {
+				var t_weight=0,t_total=0;
+				for (var j = 0; j < q_bbsCount; j++) {
+					t_weight=q_add(t_weight,q_float('txtAdjweight_'+j));
+					t_total=q_add(t_total,q_float('txtAdjcount_'+j));
+				}
+				q_tr('txtWeight',t_weight);
+				q_tr('txtTotal',t_total);
 			}
 
 			function refresh(recno) {
@@ -537,10 +556,14 @@
 						<td class="td2" colspan="8"><textarea id="txtMemo" cols="5" rows="10" style="width: 99%;height: 50px;"> </textarea></td>
 					</tr>
 					<tr class="tr7">
-						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
-						<td class="td2"><input id="txtWorker" type="text" class="txt c1" /></td>
-						<td class="td3"><span> </span><a id='lblWorker2' class="lbl"> </a></td>
-						<td class="td4"><input id="txtWorker2" type="text" class="txt c1" /></td>
+						<td class="td1"><span> </span><a class="lbl">應收金額</a></td>
+						<td class="td2"><input id="txtWeight" type="text" class="txt num c1" /></td>
+						<td class="td3"><span> </span><a class="lbl">收款金額</a></td>
+						<td class="td4"><input id="txtTotal" type="text" class="txt num c1" /></td>
+						<td class="td5"><span> </span><a id='lblWorker' class="lbl"> </a></td>
+						<td class="td6"><input id="txtWorker" type="text" class="txt c1" /></td>
+						<td class="td7"><span> </span><a id='lblWorker2' class="lbl"> </a></td>
+						<td class="td8"><input id="txtWorker2" type="text" class="txt c1" /></td>
 					</tr>
 				</table>
 			</div>

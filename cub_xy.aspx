@@ -59,6 +59,75 @@
 				}
 				mainForm(0);
 			}
+			
+			function currentData() {}
+			currentData.prototype = {
+				data : [],
+				exclude : ['txtNoa','txtDatea','txtOrdeno','txtNo2','txtWorker','txtWorker2'],  //bbm
+				excludes : [''], //bbs
+				excludet : [''], //bbt
+				copy : function() {
+					this.data = new Array();
+					for (var i in fbbm) {
+						var isExclude = false;
+						for (var j in this.exclude) {
+							if (fbbm[i] == this.exclude[j] ) {
+								isExclude = true;
+								break;
+							}
+						}
+						if (!isExclude ) {
+							this.data.push({
+								field : fbbm[i],
+								value : $('#' + fbbm[i]).val()
+							});
+						}
+					}
+					//bbs
+					for (var i in fbbs) {
+						for(var j = 0; j < q_bbsCount; j++) {
+							var isExcludes = false;
+							for (var k in this.excludes) {
+								if (fbbs[i] == this.excludes[k] ) {
+									isExcludes = true;
+									break;
+								}
+							}
+							if (!isExcludes ) {
+								this.data.push({
+									field : fbbs[i]+'_'+j,
+									value : $('#' + fbbs[i]+'_'+j).val()
+								});
+							}
+						}
+					}
+					//bbt
+					for (var i in fbbt) {
+						for(var j = 0; j < q_bbtCount; j++) {
+							var isExcludet = false;
+							for (var k in this.excludet) {
+								if (fbbt[i] == this.excludet[k] ) {
+									isExcludet = true;
+									break;
+								}
+							}
+							if (!isExcludet ) {
+								this.data.push({
+									field : fbbt[i]+'__'+j,
+									value : $('#' + fbbt[i]+'__'+j).val()
+								});
+							}
+						}
+					}
+				},
+				/*貼上資料*/
+				paste : function() {
+					for (var i in this.data) {
+					   	$('#' + this.data[i].field).val(this.data[i].value);
+				   	}
+				}
+			};
+			var curData = new currentData();
 
 			function sum() {
 				for (var j = 0; j < q_bbsCount; j++) {
@@ -124,7 +193,11 @@
 			}
 
 			function btnIns() {
-				_btnIns();
+				if($('#checkCopy').is(':checked'))
+            		curData.copy();
+                	_btnIns();
+            	if($('#checkCopy').is(':checked'))
+	                curData.paste();
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
@@ -498,6 +571,10 @@
 						</td>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>
+						<td>
+							<input id="checkCopy" type="checkbox" style="float:left;"/>
+							<span> </span><a id='lblCopy' class="lbl" style="float:left;"> </a>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblOrdeno" class="lbl" >訂單編號</a></td>
