@@ -37,8 +37,8 @@
 				['txtOrdeno', '', 'view_ordes', 'noa,no2,productno,product,custno,comp', 'txtOrdeno,txtNo2,txtProductno,txtProduct,txtCustno,txtComp,txtMemo', ''],
 				['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'],
 				['txtProductno', 'lblProduct', 'ucc', 'noa,product', 'txtProductno,txtProduct', 'ucc_b.aspx'],
-				['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', 'tgg_b.aspx'],
-				['txtProcessno_', 'btnProcessno_', 'process', 'noa,process', 'txtProcessno_,txtProcess_', 'process_b.aspx'],
+				['txtTggno_', '', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', ""],
+				['txtProcessno_', 'btnProcessno_', 'process', 'noa,process,tggno,tgg', 'txtProcessno_,txtProcess_,txtTggno_,txtTgg_', 'process_b.aspx'],
 				['txtProductno__', 'btnProductno__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
 			);
 
@@ -59,6 +59,75 @@
 				}
 				mainForm(0);
 			}
+			
+			function currentData() {}
+			currentData.prototype = {
+				data : [],
+				exclude : ['txtNoa','txtDatea','txtOrdeno','txtNo2','txtWorker','txtWorker2'],  //bbm
+				excludes : [''], //bbs
+				excludet : [''], //bbt
+				copy : function() {
+					this.data = new Array();
+					for (var i in fbbm) {
+						var isExclude = false;
+						for (var j in this.exclude) {
+							if (fbbm[i] == this.exclude[j] ) {
+								isExclude = true;
+								break;
+							}
+						}
+						if (!isExclude ) {
+							this.data.push({
+								field : fbbm[i],
+								value : $('#' + fbbm[i]).val()
+							});
+						}
+					}
+					//bbs
+					for (var i in fbbs) {
+						for(var j = 0; j < q_bbsCount; j++) {
+							var isExcludes = false;
+							for (var k in this.excludes) {
+								if (fbbs[i] == this.excludes[k] ) {
+									isExcludes = true;
+									break;
+								}
+							}
+							if (!isExcludes ) {
+								this.data.push({
+									field : fbbs[i]+'_'+j,
+									value : $('#' + fbbs[i]+'_'+j).val()
+								});
+							}
+						}
+					}
+					//bbt
+					for (var i in fbbt) {
+						for(var j = 0; j < q_bbtCount; j++) {
+							var isExcludet = false;
+							for (var k in this.excludet) {
+								if (fbbt[i] == this.excludet[k] ) {
+									isExcludet = true;
+									break;
+								}
+							}
+							if (!isExcludet ) {
+								this.data.push({
+									field : fbbt[i]+'__'+j,
+									value : $('#' + fbbt[i]+'__'+j).val()
+								});
+							}
+						}
+					}
+				},
+				/*貼上資料*/
+				paste : function() {
+					for (var i in this.data) {
+					   	$('#' + this.data[i].field).val(this.data[i].value);
+				   	}
+				}
+			};
+			var curData = new currentData();
 
 			function sum() {
 				for (var j = 0; j < q_bbsCount; j++) {
@@ -109,6 +178,17 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'bbs_tgg':
+						if (q_cur > 0 && q_cur < 4) {
+							if (!b_ret || b_ret.length == 0){
+								b_pop = '';
+								return;
+							}else{
+								$('#txtTggno_'+b_seq).val(b_ret[0].noa);
+								$('#txtTgg_'+b_seq).val(b_ret[0].comp);
+							}
+						}
+						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
@@ -124,7 +204,11 @@
 			}
 
 			function btnIns() {
-				_btnIns();
+				if($('#checkCopy').is(':checked'))
+            		curData.copy();
+                	_btnIns();
+            	if($('#checkCopy').is(':checked'))
+	                curData.paste();
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
@@ -211,7 +295,13 @@
 				for (var i = 0; i < q_bbsCount; i++) {
 					$('#lblNo_' + i).text(i + 1);
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
-						
+						$('#btnTggno_'+i).click(function() {
+							t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							t_where = "noa in (select tggno from processs where noa='"+$('#txtProcessno_'+b_seq).val()+"') or noa='"+$('#txtTggno_'+b_seq).val()+"'";
+							q_box("tgg_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'bbs_tgg', "500px", "680px", "");
+						});
 					}
 				}
 				_bbsAssign();
@@ -498,6 +588,10 @@
 						</td>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>
+						<td>
+							<input id="checkCopy" type="checkbox" style="float:left;"/>
+							<span> </span><a id='lblCopy' class="lbl" style="float:left;"> </a>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblOrdeno" class="lbl" >訂單編號</a></td>
@@ -534,10 +628,10 @@
 							<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"> </td>
-						<td style="width:150px;"><a id='lblTggno_s'>廠商編號</a></td>
-						<td style="width:180px;"><a id='lblTgg'>廠商名稱</a></td>
 						<td style="width:100px;"><a id='lblProcessno_s'>製程編號</a></td>
 						<td style="width:150px;"><a id='lblProcess'>製程名稱</a></td>
+						<td style="width:150px;"><a id='lblTggno_s'>廠商編號</a></td>
+						<td style="width:180px;"><a id='lblTgg'>廠商名稱</a></td>
 						<td style="width:120px;"><a id='lblMount'>數量</a></td>
 						<td style="width:150px;"><a id='lblNeed'>製造要求</a></td>
 						<td style="width:150px;"><a id='lblMemo_s'>備註</a></td>
@@ -549,15 +643,15 @@
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 						<td>
-							<input id="txtTggno.*" type="text" class="txt c1" style="width: 83%;"/>
-							<input class="btn"  id="btnTggno.*" type="button" value='.' style=" font-weight: bold;" />
-						</td>
-						<td><input id="txtTgg.*" type="text" class="txt c1"/></td>
-						<td>
 							<input id="txtProcessno.*" type="text" class="txt c1" style="width: 75%;"/>
 							<input class="btn"  id="btnProcessno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
 						<td><input id="txtProcess.*" type="text" class="txt c1"/></td>
+						<td>
+							<input id="txtTggno.*" type="text" class="txt c1" style="width: 83%;"/>
+							<input class="btn"  id="btnTggno.*" type="button" value='.' style=" font-weight: bold;" />
+						</td>
+						<td><input id="txtTgg.*" type="text" class="txt c1"/></td>
 						<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtNeed.*" type="text" class="txt c1"/></td>
 						<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
