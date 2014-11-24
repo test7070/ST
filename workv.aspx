@@ -66,7 +66,7 @@
                 	t_maxNo2 = 0;
                 	for(var i=0;i<q_bbtCount;i++){
                 		t_no2 = parseInt($('#txtNo2__'+j).val())
-                		
+                		t_maxNo2 = t_no2>t_maxNo2?t_no2:t_maxNo2;
                 	}
                 	//------------------------------------------
                 	for(var i=0;i<5;i++){
@@ -83,12 +83,19 @@
                 				}
         					}
                 		}else{
-                			
+                			$('#txtNo2__'+k).val(t_maxNoq++);
+                			$('#txtNoq__'+k).val(t_noq);
                 			
                 			
                 		}
                 	}
                 });
+            }
+            function getBbsNoq(strN){
+            	for(var i=0;i<q_bbsCount;i++){
+            		
+            	}
+            	
             }
             
             function q_funcPost(t_func, result) {
