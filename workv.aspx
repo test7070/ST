@@ -37,11 +37,11 @@
 
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtCustno_', 'btnCust_', 'cust', 'noa,comp', 'txtCustno_,txtCust_', 'cust_b.aspx']
-            	,['textSssno___0', '', 'sss', 'noa,namea', 'textSssno___0,textNamea___0', 'sss_b.aspx']
-            	,['textSssno___1', '', 'sss', 'noa,namea', 'textSssno___1,textNamea___1', 'sss_b.aspx']
-            	,['textSssno___2', '', 'sss', 'noa,namea', 'textSssno___2,textNamea___2', 'sss_b.aspx']
-            	,['textSssno___3', '', 'sss', 'noa,namea', 'textSssno___3,textNamea___3', 'sss_b.aspx']
-            	,['textSssno___4', '', 'sss', 'noa,namea', 'textSssno___4,textNamea___4', 'sss_b.aspx']);
+            	,['textSssno0', '', 'sss', 'noa,namea', 'textSssno0,textNamea0', 'sss_b.aspx']
+            	,['textSssno1', '', 'sss', 'noa,namea', 'textSssno1,textNamea1', 'sss_b.aspx']
+            	,['textSssno2', '', 'sss', 'noa,namea', 'textSssno2,textNamea2', 'sss_b.aspx']
+            	,['textSssno3', '', 'sss', 'noa,namea', 'textSssno3,textNamea3', 'sss_b.aspx']
+            	,['textSssno4', '', 'sss', 'noa,namea', 'textSssno4,textNamea4', 'sss_b.aspx']);
 			
 			var z_mech = new Array();
             $(document).ready(function() {
@@ -73,10 +73,10 @@
                 	//------------------------------------------
                 	
                 	for(var i=0;i<5;i++){
-                		t_noq = $('#textNoq___'+i).val();
-                		t_no2 = $('#textNo2___'+i).val();
-                		t_sssno = $('#textSssno___'+i).val();
-                		t_namea = $('#textNamea___'+i).val();
+                		t_noq = $('#textNoq'+i).val();
+                		t_no2 = $('#textNo2'+i).val();
+                		t_sssno = $('#textSssno'+i).val();
+                		t_namea = $('#textNamea'+i).val();
                 		if(t_sssno.length>0 || t_namea.length>0){
                 			t_pmount ++;	
                 		}
@@ -101,8 +101,8 @@
                 			for(var j=0;j<q_bbtCount;j++){
                 				if($('#txtNo2__'+j).val().length==0){
                 					isAdd = true;
-                					$('#textNoq___'+i).val(t_noq);
-                					$('#textNo2___'+i).val(('000'+t_maxNo2).replace(/[0-9]*([0-9][0-9][0-9])/,'$1'));
+                					$('#textNoq'+i).val(t_noq);
+                					$('#textNo2'+i).val(('000'+t_maxNo2).replace(/[0-9]*([0-9][0-9][0-9])/,'$1'));
                 					
                 					$('#txtNo2__'+j).val(('000'+t_maxNo2).replace(/[0-9]*([0-9][0-9][0-9])/,'$1'));
                 					$('#txtNoq__'+j).val(t_noq);
@@ -113,8 +113,8 @@
                 				}	
                 			}
                 			if(!isAdd){
-                				$('#textNoq___'+i).val(t_noq);
-            					$('#textNo2___'+i).val(('000'+t_maxNo2).replace(/[0-9]*([0-9][0-9][0-9])/,'$1'));
+                				$('#textNoq'+i).val(t_noq);
+            					$('#textNo2'+i).val(('000'+t_maxNo2).replace(/[0-9]*([0-9][0-9][0-9])/,'$1'));
                 				var m = q_bbtCount;
                 				$('#btnPlut').click();
 
@@ -146,7 +146,7 @@
                 switch (id) {         
                     default:
                     	try{
-                    		if(id.substring(0,12)=='textSssno___'){
+                    		if(id.substring(0,12)=='textSssno'){
                     			$(id).focusout();
                     		}
                     	}catch(e){
@@ -210,7 +210,7 @@
 		                		}
 							}
                     	}catch(e){
-                    		alert(e.Message);
+                    		
                     	}
                         break;
                 }
@@ -358,10 +358,10 @@
                         	$('#tmp').find('input').val('');//清空再填值
                         	for(var i=0;i<q_bbtCount;i++){
                         		if(t_noq == $('#txtNoq__'+i).val()){
-                        			$('#textNoq___'+m).val($('#txtNoq__'+i).val());
-                        			$('#textNo2___'+m).val($('#txtNo2__'+i).val());
-                        			$('#textSssno___'+m).val($('#txtSssno__'+i).val());
-                        			$('#textNamea___'+m).val($('#txtNamea__'+i).val());
+                        			$('#textNoq'+m).val($('#txtNoq__'+i).val());
+                        			$('#textNo2'+m).val($('#txtNo2__'+i).val());
+                        			$('#textSssno'+m).val($('#txtSssno__'+i).val());
+                        			$('#textNamea'+m).val($('#txtNamea__'+i).val());
                         			m++;
                         		}
                         	}
@@ -719,48 +719,48 @@
 				</tr>
 				<tr>
 					<td align="center">1
-						<input type="text" id="textNoq___0" style="display:none;"/>
-						<input type="text" id="textNo2___0" style="display:none;"/>
+						<input type="text" id="textNoq0" style="display:none;"/>
+						<input type="text" id="textNo20" style="display:none;"/>
 						<input type="button" id="buttonSss___0" style="display:none;"/>
 					</td>
-					<td><input type="text" id="textSssno___0" class="textSssno" style="width:95%;"/></td>
-					<td><input type="text" id="textNamea___0" style="width:95%;"/></td>
+					<td><input type="text" id="textSssno0" class="textSssno" style="width:95%;"/></td>
+					<td><input type="text" id="textNamea0" style="width:95%;"/></td>
 				</tr>
 				<tr>
 					<td align="center">2
-						<input type="text" id="textNoq___1" style="display:none;"/>
-						<input type="text" id="textNo2___1" style="display:none;"/>
+						<input type="text" id="textNoq1" style="display:none;"/>
+						<input type="text" id="textNo21" style="display:none;"/>
 						<input type="button" id="buttonSss___1" style="display:none;"/>
 					</td>
-					<td><input type="text" id="textSssno___1" class="textSssno" style="width:95%;"/></td>
-					<td><input type="text" id="textNamea___1" style="width:95%;"/></td>
+					<td><input type="text" id="textSssno1" class="textSssno" style="width:95%;"/></td>
+					<td><input type="text" id="textNamea1" style="width:95%;"/></td>
 				</tr>
 				<tr>
 					<td align="center">3
-						<input type="text" id="textNoq___2" style="display:none;"/>
-						<input type="text" id="textNo2___2" style="display:none;"/>
+						<input type="text" id="textNoq2" style="display:none;"/>
+						<input type="text" id="textNo22" style="display:none;"/>
 						<input type="button" id="buttonSss___2" style="display:none;"/>
 					</td>
-					<td><input type="text" id="textSssno___2" class="textSssno" style="width:95%;"/></td>
-					<td><input type="text" id="textNamea___2" style="width:95%;"/></td>
+					<td><input type="text" id="textSssno2" class="textSssno" style="width:95%;"/></td>
+					<td><input type="text" id="textNamea2" style="width:95%;"/></td>
 				</tr>
 				<tr>
 					<td align="center">4
-						<input type="text" id="textNoq___3" style="display:none;"/>
-						<input type="text" id="textNo2___3" style="display:none;"/>
+						<input type="text" id="textNoq3" style="display:none;"/>
+						<input type="text" id="textNo23" style="display:none;"/>
 						<input type="button" id="buttonSss___3" style="display:none;"/>
 					</td>
-					<td><input type="text" id="textSssno___3" class="textSssno" style="width:95%;"/></td>
-					<td><input type="text" id="textNamea___3" style="width:95%;"/></td>
+					<td><input type="text" id="textSssno3" class="textSssno" style="width:95%;"/></td>
+					<td><input type="text" id="textNamea3" style="width:95%;"/></td>
 				</tr>
 				<tr>
 					<td align="center">5
-						<input type="text" id="textNoq___4" style="display:none;"/>
-						<input type="text" id="textNo2___4" style="display:none;"/>
+						<input type="text" id="textNoq4" style="display:none;"/>
+						<input type="text" id="textNo24" style="display:none;"/>
 						<input type="button" id="buttonSss___4" style="display:none;"/>
 					</td>
-					<td><input type="text" id="textSssno___4" class="textSssno" style="width:95%;"/></td>
-					<td><input type="text" id="textNamea___4" style="width:95%;"/></td>
+					<td><input type="text" id="textSssno4" class="textSssno" style="width:95%;"/></td>
+					<td><input type="text" id="textNamea4" style="width:95%;"/></td>
 				</tr>
 			</table>
 		</div>

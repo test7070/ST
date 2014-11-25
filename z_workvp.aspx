@@ -17,12 +17,12 @@
 		<script type="text/javascript">
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_workjp');       
+                q_gf('', 'z_workvp');       
             });
 
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_workjp',
+					fileName : 'z_workvp',
 					options : [{
 						type : '6', //[1]
 						name : 'noa'
