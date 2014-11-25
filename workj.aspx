@@ -97,16 +97,18 @@
 	                	}	
                 	}else{
                 		var t_printCount = 0
+                		var t_printPage = 0
                 		for(var i=0;i<q_bbsCount;i++){
 	                		if($('#checkIsprint_'+i).prop('checked') && $.trim($('#txtProductno_'+i).val()).length>0){
 	                			t_noq = t_noq + (t_noq.length>0?'^':'')+$('#txtNoq_'+i).val();	
 	                			t_printCount ++;
+	                			t_printPage += $('#txtCmount_'+i).val().split(',').length;
 	                		}            
 	                	}        
 	                	if(t_noq.length==0){
 	                		alert('未選擇要列印的資料(成品)。');
 	                	}else{
-	                		if (confirm("已選擇 "+t_printCount+" 筆，是否列印條碼?") ) {
+	                		if (confirm("已選擇 "+t_printCount+" 筆共"+t_printPage+" 張條碼，是否列印?") ) {
 	                			q_func( $('#combPrint').val(), $('#txtNoa').val()+',,'+t_noq); 
 	                		}else{
 	                			Unlock(1);
