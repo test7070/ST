@@ -78,26 +78,40 @@
                 	Lock(1,{opacity:0});
                 	var t_noq = '';
                 	if($('#combPrint').val()=='barfe.gen2'){
+                		var t_printCount = 0
                 		for(var i=0;i<q_bbtCount;i++){
 	                		if($('#checkIsprint__'+i).prop('checked') && $.trim($('#txtBno__'+i).val()).length>0){
 	                			t_noq = t_noq + (t_noq.length>0?'^'.val():'')+$('#txtNoq__'+i);	
+	                			t_printCount ++;
 	                		}            
 	                	}        
 	                	if(t_noq.length==0){
 	                		alert('未選擇要列印的資料(餘料)。');
 	                	}else{
-	                		q_func( $('#combPrint').val(), $('#txtNoa').val()+',workjt,'+t_noq); 
+	                		if (confirm("已選擇 "+t_printCount+" 筆，是否列印條碼?") ) {
+	                			q_func( $('#combPrint').val(), $('#txtNoa').val()+',workjt,'+t_noq); 
+	                		}else{
+	                			Unlock(1);
+	                			return;
+	                		}	                		
 	                	}	
                 	}else{
+                		var t_printCount = 0
                 		for(var i=0;i<q_bbsCount;i++){
 	                		if($('#checkIsprint_'+i).prop('checked') && $.trim($('#txtProductno_'+i).val()).length>0){
 	                			t_noq = t_noq + (t_noq.length>0?'^':'')+$('#txtNoq_'+i).val();	
+	                			t_printCount ++;
 	                		}            
 	                	}        
 	                	if(t_noq.length==0){
 	                		alert('未選擇要列印的資料(成品)。');
 	                	}else{
-	                		q_func( $('#combPrint').val(), $('#txtNoa').val()+',,'+t_noq); 
+	                		if (confirm("已選擇 "+t_printCount+" 筆，是否列印條碼?") ) {
+	                			q_func( $('#combPrint').val(), $('#txtNoa').val()+',,'+t_noq); 
+	                		}else{
+	                			Unlock(1);
+	                			return;
+	                		}
 	                	}
                 	}
                 });
@@ -896,7 +910,7 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id="divImport" style="position:absolute; top:100px; left:400px; display:none; width:400px; height:150px; background-color: pink; border: 5px solid gray;">
+		<div id="divImport" style="position:absolute; top:100px; left:400px; display:none; width:400px; height:170px; background-color: pink; border: 5px solid gray;">
 			<table style="width:100%;">
 				<tr style="height:1px;">
 					<td style="width:80px;"></td>
@@ -911,17 +925,23 @@
 					<td></td>
 					<td><input id="btnPrint_d" type="button" value="列印"/></td>
 				</tr>
-				<tr style="height:35px;">
+				<tr style="height:20px;">
 					<td colspan="7">
 						<a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;【列印】有勾、</a>
 					</td>
 				</tr>
-				<tr>
+				<tr style="height:20px;">
 					<td colspan="7"><a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;(成品)【品名】有輸入的才會印。</a></td>
 				</tr>
-				<tr>
+				<tr style="height:20px;">
 					<td colspan="6"><a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;(餘料)【餘料批號】有輸入的才會印。</a></td>
 					<td><input id="btnCancel_d" type="button" value="關閉"/></td>
+				</tr>
+				<tr style="height:20px;">
+					<td colspan="7"><a style="font-size:8px; color:darkblue;">Chrome 若無看見確認視窗</a></td>
+				</tr>
+				<tr style="height:20px;">
+					<td colspan="7"><a style="font-size:8px; color:darkblue;">請至【設定】->【隱私權】(內容設定)->【彈出視窗】(管理例外情況)</a></td>
 				</tr>
 			</table>
 		</div>
