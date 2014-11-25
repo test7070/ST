@@ -37,11 +37,11 @@
 
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtCustno_', 'btnCust_', 'cust', 'noa,comp', 'txtCustno_,txtCust_', 'cust_b.aspx']
-            	,['textSssno___0', 'buttonSss_XX__0', 'sss', 'noa,namea', 'textSssno___0,textNamea___0', 'sss_b.aspx']
-            	,['textSssno___1', 'buttonSss_XX__1', 'sss', 'noa,namea', 'textSssno___1,textNamea___1', 'sss_b.aspx']
-            	,['textSssno___2', 'buttonSss_XX__2', 'sss', 'noa,namea', 'textSssno___2,textNamea___2', 'sss_b.aspx']
-            	,['textSssno___3', 'buttonSss_XX__3', 'sss', 'noa,namea', 'textSssno___3,textNamea___3', 'sss_b.aspx']
-            	,['textSssno___4', 'buttonSss_XX__4', 'sss', 'noa,namea', 'textSssno___4,textNamea___4', 'sss_b.aspx']);
+            	,['textSssno___0', '', 'sss', 'noa,namea', 'textSssno___0,textNamea___0', 'sss_b.aspx']
+            	,['textSssno___1', '', 'sss', 'noa,namea', 'textSssno___1,textNamea___1', 'sss_b.aspx']
+            	,['textSssno___2', '', 'sss', 'noa,namea', 'textSssno___2,textNamea___2', 'sss_b.aspx']
+            	,['textSssno___3', '', 'sss', 'noa,namea', 'textSssno___3,textNamea___3', 'sss_b.aspx']
+            	,['textSssno___4', '', 'sss', 'noa,namea', 'textSssno___4,textNamea___4', 'sss_b.aspx']);
 			
 			var z_mech = new Array();
             $(document).ready(function() {
@@ -62,12 +62,6 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                $('.textSssno').bind('contextmenu', function(e) {
-                    /*滑鼠右鍵*/
-                    e.preventDefault();
-                    var n = $(this).attr('id').replace('textSssno___', '');
-                    $('#buttonSss___'+n).click();
-                });
                 $('#tmp').find('input').focusout(function(e) {
                 	var n = $('input[name=radioSel]:checked').attr('id').replace('radioSel_', '');
                 	t_pmount = 0;
