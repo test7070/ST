@@ -19,7 +19,7 @@
             q_tables = 't';
             var q_name = "workv";
             var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
-            var q_readonlys = ['txtPmount'];
+            var q_readonlys = ['txtPmount','txtAvgkg'];
             var q_readonlyt = [];
             var bbmNum = [];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
@@ -43,7 +43,7 @@
             	,['textSssno___3', 'buttonSss_XX__3', 'sss', 'noa,namea', 'textSssno___3,textNamea___3', 'sss_b.aspx']
             	,['textSssno___4', 'buttonSss_XX__4', 'sss', 'noa,namea', 'textSssno___4,textNamea___4', 'sss_b.aspx']);
 			
-			var z_mech = '';
+			var z_mech = new Array();
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
@@ -166,9 +166,9 @@
                 	case 'mech':
                 		var as = _q_appendData("mech", "", true);
                 		if (as[0] != undefined) {
-                			z_mech = ' @';
+                			z_mech = new Array();
 	                		for(var i=0;i<as.length;i++){
-	                			z_mech += (z_mech.length>0?',':'')+as[i].noa+'@'+as[i].mech;
+	                			z_mech.push({noa:as[i].noa,mech:as[i].mech})
 	                		}
                 		}
                 		q_gt(q_name, q_content, q_sqlCount, 1);
@@ -184,36 +184,39 @@
                     			var as = _q_appendData("workj", "", true);
                     			var ar = _q_appendData("workjs", "", true);
 		                		if (as[0] != undefined) {
-		                			var t_noa = t_para.uno.substring(0,11);
-		                			var t_noq = t_para.uno.substring(12,3);
-									
-									for(var i=0;i<ar.length;i++){
-										
-									}
-		                			/*q_gt('workjs', "where=^^noa='"+t_noa+"' and noq='"+t_noq+"'^^", 0, 0, 0
-		                				, JSON.stringify({action:"data_workjs"
-		                				,n:t_para.n
-		                				,uno:t_para.uno
-		                				,custno:as[0].custno
-		                				,cust:as[0].cust}));	*/			
-		                		}
-							}else if(t_para.action=="data_workjs"){
-                    			var as = _q_appendData("workjs", "", true);
-		                		if (as[0] != undefined) {	
 		                			var n = t_para.n;
-		                			var string = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:10,K:11,L:12,M:13,N:14,O:15,P:16,Q:17,R:18,S:19,T:20,U:21,V:22,W:23,X:24,Y:25,Z:26}
-		                			$('#txtCustno_'+n).val(t_para.custno);
-		                			$('#txtCust_'+n).val(t_para.cust);	
-		                			$('#txtProductno_'+n).val(as[0].productno);	
-		                			$('#txtProduct_'+n).val(as[0].product);	
-		                			$('#txtLengthb_'+n).val(as[0].lengthb);
-		                			var t_cmount = $('#txtCmount_'+n).val().split(',');
-		                			var t_cweight = $('#txtCweight_'+n).val().split(',');		
-		                			$('#txtMount_'+n).val(t_cmount[string[t_para.uno.substring(15,1)]]);
-		                			$('#txtWeight_'+n).val(t_cweight[string[t_para.uno.substring(15,1)]]);
+		                			var string = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:10,K:11,L:12,M:13,N:14,O:15,P:16,Q:17,R:18,S:19,T:20,U:21,V:22,W:23,X:24,Y:25,Z:26};
+		                			var t_noa = t_para.uno.substring(0,11);
+		                			var t_noq = t_para.uno.substring(12,15);
+									
+									$('#txtCustno_'+n).val(as[0].custno);
+		                			$('#txtCust_'+n).val(as[0].cust);	
+									for(var i=0;i<ar.length;i++){
+										if(ar[i].noq == t_noq){
+											$('#txtProductno_'+n).val(ar[i].productno);	
+				                			$('#txtProduct_'+n).val(ar[i].product);	
+				                			$('#txtLengthb_'+n).val(ar[i].lengthb);
+				                			t_cmount = ar[i].cmount.split(',');
+				                			t_cweight = ar[i].cweight.split(',');
+				                			$('#txtMemo').val()
+				                			$('#txtMount_'+n).val(t_cmount[string[t_para.uno.substring(15,16)]-1]);
+		                					$('#txtWeight_'+n).val(t_cweight[string[t_para.uno.substring(15,16)]-1]);
+		                					t_mechno = eval('ar[i].mech'+t_para.uno.substring(18,19));
+		                					$('#txtMechno_'+n).val(t_mechno);
+		                					for(var j=0;j<z_mech.length;j++){
+		                						if(z_mech[j].noa == t_mechno){
+		                							$('#txtMech_'+n).val(z_mech[j].mech);
+		                							break;
+		                						}
+		                					}	
+		                					sum();                					
+											break;	
+										}
+									}		
 		                		}
 							}
                     	}catch(e){
+                    		alert(e.Message);
                     	}
                         break;
                 }
@@ -369,13 +372,13 @@
                         		}
                         	}
                         });
-                        $('#txtProduct_'+i).change(function(e){
-                        	sum();
-                        });
                         $('#txtLengthb_'+i).change(function(e){
                     		sum();
                     	});
                     	$('#txtMount_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtWeight_'+i).change(function(e){
                     		sum();
                     	});
                     }
@@ -395,34 +398,15 @@
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
-                var calc =[{key:'3#',value:0.56,m300:400,m600:400,m1000:270,m1600:250}
-	                ,{key:'4#',value:0.994,m300:300,m600:250,m1000:150,m1600:130}
-	                ,{key:'5#',value:1.56,m300:200,m600:160,m1000:100,m1600:80}
-	                ,{key:'6#',value:2.25,m300:160,m600:120,m1000:70,m1600:55}
-	                ,{key:'7#',value:3.05,m300:150,m600:80,m1000:50,m1600:40}
-	                ,{key:'8#',value:3.98,m300:130,m600:60,m1000:40,m1600:30}
-	                ,{key:'9#',value:5.08,m300:100,m600:50,m1000:30,m1600:20}
-	                ,{key:'10#',value:6.39,m300:80,m600:40,m1000:25,m1600:20}
-	                ,{key:'11#',value:7.9,m300:70,m600:30,m1000:20,m1600:15}];
-	             
-	            /*var t_weight=0,t_mount=0,t_weights;
+
                 for(var i=0;i<q_bbsCount;i++){
-                	t_length = q_float('txtLengthb_'+i);
-                	t_weights = 0;
-                	t_mounts = q_float('txtMount_'+i);  	
-                	t_product = $('#txtProduct_'+i).val();
-                	
+                	t_weights = q_float('txtWeight_'+i);
+                	t_pmounts = q_float('txtPmount_'+i);  	
+                	t_avgkg = t_pmounts=0?0:round(q_div(t_weights,t_pmounts),2);
                           
-                	//-----------------------------------
-					$('#txtCmount_'+i).val(t_cmount);
-					$('#txtCweight_'+i).val(t_cweight);
-                	
-                	$('#txtWeight_'+i).val(t_weights);
-                	t_weight = q_add(t_weight,t_weights);
-                	t_mount = q_add(t_mount,t_mounts);
+                	$('#txtAvgkg_'+i).val(t_avgkg);
                 }
-                $('#txtWeight').val(t_weight);
-                $('#txtMount').val(t_mount);*/
+                
             }
 
             function q_appendData(t_Table) {
@@ -685,16 +669,16 @@
 					</td>
 					<td style="width:20px;"> </td>
 					<td style="width:20px;"> </td>
-					<td style="width:200px;"><a id='lbl_uno'>條碼批號</a></td>
-					<td style="width:100px;"><a id='lbl_datea'>日期</a></td>
-					<td style="width:100px;"><a id='lbl_cust'>客戶名稱</a></td>
-					<td style="width:100px;"><a id='lbl_product'>鋼筋號數</a></td>
-					<td style="width:100px;"><a id='lbl_length'>長度</a></td>
-					<td style="width:100px;"><a id='lbl_weight'>重量</a></td>
-					<td style="width:100px;"><a id='lbl_mount'>數量</a></td>
-					<td style="width:100px;"><a id='lbl_pmount'>人數</a></td>
+					<td style="width:180px;"><a id='lbl_uno'>條碼批號</a></td>
+					<td style="width:80px;"><a id='lbl_datea'>日期</a></td>
+					<td style="width:100px;"><a id='lbl_cust'>客戶</a></td>
+					<td style="width:100px;"><a id='lbl_product'>品名</a></td>
+					<td style="width:80px;"><a id='lbl_length'>長度</a></td>
+					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
+					<td style="width:80px;"><a id='lbl_mount'>數量</a></td>
+					<td style="width:80px;"><a id='lbl_pmount'>人數</a></td>
 					<td style="width:100px;"><a id='lbl_mech'>機台</a></td>
-					<td style="width:100px;"><a id='lbl_avgkg'>平均每人KG</a></td>
+					<td style="width:80px;"><a id='lbl_avgkg'>平均每人KG</a></td>
 					<td style="width:100px;"><a id='lbl_memo'>備註</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -711,12 +695,12 @@
 					<td>
 						<input class="txt" id="txtCustno.*" type="text" style="width:35%; float:left;"/>
 						<input class="txt" id="txtCust.*" type="text" style="width:60%;float:left;"/>
-						<input id="btnCust.*" type="button" style="display:none;"/>
+						<input id="btnCust.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td>
 						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
 						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
-						<input id="btnProduct.*" type="button" style="display:none;"/>
+						<input id="btnProduct.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td><input class="txt num" id="txtLengthb.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt num" id="txtWeight.*" type="text" style="width:95%;" title=""/></td>
@@ -725,9 +709,10 @@
 					<td>
 						<input class="txt" id="txtMechno.*" type="text" style="width:35%; float:left;"/>
 						<input class="txt" id="txtMech.*" type="text" style="width:60%;float:left;"/>
-						<input id="btnMech.*" type="button" style="display:none;"/>
+						<input id="btnMech.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td><input class="txt num" id="txtAvgkg.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;" title=""/></td>
 				</tr>
 			</table>
 		</div>
