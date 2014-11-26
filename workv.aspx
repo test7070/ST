@@ -260,7 +260,23 @@
                     opacity : 0
                 });
                 $('#tmp').find('input').first().focusout();
-                	
+				
+				for(var i=0;i<q_bbtCount;i++){
+					t_noq1 = $('#txtNoq__'+i).val();
+					isExist = false;
+					for(var j=0;j<q_bbsCount;j++){
+						t_noq2 = $('#txtNoq_'+j).val();
+						if(t_noq1==t_noq2)
+							isExist = true;
+					}
+					if(!isExist){
+						$('#txtNoq__'+i).val('');
+						$('#txtNo2__'+i).val('');
+						$('#txtSssno__'+i).val('');
+						$('#txtNamea__'+i).val('');
+					}
+				}
+				
                 if (q_cur == 1) {
                     $('#txtWorker').val(r_name);
                 } else
@@ -548,7 +564,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1700px;
+                
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -560,7 +576,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1700px;
+                width: 1140px;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -576,7 +592,7 @@
                 font-size: medium;
             }
             #dbbt {
-                width: 1500px;
+                width:1700px;
             }
             #tbbt {
                 margin: 0;
@@ -656,7 +672,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs'>
+		<div class='dbbs' style="overflow:visible;width: 1200px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td style="width:20px;">
@@ -664,13 +680,13 @@
 					</td>
 					<td style="width:20px;"> </td>
 					<td style="width:20px;"> </td>
-					<td style="width:180px;"><a id='lbl_uno'>條碼批號</a></td>
+					<td style="width:220px;"><a id='lbl_uno'>條碼批號</a></td>
 					<td style="width:80px;"><a id='lbl_datea'>日期</a></td>
 					<td style="width:100px;"><a id='lbl_cust'>客戶</a></td>
 					<td style="width:100px;"><a id='lbl_product'>品名</a></td>
-					<td style="width:80px;"><a id='lbl_length'>長度</a></td>
-					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
-					<td style="width:80px;"><a id='lbl_mount'>數量</a></td>
+					<td style="width:60px;"><a id='lbl_length'>長度</a></td>
+					<td style="width:60px;"><a id='lbl_weight'>重量</a></td>
+					<td style="width:60px;"><a id='lbl_mount'>數量</a></td>
 					<td style="width:40px;"><a id='lbl_pmount'>人數</a></td>
 					<td style="width:100px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:80px;"><a id='lbl_avgkg'>平均每人KG</a></td>
@@ -690,12 +706,12 @@
 					<td><input class="txt" id="txtDatea.*" type="text" style="width:95%;" title=""/></td>
 					<td>
 						<input class="txt" id="txtCustno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtCust.*" type="text" style="width:60%;float:left;"/>
+						<input class="txt" id="txtCust.*" type="text" style="width:50%;float:left;"/>
 						<input id="btnCust.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td>
 						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:50%;float:left;"/>
 						<input id="btnProduct.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td><input class="txt num" id="txtLengthb.*" type="text" style="width:95%;" title=""/></td>
@@ -704,7 +720,7 @@
 					<td><input class="txt num" id="txtPmount.*" type="text" style="width:95%;" title=""/></td>
 					<td>
 						<input class="txt" id="txtMechno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtMech.*" type="text" style="width:60%;float:left;"/>
+						<input class="txt" id="txtMech.*" type="text" style="width:50%;float:left;"/>
 						<input id="btnMech.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td><input class="txt num" id="txtAvgkg.*" type="text" style="width:95%;" title=""/></td>
@@ -717,8 +733,8 @@
 			<table id="tmp" style="background: pink;">
 				<tr style="color:white; background:#003366;">
 					<td style="width:20px;"></td>
-					<td style="width:200px; text-align: center;">員工編號</td>
-					<td style="width:200px; text-align: center;">名稱</td>
+					<td style="width:100px; text-align: center;">員工編號</td>
+					<td style="width:150px; text-align: center;">名稱</td>
 				</tr>
 				<tr>
 					<td align="center">1
@@ -778,8 +794,8 @@
 						<td style="width:20px;"></td>
 						<td style="width:100px; text-align: center;">Noq</td>
 						<td style="width:100px; text-align: center;">No2</td>
-						<td style="width:200px; text-align: center;">Sssno</td>
-						<td style="width:200px; text-align: center;">Namea</td>
+						<td style="width:100px; text-align: center;">Sssno</td>
+						<td style="width:150px; text-align: center;">Namea</td>
 					</tr>
 					<tr class="detail">
 						<td>
