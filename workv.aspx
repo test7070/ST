@@ -162,7 +162,7 @@
                 		if (as[0] != undefined) {
                 			z_mech = new Array();
 	                		for(var i=0;i<as.length;i++){
-	                			z_mech.push({noa:as[i].noa,mech:as[i].mech})
+	                			z_mech.push({noa:as[i].noa,mech:as[i].mech,price:as[i].price})
 	                		}
                 		}
                 		q_gt(q_name, q_content, q_sqlCount, 1);
@@ -200,6 +200,7 @@
 		                					for(var j=0;j<z_mech.length;j++){
 		                						if(z_mech[j].noa == t_mechno){
 		                							$('#txtMech_'+n).val(z_mech[j].mech);
+		                							$('#txtPrice_'+n).val(z_mech[j].price);
 		                							break;
 		                						}
 		                					}	
@@ -670,9 +671,10 @@
 					<td style="width:80px;"><a id='lbl_length'>長度</a></td>
 					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
 					<td style="width:80px;"><a id='lbl_mount'>數量</a></td>
-					<td style="width:80px;"><a id='lbl_pmount'>人數</a></td>
+					<td style="width:40px;"><a id='lbl_pmount'>人數</a></td>
 					<td style="width:100px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:80px;"><a id='lbl_avgkg'>平均每人KG</a></td>
+					<td style="width:80px;"><a id='lbl_price'>NT/噸</a></td>
 					<td style="width:100px;"><a id='lbl_memo'>備註</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -706,6 +708,7 @@
 						<input id="btnMech.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td><input class="txt num" id="txtAvgkg.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtPrice.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;" title=""/></td>
 				</tr>
 			</table>
