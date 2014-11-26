@@ -397,7 +397,7 @@
                 for(var i=0;i<q_bbsCount;i++){
                 	t_weights = q_float('txtWeight_'+i);
                 	t_pmounts = q_float('txtPmount_'+i);  	
-                	t_avgkg = t_pmounts=0?0:round(q_div(t_weights,t_pmounts),2);
+                	t_avgkg = t_pmounts==0?0:round(q_div(t_weights,t_pmounts),2);
                           
                 	$('#txtAvgkg_'+i).val(t_avgkg);
                 }
