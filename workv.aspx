@@ -193,9 +193,9 @@
 				                			t_cmount = ar[i].cmount.split(',');
 				                			t_cweight = ar[i].cweight.split(',');
 				                			$('#txtMemo').val()
-				                			$('#txtMount_'+n).val(t_cmount[string[t_para.uno.substring(15,16)]-1]);
-		                					$('#txtWeight_'+n).val(t_cweight[string[t_para.uno.substring(15,16)]-1]);
-		                					t_mechno = eval('ar[i].mech'+t_para.uno.substring(18,19));
+				                			$('#txtMount_'+n).val(t_cmount[string[t_para.uno.substring(17,18)]-1]);
+		                					$('#txtWeight_'+n).val(t_cweight[string[t_para.uno.substring(17,18)]-1]);
+		                					t_mechno = eval('ar[i].mech'+t_para.uno.substring(16,17));
 		                					$('#txtMechno_'+n).val(t_mechno);
 		                					for(var j=0;j<z_mech.length;j++){
 		                						if(z_mech[j].noa == t_mechno){
