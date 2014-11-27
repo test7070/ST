@@ -557,10 +557,10 @@
 										t_spec=t_spec+(t_spec.length>0?' ':'')+$(this).val();
 								});
 								if(t_spec.length>0)
-									$('#txtProduct_'+b_seq).val($('#txtProduct_'+b_seq).val()+' '+t_spec);
+									$('#txtSpec_'+b_seq).val(t_spec);
 								
 								$('#div_spec').hide();
-								$('#txtProduct_'+b_seq).focus();
+								$('#txtSpec_'+b_seq).focus();
 							});
 						});
 						
@@ -582,7 +582,7 @@
 				$('#chkIsproj').attr('checked', false);
 				$('#txtDatea').val(q_date().substr(0,3)+'/12/31');
 				
-				$('#txtDatea').focus();
+				$('#txtCustno').focus();
 
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);

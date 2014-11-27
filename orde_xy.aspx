@@ -451,38 +451,6 @@
 							stkmount = q_add(stkmount, dec(as[i].mount));
 						}
 						t_msg = "庫存量：" + stkmount;
-						//平均成本
-						var t_where = "where=^^ productno ='" + $('#txtProductno_' + b_seq).val() + "' order by datea desc ^^ stop=1";
-						q_gt('wcost', t_where, 0, 0, 0, "msg_wcost", r_accy);
-						break;
-					case 'msg_wcost':
-						var as = _q_appendData("wcost", "", true);
-						var wcost_price;
-						if (as[0] != undefined) {
-							if (dec(as[0].mount) == 0) {
-								wcost_price = 0;
-							} else {
-								wcost_price = round(q_div(q_add(q_add(q_add(dec(as[0].costa), dec(as[0].costb)), dec(as[0].costc)), dec(as[0].costd)), dec(as[0].mount)), 0)
-							}
-						}
-						if (wcost_price != undefined) {
-							t_msg = t_msg + "<BR>平均成本：" + wcost_price;
-							q_msg($('#txtMount_' + b_seq), t_msg);
-						} else {
-							//原料成本
-							var t_where = "where=^^ productno ='" + $('#txtProductno_' + b_seq).val() + "' order by mon desc ^^ stop=1";
-							q_gt('costs', t_where, 0, 0, 0, "msg_costs", r_accy);
-						}
-						break;
-					case 'msg_costs':
-						var as = _q_appendData("costs", "", true);
-						var costs_price;
-						if (as[0] != undefined) {
-							costs_price = as[0].price;
-						}
-						if (costs_price != undefined) {
-							t_msg = t_msg + "<BR>平均成本：" + costs_price;
-						}
 						q_msg($('#txtMount_' + b_seq), t_msg);
 						break;
 					case 'custaddr':
