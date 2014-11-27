@@ -35,6 +35,21 @@
 						dbf : 'sss',
 						index : 'noa,namea',
 						src : 'sss_b.aspx'
+					},{
+						type : '2', //[6][7]
+						name : 'cust',
+						dbf : 'cust',
+						index : 'noa,comp',
+						src : 'cust_b.aspx'
+					},{
+						type : '2', //[8][9]
+						name : 'ucc',
+						dbf : 'ucc',
+						index : 'noa,product',
+						src : 'ucc_b.aspx'
+					},{
+						type : '6', //[10]
+						name : 'uno'
 					}]
 				});
 				q_popAssign();
