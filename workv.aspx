@@ -37,6 +37,7 @@
 
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtCustno_', 'btnCust_', 'cust', 'noa,comp', 'txtCustno_,txtCust_', 'cust_b.aspx']
+            	,['txtMechno_', 'btnMech_', 'mech', 'noa,mech', 'txtMechno_,txtMech_', 'mech_b.aspx']
             	,['textSssno0', '', 'sss', 'noa,namea', 'textSssno0,textNamea0', 'sss_b.aspx']
             	,['textSssno1', '', 'sss', 'noa,namea', 'textSssno1,textNamea1', 'sss_b.aspx']
             	,['textSssno2', '', 'sss', 'noa,namea', 'textSssno2,textNamea2', 'sss_b.aspx']
@@ -353,6 +354,12 @@
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtCustno_', '');
                             $('#btnCust_'+n).click();
+                        });
+                        $('#txtMechno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtMechno_', '');
+                            $('#btnMech_'+n).click();
                         });
                         $('#radioSel_'+i).click(function(e){
                         	//--------- 確保Noq都有值
