@@ -33,7 +33,7 @@
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
-            brwCount2 = 6;
+            brwCount2 = 5;
 
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtCustno_', 'btnCust_', 'cust', 'noa,comp', 'txtCustno_,txtCust_', 'cust_b.aspx']
@@ -564,7 +564,7 @@
                 font-size: medium;
             }
             .dbbs {
-                
+                width:1360px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -576,7 +576,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1140px;
+                width: 100%;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -672,7 +672,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="overflow:visible;width: 1200px;">
+		<div class='dbbs'>
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td style="width:20px;">
@@ -680,10 +680,10 @@
 					</td>
 					<td style="width:20px;"> </td>
 					<td style="width:20px;"> </td>
-					<td style="width:220px;"><a id='lbl_uno'>條碼批號</a></td>
-					<td style="width:80px;"><a id='lbl_datea'>日期</a></td>
-					<td style="width:100px;"><a id='lbl_cust'>客戶</a></td>
-					<td style="width:100px;"><a id='lbl_product'>品名</a></td>
+					<td style="width:200px;"><a id='lbl_uno'>條碼批號</a></td>
+					<td style="width:100px;"><a id='lbl_datea'>日期</a></td>
+					<td style="width:140px;"><a id='lbl_cust'>客戶</a></td>
+					<td style="width:270px;"><a id='lbl_product'>品名</a></td>
 					<td style="width:60px;"><a id='lbl_length'>長度</a></td>
 					<td style="width:60px;"><a id='lbl_weight'>重量</a></td>
 					<td style="width:60px;"><a id='lbl_mount'>數量</a></td>
@@ -706,12 +706,12 @@
 					<td><input class="txt" id="txtDatea.*" type="text" style="width:95%;" title=""/></td>
 					<td>
 						<input class="txt" id="txtCustno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtCust.*" type="text" style="width:50%;float:left;"/>
+						<input class="txt" id="txtCust.*" type="text" style="width:55%;float:left;"/>
 						<input id="btnCust.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td>
-						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtProduct.*" type="text" style="width:50%;float:left;"/>
+						<input class="txt" id="txtProductno.*" type="text" style="width:30%; float:left;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:65%;float:left;"/>
 						<input id="btnProduct.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td><input class="txt num" id="txtLengthb.*" type="text" style="width:95%;" title=""/></td>
@@ -720,7 +720,7 @@
 					<td><input class="txt num" id="txtPmount.*" type="text" style="width:95%;" title=""/></td>
 					<td>
 						<input class="txt" id="txtMechno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtMech.*" type="text" style="width:50%;float:left;"/>
+						<input class="txt" id="txtMech.*" type="text" style="width:55%;float:left;"/>
 						<input id="btnMech.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td><input class="txt num" id="txtAvgkg.*" type="text" style="width:95%;" title=""/></td>
