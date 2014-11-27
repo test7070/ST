@@ -162,7 +162,7 @@
                 		if (as[0] != undefined) {
                 			z_mech = new Array();
 	                		for(var i=0;i<as.length;i++){
-	                			z_mech.push({noa:as[i].noa,mech:as[i].mech})
+	                			z_mech.push({noa:as[i].noa,mech:as[i].mech,price:as[i].price})
 	                		}
                 		}
                 		q_gt(q_name, q_content, q_sqlCount, 1);
@@ -193,13 +193,14 @@
 				                			t_cmount = ar[i].cmount.split(',');
 				                			t_cweight = ar[i].cweight.split(',');
 				                			$('#txtMemo').val()
-				                			$('#txtMount_'+n).val(t_cmount[string[t_para.uno.substring(15,16)]-1]);
-		                					$('#txtWeight_'+n).val(t_cweight[string[t_para.uno.substring(15,16)]-1]);
-		                					t_mechno = eval('ar[i].mech'+t_para.uno.substring(18,19));
+				                			$('#txtMount_'+n).val(t_cmount[string[t_para.uno.substring(17,18)]-1]);
+		                					$('#txtWeight_'+n).val(t_cweight[string[t_para.uno.substring(17,18)]-1]);
+		                					t_mechno = eval('ar[i].mech'+t_para.uno.substring(16,17));
 		                					$('#txtMechno_'+n).val(t_mechno);
 		                					for(var j=0;j<z_mech.length;j++){
 		                						if(z_mech[j].noa == t_mechno){
 		                							$('#txtMech_'+n).val(z_mech[j].mech);
+		                							$('#txtPrice_'+n).val(z_mech[j].price);
 		                							break;
 		                						}
 		                					}	
@@ -259,7 +260,23 @@
                     opacity : 0
                 });
                 $('#tmp').find('input').first().focusout();
-                	
+				
+				for(var i=0;i<q_bbtCount;i++){
+					t_noq1 = $('#txtNoq__'+i).val();
+					isExist = false;
+					for(var j=0;j<q_bbsCount;j++){
+						t_noq2 = $('#txtNoq_'+j).val();
+						if(t_noq1==t_noq2)
+							isExist = true;
+					}
+					if(!isExist){
+						$('#txtNoq__'+i).val('');
+						$('#txtNo2__'+i).val('');
+						$('#txtSssno__'+i).val('');
+						$('#txtNamea__'+i).val('');
+					}
+				}
+				
                 if (q_cur == 1) {
                     $('#txtWorker').val(r_name);
                 } else
@@ -396,7 +413,7 @@
                 for(var i=0;i<q_bbsCount;i++){
                 	t_weights = q_float('txtWeight_'+i);
                 	t_pmounts = q_float('txtPmount_'+i);  	
-                	t_avgkg = t_pmounts=0?0:round(q_div(t_weights,t_pmounts),2);
+                	t_avgkg = t_pmounts==0?0:round(q_div(t_weights,t_pmounts),2);
                           
                 	$('#txtAvgkg_'+i).val(t_avgkg);
                 }
@@ -547,7 +564,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1700px;
+                
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -559,7 +576,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1700px;
+                width: 1140px;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -575,7 +592,7 @@
                 font-size: medium;
             }
             #dbbt {
-                width: 1500px;
+                width:1700px;
             }
             #tbbt {
                 margin: 0;
@@ -655,7 +672,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs'>
+		<div class='dbbs' style="overflow:visible;width: 1200px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td style="width:20px;">
@@ -663,16 +680,17 @@
 					</td>
 					<td style="width:20px;"> </td>
 					<td style="width:20px;"> </td>
-					<td style="width:180px;"><a id='lbl_uno'>條碼批號</a></td>
+					<td style="width:220px;"><a id='lbl_uno'>條碼批號</a></td>
 					<td style="width:80px;"><a id='lbl_datea'>日期</a></td>
 					<td style="width:100px;"><a id='lbl_cust'>客戶</a></td>
 					<td style="width:100px;"><a id='lbl_product'>品名</a></td>
-					<td style="width:80px;"><a id='lbl_length'>長度</a></td>
-					<td style="width:80px;"><a id='lbl_weight'>重量</a></td>
-					<td style="width:80px;"><a id='lbl_mount'>數量</a></td>
-					<td style="width:80px;"><a id='lbl_pmount'>人數</a></td>
+					<td style="width:60px;"><a id='lbl_length'>長度</a></td>
+					<td style="width:60px;"><a id='lbl_weight'>重量</a></td>
+					<td style="width:60px;"><a id='lbl_mount'>數量</a></td>
+					<td style="width:40px;"><a id='lbl_pmount'>人數</a></td>
 					<td style="width:100px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:80px;"><a id='lbl_avgkg'>平均每人KG</a></td>
+					<td style="width:80px;"><a id='lbl_price'>NT/噸</a></td>
 					<td style="width:100px;"><a id='lbl_memo'>備註</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -688,12 +706,12 @@
 					<td><input class="txt" id="txtDatea.*" type="text" style="width:95%;" title=""/></td>
 					<td>
 						<input class="txt" id="txtCustno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtCust.*" type="text" style="width:60%;float:left;"/>
+						<input class="txt" id="txtCust.*" type="text" style="width:50%;float:left;"/>
 						<input id="btnCust.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td>
 						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:50%;float:left;"/>
 						<input id="btnProduct.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td><input class="txt num" id="txtLengthb.*" type="text" style="width:95%;" title=""/></td>
@@ -702,10 +720,11 @@
 					<td><input class="txt num" id="txtPmount.*" type="text" style="width:95%;" title=""/></td>
 					<td>
 						<input class="txt" id="txtMechno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtMech.*" type="text" style="width:60%;float:left;"/>
+						<input class="txt" id="txtMech.*" type="text" style="width:50%;float:left;"/>
 						<input id="btnMech.*" type="button" style="display:none;float:left;"/>
 					</td>
 					<td><input class="txt num" id="txtAvgkg.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtPrice.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;" title=""/></td>
 				</tr>
 			</table>
@@ -714,8 +733,8 @@
 			<table id="tmp" style="background: pink;">
 				<tr style="color:white; background:#003366;">
 					<td style="width:20px;"></td>
-					<td style="width:200px; text-align: center;">員工編號</td>
-					<td style="width:200px; text-align: center;">名稱</td>
+					<td style="width:100px; text-align: center;">員工編號</td>
+					<td style="width:150px; text-align: center;">名稱</td>
 				</tr>
 				<tr>
 					<td align="center">1
@@ -775,8 +794,8 @@
 						<td style="width:20px;"></td>
 						<td style="width:100px; text-align: center;">Noq</td>
 						<td style="width:100px; text-align: center;">No2</td>
-						<td style="width:200px; text-align: center;">Sssno</td>
-						<td style="width:200px; text-align: center;">Namea</td>
+						<td style="width:100px; text-align: center;">Sssno</td>
+						<td style="width:150px; text-align: center;">Namea</td>
 					</tr>
 					<tr class="detail">
 						<td>
