@@ -17,8 +17,8 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2','txtComp2'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq','txtPrice'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2','txtComp2','txtPrice'];
+			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
 			var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1]];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -84,6 +84,9 @@
 			}
 
 			function mainPost() {
+				if(r_rank<'5')
+					q_readonlys.push('txtPrice');
+					
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
@@ -173,7 +176,7 @@
 					if (!emp(t_custno)) {
 						focus_addr = $(this).attr('id');
 						var t_where = "where=^^ noa='" + t_custno + "' ^^";
-						q_gt('cust', t_where, 0, 0, 0, "");
+						q_gt('cust', t_where, 0, 0, 0, "cust_addr");
 					}
 				});
 
@@ -182,7 +185,7 @@
 					if (!emp(t_custno)) {
 						focus_addr = $(this).attr('id');
 						var t_where = "where=^^ noa='" + t_custno + "' ^^";
-						q_gt('cust', t_where, 0, 0, 0, "");
+						q_gt('cust', t_where, 0, 0, 0, "cust_addr");
 					}
 				});
 
@@ -266,7 +269,7 @@
 				}
 				b_pop = '';
 			}
-
+			
 			var t_msg = '';
 			var focus_addr = '';
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
@@ -318,17 +321,7 @@
 									break;
 								}
 							}
-							GetTranPrice();
 						});
-						break;
-					case 'GetTranPrice' :
-						var as = _q_appendData("addr", "", true);
-						if (as[0] != undefined) {
-							$('#txtPrice').val(as[0].driverprice2);
-						}else{
-							$('#txtPrice').val(0);
-						}
-						sum();
 						break;
 					case 'msg_stk_all':
 						var as = _q_appendData("stkucc", "", true);
@@ -459,7 +452,29 @@
 						
 						if(t_msg.length>0)
 							q_msg($('#txtStoreno2_' + b_seq), t_msg);
-						break;	
+						break;
+					case 'msg_ucc':
+						var as = _q_appendData("ucc", "", true);
+						t_msg = '';
+						if (as[0] != undefined) {
+							t_msg = "銷售單價：" + dec(as[0].saleprice) + "<BR>";
+						}
+						//最新出貨單價
+						var t_where = "where=^^ custno='" + $('#txtCustno').val() + "' and noa in (select noa from vccs" + r_accy + " where productno='" + $('#txtProductno_' + b_seq).val() + "' and price>0 ) ^^ stop=1";
+						q_gt('vcc', t_where, 0, 0, 0, "msg_vcc", r_accy);
+						break;
+					case 'msg_vcc':
+						var as = _q_appendData("vccs", "", true);
+						var vcc_price = 0;
+						if (as[0] != undefined) {
+							for (var i = 0; i < as.length; i++) {
+								if (as[0].productno == $('#txtProductno_' + b_seq).val())
+									vcc_price = dec(as[i].price);
+							}
+						}
+						t_msg = t_msg + "最近出貨單價：" + vcc_price;
+						q_msg($('#txtPrice_' + b_seq), t_msg);
+						break;
 					case 'custaddr':
 						var as = _q_appendData("custaddr", "", true);
 						var t_item = " @ ";
@@ -486,11 +501,19 @@
 						$('#txtAddr2').val(t_addr2);
 						
 						break;
-					case 'cust':
+					case 'cust_addr':
 						var as = _q_appendData("cust", "", true);
 						if (as[0] != undefined && focus_addr != '') {
 							$('#' + focus_addr).val(as[0].addr_fact);
 							focus_addr = '';
+						}
+						break;
+					case 'cust_price':
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							var t_invomemo=as[0].invomemo;
+							t_invomemo=t_invomemo.split('##');
+							$('#txtPrice').val(t_invomemo[5]);
 						}
 						break;
 					case 'btnDele':
@@ -648,6 +671,12 @@
 								sum();
 						});
 						
+						$('#txtProductno_' + i).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
+						
 						$('#txtMount_' + i).focusin(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								t_IdSeq = -1;
@@ -666,6 +695,11 @@
 								t_IdSeq = -1;
 								q_bodyId($(this).attr('id'));
 								b_seq = t_IdSeq;
+								if (!emp($('#txtProductno_' + b_seq).val())) {
+									//金額
+									var t_where = "where=^^ noa='" + $('#txtProductno_' + b_seq).val() + "' ^^ stop=1";
+									q_gt('ucc', t_where, 0, 0, 0, "msg_ucc", r_accy);
+								}
 							}
 						});
 						
@@ -914,16 +948,28 @@
 						var thisVal = $('#txtCardealno').val();
 						var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
 						q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
-						GetTranPrice();
 						break;
 					case 'txtCustno':
 						if (!emp($('#txtCustno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+							q_gt('cust', t_where, 0, 0, 0, "cust_price");
 						}
 						bbsGetOrdeList();
 						break;
 					case 'txtProductno_':
+						if($('#txtProduct_'+b_seq).val().indexOf('運費')>-1 && dec($('#txtPrice').val())>0){
+							var t_mount=0;
+							for (var j = 0; j < q_bbsCount; j++) {
+								if(j!=b_seq){
+									t_mount=q_add(t_mount,q_float('txtMount_'+j));
+								}
+							}
+							q_tr('txtMount_'+b_seq,t_mount);
+							q_tr('txtPrice_'+b_seq,dec($('#txtPrice').val()));
+						}
+					
 						bbsGetOrdeList();
 						break;
 				}
@@ -1257,6 +1303,8 @@
 						<td class="td3"><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td class="td4"><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
 						<td class="td5" colspan='2'><input id="txtAccno" type="text" class="txt c1"/></td>
+						<td class="td7"><span> </span><a class="lbl">運費單價</a></td>
+						<td class="td8"><input id="txtPrice" type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>

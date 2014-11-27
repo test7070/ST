@@ -18,11 +18,11 @@
             $(document).ready(function() {
                 _q_boxClose();
                 q_getId();
-                q_gf('', 'z_quatp_xy');
+                q_gf('', 'z_ordep_xy');
             });
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_quatp_xy',
+                    fileName : 'z_ordep_xy',
                     options : [{
 						type : '0',
 						name : 'accy',
@@ -33,10 +33,6 @@
                     },{
                         type : '1',
                         name : 'xnoa'
-                    },{
-                        type : '8',
-                        name : 'showmemo',
-                        value : "1@顯示參考供應客戶".split(',')
                     }]
                 });
                 q_popAssign();
