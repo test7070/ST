@@ -519,14 +519,45 @@
 								t_html="<table id='table_spec' style='width:"+(t_spec.length*100)+"px;text-align: center;' border='1' cellpadding='2'  cellspacing='0'>";
 								t_html+="<tr><td style='width:35px'>規格</td>";
 								for (var i = 0; i < t_spec.length; i++) {
-									t_html+="<td>"+t_spec[i]+"</td>";	
+									var t_namea=t_spec[i];
+									if(t_namea.indexOf('#')>-1){
+										t_namea=t_namea.split('#')[0];
+									}
+									if(t_namea.indexOf('^')>-1){
+										t_namea=t_namea.split('^')[0];
+									}
+									t_html+="<td>"+t_namea+"</td>";	
 								}
 								t_html+="<td> </td></tr><tr><td>值</td>";
 								for (var i = 0; i < t_spec.length; i++) {
-									t_html+="<td><input id='spec_txtSpec_"+i+"' type='text' class='txt c1'/></td>";	
+									var t_default='';
+									if(t_spec[i].indexOf('#')>-1)
+										var t_default=t_spec[i].split('#')[1];
+									
+									if(t_spec[i].indexOf('^')>-1){
+										t_html+="<td style='width:100px;'><input id='spec_txtSpec_"+i+"' type='text' class='txt c1' style='width:75px;' value='"+t_default+"'/>";
+										t_html+="<select id='spec_cmbSpec_"+i+"' class='txt c1' style='width: 20px; float: right;'>";
+										t_html+=" <option value=''></option>";
+										for (var k = 1; k < t_spec[i].split('^').length-1; k++) {
+											t_html+=" <option value='"+t_spec[i].split('^')[k]+"'>"+t_spec[i].split('^')[k]+"</option>";
+										}
+										t_html+=" </select>";
+									}else{
+										t_html+="<td><input id='spec_txtSpec_"+i+"' type='text' class='txt c1' value='"+t_default+"'/>";
+									}
+									
+									t_html+="</td>";
 								}
 								t_html+="<td><input id='btnClose_div_spec' type='button' value='確定' style='width:55px'></td></tr></table>";
 								$('#div_spec').html(t_html);
+								
+								$('#table_spec td').children("select").each(function() {
+									var n=$(this).attr('id').split('_')[2];
+									$('#spec_cmbSpec_'+n).click(function() {
+										if($('#spec_cmbSpec_'+n).val()!='')
+											$('#spec_txtSpec_'+n).val($('#spec_cmbSpec_'+n).val());
+									});
+								});
 								
 								var SeekF= new Array();
 								$('#table_spec td').children("input:text").each(function() {
@@ -639,8 +670,14 @@
 				_readonly(t_para, empty);
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
+					for (var j = 0; j < q_bbsCount; j++) {
+						$('#combGroupbno_'+j).attr('disabled', 'disabled');
+					}
 				} else {
 					$('#combAddr').removeAttr('disabled');
+					for (var j = 0; j < q_bbsCount; j++) {
+						$('#combGroupbno_'+j).removeAttr('disabled');
+					}
 				}
 			}
 			
