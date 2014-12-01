@@ -623,71 +623,42 @@
                 		for(var j=0;j<calc.length;j++){
 							if(t_product.indexOf(calc[j].key)>0){
 								t_weights = round(q_mul(q_mul(calc[j].value,t_length/100),t_mounts),2);
+								//單一隻的重
+								t_w = q_mul(calc[j].value,t_length/100);
+								t_mm = 0;
 								if(t_length<=300){
-									if(t_weights<=calc[j].w300){
-										t_cmount = t_mounts;
-										t_cweight = t_weights;
-									}else{
-										t_n = Math.floor(t_mounts/calc[j].m300);
-										t_m = t_mounts%calc[j].m300;
-										for(var k=0;k<t_n;k++){
-											t_cmount += (t_cmount.length>0?',':'')+calc[j].m300;
-											t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),calc[j].m300),2);
-										}
-										if(t_m>0){
-											t_cmount += (t_cmount.length>0?',':'')+t_m;
-											t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_m),2);
-										}
-									}
+									//限重內最大支數
+									t_mm = t_w==0?0:Math.floor(q_div(calc[j].w300,t_w));
+									t_mm = Math.max(calc[j].m300,t_mm);
 								}else if(t_length<=600){
-									if(t_weights<=calc[j].w600){
-										t_cmount = t_mounts;
-										t_cweight = t_weights;
-									}else{						
-										t_n = Math.floor(t_mounts/calc[j].m600);
-										t_m = t_mounts%calc[j].m600;
-										for(var k=0;k<t_n;k++){
-											t_cmount += (t_cmount.length>0?',':'')+calc[j].m600;
-											t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),calc[j].m600),2);
-										}
-										if(t_m>0){
-											t_cmount += (t_cmount.length>0?',':'')+t_m;
-											t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_m),2);
-										}
-									}
+									//限重內最大支數
+									t_mm = t_w==0?0:Math.floor(q_div(calc[j].w600,t_w));
+									t_mm = Math.max(calc[j].m600,t_mm);
 								}else if(t_length<=1000){
-									if(t_weights<=calc[j].w1000){
-										t_cmount = t_mounts;
-										t_cweight = t_weights;
-									}else{
-										t_n = Math.floor(t_mounts/calc[j].m1000);
-										t_m = t_mounts%calc[j].m1000;
-										for(var k=0;k<t_n;k++){
-											t_cmount += (t_cmount.length>0?',':'')+calc[j].m1000;
-											t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),calc[j].m1000),2);
-										}
-										if(t_m>0){
-											t_cmount += (t_cmount.length>0?',':'')+t_m;
-											t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_m),2);
-										}
-									}
+									//限重內最大支數
+									t_mm = t_w==0?0:Math.floor(q_div(calc[j].w1000,t_w));
+									t_mm = Math.max(calc[j].m1000,t_mm);
 								}else{//1600
-									if(t_weights<=calc[j].w1600){
-										t_cmount = t_mounts;
-										t_cweight = t_weights;
-									}else{
-										t_n = Math.floor(t_mounts/calc[j].m1600);
-										t_m = t_mounts%calc[j].m1600;
-										for(var k=0;k<t_n;k++){
-											t_cmount += (t_cmount.length>0?',':'')+calc[j].m1600;
-											t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),calc[j].m1600),2);
-										}
-										if(t_m>0){
-											t_cmount += (t_cmount.length>0?',':'')+t_m;
-											t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_m),2);
-										}
-									}
+									//限重內最大支數
+									t_mm = t_w==0?0:Math.floor(q_div(calc[j].w1600,t_w));
+									t_mm = Math.max(calc[j].m1600,t_mm);
 								}
+								if(t_mounts<=t_mm || t_mm==0){
+									//不須分批
+									t_cmount = t_mounts;
+									t_cweight = t_weights;
+								}else{
+									t_n = Math.floor(t_mounts/t_mm);
+									t_m = t_mounts%t_mm;
+									for(var k=0;k<t_n;k++){
+										t_cmount += (t_cmount.length>0?',':'')+t_mm;
+										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_mm),0);
+									}
+									if(t_m>0){
+										t_cmount += (t_cmount.length>0?',':'')+t_m;
+										t_cweight += (t_cweight.length>0?',':'') + round(q_mul(q_mul(calc[j].value,t_length/100),t_m),0);
+									}
+								}	
 								break;
 							}                			
                 		}
