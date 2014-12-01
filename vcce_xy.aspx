@@ -60,8 +60,10 @@
 				q_mask(bbmMask);
 
 				$('#btnVccimport').click(function() {
-					var ordeno = $('#txtOrdeno').val();
+					var t_post = $('#txtZip_post').val();
 					var t_where = "noa in (select noa from view_vccs where isnull(mount,0)-isnull(tranmoney2,0)>0 or isnull(tranmoney3,0)>0 and noa not in(select ordeno from view_vcces where isnull(enda,0)=0 and noa!='"+$('#txtNoa').val()+"' ) group by noa )";
+					if(t_post.length>0)
+						t_where+=" and left((case when isnull(post2,'')!='' then post2 else post end),"+t_post.length+")='"+t_post+"'";
 					q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcc', "95%", "95%", $('#btnVccimport').val());
 				});
 
@@ -135,6 +137,9 @@
 	                                    break;
 	                                }
                                 }
+								if(as_vcc[i].typea=='2'){
+									as_vcc[i].total=-1*dec(as_vcc[i].total);
+								}
                             }
 							q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtCustno,txtComp,txtOdate,txtAdjweight', as_vcc.length, as_vcc, 'noa,custno,comp,datea,total', 'txtOrdeno');
 						}else{
@@ -201,7 +206,10 @@
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
 				$('#txtDatea').val(q_date());
-				$('#txtDatea').focus();
+				$('#txtCardealno').focus();
+				
+				$('#txtSalesno').val(r_userno);
+				$('#txtSales').val(r_name);
 			}
 
 			function btnModi() {
@@ -524,34 +532,35 @@
 						<td class="td2"><input id="txtDatea"  type="text" class="txt c1"/></td>
 						<td class="td3"><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td class="td4" colspan="2"><input id="txtNoa"  type="text" class="txt c1"/></td>
-						<td class="td5"><span> </span> <a class="lbl"> 出貨單號</a></td>
-						<td class="td6"><input id="txtOrdeno"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr2">
 						<td class="td1"><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCno"  type="text" class="txt c1"/></td>
 						<td class="td3" colspan="3"><input id="txtAcomp"  type="text" class="txt c7"/></td>
-						<td class="td6"> </td>
-						<td class="td7"><input id="btnVccimport" type="button" value="出貨、寄出匯入"/></td>
+						<td class="td6"><span> </span><a id="lblSaless" class="lbl btn">派車人員 </a></td>
+						<td class="td7"><input id="txtSalesno"  type="text" class="txt c1"/></td>
+						<td class="td8"><input id="txtSales"  type="text" class="txt c1"/></td>
 					</tr>
-					<tr class="tr6">
+					<tr class="tr3">
 						<td class="td1"><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCardealno"  type="text" class="txt c1"/></td>
 						<td class="td3" colspan="3"><input id="txtCardeal"  type="text" class="txt c7"/></td>
 					</tr>
-					<tr class="tr6">
+					<tr class="tr4">
 						<td class="td1"><span> </span><a id="lblDriver" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtDriverno"  type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtDriver"  type="text" class="txt c1"/></td>
 						<td class="td4"><span> </span><a id="lblCarno" class="lbl"> </a></td>
 						<td class="td5"><input id="txtCarno"  type="text" class="txt c1"/></td>
 					</tr>
-					<tr class="tr6">
-						<td class="td1"><span> </span><a id="lblSaless" class="lbl btn">派車人員 </a></td>
-						<td class="td2"><input id="txtSalesno"  type="text" class="txt c1"/></td>
-						<td class="td3"><input id="txtSales"  type="text" class="txt c1"/></td>
+					<tr class="tr5">
+						<td class="td1"><span> </span> <a class="lbl"> 出貨單號</a></td>
+						<td class="td2" colspan="2"><input id="txtOrdeno"  type="text" class="txt c1"/></td>
+						<td class="td4"><span> </span><a class="lbl">郵遞區號</a></td>
+						<td class="td5"><input id="txtZip_post"  type="text" class="txt c1"/></td>
+						<td class="td6"><input id="btnVccimport" type="button" value="出貨、寄出匯入"/></td>
 					</tr>
-					<tr class="tr7">
+					<tr class="tr6">
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td class="td2" colspan="8"><textarea id="txtMemo" cols="5" rows="10" style="width: 99%;height: 50px;"> </textarea></td>
 					</tr>
