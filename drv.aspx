@@ -541,14 +541,14 @@
 	                        string+='<td id="ordes_lengthb'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].lengthb+'</td>';
 	                        string+='<td id="ordes_unit'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].unit+'</td>';
 	                        string+='<td id="ordes_nmount'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+q_sub(dec(as[i].mount),dec(as[i].vmount))+'</td>';
-	                        string+='<td id="ordes_nweight'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+q_sub(dec(as[i].weight),dec(as[i].vweight))+'</td>';
+	                        string+='<td id="ordes_nweight'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+round(q_sub(dec(as[i].weight),dec(as[i].vweight)),2)+'</td>';
 	                        string+='<td id="ordes_store'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textStore'+i+'"  type="text" class="store txt " style="width: 100px;"/></td>';
 	                        string+='<td id="ordes_memo'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].memo+'</td>';
 	                        string+='<td id="ordes_enda'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+(as[i].enda=='1'?'Y':'N')+'</td>';
 	                        string+='<td id="ordes_datea'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].datea+'</td>';
 	                        string+='<td id="ordes_sprice'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].sprice+'</td>';
 	                        string+='<td id="ordes_vmount'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+dec(as[i].vmount)+'</td>';
-	                        string+='<td id="ordes_vweight'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+dec(as[i].vweight)+'</td>';
+	                        string+='<td id="ordes_vweight'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+round(dec(as[i].vweight),2)+'</td>';
 	                        string+='<td id="ordes_noa'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+as[i].noa+'</td>';
 	                        string+='<td id="ordes_no2'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+as[i].no2+'</td>';
 	                        string+='</tr>';
