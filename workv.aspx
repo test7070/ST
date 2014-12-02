@@ -19,7 +19,7 @@
             q_tables = 't';
             var q_name = "workv";
             var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
-            var q_readonlys = ['txtPmount','txtAvgkg'];
+            var q_readonlys = ['txtPmount','txtAvgkg','txtPrice'];
             var q_readonlyt = [];
             var bbmNum = [];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
@@ -418,6 +418,11 @@
                     return;
 
                 for(var i=0;i<q_bbsCount;i++){
+                	for(var j=0;j<z_mech.length;j++){
+                		if($('#txtMechno_'+i).val()==z_mech[j].noa){
+                			$('#txtPrice_'+i).val(z_mech[j].price);
+                		}
+                	}
                 	t_weights = q_float('txtWeight_'+i);
                 	t_pmounts = q_float('txtPmount_'+i);  	
                 	t_avgkg = t_pmounts==0?0:round(q_div(t_weights,t_pmounts),2);
