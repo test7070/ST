@@ -148,6 +148,11 @@
 						q_gt('view_ordes', t_where, 0, 0, 0,'show_ordes', r_accy);
                         $('#ordes').html('');
                         $('#div_stk').hide();
+                        
+                        //顯示Workjs的資料
+                        var t_where="where=^^ordeno='"+$('#orde_noa'+n).text()+"' ^^";
+						q_gt('workj', t_where, 0, 0, 0,'show_workjs', r_accy);
+						$('#workjs').html('');
                     });
                     
                     $('.orde_chk_vcce').click(function(e) {
@@ -496,6 +501,7 @@
 			var mouse_point;
 			var orde_n='';//目前orde的列數
 			var ordes_count=0;//目前bbs的資料數
+			var workjs_count=0;//目前workjs的資料數
 			var bbs_n='';//目前觸發的bbs指標
 			var t_ordemount = 0,  t_ordcmount = 0,t_ordeweight = 0,  t_ordcweight = 0;//顯示庫存用
 			function q_gtPost(t_name) {
@@ -535,14 +541,14 @@
 	                        string+='<td id="ordes_lengthb'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].lengthb+'</td>';
 	                        string+='<td id="ordes_unit'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].unit+'</td>';
 	                        string+='<td id="ordes_nmount'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+q_sub(dec(as[i].mount),dec(as[i].vmount))+'</td>';
-	                        string+='<td id="ordes_nweight'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+q_sub(dec(as[i].weight),dec(as[i].vweight))+'</td>';
+	                        string+='<td id="ordes_nweight'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+round(q_sub(dec(as[i].weight),dec(as[i].vweight)),2)+'</td>';
 	                        string+='<td id="ordes_store'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textStore'+i+'"  type="text" class="store txt " style="width: 100px;"/></td>';
 	                        string+='<td id="ordes_memo'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].memo+'</td>';
 	                        string+='<td id="ordes_enda'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+(as[i].enda=='1'?'Y':'N')+'</td>';
 	                        string+='<td id="ordes_datea'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].datea+'</td>';
 	                        string+='<td id="ordes_sprice'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+as[i].sprice+'</td>';
 	                        string+='<td id="ordes_vmount'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+dec(as[i].vmount)+'</td>';
-	                        string+='<td id="ordes_vweight'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+dec(as[i].vweight)+'</td>';
+	                        string+='<td id="ordes_vweight'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+round(dec(as[i].vweight),2)+'</td>';
 	                        string+='<td id="ordes_noa'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+as[i].noa+'</td>';
 	                        string+='<td id="ordes_no2'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+as[i].no2+'</td>';
 	                        string+='</tr>';
@@ -681,6 +687,119 @@
 						$('#div_stk').css('top',mouse_point.pageY);
 						$('#div_stk').css('left',mouse_point.pageX);
 						$('#div_stk').toggle();
+						break;
+					case 'show_workjs':
+						var workj = _q_appendData("workj", "", true);
+						var workjs = _q_appendData("workjs", "", true);
+						workjs_count=workjs.length;
+						
+						var string = "<table id='workjs_table' style='width:1720px;'>";
+	                    string+='<tr id="workjs_header">';
+	                    string+='<td id="workjs_sel" align="center" style="width:20px; color:black;"></td>';
+	                    string+='<td id="workjs_productno" title="產品編號" align="center" style="width:120px; color:black;">產品編號</td>';
+	                    string+='<td id="workjs_product" title="產品名稱" align="center" style="width:180px; color:black;">產品名稱</td>';
+	                    string+='<td id="workjs_place" title="位置" align="center" style="width:100px; color:black;">位置</td>';
+	                    string+='<td id="workjs_img" title="形狀" align="center" style="width:170px; color:black;">形狀</td>';
+	                    string+='<td id="workjs_lengthb" title="長度" align="center" style="width:100px; color:black;">長度</td>';
+	                    string+='<td id="workjs_mount" title="數量" align="center" style="width:100px; color:black;">數量</td>';
+	                    string+='<td id="workjs_weight" title="重量" align="center" style="width:80px; color:black;">重量</td>';
+	                    string+='<td id="workjs_mechno1" title="機台1" align="center" style="width:130px; color:black;display:none;">機台編號1</td>';
+	                    string+='<td id="workjs_mechno2" title="機台2" align="center" style="width:130px; color:black;display:none;">機台編號2</td>';
+	                    string+='<td id="workjs_mechno3" title="機台3" align="center" style="width:130px; color:black;display:none;">機台編號3</td>';
+	                    string+='<td id="workjs_mechno4" title="機台4" align="center" style="width:130px; color:black;display:none;">機台編號4</td>';
+	                    string+='<td id="workjs_mechno5" title="機台5" align="center" style="width:130px; color:black;display:none;">機台編號5</td>';
+	                    string+='<td id="workjs_mech1" title="機台1" align="center" style="width:130px; color:black;">機台1</td>';
+	                    string+='<td id="workjs_mech2" title="機台2" align="center" style="width:130px; color:black;">機台2</td>';
+	                    string+='<td id="workjs_mech3" title="機台3" align="center" style="width:130px; color:black;">機台3</td>';
+	                    string+='<td id="workjs_mech4" title="機台4" align="center" style="width:130px; color:black;">機台4</td>';
+	                    string+='<td id="workjs_mech5" title="機台5" align="center" style="width:130px; color:black;">機台5</td>';
+	                    string+='<td id="workjs_memo" title="備註" align="center" style="width:200px; color:black;">備註</td>';
+	                    string+='<td id="workjs_noa" align="center" style="width:70px; color:black;display:none;">noa</td>';
+	                    string+='<td id="workjs_noq" align="center" style="width:70px; color:black;display:none;">no2</td>';
+	                    string+='</tr>';
+	                    
+	                    var t_color = ['DarkBlue','DarkRed'];
+	                    var workvs_uno_where='';
+	                    for(var i=0;i<workjs.length;i++){
+	                        string+='<tr id="workjs_tr'+i+'">';
+	                        string+='<td style="text-align: center; font-weight: bolder; color:black;">'+(i+1)+'</td>';
+	                        string+='<td id="workjs_productno'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+workjs[i].productno+'</td>';
+	                        string+='<td id="workjs_product'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+workjs[i].product+'</td>';
+	                        string+='<td id="workjs_place'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+workjs[i].place+'</td>';
+	                        string+='<td id="workjs_img'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"><img src="'+workjs[i].imgdata+'" width="170px"></td>';
+	                        string+='<td id="workjs_lengthb'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+workjs[i].lengthb+'</td>';
+	                        string+='<td id="workjs_mount'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+workjs[i].mount+'</td>';
+	                        string+='<td id="workjs_weight'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+workjs[i].weight+'</td>';
+	                        string+='<td id="workjs_mechno1'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+workjs[i].mech1+'</td>';
+	                        string+='<td id="workjs_mechno2'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+workjs[i].mech2+'</td>';
+	                        string+='<td id="workjs_mechno3'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+workjs[i].mech3+'</td>';
+	                        string+='<td id="workjs_mechno4'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+workjs[i].mech4+'</td>';
+	                        string+='<td id="workjs_mechno5'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+workjs[i].mech5+'</td>';
+	                        string+='<td id="workjs_mech1'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
+	                        string+='<td id="workjs_mech2'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
+	                        string+='<td id="workjs_mech3'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
+	                        string+='<td id="workjs_mech4'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
+	                        string+='<td id="workjs_mech5'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
+	                        string+='<td id="workjs_memo'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'">'+workjs[i].memo+'</td>';
+	                        string+='<td id="workjs_noa'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+workjs[i].noa+'</td>';
+	                        string+='<td id="workjs_noq'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+workjs[i].noq+'</td>';
+	                        string+='</tr>';
+	                        
+	                        workvs_uno_where=workvs_uno_where+(workvs_uno_where.length>0?' or ':'')+" charindex('"+workjs[i].noa+'-'+workjs[i].noq+"',uno)>0 ";
+	                    }
+	                    string+='</table>';
+	                    
+	                    $('#workjs').html(string);
+	                    
+	                    //讀取機台的名稱
+	                    var t_where="where=^^ 1=1 ^^";
+						q_gt('mech', t_where, 0, 0, 0,'workjs_mech', r_accy);
+						
+						//讀取workvs的資料
+	                    var t_where="where=^^ "+workvs_uno_where+" ^^";
+						q_gt('workvs', t_where, 0, 0, 0,'workjs_workvs', r_accy);
+						
+						break;	
+					case 'workjs_mech':
+						var as = _q_appendData("mech", "", true);
+						for(var i=0;i<workjs_count;i++){
+							for(var k=1;k<=5;k++){
+								$('#workjs_mech'+k+i).text($('#workjs_mechno'+k+i).text());
+								for(var j=0;j<as.length;j++){
+									if($('#workjs_mechno'+k+i).text() == as[j].noa){
+										$('#workjs_mech'+k+i).text(as[j].mech);
+										break;
+									}
+								}
+							}
+						}
+						break;
+					case 'workjs_workvs':
+						var as = _q_appendData("workvs", "", true);
+						for(var i=0;i<workjs_count;i++){
+							for(var k=1;k<=5;k++){
+								var t_lengthb=0,t_mount=0,t_weight=0;
+								for(var j=0;j<as.length;j++){
+									if(as[j].uno.indexOf($('#workjs_noa'+i).text()+'-'+$('#workjs_noq'+i).text()+'-'+k)>-1){
+										t_lengthb=q_add(t_lengthb,dec(as[j].lengthb));
+										t_mount=q_add(t_mount,dec(as[j].mount));
+										t_weight=q_add(t_weight,dec(as[j].weight));
+									}
+								}
+								/*if(t_lengthb>0 || t_mount>0 || t_weight>0){
+									var t_tmp=$('#workjs_mech'+k+i).text();
+									$('#workjs_mech'+k+i).text(t_tmp+"\n"+t_lengthb+"/"+t_mount+"/"+t_weight);
+								}*/
+								if(t_mount>0){
+									var t_tmp=$('#workjs_mech'+k+i).text();
+									$('#workjs_mech'+k+i).html(t_tmp+" <br /> 完成數量："+t_mount);
+									
+									if(t_mount==dec($('#workjs_mount'+i).text())){
+										$('#workjs_mech'+k+i).css('background-color','gold');
+									}
+								}
+							}
+						}
 						break;
 					case 'check_vcce':
 						var as = _q_appendData("view_vcces", "", true);
@@ -892,6 +1011,22 @@
                 background-color: bisque;
                 color: blue;
             }
+            
+            #workjs_table {
+                border: 5px solid gray;
+                font-size: medium;
+                background-color: white;
+            }
+            #workjs_table tr {
+                height: 30px;
+            }
+            #workjs_table td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                background-color: darkseagreen;
+                color: blue;
+            }
 		</style>
 	</head>
 	<body>
@@ -935,5 +1070,6 @@
 		<div id="orde_control" style="width:700px;"> </div> 
 		<div id="ordes" style="float:left;width:1260px;"> </div> 
 		<input type='button' id='btnEnda' style='font-size:16px;float: left;'/>
+		<div id="workjs" style="float:left;width:1260px;"> </div> 
 	</body>
 </html>
