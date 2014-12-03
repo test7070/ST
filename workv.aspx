@@ -63,6 +63,32 @@
 
             function mainPost() {
                 q_mask(bbmMask);
+                $('#btnFile').change(function(e){
+					event.stopPropagation(); 
+				    event.preventDefault();
+					file = $('#btnFile')[0].files[0];
+					if(file){
+						fr = new FileReader();
+					    fr.readAsDataURL(file);
+					    fr.onloadend = function(e){
+					    	t_result = (fr.result).replace(/(.*base64\,)(.*)/g,'$2');
+					    	t_result = window.atob(t_result).replace(/\r/g,',').replace(/\n/g,',');
+					    	t_result = t_result.replace(/[\,]+/g,',');
+					    	t_array = t_result.split(',');
+					    	while(q_bbsCount<t_array.length){
+					    		$("#btnPlus").click();
+					    	}
+					    	for(var i=0;i<q_bbsCount.length;i++){
+					    		$('#txtUno_'+i).val('');
+					    	}
+					    	for(var i=0;i<t_array.length;i++){
+					    		$('#txtUno_'+i).val(t_array[i]);
+					    		$('#txtUno_'+i).focusout();
+					    	}
+					    	$('#btnFile').val('');
+					    };
+					}
+				});
                 $('#tmp').find('input').focusout(function(e) {
                 	var n = $('input[name=radioSel]:checked').attr('id').replace('radioSel_', '');
                 	t_pmount = 0;
@@ -316,10 +342,11 @@
                 if (t_para) {
                     $('#txtDatea').datepicker('destroy');
                     $('#tmp').find('input').attr('disabled','disabled');
+                    $('#btnFile').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
                     $('#tmp').find('input').removeAttr('disabled');
-                    
+                    $('#btnFile').removeAttr('disabled');
                 }
             }
 
@@ -508,7 +535,7 @@
             }
             .dbbm {
                 float: left;
-                width: 800px;
+                width: 600px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -660,6 +687,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
@@ -680,6 +708,10 @@
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="file" id="btnFile" value="上傳"/></td>
 					</tr>
 				</table>
 			</div>
