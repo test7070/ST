@@ -957,6 +957,13 @@
 							q_gt('cust', t_where, 0, 0, 0, "cust_price");
 						}
 						bbsGetOrdeList();
+						
+						if($('#txtComp').val().indexOf('現銷')>-1){
+							$('#txtSalesno').attr('disabled', 'disabled');
+						}else{
+							$('#txtSalesno').removeAttr('disabled');
+						}
+						
 						break;
 					case 'txtProductno_':
 						if($('#txtProduct_'+b_seq).val().indexOf('運費')>-1 && dec($('#txtPrice').val())>0){
