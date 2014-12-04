@@ -37,13 +37,14 @@
 
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
 			
-			var z_mech = '';
+			var z_uccga= new Array(),z_uccgb= new Array(),z_uccgc= new Array();
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 bbtKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1);
+                q_gt('uccga', "", 0, 0, 0, 'uccga');
+                
             });
 
             function main() {
@@ -56,10 +57,53 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-               
+                t_uccg = ' @';
+                for(var i=0;i<z_uccga.length;i++){
+                	t_uccg +=','+z_uccga[i].noa+'@'+z_uccga[i].noa+'. '+z_uccga[i].namea;
+                }
+                q_cmbParse("cmbUccgano",t_uccg);
+                t_uccg = ' @';
+                for(var i=0;i<z_uccgb.length;i++){
+                	t_uccg +=','+z_uccgb[i].noa+'@'+z_uccgb[i].noa+'. '+z_uccgb[i].namea;
+                }
+                q_cmbParse("cmbUccgbno",t_uccg);
+               	t_uccg = ' @';
+                for(var i=0;i<z_uccgc.length;i++){
+                	t_uccg +=','+z_uccgc[i].noa+'@'+z_uccgc[i].noa+'. '+z_uccgc[i].namea;
+                }
+                q_cmbParse("cmbUccgcno",t_uccg);
+                //----------------------------------------------------------
+                $('#btnImport').click(function(e){
+                	var t_noa = $('#txtNoa').val();
+                	var t_workgno = $('#txtWorkgno').val();
+                	var t_rworkdate = $('#txtRworkdate').val();
+                	var t_bday = $('#txtBday').val();
+                	var t_uccgano = $('#cmbUccgano').val();
+                	var t_uccgbno = $('#cmbUccgbno').val();
+                	var t_uccgcno = $('#cmbUccgcno').val();
+					
+					var t_string = 'ordr.txt,orda_ordr,' + encodeURI(t_noa) 
+                		+ ';' + encodeURI(t_workgno) 
+                		+ ';' + encodeURI(t_rworkdate)
+                		+ ';' + encodeURI(t_bday)
+                		+ ';' + encodeURI(t_uccgano)
+                		+ ';' + encodeURI(t_uccgbno)
+                		+ ';' + encodeURI(t_uccgcno);
+                	q_func('qtxt.query.orda_ordr', t_string );
+                });
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
+                	case 'qtxt.query.orda_ordr':
+                		var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined) {
+                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtProductno,txtProduct,txtSpec,txtUnit,txtGmount'
+                        	, as.length, as, 'noa,noq,apvmemo,productno,product,spec,unit,gmount', '','');
+                        	sum();
+                        } else {
+                            alert('無資料!');
+                        }
+                		break;
                     default:
                         break;
                 }
@@ -72,6 +116,36 @@
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'uccga':
+                		var as = _q_appendData("uccga", "", true);
+                		if (as[0] != undefined) {
+                			z_uccga = new Array();
+	                		for(var i=0;i<as.length;i++){
+	                			z_uccga.push({noa:as[i].noa,namea:as[i].namea});
+	                		}
+                		}
+                		q_gt('uccgb', "", 0, 0, 0, 'uccgb'); 
+                		break;
+            		case 'uccgb':
+                		var as = _q_appendData("uccgb", "", true);
+                		if (as[0] != undefined) {
+                			z_uccgb = new Array();
+	                		for(var i=0;i<as.length;i++){
+	                			z_uccgb.push({noa:as[i].noa,namea:as[i].namea});
+	                		}
+                		}
+                		q_gt('uccgc', "", 0, 0, 0, 'uccgc'); 
+                		break;  
+            		case 'uccgc':
+                		var as = _q_appendData("uccgc", "", true);
+                		if (as[0] != undefined) {
+                			z_uccgc = new Array();
+	                		for(var i=0;i<as.length;i++){
+	                			z_uccgc.push({noa:as[i].noa,namea:as[i].namea});
+	                		}
+                		}
+                		q_gt(q_name, q_content, q_sqlCount, 1);
+                		break;            	
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -176,8 +250,10 @@
                 _readonly(t_para, empty);
                 if (t_para) {
                     $('#txtDatea').datepicker('destroy');
+                    $('#btnImport').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
+                    $('#btnImport').removeAttr('disabled');
                 }
             }
 
@@ -461,36 +537,44 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
-						<td colspan="2">
-						<input id="txtNoa"  type="text" class="txt c1"/>
-						</td>
+						<td><input id="txtNoa"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblRworkdate" class="lbl"> </a></td>
-						<td><input id="txtRworkdate"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblUcca" class="lbl btn"> </a></td>
-						<td><select id="cmbUccano" class="txt c1"></select></td>
-						<td><span> </span><a id="lblUccb" class="lbl btn"> </a></td>
-						<td><select id="cmbUccbno" class="txt c1"></select></td>
-						<td><span> </span><a id="lblUccc" class="lbl btn"> </a></td>
-						<td><select id="cmbUcccno" class="txt c1"></select></td>
+						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
+						<td><input id="txtWorkgno"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblRworkdate" class="lbl"> </a></td>
+						<td><input id="txtRworkdate"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
+						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblUccga" class="lbl"> </a></td>
+						<td><select id="cmbUccgano" class="txt c1"></select></td>
+						<td><span> </span><a id="lblUccgb" class="lbl"> </a></td>
+						<td><select id="cmbUccgbno" class="txt c1"></select></td>
+						<td><span> </span><a id="lblUccgc" class="lbl"> </a></td>
+						<td><select id="cmbUccgcno" class="txt c1"></select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="2" rowspan="2"><textarea id="txtMemo" class="txt c1" rows="3"></textarea></td>
+						<td colspan="5" rowspan="2"><textarea id="txtMemo" class="txt c1" rows="3"></textarea></td>
+					</tr>
+					<tr>
+						<td></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
+						<td></td>
+						<td><input id="btnImport" type="button" value="匯入"/></td>
 					</tr>
 					
 				</table>
@@ -514,6 +598,8 @@
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 						<input id="txtNoq.*" type="text" style="display: none;"/>
+						<input id="txtOrdano.*" type="text" style="display: none;"/>
+						<input id="txtOrdanoq.*" type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td align="center"><input id="chkApv.*" type="checkbox"/></td>
