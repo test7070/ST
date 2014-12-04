@@ -447,7 +447,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1700px;
+                width: 1000px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -459,7 +459,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1700px;
+                width: 100%;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -587,12 +587,12 @@
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"> </td>
-					<td style="width:100px;"><a id='lbl_apv'>核準</a></td>
-					<td style="width:100px;"><a id='lbl_apvmemo'>簽核意見</a></td>
-					<td style="width:100px;"><a id='lbl_product'>物品</a></td>
-					<td style="width:100px;"><a id='lbl_spec'>規格</a></td>
-					<td style="width:100px;"><a id='lbl_unit'>單位</a></td>
-					<td style="width:100px;"><a id='lbl_gmount'>毛需求</a></td>
+					<td style="width:20px;"><a id='lbl_apv'>核準</a></td>
+					<td style="width:150px;"><a id='lbl_apvmemo'>簽核意見</a></td>
+					<td style="width:400px;"><a id='lbl_product'>物品</a></td>
+					<td style="width:150px;"><a id='lbl_spec'>規格</a></td>
+					<td style="width:50px;"><a id='lbl_unit'>單位</a></td>
+					<td style="width:80px;"><a id='lbl_gmount'>毛需求</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
