@@ -92,6 +92,9 @@
                 	q_func('qtxt.query.orda_ordr', t_string );
                 });
             }
+            function checkAll(){
+            	$('#tbbs').find('input[type="checkbox"]').prop('checked',$('.checkAll').prop('checked'));
+            }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
                 	case 'qtxt.query.orda_ordr':
@@ -103,6 +106,10 @@
                         } else {
                             alert('無資料!');
                         }
+                		break;
+            		case 'qtxt.query.ordr_orda':
+                		var as = _q_appendData("tmp0", "", true, true);
+                        Unlock(1);
                 		break;
                     default:
                         break;
@@ -165,6 +172,9 @@
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
                 Lock(1,{opacity:0});
+                var t_noa = $('#txtNoa').val();
+				
+            	q_func('qtxt.query.ordr_orda', 'ordr.txt,ordr_orda,' + encodeURI(t_noa));
             }
 
             function q_boxClose(s2) {
@@ -251,9 +261,11 @@
                 if (t_para) {
                     $('#txtDatea').datepicker('destroy');
                     $('#btnImport').attr('disabled','disabled');
+                    $('#chkApv').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
                     $('#btnImport').removeAttr('disabled');
+                    $('#chkApv').removeAttr('disabled');
                 }
             }
 
@@ -475,7 +487,7 @@
                 font-size: medium;
             }
             #dbbt {
-                width: 1500px;
+                width: 1000px;
             }
             #tbbt {
                 margin: 0;
@@ -516,15 +528,13 @@
 				<table class="tview" id="tview" >
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewCust'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewDatea'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewOdate'> </a></td>
+						<td style="width:150px; color:black;"><a id='vewWorkgno'> </a></td>
+						<td style="width:100px; color:black;"><a id='vewRworkdate'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
-						<td id='nick' style="text-align: center;">~nick</td>
-						<td id='datea' style="text-align: center;">~datea</td>
-						<td id='odate' style="text-align: center;">~odate</td>
+						<td id='workgno' style="text-align: center;">~workgno</td>
+						<td id='rworkdate' style="text-align: center;">~rworkdate</td>
 					</tr>
 				</table>
 			</div>
@@ -587,7 +597,7 @@
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"> </td>
-					<td style="width:20px;"><a id='lbl_apv'>核準</a></td>
+					<td style="width:20px;"><a id='lbl_apv'>核準</a><input id="chkApv" class="checkAll" type="checkbox" onclick="checkAll()"/></td>
 					<td style="width:150px;"><a id='lbl_apvmemo'>簽核意見</a></td>
 					<td style="width:400px;"><a id='lbl_product'>物品</a></td>
 					<td style="width:150px;"><a id='lbl_spec'>規格</a></td>
@@ -617,7 +627,7 @@
 		</div>
 		
 		<input id="q_sys" type="hidden" />
-		<div id="dbbt" >
+		<div id="dbbt" style="display:none;">
 			<table id="tbbt">
 				<tbody>
 					<tr class="head" style="color:white; background:#003366;">
