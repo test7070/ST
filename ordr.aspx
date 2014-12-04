@@ -18,7 +18,7 @@
 
             q_tables = 't';
             var q_name = "ordr";
-            var q_readonly = ['txtNoa'];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [['txtBday',10,0,1]];
