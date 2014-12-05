@@ -24,8 +24,8 @@
             var bbmNum = [['txtBday',10,0,1]];
             var bbsNum = [['txtGmount',10,2,1]];
             var bbtNum = [];
-            var bbmMask = [['txtRworkdate','999/99/99'],['txtDatea','999/99/99']];
-            var bbsMask = [];
+            var bbmMask = [['txtBworkdate','999/99/99'],['txtEworkdate','999/99/99'],['txtDatea','999/99/99']];
+            var bbsMask = [['txtWorkdate','999/99/99'],['txtFdate','999/99/99']];
             var bbtMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -76,16 +76,18 @@
                 $('#btnImport').click(function(e){
                 	var t_noa = $('#txtNoa').val();
                 	var t_workgno = $('#txtWorkgno').val();
-                	var t_rworkdate = $('#txtRworkdate').val();
-                	var t_bday = $('#txtBday').val();
+                	var t_style = $('#txtStyle').val();
+                	var t_bworkdate = $('#txtBworkdate').val();
+                	var t_eworkdate = $('#txtEworkdate').val();
                 	var t_uccgano = $('#cmbUccgano').val();
                 	var t_uccgbno = $('#cmbUccgbno').val();
                 	var t_uccgcno = $('#cmbUccgcno').val();
 					
 					var t_string = 'ordr.txt,orda_ordr,' + encodeURI(t_noa) 
-                		+ ';' + encodeURI(t_workgno) 
-                		+ ';' + encodeURI(t_rworkdate)
-                		+ ';' + encodeURI(t_bday)
+                		+ ';' + encodeURI(t_workgno)
+                		+ ';' + encodeURI(t_style) 
+                		+ ';' + encodeURI(t_bworkdate)
+                		+ ';' + encodeURI(t_eworkdate)
                 		+ ';' + encodeURI(t_uccgano)
                 		+ ';' + encodeURI(t_uccgbno)
                 		+ ';' + encodeURI(t_uccgcno);
@@ -250,10 +252,6 @@
 
             function refresh(recno) {
                 _refresh(recno);
-                $('.justPrint').prop('checked',true);	
-                $('.justPrint2').prop('checked',true);	
-                $('.checkAll').prop('checked',true);	
-                $('.checkAll2').prop('checked',true);	
             }
 
             function readonly(t_para, empty) {
@@ -438,10 +436,6 @@
                 width: 100%;
                 float: left;
             }
-            .txt.c2 {
-                width: 130%;
-                float: left;
-            }
             .txt.num {
                 text-align: right;
             }
@@ -459,7 +453,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1000px;
+                width: 1500px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -554,14 +548,22 @@
 						<td><input id="txtNoa"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
+						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
 						<td><input id="txtWorkgno"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblRworkdate" class="lbl"> </a></td>
-						<td><input id="txtRworkdate"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
-						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
+						<td><span> </span><a id="lblWorkdate" class="lbl"> </a></td>
+						<td colspan="2">
+							<input id="txtBworkdate"  type="text" style="float:left;width:45%"/>
+							<span style="float:left;display:block;width:10%;text-align: center;">～</span>
+							<input id="txtEworkdate"  type="text" style="float:left;width:45%"/>
+						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
+						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblUccga" class="lbl"> </a></td>
@@ -598,11 +600,22 @@
 					</td>
 					<td style="width:20px;"> </td>
 					<td style="width:20px;"><a id='lbl_apv'>核準</a><input id="chkApv" class="checkAll" type="checkbox" onclick="checkAll()"/></td>
-					<td style="width:150px;"><a id='lbl_apvmemo'>簽核意見</a></td>
-					<td style="width:400px;"><a id='lbl_product'>物品</a></td>
+					<td style="width:100px;"><a id='lbl_apvmemo'>簽核意見</a></td>
+					<td style="width:80px;"><a id='lbl_workdate'>開工日</a></td>
+					<td style="width:80px;"><a id='lbl_style'>機型</a></td>
+					<td style="width:350px;"><a id='lbl_product'>物品</a></td>
 					<td style="width:150px;"><a id='lbl_spec'>規格</a></td>
 					<td style="width:50px;"><a id='lbl_unit'>單位</a></td>
 					<td style="width:80px;"><a id='lbl_gmount'>毛需求</a></td>
+					<td style="width:80px;"><a id='lbl_wmount'>製令未領</a></td>
+					<td style="width:80px;"><a id='lbl_stkmount'>庫存量</a></td>
+					<td style="width:80px;"><a id='lbl_schmount'>在途量</a></td>
+					<td style="width:80px;"><a id='lbl_safemount'>安全存量</a></td>
+					<td style="width:80px;"><a id='lbl_netmount'>淨需求量</a></td>
+					<td style="width:80px;"><a id='lbl_fdate'>預測日期</a></td>
+					<td style="width:80px;"><a id='lbl_fmount'>預測需求</a></td>
+					<td style="width:80px;"><a id='lbl_memo'>備註</a></td>
+					
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -614,6 +627,8 @@
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td align="center"><input id="chkApv.*" type="checkbox"/></td>
 					<td><input class="txt" id="txtApvmemo.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtWorkdate.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtStyle.*" type="text" style="width:95%;" title=""/></td>
 					<td>
 						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
 						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
@@ -622,6 +637,14 @@
 					<td><input class="txt" id="txtSpec.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt" id="txtUnit.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt num" id="txtGmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtWmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtStkmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtSchmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtSafemount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtNetmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtFdate.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtFmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;" title=""/></td>
 				</tr>
 			</table>
 		</div>
