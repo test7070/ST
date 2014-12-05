@@ -43,13 +43,14 @@
             	,['txtEtggno', 'btnEtggno', 'tgg', 'noa,comp', 'txtEtggno,txtEtgg', 'tgg_b.aspx']
             	,['txtBproductno', 'btnBproductno', 'ucc', 'noa,product', 'txtBproductno,txtBproduct', 'ucc_b.aspx']
             	,['txtEproductno', 'btnEproductno', 'ucc', 'noa,product', 'txtEproductno,txtEproduct', 'ucc_b.aspx']);
-
+			
+			var z_uccga= new Array(),z_uccgb= new Array(),z_uccgc= new Array();
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 bbtKey = ['noa', 'no2'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1);
+                q_gt('uccga', "", 0, 0, 0, 'uccga');
             });
 
             function main() {
@@ -65,7 +66,22 @@
                 bbmMask = [['txtDatea', r_picd],['txtBodate', r_picd],['txtEodate', r_picd],['txtBldate', r_picd],['txtEldate', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbKind", q_getPara('report.all')+','+q_getPara('ordb.kind'));
-
+				t_uccg = ' @';
+                for(var i=0;i<z_uccga.length;i++){
+                	t_uccg +=','+z_uccga[i].noa+'@'+z_uccga[i].noa+'. '+z_uccga[i].namea;
+                }
+                q_cmbParse("cmbUccgano",t_uccg);
+                t_uccg = ' @';
+                for(var i=0;i<z_uccgb.length;i++){
+                	t_uccg +=','+z_uccgb[i].noa+'@'+z_uccgb[i].noa+'. '+z_uccgb[i].namea;
+                }
+                q_cmbParse("cmbUccgbno",t_uccg);
+               	t_uccg = ' @';
+                for(var i=0;i<z_uccgc.length;i++){
+                	t_uccg +=','+z_uccgc[i].noa+'@'+z_uccgc[i].noa+'. '+z_uccgc[i].namea;
+                }
+                q_cmbParse("cmbUccgcno",t_uccg);
+                
                 $('#txtBtggno').bind('contextmenu', function(e) {
 					/*滑鼠右鍵*/
 					e.preventDefault();					
@@ -97,7 +113,10 @@
 					var t_ordbno = $.trim($('#txtOrdbno').val());
 					var t_bldate = $.trim($('#txtBldate').val());
 					var t_eldate = $.trim($('#txtEldate').val());
-					var t_ordbsign = q_getPara('ordb.sign');			
+					var t_ordbsign = q_getPara('ordb.sign');		
+					var t_uccgano = $('#cmbUccgano').val();
+					var t_uccgbno = $('#cmbUccgbno').val();
+					var t_uccgcno = $('#cmbUccgcno').val();	
 	
 					q_func('qtxt.query.ordp', 'ordp.txt,import,' + encodeURI(t_kind) 
 						+ ';' + encodeURI(t_btggno)
@@ -109,7 +128,10 @@
 						+ ';' + encodeURI(t_ordbno)
 						+ ';' + encodeURI(t_bldate)
 						+ ';' + encodeURI(t_eldate)
-						+ ';' + encodeURI(t_ordbsign)); 	
+						+ ';' + encodeURI(t_ordbsign)
+						+ ';' + encodeURI(t_uccgano)
+						+ ';' + encodeURI(t_uccgbno)
+						+ ';' + encodeURI(t_uccgcno)); 	
 				});
             }
             function q_funcPost(t_func, result) {
@@ -173,6 +195,36 @@
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'uccga':
+                		var as = _q_appendData("uccga", "", true);
+                		if (as[0] != undefined) {
+                			z_uccga = new Array();
+	                		for(var i=0;i<as.length;i++){
+	                			z_uccga.push({noa:as[i].noa,namea:as[i].namea});
+	                		}
+                		}
+                		q_gt('uccgb', "", 0, 0, 0, 'uccgb'); 
+                		break;
+            		case 'uccgb':
+                		var as = _q_appendData("uccgb", "", true);
+                		if (as[0] != undefined) {
+                			z_uccgb = new Array();
+	                		for(var i=0;i<as.length;i++){
+	                			z_uccgb.push({noa:as[i].noa,namea:as[i].namea});
+	                		}
+                		}
+                		q_gt('uccgc', "", 0, 0, 0, 'uccgc'); 
+                		break;  
+            		case 'uccgc':
+                		var as = _q_appendData("uccgc", "", true);
+                		if (as[0] != undefined) {
+                			z_uccgc = new Array();
+	                		for(var i=0;i<as.length;i++){
+	                			z_uccgc.push({noa:as[i].noa,namea:as[i].namea});
+	                		}
+                		}
+                		q_gt(q_name, q_content, q_sqlCount, 1);
+                		break;    
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -691,6 +743,21 @@
                     	</td>
                     	<td class="tdZ"> </td>
                     </tr>
+                    <tr style="background-color: tan;">
+                        <td><span> </span><a id="lblUccga" class="lbl"> </a></td>
+						<td><select id="cmbUccgano" class="txt c1"></select></td>
+						<td><span> </span><a id="lblUccgb" class="lbl"> </a></td>
+						<td><select id="cmbUccgbno" class="txt c1"></select></td>
+                    	<td class="tdZ"> </td>
+                    </tr>
+                    <tr style="background-color: tan;">
+                        <td><span> </span><a id="lblUccgc" class="lbl"> </a></td>
+						<td><select id="cmbUccgcno" class="txt c1"></select></td>
+						<td></td>
+						<td></td>
+                    	<td class="tdZ"> </td>
+                    </tr>
+                    
                     <tr>
                         <td><span> </span><a id='lblWorker' class="lbl"> </a></td>
                         <td><input id="txtWorker" type="text" class="txt c1"/></td>
