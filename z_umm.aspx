@@ -31,13 +31,17 @@
 							$('#Sales').hide();
 						}
 						//月結客戶刪除業務應收帳款總表>>>月結會不知道帳要沖到哪一個業務
-						var delete_report=0;
-						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
-							if($('#q_report').data().info.reportData[i].report=='z_umm12')
-								delete_report=i;
+						if(q_getPara('sys.project').toUpperCase()!='XY'){
+							var delete_report=0;
+							for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+								if($('#q_report').data().info.reportData[i].report=='z_umm12')
+									delete_report=i;
+							}
+							if($('#q_report div div').text().indexOf('業務應收帳款總表')>-1)
+								$('#q_report div div')[delete_report].remove()
+						}else{
+							$('#Paytype').hide();
 						}
-						if($('#q_report div div').text().indexOf('業務應收帳款總表')>-1)
-							$('#q_report div div')[delete_report].remove()
 					}
 					
 					if(q_getPara('sys.isAcccUs')!='1')
