@@ -18,13 +18,13 @@
 
             q_tables = 't';
             var q_name = "ordr";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [['txtBday',10,0,1]];
             var bbsNum = [['txtGmount',10,2,1]];
             var bbtNum = [];
-            var bbmMask = [['txtBworkdate','999/99/99'],['txtEworkdate','999/99/99'],['txtDatea','999/99/99']];
+            var bbmMask = [['txtApvdate','999/99/99'],['txtBworkdate','999/99/99'],['txtEworkdate','999/99/99'],['txtDatea','999/99/99']];
             var bbsMask = [['txtWorkdate','999/99/99'],['txtFdate','999/99/99']];
             var bbtMask = [];
             q_sqlCount = 6;
@@ -95,7 +95,9 @@
                 });
                 
                 $('#btnOrdb').click(function(e){
-                	$('#dbbt').toggle();
+                	var t_key = q_getPara('sys.key_ordb');
+                	var t_noa = $('#txtNoa').val();
+                	q_func('qtxt.query.ordr_orda', 'ordr.txt,ordr_orda,' + encodeURI(t_key)+';'+ encodeURI(t_noa)); 
                 });
             }
             function checkAll(){
@@ -104,6 +106,16 @@
             function q_funcPost(t_func, result) {
                 switch(t_func) {
                 	case 'qtxt.query.orda_ordr':
+                		var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined) {
+                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
+                        	, as.length, as, 'noa,noq,apvmemo,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
+                        	sum();
+                        } else {
+                            alert('無資料!');
+                        }
+                		break;
+            		case 'qtxt.query.ordr_ordb':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
                             q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
@@ -264,10 +276,12 @@
                     $('#txtDatea').datepicker('destroy');
                     $('#btnImport').attr('disabled','disabled');
                     $('#chkApv').attr('disabled','disabled');
+                    $('#btnOrdb').removeAttr('disabled');
                 } else {	
                     $('#txtDatea').datepicker();
                     $('#btnImport').removeAttr('disabled');
                     $('#chkApv').removeAttr('disabled');
+                    $('#btnOrdb').attr('disabled','disabled');
                 }
             }
 
@@ -583,16 +597,23 @@
 					<tr>
 						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
 						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
+						<td><span> </span><a id="lblApvdate" class="lbl"> </a></td>
+						<td><input id="txtApvdate"  type="text"  class="txt c1"/></td>
+						<td></td>
+						<td style="text-align: center;"><input id="btnImport" type="button" value="匯入" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblOrdbno" class="lbl"> </a></td>
+						<td colspan="3"><input id="txtOrdbno" type="text" class="txt c1"/></td>
+						<td></td>
+						<td><input id="btnOrdb" type="button" value="轉請購單" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
-						<td style="text-align: center;"><input id="btnImport" type="button" value="匯入"/></td>
-						<td><input id="btnOrdb" type="button" value="請購單"/></td>
 					</tr>
-					
 				</table>
 			</div>
 		</div>
@@ -662,7 +683,6 @@
 							<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"></td>
-						<td style="width:120px;">請購單號</td>
 					</tr>
 					<tr>
 						<td style="display:none;">
@@ -671,10 +691,6 @@
 							<input class="txt" id="txtNo2..*" type="text" style="display: none;"/>
 						</td>
 						<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						<td>
-							<input class="txt" id="txtOrdbno.*" type="text" style="width:95%;"/>
-							<input class="txt" id="txtOrdbaccy.*" type="text" style="display:none;"/>
-						</td>
 					</tr>
 				</tbody>
 			</table>
