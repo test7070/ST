@@ -18,7 +18,7 @@
 
             q_tables = 't';
             var q_name = "ordr";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtOrdbno'];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [['txtBday',10,0,1]];
@@ -92,6 +92,10 @@
                 		+ ';' + encodeURI(t_uccgbno)
                 		+ ';' + encodeURI(t_uccgcno);
                 	q_func('qtxt.query.orda_ordr', t_string );
+                });
+                
+                $('#btnOrdb').click(function(e){
+                	$('#dbbt').toggle();
                 });
             }
             function checkAll(){
@@ -522,13 +526,13 @@
 				<table class="tview" id="tview" >
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
+						<td style="width:100px; color:black;"><a id='vewDatea'> </a></td>
 						<td style="width:150px; color:black;"><a id='vewWorkgno'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewRworkdate'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
+						<td id='datea' style="text-align: center;">~datea</td>
 						<td id='workgno' style="text-align: center;">~workgno</td>
-						<td id='rworkdate' style="text-align: center;">~rworkdate</td>
 					</tr>
 				</table>
 			</div>
@@ -579,19 +583,14 @@
 					<tr>
 						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
 						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
-						<td><span> </span><a id="lblOrdbno" class="lbl"> </a></td>
-						<td>
-							<input id="txtOrdbno"  type="text"  class="txt c1"/>
-							<input id="txtOrdbaccy"  type="text"  style="display:none;"/>
-						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
-						<td></td>
-						<td><input id="btnImport" type="button" value="匯入"/></td>
+						<td style="text-align: center;"><input id="btnImport" type="button" value="匯入"/></td>
+						<td><input id="btnOrdb" type="button" value="請購單"/></td>
 					</tr>
 					
 				</table>
@@ -655,22 +654,27 @@
 		</div>
 		
 		<input id="q_sys" type="hidden" />
-		<div id="dbbt" style="display:none;">
+		<div id="dbbt" style="position: absolute;top:280px; left:800px; display:none;width:300px;">
 			<table id="tbbt">
 				<tbody>
 					<tr class="head" style="color:white; background:#003366;">
-						<td style="width:20px;">
-						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
+						<td style="display:none;">
+							<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"></td>
+						<td style="width:120px;">請購單號</td>
 					</tr>
 					<tr>
-						<td>
+						<td style="display:none;">
 							<input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 							<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
 							<input class="txt" id="txtNo2..*" type="text" style="display: none;"/>
 						</td>
 						<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+						<td>
+							<input class="txt" id="txtOrdbno.*" type="text" style="width:95%;"/>
+							<input class="txt" id="txtOrdbaccy.*" type="text" style="display:none;"/>
+						</td>
 					</tr>
 				</tbody>
 			</table>
