@@ -18,7 +18,7 @@
 
             q_tables = 't';
             var q_name = "ordr";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtOrdbno'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [['txtBday',10,0,1]];
@@ -102,8 +102,8 @@
                 	case 'qtxt.query.orda_ordr':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
-                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtProductno,txtProduct,txtSpec,txtUnit,txtGmount'
-                        	, as.length, as, 'noa,noq,apvmemo,productno,product,spec,unit,gmount', '','');
+                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
+                        	, as.length, as, 'noa,noq,apvmemo,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
                         	sum();
                         } else {
                             alert('無資料!');
@@ -548,8 +548,8 @@
 						<td><input id="txtNoa"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
-						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
+						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
+						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
@@ -560,10 +560,6 @@
 							<span style="float:left;display:block;width:10%;text-align: center;">～</span>
 							<input id="txtEworkdate"  type="text" style="float:left;width:45%"/>
 						</td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
-						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblUccga" class="lbl"> </a></td>
@@ -579,6 +575,15 @@
 					</tr>
 					<tr>
 						<td></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
+						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
+						<td><span> </span><a id="lblOrdbno" class="lbl"> </a></td>
+						<td>
+							<input id="txtOrdbno"  type="text"  class="txt c1"/>
+							<input id="txtOrdbaccy"  type="text"  style="display:none;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
