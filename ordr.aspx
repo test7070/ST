@@ -18,7 +18,7 @@
 
             q_tables = 't';
             var q_name = "ordr";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea'];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea','txtOrdbno'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [['txtBday',10,0,1]];
@@ -99,6 +99,9 @@
                 	var t_noa = $('#txtNoa').val();
                 	q_func('qtxt.query.ordr_orda', 'ordr.txt,ordr_orda,' + encodeURI(t_key)+';'+ encodeURI(t_noa)); 
                 });
+                $('#lblOrdbno').click(function(e){
+                	q_gt('view_ordb', "where=^^ workgno='"+$('#txtNoa').val()+"'^^", 0, 0, 0, 'view_ordb');
+                });
             }
             function checkAll(){
             	$('#tbbs').find('input[type="checkbox"]').prop('checked',$('.checkAll').prop('checked'));
@@ -118,12 +121,14 @@
             		case 'qtxt.query.ordr_ordb':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
-                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
-                        	, as.length, as, 'noa,noq,apvmemo,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
-                        	sum();
-                        } else {
-                            alert('無資料!');
-                        }
+                            if(as[0].msg.length>0){
+                            	alert(as[0].msg);
+                            }else{
+                            	$('#txtOrdbno').val(as[0].ordbno);
+                            	abbm[q_recno].ordbno = as[0].ordbno;
+                            }	
+                        } 
+                        Unlock(1);
                 		break;
             		case 'qtxt.query.ordr_orda':
                 		var as = _q_appendData("tmp0", "", true, true);
@@ -141,6 +146,16 @@
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'view_ordb':
+                		var as = _q_appendData("view_ordb", "", true);
+                		if (as[0] != undefined) {
+                			t_where = '';
+	                		for(var i=0;i<as.length;i++){
+	                			t_where += (t_where.length>0?' or ':'')+ " noa='"+as[0].noa+"'" ;
+	                		}
+	                		q_box("ordb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";(" + t_where + ");" + r_accy, 'ordb'+r_accy, "95%", "95%", q_getMsg("popOrdb"));
+                		}
+                		break;
                 	case 'uccga':
                 		var as = _q_appendData("uccga", "", true);
                 		if (as[0] != undefined) {
@@ -234,6 +249,11 @@
                 });
                 if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
                     alert(q_getMsg('lblDatea') + '錯誤。');
+                    Unlock(1);
+                    return;
+                }
+                if ($('#txtApvdate').val().length == 0 || !q_cd($('#txtApvdate').val())) {
+                    alert(q_getMsg('lblApvdate') + '錯誤。');
                     Unlock(1);
                     return;
                 }
@@ -603,7 +623,7 @@
 						<td style="text-align: center;"><input id="btnImport" type="button" value="匯入" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblOrdbno" class="lbl"> </a></td>
+						<td><span> </span><a id="lblOrdbno" class="lbl btn"> </a></td>
 						<td colspan="3"><input id="txtOrdbno" type="text" class="txt c1"/></td>
 						<td></td>
 						<td><input id="btnOrdb" type="button" value="轉請購單" class="txt c1"/></td>
