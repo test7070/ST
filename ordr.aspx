@@ -33,7 +33,7 @@
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
-            brwCount2 = 6;
+            brwCount2 = 8;
 
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
 			
@@ -97,7 +97,7 @@
                 $('#btnOrdb').click(function(e){
                 	var t_key = q_getPara('sys.key_ordb');
                 	var t_noa = $('#txtNoa').val();
-                	q_func('qtxt.query.ordr_orda', 'ordr.txt,ordr_orda,' + encodeURI(t_key)+';'+ encodeURI(t_noa)); 
+                	q_func('qtxt.query.ordr_ordb', 'ordr.txt,ordr_ordb,' + encodeURI(t_key)+';'+ encodeURI(t_noa)); 
                 });
                 $('#lblOrdbno').click(function(e){
                 	q_gt('view_ordb', "where=^^ workgno='"+$('#txtNoa').val()+"'^^", 0, 0, 0, 'view_ordb');
@@ -151,9 +151,9 @@
                 		if (as[0] != undefined) {
                 			t_where = '';
 	                		for(var i=0;i<as.length;i++){
-	                			t_where += (t_where.length>0?' or ':'')+ " noa='"+as[0].noa+"'" ;
+	                			t_where += (t_where.length>0?' or ':'')+ " noa='"+as[i].noa+"'" ;
 	                		}
-	                		q_box("ordb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";(" + t_where + ");" + r_accy, 'ordb'+r_accy, "95%", "95%", q_getMsg("popOrdb"));
+	                		q_box("ordb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordb'+r_accy, "95%", "95%", q_getMsg("popOrdb"));
                 		}
                 		break;
                 	case 'uccga':
@@ -404,6 +404,7 @@
 		<style type="text/css">
             #dmain {
                 overflow: visible;
+                width: 1200px;
             }
             .dview {
                 float: left;
@@ -416,7 +417,7 @@
                 background-color: black;
             }
             .tview tr {
-                height: 30%;
+                height: 30px;
             }
             .tview td {
                 padding: 2px;
@@ -427,7 +428,7 @@
             }
             .dbbm {
                 float: left;
-                width: 70%;
+                width: 900px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -555,7 +556,7 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id='dmain' style="overflow:visible;width: 1200px;">
+		<div id='dmain' style="overflow:visible;">
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview" >
 					<tr>
@@ -586,12 +587,14 @@
 						<td><input id="txtNoa"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
-						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
 						<td><input id="txtWorkgno"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
+						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblWorkdate" class="lbl"> </a></td>
 						<td colspan="2">
 							<input id="txtBworkdate"  type="text" style="float:left;width:45%"/>
@@ -675,8 +678,8 @@
 					<td><input class="txt" id="txtWorkdate.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt" id="txtStyle.*" type="text" style="width:95%;" title=""/></td>
 					<td>
-						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
+						<input class="txt" id="txtProductno.*" type="text" style="width:60%; float:left;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:35%;float:left;"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
 					<td><input class="txt" id="txtSpec.*" type="text" style="width:95%;" title=""/></td>
