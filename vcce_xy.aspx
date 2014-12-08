@@ -279,6 +279,10 @@
 			function sum() {
 				var t_weight=0,t_total=0;
 				for (var j = 0; j < q_bbsCount; j++) {
+					if(!$('#chkEnda_'+j).prop('checked')){
+						$('#txtAdjcount_'+j).val(0);
+					}
+					
 					t_weight=q_add(t_weight,q_float('txtAdjweight_'+j));
 					t_total=q_add(t_total,q_float('txtAdjcount_'+j));
 				}
