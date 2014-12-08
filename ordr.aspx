@@ -111,8 +111,8 @@
                 	case 'qtxt.query.orda_ordr':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
-                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
-                        	, as.length, as, 'noa,noq,apvmemo,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
+                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtApvmount,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
+                        	, as.length, as, 'noa,noq,apvmemo,apvmount,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
                         	sum();
                         } else {
                             alert('無資料!');
@@ -126,7 +126,9 @@
                             }else{
                             	$('#txtOrdbno').val(as[0].ordbno);
                             	abbm[q_recno].ordbno = as[0].ordbno;
-                            }	alert('共匯出 '+as[0].ordbno.split(',').length+' 筆。');
+                            	if(as[0].ordbno.length>0)
+                            		alert('共匯出 '+as[0].ordbno.split(',').length+' 筆。');
+                            }		
                         } 
                         Unlock(1);
                 		break;
@@ -649,6 +651,7 @@
 					<td style="width:20px;"> </td>
 					<td style="width:20px;"><a id='lbl_apv'>核準</a><input id="chkApv" class="checkAll" type="checkbox" onclick="checkAll()"/></td>
 					<td style="width:100px;"><a id='lbl_apvmemo'>簽核意見</a></td>
+					<td style="width:80px;"><a id='lbl_apvmount'>異動數量</a></td>
 					<td style="width:100px;"><a id='lbl_workdate'>開工日</a></td>
 					<td style="width:80px;"><a id='lbl_style'>機型</a></td>
 					<td style="width:350px;"><a id='lbl_product'>物品</a></td>
@@ -675,6 +678,7 @@
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td align="center"><input id="chkApv.*" type="checkbox"/></td>
 					<td><input class="txt" id="txtApvmemo.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtApvmount.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt" id="txtWorkdate.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt" id="txtStyle.*" type="text" style="width:95%;" title=""/></td>
 					<td>
