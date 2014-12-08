@@ -126,7 +126,7 @@
                             }else{
                             	$('#txtOrdbno').val(as[0].ordbno);
                             	abbm[q_recno].ordbno = as[0].ordbno;
-                            }	
+                            }	alert('共匯出 '+as[0].ordbno.split(',').length+' 筆。');
                         } 
                         Unlock(1);
                 		break;
