@@ -20,7 +20,7 @@
 			var q_name = "vcce";
 			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtSales','txtDriver','txtCardeal','txtWeight','txtTotal'];
 			var q_readonlys = ['txtCustno','txtComp','txtOrdeno','txtOdate','txtAdjweight'];
-			var bbmNum = [];
+			var bbmNum = [['txtWeight', 15, 0, 1],['txtTotal', 15, 0, 1]];
 			var bbsNum = [['txtAdjcount', 10, 0, 1], ['txtAdjweight', 10, 0, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -74,7 +74,14 @@
 						q_gt('view_vcc', t_where, 0, 0, 0, "", r_accy);
 					}
 				});
-
+				
+				$('#txtDriverno').change(function() {
+					var t_driverno = trim($('#txtDriverno').val());
+					if (!emp(t_driverno)) {
+						var t_where = "where=^^ driverno='" + t_driverno + "' and datea ='"+$('#txtDatea').val()+"' ^^";
+						q_gt('vcce', t_where, 0, 0, 0, "driver_repeat", r_accy);
+					}
+				});
 			}
 
 			function q_boxClose(s2) {
@@ -116,6 +123,12 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'driver_repeat':
+						var as = _q_appendData("vcce", "", true);
+						if (as[0] != undefined) {
+							alert($('#txtDriverno').val()+' '+$('#txtDriver').val()+'在'+$('#txtDatea').val()+'已排派車 請確認是否重複派車!!');
+						}
+						break;
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
@@ -198,6 +211,22 @@
 					}
 				}
 				_bbsAssign();
+				$('#chkEnda').click(function() {
+					if(q_cur==1 || q_cur==2){
+						if($('#chkEnda').prop('checked')){
+							for (var j = 0; j < q_bbsCount; j++) {
+								$('#chkEnda_'+j).prop('checked',true);
+								q_tr('txtAdjcount_'+j,q_float('txtAdjweight_'+j));
+							}
+						}else{
+							for (var j = 0; j < q_bbsCount; j++) {
+								$('#chkEnda_'+j).prop('checked',false);
+								q_tr('txtAdjcount_'+j,0);
+							}
+						}
+						sum();
+					}
+				});
 			}
 
 			function btnIns() {
@@ -264,6 +293,11 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if(t_para){
+					$('#chkEnda').attr('disabled', 'disabled');
+				}else{
+					$('#chkEnda').removeAttr('disabled');
+				}
 			}
 
 			function btnMinus(id) {
@@ -325,6 +359,13 @@
 
 			function q_popPost(s1) {
 				switch (s1) {
+					case 'txtDriverno':
+						var t_driverno = trim($('#txtDriverno').val());
+						if (!emp(t_driverno)) {
+							var t_where = "where=^^ driverno='" + t_driverno + "' and datea ='"+$('#txtDatea').val()+"' ^^";
+							q_gt('vcce', t_where, 0, 0, 0, "driver_repeat", r_accy);
+						}
+					break;
 				}
 			}
 			
@@ -587,7 +628,7 @@
 						<td align="center" style="width:10%;">出貨單號</td>
 						<td align="center" style="width:10%;">出貨日期</td>
 						<td align="center" style="width:10%;">出貨金額</td>
-						<td align="center" style="width:5%;">已送貨</td>
+						<td align="center" style="width:6%;">已送貨<input id="chkEnda" type="checkbox"/></td>
 						<td align="center" style="width:10%;">已收金額</td>
 						<td align="center"><a id='lblMemo_s'> </a></td>
 					</tr>
