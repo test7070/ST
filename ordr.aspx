@@ -649,7 +649,7 @@
 					<td style="width:20px;"> </td>
 					<td style="width:20px;"><a id='lbl_apv'>核準</a><input id="chkApv" class="checkAll" type="checkbox" onclick="checkAll()"/></td>
 					<td style="width:100px;"><a id='lbl_apvmemo'>簽核意見</a></td>
-					<td style="width:80px;"><a id='lbl_workdate'>開工日</a></td>
+					<td style="width:100px;"><a id='lbl_workdate'>開工日</a></td>
 					<td style="width:80px;"><a id='lbl_style'>機型</a></td>
 					<td style="width:350px;"><a id='lbl_product'>物品</a></td>
 					<td style="width:150px;"><a id='lbl_spec'>規格</a></td>
