@@ -18,14 +18,14 @@
 
             q_tables = 't';
             var q_name = "ordr";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea','txtOrdbno'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [['txtBday',10,0,1]];
             var bbsNum = [['txtGmount',10,2,1]];
             var bbtNum = [];
-            var bbmMask = [['txtRworkdate','999/99/99'],['txtDatea','999/99/99']];
-            var bbsMask = [];
+            var bbmMask = [['txtApvdate','999/99/99'],['txtBworkdate','999/99/99'],['txtEworkdate','999/99/99'],['txtDatea','999/99/99']];
+            var bbsMask = [['txtWorkdate','999/99/99'],['txtFdate','999/99/99']];
             var bbtMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -33,7 +33,7 @@
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
-            brwCount2 = 6;
+            brwCount2 = 8;
 
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
 			
@@ -76,20 +76,31 @@
                 $('#btnImport').click(function(e){
                 	var t_noa = $('#txtNoa').val();
                 	var t_workgno = $('#txtWorkgno').val();
-                	var t_rworkdate = $('#txtRworkdate').val();
-                	var t_bday = $('#txtBday').val();
+                	var t_style = $('#txtStyle').val();
+                	var t_bworkdate = $('#txtBworkdate').val();
+                	var t_eworkdate = $('#txtEworkdate').val();
                 	var t_uccgano = $('#cmbUccgano').val();
                 	var t_uccgbno = $('#cmbUccgbno').val();
                 	var t_uccgcno = $('#cmbUccgcno').val();
 					
 					var t_string = 'ordr.txt,orda_ordr,' + encodeURI(t_noa) 
-                		+ ';' + encodeURI(t_workgno) 
-                		+ ';' + encodeURI(t_rworkdate)
-                		+ ';' + encodeURI(t_bday)
+                		+ ';' + encodeURI(t_workgno)
+                		+ ';' + encodeURI(t_style) 
+                		+ ';' + encodeURI(t_bworkdate)
+                		+ ';' + encodeURI(t_eworkdate)
                 		+ ';' + encodeURI(t_uccgano)
                 		+ ';' + encodeURI(t_uccgbno)
                 		+ ';' + encodeURI(t_uccgcno);
                 	q_func('qtxt.query.orda_ordr', t_string );
+                });
+                
+                $('#btnOrdb').click(function(e){
+                	var t_key = q_getPara('sys.key_ordb');
+                	var t_noa = $('#txtNoa').val();
+                	q_func('qtxt.query.ordr_ordb', 'ordr.txt,ordr_ordb,' + encodeURI(t_key)+';'+ encodeURI(t_noa)); 
+                });
+                $('#lblOrdbno').click(function(e){
+                	q_gt('view_ordb', "where=^^ workgno='"+$('#txtNoa').val()+"'^^", 0, 0, 0, 'view_ordb');
                 });
             }
             function checkAll(){
@@ -100,12 +111,26 @@
                 	case 'qtxt.query.orda_ordr':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
-                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtProductno,txtProduct,txtSpec,txtUnit,txtGmount'
-                        	, as.length, as, 'noa,noq,apvmemo,productno,product,spec,unit,gmount', '','');
+                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtApvmount,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
+                        	, as.length, as, 'noa,noq,apvmemo,apvmount,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
                         	sum();
                         } else {
                             alert('無資料!');
                         }
+                		break;
+            		case 'qtxt.query.ordr_ordb':
+                		var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined) {
+                            if(as[0].msg.length>0){
+                            	alert(as[0].msg);
+                            }else{
+                            	$('#txtOrdbno').val(as[0].ordbno);
+                            	abbm[q_recno].ordbno = as[0].ordbno;
+                            	if(as[0].ordbno.length>0)
+                            		alert('共匯出 '+as[0].ordbno.split(',').length+' 筆。');
+                            }		
+                        } 
+                        Unlock(1);
                 		break;
             		case 'qtxt.query.ordr_orda':
                 		var as = _q_appendData("tmp0", "", true, true);
@@ -123,6 +148,16 @@
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'view_ordb':
+                		var as = _q_appendData("view_ordb", "", true);
+                		if (as[0] != undefined) {
+                			t_where = '';
+	                		for(var i=0;i<as.length;i++){
+	                			t_where += (t_where.length>0?' or ':'')+ " noa='"+as[i].noa+"'" ;
+	                		}
+	                		q_box("ordb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordb'+r_accy, "95%", "95%", q_getMsg("popOrdb"));
+                		}
+                		break;
                 	case 'uccga':
                 		var as = _q_appendData("uccga", "", true);
                 		if (as[0] != undefined) {
@@ -219,6 +254,11 @@
                     Unlock(1);
                     return;
                 }
+                if ($('#txtApvdate').val().length == 0 || !q_cd($('#txtApvdate').val())) {
+                    alert(q_getMsg('lblApvdate') + '錯誤。');
+                    Unlock(1);
+                    return;
+                }
                 if (q_cur == 1) {
                     $('#txtWorker').val(r_name);
                 } else
@@ -250,10 +290,6 @@
 
             function refresh(recno) {
                 _refresh(recno);
-                $('.justPrint').prop('checked',true);	
-                $('.justPrint2').prop('checked',true);	
-                $('.checkAll').prop('checked',true);	
-                $('.checkAll2').prop('checked',true);	
             }
 
             function readonly(t_para, empty) {
@@ -262,10 +298,12 @@
                     $('#txtDatea').datepicker('destroy');
                     $('#btnImport').attr('disabled','disabled');
                     $('#chkApv').attr('disabled','disabled');
+                    $('#btnOrdb').removeAttr('disabled');
                 } else {	
                     $('#txtDatea').datepicker();
                     $('#btnImport').removeAttr('disabled');
                     $('#chkApv').removeAttr('disabled');
+                    $('#btnOrdb').attr('disabled','disabled');
                 }
             }
 
@@ -368,6 +406,7 @@
 		<style type="text/css">
             #dmain {
                 overflow: visible;
+                width: 1200px;
             }
             .dview {
                 float: left;
@@ -380,7 +419,7 @@
                 background-color: black;
             }
             .tview tr {
-                height: 30%;
+                height: 30px;
             }
             .tview td {
                 padding: 2px;
@@ -391,7 +430,7 @@
             }
             .dbbm {
                 float: left;
-                width: 70%;
+                width: 900px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -438,10 +477,6 @@
                 width: 100%;
                 float: left;
             }
-            .txt.c2 {
-                width: 130%;
-                float: left;
-            }
             .txt.num {
                 text-align: right;
             }
@@ -459,7 +494,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1000px;
+                width: 1500px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -523,18 +558,18 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id='dmain' style="overflow:visible;width: 1200px;">
+		<div id='dmain' style="overflow:visible;">
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview" >
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
+						<td style="width:100px; color:black;"><a id='vewDatea'> </a></td>
 						<td style="width:150px; color:black;"><a id='vewWorkgno'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewRworkdate'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
+						<td id='datea' style="text-align: center;">~datea</td>
 						<td id='workgno' style="text-align: center;">~workgno</td>
-						<td id='rworkdate' style="text-align: center;">~rworkdate</td>
 					</tr>
 				</table>
 			</div>
@@ -558,10 +593,16 @@
 					<tr>
 						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
 						<td><input id="txtWorkgno"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblRworkdate" class="lbl"> </a></td>
-						<td><input id="txtRworkdate"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
-						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
+						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
+						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblWorkdate" class="lbl"> </a></td>
+						<td colspan="2">
+							<input id="txtBworkdate"  type="text" style="float:left;width:45%"/>
+							<span style="float:left;display:block;width:10%;text-align: center;">～</span>
+							<input id="txtEworkdate"  type="text" style="float:left;width:45%"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblUccga" class="lbl"> </a></td>
@@ -579,14 +620,25 @@
 						<td></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
+						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
+						<td><span> </span><a id="lblApvdate" class="lbl"> </a></td>
+						<td><input id="txtApvdate"  type="text"  class="txt c1"/></td>
+						<td></td>
+						<td style="text-align: center;"><input id="btnImport" type="button" value="匯入" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblOrdbno" class="lbl btn"> </a></td>
+						<td colspan="3"><input id="txtOrdbno" type="text" class="txt c1"/></td>
+						<td></td>
+						<td><input id="btnOrdb" type="button" value="轉請購單" class="txt c1"/></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
-						<td></td>
-						<td><input id="btnImport" type="button" value="匯入"/></td>
 					</tr>
-					
 				</table>
 			</div>
 		</div>
@@ -598,11 +650,23 @@
 					</td>
 					<td style="width:20px;"> </td>
 					<td style="width:20px;"><a id='lbl_apv'>核準</a><input id="chkApv" class="checkAll" type="checkbox" onclick="checkAll()"/></td>
-					<td style="width:150px;"><a id='lbl_apvmemo'>簽核意見</a></td>
-					<td style="width:400px;"><a id='lbl_product'>物品</a></td>
+					<td style="width:100px;"><a id='lbl_apvmemo'>簽核意見</a></td>
+					<td style="width:80px;"><a id='lbl_apvmount'>異動數量</a></td>
+					<td style="width:100px;"><a id='lbl_workdate'>開工日</a></td>
+					<td style="width:80px;"><a id='lbl_style'>機型</a></td>
+					<td style="width:350px;"><a id='lbl_product'>物品</a></td>
 					<td style="width:150px;"><a id='lbl_spec'>規格</a></td>
 					<td style="width:50px;"><a id='lbl_unit'>單位</a></td>
 					<td style="width:80px;"><a id='lbl_gmount'>毛需求</a></td>
+					<td style="width:80px;"><a id='lbl_wmount'>製令未領</a></td>
+					<td style="width:80px;"><a id='lbl_stkmount'>庫存量</a></td>
+					<td style="width:80px;"><a id='lbl_schmount'>在途量</a></td>
+					<td style="width:80px;"><a id='lbl_safemount'>安全存量</a></td>
+					<td style="width:80px;"><a id='lbl_netmount'>淨需求量</a></td>
+					<td style="width:80px;"><a id='lbl_fdate'>預測日期</a></td>
+					<td style="width:80px;"><a id='lbl_fmount'>預測需求</a></td>
+					<td style="width:80px;"><a id='lbl_memo'>備註</a></td>
+					
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -614,30 +678,41 @@
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td align="center"><input id="chkApv.*" type="checkbox"/></td>
 					<td><input class="txt" id="txtApvmemo.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtApvmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtWorkdate.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtStyle.*" type="text" style="width:95%;" title=""/></td>
 					<td>
-						<input class="txt" id="txtProductno.*" type="text" style="width:35%; float:left;"/>
-						<input class="txt" id="txtProduct.*" type="text" style="width:60%;float:left;"/>
+						<input class="txt" id="txtProductno.*" type="text" style="width:60%; float:left;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:35%;float:left;"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
 					<td><input class="txt" id="txtSpec.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt" id="txtUnit.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt num" id="txtGmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtWmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtStkmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtSchmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtSafemount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtNetmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtFdate.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtFmount.*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtMemo.*" type="text" style="width:95%;" title=""/></td>
 				</tr>
 			</table>
 		</div>
 		
 		<input id="q_sys" type="hidden" />
-		<div id="dbbt" style="display:none;">
+		<div id="dbbt" style="position: absolute;top:280px; left:800px; display:none;width:300px;">
 			<table id="tbbt">
 				<tbody>
 					<tr class="head" style="color:white; background:#003366;">
-						<td style="width:20px;">
-						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
+						<td style="display:none;">
+							<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"></td>
 					</tr>
 					<tr>
-						<td>
+						<td style="display:none;">
 							<input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 							<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
 							<input class="txt" id="txtNo2..*" type="text" style="display: none;"/>
