@@ -246,7 +246,8 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,mount,memo', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
+							, 'productno,product,spec,unit,mount,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
@@ -261,6 +262,10 @@
 
 							$('#txtOrdeno').val(t_oredeno);
 							sum();
+							
+							//103/12/04出貨單價抓最新的報價資料
+							var t_where = "where=^^ productno+'_'+odate+'_'+noa in (select productno+'_'+MAX(odate+'_'+noa) from view_quats where custno='"+$('#txtCustno').val()+"' and odate<='"+q_date()+"' and productno!='' group by productno)  ^^";
+							q_gt('view_quats', t_where, 0, 0, 0, "vccprice_quat", r_accy);
 						}
 						break;
 					case q_name + '_s':
@@ -278,6 +283,18 @@
 			function q_gtPost(t_name) {
 				var as;
 				switch (t_name) {
+					case 'vccprice_quat':
+						var as = _q_appendData("view_quats", "", true);
+						for(var i=0;i<q_bbsCount;i++){
+							for(var j=0;j<as.length;j++){
+								if($('#txtProductno_'+i).val()==as[j].productno){
+									q_tr('txtPrice_'+i,dec(as[j].price));
+									break;
+								}
+							}
+						}
+						sum();
+						break;
 					case 'GetOrdeList':
 						var as = _q_appendData("view_ordes", "", true);
 						for(var k=0;k<q_bbsCount;k++){
