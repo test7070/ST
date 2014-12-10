@@ -1216,8 +1216,8 @@
 						<td class="td3"><input id="txtFloata" type="text" class="txt num c1" /></td>
 						<td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-						<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
-						<td class="td8"><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>
+						<!--<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
+						<td class="td8"><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>-->
 					</tr>
 					<tr class="tr10">
 						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>

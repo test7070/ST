@@ -936,8 +936,8 @@
 						<td><input id="txtTaxno"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id="lblPtype" class="lbl"> </a></td>
 						<td><select id="cmbPtype" class="txt c1"> </select></td>
-						<td><input id="chkHouse" type="checkbox" style="float: right;"/></td>
-						<td><a id='lblHouse'> </a></td>
+						<td> </td>
+						<td><input id="chkIshouse" type="checkbox"/><a id='lblIshouse'> </a></td>
 					</tr>
 					<tr class='tax'>
 						<td><span> </span><a id="lblAddr_rent" class="lbl"> </a></td>
