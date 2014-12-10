@@ -18,7 +18,7 @@
 
             q_tables = 't';
             var q_name = "ordr";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea','txtOrdbno'];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea','txtOrdbno','txtApvdate'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [['txtBday',10,0,1]];
@@ -231,7 +231,7 @@
                 _btnIns();
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
-                $('#txtDatea').focus();
+                $('#txtWorkgno').focus();
             }
 
             function btnModi() {
@@ -254,11 +254,13 @@
                     Unlock(1);
                     return;
                 }
-                if ($('#txtApvdate').val().length == 0 || !q_cd($('#txtApvdate').val())) {
+                //103/12/10 存檔時自動寫入今天的日期
+                /*if ($('#txtApvdate').val().length == 0 || !q_cd($('#txtApvdate').val())) {
                     alert(q_getMsg('lblApvdate') + '錯誤。');
                     Unlock(1);
                     return;
-                }
+                }*/
+               $('#txtApvdate').val(q_date());
                 if (q_cur == 1) {
                     $('#txtWorker').val(r_name);
                 } else
@@ -295,12 +297,12 @@
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
                 if (t_para) {
-                    $('#txtDatea').datepicker('destroy');
+                    //$('#txtDatea').datepicker('destroy');
                     $('#btnImport').attr('disabled','disabled');
                     $('#chkApv').attr('disabled','disabled');
                     $('#btnOrdb').removeAttr('disabled');
                 } else {	
-                    $('#txtDatea').datepicker();
+                    //$('#txtDatea').datepicker();
                     $('#btnImport').removeAttr('disabled');
                     $('#chkApv').removeAttr('disabled');
                     $('#btnOrdb').attr('disabled','disabled');
