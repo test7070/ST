@@ -71,7 +71,6 @@
                 q_cmbParse("cmbMech4", z_mech,'s');
                 q_cmbParse("cmbMech5", z_mech,'s');
                 
-                q_cmbParse("combPrint", 'barfe1-1.bat@條碼機1,barfe1-2.bat@條碼機2,barfe1-3.bat@條碼機3,barfe1-4.bat@條碼機4');
                 $('#btnPrint_d').click(function(e){
                 	$('#btnPrint_d').attr('disabled','disabled');
                 	setTimeout(function(){$('#btnPrint_d').removeAttr('disabled')}, 3000);
@@ -893,7 +892,12 @@
 				<tr style="height:35px;">
 					<td><span> </span><a id="lblPrint_d" style="float:right; color: blue; font-size: medium;"> </a></td>
 					<td colspan="4">
-						<select id="combPrint" style="font-size: medium;width:80%;"></select>
+						<select id="combPrint" style="font-size: medium;width:80%;">
+							<option value="barfe1-1.bat">白色</option>
+							<option value="barfe1-2.bat">綠色</option>
+							<option value="barfe1-3.bat">黃色</option>
+							<option value="barfe1-4.bat">藍色</option>
+						</select>
 					</td>
 					<td></td>
 					<td><input id="btnPrint_d" type="button" value="列印"/></td>
