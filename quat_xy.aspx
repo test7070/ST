@@ -251,6 +251,13 @@
 							q_cmbParse("combGroupbno", t_item,'s');
 						}
 						break;
+					case 'view_ordes':
+						var as = _q_appendData("view_ordes", "", true);
+						if (as[0] != undefined) {
+							alert('已轉訂單禁止修改!!!');
+							$('#btnCancel').click();
+						}
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -683,6 +690,9 @@
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
+				
+				var t_where = "where=^^ quatno='" + $('#txtNoa').val() + "' ^^";
+				q_gt('view_ordes', t_where, 0, 0, 0, "");
 			}
 
 			function btnPrint() {

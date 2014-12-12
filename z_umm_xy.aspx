@@ -25,7 +25,16 @@
                 q_gf('', 'z_umm_xy');
 
                 $('#q_report').click(function(e) {
-                });
+					if(r_rank<9){
+						var delete_report=0;
+							for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+								if($('#q_report').data().info.reportData[i].report=='z_umm_xy3')
+									delete_report=i;
+							}
+							if($('#q_report div div').text().indexOf('業務出貨獎金明細表')>-1)
+								$('#q_report div div')[delete_report].remove()
+					}
+				});
 
             });
 
