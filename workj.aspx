@@ -71,14 +71,13 @@
                 q_cmbParse("cmbMech4", z_mech,'s');
                 q_cmbParse("cmbMech5", z_mech,'s');
                 
-                q_cmbParse("combPrint", 'barfe.gen1@條碼機1,barfe.gen2@條碼機2,barfe.gen3@條碼機3,barfe.gen4@條碼機4');
+                q_cmbParse("combPrint", 'barfe1-1.bat@條碼機1,barfe1-2.bat@條碼機2,barfe1-3.bat@條碼機3,barfe1-4.bat@條碼機4');
                 $('#btnPrint_d').click(function(e){
                 	$('#btnPrint_d').attr('disabled','disabled');
                 	setTimeout(function(){$('#btnPrint_d').removeAttr('disabled')}, 3000);
                 	Lock(1,{opacity:0});
                 	var t_noq = '';
-                	//目前沒有餘料
-                	if($('#combPrint').val()=='xxxxxxxx'){
+                	if($('#combPrint').val()=='barfe2.bat'){
                 		var t_printCount = 0
                 		for(var i=0;i<q_bbtCount;i++){
 	                		if($('#checkIsprint__'+i).prop('checked') && $.trim($('#txtBno__'+i).val()).length>0){
@@ -90,7 +89,7 @@
 	                		alert('未選擇要列印的資料(餘料)。');
 	                	}else{
 	                		if (confirm("已選擇 "+t_printCount+" 筆，是否列印條碼?") ) {
-	                			q_func( $('#combPrint').val(), $('#txtNoa').val()+',workjt,'+t_noq); 
+	                			q_func( $('#combPrint').val(), $('#txtNoa').val()+',workjt,'+t_noq+','+$('#combPrint').val()); 
 	                		}else{
 	                			Unlock(1);
 	                			return;
@@ -110,7 +109,7 @@
 	                		alert('未選擇要列印的資料(成品)。');
 	                	}else{
 	                		if (confirm("已選擇 "+t_printCount+" 筆共"+t_printPage+" 張條碼，是否列印?") ) {
-	                			q_func( $('#combPrint').val(), $('#txtNoa').val()+',,'+t_noq); 
+	                			q_func( $('#combPrint').val(), $('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()); 
 	                		}else{
 	                			Unlock(1);
 	                			return;
@@ -900,15 +899,9 @@
 					<td><input id="btnPrint_d" type="button" value="列印"/></td>
 				</tr>
 				<tr style="height:20px;">
-					<td colspan="7">
-						<a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;【列印】有勾、</a>
+					<td colspan="6">
+						<a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;【列印】有勾、【品名】有輸入的才會印。</a>
 					</td>
-				</tr>
-				<tr style="height:20px;">
-					<td colspan="7"><a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;(成品)【品名】有輸入的才會印。</a></td>
-				</tr>
-				<tr style="height:20px;">
-					<td colspan="6"><a style="color:darkred;">&nbsp;&nbsp;&nbsp;&nbsp;(餘料)【餘料批號】有輸入的才會印。</a></td>
 					<td><input id="btnCancel_d" type="button" value="關閉"/></td>
 				</tr>
 				<tr style="height:20px;">
