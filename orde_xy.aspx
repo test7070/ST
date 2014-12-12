@@ -21,10 +21,10 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "orde";
-			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtSales', 'txtOrdbno', 'txtOrdcno'];
-			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtNo2', 'txtNo3', 'txtC1', 'txtNotv'];
+			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtSales', 'txtOrdbno', 'txtOrdcno','txtApv'];
+			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtNo2', 'txtNo3', 'txtC1', 'txtNotv','txtProduct','txtSpec'];
 			var bbmNum = [['txtTotal', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],['txtFloata', 10, 5, 1], ['txtTotalus', 15, 2, 1]];
-			var bbsNum = [['txtDime', 15, 0, 1]];
+			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_sqlCount = 6;
@@ -38,7 +38,7 @@
 					['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucc_b.aspx'],
 					['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 					['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-					['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,zip_home,addr_home', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtPost2,txtAddr2', 'cust_b.aspx'],
+					['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,zip_home,addr_home', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtPost2,txtAddr2', 'cust_b.aspx'],
 					['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', '']
 			);
 			
@@ -87,7 +87,7 @@
 				bbmMask = [['txtOdate', r_picd]];
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
-				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
+				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1],['txtDime', 15, 0, 1],['txtLengthb', 15, 0, 1]];
 				q_cmbParse("cmbStype", q_getPara('orde.stype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
@@ -546,7 +546,9 @@
 				var t_where = '';
 				if (t_custno.length > 0) {
 					t_where = "";
-					t_where="noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+$('#txtOdate').val()+"' group by b.productno)";
+					//12/11 核准判斷暫時拿掉 等上線後再放入
+					//t_where="noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+$('#txtOdate').val()+"' group by b.productno)";
+					t_where="noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+$('#txtOdate').val()+"' group by b.productno)";
 					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and datea>='"+$('#txtOdate').val()+"'";
 					q_box("quat_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'quats', "95%", "95%", $('#btnQuat').val());
 				}else {
@@ -565,7 +567,9 @@
 				
 				//檢查產品是否在報價單中，並判斷單價，不在報價單中或單價小於報價金額不能存檔
 				if(!check_quat_xy){
-					t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.odate>='"+q_date()+"' group by b.productno)";
+					//12/11 核准判斷暫時拿掉 等上線後再放入
+					//t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.odate>='"+q_date()+"' group by b.productno)";
+					t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.odate>='"+q_date()+"' group by b.productno)";
 					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", $('#txtCustno').val()) +" and odate>='"+q_date()+"' ^^";
 					q_gt('view_quats', t_where, 0, 0, 0, "btnOk_xy");
 					return;
@@ -748,7 +752,7 @@
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
 				$('#txtOdate').val(q_date());
-				$('#txtOdate').focus();
+				$('#txtCustno').focus();
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -758,7 +762,7 @@
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
-				$('#txtOdate').focus();
+				$('#txtCustno').focus();
 
 				if (!emp($('#txtCustno').val())) {
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
@@ -842,8 +846,9 @@
 			}
 			
 			function HiddenTreat() {
-				var hasSpec = q_getPara('sys.isspec');
-				var isSpec = (hasSpec.toString()=='1'?$('.isSpec').show():$('.isSpec').hide());
+				if (r_rank<9){
+					$('.bonus').hide();
+				}
 
 				if(emp($('#txtOrdbno').val()) && q_cur<1 && q_cur>2){
 					$('#lblOrde2ordb').show();
@@ -922,7 +927,9 @@
 							var t_custno = trim($('#txtCustno').val());
 							var t_where = '';
 							if (t_custno.length > 0) {
-								t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.odate>='"+q_date()+"' group by b.productno)";
+								//12/11 核准判斷暫時拿掉 等上線後再放入
+								//t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.odate>='"+q_date()+"' group by b.productno)";
+								t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.odate>='"+q_date()+"' group by b.productno)";
 								t_where+=" and productno='"+$('#txtProductno_'+b_seq).val()+"' and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and odate>='"+q_date()+"' ^^";
 							}else {
 								alert(q_getMsg('msgCustEmp'));
@@ -1117,7 +1124,7 @@
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td align="center" id='odate'>~odate</td>
 						<td align="center" id='noa'>~noa</td>
-						<td align="center" id='custno comp,4'>~custno ~comp,4</td>
+						<td align="center" id='nick' style="text-align: left;">~nick</td>
 					</tr>
 				</table>
 			</div>
@@ -1153,7 +1160,9 @@
 					<tr class="tr3">
 						<td class="td1"><span> </span><a id="lblCust" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCustno" type="text" class="txt c1"/></td>
-						<td class="td3" colspan="2"><input id="txtComp" type="text" class="txt c1"/></td>
+						<td class="td3" colspan="2"><input id="txtComp" type="text" class="txt c1"/>
+							<input id="txtNick" type="hidden" class="txt c1"/>
+						</td>
 						<td class="td5"><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td class="td6"><input id="txtPaytype" type="text" class="txt c1"/></td>
 						<td class="td7">
@@ -1216,8 +1225,8 @@
 						<td class="td3"><input id="txtFloata" type="text" class="txt num c1" /></td>
 						<td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-						<!--<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
-						<td class="td8"><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>-->
+						<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
+						<td class="td8"><input id="txtApv" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr10">
 						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
@@ -1242,22 +1251,25 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1700px;">
+		<div class='dbbs' style="width: 2200px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1'>
 				<tr style='color:White; background:#003366;' >
-					<td align="center" style="width:45px;">
-						<input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" />
-					</td>
-					<td align="center" style="width:160px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
-					<td align="center" style="width:60px;"><a>包裝方式</a></td>
+					<td align="center" style="width:40px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
+					<td align="center" style="width:40px;"><a>項次</a></td>
+					<td align="center" style="width:150px;"><a id='lblProductno'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:230px;"><a>規格</a></td>
+					<td align="center" style="width:70px;"><a>包裝方式</a></td>
 					<td align="center" style="width:40px;"><a>色數</a></td>
 					<td align="center" style="width:55px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblTotal_s'> </a></td>
+					<td align="center" style="width:85px;" class="bonus"><a>獎金</a></td>
 					<td align="center" style="width:85px;"><a id='lblGemounts'> </a></td>
-					<td align="center" style="width:175px;"><a id='lblMemos'> </a></td>
+					<td align="center" style="width:85px;"><a>未交量</a></td>
+					<td align="center" style="width:175px;"><a>備註</a></td>
+					<td align="center" style="width:175px;"><a>報價單號</a></td>
 					<td align="center" style="width:85px;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblEndas'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblCancels'> </a></td>
@@ -1268,28 +1280,27 @@
 					<td align="center" style="width:43px;"><a id='lblScheduled'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
-					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
+					<td align="center"><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td align="center">
-						<input class="txt c6" id="txtProductno.*" maxlength='30'type="text" style="width:98%;" />
+						<input class="txt c1" id="txtNo2.*" type="text" />
+					</td>
+					<td align="center">
+						<input class="txt c6" id="txtProductno.*" maxlength='30'type="text" style="width:80%;" />
 						<input class="btn" id="btnProduct.*" type="button" value='.' style=" font-weight: bold;" />
-						<input class="txt c6" id="txtNo2.*" type="text" />
 					</td>
-					<td>
-						<input class="txt c7" id="txtProduct.*" type="text" />
-						<input id="txtSpec.*" type="text" class="txt c1 isSpec"/>
-					</td>
+					<td><input class="txt c1" id="txtProduct.*" type="text" /></td>
+					<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
 					<td><input id="txtSizea.*" type="text" class="txt c1"/></td>
 					<td><input id="txtDime.*" type="text" class="txt c1 num"/></td>
 					<td align="center"><input class="txt c7" id="txtUnit.*" type="text"/></td>
 					<td><input class="txt num c7" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtTotal.*" type="text" /></td>
+					<td class="bonus"><input class="txt num c7 bonus" id="txtLengthb.*" type="text" /></td>
+					<td><input class="txt num c1" id="txtC1.*" type="text" /></td>
+					<td><input class="txt num c1" id="txtNotv.*" type="text" /></td>
+					<td><input class="txt c7" id="txtMemo.*" type="text" /></td>
 					<td>
-						<input class="txt num c1" id="txtC1.*" type="text" />
-						<input class="txt num c1" id="txtNotv.*" type="text" />
-					</td>
-					<td>
-						<input class="txt c7" id="txtMemo.*" type="text" />
 						<input class="txt" id="txtQuatno.*" type="text" style="width: 70%;" />
 						<input class="txt" id="txtNo3.*" type="text" style="width: 20%;"/>
 						<input id="recno.*" type="hidden" />

@@ -31,7 +31,7 @@
 			brwKey = 'datea';
 
 			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel,fax,zip_comp,addr_comp,zip_home,addr_home,paytype,trantype,salesno,sales,custno2,cust2', 'txtCustno,txtComp,txtTel,txtFax,txtPost,txtAddr,txtPost2,txtAddr2,txtPaytype,cmbTrantype,txtSalesno,txtSales,txtCustno2,txtComp2,txtInvono', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,fax,zip_comp,addr_comp,zip_home,addr_home,paytype,trantype,salesno,sales,custno2,cust2', 'txtCustno,txtComp,txtNick,txtTel,txtFax,txtPost,txtAddr,txtPost2,txtAddr2,txtPaytype,cmbTrantype,txtSalesno,txtSales,txtCustno2,txtComp2,txtInvono', 'cust_b.aspx'],
 				['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
@@ -91,7 +91,7 @@
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1]];
-				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1], ['txtTranmoney2', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTranmoney3', 9, q_getPara('vcc.mountPrecision'), 1]];
+				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1], ['txtTranmoney2', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTranmoney3', 9, q_getPara('vcc.mountPrecision'), 1],['txtLengthb', 15, 0, 1]];
 				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
@@ -125,9 +125,10 @@
 					var t_custno = trim($('#txtCustno').val());
 					var t_where = '';
 					if (t_custno.length > 0) {
-						t_where = "noa in (select noa from orde" + r_accy + " where enda!='1') && " + (t_custno.length > 0 ? q_sqlPara("custno", t_custno) : "");
+						t_where = " isnull(enda,0)!=1 ";
+						t_where += " and (custno='"+t_custno+"' or custno='"+t_custno.substr(0,5)+"')";
 						if (!emp($('#txtOrdeno').val()))
-							t_where += " && charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
+							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
 						t_where = t_where;
 					} else {
 						alert(q_getMsg('msgCustEmp'));
@@ -263,9 +264,9 @@
 							$('#txtOrdeno').val(t_oredeno);
 							sum();
 							
-							//103/12/04出貨單價抓最新的報價資料
-							var t_where = "where=^^ productno+'_'+odate+'_'+noa in (select productno+'_'+MAX(odate+'_'+noa) from view_quats where custno='"+$('#txtCustno').val()+"' and odate<='"+q_date()+"' and productno!='' group by productno)  ^^";
-							q_gt('view_quats', t_where, 0, 0, 0, "vccprice_quat", r_accy);
+							//103/12/04出貨單價抓最新的報價資料 >>後面取消
+							//var t_where = "where=^^ productno+'_'+odate+'_'+noa in (select productno+'_'+MAX(odate+'_'+noa) from view_quats where custno='"+$('#txtCustno').val()+"' and odate<='"+q_date()+"' and productno!='' group by productno)  ^^";
+							//q_gt('view_quats', t_where, 0, 0, 0, "vccprice_quat", r_accy);
 						}
 						break;
 					case q_name + '_s':
@@ -864,12 +865,9 @@
 			}
 
 			function HiddenTreat(){
-				var hasStyle = q_getPara('sys.isstyle');
-				var isStyle = (hasStyle.toString()=='1'?$('.isStyle').show():$('.isStyle').hide());
-				var hasSpec = q_getPara('sys.isspec');
-				var isSpec = (hasSpec.toString()=='1'?$('.isSpec').show():$('.isSpec').hide());
-				var hasRackComp = q_getPara('sys.rack');
-				var isRack = (hasRackComp.toString()=='1'?$('.isRack').show():$('.isRack').hide());
+				if (r_rank<9){
+					$('.bonus').hide();
+				}
 			}
 			
 			function stype_chang(){
@@ -1215,7 +1213,7 @@
 						<td align="center" id='typea=vcc.typea'>~typea=vcc.typea</td>
 						<td align="center" id='datea'>~datea</td>
 						<td align="center" id='noa'>~noa</td>
-						<td align="center" id='comp'>~comp</td>
+						<td align="center" id='nick' style="text-align: left;">~nick</td>
 					</tr>
 				</table>
 			</div>
@@ -1255,7 +1253,10 @@
 					<tr>
 						<td class="td1"><span> </span><a id="lblCust" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCustno" type="text" class="txt c1"/></td>
-						<td class="td2"><input id="txtComp" type="text" class="txt c1"/></td>
+						<td class="td2">
+							<input id="txtComp" type="text" class="txt c1"/>
+							<input id="txtNick" type="hidden" class="txt c1"/>
+						</td>
 						<td class="td4"><span> </span><a id='lblPay' class="lbl"> </a></td>
 						<td class="td5"><input id="txtPaytype" type="text" class="txt c1"/></td>
 						<td class="td6"><select id="combPay" style="width: 100%;" onchange='combPay_chg()'> </select></td>
@@ -1337,7 +1338,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1680px;">
+		<div class='dbbs' style="width: 1750px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;">
@@ -1345,24 +1346,21 @@
 					</td>
 					<td align="center" style="width:180px"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblProduct_s'> </a></td>
-					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a></td>
+					<td align="center" style="width:85px;" class="bonus"><a>獎金</a></td>
 					<td align="center" style="width:120px;"><a id='lblStore_s'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStore2_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTranmoney2_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTranmoney3_s'> </a></td>
-					<td align="center" style="width:100px;" class="isRack"><a id='lblRackno_s'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblRecord_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblStk_s'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
-					<td>
-						<input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
-					</td>
+					<td align="center"><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td align="center">
 						<input class="txt c1"  id="txtProductno.*" type="text" />
 						<input id="txtNoq.*" type="text" class="txt c6"/>
@@ -1372,13 +1370,13 @@
 						<input id="txtProduct.*" type="text" class="txt c1" />
 						<input id="txtSpec.*" type="text" class="txt c1 isSpec" />
 					</td>
-					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1"/>
 						<input id="txtSprice.*" type="hidden" class="txt num c1"/>
 					</td>
 					<td><input id="txtTotal.*" type="text" class="txt num c1"/></td>
+					<td class="bonus"><input class="txt num c7 bonus" id="txtLengthb.*" type="text" /></td>
 					<td>
 						<input id="txtStoreno.*" type="text" class="txt c1" style="width: 75%"/>
 						<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;" />
@@ -1391,10 +1389,6 @@
 					</td>
 					<td><input id="txtTranmoney2.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtTranmoney3.*" type="text" class="txt num c1"/></td>
-					<td class="isRack">
-						<input class="btn"  id="btnRackno.*" type="button" value='.' style="float:left;" />
-						<input id="txtRackno.*" type="text" class="txt c1 isRack" style="width: 70%"/>
-					</td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c1"/>
 						<select id="combOrdelist.*" style="width: 10%;"> </select>

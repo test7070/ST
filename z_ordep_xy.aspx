@@ -33,6 +33,10 @@
                     },{
                         type : '1',
                         name : 'xnoa'
+                    },{
+                        type : '8',
+                        name : 'showlogo2',
+                        value : "1@顯示公司章".split(',')
                     }]
                 });
                 q_popAssign();
