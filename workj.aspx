@@ -71,13 +71,14 @@
                 q_cmbParse("cmbMech4", z_mech,'s');
                 q_cmbParse("cmbMech5", z_mech,'s');
                 
-                q_cmbParse("combPrint", 'barfe.gen1@條碼機1(成品),barfe.gen2@條碼機2(餘料)');
+                q_cmbParse("combPrint", 'barfe.gen1@條碼機1,barfe.gen2@條碼機2,barfe.gen3@條碼機3,barfe.gen4@條碼機4');
                 $('#btnPrint_d').click(function(e){
                 	$('#btnPrint_d').attr('disabled','disabled');
                 	setTimeout(function(){$('#btnPrint_d').removeAttr('disabled')}, 3000);
                 	Lock(1,{opacity:0});
                 	var t_noq = '';
-                	if($('#combPrint').val()=='barfe.gen2'){
+                	//目前沒有餘料
+                	if($('#combPrint').val()=='xxxxxxxx'){
                 		var t_printCount = 0
                 		for(var i=0;i<q_bbtCount;i++){
 	                		if($('#checkIsprint__'+i).prop('checked') && $.trim($('#txtBno__'+i).val()).length>0){
