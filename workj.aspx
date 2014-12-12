@@ -89,7 +89,7 @@
 	                		alert('未選擇要列印的資料(餘料)。');
 	                	}else{
 	                		if (confirm("已選擇 "+t_printCount+" 筆，是否列印條碼?") ) {
-	                			q_func( $('#combPrint').val(), $('#txtNoa').val()+',workjt,'+t_noq+','+$('#combPrint').val()); 
+	                			q_func( 'barfe.gen2', $('#txtNoa').val()+',workjt,'+t_noq+','+$('#combPrint').val()); 
 	                		}else{
 	                			Unlock(1);
 	                			return;
@@ -109,7 +109,7 @@
 	                		alert('未選擇要列印的資料(成品)。');
 	                	}else{
 	                		if (confirm("已選擇 "+t_printCount+" 筆共"+t_printPage+" 張條碼，是否列印?") ) {
-	                			q_func( $('#combPrint').val(), $('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()); 
+	                			q_func( 'barfe.gen1', $('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()); 
 	                		}else{
 	                			Unlock(1);
 	                			return;
