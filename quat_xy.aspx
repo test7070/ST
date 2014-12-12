@@ -20,7 +20,7 @@
 			var q_name = "quat";
 			var decbbs = ['price', 'weight', 'mount', 'total', 'dime', 'width', 'lengthb', 'c1', 'notv', 'theory'];
 			var decbbm = ['money', 'tax', 'total', 'weight', 'floata', 'mount', 'price', 'totalus'];
-			var q_readonly = ['txtNoa','txtWorker', 'txtComp', 'txtAcomp', 'txtSales', 'txtWorker2','txtApv'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtAcomp', 'txtSales', 'txtWorker2','txtApv','txtMoney','txtTotal','txtTotalus'];
 			var q_readonlys = ['txtNo3'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -34,7 +34,8 @@
 			brwKey = 'Datea';
 			aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
+				['txtProduct_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', '0txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,serial,email,salesno,sales', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtPay,txtMemo2,txtSalesno,txtSales', 'cust_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			);
@@ -299,7 +300,7 @@
 			}
 
 			function combPay_chg() {
-				var cmb = document.getElementById("combPay")
+				var cmb = document.getElementById("combPaytype")
 				if (!q_cur)
 					cmb.value = '';
 				else
@@ -962,6 +963,12 @@
 						<td><span> </span><a id='lblFax' class="lbl"> </a></td>
 						<td colspan='3'><input id="txtFax" type="text" class="txt c1"/></td>
 					</tr>
+					<tr class="tr4">
+						<td><span> </span><a class="lbl">統一編號 </a></td>
+						<td colspan='3'><input id="txtPay"	type="text" class="txt c1"/></td>
+						<td><span> </span><a class="lbl">E-MAIL</a></td>
+						<td colspan='3'><input id="txtMemo2" type="text" class="txt c1"/></td>
+					</tr>
 					<tr class="tr5">
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td><input id="txtPost" type="text" class="txt c1"></td>
@@ -1040,8 +1047,10 @@
 					<td align="center" style="width:40px;">
 						<input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" />
 					</td>
-					<td align="center" style="width:200px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:230px;"><a id='lblProduct'> </a></td>
+					<td align="center" style="width:70px;">項次</td>
+					<!--<td align="center" style="width:200px;"><a id='lblProductno'> </a></td>-->
+					<td align="center" style="width:150px;"><a id='lblProduct'> </a></td>
+					<td align="center" style="width:230px;"><a>規格</a></td>
 					<td align="center" style="width:60px;"><a>便/印</a></td>
 					<td align="center" style="width:60px;"><a>包裝方式</a></td>
 					<td align="center" style="width:40px;"><a>色數</a></td>
@@ -1058,15 +1067,14 @@
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td align="center">
-						<input id="txtProductno.*" type="text" class="txt c1" />
+						<input id="txtProductno.*" type="hidden" class="txt c1" />
+						<input id="txtNo3.*" type="text" class="txt c1" />
+					</td>
+					<td><input id="txtProduct.*" type="text" class="txt c1" style="width:110px;"/>
 						<input class="btn" id="btnProduct.*" type="button" value='.' style=" font-weight: bold;" />
-						<input id="txtNo3.*" type="text" class="txt c6" />
 						<select id="combGroupbno.*" class="txt c1" style="width: 20px; float: right;"> </select>
 					</td>
-					<td>
-						<input id="txtProduct.*" type="text" class="txt c1"/>
-						<input id="txtSpec.*" type="text" class="txt c1 isSpec"/>
-					</td>
+					<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
 					<td><select id="cmbClassa.*" class="txt c1" style="float: right;"> </select></td>
 					<td><input id="txtSizea.*" type="text" class="txt c1"/></td>
 					<td><input id="txtDime.*" type="text" class="txt c1 num"/></td>
