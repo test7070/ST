@@ -106,6 +106,8 @@
 	                	}        
 	                	if(t_noq.length==0){
 	                		alert('未選擇要列印的資料(成品)。');
+	                		Unlock(1);
+                			return;
 	                	}else{
 	                		if (confirm("已選擇 "+t_printCount+" 筆共"+t_printPage+" 張條碼，是否列印?") ) {
 	                			q_func( 'barfe.gen1', $('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()); 
@@ -316,6 +318,7 @@
 								}	
 							}
                     	}catch(e){
+                    		Unlock(1);
                     	}
                         break;
                 }
@@ -481,9 +484,13 @@
 				q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg",n:n}));	
 			};
 			function createImg_btnOk(n){
-				if(n>=0){
+				if(n>=0){				
 					var t_picno = $('#txtPicno_'+n).val();
-					q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg_btnOk",n:n}));	
+					if(t_picno.length>0){
+						q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg_btnOk",n:n}));	
+					}else{
+						createImg_btnOk(n-1)
+					}
 				}else{
 					sum();
 	                var t_noa = trim($('#txtNoa').val());
