@@ -192,7 +192,8 @@
 			function q_popPost(id) {
                 switch (id) {
                 	case 'txtProductno_':
-                		sum();
+                		var n = b_seq;
+                		createImg(n);
                 	case 'txtPicno_':
                 		var n = b_seq;
                 		createImg(n);
@@ -261,8 +262,9 @@
                     default:
                     	try{
                     		var t_para = JSON.parse(t_name);
-                    		if(t_para.action=="createimg"){
+                    		if(t_para.action=="createimg" || t_para.action=="createimg_btnOk"){
                     			var n = t_para.n;
+                    			var action = t_para.action;
                     			as = _q_appendData("img", "", true);
                     			t_para = JSON.parse(as[0].para);
                     			//先用原大小
@@ -308,7 +310,10 @@
 								if($('#txtMemo_'+n).val().substring(0,1)!='*'){
 									$('#txtLengthb_'+n).val(t_length);
                 				}
-								sum();					
+								sum();	
+								if(action=="createimg_btnOk"){
+									createImg_btnOk(n-1);
+								}	
 							}
                     	}catch(e){
                     	}
@@ -406,14 +411,8 @@
                     $('#txtWorker').val(r_name);
                 } else
                     $('#txtWorker2').val(r_name);
-                sum();
-                var t_noa = trim($('#txtNoa').val());
-                var t_date = trim($('#txtDatea').val());
-                if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_workj') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-                else
-                    wrServer(t_noa);
-
+                $('#btnMemo').focus();
+				createImg_btnOk(q_bbsCount-1);
             }
 
             function wrServer(key_value) {
@@ -478,11 +477,22 @@
                 _btnPlut(org_htm, dest_tag, afield);
             }*/
 			function createImg(n){
-				if (n ==undefined)
-					return;
 				var t_picno = $('#txtPicno_'+n).val();
-				
 				q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg",n:n}));	
+			};
+			function createImg_btnOk(n){
+				if(n>=0){
+					var t_picno = $('#txtPicno_'+n).val();
+					q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg_btnOk",n:n}));	
+				}else{
+					sum();
+	                var t_noa = trim($('#txtNoa').val());
+	                var t_date = trim($('#txtDatea').val());
+	                if (t_noa.length == 0 || t_noa == "AUTO")
+	                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_workj') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+	                else
+	                    wrServer(t_noa);
+				}
 			};
             function bbsAssign() {
                 for (var i = 0; i < q_bbsCount; i++) {
