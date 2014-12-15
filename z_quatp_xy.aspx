@@ -37,6 +37,10 @@
                         type : '8',
                         name : 'showmemo',
                         value : "1@顯示參考供應客戶".split(',')
+                    },{
+                        type : '8',
+                        name : 'showlogo2',
+                        value : "1@顯示公司章".split(',')
                     }]
                 });
                 q_popAssign();
@@ -46,6 +50,14 @@
                 $('#txtXdate1').datepicker();
                 $('#txtXdate2').mask('999/99/99');
                 $('#txtXdate2').datepicker();
+                
+                $('#Showmemo').css('width','300px');
+                $('#chkShowmemo').css('width','220px');
+                $('#chkShowmemo span').css('width','180px');
+                $('#Showlogo2').css('width','300px');
+                $('#chkShowlogo2').css('width','220px');
+                $('#chkShowlogo2 span').css('width','180px');
+                
                 var t_key = q_getHref();
                 if(t_key[1] != undefined)
                 	$('#txtXnoa1').val(t_key[1]);
@@ -67,7 +79,8 @@
 	<body id="z_quatp_xy" ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
+	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
+	>
 		<div id="q_menu"> </div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">

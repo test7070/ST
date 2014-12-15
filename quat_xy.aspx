@@ -21,7 +21,7 @@
 			var decbbs = ['price', 'weight', 'mount', 'total', 'dime', 'width', 'lengthb', 'c1', 'notv', 'theory'];
 			var decbbm = ['money', 'tax', 'total', 'weight', 'floata', 'mount', 'price', 'totalus'];
 			var q_readonly = ['txtNoa','txtWorker', 'txtAcomp', 'txtSales', 'txtWorker2','txtApv','txtMoney','txtTotal','txtTotalus'];
-			var q_readonlys = ['txtNo3'];
+			var q_readonlys = ['txtNo3','txtTotal','txtProduct'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -34,8 +34,8 @@
 			brwKey = 'Datea';
 			aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
-				['txtProduct_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', '0txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,serial,email,salesno,sales', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtPay,txtMemo2,txtSalesno,txtSales', 'cust_b.aspx'],
+				//['txtProduct_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', '0txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,serial,email,salesno,sales', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtPay,txtMemo2,txtSalesno,txtSales', 'cust_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			);
@@ -132,7 +132,8 @@
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-				q_cmbParse("cmbClassa",' ,便品,印刷','s');
+				q_cmbParse("combClassa",' ,便品,印刷','s');
+				q_cmbParse("combDay",'0@ ,15@15天,30@30天,45@45天');
 				
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -250,6 +251,13 @@
 							q_cmbParse("combGroupbno", t_item,'s');
 						}
 						break;
+					case 'view_ordes':
+						var as = _q_appendData("view_ordes", "", true);
+						if (as[0] != undefined) {
+							alert('已轉訂單禁止修改!!!');
+							$('#btnCancel').click();
+						}
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -258,8 +266,18 @@
 			}
 
 			function btnOk() {
+				if(!$('#div_cost').is(':hidden')){
+					var t_class=$.trim($('#combClassa_'+b_seq).val());
+					if(t_class=='印刷')
+						$('#cost_txtCost0').focus();
+					else
+						$('#cost_txtWdate').focus();
+					return;
+				}
+				
+				
 				t_err = '';
-				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCust')], ['txtOdate', q_getMsg('lblOdate')]]);
+				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtSalesno', q_getMsg('lblSales')], ['txtOdate', q_getMsg('lblOdate')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
@@ -283,7 +301,8 @@
 				sum();
 					
 				//只要修改都會重新送簽核，將核准變回N
-				$('#txtApv').val('N');
+				//1211預設先帶核准
+				$('#txtApv').val('Y');
 
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
@@ -305,6 +324,15 @@
 					cmb.value = '';
 				else
 					$('#txtPaytype').val(cmb.value);
+				cmb.value = '';
+			}
+			
+			function combDay_chg() {
+				var cmb = document.getElementById("combDay")
+				if (!q_cur)
+					cmb.value = '';
+				else
+					$('#txtDatea').val(q_cdn(q_date(),dec(cmb.value)));
 				cmb.value = '';
 			}
 			
@@ -349,23 +377,40 @@
 							q_box("z_vccrecord.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccrecord', "95%", "95%", q_getMsg('lblRecord_s'));
 						});
 						
-						$('#cmbClassa_' + j).focusout(function() {
+						$('#txtClassa_'+j).focusout(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if($('#txtClassa_'+b_seq).val()=='印刷' || $('#txtClassa_'+b_seq).val()=='便品'){
+								$('#combClassa_' + b_seq).val($('#txtClassa_'+b_seq).val());
+								$('#combClassa_' + b_seq).focusout();
+							}else{
+								$('#combClassa_' + b_seq).val('');
+							}
+						});
+						
+						
+						$('#combClassa_' + j).focusout(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							
-							var t_class=$.trim($('#cmbClassa_'+b_seq).val());
+							$('#txtClassa_'+b_seq).val($('#combClassa_'+b_seq).val());
+							
+							var t_class=$.trim($('#combClassa_'+b_seq).val());
 							if(t_class.length>0 &&(q_cur==1 || q_cur==2)){
 								var t_html='';
 								if(t_class=='印刷'){
-									t_html="<table id='table_cost' style='width:510px;text-align: center;' border='1' cellpadding='2'  cellspacing='0'><tr>";
+									t_html="<table id='table_cost' style='width:610px;text-align: center;' border='1' cellpadding='2'  cellspacing='0'><tr>";
 									t_html+="<td style='width:100px'>版費</td>";
 									t_html+="<td style='width:100px'>刀模費</td>";
+									t_html+="<td style='width:100px'>訂金</td>";
 									t_html+="<td style='width:100px'>工期</td>";
 									t_html+="<td style='width:150px'>其他</td>";
 									t_html+="<td> </td></tr><tr>";
 									t_html+="<td><input id='cost_txtCost0' type='text' class='txt num c1'/></td>";	
 									t_html+="<td><input id='cost_txtCost1' type='text' class='txt num c1'/></td>";
+									t_html+="<td><input id='cost_txtDeposit' type='text' class='txt c1'/></td>";
 									t_html+="<td><input id='cost_txtWdate' type='text' class='txt c1'/></td>";
 									t_html+="<td><input id='cost_txtOther' type='text' class='txt c1'/></td>";
 								}
@@ -397,8 +442,8 @@
 										keypress_bbm(event, $(this), SeekF, SeekF[$.inArray($(this).attr('id'),SeekF)+1]);	
 									});
 								});
-								$('#div_cost').css('top',$('#cmbClassa_'+b_seq).offset().top-parseInt($('#div_cost').css('height')));
-								$('#div_cost').css('left',$('#cmbClassa_'+b_seq).offset().left+50);
+								$('#div_cost').css('top',$('#combClassa_'+b_seq).offset().top-parseInt($('#div_cost').css('height')));
+								$('#div_cost').css('left',$('#combClassa_'+b_seq).offset().left+50);
 								
 								$('#div_cost').show();
 								if(t_class=='印刷')
@@ -462,6 +507,11 @@
 										}
 									}
 									
+									//訂金
+									if(t_class=='印刷'){
+										if($('#cost_txtDeposit').val()!='')
+											t_memo=t_memo+(t_memo.length>0?' ':'')+'訂金：'+$('#cost_txtDeposit').val();
+									}
 									//工期,交貨日
 									if($('#cost_txtWdate').val()!=''){
 										if(t_class=='印刷'){
@@ -489,7 +539,7 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							var t_class=$.trim($('#cmbClassa_'+b_seq).val());
+							var t_class=$.trim($('#combClassa_'+b_seq).val());
 							if(!$('#div_cost').is(':hidden')){
 								if(t_class=='印刷')
 									$('#cost_txtCost0').focus();
@@ -504,7 +554,8 @@
 							b_seq = t_IdSeq;
 							
 							$('#txtProduct_'+b_seq).val($('#combGroupbno_'+b_seq).find("option:selected").text());
-							$('#cmbClassa_'+b_seq).val('印刷');
+							$('#combClassa_'+b_seq).val('印刷');
+							$('#txtClassa_'+b_seq).val('印刷');
 							
 							//顯示規格
 							var t_spec;
@@ -612,12 +663,18 @@
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtOdate').val(q_date());
 				$('#chkIsproj').attr('checked', false);
-				$('#txtDatea').val(q_date().substr(0,3)+'/12/31');
+				
+				//預設30天
+				$('#txtDatea').val(q_cdn(q_date(),30));
 				
 				$('#txtCustno').focus();
 
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
+				
+				//預設帶操作者
+				$('#txtSalesno').val(r_userno);
+				$('#txtSales').val(r_name);
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -633,6 +690,9 @@
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
+				
+				var t_where = "where=^^ quatno='" + $('#txtNoa').val() + "' ^^";
+				q_gt('view_ordes', t_where, 0, 0, 0, "");
 			}
 
 			function btnPrint() {
@@ -665,6 +725,21 @@
 				HiddenField();
 				$('#div_spec').hide();
 				$('#div_cost').hide();
+				
+				
+				if (!q_cur) {
+					$('#combAddr').attr('disabled', 'disabled');
+					for (var j = 0; j < q_bbsCount; j++) {
+						$('#combGroupbno_'+j).attr('disabled', 'disabled');
+						$('#combClassa_'+j).attr('disabled', 'disabled');
+					}
+				} else {
+					$('#combAddr').removeAttr('disabled');
+					for (var j = 0; j < q_bbsCount; j++) {
+						$('#combGroupbno_'+j).removeAttr('disabled');
+						$('#combClassa_'+j).removeAttr('disabled');
+					}
+				}
 			}
 
 			function readonly(t_para, empty) {
@@ -673,11 +748,13 @@
 					$('#combAddr').attr('disabled', 'disabled');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#combGroupbno_'+j).attr('disabled', 'disabled');
+						$('#combClassa_'+j).attr('disabled', 'disabled');
 					}
 				} else {
 					$('#combAddr').removeAttr('disabled');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#combGroupbno_'+j).removeAttr('disabled');
+						$('#combClassa_'+j).removeAttr('disabled');
 					}
 				}
 			}
@@ -752,7 +829,8 @@
 						break;
 					case 'txtProductno_':
 						if (!emp($('#txtProductno_'+b_seq).val())) {
-							$('#cmbClassa_'+b_seq).val('便品');
+							$('#combClassa_'+b_seq).val('便品');
+							$('#txtClassa_'+b_seq).val('便品');
 							$('#txtDime_'+b_seq).val(0);
 						}
 						break;	
@@ -920,7 +998,7 @@
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td align="center" id='datea'>~datea</td>
 						<td align="center" id='noa'>~noa</td>
-						<td align="center" id='custno comp,4'>~custno ~comp,4</td>
+						<td align="center" id='nick' style="text-align: left;">~nick</td>
 					</tr>
 				</table>
 			</div>
@@ -938,7 +1016,10 @@
 						<td class="td3" style="width: 108px;"><span> </span><a id='lblOdate' class="lbl"> </a></td>
 						<td class="td4" style="width: 108px;"><input id="txtOdate" type="text" class="txt c1"/></td>
 						<td class="td5" style="width: 108px;"><span> </span><a id='lblDatea' class="lbl"> </a></td>
-						<td class="td6" style="width: 108px;"><input id="txtDatea" type="text" class="txt c1"/></td>
+						<td class="td6" style="width: 108px;">
+							<input id="txtDatea" type="text" class="txt c1" style="width: 85px;"/>
+							<select id="combDay" class="txt c1" style="width: 20px;" onchange='combDay_chg()'> </select>
+						</td>
 						<td class="td7" style="width: 108px;"><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td class="td8" style="width: 108px;"><input id="txtNoa" type="text" class="txt c1"/></td>
 					</tr>
@@ -952,7 +1033,10 @@
 					<tr class="tr3">
 						<td><span> </span><a id='lblCust' class="lbl btn"> </a></td>
 						<td><input id="txtCustno" type="text" class="txt c1"/></td>
-						<td colspan="2"><input id="txtComp" type="text" class="txt c1"/></td>
+						<td colspan="2">
+							<input id="txtComp" type="text" class="txt c1"/>
+							<input id="txtNick" type="hidden" class="txt c1"/>
+						</td>
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtPaytype" type="text" class="txt c1" /></td>
 						<td><select id="combPaytype" class="txt c1" onchange='combPay_chg()'> </select></td>
@@ -1044,15 +1128,13 @@
 		<div class='dbbs' style="width: 1470px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
-					<td align="center" style="width:40px;">
-						<input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" />
-					</td>
-					<td align="center" style="width:70px;">項次</td>
-					<!--<td align="center" style="width:200px;"><a id='lblProductno'> </a></td>-->
+					<td align="center" style="width:40px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
+					<td align="center" style="width:40px;">項次</td>
+					<td align="center" style="width:150px;"><a id='lblProductno'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblProduct'> </a></td>
 					<td align="center" style="width:230px;"><a>規格</a></td>
-					<td align="center" style="width:60px;"><a>便/印</a></td>
-					<td align="center" style="width:60px;"><a>包裝方式</a></td>
+					<td align="center" style="width:85px;"><a>便/印</a></td>
+					<td align="center" style="width:70px;"><a>包裝方式</a></td>
 					<td align="center" style="width:40px;"><a>色數</a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMount'> </a></td>
@@ -1065,17 +1147,22 @@
 					<td align="center" style="width:40px;"><a id='lblVccrecord'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
-					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
+					<td align="center"><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td align="center">
-						<input id="txtProductno.*" type="hidden" class="txt c1" />
 						<input id="txtNo3.*" type="text" class="txt c1" />
 					</td>
-					<td><input id="txtProduct.*" type="text" class="txt c1" style="width:110px;"/>
+					<td align="center">
+						<input id="txtProductno.*" type="text" class="txt c1" style="width:115px;"/>
 						<input class="btn" id="btnProduct.*" type="button" value='.' style=" font-weight: bold;" />
+					</td>
+					<td><input id="txtProduct.*" type="text" class="txt c1" style="width:120px;"/>
 						<select id="combGroupbno.*" class="txt c1" style="width: 20px; float: right;"> </select>
 					</td>
 					<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
-					<td><select id="cmbClassa.*" class="txt c1" style="float: right;"> </select></td>
+					<td>
+						<input id="txtClassa.*" type="text" class="txt c1" style="width: 60px;"/>
+						<select id="combClassa.*" class="txt c1" style="width:20px;float: right;"> </select>
+					</td>
 					<td><input id="txtSizea.*" type="text" class="txt c1"/></td>
 					<td><input id="txtDime.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
