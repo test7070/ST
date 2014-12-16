@@ -579,6 +579,9 @@
 				for(var k=0;k<q_bbsCount;k++){
 					if(emp($('#txtDatea_'+k).val()))
 						$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),15))
+						
+					if($('#txtLengthb_'+k).val()!='')
+						$('#txtLengthb_'+k).val(100);
 				}
 				
 				//1030419 當專案沒有勾 BBM的取消和結案被打勾BBS也要寫入
