@@ -100,7 +100,31 @@
                         for (var i = 0; i < as.length; i++) {
                             //as._year年資
                             //as._day特休天數
-                            if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1){
+                            if(q_getPara('sys.comp').indexOf('祥興')>-1){
+                            	if (as[i].indate.length > 0)//判斷到職日是否有輸入，若沒輸入則無特休
+	                                as[i]._year = dec($('#txtNoa').val()) - dec(as[i].indate.substr(0, 3));
+	                            else
+	                                as[i]._year = 0;
+	                                
+	                            if (as[i]._year == 0 && as[i].indate.substr(4) == '01/01') {
+	                                as[i]._year = 1;
+	                            }
+	                            if (as[i]._year < 1)
+	                                as[i]._day = 0;
+	                            else if (as[i]._year < 3)
+	                                as[i]._day = 7;
+	                            else if (as[i]._year < 5)
+	                                as[i]._day = 10;
+	                            else if (as[i]._year < 10)
+	                                as[i]._day = 14;
+	                            else {
+	                                if (14 + as[i]._year - 9 > 30)
+	                                    as[i]._day = 30;
+	                                else
+	                                    as[i]._day = 14 + as[i]._year - 9;
+	                            }
+	                            as[i]._day = as[i]._day * 8;
+                            }else{
                             	if (as[i].indate.length > 0){//判斷到職日是否有輸入，若沒輸入則無特休
 	                                as[i]._year = dec($('#txtNoa').val())-dec(as[i].indate.substr(0, 3))-1+(
 	                                +((12-dec(as[i].indate.substr(4, 2))) /12)
@@ -132,30 +156,6 @@
 	                                else
 	                                    as[i]._day = (14 + Math.floor(as[i]._year) - 9)*8;
 	                            }
-                            }else{
-                            	if (as[i].indate.length > 0)//判斷到職日是否有輸入，若沒輸入則無特休
-	                                as[i]._year = dec($('#txtNoa').val()) - dec(as[i].indate.substr(0, 3));
-	                            else
-	                                as[i]._year = 0;
-	                                
-	                            if (as[i]._year == 0 && as[i].indate.substr(4) == '01/01') {
-	                                as[i]._year = 1;
-	                            }
-	                            if (as[i]._year < 1)
-	                                as[i]._day = 0;
-	                            else if (as[i]._year < 3)
-	                                as[i]._day = 7;
-	                            else if (as[i]._year < 5)
-	                                as[i]._day = 10;
-	                            else if (as[i]._year < 10)
-	                                as[i]._day = 14;
-	                            else {
-	                                if (14 + as[i]._year - 9 > 30)
-	                                    as[i]._day = 30;
-	                                else
-	                                    as[i]._day = 14 + as[i]._year - 9;
-	                            }
-	                            as[i]._day = as[i]._day * 8;
                             }
                             
                             as[i].prevyeartime=0;
