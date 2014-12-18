@@ -53,11 +53,11 @@
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+				//q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
 				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
 				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
-				
+				q_gt('sss', "where=^^noa='"+r_userno+"'^^", 0, 0, 0, "sssissales");
 			});
 
 			function main() {
@@ -248,6 +248,8 @@
 						}
 						break;
 					case q_name + '_s':
+						if(issales && s2[1]!=undefined)
+							s2[1]="where=^^"+replaceAll(replaceAll(s2[1],'where=^^',''),'^^','')+" and salesno='"+r_userno+"' "+"^^";
 						q_boxClose2(s2);
 						break;
 				}
@@ -260,9 +262,19 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			var carnoList = [];
 			var thisCarSpecno = '';
+			var issales=false;
 			function q_gtPost(t_name) {
 				var as;
 				switch (t_name) {
+					case 'sssissales':
+						var as = _q_appendData("sss", "", true);
+	                        if (as[0] != undefined) {
+	                        	issales=(as[0].issales=="true"?true:false);
+	                        	if(issales)
+	                        		q_content = "where=^^salesno='" + r_userno + "'^^";
+							}
+							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						break;
 					case 'vccprice_quat':
 						var as = _q_appendData("view_quats", "", true);
 						for(var i=0;i<q_bbsCount;i++){

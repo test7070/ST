@@ -42,10 +42,12 @@
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'no3'];
 				q_brwCount();
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+				//q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
 				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 				q_gt('uccgb', '', 0, 0, 0, "");
+				//判斷是否是業務 是業務只能顯示自己的報價單
+				q_gt('sss', "where=^^noa='"+r_userno+"'^^", 0, 0, 0, "sssissales");
 			});
 
 			function main() {
@@ -180,6 +182,8 @@
 				var ret;
 				switch (b_pop) {
 					case q_name + '_s':
+						if(issales && s2[1]!=undefined)
+							s2[1]="where=^^"+replaceAll(replaceAll(s2[1],'where=^^',''),'^^','')+" and salesno='"+r_userno+"' "+"^^";
 						q_boxClose2(s2);
 						break;
 				}
@@ -190,8 +194,18 @@
 			var uccgb;
 			var focus_addr = '';
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
+			var issales=false;
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'sssissales':
+						var as = _q_appendData("sss", "", true);
+	                        if (as[0] != undefined) {
+	                        	issales=(as[0].issales=="true"?true:false);
+	                        	if(issales)
+	                        		q_content = "where=^^salesno='" + r_userno + "'^^";
+							}
+							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						break;
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
