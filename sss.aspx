@@ -44,7 +44,7 @@
 					q_content = "where=^^noa='" + r_userno + "'^^";
 				q_gt(q_name, q_content, q_sqlCount, 1);
 				
-				q_gf('Paytype.txt', '');
+				//q_gf('Paytype.txt', ''); 等當txt 寫到資料庫再開啟並抓資料庫內容
 			});
 
 			function main() {

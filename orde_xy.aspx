@@ -87,7 +87,7 @@
 				bbmMask = [['txtOdate', r_picd]];
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
-				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1],['txtDime', 15, 0, 1],['txtLengthb', 15, 0, 1]];
+				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1],['txtDime', 15, 0, 1]];
 				q_cmbParse("cmbStype", q_getPara('orde.stype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
@@ -268,6 +268,14 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
+							//刪除沒有品編的資料
+							for (var i = 0; i < b_ret.length; i++) {
+								if(b_ret[i].productno==''){
+									b_ret.splice(i, 1);
+									i--;
+								}
+							}
+							
 							//取得報價的第一筆匯率等資料
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "' ^^";
 							q_gt('quat', t_where, 0, 0, 0, "", r_accy);
@@ -286,6 +294,7 @@
 						break;
 				}
 				b_pop = '';
+				AutoNo2();
 			}
 
 			function browTicketForm(obj) {
@@ -304,7 +313,7 @@
 								q_box("ordc.aspx?;;;noa='" + noa + "';" + r_accy, 'ordc', "95%", "95%", q_getMsg("popOrdc"));
 								break;
 							case 'quatno':
-								q_box("quat.aspx?;;;noa='" + noa + "';" + r_accy, 'quat', "95%", "95%", q_getMsg("popQuat"));
+								q_box("quat_xy.aspx?;;;noa='" + noa + "';" + r_accy, 'quat', "95%", "95%", q_getMsg("popQuat"));
 								break;
 						}
 					}
@@ -507,9 +516,10 @@
 										break;
 									}
 								}
-								if(!product_in_quat){
+								//103/12/18暫時拿掉
+								/*if(!product_in_quat){
 									error_productno+=$('#txtProductno_'+i).val()+' '+$('#txtProduct_'+i).val()+' 沒有報價資料!!\n'
-								}
+								}*/
 							}
 						}
 						
@@ -580,8 +590,8 @@
 					if(emp($('#txtDatea_'+k).val()))
 						$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),15))
 						
-					if($('#txtLengthb_'+k).val()!='')
-						$('#txtLengthb_'+k).val(100);
+					if($('#txtClass_'+k).val()!='')
+						$('#txtClass_'+k).val(100);
 				}
 				
 				//1030419 當專案沒有勾 BBM的取消和結案被打勾BBS也要寫入
@@ -651,6 +661,7 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							//q_change($(this), 'ucc', 'noa', 'noa,product,unit');
+							AutoNo2();
 						});
 
 						$('#txtUnit_' + j).focusout(function() {
@@ -848,11 +859,34 @@
 				HiddenTreat();
 			}
 			
+			function AutoNo2(){
+				var maxno2='001';
+				for (var j = 0; j < q_bbsCount; j++) {
+					if((!emp($('#txtProductno_'+j).val())) || (!emp($('#txtProduct_'+j).val()))){
+						$('#txtNo2_'+j).val(maxno2);
+						maxno2=('000'+(dec(maxno2)+1)).substr(-3);
+					}
+					if(emp($('#txtProductno_'+j).val()) && emp($('#txtProduct_'+j).val())){
+						$('#txtNo2_'+j).val('');
+					}
+				}
+			}
+			
 			function HiddenTreat() {
 				if (r_rank<9){
 					$('.bonus').hide();
 				}
-
+				
+				for (var j = 0; j < q_bbsCount; j++) {
+					if(!emp($('#txtQuatno_'+j).val())){
+						$('#txtProductno_'+j).attr('disabled', 'disabled');
+						$('#btnProduct_'+j).attr('disabled', 'disabled');
+					}else{
+						$('#txtProductno_'+j).removeAttr('disabled');
+						$('#btnProduct_'+j).removeAttr('disabled');
+					}
+				}
+				
 				if(emp($('#txtOrdbno').val()) && q_cur<1 && q_cur>2){
 					$('#lblOrde2ordb').show();
 					$('#lblOrdbno').hide();
@@ -865,6 +899,8 @@
 
 			function btnMinus(id) {
 				_btnMinus(id);
+				HiddenTreat();
+				AutoNo2();
 				sum();
 			}
 
@@ -942,6 +978,7 @@
 							}
 							q_gt('view_quats', t_where, 0, 0, 0, "keyin_productno_xy");
 						}
+						AutoNo2();
 						break;
 				}
 			}
@@ -1268,7 +1305,7 @@
 					<td align="center" style="width:85px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblTotal_s'> </a></td>
-					<td align="center" style="width:85px;" class="bonus"><a>獎金</a></td>
+					<td align="center" style="width:85px;" class="bonus"><a>獎金比例</a></td>
 					<td align="center" style="width:85px;"><a id='lblGemounts'> </a></td>
 					<td align="center" style="width:85px;"><a>未交量</a></td>
 					<td align="center" style="width:175px;"><a>備註</a></td>
@@ -1299,7 +1336,7 @@
 					<td><input class="txt num c7" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtTotal.*" type="text" /></td>
-					<td class="bonus"><input class="txt num c7 bonus" id="txtLengthb.*" type="text" /></td>
+					<td class="bonus"><input class="txt num c7 bonus" id="txtClass.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtC1.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtNotv.*" type="text" /></td>
 					<td><input class="txt c7" id="txtMemo.*" type="text" /></td>
