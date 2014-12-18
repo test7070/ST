@@ -22,7 +22,7 @@
             var q_readonlys = ['txtContno','txtContnoq','txtStore','txtMech','txtWeight'];
             var q_readonlyt = ['txtBno'];
             var bbmNum = [['txtMount',10,0,1],['txtWeight',10,2,1]];
-            var bbsNum = [['txtMount',10,0,1],['txtWeight',10,2,1],['txtLengthb',10,0,1],['txtParaa',10,0,0],['txtParab',10,0,0],['txtParac',10,0,0],['txtParad',10,0,0],['txtParae',10,0,0],['txtParaf',10,0,0]];
+            var bbsNum = [['txtMount',10,0,1],['txtWeight',10,2,1],['txtLengthb',10,0,1],['txtParaa',10,1],['txtParab',10,1],['txtParac',10,1],['txtParad',10,1],['txtParae',10,1],['txtParaf',10,1]];
             var bbtNum = [['txtGmount',10,2,1],['txtGweight',10,2,1],['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbmMask = [['txtOdate','999/99/99'],['txtDatea','999/99/99']];
             var bbsMask = [['txtTime1','99:99'],['txtTime2','99:99'],['txtTime3','99:99'],['txtTime4','99:99'],['txtTime5','99:99']];
