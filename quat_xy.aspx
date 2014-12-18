@@ -1068,8 +1068,10 @@
 						<td colspan='3'><input id="txtFax" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr4">
+						<td><span> </span><a class="lbl">聯絡人姓名</a></td>
+						<td><input id="txtPostname" type="text" class="txt c1"/></td>
 						<td><span> </span><a class="lbl">統一編號 </a></td>
-						<td colspan='3'><input id="txtPay"	type="text" class="txt c1"/></td>
+						<td><input id="txtPay"	type="text" class="txt c1"/></td>
 						<td><span> </span><a class="lbl">E-MAIL</a></td>
 						<td colspan='3'><input id="txtMemo2" type="text" class="txt c1"/></td>
 					</tr>
