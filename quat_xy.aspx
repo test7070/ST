@@ -168,6 +168,7 @@
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
 				});
+				
 				$('#chkCancel').click(function(){
 					if($(this).prop('checked')){
 						for(var k=0;k<q_bbsCount;k++){
@@ -176,6 +177,13 @@
 					}
 				});
 				
+				$('#btnTmpCreate').click(function() {
+					if(!emp($('#txtNoa').val())){
+						var t_paras = $('#txtNoa').val()+ ';'+r_name+ ';'+r_accy;
+						q_func('qtxt.query.tmp_cust_ucc', 'cust_ucc_xy.txt,tmp_cust_ucc,' + t_paras);
+						$('#btnTmpCreate').attr('disabled', 'disabled');
+					}
+				});
 			}
 
 			function q_boxClose(s2) {
@@ -753,16 +761,28 @@
 				
 				if (!q_cur) {
 					$('#combAddr').attr('disabled', 'disabled');
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#combGroupbno_'+j).attr('disabled', 'disabled');
-						$('#combClassa_'+j).attr('disabled', 'disabled');
-					}
 				} else {
 					$('#combAddr').removeAttr('disabled');
-					for (var j = 0; j < q_bbsCount; j++) {
+				}
+				
+				var emp_productno=false;
+				for (var j = 0; j < q_bbsCount; j++) {
+					if (!q_cur) {
+						$('#combGroupbno_'+j).attr('disabled', 'disabled');
+						$('#combClassa_'+j).attr('disabled', 'disabled');
+					}else{
 						$('#combGroupbno_'+j).removeAttr('disabled');
 						$('#combClassa_'+j).removeAttr('disabled');
 					}
+					
+					if(emp($('#txtProductno_'+j).val()) && !emp($('#txtProduct_'+j).val()))
+						emp_productno=true;
+				}
+				
+				if((q_cur<1 || q_cur>2) && (emp($('#txtCustno').val()) || emp_productno)){
+					$('#btnTmpCreate').show();
+				}else{
+					$('#btnTmpCreate').hide();
 				}
 			}
 
@@ -867,6 +887,21 @@
 						}
 						AutoNo3();
 						break;	
+				}
+			}
+			function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'qtxt.query.tmp_cust_ucc':
+                		$('#btnTmpCreate').removeAttr('disabled');
+						alert('臨時編號產生完畢。');
+						
+						var s2=[];
+						s2[0]=q_name + '_s';
+						s2[1]="where=^^ noa='"+$('#txtNoa').val()+"' ^^"
+						if(issales)
+							s2[1]="where=^^"+replaceAll(replaceAll(s2[1],'where=^^',''),'^^','')+" and salesno='"+r_userno+"' "+"^^";
+						q_boxClose2(s2);
+						break;
 				}
 			}
 		</script>
@@ -1146,8 +1181,7 @@
 						<td><input id="txtWorker" type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1" /></td>
-						<td> </td>
-						<td> </td>
+						<td colspan="2" align="center"><input id="btnTmpCreate" type="button" value='產生臨時編號' /></td>
 						<td colspan="2">
 							<span> </span>
 							<input id="chkIsproj" type="checkbox"/>
