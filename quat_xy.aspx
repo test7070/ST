@@ -801,6 +801,17 @@
 						$('#combClassa_'+j).removeAttr('disabled');
 					}
 				}
+				
+				var emp_productno=false;
+				for (var j = 0; j < q_bbsCount; j++) {
+					if(emp($('#txtProductno_'+j).val()) && !emp($('#txtProduct_'+j).val()))
+						emp_productno=true;
+				}
+				if((q_cur<1 || q_cur>2) && (emp($('#txtCustno').val()) || emp_productno)){
+					$('#btnTmpCreate').show();
+				}else{
+					$('#btnTmpCreate').hide();
+				}
 			}
 			
 			function AutoNo3(){
