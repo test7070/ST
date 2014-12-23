@@ -294,8 +294,8 @@
 						break;
 					case 'btnOk_check_stock':
 						var as = _q_appendData("view_vccs", "", true);
+						var stkmount_exist="";
 						if (as[0] != undefined) {
-							stkmount_exist="";
 							for (var i = 0; i < as.length; i++) {
 								if(dec(as[i].stkmount)>0){
 									stkmount_exist+=(stkmount_exist.length>0?'\n':'')+as[i].product+"尚有寄庫"+as[i].stkmount;
@@ -692,6 +692,11 @@
 								sum();
 						});
 						
+						$('#txtWidth_' + i).focusout(function() {
+							if (q_cur == 1 || q_cur == 2)
+								sum();
+						});
+						
 						$('#txtProductno_' + i).change(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
@@ -733,7 +738,7 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;								
-							
+							sum();
 							if(dec($('#txtTranmoney2_' + b_seq).val()) > dec($('#txtMount_' + b_seq).val())){
 								alert("【"+q_getMsg('lblTranmoney2_s')+"】不得大於【出貨"+q_getMsg('lblMount_s')+"】!!");
 								$('#txtTranmoney2_' + b_seq).val($('#txtMount_' + b_seq).val());
@@ -744,7 +749,7 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;								
-							
+							sum();
 							//判斷寄出量是否大於寄庫量
 							if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_' + b_seq).val())){
 								var t_where = "where=^^ custno='" + $('#txtCustno').val() + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' and storeno2='"+$('#txtStoreno2_' + b_seq).val() +"' ^^";
@@ -756,7 +761,7 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;								
-							
+							sum();
 							//判斷寄出量是否大於寄庫量
 							if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_' + b_seq).val())){
 								var t_where = "where=^^ custno='" + $('#txtCustno').val() + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
