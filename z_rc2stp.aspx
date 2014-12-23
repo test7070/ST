@@ -58,7 +58,8 @@
                 t_noa = t_noa.replace('noa=', '');
                 $('#txtXnoa1').val(t_noa);
                 $('#txtXnoa2').val(t_noa);
-
+				
+				$('#cmbPaperSize').hide();
             }
 
             function q_boxClose(s2) {
