@@ -141,23 +141,21 @@
 						<td><input id="txtBoat" maxlength='20' type="text" style='width:98%;'/></td>
 					</tr>	-->
 					<tr>
-						<td>
+						<td colspan="2">
 							<input id="chkIsfranchisestore" type="checkbox" />
 							<span> </span><a id="lblIsfranchisestore"> </a>
 						</td>
-						<td>
+						<td colspan="2">
 							<input id="chkNotprice" type="checkbox" />
 							<span> </span><a id="lblNotprice"> </a>
 						</td>
 						<td> </td>
-						<td> </td>
-						<td> </td>
 					</tr>
 					<tr>
-						<td><a id="lblCommission"> </a></td>
-						<td><input id="txtCommission" type="text" style='width:30%;text-align: right;'/>%</td>
-						<td> </td>
-						<td> </td>
+						<td style="width: 50px;"><a id="lblCommission"> </a></td>
+						<td><input id="txtCommission" type="text" style='width:50%;text-align: right;'/>%</td>
+						<td style="width: 70px;">發票<a id="lblP23"> </a></td>
+						<td><input id="txtP23" maxlength="10" type="text" style="width:50%;" /></td>
 						<td> </td>
 						<td><input id="txtNoa" type="hidden" /> </td>
 					</tr>

@@ -53,11 +53,11 @@
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+				//q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
 				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
 				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
-				
+				q_gt('sss', "where=^^noa='"+r_userno+"'^^", 0, 0, 0, "sssissales");
 			});
 
 			function main() {
@@ -92,7 +92,7 @@
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1]];
-				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1], ['txtTranmoney2', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTranmoney3', 9, q_getPara('vcc.mountPrecision'), 1]];
+				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtWidth', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1], ['txtTranmoney2', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTranmoney3', 9, q_getPara('vcc.mountPrecision'), 1]];
 				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
@@ -127,6 +127,7 @@
 					var t_where = '';
 					if (t_custno.length > 0) {
 						t_where = " isnull(enda,0)!=1 ";
+						t_where += " and left(productno,2)!='##' and left(custno,2)!='##' ";//非正式編號
 						t_where += " and (custno='"+t_custno+"' or custno='"+t_custno.substr(0,5)+"')";
 						if (!emp($('#txtOrdeno').val()))
 							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
@@ -192,6 +193,10 @@
 				});
 
 				$('#txtCustno').change(function() {
+					if (!emp($('#txtCustno').val()) && $('#txtCustno').val().substr(0,2)=='##') {
+						alert("非正式客戶編號，請聯絡專員轉正式客戶編號!!");
+						$('#txtCustno').val('');
+					}
 					if (!emp($('#txtCustno').val())) {
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -225,8 +230,8 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
-							, 'productno,product,spec,unit,mount,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
+							, 'productno,product,spec,unit,mount,mount,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
@@ -248,6 +253,8 @@
 						}
 						break;
 					case q_name + '_s':
+						if(issales && s2[1]!=undefined)
+							s2[1]="where=^^"+replaceAll(replaceAll(s2[1],'where=^^',''),'^^','')+" and salesno='"+r_userno+"' "+"^^";
 						q_boxClose2(s2);
 						break;
 				}
@@ -260,9 +267,19 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			var carnoList = [];
 			var thisCarSpecno = '';
+			var issales=false;
 			function q_gtPost(t_name) {
 				var as;
 				switch (t_name) {
+					case 'sssissales':
+						var as = _q_appendData("sss", "", true);
+	                        if (as[0] != undefined) {
+	                        	issales=(as[0].issales=="true"?true:false);
+	                        	if(issales)
+	                        		q_content = "where=^^salesno='" + r_userno + "'^^";
+							}
+							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						break;
 					case 'vccprice_quat':
 						var as = _q_appendData("view_quats", "", true);
 						for(var i=0;i<q_bbsCount;i++){
@@ -274,6 +291,24 @@
 							}
 						}
 						sum();
+						break;
+					case 'btnOk_check_stock':
+						var as = _q_appendData("view_vccs", "", true);
+						if (as[0] != undefined) {
+							stkmount_exist="";
+							for (var i = 0; i < as.length; i++) {
+								if(dec(as[i].stkmount)>0){
+									stkmount_exist+=(stkmount_exist.length>0?'\n':'')+as[i].product+"尚有寄庫"+as[i].stkmount;
+								}
+							}
+						}else{
+							check_stock=true;
+						}
+						if(stkmount_exist.length>0){
+							alert(stkmount_exist+"\n請先將寄庫銷售!!!");
+						}else{
+							btnOk();	
+						}
 						break;
 					case 'getCardealCarno' :
 						var as = _q_appendData("cardeals", "", true);
@@ -472,12 +507,14 @@
 						var t_memo = $('#txtMemo').val();
 						var t_post2 = '';
 						var t_addr2 = '';
+						var t_custorde = '';
 						for ( i = 0; i < as.length; i++) {
-							t_memo = t_memo + (t_memo.length > 0 ? '\n' : '') + as[i].noa + ':' + as[i].memo;
+							t_memo = t_memo + as[i].noa + (as[i].memo.length>0? ':':'') + as[i].memo + (as[i].memo.length>0? '\n':(as.length-1==i?'':','));
 							t_post2 = t_post2+(t_post2.length>0?';':'')+as[i].post2;
 							t_addr2 = t_addr2+(t_addr2.length>0?';':'')+as[i].addr;
+							t_custorde = t_custorde+(t_custorde.length>0?';':'')+as[i].custorde;
 						}
-						$('#txtMemo').val(t_memo);
+						$('#txtMemo').val((t_custorde.length>0?('客戶訂單編號：'+t_custorde+'\n'):'')+t_memo);
 						$('#txtPost2').val(t_post2);
 						$('#txtAddr2').val(t_addr2);
 						
@@ -567,7 +604,7 @@
 				}
 			}
 			
-			var check_startdate=false;
+			var check_startdate=false,check_stock=false;
 			function btnOk() {
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')]]);
 				if (t_err.length > 0) {
@@ -580,9 +617,22 @@
 					q_gt('cust', t_where, 0, 0, 0, "startdate", r_accy);
 					return;
 				}
+				//判斷出貨商品是否有寄庫 如果有要先將寄庫出貨完畢才能出貨
+				if(!check_stock){
+					var productno_where="";
+					for (var i = 0; i < q_bbsCount; i++) {
+						if(!emp($('#txtProductno_'+i).val())&&dec($('#txtWidth_'+i).val())!=0){
+							productno_where+=(productno_where.length>0?",":"")+"'"+$('#txtProductno_'+i).val()+"'";
+						}
+					}
+					var t_where = "where=^^ custno='" + $('#txtCustno').val() + "' and productno in ("+productno_where+") ^^";
+					q_gt('vcc_xy_store2', t_where, 0, 0, 0, "btnOk_check_stock", r_accy);
+					return;
+				}
 				/*if (emp($('#txtMon').val()))
 					$('#txtMon').val($('#txtDatea').val().substr(0, 6));*/
 				
+				check_stock=false;
 				check_startdate=false;
 					
 				if (q_cur == 1)
@@ -646,6 +696,10 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
+							if (!emp($('#txtProduct_'+b_seq).val()) && $('#txtProduct_'+b_seq).val().substr(0,2)=='##') {
+								alert("非正式產品編號，請聯絡專員轉正式產品編號!!");
+								$('#txtProduct_'+b_seq).val('');
+							}
 							AutoNoq();
 						});
 						
@@ -938,6 +992,10 @@
 						q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
 						break;
 					case 'txtCustno':
+						if (!emp($('#txtCustno').val()) && $('#txtCustno').val().substr(0,2)=='##') {
+							alert("非正式客戶編號，請聯絡專員轉正式客戶編號!!");
+							$('#txtCustno').val('');
+						}
 						if (!emp($('#txtCustno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -953,6 +1011,11 @@
 						
 						break;
 					case 'txtProductno_':
+						if (!emp($('#txtProduct_'+b_seq).val()) && $('#txtProduct_'+b_seq).val().substr(0,2)=='##') {
+							alert("非正式產品編號，請聯絡專員轉正式產品編號!!");
+							$('#txtProduct_'+b_seq).val('');
+						}
+						
 						if($('#txtProduct_'+b_seq).val().indexOf('運費')>-1 && dec($('#txtPrice').val())>0){
 							var t_mount=0;
 							for (var j = 0; j < q_bbsCount; j++) {
