@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -44,7 +44,6 @@
                 bbtKey = ['noa', 'noq'];
                 q_brwCount();
                 q_gt('uccga', "", 0, 0, 0, 'uccga');
-                
             });
 
             function main() {
@@ -57,6 +56,7 @@
 
             function mainPost() {
                 q_mask(bbmMask);
+                q_gt('workg', "", 0, 0, 0, 'workg');
                 t_uccg = ' @';
                 for(var i=0;i<z_uccga.length;i++){
                 	t_uccg +=','+z_uccga[i].noa+'@'+z_uccga[i].noa+'. '+z_uccga[i].namea;
@@ -102,6 +102,11 @@
                 $('#lblOrdbno').click(function(e){
                 	q_gt('view_ordb', "where=^^ workgno='"+$('#txtNoa').val()+"'^^", 0, 0, 0, 'view_ordb');
                 });
+                
+                $('#combWorkgno').change(function() {
+                	if(q_cur==1 || q_cur==2)
+                		$('#txtWorkgno').val($('#combWorkgno').val());
+				});
             }
             function checkAll(){
             	$('#tbbs').find('input[type="checkbox"]').prop('checked',$('.checkAll').prop('checked'));
@@ -187,7 +192,36 @@
 	                		}
                 		}
                 		q_gt(q_name, q_content, q_sqlCount, 1);
-                		break;            	
+                		break;
+                	case 'workg':
+                		var as = _q_appendData("workg", "", true);
+                		var workstye=q_getPara('workg.stype').split(',');
+                		t_item = '@選擇排產單號';
+		                for(var i=0;i<as.length;i++){
+		                	var stype='';
+		                	for(var j=0;j<workstye.length;j++){
+		                		if (workstye[j].split('@')[0]==as[i].stype){
+		                			stype=workstye[j].split('@')[1];
+		                			break;	
+		                		}
+		                	}
+		                	t_item +=','+as[i].noa+'@'+as[i].noa;
+		                	if(stype.length>0)
+		                		t_item +=' '+stype+(as[i].stype=='3'?'　　':'');
+		                		
+		                	if(as[i].comp.length>0)
+		                		t_item +=' '+as[i].comp;
+		                		
+		                	if(as[i].stype=='3')
+		                		t_item +=' '+as[i].sfbdate+'~'+as[i].sfedate;
+		                	else
+		                		t_item +=' '+as[i].bdate+'~'+as[i].edate;
+		                		
+		                	if(as[i].worker.length>0)
+		                		t_item +=' '+as[i].worker;
+		                }
+		                q_cmbParse("combWorkgno",t_item);
+                		break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -301,11 +335,14 @@
                     $('#btnImport').attr('disabled','disabled');
                     $('#chkApv').attr('disabled','disabled');
                     $('#btnOrdb').removeAttr('disabled');
+                    $('#combWorkgno')[0].selectedIndex=0;
+                    $('#combWorkgno').attr('disabled','disabled');
                 } else {	
                     //$('#txtDatea').datepicker();
                     $('#btnImport').removeAttr('disabled');
                     $('#chkApv').removeAttr('disabled');
                     $('#btnOrdb').attr('disabled','disabled');
+                    $('#combWorkgno').removeAttr('disabled');
                 }
             }
 
@@ -451,7 +488,7 @@
                 height: 35px;
             }
             .tbbm tr td {
-                width: 9%;
+                /*width: 9%;*/
             }
             .tbbm .tdZ {
                 width: 1%;
@@ -578,13 +615,13 @@
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td class="tdZ"></td>
+						<td style="width: 140px;"> </td>
+						<td style="width: 140px;"> </td>
+						<td style="width: 140px;"> </td>
+						<td style="width: 140px;"> </td>
+						<td style="width: 155px;"> </td>
+						<td style="width: 140px;"> </td>
+						<td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
@@ -608,31 +645,31 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblUccga" class="lbl"> </a></td>
-						<td><select id="cmbUccgano" class="txt c1"></select></td>
+						<td><select id="cmbUccgano" class="txt c1"> </select></td>
 						<td><span> </span><a id="lblUccgb" class="lbl"> </a></td>
-						<td><select id="cmbUccgbno" class="txt c1"></select></td>
+						<td><select id="cmbUccgbno" class="txt c1"> </select></td>
 						<td><span> </span><a id="lblUccgc" class="lbl"> </a></td>
-						<td><select id="cmbUccgcno" class="txt c1"></select></td>
+						<td><select id="cmbUccgcno" class="txt c1"> </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="5" rowspan="2"><textarea id="txtMemo" class="txt c1" rows="3"></textarea></td>
+						<td colspan="5" rowspan="2"><textarea id="txtMemo" class="txt c1" rows="3"> </textarea></td>
 					</tr>
 					<tr>
-						<td></td>
+						<td> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblBday" class="lbl"> </a></td>
 						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
 						<td><span> </span><a id="lblApvdate" class="lbl"> </a></td>
 						<td><input id="txtApvdate"  type="text"  class="txt c1"/></td>
-						<td></td>
+						<td><select id="combWorkgno" class="txt c1" style="width: 145px; float: right;font-size: medium;"> </select></td>
 						<td style="text-align: center;"><input id="btnImport" type="button" value="匯入" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblOrdbno" class="lbl btn"> </a></td>
 						<td colspan="3"><input id="txtOrdbno" type="text" class="txt c1"/></td>
-						<td></td>
+						<td> </td>
 						<td><input id="btnOrdb" type="button" value="轉請購單" class="txt c1"/></td>
 					</tr>
 					<tr>
@@ -711,7 +748,7 @@
 						<td style="display:none;">
 							<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
-						<td style="width:20px;"></td>
+						<td style="width:20px;"> </td>
 					</tr>
 					<tr>
 						<td style="display:none;">
