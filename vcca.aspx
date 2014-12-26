@@ -273,6 +273,10 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+				if(q_date()>=q_cdn($('#txtDatea').val(),3) && r_rank<9 &&(q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1)){
+					alert('已鎖單!!');
+					 return;
+				}
 				_btnModi();
 				$('#txtDatea').focus();
 				$('#txtNoa').attr('readonly', true).css('color', 'green').css('background-color', 'rgb(237,237,237)');
