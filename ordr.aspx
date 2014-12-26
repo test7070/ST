@@ -56,7 +56,7 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                q_gt('workg', "", 0, 0, 0, 'workg');
+                q_gt('workg', "stop=100", 0, 0, 0, 'workg');
                 t_uccg = ' @';
                 for(var i=0;i<z_uccga.length;i++){
                 	t_uccg +=','+z_uccga[i].noa+'@'+z_uccga[i].noa+'. '+z_uccga[i].namea;
@@ -120,7 +120,7 @@
                         	, as.length, as, 'noa,noq,apvmemo,apvmount,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
                         	sum();
                         } else {
-                            alert('無資料!');
+                            alert('無資料，請確認物料需求表是否是送簽核!');
                         }
                 		break;
             		case 'qtxt.query.ordr_ordb':
@@ -215,7 +215,7 @@
 		                	if(as[i].stype=='3')
 		                		t_item +=' '+as[i].sfbdate+'~'+as[i].sfedate;
 		                	else
-		                		t_item +=' '+as[i].bdate+'~'+as[i].edate;
+		                		t_item +=' '+as[i].wbdate+'~'+as[i].wedate;
 		                		
 		                	if(as[i].worker.length>0)
 		                		t_item +=' '+as[i].worker;
@@ -631,7 +631,10 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
-						<td><input id="txtWorkgno"  type="text"  class="txt c1"/></td>
+						<td>
+							<input id="txtWorkgno"  type="text"  class="txt c1" style="width: 125px;"/>
+							<select id="combWorkgno" class="txt c1" style="width: 20px; float: right;font-size: medium;"> </select>
+						</td>
 						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
 						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
 					</tr>
@@ -663,7 +666,7 @@
 						<td><input id="txtBday"  type="text"  class="txt c1 num"/></td>
 						<td><span> </span><a id="lblApvdate" class="lbl"> </a></td>
 						<td><input id="txtApvdate"  type="text"  class="txt c1"/></td>
-						<td><select id="combWorkgno" class="txt c1" style="width: 145px; float: right;font-size: medium;"> </select></td>
+						<td> </td>
 						<td style="text-align: center;"><input id="btnImport" type="button" value="匯入" class="txt c1"/></td>
 					</tr>
 					<tr>
