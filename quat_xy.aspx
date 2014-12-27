@@ -265,7 +265,7 @@
 						var as = _q_appendData("uccgb", "", true);
 						uccgb=as;
 						if (as[0] != undefined) {
-							var t_item = " @ ";
+							var t_item = "@";
 							for ( i = 0; i < as.length; i++) {
 								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@'+ as[i].namea;
 							}
@@ -586,12 +586,14 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							
-							$('#txtProduct_'+b_seq).val($('#combGroupbno_'+b_seq).find("option:selected").text());
-							$('#combClassa_'+b_seq).val('印刷');
-							$('#txtClassa_'+b_seq).val('印刷');
+							if($('#combGroupbno_'+b_seq).find("option:selected").text()!=''){
+								$('#txtProduct_'+b_seq).val($('#combGroupbno_'+b_seq).find("option:selected").text());
+								$('#combClassa_'+b_seq).val('印刷');
+								$('#txtClassa_'+b_seq).val('印刷');
+							}
 							
 							//顯示規格
-							var t_spec;
+							var t_spec="";
 							for (var i = 0; i < uccgb.length; i++) {
 								if($('#combGroupbno_'+b_seq).val()==uccgb[i].noa){
 									t_spec=uccgb[i].spec;
@@ -1079,7 +1081,7 @@
 						<td align="center" id='odate'>~odate</td>
 						<td align="center" id='datea'>~datea</td>
 						<td align="center" id='noa'>~noa</td>
-						<td align="center" id='comp,8' style="text-align: left;">~comp,8</td>
+						<td align="center" id='comp' style="text-align: left;">~comp</td>
 					</tr>
 				</table>
 			</div>
