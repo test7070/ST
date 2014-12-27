@@ -33,7 +33,7 @@
 				//['txtOrdeno', '', 'vcc', 'noa,custno,comp', 'txtOrdeno', ''],
 				['txtSalesno', 'lblSaless', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx'],
+				['txtDriverno', 'lblDriver', 'sss', 'noa,namea', 'txtDriverno,txtDriver', 'sss_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
 
@@ -43,6 +43,7 @@
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
+				q_gt('sss', "where=^^ typea='司機' ^^", 0, 0, 0, "driver_sss");
 			});
 
 			function main() {
@@ -81,6 +82,19 @@
 						var t_where = "where=^^ driverno='" + t_driverno + "' and datea ='"+$('#txtDatea').val()+"' ^^";
 						q_gt('vcce', t_where, 0, 0, 0, "driver_repeat", r_accy);
 					}
+				});
+				
+				$('#combDriver').change(function() {
+					if(q_cur>0&&q_cur<4){
+						$('#txtDriverno').val($('#combDriver').val())
+						$('#txtDriver').val($('#combDriver').find("option:selected").text())
+						var t_driverno = trim($('#txtDriverno').val());
+						if (!emp(t_driverno)) {
+							var t_where = "where=^^ driverno='" + t_driverno + "' and datea ='"+$('#txtDatea').val()+"' ^^";
+							q_gt('vcce', t_where, 0, 0, 0, "driver_repeat", r_accy);
+						}
+					}
+					$('#combDriver')[0].selectedIndex=0;
 				});
 			}
 
@@ -123,6 +137,16 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'driver_sss':
+						var as = _q_appendData("sss", "", true);
+						var t_item = " @ ";
+						if (as[0] != undefined) {
+							for ( i = 0; i < as.length; i++) {
+								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].namea;
+							}
+						}
+						q_cmbParse("combDriver", t_item);
+						break;
 					case 'driver_repeat':
 						var as = _q_appendData("vcce", "", true);
 						if (as[0] != undefined) {
@@ -593,7 +617,10 @@
 					</tr>
 					<tr class="tr4">
 						<td class="td1"><span> </span><a id="lblDriver" class="lbl btn"> </a></td>
-						<td class="td2"><input id="txtDriverno"  type="text" class="txt c1"/></td>
+						<td class="td2">
+							<input id="txtDriverno"  type="text" class="txt c1" style="width: 85px;"/>
+							<select id="combDriver" class="txt c1" style="width: 20px"> </select>
+						</td>
 						<td class="td3"><input id="txtDriver"  type="text" class="txt c1"/></td>
 						<td class="td4"><span> </span><a id="lblCarno" class="lbl"> </a></td>
 						<td class="td5"><input id="txtCarno"  type="text" class="txt c1"/></td>

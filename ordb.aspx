@@ -265,12 +265,8 @@
 					}
 				});
 				
-				//判斷核准是否顯示
-				if(q_getPara('sys.project').toUpperCase()=='XY'){
-					$('.apv').show();
-				}else{
-					$('.apv').hide();
-				}
+				//判斷核准(手動)是否顯示
+				$('.apv').hide();
 			}
 
 			function q_funcPost(t_func, result) {
@@ -472,7 +468,7 @@
 					return;
 				}
 				
-				if(q_getPara('ordb.accu')=='1' && !chack_accu){
+				if(q_getPara('ordb.accu')=='1' && !chack_accu &&q_getPara('sys.comp').indexOf('彩虹') > -1){
 					var t_year = $.trim($('#txtOdate').val()).substr(0,3);
 					var t_where='',t_where1='';
 					t_where="where=^^left(a.datea,3)='"+t_year+"' and isnull(a.cancel,0)=0 and isnull(b.cancel,0)=0 and a.noa!='"+$('#txtNoa').val()+"'^^"
@@ -529,12 +525,7 @@
 				} else {
 					alert("error: btnok!");
 				}
-				
-				//只要修改都會重新送簽核，將核准變回N
-				if(q_getPara('sys.project').toUpperCase()=='XY'){
-					$('#txtApv').val('N');
-				}
-				
+							
 				//清除是否判斷預估
 				chack_accu=false;
 				
@@ -570,6 +561,7 @@
 					return;
 				}
 				q_nowf();
+				as['datea'] = abbm2['datea'];
 				as['noa'] = abbm2['noa'];
 				as['apv'] = abbm2['apv'];
 				return true;
