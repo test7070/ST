@@ -14,7 +14,25 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-            this.errorHandler = null;
+            $(function () {
+		        var Sys = {};
+		        var ua = navigator.userAgent.toLowerCase();
+		        var s;
+		        (s = ua.match(/rv:([\d.]+)\) like gecko/)) ? Sys.ie = s[1] :
+		        (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
+		        (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
+		        (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
+		        (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
+		        (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+		        
+		        if (!Sys.chrome)
+		        	alert('請使用Chrome執行');
+		        /*if (Sys.ie) document.write('IE: ' + Sys.ie);
+		        if (Sys.firefox) document.write('Firefox: ' + Sys.firefox);
+		        if (Sys.chrome) document.write('Chrome: ' + Sys.chrome);
+		        if (Sys.opera) document.write('Opera: ' + Sys.opera);
+		        if (Sys.safari) document.write('Safari: ' + Sys.safari);*/
+		    });
 
             q_tables = 't';
             var q_name = "workj";
@@ -50,7 +68,7 @@
                 q_brwCount();
                 q_gt('mech', "", 0, 0, 0, 'mech'); 
             });
-
+			
             function main() {
                 if (dataErr) {
                     dataErr = false;
@@ -397,7 +415,11 @@
                     Unlock(1);
                     return;
                 }
-                
+                if ($('#txtDatea').val()>$('#txtOdate').val()) {
+                    alert(q_getMsg('lblDatea') + '須小於等於' + q_getMsg('lblOdate'));
+                    Unlock(1);
+                    return;
+                }
                 for(var i=0;i<q_bbtCount;i++){
                 	t_uno = $.trim($('#txtUno__'+i).val());
                 	t_lengthb = parseInt(round(q_float('txtLengthb__'+i)/10,0)*10);
