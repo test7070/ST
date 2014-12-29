@@ -20,7 +20,7 @@
 			var q_name = "quat";
 			var decbbs = ['price', 'weight', 'mount', 'total', 'dime', 'width', 'lengthb', 'c1', 'notv', 'theory'];
 			var decbbm = ['money', 'tax', 'total', 'weight', 'floata', 'mount', 'price', 'totalus'];
-			var q_readonly = ['txtNoa','txtWorker', 'txtAcomp', 'txtSales', 'txtWorker2','txtApv','txtMoney','txtTotal','txtTotalus'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtAcomp', 'txtSales', 'txtWorker2','txtMoney','txtTotal','txtTotalus'];
 			var q_readonlys = ['txtNo3','txtTotal'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -324,10 +324,6 @@
 					$('#txtWorker2').val(r_name);
 					
 				sum();
-					
-				//只要修改都會重新送簽核，將核准變回N
-				//1211預設先帶核准
-				$('#txtApv').val('Y');
 
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
@@ -752,7 +748,6 @@
 				as['datea'] = abbm2['datea'];
 				as['odate'] = abbm2['odate'];
 				as['custno'] = abbm2['custno'];
-				as['apv'] = abbm2['apv'];
 				return true;
 			}
 
@@ -894,9 +889,14 @@
 						break;
 					case 'txtProductno_':
 						if (!emp($('#txtProductno_'+b_seq).val())) {
-							$('#combClassa_'+b_seq).val('便品');
-							$('#txtClassa_'+b_seq).val('便品');
-							$('#txtDime_'+b_seq).val(0);
+							if($('#txtSpec_'+b_seq).val().indexOf('印')>-1 || $('#txtProductno_'+b_seq).val().indexOf($('#txtCustno').val()+"-")>-1){
+								$('#combClassa_'+b_seq).val('印刷');
+								$('#txtClassa_'+b_seq).val('印刷');
+							}else{
+								$('#combClassa_'+b_seq).val('便品');
+								$('#txtClassa_'+b_seq).val('便品');
+								$('#txtDime_'+b_seq).val(0);
+							}
 						}
 						AutoNo3();
 						break;	
@@ -1178,8 +1178,6 @@
 						<td colspan='2'><input id="txtTotalus"	type="text" class="txt c1 num"/></td>
 						<!--<td class="label2"><span> </span><a id='lblWeight' class="lbl"> </a></td>
 						<td colspan='2' ><input id="txtWeight" type="text" class="txt c1 num" /></td>-->
-						<td><span> </span><a id='lblApv' class="lbl"> </a></td>
-						<td><input id="txtApv" type="text" class="txt c1" /></td>
 					</tr>
 					<tr class="tr10">
 						<td align="right">

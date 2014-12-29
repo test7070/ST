@@ -207,6 +207,19 @@
 					$('#div_stk').toggle();
 				});
 				
+				$('#btnStore2').click(function() {
+					if(!emp($('#txtCustno').val())){
+						var t_where = "where=^^ noa!='"+$('#txtNoa').val()+"' and custno='" + $('#txtCustno').val() + "' and isnull(productno,'')!='' ^^";
+						q_gt('vcc_xy_store2', t_where, 0, 0, 0, "store2_store2", r_accy);
+					}else{
+						alert("請輸入客戶編號!!");
+					}
+					$('#div_store2').hide();
+				});
+				$('#btnClose_div_store2').click(function() {
+					$('#div_store2').toggle();
+				});
+				
 				if (isinvosystem)
 					$('.istax').hide();
 					
@@ -307,6 +320,7 @@
 						if(stkmount_exist.length>0){
 							alert(stkmount_exist+"\n請先將寄庫銷售!!!");
 						}else{
+							check_stock=true;
 							btnOk();	
 						}
 						break;
@@ -375,6 +389,41 @@
 						$('#div_stk').css('left',mouse_point.pageX-parseInt($('#div_stk').css('width')));
 						$('#div_stk').toggle();
 						break;
+					case 'store2_store2':
+						var as = _q_appendData("view_vccs", "", true);
+						for (var i = 0; i < as.length; i++) {
+							if(dec(as[i].stkmount)==0){
+								as.splice(i, 1);
+								i--;
+							}
+						}
+						if (as[0] == undefined) {
+							alert("無寄庫量");
+							break;
+						}
+						var rowslength=document.getElementById("table_store2").rows.length-1;
+							for (var j = 1; j < rowslength; j++) {
+								document.getElementById("table_store2").deleteRow(1);
+							}
+						var store2_row=0;
+					
+						for (var i = 0; i < as.length; i++) {
+							//倉庫庫存
+							var tr = document.createElement("tr");
+							tr.id = "store2_"+j;
+							tr.innerHTML = "<td><input id='store2_txtProductno_"+store2_row+"' type='text' class='txt c1' value='"+as[i].productno+"' disabled='disabled'/></td>";
+							tr.innerHTML+="<td><input id='store2_txtProduct_"+store2_row+"' type='text' class='txt c1' value='"+as[i].product+"' disabled='disabled' /></td>";
+							tr.innerHTML+= "<td><input id='store2_txtSpec_"+store2_row+"' type='text' class='txt c1' value='"+as[i].spec+"' disabled='disabled'/></td>";
+							tr.innerHTML+="<td><input id='store2_txtStore_"+store2_row+"' type='text' class='txt c1' value='"+as[i].store2+"' disabled='disabled' /></td>";
+							tr.innerHTML+="<td><input id='store2_txtMount_"+store2_row+"' type='text' class='txt c1 num' value='"+dec(as[i].stkmount)+"' disabled='disabled'/></td>";
+							var tmp = document.getElementById("store2_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+							store2_row++;
+						}
+						$('#div_store2').css('top', $('#btnStore2').offset().top+25);
+						$('#div_store2').css('left', $('#btnStore2').offset().left-parseInt($('#div_store2').css('width'))-5);
+						$('#div_store2').toggle();
+						break;
 					case 'ucca_invo':
 						var as = _q_appendData("ucca", "", true);
 						if (as[0] != undefined) {
@@ -423,7 +472,7 @@
 						
 						//取得寄庫量
 						if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_' + b_seq).val())){
-							var t_where = "where=^^ custno='" + $('#txtCustno').val() + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
+							var t_where = "where=^^ noa!='"+$('#txtNoa').val()+"' and custno='" + $('#txtCustno').val() + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
 							q_gt('vcc_xy_store2', t_where, 0, 0, 0, "store2", r_accy);
 						}else{
 							q_msg($('#txtMount_' + b_seq), t_msg);
@@ -611,6 +660,17 @@
 					alert(t_err);
 					return;
 				}
+				//判斷只要有商品 數量(出貨 寄庫/出) 為0 彈出警告視窗
+				t_err='';
+				for (var i = 0; i < q_bbsCount; i++) {
+					if(!emp($('#txtProductno_'+i).val()) && q_float('txtWidth_'+i)==0 && q_float('txtTranmoney2_'+i)==0 && q_float('txtTranmoney3_'+i)==0){
+						t_err=t_err+(t_err.length>0?'\n':'')+$('#txtProduct_'+i).val()+'數量為0，請確認出貨、寄庫、寄出數量!!';
+					}
+				}
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}
 				//判斷起算日,寫入帳款月份
 				if(!check_startdate&&emp($('#txtMon').val())){
 					var t_where = "where=^^ noa='"+$('#txtCustno').val()+"' ^^";
@@ -625,7 +685,10 @@
 							productno_where+=(productno_where.length>0?",":"")+"'"+$('#txtProductno_'+i).val()+"'";
 						}
 					}
-					var t_where = "where=^^ custno='" + $('#txtCustno').val() + "' and productno in ("+productno_where+") ^^";
+					if(productno_where=="")
+						productno_where="''";
+					
+					var t_where = "where=^^ noa!='"+$('#txtNoa').val()+"' and custno='" + $('#txtCustno').val() + "' and productno in ("+productno_where+") ^^";
 					q_gt('vcc_xy_store2', t_where, 0, 0, 0, "btnOk_check_stock", r_accy);
 					return;
 				}
@@ -764,7 +827,7 @@
 							sum();
 							//判斷寄出量是否大於寄庫量
 							if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_' + b_seq).val())){
-								var t_where = "where=^^ custno='" + $('#txtCustno').val() + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
+								var t_where = "where=^^ noa!='"+$('#txtNoa').val()+"' and custno='" + $('#txtCustno').val() + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
 								q_gt('vcc_xy_store2', t_where, 0, 0, 0, "store2_stk", r_accy);
 							}
 						});
@@ -874,6 +937,8 @@
 					$('.istax').hide();
 				HiddenTreat();
 				stype_chang();
+				$('#div_stk').hide();
+				$('#div_store2').hide();
 			}
 			
 			function AutoNoq(){
@@ -1236,6 +1301,22 @@
 				</tr>
 			</table>
 		</div>
+		<div id="div_store2" style="position:absolute; top:300px; left:400px; display:none; width:680px; background-color: #CDFFCE; border: 5px solid gray;">
+			<table id="table_store2" style="width:100%;" border="1" cellpadding='2'  cellspacing='0'>
+				<tr id='store2_top'>
+					<td style="background-color: #f8d463;width: 130px;" align="center">產品編號</td>
+					<td style="background-color: #f8d463;width: 150px;" align="center">產品名稱</td>
+					<td style="background-color: #f8d463;width: 200px;" align="center">規格</td>
+					<td style="background-color: #f8d463;width: 100px;" align="center">寄庫倉庫</td>
+					<td style="background-color: #f8d463;width: 100px;" align="center">寄庫數量</td>
+				</tr>
+				<tr id='store2_close'>
+					<td align="center" colspan='5'>
+						<input id="btnClose_div_store2" type="button" value="關閉視窗">
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div id="dmain" style="width: 1260px;">
 			<!--#include file="../inc/toolbar.inc"-->
 			<div class="dview" id="dview" >
@@ -1323,6 +1404,7 @@
 							<input id="txtAddr2"  type="text" class="txt c1" style="width: 412px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
+						<td class="td6"align="right"><input id="btnStore2" type="button" value="寄庫顯示"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblSales' class="lbl btn"> </a></td>

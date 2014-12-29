@@ -17,10 +17,10 @@
 			this.errorHandler = null;
 			q_tables = 't';
 			var q_name = "cub";
-			var q_readonly = ['txtNoa','txtComp','txtProduct','txtWorker','txtWorker2'];
+			var q_readonly = ['txtNoa','txtComp','txtProduct','txtSpec','txtWorker','txtWorker2'];
 			var q_readonlys = ['txtDate2', 'txtOrdeno', 'txtNo2'];
 			var q_readonlyt = [];
-			var bbmNum = [];
+			var bbmNum = [['txtTotal',10,0,1]];
 			var bbsNum = [];
 			var bbtNum = [];
 			var bbmMask = [];
@@ -34,9 +34,9 @@
 			q_desc = 1;
 			brwCount2 = 5;
 			aPop = new Array(
-				['txtOrdeno', '', 'view_ordes', 'noa,no2,productno,product,custno,comp', 'txtOrdeno,txtNo2,txtProductno,txtProduct,txtCustno,txtComp,txtMemo', ''],
+				['txtOrdeno', '', 'view_ordes', 'noa,no2,productno,product,spec,mount,custno,comp,memo', 'txtOrdeno,txtNo2,txtProductno,txtProduct,txtSpec,txtTotal,txtCustno,txtComp,txtMemo', ''],
 				['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'],
-				['txtProductno', 'lblProduct', 'ucc', 'noa,product', 'txtProductno,txtProduct', 'ucc_b.aspx'],
+				['txtProductno', 'lblProduct', 'ucc', 'noa,product,spec', 'txtProductno,txtProduct,txtSpec', 'ucc_b.aspx'],
 				['txtTggno_', '', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', ""],
 				['txtProcessno_', 'btnProcessno_', 'process', 'noa,process,tggno,tgg', 'txtProcessno_,txtProcess_,txtTggno_,txtTgg_', 'process_b.aspx'],
 				['txtProductno__', 'btnProductno__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
@@ -149,6 +149,25 @@
 				
 				//$('title').text("連續製令單"); //IE8會有問題
 				document.title='連續製令單'
+				
+				$('#btnOrdes').click(function() {
+					var t_custno = trim($('#txtCustno').val());
+					var t_where = '';
+					if (t_custno.length > 0) {
+						t_where = " isnull(enda,0)!=1 and isnull(cancel,0)!=1";
+						t_where += " and left(productno,2)!='##' and left(custno,2)!='##' ";//非正式編號
+						t_where += " and custno='"+t_custno+"'";
+						//只有印刷才會進來 印刷編號=客戶編號-流水號
+						t_where += " and charindex('"+t_custno+"-',productno)=1 ";
+						if (!emp($('#txtOrdeno').val()))
+							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0 ";
+						t_where = t_where;
+					} else {
+						alert('請輸入客戶編號!!');
+						return;
+					}
+					q_box("ordes_b_xy.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
+				});
 			}
 
 			function q_gtPost(t_name) {
@@ -178,6 +197,24 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'ordes':
+						if (q_cur > 0 && q_cur < 4) {
+							if (!b_ret || b_ret.length == 0){
+								b_pop = '';
+								return;
+							}else{
+								$('#txtCustno').val(b_ret[0].custno);
+								$('#txtComp').val(b_ret[0].comp);
+								$('#txtOrdeno').val(b_ret[0].noa);
+								$('#txtNo2').val(b_ret[0].no2);
+								$('#txtProductno').val(b_ret[0].productno);
+								$('#txtProduct').val(b_ret[0].product);
+								$('#txtSpec').val(b_ret[0].spec);
+								$('#txtTotal').val(b_ret[0].mount);
+								$('#txtMemo').val(b_ret[0].memo);
+							}
+						}
+						break;
 					case 'bbs_tgg':
 						if (q_cur > 0 && q_cur < 4) {
 							if (!b_ret || b_ret.length == 0){
@@ -594,20 +631,29 @@
 						</td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblCust" class="lbl btn" >客戶</a></td>
+						<td><input id="txtCustno" type="text" class="txt c1"/></td>
+						<td colspan="2"><input id="txtComp" type="text" class="txt c1"/></td>
+						<td> <input id="btnOrdes" type="button" value='訂單匯入'  style="float:right;"/></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblOrdeno" class="lbl" >訂單編號</a></td>
 						<td><input id="txtOrdeno" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblNo2" class="lbl" >訂序</a></td>
 						<td><input id="txtNo2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblCust" class="lbl btn" >客戶</a></td>
-						<td><input id="txtCustno" type="text" class="txt c1"/></td>
-						<td colspan="2"><input id="txtComp" type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
 						<td><span> </span><a id="lblProduct" class="lbl btn" >製成品</a></td>
 						<td><input id="txtProductno" type="text" class="txt c1"/></td>
 						<td colspan="2"><input id="txtProduct" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblSpec" class="lbl" >規格</a></td>
+						<td colspan="3"><input id="txtSpec" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblMount" class="lbl" >數量</a></td>
+						<td><input id="txtTotal" type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl" > </a></td>

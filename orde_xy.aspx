@@ -21,7 +21,7 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "orde";
-			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtSales', 'txtOrdbno', 'txtOrdcno','txtApv'];
+			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtSales', 'txtOrdbno', 'txtOrdcno'];
 			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtNo2', 'txtNo3', 'txtC1', 'txtNotv','txtProduct','txtSpec'];
 			var bbmNum = [['txtTotal', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],['txtFloata', 10, 5, 1], ['txtTotalus', 15, 2, 1]];
 			var bbsNum = [];
@@ -419,8 +419,9 @@
 							t_msg = "銷售單價：" + dec(as[0].saleprice) + "<BR>";
 						}
 						//客戶售價
+						//不用apv 抓sign
 						if(!emp($('#txtProductno_'+b_seq).val())){
-							t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.odate>='"+q_date()+"' group by b.productno)";
+							t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.odate>='"+q_date()+"' group by b.productno)";
 							t_where+=" and productno='"+$('#txtProductno_'+b_seq).val()+"' and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", $('#txtCustno').val()) +" and odate>='"+q_date()+"' ^^";
 							q_gt('view_quats', t_where, 0, 0, 0, "msg_quat_xy");
 						}else{
@@ -569,8 +570,7 @@
 				var t_where = '';
 				if (t_custno.length > 0) {
 					t_where = "";
-					//12/11 核准判斷暫時拿掉 等上線後再放入
-					//t_where="noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+$('#txtOdate').val()+"' group by b.productno)";
+					//12/11 核准判斷暫時拿掉 等上線後再放入不用apv 抓sign
 					t_where="noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+$('#txtOdate').val()+"' group by b.productno)";
 					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and datea>='"+$('#txtOdate').val()+"'";
 					q_box("quat_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'quats', "95%", "95%", $('#btnQuat').val());
@@ -591,7 +591,6 @@
 				//檢查產品是否在報價單中，並判斷單價，不在報價單中或單價小於報價金額不能存檔
 				if(!check_quat_xy){
 					//12/11 核准判斷暫時拿掉 等上線後再放入
-					//t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.odate>='"+q_date()+"' group by b.productno)";
 					t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.odate>='"+q_date()+"' group by b.productno)";
 					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", $('#txtCustno').val()) +" and odate>='"+q_date()+"' ^^";
 					q_gt('view_quats', t_where, 0, 0, 0, "btnOk_xy");
@@ -603,7 +602,7 @@
 					if(emp($('#txtDatea_'+k).val()))
 						$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),15))
 						
-					if($('#txtClass_'+k).val()!='')
+					if($('#txtClass_'+k).val()=='')
 						$('#txtClass_'+k).val(100);
 				}
 				
@@ -774,7 +773,7 @@
 
 			function btnIns() {
 				_btnIns();
-				$('#chkIsproj').attr('checked', true);
+				//$('#chkIsproj').attr('checked', true);
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
@@ -979,8 +978,7 @@
 							var t_custno = trim($('#txtCustno').val());
 							var t_where = '';
 							if (t_custno.length > 0) {
-								//12/11 核准判斷暫時拿掉 等上線後再放入
-								//t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where UPPER(a.apv)='Y' and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.odate>='"+q_date()+"' group by b.productno)";
+								//12/11 核准判斷暫時拿掉 等上線後再放入 不用apv 抓sign
 								t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.odate>='"+q_date()+"' group by b.productno)";
 								t_where+=" and productno='"+$('#txtProductno_'+b_seq).val()+"' and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and odate>='"+q_date()+"' ^^";
 							}else {
@@ -1278,8 +1276,6 @@
 						<td class="td3"><input id="txtFloata" type="text" class="txt num c1" /></td>
 						<td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-						<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
-						<td class="td8"><input id="txtApv" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr10">
 						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
