@@ -14,7 +14,7 @@
 			var q_name = "drv";
 			
 			aPop = new Array(
-				['textDriverno', 'lblDriver', 'driver', 'noa,namea', 'textDriverno,textDriver', 'driver_b.aspx']
+				['textDriverno', 'lblDriver', 'sss', 'noa,namea', 'textDriverno,textDriver', 'sss_b.aspx']
 				,['textCustno', 'lblCust', 'cust', 'noa,comp', 'textCustno', 'cust_b.aspx']
 				,['textHandle_0', '', 'sss', 'noa,namea', '0textHandle_0,textHandle_0', 'sss_b.aspx']
 				,['textHandle_1', '', 'sss', 'noa,namea', '0textHandle_1,textHandle_1', 'sss_b.aspx']
@@ -1067,7 +1067,7 @@
 			</table>
 		</div>
 		<div id="orde" style="float:left;width:1260px;"> </div> 
-		<div id="orde_control" style="width:700px;"> </div> 
+		<div id="orde_control" style="width:1200px;"> </div> 
 		<div id="ordes" style="float:left;width:1260px;"> </div> 
 		<input type='button' id='btnEnda' style='font-size:16px;float: left;'/>
 		<div id="workjs" style="float:left;width:1260px;"> </div> 
