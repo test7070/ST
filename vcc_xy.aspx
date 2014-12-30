@@ -492,7 +492,7 @@
 					case 'check_store2':
 						var as = _q_appendData("view_vccs", "", true);
 						if (as[0] != undefined) {
-							if(dec(as[i].stkmount)==0){
+							if(dec(as[0].stkmount)==0){
 								alert("無寄庫量，不得寄出貨!!");
 								$('#txtTranmoney3_' + b_seq).val(0);
 							}else if (dec($('#txtTranmoney3_' + b_seq).val())>dec(as[i].stkmount)){
@@ -898,7 +898,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno'] && !as['product'] && !as['spec'] && !dec(as['total'])) {
+				if (!as['productno'] ) {
 					as[bbsKey[1]] = '';
 					return;
 				}

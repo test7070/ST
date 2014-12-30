@@ -57,14 +57,26 @@
 
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [['txtDatea', r_picd]];
+				bbmMask = [['txtDatea', r_picd],['txtBdate', r_picd],['txtEdate', r_picd]];
 				q_mask(bbmMask);
 
 				$('#btnVccimport').click(function() {
 					var t_post = $('#txtZip_post').val();
+					var t_vccno = $('#txtOrdeno').val();
+					var t_bdate = $('#txtBdate').val();
+					var t_edate = $('#txtEdate').val();
+					
 					var t_where = "noa in (select noa from view_vccs where isnull(mount,0)-isnull(tranmoney2,0)>0 or isnull(tranmoney3,0)>0 and noa not in(select ordeno from view_vcces where isnull(enda,0)=0 and noa!='"+$('#txtNoa').val()+"' ) group by noa )";
 					if(t_post.length>0)
 						t_where+=" and left((case when isnull(post2,'')!='' then post2 else post end),"+t_post.length+")='"+t_post+"'";
+					if(t_vccno.length>0)
+						t_where+=" and noa='"+t_vccno+"'";
+					if(t_edate==''){
+						t_edate='999/99/99'
+					}
+					t_where+=" and (datea between '"+t_bdate+"' and '"+t_edate+"')";
+					
+					
 					q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcc', "95%", "95%", $('#btnVccimport').val());
 				});
 
@@ -260,6 +272,8 @@
 				$('#txtAcomp').val(z_acomp);
 				$('#txtDatea').val(q_date());
 				$('#txtCardealno').focus();
+				$('#txtBdate').val(q_date());
+				$('#txtEdate').val(q_date());
 				
 				$('#txtSalesno').val(r_userno);
 				$('#txtSales').val(r_name);
@@ -269,8 +283,9 @@
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
+				$('#txtBdate').val(q_date());
+				$('#txtEdate').val(q_date());
 				$('#txtDatea').focus();
-
 			}
 
 			function btnPrint() {
@@ -323,8 +338,10 @@
 				_readonly(t_para, empty);
 				if(t_para){
 					$('#chkEnda').attr('disabled', 'disabled');
+					$('#btnVccimport').attr('disabled', 'disabled');
 				}else{
 					$('#chkEnda').removeAttr('disabled');
+					$('#btnVccimport').removeAttr('disabled');
 				}
 			}
 
@@ -485,7 +502,7 @@
 				float: left;
 			}
 			.txt.c2 {
-				width: 14%;
+				width: 40%;
 				float: left;
 			}
 			.txt.c3 {
@@ -630,7 +647,14 @@
 						<td class="td2" colspan="2"><input id="txtOrdeno"  type="text" class="txt c1"/></td>
 						<td class="td4"><span> </span><a class="lbl">郵遞區號</a></td>
 						<td class="td5"><input id="txtZip_post"  type="text" class="txt c1"/></td>
-						<td class="td6"><input id="btnVccimport" type="button" value="出貨、寄出匯入"/></td>
+					</tr>
+					<tr class="tr5">
+						<td class="td1"><span> </span> <a class="lbl">出貨日期</a></td>
+						<td class="td2" colspan="2">
+							<input id="txtBdate"  type="text" class="txt c2"/><a style="float: left;">~</a>
+							<input id="txtEdate"  type="text" class="txt c2"/>
+						</td>
+						<td class="td4" colspan="2"><input id="btnVccimport" type="button" value="出貨、寄出匯入"/></td>
 					</tr>
 					<tr class="tr6">
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
