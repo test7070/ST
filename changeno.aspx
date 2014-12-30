@@ -255,10 +255,6 @@
                 		if (as[0] != undefined) {
                 			if(as[0].mess=='success'){
 		                		alert('客戶編號更新成功!!。');
-								var s2=[];
-								s2[0]=q_name + '_s';
-								s2[1]="where=^^ noa='"+$('#txtChgcustno').val()+"' ^^"
-								q_boxClose2(s2);
 							}else
 								alert('客戶編號更新失敗，請聯絡工程師!!。');
 						}else{
@@ -270,10 +266,6 @@
                 		if (as[0] != undefined) {
                 			if(as[0].mess=='success'){
 		                		alert('物品編號更新成功!!。');
-								var s2=[];
-								s2[0]=q_name + '_s';
-								s2[1]="where=^^ noa='"+$('#txtChgproductno').val()+"' ^^"
-								q_boxClose2(s2);
 							}else
 								alert('物品編號更新失敗，請聯絡工程師!!。');
 						}else{
