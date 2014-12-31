@@ -34,7 +34,10 @@
 			brwKey = 'Datea';
 			aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,serial,email,salesno,sales', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtPay,txtMemo2,txtSalesno,txtSales', 'cust_b.aspx'],
+				/*['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,serial,email,salesno,sales'
+				, 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtPay,txtMemo2,txtSalesno,txtSales', 'cust_b.aspx'],*/
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,salesno,sales'
+				, 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtSalesno,txtSales', 'cust_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			);
@@ -177,12 +180,16 @@
 					}
 				});
 				
-				$('#btnTmpCreate').click(function() {
+				/*$('#btnTmpCreate').click(function() {
 					if(!emp($('#txtNoa').val())){
 						var t_paras = $('#txtNoa').val()+ ';'+r_name+ ';'+r_accy;
 						q_func('qtxt.query.tmp_cust_ucc', 'cust_ucc_xy.txt,tmp_cust_ucc,' + t_paras);
 						$('#btnTmpCreate').attr('disabled', 'disabled');
 					}
+				});*/
+				
+				$('#btnPlusCust').click(function(){
+					q_box('cust.aspx','pluscust', "95%", "95%", '新增客戶');
 				});
 			}
 
@@ -276,7 +283,9 @@
 						var as = _q_appendData("view_ordes", "", true);
 						if (as[0] != undefined) {
 							alert('已轉訂單禁止修改!!!');
-							$('#btnCancel').click();
+						}else{
+							orde_quat=true;
+							btnModi();
 						}
 						break;
 					case q_name:
@@ -417,7 +426,6 @@
 								$('#combClassa_' + b_seq).val('');
 							}
 						});
-						
 						
 						$('#combClassa_' + j).focusout(function() {
 							t_IdSeq = -1;
@@ -577,7 +585,7 @@
 							}
 						});
 						
-						$('#combGroupbno_'+j).focusout(function() {
+						$('#combGroupbno_'+j).change(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
@@ -678,6 +686,8 @@
 								
 								AutoNo3();
 							});
+							
+							$('#combGroupbno_'+b_seq)[0].selectedIndex=0;
 						});
 						
 					}
@@ -711,10 +721,17 @@
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 			}
-
+			
+			var orde_quat=false;
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+				if(!orde_quat){
+					var t_where = "where=^^ quatno='" + $('#txtNoa').val() + "' ^^";
+					q_gt('view_ordes', t_where, 0, 0, 0, "");
+					return;
+				}
+				
 				_btnModi();
 				$('#txtProduct').focus();
 
@@ -722,9 +739,7 @@
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
-				
-				var t_where = "where=^^ quatno='" + $('#txtNoa').val() + "' ^^";
-				q_gt('view_ordes', t_where, 0, 0, 0, "");
+				orde_quat=false;
 			}
 
 			function btnPrint() {
@@ -785,6 +800,12 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if(q_cur==1){
+					$('#btnPlusCust').show();
+				}else{
+					$('#btnPlusCust').hide();
+				}
+				
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
 					for (var j = 0; j < q_bbsCount; j++) {
@@ -904,7 +925,7 @@
 			}
 			function q_funcPost(t_func, result) {
                 switch(t_func) {
-                	case 'qtxt.query.tmp_cust_ucc':
+                	/*case 'qtxt.query.tmp_cust_ucc':
                 		$('#btnTmpCreate').removeAttr('disabled');
 						alert('臨時編號產生完畢。');
 						
@@ -914,7 +935,7 @@
 						if(issales)
 							s2[1]="where=^^"+replaceAll(replaceAll(s2[1],'where=^^',''),'^^','')+" and salesno='"+r_userno+"' "+"^^";
 						q_boxClose2(s2);
-						break;
+						break;*/
 				}
 			}
 		</script>
@@ -1113,7 +1134,10 @@
 						<td colspan="3"><input id="txtContract" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr3">
-						<td><span> </span><a id='lblCust' class="lbl btn"> </a></td>
+						<td>
+							<span> </span><a id='lblCust' class="lbl btn"> </a>
+							<input class="btn" id="btnPlusCust" type="button" value='+' style="font-weight: bold;float: right;" />
+						</td>
 						<td><input id="txtCustno" type="text" class="txt c1"/></td>
 						<td colspan="2">
 							<input id="txtComp" type="text" class="txt c1"/>
@@ -1129,14 +1153,14 @@
 						<td><span> </span><a id='lblFax' class="lbl"> </a></td>
 						<td colspan='3'><input id="txtFax" type="text" class="txt c1"/></td>
 					</tr>
-					<tr class="tr4">
+					<!--<tr class="tr4">
 						<td><span> </span><a class="lbl">聯絡人姓名</a></td>
 						<td><input id="txtPostname" type="text" class="txt c1"/></td>
 						<td><span> </span><a class="lbl">統一編號 </a></td>
 						<td><input id="txtPay"	type="text" class="txt c1"/></td>
 						<td><span> </span><a class="lbl">E-MAIL</a></td>
 						<td colspan='3'><input id="txtMemo2" type="text" class="txt c1"/></td>
-					</tr>
+					</tr>-->
 					<tr class="tr5">
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td><input id="txtPost" type="text" class="txt c1"></td>
@@ -1192,7 +1216,7 @@
 						<td><input id="txtWorker" type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1" /></td>
-						<td colspan="2" align="center"><input id="btnTmpCreate" type="button" value='產生臨時編號' /></td>
+						<!--<td colspan="2" align="center"><input id="btnTmpCreate" type="button" value='產生臨時編號' /></td>-->
 						<td colspan="2">
 							<span> </span>
 							<input id="chkIsproj" type="checkbox"/>
@@ -1236,7 +1260,8 @@
 						<input id="txtProductno.*" type="text" class="txt c1" style="width:115px;"/>
 						<input class="btn" id="btnProduct.*" type="button" value='.' style=" font-weight: bold;" />
 					</td>
-					<td><input id="txtProduct.*" type="text" class="txt c1" style="width:120px;"/>
+					<td>
+						<input id="txtProduct.*" type="text" class="txt c1" style="width:120px;"/>
 						<select id="combGroupbno.*" class="txt c1" style="width: 20px; float: right;"> </select>
 					</td>
 					<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
