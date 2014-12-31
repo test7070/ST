@@ -79,19 +79,19 @@
 		        if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 				if(t_uno.length>0)
-		       		t_where += " and exists(select noa from ordet"+r_accy+" where ordet"+r_accy+".noa=orde"+r_accy+".noa and ordet"+r_accy+".uno='"+t_uno+"')";
+		       		t_where += " and exists(select noa from view_ordet"+r_accy+" where view_ordet"+r_accy+".noa=view_orde"+r_accy+".noa and view_ordet"+r_accy+".uno='"+t_uno+"')";
 		       	if(t_enda=='0'){
-		       		t_where += " and (enda=0 and exists(select noa from ordes"+r_accy+" where ordes"+r_accy+".noa=orde"+r_accy+".noa and ordes"+r_accy+".enda=0))";
+		       		t_where += " and (enda=0 and exists(select noa from view_ordes"+r_accy+" where view_ordes"+r_accy+".noa=view_orde"+r_accy+".noa and view_ordes"+r_accy+".enda=0))";
 		       	}
 		       	if(t_enda=='1'){
-		       		t_where += " and (enda=1 or exists(select noa from ordes"+r_accy+" where ordes"+r_accy+".noa=orde"+r_accy+".noa and ordes"+r_accy+".enda=1))";
+		       		t_where += " and (enda=1 or exists(select noa from view_ordes"+r_accy+" where view_ordes"+r_accy+".noa=view_orde"+r_accy+".noa and view_ordes"+r_accy+".enda=1))";
 		       	}
-		       	t_where += " and ( not exists(select top 1 noa from ordes"+r_accy+" where orde"+r_accy+".noa=ordes"+r_accy+".noa) or " 
-		       		+" (exists (select * from ordes"+r_accy+" where orde"+r_accy+".noa=ordes"+r_accy+".noa "
-		       		+" and isnull(ordes"+r_accy+".dime,0) between "+t_bdime+" and "+t_edime
-		       		+" and isnull(ordes"+r_accy+".width,0) between "+t_bwidth+" and "+t_ewidth
-		       		+" and isnull(ordes"+r_accy+".lengthb,0) between "+t_blengthb+" and "+t_elengthb
-		       		+" and isnull(ordes"+r_accy+".radius,0) between "+t_bradius+" and "+t_eradius+")))";
+		       	t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
+		       		+" (exists (select * from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa "
+		       		+" and isnull(view_ordes"+r_accy+".dime,0) between "+t_bdime+" and "+t_edime
+		       		+" and isnull(view_ordes"+r_accy+".width,0) between "+t_bwidth+" and "+t_ewidth
+		       		+" and isnull(view_ordes"+r_accy+".lengthb,0) between "+t_blengthb+" and "+t_elengthb
+		       		+" and isnull(view_ordes"+r_accy+".radius,0) between "+t_bradius+" and "+t_eradius+")))";
 		       	
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;

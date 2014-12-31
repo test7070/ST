@@ -57,9 +57,9 @@
 		        if (t_tgg.length>0)
                     t_where += " and charindex('" + t_tgg + "',tgg)>0";
 		       	if(t_uno.length>0)
-		       		t_where += " and exists(select noa from rc2s"+r_accy+" where rc2s"+r_accy+".noa=rc2"+r_accy+".noa and rc2s"+r_accy+".uno='"+t_uno+"')";
+		       		t_where += " and exists(select noa from view_rc2s"+r_accy+" where view_rc2s"+r_accy+".noa=view_rc2"+r_accy+".noa and view_rc2s"+r_accy+".uno='"+t_uno+"')";
 		       	if(t_uno2.length>0)
-		       		t_where += " and exists(select noa from rc2s"+r_accy+" where rc2s"+r_accy+".noa=rc2"+r_accy+".noa and rc2s"+r_accy+".uno2='"+t_uno2+"')";
+		       		t_where += " and exists(select noa from view_rc2s"+r_accy+" where view_rc2s"+r_accy+".noa=view_rc2"+r_accy+".noa and view_rc2s"+r_accy+".uno2='"+t_uno2+"')";
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
             }

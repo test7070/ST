@@ -91,17 +91,17 @@
 		        if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',comp)>0";
 		       	if(t_uno.length>0)
-		       		t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".uno='"+t_uno+"')";
+		       		t_where += " and exists(select noa from view_vccs"+r_accy+" where view_vccs"+r_accy+".noa=view_vcc"+r_accy+".noa and view_vccs"+r_accy+".uno='"+t_uno+"')";
 		       	if(t_ordeno.length>0)
-                    t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".ordeno='"+t_ordeno+"' "+(t_no2.length>0?" and vccs"+r_accy+".no2='"+t_no2+"'":"")+")";
+                    t_where += " and exists(select noa from view_vccs"+r_accy+" where view_vccs"+r_accy+".noa=view_vcc"+r_accy+".noa and view_vccs"+r_accy+".ordeno='"+t_ordeno+"' "+(t_no2.length>0?" and view_vccs"+r_accy+".no2='"+t_no2+"'":"")+")";
 		       	if(t_dime!=0 && !isNaN(t_dime))
-                    t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".dime="+t_dime+")";
+                    t_where += " and exists(select noa from view_vccs"+r_accy+" where view_vccs"+r_accy+".noa=view_vcc"+r_accy+".noa and view_vccs"+r_accy+".dime="+t_dime+")";
                 if(t_width!=0 && !isNaN(t_width))
-                    t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".width="+t_width+")";    
+                    t_where += " and exists(select noa from view_vccs"+r_accy+" where view_vccs"+r_accy+".noa=view_vcc"+r_accy+".noa and view_vccs"+r_accy+".width="+t_width+")";    
 		        if(t_lengthb!=0 && !isNaN(t_lengthb))
-                    t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".lengthb="+t_lengthb+")";
+                    t_where += " and exists(select noa from view_vccs"+r_accy+" where view_vccs"+r_accy+".noa=view_vcc"+r_accy+".noa and view_vccs"+r_accy+".lengthb="+t_lengthb+")";
 		        if(t_radius!=0 && !isNaN(t_radius))
-                    t_where += " and exists(select noa from vccs"+r_accy+" where vccs"+r_accy+".noa=vcc"+r_accy+".noa and vccs"+r_accy+".radius="+t_radius+")";
+                    t_where += " and exists(select noa from view_vccs"+r_accy+" where view_vccs"+r_accy+".noa=view_vcc"+r_accy+".noa and view_vccs"+r_accy+".radius="+t_radius+")";
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
             }
