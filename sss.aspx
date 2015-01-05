@@ -44,7 +44,6 @@
 					q_content = "where=^^noa='" + r_userno + "'^^";
 				q_gt(q_name, q_content, q_sqlCount, 1);
 				
-				//q_gf('Paytype.txt', ''); 等當txt 寫到資料庫再開啟並抓資料庫內容
 			});
 
 			function main() {
@@ -73,6 +72,10 @@
 				q_gt('acomp', '', 0, 0, 0, "");
 				q_gt('part', '', 0, 0, 0, "");
 				q_gt('salm', '', 0, 0, 0, "");
+				q_gt('paytype', '', 0, 0, 0, "");
+				q_gt('payform', '', 0, 0, 0, "");
+				q_gt('paymark', '', 0, 0, 0, "");
+				q_gt('payremark', '', 0, 0, 0, "");
 
 				if (q_getPara('sys.comp').indexOf('祥興') > -1) {
 					$('#btnSsspart').show();
@@ -324,39 +327,6 @@
 				q_tr('textTax',t_tax);
 			}
 			
-			//稅務資料暫時拿掉
-			var t_typep='',c_typep=' @ ';
-			var t_typea='',c_typea=' @ ',t_typeb='',c_typeb=' @ ',t_typec='',c_typec=' @ ';
-			function q_gfPost() {
-				if (q_gfTxt=='Paytype.txt'){
-					t_typep = xmlString.split('\r\n');
-					//處理內容
-					for (i=0;i<t_typep.length;i++){
-						var typep=t_typep[i].split(';')[0];
-						c_typep=c_typep+','+typep.split('.')[0]+"@"+typep;
-					}
-					
-					q_cmbParse("cmbPtype", c_typep);
-					//$('#cmbPtype').val(abbm[q_recno].ptype)
-					q_gf('PAYFORM.txt', '');
-				}else if (q_gfTxt=='PAYFORM.txt'){
-					t_typea = xmlString.split('\r\n');
-					//處理內容
-					for (i=0;i<t_typea.length;i++){
-						var typea=replaceAll(t_typea[i],' ','').split(';')[0];
-						c_typea=c_typea+','+typea.split('.')[0]+"@"+typea;
-					}
-					
-					q_cmbParse("combTypea", c_typea);
-					q_gf('PAYREMARK.txt', '');
-				}else if (q_gfTxt=='PAYREMARK.txt'){
-					t_typeb = xmlString.split('\r\n');
-					q_gf('PAYMARK.txt', '');
-				}else if (q_gfTxt=='PAYMARK.txt'){
-					t_typec = xmlString.split('\r\n');
-				}
-			}
-
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
@@ -366,6 +336,10 @@
 						break;
 				} /// end Switch
 			}
+			
+			//稅務資料暫時拿掉
+			var t_typep='',c_typep=' @ ';
+			var t_typea='',c_typea=' @ ',t_typeb='',c_typeb=' @ ',t_typec='',c_typec=' @ ';
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
@@ -381,6 +355,41 @@
 		                    	$("#cmbCno").val(abbm[q_recno].cno);
 		                }
 		                break;
+					case 'paytype':
+					
+						q_gt('paytype', '', 0, 0, 0, "");
+						q_gt('payform', '', 0, 0, 0, "");
+						q_gt('paymark', '', 0, 0, 0, "");
+						q_gt('payremark', '', 0, 0, 0, "");
+						if (q_gfTxt=='Paytype.txt'){
+							t_typep = xmlString.split('\r\n');
+							//處理內容
+							for (i=0;i<t_typep.length;i++){
+								var typep=t_typep[i].split(';')[0];
+								c_typep=c_typep+','+typep.split('.')[0]+"@"+typep;
+							}
+							
+							q_cmbParse("cmbPtype", c_typep);
+							//$('#cmbPtype').val(abbm[q_recno].ptype)
+							q_gf('PAYFORM.txt', '');
+						}else if (q_gfTxt=='PAYFORM.txt'){
+							t_typea = xmlString.split('\r\n');
+							//處理內容
+							for (i=0;i<t_typea.length;i++){
+								var typea=replaceAll(t_typea[i],' ','').split(';')[0];
+								c_typea=c_typea+','+typea.split('.')[0]+"@"+typea;
+							}
+							
+							q_cmbParse("combTypea", c_typea);
+							q_gf('PAYREMARK.txt', '');
+						}else if (q_gfTxt=='PAYREMARK.txt'){
+							t_typeb = xmlString.split('\r\n');
+							q_gf('PAYMARK.txt', '');
+						}else if (q_gfTxt=='PAYMARK.txt'){
+							t_typec = xmlString.split('\r\n');
+						}
+					
+						break;
 					case 'checkSssno_change':
 						var as = _q_appendData("sss", "", true);
 						if (as[0] != undefined) {
