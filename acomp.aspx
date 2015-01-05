@@ -59,7 +59,6 @@
                 bbmKey = ['noa'];
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1);
-                //q_gf('Taxport.txt', ''); //稅務資料暫時拿掉
             });
 
             function main() {
@@ -125,6 +124,14 @@
 				}else{
 					$('.obu').hide();
 				}
+				
+				if(q_getPara('sys.salb')=='1'){
+					q_gt('taxport', '', 0, 0, 0, "");
+					$('.salb').show();
+				}else{
+					$('.salb').hide();
+				}
+				
             }
             function display(){
             	$('.stamp_chk').prop('checked',false);
@@ -181,22 +188,6 @@
             		alert('undefined');
             	}
             }
-            
-            //稅務資料暫時拿掉
-            /*var t_typep='',c_typep=' @ ';
-			function q_gfPost() {
-				if (q_gfTxt=='Taxport.txt'){
-					t_typep = xmlString.split('\r\n');
-					//處理內容
-					for (i=0;i<t_typep.length;i++){
-						var typep=t_typep[i].split('	')[0];
-						c_typep=c_typep+','+typep+"@"+t_typep[i];
-					}
-					
-					q_cmbParse("cmbTaxport", c_typep);
-					//refresh(q_recno);  /// 第一次需要重新載入	
-				}
-			}*/
 
             function q_boxClose(s2) {
                 var ret;
@@ -209,6 +200,16 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'taxport':
+                		var as = _q_appendData("taxport", "", true);
+		                var t_item = " @ ";
+						for ( i = 0; i < as.length; i++) {
+							t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' +as[i].noa+'.'+as[i].taxport;
+						}
+						q_cmbParse("cmbTaxport", t_item);
+						if (abbm[q_recno] != undefined)
+							$("#cmbTaxport").val(abbm[q_recno].taxport);
+						break;
                 	case 'checkAcompno_change':
                 		var as = _q_appendData("acomp", "", true);
                         if (as[0] != undefined){
@@ -339,8 +340,7 @@
 					return;
 				}
 				
-				//稅務資料暫時拿掉
-				//$('#txtTaxportname').val(replaceAll($('#cmbTaxport').find("option:selected").text(),$('#cmbTaxport').val()+'	',''));
+				$('#txtTaxportname').val(replaceAll($('#cmbTaxport').find("option:selected").text(),$('#cmbTaxport').val()+'.',''));
         	
                 if(q_cur==1){
                 	t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
@@ -640,35 +640,33 @@
 							<td><span> </span><a id='lblInsur_disaster' class="lbl"> </a></td>
 							<td><input id="txtInsur_disaster"  type="text" class="txt c1" /></td>
 						</tr>
-						<!--//稅務資料暫時拿掉
-						<tr>
+						<tr class="salb">
 							<td><span> </span><a id="lblTaxport" class="lbl"> </a></td>
 							<td>
-								<select id="cmbTaxport" class="txt c1"> </select>
+								<select id="cmbTaxport" class="txt c1 salb"> </select>
 								<input id="txtTaxportname"  type="hidden"/>
 							</td>
 						</tr>
-						<tr>
+						<tr class="salb">
 							<td><span> </span><a id='lblTaxno' class="lbl"> </a></td>
-							<td><input id="txtTaxno"  type="text" class="txt c1" />	</td>
+							<td><input id="txtTaxno"  type="text" class="txt c1 salb" />	</td>
 							<td><span> </span><a id='lblHouseno' class="lbl"> </a></td>
-							<td><input id="txtHouseno"  type="text" class="txt c1" />	</td>
+							<td><input id="txtHouseno"  type="text" class="txt c1 salb" />	</td>
 						</tr>
-						<tr>
+						<tr class="salb">
 							<td><span> </span><a id='lblAcccomp' class="lbl"> </a></td>
-							<td><input id="txtAcccomp"  type="text" class="txt c1" />	</td>
+							<td><input id="txtAcccomp"  type="text" class="txt c1 salb" />	</td>
 							<td><span> </span><a id='lblAccconn' class="lbl"> </a></td>
-							<td><input id="txtAccconn"  type="text" class="txt c1" />	</td>
+							<td><input id="txtAccconn"  type="text" class="txt c1 salb" />	</td>
 						</tr>
-						<tr>
+						<tr class="salb">
 							<td><span> </span><a id='lblAcctel' class="lbl"> </a></td>
-							<td><input id="txtAcctel"  type="text" class="txt c1" />	</td>
+							<td><input id="txtAcctel"  type="text" class="txt c1 salb" />	</td>
 						</tr>
-						<tr>
+						<tr class="salb">
 							<td><span> </span><a id='lblAccaddr' class="lbl"> </a></td>
-							<td colspan="3"><input id="txtAccaddr"  type="text" class="txt c1" />	</td>
+							<td colspan="3"><input id="txtAccaddr"  type="text" class="txt c1 salb" />	</td>
 						</tr>
-						-->
 						<tr class="obu">
 							<td><span> </span><a id='lblObu' class="lbl"> </a></td>
 							<td><input id="chkIsobu" type="checkbox" style="float:left;"/></td>

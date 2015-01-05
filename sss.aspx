@@ -72,10 +72,6 @@
 				q_gt('acomp', '', 0, 0, 0, "");
 				q_gt('part', '', 0, 0, 0, "");
 				q_gt('salm', '', 0, 0, 0, "");
-				q_gt('paytype', '', 0, 0, 0, "");
-				q_gt('payform', '', 0, 0, 0, "");
-				q_gt('paymark', '', 0, 0, 0, "");
-				q_gt('payremark', '', 0, 0, 0, "");
 
 				if (q_getPara('sys.comp').indexOf('祥興') > -1) {
 					$('#btnSsspart').show();
@@ -88,7 +84,6 @@
 					$('#btnSaladjust').hide();
 				}
 				
-
 				$('#txtNoa').change(function(e) {
 					$(this).val($.trim($(this).val()).toUpperCase());
 					if ($(this).val().length > 0) {
@@ -190,6 +185,10 @@
 				
 				//稅務相關按鈕-------------------------------------
 				if(q_getPara('sys.salb')=='1'){
+					q_gt('paytype', '', 0, 0, 0, "");
+					q_gt('payform', '', 0, 0, 0, "");
+					q_gt('paymark', '', 0, 0, 0, "");
+					q_gt('payremark', '', 0, 0, 0, "");
 					$('#btnTax').show();
 				}else{
 					$('#btnTax').hide();
@@ -227,24 +226,21 @@
                
                $('#combTypea').change(function(){
 					//處理內容
-					c_typeb=' @ ';
-					for (i=0;i<t_typeb.length;i++){
-						var typeb=t_typeb[i].split('	');
-						if(typeb[1]==$('#combTypea').val())
-							c_typeb=c_typeb+','+typeb[2]+"@"+typeb[3];
-					}
 					$('#combTypeb').text('');
 					$('#combTypec').text('');
+					
+					var c_typeb=' @ ';
+					for (i=0;i<t_typeb.length;i++){
+						if(t_typeb[i].noa==$('#combTypea').val())
+							c_typeb=c_typeb+','+t_typeb[i].inote+"@"+t_typeb[i].kind;
+					}
 					q_cmbParse("combTypeb", c_typeb);
 							
 					//處理內容
-					c_typec=' @ ';
+					var c_typec=' @ ';
 					for (i=0;i<t_typec.length;i++){
-						var typec=t_typec[i].split('	');
-						if(typec[0]==$('#combTypea').val()){
-							var item=typec[1].split('.');
-							c_typec=c_typec+','+item[0]+"@"+typec[1];
-						}
+						if(t_typec[i].payformno==$('#combTypea').val())
+							c_typec=c_typec+','+t_typec[i].noa+"@"+t_typec[i].noa+'.'+t_typec[i].mark;
 					}
 					q_cmbParse("combTypec", c_typec);
 				});
@@ -337,10 +333,7 @@
 				} /// end Switch
 			}
 			
-			//稅務資料暫時拿掉
-			var t_typep='',c_typep=' @ ';
-			var t_typea='',c_typea=' @ ',t_typeb='',c_typeb=' @ ',t_typec='',c_typec=' @ ';
-
+			var t_typeb=[],t_typec=[];
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'acomp':
@@ -356,39 +349,28 @@
 		                }
 		                break;
 					case 'paytype':
-					
-						q_gt('paytype', '', 0, 0, 0, "");
-						q_gt('payform', '', 0, 0, 0, "");
-						q_gt('paymark', '', 0, 0, 0, "");
-						q_gt('payremark', '', 0, 0, 0, "");
-						if (q_gfTxt=='Paytype.txt'){
-							t_typep = xmlString.split('\r\n');
-							//處理內容
-							for (i=0;i<t_typep.length;i++){
-								var typep=t_typep[i].split(';')[0];
-								c_typep=c_typep+','+typep.split('.')[0]+"@"+typep;
-							}
-							
-							q_cmbParse("cmbPtype", c_typep);
-							//$('#cmbPtype').val(abbm[q_recno].ptype)
-							q_gf('PAYFORM.txt', '');
-						}else if (q_gfTxt=='PAYFORM.txt'){
-							t_typea = xmlString.split('\r\n');
-							//處理內容
-							for (i=0;i<t_typea.length;i++){
-								var typea=replaceAll(t_typea[i],' ','').split(';')[0];
-								c_typea=c_typea+','+typea.split('.')[0]+"@"+typea;
-							}
-							
-							q_cmbParse("combTypea", c_typea);
-							q_gf('PAYREMARK.txt', '');
-						}else if (q_gfTxt=='PAYREMARK.txt'){
-							t_typeb = xmlString.split('\r\n');
-							q_gf('PAYMARK.txt', '');
-						}else if (q_gfTxt=='PAYMARK.txt'){
-							t_typec = xmlString.split('\r\n');
+						var as = _q_appendData("paytype", "", true);
+		                var t_item = " @ ";
+						for ( i = 0; i < as.length; i++) {
+							t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' +as[i].noa+'.'+as[i].typea;
 						}
-					
+						q_cmbParse("cmbPtype", t_item);
+						if (abbm[q_recno] != undefined)
+							$("#cmbPtype").val(abbm[q_recno].ptype);
+						break;
+					case 'payform':
+						var as = _q_appendData("payform", "", true);
+		                var t_item = " @ ";
+						for ( i = 0; i < as.length; i++) {
+							t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' +as[i].noa+'.'+ as[i].form;
+						}
+						q_cmbParse("combTypea", t_item);
+						break;
+					case 'paymark':
+						t_typec = _q_appendData("paymark", "", true);
+						break;
+					case 'payremark':
+						t_typeb = _q_appendData("payremark", "", true);
 						break;
 					case 'checkSssno_change':
 						var as = _q_appendData("sss", "", true);
