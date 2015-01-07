@@ -49,7 +49,7 @@
                 }
                 mainForm(1);
             }
-
+ 
             function mainPost() {
             	bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtMount2', 10, q_getPara('rc2.mountPrecision'), 1]
            						,['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1], ['txtMoney', 15, 0, 1], ['txtTotal', 15, 0, 1]
@@ -547,7 +547,7 @@
 						<td><input id="chkBrow.*" type="checkbox" /></td>
 						<td id="datea" style="text-align: center;">~datea</td>
 						<td id="tgg,4" style="text-align: center;">~tgg,4</td>
-						<td id="total,0,1" style="text-align: right;">~total,0,1</td>
+						<td id="total" style="text-align: right;">~total</td>
 					</tr>
 				</table>
 			</div>
