@@ -126,11 +126,14 @@
 				}
 				
 				if(q_getPara('sys.salb')=='1'){
-					q_gt('taxport', '', 0, 0, 0, "");
 					$('.salb').show();
 				}else{
 					$('.salb').hide();
 				}
+				
+				$('#btnAcompu').click(function () {
+					q_box("acompu.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtNoa').val() + "';"+r_accy+";" + q_cur, 'acompu', "95%", "95%", q_getMsg('popAcompu'));
+				});
 				
             }
             function display(){
@@ -200,16 +203,6 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
-                	case 'taxport':
-                		var as = _q_appendData("taxport", "", true);
-		                var t_item = " @ ";
-						for ( i = 0; i < as.length; i++) {
-							t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' +as[i].noa+'.'+as[i].taxport;
-						}
-						q_cmbParse("cmbTaxport", t_item);
-						if (abbm[q_recno] != undefined)
-							$("#cmbTaxport").val(abbm[q_recno].taxport);
-						break;
                 	case 'checkAcompno_change':
                 		var as = _q_appendData("acomp", "", true);
                         if (as[0] != undefined){
@@ -339,8 +332,6 @@
 					Unlock();
 					return;
 				}
-				
-				$('#txtTaxportname').val(replaceAll($('#cmbTaxport').find("option:selected").text(),$('#cmbTaxport').val()+'.',''));
         	
                 if(q_cur==1){
                 	t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
@@ -611,6 +602,10 @@
 							<td><input id="txtSerial"  type="text" class="txt c1" /></td>
 						</tr>
 						<tr>
+							<td><span> </span><a id='lblConn' class="lbl"> </a></td>
+							<td><input id="txtConn"  type="text" class="txt c1" /></td>
+						</tr>
+						<tr>
 							<td><span> </span><a id='lblTel' class="lbl"> </a></td>
 							<td><input id="txtTel"  type="text" class="txt c1" /></td>
 						</tr>
@@ -627,6 +622,10 @@
 							<td colspan="3"><input id="txtAddr_invo"  type="text" class="txt c1" />	</td>
 						</tr>
 						<tr>
+							<td><span> </span><a id='lblEmail' class="lbl"> </a></td>
+							<td colspan="3"><input id="txtEmail"  type="text" class="txt c1" /></td>
+						</tr>
+						<tr>
 							<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
 							<td colspan="3"><textarea id="txtMemo" cols="10" rows="5" style="width: 100%;height: 127px;"> </textarea></td>
 						</tr>
@@ -639,33 +638,8 @@
 						<tr>
 							<td><span> </span><a id='lblInsur_disaster' class="lbl"> </a></td>
 							<td><input id="txtInsur_disaster"  type="text" class="txt c1" /></td>
-						</tr>
-						<tr class="salb">
-							<td><span> </span><a id="lblTaxport" class="lbl"> </a></td>
-							<td>
-								<select id="cmbTaxport" class="txt c1 salb"> </select>
-								<input id="txtTaxportname"  type="hidden"/>
-							</td>
-						</tr>
-						<tr class="salb">
-							<td><span> </span><a id='lblTaxno' class="lbl"> </a></td>
-							<td><input id="txtTaxno"  type="text" class="txt c1 salb" />	</td>
-							<td><span> </span><a id='lblHouseno' class="lbl"> </a></td>
-							<td><input id="txtHouseno"  type="text" class="txt c1 salb" />	</td>
-						</tr>
-						<tr class="salb">
-							<td><span> </span><a id='lblAcccomp' class="lbl"> </a></td>
-							<td><input id="txtAcccomp"  type="text" class="txt c1 salb" />	</td>
-							<td><span> </span><a id='lblAccconn' class="lbl"> </a></td>
-							<td><input id="txtAccconn"  type="text" class="txt c1 salb" />	</td>
-						</tr>
-						<tr class="salb">
-							<td><span> </span><a id='lblAcctel' class="lbl"> </a></td>
-							<td><input id="txtAcctel"  type="text" class="txt c1 salb" />	</td>
-						</tr>
-						<tr class="salb">
-							<td><span> </span><a id='lblAccaddr' class="lbl"> </a></td>
-							<td colspan="3"><input id="txtAccaddr"  type="text" class="txt c1 salb" />	</td>
+							<td> </td>
+							<td><input id='btnAcompu' type="button" class='salb'/></td>
 						</tr>
 						<tr class="obu">
 							<td><span> </span><a id='lblObu' class="lbl"> </a></td>

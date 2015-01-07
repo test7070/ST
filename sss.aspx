@@ -185,19 +185,18 @@
 				
 				//稅務相關按鈕-------------------------------------
 				if(q_getPara('sys.salb')=='1'){
-					q_gt('paytype', '', 0, 0, 0, "");
 					q_gt('payform', '', 0, 0, 0, "");
 					q_gt('paymark', '', 0, 0, 0, "");
 					q_gt('payremark', '', 0, 0, 0, "");
 					$('#btnTax').show();
+					$('#btnSalbs').show();
 				}else{
 					$('#btnTax').hide();
+					$('#btnSalbs').hide();
 				}
 				
-				$('.tax').hide();
-				
 				$('#btnTax').click(function(e) {
-                    $('.tax').toggle();
+                    q_box("sssu.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtNoa').val() + "';"+r_accy+";" + q_cur, 'sssu', "95%", "95%", q_getMsg('popSssu'));
                 });
                 
                 $('#btnSalbs').click(function(e) {
@@ -311,6 +310,7 @@
 					sum();
 				});
                 //-----------------------------------------------------
+                
 			}
 			
 			function sum() {
@@ -348,16 +348,6 @@
 		                    	$("#cmbCno").val(abbm[q_recno].cno);
 		                }
 		                break;
-					case 'paytype':
-						var as = _q_appendData("paytype", "", true);
-		                var t_item = " @ ";
-						for ( i = 0; i < as.length; i++) {
-							t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' +as[i].noa+'.'+as[i].typea;
-						}
-						q_cmbParse("cmbPtype", t_item);
-						if (abbm[q_recno] != undefined)
-							$("#cmbPtype").val(abbm[q_recno].ptype);
-						break;
 					case 'payform':
 						var as = _q_appendData("payform", "", true);
 		                var t_item = " @ ";
@@ -520,6 +510,11 @@
 				}
 				if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
 					$('.it').css('text-align','left');
+					
+				if(q_getPara('sys.salb')=='1'){
+					$('#textCountry').val($('#cmbCountry').val());
+					$('#textTaxtreaty').val($('#cmbTaxtreaty').val());
+				}
 			}
 
 			function refreshBbm() {
@@ -920,20 +915,9 @@
 							<input id='btnSssr' type="button" />
 							<span> </span>
 							<input id='btnTax' type="button" />
+							<span> </span>
+							<input id='btnSalbs' type="button"/>
 						</td>
-					</tr>
-					<tr class='tax'>
-						<td><span> </span><a id="lblTaxno" class="lbl"> </a></td>
-						<td><input id="txtTaxno"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id="lblPtype" class="lbl"> </a></td>
-						<td><select id="cmbPtype" class="txt c1"> </select></td>
-						<td> </td>
-						<td><input id="chkIshouse" type="checkbox"/><a id='lblIshouse'> </a></td>
-					</tr>
-					<tr class='tax'>
-						<td><span> </span><a id="lblAddr_rent" class="lbl"> </a></td>
-						<td colspan="4"><input id="txtAddr_rent"  type="text"  class="txt c1"/></td>
-						<td><input id='btnSalbs' type="button" /></td>
 					</tr>
 				</table>
 			</div>
