@@ -1021,7 +1021,7 @@
 			<div class="dbbm">
 				<table class="tbbm" id="tbbm">
 					<tr style="height:1px;">
-						<td> </td>
+						<td><input type="text" style="display:none;" id="txtFinish"></td>
 						<td> </td>
 						<td> </td>
 						<td> </td>
@@ -1037,9 +1037,7 @@
 						<td class="td3"><span> </span><a id='lblOdate' class="lbl"> </a></td>
 						<td class="td4"><input id="txtOdate" type="text" class="txt c1"/></td>
 						<td class="td5"><span> </span><a id='lblDatea' class="lbl"> </a></td>
-						<td class="td6" colspan="2">
-							<input id="txtDatea" type="text" class="txt c1"/>
-						</td>
+						<td class="td6" colspan="2"><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td class="td8" align="right">
 							<input id="chkIsproj" type="checkbox"/>
 							<a id='lblIsproj' style="width: 50%;"> </a><span> </span>
