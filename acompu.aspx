@@ -377,6 +377,12 @@
 						<td><input id="txtAcctel"  type="text" class="txt c1" /></td>
 					</tr>
 					<tr >
+						<td><span> </span><a id='lblAccserial' class="lbl"> </a></td>
+						<td><input id="txtAccserial"  type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblAccemail' class="lbl"> </a></td>
+						<td><input id="txtAccemail"  type="text" class="txt c1" /></td>
+					</tr>
+					<tr >
 						<td><span> </span><a id='lblAccaddr' class="lbl"> </a></td>
 						<td colspan="3"><input id="txtAccaddr"  type="text" class="txt c1" /></td>
 					</tr>
