@@ -33,6 +33,112 @@
 		        if (Sys.opera) document.write('Opera: ' + Sys.opera);
 		        if (Sys.safari) document.write('Safari: ' + Sys.safari);*/
 		    });
+		    function backupData(){
+		    	var t_workj ={
+		            noa:$('#txtNoa').val(),
+		            site:$('#txtSite').val(),
+		            datea:$('#txtDatea').val(),
+		            odate:$('#txtOdate').val(),
+		            custno:$('#txtCustno').val(),
+		            cust:$('#txtCust').val(),
+		            nick:$('#txtNick').val(),
+		            tagcolor:$('#cmbTagcolor').val(),
+		            trantype:$('#cmbTrantype').val(),
+		            chktype:$('#txtChktype').val(),
+		            worker:$('#txtWorker').val(),
+		            worker2:$('#txtWorker2').val(),
+		            memo:$('#txtMemo').val(),
+		            ordeaccy:$('#txtOrdeaccy').val(),
+		            ordeno:$('#txtOrdeno').val(),
+		            mount:q_float('txtMount'),
+		            weight:q_float('txtWeight'),
+		            lengthb:q_float('txtLengthb'),
+		            tolerance:$('#txtTolerance').val(),
+		            trantype1:$('#mbTrantype1').val(),
+		            trantype2:$('#mbTrantype2').val()    
+		        }
+		        var t_workjs = new Array();
+		    	for(var i=0;i<q_bbsCount;i++){
+		    		t_workjs.push({
+		    			noa:$('#txtNoa_'+i).val(),
+			            noq:$('#txtNoq_'+i).val(),
+			            productno:$('#txtProductno_'+i).val(),
+			            product:$('#txtProduct_'+i).val(),
+			            lengthb:q_float('txtLengthb_'+i),
+			            mount:q_float('txtMount_'+i),
+			            weight:q_float('txtWeight_'+i),
+			            memo:$('#txtMemo_'+i).val(),
+			            picno:$('#txtPicno_'+i).val(),
+			            imgpara:$('#txtImgpara_'+i).val(),
+			            imgdata:$('#txtImgdata_'+i).val(),
+			            imgbarcode:$('#txtImgBarcode_'+i).val(),
+			            contno:$('#txtContno_'+i).val(),
+			            contnoq:$('#txtContnoq_'+i).val(),
+			            mech1:$('#txtMech1_'+i).val(),
+			            mech2:$('#txtMech2_'+i).val(),
+			            mech3:$('#txtMech3_'+i).val(),
+			            mech4:$('#txtMech4_'+i).val(),
+			            mech5:$('#txtMech5_'+i).val(),
+			            place1:$('#txtPlace1_'+i).val(),
+			            place2:$('#txtPlace2_'+i).val(),
+			            place3:$('#txtPlace3_'+i).val(),
+			            place4:$('#txtPlace4_'+i).val(),
+			            place5:$('#txtPlace5_'+i).val(),
+			            time1:$('#txtTime1_'+i).val(),
+			            time2:$('#txtTime2_'+i).val(),
+			            time3:$('#txtTime3_'+i).val(),
+			            time4:$('#txtTime4_'+i).val(),
+			            time5:$('#txtTime5_'+i).val(),
+			            paraa:q_float('txtParaa_'+i),
+			            parab:q_float('txtParab_'+i),
+			            parac:q_float('txtParac_'+i),
+			            parad:q_float('txtParad_'+i),
+			            parae:q_float('txtParae_'+i),
+			            paraf:q_float('txtParaf_'+i),
+			            worker1:$('#txtWorker1_'+i).val(),
+			            worker2:$('#txtWorker2_'+i).val(),
+			            worker3:$('#txtWorker3_'+i).val(),
+			            worker4:$('#txtWorker4_'+i).val(),
+			            worker5:$('#txtWorker5_'+i).val(),
+			            place:$('#txtPlace_'+i).val(),
+			            cmount:$('#txtCmount_'+i).val(),
+			            cweight:$('#txtCweight_'+i).val()
+		    		});
+		    	}
+		    	//console.log(JSON.stringify({bbm:t_workj,bbs:t_workjs}));
+		    	$.ajax({
+                    url: 'workjbk.aspx',
+                    type: 'POST',
+                    data: JSON.stringify({bbm:t_workj,bbs:t_workjs}),
+                    dataType: 'text',
+                    timeout: 60000,
+                    success: function(data){
+                    	if(data.length>0)
+                    		alert(data);
+                    },
+                    complete: function(){
+                    	              
+                    },
+                    error: function(jqXHR, exception) {
+                        var errmsg = this.url+' 異常。\n';
+                        if (jqXHR.status === 0) {
+                            alert(errmsg+'Not connect.\n Verify Network.');
+                        } else if (jqXHR.status == 404) {
+                            alert(errmsg+'Requested page not found. [404]');
+                        } else if (jqXHR.status == 500) {
+                            alert(errmsg+'Internal Server Error [500].');
+                        } else if (exception === 'parsererror') {
+                            alert(errmsg+'Requested JSON parse failed.');
+                        } else if (exception === 'timeout') {
+                            alert(errmsg+'Time out error.');
+                        } else if (exception === 'abort') {
+                            alert(errmsg+'Ajax request aborted.');
+                        } else {
+                            alert(errmsg+'Uncaught Error.\n' + jqXHR.responseText);
+                        }
+                    }
+                });	
+		    }
 
             q_tables = 't';
             var q_name = "workj";
@@ -402,6 +508,7 @@
             }
 
             function btnOk() {
+            	//backupData();
                 Lock(1, {
                     opacity : 0
                 });
@@ -932,10 +1039,10 @@
 					<td><span> </span><a id="lblPrint_d" style="float:right; color: blue; font-size: medium;"> </a></td>
 					<td colspan="4">
 						<select id="combPrint" style="font-size: medium;width:80%;">
-							<option value="barfe1-1.bat">白色</option>
+							<option value="barfe1-1.bat">白色、紫色</option>
 							<option value="barfe1-2.bat">綠色</option>
-							<option value="barfe1-3.bat">黃色</option>
-							<option value="barfe1-4.bat">藍色</option>
+							<option value="barfe1-3.bat">黃色、膚色</option>
+							<option value="barfe1-4.bat">藍色、桃紅色</option>
 						</select>
 					</td>
 					<td></td>
