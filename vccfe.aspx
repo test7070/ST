@@ -120,7 +120,33 @@
                 q_cmbParse("cmbTrantype", q_getPara('fe.trantype'));
                 var t_where = "where=^^ 1=1  group by post,addr^^";
                 q_gt('custaddr', t_where, 0, 0, 0, "");
-
+                
+				$('#btnFile').change(function(e){
+					event.stopPropagation(); 
+				    event.preventDefault();
+					file = $('#btnFile')[0].files[0];
+					if(file){
+						fr = new FileReader();
+					    fr.readAsDataURL(file);
+					    fr.onloadend = function(e){
+					    	t_result = (fr.result).replace(/(.*base64\,)(.*)/g,'$2');
+					    	t_result = window.atob(t_result).replace(/\r/g,',').replace(/\n/g,',');
+					    	t_result = t_result.replace(/[\,]+/g,',');
+					    	t_array = t_result.split(',');
+					    	while(q_bbsCount<t_array.length){
+					    		$("#btnPlus").click();
+					    	}
+					    	for(var i=0;i<q_bbsCount.length;i++){
+					    		$('#txtUno_'+i).val('');
+					    	}
+					    	for(var i=0;i<t_array.length;i++){
+					    		$('#txtUno_'+i).val(t_array[i]);
+					    		$('#txtUno_'+i).focusout();
+					    	}
+					    	$('#btnFile').val('');
+					    };
+					}
+				});
                 //限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
                 $('#txtMemo').change(function() {
                     if ($('#txtMemo').val().substr(0, 1) == '*')
@@ -697,7 +723,42 @@
                      default:
                      	try{
                      		t_para = JSON.parse(t_name);
-                     		if(t_para.action == 'checkprice'){
+                     		if(t_para.action=="data_workj"){
+                    			var as = _q_appendData("workj", "", true);
+                    			var ar = _q_appendData("workjs", "", true);
+		                		if (as[0] != undefined) {
+		                			var n = t_para.n;
+		                			var string = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:10,K:11,L:12,M:13,N:14,O:15,P:16,Q:17,R:18,S:19,T:20,U:21,V:22,W:23,X:24,Y:25,Z:26};
+		                			var t_noa = t_para.uno.substring(0,11);
+		                			var t_noq = t_para.uno.substring(12,15);
+									
+									//$('#txtCustno_'+n).val(as[0].custno);
+		                			//$('#txtCust_'+n).val(as[0].cust);	
+									for(var i=0;i<ar.length;i++){
+										if(ar[i].noq == t_noq){
+											$('#txtProductno_'+n).val(ar[i].productno);	
+				                			$('#txtProduct_'+n).val(ar[i].product);	
+				                			$('#txtLengthb_'+n).val(ar[i].lengthb);
+				                			t_cmount = ar[i].cmount.split(',');
+				                			t_cweight = ar[i].cweight.split(',');
+				                			$('#txtMemo').val()
+				                			$('#txtMount_'+n).val(t_cmount[string[t_para.uno.substring(17,18)]-1]);
+		                					$('#txtWeight_'+n).val(t_cweight[string[t_para.uno.substring(17,18)]-1]);
+		                					t_mechno = eval('ar[i].mech'+t_para.uno.substring(16,17));
+		                					$('#txtMechno_'+n).val(t_mechno);
+		                					for(var j=0;j<z_mech.length;j++){
+		                						if(z_mech[j].noa == t_mechno){
+		                							$('#txtMech_'+n).val(z_mech[j].mech);
+		                							$('#txtPrice_'+n).val(z_mech[j].price);
+		                							break;
+		                						}
+		                					}	
+		                					sum();                					
+											break;	
+										}
+									}		
+		                		}
+							}else if(t_para.action == 'checkprice'){
                      			var as = _q_appendData('view_ordes', '', true);
                      			if (as[0] != undefined) {
                      				t_vccprice = q_float('txtPrice_'+t_para.n);
@@ -853,6 +914,12 @@
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	$('#txtUno_'+i).focusout(function(e) {
+							var n = $(this).attr('id').replace('txtUno_', '');
+							var t_uno = $(this).val();
+							if(t_uno.length==19)
+								q_gt('workj', "where=^^noa='"+t_uno.substring(0,11)+"'^^", 0, 0, 0, JSON.stringify({action:"data_workj",n:n,uno:t_uno}));				
+						});
                         $('#txtProductno_' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
@@ -1071,10 +1138,12 @@
                     $('#combAddr').attr('disabled', 'disabled');
                     $('#btnOrdes').attr('disabled', 'disabled');
                     $('#combPay').attr('disabled', 'disabled');
+                    $('#btnFile').attr('disabled','disabled');
                 } else {
                     $('#combAddr').removeAttr('disabled');
                     $('#btnOrdes').removeAttr('disabled');
                     $('#combPay').removeAttr('disabled');
+                    $('#btnFile').removeAttr('disabled');
                 }
                 HiddenTreat();
                 //限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
@@ -1598,6 +1667,7 @@
 						</td>
 						<td><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
 						<td><input id="txtAccno" type="text" class="txt c1"/></td>
+						<td colspan="2" ><input type="file" id="btnFile" value="上傳"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblApv' class="lbl"> </a></td>
