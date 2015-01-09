@@ -61,6 +61,7 @@
 				q_gt('taxport', '', 0, 0, 0, "");
 				
 				q_cmbParse("cmbReason", ('').concat(new Array('  @無重複申報情形', '01@申報單位發現錯誤主動更正', '02@稽徵機關發現錯誤更正')));
+				q_cmbParse("cmbTax2type", ('').concat(new Array('1@逐張計算後再加總', '02@彙總後一次折算')));
             }
 
             function q_boxClose(s2) {
@@ -397,6 +398,10 @@
 						<td><input id="chkIslisted" type="checkbox"/> </td>
 						<td><span> </span><a id='lblIsfinancial' class="lbl"> </a></td>
 						<td><input id="chkIsfinancial" type="checkbox"/> </td>
+					</tr>
+					<tr >
+						<td><span> </span><a id='lblTax2type' class="lbl"> </a></td>
+						<td>	<select id="cmbTax2type" class="txt c1"> </select></td>
 					</tr>
 				</table>
 			</div>
