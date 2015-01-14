@@ -233,12 +233,21 @@
 	                		Unlock(1);
                 			return;
 	                	}else{
-	                		if (confirm("已選擇 "+t_printCount+" 筆共"+t_printPage+" 張條碼，是否列印?") ) {
+	                		var vv = prompt("已選擇 "+t_printCount+" 筆共"+t_printPage+" 張條碼，請輸入列印範圍", "1-"+t_printPage);
+							if (vv != null) {
+								console.log($('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()+','+vv.replace('-',','));
+							    q_func( 'barfe.gen1', $('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()+','+vv.replace('-',',')); 
+							}else{
+	                			Unlock(1);
+	                			return;
+	                		}
+	                		/*if (confirm("已選擇 "+t_printCount+" 筆共"+t_printPage+" 張條碼，是否列印?") ) {
+	                			console.log(t_noq);
 	                			q_func( 'barfe.gen1', $('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()); 
 	                		}else{
 	                			Unlock(1);
 	                			return;
-	                		}
+	                		}*/
 	                	}
                 	}
                 });
