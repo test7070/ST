@@ -62,6 +62,10 @@
 				
 				q_cmbParse("cmbReason", ('').concat(new Array('  @無重複申報情形', '01@申報單位發現錯誤主動更正', '02@稽徵機關發現錯誤更正')));
 				q_cmbParse("cmbTax2type", ('').concat(new Array('1@逐張計算後再加總', '2@彙總後一次折算')));
+				q_cmbParse("cmbTypea", ('').concat(new Array('1@按期申報', '2@按月申報')));
+				q_cmbParse("cmbCode", ('').concat(new Array('0@單一機構報繳','1@總機構彙總報繳', '2@各單位分別申報')));
+				q_cmbParse("cmbApplytype", ('').concat(new Array('1@自行申報', '2@委託申報')));
+				
             }
 
             function q_boxClose(s2) {
@@ -400,6 +404,26 @@
 						<td><input id="chkIsfinancial" type="checkbox"/> </td>
 					</tr>
 					<tr >
+						<td><span> </span><a id='lblTypea' class="lbl"> </a></td>
+						<td>	<select id="cmbTypea" class="txt c1"> </select></td>
+						<td><span> </span><a id='lblCode' class="lbl"> </a></td>
+						<td>	<select id="cmbCode" class="txt c1"> </select></td>
+					</tr>
+					<tr >
+						<td><span> </span><a id='lblApplytype' class="lbl"> </a></td>
+						<td>	<select id="cmbApplytype" class="txt c1"> </select></td>
+						<td><span> </span><a id='lblApplyname' class="lbl"> </a></td>
+						<td><input id="txtApplyname"  type="text" class="txt c1" /></td>
+					</tr>
+					<tr >
+						<td><span> </span><a id='lblApplyid' class="lbl"> </a></td>
+						<td>	<select id="txtApplyid" class="txt c1"> </select></td>
+						<td><span> </span><a id='lblApplytel' class="lbl"> </a></td>
+						<td><input id="txtApplytel"  type="text" class="txt c1" /></td>
+					</tr>
+					<tr >
+						<td><span> </span><a id='lblApplyno' class="lbl"> </a></td>
+						<td>	<select id="txtApplyno" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblTax2type' class="lbl"> </a></td>
 						<td>	<select id="cmbTax2type" class="txt c1"> </select></td>
 					</tr>
