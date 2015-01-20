@@ -106,6 +106,7 @@
             function btnIns() {
                 _btnIns();
                 $('#txtLcno').focus();
+                $('#cmbTypea').attr('disabled','disabled').val('1');
             }
 
             function btnModi() {
@@ -113,6 +114,7 @@
                     return;
                 _btnModi();
                 $('#txtLcno').focus();
+                $('#cmbTypea').attr('disabled','disabled').val('1');
             }
 
             function btnPrint() {
@@ -419,7 +421,13 @@
 						<td><span> </span><a id='lblApplyid' class="lbl"> </a></td>
 						<td>	<select id="txtApplyid" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblApplytel' class="lbl"> </a></td>
-						<td><input id="txtApplytel"  type="text" class="txt c1" /></td>
+						<td>
+							<input id="txtApplyarea"  type="text" class="txt c1" style="width: 20%;" />
+							<a style="float: left;">-</a>
+							<input id="txtApplytel"  type="text" class="txt c1" style="width: 50%;"/>
+							<a style="float: left;">#</a>
+							<input id="txtApplyext"  type="text" class="txt c1" style="width: 20%;"/>
+						</td>
 					</tr>
 					<tr >
 						<td><span> </span><a id='lblApplyno' class="lbl"> </a></td>
