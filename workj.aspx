@@ -236,7 +236,14 @@
 	                		var vv = prompt("已選擇 "+t_printCount+" 筆共"+t_printPage+" 張條碼，請輸入列印範圍", "1-"+t_printPage);
 							if (vv != null) {
 								console.log($('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()+','+vv.replace('-',','));
-							    q_func( 'barfe.gen1', $('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()+','+vv.replace('-',',')); 
+							    var patt = /^\d+\-\d+$/;
+							    if(patt.test(vv))
+							    	q_func( 'barfe.gen1', $('#txtNoa').val()+',,'+t_noq+','+$('#combPrint').val()+','+vv.replace('-',',')); 
+								else{
+									alert('列印範圍輸入錯誤!');
+									Unlock(1);
+	                				return;
+								}
 							}else{
 	                			Unlock(1);
 	                			return;
