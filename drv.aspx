@@ -107,7 +107,7 @@
                         string+='<td id="orde_worker'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
                         string+='<td id="orde_noa'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
                         string+='<td id="orde_odate'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="orde_enda'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="orde_enda'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+'"><input class="orde_btn" id="btnEnda_'+i+'" type="button" value="."" style=" font-weight: bold;" /></td>';
                         string+='</tr>';
                     }
                     string+='</table>';
@@ -153,6 +153,16 @@
                         var t_where="where=^^ordeno='"+$('#orde_noa'+n).text()+"' ^^";
 						q_gt('workj', t_where, 0, 0, 0,'show_workjs', r_accy);
 						$('#workjs').html('');
+                    });
+                    
+                    //結案
+                    $('.orde_btn').click(function(e) {
+                        //顯示BBS的資料
+                        var n=$(this).attr('id').replace('btnEnda_','')
+                        orde_n=n;
+                        if(confirm("確定要結案?")){
+                        	q_func('qtxt.query.ordeenda', 'drv.txt,ordeenda,'+$('#orde_noa'+n).text()+';'+r_accy+';'+r_userno+';'+r_name);
+                        }
                     });
                     
                     $('.orde_chk_vcce').click(function(e) {
@@ -356,7 +366,7 @@
                             $('#orde_worker' + i).html(this.data[n+i]['worker']);  
                             $('#orde_noa' + i).html(this.data[n+i]['noa']);
                             $('#orde_odate' + i).html(this.data[n+i]['odate']);
-                            $('#orde_enda' + i).html(this.data[n+i]['enda']="false"?'N':'Y');
+                            //$('#orde_enda' + i).html(this.data[n+i]['enda']="false"?'N':'Y');
                             $('#textHandle_'+i).val('');
                             $('#textHandle2_'+i).val('');
                             //理貨員寫入
@@ -387,7 +397,7 @@
                             $('#orde_worker' + i).html('');
                             $('#orde_noa' + i).html('');
                             $('#orde_odate' + i).html('');
-                            $('#orde_enda' + i).html('');
+                            //$('#orde_enda' + i).html('');
                             //理貨員寫入
                             $('#textHandle_'+i).val('');
                             $('#textHandle2_'+i).val('');
@@ -719,7 +729,7 @@
 	                    string+='</tr>';
 	                    
 	                    var t_color = ['DarkBlue','DarkRed'];
-	                    var workvs_uno_where='';
+	                    var workvs_uno_where=' 1=0 ';
 	                    for(var i=0;i<workjs.length;i++){
 	                        string+='<tr id="workjs_tr'+i+'">';
 	                        string+='<td style="text-align: center; font-weight: bolder; color:black;">'+(i+1)+'</td>';
@@ -848,6 +858,12 @@
                 	case 'qtxt.query.drv2vcce':
                 		alert("已轉至派車單!!");
 						var t_where = "1=1 and isnull(enda,'0')!='1' and isnull(cancel,'0')!='1'";
+	                    t_where="where=^^"+t_where+"^^";
+	                    Lock();
+						q_gt('view_orde', t_where, 0, 0, 0,'aaa', r_accy);
+                	break;
+                	case 'qtxt.query.ordeenda':
+                		var t_where = "1=1 and isnull(enda,'0')!='1' and isnull(cancel,'0')!='1'";
 	                    t_where="where=^^"+t_where+"^^";
 	                    Lock();
 						q_gt('view_orde', t_where, 0, 0, 0,'aaa', r_accy);
