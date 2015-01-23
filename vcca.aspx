@@ -287,6 +287,8 @@
 			function btnPrint() {
 				if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1){
 					q_box('z_vccap_it.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
+				}else if(q_getPara('sys.comp').indexOf('鉅昕') > -1){
+					q_box("z_vccap_fe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'workj', "95%", "95%", m_print);
 				} else {
 					q_box('z_vcca.aspx?;;;' + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 				}
