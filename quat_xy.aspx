@@ -345,7 +345,7 @@
 				if (q_cur > 0 && q_cur < 4)
 					return;
 
-				q_box('quat_s.aspx', q_name + '_s', "500px", "410px", q_getMsg("popSeek"));
+				q_box('quat_xy_s.aspx', q_name + '_s', "500px", "410px", q_getMsg("popSeek"));
 			}
 
 			function combPay_chg() {
