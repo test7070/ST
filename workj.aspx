@@ -415,7 +415,7 @@
 						$('#txtPicno_'+i).val(bbs[i].picno);
 						//$('#txtImgdata_'+i).val(bbs[i].imgdata);
 						//$('#txtImgbarcode_'+i).val(bbs[i].imgbarcode);
-						createImg(i);
+						createImg(i);//產生圖片 ,若太多筆要等一下
                 	}
                 
                 });
