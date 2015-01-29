@@ -43,7 +43,7 @@
                 bbsKey = ['noa', 'noq'];
                 bbtKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt('mech', "", 0, 0, 0, 'mech'); 
+                q_gt(q_name, q_content, q_sqlCount, 1);
             });
 
             function main() {
@@ -58,7 +58,6 @@
                 q_mask(bbmMask);
                
                 $('#btnWorkj').click(function(e){
-                	
                 	
                 });
             }
@@ -77,62 +76,11 @@
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
-                	case 'mech':
-                		var as = _q_appendData("mech", "", true);
-                		if (as[0] != undefined) {
-                			z_mech = new Array();
-	                		for(var i=0;i<as.length;i++){
-	                			z_mech.push({noa:as[i].noa,mech:as[i].mech,price:as[i].price})
-	                		}
-                		}
-                		q_gt(q_name, q_content, q_sqlCount, 1);
-                		break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
                         break;
                     default:
-                    	try{
-                    		var t_para = JSON.parse(t_name);
-                    		if(t_para.action=="data_workj"){
-                    			var as = _q_appendData("workj", "", true);
-                    			var ar = _q_appendData("workjs", "", true);
-		                		if (as[0] != undefined) {
-		                			var n = t_para.n;
-		                			var string = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:10,K:11,L:12,M:13,N:14,O:15,P:16,Q:17,R:18,S:19,T:20,U:21,V:22,W:23,X:24,Y:25,Z:26};
-		                			var t_noa = t_para.uno.substring(0,11);
-		                			var t_noq = t_para.uno.substring(12,15);
-									
-									$('#txtCustno_'+n).val(as[0].custno);
-		                			$('#txtCust_'+n).val(as[0].cust);	
-									for(var i=0;i<ar.length;i++){
-										if(ar[i].noq == t_noq){
-											$('#txtProductno_'+n).val(ar[i].productno);	
-				                			$('#txtProduct_'+n).val(ar[i].product);	
-				                			$('#txtLengthb_'+n).val(ar[i].lengthb);
-				                			t_cmount = ar[i].cmount.split(',');
-				                			t_cweight = ar[i].cweight.split(',');
-				                			$('#txtMemo').val()
-				                			$('#txtMount_'+n).val(t_cmount[string[t_para.uno.substring(17,18)]-1]);
-		                					$('#txtWeight_'+n).val(t_cweight[string[t_para.uno.substring(17,18)]-1]);
-		                					t_mechno = eval('ar[i].mech'+t_para.uno.substring(16,17));
-		                					$('#txtMechno_'+n).val(t_mechno);
-		                					for(var j=0;j<z_mech.length;j++){
-		                						if(z_mech[j].noa == t_mechno){
-		                							$('#txtMech_'+n).val(z_mech[j].mech);
-		                							$('#txtPrice_'+n).val(z_mech[j].price);
-		                							break;
-		                						}
-		                					}	
-		                					sum();                					
-											break;	
-										}
-									}		
-		                		}
-							}
-                    	}catch(e){
-                    		
-                    	}
                         break;
                 }
             }
@@ -258,19 +206,6 @@
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
 
-                /*for(var i=0;i<q_bbsCount;i++){
-                	for(var j=0;j<z_mech.length;j++){
-                		if($('#txtMechno_'+i).val()==z_mech[j].noa){
-                			$('#txtPrice_'+i).val(z_mech[j].price);
-                		}
-                	}
-                	t_weights = q_float('txtWeight_'+i);
-                	t_pmounts = q_float('txtPmount_'+i);  	
-                	t_avgkg = t_pmounts==0?0:round(q_div(t_weights,t_pmounts),2);
-                          
-                	$('#txtAvgkg_'+i).val(t_avgkg);
-                }*/
-                
             }
 
             function q_appendData(t_Table) {
@@ -590,7 +525,7 @@
 						</td>
 						<td><input class="txt num" id="txtLengthb..*" type="text" style="width:95%;" title=""/></td>
 						<td><input class="txt num" id="txtMount..*" type="text" style="width:95%;" title=""/></td>
-						<td><input class="txt" id="txtCsplit..*" type="text" style="width:95%;" title=""/></td>
+						<td><input class="txt" id="txtSize..*" type="text" style="width:95%;" title=""/></td>
 						<td><input class="txt num" id="txtWaste..*" type="text" style="width:95%;" title=""/></td>
 					</tr>
 				</tbody>
