@@ -33,7 +33,7 @@
 			brwNowPage = 0;
 			brwKey = 'Datea';
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
+				['txtProductno_', '', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', ''],
 				/*['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,serial,email,salesno,sales'
 				, 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtPay,txtMemo2,txtSalesno,txtSales', 'cust_b.aspx'],*/
 				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp,salesno,sales'
@@ -196,6 +196,17 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'ucaucc':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0)
+								return;
+							$('#txtProductno_'+b_seq).val(b_ret[0].noa);
+							$('#txtProduct_'+b_seq).val(b_ret[0].product);
+							$('#txtUnit_'+b_seq).val(b_ret[0].unit);
+							$('#txtSpec_'+b_seq).val(b_ret[0].spec);
+						}
+						break;
 					case q_name + '_s':
 						if(issales && s2[1]!=undefined)
 							s2[1]="where=^^"+replaceAll(replaceAll(s2[1],'where=^^',''),'^^','')+" and salesno='"+r_userno+"' "+"^^";
@@ -400,6 +411,14 @@
 							AutoNo3();
 						});
 						
+						$('#btnProduct_' + j).click(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							t_where = "(len(noa)=5 or left(noa,5)='" + $('#txtCustno').val().substr(0,5) + "')";
+							q_box("ucaucc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ucaucc', "45%", "", "");
+						});
+						
 						$('#txtProduct_' + j).change(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
@@ -433,6 +452,12 @@
 							b_seq = t_IdSeq;
 							
 							$('#txtClassa_'+b_seq).val($('#combClassa_'+b_seq).val());
+							if($('#combClassa_'+b_seq).val()=='印刷'){
+								//非該客戶的印刷品
+								if ($('#txtProductno_'+b_seq).val().substr(0,5)!=$('#txtCustno').val().substr(0,5)){
+									$('#txtProductno_'+b_seq).val('');
+								}
+							}
 							
 							var t_class=$.trim($('#combClassa_'+b_seq).val());
 							if(t_class.length>0 &&(q_cur==1 || q_cur==2)){

@@ -265,6 +265,7 @@
                 _btnIns();
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
+                $('#txtBday').val(dec(q_getPara('ordc.prein')));
                 $('#txtWorkgno').focus();
             }
 

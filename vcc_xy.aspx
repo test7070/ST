@@ -495,9 +495,9 @@
 							if(dec(as[0].stkmount)==0){
 								alert("無寄庫量，不得寄出貨!!");
 								$('#txtTranmoney3_' + b_seq).val(0);
-							}else if (dec($('#txtTranmoney3_' + b_seq).val())>dec(as[i].stkmount)){
+							}else if (dec($('#txtTranmoney3_' + b_seq).val())>dec(as[0].stkmount)){
 								alert("【"+q_getMsg('lblTranmoney3_s')+"】不得大於【寄庫量】!!");
-								$('#txtTranmoney3_' + b_seq).val(dec(as[i].stkmount));
+								$('#txtTranmoney3_' + b_seq).val(dec(as[0].stkmount));
 							}
 						}else{
 							alert("無寄庫量，不得寄出貨!!");

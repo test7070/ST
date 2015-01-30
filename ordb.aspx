@@ -425,6 +425,11 @@
 				product_change();
 				if (abbm[q_recno] != undefined)
 					loadCustAddr(abbm[q_recno].tggno);
+					
+				if (q_getPara('sys.project').toUpperCase()=='XY'){
+					$('#txtSalesno').val(r_userno);
+					$('#txtSales').val(r_name);
+				}
 			}
 
 			function btnModi() {
