@@ -15,7 +15,7 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			var q_name = 'workjs', t_bbsTag = 'tbbs', t_content = " ", afilter = [], bbsKey = ['noa'], as;
-			var t_sqlname = 'orde_load';
+			var t_sqlname = 'workjs_load';
 			t_postname = q_name;
 			brwCount = -1;
 			brwCount2 = 0;
