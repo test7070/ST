@@ -20,7 +20,7 @@
 			var q_name = "quat";
 			var decbbs = ['price', 'weight', 'mount', 'total', 'dime', 'width', 'lengthb', 'c1', 'notv', 'theory'];
 			var decbbm = ['money', 'tax', 'total', 'weight', 'floata', 'mount', 'price', 'totalus'];
-			var q_readonly = ['txtNoa','txtWorker', 'txtAcomp', 'txtSales', 'txtWorker2','txtMoney','txtTotal','txtTotalus'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtAcomp', 'txtSales', 'txtWorker2','txtMoney','txtTotal','txtTotalus','txtComp'];
 			var q_readonlys = ['txtNo3','txtTotal'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -1093,7 +1093,7 @@
 					<tr>
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
 						<td align="center" style="width:15%"><a id='vewOdate'> </a></td>
-						<td align="center" style="width:15%"><a id='vewDatea'> </a></td>
+						<td align="center" style="width:15%">有效日期</td>
 						<td align="center" style="width:20%"><a id='vewNoa'> </a></td>
 						<td align="center" style="width:45%"><a id='vewComp'> </a></td>
 					</tr>
