@@ -294,6 +294,24 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'ucctgg':
+						var as = _q_appendData("ucctgg", "", true);
+						var ass = _q_appendData("ucctggs", "", true);
+						var mount=dec($('#txtMount_'+b_seq).val())==0?1:dec($('#txtMount_'+b_seq).val());
+						if (as[0] != undefined) {
+							for ( var i = 0; i < ass.length; i++) {
+								ass[i].dmoumt=q_sub(mount,dec(ass[i].mount));
+								if(ass[i].dmoumt<0){
+									ass.splice(i, 1);
+	                                i--;
+								}
+							}
+							ass.sort(function(a,b){return a.dmoumt-b.dmoumt;})
+							if (ass[0] != undefined) {
+								q_tr('txtPrice_'+b_seq,ass[0].price);
+							}
+						}
+					break;
 					case 'check_accu':
 						var bbs_total=0,accu_total=0,ordb_total=0;
 						var as = _q_appendData("accu", "", true);
@@ -623,7 +641,19 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#txtProductno1_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
 						$('#txtMount_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtProductno1_'+b_seq).val()) &&!emp($('#txtTggno').val())){
+								var t_where =" tggno='"+$('#txtTggno').val()+"' and productno='" + $('#txtProductno1_'+b_seq).val() + "'";
+								q_gt('ucctgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "ucctgg");
+							}
 							sum();
 						});
 						$('#txtPrice_' + j).change(function() {
@@ -727,6 +757,12 @@
 
 			function q_popPost(id) {
 				switch (id) {
+					case 'txtProductno1_':
+						if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtProductno1_'+b_seq).val()) &&!emp($('#txtTggno').val())){
+							var t_where =" tggno='"+$('#txtTggno').val()+"' and productno='" + $('#txtProductno1_'+b_seq).val() + "'";
+							q_gt('ucctgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "ucctgg");
+						}
+						break;
 					case 'txtTggno':
 						loadCustAddr($.trim($('#txtTggno').val()));
 						break;
