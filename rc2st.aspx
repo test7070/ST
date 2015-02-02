@@ -112,11 +112,20 @@
 						t_weights = q_float('txtWeight_' + j);
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
-					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+					
+					
+					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+						//批   裕承隆  是拿來當運費的單位   不能用
 						t_moneys = q_mul(t_prices, t_weights);
 					} else {
 						t_moneys = q_mul(t_prices, t_mounts);
 					}
+					console.log(t_styles == '' && t_unos == '' && t_dimes == 0);
+					console.log(t_unit);
+					console.log(t_prices);
+					console.log(t_weights);
+					console.log(t_moneys);
+					
 					if (t_float == 0) {
 						t_moneys = round(t_moneys, 0);
 					} else {
