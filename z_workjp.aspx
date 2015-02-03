@@ -98,16 +98,25 @@
 	            }else{
 	            	$('#txtNoa').val(t_para.noa);
 	            }
-                
+                $('#btnOk').hide();
+        		$('#btnOk2').click(function(e){
+               		q_func( 'barfe.genBmp1', $('#txtNoa').val());	
+               		$('#btnOk2').val('圖片產生中，請稍後...').width(100).attr('disabled','disabled');
+        		});
             }
 
-			function q_boxClose(s2) {
-            	
-			}
-            
-			function q_gtPost(s2) {
-            	
-			}
+			function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'barfe.genBmp1':
+                		$('#btnOk2').val('查詢').width(50).removeAttr('disabled');
+                		$('#btnOk').click();
+                		break;
+                    default:
+                        break;
+                }
+            }
+			//function q_boxClose(s2) {}
+			function q_gtPost(s2) {}
 		</script>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -120,6 +129,7 @@
 				<div id="q_report"> </div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
+				<input type="button" id="btnOk2" style="float:left;font-size:16px;font-weight: bold;color: blue;cursor: pointer;width:50px;height:30px;" value="查詢"/>
 				<!--#include file="../inc/print_ctrl.inc"-->
 			</div>
 		</div>
