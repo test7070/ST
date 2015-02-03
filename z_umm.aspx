@@ -202,8 +202,8 @@
 					//selectbox.attachEvent('onchange',combPay_chg);
 					//selectbox.onchange="combPay_chg";
 					tmp.parentNode.appendChild(selectbox, tmp);
-					q_cmbParse("combPay", '全部,' + q_getPara('vcc.paytype'));
-					$('#txtPaytype').val('全部');
+					q_cmbParse("combPay", '@全部,' + q_getPara('vcc.paytype').substr(1));
+					$('#txtPaytype').val('');
 	
 					$('#combPay').change(function() {
 						var cmb = document.getElementById("combPay")
