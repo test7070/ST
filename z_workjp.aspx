@@ -100,8 +100,16 @@
 	            }
                 $('#btnOk').hide();
         		$('#btnOk2').click(function(e){
-               		q_func( 'barfe.genBmp1', $('#txtNoa').val());	
-               		$('#btnOk2').val('圖片產生中，請稍後...').width(100).attr('disabled','disabled');
+        			switch($('#q_report').data('info').radioIndex) {
+                        case 0:
+                            $('#btnOk').click();
+                            break;
+                        case 1:
+                            //EXCEL
+                            q_func( 'barfe.genBmp1', $('#txtNoa').val());	
+               				$('#btnOk2').val('圖片產生中，請稍後...').width(100).attr('disabled','disabled');
+                            break;
+                    }
         		});
             }
 
