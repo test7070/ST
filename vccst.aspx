@@ -332,6 +332,12 @@
 				$('#lblInvono').click(function() {
 					if ($('#txtInvono').val().length > 0)
 						q_pop('txtInvono', "vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtInvono').val() + "';" + r_accy, 'vcca', 'noa', 'datea', "95%", "95%px", q_getMsg('lblInvono'), true);
+					else{
+						
+						var t_where = "where=^^ vccno='" + $('#txtNoa').val() + "' ^^";
+						console.log(t_where);
+						q_gt('vccat', t_where, 0, 0, 0, "");						
+					}
 				});
 
 				if (isinvosystem) {
@@ -437,6 +443,23 @@
 			var AddRet = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
+					case 'vccat':
+						var as = _q_appendData("vccat", "", true);
+						if (as[0] != undefined) {
+							var vccano = new Array();
+							for(var i=0;i<as.length;i++){
+								if(vccano.indexOf(as[i].noa)<0){
+									vccano.push(as[i].noa);
+								}								
+							}
+							var t_noa = '';
+							for(var i=0;i<vccano.length;i++){
+								t_noa += (t_noa.length>0?" or ":"")+"noa='"+vccano[i]+"'";
+							}
+							if(t_noa.length>0)
+								q_box("vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_noa + ";" + r_accy, 'vcca', "95%", "95%", q_getMsg("popVcca"));
+						}
+						break;
 					case 'getVccatax':
 						var as = _q_appendData("vcca", "", true);
 						if (as[0] != undefined) {
