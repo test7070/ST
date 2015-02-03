@@ -333,9 +333,8 @@
 					if ($('#txtInvono').val().length > 0)
 						q_pop('txtInvono', "vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtInvono').val() + "';" + r_accy, 'vcca', 'noa', 'datea', "95%", "95%px", q_getMsg('lblInvono'), true);
 					else{
-						
 						var t_where = "where=^^ vccno='" + $('#txtNoa').val() + "' ^^";
-						console.log(t_where);
+						//console.log(t_where);
 						q_gt('vccat', t_where, 0, 0, 0, "");						
 					}
 				});
