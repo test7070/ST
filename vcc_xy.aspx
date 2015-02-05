@@ -29,9 +29,8 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'datea';
-
 			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,fax,zip_comp,addr_comp,zip_home,addr_home,paytype,trantype,salesno,sales,custno2,cust2', 'txtCustno,txtComp,txtNick,txtTel,txtFax,txtPost,txtAddr,txtPost2,txtAddr2,txtPaytype,cmbTrantype,txtSalesno,txtSales,txtCustno2,txtComp2,txtInvono', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,invoicetitle', 'txtCustno,txtComp,txtNick,txtTel', 'cust_b.aspx'],
 				['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
@@ -576,12 +575,24 @@
 							focus_addr = '';
 						}
 						break;
-					case 'cust_price':
+					case 'cust_detail':
 						var as = _q_appendData("cust", "", true);
 						if (as[0] != undefined) {
 							var t_invomemo=as[0].invomemo;
 							t_invomemo=t_invomemo.split('##');
 							$('#txtPrice').val(t_invomemo[5]);
+							
+							$('#txtFax').val(as[0].fax);
+							$('#txtPost').val(as[0].zip_comp);
+							$('#txtAddr').val(as[0].addr_comp);
+							$('#txtPost2').val(as[0].zip_home);
+							$('#txtAddr2').val(as[0].addr_home);
+							$('#txtPaytype').val(as[0].paytype);
+							$('#cmbTrantype').val(as[0].trantype);
+							$('#txtSalesno').val(as[0].salesno);
+							$('#txtSales').val(as[0].sales);
+							$('#txtCustno2').val(as[0].custno2);
+							$('#txtComp2').val(as[0].cust2);
 						}
 						break;
 					case 'btnDele':
@@ -1071,7 +1082,7 @@
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
-							q_gt('cust', t_where, 0, 0, 0, "cust_price");
+							q_gt('cust', t_where, 0, 0, 0, "cust_detail");
 						}
 						
 						if($('#txtComp').val().indexOf('現銷')>-1){
