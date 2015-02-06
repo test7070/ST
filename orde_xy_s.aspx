@@ -11,8 +11,8 @@
     <link href="../qbox.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
     var q_name = "orde_s";
-    var aPop = new Array(['txtCustno','','cust','noa,nick,invoicetitle','txtCustno,txtComp','cust_b.aspx'],
-            			 ['txtSalesno', '', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']);
+    var aPop = new Array(['txtCustno','','cust','noa,nick,invoicetitle','txtCustno,txtComp',''],
+            			 ['txtSalesno', '', 'sss', 'noa,namea', 'txtSalesno,txtSales', '']);
     $(document).ready(function () {
         main();
     });         /// end ready
