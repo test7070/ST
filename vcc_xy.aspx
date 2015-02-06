@@ -727,7 +727,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
-				q_box('vcc_s.aspx', q_name + '_s', "500px", "600px", q_getMsg("popSeek"));
+				q_box('vcc_xy_s.aspx', q_name + '_s', "500px", "600px", q_getMsg("popSeek"));
 			}
 
 			function combPay_chg() {
@@ -1085,11 +1085,11 @@
 							q_gt('cust', t_where, 0, 0, 0, "cust_detail");
 						}
 						
-						if($('#txtComp').val().indexOf('現銷')>-1){
-							$('#txtSalesno').attr('disabled', 'disabled');
+						$('#txtSalesno').attr('disabled', 'disabled');
+						/*if($('#txtComp').val().indexOf('現銷')>-1){
 						}else{
 							$('#txtSalesno').removeAttr('disabled');
-						}
+						}*/
 						
 						break;
 					case 'txtProductno_':
