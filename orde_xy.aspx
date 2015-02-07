@@ -61,6 +61,62 @@
 				}
 				mainForm(1);
 			}
+			
+			function currentData() {
+			}
+
+			currentData.prototype = {
+				data : [],
+				exclude : ['chkEnda','txtWorker','txtWorker2'], //bbm
+				excludes : ['chkEnda'], //bbs
+				copy : function() {
+					this.data = new Array();
+					for (var i in fbbm) {
+						var isExclude = false;
+						for (var j in this.exclude) {
+							if (fbbm[i] == this.exclude[j]) {
+								isExclude = true;
+								break;
+							}
+						}
+						if (!isExclude) {
+							this.data.push({
+								field : fbbm[i],
+								value : $('#' + fbbm[i]).val()
+							});
+						}
+					}
+					//bbs
+					for (var i in fbbs) {
+						for (var j = 0; j < q_bbsCount; j++) {
+							var isExcludes = false;
+							for (var k in this.excludes) {
+								if (fbbs[i] == this.excludes[k]) {
+									isExcludes = true;
+									break;
+								}
+							}
+							if (!isExcludes) {
+								this.data.push({
+									field : fbbs[i] + '_' + j,
+									value : $('#' + fbbs[i] + '_' + j).val()
+								});
+							}
+						}
+					}
+				},
+				/*貼上資料*/
+				paste : function() {
+					for (var i in this.data) {
+						$('#' + this.data[i].field).val(this.data[i].value);
+					}
+					if(emp($('#txtPostname').val())){
+						$('#txtPostname').val($('#txtNoa').val());
+					}
+					
+				}
+			};
+			var curData = new currentData();
 
 			function sum() {
 				var t1 = 0, t_unit, t_mount, t_weight = 0;
@@ -1095,7 +1151,12 @@
 			}
 
 			function btnIns() {
+				if ($('#checkCopy').is(':checked'))
+					curData.copy();
 				_btnIns();
+				if ($('#checkCopy').is(':checked'))
+					curData.paste();
+				copy_field();
 				//$('#chkIsproj').attr('checked', true);
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtCno').val(z_cno);
@@ -1111,6 +1172,7 @@
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
+				copy_field();
 				$('#txtCustno').focus();
 
 				if (!emp($('#txtCustno').val())) {
@@ -1200,6 +1262,8 @@
 					$('#btnPlusCust').hide();
 				}
 				if (t_para) {
+					$('#lblAcomp').show();$('#lblAcompx').hide();
+					$('#lblCust').show();$('#lblCustx').hide();
 					$('#btnOrdei').removeAttr('disabled');
 					$('#combAddr').attr('disabled', 'disabled');
 					$('#txtOdate').datepicker( 'destroy' );
@@ -1269,6 +1333,7 @@
 						$('#combGroupbno_'+j).removeAttr('disabled');
 						$('#combClassa_'+j).removeAttr('disabled');
 					}
+					copy_field();
 				}
 				
 				if(emp($('#txtOrdbno').val()) && q_cur<1 && q_cur>2){
@@ -1279,6 +1344,38 @@
 					$('#lblOrdbno').show();
 				}
 					
+			}
+			
+			function copy_field() {
+				if(!emp($('#txtPostname').val()) && (q_cur==1||q_cur==2) ){
+					for(var i=0 ;i<fbbm.length;i++){
+						if(!(fbbm[i]=='txtOdate' || fbbm[i]=='cmbStype' || fbbm[i]=='txtCustorde' || fbbm[i]=='txtMemo'
+						|| fbbm[i]=='txtAddr2' || fbbm[i]=='txtPost2' || fbbm[i]=='cmbTaxtype'
+						|| fbbm[i]=='chkIsproj' || fbbm[i]=='chkEnda' || fbbm[i]=='chkCancel'
+						|| fbbm[i]=='cmbCoin' || fbbm[i]=='txtFloata' 	))
+							$('#'+fbbm[i]).attr('disabled', 'disabled');
+					}
+					$('#lblAcomp').hide();
+					$('#lblAcompx').text($('#lblAcomp').text()).show();
+					$('#lblCust').hide();
+					$('#lblCustx').text($('#lblCust').text()).show();
+					$('#btnPlusCust').hide();
+					$('#lblAcomp').hide();
+					$('#lblCust').hide();
+					$('#combPaytype').attr('disabled', 'disabled');
+					$('#btnQuat').attr('disabled', 'disabled');
+					$('#btnPlus').attr('disabled', 'disabled');
+					
+					for(var j=0 ;j<q_bbsCount;j++){
+						for(var i=0 ;i<fbbs.length;i++){
+							if(!(fbbs[i]=='txtMount' || fbbs[i]=='txtMemo' || fbbs[i]=='txtDatea'))
+								$('#'+fbbs[i]+'_'+j).attr('disabled', 'disabled');
+						}
+						$('#btnProduct_'+j).attr('disabled', 'disabled');
+						$('#combGroupbno_'+j).attr('disabled', 'disabled');
+						$('#combClassa_'+j).attr('disabled', 'disabled');
+					}
+				}
 			}
 
 			function btnMinus(id) {
@@ -1592,8 +1689,8 @@
 			<div class='dbbm'>
 				<table class="tbbm" id="tbbm" style="width: 872px;">
 					<tr class="tr1" style="height: 0px">
-						<td class="td1" style="width: 108px;"> </td>
-						<td class="td2" style="width: 108px;"> </td>
+						<td class="td1" style="width: 128px;"> </td>
+						<td class="td2" style="width: 88px;"> </td>
 						<td class="td3" style="width: 108px;"> </td>
 						<td class="td4" style="width: 108px;"> </td>
 						<td class="td5" style="width: 108px;"> </td>
@@ -1602,7 +1699,11 @@
 						<td class="td7" style="width: 108px;"> </td>
 					</tr>
 					<tr class="tr1">
-						<td class="td1"><span> </span><a id='lblOdate' class="lbl"> </a></td>
+						<td class="td1">
+							<input id="checkCopy" type="checkbox" style="float:left;"/>
+							<a id='lblCopy' class="lbl" style="float:left;"> </a>
+							<span> </span><a id='lblOdate' class="lbl"> </a>
+						</td>
 						<td class="td2"><input id="txtOdate" type="text" class="txt c1"/></td>
 						<td class="td3"><span> </span><a id='lblStype' class="lbl"> </a></td>
 						<td class="td4"><select id="cmbStype" class="txt c1"> </select></td>
@@ -1611,7 +1712,10 @@
 						<td class="td8" align="center"><input id="btnOrdei" type="button" /></td>
 					</tr>
 					<tr class="tr2">
-						<td class="td1"><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
+						<td class="td1"><span> </span>
+							<a id="lblAcomp" class="lbl btn"> </a>
+							<a id="lblAcompx" class="lbl btn" style="display: none;"> </a>
+						</td>
 						<td class="td2"><input id="txtCno" type="text" class="txt c1"/></td>
 						<td class="td3" colspan="2"><input id="txtAcomp" type="text" class="txt c1"/></td>
 						<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
@@ -1620,7 +1724,9 @@
 					</tr>
 					<tr class="tr3">
 						<td class="td1">
-							<span> </span><a id="lblCust" class="lbl btn"> </a>
+							<span> </span>
+							<a id="lblCust" class="lbl btn"> </a>
+							<a id="lblCustx" class="lbl btn" style="display: none;"> </a>
 							<input class="btn" id="btnPlusCust" type="button" value='+' style="font-weight: bold;float: right;" />
 						</td>
 						<td class="td2"><input id="txtCustno" type="text" class="txt c1"/></td>
@@ -1702,6 +1808,7 @@
 							<span> </span><a id='lblEnda'> </a>
 							<input id="chkCancel" type="checkbox"/>
 							<span> </span><a id='lblCancel'> </a>
+							<input id="txtPostname" type="hidden" />
 						</td>
 					</tr>
 					<tr class="tr11">

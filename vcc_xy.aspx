@@ -763,13 +763,27 @@
 						});
 						
 						$('#txtMount_' + i).focusout(function() {
-							if (q_cur == 1 || q_cur == 2)
+							if (q_cur == 1 || q_cur == 2){
+								var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
+								if (t_err.length > 0) {
+									alert(t_err);
+									$(this).val('');
+									return;
+								}
 								sum();
+							}
 						});
 						
 						$('#txtWidth_' + i).focusout(function() {
-							if (q_cur == 1 || q_cur == 2)
+							if (q_cur == 1 || q_cur == 2){
+								var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
+								if (t_err.length > 0) {
+									alert(t_err);
+									$(this).val('');
+									return;
+								}
 								sum();
+							}
 						});
 						
 						$('#txtProductno_' + i).change(function() {
@@ -780,6 +794,12 @@
 								alert("非正式產品編號，請聯絡專員轉正式產品編號!!");
 								$('#txtProduct_'+b_seq).val('');
 							}*/
+							var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
+							if (t_err.length > 0) {
+								alert(t_err);
+								$(this).val('');
+								return;
+							}
 							AutoNoq();
 						});
 						
@@ -812,7 +832,13 @@
 						$('#txtTranmoney2_' + i).change(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;								
+							b_seq = t_IdSeq;
+							var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
+							if (t_err.length > 0) {
+								alert(t_err);
+								$(this).val('');
+								return;
+							}
 							sum();
 							if(dec($('#txtTranmoney2_' + b_seq).val()) > dec($('#txtMount_' + b_seq).val())){
 								alert("【"+q_getMsg('lblTranmoney2_s')+"】不得大於【出貨"+q_getMsg('lblMount_s')+"】!!");
@@ -823,10 +849,16 @@
 						$('#txtTranmoney3_' + i).change(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;								
+							b_seq = t_IdSeq;
+							var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
+							if (t_err.length > 0) {
+								alert(t_err);
+								$(this).val('');
+								return;
+							}
 							sum();
 							//判斷寄出量是否大於寄庫量
-							if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_' + b_seq).val())){
+							if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_' + b_seq).val()) && dec($(this).val())!=0){
 								var t_where = "where=^^ custno='" + $('#txtCustno').val() + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' and storeno2='"+$('#txtStoreno2_' + b_seq).val() +"' ^^";
 								q_gt('vcc_xy_store2', t_where, 0, 0, 0, "check_store2", r_accy);
 							}
