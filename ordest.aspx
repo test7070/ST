@@ -1552,7 +1552,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 1660px;
+                width: 2000px;
             }
             .tbbs a {
                 font-size: medium;
@@ -1864,7 +1864,7 @@
                     <td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
                     <td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
                     <td align="center" style="width:50px;"><a id='lblOrdet_st'> </a></td>
-                    <td align="center" style="width:80px;"><a id='lblGemounts'> </a><br><a id='lblNotv'> </a></td>
+                    <td align="center" style="width:120px;"><a id='lblGemounts'> </a><br><a id='lblNotv'> </a></td>
                     <td align="center" style="width:120px;"><a id='lblDateas'> </a></td>
                     <td align="center" style="width:250px;"><a id='lblMemos'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblssale_st'> </a></td>
