@@ -47,6 +47,7 @@
 					$('#txtXnoa1').val(t_key[1]);
 					$('#txtXnoa2').val(t_key[1]);
 				}
+				$('#btnOk').click();
 			}
 
 			function q_boxClose(s2) {
