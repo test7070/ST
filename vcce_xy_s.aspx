@@ -15,8 +15,8 @@
 		<script type="text/javascript">
             var q_name = "vcce_xy_s";
             var aPop = new Array(
-				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-				['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx']
+				['txtSalesno', '', 'sss', 'noa,namea', 'txtSalesno,txtSales', ''],
+				['txtDriverno', '', 'sss', 'noa,namea', 'txtDriverno,txtDriver', '']
 			);
 
             $(document).ready(function() {

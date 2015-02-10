@@ -65,6 +65,10 @@
 					}, {
                         type : '6', //[13]
                         name : 'enddate'
+                    }, {
+                        type : '8', //[14]
+                        name : 'laststoein',
+                        value:'1@最後寄庫追蹤'.split(',')
                     }]
                 });
                 q_popAssign();

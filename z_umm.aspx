@@ -59,6 +59,19 @@
 			var z_coin='';
 			function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'sss_issales_xy':
+                		var as = _q_appendData("sss", "", true);
+                		if (as[0] != undefined) {
+                			if(as[0].issales=="true"){
+                				$('#txtSales1a').val(r_userno).attr('disabled', 'disabled');
+                				$('#txtSales2a').val(r_userno).attr('disabled', 'disabled');
+                				$('#txtSales1b').val(r_name).attr('disabled', 'disabled');
+                				$('#txtSales2b').val(r_name).attr('disabled', 'disabled');
+                				$('#btnSales1').hide();
+                				$('#btnSales2').hide();
+                			}
+                		}
+                		break;
                 	case 'flors_coin':
                 		z_coin='#non@本幣';
                 		var as = _q_appendData("flors", "", true);
@@ -212,6 +225,11 @@
 					
 					if(q_getPara('sys.isAcccUs')!='1')
 						$('#Xcoin').hide();
+						
+					//鎖住業務
+					if(q_getPara('sys.project').toUpperCase()=='XY'){
+						q_gt('sss', "where=^^ noa='"+r_userno+"' ^^", 0, 0, 0, "sss_issales_xy");
+					}
                 }
 	         }
 
