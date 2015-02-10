@@ -1023,7 +1023,7 @@
 				margin: -1px;
 				float: left;
 			}
-			.tbbm select {
+			select {
 				border-width: 1px;
 				padding: 0px;
 				margin: -1px;
@@ -1202,7 +1202,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1680px;">
+		<div class='dbbs' style="width: 1800px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;">
