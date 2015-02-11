@@ -97,11 +97,11 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				
-				$('#lblOrdb_ra').text('進貨憑單');
+				$('#lblOrde_ra').text('進貨憑單');
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
-				$('#lblAccc').click(function() {
-					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('lblAccc'), true);
+				$('#lblAccno').click(function() {
+					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('lblAccno'), true);
 				});
 				$('#lblOrdc').click(function() {
 					var t_tggno = trim($('#txtTggno').val());
@@ -197,6 +197,7 @@
 
 			var focus_addr = '', zip_fact = '';
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
+			var ordcoverrate = [],rc2soverrate = [];
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'ucca_invo':
@@ -297,6 +298,91 @@
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
 						break;
+					case 'startdate':
+						var as = _q_appendData('tgg', '', true);
+						var t_startdate='';
+						if (as[0] != undefined) {
+							t_startdate=as[0].startdate;
+						}
+						if(t_startdate.length==0 || ('00'+t_startdate).slice(-2)=='00' || $('#txtDatea').val().substr(7, 2)<('00'+t_startdate).substr(-2)){
+							$('#txtMon').val($('#txtDatea').val().substr(0, 6));
+						}else{
+							var t_date=$('#txtDatea').val();
+							var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,dec(t_date.substr(7,2)));
+				    		nextdate.setMonth(nextdate.getMonth() +1)
+				    		t_date=''+(nextdate.getFullYear()-1911)+'/'+(nextdate.getMonth()<9?'0':'')+(nextdate.getMonth()+1);
+							$('#txtMon').val(t_date);
+						}
+						check_startdate=true;
+						btnOk();
+						break;
+					case 'ordc_overrate':
+						ordcoverrate = _q_appendData('view_ordc', '', true);
+						if (ordcoverrate[0] != undefined) {
+							//抓已進貨數量
+							var t_where ='';
+							for (var i = 0; i < ordcoverrate.length; i++) {
+								t_where=t_where+" or ordeno='"+ordcoverrate[i].noa+"'";
+							}
+							if(t_where.length>0){
+								t_where = "where=^^ (1=0 "+t_where+") and noa!='"+$('#txtNoa').val()+"' ^^";
+								q_gt('view_rc2s', t_where, 0, 0, 0, "rc2s_overrate",'');
+							}
+						}else{
+							check_ordc_overrate=true;
+							btnOk();
+						}
+						break;
+					case 'rc2s_overrate':
+						rc2soverrate = _q_appendData('view_rc2s', '', true);
+						//抓ordcs的資料
+						var t_where ='';
+						for (var i = 0; i < ordcoverrate.length; i++) {
+							t_where=t_where+" or noa='"+ordcoverrate[i].noa+"'";
+						}
+						if(t_where.length>0){
+							t_where = "where=^^ 1=0 "+t_where+" ^^";
+							q_gt('view_ordcs', t_where, 0, 0, 0, "ordcs_overrate",'');
+						}
+						break;
+					case 'ordcs_overrate':
+						var as = _q_appendData('view_ordcs', '', true);
+						var t_msg='';
+						//計算超交數量
+						for (var j = 0; j < as.length; j++) {
+							as[j].overmount=as[j].mount;
+							for (var i = 0; i < ordcoverrate.length; i++) {
+								if(ordcoverrate[i].noa==as[j].noa){
+									as[j].overmount=q_mul(as[j].mount,q_add(1,q_div(dec(ordcoverrate[i].overrate),100)));
+								}
+							}
+						}
+						//寫入已入庫數量
+						for (var j = 0; j < as.length; j++) {
+							as[j].rc2smount=0;
+							for (var i = 0; i < rc2soverrate.length; i++) {
+								if(as[j].noa==rc2soverrate[i].ordeno && as[j].no2==rc2soverrate[i].no2){
+									as[j].rc2smount=q_add(dec(as[j].rc2smount),dec(rc2soverrate[i].mount));			
+								}
+							}
+						}
+						//判斷是否超交
+						for (var i = 0; i < q_bbsCount; i++) {
+							for (var j = 0; j < as.length; j++) {
+								if (!emp($('#txtOrdeno_'+i).val()) && $('#txtOrdeno_'+i).val()==as[j].noa && $('#txtNo2_'+i).val()==as[j].no2	
+									&& (q_sub(dec(as[j].overmount),dec(as[j].rc2smount))< dec($('#txtMount_'+i).val()))){
+									t_msg=t_msg+(t_msg.length>0?',':'')+$('#txtProduct_'+i).val();
+								}
+							}
+						}
+						
+						if(t_msg.length>0){
+							alert(t_msg+'進貨數量高於允需超交數量!!');
+						}else{
+							check_ordc_overrate=true;
+							btnOk();
+						}
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -316,15 +402,10 @@
 				abbm[q_recno]['accno'] = s1[0];
 				$('#txtAccno').val(s1[0]);
 			}
-
+			
+			var check_startdate=false;
+			var check_ordc_overrate=false;
 			function btnOk() {
-				$('#txtMon').val($.trim($('#txtMon').val()));
-				if ($('#txtMon').val().length > 0 && !(/^[0-9]{3}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())) {
-					alert(q_getMsg('lblMon') + '錯誤。');
-					return;
-				}
-				if (emp($('#txtMon').val()))
-					$('#txtMon').val($('#txtDatea').val().substr(0, 6));
 				/*if(HiddenTreat('rack')){
 					var t_rackErr = '';
 					for(var j=0;j<q_bbsCount;j++){
@@ -348,6 +429,32 @@
 					alert(t_err);
 					return;
 				}
+				
+				//檢查是否有超交	
+				if(!check_ordc_overrate){
+					var t_where ='';
+					for (var i = 0; i < q_bbsCount; i++) {
+						if (!emp($('#txtOrdeno_'+i).val()) && t_where.indexOf($('#txtOrdeno_'+i).val())==-1){
+							t_where=t_where+" or noa='"+$('#txtOrdeno_'+i).val()+"'";
+						}
+					}
+					if(t_where.length>0){
+						t_where = "where=^^ (1=0 "+t_where+") and isnull(overrate,0)>0 ^^";
+						q_gt('view_ordc', t_where, 0, 0, 0, "ordc_overrate",'');
+						return;
+					}
+				}
+				
+				//判斷起算日,寫入帳款月份
+				if(!check_startdate&&emp($('#txtMon').val())){
+					var t_where = "where=^^ noa='"+$('#txtTggno').val()+"' ^^";
+					q_gt('tgg', t_where, 0, 0, 0, "startdate", r_accy);
+					return;
+				}
+				check_startdate=false;
+				check_ordc_overrate=false;
+				sum();
+				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				if (q_cur == 2)
@@ -362,7 +469,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
-				q_box('rc2_s.aspx', q_name + '_s', "500px", "500px", q_getMsg("popSeek"));
+				q_box('rc2_ra_s.aspx', q_name + '_s', "500px", "500px", q_getMsg("popSeek"));
 			}
 
 			function cmbPaytype_chg() {
@@ -391,8 +498,8 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							var t_mount = q_float('txtWeight_'+b_seq)!=0?q_float('txtWeight_'+b_seq):q_float('txtMount_'+b_seq);
-							$('#txtTotal_' + b_seq).val(round(q_mul(dec($('#txtPrice_' + b_seq).val()), dec(t_mount)), 0));
+							/*var t_mount = q_float('txtWeight_'+b_seq)!=0?q_float('txtWeight_'+b_seq):q_float('txtMount_'+b_seq);
+							$('#txtTotal_' + b_seq).val(round(q_mul(dec($('#txtPrice_' + b_seq).val()), dec(t_mount)), 0));*/
 							sum();
 						});
 						$('#txtMount_' + j).change(function() {
@@ -880,7 +987,7 @@
 					<tr class="tr8">
 						<td class="td1"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td class="td2" colspan='2'><input id="txtTotalus" type="text" class="txt num c1" /></td>
-						<td class="td7"><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
+						<td class="td7"><span> </span><a id='lblAccno' class="lbl btn"> </a></td>
 						<td class="td8" colspan="2"><input id="txtAccno" type="text" class="txt c1"/></td>
 						<td class="td1"><span> </span><a id='lblLcno' class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtLcno" type="text" class="txt c1"/></td>
@@ -896,8 +1003,8 @@
 						<td class="td4"><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td class="td5"> </td>
 						<td class="td6"> </td>
-						<td class="td7"><span> </span><a id='lblOrdb_ra' class="lbl"> </a></td>
-						<td class="td8"><input id="txtOrdbno" type="text" class="txt c1"/></td>
+						<td class="td7"><span> </span><a id='lblOrde_ra' class="lbl"> </a></td>
+						<td class="td8"><input id="txtOrdeno" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>

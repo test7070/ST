@@ -40,6 +40,7 @@
         t_tggno = $('#txtTggno').val();
         t_invono = $('#txtInvono').val();
         t_accno = $('#txtAccno').val();
+        t_ordeno = $('#txtOrdeno').val();
 
         t_bdate = t_bdate.length > 0 && t_bdate.indexOf("_") > -1 ? t_bdate.substr(0, t_bdate.indexOf("_")) : t_bdate;  /// 100.  .
         t_edate = t_edate.length > 0 && t_edate.indexOf("_") > -1 ? t_edate.substr(0, t_edate.indexOf("_")) : t_edate;  /// 100.  .
@@ -89,13 +90,17 @@
                 <td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
             </tr>
              <tr class='seek_tr'>
-					<td><a id='lblInvono'> </a></td>
-					<td><input id="txtInvono" type="text"/></td>
-				</tr>
-				<tr class='seek_tr'>
-					<td><a id='lblAccno'> </a></td>
-					<td><input id="txtAccno" type="text"/></td>
-				</tr>
+				<td><a id='lblInvono'> </a></td>
+				<td><input id="txtInvono" type="text"/></td>
+			</tr>
+			<tr class='seek_tr'>
+				<td><a id='lblAccno'> </a></td>
+				<td><input id="txtAccno" type="text"/></td>
+			</tr>
+			<tr class='seek_tr'>
+					<td><a id='lblOrdeno_ra'>進貨憑單</a></td>
+					<td><input id="txtOrdeno" type="text"/></td>
+				</tr>	
         </table>
   <!--#include file="../inc/seek_ctrl.inc"--> 
 </div>
