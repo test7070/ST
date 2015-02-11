@@ -260,6 +260,8 @@
 							}else{
 								$('#txtMount_'+i).val(0);
 							}
+							$('#txtQcworker_'+i).val(r_name);
+							$('#txtQctime_'+i).val(padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2));
 						}
 						bbssum(i);
 					}
@@ -912,7 +914,7 @@
 							abbm[q_recno]['rc2no'] = as[0].rc2no;
 							$('#txtRc2no').val(as[0].rc2no);
 							
-							if(!emp(as[0].workcno))
+							if(!emp(as[0].rc2no))
 								q_func('rc2_post.post', r_accy + ',' + $('#txtRc2no').val() + ',1');
 						}
 						break;
@@ -1063,14 +1065,12 @@
 				<table class="tview" id="tview" >
 					<tr>
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
-						<td align="center" style="width:5%"><a id='vewTypea'> </a></td>
 						<td align="center" style="width:25%"><a id='vewDatea'> </a></td>
 						<td align="center" style="width:25%"><a id='vewNoa'> </a></td>
 						<td align="center" style="width:40%"><a id='vewTgg'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
-						<td align="center" id='typea=rc2.typea'>~typea=rc2.typea</td>
 						<td align="center" id='datea'>~datea</td>
 						<td align="center" id='noa'>~noa</td>
 						<td align="center" id='tggno tgg,4' style="text-align: left;">~tggno ~tgg,4</td>
