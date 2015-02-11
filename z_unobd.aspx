@@ -23,7 +23,7 @@
 					if(q_getPara('sys.project').toUpperCase()!='RA'){
 						var delete_report=0;
 							for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
-								if($('#q_report').data().info.reportData[i].report=='z_uno4')
+								if($('#q_report').data().info.reportData[i].report=='z_unobd04')
 									delete_report=i;
 							}
 							if($('#q_report div div').text().indexOf('批號庫存表')>-1)
