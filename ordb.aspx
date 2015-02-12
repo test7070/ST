@@ -177,7 +177,8 @@
 				});
 
 				$('#btnOrde').click(function() {
-					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; isnull(enda,'0')='0' and noa+'_'+no2 not in (select isnull(ordeno,'')+'_'+isnull(no2,'') from view_ordbs" + r_accy + " where noa!='" + $('#txtNoa').val() + "')", 'ordes', "95%", "95%", q_getMsg('popOrde'));
+					var t_where =" isnull(enda,'0')='0' and ISNULL(cancel,'0')='0' and noa+'_'+no2 not in (select isnull(ordeno,'')+'_'+isnull(no2,'') from view_ordbs" + r_accy + " where noa!='" + $('#txtNoa').val() + "') and productno in ( select noa from ucc)";
+					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+";"+r_accy, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 				});
 
 				//變動按鈕
