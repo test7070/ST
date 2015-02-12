@@ -70,6 +70,7 @@
 				t_ordeno = $('#txtOrdeno').val();
 				t_salesno = $('#txtSalesno').val();
 				t_stype = $('#cmbStype').val();
+				t_memo = $('#txtMemo').val();
 				
 				var t_where = " 1=1 "
 				+ q_sqlPara2("cno", t_cno)
@@ -85,6 +86,9 @@
 				
 				if(t_salesno.length>0)
 					t_where += " and (salesno='"+t_salesno+"' or salesno2='"+t_salesno+"') ";
+					
+				if(t_memo.length>0)
+					t_where += " and charindex('"+t_memo+"',memo)>0 ";	
 				
                 if(t_status=='Y')
                 	t_where += " and unpay=0";
@@ -177,6 +181,10 @@
 				<tr class='seek_tr'>
 					<td><a id='lblOrdeno'> </a></td>
 					<td><input id="txtOrdeno" type="text"/></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td><a id='lblMemo'>備註 </a></td>
+					<td><input id="txtMemo" type="text"/></td>
 				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->

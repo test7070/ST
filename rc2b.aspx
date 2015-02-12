@@ -487,6 +487,11 @@
 				var s1 = xmlString.split(';');
 				abbm[q_recno]['accno'] = s1[0];
 				$('#txtAccno').val(s1[0]);
+				
+				if (q_cur == 1 || emp($('#txtRc2no').val()))
+					q_func('qtxt.query.c0', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+				else
+					q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
 			}
 			
 			var check_startdate=false;
@@ -657,11 +662,6 @@
 				var i;
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
 				_btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
-				
-				if (q_cur == 1 || emp($('#txtRc2no').val()))
-					q_func('qtxt.query.c0', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
-				else
-					q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
 			}
 
 			function bbsSave(as) {

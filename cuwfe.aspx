@@ -88,6 +88,8 @@
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
                 Unlock();
+                if ((q_cur == 1 || q_cur == 2 ) && $.trim($('#txtMemo').val()).length!=0)
+					q_func('qtxt.query.c0', 'cuwfe.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val())+ ';' + encodeURI(q_getPara('sys.key_cub'))+ ';' + encodeURI(r_userno)+ ';0');
             }
 
             function q_boxClose(s2) {
@@ -145,9 +147,6 @@
                 var i;
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
                 _btnOk(key_value, bbmKey[0], '', '', 2);
-                
-                if ((q_cur == 1 || q_cur == 2 ) && $.trim($('#txtMemo').val()).length!=0)
-					q_func('qtxt.query.c0', 'cuwfe.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val())+ ';' + encodeURI(q_getPara('sys.key_cub'))+ ';' + encodeURI(r_userno)+ ';0');
             }
 
             function refresh(recno) {
