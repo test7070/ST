@@ -61,6 +61,10 @@
 	                    },{
 	                        type : '6',
 	                        name : 'xnoa'
+	                    },{
+	                        type : '5',
+	                        name : 'service',
+	                        value : (('').concat(new Array("#non@全部","1@在職","0@離職"))).split(',')
 	                    }]
                     });
                 q_popAssign();
