@@ -265,7 +265,7 @@
                 refreshBbt();
             }
             function btnPrint() {
-                q_box("z_ordp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'ordp', "95%", "95%", m_print);
+                //q_box("z_ordp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'ordp', "95%", "95%", m_print);
             }
             function btnOk() {
                 if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {

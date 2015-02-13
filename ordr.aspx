@@ -56,7 +56,7 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                q_gt('workg', "stop=100", 0, 0, 0, 'workg');
+                q_gt('workg', "stop=100", 0, 0, 0, 'workg', r_accy);
                 t_uccg = ' @';
                 for(var i=0;i<z_uccga.length;i++){
                 	t_uccg +=','+z_uccga[i].noa+'@'+z_uccga[i].noa+'. '+z_uccga[i].namea;
@@ -100,7 +100,7 @@
                 	q_func('qtxt.query.ordr_ordb', 'ordr.txt,ordr_ordb,' + encodeURI(t_key)+';'+ encodeURI(t_noa)); 
                 });
                 $('#lblOrdbno').click(function(e){
-                	q_gt('view_ordb', "where=^^ workgno='"+$('#txtNoa').val()+"'^^", 0, 0, 0, 'view_ordb');
+                	q_gt('view_ordb', "where=^^ workgno='"+$('#txtNoa').val()+"'^^", 0, 0, 0, 'view_ordb', r_accy);
                 });
                 
                 $('#combWorkgno').change(function() {
