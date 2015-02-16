@@ -478,7 +478,7 @@
 							var t_custno=$('#txtCustno').val().substr(0,$('#txtCustno').val().indexOf('-'));
 							if(t_custno=='') 
 								t_custno=$('#txtCustno').val();
-							var t_where = "where=^^ noa!='"+$('#txtNoa').val()+"' and b.custno='" + t_custno + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
+							var t_where = "where=^^ a.noa!='"+$('#txtNoa').val()+"' and b.custno='" + t_custno + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
 							q_gt('vcc_xy_store2', t_where, 0, 0, 0, "store2", r_accy);
 						}else{
 							q_msg($('#txtMount_' + b_seq), t_msg);
@@ -709,7 +709,7 @@
 					var t_custno=$('#txtCustno').val().substr(0,$('#txtCustno').val().indexOf('-'));
 					if(t_custno=='') 
 						t_custno=$('#txtCustno').val();
-					var t_where = "where=^^ noa!='"+$('#txtNoa').val()+"' and b.custno='" + t_custno + "' and productno in ("+productno_where+") ^^";
+					var t_where = "where=^^ a.noa!='"+$('#txtNoa').val()+"' and b.custno='" + t_custno + "' and productno in ("+productno_where+") ^^";
 					q_gt('vcc_xy_store2', t_where, 0, 0, 0, "btnOk_check_stock", r_accy);
 					return;
 				}
@@ -890,7 +890,7 @@
 									t_custno=$('#txtCustno').val();
 									
 								//var t_where = "where=^^ noa!='"+$('#txtNoa').val()+"' and custno='" + $('#txtCustno').val() + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
-								var t_where = "where=^^ noa!='"+$('#txtNoa').val()+"' and b.custno='" + t_custno + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
+								var t_where = "where=^^ a.noa!='"+$('#txtNoa').val()+"' and b.custno='" + t_custno + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
 								q_gt('vcc_xy_store2', t_where, 0, 0, 0, "store2_stk", r_accy);
 							}
 						});
