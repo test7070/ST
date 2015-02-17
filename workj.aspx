@@ -159,7 +159,7 @@
             brwKey = 'noa';
             q_desc = 1;
             brwCount2 = 6;
-
+			q_bbsLen = 15;
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtPicno_', 'btnPicno_', 'img', 'noa', 'txtPicno_', 'img_b.aspx']
             	,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
@@ -1441,7 +1441,7 @@
 		</div>
 		
 		<input id="q_sys" type="hidden" />
-		<div id="dbbt" >
+		<div id="dbbt" style="display:none;">
 			<table id="tbbt">
 				<tbody>
 					<tr class="head" style="color:white; background:#003366;">
