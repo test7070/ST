@@ -131,6 +131,11 @@
                             }else{
                             	$('#txtOrdbno').val(as[0].ordbno);
                             	abbm[q_recno].ordbno = as[0].ordbno;
+                            	var t_ordbno=as[0].ordbno.split(',');
+                            	for(var i=0;i<t_ordbno.length;i++){
+                            		if(t_ordbno[i]!=undefined)
+                            			q_func('sign.q_signForm', 'ordb,'+r_accy+','+ t_ordbno[i]);	
+                            	}
                             	if(as[0].ordbno.length>0)
                             		alert('共匯出 '+as[0].ordbno.split(',').length+' 筆。');
                             }		
