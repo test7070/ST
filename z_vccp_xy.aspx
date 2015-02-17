@@ -29,13 +29,33 @@
 	                        type : '0', //[1]
 	                        name : 'accy',
 	                        value : r_accy
-	                    },  {
+	                    }, {
 	                        type : '1', //[2][3]
 	                        name : 'xnoa'
-	                    }]
+	                    }, {
+	                        type : '1', //[4][5]
+	                        name : 'xdate'
+	                    }, {
+							type : '2',
+							name : 'xproduct', //[6][7]
+							dbf : 'ucc',
+							index : 'noa,product',
+							src : 'ucc_b.aspx'
+						}, {
+							type : '2',
+							name : 'xcust', //[8][9]
+							dbf : 'cust',
+							index : 'noa,comp',
+							src : 'cust_b.aspx'
+						}]
                     });
                 q_popAssign();
-                	
+                
+                $('#txtXdate1').mask('999/99/99');
+                $('#txtXdate2').mask('999/99/99');
+                
+                $('#txtXdate1').val(q_cdn(q_date(),1));
+                $('#txtXdate2').val(q_cdn(q_date(),1));
 	                
 	            var t_noa=typeof(q_getId()[3])=='undefined'?'':q_getId()[3];
                 t_noa  =  t_noa.replace('noa=','');

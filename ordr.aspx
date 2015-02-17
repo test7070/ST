@@ -15,7 +15,7 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
             this.errorHandler = null;
-
+			q_bbsLen = 10;
             q_tables = 't';
             var q_name = "ordr";
             var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea','txtOrdbno','txtApvdate'];
