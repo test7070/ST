@@ -109,6 +109,10 @@
 						var t_paras = $('#txtOrgproductno').val()+ ';'+$('#txtChgproductno').val();
 						q_func('qtxt.query.uccno_change', 'changeno.txt,uccno_change,' + t_paras);
 					}
+					chg_cust=false;  
+	            	chg_ucc=false;
+	            	db_cust=false;
+	            	db_ucc=false;
                 }
             }
 
@@ -246,6 +250,19 @@
 
             function btnCancel() {
                 _btnCancel();
+            }
+            
+            function q_popPost(id) {
+                switch (id) {
+                	case 'txtOrgcustno':
+                		$('#txtChgcustno').focus();
+                		break;
+                	case 'txtOrgproductno':
+                		$('#txtChgproductno').focus();
+                		break;
+                    default:
+                        break;
+                }
             }
             
             function q_funcPost(t_func, result) {
