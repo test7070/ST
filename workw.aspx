@@ -58,7 +58,7 @@
                 q_mask(bbmMask);
                
                 $('#btnWorkj').click(function(e){
-                	
+                	//workj_b.aspx
                 });
             }
 
