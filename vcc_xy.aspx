@@ -587,7 +587,12 @@
 							var t_invomemo=as[0].invomemo;
 							t_invomemo=t_invomemo.split('##');
 							$('#txtPrice').val(t_invomemo[5]);
-							
+							var taxtype='0',xy_taxtypetmp=q_getPara('sys.taxtype').split(',');
+							for (var i=0;i<xy_taxtypetmp.length;i++){
+								if(xy_taxtypetmp[i].split('@')[1]==t_invomemo[2])
+									taxtype=xy_taxtypetmp[i].split('@')[0];
+							}
+							$('#cmbTaxtype').val(taxtype);
 							$('#txtFax').val(as[0].fax);
 							$('#txtPost').val(as[0].zip_comp);
 							$('#txtAddr').val(as[0].addr_comp);
