@@ -104,6 +104,11 @@
 							Unlock();
 							return;
 						}
+						if(q_cur==1)
+							$('#txtWorker').val(r_name);
+						else
+							$('#txtWorker2').val(r_name);
+						
 						if (t_noa.length == 0 || t_noa == "AUTO")
 							q_gtnoa(q_name, replaceAll((t_date.length == 0 ? q_date() : t_date), '/', ''));
 						else
@@ -162,10 +167,6 @@
 
 			function btnOk() {
 				Lock();
-				if(q_cur==1)
-					$('#txtWorker').val(r_name);
-				else
-					$('#txtWorker2').val(r_name);
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtModelno', q_getMsg('lblModelno')]]);
 				var t_err2 = '';
 				var t_outsno = $.trim($('#txtOutsno').val());

@@ -81,7 +81,7 @@
 					case 'checkModelno_change':
 						var as = _q_appendData("model", "", true);
 						if (as[0] != undefined) {
-							alert('已存在 ' + as[0].noa + ' ' + as[0].addr);
+							alert('已存在 ' + as[0].noa + ' ' + as[0].model);
 						}
 						break;
 					case 'checkModelno_btnOk':
