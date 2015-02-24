@@ -543,15 +543,19 @@
                     	try{
                     		var t_para = JSON.parse(t_name);
                     		if(t_para.action=="createimg" || t_para.action=="createimg_btnOk"){
+                    			
                     			var n = t_para.n;
                     			var action = t_para.action;
+                    			//console.log('gtpost:'+n);
                     			as = _q_appendData("img", "", true);
                     			t_para = JSON.parse(as[0].para);
                     			//先用原大小
 		                    	$('#imgPic_'+n).attr('src',as[0].org)
 		                    	
-								var imgwidth = $('#imgPic_'+n).width();
-				                var imgheight = $('#imgPic_'+n).height();
+								/*var imgwidth = $('#imgPic_'+n).width();
+				                var imgheight = $('#imgPic_'+n).height();*/
+				                var imgwidth = 300;
+				                var imgheight = 100;
 				                $('#canvas_'+n).width(imgwidth).height(imgheight);
 				                var c = document.getElementById("canvas_"+n);
 								var ctx = c.getContext("2d");		
@@ -579,7 +583,6 @@
 								c.height = xx_height;
 								$('#canvas_'+n)[0].getContext("2d").drawImage($('#imgPic_'+n)[0],0,0,imgwidth,imgheight,0,0,xx_width,xx_height);
 								$('#txtImgbarcode_'+n).val(c.toDataURL());
-								
 								//報表用圖形 縮放為150*50
 								$('#canvas_'+n).width(150).height(50);
 								c.width = 150;
@@ -590,7 +593,7 @@
 								if($('#txtMemo_'+n).val().substring(0,1)!='*'){
 									$('#txtLengthb_'+n).val(t_length);
                 				}
-								sum();	
+								sum();
 								if(action=="createimg_btnOk"){
 									createImg_btnOk(n-1);
 								}	
@@ -798,6 +801,7 @@
 				q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg",n:n}));	
 			};
 			function createImg_btnOk(n){
+				//console.log(n);
 				if(n>=0){				
 					var t_picno = $('#txtPicno_'+n).val();
 					if(t_picno.length>0){
@@ -928,6 +932,7 @@
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
+                
                 var calc =[{key:'3#',value:0.56,m300:400,m600:400,m1000:270,m1600:250,w300:600,w600:1300,w1000:1300,w1600:1300}
 	                ,{key:'4#',value:0.994,m300:300,m600:250,m1000:150,m1600:130,w300:500,w600:1300,w1000:1300,w1600:1300}
 	                ,{key:'5#',value:1.56,m300:200,m600:160,m1000:100,m1600:80,w300:900,w600:1300,w1000:1300,w1600:1300}
