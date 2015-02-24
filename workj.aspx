@@ -159,7 +159,7 @@
             brwKey = 'noa';
             q_desc = 1;
             brwCount2 = 6;
-			q_bbsLen = 15;
+			q_bbsLen = 5;
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtPicno_', 'btnPicno_', 'img', 'noa', 'txtPicno_', 'img_b.aspx']
             	,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
@@ -738,6 +738,15 @@
                 $('.justPrint2').prop('checked',true);	
                 $('.checkAll').prop('checked',true);	
                 $('.checkAll2').prop('checked',true);	
+            }
+            function q_bbsLenShow( t_start, t_end){
+            	for(var i=t_start;i<t_end;i++)
+            	if($('#canvas_'+i).length>0){
+					$('#imgPic_'+i).attr('src', $('#txtImgdata_'+i).val());
+					var imgwidth = $('#imgPic_'+i).width();
+                    var imgheight = $('#imgPic_'+i).height();
+					$("#canvas_"+i)[0].getContext("2d").drawImage($('#imgPic_'+i)[0],0,0,imgwidth,imgheight,0,0,150,50);
+            	}
             }
 
             function readonly(t_para, empty) {
