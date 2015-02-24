@@ -562,9 +562,12 @@
 												q_tr('txtPrice_'+iscost1,dec($('#cost_txtCost0').val()));
 											}else{
 												q_bbs_addrow('bbs', b_seq, 1);
-												$('#txtProduct_'+(dec(b_seq)+1)).val('版費');
+												$('#txtProductno_'+(dec(b_seq)+1)).val('ZE001');
+												$('#txtProduct_'+(dec(b_seq)+1)).val('其他費用');
+												$('#txtSpec_'+(dec(b_seq)+1)).val('版費');
 												$('#txtMount_'+(dec(b_seq)+1)).val(1);
 												$('#txtPrice_'+(dec(b_seq)+1)).val($('#cost_txtCost0').val());
+												AutoNo3();
 											}
 											sum();	
 										}
@@ -581,9 +584,12 @@
 													}
 												}
 												q_bbs_addrow('bbs', (dec(b_seq)+t_iscost1), 1);
-												$('#txtProduct_'+((dec(b_seq)+t_iscost1)+1)).val('刀模費');
+												$('#txtProductno_'+((dec(b_seq)+t_iscost1)+1)).val('ZE004');
+												$('#txtProduct_'+((dec(b_seq)+t_iscost1)+1)).val('其他費用');
+												$('#txtSpec_'+((dec(b_seq)+t_iscost1)+1)).val('刀模費');
 												$('#txtMount_'+((dec(b_seq)+t_iscost1)+1)).val(1);
 												$('#txtPrice_'+((dec(b_seq)+t_iscost1)+1)).val($('#cost_txtCost1').val());
+												AutoNo3();
 											}
 											sum();
 										}

@@ -1155,14 +1155,14 @@
 							$('#txtProduct_'+b_seq).val('');
 						}*/
 						
-						if($('#txtProduct_'+b_seq).val().indexOf('運費')>-1 && dec($('#txtPrice').val())>0){
+						if(($('#txtProduct_'+b_seq).val().indexOf('運費')>-1 || $('#txtSpec_'+b_seq).val().indexOf('運費')>-1) && dec($('#txtPrice').val())>0){
 							var t_mount=0;
 							for (var j = 0; j < q_bbsCount; j++) {
 								if(j!=b_seq){
 									t_mount=q_add(t_mount,q_float('txtMount_'+j));
 								}
 							}
-							q_tr('txtMount_'+b_seq,t_mount);
+							q_tr('txtWidth_'+b_seq,t_mount);
 							q_tr('txtPrice_'+b_seq,dec($('#txtPrice').val()));
 						}
 						AutoNoq();

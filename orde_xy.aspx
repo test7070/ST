@@ -971,9 +971,12 @@
 												q_tr('txtPrice_'+iscost1,dec($('#cost_txtCost0').val()));
 											}else{
 												q_bbs_addrow('bbs', b_seq, 1);
-												$('#txtProduct_'+(dec(b_seq)+1)).val('版費');
+												$('#txtProductno_'+(dec(b_seq)+1)).val('ZE001');
+												$('#txtProduct_'+(dec(b_seq)+1)).val('其他費用');
+												$('#txtSpec_'+(dec(b_seq)+1)).val('版費');
 												$('#txtMount_'+(dec(b_seq)+1)).val(1);
 												$('#txtPrice_'+(dec(b_seq)+1)).val($('#cost_txtCost0').val());
+												AutoNo2();
 											}
 											sum();	
 										}
@@ -990,9 +993,12 @@
 													}
 												}
 												q_bbs_addrow('bbs', (dec(b_seq)+t_iscost1), 1);
-												$('#txtProduct_'+((dec(b_seq)+t_iscost1)+1)).val('刀模費');
+												$('#txtProductno_'+((dec(b_seq)+t_iscost1)+1)).val('ZE004');
+												$('#txtProduct_'+((dec(b_seq)+t_iscost1)+1)).val('其他費用');
+												$('#txtSpec_'+((dec(b_seq)+t_iscost1)+1)).val('刀模費');
 												$('#txtMount_'+((dec(b_seq)+t_iscost1)+1)).val(1);
 												$('#txtPrice_'+((dec(b_seq)+t_iscost1)+1)).val($('#cost_txtCost1').val());
+												AutoNo2();
 											}
 											sum();
 										}
@@ -1523,6 +1529,36 @@
 						break;
 				}
 			}
+			
+			//插入欄位
+			function q_bbs_addrow(bbsbbt,row,topdown){
+	        	//取得目前行
+	            var rows_b_seq=dec(row)+dec(topdown);
+	            if(bbsbbt=='bbs'){
+		            q_gridAddRow(bbsHtm, 'tbbs', 'txtNo2', 1);
+		            //目前行的資料往下移動
+					for (var i = q_bbsCount-1; i >=rows_b_seq; i--) {
+						for (var j = 0; j <fbbs.length; j++) {
+		      				if(i!=rows_b_seq)
+								$('#'+fbbs[j]+'_'+i).val($('#'+fbbs[j]+'_'+(i-1)).val());
+							else
+								$('#'+fbbs[j]+'_'+i).val('');
+						}
+					}
+				}
+				if(bbsbbt=='bbt'){
+					q_gridAddRow(bbtHtm, 'tbbt', fbbt, 1, '', '', '', '__');
+		            //目前行的資料往下移動
+					for (var i = q_bbtCount-1; i >=rows_b_seq; i--) {
+						for (var j = 0; j <fbbt.length; j++) {
+		      				if(i!=rows_b_seq)
+								$('#'+fbbt[j]+'__'+i).val($('#'+fbbt[j]+'__'+(i-1)).val());
+							else
+								$('#'+fbbt[j]+'__'+i).val('');
+						}
+					}
+				}
+	        }
 		</script>
 		<style type="text/css">
 			#dmain {
