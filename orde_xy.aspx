@@ -191,6 +191,11 @@
 				});
 
 				$('#txtCustno').change(function() {
+					if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
+						curData.paste();
+						alert('非總店與相關分店!!');
+					}
+					
 					if (!emp($('#txtCustno').val())) {
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -1163,13 +1168,24 @@
 					}
 				}
 			}
-
+			
+			var copycustno='';
 			function btnIns() {
-				if ($('#checkCopy').is(':checked'))
+				var t_bbscounts=q_bbsCount;
+				if ($('#checkCopy').is(':checked')){
 					curData.copy();
+					copycustno=$('#txtCustno').val();
+				}else{
+					copycustno='';
+				}
 				_btnIns();
-				if ($('#checkCopy').is(':checked'))
+				if ($('#checkCopy').is(':checked')){
+					while(t_bbscounts>=q_bbsCount){
+						q_bbs_addrow('bbs',0,0);
+					}
 					curData.paste();
+				}
+				
 				copy_field();
 				//$('#chkIsproj').attr('checked', true);
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
@@ -1285,6 +1301,7 @@
 						$('#combGroupbno_'+j).attr('disabled', 'disabled');
 						$('#combClassa_'+j).attr('disabled', 'disabled');
 					}
+					$('#checkCopy').removeAttr('disabled');
 				} else {
 					$('#btnOrdei').attr('disabled', 'disabled');
 					$('#combAddr').removeAttr('disabled');
@@ -1366,9 +1383,12 @@
 						if(!(fbbm[i]=='txtOdate' || fbbm[i]=='cmbStype' || fbbm[i]=='txtCustorde' || fbbm[i]=='txtMemo'
 						|| fbbm[i]=='txtAddr2' || fbbm[i]=='txtPost2' || fbbm[i]=='cmbTaxtype'
 						|| fbbm[i]=='chkIsproj' || fbbm[i]=='chkEnda' || fbbm[i]=='chkCancel'
-						|| fbbm[i]=='cmbCoin' || fbbm[i]=='txtFloata' 	))
+						|| fbbm[i]=='cmbCoin' || fbbm[i]=='txtFloata' || fbbm[i]=='txtCustno'))
 							$('#'+fbbm[i]).attr('disabled', 'disabled');
 					}
+					if(q_cur==2)
+						$('#txtCustno').attr('disabled', 'disabled');
+						
 					$('#lblAcomp').hide();
 					$('#lblAcompx').text($('#lblAcomp').text()).show();
 					$('#lblCust').hide();
@@ -1452,6 +1472,11 @@
 				switch (s1) {
 					case 'txtCustno':
 						if (!emp($('#txtCustno').val())) {
+							if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
+								curData.paste();
+								alert('非總店與相關分店!!');
+							}
+							
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 							

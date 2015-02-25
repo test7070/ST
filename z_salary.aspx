@@ -21,6 +21,18 @@
             $(document).ready(function() {
             	q_getId();
                 q_gf('', 'z_salary');
+                
+                $('#q_report').click(function(e) {
+					if(q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1){
+	            		if (window.parent.q_name == 'salary') {
+							var wParent = window.parent.document;
+							$('#txtXnoa').val(wParent.getElementById("txtNoa").value);
+						}
+	            	}else{
+	            		$('#Xnoa').hide();
+	            		$('#txtXnoa').val('');
+	            	}
+				});
             });
             function q_gfPost() {
                $('#q_report').q_report({

@@ -82,7 +82,7 @@
                 			alert('物品 '+as[0].noa+' '+as[0].product+' 已存在!!');
             				chg_ucc=false;
                 		}else{
-                			chg_ucc=false;
+                			chg_ucc=true;
                 		}
                 		break;
                     case q_name:
