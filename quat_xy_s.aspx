@@ -46,10 +46,11 @@
                 t_cust = $('#txtCust').val();
 
                 var t_where = " 1=1 " + q_sqlPara2("noa", t_noa)+ q_sqlPara2("datea", t_bdate, t_edate) + q_sqlPara2("salesno", t_salesno) + q_sqlPara2("custno", t_custno) ;
-				if (t_cust.length>0)
-		        	t_where += " and charindex('"+t_cust+"',comp)>0"
-		        if (t_sales.length>0)
+				if (t_sales.length>0)
 		        	t_where += " and charindex('"+t_sales+"',sales)>0"
+		        	
+		        if (t_cust.length>0)
+					t_where="("+t_where+") or charindex('"+t_cust+"',comp)>0"
 		        	
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;

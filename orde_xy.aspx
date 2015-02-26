@@ -193,6 +193,8 @@
 				$('#txtCustno').change(function() {
 					if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
 						curData.paste();
+						if(q_cur==1)
+							$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 						alert('非總店與相關分店!!');
 					}
 					
@@ -1302,7 +1304,9 @@
 						$('#combClassa_'+j).attr('disabled', 'disabled');
 					}
 					$('#checkCopy').removeAttr('disabled');
+					$('#btnQuat').removeAttr('disabled');
 				} else {
+					$('#checkCopy').attr('disabled', 'disabled');
 					$('#btnOrdei').attr('disabled', 'disabled');
 					$('#combAddr').removeAttr('disabled');
 					$('#txtOdate').datepicker();
@@ -1474,6 +1478,8 @@
 						if (!emp($('#txtCustno').val())) {
 							if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
 								curData.paste();
+								if(q_cur==1)
+									$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 								alert('非總店與相關分店!!');
 							}
 							
