@@ -115,6 +115,18 @@
 					$(this).attr('size', len + "");
 				}).blur(function() {
 					$(this).attr('size', '1');
+				}).change(function() {
+					if($("#cmbPerson").val()=='外勞'){
+						$('#txtPassportno').show();
+						$('#lblPassportno').show();
+						$('#txtId').hide();
+						$('#lblId').hide();
+					}else{
+	                   	$('#txtPassportno').hide();
+						$('#lblPassportno').hide();
+						$('#txtId').show();
+						$('#lblId').show();
+					}
 				});
 				$("#cmbRecord").focus(function() {
 					var len = $(this).children().length > 0 ? $(this).children().length : 1;
