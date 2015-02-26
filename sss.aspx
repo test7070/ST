@@ -545,7 +545,7 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
-				var WantDisabledArray = ['btnSsspart', 'btnSaladjust', 'btnLabases','btnSssr','btnSalbs'];
+				var WantDisabledArray = ['btnSsspart', 'btnSaladjust', 'btnLabases','btnSssr','btnSalbs','btnTax'];
 				for (var k = 0; k < WantDisabledArray.length; k++) {
 					if (q_cur == 1 || q_cur == 2) {
 						$("#" + WantDisabledArray[k]).attr('disabled', 'disabled');
