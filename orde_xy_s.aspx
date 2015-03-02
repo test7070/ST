@@ -28,10 +28,8 @@
 
         bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
         q_mask(bbmMask);
-       if(q_getPara('sys.comp').indexOf('永勝') > -1)
-        	q_cmbParse("cmbStype", '@全部,'+q_getPara('orde.stype_uu'));
-        else
-        	q_cmbParse("cmbStype", '@全部,'+q_getPara('orde.stype'));
+     
+        q_cmbParse("cmbStype", '@全部,'+q_getPara('orde.stype'));
 
         $('#txtBdate').focus();
     }
@@ -56,7 +54,7 @@
         		 +q_sqlPara2("salesno", t_salesno) + q_sqlPara2("custno", t_custno)
         		 +q_sqlPara2("stype", t_stype)+ q_sqlPara2("contract", t_contract);
 		if(t_quatno.length>0)
-		       		t_where += " and exists(select noa from ordes"+r_accy+" where ordes"+r_accy+".noa=orde"+r_accy+".noa and ordes"+r_accy+".quatno='"+t_quatno+"')";
+		       		t_where += " and exists(select noa from view_ordes"+r_accy+" where view_ordes"+r_accy+".noa=view_orde"+r_accy+".noa and view_ordes"+r_accy+".quatno='"+t_quatno+"')";
 		
 		if(t_comp.length>0)
 			t_where="("+t_where+") or charindex('"+t_comp+"',comp)>0"
