@@ -191,11 +191,14 @@
 				});
 
 				$('#txtCustno').change(function() {
-					if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
+					/*if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
 						curData.paste();
 						if(q_cur==1)
 							$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 						alert('非總店與相關分店!!');
+					}*/
+					for(var j=0 ;j<q_bbsCount;j++){
+						$('#btnMinus_'+j).click();
 					}
 					
 					if (!emp($('#txtCustno').val())) {
@@ -353,8 +356,8 @@
 							}
 
 							var i, j = 0;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSizea,txtDime,txtUnit,txtPrice,txtMount,txtQuatno,txtNo3,txtClassa'
-							, b_ret.length, b_ret, 'productno,product,spec,sizea,dime,unit,price,mount,noa,no3,classa', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSizea,txtDime,txtUnit,txtPrice,txtMount,txtQuatno,txtNo3,txtClassa,txtClass'
+							, b_ret.length, b_ret, 'productno,product,spec,sizea,dime,unit,price,mount,noa,no3,classa,class', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							sum();
 							bbsAssign();
@@ -679,6 +682,8 @@
 					//12/11 核准判斷暫時拿掉 等上線後再放入不用apv 抓sign
 					t_where="noa+'_'+odate+'_'+productno+'_'+product in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno+'_'+b.product from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+$('#txtOdate').val()+"' group by b.productno,b.product)";
 					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and datea>='"+$('#txtOdate').val()+"'";
+					//104/03/04 只有成交才能匯入
+					t_where+=" and isnull(gweight,0)=1 ";
 					q_box("quat_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'quats', "95%", "95%", $('#btnQuat').val());
 				}else {
 					alert(q_getMsg('msgCustEmp'));
@@ -1171,17 +1176,17 @@
 				}
 			}
 			
-			var copycustno='';
+			//var copycustno='';
 			function btnIns() {
-				var t_bbscounts=q_bbsCount;
+				/*var t_bbscounts=q_bbsCount;
 				if ($('#checkCopy').is(':checked')){
 					curData.copy();
 					copycustno=$('#txtCustno').val();
 				}else{
 					copycustno='';
-				}
+				}*/
 				_btnIns();
-				if ($('#checkCopy').is(':checked')){
+				/*if ($('#checkCopy').is(':checked')){
 					while(t_bbscounts>=q_bbsCount){
 						q_bbs_addrow('bbs',0,0);
 					}
@@ -1189,7 +1194,8 @@
 				}
 				
 				copy_field();
-				//$('#chkIsproj').attr('checked', true);
+				*/
+				$('#chkIsproj').attr('checked', true);
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
@@ -1204,7 +1210,7 @@
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
-				copy_field();
+				//copy_field();
 				$('#txtCustno').focus();
 
 				if (!emp($('#txtCustno').val())) {
@@ -1368,7 +1374,7 @@
 						$('#combGroupbno_'+j).removeAttr('disabled');
 						$('#combClassa_'+j).removeAttr('disabled');
 					}
-					copy_field();
+					//copy_field();
 				}
 				
 				if(emp($('#txtOrdbno').val()) && q_cur<1 && q_cur>2){
@@ -1476,11 +1482,14 @@
 				switch (s1) {
 					case 'txtCustno':
 						if (!emp($('#txtCustno').val())) {
-							if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
+							/*if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
 								curData.paste();
 								if(q_cur==1)
 									$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 								alert('非總店與相關分店!!');
+							}*/
+							for(var j=0 ;j<q_bbsCount;j++){
+								$('#btnMinus_'+j).click();
 							}
 							
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr^^";
@@ -1775,8 +1784,8 @@
 					</tr>
 					<tr class="tr1">
 						<td class="td1">
-							<input id="checkCopy" type="checkbox" style="float:left;"/>
-							<a id='lblCopy' class="lbl" style="float:left;"> </a>
+							<!--<input id="checkCopy" type="checkbox" style="float:left;"/>
+							<a id='lblCopy' class="lbl" style="float:left;"> </a>-->
 							<span> </span><a id='lblOdate' class="lbl"> </a>
 						</td>
 						<td class="td2"><input id="txtOdate" type="text" class="txt c1"/></td>

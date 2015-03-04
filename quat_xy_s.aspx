@@ -32,6 +32,9 @@
 
                 bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
                 q_mask(bbmMask);
+                
+                q_cmbParse("cmbGweight", '@全部,0@未成交,1@成交');
+                q_cmbParse("cmbEweight", '@全部,0@未填獎金,1@已填獎金');
 
                 $('#txtBdate').focus();
             }
@@ -44,13 +47,20 @@
                 t_salesno = $('#txtSalesno').val();
                 t_sales = $('#txtSales').val();
                 t_cust = $('#txtCust').val();
+                t_gweight = $('#cmbGweight').val();
+                t_eweight = $('#cmbEweight').val();
 
                 var t_where = " 1=1 " + q_sqlPara2("noa", t_noa)+ q_sqlPara2("datea", t_bdate, t_edate) + q_sqlPara2("salesno", t_salesno) + q_sqlPara2("custno", t_custno) ;
 				if (t_sales.length>0)
 		        	t_where += " and charindex('"+t_sales+"',sales)>0"
+		        if (t_gweight.length>0)
+					t_where += " and isnull(gweight,0)="+t_gweight
+				if (t_eweight.length>0)
+					t_where += " and isnull(eweight,0)="+t_eweight
 		        	
 		        if (t_cust.length>0)
 					t_where="("+t_where+") or charindex('"+t_cust+"',comp)>0"
+				
 		        	
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
@@ -106,6 +116,14 @@
 					<input class="txt" id="txtSales" type="text" style="width:215px; font-size:medium;" />
 					</td>
 				</tr>
+				<tr class='seek_tr'>
+	                <td class='seek'  style="width:20%;"><a>成交</a></td>
+	                <td><select id="cmbGweight" class="txt c1" style="font-size:medium;"> </select></td>
+	             </tr>
+	             <tr class='seek_tr'>
+	                <td class='seek'  style="width:20%;"><a>獎金</a></td>
+	                <td><select id="cmbEweight" class="txt c1" style="font-size:medium;"> </select></td>
+	             </tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->
 		</div>
