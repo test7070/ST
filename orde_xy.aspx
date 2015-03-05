@@ -152,6 +152,7 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("combClassa",' ,便品,印刷','s');
+				q_cmbParse("cmbSource",'0@ ,1@寄庫,2@寄出','s');
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -680,7 +681,7 @@
 				if (t_custno.length > 0) {
 					t_where = "";
 					//12/11 核准判斷暫時拿掉 等上線後再放入不用apv 抓sign
-					t_where="noa+'_'+odate+'_'+productno+'_'+product in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno+'_'+b.product from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+$('#txtOdate').val()+"' group by b.productno,b.product)";
+					t_where="noa+'_'+odate+'_'+productno+'_'+product in (select MAX(a.noa)+'_'+MAX(a.odate)+'_'+b.productno+'_'+b.product from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+$('#txtOdate').val()+"' group by b.productno,b.product)";
 					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and datea>='"+$('#txtOdate').val()+"'";
 					//104/03/04 只有成交才能匯入
 					t_where+=" and isnull(gweight,0)=1 ";
@@ -1904,7 +1905,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 2300px;">
+		<div class='dbbs' style="width: 2320px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
@@ -1916,7 +1917,7 @@
 					<td align="center" style="width:70px;"><a>包裝方式</a></td>
 					<td align="center" style="width:40px;"><a>色數</a></td>
 					<td align="center" style="width:55px;"><a id='lblUnit'> </a></td>
-					<td align="center" style="width:85px;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:105px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblTotal_s'> </a></td>
 					<!--<td align="center" style="width:85px;" class="bonus"><a>獎金比例</a></td>-->
@@ -1954,7 +1955,10 @@
 					<td><input id="txtSizea.*" type="text" class="txt c1"/></td>
 					<td><input id="txtDime.*" type="text" class="txt c1 num"/></td>
 					<td align="center"><input class="txt c7" id="txtUnit.*" type="text"/></td>
-					<td><input class="txt num c7" id="txtMount.*" type="text" /></td>
+					<td>
+						<input class="txt num c7" id="txtMount.*" type="text" style="width:80px;"/>
+						<select id="cmbSource.*" class="txt c1" style="width:20px;float: right;"> </select>
+					</td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtTotal.*" type="text" /></td>
 					<!--<td class="bonus"><input class="txt num c7 bonus" id="txtClass.*" type="text" /></td>-->

@@ -407,7 +407,7 @@
 						all_eweight=false;
 					}
 				}
-				if(all_gweight)
+				/*if(all_gweight)
 					$('#checkGweight').prop('checked',true);
 				else
 					$('#checkGweight').prop('checked',false);
@@ -415,7 +415,7 @@
 					$('#checkEweight').prop('checked',true);
 				else
 					$('#checkEweight').prop('checked',false);
-				
+				*/
 				if($('#checkGweight').prop('checked')){
 					$('#txtGweight').val(1);
 				}else{

@@ -128,7 +128,9 @@
 						t_where = " isnull(enda,0)!=1 ";
 						//t_where += " and left(productno,2)!='##' and left(custno,2)!='##' ";//非正式編號
 						t_where += " and productno!='' ";
-						t_where += " and (custno='"+t_custno+"' or custno='"+t_custno.substr(0,5)+"')";
+						//t_where += " and (custno='"+t_custno+"' or custno='"+t_custno.substr(0,5)+"')";
+						t_where += " and (custno='"+t_custno+"')";
+						t_where += " and (source!='2' or mount!=isnull((select SUM(tranmoney3) from view_vccs where ordeno=view_ordes"+r_accy+".noa and no2=view_ordes"+r_accy+".no2),0))";
 						if (!emp($('#txtOrdeno').val()))
 							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
 						t_where = t_where;
@@ -247,8 +249,22 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
-							, 'productno,product,spec,unit,mount,mount,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
+							for (var i = 0; i < b_ret.length; i++) {
+								b_ret[i].tranmoney3=0;
+								b_ret[i].tranmoney2=0;
+								b_ret[i].width=0;
+								if(b_ret[i].source=='2'){//寄出
+									b_ret[i].tranmoney3=b_ret[i].mount;
+									b_ret[i].mount=0;
+								}else if(b_ret[i].source=='1'){//寄庫
+									b_ret[i].tranmoney2=b_ret[i].mount;
+								}else{
+									b_ret[i].width=b_ret[i].mount;
+								}
+							}
+								
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtTranmoney2,txtTranmoney3,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
+							, 'productno,product,spec,unit,mount,width,tranmoney2,tranmoney3,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
