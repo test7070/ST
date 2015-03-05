@@ -1346,9 +1346,9 @@
 			}
 			
 			function HiddenTreat() {
-				if (r_rank<9){
+				/*if (r_rank<9){
 					$('.bonus').hide();
-				}
+				}*/
 				
 				for (var j = 0; j < q_bbsCount; j++) {
 					if(!emp($('#txtQuatno_'+j).val())){
@@ -1919,7 +1919,7 @@
 					<td align="center" style="width:85px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblTotal_s'> </a></td>
-					<td align="center" style="width:85px;" class="bonus"><a>獎金比例</a></td>
+					<!--<td align="center" style="width:85px;" class="bonus"><a>獎金比例</a></td>-->
 					<td align="center" style="width:85px;"><a id='lblGemounts'> </a></td>
 					<td align="center" style="width:85px;"><a>未交量</a></td>
 					<td align="center" style="width:175px;"><a>備註</a></td>
@@ -1957,7 +1957,7 @@
 					<td><input class="txt num c7" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtTotal.*" type="text" /></td>
-					<td class="bonus"><input class="txt num c7 bonus" id="txtClass.*" type="text" /></td>
+					<!--<td class="bonus"><input class="txt num c7 bonus" id="txtClass.*" type="text" /></td>-->
 					<td><input class="txt num c1" id="txtC1.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtNotv.*" type="text" /></td>
 					<td><input class="txt c7" id="txtMemo.*" type="text" /></td>

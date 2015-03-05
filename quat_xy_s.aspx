@@ -50,17 +50,18 @@
                 t_gweight = $('#cmbGweight').val();
                 t_eweight = $('#cmbEweight').val();
 
-                var t_where = " 1=1 " + q_sqlPara2("noa", t_noa)+ q_sqlPara2("datea", t_bdate, t_edate) + q_sqlPara2("salesno", t_salesno) + q_sqlPara2("custno", t_custno) ;
+                var t_where = " 1=1 " + q_sqlPara2("noa", t_noa)+ q_sqlPara2("datea", t_bdate, t_edate) + q_sqlPara2("salesno", t_salesno)  ;
 				if (t_sales.length>0)
-		        	t_where += " and charindex('"+t_sales+"',sales)>0"
+		        	t_where += " and charindex('"+t_sales+"',sales)>0";
 		        if (t_gweight.length>0)
-					t_where += " and isnull(gweight,0)="+t_gweight
+					t_where += " and noa in ( select noa from view_quats where isnull(gweight,0)="+t_gweight+")";
 				if (t_eweight.length>0)
-					t_where += " and isnull(eweight,0)="+t_eweight
+					t_where += " and noa in ( select noa from view_quats where isnull(eweight,0)="+t_eweight+")";
 		        	
 		        if (t_cust.length>0)
-					t_where="("+t_where+") or charindex('"+t_cust+"',comp)>0"
-				
+					t_where="("+t_where+") and charindex('"+t_cust+"',comp)>0 ";
+				else
+					t_where +=q_sqlPara2("custno", t_custno);
 		        	
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
