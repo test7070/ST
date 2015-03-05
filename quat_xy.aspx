@@ -192,20 +192,26 @@
 				
 				$('#checkGweight').click(function(){
 					for (var i = 0; i < q_bbsCount; i++) {
-						if($('#checkGweight').prop('checked')){
-							$('#checkGweight_'+i).prop('checked',true);
-						}else{
-							$('#checkGweight_'+i).prop('checked',false);
+						if(!emp($('#txtProductno_'+i).val()) || !emp($('#txtProduct_'+i).val())){
+							if($('#checkGweight').prop('checked')){
+								$('#checkGweight_'+i).prop('checked',true);
+							}else{
+								$('#checkGweight_'+i).prop('checked',false);
+							}
 						}
 					}
 				});
 				
 				$('#checkEweight').click(function(){
 					for (var i = 0; i < q_bbsCount; i++) {
-						if($('#checkEweight').prop('checked')){
-							$('#checkEweight_'+i).prop('checked',true);
-						}else{
-							$('#checkEweight_'+i).prop('checked',false);
+						if(!emp($('#txtProductno_'+i).val()) || !emp($('#txtProduct_'+i).val())){
+							if($('#checkEweight').prop('checked')){
+								$('#checkEweight_'+i).prop('checked',true);
+								if($('#txtClass_'+i).val()=='') //104/03/05 預設代100
+									$('#txtClass_'+i).val('100');
+							}else{
+								$('#checkEweight_'+i).prop('checked',false);
+							}
 						}
 					}
 				});
