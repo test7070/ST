@@ -213,6 +213,23 @@
 						q_box("z_credit.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" + $('#txtCustno').val() + "';" + r_accy + ";" + q_cur, 'ordei', "95%", "95%", q_getMsg('btnCredit'));
 					}
 				});
+				
+				$('#btnStore2').click(function() {
+					if(!emp($('#txtCustno').val())){
+						var t_custno=$('#txtCustno').val().substr(0,$('#txtCustno').val().indexOf('-'));
+						if(t_custno=='') 
+							t_custno=$('#txtCustno').val();
+						var t_where = "where=^^ a.storeno2 like '"+t_custno +"%' and a.noa !='"+$('#txtNoa').val()+"' and isnull(a.productno,'')!='' ^^";
+						//var t_where = "where=^^ a.noa!='"+$('#txtNoa').val()+"' and b.custno='" + t_custno + "' and isnull(productno,'')!='' ^^";
+						q_gt('vcc_xy_store2', t_where, 0, 0, 0, "store2_store2", r_accy);
+					}else{
+						alert("請輸入客戶編號!!");
+					}
+					$('#div_store2').hide();
+				});
+				$('#btnClose_div_store2').click(function() {
+					$('#div_store2').toggle();
+				});
 				////-----------------以下為addr2控制事件---------------
 				$('#btnAddr2').mousedown(function(e) {
 					var t_post2 = $('#txtPost2').val().split(';');
@@ -661,6 +678,41 @@
 							$('#txtSales').val(as[0].sales);
 						}
 						break;
+					case 'store2_store2':
+						var as = _q_appendData("view_vccs", "", true);
+						for (var i = 0; i < as.length; i++) {
+							if(dec(as[i].stkmount)==0){
+								as.splice(i, 1);
+								i--;
+							}
+						}
+						if (as[0] == undefined) {
+							alert("無寄庫量");
+							break;
+						}
+						var rowslength=document.getElementById("table_store2").rows.length-1;
+							for (var j = 1; j < rowslength; j++) {
+								document.getElementById("table_store2").deleteRow(1);
+							}
+						var store2_row=0;
+					
+						for (var i = 0; i < as.length; i++) {
+							//倉庫庫存
+							var tr = document.createElement("tr");
+							tr.id = "store2_"+j;
+							tr.innerHTML = "<td><input id='store2_txtProductno_"+store2_row+"' type='text' class='txt c1' value='"+as[i].productno+"' disabled='disabled'/></td>";
+							tr.innerHTML+="<td><input id='store2_txtProduct_"+store2_row+"' type='text' class='txt c1' value='"+as[i].product+"' disabled='disabled' /></td>";
+							tr.innerHTML+= "<td><input id='store2_txtSpec_"+store2_row+"' type='text' class='txt c1' value='"+as[i].spec+"' disabled='disabled'/></td>";
+							tr.innerHTML+="<td><input id='store2_txtStore_"+store2_row+"' type='text' class='txt c1' value='"+as[i].store2+"' disabled='disabled' /></td>";
+							tr.innerHTML+="<td><input id='store2_txtMount_"+store2_row+"' type='text' class='txt c1 num' value='"+dec(as[i].stkmount)+"' disabled='disabled'/></td>";
+							var tmp = document.getElementById("store2_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+							store2_row++;
+						}
+						$('#div_store2').css('top', $('#btnStore2').offset().top+25);
+						$('#div_store2').css('left', $('#btnStore2').offset().left-parseInt($('#div_store2').css('width'))-5);
+						$('#div_store2').toggle();
+						break;
 					case 'flors':
 						var as = _q_appendData("flors", "", true);
 						if (as[0] != undefined) {
@@ -680,10 +732,14 @@
 				var t_where = '';
 				if (t_custno.length > 0) {
 					t_where = "";
+					//取總店
+					t_custno=$('#txtCustno').val().substr(0,$('#txtCustno').val().indexOf('-'));
+					if(t_custno=='') 
+						t_custno=$('#txtCustno').val();
 					//12/11 核准判斷暫時拿掉 等上線後再放入不用apv 抓sign
 					t_where="noa+'_'+odate+'_'+productno+'_'+product in (select MAX(a.noa)+'_'+MAX(a.odate)+'_'+b.productno+'_'+b.product from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+$('#txtOdate').val()+"' group by b.productno,b.product)";
 					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and datea>='"+$('#txtOdate').val()+"'";
-					//104/03/04 只有成交才能匯入
+					//104/03/04 只有成交才能匯入//所以不用簽核
 					t_where+=" and isnull(gweight,0)=1 ";
 					q_box("quat_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'quats', "95%", "95%", $('#btnQuat').val());
 				}else {
@@ -800,6 +856,15 @@
 							b_seq = t_IdSeq;
 							//q_change($(this), 'ucc', 'noa', 'noa,product,unit');
 							AutoNo2();
+						});
+						$('#cmbSource_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if(!emp($('#txtMemo_'+b_seq).val()))
+								$('#txtMemo_'+b_seq).val($('#cmbSource_' + b_seq).find("option:selected").text()+'：'+$('#txtMount_' + b_seq).val()+$('#txtUnit_' + b_seq).val()+','+$('#txtMemo_'+b_seq).val());
+							else
+								$('#txtMemo_'+b_seq).val($('#cmbSource_' + b_seq).find("option:selected").text()+'：'+$('#txtMount_' + b_seq).val()+$('#txtUnit_' + b_seq).val());
 						});
 
 						$('#txtUnit_' + j).focusout(function() {
@@ -1754,6 +1819,23 @@
 				</tr>
 			</table>
 		</div>
+		
+		<div id="div_store2" style="position:absolute; top:300px; left:400px; display:none; width:680px; background-color: #CDFFCE; border: 5px solid gray;">
+			<table id="table_store2" style="width:100%;" border="1" cellpadding='2'  cellspacing='0'>
+				<tr id='store2_top'>
+					<td style="background-color: #f8d463;width: 130px;" align="center">產品編號</td>
+					<td style="background-color: #f8d463;width: 150px;" align="center">產品名稱</td>
+					<td style="background-color: #f8d463;width: 200px;" align="center">規格</td>
+					<td style="background-color: #f8d463;width: 100px;" align="center">寄庫倉庫</td>
+					<td style="background-color: #f8d463;width: 100px;" align="center">寄庫數量</td>
+				</tr>
+				<tr id='store2_close'>
+					<td align="center" colspan='5'>
+						<input id="btnClose_div_store2" type="button" value="關閉視窗">
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div id='dmain' style="overflow:hidden;width: 1260px;">
 			<div class="dview" id="dview">
 				<table class="tview" id="tview">
@@ -1880,6 +1962,8 @@
 						<td class="td3"><input id="txtFloata" type="text" class="txt num c1" /></td>
 						<td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
+						<td class="td7"> </td>
+						<td class="td8"><input id="btnStore2" type="button" value="寄庫顯示"/></td>
 					</tr>
 					<tr class="tr10">
 						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
@@ -1905,7 +1989,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 2320px;">
+		<div class='dbbs' style="width: 2370px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
@@ -1917,7 +2001,8 @@
 					<td align="center" style="width:70px;"><a>包裝方式</a></td>
 					<td align="center" style="width:40px;"><a>色數</a></td>
 					<td align="center" style="width:55px;"><a id='lblUnit'> </a></td>
-					<td align="center" style="width:105px;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:85px;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:70px;"><a >寄/出庫</a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblTotal_s'> </a></td>
 					<!--<td align="center" style="width:85px;" class="bonus"><a>獎金比例</a></td>-->
@@ -1955,10 +2040,8 @@
 					<td><input id="txtSizea.*" type="text" class="txt c1"/></td>
 					<td><input id="txtDime.*" type="text" class="txt c1 num"/></td>
 					<td align="center"><input class="txt c7" id="txtUnit.*" type="text"/></td>
-					<td>
-						<input class="txt num c7" id="txtMount.*" type="text" style="width:80px;"/>
-						<select id="cmbSource.*" class="txt c1" style="width:20px;float: right;"> </select>
-					</td>
+					<td><input class="txt num c7" id="txtMount.*" type="text"/></td>
+					<td><select id="cmbSource.*" class="txt c1"> </select></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtTotal.*" type="text" /></td>
 					<!--<td class="bonus"><input class="txt num c7 bonus" id="txtClass.*" type="text" /></td>-->
