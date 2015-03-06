@@ -608,7 +608,7 @@
 							$('#txtAddr').val(as[0].addr);
 							$('#txtPost2').val(as[0].post2);
 							$('#txtAddr2').val(as[0].addr2);
-							$('#cmbTaxtype').val(as[0].taxtype);
+							//$('#cmbTaxtype').val(as[0].taxtype);
 							sum();
 						}
 						break;
