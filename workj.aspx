@@ -199,6 +199,7 @@
 	                q_cmbParse("cmbMech4", z_mech,'s');
 	                q_cmbParse("cmbMech5", z_mech,'s');
                 }
+     
                 $('#btnPrint_d').click(function(e){
                 	$('#btnPrint_d').attr('disabled','disabled');
                 	setTimeout(function(){$('#btnPrint_d').removeAttr('disabled')}, 3000);
@@ -743,7 +744,7 @@
                 $('.checkAll2').prop('checked',true);	
             }
             function q_bbsLenShow( t_start, t_end){
-            	for(var i=t_start;i<t_end;i++)
+            	for(var i=t_start;i<=t_end;i++)
             	if($('#canvas_'+i).length>0){
 					$('#imgPic_'+i).attr('src', $('#txtImgdata_'+i).val());
 					var imgwidth = $('#imgPic_'+i).width();
@@ -819,6 +820,30 @@
 	                    wrServer(t_noa);
 				}
 			};
+			function CopyMech(n){
+				if(!$('#lbl_mech').data('isInit')){
+					$('#lbl_mech').bind('contextmenu', function(e) {
+	                    /*滑鼠右鍵*/
+	                    e.preventDefault();
+	                    $('#lbl_mech').data('isInit',true);
+	                    //假如已有複製標記就清除
+	                    if($('#lbl_mech').data('copy')==null || $('#lbl_mech').data('copy').length==0){
+	                    }else{
+	                    	$('#lbl_mech').data('copy','').css('color','white');
+	                    }
+	                });
+				}
+				if($('#lbl_mech').data('copy') == null || $('#lbl_mech').data('copy').length==0){
+                	$('#lbl_mech').data('copy',n).css('color','red');
+                }else{
+                	var targetN = $('#lbl_mech').data('copy');
+                	$('#cmbMech1_'+n).val($('#cmbMech1_'+targetN).val());
+                	$('#cmbMech2_'+n).val($('#cmbMech2_'+targetN).val());
+                	$('#cmbMech3_'+n).val($('#cmbMech3_'+targetN).val());
+                	$('#cmbMech4_'+n).val($('#cmbMech4_'+targetN).val());
+                	$('#cmbMech5_'+n).val($('#cmbMech5_'+targetN).val());
+                }
+			}
             function bbsAssign() {
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
@@ -829,6 +854,38 @@
 						$("#canvas_"+i)[0].getContext("2d").drawImage($('#imgPic_'+i)[0],0,0,imgwidth,imgheight,0,0,150,50);
                 	}
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	//機台複製
+                    	$('#cmbMech1_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('cmbMech1_', '');
+                            CopyMech(n)
+                        });
+                        $('#cmbMech2_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('cmbMech2_', '');
+                            CopyMech(n)
+                        });
+                        $('#cmbMech3_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('cmbMech3_', '');
+                            CopyMech(n)
+                        });
+                        $('#cmbMech4_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('cmbMech4_', '');
+                            CopyMech(n)
+                        });
+                        $('#cmbMech5_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('cmbMech5_', '');
+                            CopyMech(n)
+                        });
+                    	//--------------------------------------------------------------
                     	$('#txtProductno_' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
