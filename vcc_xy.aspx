@@ -128,7 +128,9 @@
 						t_where = " isnull(enda,0)!=1 ";
 						//t_where += " and left(productno,2)!='##' and left(custno,2)!='##' ";//非正式編號
 						t_where += " and productno!='' ";
-						t_where += " and (custno='"+t_custno+"' or custno='"+t_custno.substr(0,5)+"')";
+						//t_where += " and (custno='"+t_custno+"' or custno='"+t_custno.substr(0,5)+"')";
+						t_where += " and (custno='"+t_custno+"')";
+						t_where += " and (source!='2' or mount!=isnull((select SUM(tranmoney3) from view_vccs where ordeno=view_ordes"+r_accy+".noa and no2=view_ordes"+r_accy+".no2),0))";
 						if (!emp($('#txtOrdeno').val()))
 							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
 						t_where = t_where;
@@ -247,8 +249,22 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
-							, 'productno,product,spec,unit,mount,mount,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
+							for (var i = 0; i < b_ret.length; i++) {
+								b_ret[i].tranmoney3=0;
+								b_ret[i].tranmoney2=0;
+								b_ret[i].width=0;
+								if(b_ret[i].source=='2'){//寄出
+									b_ret[i].tranmoney3=b_ret[i].mount;
+									b_ret[i].mount=0;
+								}else if(b_ret[i].source=='1'){//寄庫
+									b_ret[i].tranmoney2=b_ret[i].mount;
+								}else{
+									b_ret[i].width=b_ret[i].mount;
+								}
+							}
+								
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtTranmoney2,txtTranmoney3,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
+							, 'productno,product,spec,unit,mount,width,tranmoney2,tranmoney3,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
@@ -720,7 +736,8 @@
 					return;
 				}
 				//判斷出貨商品是否有寄庫 如果有要先將寄庫出貨完畢才能出貨
-				if(!check_stock){
+				//104/03/02 等寄庫存完整再判斷
+				/*if(!check_stock){
 					var productno_where="";
 					for (var i = 0; i < q_bbsCount; i++) {
 						if(!emp($('#txtProductno_'+i).val())&&dec($('#txtWidth_'+i).val())!=0){
@@ -730,13 +747,13 @@
 					if(productno_where=="")
 						productno_where="''";
 					
-					/*var t_custno=$('#txtCustno').val().substr(0,$('#txtCustno').val().indexOf('-'));
-					if(t_custno=='') 
-						t_custno=$('#txtCustno').val();*/
+					//var t_custno=$('#txtCustno').val().substr(0,$('#txtCustno').val().indexOf('-'));
+					//if(t_custno=='') 
+					//	t_custno=$('#txtCustno').val();
 					var t_where = "where=^^ a.noa!='"+$('#txtNoa').val()+"' and a.productno in ("+productno_where+") and a.productno !='' ^^";
 					q_gt('vcc_xy_store2', t_where, 0, 0, 0, "btnOk_check_stock", r_accy);
 					return;
-				}
+				}*/
 				/*if (emp($('#txtMon').val()))
 					$('#txtMon').val($('#txtDatea').val().substr(0, 6));*/
 				
@@ -900,10 +917,11 @@
 								var t_where = "where=^^ b.custno='" + t_custno + "' and productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
 								q_gt('vcc_xy_store2', t_where, 0, 0, 0, "check_store2", r_accy);
 							}*/
-							if(!emp($('#txtProductno_' + b_seq).val()) && dec($(this).val())!=0){						
+							//104/03/02 等寄庫存完整再判斷
+							/*if(!emp($('#txtProductno_' + b_seq).val()) && dec($(this).val())!=0){						
 								var t_where = "where=^^ a.productno='" + $('#txtProductno_' + b_seq).val() + "' and a.storeno2='"+$('#txtStoreno2_' + b_seq).val() +"' and a.noa !='"+$('#txtNoa').val()+"' ^^";
 								q_gt('vcc_xy_store2', t_where, 0, 0, 0, "check_store2", r_accy);
-							}
+							}*/
 						});
 						
 						$('#txtStoreno2_' + i).focusin(function() {
@@ -1403,7 +1421,7 @@
 					<td style="background-color: #f8d463;width: 130px;" align="center">產品編號</td>
 					<td style="background-color: #f8d463;width: 150px;" align="center">產品名稱</td>
 					<td style="background-color: #f8d463;width: 200px;" align="center">規格</td>
-					<!--<td style="background-color: #f8d463;width: 100px;" align="center">寄庫倉庫</td>-->
+					<td style="background-color: #f8d463;width: 100px;" align="center">寄庫倉庫</td>
 					<td style="background-color: #f8d463;width: 100px;" align="center">寄庫數量</td>
 				</tr>
 				<tr id='store2_close'>

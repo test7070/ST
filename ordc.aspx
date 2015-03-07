@@ -468,7 +468,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno1'] && !as['productno2'] && !as['productno3']) {
+				if (!as['productno1'] && !as['productno2'] && !as['productno3'] && !as['product']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -645,6 +645,40 @@
 							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
+						break;
+				}
+			}
+			
+			function q_stPost() {
+				if (!(q_cur == 1 || q_cur == 2))
+					return false;
+					
+				//有達自動產生便品
+				if(q_getPara('sys.project').toUpperCase()=='XY'){
+					var isordc_ucc=false;
+					for (var j = 0; j < q_bbsCount; j++) {
+						if(!emp($('#txtProduct_'+j).val()) && emp($('#txtProductno_'+j).val())){
+							isordc_ucc=true;
+							break;
+						}
+					}
+					if(isordc_ucc){
+						var t_paras = $('#txtNoa').val()+ ';'+r_accy;
+						q_func('qtxt.query.ordc_ucc', 'cust_ucc_xy.txt,ordc_ucc,' + t_paras);
+					}
+				}
+			}
+			
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'qtxt.query.ordc_ucc':
+						//var as = _q_appendData("tmp0", "", true, true);
+						var s2=[];
+						s2[0]=q_name + '_s';
+						s2[1]="where=^^ noa<='"+$('#txtNoa').val()+"' ^^"
+						q_boxClose2(s2);
+						break;
+					default:
 						break;
 				}
 			}
@@ -969,7 +1003,7 @@
                     </td>
                     <td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:180px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblProduct_st'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblProduct_st'> </a><a class="isSpec">/</a><a id='lblSpec' class="isSpec"> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyles'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMount_st'> </a></td>

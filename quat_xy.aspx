@@ -33,7 +33,7 @@
 			brwNowPage = 0;
 			brwKey = 'Datea';
 			aPop = new Array(
-				['txtProductno_', '', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', ''],
+				['txtProductno_', '', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,invoicetitle'
 				, 'txtCustno,txtComp,txtNick,txtTel', 'cust_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
@@ -188,6 +188,32 @@
 				
 				$('#btnPlusCust').click(function(){
 					q_box('cust.aspx','pluscust', "95%", "95%", '新增客戶');
+				});
+				
+				$('#checkGweight').click(function(){
+					for (var i = 0; i < q_bbsCount; i++) {
+						if(!emp($('#txtProductno_'+i).val()) || !emp($('#txtProduct_'+i).val())){
+							if($('#checkGweight').prop('checked')){
+								$('#checkGweight_'+i).prop('checked',true);
+							}else{
+								$('#checkGweight_'+i).prop('checked',false);
+							}
+						}
+					}
+				});
+				
+				$('#checkEweight').click(function(){
+					for (var i = 0; i < q_bbsCount; i++) {
+						if(!emp($('#txtProductno_'+i).val()) || !emp($('#txtProduct_'+i).val())){
+							if($('#checkEweight').prop('checked')){
+								$('#checkEweight_'+i).prop('checked',true);
+								if($('#txtClass_'+i).val()=='') //104/03/05 預設代100
+									$('#txtClass_'+i).val('100');
+							}else{
+								$('#checkEweight_'+i).prop('checked',false);
+							}
+						}
+					}
 				});
 			}
 
@@ -362,7 +388,45 @@
 					$('#txtWorker').val(r_name);
 				if (q_cur == 2)
 					$('#txtWorker2').val(r_name);
-					
+				
+				//*************************************
+				
+				var all_gweight=true;
+				var all_eweight=true;
+				for (var i = 0; i < q_bbsCount; i++) {
+					if($('#checkGweight_'+i).prop('checked')){
+						$('#txtGweight_'+i).val(1);
+					}else{
+						$('#txtGweight_'+i).val(0);
+						all_gweight=false;
+					}
+					if($('#checkEweight_'+i).prop('checked')){
+						$('#txtEweight_'+i).val(1);
+					}else{
+						$('#txtEweight_'+i).val(0);
+						all_eweight=false;
+					}
+				}
+				/*if(all_gweight)
+					$('#checkGweight').prop('checked',true);
+				else
+					$('#checkGweight').prop('checked',false);
+				if(all_eweight)
+					$('#checkEweight').prop('checked',true);
+				else
+					$('#checkEweight').prop('checked',false);
+				*/
+				if($('#checkGweight').prop('checked')){
+					$('#txtGweight').val(1);
+				}else{
+					$('#txtGweight').val(0);
+				}
+				if($('#checkEweight').prop('checked')){
+					$('#txtEweight').val(1);
+				}else{
+					$('#txtEweight').val(0);
+				}
+				//*************************************
 				sum();
 
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
@@ -376,7 +440,7 @@
 				if (q_cur > 0 && q_cur < 4)
 					return;
 
-				q_box('quat_xy_s.aspx', q_name + '_s', "500px", "410px", q_getMsg("popSeek"));
+				q_box('quat_xy_s.aspx', q_name + '_s', "500px", "510px", q_getMsg("popSeek"));
 			}
 
 			function combPay_chg() {
@@ -741,9 +805,19 @@
 							$('#combGroupbno_'+b_seq)[0].selectedIndex=0;
 						});
 						
+						$('#txtClass_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							$('#checkEweight_'+b_seq).prop('checked',true);
+						});
 					}
 				}
 				_bbsAssign();
+				change_check();
+				if (r_rank<9){
+					$('.bonus').hide();
+				}
 			}
 
 			function btnIns() {
@@ -777,11 +851,11 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				if(!orde_quat){
+				/*if(!orde_quat){
 					var t_where = "where=^^ quatno='" + $('#txtNoa').val() + "' ^^";
 					q_gt('view_ordes', t_where, 0, 0, 0, "");
 					return;
-				}
+				}*/
 				
 				_btnModi();
 				$('#txtProduct').focus();
@@ -822,6 +896,8 @@
 				$('#div_spec').hide();
 				$('#div_cost').hide();
 				
+				change_check();
+				
 				if (!q_cur) {
 					$('#combAddr').attr('disabled', 'disabled');
 				} else {
@@ -857,17 +933,26 @@
 					$('#btnPlusCust').hide();
 				}
 				
+				change_check();
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
+					$('#checkGweight').attr('disabled', 'disabled');
+					$('#checkEweight').attr('disabled', 'disabled');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#combGroupbno_'+j).attr('disabled', 'disabled');
 						$('#combClassa_'+j).attr('disabled', 'disabled');
+						$('#checkGweight_'+j).attr('disabled', 'disabled');
+						$('#checkEweight_'+j).attr('disabled', 'disabled');
 					}
 				} else {
 					$('#combAddr').removeAttr('disabled');
+					$('#checkGweight').removeAttr('disabled');
+					$('#checkEweight').removeAttr('disabled');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#combGroupbno_'+j).removeAttr('disabled');
 						$('#combClassa_'+j).removeAttr('disabled');
+						$('#checkGweight_'+j).removeAttr('disabled');
+						$('#checkEweight_'+j).removeAttr('disabled');
 					}
 				}
 				
@@ -991,6 +1076,51 @@
 						break;*/
 				}
 			}
+			
+			function change_check() {
+				if(dec($('#txtGweight').val())==0){
+					$('#checkGweight').prop('checked',false);
+				}else{
+					$('#checkGweight').prop('checked',true);
+				}
+				if(dec($('#txtEweight').val())==0){
+					$('#checkEweight').prop('checked',false);
+				}else{
+					$('#checkEweight').prop('checked',true);
+				}
+				for (var i = 0; i < brwCount; i++) {
+					if($('#vtgweight_'+i).text()=='1' || $('#vtgweight_'+i).text()=='V'){
+						$('#vtgweight_'+i).text('V');
+					}else{
+						$('#vtgweight_'+i).text('');
+					}
+					if($('#vteweight_'+i).text()=='1' || $('#vteweight_'+i).text()=='V'){
+						$('#vteweight_'+i).text('V');
+					}else{
+						$('#vteweight_'+i).text('');
+					}
+				}
+				for (var i = 0; i < q_bbsCount; i++) {
+					if(q_cur==1 || q_cur==2){
+						$('#checkGweight_'+i).removeAttr('disabled');
+						$('#checkEweight_'+i).removeAttr('disabled');
+					}else{
+						$('#checkGweight_'+i).attr('disabled', 'disabled');
+						$('#checkEweight_'+i).attr('disabled', 'disabled');
+					}
+					
+					if($('#txtGweight_'+i).val()==0){
+						$('#checkGweight_'+i).prop('checked',false);
+					}else{
+						$('#checkGweight_'+i).prop('checked',true);
+					}
+					if($('#txtEweight_'+i).val()==0){
+						$('#checkEweight_'+i).prop('checked',false);
+					}else{
+						$('#checkEweight_'+i).prop('checked',true);
+					}
+				}
+			}
 		</script>
 		<style type="text/css">
 			#dmain {
@@ -998,7 +1128,7 @@
 			}
 			.dview {
 				float: left;
-				width: 35%;
+				/*width: 35%;*/
 				border-width: 0px;
 			}
 			.tview {
@@ -1019,7 +1149,7 @@
 			}
 			.dbbm {
 				float: left;
-				width: 65%;
+				/*width: 65%;*/
 				/*margin: -1px;
 				 border: 1px black solid;*/
 				border-radius: 5px;
@@ -1142,13 +1272,15 @@
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' style="overflow:hidden;width: 1270px;">
 			<div class="dview" id="dview">
-				<table class="tview" id="tview"	>
+				<table class="tview" id="tview" style="width: 500px;"	>
 					<tr>
-						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
+						<td align="center" style="width:3%"><a id='vewChk'> </a></td>
 						<td align="center" style="width:15%"><a id='vewOdate'> </a></td>
 						<td align="center" style="width:15%">有效日期</td>
 						<td align="center" style="width:20%"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:45%"><a id='vewComp'> </a></td>
+						<td align="center" style="width:30%"><a id='vewComp'> </a></td>
+						<td align="center" style="width:8%"><a id='vewGweight'>成交</a></td>
+						<td align="center" style="width:8%" class="bonus"><a id='vewEweight'>獎金</a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
@@ -1156,11 +1288,13 @@
 						<td align="center" id='datea'>~datea</td>
 						<td align="center" id='noa'>~noa</td>
 						<td align="center" id='comp' style="text-align: left;">~comp</td>
+						<td align="center" id='gweight'>~gweight</td>
+						<td align="center" id='eweight' class="bonus">~eweight</td>
 					</tr>
 				</table>
 			</div>
 			<div class='dbbm'>
-				<table class="tbbm" id="tbbm" style="width: 820px;">
+				<table class="tbbm" id="tbbm" style="width: 760px;">
 					<tr class="tr1">
 						<td class="td1" style="width: 108px;">
 							<input id="checkCopy" type="checkbox" style="float:left;"/>
@@ -1223,7 +1357,7 @@
 						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
 						<td><input id="txtPost2" type="text" class="txt c1"/></td>
 						<td colspan='6' >
-							<input id="txtAddr2" type="text" class="txt c1" style="width: 565px;"/>
+							<input id="txtAddr2" type="text" class="txt c1" style="width: 545px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
 					</tr>
@@ -1279,11 +1413,20 @@
 							<input id="chkCancel" type="checkbox"/>
 							<span> </span><a id='lblCancel'> </a>
 						</td>
+						<td colspan="2">
+							<span> </span>
+							<input id="checkGweight" type="checkbox"/>
+							<input id="txtGweight" type="hidden" />
+							<span> </span><a>成交</a>
+							<input id="checkEweight" type="checkbox" class="bonus"/>
+							<input id="txtEweight" type="hidden" class="bonus" />
+							<span class="bonus"> </span><a class="bonus">獎金</a>
+						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1470px;">
+		<div class='dbbs' style="width: 1640px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
@@ -1299,7 +1442,10 @@
 					<!--<td align="center"><a id='lblWeights'></a></td>-->
 					<td align="center" style="width:100px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a></td>
+					<td align="center" style="width:85px;" class="bonus"><a>獎金比例</a></td>
+					<td align="center" style="width:40px;" class="bonus"><a>獎金</a></td>
 					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
+					<td align="center" style="width:40px;"><a>成交</a></td>
 					<td align="center" style="width:40px;"><a id='lblEnda_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblCancels'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblVccrecord'> </a></td>
@@ -1329,12 +1475,21 @@
 					<!--<td style="width:8%;"><input id="txtWeight.*" type="text" class="txt c2 num"/></td>-->
 					<td><input id="txtPrice.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtTotal.*" type="text" class="txt c1 num"/></td>
+					<td class="bonus"><input class="txt num c7 bonus" id="txtClass.*" type="text" /></td>
+					<td class="bonus" align="center">
+						<input id="checkEweight.*" type="checkbox" class="bonus"/>
+						<input id="txtEweight.*" type="hidden" />
+					</td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c1"/>
 						<input class="txt" id="txtOrdeno.*" type="hidden"style="width:65%;" />
 						<input class="txt" id="txtNo2.*" type="hidden" style="width:25%;" />
 						<input id="txtNoq.*" type="hidden" />
 						<input id="recno.*" type="hidden" />
+					</td>
+					<td align="center">
+						<input id="checkGweight.*" type="checkbox"/>
+						<input id="txtGweight.*" type="hidden" />
 					</td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 					<td align="center"><input id="chkCancel.*" type="checkbox"/></td>
