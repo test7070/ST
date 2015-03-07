@@ -20,7 +20,7 @@
 			var q_name = "quat";
 			var decbbs = ['price', 'weight', 'mount', 'total', 'dime', 'width', 'lengthb', 'c1', 'notv', 'theory'];
 			var decbbm = ['money', 'tax', 'total', 'weight', 'floata', 'mount', 'price', 'totalus'];
-			var q_readonly = ['txtNoa','txtWorker', 'txtAcomp', 'txtSales', 'txtWorker2','txtMoney','txtTotal','txtTotalus','txtComp'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtCno', 'txtAcomp', 'txtSales', 'txtWorker2','txtMoney','txtTotal','txtTotalus','txtComp'];
 			var q_readonlys = ['txtNo3','txtTotal'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -431,7 +431,7 @@
 
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_quat') + (!emp($('#txtDatea').val())?$('#txtDatea').val():q_date()), '/', ''));
+					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_quat') + (!emp($('#txtOdate').val())?$('#txtOdate').val():q_date()), '/', ''));
 				else
 					wrServer(s1);
 			}
@@ -858,7 +858,7 @@
 				}*/
 				
 				_btnModi();
-				$('#txtProduct').focus();
+				$('#txtCustno').focus();
 
 				if (!emp($('#txtCustno').val())) {
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
