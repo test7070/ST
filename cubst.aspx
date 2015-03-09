@@ -519,7 +519,7 @@
 				font-size: medium;
 			}
 			#dbbt {
-				width: 2500px;
+				width: 2700px;
 			}
 			#tbbt {
 				margin: 0;
@@ -701,6 +701,7 @@
 					<td style="width:120px; text-align: center;">原批號</td>
 					<td style="width:120px; text-align: center;">原批號領料數</td>
 					<td style="width:120px; text-align: center;">領料重</td>
+					<td style="width:200px; text-align: center;">裁剪備註</td>
 					<td style="width:120px; text-align: center;">餘料寬</td>
 					<td style="width:120px; text-align: center;">餘料長</td>
 					<td style="width:30px; text-align: center;">型</td>
@@ -733,6 +734,7 @@
 					<td><input id="txtUno..*" type="text" class="txt c1"/></td>
 					<td><input id="txtGmount..*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtGweight..*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtMemo2..*" type="text" class="txt c1"/></td>
 					<td><input id="txtWidth..*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtLengthb..*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtStyle..*" type="text" class="txt c1"/></td>
