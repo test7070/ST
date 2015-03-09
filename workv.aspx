@@ -24,7 +24,7 @@
             var bbmNum = [];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbtNum = [];
-            var bbmMask = [['txtDatea','999/99/99']];
+            var bbmMask = [['txtDatea','999/99/99'],['txtWdate','999/99/99']];
             var bbsMask = [['txtDatea','999/99/99']];
             var bbtMask = [];
             q_sqlCount = 6;
@@ -38,12 +38,18 @@
             aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtCustno_', 'btnCust_', 'cust', 'noa,comp', 'txtCustno_,txtCust_', 'cust_b.aspx']
             	,['txtMechno_', 'btnMech_', 'mech', 'noa,mech', 'txtMechno_,txtMech_', 'mech_b.aspx']
+            	,['txtSssno1', 'lblSssno1', 'sss', 'noa,namea', 'txtSssno1,txtName1', 'sss_b.aspx']
+            	,['txtSssno2', 'lblSssno2', 'sss', 'noa,namea', 'txtSssno2,txtName2', 'sss_b.aspx']
+            	,['txtSssno3', 'lblSssno3', 'sss', 'noa,namea', 'txtSssno3,txtName3', 'sss_b.aspx']
+            	,['txtSssno4', 'lblSssno4', 'sss', 'noa,namea', 'txtSssno4,txtName4', 'sss_b.aspx']
+            	,['txtSssno5', 'lblSssno5', 'sss', 'noa,namea', 'txtSssno5,txtName5', 'sss_b.aspx']
+            	
             	,['textSssno0', '', 'sss', 'noa,namea', 'textSssno0,textNamea0', 'sss_b.aspx']
             	,['textSssno1', '', 'sss', 'noa,namea', 'textSssno1,textNamea1', 'sss_b.aspx']
             	,['textSssno2', '', 'sss', 'noa,namea', 'textSssno2,textNamea2', 'sss_b.aspx']
             	,['textSssno3', '', 'sss', 'noa,namea', 'textSssno3,textNamea3', 'sss_b.aspx']
             	,['textSssno4', '', 'sss', 'noa,namea', 'textSssno4,textNamea4', 'sss_b.aspx']);
-			
+			q_bbsLen = 10;
 			var z_mech = new Array();
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -261,7 +267,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)
                     return;
-                q_box('workv_s.aspx', q_name + '_s', "550px", "440px", q_getMsg("popSeek"));
+                q_box('workv_s.aspx', q_name + '_s', "600px", "440px", q_getMsg("popSeek"));
             }
 
             function btnIns() {
@@ -269,13 +275,13 @@
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
                 $('#txtDatea').focus();
-                $('input[name=radioSel]').first().click();
+                //$('input[name=radioSel]').first().click();
             }
 
             function btnModi() {
             	_btnModi();
             	$('#txtDatea').focus();
-            	$('input[name=radioSel]').first().click();
+            	//$('input[name=radioSel]').first().click();
             }
 
             function btnPrint() {
@@ -286,8 +292,7 @@
                 Lock(1, {
                     opacity : 0
                 });
-                $('#tmp').find('input').first().focusout();
-				
+                /*$('#tmp').find('input').first().focusout();
 				for(var i=0;i<q_bbtCount;i++){
 					t_noq1 = $('#txtNoq__'+i).val();
 					isExist = false;
@@ -302,6 +307,11 @@
 						$('#txtSssno__'+i).val('');
 						$('#txtNamea__'+i).val('');
 					}
+				}*/
+				var wdate = $.trim($('#txtWdate').val());
+				for(var i=0;i<q_bbsCount;i++){
+					if($.trim($('#txtDatea_'+i).val()).length==0)
+						$('#txtDatea_'+i).val(wdate);
 				}
 				
                 if (q_cur == 1) {
@@ -335,16 +345,18 @@
 
             function refresh(recno) {
                 _refresh(recno);
-                $('input[name=radioSel]').first().click();
+                //$('input[name=radioSel]').first().click();
             }
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
                 if (t_para) {
                     $('#txtDatea').datepicker('destroy');
+                    $('#txtWdate').datepicker('destroy');
                     $('#tmp').find('input').attr('disabled','disabled');
                     $('#btnFile').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
+                    $('#txtWdate').datepicker();
                     $('#tmp').find('input').removeAttr('disabled');
                     $('#btnFile').removeAttr('disabled');
                 }
@@ -443,7 +455,12 @@
             function sum() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
-
+				
+				t_pmounts = ($.trim($('#txtSssno1').val()).length>0?1:0)
+					+($.trim($('#txtSssno2').val()).length>0?1:0)
+					+($.trim($('#txtSssno3').val()).length>0?1:0)
+					+($.trim($('#txtSssno4').val()).length>0?1:0)
+					+($.trim($('#txtSssno5').val()).length>0?1:0);
                 for(var i=0;i<q_bbsCount;i++){
                 	for(var j=0;j<z_mech.length;j++){
                 		if($('#txtMechno_'+i).val()==z_mech[j].noa){
@@ -451,7 +468,7 @@
                 		}
                 	}
                 	t_weights = q_float('txtWeight_'+i);
-                	t_pmounts = q_float('txtPmount_'+i);  	
+                	//t_pmounts = q_float('txtPmount_'+i);  	
                 	t_avgkg = t_pmounts==0?0:round(q_div(t_weights,t_pmounts),2);
                           
                 	$('#txtAvgkg_'+i).val(t_avgkg);
@@ -535,7 +552,7 @@
             }
             .dbbm {
                 float: left;
-                width: 600px;
+                width: 800px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -603,7 +620,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width:1360px;
+                width:1400px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -631,7 +648,7 @@
                 font-size: medium;
             }
             #dbbt {
-                width:1700px;
+                width:1400px;
             }
             #tbbt {
                 margin: 0;
@@ -667,7 +684,7 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id='dmain' style="overflow:visible;width: 1200px;">
+		<div id='dmain' style="overflow:visible;width: 1400px;">
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview" >
 					<tr>
@@ -688,32 +705,68 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
+						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
-						<td >
-						<input id="txtNoa"  type="text" class="txt c1"/>
-						</td>
+						<td colspan="2"><input id="txtNoa"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblSssno1" class="lbl">員工１</a></td>
+						<td>
+							<input id="txtSssno1" type="text" class="txt" style="width:50%;"/>
+							<input id="txtName1" type="text" class="txt" style="width:50%;"/>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td><span> </span><a id="lblWdate" class="lbl">製作日期</a></td>
+						<td><input id="txtWdate"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id="lblSssno2" class="lbl">員工２</a></td>
+						<td>
+							<input id="txtSssno2" type="text" class="txt" style="width:50%;"/>
+							<input id="txtName2" type="text" class="txt" style="width:50%;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="3" rowspan="2"><textarea id="txtMemo" class="txt c1" rows="3"></textarea></td>
+						<td colspan="4" rowspan="2"><textarea id="txtMemo" class="txt c1" rows="3"> </textarea></td>
+						<td><span> </span><a id="lblSssno3" class="lbl">員工３</a></td>
+						<td>
+							<input id="txtSssno3" type="text" class="txt" style="width:50%;"/>
+							<input id="txtName3" type="text" class="txt" style="width:50%;"/>
+						</td>
 					</tr>
-					<tr></tr>
+					<tr>
+						<td></td>
+						<td><span> </span><a id="lblSssno4" class="lbl">員工４</a></td>
+						<td>
+							<input id="txtSssno4" type="text" class="txt" style="width:50%;"/>
+							<input id="txtName4" type="text" class="txt" style="width:50%;"/>
+						</td>
+					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
+						<td></td>
+						<td><span> </span><a id="lblSssno5" class="lbl">員工５</a></td>
+						<td>
+							<input id="txtSssno5" type="text" class="txt" style="width:50%;"/>
+							<input id="txtName5" type="text" class="txt" style="width:50%;"/>
+						</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td><input type="file" id="btnFile" value="上傳"/></td>
+						<td>
+						<td colspan="4"><input type="file" id="btnFile" value="上傳" style="width:100%"/></td>
 					</tr>
 				</table>
+				
 			</div>
 		</div>
 		<div class='dbbs'>
@@ -722,16 +775,16 @@
 					<td style="width:20px;">
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
-					<td style="width:20px;"> </td>
+					<td style="width:20px;display:none;"> </td>
 					<td style="width:20px;"> </td>
 					<td style="width:200px;"><a id='lbl_uno'>條碼批號</a></td>
-					<td style="width:100px;"><a id='lbl_datea'>日期</a></td>
+					<td style="width:100px;"><a id='lbl_datea'>製作日期</a></td>
 					<td style="width:140px;"><a id='lbl_cust'>客戶</a></td>
 					<td style="width:270px;"><a id='lbl_product'>品名</a></td>
 					<td style="width:60px;"><a id='lbl_length'>長度</a></td>
 					<td style="width:60px;"><a id='lbl_weight'>重量</a></td>
 					<td style="width:60px;"><a id='lbl_mount'>數量</a></td>
-					<td style="width:40px;"><a id='lbl_pmount'>人數</a></td>
+					<td style="width:40px;display:none;"><a id='lbl_pmount'>人數</a></td>
 					<td style="width:100px;"><a id='lbl_mech'>機台</a></td>
 					<td style="width:80px;"><a id='lbl_avgkg'>平均每人KG</a></td>
 					<td style="width:80px;"><a id='lbl_price'>NT/噸</a></td>
@@ -742,7 +795,7 @@
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 						<input id="txtNoq.*" type="text" style="display: none;"/>
 					</td>
-					<td><input id="radioSel.*" type="radio" name="radioSel"/></td>
+					<td style="display:none;"><input id="radioSel.*" type="radio" name="radioSel" /></td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					
 					<td><input class="txt" id="txtUno.*" type="text" style="width:95%;" title=""/></td>
@@ -761,7 +814,7 @@
 					<td><input class="txt num" id="txtLengthb.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt num" id="txtWeight.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt num" id="txtMount.*" type="text" style="width:95%;" title=""/></td>
-					<td><input class="txt num" id="txtPmount.*" type="text" style="width:95%;" title=""/></td>
+					<td style="display:none;"><input class="txt num" id="txtPmount.*" type="text" style="width:95%;" title=""/></td>
 					<td>
 						<input class="txt" id="txtMechno.*" type="text" style="width:35%; float:left;"/>
 						<input class="txt" id="txtMech.*" type="text" style="width:55%;float:left;"/>
@@ -773,7 +826,33 @@
 				</tr>
 			</table>
 		</div>
-		<div>
+		<input id="q_sys" type="hidden" />
+		<div id="dbbt" style="display:none;">
+			<table id="tbbt">
+				<tbody>
+					<tr class="head" style="color:white; background:#003366;">
+						<td style="width:20px;">
+						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
+						</td>
+						<td style="width:20px;"></td>
+						<td style="width:100px; text-align: center;">Noq</td>
+						<td style="width:100px; text-align: center;">No2</td>
+						<td style="width:100px; text-align: center;">Sssno</td>
+						<td style="width:150px; text-align: center;">Namea</td>
+					</tr>
+					<tr class="detail">
+						<td>
+							<input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+						<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+						<td><input class="txt" id="txtNoq..*" type="text" style="width:95%;"/></td>
+						<td><input class="txt" id="txtNo2..*" type="text" style="width:95%;"/></td>
+						<td><input class="txt" id="txtSssno..*" type="text" style="width:95%;"/></td>
+						<td><input class="txt" id="txtNamea..*" type="text" style="width:95%;"/></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div style="display:none;">
 			<table id="tmp" style="background: pink;">
 				<tr style="color:white; background:#003366;">
 					<td style="width:20px;"></td>
@@ -825,32 +904,6 @@
 					<td><input type="text" id="textSssno4" class="textSssno" style="width:95%;"/></td>
 					<td><input type="text" id="textNamea4" style="width:95%;"/></td>
 				</tr>
-			</table>
-		</div>
-		<input id="q_sys" type="hidden" />
-		<div id="dbbt" style="display:none;">
-			<table id="tbbt">
-				<tbody>
-					<tr class="head" style="color:white; background:#003366;">
-						<td style="width:20px;">
-						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
-						</td>
-						<td style="width:20px;"></td>
-						<td style="width:100px; text-align: center;">Noq</td>
-						<td style="width:100px; text-align: center;">No2</td>
-						<td style="width:100px; text-align: center;">Sssno</td>
-						<td style="width:150px; text-align: center;">Namea</td>
-					</tr>
-					<tr class="detail">
-						<td>
-							<input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
-						<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						<td><input class="txt" id="txtNoq..*" type="text" style="width:95%;"/></td>
-						<td><input class="txt" id="txtNo2..*" type="text" style="width:95%;"/></td>
-						<td><input class="txt" id="txtSssno..*" type="text" style="width:95%;"/></td>
-						<td><input class="txt" id="txtNamea..*" type="text" style="width:95%;"/></td>
-					</tr>
-				</tbody>
 			</table>
 		</div>
 	</body>
