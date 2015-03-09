@@ -34,8 +34,7 @@
 			brwKey = 'Datea';
 			aPop = new Array(
 				['txtProductno_', '', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,invoicetitle'
-				, 'txtCustno,txtComp,txtNick,txtTel', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,invoicetitle','txtCustno,txtComp,txtNick,txtTel', 'cust_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			);
@@ -1349,15 +1348,17 @@
 						<td colspan='3'><input id="txtMemo2" type="text" class="txt c1"/></td>
 					</tr>-->
 					<tr class="tr5">
-						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
+						<td><span> </span><a class="lbl">郵遞區號</a></td>
 						<td><input id="txtPost" type="text" class="txt c1"></td>
-						<td colspan='6' ><input id="txtAddr" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
+						<td colspan='5' ><input id="txtAddr" type="text" class="txt c1" /></td>
 					</tr>
 					<tr class="tr6">
-						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td><span> </span><a class="lbl">指送郵區 </a></td>
 						<td><input id="txtPost2" type="text" class="txt c1"/></td>
-						<td colspan='6' >
-							<input id="txtAddr2" type="text" class="txt c1" style="width: 545px;"/>
+						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td colspan='5' >
+							<input id="txtAddr2" type="text" class="txt c1" style="width: 455px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
 					</tr>

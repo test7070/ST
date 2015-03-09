@@ -1506,17 +1506,19 @@
 						<td class="td5"><select id="cmbTrantype" style="width: 100%;"> </select></td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id="lblAddr" class="lbl btn"> </a></td>
+						<td class="td1"><span> </span><a class="lbl">郵遞區號</a></td>
 						<td class="td2"><input id="txtPost" type="text" class="txt c1"/></td>
-						<td class="td3" colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
+						<td class="td1"><span> </span><a id="lblAddr" class="lbl"> </a></td>
+						<td class="td3" colspan='3'><input id="txtAddr" type="text" class="txt c1"/></td>
 						<td class="td7"><span> </span><a id='lblOrdeno' class="lbl btn"> </a></td>
 						<td class="td8"><input id="txtOrdeno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id='lblAddr2' class="lbl btn"> </a></td>
+						<td class="td1"><span> </span><a class="lbl">指送區號</a></td>
 						<td class="td2"><input id="txtPost2"  type="text" class="txt c1"/></td>
-						<td class="td3" colspan='4'>
-							<input id="txtAddr2"  type="text" class="txt c1" style="width: 412px;"/>
+						<td class="td1"><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td class="td3" colspan='3'>
+							<input id="txtAddr2"  type="text" class="txt c1" style="width: 302px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
 						<td class="td6"align="right"><input id="btnStore2" type="button" value="寄庫顯示"/></td>

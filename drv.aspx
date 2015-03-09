@@ -1085,7 +1085,7 @@
 		<div id="orde" style="float:left;width:1260px;"> </div> 
 		<div id="orde_control" style="width:1200px;"> </div> 
 		<div id="ordes" style="float:left;width:1260px;"> </div> 
-		<input type='button' id='btnEnda' style='font-size:16px;float: left;'/>
+		<!--<input type='button' id='btnEnda' style='font-size:16px;float: left;'/>-->
 		<div id="workjs" style="float:left;width:1260px;"> </div> 
 	</body>
 </html>

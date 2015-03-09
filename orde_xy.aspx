@@ -192,15 +192,15 @@
 				});
 
 				$('#txtCustno').change(function() {
-					/*if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
+					if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
 						curData.paste();
 						if(q_cur==1)
 							$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 						alert('非總店與相關分店!!');
-					}*/
-					for(var j=0 ;j<q_bbsCount;j++){
-						$('#btnMinus_'+j).click();
 					}
+					/*for(var j=0 ;j<q_bbsCount;j++){
+						$('#btnMinus_'+j).click();
+					}*/
 					
 					if (!emp($('#txtCustno').val())) {
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
@@ -381,7 +381,22 @@
 							bbsAssign();
 						}
 						break;
-
+					case 'cust':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0)
+								curData.paste();
+							else{
+								if(copycustno!='' && copycustno.substr(0,5)!=b_ret[0].noa.substr(0,5)){
+									curData.paste();
+									if(q_cur==1)
+										$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
+									alert('非總店與相關分店!!');
+								}
+								
+							}
+						}
+						break;
 					case q_name + '_s':
 						if(issales && s2[1]!=undefined)
 							s2[1]="where=^^"+replaceAll(replaceAll(s2[1],'where=^^',''),'^^','')+" and salesno='"+r_userno+"' "+"^^";
@@ -1242,17 +1257,17 @@
 				}
 			}
 			
-			//var copycustno='';
+			var copycustno='';
 			function btnIns() {
-				/*var t_bbscounts=q_bbsCount;
+				var t_bbscounts=q_bbsCount;
 				if ($('#checkCopy').is(':checked')){
 					curData.copy();
 					copycustno=$('#txtCustno').val();
 				}else{
 					copycustno='';
-				}*/
+				}
 				_btnIns();
-				/*if ($('#checkCopy').is(':checked')){
+				if ($('#checkCopy').is(':checked')){
 					while(t_bbscounts>=q_bbsCount){
 						q_bbs_addrow('bbs',0,0);
 					}
@@ -1260,7 +1275,7 @@
 				}
 				
 				copy_field();
-				*/
+				
 				$('#chkIsproj').attr('checked', true);
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtCno').val(z_cno);
@@ -1276,7 +1291,7 @@
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
-				//copy_field();
+				copy_field();
 				$('#txtCustno').focus();
 
 				if (!emp($('#txtCustno').val())) {
@@ -1440,7 +1455,7 @@
 						$('#combGroupbno_'+j).removeAttr('disabled');
 						$('#combClassa_'+j).removeAttr('disabled');
 					}
-					//copy_field();
+					copy_field();
 				}
 				
 				if(emp($('#txtOrdbno').val()) && q_cur<1 && q_cur>2){
@@ -1548,15 +1563,15 @@
 				switch (s1) {
 					case 'txtCustno':
 						if (!emp($('#txtCustno').val())) {
-							/*if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
+							if(copycustno!='' && copycustno.substr(0,5)!=$('#txtCustno').val().substr(0,5)){
 								curData.paste();
 								if(q_cur==1)
 									$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 								alert('非總店與相關分店!!');
-							}*/
-							for(var j=0 ;j<q_bbsCount;j++){
-								$('#btnMinus_'+j).click();
 							}
+							/*for(var j=0 ;j<q_bbsCount;j++){
+								$('#btnMinus_'+j).click();
+							}*/
 							
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -1867,8 +1882,8 @@
 					</tr>
 					<tr class="tr1">
 						<td class="td1">
-							<!--<input id="checkCopy" type="checkbox" style="float:left;"/>
-							<a id='lblCopy' class="lbl" style="float:left;"> </a>-->
+							<input id="checkCopy" type="checkbox" style="float:left;"/>
+							<a id='lblCopy' class="lbl" style="float:left;"> </a>
 							<span> </span><a id='lblOdate' class="lbl"> </a>
 						</td>
 						<td class="td2"><input id="txtOdate" type="text" class="txt c1"/></td>
@@ -1917,9 +1932,10 @@
 						</td>
 					</tr>
 					<tr class="tr5">
-						<td class="td1"><span> </span><a id='lblAddr' class="lbl"> </a></td>
+						<td class="td1"><span> </span><a class="lbl">郵遞區號</a></td>
 						<td class="td2"><input id="txtPost" type="text" class="txt c1"/></td>
-						<td class="td3"colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
+						<td class="td1"><span> </span><a id='lblAddr' class="lbl"> </a></td>
+						<td class="td3"colspan='3'><input id="txtAddr" type="text" class="txt c1"/></td>
 						<td class="td7"><span> </span>
 							<a id='lblOrdbno' class="lbl"> </a>
 							<a id='lblOrde2ordb' class="lbl btn"> </a>
@@ -1927,10 +1943,11 @@
 						<td class="td8"><input id="txtOrdbno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr6">
-						<td class="td1"><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td class="td1"><span> </span><a class="lbl">指送區號</a></td>
 						<td class="td2"><input id="txtPost2" type="text" class="txt c1"/></td>
-						<td class="td3" colspan='4'>
-							<input id="txtAddr2" type="text" class="txt c1" style="width: 412px;"/>
+						<td class="td1"><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td class="td3" colspan='3'>
+							<input id="txtAddr2" type="text" class="txt c1" style="width: 302px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
 						<td class="td7"><input id="btnAddr2" type="button" value='...' style="width: 30px;height: 21px" /> <span> </span><a id='lblOrdcno' class="lbl"> </a></td>
