@@ -43,6 +43,7 @@
             	,['txtSssno3', 'lblSssno3', 'sss', 'noa,namea', 'txtSssno3,txtName3', 'sss_b.aspx']
             	,['txtSssno4', 'lblSssno4', 'sss', 'noa,namea', 'txtSssno4,txtName4', 'sss_b.aspx']
             	,['txtSssno5', 'lblSssno5', 'sss', 'noa,namea', 'txtSssno5,txtName5', 'sss_b.aspx']
+            	,['txtSssno6', 'lblSssno6', 'sss', 'noa,namea', 'txtSssno6,txtName6', 'sss_b.aspx']
             	
             	,['textSssno0', '', 'sss', 'noa,namea', 'textSssno0,textNamea0', 'sss_b.aspx']
             	,['textSssno1', '', 'sss', 'noa,namea', 'textSssno1,textNamea1', 'sss_b.aspx']
@@ -460,7 +461,8 @@
 					+($.trim($('#txtSssno2').val()).length>0?1:0)
 					+($.trim($('#txtSssno3').val()).length>0?1:0)
 					+($.trim($('#txtSssno4').val()).length>0?1:0)
-					+($.trim($('#txtSssno5').val()).length>0?1:0);
+					+($.trim($('#txtSssno5').val()).length>0?1:0)
+					+($.trim($('#txtSssno6').val()).length>0?1:0);
                 for(var i=0;i<q_bbsCount;i++){
                 	for(var j=0;j<z_mech.length;j++){
                 		if($('#txtMechno_'+i).val()==z_mech[j].noa){
@@ -764,6 +766,11 @@
 					<tr>
 						<td>
 						<td colspan="4"><input type="file" id="btnFile" value="上傳" style="width:100%"/></td>
+						<td><span> </span><a id="lblSssno6" class="lbl">員工６</a></td>
+						<td>
+							<input id="txtSssno6" type="text" class="txt" style="width:50%;"/>
+							<input id="txtName6" type="text" class="txt" style="width:50%;"/>
+						</td>
 					</tr>
 				</table>
 				
