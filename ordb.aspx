@@ -1123,7 +1123,7 @@
 						<td class="td5"><span> </span><a id='lblFax' class="lbl"> </a></td>
 						<td class="td6" colspan="2"><input id="txtFax" type="text" class="txt c1"/></td>
 					   <td class="td8" align="center">
-                            <input id="btnOrde" type="button" style="text-align: center;"/>
+                            <!--<input id="btnOrde" type="button" style="text-align: center;"/>-->
                         </td>
 					</tr>
 					<tr>
