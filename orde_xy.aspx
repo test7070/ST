@@ -207,6 +207,12 @@
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
 				});
+				
+				$('#lblCustx').click(function() {
+					if(copycustno!=''){
+						q_box("cust_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";left(noa,5)='" + copycustno.substr(0,5) + "';" + r_accy + ";" + q_cur, 'custx', "95%", "95%", q_getMsg('lblCust'));
+					}
+				});
 
 				$('#btnCredit').click(function() {
 					if (!emp($('#txtCustno').val())) {
@@ -393,7 +399,29 @@
 										$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 									alert('非總店與相關分店!!');
 								}
-								
+							}
+						}
+						break;
+					case 'custx':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0)
+								curData.paste();
+							else{
+								if(copycustno!='' && copycustno.substr(0,5)!=b_ret[0].noa.substr(0,5)){
+									curData.paste();
+									if(q_cur==1)
+										$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
+									alert('非總店與相關分店!!');
+								}else{
+									$('#txtCustno').val(b_ret[0].noa);
+									$('#txtComp').val(b_ret[0].comp);
+									$('#txtNick').val(b_ret[0].nick);
+									$('#txtTel').val(b_ret[0].tel);
+									
+									var t_where = "where=^^ noa='" + b_ret[0].noa + "' ^^";
+									q_gt('cust', t_where, 0, 0, 0, "cust_detail");
+								}
 							}
 						}
 						break;
@@ -541,8 +569,8 @@
 						//客戶售價
 						//不用apv 抓sign
 						if(!emp($('#txtProductno_'+b_seq).val())){
-							t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.odate>='"+q_date()+"' group by b.productno)";
-							t_where+=" and productno='"+$('#txtProductno_'+b_seq).val()+"' and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", $('#txtCustno').val()) +" and odate>='"+q_date()+"' ^^";
+							t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.datea>='"+q_date()+"' group by b.productno)";
+							t_where+=" and productno='"+$('#txtProductno_'+b_seq).val()+"' and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", $('#txtCustno').val()) +" and datea>='"+q_date()+"' ^^";
 							q_gt('view_quats', t_where, 0, 0, 0, "msg_quat_xy");
 						}else{
 							var t_where = "where=^^ custno='" + $('#txtCustno').val() + "' and datea<'" + q_date() + "' ^^ stop=1";
@@ -631,6 +659,8 @@
 						var as = _q_appendData("view_quats", "", true);
 						if (as[0] != undefined) {
 							$('#txtPrice_'+b_seq).val(as[0].price);
+							$('#txtQuatno_'+b_seq).val(as[0].noa);
+							$('#txtNo3_'+b_seq).val(as[0].no3);	
 							sum();
 						}
 						break;
@@ -788,8 +818,8 @@
 				//檢查產品是否在報價單中，並判斷單價，不在報價單中或單價小於報價金額不能存檔
 				if(!check_quat_xy){
 					//12/11 核准判斷暫時拿掉 等上線後再放入
-					t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.odate>='"+q_date()+"' group by b.productno)";
-					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", $('#txtCustno').val()) +" and odate>='"+q_date()+"' ^^";
+					t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", $('#txtCustno').val())+" and a.datea>='"+q_date()+"' group by b.productno)";
+					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", $('#txtCustno').val()) +" and datea>='"+q_date()+"' ^^";
 					q_gt('view_quats', t_where, 0, 0, 0, "btnOk_xy");
 					return;
 				}
@@ -1586,8 +1616,8 @@
 							var t_where = '';
 							if (t_custno.length > 0) {
 								//12/11 核准判斷暫時拿掉 等上線後再放入 不用apv 抓sign
-								t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.odate>='"+q_date()+"' group by b.productno)";
-								t_where+=" and productno='"+$('#txtProductno_'+b_seq).val()+"' and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and odate>='"+q_date()+"' ^^";
+								t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+q_date()+"' group by b.productno)";
+								t_where+=" and productno='"+$('#txtProductno_'+b_seq).val()+"' and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and datea>='"+q_date()+"' ^^";
 							}else {
 								alert(q_getMsg('msgCustEmp'));
 								$('#txtCustno').focus();
