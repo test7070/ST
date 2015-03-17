@@ -203,6 +203,8 @@
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
+				}).focusin(function() {
+					q_msg($(this),'請輸入客戶編號');
 				});
 				
 				$('#btnClose_div_stk').click(function() {

@@ -206,6 +206,8 @@
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
+				}).focusin(function() {
+					q_msg($(this),'請輸入客戶編號');
 				});
 				
 				$('#lblCustx').click(function() {
