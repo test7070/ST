@@ -106,16 +106,15 @@
 					var t_tggno = trim($('#txtTggno').val());
 					var t_ordbno = trim($('#txtOrdbno').val());
 					var t_where = '';
-					if (t_tggno.length > 0 && q_getPara('sys.project').toUpperCase()=='XY' ) {
+					
+					if (q_getPara('sys.project').toUpperCase()=='XY' ) {
 						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and b.datea>='"+q_date()+"' and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
 						t_where = t_where;
-					}else if (t_tggno.length > 0) {
+					}else {
 						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
 						t_where = t_where;
-					}else {
-						alert('請輸入' + q_getMsg('lblTgg'));
-						return;
 					}
+					
 					q_box("ordbs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordbs', "95%", "95%", $('#lblOrdb').text());
 				});
 				$('#txtFloata').change(function() {
@@ -128,6 +127,14 @@
 					if (!emp($('#txtTggno').val())) {
 						var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
+					}
+					if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) ) {
+						for(var i=0;i<q_bbsCount;i++){
+							if(!emp($('#txtProductno1_'+i).val())){
+								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+i).val()+"' ^^";
+								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
+							}
+						}
 					}
 				});
 				$('#txtAddr').change(function() {
@@ -280,6 +287,41 @@
 							q_Seek_gtPost();
 						break;
 				}
+				if(t_name.substr(0,7)=='ucctgg_'){
+					var t_seq=replaceAll(t_name,'ucctgg_','')
+					var t_mount=dec($("#txtMount_"+t_seq).val());
+					var t_price=[];
+					var as = _q_appendData("ucctgg", "", true);
+					if (as[0] != undefined) {
+						var ass = _q_appendData("ucctggs", "", true);
+						if (ass[0] != undefined) {
+							for(var j=0;j<ass.length;j++){
+								if(t_mount>=dec(ass[j].mount)){
+									t_price.push({
+										mount:dec(ass[j].mount),
+										price:ass[j].price
+									})
+								}
+							}
+							if(t_price.length>0){
+								t_price.sort(compare);
+								$("#txtPrice_"+t_seq).val(t_price[t_price.length-1].price);
+							}else{
+								$("#txtPrice_"+t_seq).val(0);
+							}
+						}
+					}
+					sum();
+				}
+				
+			}
+			
+			function compare(a,b) {
+				if (a.mount < b.mount)
+					return -1;
+				if (a.mount > b.mount)
+					return 1;
+				return 0;
 			}
 
 			function btnOk() {
@@ -393,6 +435,11 @@
 							sum();
 						});
 						$('#txtMount_' + j).change(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) &&!emp($('#txtProductno1_'+n).val())) {
+								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+n).val()+"' ^^";
+								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
+							}
 							sum();
 						});
 						$('#txtPrice_' + j).change(function() {
@@ -405,6 +452,15 @@
 							var n = replaceAll($(this).attr('id'),'btnRc2record_','');
                             q_box("z_rc2record.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";ordcno="+$('#txtNoa').val()+"&no2="+$('#txtNo2_' + n).val()+";" + r_accy, 'z_rc2record', "95%", "95%", q_getMsg('popPrint'));    
 						});
+						
+						$('#txtProductno1_' + j).change(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) &&!emp($('#txtProductno1_'+n).val())) {
+								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+n).val()+"' ^^";
+								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
+							}
+						});
+						
 					}
 				}
 				_bbsAssign();
