@@ -82,6 +82,9 @@
 					$('#sbutton').hide();
 					$('#btnLabases').hide();
 					$('#btnSaladjust').hide();
+				}else if(r_rank<8){
+					$('#btnLabases').hide();
+					$('#btnSaladjust').hide();
 				}
 				
 				$('#txtNoa').change(function(e) {
@@ -177,7 +180,7 @@
 					if (q_cur == 1) {
 						return;
 					}
-					q_box("sssr.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'sssr', "500px", "600px", $('#btnSssr').val());
+					q_box("sssr.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'sssr', "900px", "80%", $('#btnSssr').val());
 				});
 
 				$('#txtIndate').change(function(e) {
