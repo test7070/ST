@@ -60,9 +60,9 @@
 				,['textBmon','99'],['textEmon','99'],['textYear','999']];
 				q_mask(bbmMask);
 
-				if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1)
+				/*if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1)
 					q_cmbParse("cmbTypea", q_getPara('sss.typea_it'));
-				else
+				else*/
 					q_cmbParse("cmbTypea", q_getPara('sss.typea'));
 
 				q_cmbParse("cmbSex", q_getPara('sss.sex'));

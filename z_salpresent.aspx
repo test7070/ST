@@ -59,7 +59,7 @@
                     },{
                         type : '5',
                         name : 'xtype',
-                        value : ('#non@全部,'+((q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1)?q_getPara('sss.typea_it'):q_getPara('sss.typea'))).split(',')
+                        value : ('#non@全部,'+q_getPara('sss.typea')).split(',')//('#non@全部,'+((q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1)?q_getPara('sss.typea_it'):q_getPara('sss.typea'))).split(',')
                     }]
                 });
                 q_popAssign();

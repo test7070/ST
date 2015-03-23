@@ -88,12 +88,12 @@
 					}, {
 						type : '0', //[2]
 						name : 'xrstype',
-						value : q_getPara('vcc.stype_uu')
+						value : q_getPara('vcc.stype')//q_getPara('vcc.stype_uu')
 						/*#####################*/
 					}, {
 						type : '5', //[3]
 						name : 'xstype',
-						value : [q_getPara('report.all')].concat(q_getPara('vcc.stype_uu').split(','))
+						value : [q_getPara('report.all')].concat(q_getPara('vcc.stype').split(','))//[q_getPara('report.all')].concat(q_getPara('vcc.stype_uu').split(','))
 					}, {
 						type : '5', //[4]/
 						name : 'xgroupano',

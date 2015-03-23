@@ -49,9 +49,9 @@
         function mainPost() {
         	bbsMask = [['txtMon', r_picm]];
             q_mask(bbmMask);
-            if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
+            /*if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
 				q_cmbParse("cmbTypea", q_getPara('ucc.typea_it'));	//IT
-			else
+			else*/
 				q_cmbParse("cmbTypea", q_getPara('ucc.typea'));
 				
 			q_gt('acomp', '', 0, 0, 0, "",r_accy);
@@ -149,13 +149,6 @@
             _btnIns();
             refreshBbm();
             $('#txtNoa').focus();
-            if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1){
-				$('.it').show();
-				$('.normal').hide();
-			}else{
-				$('.normal').show();
-				$('.it').hide();
-			}
         }
 
         function btnModi() {
@@ -237,13 +230,7 @@
         function refresh(recno) {
             _refresh(recno);
             refreshBbm();
-            if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1){
-				$('.it').show();
-				$('.normal').hide();
-			}else{
-				$('.normal').show();
-				$('.it').hide();
-			}
+           
         }
 		function refreshBbm(){
             	if(q_cur==1){
@@ -447,16 +434,14 @@
                 <td align="center" style="width:15%"><a id='vewNoa'></a></td>
                 <td align="center" style="width:60%"><a id='vewProduct'></a></td>
                 <td align="center" style="width:7%"><a id='vewUnit'></a></td>
-                <td align="center" style="width:13%" class="normal"><a id='vewType'></a></td>     
-                <td align="center" style="width:13%" class="it"><a id='vewType_it'></a></td>           
+                <td align="center" style="width:13%"><a id='vewType'></a></td>          
             </tr>
              <tr>
                    <td ><input id="chkBrow.*" type="checkbox" style=''/> </td>
                    <td align="center" id='noa' style="text-align: left;">~noa</td>
                    <td align="center" id='product' style="text-align: left;">~product</td>
                    <td align="center" id='unit'>~unit</td>
-                   <td align="center" id='typea=ucc.typea' class="normal">~typea=ucc.typea</td>
-                   <td align="center" id='typea=ucc.typea_it' class="it">~typea=ucc.typea_it</td>
+                   <td align="center" id='typea=ucc.typea'>~typea=ucc.typea</td>
             </tr>
         </table>
         </div>
