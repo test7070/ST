@@ -49,8 +49,9 @@
 		        var t_where = " 1=1 " 
 		        + q_sqlPara2("noa", t_noa) 
 		        + q_sqlPara2("datea", t_bdate, t_edate) 
-		        + q_sqlPara2("odate", t_bodate, t_eodate) 		     
-		        + q_sqlPara2("custno", t_custno);
+		        + q_sqlPara2("odate", t_bodate, t_eodate);
+		        if (t_custno.length>0)
+                    t_where += " and custno='" + t_custno + "'";
 		        if (t_cust.length>0)
                     t_where += " and charindex('" + t_cust + "',cust)>0";
 		       	if(t_uno.length>0)
