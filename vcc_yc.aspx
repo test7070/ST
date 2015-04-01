@@ -46,7 +46,7 @@
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtSize', 'ucaucc_b.aspx'],
 				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
@@ -88,10 +88,6 @@
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
 					t_product = $.trim($('#txtProduct_' + j).val());
 					if (t_unit.length == 0 && t_product.length > 0) {
-						if (t_product.indexOf('管') > -1 || t_product.indexOf('支') > -1)
-							t_unit = '支';
-						else
-							t_unit = 'KG';
 						$('#txtUnit_' + j).val(t_unit);
 					}
 					//---------------------------------------
@@ -224,7 +220,7 @@
 					var t_custno = $('#txtCustno').val();
 					var t_where = '1=1 ';
 					t_where += q_sqlPara2('ordeno', t_ordeno) + q_sqlPara2('custno', t_custno) + " and ((len(gmemo)=0) or gmemo='cubu') ";
-					q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "95%", "95%", q_getMsg('popVcceImport'));
+					q_box("vcce_import_yc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "95%", "95%", q_getMsg('popVcceImport'));
 				});
 				
 				$('#btnOrdeno').click(function() {
@@ -338,13 +334,15 @@
 							}
 							for (var k = 0; k < b_ret.length; k++) {
 								var t_notv = dec(b_ret[k].notv);
+								var t_unit = b_ret[k].unit.toUpperCase();
 								var t_mount = dec(b_ret[k].mount);
 								var t_weight = dec(b_ret[k].weight);
 								
-									if (t_notv != t_weight) {
-										t_mount = round(q_mul(q_div(t_mount, t_weight), t_notv), 0);
-									}
+								if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 									t_weight = t_notv;
+								}else{
+									t_mount = t_notv;
+								}
 								
 								b_ret[k].mount = t_mount;
 								b_ret[k].weight = t_weight;
@@ -771,7 +769,7 @@
 				inStr = inStr.substring(0, inStr.length - 1);
 				t_where += " and (select enda from view_orde"+r_accy+" where view_orde"+r_accy+".noa=view_ordes" + r_accy + ".noa)='0' ";
 				t_where += " and (((enda!=1) and (notv > 0))" + (trim(inStr).length > 0 ? " or noa+no2 in(" + inStr + ") " : '') + ")";
-				q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
+				q_box("ordes_yc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
 			}/// q_box() 開 視窗
 
 			function GetOrdenoList() {
@@ -1066,7 +1064,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['product'] && !as['uno'] && parseFloat(as['mount'].length == 0 ? "0" : as['mount']) == 0 && parseFloat(as['weight'].length == 0 ? "0" : as['weight']) == 0) {
+				if (!as['product'] && !as['uno'] && parseFloat(as['mount'].length == 0 ? "0" : as['mount']) == 0 && parseFloat(as['weight'].length == 0 ? "0" : as['weight']) == 0 && !as['size']) {
 					as[bbsKey[1]] = '';
 					return;
 				}

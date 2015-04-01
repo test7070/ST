@@ -39,7 +39,7 @@
             brwKey = 'noa';
             //ajaxPath = ""; // 只在根目錄執行，才需設定
             aPop = new Array(
-            	['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_', 'ucaucc_b.aspx'], 
+            	['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtSize', 'ucaucc_b.aspx'], 
 	            ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx'], 
 	            ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'], 
 	            ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'], 
@@ -101,10 +101,6 @@
                     t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
                     t_product = $.trim($('#txtProduct_' + j).val());
                     if (t_unit.length == 0 && t_product.length > 0) {
-                        if (t_product.indexOf('管') > 0 || t_product.indexOf('支') > 0)
-                            t_unit = '支';
-                        else
-                            t_unit = 'KG';
                         $('#txtUnit_' + j).val(t_unit);
                     }
                     //---------------------------------------
@@ -732,10 +728,6 @@
                             t_weights = q_float('txtWeight_' + n);
                             t_mounts = q_float('txtMount_' + n);
                             if (t_unit.length == 0 && t_product.length > 0) {
-                                if (t_product.indexOf('管') > 0 ||t_product.indexOf('支') > 0)
-                                    t_unit = '支';
-                                else
-                                    t_unit = 'KG';
                                 $('#txtUnit_' + n).val(t_unit);
                             }
                             t_prices = q_float('txtPrice_' + n);
@@ -756,10 +748,6 @@
                             t_weights = q_float('txtWeight_' + n);
                             t_mounts = q_float('txtMount_' + n);
                             if (t_unit.length == 0 && t_product.length > 0) {
-                                if (t_product.indexOf('管') > 0)
-                                    t_unit = '支';
-                                else
-                                    t_unit = 'KG';
                                 $('#txtUnit_' + n).val(t_unit);
                             }
                             t_sprices = q_float('txtSprice_' + n);
@@ -927,7 +915,7 @@
             }
 
             function bbsSave(as) {/// 表身 寫入資料庫前，寫入需要欄位
-                if (!as['productno'] && !as['product'] && !as['spec'] && !dec(as['total'])) {//不存檔條件
+                if (!as['productno'] && !as['product'] && !as['size'] && !dec(as['total'])) {//不存檔條件
                     as[bbsKey[1]] = '';
                     /// no2 為空，不存檔
                     return;
@@ -1315,7 +1303,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 2100px;
+                width: 2000px;
             }
             .tbbs a {
                 font-size: medium;
@@ -1524,7 +1512,6 @@
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblWeights'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblSprices'>單價(KG)</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblOrdet_st'> </a></td>
@@ -1562,7 +1549,6 @@
 					<td ><input  id="txtUnit.*" type="text" style="width:90%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td><input id="txtSprice.*" type="text"  class="txt num" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
