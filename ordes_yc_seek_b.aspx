@@ -201,6 +201,7 @@
 						break;
 				}
 			}
+			
 			function seekData(seekStr){
 				var newUrl = location.href.split(';');
 				var newUrlStr = '';

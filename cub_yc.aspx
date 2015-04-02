@@ -91,7 +91,7 @@
 						q_box("cubu_yc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";"+r_accy, 'cubu', "95%", "95%", q_getMsg('popCubu'));
 					}
 				});
-				
+					
 				$('#btnUccc_pi').click(function() {
 					var t_where = ' 1=1';
 					var t_productno = trim($('#txtProductno').val());
@@ -786,7 +786,6 @@
 						<td style="width:150px;"><a id='lbl_product'> </a></td>
 						<td style="width:150px;"><a id='lbl_spec'> </a></td>
 						<td style="width:150px;"><a id='lbl_size'> </a></td>
-						<td align="center" style="width:280px;">厚 X 寬 X 高 X 長</td>
 						<td style="width:80px;"><a id='lbl_mount'> </a></td>
 						<td style="width:100px;"><a id='lbl_weight'> </a></td>
 						<td style="width:100px;"><a id='lbl_bdime'> </a></td>
@@ -803,6 +802,7 @@
 						<td style="width:100px;"><a id='lbl_datea'> </a></td>
 						<td style="width:30px;"><a id='lbl_prt'> </a></td>
 						<td style="width:40px;"><a id='lbl_hend'> </a></td>
+						<td align="center" style="width:280px;">厚 X 寬 X 高 X 長</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center">
@@ -819,15 +819,6 @@
 						<td><input id="txtProduct.*" type="text" class="txt c1"/></td>
 						<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
 						<td><input id="txtSize.*" type="text" class="txt c1"/></td>
-						<td>
-							<input id="txtDime.*" type="text" class="txt num c1" style="float: left;width:55px;"/>
-							<a style="float: left;">X</a>
-							<input id="txtWidth.*" type="text" class="txt num c1" style="float: left;width:55px;"/>
-							<a style="float: left;">X</a>
-							<input id="txtRadius.*" type="text" class="txt num c1" style="float: left;width:55px;"/>
-							<a style="float: left;">X</a>
-							<input id="txtLengthb.*" type="text" class="txt num c1" style="float: left;width:55px;"/>
-						</td>
 						<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtWeight.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtBdime.*" type="text" class="txt c1 num"/></td>
@@ -844,6 +835,15 @@
 						<td><input id="txtDatea.*" type="text" class="txt c1"/></td>
 						<td><input id="chkPrt.*" type="checkbox"/></td>
 						<td><input id="chkHend.*" type="checkbox"/></td>
+						<td>
+							<input id="txtDime.*" type="text" class="txt num c1" style="float: left;width:55px;"/>
+							<a style="float: left;">X</a>
+							<input id="txtWidth.*" type="text" class="txt num c1" style="float: left;width:55px;"/>
+							<a style="float: left;">X</a>
+							<input id="txtRadius.*" type="text" class="txt num c1" style="float: left;width:55px;"/>
+							<a style="float: left;">X</a>
+							<input id="txtLengthb.*" type="text" class="txt num c1" style="float: left;width:55px;"/>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -865,12 +865,12 @@
 					<td style="width:100px; text-align: center;">餘料批號</td>
 					<td style="width:150px; text-align: center;">規格</td>
 					<td style="width:150px; text-align: center;">尺寸</td>
-					<td align="center" style="width:280px;">厚 X 寬 X 高 X 長</td>
 					<td style="width:100px; text-align: center;">餘料數</td>
 					<td style="width:100px; text-align: center;">餘料重</td>
 					<td style="width:100px; text-align: center;">餘料毛重</td>
 					<td style="width:120px; text-align: center;">餘料倉</td>
 					<td style="width:120px; text-align: center;">餘料備註</td>
+					<td align="center" style="width:280px;">厚 X 寬 X 高 X 長</td>
 				</tr>
 				<tr>
 					<td>
@@ -891,6 +891,11 @@
 					<td><input id="txtBno..*" type="text" class="txt c1"/></td>
 					<td><input id="txtSpec..*" type="text" class="txt c1"/></td>
 					<td><input id="txtSize..*" type="text" class="txt c1"/></td>
+					<td><input id="txtMount..*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWeight..*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtMweight..*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtStoreno..*" type="text" class="txt c1"/></td>
+					<td><input id="txtMemo..*" type="text" class="txt c1"/></td>
 					<td>
 						<input id="txtDime..*" type="text" class="txt num c1" style="float: left;width:55px;"/>
 						<a style="float: left;">X</a>
@@ -900,11 +905,6 @@
 						<a style="float: left;">X</a>
 						<input id="txtLengthb..*" type="text" class="txt num c1" style="float: left;width:55px;"/>
 					</td>
-					<td><input id="txtMount..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWeight..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtMweight..*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtStoreno..*" type="text" class="txt c1"/></td>
-					<td><input id="txtMemo..*" type="text" class="txt c1"/></td>
 				</tr>
 			</table>
 		</div>

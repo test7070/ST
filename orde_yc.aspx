@@ -195,9 +195,9 @@
                     btnQuat();
                 });
 
-                $('#btnOrdem').click(function() {
+                /*$('#btnOrdem').click(function() {
                     q_box("ordem_b_st.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtNoa').val() + "';" + r_accy + ";" + q_cur, 'ordem', "95%", "95%", q_getMsg('popOrdem'));
-                });
+                });*/
 
                 $("#combPaytype").change(function(e) {
                     if (q_cur == 1 || q_cur == 2)
@@ -1048,11 +1048,11 @@
                 else
                     $('#btnOrdei').attr('disabled', 'disabled');
 
-                if (q_cur == 1 || q_cur == 0)
+                /*if (q_cur == 1 || q_cur == 0)
                     $('#btnOrdem').attr('disabled', 'disabled');
                 else
                     $('#btnOrdem').removeAttr('disabled');
-
+				*/
                 if (q_cur == 1 || q_cur == '2')
                     $('#btnApv').attr('disabled', 'disabled');
                 else
@@ -1477,7 +1477,7 @@
 						</td>
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td><input id="txtTotal" type="text" class="txt num c1" /></td>
-						<td align="center"><input id="btnOrdem" type="button"/></td>
+						<!--<td align="center"><input id="btnOrdem" type="button"/></td>-->
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
