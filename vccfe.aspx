@@ -1667,7 +1667,7 @@
 						</td>
 						<td><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
 						<td><input id="txtAccno" type="text" class="txt c1"/></td>
-						<td colspan="2" ><input type="file" id="btnFile" value="上傳"/></td>
+						<!--<td colspan="2" ><input type="file" id="btnFile" value="上傳" style="display:none;"/></td>-->
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblApv' class="lbl"> </a></td>
