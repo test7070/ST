@@ -223,7 +223,7 @@
             }
             .dview {
                 float: left;
-                width: 400px;
+                width: 350px;
                 border-width: 0px;
             }
             .tview {
@@ -373,19 +373,23 @@
                     	<td><span> </span><a id="lblUnit" class="lbl"> </a></td>
                         <td><input id="txtUnit" type="text" class="txt c1"/></td>
                         <td><span> </span><a class="lbl">進貨單價</a></td>
-                        <td><input id="txtInprice" type="text" class="txt c1"/></td>
+                        <td><input id="txtInprice" type="text" class="txt num c1"/></td>
                     </tr>
                     <tr>
                     	<td><span> </span><a class="lbl">安全數量</a></td>
-                        <td><input id="txtSafemount" type="text" class="txt c1"/></td>
+                        <td><input id="txtSafemount" type="text" class="txt num c1"/></td>
                         <td><span> </span><a class="lbl">牌價</a></td>
-                        <td><input id="txtSaleprice" type="text" class="txt c1"/></td>
+                        <td><input id="txtSaleprice" type="text" class="txt num c1"/></td>
                     </tr>
                     <tr>
                     	<td><span> </span><a id="lblUweight" class="lbl"> </a></td>
-                        <td><input id="txtUweight" type="text" class="txt c1"/></td>
+                        <td><input id="txtUweight" type="text" class="txt num c1"/></td>
                         <td><span> </span><a class="lbl">運費型態</a></td>
                         <td><input id="txtStyleno" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr>
+                    	<td><span> </span><a id="lblStdmount" class="lbl"> </a></td>
+                        <td><input id="txtStdmount" type="text" class="txt num c1"/></td>
                     </tr>
                     <tr>
 						<td><span> </span><a id='lblTggno' class="lbl btn"> </a></td>
