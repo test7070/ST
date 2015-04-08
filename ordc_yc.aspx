@@ -21,14 +21,11 @@
 			q_desc = 1;
 			q_tables = 't';
 			var q_name = "ordc";
-			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2','txtTax','txtMoney','txtTotal'];
 			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount'];
 			var q_readonlyt = [];
 
-			var bbmNum = [
-				['txtFloata', 10, 5, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],
-				['txtTotal', 10, 0, 1], ['txtTotalus', 10, 0, 1], ['txtOverrate', 5, 2, 1],
-			];
+			var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],['txtTotal', 10, 0, 1], ['txtOverrate', 5, 2, 1]];
 			var bbsNum = [];
 			var bbtNum = [];
 			var bbmMask = [];
@@ -56,7 +53,6 @@
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
-				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 			});
 
 			function main() {
@@ -68,16 +64,20 @@
 			}
 
 			function sum() {
+				if(q_cur>2 || q_cur<1)
+					return;
 				var t1 = 0, t_unit, t_mount, t_weight = 0;
-				var t_money = 0;
 				for (var j = 0; j < q_bbsCount; j++) {
-					q_tr('txtTotal_' + j, q_mul(q_float('txtMount_' + j), q_float('txtPrice_' + j)));
-					q_tr('txtNotv_' + j, q_sub(q_float('txtMount_' + j), q_float('txtC1' + j)));
-					t_money = q_add(t_money, q_float('txtTotal_' + j));
+					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
+					t_mount = q_float('txtMount_' + j);
+					t_weight=+q_float('txtWeight_' + j);
+					if (t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') 
+						$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_weight)), 0));
+					else
+						$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
+					t1 = q_add(t1, dec(q_float('txtTotal_' + j)));
 				}
-				q_tr('txtMoney', t_money);
-				q_tr('txtTotal', q_add(q_float('txtMoney'), q_float('txtTax')));
-				q_tr('txtTotalus', q_mul(q_float('txtTotal'), q_float('txtFloata')));
+				$('#txtMoney').val(round(t1, 0));
 
 				calTax();
 			}
@@ -90,53 +90,42 @@
 								['txtStdmount', 10, q_getPara('rc2.mountPrecision'), 1],['txtC1', 10, q_getPara('rc2.mountPrecision'), 1],['txtNotv', 10, q_getPara('rc2.mountPrecision'), 1]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbKind", q_getPara('ordc.kind'));
-				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+				
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
 				$('#cmbKind').change(function() {
 					for (var j = 0; j < q_bbsCount; j++) {
 						btnMinus('btnMinus_' + j);
 					}
 					product_change();
 				});
+				
 				$('#lblOrdb').click(function() {
 					var t_tggno = trim($('#txtTggno').val());
 					var t_ordbno = trim($('#txtOrdbno').val());
 					var t_where = '';
 					
-					if (q_getPara('sys.project').toUpperCase()=='XY' ) {
-						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and b.datea>='"+q_date()+"' and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
-						t_where = t_where;
-					}else {
-						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
-						t_where = t_where;
-					}
+					t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
+					t_where = t_where;
 					
 					q_box("ordbs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordbs', "95%", "95%", $('#lblOrdb').text());
 				});
-				$('#txtFloata').change(function() {
-					sum();
-				});
+				
 				$('#txtTotal').change(function() {
 					sum();
 				});
+				
 				$('#txtTggno').change(function() {
 					if (!emp($('#txtTggno').val())) {
 						var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
-					if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) ) {
-						for(var i=0;i<q_bbsCount;i++){
-							if(!emp($('#txtProductno1_'+i).val())){
-								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+i).val()+"' ^^";
-								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
-							}
-						}
-					}
 				});
+				
 				$('#txtAddr').change(function() {
 					var t_tggno = trim($(this).val());
 					if (!emp(t_tggno)) {
@@ -146,6 +135,7 @@
 						q_gt('tgg', t_where, 0, 0, 0, "");
 					}
 				});
+				
 				$('#txtAddr2').change(function() {
 					var t_custno = trim($(this).val());
 					if (!emp(t_custno)) {
@@ -155,21 +145,14 @@
 						q_gt('cust', t_where, 0, 0, 0, "");
 					}
 				});
-				$('#btnImport').click(function() {
-					if ($('#btnImport').val() == '進口欄位顯示') {
-						$('.import').show();
-						$('#btnImport').val('進口欄位隱藏');
-					} else {
-						$('.import').hide();
-						$('#btnImport').val('進口欄位顯示');
-					}
-				});
+				
 				$('#txtOdate').focusout(function(){
 					var thisVal = $.trim($(this).val());
 					if(checkId(thisVal) != 0){
 						$('#txtDatea').val(q_cdn(thisVal,20));
 					}
 				});
+				
 				$('#chkCancel').click(function(){
 					if($(this).prop('checked')){
 						for(var k=0;k<q_bbsCount;k++){
@@ -222,26 +205,6 @@
 							z_nick = as[0].nick;
 						}
 						break;
-					case 'flors_coin':
-						var as = _q_appendData("flors", "", true);
-						var z_coin='';
-						for ( i = 0; i < as.length; i++) {
-							z_coin+=','+as[i].coin;
-						}
-						if(z_coin.length==0) z_coin=' ';
-						
-						q_cmbParse("cmbCoin", z_coin);
-						if(abbm[q_recno])
-							$('#cmbCoin').val(abbm[q_recno].coin);
-						
-						break;
-					case 'flors':
-						var as = _q_appendData("flors", "", true);
-						if (as[0] != undefined) {
-							q_tr('txtFloata',as[0].floata);
-							sum();
-						}
-						break;
 					case 'custaddr':
 						var as = _q_appendData("custaddr", "", true);
 						var t_item = " @ ";
@@ -277,7 +240,6 @@
 							$('#combPaytype').val(ordb[0].paytype);
 							$('#txtPaytype').val(ordb[0].pay);
 							$('#cmbTrantype').val(ordb[0].trantype);
-							$('#cmbCoin').val(ordb[0].coin);
 							$('#txtPost2').val(ordb[0].post);
 							$('#txtAddr2').val(ordb[0].addr);
 						}
@@ -287,33 +249,14 @@
 							q_Seek_gtPost();
 						break;
 				}
-				if(t_name.substr(0,7)=='ucctgg_'){
-					var t_seq=replaceAll(t_name,'ucctgg_','')
-					var t_mount=dec($("#txtMount_"+t_seq).val());
-					var t_price=[];
-					var as = _q_appendData("ucctgg", "", true);
+				if(t_name.split('_')[0]=="uccuweight"){
+					var n=t_name.split('_')[1];
+					var as = _q_appendData("ucc", "", true);
 					if (as[0] != undefined) {
-						var ass = _q_appendData("ucctggs", "", true);
-						if (ass[0] != undefined) {
-							for(var j=0;j<ass.length;j++){
-								if(t_mount>=dec(ass[j].mount)){
-									t_price.push({
-										mount:dec(ass[j].mount),
-										price:ass[j].price
-									})
-								}
-							}
-							if(t_price.length>0){
-								t_price.sort(compare);
-								$("#txtPrice_"+t_seq).val(t_price[t_price.length-1].price);
-							}else{
-								$("#txtPrice_"+t_seq).val(0);
-							}
-						}
+						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
+						sum();
 					}
-					sum();
 				}
-				
 			}
 			
 			function compare(a,b) {
@@ -421,46 +364,51 @@
 					$('#txtPost2').val($('#combAddr').find("option:selected").val());
 				}
 			}
-			
-			function coin_chg() {
-				var t_where = "where=^^ ('" + $('#txtOdate').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
-				q_gt('flors', t_where, 0, 0, 0, "");
-			}
 
 			function bbsAssign() {
 				for (var j = 0; j < q_bbsCount; j++) {
 				    $('#lblNo_'+j).text(j+1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#txtProductno1_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
+						$('#txtProductno2_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
+						$('#txtProductno3_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
 						$('#txtUnit_' + j).change(function() {
 							sum();
 						});
+						
 						$('#txtMount_' + j).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) &&!emp($('#txtProductno1_'+n).val())) {
-								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+n).val()+"' ^^";
-								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
+							if (!emp($('#txtProductno_' + n).val())) {
+								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
+								q_gt('ucc', t_where, 0, 0, 0, "uccuweight_"+n, r_accy);
 							}
 							sum();
 						});
+						
+						$('#txtWeight_' + j).change(function() {
+							sum();
+						});
+						
 						$('#txtPrice_' + j).change(function() {
 							sum();
 						});
-						$('#txtTotal_' + j).change(function() {
-							sum();
-						});
+						
 						$('#btnRc2record_' + j).click(function() {
 							var n = replaceAll($(this).attr('id'),'btnRc2record_','');
                             q_box("z_rc2record.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";ordcno="+$('#txtNoa').val()+"&no2="+$('#txtNo2_' + n).val()+";" + r_accy, 'z_rc2record', "95%", "95%", q_getMsg('popPrint'));    
 						});
-						
-						$('#txtProductno1_' + j).change(function() {
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) &&!emp($('#txtProductno1_'+n).val())) {
-								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+n).val()+"' ^^";
-								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
-							}
-						});
-						
 					}
 				}
 				_bbsAssign();
@@ -540,19 +488,6 @@
 			function refresh(recno) {
 				_refresh(recno);
 				product_change();
-				if (!emp($('#txtLcno').val())) {
-					$('.import').show();
-					$('#btnImport').val('進口欄位隱藏');
-				} else {
-					$('.import').hide();
-					$('#btnImport').val('進口欄位顯示');
-				}
-				
-				if (q_getPara('sys.comp').indexOf('楊家') > -1 || q_getPara('sys.comp').indexOf('德芳') > -1){
-					$('#lblOrdb').hide();
-					$('#txtOrdbno').hide();
-					$('.floata').hide();
-				}
 			}
 
 			function readonly(t_para, empty) {
@@ -696,6 +631,15 @@
 
 			function q_popPost(s1) {
 				switch (s1) {
+					case 'txtProductno1_':
+						$('#txtProductno_'+b_seq).val($('#'+s1+b_seq).val());
+						break;
+					case 'txtProductno2_':
+						$('#txtProductno_'+b_seq).val($('#'+s1+b_seq).val());
+						break;
+					case 'txtProductno3_':
+						$('#txtProductno_'+b_seq).val($('#'+s1+b_seq).val());
+						break;
 					case 'txtTggno':
 						if (!emp($('#txtTggno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
@@ -709,20 +653,6 @@
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
 					
-				//有達自動產生便品
-				if(q_getPara('sys.project').toUpperCase()=='XY'){
-					var isordc_ucc=false;
-					for (var j = 0; j < q_bbsCount; j++) {
-						if(!emp($('#txtProduct_'+j).val()) && emp($('#txtProductno_'+j).val())){
-							isordc_ucc=true;
-							break;
-						}
-					}
-					if(isordc_ucc){
-						var t_paras = $('#txtNoa').val()+ ';'+r_accy;
-						q_func('qtxt.query.ordc_ucc', 'cust_ucc_xy.txt,ordc_ucc,' + t_paras);
-					}
-				}
 			}
 			
 			function q_funcPost(t_func, result) {
@@ -738,7 +668,7 @@
 						break;
 				}
 			}
-
+			
 		</script>
 		<style type="text/css">
 			#dmain {
@@ -859,7 +789,7 @@
 				text-align: right;
 			}
 			.dbbs {
-				width: 1600px;
+				width: 1450px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1000,33 +930,6 @@
 						<td class="td6"><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td class="td7"><input id="txtTotal" type="text" class="txt num c1 lef" /></td>
 					</tr>
-					<tr class="tr7 floata">
-						<td class="td1"><span> </span><a id='lblFloata' class="lbl"> </a></td>
-						<td class="td2"><select id="cmbCoin" class="txt c1 lef" onchange='coin_chg()'> </select></td>
-						<td class="td3"><input id="txtFloata" type="text" class="txt num c1 lef" /></td>
-						<td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
-						<td class="td5" colspan="2"><input id="txtTotalus" type="text" class="txt num c1 lef" /></td>
-						<td class="td7"> </td>
-						<td class="td8"><input id="btnImport" type="button"/></td>
-						<!--<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
-						<td class="td8"><input id="txtApv" type="text" class="txt c1 lef" disabled="disabled" /></td>-->
-					</tr>
-					<tr class="tr8 import">
-						<td class="td1"><span> </span><a id='lblLcno' class="lbl"> </a></td>
-						<td class="td2" colspan="2"><input id="txtLcno" type="text"	class="txt c1 lef"/></td>
-						<td class="td4"><span> </span><a id='lblImportno' class="lbl"> </a></td>
-						<td class="td5" colspan="2"><input id="txtImportno" type="text"	class="txt c1 lef"/></td>
-						<td class="td7"> </td>
-						<td class="td8"><!--<input id="btnSi" type="button"/>--></td>
-					</tr>
-					<tr class="tr8 import">
-						<td class="td1"><span> </span><a id='lblEtd' class="lbl"> </a></td>
-						<td class="td2" colspan="2"><input id="txtEtd" type="text"	class="txt c1 lef"/></td>
-						<td class="td4"><span> </span><a id='lblEta' class="lbl"> </a></td>
-						<td class="td5" colspan="2"><input id="txtEta" type="text"	class="txt c1 lef"/></td>
-						<td class="td7"><span> </span><a id='lblOnboarddate' class="lbl"> </a></td>
-						<td class="td8"><input id="txtOnboarddate" type="text"	class="txt c1 lef"/></td>
-					</tr>
 					<tr class="tr9">
 						<td class="td1"><span> </span><a id='lblContract' class="lbl"> </a></td>
 						<td class="td2" colspan="2"><input id="txtContract" type="text" class="txt c1 lef"/></td>
@@ -1058,20 +961,21 @@
                         <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
                     <td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:180px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblProduct_st'> </a><a class="isSpec">/</a><a id='lblSpec' class="isSpec"> </a></td>
+					<td align="center" style="width:100px;"><a id='lblProductno'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblProduct_st'> </a><a class="isSpec">/</a><a id='lblSpec' class="isSpec"> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyles'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblUnit'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblMount_st'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblOmount_st'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblPrices'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblTotals'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
+					<td align="center" style="width:110px;"><a id='lblOmount_st'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblPrices'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTrandates'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblGemounts'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
-					<td align="center" style="width:45px;"><a id='lblRc2record'> </a></td>
-					<td align="center" style="width:45px;"><a id='lblCancels'> </a></td>
-					<td align="center" style="width:45px;"><a id='lblEndas'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblGemounts'> </a></td>
+					<td align="center" ><a id='lblMemos'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblRc2record'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblCancels'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblEndas'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
@@ -1093,6 +997,7 @@
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
+					<td><input id="txtWeight.*" type="text" class="txt num c1" /></td>
 					<td>
 						<input id="txtOmount.*" type="text" class="txt num c1" />
 						<input id="txtStdmount.*" type="text" class="txt c1 num"/>
