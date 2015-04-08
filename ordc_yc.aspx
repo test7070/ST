@@ -462,7 +462,7 @@
 			}
 
 			function btnPrint() {
-				q_box("z_ordcp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_ordcp', "95%", "95%", q_getMsg('popPrint'));
+				q_box("z_ordcfep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy, 'z_ordcp', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {

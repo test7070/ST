@@ -503,8 +503,7 @@
                     <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
                     <td align="center" style="width:20px;"></td>
-					<td align="center" style="width:200px;"><a id='lblUno_s'> </a></td>
-					<td align="center" style="width:200px"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:300px"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
 					<td align="center" style="width:80px;" class="isFe"><a id='lblLengthb_fe_s'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblUnit_s'> </a></td>
@@ -516,6 +515,7 @@
 					<td align="center" style="width:100px;"><a id='lblClass_s'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMech_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTimea_s'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblUno_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
                     <td align="center">
@@ -523,8 +523,6 @@
                     <input id="txtNoq.*" type="text" style="display: none;" />
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-                    
-					<td><input class="txt" id="txtUno.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:95%;" />
 						<input class="txt" id="txtProduct.*" type="text" style="width:95%;"/>
@@ -553,6 +551,7 @@
 						<input class="txt" id="txtMech.*" type="text" style="width:95%;"/>
 					</td>
 					<td><input class="txt" id="txtTimea.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt" id="txtUno.*" type="text" style="width:95%;"/></td>
 				</tr>
 			</table>
 		</div>
