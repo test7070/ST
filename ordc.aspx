@@ -626,15 +626,15 @@
 			}
 
 			function product_change() {
-				if ($('#cmbKind').val() == '1') {
+				if ($('#cmbKind').val() == '3') {
 					for (var j = 0; j < q_bbsCount; j++) {
-						$('#btnProduct1_' + j).show();
+						$('#btnProduct1_' + j).hide();
 						$('#btnProduct2_' + j).hide();
-						$('#btnProduct3_' + j).hide();
-						$('#txtProductno1_' + j).show();
+						$('#btnProduct3_' + j).show();
+						$('#txtProductno1_' + j).hide();
 						$('#txtProductno2_' + j).hide();
-						$('#txtProductno3_' + j).hide();
-						$('#txtProductno1_' + j).val($('#txtProductno_' + j).val());
+						$('#txtProductno3_' + j).show();
+						$('#txtProductno3_' + j).val($('#txtProductno_' + j).val());
 					}
 				} else if ($('#cmbKind').val() == '2') {
 					for (var j = 0; j < q_bbsCount; j++) {
@@ -648,13 +648,13 @@
 					}
 				} else {
 					for (var j = 0; j < q_bbsCount; j++) {
-						$('#btnProduct1_' + j).hide();
+						$('#btnProduct1_' + j).show();
 						$('#btnProduct2_' + j).hide();
-						$('#btnProduct3_' + j).show();
-						$('#txtProductno1_' + j).hide();
+						$('#btnProduct3_' + j).hide();
+						$('#txtProductno1_' + j).show();
 						$('#txtProductno2_' + j).hide();
-						$('#txtProductno3_' + j).show();
-						$('#txtProductno3_' + j).val($('#txtProductno_' + j).val());
+						$('#txtProductno3_' + j).hide();
+						$('#txtProductno1_' + j).val($('#txtProductno_' + j).val());
 					}
 				}
 				var hasStyle = q_getPara('sys.isstyle');

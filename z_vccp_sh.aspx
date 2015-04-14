@@ -20,63 +20,47 @@
             }
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_rc2fep');
-                
-                $('#q_report').click(function(e) {
-					if(q_getPara('sys.project').toUpperCase()!='FE'){
-						var delete_report=0;
-						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
-							if($('#q_report').data().info.reportData[i].report=='z_rc2fep1')
-								delete_report=i;
-						}
-						if($('#q_report div div').text().indexOf('進/退貨單(套表)')>-1){
-							$('#q_report div div')[delete_report].remove();
-							$('#q_report div div .radio').first().removeClass('nonselect').addClass('select').click();
-						}
-					}
-				});
+                q_gf('', 'z_vccp_sh');
             });
             function q_gfPost() {
-               $('#q_report').q_report({
-                        fileName : 'z_rc2fep',
-                        options : [{
-	                        type : '0',
-	                        name : 'accy',
-	                        value : r_accy
-	                    },{
-	                        type : '0',
-	                        name : 'mountprecision',
-	                        value : q_getPara('rc2.mountPrecision')
-	                    },{
-	                        type : '0',
-	                        name : 'weightprecision',
-	                        value : q_getPara('rc2.weightPrecision')
-	                    },{
-	                        type : '0',
-	                        name : 'priceprecision',
-	                        value : q_getPara('rc2.pricePrecision')
-	                    },{
-	                        type : '1',
-	                        name : 'xnoa'
-	                    },{
-	                        type : '8', 
-	                        name : 'showprice',
-	                        value : "1@顯示單價".split(',')
-                    	}]
-                    });
+				$('#q_report').q_report({
+					fileName : 'z_vccp_sh',
+					options : [{
+						type : '0', //[1]
+						name : 'accy',
+						value : r_accy
+					}, {
+						type : '1', //[2][3]
+						name : 'xnoa'
+					}]
+				});
+                    
                 q_popAssign();
-                	
+                
+                $('#txtXdate1').mask('999/99/99');
+                $('#txtXdate2').mask('999/99/99');
+                
+                $('#txtXdate1').val(q_cdn(q_date(),1));
+                $('#txtXdate2').val(q_cdn(q_date(),1));
+	                
 	            var t_noa=typeof(q_getId()[3])=='undefined'?'':q_getId()[3];
                 t_noa  =  t_noa.replace('noa=','');
                 $('#txtXnoa1').val(t_noa);
                 $('#txtXnoa2').val(t_noa);
+	                
             }
 
             function q_boxClose(s2) {
             }
+            
             function q_gtPost(s2) {
             }
 		</script>
+		<style type="text/css">
+			#frameReport table{
+					border-collapse: collapse;
+				}
+		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
@@ -93,3 +77,5 @@
 		</div>
 	</body>
 </html>
+           
+          

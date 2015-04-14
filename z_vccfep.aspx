@@ -18,6 +18,21 @@
             $(document).ready(function() {
             	q_getId();
                 q_gf('', 'z_vccfep');
+                
+                $('#q_report').click(function(e) {
+					if(q_getPara('sys.project').toUpperCase()!='FE'){
+						var delete_report=0;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_vccfep02')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('出貨單列印(套表)')>-1){
+							$('#q_report div div')[delete_report].remove();
+							$('#q_report div div .radio').first().removeClass('nonselect').addClass('select').click();
+						}
+					}
+				});
+                
             });
             function q_gfPost() {
 				$('#q_report').q_report({

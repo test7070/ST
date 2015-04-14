@@ -155,6 +155,9 @@
 					}
 				}
 				_bbsAssign();
+				if (q_getPara('sys.project').toUpperCase()!='FE'){
+					$('.fe').hide();
+				}
 			}
 
 			function btnIns() {
@@ -204,6 +207,9 @@
 
 			function refresh(recno) {
 				_refresh(recno);
+				if (q_getPara('sys.project').toUpperCase()!='FE'){
+					$('.fe').hide();
+				}
 			}
 
 			function readonly(t_para, empty) {
@@ -475,7 +481,7 @@
 					<td style="width:20px;"> </td>
 					<td align="center" style="width:80px;"><a id='lblStoreno_s'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblLengthb_fe_s'> </a></td>
+					<td align="center" style="width:80px;" class="fe"><a id='lblLengthb_fe_s'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblEmount_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblEweight_s'> </a></td>
@@ -498,7 +504,7 @@
 						<input id="txtProduct.*" type="text" style="width:95%;"/>
 						<input id="btnProduct.*" type="button" style="display:none;" />
 					</td>
-					<td><input id="txtLengthb.*" type="text" class="txt c1 num" style="width:95%;"/></td>
+					<td class="fe"><input id="txtLengthb.*" type="text" class="txt c1 num fe" style="width:95%;"/></td>
 					<td><input class="txt c1" id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num c1" id="txtMount.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num c1" id="txtWeight.*" type="text" style="width:95%;"/></td>

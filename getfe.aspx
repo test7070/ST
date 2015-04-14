@@ -60,7 +60,7 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtCucdate', r_picd]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbTypea", q_getPara('getfe.typea'));
+				q_cmbParse("cmbTypea", q_getPara('get.typea'));
 				bbmNum = [['txtPrice', 10, q_getPara('vcc.pricePrecision') ,1]];
 				bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision') ,1],['txtWeight', 10, q_getPara('vcc.weightPrecision') ,1],['txtPrice', 10, q_getPara('vcc.pricePrecision') ,1]];
 				
@@ -86,11 +86,18 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
 						break;
+				}
+				if(t_name.split('_')[0]=="uccuweight"){
+					var n=t_name.split('_')[1];
+					var as = _q_appendData("ucc", "", true);
+					if (as[0] != undefined) {
+						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
+						sum();
+					}
 				}
 			}
 
@@ -150,6 +157,11 @@
 							btnMinus($(this).attr('id'));
 						});
 						$('#txtMount_' + j).change(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							if (!emp($('#txtProductno_' + n).val())) {
+								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
+								q_gt('ucc', t_where, 0, 0, 0, "uccuweight_"+n, r_accy);
+							}
 							sum();
 						});
 						$('#txtWeight_' + j).change(function() {
@@ -169,6 +181,7 @@
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
+				$('#cmbTypea').val('領料');
 			}
 
 			function btnModi() {
@@ -456,11 +469,8 @@
 		<div class='dbbs'>
             <table id="tbbs" class='tbbs'>
                 <tr style='color:white; background:#003366;' >
-                    <td  align="center" style="width:30px;">
-                    <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
-                    </td>
-                    <td align="center" style="width:20px;"></td>
-					<td align="center" style="width:160px;"><a id='lblUno_s'> </a></td>
+                    <td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+                    <td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:150px;"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
@@ -469,15 +479,14 @@
 					<td align="center" style="width:80px;"><a id='lblWeight_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblMemo_s'> </a></td>
+					<td align="center" style="width:160px;"><a id='lblUno_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
                     <td align="center">
-                    <input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-                    <input id="txtNoq.*" type="text" style="display: none;" />
+	                    <input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+	                    <input id="txtNoq.*" type="text" style="display: none;" />
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-                    
-					<td><input class="txt" id="txtUno.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="txtProductno.*" type="text"  style="width:95%;" />
 						<input class="btn" id="btnProductno.*" type="button" value='.' style="display:none;" />
@@ -495,6 +504,7 @@
 						<input class="txt" id="txtMemo.*" type="text" style="width:95%;"/>
 						<input id="recno.*" type="hidden" />
 					</td>
+					<td><input class="txt" id="txtUno.*" type="text" style="width:95%;"/></td>
 				</tr>
 			</table>
 		</div>
