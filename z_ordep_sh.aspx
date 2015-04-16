@@ -20,11 +20,11 @@
             }
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_vccp_sh');
+                q_gf('', 'z_ordep_sh');
             });
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_vccp_sh',
+					fileName : 'z_ordep_sh',
 					options : [{
 						type : '0', //[1]
 						name : 'accy',
