@@ -79,6 +79,10 @@
 					}, {
 						type : '1', //[20][21] 4
 						name : 'xlengthb'
+					}, {
+						type : '8', //[22] 1
+						name : 'detail',
+						value : (new Array('detail@明細'))
 					}]
 				});
 				q_popAssign();
