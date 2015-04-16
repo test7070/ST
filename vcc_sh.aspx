@@ -36,8 +36,6 @@
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-				['txtPost', 'lblAddr', 'addr2', 'noa,post', 'txtPost', 'addr2_b.aspx'],
-				['txtPost2', 'lblAddr2', 'addr2', 'noa,post', 'txtPost2', 'addr2_b.aspx'],
 				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx']
 			);
 
@@ -1410,14 +1408,14 @@
 						<td class="td5"><select id="cmbTrantype" style="width: 100%;"> </select></td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id="lblAddr" class="lbl btn"> </a></td>
+						<td class="td1"><span> </span><a id="lblAddr" class="lbl"> </a></td>
 						<td class="td2"><input id="txtPost" type="text" class="txt c1"/></td>
 						<td class="td3" colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
 						<td class="td7"><span> </span><a id='lblOrdeno' class="lbl btn"> </a></td>
 						<td class="td8"><input id="txtOrdeno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id='lblAddr2' class="lbl btn"> </a></td>
+						<td class="td1"><span> </span><a id='lblAddr2' class="lbl"> </a></td>
 						<td class="td2"><input id="txtPost2"  type="text" class="txt c1"/></td>
 						<td class="td3" colspan='4'>
 							<input id="txtAddr2"  type="text" class="txt c1" style="width: 412px;"/>
@@ -1458,9 +1456,8 @@
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;width:" /></td>
 					<td align="center" style="width:40px;"><a>項次</a></td>
-					<td align="center" style="width:180px"><a id='lblUno_s'> </a></td>
-					<td align="center" style="width:180px"><a id='lblProductno_s'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblProduct_s'> </a><a class="isSpec">/</a><a id='lblSpec_s' class="isSpec"> </a></td>
+					<td align="center" style="width:110px"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblProduct_s'> </a><a class="isSpec">/</a><a id='lblSpec_s' class="isSpec"> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:80px;">出貨數量</td>
@@ -1468,20 +1465,20 @@
 					<td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width:120px;">出貨倉庫</td>
-					<td class="store2" align="center" style="width:120px;"><a id='lblStore2_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTranmoney2_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTranmoney3_s'> </a></td>
+					<td align="center" style="width:180px"><a id='lblUno_s'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:150px;">訂單號碼</td>
 					<td align="center" style="width:40px;"><a id='lblRecord_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblStk_s'> </a></td>
+					<td class="store2" align="center" style="width:120px;"><a id='lblStore2_s'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center"><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td align="center"><input id="txtNoq.*" type="text" class="txt c1"/></td>
-					<td><input id="txtUno.*" type="text" class="txt c1" /></td>
 					<td align="center">
-						<input class="txt c1"  id="txtProductno.*" type="text" style="width: 85%;" />
+						<input class="txt c1"  id="txtProductno.*" type="text" style="width: 75%;" />
 						<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;" />
 					</td>
 					<td>
@@ -1501,13 +1498,9 @@
 						<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;" />
 						<input id="txtStore.*" type="text" class="txt c1" style="width: 50%"/>
 					</td>
-					<td class="store2">
-						<input id="txtStoreno2.*" type="text" class="txt c1 store2" style="width: 30%"/>
-						<input class="btn"  id="btnStoreno2.*" type="button" value='.' style=" font-weight: bold;" />
-						<input id="txtStore2.*" type="text" class="txt c1 store2" style="width: 50%"/>
-					</td>
 					<td><input id="txtTranmoney2.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtTranmoney3.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtUno.*" type="text" class="txt c1" /></td>
 					<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
 					<td>
 						<input id="txtOrdeno.*" type="text"  class="txt" style="width:65%;"/>
@@ -1515,6 +1508,11 @@
 					</td>
 					<td align="center"><input class="btn"  id="btnRecord.*" type="button" value='.' style=" font-weight: bold;" /></td>
 					<td align="center"><input class="btn"  id="btnStk.*" type="button" value='.' style="width:1%;"/></td>
+					<td class="store2">
+						<input id="txtStoreno2.*" type="text" class="txt c1 store2" style="width: 30%"/>
+						<input class="btn"  id="btnStoreno2.*" type="button" value='.' style=" font-weight: bold;" />
+						<input id="txtStore2.*" type="text" class="txt c1 store2" style="width: 50%"/>
+					</td>
 				</tr>
 			</table>
 		</div>
