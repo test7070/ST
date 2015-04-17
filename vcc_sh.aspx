@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -221,7 +221,6 @@
 							if (!b_ret || b_ret.length == 0)
 								return;
 							
-								
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
 							, 'productno,product,spec,unit,notv,notv,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
 							
@@ -268,47 +267,6 @@
 	                        		q_content = "where=^^salesno='" + r_userno + "'^^";
 							}
 							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-						break;
-					case 'vccprice_quat':
-						var as = _q_appendData("view_quats", "", true);
-						for(var i=0;i<q_bbsCount;i++){
-							for(var j=0;j<as.length;j++){
-								if($('#txtProductno_'+i).val()==as[j].productno){
-									q_tr('txtPrice_'+i,dec(as[j].price));
-									break;
-								}
-							}
-						}
-						sum();
-						break;
-					case 'getCardealCarno' :
-						var as = _q_appendData("cardeals", "", true);
-						carnoList = as;
-						var t_item = " @ ";
-						if (as[0] != undefined) {
-							for ( i = 0; i < as.length; i++) {
-								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].carno + '@' + as[i].carno;
-							}
-						}
-						for(var k=0;k<carnoList.length;k++){
-							if(carnoList[k].carno==$('#txtCarno').val()){
-								thisCarSpecno = carnoList[k].carspecno;
-								break;
-							}
-						}
-						document.all.combCarno.options.length = 0;
-						q_cmbParse("combCarno", t_item);
-						$('#combCarno').unbind('change').change(function(){
-							if (q_cur == 1 || q_cur == 2) {
-								$('#txtCarno').val($('#combCarno').find("option:selected").text());
-							}
-							for(var k=0;k<carnoList.length;k++){
-								if(carnoList[k].carno==$('#txtCarno').val()){
-									thisCarSpecno = carnoList[k].carspecno;
-									break;
-								}
-							}
-						});
 						break;
 					case 'msg_stk_all':
 						var as = _q_appendData("stkucc", "", true);

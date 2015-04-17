@@ -76,6 +76,8 @@
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();  
+				
+				$('#chkShowprice input').prop('checked',true);
 	              
 	            var t_para = new Array();
 	            try{
