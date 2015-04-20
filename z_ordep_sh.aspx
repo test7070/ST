@@ -20,37 +20,17 @@
             }
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_vccp_sh');
+                q_gf('', 'z_ordep_sh');
             });
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_vccp_sh',
+					fileName : 'z_ordep_sh',
 					options : [{
 						type : '0', //[1]
 						name : 'accy',
 						value : r_accy
 					}, {
-						type : '0',//[2]
-						name : 'addr2',
-                        value : q_getPara('sys.addr2')
-                    }, {
-						type : '0',//[3]
-						name : 'addr',
-                        value : q_getPara('sys.addr')
-                    }, 
-                    {
-						type : '0',//[4]
-						name : 'tel',
-                        value : q_getPara('sys.tel2')
-                    },
-                    {
-						type : '0',//[5]
-						name : 'fax',
-                        value : q_getPara('sys.tel')
-                    },
-                      
-					{
-						type : '1', //[6][7]
+						type : '1', //[2][3]
 						name : 'xnoa'
 					}]
 				});

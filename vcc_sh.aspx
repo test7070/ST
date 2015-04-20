@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -36,7 +36,7 @@
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx']
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtMount_', 'ucaucc_b.aspx']
 			);
 
 			var isinvosystem = false;
@@ -108,12 +108,9 @@
 					var t_custno = trim($('#txtCustno').val());
 					var t_where = '';
 					if (t_custno.length > 0) {
-						t_where = " isnull(enda,0)!=1 ";
-						//t_where += " and left(productno,2)!='##' and left(custno,2)!='##' ";//非正式編號
+						t_where = " isnull(enda,0)!=1 and mount!=0 ";
 						t_where += " and productno!='' ";
-						//t_where += " and (custno='"+t_custno+"' or custno='"+t_custno.substr(0,5)+"')";
 						t_where += " and (custno='"+t_custno+"')";
-						t_where += " and (source!='2' or mount!=isnull((select SUM(tranmoney3) from view_vccs where ordeno=view_ordes"+r_accy+".noa and no2=view_ordes"+r_accy+".no2),0))";
 						if (!emp($('#txtOrdeno').val()))
 							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
 						t_where = t_where;
@@ -223,28 +220,17 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
-							for (var i = 0; i < b_ret.length; i++) {
-								b_ret[i].tranmoney3=0;
-								b_ret[i].tranmoney2=0;
-								b_ret[i].width=0;
-								if(b_ret[i].source=='2'){//寄出
-									b_ret[i].tranmoney3=b_ret[i].mount;
-									b_ret[i].mount=0;
-								}else if(b_ret[i].source=='1'){//寄庫
-									b_ret[i].tranmoney2=b_ret[i].mount;
-								}else{
-									b_ret[i].width=b_ret[i].mount;
-								}
-							}
-								
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtTranmoney2,txtTranmoney3,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
-							, 'productno,product,spec,unit,mount,width,tranmoney2,tranmoney3,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
+							
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
+							, 'productno,product,spec,unit,notv,notv,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
+							
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
 								if (t_oredeno.indexOf(b_ret[i].noa) == -1)
 									t_oredeno = t_oredeno + (t_oredeno.length > 0 ? (',' + b_ret[i].noa) : b_ret[i].noa);
 							}
+							
 							//取得訂單備註 + 指定地址
 							if (t_oredeno.length > 0) {
 								var t_where = "where=^^ charindex(noa,'" + t_oredeno + "')>0 ^^";
@@ -254,14 +240,9 @@
 							$('#txtOrdeno').val(t_oredeno);
 							sum();
 							
-							//103/12/04出貨單價抓最新的報價資料 >>後面取消
-							//var t_where = "where=^^ productno+'_'+odate+'_'+noa in (select productno+'_'+MAX(odate+'_'+noa) from view_quats where custno='"+$('#txtCustno').val()+"' and odate<='"+q_date()+"' and productno!='' group by productno)  ^^";
-							//q_gt('view_quats', t_where, 0, 0, 0, "vccprice_quat", r_accy);
 						}
 						break;
 					case q_name + '_s':
-						if(issales && s2[1]!=undefined)
-							s2[1]="where=^^"+replaceAll(replaceAll(s2[1],'where=^^',''),'^^','')+" and salesno='"+r_userno+"' "+"^^";
 						q_boxClose2(s2);
 						break;
 				}
@@ -286,47 +267,6 @@
 	                        		q_content = "where=^^salesno='" + r_userno + "'^^";
 							}
 							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-						break;
-					case 'vccprice_quat':
-						var as = _q_appendData("view_quats", "", true);
-						for(var i=0;i<q_bbsCount;i++){
-							for(var j=0;j<as.length;j++){
-								if($('#txtProductno_'+i).val()==as[j].productno){
-									q_tr('txtPrice_'+i,dec(as[j].price));
-									break;
-								}
-							}
-						}
-						sum();
-						break;
-					case 'getCardealCarno' :
-						var as = _q_appendData("cardeals", "", true);
-						carnoList = as;
-						var t_item = " @ ";
-						if (as[0] != undefined) {
-							for ( i = 0; i < as.length; i++) {
-								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].carno + '@' + as[i].carno;
-							}
-						}
-						for(var k=0;k<carnoList.length;k++){
-							if(carnoList[k].carno==$('#txtCarno').val()){
-								thisCarSpecno = carnoList[k].carspecno;
-								break;
-							}
-						}
-						document.all.combCarno.options.length = 0;
-						q_cmbParse("combCarno", t_item);
-						$('#combCarno').unbind('change').change(function(){
-							if (q_cur == 1 || q_cur == 2) {
-								$('#txtCarno').val($('#combCarno').find("option:selected").text());
-							}
-							for(var k=0;k<carnoList.length;k++){
-								if(carnoList[k].carno==$('#txtCarno').val()){
-									thisCarSpecno = carnoList[k].carspecno;
-									break;
-								}
-							}
-						});
 						break;
 					case 'msg_stk_all':
 						var as = _q_appendData("stkucc", "", true);
@@ -732,12 +672,6 @@
 						
 						$('#txtMount_' + i).focusout(function() {
 							if (q_cur == 1 || q_cur == 2){
-								var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
-								if (t_err.length > 0) {
-									alert(t_err);
-									$(this).val('');
-									return;
-								}
 								sum();
 							}
 						}).focusin(function() {
@@ -755,12 +689,6 @@
 						
 						$('#txtWidth_' + i).focusout(function() {
 							if (q_cur == 1 || q_cur == 2){
-								var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
-								if (t_err.length > 0) {
-									alert(t_err);
-									$(this).val('');
-									return;
-								}
 								sum();
 							}
 						});
@@ -769,12 +697,6 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
-							if (t_err.length > 0) {
-								alert(t_err);
-								$(this).val('');
-								return;
-							}
 							AutoNoq();
 							//判斷寄出量是否大於寄庫量
 							store2_seq=b_seq.toString();
@@ -785,7 +707,7 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
+							var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')],['txtProductno_'+ b_seq, q_getMsg('lblProductno_s')]]);
 							if (t_err.length > 0) {
 								alert(t_err);
 								$(this).val('');
@@ -830,12 +752,6 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
-							if (t_err.length > 0) {
-								alert(t_err);
-								$(this).val('');
-								return;
-							}
 							sum();
 							//判斷寄出量是否大於寄庫量
 							store2_seq=b_seq.toString();

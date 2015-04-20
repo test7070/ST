@@ -22,7 +22,7 @@
 			q_tables = 't';
 			var q_name = "ordc";
 			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2','txtTax','txtMoney','txtTotal'];
-			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount'];
+			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','chkEnda'];
 			var q_readonlyt = [];
 
 			var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],['txtTotal', 10, 0, 1], ['txtOverrate', 5, 2, 1]];
@@ -38,7 +38,7 @@
 			brwNowPage = 0;
 			brwKey = 'Odate';
 			aPop = new Array(
-				['txtProductno1_', 'btnProduct1_', 'ucaucc2', 'noa,product,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_,txtMount_', 'ucaucc2_b.aspx'],
+				['txtProductno1_', 'btnProduct1_', 'ucaucc2', 'noa,product,unit,spec', 'txtProductno1_,txtProduct_,txtUnit_,txtSpec_,txtMount_', 'ucaucc2_b.aspx'],
 				['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_,txtMount_', 'bcc_b.aspx'],
 				['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_,txtMount_', 'fixucc_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
@@ -86,8 +86,8 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd], ['txtTrandate', r_picd], ['txtEtd', r_picd], ['txtEta', r_picd], ['txtOnboarddate', r_picd]];
 				bbsMask = [['txtTrandate', r_picd]];
-				bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtPrice', 10, q_getPara('rc2.pricePrecision'), 1], ['txtTotal', 10, 0, 1], ['txtOmount', 10, q_getPara('rc2.mountPrecision'), 1]	,
-								['txtStdmount', 10, q_getPara('rc2.mountPrecision'), 1],['txtC1', 10, q_getPara('rc2.mountPrecision'), 1],['txtNotv', 10, q_getPara('rc2.mountPrecision'), 1]];
+				bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtPrice', 10, q_getPara('rc2.pricePrecision'), 1], ['txtTotal', 10, 0, 1], 
+								['txtC1', 10, q_getPara('rc2.mountPrecision'), 1],['txtNotv', 10, q_getPara('rc2.mountPrecision'), 1]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbKind", q_getPara('ordc.kind'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
@@ -327,8 +327,6 @@
 					if(!emp($('#txtProductno_' + j).val())&&emp($('#txtTrandate_'+j).val()))
 						$('#txtTrandate_'+j).val($('#txtTrandate').val());
 						
-					if(q_cur==1)
-						$('#txtOmount_'+j).val($('#txtMount_'+j).val());
 				}
 				
 				if (q_cur == 1)
@@ -789,7 +787,7 @@
 				text-align: right;
 			}
 			.dbbs {
-				width: 1450px;
+				width: 1350px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -967,11 +965,10 @@
 					<td align="center" style="width:60px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblWeight_s'> </a></td>
-					<td align="center" style="width:110px;"><a id='lblOmount_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTrandates'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblGemounts'> </a></td>
+					<td align="center" style="width:105px;"><a id='lblGemounts'> </a></td>
 					<td align="center" ><a id='lblMemos'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblRc2record'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblCancels'> </a></td>
@@ -998,10 +995,6 @@
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtWeight.*" type="text" class="txt num c1" /></td>
-					<td>
-						<input id="txtOmount.*" type="text" class="txt num c1" />
-						<input id="txtStdmount.*" type="text" class="txt c1 num"/>
-					</td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtTotal.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtTrandate.*" type="text" class="txt c1"/></td>
