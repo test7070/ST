@@ -30,7 +30,27 @@
 						name : 'accy',
 						value : r_accy
 					}, {
-						type : '1', //[2][3]
+						type : '0',//[2]
+						name : 'addr2',
+                        value : q_getPara('sys.addr2')
+                    }, {
+						type : '0',//[3]
+						name : 'addr',
+                        value : q_getPara('sys.addr')
+                    }, 
+                    {
+						type : '0',//[4]
+						name : 'tel',
+                        value : q_getPara('sys.tel2')
+                    },
+                    {
+						type : '0',//[5]
+						name : 'fax',
+                        value : q_getPara('sys.tel')
+                    },
+                      
+					{
+						type : '1', //[6][7]
 						name : 'xnoa'
 					}]
 				});
