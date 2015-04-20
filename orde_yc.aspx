@@ -35,7 +35,7 @@
 			brwCount2 = 11;
 			
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucaucc2', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc2_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucaucc2', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtSprice_', 'ucaucc2_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
@@ -455,6 +455,15 @@
 						sum();
 					}
 				}
+				if(t_name.split('_')[0]=="uccstdmount"){
+					var n=t_name.split('_')[1];
+					var as = _q_appendData("ucc", "", true);
+					if (as[0] != undefined) {
+						q_tr('txtMount_'+n,q_mul(q_float('txtSprice_'+n),dec(as[0].stdmount)));
+						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
+						sum();
+					}
+				}
 			}
 
 			function btnQuat() {
@@ -561,6 +570,15 @@
 						$('#btnMinus_' + j).click(function() {
 							btnMinus($(this).attr('id'));
 						});
+						
+						$('#txtSprice_'+i).change(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							if (!emp($('#txtProductno_' + n).val())) {
+								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
+								q_gt('ucc', t_where, 0, 0, 0, "uccstdmount_"+n, r_accy);
+							}
+						});
+						
 						$('#btnProductno_' + j).click(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
@@ -1139,7 +1157,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1700px;">
+		<div class='dbbs' style="width: 1780px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:45px;">
@@ -1149,6 +1167,7 @@
 					<td align="center" style="width:250px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle'> </a></td>
 					<td align="center" style="width:55px;"><a id='lblUnit'> </a></td>
+					<td align="center" style="width:80px;"><a>箱數</a></td>
 					<td align="center" style="width:85px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblWeights'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
@@ -1181,6 +1200,7 @@
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
 					<td align="center"><input class="txt c7" id="txtUnit.*" type="text"/></td>
+					<td><input id="txtSprice.*" type="text" class="txt num c7"/></td>
 					<td><input class="txt num c7" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtWeight.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>

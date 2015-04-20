@@ -38,7 +38,7 @@
             brwCount2 = 8;
 
             aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax', 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'Tgg_b.aspx']
-            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', "ucc_b.aspx?" ]
+            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtLengthb_', "ucc_b.aspx?" ]
             , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product,unit', 'txtProductno__,txtProduct__,txtUnit__', "ucc_b.aspx?" ]
             , ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', "store_b.aspx?" ]
             , ['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__,txtStore__', "store_b.aspx?" ]);
@@ -97,8 +97,8 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtOrdeno,txtNo2,txtMount,txtWeight,txtMemo', b_ret.length, b_ret
-															, 'productno,product,unit,noa,no2,mount,weight,memo', 'txtProductno,txtProduct');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtLengthb,txtOrdeno,txtNo2,txtMount,txtWeight,txtMemo', b_ret.length, b_ret
+															, 'productno,product,unit,sprice,noa,no2,mount,weight,memo', 'txtProductno,txtProduct');
 							sum();
 						}
 						break;
@@ -129,6 +129,15 @@
 					var as = _q_appendData("ucc", "", true);
 					if (as[0] != undefined) {
 						q_tr('txtWeight__'+n,q_mul(q_float('txtMount__'+n),dec(as[0].uweight)));
+						sum();
+					}
+				}
+				if(t_name.split('_')[0]=="uccstdmount"){
+					var n=t_name.split('_')[1];
+					var as = _q_appendData("ucc", "", true);
+					if (as[0] != undefined) {
+						q_tr('txtMount_'+n,q_mul(q_float('txtLengthb_'+n),dec(as[0].stdmount)));
+						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
 						sum();
 					}
 				}
@@ -163,6 +172,14 @@
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	$('#txtLengthb_'+i).change(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							if (!emp($('#txtProductno_' + n).val())) {
+								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
+								q_gt('ucc', t_where, 0, 0, 0, "uccstdmount_"+n, r_accy);
+							}
+						});
+                    	
                     	$('#txtProductno_' + i).bind('contextmenu', function(e) {
 							/*滑鼠右鍵*/
 							e.preventDefault();
@@ -545,7 +562,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 1250px;
+                width: 1300px;
             }
             .tbbs a {
                 font-size: medium;
@@ -566,7 +583,7 @@
                 background-color: bisque;
             }
             #dbbt {
-                width: 1250px;
+                width: 1300px;
             }
             #tbbt {
                 margin: 0;
@@ -703,6 +720,7 @@
                     <td style="width:100px; text-align: center;">物品編號</td>
                     <td style="width:300px; text-align: center;">物品名稱</td>
                     <td style="width:40px; text-align: center;">單位</td>
+                    <td style="width:80px; text-align: center;"><a>箱數</a></td>
                     <td style="width:80px; text-align: center;">入庫數量</td>
                     <td style="width:80px; text-align: center;">入庫重量</td>
                     <td style="width:80px; text-align: center;">加工單價</td>
@@ -722,6 +740,7 @@
                 	</td>
                 	<td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
+                    <td><input id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
                     <td><input id="txtMount.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtWeight.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtPrice.*"  type="text" style="width:95%; text-align: right;"/></td>
