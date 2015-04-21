@@ -37,7 +37,7 @@
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtSalesno2', 'lblSales2', 'sss', 'noa,namea', 'txtSalesno2,txtSales2', 'sss_b.aspx'],
 				['txtCustno2', 'lblCust2', 'cust', 'noa,comp', 'txtCustno2,txtComp2', 'cust_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtSprice_', 'ucaucc_b.aspx']
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtLengthc_', 'ucaucc_b.aspx']
 			);
 
 			var isinvosystem = false;
@@ -535,7 +535,7 @@
 					var n=t_name.split('_')[1];
 					var as = _q_appendData("ucc", "", true);
 					if (as[0] != undefined) {
-						q_tr('txtMount_'+n,q_mul(q_float('txtSprice_'+n),dec(as[0].stdmount)));
+						q_tr('txtMount_'+n,q_mul(q_float('txtLengthc_'+n),dec(as[0].stdmount)));
 						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
 						sum();
 					}
@@ -600,7 +600,7 @@
 			function bbsAssign() {
 				for (var i = 0; i < q_bbsCount; i++) {
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
-						$('#txtSprice_'+i).change(function(){
+						$('#txtLengthc_'+i).change(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if (!emp($('#txtProductno_' + n).val())) {
 								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
@@ -1243,7 +1243,7 @@
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
-					<td><input id="txtSprice.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLengthc.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1"/></td>

@@ -35,7 +35,7 @@
 			brwCount2 = 11;
 			
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucaucc2', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtSprice_', 'ucaucc2_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucaucc2', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtLengthc_', 'ucaucc2_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
@@ -459,7 +459,7 @@
 					var n=t_name.split('_')[1];
 					var as = _q_appendData("ucc", "", true);
 					if (as[0] != undefined) {
-						q_tr('txtMount_'+n,q_mul(q_float('txtSprice_'+n),dec(as[0].stdmount)));
+						q_tr('txtMount_'+n,q_mul(q_float('txtLengthc_'+n),dec(as[0].stdmount)));
 						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
 						sum();
 					}
@@ -571,7 +571,7 @@
 							btnMinus($(this).attr('id'));
 						});
 						
-						$('#txtSprice_'+i).change(function(){
+						$('#txtLengthc_'+j).change(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if (!emp($('#txtProductno_' + n).val())) {
 								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
@@ -1200,7 +1200,7 @@
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
 					<td align="center"><input class="txt c7" id="txtUnit.*" type="text"/></td>
-					<td><input id="txtSprice.*" type="text" class="txt num c7"/></td>
+					<td><input id="txtLengthc.*" type="text" class="txt num c7"/></td>
 					<td><input class="txt num c7" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtWeight.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>

@@ -98,7 +98,7 @@
 							if (!b_ret || b_ret.length == 0)
 								return;
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtLengthb,txtOrdeno,txtNo2,txtMount,txtWeight,txtMemo', b_ret.length, b_ret
-															, 'productno,product,unit,sprice,noa,no2,mount,weight,memo', 'txtProductno,txtProduct');
+															, 'productno,product,unit,lengthc,noa,no2,mount,weight,memo', 'txtProductno,txtProduct');
 							sum();
 						}
 						break;
