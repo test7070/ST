@@ -1314,6 +1314,7 @@
 						<td class="td5"><input id="txtPaytype" type="text" class="txt c1"/></td>
 						<td class="td6"><select id="combPay" style="width: 100%;" onchange='combPay_chg()'> </select></td>
 						<td class="td6"align="right"><input id="btnOrdes" type="button"/></td>
+						<td class="td7"align="right"><input id="btnStore2" type="button" value="寄庫顯示"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblTel" class="lbl"> </a></td>
@@ -1337,7 +1338,8 @@
 							<input id="txtAddr2"  type="text" class="txt c1" style="width: 412px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
-						<td class="td6"align="right"><input id="btnStore2" type="button" value="寄庫顯示"/></td>
+						<td class="td1"><span> </span><a id='lblCarno' class="lbl"> </a></td>
+						<td class="td2"><input id="txtCarno"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
