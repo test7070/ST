@@ -807,6 +807,17 @@
 				}
 				_bbsAssign();
 				HiddenTreat();
+				
+				if((q_cur==1 || q_cur==2)){
+					if(q_bbsCount>=10){
+						$('#btnPlus').attr('disabled', 'disabled');
+					}else{
+						$('#btnPlus').removeAttr('disabled');
+					}
+				}
+				for (var i = 10; i < q_bbsCount; i++) {
+					$('#bbsseq_'+i).hide();
+				}
 			}
 			
 			function check_store2(t_seq) {
@@ -856,7 +867,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno'] ) {
+				if (!as['productno'] && !as['product'] ) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -1392,7 +1403,7 @@
 					<td align="center" style="width:40px;"><a id='lblStk_s'> </a></td>
 					<td class="store2" align="center" style="width:120px;"><a id='lblStore2_s'> </a></td>
 				</tr>
-				<tr style='background:#cad3ff;'>
+				<tr id="bbsseq.*" style='background:#cad3ff;'>
 					<td align="center"><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td align="center"><input id="txtNoq.*" type="text" class="txt c1"/></td>
 					<td align="center">
