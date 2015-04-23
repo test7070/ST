@@ -17,12 +17,9 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2','txtTranstart'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
-			var bbmNum = [
-				['txtPrice', 10, 3, 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],
-				['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtTranadd', 15, 2, 1], ['txtFloata', 11, 5, 1]
-			];
+			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -42,16 +39,14 @@
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtSalesno2', 'lblSales2', 'sss', 'noa,namea', 'txtSalesno2,txtSales2', 'sss_b.aspx'],
 				['txtCustno2', 'lblCust2', 'cust', 'noa,comp', 'txtCustno2,txtComp2', 'cust_b.aspx'],
-				//['txtPost', 'lblAddr', 'addr', 'post,addr', 'txtPost,txtAddr', 'addr_b.aspx'],
-				//['txtPost2', 'lblAddr2', 'addr', 'post,addr', 'txtPost2,txtAddr2', 'addr_b.aspx'],
 				['txtPost', 'lblAddr', 'addr2', 'noa,post', 'txtPost', 'addr2_b.aspx'],
 				['txtPost2', 'lblAddr2', 'addr2', 'noa,post', 'txtPost2', 'addr2_b.aspx'],
 				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
-				['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx']
+				['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],
+				['txtPartno', 'lblPart', 'part', 'noa,part','txtPartno,txtPart', 'part_b.aspx'],
+				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx']
 			);
 
-			var isinvosystem = false;
-			//購買發票系統
 			$(document).ready(function() {
 				q_desc = 1;
 				bbmKey = ['noa'];
@@ -59,9 +54,7 @@
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
-				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
 				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
-				//判斷是否有買發票系統
 			});
 
 			function main() {
@@ -73,44 +66,46 @@
 			}
 
 			function sum() {
-				var t1 = 0, t_unit, t_mount, t_weight = 0;
+				var t1 = 0, t_unit, t_mount, t_weight = 0,t_money=0, t_tax = 0, t_total = 0;
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $('#txtUnit_' + j).val();
 					t_mount = q_float('txtMount_' + j);
 					t_weight=+q_float('txtMount_' + j);
 					$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
-					t1 = q_add(t1, dec(q_float('txtTotal_' + j)));
+					t_money = q_add(t_money, dec(q_float('txtTotal_' + j)));
 				}
-				$('#txtMoney').val(round(t1, 0));
-				var price = dec($('#txtPrice').val());
-				var addMoney = dec(q_getPara('sys.tranadd'));
-				var addMul = dec($('#txtTranadd').val());
-				var total = 0
-				var transtyle = $.trim($('#cmbTranstyle').val());
-				if(transtyle=='4' || transtyle=='9'){
-					price = 0;
+				if($('#chkAtax').prop('checked')){
+					var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
+					t_tax = round(q_mul(t_money, t_taxrate), 0);
+					t_total = q_add(t_money, t_tax);
+				}else{
+					t_tax = q_float('txtTax');
+					t_total = q_add(t_money, t_tax);
 				}
-				total = q_add(q_mul(addMoney,addMul),price);
-				q_tr('txtTranmoney', total);
-				calTax();
+				$('#txtMoney').val(FormatNumber(t_money));
+				$('#txtTax').val(FormatNumber(t_tax));
+				$('#txtTotal').val(FormatNumber(t_total));
+				
 				q_tr('txtTotalus', round(q_mul(q_float('txtMoney'), q_float('txtFloata')),2));
 			}
 
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
+				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm],['txtZipcode', r_picd],['txtZipname', '99:99']];
 				q_mask(bbmMask);
-				bbmNum = [	['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtTranadd', 11, 2, 1], ['txtFloata', 11, 5, 1]];
+				bbmNum = [	['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtFloata', 11, 5, 1],['txtMount', 15, 0, 1]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]];
 				q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
-				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPay", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
+				$('#lblPart').text('運費所屬部門');
+				$('#lblDdate').text('配送時間');
+				$('#lblMount').text('箱數');
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
@@ -122,6 +117,15 @@
 				$('#txtMon').click(function(){
 					if ($('#txtMon').attr("readonly")=="readonly" && (q_cur==1 || q_cur==2))
 						q_msg($('#txtMon'), "月份要另外設定，請在"+q_getMsg('lblMemo')+"的第一個字打'*'字");
+				});
+				
+				$('#chkAtax').click(function() {
+					refreshBbm();
+					sum();
+				});
+				
+				$('#txtTax').change(function() {
+					sum();
 				});
 				
 				$('#txtPost').change(function(){
@@ -198,10 +202,6 @@
 					sum();
 				});
 				
-				$('#txtTranadd').change(function() {
-					sum();
-				});
-				
 				$('#txtAddr').change(function() {
 					var t_custno = trim($(this).val());
 					if (!emp(t_custno)) {
@@ -230,15 +230,19 @@
 				$('#btnClose_div_stk').click(function() {
 					$('#div_stk').hide();
 				});
-				
-				if (isinvosystem)
-					$('.istax').hide();
 					
-				if (q_getPara('sys.menu').substr(0,3)!='qra'){
-					$('#lblTranadd').hide()
-					$('#txtTranadd').hide()
-				}
 			}
+			
+			function refreshBbm() {
+                if (q_cur == 1 || q_cur==2) {
+					if($('#chkAtax').prop('checked'))
+						$('#txtTax').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					else
+						$('#txtTax').css('color', 'black').css('background', 'white').removeAttr('readonly');  
+                }else{
+                	$('#txtTax').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+                }
+            }
 
 			function bbsGetOrdeList(){
 				var t_custno = $.trim($('#txtCustno').val());
@@ -337,6 +341,12 @@
 			function q_gtPost(t_name) {
 				var as;
 				switch (t_name) {
+					case 'getpart':
+						var as = _q_appendData("part", "", true);
+						if (as[0] != undefined) {
+							$('#txtPart').val(as[0].part);
+						}
+						break;
 					case 'GetOrdeList':
 						var as = _q_appendData("view_ordes", "", true);
 						for(var k=0;k<q_bbsCount;k++){
@@ -427,15 +437,6 @@
 						$('#div_stk').css('top',mouse_point.pageY-parseInt($('#div_stk').css('height')));
 						$('#div_stk').css('left',mouse_point.pageX-parseInt($('#div_stk').css('width')));
 						$('#div_stk').toggle();
-						break;
-					case 'ucca_invo':
-						var as = _q_appendData("ucca", "", true);
-						if (as[0] != undefined) {
-							isinvosystem = true;
-							$('.istax').hide();
-						} else {
-							isinvosystem = false;
-						}
 						break;
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
@@ -565,24 +566,29 @@
 						var t_addr = '';
 						var t_post2 = '';
 						var t_addr2 = '';
+						var t_consignee = '';
 						for ( i = 0; i < as.length; i++) {
 							t_memo = t_memo + (t_memo.length > 0 ? '\n' : '') + as[i].noa + ':' + as[i].memo;
 							t_post = t_post+(t_post.length>0?';':'')+as[i].post;
 							t_addr = t_addr+(t_addr.length>0?';':'')+as[i].addr;
 							t_post2 = t_post2+(t_post2.length>0?';':'')+as[i].post2;
 							t_addr2 = t_addr2+(t_addr2.length>0?';':'')+as[i].addr2;
+							t_consignee = t_consignee+(t_consignee.length>0?';':'')+as[i].memo2;
 						}
 						$('#txtMemo').val(t_memo);
 						$('#txtPost').val(t_post);
 						$('#txtAddr').val(t_addr);
 						$('#txtPost2').val(t_post2);
 						$('#txtAddr2').val(t_addr2);
+						$('#txtApvmemo').val(t_consignee);
 						if (as[0] != undefined){
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
-							$('#cmbTaxtype').val(as[0].taxtype);
+							//$('#cmbTaxtype').val(as[0].taxtype);
 							$('#cmbCoin').val(as[0].coin);
 							$('#txtFloata').val(as[0].floata);
+							$('#txtZipcode').val(as[0].gdate);
+							$('#txtZipname').val(as[0].gtime);
 						}
 						sum();
 						break;
@@ -692,6 +698,15 @@
 					$('#txtMon').val($('#txtDatea').val().substr(0, 6));*/
 				
 				check_startdate=false;
+				
+				if(!emp($('#txtStoreno').val())){
+					for (var i = 0; i < q_bbsCount; i++) {
+						if(!emp($('#txtProductno_'+i).val()) && emp($('#txtStoreno_'+i).val())){
+							$('#txtStoreno_'+i).val($('#txtStoreno').val());
+							$('#txtStore_'+i).val($('#txtStore').val());
+						}
+					}
+				}
 					
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
@@ -819,6 +834,7 @@
 				}
 				_bbsAssign();
 				HiddenTreat();
+				refreshBbm();
 			}
 
 			function btnIns() {
@@ -829,9 +845,13 @@
 				$('#txtDatea').val(q_date());
 				$('#cmbTypea').val('1');
 				$('#txtDatea').focus();
-				$('#cmbTaxtype').val('1');
+				//$('#cmbTaxtype').val('1');
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				$('#txtMount').val(1);
+				$('#txtPartno').val(r_partno);
+				var t_where = "where=^^ noa='"+r_partno+"' ^^";
+				q_gt('part', t_where, 0, 0, 0, "getpart");
 			}
 
 			function btnModi() {
@@ -844,13 +864,8 @@
 				q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
 			}
 
-			function btnPrint() {
-				var hasStyle = q_getPara('sys.isstyle');
-				if(hasStyle=='1'){
-					q_box('z_vcc_ra.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-				}else{
-					q_box('z_vccp.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-				}
+			function btnPrint() {				
+				q_box('z_vccp_rb.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
@@ -896,10 +911,9 @@
 
 			function refresh(recno) {
 				_refresh(recno);
-				if (isinvosystem)
-					$('.istax').hide();
 				HiddenTreat();
 				stype_chang();
+				refreshBbm();
 			}
 
 			function HiddenTreat(returnType){
@@ -942,6 +956,7 @@
 					$('#txtMon').removeAttr('readonly');
 				else
 					$('#txtMon').attr('readonly', 'readonly');
+				refreshBbm();
 			}
 
 			function btnMinus(id) {
@@ -1048,53 +1063,6 @@
 				return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
 			}
 			
-			function calTax() {
-				var t_money = 0, t_tax = 0, t_total = 0;
-				for (var j = 0; j < q_bbsCount; j++) {
-					t_money += q_float('txtTotal_' + j);
-				}
-				t_total = t_money;
-				if (!isinvosystem) {
-					var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
-					switch ($('#cmbTaxtype').val()) {
-						case '0': // 無
-							t_tax = 0;
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '1': // 應稅
-							t_tax = round(q_mul(t_money, t_taxrate), 0);
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '2': //零稅率
-							t_tax = 0;
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '3': // 內含
-							t_tax = round(q_mul(q_div(t_money, q_add(1, t_taxrate)), t_taxrate), 0);
-							t_total = t_money;
-							t_money = q_sub(t_total, t_tax);
-							break;
-						case '4': // 免稅
-							t_tax = 0;
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '5': // 自定
-							$('#txtTax').attr('readonly', false);
-							$('#txtTax').css('background-color', 'white').css('color', 'black');
-							t_tax = round(q_float('txtTax'), 0);
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '6': // 作廢-清空資料
-							t_money = 0, t_tax = 0, t_total = 0;
-							break;
-						default:
-					}
-				}
-				
-				$('#txtMoney').val(FormatNumber(t_money));
-				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
-			}
 		</script>
 		<style type="text/css">
 			#dmain {
@@ -1320,9 +1288,8 @@
 						<td class="td3" colspan='4'>
 							<input id="txtAddr2"  type="text" class="txt c1" style="width: 412px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
+							<input id="txtApvmemo" type="hidden" class="txt c1"/>
 						</td>
-						<td class="td7"><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
-						<td class="td8"><input id="txtTranmoney" type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
@@ -1334,18 +1301,28 @@
 							<select id="combCarno" style="width: 20%;"> </select>
 						</td>
 						<td class="td5"><select id="cmbTranstyle" style="width: 100%;"> </select></td>
-						<td class="td7"><span> </span><a id='lblPrice' class="lbl"> </a></td>
-						<td class="td8"><input id="txtPrice" type="text" class="txt num c1"/></td>
+						<td class="td7"><span> </span><a id='lblMount' class="lbl"> </a></td>
+						<td class="td8"><input id="txtMount" type="text" class="txt num c1"/></td>
+					</tr>
+					<tr>
+						<td class="td4"><span> </span><a id="lblDdate" class="lbl"> </a></td>
+						<td class="td5"><input id="txtZipcode" type="text" class="txt c1"/></td>
+						<td class="td6"><input id="txtZipname" type="text" class="txt c1"/></td>
+						<td class="td4"><span> </span><a id='lblTranstart' class="lbl btn"> </a></td>
+						<td class="td5"><input id="txtTranstartno" type="text" class="txt c1"/></td>
+						<td class="td6"><input id="txtTranstart" type="text" class="txt c1"/></td>
+						<td class="td7"><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
+						<td class="td8"><input id="txtTranmoney" type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblSales' class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtSalesno" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtSales" type="text" class="txt c1"/></td>
-						<td class="td4"><span> </span><a id='lblTranstart' class="lbl btn"> </a></td>
-						<td class="td5"><input id="txtTranstartno" type="text" class="txt c1"/></td>
-						<td class="td6"><input id="txtTranstart" type="text" class="txt c1"/></td>
-						<td class="td7"><span> </span><a id='lblTranadd' class="lbl"> </a></td>
-						<td class="td8"><input id="txtTranadd" type="text" class="txt num c1"/></td>
+						<td class="td1"><span> </span><a id="lblPart" class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtPartno" type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtPart" type="text" class="txt c1"/></td>
+						<td class="td7"><span> </span><a id='lblPrice' class="lbl"> </a></td>
+						<td class="td8"><input id="txtPrice" type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
@@ -1353,7 +1330,8 @@
 						<td class="td4"><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td class="td5" colspan='2'>
 							<input id="txtTax" type="text" class="txt num c1 istax"  style="width: 49%;"/>
-							<select id="cmbTaxtype" style="width: 49%;" onchange="calTax();"> </select>
+							<!--<select id="cmbTaxtype" style="width: 49%;" onchange="calTax();"> </select>-->
+							<input id="chkAtax" type="checkbox" />
 						</td>
 						<td class="td7"><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
 						<td class="td8"><input id="txtTotal" type="text" class="txt num c1 istax"/></td>
@@ -1366,6 +1344,9 @@
 						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
+						<td class="td1"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtStoreno" type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtStore" type="text" class="txt c1"/></td>
 						<td class="td1"><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td class="td2"><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtWorker2" type="text" class="txt c1"/></td>
