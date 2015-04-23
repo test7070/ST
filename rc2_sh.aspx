@@ -71,7 +71,7 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_mount = q_float('txtMount_' + j);
 					$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
-					t_money = q_add(t1, dec(q_float('txtTotal_' + j)));
+					t_money = q_add(t_money, dec(q_float('txtTotal_' + j)));
 				}
 				q_tr('txtMoney',round(t_money, 0));
 				
