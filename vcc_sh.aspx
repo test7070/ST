@@ -17,7 +17,7 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtAcc2'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq','txtStore','txtStore2'];
 			var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1]];
 			var bbsNum = [];
@@ -36,7 +36,8 @@
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtMount_', 'ucaucc_b.aspx']
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_,txtMount_', 'ucaucc_b.aspx'],
+				['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2,txtMount', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
 			);
 
 			var isinvosystem = false;
@@ -48,7 +49,7 @@
 				q_brwCount();
 				//q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
-				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
+				//q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
 				q_gt('sss', "where=^^noa='"+r_userno+"'^^", 0, 0, 0, "sssissales");
 			});
 
@@ -71,8 +72,7 @@
 					$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
 					t1 = q_add(t1, dec(q_float('txtTotal_' + j)));
 				}
-				$('#txtMoney').val(round(t1, 0));
-				
+				q_tr('txtMoney',round(t1, 0));
 				calTax();
 			}
 
@@ -80,7 +80,7 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
-				bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1]];
+				bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1],['txtMount',15,0,1],['txtDiscount',15,0,1]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtWidth', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1], ['txtTranmoney2', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTranmoney3', 9, q_getPara('vcc.mountPrecision'), 1]];
 				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
@@ -90,6 +90,7 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				$('#lblCash').text('收款金額');
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
@@ -127,6 +128,20 @@
 
 				$('#lblAccc').click(function() {
 					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('lblAccc'), true);
+				});
+				
+				$('#txtAcc1').change(function() {
+					var patt = /^(\d{4})([^\.,.]*)$/g;
+					$(this).val($(this).val().replace(patt,"$1.$2"));
+	            	sum();
+				});
+				
+				$('#txtMount').change(function() {
+					sum();
+				});
+				
+				$('#txtDiscount').change(function() {
+					sum();
 				});
 
 				$('#lblInvono').click(function() {
@@ -807,6 +822,17 @@
 				}
 				_bbsAssign();
 				HiddenTreat();
+				
+				if((q_cur==1 || q_cur==2)){
+					if(q_bbsCount>=10){
+						$('#btnPlus').attr('disabled', 'disabled');
+					}else{
+						$('#btnPlus').removeAttr('disabled');
+					}
+				}
+				for (var i = 10; i < q_bbsCount; i++) {
+					$('#bbsseq_'+i).hide();
+				}
 			}
 			
 			function check_store2(t_seq) {
@@ -856,7 +882,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno'] ) {
+				if (!as['productno'] && !as['product'] ) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -1040,9 +1066,7 @@
 
 			function calTax() {
 				var t_money = 0, t_tax = 0, t_total = 0;
-				for (var j = 0; j < q_bbsCount; j++) {
-					t_money += q_float('txtTotal_' + j);
-				}
+				t_money= q_float('txtMoney');
 				t_total = t_money;
 				if (!isinvosystem) {
 					var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
@@ -1082,7 +1106,7 @@
 				}
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
+				q_tr('txtTotal', q_sub(q_sub(q_add(t_money,t_tax),q_float('txtMount')),q_float('txtDiscount')));
 			}
 			
 			function HiddenTreat(){
@@ -1314,6 +1338,7 @@
 						<td class="td5"><input id="txtPaytype" type="text" class="txt c1"/></td>
 						<td class="td6"><select id="combPay" style="width: 100%;" onchange='combPay_chg()'> </select></td>
 						<td class="td6"align="right"><input id="btnOrdes" type="button"/></td>
+						<td class="td7"align="right"><input id="btnStore2" type="button" value="寄庫顯示"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblTel" class="lbl"> </a></td>
@@ -1337,7 +1362,8 @@
 							<input id="txtAddr2"  type="text" class="txt c1" style="width: 412px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
-						<td class="td6"align="right"><input id="btnStore2" type="button" value="寄庫顯示"/></td>
+						<td class="td1"><span> </span><a id='lblCarno' class="lbl"> </a></td>
+						<td class="td2"><input id="txtCarno"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
@@ -1345,10 +1371,19 @@
 						<td class="td4"><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td class="td5" colspan='2'>
 							<input id="txtTax" type="text" class="txt num c1 istax"  style="width: 49%;"/>
-							<select id="cmbTaxtype" style="width: 49%;" onchange="calTax();"> </select>
+							<select id="cmbTaxtype" style="width: 49%;" onchange="sum();"> </select>
 						</td>
 						<td class="td7"><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
 						<td class="td8"><input id="txtTotal" type="text" class="txt num c1 istax"/></td>
+					</tr>
+					<tr class="tr9">
+						<td class="td1"><span> </span><a id='lblAcc1' class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtAcc1" type="text" class="txt c1" /></td>
+						<td class="td3"><input id="txtAcc2" type="text" class="txt c1" /></td>
+						<td class="td4"><span> </span><a id='lblCash' class="lbl"> </a></td>
+						<td class="td5"  colspan="2"><input id="txtMount" type="text" class="txt num c1" /></td>
+						<td class="td7"><span> </span><a id='lblDiscount' class="lbl"> </a></td>
+						<td class="td8"><input id="txtDiscount" type="text" class="txt num c1" /></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblSales' class="lbl btn"> </a></td>
@@ -1390,7 +1425,7 @@
 					<td align="center" style="width:40px;"><a id='lblStk_s'> </a></td>
 					<td class="store2" align="center" style="width:120px;"><a id='lblStore2_s'> </a></td>
 				</tr>
-				<tr style='background:#cad3ff;'>
+				<tr id="bbsseq.*" style='background:#cad3ff;'>
 					<td align="center"><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td align="center"><input id="txtNoq.*" type="text" class="txt c1"/></td>
 					<td align="center">

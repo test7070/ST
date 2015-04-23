@@ -26,7 +26,7 @@
 				
 				$('#q_report').click(function(e) {
 					//客戶請款單與應收對帳簡要表>>正常隱藏業務選項>>>不然會造成金額問題
-					if(!(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1 || q_getPara('sys.comp').indexOf('永勝')>-1)){
+					if(!(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1 || q_getPara('sys.comp').indexOf('永勝')>-1 || q_getPara('sys.project').toUpperCase()=='RB')){
 						if($('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm13' || $('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm10'){
 							$('#Sales').hide();
 						}
