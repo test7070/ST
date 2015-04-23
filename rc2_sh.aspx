@@ -19,7 +19,7 @@
 			var q_name = "rc2";
 			var decbbs = ['money', 'total', 'mount', 'price', 'sprice', 'dime', 'width', 'lengthb', 'weight2'];
 			var decbbm = ['payed', 'unpay', 'usunpay', 'uspayed', 'ustotal', 'discount', 'money', 'tax', 'total', 'weight', 'mount', 'price', 'tranmoney'];
-			var q_readonly = ['txtNoa', 'txtAcomp', 'txtTgg', 'txtWorker', 'txtWorker2','txtTranstart','txtMoney','txtTotal','txtAcc2'];
+			var q_readonly = ['txtNoa', 'txtAcomp', 'txtTgg', 'txtWorker', 'txtWorker2','txtTranstart','txtMoney','txtTotal','txtAcc2','txtTax'];
 			var q_readonlys = ['txtNoq','txtAcc2'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -57,7 +57,7 @@
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
 				//判斷是否有買發票系統
-				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
+				//q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
 			});
 
 			function main() {
@@ -75,7 +75,7 @@
 					t_money = q_add(t_money, q_float('txtTotal_' + j));
 					t_mount += q_float('txtMount_' + j);
 				}
-				q_tr('txtMoney', q_sub(q_sub(t_money,q_float('txtMount')),q_float('txtDiscount')));
+				q_tr('txtMoney', t_money);
 				q_tr('txtTotal', q_add(q_float('txtMoney'), q_float('txtTax')));
 				calTax();
 			}
@@ -940,7 +940,7 @@
 				}
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
+				q_tr('txtTotal', q_sub(q_sub(q_add(t_money,t_tax),q_float('txtMount')),q_float('txtDiscount')));
 			}
 		</script>
 		<style type="text/css">
@@ -1190,7 +1190,7 @@
 						<td class="td4" ><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td class="td5" colspan='2' >
 							<input id="txtTax" type="text" class="txt num c1 istax" style="width: 49%;" />
-							<select id="cmbTaxtype" class="txt c1" style="width: 49%;" onchange="calTax();"> </select>
+							<select id="cmbTaxtype" class="txt c1" style="width: 49%;" onchange="sum();"> </select>
 						</td>
 						<td class="td7"><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
 						<td class="td8"><input id="txtTotal" type="text" class="txt num c1 istax" /></td>

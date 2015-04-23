@@ -49,7 +49,7 @@
 				q_brwCount();
 				//q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
-				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
+				//q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
 				q_gt('sss', "where=^^noa='"+r_userno+"'^^", 0, 0, 0, "sssissales");
 			});
 
@@ -72,8 +72,7 @@
 					$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
 					t1 = q_add(t1, dec(q_float('txtTotal_' + j)));
 				}
-				q_tr('txtMoney', q_sub(q_sub(round(t1, 0),q_float('txtMount')),q_float('txtDiscount')));
-				
+				q_tr('txtMoney',round(t1, 0));
 				calTax();
 			}
 
@@ -1107,7 +1106,7 @@
 				}
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
+				q_tr('txtTotal', q_sub(q_sub(q_add(t_money,t_tax),q_float('txtMount')),q_float('txtDiscount')));
 			}
 			
 			function HiddenTreat(){
@@ -1372,7 +1371,7 @@
 						<td class="td4"><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td class="td5" colspan='2'>
 							<input id="txtTax" type="text" class="txt num c1 istax"  style="width: 49%;"/>
-							<select id="cmbTaxtype" style="width: 49%;" onchange="calTax();"> </select>
+							<select id="cmbTaxtype" style="width: 49%;" onchange="sum();"> </select>
 						</td>
 						<td class="td7"><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
 						<td class="td8"><input id="txtTotal" type="text" class="txt num c1 istax"/></td>
