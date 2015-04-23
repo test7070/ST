@@ -17,7 +17,7 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtAcc2'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTotal', 'txtWorker', 'txtWorker2','txtAcc2'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq','txtStore','txtStore2'];
 			var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1]];
 			var bbsNum = [];
@@ -40,8 +40,6 @@
 				['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2,txtMount', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
 			);
 
-			var isinvosystem = false;
-			//購買發票系統
 			$(document).ready(function() {
 				q_desc = 1;
 				bbmKey = ['noa'];
@@ -49,7 +47,6 @@
 				q_brwCount();
 				//q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
-				//q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");//判斷是否有買發票系統
 				q_gt('sss', "where=^^noa='"+r_userno+"'^^", 0, 0, 0, "sssissales");
 			});
 
@@ -63,6 +60,7 @@
 
 			function sum() {
 				var t1 = 0, t_unit, t_mount = 0;
+				var t_money = 0, t_tax = 0, t_total = 0;
 				for (var j = 0; j < q_bbsCount; j++) {
 					if(q_float('txtWidth_' + j)!=0)
 						t_mount = q_float('txtWidth_' + j);
@@ -70,10 +68,22 @@
 						t_mount = q_float('txtMount_' + j);
 						
 					$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
-					t1 = q_add(t1, dec(q_float('txtTotal_' + j)));
+					t_money = q_add(t_money, dec(q_float('txtTotal_' + j)));
 				}
-				q_tr('txtMoney',round(t1, 0));
-				calTax();
+				q_tr('txtMoney',round(t_money, 0));
+				
+				if($('#chkAtax').prop('checked')){
+					var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
+					t_tax = round(q_mul(t_money, t_taxrate), 0);
+					t_total = q_add(t_money, t_tax);
+				}else{
+					t_tax = q_float('txtTax');
+					t_total = q_add(t_money, t_tax);
+				}
+				
+				$('#txtMoney').val(FormatNumber(t_money));
+				$('#txtTax').val(FormatNumber(t_tax));
+				q_tr('txtTotal', q_sub(q_sub(q_add(t_money,t_tax),q_float('txtMount')),q_float('txtDiscount')));
 			}
 
 			function mainPost() {
@@ -85,7 +95,7 @@
 				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
-				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+				//q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("combPay", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				var t_where = "where=^^ 1=1  group by post,addr^^";
@@ -103,6 +113,15 @@
 				$('#txtMon').click(function(){
 					if ($('#txtMon').attr("readonly")=="readonly" && (q_cur==1 || q_cur==2))
 						q_msg($('#txtMon'), "月份要另外設定，請在"+q_getMsg('lblMemo')+"的第一個字打'*'字");
+				});
+				
+				$('#chkAtax').click(function() {
+					refreshBbm();
+					sum();
+				});
+				
+				$('#txtTax').change(function() {
+					sum();
 				});
 				
 				$('#btnOrdes').click(function() {
@@ -211,11 +230,18 @@
 				$('#btnClose_div_store2').click(function() {
 					$('#div_store2').toggle();
 				});
-				
-				if (isinvosystem)
-					$('.istax').hide();
-					
 			}
+			
+			function refreshBbm() {
+                if (q_cur == 1 || q_cur==2) {
+					if($('#chkAtax').prop('checked'))
+						$('#txtTax').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					else
+						$('#txtTax').css('color', 'black').css('background', 'white').removeAttr('readonly');  
+                }else{
+                	$('#txtTax').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+                }
+            }
 
 			function q_funcPost(t_func, result) {
 				if (result.substr(0, 5) == '<Data') {
@@ -355,15 +381,6 @@
 						$('#div_store2').css('left', $('#btnStore2').offset().left-parseInt($('#div_store2').css('width'))-5);
 						$('#div_store2').toggle();
 						break;
-					case 'ucca_invo':
-						var as = _q_appendData("ucca", "", true);
-						if (as[0] != undefined) {
-							isinvosystem = true;
-							$('.istax').hide();
-						} else {
-							isinvosystem = false;
-						}
-						break;
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
@@ -487,31 +504,6 @@
 						if (as[0] != undefined && focus_addr != '') {
 							$('#' + focus_addr).val(as[0].addr_fact);
 							focus_addr = '';
-						}
-						break;
-					case 'cust_detail':
-						var as = _q_appendData("cust", "", true);
-						if (as[0] != undefined) {
-							var t_invomemo=as[0].invomemo;
-							t_invomemo=t_invomemo.split('##');
-							$('#txtPrice').val(t_invomemo[5]);
-							var taxtype='0',xy_taxtypetmp=q_getPara('sys.taxtype').split(',');
-							for (var i=0;i<xy_taxtypetmp.length;i++){
-								if(xy_taxtypetmp[i].split('@')[1]==t_invomemo[2])
-									taxtype=xy_taxtypetmp[i].split('@')[0];
-							}
-							$('#cmbTaxtype').val(taxtype);
-							$('#txtFax').val(as[0].fax);
-							$('#txtPost').val(as[0].zip_comp);
-							$('#txtAddr').val(as[0].addr_comp);
-							$('#txtPost2').val(as[0].zip_home);
-							$('#txtAddr2').val(as[0].addr_home);
-							$('#txtPaytype').val(as[0].paytype);
-							$('#cmbTrantype').val(as[0].trantype);
-							$('#txtSalesno').val(as[0].salesno);
-							$('#txtSales').val(as[0].sales);
-							$('#txtCustno2').val(as[0].custno2);
-							$('#txtComp2').val(as[0].cust2);
 						}
 						break;
 					case 'btnDele':
@@ -822,6 +814,7 @@
 				}
 				_bbsAssign();
 				HiddenTreat();
+				refreshBbm();
 				
 				if((q_cur==1 || q_cur==2)){
 					if(q_bbsCount>=10){
@@ -855,7 +848,7 @@
 				$('#txtDatea').val(q_date());
 				$('#cmbTypea').val('1');
 				$('#txtDatea').focus();
-				$('#cmbTaxtype').val('0');
+				//$('#cmbTaxtype').val('0');
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 			}
@@ -918,12 +911,11 @@
 
 			function refresh(recno) {
 				_refresh(recno);
-				if (isinvosystem)
-					$('.istax').hide();
 				HiddenTreat();
 				stype_chang();
 				$('#div_stk').hide();
 				$('#div_store2').hide();
+				refreshBbm();
 			}
 			
 			function AutoNoq(){
@@ -974,6 +966,7 @@
 					$('#txtMon').removeAttr('readonly');
 				else
 					$('#txtMon').attr('readonly', 'readonly');
+				refreshBbm();
 			}
 
 			function btnMinus(id) {
@@ -1062,51 +1055,6 @@
 				var arr = n.split(".");
 				var re = /(\d{1,3})(?=(\d{3})+$)/g;
 				return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
-			}
-
-			function calTax() {
-				var t_money = 0, t_tax = 0, t_total = 0;
-				t_money= q_float('txtMoney');
-				t_total = t_money;
-				if (!isinvosystem) {
-					var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
-					switch ($('#cmbTaxtype').val()) {
-						case '0': // 無
-							t_tax = 0;
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '1': // 應稅
-							t_tax = round(q_mul(t_money, t_taxrate), 0);
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '2': //零稅率
-							t_tax = 0;
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '3': // 內含
-							t_tax = round(q_mul(q_div(t_money, q_add(1, t_taxrate)), t_taxrate), 0);
-							t_total = t_money;
-							t_money = q_sub(t_total, t_tax);
-							break;
-						case '4': // 免稅
-							t_tax = 0;
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '5': // 自定
-							$('#txtTax').attr('readonly', false);
-							$('#txtTax').css('background-color', 'white').css('color', 'black');
-							t_tax = round(q_float('txtTax'), 0);
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '6': // 作廢-清空資料
-							t_money = 0, t_tax = 0, t_total = 0;
-							break;
-						default:
-					}
-				}
-				$('#txtMoney').val(FormatNumber(t_money));
-				$('#txtTax').val(FormatNumber(t_tax));
-				q_tr('txtTotal', q_sub(q_sub(q_add(t_money,t_tax),q_float('txtMount')),q_float('txtDiscount')));
 			}
 			
 			function HiddenTreat(){
@@ -1371,7 +1319,8 @@
 						<td class="td4"><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td class="td5" colspan='2'>
 							<input id="txtTax" type="text" class="txt num c1 istax"  style="width: 49%;"/>
-							<select id="cmbTaxtype" style="width: 49%;" onchange="sum();"> </select>
+							<!--<select id="cmbTaxtype" style="width: 49%;" onchange="sum();"> </select>-->
+							<input id="chkAtax" type="checkbox" />
 						</td>
 						<td class="td7"><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
 						<td class="td8"><input id="txtTotal" type="text" class="txt num c1 istax"/></td>
