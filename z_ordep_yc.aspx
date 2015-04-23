@@ -23,13 +23,14 @@
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_ordep_yc',
-                    options : [{//[1]
+                    options : [{//[1][2]
+                    	type : '1',
+                        name : 'xnoa'
+                       
+                    },{//[3]
                         type : '8',
 						name : 'iswight',
                         value : '1@重量'.split(',') 
-                    },{//21 [2][3]
-                        type : '1',
-                        name : 'xnoa'
                     }]
                 });
                 q_popAssign();
