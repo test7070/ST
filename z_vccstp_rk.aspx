@@ -17,12 +17,12 @@
 		<script type="text/javascript">
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_vccd_rs');
+                q_gf('', 'z_vccstp_rk');
             });
             
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_vccd_rs',
+					fileName : 'z_vccstp_rk',
 					options : [{/* [1]*/
                         type : '0', //數量的小數位數
                         name : 'mount_precision',
@@ -35,21 +35,14 @@
                         type : '0', //價格的小數位數
                         name : 'price_precision',
                         value : q_getPara('rc2.pricePrecision')
-                    },{
-                        type : '5',//[4]
-                        name : 'xkind',
-                        value : q_getPara('sys.stktype').split(',')
-                    },{
-						type : '1',/*[5][6]*/
+                    }, {/*[4][5]*/
+                        type : '1',
+                        name : 'xnoa'
+                    }, {
+                    	
+						type : '1',/*[6][7]*/
 						name : 'xdate'
-					},{
-						type : '1',/*[7][8]*/
-						name : 'xuno'
-					},{
-                        type : '8',//[9]
-                        name : 'xremainder',
-                        value : ('1@餘料明細').split(',')
-                    }]
+					},]
 				});
 				
                 q_popAssign();
