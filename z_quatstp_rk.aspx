@@ -29,9 +29,6 @@
                         value : q_getId()[4] //[1]
                     },{
                         type : '1',
-                        name : 'date'
-                    },{
-                        type : '6',
                         name : 'xnoa'
                     }]
                 });
