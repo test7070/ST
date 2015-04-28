@@ -31,6 +31,10 @@
                         type : '8',
 						name : 'iswight',
                         value : '1@重量'.split(',') 
+                    },{//[4]
+                        type : '8',
+						name : 'isprice',
+                        value : '1@單價'.split(',') 
                     }]
                 });
                 q_popAssign();
