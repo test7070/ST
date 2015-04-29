@@ -109,7 +109,7 @@
 					var t_custno = trim($('#txtCustno').val());
 					var t_where = '';
 					if (t_custno.length > 0) {
-						t_where = "isnull(notv,0)>0  && isnull(enda,0)!=1 && isnull(cancel,0)!=1 && isnull(apv,'')!='' &&" + (t_custno.length > 0 ? q_sqlPara("custno", t_custno) : "");
+						t_where = "isnull(notv,0)>0  && isnull(enda,0)!=1 && isnull(cancel,0)!=1 && exists (select * from view_orde where isnull(apv,'')!='' and noa=view_ordes"+r_accy+".noa) &&" + (t_custno.length > 0 ? q_sqlPara("custno", t_custno) : "");
 						if (!emp($('#txtOrdeno').val()))
 							t_where += " && charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
 						t_where = t_where;
