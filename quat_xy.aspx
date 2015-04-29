@@ -216,6 +216,13 @@
 						}
 					}
 				});
+				
+				$('#btnEmailpost').click(function() {
+					if(!emp($('#txtNoa').val())){
+						if(confirm("確定要Email報價單給客戶【"+$('#txtComp').val()+"】?"))
+							q_func("quat.email",$('#txtNoa').val());
+					}
+				});
 			}
 
 			function q_boxClose(s2) {
@@ -939,6 +946,7 @@
 					$('#combAddr').attr('disabled', 'disabled');
 					$('#checkGweight').attr('disabled', 'disabled');
 					$('#checkEweight').attr('disabled', 'disabled');
+					$('#btnEmailpost').removeAttr('disabled');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#combGroupbno_'+j).attr('disabled', 'disabled');
 						$('#combClassa_'+j).attr('disabled', 'disabled');
@@ -949,6 +957,7 @@
 					$('#combAddr').removeAttr('disabled');
 					$('#checkGweight').removeAttr('disabled');
 					$('#checkEweight').removeAttr('disabled');
+					$('#btnEmailpost').attr('disabled', 'disabled');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#combGroupbno_'+j).removeAttr('disabled');
 						$('#combClassa_'+j).removeAttr('disabled');
@@ -1392,6 +1401,8 @@
 						<td colspan='2'><input id="txtTotalus"	type="text" class="txt c1 num"/></td>
 						<!--<td class="label2"><span> </span><a id='lblWeight' class="lbl"> </a></td>
 						<td colspan='2' ><input id="txtWeight" type="text" class="txt c1 num" /></td>-->
+						<td> </td>
+						<td><input id="btnEmailpost" type="button" value="Email發送"></td>
 					</tr>
 					<tr class="tr10">
 						<td align="right">
