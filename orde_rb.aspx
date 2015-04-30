@@ -23,7 +23,7 @@
 			var q_name = "orde";
 			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtSales', 'txtOrdbno', 'txtOrdcno'];
 			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtNo2', 'txtNo3', 'txtC1', 'txtNotv'];
-			var bbmNum = [['txtTotal', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],['txtFloata', 10, 5, 1], ['txtTotalus', 15, 2, 1]];
+			var bbmNum = [['txtTotal', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1]];
 			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -32,7 +32,7 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'odate';
-			brwCount2 = 11;
+			brwCount2 = 10;
 			
 			aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucc_b2.aspx'],
@@ -49,7 +49,7 @@
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
-				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
+				//q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 				$('#txtOdate').focus();
 			});
 
@@ -79,7 +79,7 @@
 					$('#txtTranmoney').val(round(q_mul(t_weight, dec($('#txtPrice').val())), 0));
 				// $('#txtWeight').val(round(t_weight, 0));
 				q_tr('txtTotal', q_add(t1, dec($('#txtTax').val())));
-				q_tr('txtTotalus', q_mul(q_float('txtMoney'), q_float('txtFloata')));
+				//q_tr('txtTotalus', q_mul(q_float('txtMoney'), q_float('txtFloata')));
 				calTax();
 			}
 
@@ -89,7 +89,7 @@
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
-				q_cmbParse("cmbStype", q_getPara('orde.stype'));
+				//q_cmbParse("cmbStype", q_getPara('orde.stype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
@@ -105,9 +105,9 @@
 					q_box('cust.aspx','pluscust', "95%", "95%", '新增客戶');
 				});
 				
-				$('#txtFloata').change(function() {
+				/*$('#txtFloata').change(function() {
 					sum();
-				});
+				});*/
 				$('#txtTotal').change(function() {
 					sum();
 				});
@@ -294,7 +294,7 @@
 							z_nick = as[0].nick;
 						}
 						break;
-					case 'flors_coin':
+					/*case 'flors_coin':
 						var as = _q_appendData("flors", "", true);
 						var z_coin='';
 						for ( i = 0; i < as.length; i++) {
@@ -306,7 +306,7 @@
 						if(abbm[q_recno])
 							$('#cmbCoin').val(abbm[q_recno].coin);
 						
-						break;
+						break;*/
 					case 'orde_ordb':
 						var as = _q_appendData("view_orde", "", true);
 						var rowslength=document.getElementById("table_ordb").rows.length-1;
@@ -455,12 +455,12 @@
 					case 'quat':
 						var as = _q_appendData("quat", "", true);
 						if (as[0] != undefined) {
-							$('#txtFloata').val(as[0].floata);
-							$('#cmbCoin').val(as[0].coin);
+							//$('#txtFloata').val(as[0].floata);
+							//$('#cmbCoin').val(as[0].coin);
 							$('#txtPaytype').val(as[0].paytype);
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
-							$('#txtContract').val(as[0].contract);
+							//$('#txtContract').val(as[0].contract);
 							$('#cmbTrantype').val(as[0].trantype);
 							$('#txtTel').val(as[0].tel);
 							$('#txtFax').val(as[0].fax);
@@ -479,13 +479,13 @@
 							focus_addr = '';
 						}
 						break;
-					case 'flors':
+					/*case 'flors':
 						var as = _q_appendData("flors", "", true);
 						if (as[0] != undefined) {
 							q_tr('txtFloata',as[0].floata);
 							sum();
 						}
-						break;
+						break;*/
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -544,10 +544,10 @@
 				cmb.value = '';
 			}
 			
-			function coin_chg() {
+			/*function coin_chg() {
 				var t_where = "where=^^ ('" + $('#txtOdate').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
 				q_gt('flors', t_where, 0, 0, 0, "");
-			}
+			}*/
 
 			function combAddr_chg() {
 				if (q_cur == 1 || q_cur == 2) {
@@ -1026,8 +1026,10 @@
 					<tr class="tr1">
 						<td class="td1"><span> </span><a id='lblOdate' class="lbl"> </a></td>
 						<td class="td2"><input id="txtOdate" type="text" class="txt c1"/></td>
-						<td class="td3"><span> </span><a id='lblStype' class="lbl"> </a></td>
-						<td class="td4"><select id="cmbStype" class="txt c1"> </select></td>
+						<!--<td class="td3"><span> </span><a id='lblStype' class="lbl"> </a></td>
+						<td class="td4"><select id="cmbStype" class="txt c1"> </select></td>-->
+						<td> </td>
+						<td> </td>
 						<td> </td>
 						<td> </td>
 						<td class="td5"><span> </span><a id='lblNoa' class="lbl"> </a></td>
@@ -1037,8 +1039,8 @@
 						<td class="td1"><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCno" type="text" class="txt c1"/></td>
 						<td class="td3" colspan="4"><input id="txtAcomp" type="text" class="txt c1"/></td>
-						<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
-						<td class="td6"colspan="2"><input id="txtContract" type="text" class="txt c1"/></td>
+						<!--<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
+						<td class="td6"colspan="2"><input id="txtContract" type="text" class="txt c1"/></td>-->
 					</tr>
 					<tr class="tr3">
 						<td class="td1">
@@ -1104,15 +1106,15 @@
 						<td class="td7"><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td class="td8" colspan='2'><input id="txtTotal" type="text" class="txt num c1"/></td>
 					</tr>
-					<tr class="tr9">
+					<!--<tr class="tr9">
 						<td class="td1"><span> </span><a id='lblFloata' class="lbl"> </a></td>
 						<td class="td2"><select id="cmbCoin" class="txt c1" onchange='coin_chg()'> </select></td>
 						<td class="td3"><input id="txtFloata" type="text" class="txt num c1" /></td>
 						<td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-						<!--<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
-						<td class="td8"><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>-->
-					</tr>
+						<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
+						<td class="td8"><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>
+					</tr>-->
 					<tr class="tr10">
 						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td class="td2" colspan='2'><input id="txtWorker" type="text" class="txt c1" /></td>
