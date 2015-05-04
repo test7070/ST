@@ -286,6 +286,8 @@
 								
 								q_func("quat.email",$('#txtNoa').val()+","+t_email+","+t_subject+","+t_contents);
 								$('#div_email').hide();
+								$('#btnEmailpost').removeAttr('disabled', 'disabled');
+								$('#btnFaxpost').removeAttr('disabled', 'disabled');
 							}
 						}else{ //fax
 							if(confirm("確定要傳真報價單給客戶【"+$('#txtComp').val()+"】?")){
@@ -295,6 +297,8 @@
 								
 								q_func("quat.fax",$('#txtNoa').val()+","+t_fax+","+t_subject+","+t_contents);
 								$('#div_email').hide();
+								$('#btnEmailpost').removeAttr('disabled', 'disabled');
+								$('#btnFaxpost').removeAttr('disabled', 'disabled');
 							}
 						}
 					}
