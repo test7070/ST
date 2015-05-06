@@ -36,7 +36,10 @@
 						type : '1', //[4][5]
 						name : 'date'
 					}, {
-						type : '8',//[6]
+						type : '1', //[6][7]
+						name : 'invo'
+					},{
+						type : '8',//[8]
 						name : 'xshowprice',
 						value : "1@".split(',')
 					}]
@@ -52,6 +55,11 @@
                 t_noa  =  t_noa.replace('noa=','');
                 $('#txtXnoa1').val(t_noa);
                 $('#txtXnoa2').val(t_noa);
+                
+                var t_invo=typeof(q_getId()[4])=='undefined'?'':q_getId()[4];
+                t_invo  =  t_invo.replace('invo=','');
+                $('#txtInvo1').val(t_invo);
+                $('#txtInvo2').val(t_invo);
                 
 				var t_date,t_year,t_month,t_day;
 				t_date = new Date();
