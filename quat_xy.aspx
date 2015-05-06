@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -216,6 +216,100 @@
 						}
 					}
 				});
+				
+				$('#btnEmailpost').click(function() {
+					$('#textTypea').val('1');//表示email
+					$('#textEmailaddr').val('');
+					$('#textSubject').val($('#txtComp').val()+'－報價單');
+					$('#textContents').val("親愛的"+$('#txtComp').val()+":\n\n\n\n\n\n\n\n\n有達實業有限公司\n業務專員：\n手機號碼：\n電　　郵：");
+					$('#lblEmailaddr').text('收件人信箱');
+					$('#lblSubject').text('信件主旨');
+					$('#lblContents').text('信件內容');
+					$('#lblNote').text('不同的電子信箱請以分號分開');
+					$('#div_email').show();
+					$('#btnEmailpost').attr('disabled', 'disabled');
+					$('#btnFaxpost').attr('disabled', 'disabled');
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+					q_gt('cust', t_where, 0, 0, 0, "emailcust");
+					var t_where = "where=^^ noa='" + $('#txtSalesno').val() + "' ^^";
+					q_gt('sss', t_where, 0, 0, 0, "emailsss");
+				});
+				
+				$('#btnFaxpost').click(function() {
+					$('#textTypea').val('2');//表示fax
+					$('#textEmailaddr').val('');
+					$('#textSubject').val($('#txtComp').val()+'－報價單');
+					$('#textContents').val("親愛的"+$('#txtComp').val()+":\n\n\n\n\n\n\n\n\n有達實業有限公司\n業務專員：\n手機號碼：\n電　　郵：");
+					$('#lblEmailaddr').text('傳真電話');
+					$('#lblSubject').text('傳真主旨');
+					$('#lblContents').text('傳真內容');
+					$('#lblNote').text('不同的傳真號碼請以逗號分開');
+					$('#div_email').show();
+					$('#btnEmailpost').attr('disabled', 'disabled');
+					$('#btnFaxpost').attr('disabled', 'disabled');
+					if(!emp($('#txtFax').val())){
+						$('#textEmailaddr').val($('#txtFax').val());
+					}else{
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+						q_gt('cust', t_where, 0, 0, 0, "faxcust");
+					}
+					var t_where = "where=^^ noa='" + $('#txtSalesno').val() + "' ^^";
+					q_gt('sss', t_where, 0, 0, 0, "emailsss");
+				});
+				
+				$('#btnSend_div_email').click(function() {
+					if(!emp($('#txtNoa').val()) && !emp($('#textTypea').val())){
+						if(emp($('#textEmailaddr').val())){
+							alert("無"+$('#lblEmailaddr').text()+"!!");
+							return;
+						}
+						var reg = /^((([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6}\;))*(([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})))$/;
+						if($('#textTypea').val()=='1' ){//email
+							if(!(reg).test($('#textEmailaddr').val())){
+								alert($('#lblEmailaddr').text()+"格式錯誤!!");
+								return;
+							}
+						}
+						if(emp($('#textSubject').val())){
+							alert("無"+$('#lblSubject').text()+"!!");
+							return;
+						}
+						if(emp($('#textContents').val())){
+							alert("無"+$('#lblContents').text()+"!!");
+							return;
+						}
+						if($('#textTypea').val()=='1'){//email
+							if(confirm("確定要Email報價單給客戶【"+$('#txtComp').val()+"】?")){
+								var t_email=replaceAll($('#textEmailaddr').val(),";","^");
+								var t_subject=replaceAll($('#textSubject').val(),",","，");
+								var t_contents=replaceAll($('#textContents').val(),",","，");
+								
+								q_func("quat.email",$('#txtNoa').val()+","+t_email+","+t_subject+","+t_contents);
+								$('#div_email').hide();
+								$('#btnEmailpost').removeAttr('disabled', 'disabled');
+								$('#btnFaxpost').removeAttr('disabled', 'disabled');
+							}
+						}else{ //fax
+							if(confirm("確定要傳真報價單給客戶【"+$('#txtComp').val()+"】?")){
+								var t_fax=replaceAll($('#textEmailaddr').val(),",","^");
+								var t_subject=replaceAll($('#textSubject').val(),",","，");
+								var t_contents=replaceAll($('#textContents').val(),",","，");
+								
+								q_func("quat.fax",$('#txtNoa').val()+","+t_fax+","+t_subject+","+t_contents);
+								$('#div_email').hide();
+								$('#btnEmailpost').removeAttr('disabled', 'disabled');
+								$('#btnFaxpost').removeAttr('disabled', 'disabled');
+							}
+						}
+					}
+				});
+				
+				$('#btnClose_div_email').click(function() {
+					$('#textTypea').val('');
+					$('#div_email').hide();
+					$('#btnEmailpost').removeAttr('disabled', 'disabled');
+					$('#btnFaxpost').removeAttr('disabled', 'disabled');
+				});
 			}
 
 			function q_boxClose(s2) {
@@ -344,6 +438,24 @@
 							$('#cmbTrantype').val(as[0].trantype);
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
+						}
+						break;
+					case 'emailcust':
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							$('#textEmailaddr').val(as[0].email);
+						}
+						break;	
+					case 'faxcust':
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							$('#textEmailaddr').val(as[0].fax);
+						}
+						break;	
+					case 'emailsss':
+						var as = _q_appendData("sss", "", true);
+						if (as[0] != undefined) {
+							$('#textContents').val("親愛的"+$('#txtComp').val()+":\n\n\n\n\n\n\n\n\n有達實業有限公司\n業務專員："+as[0].namea+"\n手機號碼："+as[0].mobile1+"\n電　　郵："+as[0].email);
 						}
 						break;
 					case q_name:
@@ -896,7 +1008,9 @@
 				_refresh(recno);
 				$('#div_spec').hide();
 				$('#div_cost').hide();
-				
+				$('#div_email').hide();
+				$('#btnEmailpost').removeAttr('disabled');
+				$('#btnFaxpost').removeAttr('disabled');
 				change_check();
 				
 				if (!q_cur) {
@@ -939,6 +1053,8 @@
 					$('#combAddr').attr('disabled', 'disabled');
 					$('#checkGweight').attr('disabled', 'disabled');
 					$('#checkEweight').attr('disabled', 'disabled');
+					$('#btnEmailpost').removeAttr('disabled');
+					$('#btnFaxpost').removeAttr('disabled');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#combGroupbno_'+j).attr('disabled', 'disabled');
 						$('#combClassa_'+j).attr('disabled', 'disabled');
@@ -949,6 +1065,8 @@
 					$('#combAddr').removeAttr('disabled');
 					$('#checkGweight').removeAttr('disabled');
 					$('#checkEweight').removeAttr('disabled');
+					$('#btnEmailpost').attr('disabled', 'disabled');
+					$('#btnFaxpost').attr('disabled', 'disabled');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#combGroupbno_'+j).removeAttr('disabled');
 						$('#combClassa_'+j).removeAttr('disabled');
@@ -1271,6 +1389,32 @@
 	</head>
 	<body>
 		<!--#include file="../inc/toolbar.inc"-->
+		<div id="div_email" style="position:absolute; top:200px; left:400px; display:none; width:680px; background-color: #CDFFCE; border: 5px solid gray;">
+			<table id="table_email" style="width:100%;" border="1" cellpadding='2'  cellspacing='0'>
+				<tr>
+					<td style="background-color: #f8d463;width: 130px;" align="center"><a id="lblEmailaddr"> </a></td>
+					<td style="background-color: #f8d463;width: 550px;" align="center">
+						<input id="textEmailaddr" type="text" class="txt c1"/>
+						<a id="lblNote" style="float:left;;font-size: 12px;"> </a>
+					</td>
+				</tr>
+				<tr>
+					<td style="background-color: #f8d463;width: 130px;" align="center"><a id="lblSubject"> </a></td>
+					<td style="background-color: #f8d463;width: 550px;" align="center"><input id="textSubject" type="text" class="txt c1" onblur="this.value=replaceAll(this.value,',','，')"/></td>
+				</tr>
+				<tr>
+					<td style="background-color: #f8d463;" align="center"><a id="lblContents"> </a></td>
+					<td style="background-color: #f8d463;" align="center"><textarea id="textContents" cols="10" rows="10" style="width: 99%;height: 280px;font-size: larger;" onblur="this.value=replaceAll(this.value,',','，')"> </textarea></td>
+				</tr>
+				<tr id='email_close'>
+					<td align="center" colspan='5'>
+						<input id="textTypea" type="hidden" class="txt c1"/>
+						<input id="btnSend_div_email" type="button" value="發送">
+						<input id="btnClose_div_email" type="button" value="關閉視窗">
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div id='dmain' style="overflow:hidden;width: 1270px;">
 			<div class="dview" id="dview">
 				<table class="tview" id="tview" style="width: 500px;"	>
@@ -1392,6 +1536,10 @@
 						<td colspan='2'><input id="txtTotalus"	type="text" class="txt c1 num"/></td>
 						<!--<td class="label2"><span> </span><a id='lblWeight' class="lbl"> </a></td>
 						<td colspan='2' ><input id="txtWeight" type="text" class="txt c1 num" /></td>-->
+						<td colspan="2" style="text-align: center;">
+							<input id="btnEmailpost" type="button" value="Email發送">
+							<!--<input id="btnFaxpost" type="button" value="傳真發送">-->
+						</td>
 					</tr>
 					<tr class="tr10">
 						<td align="right">

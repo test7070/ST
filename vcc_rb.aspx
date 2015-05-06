@@ -17,7 +17,7 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -86,18 +86,18 @@
 				$('#txtTax').val(FormatNumber(t_tax));
 				$('#txtTotal').val(FormatNumber(t_total));
 				
-				q_tr('txtTotalus', round(q_mul(q_float('txtMoney'), q_float('txtFloata')),2));
+				//q_tr('txtTotalus', round(q_mul(q_float('txtMoney'), q_float('txtFloata')),2));
 			}
 
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm],['txtZipcode', r_picd],['txtZipname', '99:99']];
 				q_mask(bbmMask);
-				bbmNum = [	['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtFloata', 11, 5, 1],['txtMount', 15, 0, 1]];
+				bbmNum = [	['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1],['txtMount', 15, 0, 1]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]];
 				q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
-				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
+				//q_cmbParse("cmbStype", q_getPara('vcc.stype'));
 				q_cmbParse("combPay", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				var t_where = "where=^^ 1=1  group by post,addr^^";
@@ -190,13 +190,9 @@
 					}
 				});
 				
-				$('#cmbStype').change(function() {
-					stype_chang();
-				});
-				
-				$('#txtFloata').change(function() {
+				/*$('#txtFloata').change(function() {
 					sum();
-				});
+				});*/
 				
 				$('#txtPrice').change(function() {
 					sum();
@@ -446,7 +442,7 @@
 							z_nick = as[0].nick;
 						}
 						break;
-					case 'flors_coin':
+					/*case 'flors_coin':
 						var as = _q_appendData("flors", "", true);
 						var z_coin='';
 						for ( i = 0; i < as.length; i++) {
@@ -458,7 +454,7 @@
 						if(abbm[q_recno])
 							$('#cmbCoin').val(abbm[q_recno].coin);
 						
-						break;
+						break;*/
 					case 'msg_ucc':
 						var as = _q_appendData("ucc", "", true);
 						t_msg = '';
@@ -585,8 +581,8 @@
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
 							//$('#cmbTaxtype').val(as[0].taxtype);
-							$('#cmbCoin').val(as[0].coin);
-							$('#txtFloata').val(as[0].floata);
+							//$('#cmbCoin').val(as[0].coin);
+							//$('#txtFloata').val(as[0].floata);
 							$('#txtZipcode').val(as[0].gdate);
 							$('#txtZipname').val(as[0].gtime);
 						}
@@ -671,13 +667,13 @@
 						check_startdate=true;
 						btnOk();
 						break;
-					case 'flors':
+					/*case 'flors':
 						var as = _q_appendData("flors", "", true);
 						if (as[0] != undefined) {
 							q_tr('txtFloata',as[0].floata);
 							sum();
 						}
-						break;
+						break;*/
 				}
 			}
 			
@@ -737,10 +733,10 @@
 				cmb.value = '';
 			}
 			
-			function coin_chg() {
+			/*function coin_chg() {
 				var t_where = "where=^^ ('" + $('#txtDatea').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
 				q_gt('flors', t_where, 0, 0, 0, "");
-			}
+			}*/
 
 			function combAddr_chg() {
 				if (q_cur == 1 || q_cur == 2) {
@@ -912,7 +908,6 @@
 			function refresh(recno) {
 				_refresh(recno);
 				HiddenTreat();
-				stype_chang();
 				refreshBbm();
 			}
 
@@ -930,16 +925,6 @@
 					return (hasSpec.toString()=='1');
 				}else if(returnType=='rack'){
 					return (hasRackComp.toString()=='1');
-				}
-			}
-			
-			function stype_chang(){
-				if($('#cmbStype').val()=='3'){
-					$('.invo').show();
-					$('.vcca').hide();
-				}else{
-					$('.invo').hide();
-					$('.vcca').show();
 				}
 			}
 
@@ -1230,11 +1215,12 @@
 					<tr>
 						<td class="td1" style="width: 108px;"><span> </span><a id='lblType' class="lbl"> </a></td>
 						<td class="td2" style="width: 108px;"><select id="cmbTypea"> </select></td>
-						<td class="td3" style="width: 108px;">
+						<!--<td class="td3" style="width: 108px;">
 							<a id='lblStype' class="lbl" style="float: left;"> </a>
 							<span style="float: left;"> </span>
 							<select id="cmbStype"> </select>
-						</td>
+						</td>-->
+						<td> </td>
 						<td class="td4" style="width: 108px;"><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td class="td5" style="width: 108px;"><input id="txtDatea" type="text"  class="txt c1"/></td>
 						<td class="td6" style="width: 108px;"> </td>
@@ -1248,15 +1234,8 @@
 						<td class="td7"><span> </span><a id='lblMon' class="lbl"> </a></td>
 						<td class="td8"><input id="txtMon" type="text" class="txt c1"/></td>
 						<td class="td8"> </td>
-						<td class="td7">
-							<span> </span>
-							<a id='lblInvono' class="lbl btn vcca"> </a>
-							<a id='lblInvo' class="lbl btn invo"> </a>
-						</td>
-						<td class="td8">
-							<input id="txtInvono" type="text" class="txt c1 vcca"/>
-							<input id="txtInvo" type="text" class="txt c1 invo"/>
-						</td>
+						<td class="td7"><span> </span><a id='lblInvono' class="lbl btn vcca"> </a></td>
+						<td class="td8"><input id="txtInvono" type="text" class="txt c1 vcca"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblCust" class="lbl btn"> </a></td>
@@ -1336,13 +1315,13 @@
 						<td class="td7"><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
 						<td class="td8"><input id="txtTotal" type="text" class="txt num c1 istax"/></td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td class="td1"><span> </span><a id='lblFloata' class="lbl"> </a></td>
 						<td class="td2"><select id="cmbCoin" style="width: 100%;" onchange='coin_chg()'> </select></td>
 						<td class="td3"><input id="txtFloata" type="text" class="txt num c1"/></td>
 						<td class="td4"><span> </span><a id="lblTotalus" class="lbl"> </a></td>
 						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-					</tr>
+					</tr>-->
 					<tr>
 						<td class="td1"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtStoreno" type="text" class="txt c1"/></td>
@@ -1360,22 +1339,22 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1400px;">
+		<div class='dbbs' style="width: 1150px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;">
 						<input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;width:" />
 					</td>
-					<td align="center" style="width:180px"><a id='lblProductno_s'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:150px"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:280px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblStore_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblPrice_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblTotal_s'> </a></td>
+					<td align="center" style="display: none;"><a id='lblStore_s'> </a></td>
 					<td align="center" style="width:100px;" class="isRack"><a id='lblRackno_s'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblMemo_s'> </a></td>
+					<td align="center" ><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblRecord_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblStk_s'> </a></td>
 				</tr>
@@ -1397,7 +1376,7 @@
 					<td><input id="txtMount.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtTotal.*" type="text" class="txt num c1"/></td>
-					<td>
+					<td style="display: none;">
 						<input id="txtStoreno.*" type="text" class="txt c1" style="width: 75%"/>
 						<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;" />
 						<input id="txtStore.*" type="text" class="txt c1"/>
