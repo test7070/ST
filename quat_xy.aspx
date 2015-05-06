@@ -1538,7 +1538,7 @@
 						<td colspan='2' ><input id="txtWeight" type="text" class="txt c1 num" /></td>-->
 						<td colspan="2" style="text-align: center;">
 							<input id="btnEmailpost" type="button" value="Email發送">
-							<input id="btnFaxpost" type="button" value="傳真發送">
+							<!--<input id="btnFaxpost" type="button" value="傳真發送">-->
 						</td>
 					</tr>
 					<tr class="tr10">
