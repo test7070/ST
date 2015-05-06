@@ -1097,8 +1097,8 @@
 						<td class="td1"><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td class="td2"><input id="txtPost" type="text" class="txt c1"/></td>
 						<td class="td3"colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
-						<td class="td7"><span> </span><a id='lblOrdbno' class="lbl"> </a></td>
-						<td class="td8"><input id="txtOrdbno" type="text" class="txt c1"/></td>
+						<!--<td class="td7"><span> </span><a id='lblOrdbno' class="lbl"> </a></td>
+						<td class="td8"><input id="txtOrdbno" type="text" class="txt c1"/></td>-->
 					</tr>
 					<tr class="tr6">
 						<td class="td1"><span> </span><a id='lblAddr2' class="lbl"> </a></td>
@@ -1107,8 +1107,8 @@
 							<input id="txtAddr2" type="text" class="txt c1" style="width: 412px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
-						<td class="td7"><input id="btnAddr2" type="button" value='...' style="width: 30px;height: 21px" /> <span> </span><a id='lblOrdcno' class="lbl"> </a></td>
-						<td class="td8"><input id="txtOrdcno" type="text" class="txt c1"/></td>
+						<td class="td7"><input id="btnAddr2" type="button" value='...' style="width: 30px;height: 21px" /> <!--<span> </span><a id='lblOrdcno' class="lbl"> </a>--></td>
+						<!--<td class="td8"><input id="txtOrdcno" type="text" class="txt c1"/></td>-->
 					</tr>
 					<tr class="tr7">
 						<td class="td1"><span> </span><a id='lblTrantype' class="lbl"> </a></td>

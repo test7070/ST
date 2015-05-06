@@ -29,6 +29,8 @@
             brwKey = 'Noa';
             brwCount2 = 10;
            	aPop = new Array(['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']);
+           	
+           	q_copy = 1;
             $(document).ready(function() {
                 q_bbsShow = -1;
                 bbmKey = ['noa'];
@@ -36,6 +38,7 @@
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
             });
+            
             function main() {
                 if (dataErr) {
                     dataErr = false;

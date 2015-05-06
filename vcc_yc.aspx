@@ -90,6 +90,7 @@
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("combPay", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
+				q_cmbParse("combAddr", ' @ ');
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
@@ -172,6 +173,8 @@
 					if (!emp($('#txtCustno').val())) {
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
+						q_gt('cust', t_where, 0, 0, 0, "custgetaddr");
 					}
 				});
 				
@@ -412,7 +415,20 @@
 								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].post + '@' + as[i].addr;
 							}
 						}
-						document.all.combAddr.options.length = 0;
+						document.all.combAddr2.options.length = 0;
+						q_cmbParse("combAddr2", t_item);
+						break;
+					case 'custgetaddr':
+						var as = _q_appendData("cust", "", true);
+						var t_item = " @ ";
+						if (as[0] != undefined) {
+							t_item = t_item+","+as[0].zip_comp+"^^"+as[0].addr_comp+"@公司地址";
+							t_item = t_item+","+as[0].zip_fact+"^^"+as[0].addr_fact+"@工廠地址";
+							t_item = t_item+","+as[0].zip_fact2+"^^"+as[0].addr_fact2+"@工廠地址2";
+							t_item = t_item+","+as[0].zip_invo+"^^"+as[0].addr_invo+"@發票地址";
+							t_item = t_item+","+as[0].zip_home+"^^"+as[0].addr_home+"@通信地址";
+						}
+						$('#combAddr').text('')
 						q_cmbParse("combAddr", t_item);
 						break;
 					case 'orde':
@@ -488,6 +504,8 @@
 						if (!emp($('#txtCustno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
+							q_gt('cust', t_where, 0, 0, 0, "custgetaddr");
 						}
 						break;
 					case q_name:
@@ -589,10 +607,18 @@
 				cmb.value = '';
 			}
 
+			function combAddr2_chg() {
+				if (q_cur == 1 || q_cur == 2) {
+					$('#txtAddr2').val($('#combAddr2').find("option:selected").text());
+					$('#txtPost2').val($('#combAddr2').find("option:selected").val());
+				}
+			}
+			
 			function combAddr_chg() {
 				if (q_cur == 1 || q_cur == 2) {
-					$('#txtAddr2').val($('#combAddr').find("option:selected").text());
-					$('#txtPost2').val($('#combAddr').find("option:selected").val());
+					var t_addr=$('#combAddr2').find("option:selected").val().split('^^');
+					$('#txtPost2').val(t_addr[0]);
+					$('#txtAddr2').val(t_addr[1]);
 				}
 			}
 			
@@ -715,6 +741,9 @@
 				$('#cmbTaxtype').val('1');
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
+				$('#combAddr').text('');
+				q_cmbParse("combAddr", ' @ ');
 			}
 
 			function btnModi() {
@@ -808,8 +837,10 @@
 				_readonly(t_para, empty);
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
+					$('#combAddr2').attr('disabled', 'disabled');
 				} else {
 					$('#combAddr').removeAttr('disabled');
+					$('#combAddr2').removeAttr('disabled');
 				}
 				HiddenTreat();
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
@@ -886,6 +917,8 @@
 						if (!emp($('#txtCustno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
+							q_gt('cust', t_where, 0, 0, 0, "custgetaddr");
 						}
 						bbsGetOrdeList();
 						break;
@@ -1169,7 +1202,10 @@
 					<tr>
 						<td class="td1"><span> </span><a id="lblAddr" class="lbl"> </a></td>
 						<td class="td2"><input id="txtPost" type="text" class="txt c1"/></td>
-						<td class="td3" colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
+						<td class="td3" colspan='4'>
+							<input id="txtAddr" type="text" class="txt c1" style="width: 412px;"/>
+							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
+						</td>
 						<td class="td7"><span> </span><a id='lblOrdeno' class="lbl btn"> </a></td>
 						<td class="td8"><input id="txtOrdeno" type="text" class="txt c1"/></td>
 					</tr>
@@ -1178,7 +1214,7 @@
 						<td class="td2"><input id="txtPost2"  type="text" class="txt c1"/></td>
 						<td class="td3" colspan='4'>
 							<input id="txtAddr2"  type="text" class="txt c1" style="width: 412px;"/>
-							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
+							<select id="combAddr2" style="width: 20px" onchange='combAddr2_chg()'> </select>
 						</td>
 					</tr>
 					<tr>
