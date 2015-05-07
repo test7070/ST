@@ -87,7 +87,7 @@
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1]];
-				bbsNum = [['txtPrice', 12, 2, 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]];
+				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]];
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
@@ -767,7 +767,7 @@
 			}
 
 			function btnPrint() {
-				 q_box("z_vccfep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa : trim($('#txtNoa').val())}) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				 q_box("z_vccp_yc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa : trim($('#txtNoa').val())}) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {

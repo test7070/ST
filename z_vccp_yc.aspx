@@ -17,26 +17,12 @@
 		<script type="text/javascript">
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_vccfep');
-                
-                $('#q_report').click(function(e) {
-					if(q_getPara('sys.project').toUpperCase()!='FE'){
-						var delete_report=0;
-						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
-							if($('#q_report').data().info.reportData[i].report=='z_vccfep02')
-								delete_report=i;
-						}
-						if($('#q_report div div').text().indexOf('出貨單列印(套表)')>-1){
-							$('#q_report div div')[delete_report].remove();
-							$('#q_report div div .radio').first().removeClass('nonselect').addClass('select').click();
-						}
-					}
-				});
+                q_gf('', 'z_vccp_yc');
                 
             });
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_vccfep',
+					fileName : 'z_vccp_yc',
 					options : [{
 						type : '6', //[1]
 						name : 'xnoa'
@@ -68,6 +54,10 @@
 						type : '8', //[11]
 						name : 'showprice',
 						value : "1@顯示單價".split(',')
+					},{
+						type : '8', //[12]
+						name : 'showweight',
+						value : "1@顯示重量".split(',')
 					}]
 				});
 				q_popAssign();
