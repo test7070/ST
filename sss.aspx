@@ -912,13 +912,13 @@
 						<td><span> </span><a id="lblConn" class="lbl"> </a></td>
 						<td><input id="txtConn" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblConntel" class="lbl"> </a></td>
-						<td><input id="txtConntel" type="text" class="txt c1"/></td>
+						<td colspan="3"><input id="txtConntel" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblConn2" class="lbl"> </a></td>
 						<td><input id="txtConn2" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblConntel2" class="lbl"> </a></td>
-						<td><input id="txtConntel2" type="text" class="txt c1"/></td>
+						<td colspan="3"><input id="txtConntel2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>

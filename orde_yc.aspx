@@ -126,6 +126,8 @@
 					if (!emp($('#txtCustno').val())) {
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
+						q_gt('cust', t_where, 0, 0, 0, "custgetaddr");
 					}
 				});
 
@@ -414,7 +416,20 @@
 								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].post + '@' + as[i].addr;
 							}
 						}
-						document.all.combAddr.options.length = 0;
+						document.all.combAddr2.options.length = 0;
+						q_cmbParse("combAddr2", t_item);
+						break;
+					case 'custgetaddr':
+						var as = _q_appendData("cust", "", true);
+						var t_item = " @ ";
+						if (as[0] != undefined) {
+							t_item = t_item+","+as[0].zip_comp+"^^"+as[0].addr_comp+"@"+as[0].addr_comp;
+							t_item = t_item+","+as[0].zip_fact+"^^"+as[0].addr_fact+"@"+as[0].addr_fact;
+							t_item = t_item+","+as[0].zip_fact2+"^^"+as[0].addr_fact2+"@"+as[0].addr_fact2;
+							t_item = t_item+","+as[0].zip_invo+"^^"+as[0].addr_invo+"@"+as[0].addr_invo;
+							t_item = t_item+","+as[0].zip_home+"^^"+as[0].addr_home+"@"+as[0].addr_home;
+						}
+						$('#combAddr').text('')
 						q_cmbParse("combAddr", t_item);
 						break;
 					case 'quat':
@@ -557,10 +572,18 @@
 				cmb.value = '';
 			}
 
+			function combAddr2_chg() {
+				if (q_cur == 1 || q_cur == 2) {
+					$('#txtAddr2').val($('#combAddr2').find("option:selected").text());
+					$('#txtPost2').val($('#combAddr2').find("option:selected").val());
+				}
+			}
+			
 			function combAddr_chg() {
 				if (q_cur == 1 || q_cur == 2) {
-					$('#txtAddr2').val($('#combAddr').find("option:selected").text());
-					$('#txtPost2').val($('#combAddr').find("option:selected").val());
+					var t_addr=$('#combAddr').find("option:selected").val().split('^^');
+					$('#txtPost').val(t_addr[0]);
+					$('#txtAddr').val(t_addr[1]);
 				}
 			}
 
@@ -715,6 +738,9 @@
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
+				$('#combAddr').text('');
+				q_cmbParse("combAddr", ' @ ');
 			}
 
 			function btnModi() {
@@ -726,6 +752,8 @@
 				if (!emp($('#txtCustno').val())) {
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 					q_gt('custaddr', t_where, 0, 0, 0, "");
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
+					q_gt('cust', t_where, 0, 0, 0, "custgetaddr");
 				}
 			}
 
@@ -790,10 +818,12 @@
 				_readonly(t_para, empty);
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
+					$('#combAddr2').attr('disabled', 'disabled');
 					$('#txtOdate').datepicker( 'destroy' );
 					$('#btnApv').removeAttr('disabled');
 				} else {
 					$('#combAddr').removeAttr('disabled');
+					$('#combAddr2').removeAttr('disabled');
 					$('#txtOdate').datepicker();
 					$('#btnApv').attr('disabled', 'disabled');
 				}	
@@ -870,6 +900,8 @@
 						if (!emp($('#txtCustno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
+							q_gt('cust', t_where, 0, 0, 0, "custgetaddr");
 						}
 						break;
 				}
@@ -1049,14 +1081,14 @@
 			<div class='dbbm'>
 				<table class="tbbm" id="tbbm" style="width: 872px;">
 					<tr class="tr1" style="height: 0px">
-						<td class="td1" style="width: 108px;"></td>
-						<td class="td2" style="width: 108px;"></td>
-						<td class="td3" style="width: 108px;"></td>
-						<td class="td4" style="width: 108px;"></td>
-						<td class="td5" style="width: 108px;"></td>
-						<td class="td6" style="width: 108px;"></td>
-						<td class="td7" style="width: 108px;"></td>
-						<td class="td7" style="width: 108px;"></td>
+						<td class="td1" style="width: 108px;"> </td>
+						<td class="td2" style="width: 108px;"> </td>
+						<td class="td3" style="width: 108px;"> </td>
+						<td class="td4" style="width: 108px;"> </td>
+						<td class="td5" style="width: 108px;"> </td>
+						<td class="td6" style="width: 108px;"> </td>
+						<td class="td7" style="width: 108px;"> </td>
+						<td class="td7" style="width: 108px;"> </td>
 					</tr>
 					<tr class="tr1">
 						<td class="td1"><span> </span><a id='lblOdate' class="lbl"> </a></td>
@@ -1096,7 +1128,10 @@
 					<tr class="tr5">
 						<td class="td1"><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td class="td2"><input id="txtPost" type="text" class="txt c1"/></td>
-						<td class="td3"colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
+						<td class="td3"colspan='4'>
+							<input id="txtAddr" type="text" class="txt c1" style="width: 412px;"/>
+							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
+						</td>
 						<!--<td class="td7"><span> </span><a id='lblOrdbno' class="lbl"> </a></td>
 						<td class="td8"><input id="txtOrdbno" type="text" class="txt c1"/></td>-->
 					</tr>
@@ -1105,7 +1140,7 @@
 						<td class="td2"><input id="txtPost2" type="text" class="txt c1"/></td>
 						<td class="td3" colspan='4'>
 							<input id="txtAddr2" type="text" class="txt c1" style="width: 412px;"/>
-							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
+							<select id="combAddr2" style="width: 20px" onchange='combAddr2_chg()'> </select>
 						</td>
 						<td class="td7"><input id="btnAddr2" type="button" value='...' style="width: 30px;height: 21px" /> <!--<span> </span><a id='lblOrdcno' class="lbl"> </a>--></td>
 						<!--<td class="td8"><input id="txtOrdcno" type="text" class="txt c1"/></td>-->
