@@ -423,11 +423,11 @@
 						var as = _q_appendData("cust", "", true);
 						var t_item = " @ ";
 						if (as[0] != undefined) {
-							t_item = t_item+","+as[0].zip_comp+"^^"+as[0].addr_comp+"@公司地址";
-							t_item = t_item+","+as[0].zip_fact+"^^"+as[0].addr_fact+"@工廠地址";
-							t_item = t_item+","+as[0].zip_fact2+"^^"+as[0].addr_fact2+"@工廠地址2";
-							t_item = t_item+","+as[0].zip_invo+"^^"+as[0].addr_invo+"@發票地址";
-							t_item = t_item+","+as[0].zip_home+"^^"+as[0].addr_home+"@通信地址";
+							t_item = t_item+","+as[0].zip_comp+"^^"+as[0].addr_comp+"@"+as[0].addr_comp;
+							t_item = t_item+","+as[0].zip_fact+"^^"+as[0].addr_fact+"@"+as[0].addr_fact;
+							t_item = t_item+","+as[0].zip_fact2+"^^"+as[0].addr_fact2+"@"+as[0].addr_fact2;
+							t_item = t_item+","+as[0].zip_invo+"^^"+as[0].addr_invo+"@"+as[0].addr_invo;
+							t_item = t_item+","+as[0].zip_home+"^^"+as[0].addr_home+"@"+as[0].addr_home;
 						}
 						$('#combAddr').text('')
 						q_cmbParse("combAddr", t_item);
