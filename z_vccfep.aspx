@@ -68,6 +68,10 @@
 						type : '8', //[11]
 						name : 'showprice',
 						value : "1@顯示單價".split(',')
+					},{
+						type : '8', //[12]
+						name : 'showweight',
+						value : "1@顯示重量".split(',')
 					}]
 				});
 				q_popAssign();
