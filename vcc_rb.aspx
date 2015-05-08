@@ -17,7 +17,7 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore','txtOrdeno'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -140,13 +140,13 @@
 				$('#txtTranstartno').change(function(){
 					GetTranPrice();
 				});
-				$('#txtCardealno').change(function(){
+				/*$('#txtCardealno').change(function(){
 					GetTranPrice();
 					//取得車號下拉式選單
 					var thisVal = $(this).val();
 					var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
 					q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
-				});
+				});*/
 				
 				$('#cmbTranstyle').change(function(){
 					GetTranPrice();
@@ -362,7 +362,7 @@
 							}
 						}
 						break;
-					case 'getCardealCarno' :
+					/*case 'getCardealCarno' :
 						var as = _q_appendData("cardeals", "", true);
 						carnoList = as;
 						var t_item = " @ ";
@@ -391,8 +391,8 @@
 							}
 							GetTranPrice();
 						});
-						break;
-					case 'GetTranPrice' :
+						break;*/
+					/*case 'GetTranPrice' :
 						var as = _q_appendData("addr", "", true);
 						if (as[0] != undefined) {
 							$('#txtPrice').val(as[0].driverprice2);
@@ -400,7 +400,7 @@
 							$('#txtPrice').val(0);
 						}
 						sum();
-						break;
+						break;*/
 					case 'msg_stk_all':
 						var as = _q_appendData("stkucc", "", true);
 						var rowslength=document.getElementById("table_stk").rows.length-3;
@@ -644,9 +644,9 @@
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
 						//取得車號下拉式選單
-						var thisVal = $('#txtCardealno').val();
-						var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
-						q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
+						//var thisVal = $('#txtCardealno').val();
+						//var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
+						//q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
 						bbsGetOrdeList();
 						break;
 					case q_name:
