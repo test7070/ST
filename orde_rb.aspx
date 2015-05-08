@@ -33,12 +33,13 @@
 			brwNowPage = 0;
 			brwKey = 'odate';
 			brwCount2 = 10;
+			q_copy=1;
 			
 			aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucc_b2.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
 				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', ''],
 				['txtPostname', 'lblStore', 'store', 'noa,store', 'txtPostname,txtConform', 'store_b.aspx']
 			);
@@ -85,7 +86,7 @@
 
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd],['txtGtime', '99:99']];
+				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd]];//,['txtGtime', '99:99']
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
@@ -94,9 +95,11 @@
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+				q_cmbParse("cmbGtime", ",08:00~09:00,09:00~10:00,10:00~11:00,11:00~12:00,12:00~13:00,13:00~14:00,14:00~15:00,15:00~16:00,16:00~17:00,17:00~18:00,18:00~19:00,19:00~20:00,21:00~22:00");
 				
 				$('#lblGdate').text('配送時間');
 				$('#lblStore').text('倉庫');
+				$('#lblSerial').text('統一編號');
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -503,7 +506,7 @@
 				
 				for(var k=0;k<q_bbsCount;k++){
 					if(emp($('#txtDatea_'+k).val()))
-						$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),15))
+						$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),1))
 				}
 				
 				//1030419 當專案沒有勾 BBM的取消和結案被打勾BBS也要寫入
@@ -671,6 +674,15 @@
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
+				$('#txtSalesno').val(r_userno);
+				$('#txtSales').val(r_name);
+				
+				if($('#chekQcopy').prop('checked')){
+					for (var j = 0; j < (q_bbsCount == 0 ? 1 : q_bbsCount); j++) {
+						$('#txtDatea_'+j).val('');
+					}
+				}
 			}
 
 			function btnModi() {
@@ -1049,17 +1061,17 @@
 						</td>
 						<td class="td2"><input id="txtCustno" type="text" class="txt c1"/></td>
 						<td class="td3" colspan="4"><input id="txtComp" type="text" class="txt c1"/></td>
-						<td class="td5"><span> </span><a id='lblPaytype' class="lbl"> </a></td>
-						<td class="td6"><input id="txtPaytype" type="text" class="txt c1"/></td>
-						<td class="td7">
-							<select id="combPaytype" class="txt c1" onchange='combPaytype_chg()' > </select>
-						</td>
+						<td class="td1"><span> </span><a id='lblSerial' class="lbl"> </a></td>
+						<td class="td2" colspan="2"><input id="txtCoin" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr4">
 						<td class="td1"><span> </span><a id='lblTel' class="lbl"> </a></td>
-						<td class="td2" colspan='5'><input id="txtTel" type="text" class="txt c1"/></td>
+						<td class="td2" colspan='2'><input id="txtTel" type="text" class="txt c1"/></td>
 						<td class="td5"><span> </span><a id='lblFax' class="lbl"> </a></td>
 						<td class="td6" colspan="2"><input id="txtFax" type="text" class="txt c1" /></td>
+						<td class="td5"><span> </span><a id='lblPaytype' class="lbl"> </a></td>
+						<td class="td6"><input id="txtPaytype" type="text" class="txt c1"/></td>
+						<td class="td7"><select id="combPaytype" class="txt c1" onchange='combPaytype_chg()' > </select></td>
 					</tr>
 					<tr class="tr5">
 						<td class="td1"><span> </span><a id='lblAddr' class="lbl"> </a></td>
@@ -1087,8 +1099,11 @@
 							<select id="cmbTrantype" class="txt c1" name="D1" > </select>
 						</td>
 						<td><span> </span><a  id="lblGdate" class="lbl"> </a></td>
-						<td><input id="txtGdate" type="text" class="txt c1"/></td>
-						<td><input id="txtGtime" type="text" class="txt c1"/></td>
+						<td colspan="2">
+							<input id="txtGdate" type="text" class="txt c1" style="width: 40%;"/>
+							<select id="cmbGtime" class="txt c1" style="width: 60%;"> </select>
+							<!--<input id="txtGtime" type="text" class="txt c1"/>-->
+						</td>
 						<td class="td4"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
 						<td class="td5" colspan="2">
 							<input id="txtPostname" type="text" class="txt c2"/>
@@ -1138,7 +1153,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1400px;">
+		<div class='dbbs' style="width: 1300px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
@@ -1154,8 +1169,8 @@
 					<td align="center" style="width:85px;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblEndas'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblCancels'> </a></td>
-					<td align="center" style="width:43px;"><a id='lblBorn'> </a></td>
-					<td align="center" style="width:43px;"><a id='lblNeed'> </a></td>
+					<!--<td align="center" style="width:43px;"><a id='lblBorn'> </a></td>
+					<td align="center" style="width:43px;"><a id='lblNeed'> </a></td>-->
 					<td align="center" style="width:43px;"><a id='lblVccrecord'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblOrdemount'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblScheduled'> </a></td>
@@ -1164,7 +1179,7 @@
 					<td align="center"><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td align="center">
 						<input class="txt c6" id="txtProductno.*" maxlength='30'type="text" style="width:98%;" />
-						<input class="btn" id="btnProduct.*" type="button" value='...' style=" font-weight: bold;" />
+						<input class="btn" id="btnProduct.*" type="button" value='.' style=" font-weight: bold;" />
 						<input class="txt c6" id="txtNo2.*" type="text" />
 					</td>
 					<td>
@@ -1189,8 +1204,8 @@
 					<td><input class="txt c7" id="txtDatea.*" type="text" /></td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 					<td align="center"><input id="chkCancel.*" type="checkbox"/></td>
-					<td align="center"><input class="btn" id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" /></td>
-					<td align="center"><input class="btn" id="btnNeed.*" type="button" value='.' style=" font-weight: bold;" /></td>
+					<!--<td align="center"><input class="btn" id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" /></td>
+					<td align="center"><input class="btn" id="btnNeed.*" type="button" value='.' style=" font-weight: bold;" /></td>-->
 					<td align="center"><input class="btn" id="btnVccrecord.*" type="button" value='.' style=" font-weight: bold;" /></td>
 					<td align="center"><input class="btn" id="btnOrdemount.*" type="button" value='.' style=" font-weight: bold;" /></td>
 					<td align="center"><input class="btn" id="btnScheduled.*" type="button" value='.' style=" font-weight: bold;" /></td>

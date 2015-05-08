@@ -166,6 +166,10 @@
 							type : '5', //[27]
 							name : 'xcoin', //幣別
 							value : z_coin.split(',')
+						}, {
+							type : '8', //[28]
+							name : 'showordetotal', //顯示單據小計
+							value : "1@顯示單據小計".split(',')
 						}]
 					});
 					q_popAssign();
@@ -181,6 +185,13 @@
 					$('#txtXmemo').css('width', '85%');
 					$('.q_report .report').css('width', '420px');
 					$('.q_report .report div').css('width', '200px');
+					
+					$('#Showunpay').css('width','300px');
+					$('#chkShowunpay').css('width','220px');
+					$('#chkShowunpay span').css('width','180px');
+					$('#Showordetotal').css('width','300px');
+					$('#chkShowordetotal').css('width','220px');
+					$('#chkShowordetotal span').css('width','180px');
 	
 					var t_date, t_year, t_month, t_day;
 					t_date = new Date();
