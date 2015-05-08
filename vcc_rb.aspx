@@ -42,7 +42,7 @@
 				['txtPost', 'lblAddr', 'addr2', 'noa,post', 'txtPost', 'addr2_b.aspx'],
 				['txtPost2', 'lblAddr2', 'addr2', 'noa,post', 'txtPost2', 'addr2_b.aspx'],
 				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
-				['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],
+				/*['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],*/
 				['txtPartno', 'lblPart', 'part', 'noa,part','txtPartno,txtPart', 'part_b.aspx'],
 				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx']
 			);
@@ -91,21 +91,24 @@
 
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm],['txtZipcode', r_picd],['txtZipname', '99:99']];
+				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm],['txtZipcode', r_picd]];//,['txtZipname', '99:99']
 				q_mask(bbmMask);
-				bbmNum = [	['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1],['txtMount', 15, 0, 1]];
+				bbmNum = [	 ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1]];
+				/*,['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTranmoney', 11, 0, 1],['txtMount', 15, 0, 1]*/
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]];
-				q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
+				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				//q_cmbParse("cmbStype", q_getPara('vcc.stype'));
 				q_cmbParse("combPay", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
+				q_cmbParse("cmbZipname", ",08:00~09:00,09:00~10:00,10:00~11:00,11:00~12:00,12:00~13:00,13:00~14:00,14:00~15:00,15:00~16:00,16:00~17:00,17:00~18:00,18:00~19:00,19:00~20:00,21:00~22:00");
+				
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#lblPart').text('運費所屬部門');
 				$('#lblDdate').text('配送時間');
-				$('#lblMount').text('箱數');
+				//$('#lblMount').text('箱數');
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
@@ -564,7 +567,7 @@
 						var t_addr2 = '';
 						var t_consignee = '';
 						for ( i = 0; i < as.length; i++) {
-							t_memo = t_memo + (t_memo.length > 0 ? '\n' : '') + as[i].noa + ':' + as[i].memo;
+							t_memo = t_memo + (t_memo.length > 0 ? '\n' : '') + as[i].memo;
 							t_post = t_post+(t_post.length>0?';':'')+as[i].post;
 							t_addr = t_addr+(t_addr.length>0?';':'')+as[i].addr;
 							t_post2 = t_post2+(t_post2.length>0?';':'')+as[i].post2;
@@ -580,11 +583,15 @@
 						if (as[0] != undefined){
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
+							$('#txtPaytype').val(as[0].paytype);
+							$('#cmbTrantype').val(as[0].trantype);
+							$('#txtStoreno').val(as[0].postname);
+							$('#txtStore').val(as[0].conform);
 							//$('#cmbTaxtype').val(as[0].taxtype);
 							//$('#cmbCoin').val(as[0].coin);
 							//$('#txtFloata').val(as[0].floata);
 							$('#txtZipcode').val(as[0].gdate);
-							$('#txtZipname').val(as[0].gtime);
+							$('#cmbZipname').val(as[0].gtime);
 						}
 						sum();
 						break;
@@ -1270,7 +1277,7 @@
 							<input id="txtApvmemo" type="hidden" class="txt c1"/>
 						</td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td class="td1"><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCardealno" type="text" class="txt c1"/></td>
 						<td class="td2"><input id="txtCardeal" type="text" class="txt c1"/></td>
@@ -1282,27 +1289,35 @@
 						<td class="td5"><select id="cmbTranstyle" style="width: 100%;"> </select></td>
 						<td class="td7"><span> </span><a id='lblMount' class="lbl"> </a></td>
 						<td class="td8"><input id="txtMount" type="text" class="txt num c1"/></td>
-					</tr>
+					</tr>-->
 					<tr>
 						<td class="td4"><span> </span><a id="lblDdate" class="lbl"> </a></td>
-						<td class="td5"><input id="txtZipcode" type="text" class="txt c1"/></td>
-						<td class="td6"><input id="txtZipname" type="text" class="txt c1"/></td>
-						<td class="td4"><span> </span><a id='lblTranstart' class="lbl btn"> </a></td>
-						<td class="td5"><input id="txtTranstartno" type="text" class="txt c1"/></td>
-						<td class="td6"><input id="txtTranstart" type="text" class="txt c1"/></td>
-						<td class="td7"><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
-						<td class="td8"><input id="txtTranmoney" type="text" class="txt num c1"/></td>
+						<td class="td5" colspan="2">
+							<input id="txtZipcode" type="text" class="txt c1" style="width: 40%;"/>
+							<select id="cmbZipname" class="txt c1" style="width: 60%;"> </select>
+							<!--<input id="txtZipname" type="text" class="txt c1"/>-->
+						</td>
+						<td class="td1"><span> </span><a id="lblPart" class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtPartno" type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtPart" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblSales' class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtSalesno" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtSales" type="text" class="txt c1"/></td>
-						<td class="td1"><span> </span><a id="lblPart" class="lbl btn"> </a></td>
-						<td class="td2"><input id="txtPartno" type="text" class="txt c1"/></td>
-						<td class="td3"><input id="txtPart" type="text" class="txt c1"/></td>
+						<td class="td1"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtStoreno" type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtStore" type="text" class="txt c1"/></td>
+					</tr>
+					<!--<tr>
+						<td class="td4"><span> </span><a id='lblTranstart' class="lbl btn"> </a></td>
+						<td class="td5"><input id="txtTranstartno" type="text" class="txt c1"/></td>
+						<td class="td6"><input id="txtTranstart" type="text" class="txt c1"/></td>
+						<td class="td7"><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
+						<td class="td8"><input id="txtTranmoney" type="text" class="txt num c1"/></td>
 						<td class="td7"><span> </span><a id='lblPrice' class="lbl"> </a></td>
 						<td class="td8"><input id="txtPrice" type="text" class="txt num c1"/></td>
-					</tr>
+					</tr>-->
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
 						<td class="td2" colspan='2'><input id="txtMoney" type="text" class="txt num c1"/></td>
@@ -1323,9 +1338,6 @@
 						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
 					</tr>-->
 					<tr>
-						<td class="td1"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
-						<td class="td2"><input id="txtStoreno" type="text" class="txt c1"/></td>
-						<td class="td3"><input id="txtStore" type="text" class="txt c1"/></td>
 						<td class="td1"><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td class="td2"><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtWorker2" type="text" class="txt c1"/></td>
