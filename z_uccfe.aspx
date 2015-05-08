@@ -20,6 +20,14 @@
 				_q_boxClose();
 				q_getId();
 				q_gf('', 'z_uccfe');
+				
+				$('#q_report').click(function() {
+					
+				if (q_getPara('sys.project').toUpperCase()!='YC'){
+						$('#Xcarton').hide();
+				
+					}
+				});
 			});
 			function q_gfPost() {
 				$('#q_report').q_report({
@@ -46,6 +54,10 @@
 						type : '8',
 						name : 'xoption01',//[8]
 						value : ['倉庫明細']
+					}, {
+						type : '8',
+						name : 'xcarton',//[8]
+						value : "1@顯示箱數".split(',')
 					}]
 				});
 				q_popAssign();
@@ -60,6 +72,8 @@
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();
+				
+				
 			}
 
 			function q_boxClose(s2) {
