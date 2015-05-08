@@ -49,7 +49,7 @@
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
-				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
+				//q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
 				//判斷是否有買發票系統
 			});
 
@@ -77,6 +77,9 @@
 				}
 				$('#txtMoney').val(round(t1, 0));
 				calTax();
+				
+				//計算折扣 
+				q_tr('txtDiscount', Math.round(q_div(q_mul(q_float('txtTotal'),q_float('txtPrice')),100)));
 			}
 
 			function mainPost() {
@@ -93,6 +96,8 @@
 				q_cmbParse("combAddr", ' @ ');
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				$('#lblPrice').text('扣');
+				$('#lblPer').html('%&nbsp;&nbsp;');
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
@@ -182,8 +187,12 @@
 					$('#div_stk').hide();
 				});
 				
-				if (isinvosystem)
-					$('.istax').hide();
+				$('#txtPrice').change(function(){
+					sum();
+				});
+				
+				/*if (isinvosystem)
+					$('.istax').hide();*/
 			}
 
 			function bbsGetOrdeList(){
@@ -301,7 +310,7 @@
 						$('#div_stk').css('left',mouse_point.pageX-parseInt($('#div_stk').css('width')));
 						$('#div_stk').toggle();
 						break;
-					case 'ucca_invo':
+					/*case 'ucca_invo':
 						var as = _q_appendData("ucca", "", true);
 						if (as[0] != undefined) {
 							isinvosystem = true;
@@ -309,7 +318,7 @@
 						} else {
 							isinvosystem = false;
 						}
-						break;
+						break;*/
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
@@ -422,11 +431,11 @@
 						var as = _q_appendData("cust", "", true);
 						var t_item = " @ ";
 						if (as[0] != undefined) {
-							t_item = t_item+","+as[0].zip_comp+"^^"+as[0].addr_comp+"@公司地址";
-							t_item = t_item+","+as[0].zip_fact+"^^"+as[0].addr_fact+"@工廠地址";
-							t_item = t_item+","+as[0].zip_fact2+"^^"+as[0].addr_fact2+"@工廠地址2";
-							t_item = t_item+","+as[0].zip_invo+"^^"+as[0].addr_invo+"@發票地址";
-							t_item = t_item+","+as[0].zip_home+"^^"+as[0].addr_home+"@通信地址";
+							t_item = t_item+","+as[0].zip_comp+"^^"+as[0].addr_comp+"@"+as[0].addr_comp;
+							t_item = t_item+","+as[0].zip_fact+"^^"+as[0].addr_fact+"@"+as[0].addr_fact;
+							t_item = t_item+","+as[0].zip_fact2+"^^"+as[0].addr_fact2+"@"+as[0].addr_fact2;
+							t_item = t_item+","+as[0].zip_invo+"^^"+as[0].addr_invo+"@"+as[0].addr_invo;
+							t_item = t_item+","+as[0].zip_home+"^^"+as[0].addr_home+"@"+as[0].addr_home;
 						}
 						$('#combAddr').text('')
 						q_cmbParse("combAddr", t_item);
@@ -616,9 +625,9 @@
 			
 			function combAddr_chg() {
 				if (q_cur == 1 || q_cur == 2) {
-					var t_addr=$('#combAddr2').find("option:selected").val().split('^^');
-					$('#txtPost2').val(t_addr[0]);
-					$('#txtAddr2').val(t_addr[1]);
+					var t_addr=$('#combAddr').find("option:selected").val().split('^^');
+					$('#txtPost').val(t_addr[0]);
+					$('#txtAddr').val(t_addr[1]);
 				}
 			}
 			
@@ -758,7 +767,7 @@
 			}
 
 			function btnPrint() {
-				 q_box("z_vccfep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa : trim($('#txtNoa').val())}) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				 q_box("z_vccp_yc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa : trim($('#txtNoa').val())}) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
@@ -804,8 +813,8 @@
 
 			function refresh(recno) {
 				_refresh(recno);
-				if (isinvosystem)
-					$('.istax').hide();
+				/*if (isinvosystem)
+					$('.istax').hide();*/
 				HiddenTreat();
 				stype_chang();
 			}
@@ -1215,6 +1224,13 @@
 						<td class="td3" colspan='4'>
 							<input id="txtAddr2"  type="text" class="txt c1" style="width: 412px;"/>
 							<select id="combAddr2" style="width: 20px" onchange='combAddr2_chg()'> </select>
+						</td>
+						<td class="td4" colspan="2" style="text-align: right;" >
+							<a id='lblPrice' class="lbl" style="float:none"> </a>
+							<input id="txtPrice"  type="text" class="txt num c1" style="float:none;width: 25%"/>
+							<a id='lblPer' class="lbl" style="float:none"> </a>
+							<a id='lblDiscount' class="lbl" style="float:none"> </a>
+							<input id="txtDiscount"  type="text" class="txt num c1" style="float:none;width: 25%"/>
 						</td>
 					</tr>
 					<tr>
