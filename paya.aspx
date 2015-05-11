@@ -189,7 +189,7 @@
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
 
-                q_box('paya_s.aspx', q_name + '_s', "550px", "550px", q_getMsg("popSeek"));
+                q_box('paya_s.aspx', q_name + '_s', "450px", "400px", q_getMsg("popSeek"));
             }
 			
             function btnIns() {

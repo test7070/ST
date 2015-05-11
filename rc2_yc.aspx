@@ -47,7 +47,7 @@
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
 				//判斷是否有買發票系統
-				q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
+				//q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
 			});
 
 			function main() {
@@ -106,6 +106,15 @@
 				
 				$('#lblAccc').click(function() {
 					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('lblAccc'), true);
+				});
+				
+				$('#lblPayano').click(function() {
+					t_where = '';
+					t_payano = $('#txtPayano').val();
+					if (t_payano.length > 0) {
+						t_where = "noa='" + t_payano + "'";
+						q_box("paya.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'paya', "95%", "95%", q_getMsg('popPaya'));
+					}
 				});
 				
 				$('#lblOrdc').click(function() {
@@ -208,7 +217,7 @@
 			var ordcoverrate = [],rc2soverrate = [];
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					case 'ucca_invo':
+					/*case 'ucca_invo':
 						var as = _q_appendData("ucca", "", true);
 						if (as[0] != undefined) {
 							isinvosystem = true;
@@ -216,7 +225,7 @@
 						} else {
 							isinvosystem = false;
 						}
-						break;
+						break;*/
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
@@ -584,10 +593,6 @@
 				Lock(1, {
 					opacity : 0
 				});
-				//取得車號下拉式選單
-				var thisVal = $('#txtCardealno').val();
-				var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
-				q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
 				var t_where = " where=^^ rc2no='" + $('#txtNoa').val() + "'^^";
 				q_gt('pays', t_where, 0, 0, 0, 'btnModi', r_accy);
 			}
@@ -1057,6 +1062,8 @@
 						<td class="td3"><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td class="td4"><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
 						<td class="td5" colspan="2"><input id="txtAccno" type="text" class="txt c1"/></td>
+						<td class="td1"><span> </span><a id='lblPayano' class="lbl btn">預付單號</a></td>
+						<td class="td2"><input id="txtPayano" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
