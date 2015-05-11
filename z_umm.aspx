@@ -241,6 +241,10 @@
 					if(q_getPara('sys.project').toUpperCase()=='XY'){
 						q_gt('sss', "where=^^ noa='"+r_userno+"' ^^", 0, 0, 0, "sss_issales_xy");
 					}
+					
+					if(q_getPara('sys.project').toUpperCase()=='RB'){
+						$('#chkShowordetotal input').prop('checked',true)
+					}
                 }
 	         }
 

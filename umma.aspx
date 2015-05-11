@@ -16,7 +16,7 @@
                 alert("An error occurred:\r\n" + error.Message);
             }
 
-            var q_name = "paya";
+            var q_name = "umma";
             var q_readonly = ['txtVccbno','txtAccno','txtNoa', 'txtWorker','txtWorker2','txtAcc2','txtDdate','txtDiscount'];
             var bbmNum = [['txtMoney', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtDiscount', 10, 0, 1]];
             var bbmMask = [];
@@ -27,7 +27,7 @@
             brwKey = 'noa';
             q_desc = 1;
             //ajaxPath = "";
-            aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick', 'txtTggno,txtComp,txtNick', 'tgg_b.aspx']
+            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
             ,['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2,txtMount', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]);
             
             $(document).ready(function() {
@@ -183,7 +183,7 @@
                 var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtDatea').val());
                 if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_paya') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_umma') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
                 else
                     wrServer(t_noa);
             }
@@ -192,7 +192,7 @@
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
 
-                q_box('paya_s.aspx', q_name + '_s', "450px", "400px", q_getMsg("popSeek"));
+                q_box('umma_s.aspx', q_name + '_s', "450px", "400px", q_getMsg("popSeek"));
             }
 			
             function btnIns() {
@@ -215,7 +215,7 @@
             }
 
             function btnPrint() {
-				q_box('z_paya.aspx', '', "95%", "95%", q_getMsg("popPrint"));
+				q_box('z_umma.aspx', '', "95%", "95%", q_getMsg("popPrint"));
             }
 
             function wrServer(key_value) {
@@ -479,9 +479,9 @@
 						</td>	
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblTgg"  class="lbl btn"> </a></td>
+						<td><span> </span><a id="lblCust"  class="lbl btn"> </a></td>
 						<td colspan="3">
-							<input id="txtTggno" type="text" style="float:left; width:20%;"/>
+							<input id="txtCustno" type="text" style="float:left; width:20%;"/>
 							<input id="txtComp"  type="text" style="float:left; width:80%;"/>
 							<input id="txtNick"  type="text" style="display:none;"/>
 						</td>
