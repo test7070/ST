@@ -133,6 +133,15 @@
 				$('#lblAccc').click(function() {
 					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('lblAccc'), true);
 				});
+				
+				$('#lblUmmano').click(function() {
+					t_where = '';
+					t_ummano = $('#txtUmmano').val();
+					if (t_ummano.length > 0) {
+						t_where = "noa='" + t_ummano + "'";
+						q_box("umma.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'umma', "95%", "95%", q_getMsg('popUmma'));
+					}
+				});
 
 				$('#lblInvono').click(function() {
 					t_where = '';
@@ -1248,15 +1257,19 @@
 						<td class="td1"><span> </span><a id='lblSales' class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtSalesno" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtSales" type="text" class="txt c1"/></td>
+						<td class="td4"><span> </span><a id='lblUmmano' class="lbl btn">預收單號</a></td>
+						<td class="td5" colspan='2'><input id="txtUmmano" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
+						<td class="td2" colspan='7'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea></td>
+					</tr>
+					<tr>
 						<td class="td1"><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td class="td2"><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td class="td4"><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
 						<td class="td5" colspan='2'><input id="txtAccno" type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
-						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td class="td2" colspan='7'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea></td>
 					</tr>
 				</table>
 			</div>
