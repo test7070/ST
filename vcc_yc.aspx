@@ -77,9 +77,6 @@
 				}
 				$('#txtMoney').val(round(t1, 0));
 				calTax();
-				
-				//計算折扣 
-				q_tr('txtDiscount', Math.round(q_div(q_mul(q_float('txtTotal'),q_float('txtPrice')),100)));
 			}
 
 			function mainPost() {
@@ -197,6 +194,16 @@
 				});
 				
 				$('#txtPrice').change(function(){
+					//折扣歸零
+					q_tr('txtDiscount',0);
+					//計算正常金額
+					sum();
+					//計算折扣 
+					q_tr('txtDiscount', Math.round(q_div(q_mul(q_float('txtTotal'),q_float('txtPrice')),100)));
+					//重新計算折扣後的金額
+					sum();
+				});
+				$('#txtDiscount').change(function(){
 					sum();
 				});
 				
@@ -1003,7 +1010,7 @@
 				
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
+				$('#txtTotal').val(FormatNumber(q_sub(t_total,q_float('txtDiscount'))));
 			}
 		</script>
 		<style type="text/css">
