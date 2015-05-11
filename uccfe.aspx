@@ -62,6 +62,7 @@
 						q_boxClose2(s2);
 						break;
 				}  
+				b_pop = '';
 			}
             function q_gtPost(t_name) {
                 switch (t_name) {
