@@ -48,6 +48,7 @@
             function mainPost() {
             	bbmMask = [];
                 q_mask(bbmMask);
+                q_cmbParse("cmbTypea", q_getPara('uptgg.typea'));
             }
             
             var guid = (function() {
@@ -477,39 +478,40 @@
 				<table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='5'>
 					<tr style="height:1px;">
 						<td style="width: 150px"> </td>
-						<td style="width: 640px"> </td>
+						<td style="width: 245px"> </td>
+						<td style="width: 150px"> </td>
+						<td style="width: 245px"> </td>
 						<td style="width: 10px"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1" style="width: 130px;"/></td>
+						<td><span> </span><a id='lblTypea' class="lbl"> </a></td>
+						<td><select id="cmbTypea" class="txt c6"> </select></td>
 						<td><input id="txtNoa"  type="text" style="display: none;"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTgg' class="lbl btn"> </a></td>
-						<td>
+						<td colspan="3">
 							<input id="txtTggno"  type="text"  class="txt c1" style="width: 130px;"/>
 							<input id="txtComp"  type="text"  class="txt c1" style="width: 400px;"/>
 						</td>
 						<td><input id="txtNick"  type="text" style="display: none;"/></td>
 					</tr>
-					<tr>
+					<tr colspan="3">
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
 						<td><input id="txtMemo"  type="text"  class="txt c1"/></td>
 						<td> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
-						<td><input id="txtWorker"  type="text"  class="txt c2"/></td>
-						<td> </td>
-					</tr>
-					<tr>
+						<td><input id="txtWorker"  type="text"  class="txt c6"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
-						<td><input id="txtWorker2"  type="text"  class="txt c2"/></td>
+						<td><input id="txtWorker2"  type="text"  class="txt c6"/></td>
 						<td> </td>
 					</tr>
 					<tr style="display: none;">
-						<td colspan="2"><div style="width:100%;" id="FileList"> </div></td>
+						<td colspan="3"><div style="width:100%;" id="FileList"> </div></td>
 					</tr>
 				</table>
 			</div>

@@ -137,7 +137,6 @@
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
 				});
-
 				
 				////-----------------以下為addr2控制事件---------------
 				$('#btnAddr2').mousedown(function(e) {
@@ -489,6 +488,58 @@
 							sum();
 						}
 						break;*/
+					case 'btnModi':
+						var as = _q_appendData("umms", "", true);
+						if (as[0] != undefined) {
+							var z_msg = "", t_paysale = 0;
+							for (var i = 0; i < as.length; i++) {
+								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								if (t_paysale != 0)
+									z_msg += String.fromCharCode(13) + '收款單號【' + as[i].noa + '】 ' + FormatNumber(t_paysale);
+							}
+							if (z_msg.length > 0) {
+								alert('已沖帳:' + z_msg);
+								Unlock(1);
+								return;
+							}
+						}
+						_btnModi();
+						Unlock(1);
+						$('#txtOdate').focus();
+						if (!emp($('#txtCustno').val())) {
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+							q_gt('custaddr', t_where, 0, 0, 0, "");
+						}
+						break;
+					case 'btnDele':
+						var as = _q_appendData("umms", "", true);
+						if (as[0] != undefined) {
+							var z_msg = "", t_paysale = 0;
+							for (var i = 0; i < as.length; i++) {
+								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								if (t_paysale != 0)
+									z_msg += String.fromCharCode(13) + '收款單號【' + as[i].noa + '】 ' + FormatNumber(t_paysale);
+							}
+							if (z_msg.length > 0) {
+								alert('已沖帳:' + z_msg);
+								Unlock(1);
+								return;
+							}
+						}
+						
+						if (!emp($('#txtNoa').val())){
+							if (!confirm(mess_dele))
+								return;
+							q_cur = 3;
+							
+							if(emp($('#txtVccno').val()))
+								q_func('qtxt.query.post2', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+							else
+								q_func('vcc_post.post.a2', r_accy + ',' + $('#txtVccno').val() + ',0');
+						}
+						//_btnDele();
+						Unlock(1);
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -531,6 +582,56 @@
 				else
 					wrServer(s1);
 			}
+			
+			function wrServer(key_value) {
+				var i;
+				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
+				xmlSql = '';
+				if (q_cur == 2)
+					xmlSql = q_preXml();
+
+				_btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
+			}
+			
+			function q_stPost() {
+				if (!(q_cur == 1 || q_cur == 2))
+					return false;
+				
+				if (q_cur == 1 || emp($('#txtVccno').val()))
+					q_func('qtxt.query.post0', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+				else {
+					//vcc.post內容
+					q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
+				}
+			}
+			
+			function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'vcc_post.post.a1':
+                		q_func('qtxt.query.post0', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+                		break;
+                	case 'vcc_post.post.a2':
+                		q_func('qtxt.query.post2', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+                		break;
+                    case 'qtxt.query.post0':
+                        	q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+                        break;
+					case 'qtxt.query.post1':
+						var as = _q_appendData("tmp0", "", true, true);
+							if (as[0] != undefined) {
+								abbm[q_recno]['vccno'] = as[0].vccno;
+								$('#txtVccno').val(as[0].vccno);
+								//vcc.post內容
+								if(!emp($('#txtVccno').val()))
+									q_func('vcc_post.post', r_accy + ',' + $('#txtVccno').val() + ',1');
+							}
+                        	//alert('成功轉出出貨單!!');
+                        break;
+					case 'qtxt.query.post2':
+						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
+                        break;
+                }
+            }
 
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
@@ -688,28 +789,16 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				_btnModi();
-				$('#txtOdate').focus();
-
-				if (!emp($('#txtCustno').val())) {
-					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
-					q_gt('custaddr', t_where, 0, 0, 0, "");
-				}
+				Lock(1, {
+					opacity : 0
+				});
+				var t_where = " where=^^ vccno='" + $('#txtVccno').val() + "'^^";
+				q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
 			}
 
 			function btnPrint() {
                 var t_where = "noa='" + $.trim($('#txtNoa').val()) + "'";
 				q_box("z_ordep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
-			}
-
-			function wrServer(key_value) {
-				var i;
-				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
-				xmlSql = '';
-				if (q_cur == 2)
-					xmlSql = q_preXml();
-
-				_btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
 			}
 
 			function bbsSave(as) {
@@ -763,13 +852,9 @@
 					$('#btnPlusCust').hide();
 				}
 				if (t_para) {
-					$('#btnOrdei').removeAttr('disabled');
 					$('#combAddr').attr('disabled', 'disabled');
-					$('#btnOrdem').removeAttr('disabled');
 				} else {
-					$('#btnOrdei').attr('disabled', 'disabled');
 					$('#combAddr').removeAttr('disabled');
-					$('#btnOrdem').attr('disabled', 'disabled');
 				}	
 				
 				$('#div_addr2').hide();
@@ -831,7 +916,16 @@
 			}
 
 			function btnDele() {
-				_btnDele();
+				if (q_chkClose())
+					return;
+				Lock(1, {
+					opacity : 0
+				});
+				
+				var t_where = " where=^^ vccno='" + $('#txtVccno').val() + "'^^";
+				q_gt('umms', t_where, 0, 0, 0, 'btnDele', r_accy);
+				
+				//_btnDele();
 			}
 
 			function btnCancel() {
@@ -1053,6 +1147,8 @@
 						<td class="td3" colspan="4"><input id="txtAcomp" type="text" class="txt c1"/></td>
 						<!--<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
 						<td class="td6"colspan="2"><input id="txtContract" type="text" class="txt c1"/></td>-->
+						<td> </td>
+						<td> </td>
 					</tr>
 					<tr class="tr3">
 						<td class="td1">
@@ -1148,6 +1244,7 @@
 						<td class="td1"><span> </span><a id='lblMemo' class='lbl'> </a></td>
 						<td class="td2" colspan='7'>
 							<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea>
+							<input id="txtVccno" type="hidden" />
 						</td>
 					</tr>
 				</table>
