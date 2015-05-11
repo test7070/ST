@@ -21,7 +21,7 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "orde";
-			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtSales', 'txtOrdbno', 'txtOrdcno'];
+			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtSales', 'txtOrdbno', 'txtOrdcno','txtVccno'];
 			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtNo2', 'txtNo3', 'txtC1', 'txtNotv'];
 			var bbmNum = [['txtTotal', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1]];
 			var bbsNum = [];
@@ -108,9 +108,23 @@
 					q_box('cust.aspx','pluscust', "95%", "95%", '新增客戶');
 				});
 				
-				/*$('#txtFloata').change(function() {
-					sum();
-				});*/
+				$('#txtVccno').click(function(){
+					t_where = '';
+					t_vccno = $('#txtVccno').val();
+					if (t_vccno.length > 0) {
+						t_where = "noa='" + t_vccno + "'";
+						q_box("vcc_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcc', "95%", "95%", "出貨單");
+					}
+				});
+				
+				$('#btnOrdetoVcc').click(function() {
+					if(emp($('#txtVccno').val())){
+						q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+					}else{
+						q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
+					}
+				});
+				
 				$('#txtTotal').change(function() {
 					sum();
 				});
@@ -597,12 +611,12 @@
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
 				
-				if (q_cur == 1 || emp($('#txtVccno').val()))
+				/*if (q_cur == 1 || emp($('#txtVccno').val()))
 					q_func('qtxt.query.post0', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
 				else {
 					//vcc.post內容
 					q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
-				}
+				}*/
 			}
 			
 			function q_funcPost(t_func, result) {
@@ -621,11 +635,14 @@
 							if (as[0] != undefined) {
 								abbm[q_recno]['vccno'] = as[0].vccno;
 								$('#txtVccno').val(as[0].vccno);
+								
+				                $('#vtvccno_'+(q_recno%brwCount)).text("V");
 								//vcc.post內容
-								if(!emp($('#txtVccno').val()))
+								if(!emp($('#txtVccno').val())){
 									q_func('vcc_post.post', r_accy + ',' + $('#txtVccno').val() + ',1');
+								}
 							}
-                        	//alert('成功轉出出貨單!!');
+                        	alert('成功轉出出貨單!!');
                         break;
 					case 'qtxt.query.post2':
 						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
@@ -789,6 +806,11 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+				if(!emp($('#txtVccno').val())){
+					alert("已轉出貨單禁止修改!!");
+					return;
+				}
+					
 				Lock(1, {
 					opacity : 0
 				});
@@ -842,6 +864,11 @@
 				});
 				$('#div_addr2').hide();
 				HiddenTreat();
+				
+				for (var i = 0; i < brwCount; i++) {
+                	if($('#vtvccno_'+i).text()!="")
+                		$('#vtvccno_'+i).text("V");
+                }
 			}
 
 			function readonly(t_para, empty) {
@@ -853,9 +880,11 @@
 				}
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
+					$('#btnOrdetoVcc').removeAttr('disabled');
 				} else {
 					$('#combAddr').removeAttr('disabled');
-				}	
+					$('#btnOrdetoVcc').attr('disabled', 'disabled');
+				}
 				
 				$('#div_addr2').hide();
 				readonly_addr2();
@@ -918,6 +947,11 @@
 			function btnDele() {
 				if (q_chkClose())
 					return;
+				if(!emp($('#txtVccno').val())){
+					alert("已轉出貨單禁止刪除!!");
+					return;
+				}
+				
 				Lock(1, {
 					opacity : 0
 				});
@@ -941,6 +975,65 @@
 						}
 						break;
 				}
+			}
+			
+			function FormatNumber(n) {
+				var xx = "";
+				if (n < 0) {
+					n = Math.abs(n);
+					xx = "-";
+				}
+				n += "";
+				var arr = n.split(".");
+				var re = /(\d{1,3})(?=(\d{3})+$)/g;
+				return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
+			}
+			
+			function calTax() {
+				var t_money = 0, t_tax = 0, t_total = 0;
+				for (var j = 0; j < q_bbsCount; j++) {
+					t_money += q_float('txtTotal_' + j);
+				}
+				t_total = t_money;
+				
+				var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
+				switch ($('#cmbTaxtype').val()) {
+					case '0': // 無
+						t_tax = 0;
+						t_total = q_add(t_money, t_tax);
+						break;
+					case '1': // 應稅
+						t_tax = round(q_mul(t_money, t_taxrate), 0);
+						t_total = q_add(t_money, t_tax);
+						break;
+					case '2': //零稅率
+						t_tax = 0;
+						t_total = q_add(t_money, t_tax);
+						break;
+					case '3': // 內含
+						t_tax = round(q_mul(q_div(t_money, q_add(1, t_taxrate)), t_taxrate), 0);
+						t_total = t_money;
+						t_money = q_sub(t_total, t_tax);
+						break;
+					case '4': // 免稅
+						t_tax = 0;
+						t_total = q_add(t_money, t_tax);
+						break;
+					case '5': // 自定
+						$('#txtTax').attr('readonly', false);
+						$('#txtTax').css('background-color', 'white').css('color', 'black');
+						t_tax = round(q_float('txtTax'), 0);
+						t_total = q_add(t_money, t_tax);
+						break;
+					case '6': // 作廢-清空資料
+						t_money = 0, t_tax = 0, t_total = 0;
+						break;
+					default:
+				}
+				
+				$('#txtMoney').val(FormatNumber(t_money));
+				$('#txtTax').val(FormatNumber(t_tax));
+				$('#txtTotal').val(FormatNumber(t_total));
 			}
 			
 		</script>
@@ -1103,15 +1196,17 @@
 				<table class="tview" id="tview">
 					<tr>
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
-						<td align="center" style="width:25%"><a id='vewOdate'> </a></td>
+						<td align="center" style="width:20%"><a id='vewOdate'> </a></td>
 						<td align="center" style="width:30%"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:40%"><a id='vewComp'> </a></td>
+						<td align="center" style="width:30%"><a id='vewComp'> </a></td>
+						<td align="center" style="width:10%"><a id='vewVcc'>出貨</a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td align="center" id='odate'>~odate</td>
 						<td align="center" id='noa'>~noa</td>
 						<td align="center" id='custno comp,4'>~custno ~comp,4</td>
+						<td align="center" id='vccno'>~vccno</td>
 					</tr>
 				</table>
 			</div>
@@ -1147,8 +1242,8 @@
 						<td class="td3" colspan="4"><input id="txtAcomp" type="text" class="txt c1"/></td>
 						<!--<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
 						<td class="td6"colspan="2"><input id="txtContract" type="text" class="txt c1"/></td>-->
-						<td> </td>
-						<td> </td>
+						<td><input class="btn" id="btnOrdetoVcc" type="button" value='轉出貨單' /> </td>
+						<td colspan="2"><input id="txtVccno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr3">
 						<td class="td1">
@@ -1244,7 +1339,6 @@
 						<td class="td1"><span> </span><a id='lblMemo' class='lbl'> </a></td>
 						<td class="td2" colspan='7'>
 							<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea>
-							<input id="txtVccno" type="hidden" />
 						</td>
 					</tr>
 				</table>
