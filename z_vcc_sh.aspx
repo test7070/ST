@@ -107,7 +107,14 @@
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
                 $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
                 
-                
+                if(q_getHref()[1]!=undefined){
+                	$('#txtXcust1a').val(q_getHref()[1]);
+                	$('#txtXcust2a').val(q_getHref()[1]);
+                }
+                if(q_getHref()[3]!=undefined){
+                	$('#txtXcust1b').val(q_getHref()[3]);
+                	$('#txtXcust2b').val(q_getHref()[3]);
+                }
             }
 
             function q_boxClose(s2) {

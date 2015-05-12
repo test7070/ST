@@ -140,6 +140,10 @@
 					}
 					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
 				});
+				
+				$('#btnStore2report').click(function() {
+					q_box("z_vcc_sh.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" +$('#txtCustno').val()+"' and comp='" +$('#txtComp').val()+"';"+r_accy, 'ordes', "95%", "650px", "寄庫報表");
+				});
 
 				$('#lblOrdeno').click(function() {
 					q_pop('txtOrdeno', "orde_xy.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'" + $('#txtOrdeno').val() + "')>0;" + r_accy + '_' + r_cno, 'orde', 'noa', '', "92%", "1024px", q_getMsg('lblOrdeno'), true);
@@ -228,7 +232,32 @@
 					$('#div_store2').hide();
 				});
 				$('#btnClose_div_store2').click(function() {
-					$('#div_store2').toggle();
+					$('#div_store2').hide();
+				});
+				
+				$('#btnImport_div_store2').click(function() {
+					var t_store2=[];
+					var store2_row=document.getElementById("table_store2").rows.length-2;
+					if(store2_row>0){//有資料
+						for(var i=0 ;i<store2_row;i++){
+							if($('#store2_chkSel_'+i).prop('checked'))
+								t_store2.push({
+									productno:$('#store2_txtProductno_'+i).val(),
+									product:$('#store2_txtProduct_'+i).val(),
+									uno:$('#store2_txtUno_'+i).val(),
+									unit:$('#store2_txtUnit_'+i).val(),
+									storeno:$('#store2_txtStoreno_'+i).val(),
+									store:$('#store2_txtStore_'+i).val(),
+									mount:$('#store2_txtMount_'+i).val()
+								});
+						}
+						if(t_store2.length>0){
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtTranmoney3,txtUno,txtStoreno2,txtStore2', t_store2.length, t_store2
+							, 'productno,product,unit,mount,uno,storeno,store', 'txtProductno,txtProduct,txtUno');
+							AutoNoq();	
+						}
+					}
+					$('#div_store2').hide();
 				});
 			}
 			
@@ -367,11 +396,17 @@
 							//倉庫庫存
 							var tr = document.createElement("tr");
 							tr.id = "store2_"+j;
-							tr.innerHTML = "<td><input id='store2_txtProductno_"+store2_row+"' type='text' class='txt c1' value='"+as[i].productno+"' disabled='disabled'/></td>";
+							if(q_cur==1 || q_cur==2)
+								tr.innerHTML = "<td><input id='store2_chkSel_"+store2_row+"' type='checkbox' /></td>";
+							else
+								tr.innerHTML = "<td><input id='store2_chkSel_"+store2_row+"' type='checkbox' disabled='disabled'/></td>";
+								
+							tr.innerHTML+="<td><input id='store2_txtProductno_"+store2_row+"' type='text' class='txt c1' value='"+as[i].productno+"' disabled='disabled'/></td>";
 							tr.innerHTML+="<td><input id='store2_txtProduct_"+store2_row+"' type='text' class='txt c1' value='"+as[i].product+"' disabled='disabled' /></td>";
+							tr.innerHTML+="<td><input id='store2_txtUnit_"+store2_row+"' type='text' class='txt c1' value='"+as[i].unit+"' disabled='disabled' /></td>";
 							tr.innerHTML+= "<td><input id='store2_txtUno_"+store2_row+"' type='text' class='txt c1' value='"+as[i].uno+"' disabled='disabled'/></td>";
-							tr.innerHTML+= "<td><input id='store2_txtSpec_"+store2_row+"' type='text' class='txt c1' value='"+as[i].spec+"' disabled='disabled'/></td>";
-							tr.innerHTML+="<td><input id='store2_txtStore_"+store2_row+"' type='text' class='txt c1' value='"+as[i].store2+"' disabled='disabled' /></td>";
+							//tr.innerHTML+= "<td><input id='store2_txtSpec_"+store2_row+"' type='text' class='txt c1' value='"+as[i].spec+"' disabled='disabled'/></td>";
+							tr.innerHTML+="<td><input id='store2_txtStore_"+store2_row+"' type='text' class='txt c1' value='"+as[i].store2+"' disabled='disabled' /><input id='store2_txtStoreno_"+store2_row+"' type='hidden' value='"+as[i].storeno2+"'  /></td>";
 							tr.innerHTML+="<td><input id='store2_txtMount_"+store2_row+"' type='text' class='txt c1 num' value='"+dec(as[i].stkmount)+"' disabled='disabled'/></td>";
 							var tmp = document.getElementById("store2_close");
 							tmp.parentNode.insertBefore(tr,tmp);
@@ -379,6 +414,12 @@
 						}
 						$('#div_store2').css('top', $('#btnStore2').offset().top+25);
 						$('#div_store2').css('left', $('#btnStore2').offset().left-parseInt($('#div_store2').css('width'))-5);
+						
+						if(q_cur==1 || q_cur==2)
+							$('#btnImport_div_store2').removeAttr('disabled');
+						else
+							$('#btnImport_div_store2').attr('disabled', 'disabled');
+							
 						$('#div_store2').toggle();
 						break;
 					case 'cno_acomp':
@@ -835,12 +876,13 @@
 					var t_uno=$('#txtUno_'+t_seq).val();
 					var t_pno=$('#txtProductno_'+t_seq).val();
 					var t_sno=$('#txtStoreno2_'+t_seq).val();
-					var t_where = "where=^^ a.noa !='"+ t_noa +"' and  a.custno='" + t_custno + "' and a.uno='" + t_uno + "' and a.productno='" + t_pno + "' and a.storeno2='" + t_sno + "' ^^";
+					var t_where = "where=^^ a.noa !='"+ t_noa +"' and  isnull(a.custno,'')='" + t_custno + "' and isnull(a.uno,'')='" + t_uno + "' and isnull(a.productno,'')='" + t_pno + "' and isnull(a.storeno2,'')='" + t_sno + "' ^^";
 						q_gt('vcc_sh_store2', t_where, 0, 0, 0, "check_store2", r_accy);
 				}
 			}
 
 			function btnIns() {
+				$('#div_store2').hide();
 				_btnIns();
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtCno').val(z_cno);
@@ -856,6 +898,7 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+				$('#div_store2').hide();
 				Lock(1, {
 					opacity : 0
 				});
@@ -1070,7 +1113,7 @@
 			}
 			.dview {
 				float: left;
-				width: 30%;
+				width: 27%;
 				border-width: 0px;
 			}
 			.tview {
@@ -1091,7 +1134,7 @@
 			}
 			.dbbm {
 				float: left;
-				width: 70%;
+				width: 73%;
 				border-radius: 5px;
 			}
 			.tbbm {
@@ -1205,18 +1248,21 @@
 				</tr>
 			</table>
 		</div>
-		<div id="div_store2" style="position:absolute; top:300px; left:400px; display:none; width:880px; background-color: #CDFFCE; border: 5px solid gray;">
+		<div id="div_store2" style="position:absolute; top:300px; left:400px; display:none; width:785px; background-color: #CDFFCE; border: 5px solid gray;">
 			<table id="table_store2" style="width:100%;" border="1" cellpadding='2'  cellspacing='0'>
 				<tr id='store2_top'>
+					<td style="background-color: #f8d463;width: 21px;" align="center"> </td>
 					<td style="background-color: #f8d463;width: 130px;" align="center">產品編號</td>
-					<td style="background-color: #f8d463;width: 150px;" align="center">產品名稱</td>
+					<td style="background-color: #f8d463;width: 300px;" align="center">產品名稱</td>
+					<td style="background-color: #f8d463;width: 300px;" align="center">單位</td>
 					<td style="background-color: #f8d463;width: 200px;" align="center">批號</td>
-					<td style="background-color: #f8d463;width: 200px;" align="center">規格</td>
+					<!--<td style="background-color: #f8d463;width: 200px;" align="center">規格</td>-->
 					<td style="background-color: #f8d463;width: 100px;" align="center">寄庫倉庫</td>
 					<td style="background-color: #f8d463;width: 100px;" align="center">寄庫數量</td>
 				</tr>
 				<tr id='store2_close'>
-					<td align="center" colspan='5'>
+					<td align="center" colspan='7'>
+						<input id="btnImport_div_store2" type="button" value="寄庫匯入">
 						<input id="btnClose_div_store2" type="button" value="關閉視窗">
 					</td>
 				</tr>
@@ -1229,8 +1275,8 @@
 					<tr>
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
 						<td align="center" style="width:5%"><a id='vewType'> </a></td>
-						<td align="center" style="width:25%"><a id='vewDatea'> </a></td>
-						<td align="center" style="width:25%"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:20%"><a id='vewDatea'> </a></td>
+						<td align="center" style="width:30%"><a id='vewNoa'> </a></td>
 						<td align="center" style="width:40%"><a id='vewComp'> </a></td>
 					</tr>
 					<tr>
@@ -1243,20 +1289,20 @@
 				</table>
 			</div>
 			<div class='dbbm'>
-				<table class="tbbm"  id="tbbm" style="width: 872px;">
+				<table class="tbbm"  id="tbbm" style="width: 910px;">
 					<tr>
-						<td class="td1" style="width: 108px;"><span> </span><a id='lblType' class="lbl"> </a></td>
-						<td class="td2" style="width: 108px;"><select id="cmbTypea"> </select></td>
+						<td class="td1" style="width: 90px;"><span> </span><a id='lblType' class="lbl"> </a></td>
+						<td class="td2" style="width: 116px;"><select id="cmbTypea"> </select></td>
 						<td class="td3" style="width: 108px;">
 							<a id='lblStype' class="lbl" style="float: left;"> </a>
 							<span style="float: left;"> </span>
 							<select id="cmbStype"> </select>
 						</td>
-						<td class="td4" style="width: 108px;"><span> </span><a id='lblDatea' class="lbl"> </a></td>
-						<td class="td5" style="width: 108px;"><input id="txtDatea" type="text"  class="txt c1"/></td>
-						<td class="td6" style="width: 108px;"> </td>
-						<td class="td7" style="width: 108px;"><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td class="td8" style="width: 108px;"><input id="txtNoa" type="text" class="txt c1" /></td>
+						<td class="td4" style="width: 90px;"><span> </span><a id='lblDatea' class="lbl"> </a></td>
+						<td class="td5" style="width: 100px;"><input id="txtDatea" type="text"  class="txt c1"/></td>
+						<td class="td6" style="width: 116px;"> </td>
+						<td class="td7" style="width: 100px;"><span> </span><a id='lblNoa' class="lbl"> </a></td>
+						<td class="td8" style="width: 144px;"><input id="txtNoa" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
@@ -1285,8 +1331,11 @@
 						<td class="td4"><span> </span><a id='lblPay' class="lbl"> </a></td>
 						<td class="td5"><input id="txtPaytype" type="text" class="txt c1"/></td>
 						<td class="td6"><select id="combPay" style="width: 100%;" onchange='combPay_chg()'> </select></td>
-						<td class="td6"align="right"><input id="btnOrdes" type="button"/></td>
-						<td class="td7"align="right"><input id="btnStore2" type="button" value="寄庫顯示"/></td>
+						<td class="td6" colspan="2">
+							<input id="btnOrdes" type="button"/>
+							<input id="btnStore2" type="button" value="寄庫顯示"/>
+							<input id="btnStore2report" type="button" value="寄庫報表"/>
+						</td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblTel" class="lbl"> </a></td>
