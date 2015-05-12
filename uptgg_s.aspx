@@ -27,6 +27,7 @@
 				q_langShow();
 				bbmMask = [['txtBdate', '9999/99/99'], ['txtEdate', '9999/99/99']];
 				q_mask(bbmMask);
+				q_cmbParse("cmbTypea", '@全部'+q_getPara('uptgg.typea'));
 			}
 			
 			function q_gtPost(t_name) {
@@ -38,12 +39,13 @@
 				t_bdate = $('#txtBdate').val();
 				t_edate = $('#txtEdate').val();
 				t_memo = $('#txtMemo').val();
+				t_typea = $('#cmbTypea').val();
 				t_tggno = $.trim($('#txtTggno').val());
 
 				t_bdate = t_bdate.length > 0 && t_bdate.indexOf("_") > -1 ? t_bdate.substr(0, t_bdate.indexOf("_")) : t_bdate;
 				t_edate = t_edate.length > 0 && t_edate.indexOf("_") > -1 ? t_edate.substr(0, t_edate.indexOf("_")) : t_edate;
 
-				var t_where = " 1=1 " + q_sqlPara2("datea", t_bdate, t_edate)+ q_sqlPara2("tggno", t_tggno) ;
+				var t_where = " 1=1 " + q_sqlPara2("datea", t_bdate, t_edate)+ q_sqlPara2("tggno", t_tggno)+ q_sqlPara2("typea", t_typea) ;
 				
 				if(t_memo.length>0)
 					t_where=t_where+" and charindex('"+t_memo+"',memo)>0 "
@@ -71,6 +73,10 @@
 						<span style="display:inline-block; vertical-align:middle">&sim;</span>
 						<input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
 					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek' style="width:30%;"><a id='lblTypea'> </a></td>
+					<td><select id="cmbTypea" class="txt c1" style="width:215px; font-size:medium;"> </select></td>
 				</tr>
 				<tr class='seek_tr'>
 					<td class='seek' style="width:30%;"><a id='lblTggno'> </a></td>

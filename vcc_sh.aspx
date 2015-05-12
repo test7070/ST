@@ -625,19 +625,20 @@
 					return;
 				}
 				//判斷只要有商品 數量(出貨 寄庫/出) 為0 彈出警告視窗
-				t_err='';
+				/*t_err='';
 				for (var i = 0; i < q_bbsCount; i++) {
-					if(!emp($('#txtProductno_'+i).val()) && q_float('txtWidth_'+i)==0 && q_float('txtTranmoney2_'+i)==0 && q_float('txtTranmoney3_'+i)==0){
+					if(!emp($('#txtProductno_'+i).val()) && q_float('txtMount_'+i)==0 && q_float('txtTranmoney2_'+i)==0 && q_float('txtTranmoney3_'+i)==0){
 						t_err=t_err+(t_err.length>0?'\n':'')+$('#txtProduct_'+i).val()+'數量為0，請確認出貨、寄庫、寄出數量!!';
 					}
 				}
+				
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
-				}
+				}*/
 				
 				//104/02/26 判斷寄庫倉編號要與客戶編號相似
-				t_err='';
+				/*t_err='';
 				var t_custno=$('#txtCustno').val().substr(0,$('#txtCustno').val().indexOf('-'));
 				for (var i = 0; i < q_bbsCount; i++) {
 					if(!emp($('#txtProductno_'+i).val()) && !emp($('#txtStoreno2_'+i).val()) && $('#txtStoreno2_'+i).val().indexOf(t_custno)==-1 && (q_float('txtTranmoney2_'+i)!=0 || q_float('txtTranmoney3_'+i)!=0)){
@@ -647,7 +648,7 @@
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
-				}
+				}*/
 				
 				//判斷起算日,寫入帳款月份
 				if(!check_startdate&&emp($('#txtMon').val())){

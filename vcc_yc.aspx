@@ -242,7 +242,7 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo,txtUno', b_ret.length, b_ret, 'productno,product,spec,size,unit,noa,no2,price,mount,memo,uno', 'txtProductno,txtProduct,txtUno');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtMemo,txtUno', b_ret.length, b_ret, 'productno,product,spec,size,unit,noa,no2,price,mount,weight,memo,uno', 'txtProductno,txtProduct,txtUno');
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
