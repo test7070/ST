@@ -13,7 +13,7 @@
         	q_tables = 's';
             var q_name = "upcust";
             var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea'];
-            var q_readonlys = [];
+            var q_readonlys = ['txtFilesname'];
             var bbmNum = [];
             var bbsNum = [];
             var bbmMask = [];
@@ -523,6 +523,7 @@
 						<td style="width:40px;"><a id='lblNo_s'> </a></td>
 						<td style="width:150px;"><a id='lblNamea_s'> </a></td>
 						<td style="width:300px;"><a id='lblFiles_s'> </a></td>
+						<td style="width:150px;"><a id='lblFilesname_s'> </a></td>
 						<td><a id='lblMemo_s'> </a></td>
 					</tr>
 					<tr style='background:#cad3ff;'>
@@ -536,9 +537,9 @@
 							<span style="float: left;"> </span>
 							<input type="file" id="btnFiles.*" class="btnFiles" value="選擇檔案"/>
 							<input id="txtFiles.*"  type="hidden"/>
-							<input id="txtFilesname.*"  type="hidden"/>
 							<a id="lblFiles.*" class='lblDownload lbl btn'> </a>
 						</td>
+						<td><input type="text" id="txtFilesname.*" class="txt c1" /></td>
 						<td><input type="text" id="txtMemo.*" class="txt c1" /></td>
 					</tr>
 				</table>
