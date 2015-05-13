@@ -564,12 +564,10 @@
 					alert(q_getMsg('lblMon') + '錯誤。');
 					return;
 				}
-				
-				if (emp($('#txtMon').val()))
-					$('#txtMon').val($('#txtDatea').val().substr(0, 6));*/
+				*/
 					
 				//檢查是否有超交	
-				if(!check_ordc_overrate){
+				/*if(!check_ordc_overrate){
 					var t_where ='';
 					for (var i = 0; i < q_bbsCount; i++) {
 						if (!emp($('#txtOrdeno_'+i).val()) && t_where.indexOf($('#txtOrdeno_'+i).val())==-1){
@@ -581,7 +579,7 @@
 						q_gt('view_ordc', t_where, 0, 0, 0, "ordc_overrate",'');
 						return;
 					}
-				}
+				}*/
 				
 				//判斷起算日,寫入帳款月份
 				if(!check_startdate&&emp($('#txtMon').val())){
@@ -706,15 +704,24 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				Lock(1, {
+				//104/05/13測試中暫時不判斷是否付款
+				/*Lock(1, {
 					opacity : 0
 				});
+				var t_where = " where=^^ rc2no='" + $('#txtNoa').val() + "'^^";
+				q_gt('pays', t_where, 0, 0, 0, 'btnModi', r_accy);*/
+				
 				//取得車號下拉式選單
 				var thisVal = $('#txtCardealno').val();
 				var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
 				q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
-				var t_where = " where=^^ rc2no='" + $('#txtNoa').val() + "'^^";
-				q_gt('pays', t_where, 0, 0, 0, 'btnModi', r_accy);
+				
+				_btnModi();
+				$('#txtDatea').focus();
+				if (!emp($('#txtTggno').val())) {
+					var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
+					q_gt('custaddr', t_where, 0, 0, 0, "");
+				}
 			}
 
 			function btnPrint() {
@@ -857,11 +864,13 @@
 			}
 
 			function btnDele() {
-				Lock(1, {
+				//104/05/13測試中暫時不判斷是否付款
+				/*Lock(1, {
 					opacity : 0
 				});
 				var t_where = " where=^^ rc2no='" + $('#txtNoa').val() + "'^^";
-				q_gt('pays', t_where, 0, 0, 0, 'btnDele', r_accy);
+				q_gt('pays', t_where, 0, 0, 0, 'btnDele', r_accy);*/
+				_btnDele();
 			}
 
 			function btnCancel() {

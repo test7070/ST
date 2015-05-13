@@ -48,8 +48,11 @@
 				//q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
 				q_gt('sss', "where=^^noa='"+r_userno+"'^^", 0, 0, 0, "sssissales");
+				//104/05/13取得預設倉庫
+				q_gt('store', "where=^^noa='1'^^", 0, 0, 0, "d4store");
 			});
-
+			var d4storeno='',d4store='';
+			
 			function main() {
 				if (dataErr) {
 					dataErr = false;
@@ -329,6 +332,12 @@
 			function q_gtPost(t_name) {
 				var as;
 				switch (t_name) {
+					case 'd4store':
+						var as = _q_appendData("store", "", true);
+	                        if (as[0] != undefined) {
+								d4storeno=as[0].noa,d4store=as[0].store;
+							}
+						break;
 					case 'sssissales':
 						var as = _q_appendData("sss", "", true);
 	                        if (as[0] != undefined) {
@@ -624,9 +633,17 @@
 					alert(t_err);
 					return;
 				}
+				//帶入預設倉庫
+				for (var i = 0; i < q_bbsCount; i++) {
+					if(emp($('#txtStoreno_'+i).val())){
+						$('#txtStoreno_'+i).val(d4storeno);
+						$('#txtStore_'+i).val(d4store);
+					}
+				}
+				
 				//判斷只要有商品 數量(出貨 寄庫/出) 為0 彈出警告視窗
 				/*t_err='';
-				for (var i = 0; i < q_bbsCount; i++) {
+				
 					if(!emp($('#txtProductno_'+i).val()) && q_float('txtMount_'+i)==0 && q_float('txtTranmoney2_'+i)==0 && q_float('txtTranmoney3_'+i)==0){
 						t_err=t_err+(t_err.length>0?'\n':'')+$('#txtProduct_'+i).val()+'數量為0，請確認出貨、寄庫、寄出數量!!';
 					}
@@ -900,12 +917,22 @@
 				if (emp($('#txtNoa').val()))
 					return;
 				$('#div_store2').hide();
-				Lock(1, {
+				
+				//104/05/13測試中暫時不判斷是否收款
+				/*Lock(1, {
 					opacity : 0
 				});
 				$('#txtCustno').focus();
 				var t_where = " where=^^ vccno='" + $('#txtNoa').val() + "'^^";
 				q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
+				*/
+				
+				_btnModi();
+				$('#txtDatea').focus();
+				if (!emp($('#txtCustno').val())) {
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+					q_gt('custaddr', t_where, 0, 0, 0, "");
+				}
 			}
 
 			function btnPrint() {
@@ -1062,13 +1089,14 @@
 			}
 
 			function btnDele() {
-				if (q_chkClose())
-					return;
-				Lock(1, {
+				//104/05/13測試中暫時不判斷是否收款
+				/*Lock(1, {
 					opacity : 0
 				});
 				var t_where = " where=^^ vccno='" + $('#txtNoa').val() + "'^^";
-				q_gt('umms', t_where, 0, 0, 0, 'btnDele', r_accy);
+				q_gt('umms', t_where, 0, 0, 0, 'btnDele', r_accy);*/
+				
+				_btnDele();
 			}
 
 			function btnCancel() {
