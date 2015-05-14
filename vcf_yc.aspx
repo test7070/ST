@@ -41,7 +41,8 @@
             , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtLengthb_', "ucc_b.aspx?" ]
             , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product,unit', 'txtProductno__,txtProduct__,txtUnit__', "ucc_b.aspx?" ]
             , ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', "store_b.aspx?" ]
-            , ['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__,txtStore__', "store_b.aspx?" ]);
+            , ['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__,txtStore__', "store_b.aspx?" ]
+            , ['txtCustno_', 'btnCust_', 'cust', 'noa,nick', 'txtCustno_,txtComp_', 'cust_b.aspx']);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -562,7 +563,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 1300px;
+                width: 1550px;
             }
             .tbbs a {
                 font-size: medium;
@@ -717,6 +718,8 @@
                 <tr style='color:white; background:#003366;' >
                     <td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
                     <td align="center" style="width:20px;"> </td>
+                    <td style="width:100px; text-align: center;">客戶編號</td>
+                    <td style="width:150px; text-align: center;">客戶名稱</td>
                     <td style="width:100px; text-align: center;">物品編號</td>
                     <td style="width:300px; text-align: center;">物品名稱</td>
                     <td style="width:40px; text-align: center;">單位</td>
@@ -734,6 +737,11 @@
 	                    <input id="txtNoq.*" type="text" style="display: none;" />
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+                    <td>
+                    	<input id="btnCust.*" type="button" value="."/>
+                    	<input id="txtCustno.*" type="text" style="float:left;width:73%;"/>
+                	</td>
+                	<td><input id="txtComp.*" type="text" style="float:left;width:95%;"/></td>
                     <td>
                     	<input id="btnProduct.*" type="button" value="."/>
                     	<input id="txtProductno.*" type="text" style="float:left;width:73%;"/>

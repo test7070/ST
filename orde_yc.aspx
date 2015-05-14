@@ -1208,10 +1208,10 @@
 					<td align="center" style="width:85px;"><a id='lblWeights'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblTotal_s'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblGemounts'> </a></td>
 					<td align="center" style="width:175px;"><a id='lblMemos'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblDateas'> </a></td>
-					<td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblEndas'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblCancels'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
@@ -1241,6 +1241,7 @@
 					<td><input class="txt num c7" id="txtWeight.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtTotal.*" type="text" /></td>
+					<td align="center"><input id="chkCut.*" type="checkbox"/></td>
 					<td>
 						<input class="txt num c1" id="txtC1.*" type="text" />
 						<input class="txt num c1" id="txtNotv.*" type="text" />
@@ -1252,7 +1253,6 @@
 						<input id="recno.*" type="hidden" />
 					</td>
 					<td><input class="txt c7" id="txtDatea.*" type="text" /></td>
-					<td align="center"><input id="chkCut.*" type="checkbox"/></td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 					<td align="center"><input id="chkCancel.*" type="checkbox"/></td>
 					<td align="center"><input class="btn" id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" /></td>

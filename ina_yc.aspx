@@ -32,7 +32,8 @@
 				['txtStationno', 'lblStation', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'],
 				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
 				['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx']
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx'],
+				['txtSssno_', 'btnCust_', 'cust', 'noa,nick', 'txtSssno_,txtNamea_', 'cust_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -157,9 +158,9 @@
 					return;
 				_btnModi();
 				//取得車號下拉式選單
-				var thisVal = $('#txtCardealno').val();
+				/*var thisVal = $('#txtCardealno').val();
 				var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
-				q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
+				q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");*/
 				$('#txtProduct').focus();
 			}
 
@@ -469,9 +470,9 @@
 		<div class='dbbs' style="width: 1260px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
-					<td align="center" style="width:1%;">
-						<input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" />
-					</td>
+					<td align="center" style="width:1%;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
+					<td align="center" style="width:100px;"><a id='lblSssno_s'>客戶編號</a></td>
+					<td align="center" style="width:150px;"><a id='lblNamea_s'>客戶名稱</a></td>
 					<td align="center" style="width:100px;"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblProduct_s'> </a> <a class="isSpec">/</a> <a id='lblSpec' class="isSpec"> </a></td>
 					<td align="center" style="width:8%;" class="isStyle"><a id='lblStyles'> </a></td>
@@ -484,6 +485,11 @@
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
+					<td>
+						<input id="txtSssno.*" type="text" style="width:70%;" />
+						<input class="btn" id="btnCust.*" type="button" value='.' style="width:1%;" />
+					</td>
+					<td><input class="txt c1" id="txtNamea.*" type="text" /></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:70%;" />
 						<input class="btn" id="btnProductno.*" type="button" value='.' style="width:1%;" />
