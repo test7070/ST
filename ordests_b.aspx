@@ -192,8 +192,12 @@
 			function size_change() {
 				var w = window.parent;
                 var t_kind = ((w.$('#cmbKind').val())?w.$('#cmbKind').val():'');
-                t_kind = t_kind.substr(0, 1);				
-				if (t_kind == 'A') {
+                t_kind = t_kind.substr(0, 1);	
+                if(q_db=="st4")	{
+                	$('.price').hide();	
+                }
+                	
+				if (t_kind == 'A' || t_kind.length==0) {
 					$('*[id="sizeTd"]').css('width','208px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -284,7 +288,7 @@
 					<td align="center" style="width:6%;"><a id='lblSpec'></a></td>
 					<td align="center" style="width:6%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:8%;"><a id='lblWeight'></a></td>
-					<td align="center" style="width:8%;"><a id='lblPrice'></a></td>
+					<td align="center" style="width:8%;" class="price"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblNotv'></a></td>
 					<td align="center" style="width:11%;"><a id='lblNoa'></a></td>
 					<td align="center" style="width:8%;"><a id='lblCust'></a></td>
@@ -304,7 +308,7 @@
 					<td align="center"><a id='lblSpec'></a></td>
 					<td align="center"><a id='lblMount'></a></td>
 					<td align="center"><a id='lblWeight'></a></td>
-					<td align="center"><a id='lblPrice'></a></td>
+					<td align="center" class="price"><a id='lblPrice'></a></td>
 					<td align="center"><a id='lblNotv'></a></td>
 					<td align="center"><a id='lblNoa'></a></td>
 					<td align="center"><a id='lblCust'></a></td>
@@ -351,7 +355,7 @@
 					<td style="width:8%;">
 						<input class="txt" id="txtWeight.*" type="text" style="width:96%; text-align:right;"/>
 					</td>
-					<td style="width:8%;">
+					<td style="width:8%;"  class="price">
 						<input class="txt" id="txtPrice.*" type="text" style="width:96%; text-align:right;"/>
 					</td>
 					<td style="width:8%;">
