@@ -193,9 +193,9 @@
 				var w = window.parent;
                 var t_kind = ((w.$('#cmbKind').val())?w.$('#cmbKind').val():'');
                 t_kind = t_kind.substr(0, 1);	
-                if(q_db=="st4")	{
+                /*if(q_db=="st4")	{
                 	$('.price').hide();	
-                }
+                }*/
                 	
 				if (t_kind == 'A' || t_kind.length==0) {
 					$('*[id="sizeTd"]').css('width','208px');
