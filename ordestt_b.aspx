@@ -9,7 +9,7 @@
 		<script src="../script/qbox.js" type="text/javascript"></script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-			var q_name = 'view_ordes', t_bbsTag = 'tbbs', t_content = " field=accy,noa,no2,productno,product,sizea,unit,price,weight,memo,mount,total,datea,cancel,type,custno,indate,enda,odate,spec,no3,quatno,size,dime,width,lengthb,c1,notv,style,uno,source,classa,sale,slit,cut,theory,apv,radius,gweight,class,comp,cust,mechno,mech,tdmount,kind,amemo,acoin,afloata", afilter = [], bbsKey = ['noa'], as;
+			var q_name = 'view_ordes', t_bbsTag = 'tbbs', t_content = " field=accy,noa,no2,productno,product,sizea,unit,weight,memo,mount,total,datea,cancel,type,custno,indate,enda,odate,spec,no3,quatno,size,dime,width,lengthb,c1,notv,style,uno,source,classa,sale,slit,cut,theory,apv,radius,gweight,class,comp,cust,mechno,mech,tdmount,kind,amemo,acoin,afloata", afilter = [], bbsKey = ['noa'], as;
 			//, t_where = '';
 			var t_sqlname = 'ordests_load';
 			t_postname = q_name;
@@ -193,10 +193,7 @@
 				var w = window.parent;
                 var t_kind = ((w.$('#cmbKind').val())?w.$('#cmbKind').val():'');
                 t_kind = t_kind.substr(0, 1);	
-                /*if(q_db=="st4")	{
-                	$('.price').hide();	
-                }*/
-                	
+
 				if (t_kind == 'A' || t_kind.length==0) {
 					$('*[id="sizeTd"]').css('width','208px');
 					for (var j = 0; j < q_bbsCount; j++) {
@@ -288,7 +285,6 @@
 					<td align="center" style="width:6%;"><a id='lblSpec'></a></td>
 					<td align="center" style="width:6%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:8%;"><a id='lblWeight'></a></td>
-					<td align="center" style="width:8%;" class="price"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblNotv'></a></td>
 					<td align="center" style="width:11%;"><a id='lblNoa'></a></td>
 					<td align="center" style="width:8%;"><a id='lblCust'></a></td>
@@ -308,7 +304,6 @@
 					<td align="center"><a id='lblSpec'></a></td>
 					<td align="center"><a id='lblMount'></a></td>
 					<td align="center"><a id='lblWeight'></a></td>
-					<td align="center" class="price"><a id='lblPrice'></a></td>
 					<td align="center"><a id='lblNotv'></a></td>
 					<td align="center"><a id='lblNoa'></a></td>
 					<td align="center"><a id='lblCust'></a></td>
@@ -354,9 +349,6 @@
 					</td>
 					<td style="width:8%;">
 						<input class="txt" id="txtWeight.*" type="text" style="width:96%; text-align:right;"/>
-					</td>
-					<td style="width:8%;"  class="price">
-						<input class="txt" id="txtPrice.*" type="text" style="width:96%; text-align:right;"/>
 					</td>
 					<td style="width:8%;">
 						<input class="txt" id="txtNotv.*" type="text" style="width:96%; text-align:right;"/>
