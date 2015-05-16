@@ -86,11 +86,11 @@
 
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd]];//,['txtGtime', '99:99']
+				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd],['txtDatea', r_picd]];//,['txtGtime', '99:99']
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
-				//q_cmbParse("cmbStype", q_getPara('orde.stype'));
+				q_cmbParse("cmbStype", q_getPara('orde.stype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
@@ -570,8 +570,7 @@
 				}
 				
 				for(var k=0;k<q_bbsCount;k++){
-					if(emp($('#txtDatea_'+k).val()))
-						$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),1))
+					$('#txtDatea_'+k).val($('#txtDatea').val())
 				}
 				
 				//1030419 當專案沒有勾 BBM的取消和結案被打勾BBS也要寫入
@@ -1227,10 +1226,9 @@
 					<tr class="tr1">
 						<td class="td1"><span> </span><a id='lblOdate' class="lbl"> </a></td>
 						<td class="td2"><input id="txtOdate" type="text" class="txt c1"/></td>
-						<!--<td class="td3"><span> </span><a id='lblStype' class="lbl"> </a></td>
-						<td class="td4"><select id="cmbStype" class="txt c1"> </select></td>-->
 						<td> </td>
-						<td> </td>
+						<td class="td3"><span> </span><a id='lblStype' class="lbl"> </a></td>
+						<td class="td4"><select id="cmbStype" class="txt c1"> </select></td>
 						<td> </td>
 						<td> </td>
 						<td class="td5"><span> </span><a id='lblNoa' class="lbl"> </a></td>
@@ -1283,6 +1281,8 @@
 							<input id="txtMemo2" type="hidden" class="txt c1"/>
 						</td>
 						<td class="td7"><input id="btnAddr2" type="button" value='...' style="width: 30px;height: 21px" /></td>
+						<td class="td1"><span> </span><a class="lbl">預交日</a></td>
+						<td class="td2"><input id="txtDatea" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr7">
 						<td class="td1"><span> </span><a id='lblTrantype' class="lbl"> </a></td>

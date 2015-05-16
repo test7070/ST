@@ -86,7 +86,7 @@
 				$('#txtTax').val(FormatNumber(t_tax));
 				$('#txtTotal').val(FormatNumber(t_total));
 				*/
-				caltax();
+				calTax();
 				//q_tr('txtTotalus', round(q_mul(q_float('txtMoney'), q_float('txtFloata')),2));
 			}
 
@@ -99,7 +99,7 @@
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]];
 				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
-				//q_cmbParse("cmbStype", q_getPara('vcc.stype'));
+				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
 				q_cmbParse("combPay", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
@@ -156,14 +156,22 @@
 				
 				$('#btnOrdes').click(function() {
 					var t_custno = trim($('#txtCustno').val());
+					var t_storeno = trim($('#txtStoreno').val());
 					var t_where = '';
-					if (t_custno.length > 0) {
-						t_where = "isnull(notv,0)>0  && isnull(enda,0)!=1 && isnull(cancel,0)!=1 &&" + (t_custno.length > 0 ? q_sqlPara("custno", t_custno) : "");
+					if (t_custno.length > 0 || t_storeno.length>0 ) {
+						t_where = "isnull(notv,0)>0  and isnull(enda,0)!=1 and isnull(cancel,0)!=1 ";
+						if (t_custno.length>0){
+							t_where += " and custno='"+t_custno+ "' ";
+						}
+						if (t_storeno.length>0){
+							t_where += " and exists (select * from view_orde where view_ordes"+r_accy+".noa=noa and postname='"+t_storeno+"' and isnull(enda,0)!=1 and isnull(cancel,0)!=1 ) ";
+						}
+						
 						if (!emp($('#txtOrdeno').val()))
-							t_where += " && charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
+							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
 						t_where = t_where;
 					} else {
-						alert(q_getMsg('msgCustEmp'));
+						alert('【客戶編號】 或 【倉庫編號】 空白');
 						return;
 					}
 					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
@@ -594,6 +602,7 @@
 							//$('#txtFloata').val(as[0].floata);
 							$('#txtZipcode').val(as[0].gdate);
 							$('#cmbZipname').val(as[0].gtime);
+							$('#cmbStype').val(as[0].stype);
 						}
 						sum();
 						break;
@@ -1270,13 +1279,12 @@
 				<table class="tbbm"  id="tbbm" style="width: 872px;">
 					<tr>
 						<td class="td1" style="width: 108px;"><span> </span><a id='lblType' class="lbl"> </a></td>
-						<td class="td2" style="width: 108px;"><select id="cmbTypea"> </select></td>
-						<!--<td class="td3" style="width: 108px;">
-							<a id='lblStype' class="lbl" style="float: left;"> </a>
-							<span style="float: left;"> </span>
-							<select id="cmbStype"> </select>
-						</td>-->
-						<td> </td>
+						<td class="td2" style="width: 108px;">
+							<select id="cmbTypea"> </select>
+							<span style="float: right;"> </span>
+							<a id='lblStype' class="lbl" style="float: right;"> </a>
+						</td>
+						<td class="td3" style="width: 108px;"><select id="cmbStype"> </select></td>
 						<td class="td4" style="width: 108px;"><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td class="td5" style="width: 108px;"><input id="txtDatea" type="text"  class="txt c1"/></td>
 						<td class="td6" style="width: 108px;"> </td>
