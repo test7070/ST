@@ -155,10 +155,22 @@
 				});
 				
 				$('#btnOrdes').click(function() {
+					var t_datea = trim($('#txtDatea').val());
 					var t_custno = trim($('#txtCustno').val());
 					var t_storeno = trim($('#txtStoreno').val());
-					var t_where = '';
-					if (t_custno.length > 0 || t_storeno.length>0 ) {
+					var t_where = "";
+					//0518 抓表頭 且全部出來
+					t_where = "isnull(enda,0)!=1 and isnull(cancel,0)!=1 ";
+					if (t_custno.length>0){
+						t_where += " and custno='"+t_custno+ "' ";
+					}
+					if (t_storeno.length>0){
+						t_where += " and  postname='"+t_storeno+"' ";
+					}
+					
+					q_box("orde_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'orde', "95%", "650px", q_getMsg('popOrde'));
+					
+					/*if (t_custno.length > 0 || t_storeno.length>0 ) {
 						t_where = "isnull(notv,0)>0  and isnull(enda,0)!=1 and isnull(cancel,0)!=1 ";
 						if (t_custno.length>0){
 							t_where += " and custno='"+t_custno+ "' ";
@@ -174,7 +186,7 @@
 						alert('【客戶編號】 或 【倉庫編號】 空白');
 						return;
 					}
-					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
+					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));*/
 				});
 
 				$('#lblOrdeno').click(function() {
@@ -308,17 +320,34 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'orde':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0)
+								return;
+							
+							//寫入訂單號碼
+							var t_oredeno = '';
+							for (var i = 0; i < b_ret.length; i++) {
+								if (t_oredeno.indexOf(b_ret[i].noa) == -1)
+									t_oredeno = t_oredeno + (t_oredeno.length > 0 ? (',' + b_ret[i].noa) : b_ret[i].noa);
+							}
+							//取得訂單備註 + 指定地址
+							if (t_oredeno.length > 0) {
+								var t_where = "where=^^ charindex(noa,'" + t_oredeno + "')>0 ^^";
+								q_gt('orde', t_where, 0, 0, 0, "", r_accy);
+							}
+							$('#txtOrdeno').val(t_oredeno);
+						}
+						break;
 					case 'ordes':
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
 							
-							if (q_getPara('sys.project').toUpperCase()=='RB'){
-								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
-							}else{
-								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,mount,memo', 'txtProductno,txtProduct,txtSpec');
-							}
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
+							
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
@@ -570,6 +599,7 @@
 						break;
 					case 'orde':
 						var as = _q_appendData("orde", "", true);
+						var ass = _q_appendData("ordes", "", true);
 						var t_memo = $('#txtMemo').val();
 						var t_post = '';
 						var t_addr = '';
@@ -604,6 +634,8 @@
 							$('#cmbZipname').val(as[0].gtime);
 							$('#cmbStype').val(as[0].stype);
 						}
+						//寫入bbs
+						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', ass.length, ass, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
 						sum();
 						break;
 					case 'cust':
