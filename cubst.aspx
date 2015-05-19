@@ -82,6 +82,12 @@
 					t_where += ' and (cut=1)';
 					q_box("ordestt_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 				});
+				$('#btnCubu').click(function() {
+					if (q_cur == 0 || q_cur==4) {
+						var t_where = "noa='" + trim($('#txtNoa').val()) + "'";
+						q_box("cubu_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";"+r_accy, 'cubu', "95%", "95%", q_getMsg('popCubu'));
+					}
+				});
 			}
 
 			function q_gtPost(t_name) {
@@ -595,7 +601,7 @@
 							<span style="float:left; display:block; width:20px;"><a> ～ </a></span>
 							<input id="txtEdime" type="text" style="width:45%;" class="num"/>
 						</td>
-						<td><input type="button" id="btnOrdeImport" /></td>
+						<td><input type="button" id="btnOrdeImport" style="width:120px;"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblIdime" class="lbl" ></a></td>
@@ -604,6 +610,7 @@
 						<td><input id="txtOdime" type="text" class="txt c1 num"/></td>
 						<td></td>
 						<td></td>
+						<td><input type="button" id="btnCubu" style="width:120px;"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWaste" class="lbl" ></a></td>

@@ -489,79 +489,23 @@
 					<td style="width:20px;">
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
-					<td align="center" style="width: 5%;"><a id='lblDatea_s'></a></td>
-					<td align="center" style="width: 6%;"><a id='lblUno_s'></a></td>
-					<td align="center" style="width: 5%;"><a id='lblUdate_s'></a></td>
-					<td align="center" style="width: 5%;"><a id='lblDate2_s'></a></td>
-					<td align="center" style="width: 10%;"><a id='lblOrdeno_s'></a></td>
-					<td align="center" style="width: 9%;"><a id='lblMechno_s'></a></td>
-					<td align="center" style="width: 9%;"><a id='lblCustno_s'></a></td>
-					<td align="center" style="width: 9%;"><a id='lblProductno_s'></a></td>
-					<td align="center" style="width: 6%;"><a id='lblRadius_s'></a></td>
-					<td align="center" style="width: 6%;"><a id='lblWidth_s'></a></td>
-					<td align="center" style="width: 6%;"><a id='lblDime_s'></a></td>
-					<td align="center" style="width: 6%;"><a id='lblLengthb_s'></a></td>
-					<td align="center" style="width: 6%;"><a id='lblHours_s'></a></td>
-					<td align="center" style="width: 6%;"><a id='lblMount_s'></a></td>
-					<td align="center" style="width: 6%;"><a id='lblWeight_s'></a></td>
+					<td style="width:20px;"></td>
+					<td style="width:200px;" colspan="2">生產指示單號<BR>製造批號</td>
+					<td style="width:120px;">皮膜<BR>編號</td>
+					
 				</tr>
-				<tr  style='background:#cad3ff;'>
+				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 						<input id="txtNoq.*" type="text" style="display: none;"/>
 					</td>
+					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-					<input class="txt c1" id="txtDatea.*" type="text"/>
+						<input id="txtOrdeno.*" type="text" class="txt c1" style="display:none;"/>
+						<input id="txtComp.*" type="text" class="txt c1"/>
 					</td>
-					<td>
-					<input class="txt c1" id="txtUno.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt c1" id="txtUdate.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt c1" id="txtDate2.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt" id="txtOrdeno.*" type="text" style="width:65%;" />
-					<input class="txt" id="txtNo2.*" type="text" style="width:25%;"/>
-					</td>
-					<td>
-					<input class="txt" id="txtMechno.*" type="text" style="width:75%;" />
-					<input class="btn" id="btnMechno.*" type="button" value="."/>
-					<input class="txt c1" id="txtMech.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt" id="txtCustno.*" type="text" style="width:75%;" />
-					<input class="btn" id="btnCustno.*" type="button" value="."/>
-					<input class="txt c1" id="txtCust.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt" id="txtProductno.*" type="text" style="width:75%;" />
-					<input class="btn" id="btnProductno.*" type="button" value="."/>
-					<input class="txt c1" id="txtProduct.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt c1 num" id="txtRadius.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt c1 num" id="txtWidth.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt c1 num" id="txtDime.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt c1 num" id="txtLengthb.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt c1 num" id="txtHours.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt c1 num" id="txtMount.*" type="text"/>
-					</td>
-					<td>
-					<input class="txt c1 num" id="txtWeight.*" type="text"/>
-					</td>
+					<td><input id="txtProductno.*" type="text" class="txt c1"/></td>
+					
 				</tr>
 			</table>
 		</div>
