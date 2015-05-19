@@ -64,6 +64,7 @@
 			function sum() {
 				if(q_cur>2 || q_cur<1)
 					return;
+				
 				var t1 = 0, t_unit, t_mount, t_weight = 0;
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
@@ -77,6 +78,8 @@
 				}
 				$('#txtMoney').val(round(t1, 0));
 				calTax();
+				//計算折扣
+				$('#txtTotal').val(FormatNumber(q_sub(q_float('txtTotal'),q_float('txtDiscount'))));
 			}
 
 			function mainPost() {
@@ -203,6 +206,7 @@
 					//重新計算折扣後的金額
 					sum();
 				});
+				
 				$('#txtDiscount').change(function(){
 					sum();
 				});
@@ -242,7 +246,7 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtMemo,txtUno', b_ret.length, b_ret, 'productno,product,spec,size,unit,noa,no2,price,mount,weight,memo,uno', 'txtProductno,txtProduct,txtUno');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtUnit,txtLengthc,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtMemo,txtUno', b_ret.length, b_ret, 'productno,product,spec,size,unit,lengthc,noa,no2,price,mount,weight,memo,uno', 'txtProductno,txtProduct,txtUno');
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
@@ -479,6 +483,10 @@
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
 							$('#cmbTaxtype').val(as[0].taxtype);
+							$('#cmbTrantype').val(as[0].trantype);
+							$('#txtPaytype').val(as[0].paytype);
+							$('#txtPrice').val(as[0].price);
+							$('#txtDiscount').val(as[0].weight);
 						}
 						sum();
 						break;
@@ -1010,7 +1018,7 @@
 				
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(q_sub(t_total,q_float('txtDiscount'))));
+				$('#txtTotal').val(FormatNumber(t_total));
 			}
 		</script>
 		<style type="text/css">

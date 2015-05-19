@@ -33,6 +33,7 @@
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 q_brwCount();
+                q_content="where=^^1=1^^";
                 q_gt(q_name, q_content, q_sqlCount, 1)
             });
             
@@ -321,7 +322,7 @@
             }
             .dview {
                 float: left;
-                width: 390px;
+                width: 490px;
                 border-width: 0px;
             }
             .tview {
@@ -443,6 +444,7 @@
 						<td align="center" style="width:120px; color:black;"><a id='vewComp'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewMoney'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewDiscount'> </a></td>
+						<td align="center" style="width:100px; color:black;"><a id='vewBalancet'> </a></td>
 					</tr>
 					<tr>
 						<td >
@@ -452,6 +454,7 @@
 						<td id="nick" style="text-align: center;">~nick</td>
 						<td id="money,0,1" style="text-align: right;">~money,0,1</td>
 						<td id="discount,0,1" style="text-align: right;">~discount,0,1</td>
+						<td id="balance,0,1" style="text-align: right;">~balance,0,1</td>
 					</tr>
 				</table>
 			</div>

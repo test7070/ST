@@ -168,7 +168,7 @@
 						t_where += " and  postname='"+t_storeno+"' ";
 					}
 					
-					q_box("orde_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'orde', "95%", "650px", q_getMsg('popOrde'));
+					q_box("orde_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'orde', "95%", "350px", q_getMsg('popOrde'));
 					
 					/*if (t_custno.length > 0 || t_storeno.length>0 ) {
 						t_where = "isnull(notv,0)>0  and isnull(enda,0)!=1 and isnull(cancel,0)!=1 ";
