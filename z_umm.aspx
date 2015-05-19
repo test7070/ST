@@ -43,6 +43,10 @@
 							$('#Paytype').hide();
 						}
 					}
+					if($('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm10'){
+						if(q_getPara('sys.project').toUpperCase()!='YC')
+							$('#Xcno').hide();
+					}
 					
 					if(q_getPara('sys.isAcccUs')!='1')
 						$('#Xcoin').hide();

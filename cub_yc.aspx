@@ -20,7 +20,7 @@
             }
             q_desc=1;
             q_tables = 't';
-            var q_name = "vcf";
+            var q_name = "cub";
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney','txtTax','txtTotal','txtImount','txtIweight','txtOmount','txtOweight'];
             var q_readonlys = ['txtOrdeno','txtNo2'];
             var q_readonlyt = [];
@@ -37,7 +37,7 @@
             brwKey = 'Datea';
             brwCount2 = 8;
 
-            aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax', 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'Tgg_b.aspx']
+            aPop = new Array(['txtTggno', 'lblTgg', 'sss', 'noa,namea', 'txtTggno,txtTgg', 'sss_b.aspx']
             , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtLengthb_', "ucc_b.aspx?" ]
             , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product,unit', 'txtProductno__,txtProduct__,txtUnit__', "ucc_b.aspx?" ]
             , ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', "store_b.aspx?" ]
@@ -72,7 +72,9 @@
                 q_mask(bbmMask);
                 
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-                document.title='委外加工單'
+                document.title='委外加工單';
+                $('#vewTgg').text('員工');
+                $('#lblTgg').text('員工');
                 
                 $('#cmbTaxtype').change(function() {
                 	sum();
@@ -158,7 +160,7 @@
                 var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtDatea').val());
                 if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcf') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cub') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
                 else
                     wrServer(t_noa);
             }
@@ -166,7 +168,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('vcf_yc_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
+                q_box('cub_yc_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
             }
 
             function bbsAssign() {
@@ -273,7 +275,7 @@
             }
 
             function btnPrint() {
-                q_box("z_vcfp_yc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'vcf', "95%", "95%", m_print);
+                q_box("z_cubp_yc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cub', "95%", "95%", m_print);
             }
 
             function wrServer(key_value) {
@@ -617,15 +619,15 @@
                 <table class="tview" id="tview">
                     <tr>
                         <td align="center" style="width:30px; color:black;"><a id='vewChk'> </a></td>
-                        <td align="center" style="width:100px; color:black;"><a id='vewDatea'></a></td>
-                        <td align="center" style="width:170px; color:black;"><a id='vewNick'></a></td>
+                        <td align="center" style="width:100px; color:black;"><a id='vewDatea'> </a></td>
+                        <td align="center" style="width:170px; color:black;"><a id='vewTgg'> </a></td>
                     </tr>
                     <tr>
                         <td>
                         <input id="chkBrow.*" type="checkbox" style=''/>
                         </td>
                         <td align="center" id='datea'>~datea</td>
-                        <td id='nick' style="text-align: right;" >~nick</td>
+                        <td id='tgg' style="text-align: right;" >~tgg</td>
                     </tr>
                 </table>
             </div>
@@ -666,17 +668,16 @@
                         <td colspan="2">
                         	<input id="txtTggno"  type="text" class="txt" style="width:45%;"/>
                         	<input id="txtTgg"  type="text" class="txt" style="width:55%;"/>
-                        	<input id="txtNick"  type="text" class="txt" style="display:none;"/>
                     	</td>
                     	<td><span> </span><a id="lblManu" class="lbl" > </a></td>
                         <td colspan="2"><input id="txtManu"type="text" class="txt c1"/></td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                     	<td><span> </span><a id="lblTel" class="lbl" > </a></td>
                         <td colspan="2"><input id="txtTel"type="text" class="txt c1"/></td>
                     	<td><span> </span><a id="lblFax" class="lbl" > </a></td>
                         <td colspan="2"><input id="txtFax"type="text" class="txt c1"/></td>
-                    </tr>
+                    </tr>-->
                     <tr>
                     	<td><span> </span><a id='lblImount' class="lbl"> </a></td>
                         <td><input id="txtImount" type="text" class="txt c1 num" /></td>

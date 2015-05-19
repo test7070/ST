@@ -31,9 +31,9 @@
 			aPop = new Array(
 				['txtStationno', 'lblStation', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'],
 				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
-				['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx'],
-				['txtSssno_', 'btnCust_', 'cust', 'noa,nick', 'txtSssno_,txtNamea_', 'cust_b.aspx']
+				['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'],
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx']
+				//,['txtSssno_', 'btnCust_', 'cust', 'noa,nick', 'txtSssno_,txtNamea_', 'cust_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -437,9 +437,9 @@
 						<td class="td6"><input id="txtOrdeno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr4">
-						<td class='td1'><span> </span><a id="lblTgg" class="lbl btn"> </a></td>
+						<td class='td1'><span> </span><a id="lblCust" class="lbl btn"> </a></td>
 						<td class="td2" colspan="3">
-							<input id="txtTggno" type="text" class="txt c2"/>
+							<input id="txtCustno" type="text" class="txt c2"/>
 							<input id="txtComp" type="text" class="txt c3"/>
 						</td>
 					</tr>
@@ -471,10 +471,10 @@
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
-					<td align="center" style="width:100px;"><a id='lblSssno_s'>客戶編號</a></td>
-					<td align="center" style="width:150px;"><a id='lblNamea_s'>客戶名稱</a></td>
-					<td align="center" style="width:100px;"><a id='lblProductno_s'> </a></td>
-					<td align="center" style="width:250px;"><a id='lblProduct_s'> </a> <a class="isSpec">/</a> <a id='lblSpec' class="isSpec"> </a></td>
+					<!--<td align="center" style="width:100px;"><a id='lblSssno_s'>客戶編號</a></td>
+					<td align="center" style="width:150px;"><a id='lblNamea_s'>客戶名稱</a></td>-->
+					<td align="center" style="width:130px;"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:300px;"><a id='lblProduct_s'> </a> <a class="isSpec">/</a> <a id='lblSpec' class="isSpec"> </a></td>
 					<td align="center" style="width:8%;" class="isStyle"><a id='lblStyles'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblMount_s'> </a></td>
@@ -485,11 +485,11 @@
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
-					<td>
+					<!--<td>
 						<input id="txtSssno.*" type="text" style="width:70%;" />
 						<input class="btn" id="btnCust.*" type="button" value='.' style="width:1%;" />
 					</td>
-					<td><input class="txt c1" id="txtNamea.*" type="text" /></td>
+					<td><input class="txt c1" id="txtNamea.*" type="text" /></td>-->
 					<td>
 						<input id="txtProductno.*" type="text" style="width:70%;" />
 						<input class="btn" id="btnProductno.*" type="button" value='.' style="width:1%;" />
