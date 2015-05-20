@@ -195,7 +195,7 @@
 							$('#btnStore_'+n).click();
 						}).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-							$('#txtDatea__'+n).val(q_date());
+							$('#txtDatea_'+n).val(q_date());
 						});
 						
                         $('#txtMount_'+i).change(function(e){
@@ -215,6 +215,7 @@
                     }
                 }
                 _bbsAssign();
+                HiddenTreat();
             }
             
             function bbtAssign() {
@@ -228,7 +229,7 @@
 							$('#btnProduct__'+n).click();
 						}).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('__').length-1];
-							$('#txtDatea').val(q_date());
+							$('#txtDatea__'+n).val(q_date());
 						});
 						$('#txtStoreno__' + i).bind('contextmenu', function(e) {
 							/*滑鼠右鍵*/
@@ -393,6 +394,7 @@
             ///////////////////////////////////////////////////  以下提供事件程式，有需要時修改
             function refresh(recno) {
                 _refresh(recno);
+                HiddenTreat();
             }
 
             function readonly(t_para, empty) {
@@ -402,6 +404,7 @@
 				} else {
 					$('#btnOrdes').removeAttr('disabled');
 				}	
+				HiddenTreat();
             }
 
             function btnMinus(id) {
@@ -464,6 +467,12 @@
             function btnCancel() {
                 _btnCancel();
             }
+            
+            function HiddenTreat() {
+				if (q_getPara('sys.project').toUpperCase()!='YC'){
+					$('.islengthc').hide();
+				}
+			}
             
         </script>
         <style type="text/css">
@@ -723,7 +732,7 @@
                     <td style="width:100px; text-align: center;">物品編號</td>
                     <td style="width:300px; text-align: center;">物品名稱</td>
                     <td style="width:40px; text-align: center;">單位</td>
-                    <td style="width:80px; text-align: center;"><a>箱數</a></td>
+                    <td style="width:80px; text-align: center;" class="islengthc"><a>箱數</a></td>
                     <td style="width:80px; text-align: center;">入庫數量</td>
                     <td style="width:80px; text-align: center;">入庫重量</td>
                     <td style="width:80px; text-align: center;">加工單價</td>
@@ -748,7 +757,7 @@
                 	</td>
                 	<td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
-                    <td><input id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
+                    <td class="islengthc"><input id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
                     <td><input id="txtMount.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtWeight.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtPrice.*"  type="text" style="width:95%; text-align: right;"/></td>

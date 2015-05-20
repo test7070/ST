@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title></title>
+        <title> </title>
         <script src="../script/jquery.min.js" type="text/javascript"></script>
         <script src='../script/qj2.js' type="text/javascript"></script>
         <script src='qset.js' type="text/javascript"></script>
@@ -20,12 +20,12 @@
 			}
 			$(document).ready(function() {
 				q_getId();
-				q_gf('', 'z_vcfp_yc');
+				q_gf('', 'z_cubp_yc');
 			});
 			
 			function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_vcfp_yc', 
+					fileName : 'z_cubp_yc', 
 					options : [{
 						type : '0', 
 						name : 'xworker', 
@@ -38,10 +38,10 @@
 						name : 'xdate'
 					}, {
 						type : '2', 
-						name : 'xtgg', 
-						dbf : 'tgg', 
-						index : 'noa,comp', 
-						src : 'tgg_b.aspx'
+						name : 'xsss', 
+						dbf : 'sss', 
+						index : 'noa,namea', 
+						src : 'sss_b.aspx'
 					},{
 						type : '0',//[8]
 						name : 'mountprecision',
@@ -99,7 +99,7 @@
 					if($('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_cubp_yc01'){
 						if(emp($('#txtXnoa1').val()) && emp($('#txtXnoa2').val()) 
 						&& emp($('#txtXdate1').val()) && emp($('#txtXdate2').val()) 
-						&& emp($('#txtXtgg1a').val()) && emp($('#txtXtgg2a').val()) ){
+						&& emp($('#txtXsss1a').val()) && emp($('#txtXsss2a').val()) ){
 		    				var t_date, t_year, t_month, t_day;
 		    				t_date = new Date();
 		    				t_date.setDate(1);
@@ -157,10 +157,10 @@
     ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
     ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
     ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
-        <div id="q_menu"></div>
+        <div id="q_menu"> </div>
         <div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
             <div id="container">
-                <div id="q_report"></div>
+                <div id="q_report"> </div>
             </div>
             <div class="prt" style="margin-left: -40px;">
                 <!--#include file="../inc/print_ctrl.inc"-->
