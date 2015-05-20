@@ -57,6 +57,11 @@
                 bbsMask = [];
                 q_mask(bbmMask);
                 q_cmbParse("cmbTypea", '分條作業,十呎裁切,四呎裁切,三呎裁切,二呎裁切');
+                
+                $('#btnOrde').click(function(e){
+                	
+                	
+                });
             }
 
             function q_popPost(s1) {
@@ -240,6 +245,13 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                if (t_para) {
+                    $('#txtDatea').datepicker('destroy');
+                    $('#btnOrde').attr('disabled','disabled');
+                } else {	
+                    $('#txtDatea').datepicker();
+                    $('#btnOrde').removeAttr('disabled');
+                }
             }
 
             function btnMinus(id) {
@@ -320,7 +332,7 @@
             }
             .dbbm {
                 float: left;
-                width: 70%;
+                width: 800px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -507,6 +519,8 @@
 						</td>
 						<td><span> </span><a id="lblTypea" class="lbl"> </a></td>
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
+						<td> </td>
+						<td><input id="btnOrde" type="button" class="txt c1" value="訂單匯入"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
