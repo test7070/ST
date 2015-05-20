@@ -959,6 +959,10 @@
 				var isStyle = (hasStyle.toString()=='1'?$('.isStyle').show():$('.isStyle').hide());
 				var hasSpec = q_getPara('sys.isspec');
 				var isSpec = (hasSpec.toString()=='1'?$('.isSpec').show():$('.isSpec').hide());
+				
+				if (q_getPara('sys.project').toUpperCase()!='YC'){
+					$('.islengthc').hide();
+				}
 			}
 
 			function btnMinus(id) {
@@ -1395,7 +1399,7 @@
 					<td align="center" style="width:250px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle'> </a></td>
 					<td align="center" style="width:55px;"><a id='lblUnit'> </a></td>
-					<td align="center" style="width:80px;"><a>箱數</a></td>
+					<td align="center" style="width:80px;" class="islengthc"><a>箱數</a></td>
 					<td align="center" style="width:85px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblWeights'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
@@ -1428,7 +1432,7 @@
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
 					<td align="center"><input class="txt c7" id="txtUnit.*" type="text"/></td>
-					<td><input id="txtLengthc.*" type="text" class="txt num c7"/></td>
+					<td class="islengthc"><input id="txtLengthc.*" type="text" class="txt num c7"/></td>
 					<td><input class="txt num c7" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtWeight.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>

@@ -854,6 +854,10 @@
 				}else if(returnType=='spec'){
 					return (hasSpec.toString()=='1');
 				}
+				
+				if (q_getPara('sys.project').toUpperCase()!='YC'){
+					$('.islengthc').hide();
+				}
 			}
 			
 			function stype_chang(){
@@ -1297,7 +1301,7 @@
 					<td align="center" style="width:300px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
-					<td align="center" style="width:80px;"><a>箱數</a></td>
+					<td align="center" style="width:80px;" class="islengthc"><a>箱數</a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblWeight_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
@@ -1323,7 +1327,7 @@
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
-					<td><input id="txtLengthc.*" type="text" class="txt num c1"/></td>
+					<td class="islengthc"><input id="txtLengthc.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1"/></td>
