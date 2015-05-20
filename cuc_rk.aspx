@@ -19,7 +19,7 @@
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtRadius', 10, 3, 1], ['txtWidth', 10, 3, 1], ['txtDime', 10, 3, 1], ['txtLengthb', 10, 3, 1], ['txtHours', 10, 3, 1], ['txtMount', 10, 3, 1], ['txtWeight', 10, 3, 1]];
+            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 3, 1], ['txtWeight', 10, 3, 1]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -47,7 +47,7 @@
             function mainPost() {
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
-                bbsMask = [['txtDatea', r_picd], ['txtUdate', r_picd], ['txtDate2', r_picd]];
+                bbsMask = [];
                 q_mask(bbmMask);
             }
 
@@ -118,22 +118,26 @@
             }
 
             function btnOk() {
-                t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')]]);
-                if (t_err.length > 0) {
-                    alert(t_err);
+				Lock(1, {
+                    opacity : 0
+                });
+                if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
+                    alert(q_getMsg('lblDatea') + '錯誤。');
+                    Unlock(1);
                     return;
                 }
-
+                
                 if (q_cur == 1)
                     $('#txtWorker').val(r_name);
                 else
                     $('#txtWorker2').val(r_name);
-                var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+                sum();
+                var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtDatea').val());
-                if (s1.length == 0 || s1 == "AUTO")
+                if (t_noa.length == 0 || t_noa == "AUTO")
                     q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cuc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
                 else
-                    wrServer(s1);
+                    wrServer(t_noa);
             }
 
             function _btnSeek() {
@@ -146,8 +150,45 @@
             }
 
             function bbsAssign() {
-                for (var j = 0; j < q_bbsCount; j++) {
-                    if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+                for (var i = 0; i < q_bbsCount; i++) {
+                    $('#lblNo_' + i).text(i + 1);
+                    if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	$('#txtMount_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtWeight_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtMount1_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtWeight1_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtMount2_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtWeight2_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtMount3_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtWeight3_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtMount4_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtWeight4_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtMount5_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtWeight5_'+i).change(function(e){
+                    		sum();
+                    	});
                     }
                 }
                 _bbsAssign();
@@ -166,7 +207,7 @@
             }
 
             function btnPrint() {
-
+				q_box("z_cuc_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
             }
 
             function wrServer(key_value) {
@@ -177,13 +218,11 @@
             }
 
             function bbsSave(as) {
-                if (!as['datea']) {
+                if (!as['ordeno']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
-
                 q_nowf();
-
                 return true;
             }
 
@@ -423,7 +462,7 @@
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' style="overflow:visible;width: 1200px;">
 			<div class="dview" id="dview" >
-				<table class="tview signup" id="tview"  >
+				<table class="tview" id="tview"  >
 					<tr>
 						<td align="center" style="width:5%"><a id='vewChk'></a></td>
 						<td align="center" style="width:20%"><a id='vewDatea'></a></td>
@@ -439,7 +478,7 @@
 				</table>
 			</div>
 			<div class='dbbm'>
-				<table class="tbbm signup"  id="tbbm">
+				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
 						<td></td>
 						<td></td>
@@ -486,13 +525,28 @@
 		<div class='dbbs'>
 			<table id="tbbs" class='tbbs signup'>
 				<tr style='color:white; background:#003366;' >
-					<td style="width:20px;">
+					<td style="width:20px;" rowspan="2">
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"></td>
-					<td style="width:200px;" colspan="2">生產指示單號<BR>製造批號</td>
+					<td style="width:200px;">生產指示單號</td>
+					<td style="width:200px;">製造批號</td>
 					<td style="width:120px;">皮膜<BR>編號</td>
-					
+					<td style="width:120px;">半成品<BR>進料<BR>重量(KG)</td>
+					<td style="width:120px;">SHEET(COIL)規格尺寸</td>
+					<td style="width:120px;">作業條件</td>
+					<td style="width:120px;">SHEET(COIL)裁剪(分條)尺寸</td>
+					<td style="width:120px;">進料數量</td>
+					<td style="width:120px;">進料重量</td>
+					<td style="width:120px;">裁切數量</td>
+					<td style="width:120px;">裁切重量</td>
+					<td style="width:120px;">成品片數</td>
+					<td style="width:120px;">成品重量</td>
+					<td style="width:120px;">待修品片數</td>
+					<td style="width:120px;">待修品重量</td>
+					<td style="width:120px;">廢料重量(KG)</td>
+					<td style="width:120px;">裁剪(包裝)工時(分)</td>
+					<td style="width:120px;">COIL編號</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -501,11 +555,30 @@
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-						<input id="txtOrdeno.*" type="text" class="txt c1" style="display:none;"/>
-						<input id="txtComp.*" type="text" class="txt c1"/>
+						<input id="txtOrdeno.*" type="text" class="txt c1"/>
+						<input id="txtno2.*" type="text" style="display:none;"/>
 					</td>
-					<td><input id="txtProductno.*" type="text" class="txt c1"/></td>
-					
+					<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
+					<td>
+						<input id="txtMount.*" type="text" class="txt c1 num" style="display:none;"/>
+						<input id="txtWeight.*" type="text" class="txt c1 num"/>
+					</td>
+					<td><input id="txtSize.*" type="text" class="txt c1"/></td>
+					<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
+					<td><input id="txtSize2.*" type="text" class="txt c1"/></td>
+					<td><input id="txtMount1.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWeight1.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtMount2.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWeight2.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtMount3.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWeight3.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtMount4.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWeight4.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtMount5.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWeight5.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWaste.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtHours.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtUno.*" type="text" class="txt c1"/></td>
 				</tr>
 			</table>
 		</div>
