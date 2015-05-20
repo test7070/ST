@@ -64,10 +64,10 @@
             function mainPost() {
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd],['txtBdate', r_picd],['txtEdate', r_picd]];
-                bbsMask = [['txtDatea', r_picd]];
+                bbsMask = [['txtDate2', r_picd]];
                 bbtMask = [['txtDatea', r_picd]];
                 bbmNum = [];
-                bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1],['txtLengthb', 10, 0, 1]];
+                bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1],['txtLengthb', 10, 0, 1]];
                 bbtNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1],['txtLengthb', 10, 0, 1]];
                 q_mask(bbmMask);
                 
@@ -206,7 +206,7 @@
 							$('#btnStore_'+n).click();
 						}).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-							$('#txtDatea__'+n).val(q_date());
+							$('#txtDate2_'+n).val(q_date());
 						});
 						
                         $('#txtMount_'+i).change(function(e){
@@ -220,12 +220,10 @@
                         $('#txtWeight_'+i).change(function(e){
                             sum();
                         });
-                        $('#txtPrice_'+i).change(function(e){
-                            sum();
-                        });
                     }
                 }
                 _bbsAssign();
+                HiddenTreat();
             }
             
             function bbtAssign() {
@@ -239,7 +237,7 @@
 							$('#btnProduct__'+n).click();
 						}).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('__').length-1];
-							$('#txtDatea').val(q_date());
+							$('#txtDatea__'+n).val(q_date());
 						});
 						$('#txtStoreno__' + i).bind('contextmenu', function(e) {
 							/*滑鼠右鍵*/
@@ -323,16 +321,8 @@
             	var t_imount=0,t_iweight=0,t_money=0,t_omount=0,t_oweight=0;
             	
                 for (var i = 0; i < q_bbsCount; i++) {
-                	var t_unit = $.trim($('#txtUnit_' + i).val()).toUpperCase();
                     t_imount = q_add(t_imount,q_float('txtMount_'+i));
                     t_iweight = q_add(t_iweight,q_float('txtWeight_'+i));
-                    
-                    if (t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'){
-                    	 t_money=q_add(t_money,q_mul(q_float('txtWeight_'+i),q_float('txtPrice_'+i)));
-                    }else{
-                    	t_money=q_add(t_money,q_mul(q_float('txtMount_'+i),q_float('txtPrice_'+i)));
-                    }
-                    
                 }
                 for (var i = 0; i < q_bbtCount; i++) {
                     t_omount = q_add(t_omount,q_float('txtMount__'+i));
@@ -345,8 +335,6 @@
                 $('#txtOdime').val(t_oweight);
             }
             
-            
-			
 			function FormatNumber(n) {
 				var xx = "";
 				if (n < 0) {
@@ -367,6 +355,7 @@
             ///////////////////////////////////////////////////  以下提供事件程式，有需要時修改
             function refresh(recno) {
                 _refresh(recno);
+                HiddenTreat();
             }
 
             function readonly(t_para, empty) {
@@ -376,6 +365,7 @@
 				} else {
 					$('#btnOrdes').removeAttr('disabled');
 				}	
+				HiddenTreat();
             }
 
             function btnMinus(id) {
@@ -438,6 +428,12 @@
             function btnCancel() {
                 _btnCancel();
             }
+            
+            function HiddenTreat() {
+				if (q_getPara('sys.project').toUpperCase()!='YC'){
+					$('.islengthc').hide();
+				}
+			}
             
         </script>
         <style type="text/css">
@@ -537,7 +533,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 1550px;
+                width: 1500px;
             }
             .tbbs a {
                 font-size: medium;
@@ -673,10 +669,9 @@
                     <td style="width:100px; text-align: center;">物品編號</td>
                     <td style="width:300px; text-align: center;">物品名稱</td>
                     <td style="width:40px; text-align: center;">單位</td>
-                    <td style="width:80px; text-align: center;"><a>箱數</a></td>
+                    <td style="width:80px; text-align: center;" class="islengthc"><a>箱數</a></td>
                     <td style="width:80px; text-align: center;">入庫數量</td>
                     <td style="width:80px; text-align: center;">入庫重量</td>
-                    <td style="width:80px; text-align: center;">加工單價</td>
                     <td style="width:180px; text-align: center;">入庫倉</td>
                     <td style="width:80px; text-align: center;">入庫日</td>
                     <td style="text-align: center;">訂單備註/訂單編號</td>
@@ -698,16 +693,15 @@
                 	</td>
                 	<td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
-                    <td><input id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
+                    <td class="islengthc"><input id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
                     <td><input id="txtMount.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtWeight.*"  type="text" style="width:95%; text-align: right;"/></td>
-                    <td><input id="txtPrice.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td>
                     	<input id="txtStoreno.*" type="text" style="float:left;width:35%;"/>
                     	<input id="btnStore.*" type="button" value="." style="float:left;"/>
                     	<input id="txtStore.*" type="text" style="float:left;width:45%;"/>
                     </td>
-                    <td><input id="txtDatea.*" type="text" style="float:left;width:95%;"/></td>
+                    <td><input id="txtDate2.*" type="text" style="float:left;width:95%;"/></td>
                 	<td>
                 		<input id="txtMemo.*" type="text" style="float:left;width:95%;"/>
                 		<input id="txtOrdeno.*" type="text" style="float:left;width:63%;"/>
