@@ -39,6 +39,10 @@
 				$('#btnPrev').hide();
 				$('#btnNext').hide();
 				$('#btnBott').hide();
+				
+				$('#checkAllCheckbox').click(function(e){
+					$('.ccheck').prop('checked',$(this).prop('checked'));
+				});
 			}
             function q_gtPost(t_name) {
 				switch (t_name) {
@@ -94,7 +98,7 @@
 					<td align="center" style="width:7%;"><a id='lblXweight'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
-					<td style="width:2%;"><input type="checkbox" id="chkSel.*"/></td>
+					<td style="width:2%;"><input type="checkbox" class="ccheck" id="chkSel.*"/></td>
 					<td style="width:10%;"><input class="txt" id="txtContno.*" type="text" style="width:98%;"  readonly="readonly" />
 						<input class="txt" id="txtContnoq.*" type="text" style="display:none;"  readonly="readonly" />
 					</td>
