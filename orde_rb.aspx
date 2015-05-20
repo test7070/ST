@@ -610,12 +610,10 @@
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
 				
-				/*if (q_cur == 1 || emp($('#txtVccno').val()))
-					q_func('qtxt.query.post0', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
-				else {
+				if(q_cur==2 && !emp($('#txtVccno').val())){//修改後重新產生 避免資料不對應
 					//vcc.post內容
 					q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
-				}*/
+				}
 			}
 			
 			function q_funcPost(t_func, result) {
@@ -627,7 +625,7 @@
                 		q_func('qtxt.query.post2', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
                 		break;
                     case 'qtxt.query.post0':
-                        	q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+                        q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
                         break;
 					case 'qtxt.query.post1':
 						var as = _q_appendData("tmp0", "", true, true);
