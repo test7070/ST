@@ -21,10 +21,10 @@
             q_desc=1;
             q_tables = 't';
             var q_name = "cub";
-            var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney','txtTax','txtTotal','txtImount','txtIweight','txtOmount','txtOweight'];
+            var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2','txtBdime','txtEdime','txtIdime','txtOdime'];
             var q_readonlys = ['txtOrdeno','txtNo2'];
             var q_readonlyt = [];
-            var bbmNum = [['txtMoney', 10, 0, 1],['txtTotal', 10, 0, 1]];
+            var bbmNum = [];
             var bbsNum = [];
             var bbtNum = [];
             var bbmMask = [];
@@ -35,7 +35,7 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Datea';
-            brwCount2 = 8;
+            brwCount2 = 6;
 
             aPop = new Array(['txtTggno', 'lblTgg', 'sss', 'noa,namea', 'txtTggno,txtTgg', 'sss_b.aspx']
             , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtLengthb_', "ucc_b.aspx?" ]
@@ -49,7 +49,7 @@
                 bbsKey = ['noa', 'noq'];
                 bbtKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1);
+                q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
             });
 
             function main() {
@@ -66,19 +66,19 @@
                 bbmMask = [['txtDatea', r_picd],['txtBdate', r_picd],['txtEdate', r_picd]];
                 bbsMask = [['txtDatea', r_picd]];
                 bbtMask = [['txtDatea', r_picd]];
-                bbmNum = [['txtMoney', 15, 0, 1], ['txtTotal', 15, 0, 1],['txtTax', 10, 0, 1]];
-                bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1]];
-                bbtNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1]];
+                bbmNum = [];
+                bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1],['txtLengthb', 10, 0, 1]];
+                bbtNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1],['txtLengthb', 10, 0, 1]];
                 q_mask(bbmMask);
                 
-                q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-                document.title='委外加工單';
-                $('#vewTgg').text('員工');
+                document.title='加工單';
                 $('#lblTgg').text('員工');
-                
-                $('#cmbTaxtype').change(function() {
-                	sum();
-				});
+                $('#lblBdate').text('預交日');
+                $('#lblMemo2').text('加工方式');
+                $('#lblBdime').text('入庫數量');
+                $('#lblEdime').text('入庫重量');
+                $('#lblIdime').text('出庫數量');
+                $('#lblOdime').text('出庫重量');
 				
 				$('#btnOrdes').click(function() {
 					var bdate=$('#txtBdate').val();
@@ -135,12 +135,21 @@
 						sum();
 					}
 				}
-				if(t_name.split('_')[0]=="uccstdmount"){
+				if(t_name.split('_')[0]=="bbsuccstdmount"){
 					var n=t_name.split('_')[1];
 					var as = _q_appendData("ucc", "", true);
 					if (as[0] != undefined) {
 						q_tr('txtMount_'+n,q_mul(q_float('txtLengthb_'+n),dec(as[0].stdmount)));
 						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
+						sum();
+					}
+				}
+				if(t_name.split('_')[0]=="bbtuccstdmount"){
+					var n=t_name.split('_')[1];
+					var as = _q_appendData("ucc", "", true);
+					if (as[0] != undefined) {
+						q_tr('txtMount__'+n,q_mul(q_float('txtLengthb__'+n),dec(as[0].stdmount)));
+						q_tr('txtWeight__'+n,q_mul(q_float('txtMount__'+n),dec(as[0].uweight)));
 						sum();
 					}
 				}
@@ -168,7 +177,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('cub_yc_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
+                q_box('cub_yc_s.aspx', q_name + '_s', "500px", "380px", q_getMsg("popSeek"));
             }
 
             function bbsAssign() {
@@ -179,7 +188,7 @@
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if (!emp($('#txtProductno_' + n).val())) {
 								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
-								q_gt('ucc', t_where, 0, 0, 0, "uccstdmount_"+n, r_accy);
+								q_gt('ucc', t_where, 0, 0, 0, "bbsuccstdmount_"+n, r_accy);
 							}
 						});
                     	
@@ -239,6 +248,14 @@
 							$('#btnStore__'+n).click();
 						});
 						
+						$('#txtLengthb__'+i).change(function(){
+							var n = $(this).attr('id').split('__')[$(this).attr('id').split('__').length-1];
+							if (!emp($('#txtProductno__' + n).val())) {
+								var t_where = "where=^^ noa='" + $('#txtProductno__' + n).val() + "' ^^ stop=1";
+								q_gt('ucc', t_where, 0, 0, 0, "bbtuccstdmount_"+n, r_accy);
+							}
+						});
+						
                         $('#txtMount__'+i).change(function(e){
                         	var n = $(this).attr('id').split('__')[$(this).attr('id').split('__').length-1];
 							$('#txtDatea__'+n).val(q_date());
@@ -262,7 +279,6 @@
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
                 $('#txtDatea').val(q_date());
                 $('#txtDatea').focus();
-                $('#cmbTaxtype').val('1');
             }
 
             function btnModi() {
@@ -323,57 +339,13 @@
                     t_oweight = q_add(t_oweight,q_float('txtWeight__'+i));
                 }
                 
-                $('#txtImount').val(t_imount);
-                $('#txtIweight').val(t_iweight);
-                $('#txtOmount').val(t_omount);
-                $('#txtOweight').val(t_oweight);
-                $('#txtMoney').val(t_money);
-                calTax();
+                $('#txtBdime').val(t_imount);
+                $('#txtEdime').val(t_iweight);
+                $('#txtIdime').val(t_omount);
+                $('#txtOdime').val(t_oweight);
             }
             
-            function calTax() {
-				var t_money = q_float('txtMoney'), t_tax = 0, t_total = 0;
-				t_total = t_money;
-				var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
-				switch ($('#cmbTaxtype').val()) {
-					case '0': // 無
-						t_tax = 0;
-						t_total = q_add(t_money, t_tax);
-						break;
-					case '1': // 應稅
-						t_tax = round(q_mul(t_money, t_taxrate), 0);
-						t_total = q_add(t_money, t_tax);
-						break;
-					case '2': //零稅率
-						t_tax = 0;
-						t_total = q_add(t_money, t_tax);
-						break;
-					case '3': // 內含
-						t_tax = round(q_mul(q_div(t_money, q_add(1, t_taxrate)), t_taxrate), 0);
-						t_total = t_money;
-						t_money = q_sub(t_total, t_tax);
-						break;
-					case '4': // 免稅
-						t_tax = 0;
-						t_total = q_add(t_money, t_tax);
-						break;
-					case '5': // 自定
-						$('#txtTax').attr('readonly', false);
-						$('#txtTax').css('background-color', 'white').css('color', 'black');
-						t_tax = round(q_float('txtTax'), 0);
-						t_total = q_add(t_money, t_tax);
-						break;
-					case '6': // 作廢-清空資料
-						t_money = 0, t_tax = 0, t_total = 0;
-						break;
-					default:
-					
-				}
-				
-				$('#txtMoney').val(FormatNumber(t_money));
-				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
-			}
+            
 			
 			function FormatNumber(n) {
 				var xx = "";
@@ -586,7 +558,7 @@
                 background-color: bisque;
             }
             #dbbt {
-                width: 1300px;
+                width: 1400px;
             }
             #tbbt {
                 margin: 0;
@@ -620,7 +592,7 @@
                     <tr>
                         <td align="center" style="width:30px; color:black;"><a id='vewChk'> </a></td>
                         <td align="center" style="width:100px; color:black;"><a id='vewDatea'> </a></td>
-                        <td align="center" style="width:170px; color:black;"><a id='vewTgg'> </a></td>
+                        <td align="center" style="width:170px; color:black;"><a>員工</a></td>
                     </tr>
                     <tr>
                         <td>
@@ -647,15 +619,9 @@
                         <td><input id="txtNoa"type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblDatea" class="lbl"> </a></td>
                         <td><input id="txtDatea"  type="text" class="txt c1"/></td>
-                        <td><span> </span><a id='lblEnda' class="lbl"> </a></td>
-                    	<td>
-                    		<input id="chkEnda" type="checkbox"/>
-                    		<span> </span><a id='lblCancel'> </a>
-							<input id="chkCancel" type="checkbox"/>
-                    	</td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id="lblBdate" class="lbl" >預交日</a></td>
+                        <td><span> </span><a id="lblBdate" class="lbl" > </a></td>
                         <td colspan="2">
                         	<input id="txtBdate"type="text" class="txt c2"/>
                         	<a style="float: left;">~</a>
@@ -669,37 +635,20 @@
                         	<input id="txtTggno"  type="text" class="txt" style="width:45%;"/>
                         	<input id="txtTgg"  type="text" class="txt" style="width:55%;"/>
                     	</td>
-                    	<td><span> </span><a id="lblManu" class="lbl" > </a></td>
-                        <td colspan="2"><input id="txtManu"type="text" class="txt c1"/></td>
-                    </tr>
-                    <!--<tr>
-                    	<td><span> </span><a id="lblTel" class="lbl" > </a></td>
-                        <td colspan="2"><input id="txtTel"type="text" class="txt c1"/></td>
-                    	<td><span> </span><a id="lblFax" class="lbl" > </a></td>
-                        <td colspan="2"><input id="txtFax"type="text" class="txt c1"/></td>
-                    </tr>-->
-                    <tr>
-                    	<td><span> </span><a id='lblImount' class="lbl"> </a></td>
-                        <td><input id="txtImount" type="text" class="txt c1 num" /></td>
-                        <td><span> </span><a id='lblIweight' class="lbl"> </a></td>
-                        <td><input id="txtIweight" type="text" class="txt c1 num" /></td>
+                    	<td><span> </span><a id="lblMemo2" class="lbl" > </a></td>
+                        <td colspan="2"><input id="txtMemo2"type="text" class="txt c1"/></td>
                     </tr>
                     <tr>
-                    	<td><span> </span><a id='lblOmount' class="lbl"> </a></td>
-                        <td><input id="txtOmount" type="text" class="txt c1 num" /></td>
-                        <td><span> </span><a id='lblOweight' class="lbl"> </a></td>
-                        <td><input id="txtOweight" type="text" class="txt c1 num" /></td>
+                    	<td><span> </span><a id='lblBdime' class="lbl"> </a></td>
+                        <td><input id="txtBdime" type="text" class="txt c1 num" /></td>
+                        <td><span> </span><a id='lblEdime' class="lbl"> </a></td>
+                        <td><input id="txtEdime" type="text" class="txt c1 num" /></td>
                     </tr>
                     <tr>
-                    	<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
-                        <td><input id="txtMoney" type="text" class="txt c1 num" /></td>
-                        <td><span> </span><a id='lblTax' class="lbl"> </a></td>
-                        <td>
-                        	<input id="txtTax" type="text" class="txt c1 num" style="width: 50%;"/>
-                        	<select id="cmbTaxtype" class="txt c1" style="width: 50%;"> </select>
-                        </td>
-                        <td><span> </span><a id='lblTotal' class="lbl"> </a></td>
-                        <td><input id="txtTotal" type="text" class="txt c1 num" /></td>
+                    	<td><span> </span><a id='lblIdime' class="lbl"> </a></td>
+                        <td><input id="txtIdime" type="text" class="txt c1 num" /></td>
+                        <td><span> </span><a id='lblOdime' class="lbl"> </a></td>
+                        <td><input id="txtOdime" type="text" class="txt c1 num" /></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblMemo"  class="lbl"> </a></td>
@@ -776,6 +725,7 @@
                         <td style="width:100px; text-align: center;">物品編號</td>
                         <td style="width:300px; text-align: center;">物品名稱</td>
                         <td style="width:40px; text-align: center;">單位</td>
+                        <td style="width:80px; text-align: center;">箱數</td>
                         <td style="width:80px; text-align: center;">領料數量</td>
                         <td style="width:80px; text-align: center;">領料重量</td>
                         <td style="width:80px; text-align: center;">領料日</td>
@@ -795,6 +745,7 @@
                     	</td>
                         <td><input id="txtProduct..*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtUnit..*" type="text" style="float:left;width:95%;"/></td>
+                        <td><input id="txtLengthb..*"  type="text" style="width:95%; text-align: right;"/></td>
                         <td><input id="txtMount..*"  type="text" style="width:95%; text-align: right;"/></td>
                         <td><input id="txtWeight..*"  type="text" style="width:95%; text-align: right;"/></td>
                         <td><input id="txtDatea..*" type="text" style="float:left;width:95%;"/></td>

@@ -13,8 +13,8 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
-            var q_name = "vcf_s";
-			aPop = new Array(['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno', 'tgg_b.aspx']);
+            var q_name = "cub_s";
+			aPop = new Array(['txtTggno', 'lblTggno', 'sss', 'noa,namea', 'txtTggno', 'sss_b.aspx']);
             $(document).ready(function() {
                 main();
             });
@@ -29,6 +29,11 @@
                 q_langShow();
                 bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
                 q_mask(bbmMask);
+                
+                $('#lblDatea').text('預交日');
+                $('#lblTggno').text('員工編號');
+                $('#lblTgg').text('員工姓名');
+                
                 /*q_cmbParse("cmbEnda", '@全部,1@結案,0@未結案');
                 q_cmbParse("cmbCancel", '@全部,1@取消,0@未取消');*/
                 $('#txtBdate').datepicker();
@@ -60,13 +65,13 @@
 		        if (t_cancel.length>0)
 		        	t_where += " and isnull(cancel,0)="+t_cancel;*/
 		        if (t_tgg.length>0)
-		        	t_where += " and charindex('"+t_tgg+"',tgg)"
+		        	t_where += " and charindex('"+t_tgg+"',tgg)"	
 		        	
 		        if(t_ordeno.length>0)
-		        	t_where += " and exists(select noa from vcfs where noa=vcf.noa and ordeno='"+t_ordeno+"' "+q_sqlPara2("no2", t_no2) +" ) ";
+		        	t_where += " and exists(select noa from view_cubs where noa=view_cub"+r_accy+".noa and ordeno='"+t_ordeno+"' "+q_sqlPara2("no2", t_no2) +" ) ";
 		       	 	
 		       	if(t_uno.length>0)
-		       		t_where += " and (exists(select noa from vcft where vcft.noa=vcf.noa and vcft.uno='"+t_uno+"') or exists(select noa from vcfs where vcfs.noa=vcf.noa and vcfs.uno='"+t_uno+"'))";
+		       		t_where += " and (exists(select noa from view_cubt where view_cubt.noa=cub"+r_accy+".noa and view_cubt.uno='"+t_uno+"') or exists(select noa from view_cubs where view_cubs.noa=cub"+r_accy+".noa and view_cubs.uno='"+t_uno+"'))";
 		       		
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;

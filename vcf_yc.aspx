@@ -67,7 +67,7 @@
                 bbsMask = [['txtDatea', r_picd]];
                 bbtMask = [['txtDatea', r_picd]];
                 bbmNum = [['txtMoney', 15, 0, 1], ['txtTotal', 15, 0, 1],['txtTax', 10, 0, 1]];
-                bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1]];
+                bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1],['txtLengthb', 10, 0, 1]];
                 bbtNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1]];
                 q_mask(bbmMask);
                 
@@ -166,7 +166,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('vcf_yc_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
+                q_box('vcf_yc_s.aspx', q_name + '_s', "500px", "380px", q_getMsg("popSeek"));
             }
 
             function bbsAssign() {
@@ -645,12 +645,12 @@
                         <td><input id="txtNoa"type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblDatea" class="lbl"> </a></td>
                         <td><input id="txtDatea"  type="text" class="txt c1"/></td>
-                        <td><span> </span><a id='lblEnda' class="lbl"> </a></td>
+                        <!--<td><span> </span><a id='lblEnda' class="lbl"> </a></td>
                     	<td>
                     		<input id="chkEnda" type="checkbox"/>
                     		<span> </span><a id='lblCancel'> </a>
 							<input id="chkCancel" type="checkbox"/>
-                    	</td>
+                    	</td>-->
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblBdate" class="lbl" >預交日</a></td>
