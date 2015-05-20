@@ -20,7 +20,7 @@
 			var q_readonly = ['txtNoa','txtStation','txtComp','txtStore','txtCardeal','txtAddr','txtTranstart','txtWorker','txtWorker2','txtTotal'];
 			var q_readonlys = ['txtTotal'];
 			var bbmNum = [['txtTotal', 15, 0, 1]];
-			var bbsNum = [['txtMount', 10, 0, 1], ['txtPrice', 10, 2, 1], ['txtTotal', 15, 0, 1]];
+			var bbsNum = [['txtMount', 10, 0, 1], ['txtPrice', 10, 2, 1], ['txtTotal', 15, 0, 1],['txtLengthb', 10, 0, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_sqlCount = 6;
@@ -95,6 +95,15 @@
 							q_Seek_gtPost();
 						break;
 				}
+				if(t_name.split('_')[0]=="uccstdmount"){
+					var n=t_name.split('_')[1];
+					var as = _q_appendData("ucc", "", true);
+					if (as[0] != undefined) {
+						q_tr('txtMount_'+n,q_mul(q_float('txtLengthb_'+n),dec(as[0].stdmount)));
+						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
+						sum();
+					}
+				}
 			}
 
 			function btnOk() {
@@ -139,6 +148,14 @@
 						
 						$('#txtPrice_' + j).change(function() {
 							sum();
+						});
+						
+						$('#txtLengthb_'+i).change(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							if (!emp($('#txtProductno_' + n).val())) {
+								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
+								q_gt('ucc', t_where, 0, 0, 0, "uccstdmount_"+n, r_accy);
+							}
 						});
 					}
 				}
@@ -214,6 +231,10 @@
 				var isStyle = (hasStyle.toString()=='1'?$('.isStyle').show():$('.isStyle').hide());
 				var hasSpec = q_getPara('sys.isspec');
 				var isSpec = (hasSpec.toString()=='1'?$('.isSpec').show():$('.isSpec').hide());
+				
+				if (q_getPara('sys.project').toUpperCase()!='YC'){
+					$('.islengthb').hide();
+				}
 			}
 
 			function readonly(t_para, empty) {
@@ -477,6 +498,7 @@
 					<td align="center" style="width:300px;"><a id='lblProduct_s'> </a> <a class="isSpec">/</a> <a id='lblSpec' class="isSpec"> </a></td>
 					<td align="center" style="width:8%;" class="isStyle"><a id='lblStyles'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
+					<td align="center" style="width:90px;" class="islengthb"><a>箱數</a></td>
 					<td align="center" style="width:90px;"><a id='lblMount_s'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblWeight_s'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblPrice_s'> </a></td>
@@ -500,6 +522,7 @@
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1"/></td>
 					<td><input class="txt c1" id="txtUnit.*" type="text"/></td>
+					<td class="islengthb"><input class="txt num c1" id="txtLengthb.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtWeight.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtPrice.*" type="text" /></td>

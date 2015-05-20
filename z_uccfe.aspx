@@ -22,13 +22,12 @@
 				q_gf('', 'z_uccfe');
 				
 				$('#q_report').click(function() {
-					
-				if (q_getPara('sys.project').toUpperCase()!='YC'){
+					if (q_getPara('sys.project').toUpperCase()!='YC'){
 						$('#Xcarton').hide();
-				
 					}
 				});
 			});
+			
 			function q_gfPost() {
 				$('#q_report').q_report({
 					fileName : 'z_uccfe',
@@ -56,8 +55,12 @@
 						value : ['倉庫明細']
 					}, {
 						type : '8',
-						name : 'xcarton',//[8]
+						name : 'xcarton',//[9]
 						value : "1@顯示箱數".split(',')
+					},{
+						type : '0',//[10]
+						name : 'projectname',
+						value : q_getPara('sys.project').toUpperCase()
 					}]
 				});
 				q_popAssign();
@@ -73,14 +76,66 @@
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();
 				
+				$('#Xoption01').css('width','300px').css('height','30px');
+				$('#chkXoption01').css('width','215px');
+				$('#chkXoption01 span').css('width','175px');
+				$('#Xcarton').css('width','300px').css('height','30px');
+				$('#chkXcarton').css('width','215px');
+				$('#chkXcarton span').css('width','175px');
 				
+				if (q_getPara('sys.project').toUpperCase()=='FE'){
+					$('#btnUcf').hide();
+				}
+				
+				$('#btnUcf').click(function() {
+					q_box('ucf.aspx' + "?;;;;" + r_accy, '', "450px", "200px", $('#btnUcf').val());
+				});
+				
+				if (q_getPara('sys.project').toUpperCase()=='YC')
+					q_gt('ucc',"where=^^noa= (select MAX(noa) from ucc where left(noa,1)<'S') ^^", 0, 0, 0, "maxpno", r_accy);
+				
+				$('#txtProduct2a').change(function() {
+					if (q_getPara('sys.project').toUpperCase()=='YC' && $('#txtProduct2a').val().substr(0,1).toUpperCase()>'S'){
+						$('#txtProduct2a').val(maxpno);
+						$('#txtProduct2b').val(maxproduct);
+					}
+				});
+				
+				$('#btnOk').focusin(function() {
+					if (q_getPara('sys.project').toUpperCase()=='YC' && ($('#txtProduct2a').val().substr(0,1).toUpperCase()>'S' || emp($('#txtProduct2a').val()))){
+						$('#txtProduct2a').val(maxpno);
+						$('#txtProduct2b').val(maxproduct);
+					}
+				});
+			}
+			
+			function q_popPost(s1) {
+				switch (s1) {
+					case 'txtProduct2a':
+						if (q_getPara('sys.project').toUpperCase()=='YC' && $('#txtProduct2a').val().substr(0,1).toUpperCase()>'S'){
+							$('#txtProduct2a').val(maxpno);
+							$('#txtProduct2b').val(maxproduct);
+						}
+					break;
+				}
 			}
 
 			function q_boxClose(s2) {
 			}
-
+			
+			var maxpno='',maxproduct='';
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'maxpno':
+						var as = _q_appendData("ucc", "", true);
+						if (as[0] != undefined) {
+							maxpno=as[0].noa;
+							maxproduct=as[0].product;
+						}else{
+							maxpno='SZZZZZZ'
+							maxproduct='';
+						}
+						break;
 					default:
 						break;
 				}
@@ -118,10 +173,11 @@
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
-		<div id="q_menu"></div>
+		<div id="q_menu"> </div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
-				<div id="q_report"></div>
+				<div id="q_report"> </div>
+				<input type="button" id="btnUcf" value="成本結轉" style="font-weight: bold;font-size: medium;color: red;">
 			</div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->

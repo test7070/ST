@@ -470,7 +470,7 @@
             
             function HiddenTreat() {
 				if (q_getPara('sys.project').toUpperCase()!='YC'){
-					$('.islengthc').hide();
+					$('.islengthb').hide();
 				}
 			}
             
@@ -732,7 +732,7 @@
                     <td style="width:100px; text-align: center;">物品編號</td>
                     <td style="width:300px; text-align: center;">物品名稱</td>
                     <td style="width:40px; text-align: center;">單位</td>
-                    <td style="width:80px; text-align: center;" class="islengthc"><a>箱數</a></td>
+                    <td style="width:80px; text-align: center;" class="islengthb"><a>箱數</a></td>
                     <td style="width:80px; text-align: center;">入庫數量</td>
                     <td style="width:80px; text-align: center;">入庫重量</td>
                     <td style="width:80px; text-align: center;">加工單價</td>
@@ -757,7 +757,7 @@
                 	</td>
                 	<td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
-                    <td class="islengthc"><input id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
+                    <td class="islengthb"><input id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
                     <td><input id="txtMount.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtWeight.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtPrice.*"  type="text" style="width:95%; text-align: right;"/></td>
