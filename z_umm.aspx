@@ -50,6 +50,17 @@
 					
 					if(q_getPara('sys.isAcccUs')!='1')
 						$('#Xcoin').hide();
+					
+					if(q_getPara('sys.project').toUpperCase()!='YC'){
+						var delete_report=0;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_umm15')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('客戶收款簽收報表')>-1)
+							$('#q_report div div')[delete_report].remove();
+					}
+						
 				});
 			});
 			

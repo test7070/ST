@@ -62,7 +62,7 @@
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('get.typea'));
 				bbmNum = [['txtPrice', 10, q_getPara('vcc.pricePrecision') ,1]];
-				bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision') ,1],['txtWeight', 10, q_getPara('vcc.weightPrecision') ,1],['txtPrice', 10, q_getPara('vcc.pricePrecision') ,1]];
+				bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision') ,1],['txtWeight', 10, q_getPara('vcc.weightPrecision') ,1],['txtPrice', 10, q_getPara('vcc.pricePrecision') ,1],['txtLengthb', 10, 0, 1]];
 				
 			}
 			
@@ -95,6 +95,15 @@
 					var n=t_name.split('_')[1];
 					var as = _q_appendData("ucc", "", true);
 					if (as[0] != undefined) {
+						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
+						sum();
+					}
+				}
+				if(t_name.split('_')[0]=="uccstdmount"){
+					var n=t_name.split('_')[1];
+					var as = _q_appendData("ucc", "", true);
+					if (as[0] != undefined) {
+						q_tr('txtMount_'+n,q_mul(q_float('txtLengthb_'+n),dec(as[0].stdmount)));
 						q_tr('txtWeight_'+n,q_mul(q_float('txtMount_'+n),dec(as[0].uweight)));
 						sum();
 					}
@@ -135,6 +144,10 @@
 				}else if(returnType=='rack'){
 					return (hasRackComp.toString()=='1');
 				}
+				
+				if (q_getPara('sys.project').toUpperCase()!='YC'){
+					$('.islengthb').hide();
+				}
 			}
 
 			function _btnSeek() {
@@ -153,22 +166,34 @@
 							var n = $(this).attr('id').replace('txtProductno_', '');
 							$('#btnProductno_'+n).click();
 						});
+						
 						$('#btnMinus_' + j).click(function() {
 							btnMinus($(this).attr('id'));
 						});
+						
 						$('#txtMount_' + j).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-							if (!emp($('#txtProductno_' + n).val())) {
+							if (!emp($('#txtProductno_' + n).val()) && q_getPara('sys.project').toUpperCase()=='YC') {
 								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
 								q_gt('ucc', t_where, 0, 0, 0, "uccuweight_"+n, r_accy);
 							}
 							sum();
 						});
+						
 						$('#txtWeight_' + j).change(function() {
 							sum();
 						});
+						
 						$('#txtPrice_' + j).change(function() {
 							sum();
+						});
+						
+						$('#txtLengthb_'+i).change(function(){
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+							if (!emp($('#txtProductno_' + n).val()) && q_getPara('sys.project').toUpperCase()=='YC') {
+								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";
+								q_gt('ucc', t_where, 0, 0, 0, "uccstdmount_"+n, r_accy);
+							}
 						});
 					}
 				}
@@ -475,6 +500,7 @@
 					<td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit_s'> </a></td>
+					<td align="center" style="width:80px;" class="islengthb"><a>箱數</a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblWeight_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
@@ -497,6 +523,7 @@
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt isStyle" style="width:95%;"/></td>
 					<td><input class="txt" id="txtUnit.*" type="text"  style="width:95%;"/></td>
+					<td class="islengthb"><input class="txt num c1" id="txtLengthb.*" type="text" /></td>
 					<td><input class="txt num" id="txtMount.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num" id="txtWeight.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num" id="txtPrice.*" type="text" style="width:95%;"/></td>

@@ -68,10 +68,10 @@
                 bbtMask = [['txtDatea', r_picd]];
                 bbmNum = [];
                 bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1],['txtLengthb', 10, 0, 1]];
-                bbtNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1],['txtLengthb', 10, 0, 1]];
+                bbtNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1]];//,['txtLengthb', 10, 0, 1]
                 q_mask(bbmMask);
                 
-                document.title='加工單';
+                document.title='廠內加工單';
                 $('#lblTgg').text('員工');
                 $('#lblBdate').text('預交日');
                 $('#lblMemo2').text('加工方式');
@@ -431,7 +431,7 @@
             
             function HiddenTreat() {
 				if (q_getPara('sys.project').toUpperCase()!='YC'){
-					$('.islengthc').hide();
+					$('.islengthb').hide();
 				}
 			}
             
@@ -554,7 +554,7 @@
                 background-color: bisque;
             }
             #dbbt {
-                width: 1400px;
+                width: 1320px;
             }
             #tbbt {
                 margin: 0;
@@ -669,7 +669,7 @@
                     <td style="width:100px; text-align: center;">物品編號</td>
                     <td style="width:300px; text-align: center;">物品名稱</td>
                     <td style="width:40px; text-align: center;">單位</td>
-                    <td style="width:80px; text-align: center;" class="islengthc"><a>箱數</a></td>
+                    <td style="width:80px; text-align: center;" class="islengthb"><a>箱數</a></td>
                     <td style="width:80px; text-align: center;">入庫數量</td>
                     <td style="width:80px; text-align: center;">入庫重量</td>
                     <td style="width:180px; text-align: center;">入庫倉</td>
@@ -693,7 +693,7 @@
                 	</td>
                 	<td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
-                    <td class="islengthc"><input id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
+                    <td class="islengthb"><input id="txtLengthb.*" type="text" style="width:95%;text-align: right;"/></td>
                     <td><input id="txtMount.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtWeight.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td>
@@ -719,7 +719,7 @@
                         <td style="width:100px; text-align: center;">物品編號</td>
                         <td style="width:300px; text-align: center;">物品名稱</td>
                         <td style="width:40px; text-align: center;">單位</td>
-                        <td style="width:80px; text-align: center;">箱數</td>
+                        <!--<td style="width:80px; text-align: center;">箱數</td>-->
                         <td style="width:80px; text-align: center;">領料數量</td>
                         <td style="width:80px; text-align: center;">領料重量</td>
                         <td style="width:80px; text-align: center;">領料日</td>
@@ -739,7 +739,7 @@
                     	</td>
                         <td><input id="txtProduct..*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtUnit..*" type="text" style="float:left;width:95%;"/></td>
-                        <td><input id="txtLengthb..*"  type="text" style="width:95%; text-align: right;"/></td>
+                        <!--<td><input id="txtLengthb..*"  type="text" style="width:95%; text-align: right;"/></td>-->
                         <td><input id="txtMount..*"  type="text" style="width:95%; text-align: right;"/></td>
                         <td><input id="txtWeight..*"  type="text" style="width:95%; text-align: right;"/></td>
                         <td><input id="txtDatea..*" type="text" style="float:left;width:95%;"/></td>
