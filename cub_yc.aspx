@@ -71,7 +71,7 @@
                 bbtNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1]];//,['txtLengthb', 10, 0, 1]
                 q_mask(bbmMask);
                 
-                document.title='加工單';
+                document.title='廠內加工單';
                 $('#lblTgg').text('員工');
                 $('#lblBdate').text('預交日');
                 $('#lblMemo2').text('加工方式');
