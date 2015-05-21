@@ -27,8 +27,10 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Datea';
-            brwCount2 = 6;
-            aPop = new Array(['txtCustno', 'btnCustno', 'cust', 'noa,comp', 'txtCustno,txtCust', 'cust_b.aspx']);
+            brwCount2 = 20;
+            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial', 'txtCustno,txtComp,txtNick,txtSerial', 'cust_b.aspx']
+            	,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
+            	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClassa_', 'spec_b.aspx']);
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'no3'];
@@ -55,12 +57,28 @@
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);
-                //q_cmbParse("cmbTypea", '分條作業,十呎裁切,四呎裁切,三呎裁切,二呎裁切');
-                
-                $('#btnOrde').click(function(e){
-                	
-                	
-                });
+                q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
+                $("#combPaytype").change(function(e) {
+					if (q_cur == 1 || q_cur == 2){
+						$('#txtPaytype').val($('#combPaytype').find(":selected").text());
+						$(this)[0].selectedIndex=0;
+					}
+				});
+                $("#txtPaytype").focus(function(e) {
+					var n = $(this).val().match(/[0-9]+/g);
+					var input = document.getElementById("txtPaytype");
+					if ( typeof (input.selectionStart) != 'undefined' && n != null) {
+						input.selectionStart = $(this).val().indexOf(n);
+						input.selectionEnd = $(this).val().indexOf(n) + (n + "").length;
+					}
+				}).click(function(e) {
+					var n = $(this).val().match(/[0-9]+/g);
+					var input = document.getElementById("txtPaytype");
+					if ( typeof (input.selectionStart) != 'undefined' && n != null) {
+						input.selectionStart = $(this).val().indexOf(n);
+						input.selectionEnd = $(this).val().indexOf(n) + (n + "").length;
+					}
+				});
             }
 
             function q_popPost(s1) {
@@ -87,41 +105,6 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
-                    case 'view_ordes':
-                        for (var i = 0; i < q_bbsCount; i++) {
-                            $('#btnMinus_' + i).click();
-                        };
-                        var wret = '';
-                        var as = _q_appendData("view_ordes", "", true);
-                        if (as[0] != undefined) {
-                            for (var j = 0; j < as.length; j++) {
-                                as[j].mount = as[j].mount - as[j].tdmount;
-                            }
-                            wret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUdate,txtOrdeno,txtNo2,txtCustno,txtCust,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtMount', as.length, as, 'datea,noa,no2,custno,cust,productno,product,radius,width,dime,lengthb,mount', '');
-                        }
-                        for (var j = 0; j < wret.length; j++) {
-                            $('#txtDatea_' + wret[j]).val(q_date());
-                            var t_uno = trim($('#txtUno_' + wret[j]).val());
-                            if (emp(t_uno))
-                                $('#txtUno_' + wret[j]).val('9999');
-                            var t_where = "where=^^ 1=1 and isnull(ordeno,'') != '' and isnull(no2,'') != '' ";
-                            t_where += "and ordeno='" + $('#txtOrdeno_' + wret[j]).val() + "'and no2='" + $('#txtNo2_' + wret[j]).val() + "'"
-                            t_where += " ^^";
-                            q_gt('cucs', t_where, 0, 0, 0, "getUno", r_accy);
-                        }
-                        break;
-                    case 'getUno':
-                        var as = _q_appendData("cucs", "", true);
-                        if (as[0] != undefined) {
-                            for (var i = 0; i < q_bbsCount; i++) {
-                                var t_ordeno = $('#txtOrdeno_' + i).val();
-                                var t_no2 = $('#txtNo2_' + i).val();
-                                if (as[0].ordeno == t_ordeno && as[0].no2 == t_no2) {
-                                    $('#txtUno_' + i).val(as[0].uno);
-                                }
-                            }
-                        }
-                        break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -155,7 +138,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('cuc_rk_s.aspx', q_name + '_s', "500px", "310px", q_getMsg("popSeek"));
+                q_box('quat_rk_s.aspx', q_name + '_s', "500px", "310px", q_getMsg("popSeek"));
             }
 
             function combPay_chg() {
@@ -165,6 +148,18 @@
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	$('#txtProductno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
+                        });
+                        $('#txtSpec_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtSpec_', '');
+                            $('#btnSpec_'+n).click();
+                        });
                     	$('#txtMount_'+i).change(function(e){
                     		sum();
                     	});
@@ -187,7 +182,7 @@
             }
 
             function btnPrint() {
-				q_box("z_cuc_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
+				q_box("z_quat_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
             }
 
             function wrServer(key_value) {
@@ -198,7 +193,7 @@
             }
 
             function bbsSave(as) {
-                if (!as['ordeno']) {
+                if (!as['productno']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
@@ -214,10 +209,14 @@
                 _readonly(t_para, empty);
                 if (t_para) {
                     $('#txtDatea').datepicker('destroy');
+                    $('#txtOdate').datepicker('destroy');
                     $('#btnOrde').attr('disabled','disabled');
+                    $('#combPaytype').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
+                    $('#txtOdate').datepicker();
                     $('#btnOrde').removeAttr('disabled');
+                    $('#combPaytype').removeAttr('disabled');
                 }
             }
 
@@ -279,7 +278,7 @@
             }
             .dview {
                 float: left;
-                width: 400px;
+                width: 350px;
                 border-width: 0px;
             }
             .tview {
@@ -299,7 +298,7 @@
             }
             .dbbm {
                 float: left;
-                width: 800px;
+                width: 900px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -363,7 +362,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1500px;
+                width: 1200px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -443,18 +442,18 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id='dmain' style="overflow:visible;width: 1200px;">
+		<div id='dmain' style="overflow:visible;width:1400px;">
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview"  >
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td style="width:100px; color:black;"><a id='vewDatea'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewCust'> </a></td>
+						<td style="width:200px; color:black;"><a id='vewComp'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
 						<td align="center" id='datea'>~datea</td>
-						<td align="center" id='cust'>~cust</td>
+						<td align="center" id='comp'>~comp</td>
 					</tr>
 				</table>
 			</div>
@@ -467,12 +466,11 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">合約編號</a></td>
-						<td><input id="txtNoa"  type="text" class="txt c1"/></td>
+						<td><input id="txtNoa"  type="text" class="txt c1" maxlength="20"/></td>
 						<td><span> </span><a class="lbl">日期</a></td>
 						<td><input id="txtDatea"  type="text" class="txt c1"/></td>
 				
@@ -480,64 +478,83 @@
 					<tr>
 						<td><span> </span><a id="lblCust" class="lbl btn"></a></td>
 						<td colspan="2">
-							<input id="txtCustno"  type="text" class="txt" style="width:30%;"/>
-							<input id="txtComp"  type="text" class="txt" style="width:65%;"/>
-							<input id="txtNick"  type="text" class="txt" style="display:none;"/>
+							<input id="txtCustno"  type="text" class="txt" style="width:30%;" maxlength="20"/>
+							<input id="txtComp"  type="text" class="txt" style="width:70%;" maxlength="50"/>
+							<input id="txtNick"  type="text" class="txt" style="display:none;" maxlength="20"/>
 						</td>
-						<td><span> </span><a id="txtSerial" class="lbl"></a></td>
-						<td><input id="txtSerial"  type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblSerial" class="lbl"></a></td>
+						<td><input id="txtSerial"  type="text" class="txt c1" maxlength="20"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">代表人</a></td>
-						<td><input id="txtBoss"  type="text" class="txt c1"/></td>
+						<td colspan="2"><input id="txtBoss"  type="text" class="txt c1" maxlength="20"/></td>
 						<td><span> </span><a class="lbl">連絡人</a></td>
-						<td><input id="txtConn"  type="text" class="txt c1"/></td>
+						<td colspan="2"><input id="txtConn"  type="text" class="txt c1" maxlength="20"/></td>
+					</tr>
+					<tr>
 						<td><span> </span><a class="lbl">電話</a></td>
-						<td><input id="txtTel"  type="text" class="txt c1"/></td>
+						<td colspan="2"><input id="txtTel"  type="text" class="txt c1" maxlength="20"/></td>
 						<td><span> </span><a class="lbl">傳真</a></td>
-						<td><input id="txtFax"  type="text" class="txt c1"/></td>
+						<td colspan="2"><input id="txtFax"  type="text" class="txt c1" maxlength="20"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">交貨日期</a></td>
 						<td><input id="txtOdate"  type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
 						<td><span> </span><a class="lbl">付款方式</a></td>
-						<td><select id="cmbPaytype"></select></td>
-						<td colspan="2"><input id="txtMemo2"  type="text" class="txt c1"/></td>
-						
-
+						<td>
+							<input id="txtPaytype" type="text" class="txt" style="float:left;width: 80%;" maxlength="20"/>
+							<select id="combPaytype" style="float:left;width:20px;"></select>							
+						</td>
+						<td><span> </span><a class="lbl">付款備註</a></td>
+						<td colspan="3"><input id="txtMemo2"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">包裝方式</a></td>
 						<td><input id="txtPacktype"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td></td><td><span> </span><a class="lbl">交貨方式</a></td>
-						<td><input type="checkbox" value="賣方運送"></td>
-						<td><input type="checkbox" value="買方自運"></td>
-						<td><input type="checkbox" value="可分批交運"></td>
-						<td><input type="checkbox" value="不可分批交運"></td>
-						<td><input type="checkbox" value="出貨數量若不足五噸，另需負擔運費"></td>
+						<td><span> </span><a class="lbl">交貨方式</a></td>
+						<td style="color:black;"><input type="checkbox" id="chkChka1">賣方運送</td>
+						<td style="color:black;"><input type="checkbox" id="chkChka2">買方自運</td>
+						<td style="color:black;"><input type="checkbox" id="chkChka3">可分批交運</td>
+						<td style="color:black;"><input type="checkbox" id="chkChka4">不可分批交運</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td  style="color:black;" colspan="2"><input type="checkbox" id="chkChka5">出貨數量若不足五噸，另需負擔運費</td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">交貨地點</a></td>
-						<td><input id="txtAddr"  type="text" class="txt c1"/></td>
+						<td colspan="5"><input id="txtAddr"  type="text" class="txt c1" maxlength="50"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a class="lbl">交貨公差</a></td>
+						<td><input id="txtTolerance"  type="text" class="txt c1 num"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">材料類別</a></td>
-						<td><input type="checkbox" value="一般流通品"></td>
-						<td><input type="checkbox" value="買方專用材料"></td>
-						<td><input type="checkbox" value="特製皮膜"></td>
-						<td><input type="checkbox" value="特殊規格鋼捲，於合約完成後半年內未出貨完畢，買方需購回剩餘原材料。"></td>
+						<td style="color:black;"><span style="display: block;width:20px;float:left;">A.</span><input type="checkbox" style="float:left;" id="chkChkb1">一般流通品</td>
+					</tr>
+					<tr>
+						<td> </td>
+						<td style="color:black;"><span style="display: block;width:20px;float:left;">B.</span><input type="checkbox" style="float:left;" id="chkChkb2">買方專用材料</td>
+					</tr>
+					<tr>
+						<td> </td>
+						<td style="color:black;"><span style="display: block;width:20px;float:left;"></span><input type="checkbox" style="float:left;" id="chkChkb3">特製皮膜</td>
+						<td style="color:black;" colspan="4"><input type="checkbox" id="chkChkb4">特殊規格鋼捲，於合約完成後半年內未出貨完畢，買方需購回剩餘原材料。</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="6"><input id="txtMemo"  type="text" class="txt c1"/></td>
+						<td colspan="5"><textarea id="txtMemo" rows="5" class="txt c1"></textarea></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
-						<td><input id="txtWorker" type="text" class="txt c1"/></td>
+						<td><input id="txtWorker" type="text" class="txt c1" maxlength="20"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"></a></td>
-						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
+						<td><input id="txtWorker2" type="text" class="txt c1" maxlength="20"/></td>
 					</tr>
 				</table>
 			</div>
@@ -549,36 +566,42 @@
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"></td>
-					<td style="width:120px;">品名</td>
-					<td style="width:120px;">規格</td>
-					<td style="width:120px;">皮膜</td>
-					<td style="width:120px;">背面<BR>處理</td>
-					<td style="width:120px;">保護膜</td>
-					<td style="width:120px;">單位</td>
-					<td style="width:120px;">數量</td>
-					<td style="width:120px;">單價</td>
+					<td style="width:200px;">品名</td>
+					<td style="width:60px;">厚</td>
+					<td style="width:60px;">皮瞙厚</td>
+					<td style="width:60px;">寬</td>
+					<td style="width:60px;">長</td>
+					<td style="width:160px;">皮膜</td>
+					<td style="width:60px;">背面<BR>處理</td>
+					<td style="width:100px;">保護膜</td>
+					<td style="width:60px;">單位</td>
+					<td style="width:80px;">數量</td>
+					<td style="width:80px;">單價</td>
 					<td style="width:120px;">P/O</td>
 					<td style="width:120px;">P/N</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
-						<input id="txtNoq.*" type="text" style="display: none;"/>
+						<input id="txtNo3.*" type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:45%"/>
 						<input id="txtProduct.*" type="text" style="width:45%"/>
-						<input id="btnProductno.*" type="button" style="display:none;"/>
+						<input id="btnProduct.*" type="button" style="display:none;"/>
 					</td>
 					<td><input id="txtDime.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtRadius.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtWidth.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtLengthb.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtRadius.*" type="text" class="txt c1 num"/></td>
-					
-					<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
-					<td><input id="txtType.*" type="text" class="txt c1"/></td>
-					<td><input id="txtClassa.*" type="text" class="txt c1"/></td>
+
+					<td>
+						<input id="txtSpec.*" type="text" style="width:45%"/>
+						<input id="txtClassa.*" type="text" style="width:45%"/>
+						<input id="btnSpec.*" type="button" style="display:none;"/>
+					</td>
+					<td><input id="txtStyle.*" type="text" class="txt c1"/></td>
 					<td><input id="txtSource.*" type="text" class="txt c1"/></td>
 					
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
