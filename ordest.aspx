@@ -818,6 +818,8 @@
                             sum();
                         });
                         $('#txtPrice_' + j).focusout(function() {
+                        	if(!(q_cur==1 || q_cur==2))
+                        		return;
                             var n = $(this).attr('id').replace('txtPrice_','');
                             t_unit = $.trim($('#txtUnit_' + n).val()).toUpperCase();
                             t_product = $.trim($('#txtProduct_' + n).val());
@@ -841,6 +843,8 @@
                             sum();
                         });
                         $('#txtSprice_' + j).focusout(function() {
+                        	if(!(q_cur==1 || q_cur==2))
+                        		return;
                             var n = $(this).attr('id').replace('txtSprice_','');
                             t_unit = $.trim($('#txtUnit_' + n).val()).toUpperCase();
                             t_product = $.trim($('#txtProduct_' + n).val());
@@ -865,6 +869,8 @@
                             sum();
                         });
                         $('#txtMount_' + j).focusout(function() {
+                        	if(!(q_cur==1 || q_cur==2))
+                        		return;
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							sum();
 							$('#txtWeight_'+n).val($('#txtTheory_'+n).val());
