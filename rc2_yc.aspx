@@ -215,6 +215,7 @@
 			var carnoList = [];
 			var thisCarSpecno = '';
 			var ordcoverrate = [],rc2soverrate = [];
+			var paya_total=0,paya_discount=0;
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					/*case 'ucca_invo':
@@ -399,6 +400,39 @@
 							btnOk();
 						}
 						break;
+					case 'paya':
+						var as = _q_appendData("paya", "", true);
+						if (as[0] != undefined) {
+							paya_total=dec(as[0].total);
+							paya_discount=dec(as[0].discount);
+							var t_where = "where=^^ payano='"+$('#txtPayano').val()+"' and noa!='"+$('#txtNoa').val()+"' ^^";
+							q_gt('view_rc2', t_where, 0, 0, 0, "paya_getrc2", r_accy);
+						}else{
+							alert('無【'+$('#txtPayano').val()+'】預付單號');
+						}
+						break;
+					case 'paya_getrc2':
+						var as = _q_appendData("view_rc2", "", true);
+						if (as[0] != undefined) {
+							var rc2_money=0;
+							for (var i = 0; i < as.length; i++) {
+								rc2_money=rc2_money+dec(as[i].money);
+							}
+							if((paya_total-paya_discount-rc2_money-dec($('#txtMoney').val()))<0){
+								alert('【'+$('#txtPayano').val()+'】預付單號 金額超出'+Math.abs(paya_total-paya_discount-rc2_money-dec($('#txtMoney').val())));
+							}else{
+								check_paya=true;
+								btnOk();
+							}
+						}else{
+							if((paya_total-paya_discount-dec($('#txtMoney').val()))<0){
+								alert('【'+$('#txtPayano').val()+'】預付單號 金額超出'+FormatNumber(Math.abs(paya_total-paya_discount-dec($('#txtMoney').val()))));
+							}else{
+								check_paya=true;
+								btnOk();
+							}
+						}
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -443,6 +477,7 @@
 			
 			var check_startdate=false;
 			var check_ordc_overrate=false;
+			var check_paya=false;
 			function btnOk() {
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtTggno', q_getMsg('lblTgg')], ['txtCno', q_getMsg('lblAcomp')]]);
 				// 檢查空白
@@ -459,6 +494,20 @@
 				if (emp($('#txtMon').val()))
 					$('#txtMon').val($('#txtDatea').val().substr(0, 6));*/
 					
+				//判斷起算日,寫入帳款月份
+				if(!check_startdate&&emp($('#txtMon').val())){
+					var t_where = "where=^^ noa='"+$('#txtTggno').val()+"' ^^";
+					q_gt('tgg', t_where, 0, 0, 0, "startdate", r_accy);
+					return;
+				}
+				
+				//判斷超出預付
+				if(!check_paya && !emp($('#txtPayano').val())){
+					var t_where = "where=^^ noa='"+$('#txtPayano').val()+"' ^^";
+					q_gt('paya', t_where, 0, 0, 0, "paya", r_accy);
+					return;
+				}
+				
 				//檢查是否有超交	
 				if(!check_ordc_overrate){
 					var t_where ='';
@@ -474,14 +523,9 @@
 					}
 				}
 				
-				//判斷起算日,寫入帳款月份
-				if(!check_startdate&&emp($('#txtMon').val())){
-					var t_where = "where=^^ noa='"+$('#txtTggno').val()+"' ^^";
-					q_gt('tgg', t_where, 0, 0, 0, "startdate", r_accy);
-					return;
-				}
 				check_startdate=false;
 				check_ordc_overrate=false;
+				check_paya=false;
 				sum();
 				
 				if (q_cur == 1)

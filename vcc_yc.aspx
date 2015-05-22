@@ -275,6 +275,7 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			var carnoList = [];
 			var thisCarSpecno = '';
+			var umma_total=0,umma_discount=0;
 			function q_gtPost(t_name) {
 				var as;
 				switch (t_name) {
@@ -573,6 +574,39 @@
 							sum();
 						}
 						break;
+					case 'umma':
+						var as = _q_appendData("umma", "", true);
+						if (as[0] != undefined) {
+							umma_total=dec(as[0].total);
+							umma_discount=dec(as[0].discount);
+							var t_where = "where=^^ ummano='"+$('#txtUmmano').val()+"' and noa!='"+$('#txtNoa').val()+"' ^^";
+							q_gt('view_vcc', t_where, 0, 0, 0, "umma_getvcc", r_accy);
+						}else{
+							alert('無【'+$('#txtUmmano').val()+'】預收單號');
+						}
+						break;
+					case 'umma_getvcc':
+						var as = _q_appendData("view_vcc", "", true);
+						if (as[0] != undefined) {
+							var vcc_money=0;
+							for (var i = 0; i < as.length; i++) {
+								vcc_money=vcc_money+dec(as[i].money);
+							}
+							if((umma_total-umma_discount-vcc_money-dec($('#txtMoney').val()))<0){
+								alert('【'+$('#txtUmmano').val()+'】預收單號 金額超出'+Math.abs(umma_total-umma_discount-vcc_money-dec($('#txtMoney').val())));
+							}else{
+								check_umma=true;
+								btnOk();
+							}
+						}else{
+							if((umma_total-umma_discount-dec($('#txtMoney').val()))<0){
+								alert('【'+$('#txtUmmano').val()+'】預收單號 金額超出'+FormatNumber(Math.abs(umma_total-umma_discount-dec($('#txtMoney').val()))));
+							}else{
+								check_umma=true;
+								btnOk();
+							}
+						}
+						break;
 				}
 				if(t_name.split('_')[0]=="uccuweight"){
 					var n=t_name.split('_')[1];
@@ -594,6 +628,7 @@
 			}
 			
 			var check_startdate=false;
+			var check_umma=false;
 			function btnOk() {
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')]]);
 				if (t_err.length > 0) {
@@ -608,7 +643,15 @@
 				}
 				/*if (emp($('#txtMon').val()))
 					$('#txtMon').val($('#txtDatea').val().substr(0, 6));*/
+					
+				//判斷超出預收
+				if(!check_umma && !emp($('#txtUmmano').val())){
+					var t_where = "where=^^ noa='"+$('#txtUmmano').val()+"' ^^";
+					q_gt('umma', t_where, 0, 0, 0, "umma", r_accy);
+					return;
+				}
 				
+				check_umma=false;
 				check_startdate=false;
 					
 				if (q_cur == 1)
