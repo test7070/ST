@@ -15,7 +15,7 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
             q_tables = 's';
-            var q_name = "quat";
+            var q_name = "orde";
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
             var q_readonlys = [];
             var bbmNum = [];
@@ -27,13 +27,13 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Datea';
-            brwCount2 = 20;
+            brwCount2 = 10;
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial', 'txtCustno,txtComp,txtNick,txtSerial', 'cust_b.aspx']
             	,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
-            	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClassa_', 'spec_b.aspx']);
+            	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']);
             $(document).ready(function() {
                 bbmKey = ['noa'];
-                bbsKey = ['noa', 'no3'];
+                bbsKey = ['noa', 'no2'];
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
             });
@@ -453,11 +453,12 @@
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
-						<td><span> </span><a class="lbl">合約編號</a></td>
+						<td><span> </span><a class="lbl">訂單編號</a></td>
 						<td><input id="txtNoa"  type="text" class="txt c1" maxlength="20"/></td>
 						<td><span> </span><a class="lbl">日期</a></td>
 						<td><input id="txtDatea"  type="text" class="txt c1"/></td>
-				
+						<td><span> </span><a class="lbl">交貨日期</a></td>
+						<td><input id="txtOdate"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblCust" class="lbl btn"></a></td>
@@ -470,22 +471,6 @@
 						<td><input id="txtSerial"  type="text" class="txt c1" maxlength="20"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a class="lbl">代表人</a></td>
-						<td colspan="2"><input id="txtBoss"  type="text" class="txt c1" maxlength="20"/></td>
-						<td><span> </span><a class="lbl">連絡人</a></td>
-						<td colspan="2"><input id="txtConn"  type="text" class="txt c1" maxlength="20"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a class="lbl">電話</a></td>
-						<td colspan="2"><input id="txtTel"  type="text" class="txt c1" maxlength="20"/></td>
-						<td><span> </span><a class="lbl">傳真</a></td>
-						<td colspan="2"><input id="txtFax"  type="text" class="txt c1" maxlength="20"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a class="lbl">交貨日期</a></td>
-						<td><input id="txtOdate"  type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
 						<td><span> </span><a class="lbl">付款方式</a></td>
 						<td>
 							<input id="txtPaytype" type="text" class="txt" style="float:left;width: 80%;" maxlength="20"/>
@@ -494,42 +479,7 @@
 						<td><span> </span><a class="lbl">付款備註</a></td>
 						<td colspan="3"><input id="txtMemo2"  type="text" class="txt c1"/></td>
 					</tr>
-					<tr>
-						<td><span> </span><a class="lbl">包裝方式</a></td>
-						<td><input id="txtPacktype"  type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a class="lbl">交貨方式</a></td>
-						<td style="color:black;"><input type="checkbox" id="chkChka1">賣方運送</td>
-						<td style="color:black;"><input type="checkbox" id="chkChka2">買方自運</td>
-						<td style="color:black;"><input type="checkbox" id="chkChka3">可分批交運</td>
-						<td style="color:black;"><input type="checkbox" id="chkChka4">不可分批交運</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td  style="color:black;" colspan="2"><input type="checkbox" id="chkChka5">出貨數量若不足五噸，另需負擔運費</td>
-					</tr>
-					<tr>
-						<td><span> </span><a class="lbl">交貨地點</a></td>
-						<td colspan="5"><input id="txtAddr"  type="text" class="txt c1" maxlength="50"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a class="lbl">交貨公差</a></td>
-						<td><input id="txtTolerance"  type="text" class="txt c1 num"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a class="lbl">材料類別</a></td>
-						<td style="color:black;"><span style="display: block;width:20px;float:left;">A.</span><input type="checkbox" style="float:left;" id="chkChkb1">一般流通品</td>
-					</tr>
-					<tr>
-						<td> </td>
-						<td style="color:black;"><span style="display: block;width:20px;float:left;">B.</span><input type="checkbox" style="float:left;" id="chkChkb2">買方專用材料</td>
-					</tr>
-					<tr>
-						<td> </td>
-						<td style="color:black;"><span style="display: block;width:20px;float:left;"></span><input type="checkbox" style="float:left;" id="chkChkb3">特製皮膜</td>
-						<td style="color:black;" colspan="4"><input type="checkbox" id="chkChkb4">特殊規格鋼捲，於合約完成後半年內未出貨完畢，買方需購回剩餘原材料。</td>
-					</tr>
+					
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td colspan="5"><textarea id="txtMemo" rows="5" class="txt c1"></textarea></td>
@@ -561,13 +511,12 @@
 					<td style="width:60px;">單位</td>
 					<td style="width:80px;">數量</td>
 					<td style="width:80px;">單價</td>
-					<td style="width:120px;">P/O</td>
-					<td style="width:120px;">P/N</td>
+					<td style="width:200px;">P/O<br>P/N</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
-						<input id="txtNo3.*" type="text" style="display: none;"/>
+						<input id="txtNo2.*" type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
@@ -582,7 +531,7 @@
 
 					<td>
 						<input id="txtSpec.*" type="text" style="width:45%"/>
-						<input id="txtClassa.*" type="text" style="width:45%"/>
+						<input id="txtClass.*" type="text" style="width:45%"/>
 						<input id="btnSpec.*" type="button" style="display:none;"/>
 					</td>
 					<td><input id="txtStyle.*" type="text" class="txt c1"/></td>
@@ -591,8 +540,7 @@
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtPo.*" type="text" class="txt c1"/></td>
-					<td><input id="txtPn.*" type="text" class="txt c1"/></td>
+					<td><textarea id="txtMemo.*" rows="2" class="txt c1"></textarea></td>
 				</tr>
 			</table>
 		</div>
