@@ -418,22 +418,6 @@
                 position: absolute;
                 z-index: 50;
             }
-            .signupXX {font-family: "微軟正黑體","Microsoft JhengHei",sans-serif;
-			    padding: 10 10 10 10px;
-			    background: #fff;
-			    box-shadow: 
-			        0px 0px 0px 5px rgba( 255,255,255,0.4 ), 
-			        0px 4px 20px rgba( 0,0,0,0.33 );
-			    -moz-border-radius: 5px;
-			    -webkit-border-radius: 5px;
-			    border-radius: 5px;
-				margin-top:5px;
-				margin-bottom:10px;
-			    /*display: table;
-			    position: static;*/
-				/*width:620px;*/ 
-				margin-left:5px;
-			}
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
