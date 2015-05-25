@@ -23,7 +23,7 @@
             var q_name = "cub";
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2','txtBdime','txtEdime','txtIdime','txtOdime'];
             var q_readonlys = ['txtOrdeno','txtNo2'];
-            var q_readonlyt = [];
+            var q_readonlyt = ['txtWeight'];
             var bbmNum = [];
             var bbsNum = [];
             var bbtNum = [];
@@ -68,7 +68,7 @@
                 bbtMask = [['txtDatea', r_picd]];
                 bbmNum = [];
                 bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1],['txtLengthb', 10, 0, 1]];
-                bbtNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1]];//,['txtLengthb', 10, 0, 1]
+                bbtNum = [['txtGmount', 10, q_getPara('vcc.mountPrecision'), 1],['txtGweight', 10, q_getPara('vcc.weightPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1]];//,['txtLengthb', 10, 0, 1]
                 q_mask(bbmMask);
                 
                 document.title='廠內加工單';
@@ -131,7 +131,8 @@
 					var n=t_name.split('_')[1];
 					var as = _q_appendData("ucc", "", true);
 					if (as[0] != undefined) {
-						q_tr('txtWeight__'+n,q_mul(q_float('txtMount__'+n),dec(as[0].uweight)));
+						q_tr('txtGweight__'+n,q_mul(q_float('txtGmount__'+n),dec(as[0].uweight)));
+						q_tr('txtWeight__'+n,q_mul(q_float('txtGmount__'+n),dec(as[0].uweight)));
 						sum();
 					}
 				}
@@ -148,8 +149,8 @@
 					var n=t_name.split('_')[1];
 					var as = _q_appendData("ucc", "", true);
 					if (as[0] != undefined) {
-						q_tr('txtMount__'+n,q_mul(q_float('txtLengthb__'+n),dec(as[0].stdmount)));
-						q_tr('txtWeight__'+n,q_mul(q_float('txtMount__'+n),dec(as[0].uweight)));
+						q_tr('txtGmount__'+n,q_mul(q_float('txtLengthb__'+n),dec(as[0].stdmount)));
+						q_tr('txtGweight__'+n,q_mul(q_float('txtGmount__'+n),dec(as[0].uweight)));
 						sum();
 					}
 				}
@@ -254,7 +255,7 @@
 							}
 						});
 						
-                        $('#txtMount__'+i).change(function(e){
+                        $('#txtGmount__'+i).change(function(e){
                         	var n = $(this).attr('id').split('__')[$(this).attr('id').split('__').length-1];
 							$('#txtDatea__'+n).val(q_date());
 							if (!emp($('#txtProductno__' + n).val())) {
@@ -264,7 +265,7 @@
                             sum();
                         });
                         
-                        $('#txtWeight__'+i).change(function(e){
+                        $('#txtGweight__'+i).change(function(e){
                             sum();
                         });
                     }
@@ -325,8 +326,8 @@
                     t_iweight = q_add(t_iweight,q_float('txtWeight_'+i));
                 }
                 for (var i = 0; i < q_bbtCount; i++) {
-                    t_omount = q_add(t_omount,q_float('txtMount__'+i));
-                    t_oweight = q_add(t_oweight,q_float('txtWeight__'+i));
+                    t_omount = q_add(t_omount,q_float('txtGmount__'+i));
+                    t_oweight = q_add(t_oweight,q_float('txtGweight__'+i));
                 }
                 
                 $('#txtBdime').val(t_imount);
@@ -443,7 +444,7 @@
             }
             .dview {
                 float: left;
-                width: 300px;
+                width: 240px;
                 border-width: 0px;
             }
             .tview {
@@ -588,14 +589,14 @@
                     <tr>
                         <td align="center" style="width:30px; color:black;"><a id='vewChk'> </a></td>
                         <td align="center" style="width:100px; color:black;"><a id='vewDatea'> </a></td>
-                        <td align="center" style="width:170px; color:black;"><a>員工</a></td>
+                        <td align="center" style="width:100px; color:black;"><a>員工</a></td>
                     </tr>
                     <tr>
                         <td>
                         <input id="chkBrow.*" type="checkbox" style=''/>
                         </td>
                         <td align="center" id='datea'>~datea</td>
-                        <td id='tgg' style="text-align: right;" >~tgg</td>
+                        <td id='tgg' style="text-align: center;" >~tgg</td>
                     </tr>
                 </table>
             </div>
@@ -722,6 +723,7 @@
                         <!--<td style="width:80px; text-align: center;">箱數</td>-->
                         <td style="width:80px; text-align: center;">領料數量</td>
                         <td style="width:80px; text-align: center;">領料重量</td>
+                        <td style="width:80px; text-align: center;">理論重</td>
                         <td style="width:80px; text-align: center;">領料日</td>
                         <td style="width:180px; text-align: center;">領料倉</td>
                         <td style="width:150px; text-align: center;">批號</td>
@@ -740,7 +742,8 @@
                         <td><input id="txtProduct..*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtUnit..*" type="text" style="float:left;width:95%;"/></td>
                         <!--<td><input id="txtLengthb..*"  type="text" style="width:95%; text-align: right;"/></td>-->
-                        <td><input id="txtMount..*"  type="text" style="width:95%; text-align: right;"/></td>
+                        <td><input id="txtGmount..*"  type="text" style="width:95%; text-align: right;"/></td>
+                        <td><input id="txtGweight..*"  type="text" style="width:95%; text-align: right;"/></td>
                         <td><input id="txtWeight..*"  type="text" style="width:95%; text-align: right;"/></td>
                         <td><input id="txtDatea..*" type="text" style="float:left;width:95%;"/></td>
                         <td>
