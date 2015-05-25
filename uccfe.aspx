@@ -30,13 +30,14 @@
             brwCount2 = 10;
            	aPop = new Array(['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']);
            	
+           	t_groupano = "";
            	q_copy = 1;
             $(document).ready(function() {
                 q_bbsShow = -1;
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+                q_gt('uccga', '', 0, 0, 0, "");
             });
             
             function main() {
@@ -50,7 +51,10 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
-                
+                q_cmbParse("cmbGroupano", t_groupano);
+				if (abbm[q_recno] != undefined) {
+					$("#cmbGroupano").val(abbm[q_recno].groupano);
+				}
                 $('#btnImport').click(function(e){
                 	
                 });
@@ -66,6 +70,16 @@
 			}
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'uccga':
+						var as = _q_appendData("uccga", "", true);
+						if (as[0] != undefined) {
+							t_groupano = " @ ";
+							for ( i = 0; i < as.length; i++) {
+								t_groupano = t_groupano + (t_groupano.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
+							}
+							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						}
+						break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -394,6 +408,8 @@
                     <tr>
                     	<td><span> </span><a id="lblStdmount" class="lbl"> </a></td>
                         <td><input id="txtStdmount" type="text" class="txt num c1"/></td>
+                        <td><span> </span><a id='lblGroupano' class="lbl"> </a></td>
+						<td><select id="cmbGroupano" class="txt c1"></select></td>
                     </tr>
                     <tr>
 						<td><span> </span><a id='lblTggno' class="lbl btn"> </a></td>

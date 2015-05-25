@@ -25,10 +25,13 @@
 			brwNowPage = 0;
 			brwKey = 'noa';
 			brwCount2 = 20;
+			
+			t_groupano = "";
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				q_brwCount();
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+				q_gt('uccga', '', 0, 0, 0, "");
+				
 			});
 			function currentData() {
 			}
@@ -75,7 +78,10 @@
 			function mainPost() {
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('uccst.typea'));
-				q_gt('uccga', '', 0, 0, 0, "");
+				q_cmbParse("cmbGroupano", t_groupano);
+				if (abbm[q_recno] != undefined) {
+					$("#cmbGroupano").val(abbm[q_recno].groupano);
+				}
 			}
 			function q_boxClose(s2) {
 				var ret;
@@ -92,14 +98,11 @@
 					case 'uccga':
 						var as = _q_appendData("uccga", "", true);
 						if (as[0] != undefined) {
-							var t_item = " @ ";
+							t_groupano = " @ ";
 							for ( i = 0; i < as.length; i++) {
-								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
+								t_groupano = t_groupano + (t_groupano.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
 							}
-							q_cmbParse("cmbGroupano", t_item);
-							if (abbm[q_recno] != undefined) {
-								$("#cmbGroupano").val(abbm[q_recno].groupano);
-							}
+							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 						}
 						break;
 					case q_name:
