@@ -29,7 +29,7 @@
 			brwNowPage = 0;
 			brwKey = 'Datea';
 			aPop = new Array(
-				['txtStationno', 'lblStation', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'],
+				['txtStationno', 'lblStation', 'part', 'noa,part', 'txtStationno,txtStation', 'part_b.aspx'],
 				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'],
 				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx']
@@ -59,7 +59,7 @@
 				q_mask(bbmMask);
 				q_cmbParse("cmbItype", q_getPara('ina.typea'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
-				
+				$('#lblStation').text('部門');
 			}
 
 			function q_boxClose(s2) {
@@ -182,10 +182,7 @@
 			}
 
 			function btnPrint() {
-				if (q_getPara('sys.menu').substr(0,3)=='qra')
-					q_box('z_ina_rap.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
-				else
-					q_box('z_inap.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
+				q_box('z_inap_yc.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
