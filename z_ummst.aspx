@@ -56,54 +56,54 @@
                 	$('#q_report').q_report({
 	                    fileName : 'z_ummst',
 	                    options : [{
-	                        type : '6', //[1]
+	                        type : '6', //[1]  1
 	                        name : 'xcno'
 	                    }, {
-	                        type : '6', //[2]
+	                        type : '6', //[2]    2
 	                        name : 'xpart'
 	                    }, {
-	                        type : '1', //[3][4]
+	                        type : '1', //[3][4]   3
 	                        name : 'date'
 	                    }, {
-	                        type : '2', //[5][6]
+	                        type : '2', //[5][6]  4
 	                        name : 'xcust',
 	                        dbf : 'cust',
 	                        index : 'noa,comp',
 	                        src : 'cust_b.aspx'
 	                    }, {
-	                        type : '1', //[7][8]
+	                        type : '1', //[7][8]  5
 	                        name : 'xdate'
 	                    }, {
 	                        type : '0',
 	                        name : 'accy', //[9]
 	                        value : r_accy + "_" + r_cno
 	                    }, {
-	                        type : '0', //[10]
+	                        type : '0', //[10]  
 	                        name : 'xaccy',
 	                        value : r_accy
 	                    }, {
-	                        type : '2', //[11][12]
+	                        type : '2', //[11][12]  6
 	                        name : 'scno',
 	                        dbf : 'acomp',
 	                        index : 'noa,acomp',
 	                        src : 'acomp_b.aspx'
 	                    }, {
-	                        type : '1', //[13][14]
+	                        type : '1', //[13][14]  7
 	                        name : 'smon'
 	                    }, {
-	                        type : '2', //[15][16]
+	                        type : '2', //[15][16]   8
 	                        name : 'sales',
 	                        dbf : 'sss',
 	                        index : 'noa,namea',
 	                        src : 'sss_b.aspx'
 	                    }, {
-	                        type : '2', //[17][18]
+	                        type : '2', //[17][18]   9
 	                        name : 'product',
 	                        dbf : 'ucaucc',
 	                        index : 'noa,product',
 	                        src : 'ucaucc_b.aspx'
 	                    }, {
-	                        type : '6', //[19]
+	                        type : '6', //[19]   10
 	                        name : 'xmemo'
 	                    }, {
 	                        type : '6', //[20]
