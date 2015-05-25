@@ -27,7 +27,7 @@
 				$('#q_report').click(function(e) {
 					//客戶請款單與應收對帳簡要表>>正常隱藏業務選項>>>不然會造成金額問題
 					if(!(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1 || q_getPara('sys.comp').indexOf('永勝')>-1 || q_getPara('sys.project').toUpperCase()=='RB')){
-						if($('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm13' || $('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm10'){
+						if($('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm13' || $('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm10' || $('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report=='z_umm16'){
 							$('#Sales').hide();
 						}
 						//月結客戶刪除業務應收帳款總表>>>月結會不知道帳要沖到哪一個業務
@@ -58,6 +58,16 @@
 								delete_report=i;
 						}
 						if($('#q_report div div').text().indexOf('客戶收款簽收報表')>-1)
+							$('#q_report div div')[delete_report].remove();
+					}
+					
+					if(!(q_getPara('sys.project').toUpperCase()=='YC' || q_getPara('sys.project').toUpperCase()=='FE' || q_getPara('sys.project')=='1')){
+						var delete_report=0;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_umm16')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('客戶請款單(重量)')>-1)
 							$('#q_report div div')[delete_report].remove();
 					}
 						

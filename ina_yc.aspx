@@ -150,7 +150,7 @@
 							sum();
 						});
 						
-						$('#txtLengthb_'+i).change(function(){
+						$('#txtLengthb_'+j).change(function(){
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if (!emp($('#txtProductno_' + n).val())) {
 								var t_where = "where=^^ noa='" + $('#txtProductno_' + n).val() + "' ^^ stop=1";

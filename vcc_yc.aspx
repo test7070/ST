@@ -202,7 +202,7 @@
 					//計算正常金額
 					sum();
 					//計算折扣 
-					q_tr('txtDiscount', Math.round(q_div(q_mul(q_float('txtTotal'),q_float('txtPrice')),100)));
+					q_tr('txtDiscount', Math.round(q_div(q_mul(q_float('txtMoney'),q_float('txtPrice')),100)));
 					//重新計算折扣後的金額
 					sum();
 				});
