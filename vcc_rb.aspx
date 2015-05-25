@@ -160,7 +160,7 @@
 					var t_storeno = trim($('#txtStoreno').val());
 					var t_where = "";
 					//0518 抓表頭 且全部出來
-					t_where = "isnull(enda,0)!=1 and isnull(cancel,0)!=1 ";
+					t_where = " isnull(enda,0)!=1 and isnull(cancel,0)!=1 ";
 					if (t_custno.length>0){
 						t_where += " and custno='"+t_custno+ "' ";
 					}
@@ -168,7 +168,7 @@
 						t_where += " and  postname='"+t_storeno+"' ";
 					}
 					
-					q_box("orde_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'orde', "95%", "350px", q_getMsg('popOrde'));
+					q_box("orde_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'orde', "400px", "95%", q_getMsg('popOrde'));
 					
 					/*if (t_custno.length > 0 || t_storeno.length>0 ) {
 						t_where = "isnull(notv,0)>0  and isnull(enda,0)!=1 and isnull(cancel,0)!=1 ";
@@ -635,6 +635,12 @@
 							$('#cmbStype').val(as[0].stype);
 						}
 						//寫入bbs
+						for (var  j = 0; j < ass.length; j++) {
+							if(ass[j].enda=="true" || ass[j].cancel=="true"){
+								ass.splice(j, 1);
+                                j--;
+							}
+						}
 						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', ass.length, ass, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
 						sum();
 						break;
