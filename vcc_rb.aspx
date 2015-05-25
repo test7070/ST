@@ -621,6 +621,11 @@
 						$('#txtAddr2').val(t_addr2);
 						$('#txtApvmemo').val(t_consignee);
 						if (as[0] != undefined){
+							$('#txtCustno').val(as[0].custno);
+							$('#txtComp').val(as[0].comp);
+							$('#txtTel').val(as[0].tel);
+							$('#txtFax').val(as[0].fax);
+							
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
 							$('#txtPaytype').val(as[0].paytype);
