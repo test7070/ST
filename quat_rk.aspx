@@ -362,7 +362,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1200px;
+                width: 1250px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -374,7 +374,6 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1700px;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -390,7 +389,7 @@
                 font-size: medium;
             }
             #dbbt {
-                width: 1500px;
+                width: 1250px;
             }
             #tbbt {
                 margin: 0;
@@ -552,7 +551,7 @@
 					<td style="width:20px;"></td>
 					<td style="width:200px;">品名</td>
 					<td style="width:60px;">厚</td>
-					<td style="width:60px;">皮瞙厚</td>
+					<td style="width:60px;">皮膜厚</td>
 					<td style="width:60px;">寬</td>
 					<td style="width:60px;">長</td>
 					<td style="width:160px;">皮膜</td>
@@ -561,8 +560,8 @@
 					<td style="width:60px;">單位</td>
 					<td style="width:80px;">數量</td>
 					<td style="width:80px;">單價</td>
-					<td style="width:120px;">P/O</td>
-					<td style="width:120px;">P/N</td>
+					<td style="width:120px;display:none;">P/O</td>
+					<td style="width:120px;display:none;">P/N</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -591,8 +590,8 @@
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtPo.*" type="text" class="txt c1"/></td>
-					<td><input id="txtPn.*" type="text" class="txt c1"/></td>
+					<td style="display:none;"><input id="txtPo.*" type="text" class="txt c1"/></td>
+					<td style="display:none;"><input id="txtPn.*" type="text" class="txt c1"/></td>
 				</tr>
 			</table>
 		</div>

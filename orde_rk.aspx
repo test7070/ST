@@ -16,7 +16,7 @@
 		<script type="text/javascript">
             q_tables = 's';
             var q_name = "orde";
-            var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
+            var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2','txtMoney','txtTax','txtTotal','txtQuatno'];
             var q_readonlys = [];
             var bbmNum = [];
             var bbsNum = [];
@@ -28,7 +28,7 @@
             brwNowPage = 0;
             brwKey = 'Datea';
             brwCount2 = 10;
-            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial', 'txtCustno,txtComp,txtNick,txtSerial', 'cust_b.aspx']
+            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
             	,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']);
             $(document).ready(function() {
@@ -38,12 +38,70 @@
                 q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
             });
 			function sum(){
+				if(!(q_cur==1 || q_cur==2))
+					return;
+				$('#cmbTaxtype').val((($('#cmbTaxtype').val())?$('#cmbTaxtype').val():'1'));
+                $('#txtMoney').attr('readonly', true);
+                $('#txtTax').attr('readonly', true);
+                $('#txtTotal').attr('readonly', true);
+                $('#txtMoney').css('background-color', 'rgb(237,237,238)').css('color', 'green');
+                $('#txtTax').css('background-color', 'rgb(237,237,238)').css('color', 'green');
+                $('#txtTotal').css('background-color', 'rgb(237,237,238)').css('color', 'green');
+                
+                
+				var t_money = 0,t_tax=0,t_total=0;
 				for(var i=0;i<q_bbsCount;i++){
-					
-					
+					t_unit = $.trim($('#txtUnit_'+i).val()).toUpperCase();
+					t_count = (t_unit=='KG' || t_unit=='公斤'|| t_unit=='噸')?q_float('txtWeight_'+i):q_float('txtMount_'+i);
+					t_moneys = round(q_mul(q_float('txtPrice_'+i),t_count),0);		
+					q_tr('txtTotal_'+i,t_moneys,0);
+					t_money = q_add(t_money,t_moneys);
 				}
 				
+				//------------------------------------------------------------------------------
+				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
+                switch ($('#cmbTaxtype').val()) {
+                    case '1':
+                        // 應稅
+                        t_tax = round(q_mul(t_money,t_taxrate), 0);
+                        t_total = q_add(t_money,t_tax);
+                        break;
+                    case '2':
+                        //零稅率
+                        t_tax = 0;
+                        t_total = q_add(t_money,t_tax);
+                        break;
+                    case '3':
+                        // 內含
+                        t_tax = q_sub(t_money,round(q_div(t_money, q_add(1, t_taxrate)), 0));
+                        t_total = t_money;
+                        t_money = q_sub(t_total,t_tax);
+                        break;
+                    case '4':
+                        // 免稅
+                        t_tax = 0;
+                        t_total = q_add(t_money,t_tax);
+                        break;
+                    case '5':
+                        // 自定
+                        $('#txtTax').attr('readonly', false);
+                        $('#txtTax').css('background-color', 'white').css('color', 'black');
+                        t_tax = round(q_float('txtTax'), 0);
+                        t_total = q_add(t_money,t_tax);
+                        break;
+                    case '6':
+                        // 作廢-清空資料
+                        t_money = 0, t_tax = 0, t_total = 0;
+                        break;
+                    default:
+                }
+				//---------------------------
+				q_tr('txtMoney',t_money,0);
+				q_tr('txtTax',t_tax,0);
+				q_tr('txtTotal',t_total,0);
 			}
+			
+			
             function main() {
                 if (dataErr) {
                     dataErr = false;
@@ -58,6 +116,11 @@
                 bbsMask = [];
                 q_mask(bbmMask);
                 q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
+                q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+                $("#cmbTaxtype").change(function(e) {
+                    sum();
+                });
+                
                 $("#combPaytype").change(function(e) {
 					if (q_cur == 1 || q_cur == 2){
 						$('#txtPaytype').val($('#combPaytype').find(":selected").text());
@@ -79,6 +142,24 @@
 						input.selectionEnd = $(this).val().indexOf(n) + (n + "").length;
 					}
 				});
+				$('#btnQuat').click(function(e){
+					if(!(q_cur==1 || q_cur==2))
+						return;
+					var t_noa = $('#txtNoa').val();
+                	var t_custno = $('#txtCustno').val();
+                	var t_where ='';
+                	q_box("quat_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({ordeno:t_noa,custno:t_custno,page:'orde_rk'}), "quat_orde", "95%", "95%", '');
+                });
+            }
+            function distinct(arr1){
+                var uniArray = [];
+                for(var i=0;i<arr1.length;i++){
+                    var val = arr1[i];
+                    if($.inArray(val, uniArray)===-1){
+                        uniArray.push(val);
+                    }
+                }
+                return uniArray;
             }
 
             function q_popPost(s1) {
@@ -163,7 +244,15 @@
                     	$('#txtMount_'+i).change(function(e){
                     		sum();
                     	});
-                    	
+                    	$('#txtWeight_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtPrice_'+i).change(function(e){
+                    		sum();
+                    	});
+                    	$('#txtUnit_'+i).change(function(e){
+                    		sum();
+                    	});
                     }
                 }
                 _bbsAssign();
@@ -182,7 +271,7 @@
             }
 
             function btnPrint() {
-				q_box("z_quat_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
+				q_box("z_orde_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
             }
 
             function wrServer(key_value) {
@@ -467,8 +556,16 @@
 							<input id="txtComp"  type="text" class="txt" style="width:70%;" maxlength="50"/>
 							<input id="txtNick"  type="text" class="txt" style="display:none;" maxlength="20"/>
 						</td>
-						<td><span> </span><a id="lblSerial" class="lbl"></a></td>
-						<td><input id="txtSerial"  type="text" class="txt c1" maxlength="20"/></td>
+						<td><span> </span><a id="lblFax" class="lbl"></a></td>
+						<td colspan="2"><input id="txtFax"  type="text" class="txt c1" maxlength="20"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblAddr" class="lbl"></a></td>
+						<td colspan="5"><input id="txtAddr"  type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblAddr2" class="lbl"></a></td>
+						<td colspan="5"><input id="txtAddr2"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">付款方式</a></td>
@@ -479,7 +576,18 @@
 						<td><span> </span><a class="lbl">付款備註</a></td>
 						<td colspan="3"><input id="txtMemo2"  type="text" class="txt c1"/></td>
 					</tr>
-					
+					<tr>
+                        <td><span> </span><a id='lblMoney' class="lbl"> </a></td>
+                        <td><input id="txtMoney" type="text" class="txt num c1" /></td>
+                        <td><span> </span><a id='lblTax' class="lbl"> </a></td>
+                        <td>
+                        	<input id="txtTax" type="text" class="txt num" style="width:50%;"/>
+                        	<span style="float:left;display:block;width:3%;"></span>
+                        	<select id="cmbTaxtype" style="float:left;width:42%;" > </select>
+                        </td>
+                        <td><span> </span><a id='lblTotal' class="lbl"> </a></td>
+                        <td><input id="txtTotal" type="text" class="txt num c1" /></td>
+                    </tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td colspan="5"><textarea id="txtMemo" rows="5" class="txt c1"></textarea></td>
@@ -488,7 +596,9 @@
 						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
 						<td><input id="txtWorker" type="text" class="txt c1" maxlength="20"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"></a></td>
-						<td><input id="txtWorker2" type="text" class="txt c1" maxlength="20"/></td>
+						<td><input id="txtWorker2" type="text" class="txt c1" maxlength="20"/></td>		
+						<td align="center"><input id="btnQuat" type="button" value="報價匯入"/></td>
+						<td><input id="txtQuatno" type="text" class="txt c1" /></td>
 					</tr>
 				</table>
 			</div>
@@ -502,7 +612,7 @@
 					<td style="width:20px;"></td>
 					<td style="width:200px;">品名</td>
 					<td style="width:60px;">厚</td>
-					<td style="width:60px;">皮瞙厚</td>
+					<td style="width:60px;">皮膜厚</td>
 					<td style="width:60px;">寬</td>
 					<td style="width:60px;">長</td>
 					<td style="width:160px;">皮膜</td>
@@ -510,13 +620,17 @@
 					<td style="width:100px;">保護膜</td>
 					<td style="width:60px;">單位</td>
 					<td style="width:80px;">數量</td>
+					<td style="width:80px;">重量</td>
 					<td style="width:80px;">單價</td>
+					<td style="width:80px;">金額</td>
 					<td style="width:200px;">P/O<br>P/N</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 						<input id="txtNo2.*" type="text" style="display: none;"/>
+						<input id="txtQuatno.*" type="text" style="display: none;"/>
+						<input id="txtNo3.*" type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
@@ -539,7 +653,9 @@
 					
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWeight.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtTotal.*" type="text" class="txt c1 num"/></td>
 					<td><textarea id="txtMemo.*" rows="2" class="txt c1"></textarea></td>
 				</tr>
 			</table>
