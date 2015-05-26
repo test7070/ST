@@ -61,7 +61,19 @@
 						type : '0',//[10]
 						name : 'projectname',
 						value : q_getPara('sys.project').toUpperCase()
-					}]
+					}, {
+                        type : '0', //[11]
+                        name : 'mountprecision',
+                        value : q_getPara('vcc.mountPrecision')
+                    }, {
+                        type : '0', //[12]
+                        name : 'weightprecision',
+                        value : q_getPara('vcc.weightPrecision')
+                    }, {
+                        type : '0', //[13]
+                        name : 'priceprecision',
+                        value : q_getPara('vcc.pricePrecision')
+                    }]
 				});
 				q_popAssign();
 				q_getFormat();

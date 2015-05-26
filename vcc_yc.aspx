@@ -202,7 +202,7 @@
 					//計算正常金額
 					sum();
 					//計算折扣 
-					q_tr('txtDiscount', Math.round(q_div(q_mul(q_float('txtTotal'),q_float('txtPrice')),100)));
+					q_tr('txtDiscount', Math.round(q_div(q_mul(q_float('txtMoney'),q_float('txtPrice')),100)));
 					//重新計算折扣後的金額
 					sum();
 				});
@@ -1336,11 +1336,11 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1455px;">
+		<div class='dbbs' style="width: 1555px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;width:" /></td>
-					<td align="center" style="width:100px"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:200px"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:300px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>

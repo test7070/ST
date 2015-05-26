@@ -21,6 +21,15 @@
 				q_getId();
 				
 				q_gf('', 'z_anavccst');
+				
+				$('#q_report').click(function() {
+					now_report=$('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report;
+					if(now_report=='z_anavccst04'){
+						$('#lblXdate').text('訂單日期');
+					}else{
+						$('#lblXdate').text(q_getMsg("lblXdate"));
+					}
+				});
 						
 			});
 			function q_gfPost() {
