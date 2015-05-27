@@ -208,8 +208,8 @@
 					$('#txtSmon2').mask('999/99');
 					$('#Xmemo').removeClass('a2').addClass('a1');
 					$('#txtXmemo').css('width', '85%');
-					$('.q_report .report').css('width', '420px');
-					$('.q_report .report div').css('width', '200px');
+					$('.q_report .report').css('width', '460px');
+					$('.q_report .report div').css('width', '220px');
 					
 					$('#Showunpay').css('width','300px');
 					$('#chkShowunpay').css('width','220px');
