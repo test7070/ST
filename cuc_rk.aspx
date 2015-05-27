@@ -544,21 +544,17 @@
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"></td>
-					<td style="width:200px;">生產指示單號</td>
-					<td style="width:200px;">製造批號</td>
+					<td style="width:200px;">訂單號碼<BR>製造批號</td>
 					<td style="width:120px;">皮膜<BR>編號</td>
 					<td style="width:120px;">半成品<BR>進料<BR>重量(KG)</td>
 					<td style="width:120px;">SHEET(COIL)規格尺寸</td>
 					<td style="width:120px;">作業條件</td>
 					<td style="width:120px;">SHEET(COIL)裁剪(分條)尺寸</td>
-					<td style="width:120px;">進料數量</td>
-					<td style="width:120px;">進料重量</td>
-					<td style="width:120px;">裁切數量</td>
-					<td style="width:120px;">裁切重量</td>
-					<td style="width:120px;">成品片數</td>
-					<td style="width:120px;">成品重量</td>
-					<td style="width:120px;">待修品片數</td>
-					<td style="width:120px;">待修品重量</td>
+					<td style="width:120px;">進料<br>數量<br>重量</td>
+					<td style="width:120px;">裁切<br>數量<br>重量</td>
+					<td style="width:120px;">成品<br>片數<br>重量</td>
+					<td style="width:120px;">餘料<br>片數<br>重量</td>
+					<td style="width:120px;">待修品<br>片數<br>重量</td>
 					<td style="width:120px;">廢料重量(KG)</td>
 					<td style="width:120px;">裁剪(包裝)工時(分)</td>
 					<td style="width:120px;">COIL編號</td>
@@ -570,30 +566,45 @@
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-						<input id="txtOrdeno.*" type="text" class="txt c1"/>
-						<input id="txtno2.*" type="text" style="display:none;"/>
+						<input id="txtOrdeno.*" type="text" style="float:left;width:72%;"/>
+						<input id="txtNo2.*" type="text" style="float:left;width:20%;"/>
+						<input id="txtCubno.*" type="text" style="float:left;width:95%;"/>
 					</td>
-					<td><input id="txtSpec.*" type="text" class="txt c1"/></td>
+					<td><input id="txtSpec.*" type="text" style="float:left;width:95%;"/></td>
 					<td>
-						<input id="txtMount.*" type="text" class="txt c1 num" style="display:none;"/>
-						<input id="txtWeight.*" type="text" class="txt c1 num"/>
+						<input id="txtMount.*" type="text" style="display:none;"/>
+						<input id="txtWeight.*" type="text" class="num" style="float:left;width:95%;"/>
 					</td>
-					<td><input id="txtSize.*" type="text" class="txt c1"/></td>
-					<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
-					<td><input id="txtSize2.*" type="text" class="txt c1"/></td>
-					<td><input id="txtMount1.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWeight1.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtMount2.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWeight2.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtMount3.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWeight3.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtMount4.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWeight4.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtMount5.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWeight5.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtWaste.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtHours.*" type="text" class="txt c1 num"/></td>
-					<td><input id="txtUno.*" type="text" class="txt c1"/></td>
+					<td><input id="txtSize.*" type="text" style="float:left;width:95%;"/></td>
+					<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
+					<td>
+						<input id="txtSize2.*" type="text" style="float:left;width:95%;"/>
+						<input id="txtWidth.*" type="text" class="num" style="float:left;width:46%;"/>
+						<input id="txtLengthb.*" type="text" class="num" style="float:left;width:46%;"/>
+					</td>
+					<td>
+						<input id="txtMount1.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight1.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td>
+						<input id="txtMount2.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight2.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td>
+						<input id="txtMount3.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight3.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td>
+						<input id="txtMount4.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight4.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td>
+						<input id="txtMount5.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight5.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td><input id="txtWaste.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtHours.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
 				</tr>
 			</table>
 		</div>
