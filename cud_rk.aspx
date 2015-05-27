@@ -92,9 +92,12 @@
                     		if(t_para.action == 'importOrde'){
                     			var as = _q_appendData("view_ordes", "", true);
 		                		if (as[0] != undefined) {
-		                			$('#txtSize_'+t_para.n).val(as[0].dime+'+'+as[0].radius+'*'+as[0].width+'*'+as[0].lengthb);	
+		                			$('#txtDime_'+t_para.n).val(as[0].dime);
+		                			$('#txtRadius_'+t_para.n).val(as[0].radius);
+		                			$('#txtWidth_'+t_para.n).val(as[0].width);
+		                			$('#txtLengthb_'+t_para.n).val(as[0].lengthb);
 		                			$('#txtSpec_'+t_para.n).val(as[0].spec);
-		                			$('#txtSize2_'+t_para.n).val(as[0].source);		
+		                			$('#txtsource_'+t_para.n).val(as[0].source);		
 		                		}else{
 		                			alert('找不到訂單【'+t_para.ordeno+'-'+t_para.no2+'】');
 		                		}
@@ -126,7 +129,7 @@
                 var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtDatea').val());
                 if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cuc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cud') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
                 else
                     wrServer(t_noa);
             }
@@ -308,7 +311,7 @@
             }
             .dview {
                 float: left;
-                width: 400px;
+                width: 300px;
                 border-width: 0px;
             }
             .tview {
@@ -328,7 +331,7 @@
             }
             .dbbm {
                 float: left;
-                width: 800px;
+                width: 600px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -430,20 +433,19 @@
 				<table class="tview" id="tview"  >
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewDatea'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewMech'> </a></td>
+						<td style="width:100px; color:black;">日期</td>
+						<td style="width:100px; color:black;">單號</td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
 						<td align="center" id='datea'>~datea</td>
-						<td align="center" id='mech'>~mech</td>
+						<td align="center" id='noa'>~noa</td>
 					</tr>
 				</table>
 			</div>
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
@@ -460,7 +462,7 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="6"><input id="txtMemo"  type="text" class="txt c1"/></td>
+						<td colspan="5"><input id="txtMemo"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
