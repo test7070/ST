@@ -70,7 +70,7 @@
 		<div  id="dFixedTitle" style="overflow-y: scroll;">
 			<table id="tFixedTitle" class='tFixedTitle'  border="2"  cellpadding='2' cellspacing='1' style='width:100%;'  >
 				<tr style='color:white; background:#003366;' >
-					<th align="center" style="width:2%;"></th>
+					<th align="center" style="width:2%;"><input type="checkbox" id="checkAllCheckbox"/></th>
 					<td align="center" style="width:10%;">單號</td>
 					<td align="center" style="width:20%;">品名</td>
 					<td align="center" style="width:5%;">厚</td>
@@ -83,8 +83,8 @@
 					<td align="center" style="width:5%;">保護膜</td>
 					<td align="center" style="width:5%;">數量</td>
 					<td align="center" style="width:8%;">備註</td>
-					<td align="center" style="width:5%;">訂單<BR>數量</td>
-					<td align="center" style="width:5%;">未交<BR>數量</td>
+					<td align="center" style="width:5%;">已訂<BR>數量</td>
+					<td align="center" style="width:5%;">未訂<BR>數量</td>
 				</tr>
 			</table>
 		</div>

@@ -51,9 +51,10 @@
                 
 				var t_money = 0,t_tax=0,t_total=0;
 				for(var i=0;i<q_bbsCount;i++){
-					t_unit = $.trim($('#txtUnit_'+i).val()).toUpperCase();
-					t_count = (t_unit=='KG' || t_unit=='公斤'|| t_unit=='噸')?q_float('txtWeight_'+i):q_float('txtMount_'+i);
-					t_moneys = round(q_mul(q_float('txtPrice_'+i),t_count),0);		
+					//t_unit = $.trim($('#txtUnit_'+i).val()).toUpperCase();
+					//t_count = (t_unit=='KG' || t_unit=='公斤'|| t_unit=='噸')?q_float('txtWeight_'+i):q_float('txtMount_'+i);
+					//t_moneys = round(q_mul(q_float('txtPrice_'+i),t_count),0);
+					t_moneys = round(q_mul(q_float('txtPrice_'+i),q_float('txtWeight_'+i)),0);		
 					q_tr('txtTotal_'+i,t_moneys,0);
 					t_money = q_add(t_money,t_moneys);
 				}
@@ -177,6 +178,18 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'quat_orde':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtQuatno,txtNo3,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtStyle,txtSource,txtUnit,txtMount,txtPrice'
+                        	, as.length, as, 'noa,no3,productno,product,dime,radius,width,lengthb,spec,classa,style,source,unit,emount,price', '','');
+                        	
+                        	var t_quatno = $('#txtQuatno_0').length>0?$('#txtQuatno_0').val():'';
+                        	q_gt('view_quat', "where=^^ noa='"+t_quatno+"' ^^", 0, 0, 0, JSON.stringify({action:'importQuat'}));
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
@@ -190,6 +203,25 @@
                         if (q_cur == 4)
                             q_Seek_gtPost();
                         break;
+                    default:
+                    	try{
+                    		t_para = JSON.parse(t_name);
+                    		if(t_para.action == 'importQuat'){
+                    			var as = _q_appendData("view_quat", "", true);
+		                		if (as[0] != undefined) {
+		                			$('#txtQuatno').val(as[0].noa);	
+		                			$('#txtAddr2').val(as[0].addr);	
+		                			$('#txtPaytype').val(as[0].paytype);	
+		                			$('#txtMemo2').val(as[0].memo2);
+		                			$('#txtFax').val(as[0].fax);		
+		                		}
+                    			sum();
+                    		}
+                    		
+                    	}catch(e){
+                    		
+                    	}
+                    	break;
                 }
             }
 
@@ -211,7 +243,7 @@
                 var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtDatea').val());
                 if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cuc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
                 else
                     wrServer(t_noa);
             }
@@ -621,7 +653,7 @@
 					<td style="width:60px;">單位</td>
 					<td style="width:80px;">數量</td>
 					<td style="width:80px;">重量</td>
-					<td style="width:80px;">單價</td>
+					<td style="width:80px;">單價(KG)</td>
 					<td style="width:80px;">金額</td>
 					<td style="width:200px;">P/O<br>P/N</td>
 				</tr>

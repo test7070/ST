@@ -130,7 +130,7 @@
                 var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtDatea').val());
                 if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cuc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_quat') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
                 else
                     wrServer(t_noa);
             }
@@ -559,7 +559,7 @@
 					<td style="width:100px;">保護膜</td>
 					<td style="width:60px;">單位</td>
 					<td style="width:80px;">數量</td>
-					<td style="width:80px;">單價</td>
+					<td style="width:80px;">單價(KG)</td>
 					<td style="width:120px;display:none;">P/O</td>
 					<td style="width:120px;display:none;">P/N</td>
 				</tr>
