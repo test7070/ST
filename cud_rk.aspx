@@ -56,14 +56,6 @@
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);
-                q_cmbParse("cmbTypea", '分條作業,十呎裁切,四呎裁切,三呎裁切,二呎裁切');
-                
-				
-				
-                $('#btnOrde').click(function(e){
-                	
-                	
-                });
             }
 
             function q_popPost(s1) {
@@ -399,10 +391,8 @@
             input[type="text"], input[type="button"] {
                 font-size: medium;
             }
-            .dbbs {
-                width: 1500px;
-            }
-            .dbbs .tbbs {
+            .dbbs{width: 1700px;}
+            .tbbs {
                 margin: 0;
                 padding: 2px;
                 border: 2px lightgrey double;
@@ -412,66 +402,21 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1700px;
+                width: 100%;
             }
-            .dbbs .tbbs tr {
+            .tbbs tr {
                 height: 35px;
             }
-            .dbbs .tbbs tr td {
+            .tbbs tr td {
                 text-align: center;
                 border: 2px lightgrey double;
             }
-            .dbbs .tbbs select {
+            .tbbs select {
                 border-width: 1px;
                 padding: 0px;
                 margin: -1px;
                 font-size: medium;
             }
-            #dbbt {
-                width: 1500px;
-            }
-            #tbbt {
-                margin: 0;
-                padding: 2px;
-                border: 2px pink double;
-                border-spacing: 1;
-                border-collapse: collapse;
-                font-size: medium;
-                color: blue;
-                background: pink;
-                width: 100%;
-            }
-            #tbbt tr {
-                height: 35px;
-            }
-            #tbbt tr td {
-                text-align: center;
-                border: 2px pink double;
-            }
-            #InterestWindows {
-                display: none;
-                width: 20%;
-                background-color: #cad3ff;
-                border: 5px solid gray;
-                position: absolute;
-                z-index: 50;
-            }
-            .signupXX {font-family: "微軟正黑體","Microsoft JhengHei",sans-serif;
-			    padding: 10 10 10 10px;
-			    background: #fff;
-			    box-shadow: 
-			        0px 0px 0px 5px rgba( 255,255,255,0.4 ), 
-			        0px 4px 20px rgba( 0,0,0,0.33 );
-			    -moz-border-radius: 5px;
-			    -webkit-border-radius: 5px;
-			    border-radius: 5px;
-				margin-top:5px;
-				margin-bottom:10px;
-			    /*display: table;
-			    position: static;*/
-				/*width:620px;*/ 
-				margin-left:5px;
-			}
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -514,15 +459,6 @@
 						<td><input id="txtDatea"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblMechno" class="lbl btn"></a></td>
-						<td colspan="2">
-							<input id="txtMechno"  type="text" class="txt" style="width:30%;"/>
-							<input id="txtMech"  type="text" class="txt" style="width:65%;"/>
-						</td>
-						<td><span> </span><a id="lblTypea" class="lbl"> </a></td>
-						<td><select id="cmbTypea" class="txt c1"> </select></td>
-					</tr>
-					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td colspan="6"><input id="txtMemo"  type="text" class="txt c1"/></td>
 					</tr>
@@ -536,26 +472,102 @@
 			</div>
 		</div>
 		<div class='dbbs'>
-			<table id="tbbs" class='tbbs signup'>
+			<table class='tbbs'>
+				<tr style='height:1px;' >
+					<td style="width:20px;"></td>
+					<td style="width:20px;"></td>
+					<td style="width:200px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:200px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+				</tr>
 				<tr style='color:white; background:#003366;' >
-					<td style="width:20px;">
+					<td rowspan="4">
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
+					<td align="center" rowspan="4">項<BR><BR>次</td>
+					<td align="center" rowspan="2">訂單號碼</td>
+					<td align="center" rowspan="4">皮膜<BR>編號</td>
+					<td align="center" rowspan="4">SHEET(COIL)規格尺寸</td>
+					<td align="center" rowspan="2">進料</td>
+					<td align="center" rowspan="2">成品</td>
+					<td align="center" rowspan="2">直痕</td>
+					<td align="center" rowspan="2">凹凸<BR>(廠內)</td>
+					<td align="center" rowspan="2">刮傷</td>
+					<td align="center" align="center" rowspan="2">氧化/報廢</td>
+					<td align="center" rowspan="2">粒點<BR>PVC皮膜</td>
+					<td align="center" rowspan="2">殘膠</td>
+					<td align="center" colspan="2">變形及摺痕</td>
+					<td align="center" rowspan="2">板邊<BR>波浪</td>
+					<td align="center" rowspan="2">背面刮傷<BR>背面黑點</td>
+					<td align="center" rowspan="4">COIL<BR>編號</td>
+				</tr>
+				<tr style='color:white; background:#003366;' >
+					<td align="center">廠內</td>
+					<td align="center">原材料</td>
+				</tr>
+				<tr style='color:white; background:#003366;' >
+					<td align="center" rowspan="2">製造批號</td>
+					<td align="center">預計片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+					<td align="center">片數</td>
+				</tr>
+				<tr style='color:white; background:#003366;' >
+					<td align="center">實際片數</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+					<td align="center">重量</td>
+				</tr>
+			</table>
+			<table id="tbbs" class='tbbs'>
+				<tr style='height:1px;' >
 					<td style="width:20px;"></td>
-					<td style="width:200px;">訂單號碼<BR>製造批號</td>
-					<td style="width:60px;">皮膜<BR>編號</td>
-					<td style="width:80px;">半成品<BR>進料<BR>重量(KG)</td>
-					<td style="width:200px;">SHEET(COIL)規格尺寸</td>
-					<td style="width:120px;">作業條件</td>
-					<td style="width:120px;">SHEET(COIL)裁剪(分條)尺寸</td>
-					<td style="width:120px;">進料<br>數量<br>重量</td>
-					<td style="width:120px;">裁切<br>數量<br>重量</td>
-					<td style="width:120px;">成品<br>片數<br>重量</td>
-					<td style="width:120px;">餘料<br>片數<br>重量</td>
-					<td style="width:120px;">待修品<br>片數<br>重量</td>
-					<td style="width:120px;">廢料重量(KG)</td>
-					<td style="width:120px;">裁剪(包裝)工時(分)</td>
-					<td style="width:120px;">COIL編號</td>
+					<td style="width:20px;"></td>
+					<td style="width:200px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:200px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -566,19 +578,23 @@
 					<td>
 						<input id="txtOrdeno.*" type="text" style="float:left;width:72%;"/>
 						<input id="txtNo2.*" type="text" style="float:left;width:20%;"/>
-						<input id="txtCubno.*" type="text" style="float:left;width:95%;"/>
+						<input id="txtMemo.*" type="text" style="float:left;width:95%;"/>
 					</td>
 					<td><input id="txtSpec.*" type="text" style="float:left;width:95%;"/></td>
 					<td>
-						<input id="txtMount.*" type="text" style="display:none;"/>
-						<input id="txtWeight.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtDime.*" type="text" class="num" style="float:left;width:22%;"/>
+						<input id="txtRadius.*" type="text" class="num" style="float:left;width:22%;"/>
+						<input id="txtWidth.*" type="text" class="num" style="float:left;width:22%;"/>
+						<input id="txtLengthb.*" type="text" class="num" style="float:left;width:22%;"/>
 					</td>
-					<td><input id="txtSize.*" type="text" style="float:left;width:95%;"/></td>
-					<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
+					
 					<td>
-						<input id="txtSize2.*" type="text" style="float:left;width:95%;"/>
-						<input id="txtWidth.*" type="text" class="num" style="float:left;width:46%;"/>
-						<input id="txtLengthb.*" type="text" class="num" style="float:left;width:46%;"/>
+						<input id="txtOrdemount.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtTdmount.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td>
+						<input id="txtMount.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight.*" type="text" class="num" style="float:left;width:95%;"/>
 					</td>
 					<td>
 						<input id="txtMount1.*" type="text" class="num" style="float:left;width:95%;"/>
@@ -600,13 +616,30 @@
 						<input id="txtMount5.*" type="text" class="num" style="float:left;width:95%;"/>
 						<input id="txtWeight5.*" type="text" class="num" style="float:left;width:95%;"/>
 					</td>
-					<td><input id="txtWaste.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtHours.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td>
+						<input id="txtMount6.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight6.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td>
+						<input id="txtMount7.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight7.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td>
+						<input id="txtMount8.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight8.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td>
+						<input id="txtMount9.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight9.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
+					<td>
+						<input id="txtMount10.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight10.*" type="text" class="num" style="float:left;width:95%;"/>
+					</td>
 					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
 				</tr>
 			</table>
 		</div>
-
 		<input id="q_sys" type="hidden" />
 	</body>
 </html>
