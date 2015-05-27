@@ -202,7 +202,7 @@
 					t_invo = $('#txtInvono').val();
 					if (t_invo.length > 0) {
 						t_where = "noa='" + t_invo + "'";
-						q_box("vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcca', "95%", "95%", $('#lblInvono').val());
+						q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcca', "95%", "95%", $('#lblInvono').val());
 					}
 				});
 				
