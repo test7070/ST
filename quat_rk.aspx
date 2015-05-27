@@ -130,7 +130,7 @@
                 var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtDatea').val());
                 if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cuc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_quat') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
                 else
                     wrServer(t_noa);
             }
@@ -182,7 +182,7 @@
             }
 
             function btnPrint() {
-				q_box("z_quat_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
+				q_box("z_quat_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'quat_rk', "95%", "95%", m_print);
             }
 
             function wrServer(key_value) {
@@ -559,7 +559,7 @@
 					<td style="width:100px;">保護膜</td>
 					<td style="width:60px;">單位</td>
 					<td style="width:80px;">數量</td>
-					<td style="width:80px;">單價</td>
+					<td style="width:80px;">單價(KG)</td>
 					<td style="width:120px;display:none;">P/O</td>
 					<td style="width:120px;display:none;">P/N</td>
 				</tr>
