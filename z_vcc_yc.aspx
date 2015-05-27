@@ -21,6 +21,7 @@
             var issale = '0';
             var job = '';
             var sgroup = '';
+            var isinvosystem = '';
 
             if (location.href.indexOf('?') < 0) {
                 location.href = location.href + "?;;;;100";
@@ -29,6 +30,12 @@
             $(document).ready(function() {
                 q_getId();
       			q_gt('acomp', '', 0, 0, 0, "");
+      			
+      			$('#q_report').click(function(e) {
+					if(isinvosystem=='2'){//沒有發票系統
+	                	$('#Xshowinvono').hide();
+	                }
+				});
             });
             
             function q_gtPost(t_name) {
@@ -39,8 +46,17 @@
                         for ( i = 0; i < as.length; i++) {
                             acompItem = acompItem + (acompItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
                         }
-                        q_gt('uccga', '', 0, 0, 0, "");
+                        q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
                         break;
+					case 'ucca_invo':
+						var as = _q_appendData("ucca", "", true);
+						if (as[0] != undefined) {
+							isinvosystem = '1';
+						} else {
+							isinvosystem = '2';
+						}
+						q_gt('uccga', '', 0, 0, 0, "");
+						break;
                     case 'uccga':
                         var as = _q_appendData("uccga", "", true);
                         uccgaItem = " @全部";
@@ -179,7 +195,11 @@
                         type : '5', //[35]//40000
                         name : 'xcno',
                         value : acompItem.split(',')
-                    }]
+                    },{
+						type : '0',//[36]
+						name : 'xproject',
+						value : q_getPara('sys.project').toUpperCase()
+					}]
                 });
                 q_popAssign();
                 q_getFormat();
@@ -210,6 +230,7 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                
                 $('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
                 $('#txtMon1').val(r_accy + '/01').mask('999/99');
                 $('#txtMon2').val(r_accy + '/12').mask('999/99');
@@ -242,6 +263,10 @@
                 $('#txtUdate2').datepicker();
                 $('#txtOdate').mask('999/99/99');
                 $('#txtOdate').datepicker();
+                
+                if(isinvosystem=='2'){//沒有發票系統
+	                $('#Xshowinvono').hide();
+				}
             }
 
             function q_boxClose(s2) {
