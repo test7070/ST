@@ -182,7 +182,7 @@
             }
 
             function btnPrint() {
-				q_box("z_quat_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
+				q_box("z_quat_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'quat_rk', "95%", "95%", m_print);
             }
 
             function wrServer(key_value) {

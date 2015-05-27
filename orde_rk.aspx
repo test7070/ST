@@ -17,7 +17,7 @@
             q_tables = 's';
             var q_name = "orde";
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2','txtMoney','txtTax','txtTotal','txtQuatno'];
-            var q_readonlys = [];
+            var q_readonlys = ['txtNo2'];
             var bbmNum = [];
             var bbsNum = [];
             var bbmMask = [];
@@ -303,7 +303,7 @@
             }
 
             function btnPrint() {
-				q_box("z_orde_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
+				q_box("z_orde_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'orde_rk', "95%", "95%", m_print);
             }
 
             function wrServer(key_value) {
@@ -319,6 +319,8 @@
                     return;
                 }
                 q_nowf();
+                as['custno'] = abbm2['custno'];
+                as['comp'] = abbm2['nick'];
                 return true;
             }
 
@@ -558,7 +560,7 @@
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
 						<td align="center" id='datea'>~datea</td>
-						<td align="center" id='comp'>~comp</td>
+						<td align="center" id='nick'>~nick</td>
 					</tr>
 				</table>
 			</div>
@@ -642,6 +644,7 @@
 						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"></td>
+					<td style="width:50px;">序</td>
 					<td style="width:200px;">品名</td>
 					<td style="width:60px;">厚</td>
 					<td style="width:60px;">皮膜厚</td>
@@ -660,11 +663,13 @@
 				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
-						<input id="txtNo2.*" type="text" style="display: none;"/>
 						<input id="txtQuatno.*" type="text" style="display: none;"/>
 						<input id="txtNo3.*" type="text" style="display: none;"/>
+						<input id="txtCustno.*" type="text" style="display: none;"/>
+						<input id="txtComp.*" type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td><input id="txtNo2.*" type="text" class="txt c1"/></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:45%"/>
 						<input id="txtProduct.*" type="text" style="width:45%"/>
