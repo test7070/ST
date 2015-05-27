@@ -95,6 +95,8 @@
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+				q_cmbParse("cmbKind", '隨貨單張,隨貨多張,批次未開,批次已開');
+				
 				q_cmbParse("cmbGtime", ",08:00~09:00,09:00~10:00,10:00~11:00,11:00~12:00,12:00~13:00,13:00~14:00,14:00~15:00,15:00~16:00,16:00~17:00,17:00~18:00,18:00~19:00,19:00~20:00,21:00~22:00");
 				
 				$('#lblGdate').text('配送時間');
@@ -1228,7 +1230,6 @@
 						<td class="td3"><span> </span><a id='lblStype' class="lbl"> </a></td>
 						<td class="td4"><select id="cmbStype" class="txt c1"> </select></td>
 						<td> </td>
-						<td> </td>
 						<td class="td5"><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td class="td6" colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
 					</tr>
@@ -1238,7 +1239,7 @@
 						<td class="td3" colspan="4"><input id="txtAcomp" type="text" class="txt c1"/></td>
 						<!--<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
 						<td class="td6"colspan="2"><input id="txtContract" type="text" class="txt c1"/></td>-->
-						<td><input class="btn" id="btnOrdetoVcc" type="button" value='轉出貨單' /> </td>
+						<td><input style="float: right;" class="btn" id="btnOrdetoVcc" type="button" value='轉出貨單' /> </td>
 						<td colspan="2"><input id="txtVccno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr3">
@@ -1321,9 +1322,12 @@
 					</tr>-->
 					<tr class="tr10">
 						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
-						<td class="td2" colspan='2'><input id="txtWorker" type="text" class="txt c1" /></td>
-						<td class="td4"><span> </span><a id='lblWorker2' class="lbl"> </a></td>
-						<td class="td6" colspan='2'><input id="txtWorker2" type="text" class="txt c1" /></td>
+						<td class="td2"><input id="txtWorker" type="text" class="txt c1" /></td>
+						<td class="td3"><input id="txtWorker2" type="text" class="txt c1" /></td>
+						<td class="td1"><span> </span><a class="lbl">發票開立</a></td>
+						<td class="td2"><select id="cmbKind" class="txt c1" > </select></td>
+						<td> </td>
+						<td> </td>
 						<td colspan="3">
 							<input id="chkIsproj" type="checkbox"/>
 							<span> </span><a id='lblIsproj'> </a>

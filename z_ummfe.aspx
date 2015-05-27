@@ -65,7 +65,11 @@
                         type : '8',
                         name : 'yoption01',
                         value : ['依業務','僅印異常']
-                    }]
+                    }, {
+						type : '0', //[26] 
+						name : 'xproject',
+						value : q_getPara('sys.project').toUpperCase()
+					}]
 				});
 				q_popAssign();
 				q_langShow();
@@ -104,7 +108,17 @@
 				t_day = t_date.getUTCDate();
 				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
 				$('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
-
+				
+				t_date = new Date();
+				t_date.setDate(1);
+				t_date.setDate(-1);
+				t_year = t_date.getUTCFullYear() - 1911;
+				t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+				t_month = t_date.getUTCMonth() + 1;
+				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+				
+				$('#txtXmon1').val(t_year + '/' + t_month);
+				
 			}
 
 			function q_boxClose(s2) {
