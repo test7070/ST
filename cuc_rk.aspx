@@ -90,45 +90,29 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
-                    case 'view_ordes':
-                        for (var i = 0; i < q_bbsCount; i++) {
-                            $('#btnMinus_' + i).click();
-                        };
-                        var wret = '';
-                        var as = _q_appendData("view_ordes", "", true);
-                        if (as[0] != undefined) {
-                            for (var j = 0; j < as.length; j++) {
-                                as[j].mount = as[j].mount - as[j].tdmount;
-                            }
-                            wret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUdate,txtOrdeno,txtNo2,txtCustno,txtCust,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtMount', as.length, as, 'datea,noa,no2,custno,cust,productno,product,radius,width,dime,lengthb,mount', '');
-                        }
-                        for (var j = 0; j < wret.length; j++) {
-                            $('#txtDatea_' + wret[j]).val(q_date());
-                            var t_uno = trim($('#txtUno_' + wret[j]).val());
-                            if (emp(t_uno))
-                                $('#txtUno_' + wret[j]).val('9999');
-                            var t_where = "where=^^ 1=1 and isnull(ordeno,'') != '' and isnull(no2,'') != '' ";
-                            t_where += "and ordeno='" + $('#txtOrdeno_' + wret[j]).val() + "'and no2='" + $('#txtNo2_' + wret[j]).val() + "'"
-                            t_where += " ^^";
-                            q_gt('cucs', t_where, 0, 0, 0, "getUno", r_accy);
-                        }
-                        break;
-                    case 'getUno':
-                        var as = _q_appendData("cucs", "", true);
-                        if (as[0] != undefined) {
-                            for (var i = 0; i < q_bbsCount; i++) {
-                                var t_ordeno = $('#txtOrdeno_' + i).val();
-                                var t_no2 = $('#txtNo2_' + i).val();
-                                if (as[0].ordeno == t_ordeno && as[0].no2 == t_no2) {
-                                    $('#txtUno_' + i).val(as[0].uno);
-                                }
-                            }
-                        }
-                        break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
                         break;
+                    default:
+                    	try{
+                    		t_para = JSON.parse(t_name);
+                    		if(t_para.action == 'importOrde'){
+                    			var as = _q_appendData("view_ordes", "", true);
+		                		if (as[0] != undefined) {
+		                			$('#txtSize_'+t_para.n).val(as[0].dime+'+'+as[0].radius+'*'+as[0].width+'*'+as[0].lengthb);	
+		                			$('#txtSpec_'+t_para.n).val(as[0].spec);
+		                			$('#txtSize2_'+t_para.n).val(as[0].source);		
+		                		}else{
+		                			alert('找不到訂單【'+t_para.ordeno+'-'+t_para.no2+'】');
+		                		}
+                    			sum();
+                    		}
+                    		
+                    	}catch(e){
+                    		
+                    	}
+                    	break;
                 }
             }
 
@@ -168,6 +152,16 @@
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	$('#txtOrdeno_'+i).change(function(e){
+							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+							n = parseInt(n);
+							ImportOrde(n);
+						});
+						$('#txtNo2_'+i).change(function(e){
+							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+							n = parseInt(n);
+							ImportOrde(n);
+						});
                     	$('#txtMount_'+i).change(function(e){
                     		sum();
                     	});
@@ -208,6 +202,14 @@
                 }
                 _bbsAssign();
             }
+            function ImportOrde(n){
+				var t_ordeno = $('#txtOrdeno_'+n).val();
+				var t_no2 = $('#txtNo2_'+n).val();
+				if(t_ordeno.length>0 && t_no2.length>0){
+					var t_where = "where=^^ noa='"+t_ordeno+"' and no2='" + t_no2 + "' ^^";
+                	q_gt('view_ordes', t_where, 0, 0, 0, JSON.stringify({action:'importOrde',n:n,ordeno:t_ordeno,no2:t_no2}), r_accy);
+				}
+			}
 
             function btnIns() {
                 _btnIns();
@@ -484,13 +486,11 @@
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td style="width:100px; color:black;"><a id='vewDatea'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewCust'> </a></td>
 						<td style="width:100px; color:black;"><a id='vewMech'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
 						<td align="center" id='datea'>~datea</td>
-						<td align="center" id='cust'>~cust</td>
 						<td align="center" id='mech'>~mech</td>
 					</tr>
 				</table>
@@ -521,8 +521,6 @@
 						</td>
 						<td><span> </span><a id="lblTypea" class="lbl"> </a></td>
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
-						<td> </td>
-						<td><input id="btnOrde" type="button" class="txt c1" value="訂單匯入"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
@@ -545,9 +543,9 @@
 					</td>
 					<td style="width:20px;"></td>
 					<td style="width:200px;">訂單號碼<BR>製造批號</td>
-					<td style="width:120px;">皮膜<BR>編號</td>
-					<td style="width:120px;">半成品<BR>進料<BR>重量(KG)</td>
-					<td style="width:120px;">SHEET(COIL)規格尺寸</td>
+					<td style="width:60px;">皮膜<BR>編號</td>
+					<td style="width:80px;">半成品<BR>進料<BR>重量(KG)</td>
+					<td style="width:200px;">SHEET(COIL)規格尺寸</td>
 					<td style="width:120px;">作業條件</td>
 					<td style="width:120px;">SHEET(COIL)裁剪(分條)尺寸</td>
 					<td style="width:120px;">進料<br>數量<br>重量</td>
