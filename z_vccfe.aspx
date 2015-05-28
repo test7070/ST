@@ -21,6 +21,7 @@
             var issale = '0';
             var job = '';
             var sgroup = '';
+            var isinvosystem = '';
 
             if (location.href.indexOf('?') < 0) {
                 location.href = location.href + "?;;;;100";
@@ -29,6 +30,12 @@
             $(document).ready(function() {
                 q_getId();
       			q_gt('acomp', '', 0, 0, 0, "");
+      			
+      			$('#q_report').click(function(e) {
+					if(isinvosystem=='2'){//沒有發票系統
+	                	$('#Xshowinvono').hide();
+	                }
+				});
             });
             
             function q_gtPost(t_name) {
@@ -39,8 +46,17 @@
                         for ( i = 0; i < as.length; i++) {
                             acompItem = acompItem + (acompItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
                         }
-                        q_gt('uccga', '', 0, 0, 0, "");
+                        q_gt('ucca', 'stop=1 ', 0, 0, 0, "ucca_invo");
                         break;
+					case 'ucca_invo':
+						var as = _q_appendData("ucca", "", true);
+						if (as[0] != undefined) {
+							isinvosystem = '1';
+						} else {
+							isinvosystem = '2';
+						}
+						q_gt('uccga', '', 0, 0, 0, "");
+						break;
                     case 'uccga':
                         var as = _q_appendData("uccga", "", true);
                         uccgaItem = " @全部";
@@ -242,6 +258,10 @@
                 $('#txtUdate2').datepicker();
                 $('#txtOdate').mask('999/99/99');
                 $('#txtOdate').datepicker();
+                
+                if(isinvosystem=='2'){//沒有發票系統
+	                $('#Xshowinvono').hide();
+				}
             }
 
             function q_boxClose(s2) {
