@@ -399,10 +399,8 @@
             input[type="text"], input[type="button"] {
                 font-size: medium;
             }
-            .dbbs {
-                width: 1500px;
-            }
-            .dbbs .tbbs {
+            .dbbs{width: 1800px;}
+            .tbbs {
                 margin: 0;
                 padding: 2px;
                 border: 2px lightgrey double;
@@ -412,66 +410,21 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1700px;
+                width: 100%;
             }
-            .dbbs .tbbs tr {
+            .tbbs tr {
                 height: 35px;
             }
-            .dbbs .tbbs tr td {
+            .tbbs tr td {
                 text-align: center;
                 border: 2px lightgrey double;
             }
-            .dbbs .tbbs select {
+            .tbbs select {
                 border-width: 1px;
                 padding: 0px;
                 margin: -1px;
                 font-size: medium;
             }
-            #dbbt {
-                width: 1500px;
-            }
-            #tbbt {
-                margin: 0;
-                padding: 2px;
-                border: 2px pink double;
-                border-spacing: 1;
-                border-collapse: collapse;
-                font-size: medium;
-                color: blue;
-                background: pink;
-                width: 100%;
-            }
-            #tbbt tr {
-                height: 35px;
-            }
-            #tbbt tr td {
-                text-align: center;
-                border: 2px pink double;
-            }
-            #InterestWindows {
-                display: none;
-                width: 20%;
-                background-color: #cad3ff;
-                border: 5px solid gray;
-                position: absolute;
-                z-index: 50;
-            }
-            .signupXX {font-family: "微軟正黑體","Microsoft JhengHei",sans-serif;
-			    padding: 10 10 10 10px;
-			    background: #fff;
-			    box-shadow: 
-			        0px 0px 0px 5px rgba( 255,255,255,0.4 ), 
-			        0px 4px 20px rgba( 0,0,0,0.33 );
-			    -moz-border-radius: 5px;
-			    -webkit-border-radius: 5px;
-			    border-radius: 5px;
-				margin-top:5px;
-				margin-bottom:10px;
-			    /*display: table;
-			    position: static;*/
-				/*width:620px;*/ 
-				margin-left:5px;
-			}
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -536,26 +489,87 @@
 			</div>
 		</div>
 		<div class='dbbs'>
-			<table id="tbbs" class='tbbs signup'>
-				<tr style='color:white; background:#003366;' >
-					<td style="width:20px;">
-						<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
-					</td>
+			<table class='tbbs'>
+				<tr style='height:1px;' >
 					<td style="width:20px;"></td>
-					<td style="width:200px;">訂單號碼<BR>製造批號</td>
-					<td style="width:60px;">皮膜<BR>編號</td>
-					<td style="width:80px;">半成品<BR>進料<BR>重量(KG)</td>
-					<td style="width:200px;">SHEET(COIL)規格尺寸</td>
-					<td style="width:120px;">作業條件</td>
-					<td style="width:120px;">SHEET(COIL)裁剪(分條)尺寸</td>
-					<td style="width:120px;">進料<br>數量<br>重量</td>
-					<td style="width:120px;">裁切<br>數量<br>重量</td>
-					<td style="width:120px;">成品<br>片數<br>重量</td>
-					<td style="width:120px;">餘料<br>片數<br>重量</td>
-					<td style="width:120px;">待修品<br>片數<br>重量</td>
-					<td style="width:120px;">廢料重量(KG)</td>
-					<td style="width:120px;">裁剪(包裝)工時(分)</td>
-					<td style="width:120px;">COIL編號</td>
+					<td style="width:20px;"></td>
+					<td style="width:200px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:80px;"></td>
+					<td style="width:200px;"></td>
+					<td style="width:120px;"></td>
+					<td style="width:120px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:120px;"></td>
+				</tr>
+				<tr style='color:white; background:#003366;' >
+					<td rowspan="2"><input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
+					<td rowspan="2">項<BR>次</td>
+					<td>訂單號碼</td>
+					<td rowspan="2">皮膜<BR>編號</td>
+					<td rowspan="2">半成品<BR>進料<BR>重量(KG)</td>
+					<td>SHEET(COIL)</td>
+					<td rowspan="2">作業條件</td>
+					<td>SHEET(COIL)</td>
+					<td colspan="2">進料</td>
+					<td colspan="2">裁切</td>
+					<td colspan="2">成品</td>
+					<td colspan="2">餘料</td>
+					<td colspan="2">待修品</td>
+					<td rowspan="2">廢料重量<BR>(KG)</td>
+					<td rowspan="2">裁剪(包裝)<BR>工時(分)</td>
+					<td rowspan="2">COIL編號</td>
+				</tr>
+				<tr style='color:white; background:#003366;' >
+					<td>製造批號</td>
+					<td>規格尺寸</td>
+					<td>裁剪(分條)尺寸</td>
+					<td>數量</td>
+					<td>重量</td>
+					<td>數量</td>
+					<td>重量</td>
+					<td>片數</td>
+					<td>重量</td>
+					<td>片數</td>
+					<td>重量</td>
+					<td>片數</td>
+					<td>重量</td>
+				</tr>
+			</table>
+			<table id="tbbs" class='tbbs'>
+				<tr style='height: 1px;' >
+					<td style="width:20px;"></td>
+					<td style="width:20px;"></td>
+					<td style="width:200px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:80px;"></td>
+					<td style="width:200px;"></td>
+					<td style="width:120px;"></td>
+					<td style="width:120px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:60px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:120px;"></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -580,26 +594,16 @@
 						<input id="txtWidth.*" type="text" class="num" style="float:left;width:46%;"/>
 						<input id="txtLengthb.*" type="text" class="num" style="float:left;width:46%;"/>
 					</td>
-					<td>
-						<input id="txtMount1.*" type="text" class="num" style="float:left;width:95%;"/>
-						<input id="txtWeight1.*" type="text" class="num" style="float:left;width:95%;"/>
-					</td>
-					<td>
-						<input id="txtMount2.*" type="text" class="num" style="float:left;width:95%;"/>
-						<input id="txtWeight2.*" type="text" class="num" style="float:left;width:95%;"/>
-					</td>
-					<td>
-						<input id="txtMount3.*" type="text" class="num" style="float:left;width:95%;"/>
-						<input id="txtWeight3.*" type="text" class="num" style="float:left;width:95%;"/>
-					</td>
-					<td>
-						<input id="txtMount4.*" type="text" class="num" style="float:left;width:95%;"/>
-						<input id="txtWeight4.*" type="text" class="num" style="float:left;width:95%;"/>
-					</td>
-					<td>
-						<input id="txtMount5.*" type="text" class="num" style="float:left;width:95%;"/>
-						<input id="txtWeight5.*" type="text" class="num" style="float:left;width:95%;"/>
-					</td>
+					<td><input id="txtMount1.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight1.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount2.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight2.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount3.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight3.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount4.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight4.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount5.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight5.*" type="text" class="num" style="float:left;width:95%;"/></td>
 					<td><input id="txtWaste.*" type="text" class="num" style="float:left;width:95%;"/></td>
 					<td><input id="txtHours.*" type="text" class="num" style="float:left;width:95%;"/></td>
 					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
