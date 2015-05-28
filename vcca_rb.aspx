@@ -24,7 +24,7 @@
 			var q_readonly = ['txtMoney', 'txtTotal', 'txtChkno', 'txtTax', 'txtAccno', 'txtWorker','txtVccno'];
 			var q_readonlys = [];
 			var q_readonlyt = ['txtVccaccy','txtVccno','txtVccnoq'];
-			var bbmNum = [['txtMoney', 15, 0], ['txtTax', 15, 0], ['txtTotal', 15, 0]];
+			var bbmNum = [['txtMoney', 15, 0], ['txtTax', 15, 0], ['txtTotal', 15, 0], ['textTotal', 15, 0], ['textMoney', 15, 0]];
 			var bbsNum = [['txtMount', 15, 3], ['txtGmount', 15, 4], ['txtEmount', 15, 4], ['txtPrice', 15, 3], ['txtTotal', 15, 0]];
 			var bbtNum = [['txtMoney',15,0,1]];
 			var bbmMask = [];
@@ -39,7 +39,11 @@
 			, ['txtAddress', '', 'view_road', 'memo,zipcode', '0txtAddress,txtZip', 'road_b.aspx']
 			, ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial,zip_invo,addr_invo', 'txtCustno,txtComp,txtNick,txtSerial,txtZip,txtAddress', 'cust_b.aspx']
 			, ['txtBuyerno', 'lblBuyer', 'cust', 'noa,comp', 'txtBuyerno,txtBuyer', 'cust_b.aspx']
-			, ['txtProductno_', 'btnProductno_', 'ucca', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucca_b.aspx']);
+			, ['txtProductno_', 'btnProductno_', 'ucca', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucca_b.aspx']
+			
+			, ['textBuyerno', '', 'cust', 'noa,comp', 'textBuyerno,textBuyer', 'cust_b.aspx']
+			, ['textOrdeno', '', 'view_orde', 'noa,total,comp', 'textOrdeno,textTotal', 'orde_b.aspx']
+			);
 			q_xchg = 1;
 			q_desc = 1;
 			q_copy = 1;
@@ -163,13 +167,73 @@
 				});
 				
 				$('#btnOrdes').click(function() {
-					var t_ordeno = trim($('#txtTrdno').val());
-					if (t_ordeno.length > 0) {
-						t_where = " noa='"+t_ordeno+"' ";
-						q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where + ";" + r_accy, 'ordes', "95%", "95%", q_getMsg("popOrdes"));
-					}else{
-						alert('訂單編號禁止空白!!');
+					if(q_cur==1 || q_cur==2){
+						var t_ordeno = trim($('#txtTrdno').val());
+						if (t_ordeno.length > 0) {
+							t_where = " noa='"+t_ordeno+"' ";
+							q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where + ";" + r_accy, 'ordes', "95%", "95%", q_getMsg("popOrdes"));
+						}else{
+							alert('訂單編號禁止空白!!');
+						}
 					}
+				});
+				
+				$('#btnBatchvcca').click(function() {
+					$("#table_batchvcca input[type='text']").val('');
+					
+					var SeekF= new Array();
+						$("#table_batchvcca input[type='text']").each(function() {
+							if($(this).attr('disabled')!='disabled')
+								SeekF.push($(this).attr('id'));
+						});
+						
+						SeekF.push('btnOk_div_batchvcca');
+						
+						$("#table_batchvcca input[type='text']").each(function() {
+							$(this).keydown(function(event) {
+								if( event.which == 13) {
+									$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
+									$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
+								}
+							});
+						});
+						
+						$('#table_ordb td .num').each(function() {
+							$(this).keyup(function() {
+								var tmp=$(this).val();
+								tmp=tmp.match(/\d{1,}\.{0,1}\d{0,}/);
+								$(this).val(tmp);
+							});
+						});
+					
+					$('#div_batchvcca').show();
+				});
+				
+				$('#textOrdeno').focusin(function() {
+					q_cur=2;
+				}).blur(function() {
+					q_cur=0;
+				});
+				
+				$('#textBuyerno').focusin(function() {
+					q_cur=2;
+				}).blur(function() {
+					q_cur=0;
+				});
+				
+				$('#btnOk_div_batchvcca').click(function() {
+					if(q_float('textTotal')>0 && q_float('textMoney')>0){
+						if(q_float('textTotal')%q_float('textMoney')==0){
+							$('#div_batchvcca').hide();
+						}else{
+							alert('訂單金額輸入除不盡!!');
+						}
+					}else{
+						alert('訂單金額與分開金額不可為0!!');
+					}
+				});
+				$('#btnClose_div_batchvcca').click(function() {
+					$('#div_batchvcca').hide();
 				});
 			}
 
@@ -302,7 +366,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
-				q_box('vcca_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
+				q_box('vcca_rb_s.aspx', q_name + '_s', "500px", "480px", q_getMsg("popSeek"));
 			}
 
 			function bbsAssign() {/// 表身運算式
@@ -520,6 +584,8 @@
 					$("#dbbt").show();
 				else
 					$("#dbbt").hide();
+					
+				$('#div_batchvcca').hide();
 			}
 
 			function readonly(t_para, empty) {
@@ -543,6 +609,14 @@
 					}
 				}
 				
+				if(t_para){
+					$('#btnOrdes').removeAttr('disabled');
+					$('#btnBatchvcca').removeAttr('disabled');
+				}else{
+					$('#btnOrdes').attr('disabled','disabled');
+					$('#btnBatchvcca').attr('disabled','disabled');
+				}
+				$('#div_batchvcca').hide();
 			}
 
 			function btnMinus(id) {
@@ -702,6 +776,14 @@
                 width: 100%;
                 float: left;
             }
+            .txt.c2 {
+                width: 98%;
+                float: left;
+            }
+            .txt.c3 {
+                width: 96%;
+                float: left;
+            }
             .txt.num {
                 text-align: right;
             }
@@ -776,6 +858,41 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
+		<div id="div_batchvcca" style="position:absolute; top:300px; left:400px; display:none; width:400px; background-color: #CDFFCE; border: 5px solid gray;">
+			<table id="table_batchvcca" style="width:100%;" border="1" cellpadding='2'  cellspacing='0'>
+				<tr>
+					<td style="background-color: #f8d463;" align="center">訂單號碼</td>
+					<td style="background-color: #f8d463;" colspan="2"><input id="textOrdeno" type="text" class="txt c2"> </td>
+				</tr>
+				<tr>
+					<td style="background-color: #f8d463;" align="center">訂單金額</td>
+					<td style="background-color: #f8d463;" colspan="2"><input id="textTotal" type="text" class="txt num c2"> </td>
+				</tr>
+				<tr>
+					<td style="background-color: #f8d463;" align="center">分開金額</td>
+					<td style="background-color: #f8d463;" colspan="2"><input id="textMoney" type="text" class="txt num c2"> </td>
+				</tr>
+				<tr>
+					<td style="width:100px;background-color: #f8d463;" align="center">買受人</td>
+					<td style="width:120px;background-color: #f8d463;"><input id="textBuyerno" type="text" class="txt c3"> </td>
+					<td style="width:180px;background-color: #f8d463;"><input id="textBuyer" type="text" class="txt c3"> </td>
+				</tr>
+				<tr>
+					<td style="background-color: #f8d463;" align="center">統一編號</td>
+					<td style="background-color: #f8d463;" colspan="2"><input id="textSerial" type="text" class="txt c2"> </td>
+				</tr>
+				<tr>
+					<td style="background-color: #f8d463;" align="center">發票起始號</td>
+					<td style="background-color: #f8d463;" colspan="2"><input id="textVccano" type="text" class="txt c2"> </td>
+				</tr>
+				<tr id='batchvcca_close'>
+					<td align="center" colspan='3'>
+						<input id="btnOk_div_batchvcca" type="button" value="批次開立">
+						<input id="btnClose_div_batchvcca" type="button" value="關閉視窗">
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div id="dmain">
 			<div class="dview" id="dview">
 				<table class="tview" id="tview">
@@ -882,7 +999,7 @@
 						<td><input id="txtTrdno"  type="text" class="txt c1"/></td>
 						<td colspan="2">
 							<input id="btnOrdes"  type="button" value="訂單匯入"/>
-							<input id="btnOrdevcca"  type="button" value="訂單批次產生發票"/>
+							<input id="btnBatchvcca"  type="button" value="訂單批次產生發票"/>
 						</td>
 					</tr>
 				</table>

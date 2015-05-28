@@ -57,7 +57,7 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbItype", q_getPara('ina.typea'));
+				q_cmbParse("cmbItype", q_getPara('inafe.typea'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				$('#lblStation').text('部門');
 			}
