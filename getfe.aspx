@@ -60,7 +60,7 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtCucdate', r_picd]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbTypea", q_getPara('get.typea'));
+				q_cmbParse("cmbTypea", q_getPara('getfe.typea'));
 				bbmNum = [['txtPrice', 10, q_getPara('vcc.pricePrecision') ,1]];
 				bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision') ,1],['txtWeight', 10, q_getPara('vcc.weightPrecision') ,1],['txtPrice', 10, q_getPara('vcc.pricePrecision') ,1],['txtLengthb', 10, 0, 1]];
 				

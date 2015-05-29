@@ -722,7 +722,7 @@
                 </table>
             </div>
         </div>
-        <div class='dbbs'>
+        <div class='dbbs' style="display: none;">
             <table id="tbbs" class='tbbs' style=' text-align:center'>
                 <tr style='color:white; background:#003366;' >
                     <td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
