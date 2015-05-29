@@ -106,6 +106,7 @@
 					else
 						$('#txtMon').attr('readonly', 'readonly');
 				});
+				
 				$('#txtMon').click(function(){
 					if ($('#txtMon').attr("readonly")=="readonly" && (q_cur==1 || q_cur==2))
 						q_msg($('#txtMon'), "月份要另外設定，請在"+q_getMsg('lblMemo')+"的第一個字打'*'字");
@@ -140,6 +141,15 @@
 					if (t_ummano.length > 0) {
 						t_where = "noa='" + t_ummano + "'";
 						q_box("umma.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'umma', "95%", "95%", q_getMsg('popUmma'));
+					}
+				});
+				
+				$('#txtUmmano').change(function() {
+					if(!emp($('#txtUmmano').val())){
+						var t_where = "where=^^ noa='"+$('#txtUmmano').val()+"' ^^";
+						q_gt('umma', t_where, 0, 0, 0, "umma_change", r_accy);
+					}else{
+						sum();
 					}
 				});
 
@@ -488,6 +498,8 @@
 							$('#txtPaytype').val(as[0].paytype);
 							$('#txtPrice').val(as[0].price);
 							$('#txtDiscount').val(as[0].weight);
+							$('#txtCno').val(as[0].cno);
+							$('#txtAcomp').val(as[0].acomp);
 						}
 						sum();
 						break;
@@ -574,7 +586,17 @@
 							sum();
 						}
 						break;
-					case 'umma':
+					case 'umma_change':
+						var as = _q_appendData("umma", "", true);
+						if (as[0] != undefined) {
+							sum();
+						}else{
+							alert('無【'+$('#txtUmmano').val()+'】預收單號');
+							$('#txtUmmano').val('');
+							sum();
+						}
+						break;
+					case 'umma_btnOk':
 						var as = _q_appendData("umma", "", true);
 						if (as[0] != undefined) {
 							umma_total=dec(as[0].total);
@@ -647,7 +669,7 @@
 				//判斷超出預收
 				if(!check_umma && !emp($('#txtUmmano').val())){
 					var t_where = "where=^^ noa='"+$('#txtUmmano').val()+"' ^^";
-					q_gt('umma', t_where, 0, 0, 0, "umma", r_accy);
+					q_gt('umma', t_where, 0, 0, 0, "umma_btnOk", r_accy);
 					return;
 				}
 				
@@ -1068,7 +1090,12 @@
 				
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
+				
+				if(!emp($('#txtUmmano').val())){
+					$('#txtTotal').val(FormatNumber(t_tax));
+				}else{
+					$('#txtTotal').val(FormatNumber(t_total));	
+				}
 			}
 		</script>
 		<style type="text/css">

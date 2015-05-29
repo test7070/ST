@@ -17,18 +17,21 @@
             }
 
             var q_name = "umma";
-            var q_readonly = ['txtVccbno','txtAccno','txtNoa', 'txtWorker','txtWorker2','txtAcc2','txtDdate','txtDiscount'];
-            var bbmNum = [['txtMoney', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtDiscount', 10, 0, 1]];
+            var q_readonly = ['txtVccbno','txtAccno','txtNoa', 'txtWorker','txtWorker2','txtAcc2','txtTax','txtDaccno','txtAcc4'];
+            var bbmNum = [['txtMoney', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtDiscount', 10, 0, 1], ['txtTax', 10, 0, 1]];
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
+            brwCount2 = 12;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
             //ajaxPath = "";
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
-            ,['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2,txtMount', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]);
+            ,['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
+            ,['txtAcc3', 'lblAcc3', 'acc', 'acc1,acc2', 'txtAcc3,txtAcc4', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
+            );
             
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -50,7 +53,7 @@
             }
             function mainPost() {
                 q_getFormat();
-                bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
+                bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm],['txtIdate', r_picd],['txtDdate', r_picd]];
                 q_mask(bbmMask);
                 q_gt('acomp', '', 0, 0, 0, "");
                 
@@ -70,6 +73,11 @@
                 $('#lblAccno').click(function() {
                 	if(!emp($('#txtAccno').val()))
                     	q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0,3) + '_1', 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('popAccc'), true);
+                });
+                
+                $('#lblDaccno').click(function() {
+                	if(!emp($('#txtAccno').val()))
+                    	q_pop('txtDaccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtDaccno').val() + "';" + $('#txtDatea').val().substring(0,3) + '_1', 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('popAccc'), true);
                 });
                         
                 $('#lblVccbno').click(function() {
@@ -322,7 +330,7 @@
             }
             .dview {
                 float: left;
-                width: 490px;
+                width: 590px;
                 border-width: 0px;
             }
             .tview {
@@ -342,7 +350,7 @@
             }
             .dbbm {
                 float: left;
-                width: 700px;
+                width: 600px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -361,7 +369,7 @@
                 height: 35px;
             }
             .tbbm tr td {
-                width: 23%;
+                /*width: 23%;*/
             }
             .tbbm .tdZ {
                 width: 1%;
@@ -445,6 +453,7 @@
 						<td align="center" style="width:100px; color:black;"><a id='vewMoney'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewDiscount'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewBalancet'> </a></td>
+						<td align="center" style="width:100px; color:black;"><a id='vewTax'> </a></td>
 					</tr>
 					<tr>
 						<td >
@@ -455,17 +464,18 @@
 						<td id="money,0,1" style="text-align: right;">~money,0,1</td>
 						<td id="discount,0,1" style="text-align: right;">~discount,0,1</td>
 						<td id="balance,0,1" style="text-align: right;">~balance,0,1</td>
+						<td id="tax,0,1" style="text-align: right;">~tax,0,1</td>
 					</tr>
 				</table>
 			</div>
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
+						<td style="width: 100px;"> </td>
+						<td style="width: 200px;"> </td>
+						<td style="width: 100px;"> </td>
+						<td style="width: 200px;"> </td>
+						<td style="width: 10px;"> </td>
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
@@ -521,8 +531,19 @@
 						<td><input id="txtDiscount" type="text"  class="txt num c1" /></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id='lblAcc3' class="lbl btn"> </a></td>
+						<td>
+							<input id="txtAcc3" type="text"  class="txt c1" style="width: 49%;"/>
+							<input id="txtAcc4" type="text"  class="txt c1" style="width: 49%;"/>
+						</td>
+						<td><span> </span><a id='lblDaccno' class="lbl btn"> </a></td>
+						<td><input id="txtDaccno" type="text" class="txt c1" /></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblVccbno' class="lbl btn"> </a></td>
 						<td><input id="txtVccbno" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
+						<td><input id="txtTax" type="text" class="txt num c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
