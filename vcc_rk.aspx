@@ -31,9 +31,11 @@
 			//ajaxPath = "";
 			aPop = new Array(
 				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx']
+				,['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 				,['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 				,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']
+            	,['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
 			brwCount2 = 12;
 			$(document).ready(function() {
@@ -193,10 +195,12 @@
 					sum();
 				});
 				$("#combPaytype").change(function(e) {
-					if (q_cur == 1 || q_cur == 2)
+					if (q_cur == 1 || q_cur == 2){
 						$('#txtPaytype').val($('#combPaytype').find(":selected").text());
+						$(this)[0].selectedIndex=0;
+					}
 				});
-				$("#txtPaytype").focus(function(e) {
+                $("#txtPaytype").focus(function(e) {
 					var n = $(this).val().match(/[0-9]+/g);
 					var input = document.getElementById("txtPaytype");
 					if ( typeof (input.selectionStart) != 'undefined' && n != null) {
@@ -295,20 +299,24 @@
                         	as = b_ret;
                     		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtStyle,txtRackno,txtUnit,txtPrice'
                         	, as.length, as, 'noa,no2,productno,product,dime,radius,width,lengthb,spec,class,style,source,unit,price', '','');             	
+                        	//訂單資料
+                        	var t_ordeno = $('#txtOrdeno_0').length>0?$('#txtOrdeno_0').val():'';
+                    		q_gt('view_orde', "where=^^ noa='"+t_ordeno+"' ^^", 0, 0, 0, JSON.stringify({action:'importOrde'}));
                         }else{
                         	Unlock(1);
                         }
-                        sum();
                         break;
                     case 'cut_vcc':
                         if (b_ret != null) {
                         	as = b_ret;
                     		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtUno,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtStyle,txtRackno,txtUnit,txtPrice'
                         	, as.length, as, 'noa,no2,uno,productno,product,dime,radius,width,lengthb,spec,class,style,source,unit,price', '','');             	
+                        	//訂單資料
+                        	var t_ordeno = $('#txtOrdeno_0').length>0?$('#txtOrdeno_0').val():'';
+                    		q_gt('view_orde', "where=^^ noa='"+t_ordeno+"' ^^", 0, 0, 0, JSON.stringify({action:'importOrde'}));
                         }else{
                         	Unlock(1);
                         }
-                        sum();
                         break;
 					case q_name + '_s':
 						q_boxClose2(s2);
@@ -343,6 +351,24 @@
 						if (q_cur == 4)// 查詢
 							q_Seek_gtPost();
 						break;
+					default:
+                    	try{
+                    		t_para = JSON.parse(t_name);
+                    		if(t_para.action == 'importOrde'){
+                    			var as = _q_appendData("view_orde", "", true);
+		                		if (as[0] != undefined) {
+		                			$('#txtOrdeno').val(as[0].noa);	
+		                			$('#txtAddr2').val(as[0].addr2);	
+		                			$('#txtPaytype').val(as[0].paytype);	
+		                			$('#txtMemo').val(as[0].memo2);
+		                			$('#txtTel').val(as[0].tel);		
+		                		}
+                    			sum();
+                    		}
+                    	}catch(e){
+                    		
+                    	}
+                    	break;
 				}
 			}
 
@@ -623,7 +649,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 2200px;
+				width: 1700px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -685,8 +711,6 @@
 						</td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"></select></td>
-						<td></td>
-						<td></td>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
 					</tr>
@@ -696,8 +720,9 @@
 						<td><span> </span><a id='lblMon' class="lbl"> </a></td>
 						<td><input id="txtMon" type="text" class="txt c1"/></td>
 						<td><input id="txtOrdeno" type="text" style="display:none;" /></td>
-						<td><input id="btnOrdeno" type="button" class="lbl"/></td>
-						<td><input id="btnCut" type="button" value="製成品匯入"/></td>
+						<td></td>
+						<td><input id="btnOrdeno" type="button" class="txt c1"/></td>
+						<td><input id="btnCut" type="button" value="製成品匯入" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
@@ -728,8 +753,8 @@
 					<tr>
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td colspan="4" >
-							<input id="txtPost" type="text" style="float:left; width:70px;"/>
-							<input id="txtAddr" type="text" style="float:left; width:369px;"/>
+							<input id="txtPost" type="text" style="float:left; width:15%;"/>
+							<input id="txtAddr" type="text" style="float:left; width:85%px;"/>
 						</td>
 						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
 						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>
@@ -737,8 +762,8 @@
 					<tr>
 						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
 						<td colspan="4" >
-							<input id="txtPost2" type="text" style="float:left; width:70px;"/>
-							<input id="txtAddr2" type="text" style="float:left; width:347px;"/>
+							<input id="txtPost2" type="text" style="float:left; width:15%;"/>
+							<input id="txtAddr2" type="text" style="float:left; width:85%;"/>
 						</td>
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
@@ -822,6 +847,8 @@
 					<td style="width:60px;">背面<BR>處理</td>
 					<td style="width:100px;">保護膜</td>
 					<td style="width:60px;">單位</td>
+					<td style="width:100px;">包裝內容</td>
+					<td style="width:80px;">件數</td>
 					<td style="width:80px;">數量</td>
 					<td style="width:80px;">重量</td>
 					<td style="width:80px;">單價(KG)</td>
@@ -853,8 +880,9 @@
 					</td>
 					<td><input id="txtStyle.*" type="text" class="txt c1"/></td>
 					<td><input id="txtRackno.*" type="text" class="txt c1"/></td>
-					
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
+					<td><input id="txtChecker.*" type="text" class="txt c1"/></td>
+					<td><input id="txtLengthc.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt c1 num"/></td>
