@@ -488,6 +488,8 @@
 							$('#txtPaytype').val(as[0].paytype);
 							$('#txtPrice').val(as[0].price);
 							$('#txtDiscount').val(as[0].weight);
+							$('#txtCno').val(as[0].cno);
+							$('#txtAcomp').val(as[0].acomp);
 						}
 						sum();
 						break;

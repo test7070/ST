@@ -17,8 +17,8 @@
             }
 
             var q_name = "paya";
-            var q_readonly = ['txtVccbno','txtAccno','txtNoa', 'txtWorker','txtWorker2','txtAcc2','txtDdate','txtDiscount'];
-            var bbmNum = [['txtMoney', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtDiscount', 10, 0, 1]];
+            var q_readonly = ['txtVccbno','txtAccno','txtNoa', 'txtWorker','txtWorker2','txtAcc2','txtTax','txtDaccno','txtAcc4'];
+            var bbmNum = [['txtMoney', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtDiscount', 10, 0, 1], ['txtTax', 10, 0, 1]];
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -28,7 +28,9 @@
             q_desc = 1;
             //ajaxPath = "";
             aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick', 'txtTggno,txtComp,txtNick', 'tgg_b.aspx']
-            ,['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2,txtMount', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]);
+            ,['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2,txtMount', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
+            ,['txtAcc3', 'lblAcc3', 'acc', 'acc1,acc2', 'txtAcc3,txtAcc4', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
+            );
             
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -50,7 +52,7 @@
             }
             function mainPost() {
                 q_getFormat();
-                bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
+                bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm],['txtIdate', r_picd],['txtDdate', r_picd]];
                 q_mask(bbmMask);
                 q_gt('acomp', '', 0, 0, 0, "");
                 
@@ -70,6 +72,11 @@
                 $('#lblAccno').click(function() {
                 	if(!emp($('#txtAccno').val()))
                     	q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0,3) + '_1', 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('popAccc'), true);
+                });
+                
+                $('#lblDaccno').click(function() {
+                	if(!emp($('#txtAccno').val()))
+                    	q_pop('txtDaccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtDaccno').val() + "';" + $('#txtDatea').val().substring(0,3) + '_1', 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('popAccc'), true);
                 });
                         
                 $('#lblVccbno').click(function() {
@@ -521,8 +528,19 @@
 						<td><input id="txtDiscount" type="text"  class="txt num c1" /></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id='lblAcc3' class="lbl btn"> </a></td>
+						<td>
+							<input id="txtAcc3" type="text"  class="txt c1" style="width: 49%;"/>
+							<input id="txtAcc4" type="text"  class="txt c1" style="width: 49%;"/>
+						</td>
+						<td><span> </span><a id='lblDaccno' class="lbl btn"> </a></td>
+						<td><input id="txtDaccno" type="text" class="txt c1" /></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblVccbno' class="lbl btn"> </a></td>
 						<td><input id="txtVccbno" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
+						<td><input id="txtTax" type="text" class="txt num c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
