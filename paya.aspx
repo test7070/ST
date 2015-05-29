@@ -22,6 +22,7 @@
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
+            brwCount2 = 12;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
@@ -329,7 +330,7 @@
             }
             .dview {
                 float: left;
-                width: 490px;
+                width: 590px;
                 border-width: 0px;
             }
             .tview {
@@ -349,7 +350,7 @@
             }
             .dbbm {
                 float: left;
-                width: 700px;
+                width: 600px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -368,7 +369,7 @@
                 height: 35px;
             }
             .tbbm tr td {
-                width: 23%;
+                /*width: 23%;*/
             }
             .tbbm .tdZ {
                 width: 1%;
@@ -452,6 +453,7 @@
 						<td align="center" style="width:100px; color:black;"><a id='vewMoney'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewDiscount'> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewBalancet'> </a></td>
+						<td align="center" style="width:100px; color:black;"><a id='vewTax'> </a></td>
 					</tr>
 					<tr>
 						<td >
@@ -462,17 +464,18 @@
 						<td id="money,0,1" style="text-align: right;">~money,0,1</td>
 						<td id="discount,0,1" style="text-align: right;">~discount,0,1</td>
 						<td id="balance,0,1" style="text-align: right;">~balance,0,1</td>
+						<td id="tax,0,1" style="text-align: right;">~tax,0,1</td>
 					</tr>
 				</table>
 			</div>
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
+						<td style="width: 100px;"> </td>
+						<td style="width: 200px;"> </td>
+						<td style="width: 100px;"> </td>
+						<td style="width: 200px;"> </td>
+						<td style="width: 10px;"> </td>
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>

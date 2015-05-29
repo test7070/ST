@@ -117,6 +117,15 @@
 					}
 				});
 				
+				$('#txtPayano').change(function() {
+					if(!emp($('#txtPayano').val())){
+						var t_where = "where=^^ noa='"+$('#txtPayano').val()+"' ^^";
+						q_gt('paya', t_where, 0, 0, 0, "paya_change", r_accy);
+					}else{
+						sum();
+					}
+				});
+				
 				$('#lblOrdc').click(function() {
 					lblOrdc();
 				});
@@ -400,7 +409,17 @@
 							btnOk();
 						}
 						break;
-					case 'paya':
+					case 'paya_change':
+						var as = _q_appendData("paya", "", true);
+						if (as[0] != undefined) {
+							sum();
+						}else{
+							alert('無【'+$('#txtPayano').val()+'】預付單號');
+							$('#txtPayano').val('');
+							sum();
+						}
+						break;
+					case 'paya_btnOk':
 						var as = _q_appendData("paya", "", true);
 						if (as[0] != undefined) {
 							paya_total=dec(as[0].total);
@@ -504,7 +523,7 @@
 				//判斷超出預付
 				if(!check_paya && !emp($('#txtPayano').val())){
 					var t_where = "where=^^ noa='"+$('#txtPayano').val()+"' ^^";
-					q_gt('paya', t_where, 0, 0, 0, "paya", r_accy);
+					q_gt('paya', t_where, 0, 0, 0, "paya_btnOk", r_accy);
 					return;
 				}
 				
@@ -858,7 +877,12 @@
 				}
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
+				
+				if(!emp($('#txtPayano').val())){
+					$('#txtTotal').val(FormatNumber(t_tax));
+				}else{
+					$('#txtTotal').val(FormatNumber(t_total));	
+				}
 			}
 		</script>
 		<style type="text/css">
