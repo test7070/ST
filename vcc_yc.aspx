@@ -79,7 +79,7 @@
 				$('#txtMoney').val(round(t1, 0));
 				calTax();
 				//計算折扣
-				$('#txtTotal').val(FormatNumber(q_sub(q_float('txtTotal'),q_float('txtDiscount'))));
+				//$('#txtTotal').val(FormatNumber(q_sub(q_float('txtTotal'),q_float('txtDiscount'))));
 			}
 
 			function mainPost() {
@@ -1025,6 +1025,9 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_money += q_float('txtTotal_' + j);
 				}
+				//104/05/29 稅金=應收-折扣*0.5
+				t_money=q_sub(t_money,q_float('txtDiscount'));
+				
 				t_total = t_money;
 				if (!isinvosystem) {
 					var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
