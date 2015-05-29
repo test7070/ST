@@ -1113,7 +1113,6 @@
 							}
 						});
 						$('#txtSize_' + j).change(function(e) {
-							return;
 							if ($.trim($(this).val()).length == 0)
 								return;
 							var n = $(this).attr('id').replace('txtSize_', '');
