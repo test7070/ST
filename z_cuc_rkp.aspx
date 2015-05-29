@@ -25,7 +25,7 @@
 					options : [{
 						type : '0', //[1]
 						name : 'path',
-						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_orde_rkp.aspx','')
+						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_cuc_rkp.aspx','')
 					},{
 						type : '0', //[2]
 						name : 'db',
