@@ -54,7 +54,7 @@
 
             function mainPost() {
                 q_getFormat();
-                document.title = '報價單';
+                document.title = '報價作業';
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);

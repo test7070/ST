@@ -156,7 +156,7 @@
 
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
-				document.title = '交運單';
+				document.title = '交運作業';
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));

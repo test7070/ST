@@ -53,7 +53,7 @@
 
             function mainPost() {
                 q_getFormat();
-                document.title = '成品進倉單';
+                document.title = '成品進倉作業';
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);

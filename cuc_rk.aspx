@@ -53,6 +53,7 @@
 
             function mainPost() {
                 q_getFormat();
+                document.title = '裁切作業';
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);

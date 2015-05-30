@@ -61,6 +61,7 @@
 
 			function mainPost() {
 				q_getFormat();
+				document.title = '領退料作業';
 				bbmMask = [['txtDatea', r_picd], ['txtCucdate', r_picd]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", '領料單,退料單');
