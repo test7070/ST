@@ -125,9 +125,9 @@
 					<td style="width:5%;"><input id="txtUnit.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
 					<td style="width:10%;">
 						<input id="txtSpec.*" type="text" style="float:left;width:50%;"  readonly="readonly" />
-						<input id="txtClassa.*" type="text" style="float:left;width:50%;"  readonly="readonly" />
+						<input id="txtClass.*" type="text" style="float:left;width:50%;"  readonly="readonly" />
 					</td>
-					<td style="width:5%;"><input id="txtStyle.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
+					<td style="width:5%;"><input id="txtUcolor.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
 					<td style="width:5%;"><input id="txtSource.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
 					<td style="width:5%;">
 						<input id="txtMount.*" type="text" style="float:left;width:100%;"  readonly="readonly" />

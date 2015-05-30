@@ -156,6 +156,7 @@
 
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
+				document.title = '交運單';
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
@@ -297,8 +298,8 @@
 					case 'orde_vcc':
                         if (b_ret != null) {
                         	as = b_ret;
-                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtStyle,txtRackno,txtUnit,txtPrice'
-                        	, as.length, as, 'noa,no2,productno,product,dime,radius,width,lengthb,spec,class,style,source,unit,price', '','');             	
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtUcolor,txtRackno,txtUnit,txtPrice'
+                        	, as.length, as, 'noa,no2,productno,product,dime,radius,width,lengthb,spec,class,ucolor,source,unit,price', '','');             	
                         	//訂單資料
                         	var t_ordeno = $('#txtOrdeno_0').length>0?$('#txtOrdeno_0').val():'';
                     		q_gt('view_orde', "where=^^ noa='"+t_ordeno+"' ^^", 0, 0, 0, JSON.stringify({action:'importOrde'}));
@@ -309,8 +310,8 @@
                     case 'cut_vcc':
                         if (b_ret != null) {
                         	as = b_ret;
-                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtUno,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtStyle,txtRackno,txtUnit,txtPrice'
-                        	, as.length, as, 'noa,no2,uno,productno,product,dime,radius,width,lengthb,spec,class,style,source,unit,price', '','');             	
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtUno,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtUcolor,txtRackno,txtUnit,txtPrice'
+                        	, as.length, as, 'noa,no2,uno,productno,product,dime,radius,width,lengthb,spec,class,ucolor,source,unit,price', '','');             	
                         	//訂單資料
                         	var t_ordeno = $('#txtOrdeno_0').length>0?$('#txtOrdeno_0').val():'';
                     		q_gt('view_orde', "where=^^ noa='"+t_ordeno+"' ^^", 0, 0, 0, JSON.stringify({action:'importOrde'}));
@@ -878,7 +879,7 @@
 						<input id="txtClass.*" type="text" style="width:45%"/>
 						<input id="btnSpec.*" type="button" style="display:none;"/>
 					</td>
-					<td><input id="txtStyle.*" type="text" class="txt c1"/></td>
+					<td><input id="txtUcolor.*" type="text" class="txt c1"/></td>
 					<td><input id="txtRackno.*" type="text" class="txt c1"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtChecker.*" type="text" class="txt c1"/></td>

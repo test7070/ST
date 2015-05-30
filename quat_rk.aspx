@@ -30,7 +30,7 @@
             brwCount2 = 20;
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial', 'txtCustno,txtComp,txtNick,txtSerial', 'cust_b.aspx']
             	,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
-            	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClassa_', 'spec_b.aspx']);
+            	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']);
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'no3'];
@@ -54,6 +54,7 @@
 
             function mainPost() {
                 q_getFormat();
+                document.title = '報價單';
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);
@@ -581,10 +582,10 @@
 
 					<td>
 						<input id="txtSpec.*" type="text" style="width:45%"/>
-						<input id="txtClassa.*" type="text" style="width:45%"/>
+						<input id="txtClass.*" type="text" style="width:45%"/>
 						<input id="btnSpec.*" type="button" style="display:none;"/>
 					</td>
-					<td><input id="txtStyle.*" type="text" class="txt c1"/></td>
+					<td><input id="txtUcolor.*" type="text" class="txt c1"/></td>
 					<td><input id="txtSource.*" type="text" class="txt c1"/></td>
 					
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>

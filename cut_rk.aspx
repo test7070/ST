@@ -53,6 +53,7 @@
 
             function mainPost() {
                 q_getFormat();
+                document.title = '成品進倉單';
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);
@@ -103,7 +104,7 @@
 		                			$('#txtLengthb_'+t_para.n).val(as[0].lengthb);
 		                			$('#txtSpec_'+t_para.n).val(as[0].spec);
 		                			$('#txtClass_'+t_para.n).val(as[0].class);
-		                			$('#txtStyle_'+t_para.n).val(as[0].style);
+		                			$('#txtUcolor_'+t_para.n).val(as[0].ucolor);
 		                			$('#txtsource_'+t_para.n).val(as[0].source);	
 		                		}else{
 		                			alert('找不到訂單【'+t_para.ordeno+'-'+t_para.no2+'】');
@@ -500,7 +501,7 @@
 						<input id="txtClass.*" type="text" style="float:left;width:45%;"/>
 						<input id="txtProductno.*" type="text" style="display:none;"/>
 						<input id="txtProduct.*" type="text" style="display:none;"/>
-						<input id="txtStyle.*" type="text" style="display:none;"/>
+						<input id="txtUcolor.*" type="text" style="display:none;"/>
 						<input id="txtSource.*" type="text" style="display:none;"/>
 						<input id="txtDime.*" type="text" class="num" style="float:left;width:22%;"/>
 						<input id="txtRadius.*" type="text" class="num" style="float:left;width:22%;"/>
