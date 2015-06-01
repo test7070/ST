@@ -102,8 +102,8 @@
 							for ( i = 0; i < as.length; i++) {
 								t_groupano = t_groupano + (t_groupano.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
 							}
-							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 						}
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 						break;
 					case q_name:
 						if (q_cur == 4)
