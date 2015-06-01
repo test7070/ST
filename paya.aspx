@@ -166,6 +166,13 @@
 			function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
+				
+				var s2 = xmlString.split(';');
+                abbm[q_recno]['accno'] = s2[0];
+                abbm[q_recno]['daccno'] = s2[1];
+                $('#txtAccno').val(s2[0]);
+                $('#txtDaccno').val(s2[1]);
+                
                 Unlock(1);
             }
             
@@ -540,8 +547,8 @@
 						<td><input id="txtDaccno" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblVccbno' class="lbl btn"> </a></td>
-						<td><input id="txtVccbno" type="text" class="txt c1" /></td>
+						<td style="display: none;"><span> </span><a id='lblVccbno' class="lbl btn"> </a></td>
+						<td style="display: none;"><input id="txtVccbno" type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td><input id="txtTax" type="text" class="txt num c1" /></td>
 					</tr>
