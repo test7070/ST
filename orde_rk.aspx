@@ -113,6 +113,7 @@
 
             function mainPost() {
                 q_getFormat();
+                document.title = '單筆買賣合約書';
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);
@@ -181,8 +182,8 @@
                 	case 'quat_orde':
                         if (b_ret != null) {
                         	as = b_ret;
-                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtQuatno,txtNo3,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtStyle,txtSource,txtUnit,txtMount,txtPrice'
-                        	, as.length, as, 'noa,no3,productno,product,dime,radius,width,lengthb,spec,classa,style,source,unit,emount,price', '','');
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtQuatno,txtNo3,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtUcolor,txtSource,txtUnit,txtMount,txtPrice'
+                        	, as.length, as, 'noa,no3,productno,product,dime,radius,width,lengthb,spec,class,ucolor,source,unit,emount,price', '','');
                         	
                         	var t_quatno = $('#txtQuatno_0').length>0?$('#txtQuatno_0').val():'';
                         	q_gt('view_quat', "where=^^ noa='"+t_quatno+"' ^^", 0, 0, 0, JSON.stringify({action:'importQuat'}));
@@ -685,7 +686,7 @@
 						<input id="txtClass.*" type="text" style="width:45%"/>
 						<input id="btnSpec.*" type="button" style="display:none;"/>
 					</td>
-					<td><input id="txtStyle.*" type="text" class="txt c1"/></td>
+					<td><input id="txtUcolor.*" type="text" class="txt c1"/></td>
 					<td><input id="txtSource.*" type="text" class="txt c1"/></td>
 					
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>

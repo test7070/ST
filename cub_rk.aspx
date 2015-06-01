@@ -57,6 +57,7 @@
 
 			function mainPost() {
 				q_getFormat();
+				document.title = '生產作業';
 				bbmMask = [['txtDatea', r_picd]];
 				bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
 				q_mask(bbmMask);

@@ -17,15 +17,15 @@
 		<script type="text/javascript">
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_cuc_rkp');       
+                q_gf('', 'z_cut_rkp');       
             });
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_cuc_rkp',
+					fileName : 'z_cut_rkp',
 					options : [{
 						type : '0', //[1]
 						name : 'path',
-						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_cuc_rkp.aspx','')
+						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_cut_rkp.aspx','')
 					},{
 						type : '0', //[2]
 						name : 'db',

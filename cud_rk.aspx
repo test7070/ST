@@ -53,6 +53,7 @@
 
             function mainPost() {
                 q_getFormat();
+                document.title = '烘板作業';
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);
@@ -219,7 +220,7 @@
             }
 
             function btnPrint() {
-				q_box("z_cuc_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
+				q_box("z_cud_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cuc_rk', "95%", "95%", m_print);
             }
 
             function wrServer(key_value) {
