@@ -451,7 +451,7 @@
                         <td> </td>
                         <td> </td>
                         <td> </td>
-                        <td class="tdZ"></td>
+                        <td class="tdZ"> </td>
                     </tr>
 					<tr class="tr1">
 						<td><span> </span><a id="lblType" class="lbl"> </a></td>
@@ -464,7 +464,7 @@
 					<tr class="tr4">
 						<td class="td1"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
 						<td class="td2" colspan="3">
-							<input id="txtStoreno" type="text" class="txt" style="float:left;width:40%;"/>
+							<input id="txtStoreno" type="text" class="txt" style="float:left;width:38%;"/>
 							<input id="txtStore" type="text" class="txt" style="float:left;width:60%;"/>
 						</td>
 						<td class='td3 isRack'><span> </span><a id="lblRackno" class="lbl btn" > </a></td>
