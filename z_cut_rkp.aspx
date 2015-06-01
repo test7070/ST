@@ -31,8 +31,17 @@
 						name : 'db',
 						value : q_db
 					},{
-						type : '6', //[3]
+						type : '6', //[3]     1
 						name : 'noa'
+					},{
+						type : '1', //[4][5]  2
+						name : 'date'
+					},{
+						type : '2', //[6][7]  3
+						name : 'cust',
+						dbf : 'cust',
+						index : 'noa,comp',
+						src : 'cust_b.aspx'
 					}]
 				});
 				q_popAssign();
