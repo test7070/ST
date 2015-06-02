@@ -17,15 +17,15 @@
 		<script type="text/javascript">
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_vcc_rkp');       
+                q_gf('', 'z_get_rkp');       
             });
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_vcc_rkp',
+					fileName : 'z_get_rkp',
 					options : [{
 						type : '0', //[1]
 						name : 'path',
-						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_vcc_rkp.aspx','')
+						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_get_rkp.aspx','')
 					},{
 						type : '0', //[2]
 						name : 'db',

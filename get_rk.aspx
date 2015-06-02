@@ -32,7 +32,7 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'Datea';
-			brwCount2 = 5;
+			brwCount2 = 4;
 			aPop = new Array(
 				//['txtPost', 'lblPost', 'addr', 'post,addr', 'txtPost', 'addr_b.aspx'],
 				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
@@ -275,7 +275,7 @@
                 background-color: black;
             }
             .tview tr {
-                height: 30%;
+                height: 35px;
             }
             .tview td {
                 padding: 2px;
@@ -413,17 +413,18 @@
 						<td><span> </span><a id="lblNoa" class="lbl" > </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>
 					</tr>
+					
+					<tr>
+						<td><span> </span><a id="lblMemo" class="lbl" > </a></td>
+						<td colspan='5'>
+							<textarea id="txtMemo" rows="6" class="txt c1"> </textarea>
+						</td>
+					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblMemo" class="lbl" > </a></td>
-						<td colspan='5'>
-							<textarea id="txtMemo" cols="10" rows="5" style="width: 99%; height: 50px;" > </textarea>
-						</td>
 					</tr>
 					<tr></tr>
 				</table>

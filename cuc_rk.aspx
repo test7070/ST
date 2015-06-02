@@ -27,7 +27,7 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Noa';
-            brwCount2 = 6;
+            brwCount2 = 4;
             aPop = new Array(['txtMechno', 'lblMechno', 'mech', 'noa,mech', 'txtMechno,txtMech', 'mech_b.aspx']
             , ['txtCustno', 'btnCustno', 'cust', 'noa,comp', 'txtCustno,txtCust', 'cust_b.aspx']);
             $(document).ready(function() {
@@ -317,7 +317,7 @@
             }
             .dview {
                 float: left;
-                width: 400px;
+                width: 250px;
                 border-width: 0px;
             }
             .tview {
@@ -326,7 +326,7 @@
                 background-color: black;
             }
             .tview tr {
-                height: 30%;
+                height: 35px;
             }
             .tview td {
                 padding: 2px;
@@ -337,7 +337,7 @@
             }
             .dbbm {
                 float: left;
-                width: 800px;
+                width: 700px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -440,20 +440,18 @@
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td style="width:100px; color:black;"><a id='vewDatea'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewMech'> </a></td>
+						<td style="width:120px; color:black;"><a id='vewTypea'>作業</a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
 						<td align="center" id='datea'>~datea</td>
-						<td align="center" id='mech'>~mech</td>
+						<td align="center" id='typea'>~typea</td>
 					</tr>
 				</table>
 			</div>
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
-						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
@@ -468,17 +466,19 @@
 						<td><input id="txtDatea"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblTypea" class="lbl"> </a></td>
+						<td><select id="cmbTypea" class="txt c1"> </select></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblMechno" class="lbl btn"></a></td>
 						<td colspan="2">
 							<input id="txtMechno"  type="text" class="txt" style="width:30%;"/>
 							<input id="txtMech"  type="text" class="txt" style="width:65%;"/>
 						</td>
-						<td><span> </span><a id="lblTypea" class="lbl"> </a></td>
-						<td><select id="cmbTypea" class="txt c1"> </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="6"><input id="txtMemo"  type="text" class="txt c1"/></td>
+						<td colspan="4"><input id="txtMemo"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
@@ -486,6 +486,7 @@
 						<td><span> </span><a id="lblWorker2" class="lbl"></a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
+					<tr></tr>
 				</table>
 			</div>
 		</div>

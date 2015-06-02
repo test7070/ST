@@ -27,7 +27,7 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Noa';
-            brwCount2 = 6;
+            brwCount2 = 4;
             aPop = new Array(['txtMechno', 'lblMechno', 'mech', 'noa,mech', 'txtMechno,txtMech', 'mech_b.aspx']
             , ['txtCustno', 'btnCustno', 'cust', 'noa,comp', 'txtCustno,txtCust', 'cust_b.aspx']);
             $(document).ready(function() {
@@ -57,7 +57,7 @@
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);
-				
+				q_cmbParse("cmbTypea", '製成品,再製品');
             }
 
             function q_popPost(s1) {
@@ -290,7 +290,7 @@
                 background-color: black;
             }
             .tview tr {
-                height: 30%;
+                height: 30px;
             }
             .tview td {
                 padding: 2px;
@@ -435,7 +435,7 @@
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td style="width:100px; color:black;"><a id='vewDatea'> </a></td>
-						<td style="width:100px; color:black;"><a id='vewNoa'> </a></td>
+						<td style="width:150px; color:black;"><a id='vewNoa'>編號</a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
@@ -460,8 +460,12 @@
 						<td><input id="txtDatea"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td><span> </span><a class="lbl">入庫類型</a></td>
+						<td><select id="cmbTypea" class="txt c1"> </select></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="3"><input id="txtMemo"  type="text" class="txt c1"/></td>
+						<td colspan="3"><textarea id="txtMemo" rows="5" class="txt c1"> </textarea></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
@@ -485,6 +489,7 @@
 					<td style="width:200px;">Coil編號</td>
 					<td style="width:200px;">棧板序號</td>
 					<td style="width:200px;">備註</td>
+					<td style="width:200px;">入庫批號</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -515,9 +520,10 @@
 						<input id="txtComp.*" type="text" style="float:left;width:45%;"/>
 						<input id="btnCust.*" type="button" style="display:none;">
 					</td>
-					<td><input id="txtBno.*" type="text" style="float:left;width:95%;"/></td>
+					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtSpecial.*" maxlength="20" type="text" style="float:left;width:95%;"/></td>			
 					<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
+					<td><input id="txtBno.*" type="text" style="float:left;width:95%;"/></td>
 				</tr>
 			</table>
 		</div>

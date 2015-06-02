@@ -27,7 +27,7 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Noa';
-            brwCount2 = 6;
+            brwCount2 = 4;
             aPop = new Array(['txtMechno', 'lblMechno', 'mech', 'noa,mech', 'txtMechno,txtMech', 'mech_b.aspx']
             , ['txtCustno', 'btnCustno', 'cust', 'noa,comp', 'txtCustno,txtCust', 'cust_b.aspx']);
             $(document).ready(function() {
@@ -312,7 +312,7 @@
             }
             .dview {
                 float: left;
-                width: 300px;
+                width: 250px;
                 border-width: 0px;
             }
             .tview {
@@ -321,7 +321,7 @@
                 background-color: black;
             }
             .tview tr {
-                height: 30%;
+                height: 35px;
             }
             .tview td {
                 padding: 2px;
@@ -435,7 +435,7 @@
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td style="width:100px; color:black;">日期</td>
-						<td style="width:100px; color:black;">單號</td>
+						<td style="width:120px; color:black;">單號</td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
@@ -451,8 +451,6 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
-						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
@@ -463,8 +461,10 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="5"><input id="txtMemo"  type="text" class="txt c1"/></td>
+						<td colspan="3" rowspan="3"><textarea id="txtMemo"  rows="5" class="txt c1"></textarea></td>
 					</tr>
+					<tr><td></td></tr>
+					<tr><td></td></tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>

@@ -436,6 +436,8 @@
 				Lock(1, {
 					opacity : 0
 				});
+				$('#txtNoa').val('AUTO');
+				$('#txtDatea').val(q_date);
 				$('#cmbTaxtype').val(1);
 				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
 			}
@@ -755,7 +757,7 @@
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td colspan="4" >
 							<input id="txtPost" type="text" style="float:left; width:15%;"/>
-							<input id="txtAddr" type="text" style="float:left; width:85%px;"/>
+							<input id="txtAddr" type="text" style="float:left; width:85%;"/>
 						</td>
 						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
 						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>

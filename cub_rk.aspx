@@ -309,7 +309,7 @@
 				background-color: black;
 			}
 			.tview tr {
-				height: 30px;
+				height: 35px;
 			}
 			.tview td {
 				padding: 2px;
@@ -320,7 +320,7 @@
 			}
 			.dbbm {
 				float: left;
-				width: 70%;
+				width: 600px;
 				/*margin: -1px;
 				 border: 1px black solid;*/
 				border-radius: 5px;
@@ -469,6 +469,8 @@
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
+					<tr></tr>
+					<tr></tr>
 				</table>
 			</div>
 			<div class='dbbs'>
