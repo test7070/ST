@@ -57,7 +57,7 @@
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);
-				
+				q_cmbParse("cmbTypea", '製成品,再製品');
             }
 
             function q_popPost(s1) {
@@ -460,8 +460,12 @@
 						<td><input id="txtDatea"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td><span> </span><a class="lbl">入庫類型</a></td>
+						<td><select id="cmbTypea" class="txt c1"> </select></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="3"><textarea id="txtMemo" rows="6" class="txt c1"> </textarea></td>
+						<td colspan="3"><textarea id="txtMemo" rows="5" class="txt c1"> </textarea></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
