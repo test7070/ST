@@ -95,7 +95,7 @@
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-				q_cmbParse("cmbKind", '隨貨單張,隨貨多張,批次未開,批次已開');
+				q_cmbParse("cmbKind", ',隨貨單張,隨貨多張,批次未開,批次已開');
 				
 				q_cmbParse("cmbGtime", ",08:00~09:00,09:00~10:00,10:00~11:00,11:00~12:00,12:00~13:00,13:00~14:00,14:00~15:00,15:00~16:00,16:00~17:00,17:00~18:00,18:00~19:00,19:00~20:00,21:00~22:00");
 				
@@ -130,6 +130,13 @@
 				$('#txtTotal').change(function() {
 					sum();
 				});
+				
+				$('#cmbStype').change(function() {
+					if($('#cmbStype').val()=='4'){
+						$('#cmbKind').val('');
+					}
+				});
+				
 				$('#txtAddr').change(function() {
 					var t_custno = trim($(this).val());
 					if (!emp(t_custno)) {
@@ -585,10 +592,15 @@
 					}
 				}
 				
+				if($('#cmbStype').val()=='4'){
+					$('#cmbKind').val('');
+				}
+				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
+					
 				sum();
 
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();

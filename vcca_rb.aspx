@@ -213,6 +213,11 @@
 					q_cur=2;
 				}).blur(function() {
 					q_cur=0;
+				}).change(function() {
+					if(!emp($('#textOrdeno').val())){
+						t_where = "where=^^ trdno='" + $('#textOrdeno').val() + "' ^^";
+						q_gt('vcca', t_where, 0, 0, 0, "vcca_rep", r_accy);
+					}
 				});
 				
 				$('#textBuyerno').focusin(function() {
@@ -222,19 +227,55 @@
 				});
 				
 				$('#btnOk_div_batchvcca').click(function() {
-					if(q_float('textTotal')>0 && q_float('textMoney')>0){
-						if(q_float('textTotal')%q_float('textMoney')==0){
-							$('#div_batchvcca').hide();
+					if(!emp($('#textOrdeno').val())){
+						if(q_float('textTotal')>0 && q_float('textMoney')>0){
+							if(q_float('textTotal')%q_float('textMoney')==0){
+								var t_ordeno=$('#textOrdeno').val();
+								var t_total=$('#textTotal').val();
+								var t_money=$('#textMoney').val();
+								var t_buyerno=emp(trim($('#textBuyerno').val()))?'#non':$('#textBuyerno').val();
+								var t_buyer=emp(trim($('#textBuyer').val()))?'#non':$('#textBuyer').val();
+								var t_serial=emp(trim($('#textSerial').val()))?'#non':$('#textSerial').val();
+								var t_vccano=emp(trim($('#textVccano').val()))?'#non':$('#textVccano').val();
+								
+								q_func('qtxt.query.vcca_rb','vcca.txt,batchvcca_rb,'+encodeURI(t_ordeno) 
+								+ ';' + encodeURI(t_total) + ';' + encodeURI(t_money) + ';' + encodeURI(t_buyerno)+ ';' + encodeURI(t_buyer) 
+								+ ';' + encodeURI(t_serial) + ';' + encodeURI(t_vccano) + ';' + encodeURI(r_name));
+								
+								$('#btnOk_div_batchvcca').attr('disabled','disabled').val('開立中...');
+							}else{
+								alert('訂單金額輸入除不盡!!');
+							}
 						}else{
-							alert('訂單金額輸入除不盡!!');
+							alert('訂單金額與分開金額不可為0!!');
 						}
 					}else{
-						alert('訂單金額與分開金額不可為0!!');
+						alert('訂單編號禁止空白!!');
 					}
 				});
+				
 				$('#btnClose_div_batchvcca').click(function() {
 					$('#div_batchvcca').hide();
 				});
+			}
+			
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'qtxt.query.vcca_rb':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							if(as[0].err=='vccaok')
+								alert('訂單批次產生發票已產生完畢!!');
+							else
+								alert(as[0].err+'!!');
+						}else{
+							alert('訂單批次產生錯誤!!');
+						}
+						
+						$('#btnOk_div_batchvcca').removeAttr('disabled').val('批次開立');
+						$('#div_batchvcca').hide();
+						break;
+				}
 			}
 
 			function q_boxClose(s2) {
@@ -311,6 +352,13 @@
 							 }*/
 							wrServer($('#txtNoa').val());
 							return;
+						}
+						break;
+					case 'vcca_rep':
+						var as = _q_appendData("vcca", "", true);
+						if (as[0] != undefined) {
+							alert("【"+$('#textOrdeno').val()+"】訂單編號已開過發票【"+as[0].noa+"】!!!");
+							$('#textOrdeno').val('');
 						}
 						break;
 					case q_name:
@@ -866,7 +914,7 @@
 				</tr>
 				<tr>
 					<td style="background-color: #f8d463;" align="center">訂單金額</td>
-					<td style="background-color: #f8d463;" colspan="2"><input id="textTotal" type="text" class="txt num c2"> </td>
+					<td style="background-color: #f8d463;" colspan="2"><input id="textTotal" type="text" class="txt num c2" disabled="disabled"> </td>
 				</tr>
 				<tr>
 					<td style="background-color: #f8d463;" align="center">分開金額</td>

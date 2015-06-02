@@ -626,15 +626,13 @@
                 <table class="tview" id="tview">
                     <tr>
                         <td align="center" style="width:30px; color:black;"><a id='vewChk'> </a></td>
-                        <td align="center" style="width:100px; color:black;"><a id='vewDatea'></a></td>
-                        <td align="center" style="width:170px; color:black;"><a id='vewNick'></a></td>
+                        <td align="center" style="width:100px; color:black;"><a id='vewDatea'> </a></td>
+                        <td align="center" style="width:170px; color:black;"><a id='vewNick'> </a></td>
                     </tr>
                     <tr>
-                        <td>
-                        <input id="chkBrow.*" type="checkbox" style=''/>
-                        </td>
-                        <td align="center" id='datea'>~datea</td>
-                        <td id='nick' style="text-align: right;" >~nick</td>
+                        <td><input id="chkBrow.*" type="checkbox" style=''/></td>
+						<td align="center" id='datea'>~datea</td>
+						<td align="center" id='nick' >~nick</td>
                     </tr>
                 </table>
             </div>

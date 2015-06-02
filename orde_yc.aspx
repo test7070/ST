@@ -867,8 +867,21 @@
 					opacity : 0
 				});
 				
-				var t_where = " where=^^ ordeno='" + $('#txtNoa').val() + "'^^";
-				q_gt('view_vccs', t_where, 0, 0, 0, 'btnModi');
+				if(q_getPara('sys.project').toUpperCase()!='YC'){
+					var t_where = " where=^^ ordeno='" + $('#txtNoa').val() + "'^^";
+					q_gt('view_vccs', t_where, 0, 0, 0, 'btnModi');
+				}else{
+					_btnModi();
+					Unlock(1);
+					$('#txtOdate').focus();
+					$('#txtApv').val('');
+					if (!emp($('#txtCustno').val())) {
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+						q_gt('custaddr', t_where, 0, 0, 0, "");
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
+						q_gt('cust', t_where, 0, 0, 0, "custgetaddr");
+					}
+				}
 				
 			}
 
