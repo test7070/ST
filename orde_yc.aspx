@@ -21,7 +21,7 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "orde";
-			var q_readonly = ['txtNoa','txtApv', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtSales', 'txtOrdbno', 'txtOrdcno'];
+			var q_readonly = ['txtNoa','txtApv', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtSales', 'txtOrdbno', 'txtOrdcno','txtWeight'];
 			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtNo2', 'txtNo3', 'txtC1', 'txtNotv'];
 			var bbmNum = [['txtTotal', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1]];
 			var bbsNum = [];
@@ -79,6 +79,8 @@
 					t1 = q_add(t1, dec($('#txtTotal_' + j).val()));
 				}
 				$('#txtMoney').val(round(t1, 0));
+				
+				q_tr('txtWeight', Math.round(q_div(q_mul(q_float('txtMoney'),q_float('txtPrice')),100)));
 				
 				calTax();
 			}
@@ -203,13 +205,6 @@
 				});
 				
 				$('#txtPrice').change(function(){
-					//折扣歸零
-					q_tr('txtWeight',0);
-					//計算正常金額
-					sum();
-					//計算折扣 
-					q_tr('txtWeight', Math.round(q_div(q_mul(q_float('txtMoney'),q_float('txtPrice')),100)));
-					//重新計算折扣後的金額
 					sum();
 				});
 				
@@ -595,8 +590,8 @@
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
+					
 				sum();
-				
 				//判斷信用餘額
 				q_func('qtxt.query.orde', 'credit.txt,orde,'+ encodeURI($('#txtCustno').val()) + ';' + encodeURI($('#txtNoa').val()));
 			}

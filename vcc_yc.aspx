@@ -17,7 +17,7 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtDiscount'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -77,9 +77,8 @@
 					t1 = q_add(t1, dec(q_float('txtTotal_' + j)));
 				}
 				$('#txtMoney').val(round(t1, 0));
+				q_tr('txtDiscount', Math.round(q_div(q_mul(q_float('txtMoney'),q_float('txtPrice')),100)));	
 				calTax();
-				//計算折扣
-				//$('#txtTotal').val(FormatNumber(q_sub(q_float('txtTotal'),q_float('txtDiscount'))));
 			}
 
 			function mainPost() {
@@ -207,13 +206,6 @@
 				});
 				
 				$('#txtPrice').change(function(){
-					//折扣歸零
-					q_tr('txtDiscount',0);
-					//計算正常金額
-					sum();
-					//計算折扣 
-					q_tr('txtDiscount', Math.round(q_div(q_mul(q_float('txtMoney'),q_float('txtPrice')),100)));
-					//重新計算折扣後的金額
 					sum();
 				});
 				
@@ -680,13 +672,14 @@
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
-					
+				
 				sum();
-
+				
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-				if (s1.length == 0 || s1 == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));
-				else
+				if (s1.length == 0 || s1 == "AUTO"){
+					q_gtnoa(q_name, replaceAll($('#txtCno').val() + $('#txtDatea').val(), '/', ''));
+					//q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));
+				}else
 					wrServer(s1);
 			}
 
