@@ -436,6 +436,8 @@
 				Lock(1, {
 					opacity : 0
 				});
+				$('#txtNoa').val('AUTO');
+				$('#txtDatea').val(q_date);
 				$('#cmbTaxtype').val(1);
 				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
 			}
