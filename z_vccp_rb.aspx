@@ -45,19 +45,19 @@
 					}]
 				});
                 q_popAssign();
+                q_getFormat();
+				q_langShow();
                 	
 				$('#txtDate1').mask('999/99/99');
 				//$('#txtDate1').datepicker();
 				$('#txtDate2').mask('999/99/99');
 				//$('#txtDate2').datepicker();  
 	                
-	            var t_noa=typeof(q_getId()[3])=='undefined'?'':q_getId()[3];
-                t_noa  =  t_noa.replace('noa=','');
+	            var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
                 $('#txtXnoa1').val(t_noa);
                 $('#txtXnoa2').val(t_noa);
                 
-                var t_invo=typeof(q_getId()[4])=='undefined'?'':q_getId()[4];
-                t_invo  =  t_invo.replace('invo=','');
+                var t_invo=q_getHref()[3]=='undefined'?'':q_getHref()[3];
                 $('#txtInvo1').val(t_invo);
                 $('#txtInvo2').val(t_invo);
                 
@@ -84,12 +84,36 @@
 				$('#txtDate2').val(t_year+'/'+t_month+'/'+t_day);
 	                
 				$("input[type='checkbox'][value!='']").attr('checked', true);
+				
+				var t_ordeno=q_getHref()[5]=='undefined'?'':q_getHref()[5];
+				if(t_ordeno!=''){
+					var t_where = " where=^^ noa=(select MIN(noa) from view_vcc where ordeno='" + t_ordeno + "') ^^";
+					q_gt('view_vcc', t_where, 0, 0, 0, 'view_vcc', r_accy);
+				}
             }
 
             function q_boxClose(s2) {
             }
             
-            function q_gtPost(s2) {
+            function q_gtPost(t_name) {
+            	switch (t_name) {
+            		case 'view_vcc':
+            			var as = _q_appendData("view_vcc", "", true);
+						if (as[0] != undefined) {
+							var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
+							if(as[0].noa!=t_noa){
+								//第二次出貨 代表上次發票已隨貨全開完
+								var delete_report=0;
+								for(var i=0;i<$('#qReport').data().info.reportData.length;i++){
+									if($('#qReport').data().info.reportData[i].report=='z_vccp_rb02')
+										delete_report=i;
+								}
+								if($('#qReport div div').text().indexOf('發票列印')>-1)
+									$('#qReport div div')[delete_report].remove();
+							}
+						}
+            		break;
+            	}
             }
             
 		</script>

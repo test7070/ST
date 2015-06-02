@@ -922,7 +922,7 @@
 			}
 
 			function btnPrint() {				
-				q_box('z_vccp_rb.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";invo=" + trim($('#txtInvono').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				q_box('z_vccp_rb.aspx' + "?;;;noa='" + trim($('#txtNoa').val()) + "' and invo='" + trim($('#txtInvono').val())  + "' and ordeno='" + trim($('#txtInvono').val())+"';" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {

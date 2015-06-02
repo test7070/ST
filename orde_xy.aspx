@@ -1664,7 +1664,7 @@
 					case 'qtxt.query.ordb':
 						var as = _q_appendData("tmp0", "", true, true);
 						if (as[0] != undefined) {
-							alert("已成功轉成請購單【"+as[i].ordbnos.substr(0,as[i].ordbnos.length-1)+"】!!");
+							alert("已成功轉成請購單【"+as[0].ordbnos.substr(0,as[0].ordbnos.length-1)+"】!!");
 						} else {
 							alert('轉請購單失敗!!');
 						}

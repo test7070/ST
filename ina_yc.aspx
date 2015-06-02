@@ -54,12 +54,17 @@
 			}
 
 			function mainPost() {
+				bbsNum = [['txtMount', 15, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 15, q_getPara('vcc.weightPrecision'), 1],['txtMweight', 15, q_getPara('vcc.weightPrecision'), 1], ['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTotal', 15, 0, 1],['txtLengthb', 10, 0, 1]];
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbItype", q_getPara('inafe.typea'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
-				$('#lblStation').text('部門');
+				
+				if (q_getPara('sys.project').toUpperCase()=='YC'){
+					$('#lblStation').text('部門');
+					$('#lblMweight_s').text('公斤單價');
+				}
 			}
 
 			function q_boxClose(s2) {
@@ -154,6 +159,10 @@
 							sum();
 						});
 						
+						$('#txtMweight_' + j).change(function() {
+							sum();
+						});
+						
 						$('#txtPrice_' + j).change(function() {
 							sum();
 						});
@@ -216,11 +225,21 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
 					t_mount = q_float('txtMount_' + j);
-					t_weight=+q_float('txtWeight_' + j);
-					if (t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') 
-						$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_weight)), 0));
-					else
+					t_weight = q_float('txtWeight_' + j);
+					if(q_getPara('sys.project').toUpperCase()=='YC'){
+						if(q_float('txtMount_'+j)==0)
+							q_tr('txtPrice_'+j,0);
+						else
+							q_tr('txtPrice_'+j,round(q_div(q_mul(q_float('txtWeight_'+j),q_float('txtMweight_'+j)),q_float('txtMount_'+j)),q_getPara('vcc.weightPrecision')));
+							
 						$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
+					}else{
+						if (t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓' )
+							$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_weight)), 0));
+						else
+							$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
+					}
+						
 					t1 = q_add(t1, dec(q_float('txtTotal_' + j)));
 				}
 				$('#txtTotal').val(round(t1, 0));
@@ -239,6 +258,11 @@
 				
 				if (q_getPara('sys.project').toUpperCase()!='YC'){
 					$('.islengthb').hide();
+					$('.bbsmweight').hide();
+				}else{
+					$('#lblMweight_s').text('公斤單價');
+					$('#lblLengthbt_s').text('箱數');
+					$('#vewStation').text('部門');
 				}
 			}
 
@@ -468,6 +492,8 @@
 							<input id="txtCustno" type="text" class="txt c2"/>
 							<input id="txtComp" type="text" class="txt c3"/>
 						</td>
+						<td class="td5"><span> </span><a id="lblTrantype" class="lbl"> </a></td>
+						<td class="td6"><select id="cmbTrantype" class="txt c1"> </select></td>
 					</tr>
 					<tr class="tr5">
 						<td class="td1"><span> </span><a id="lblStore" class="lbl btn" > </a></td>
@@ -475,8 +501,6 @@
 							<input id="txtStoreno" type="text" class="txt c2"/>
 							<input id="txtStore" type="text" class="txt c3"/>
 						</td>
-						<td class="td1"><span> </span><a id="lblTrantype" class="lbl"> </a></td>
-						<td class="td2"><select id="cmbTrantype" class="txt c1"> </select></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblTotal" class="lbl"> </a></td>
@@ -503,9 +527,10 @@
 					<td align="center" style="width:300px;"><a id='lblProduct_s'> </a> <a class="isSpec">/</a> <a id='lblSpec' class="isSpec"> </a></td>
 					<td align="center" style="width:8%;" class="isStyle"><a id='lblStyles'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
-					<td align="center" style="width:90px;" class="islengthb"><a>箱數</a></td>
+					<td align="center" style="width:90px;" class="islengthb"><a id="lblLengthbt_s"> </a></td>
 					<td align="center" style="width:90px;"><a id='lblMount_s'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblWeight_s'> </a></td>
+					<td align="center" style="width:90px;" class="bbsmweight"><a id='lblMweight_s'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotal_s'> </a></td>
 					<td align="center"><a id='lblMemo_st'> </a></td>
@@ -530,6 +555,7 @@
 					<td class="islengthb"><input class="txt num c1" id="txtLengthb.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtWeight.*" type="text" /></td>
+					<td><input class="txt num c1 bbsmweight" id="txtMweight.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtPrice.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtTotal.*" type="text" /></td>
 					<td>
