@@ -27,7 +27,7 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Datea';
-            brwCount2 = 20;
+            brwCount2 = 15;
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial', 'txtCustno,txtComp,txtNick,txtSerial', 'cust_b.aspx']
             	,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']);
@@ -288,7 +288,7 @@
                 background-color: black;
             }
             .tview tr {
-                height: 30%;
+                height: 35px;
             }
             .tview td {
                 padding: 2px;

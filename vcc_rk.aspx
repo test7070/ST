@@ -755,7 +755,7 @@
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td colspan="4" >
 							<input id="txtPost" type="text" style="float:left; width:15%;"/>
-							<input id="txtAddr" type="text" style="float:left; width:85%px;"/>
+							<input id="txtAddr" type="text" style="float:left; width:85%;"/>
 						</td>
 						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
 						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>
