@@ -213,11 +213,6 @@
 					q_cur=2;
 				}).blur(function() {
 					q_cur=0;
-				}).change(function() {
-					if(!emp($('#textOrdeno').val())){
-						t_where = "where=^^ trdno='" + $('#textOrdeno').val() + "' ^^";
-						q_gt('vcca', t_where, 0, 0, 0, "vcca_rep", r_accy);
-					}
 				});
 				
 				$('#textBuyerno').focusin(function() {
@@ -719,7 +714,17 @@
 			function btnCancel() {
 				_btnCancel();
 			}
-
+			
+			function q_popPost(s1) {
+				switch (s1) {
+					case 'textOrdeno':
+						if(!emp($('#textOrdeno').val())){
+							t_where = "where=^^ trdno='" + $('#textOrdeno').val() + "' ^^";
+							q_gt('vcca', t_where, 0, 0, 0, "vcca_rep", r_accy);
+						}
+						break;
+				}
+			}
 			function checkId(str) {
 				if ((/^[a-z,A-Z][0-9]{9}$/g).test(str)) {//身分證字號
 					var key = 'ABCDEFGHJKLMNPQRSTUVWXYZIO';
