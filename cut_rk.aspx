@@ -134,14 +134,80 @@
                 else
                     $('#txtWorker2').val(r_name);
                 sum();
-                var t_noa = trim($('#txtNoa').val());
-                var t_date = trim($('#txtDatea').val());
-                if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cut') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-                else
-                    wrServer(t_noa);
+                getUno(q_bbsCount-1);
             }
-
+			function getUno(n){
+				if(n<0){
+					var t_noa = trim($('#txtNoa').val());
+	                var t_date = trim($('#txtDatea').val());
+	                if (t_noa.length == 0 || t_noa == "AUTO")
+	                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cut') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+	                else
+	                    wrServer(t_noa);
+				}else{
+					var t_uno = $('#txtUno_'+n).val();
+					var t_bno = $('#txtBno_'+n).val();
+					if(t_uno.length==0 || t_bno.length>0)
+						getUno(n-1);
+					else
+						q_func('qtxt.query.getuno_'+n, 'uno_rk.txt,getuno,' + t_uno + ';');
+					//JSON.stringify({action:'getUno',n:n})
+				}
+			}
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					default:
+						
+							if(t_func.substring(0,18)=='qtxt.query.getuno_'){
+								console.log('xx');
+								var n = t_func.replace('qtxt.query.getuno_','');
+								var as = _q_appendData("tmp0", "", true, true);
+								if (as[0] != undefined) {
+									$('#txtBno_'+n).val(as[0].uno);
+									console.log(as[0].uno);
+								}
+								getUno(n-1);
+							}
+							
+							/*t_para = JSON.parse(t_func);
+							if(t_para.action=='getUno'){
+								var as = _q_appendData("tmp0", "", true, true);
+								if (as[0] != undefined) {
+									$('#txtBno_'+t_para.n).val(as[0].uno);
+								}
+								getUno(t_para.n-1);
+							}*/
+						
+						break;
+					
+					case 'qtxt.quxery.getuno':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							if (as.length != q_bbsCount) {
+								alert('批號取得異常。');
+							} else {
+								for (var i = 0; i < q_bbsCount; i++) {
+									if ($('#txtUno_' + i).val().length == 0) {
+										$('#txtUno_' + i).val(as[i].uno);
+									}
+								}
+							}
+						}
+						if (q_cur == 1)
+							$('#txtWorker').val(r_name);
+						else
+							$('#txtWorker2').val(r_name);
+						sum();
+						var t_noa = trim($('#txtNoa').val());
+						var t_date = trim($('#txtDatea').val());
+						if (t_noa.length == 0 || t_noa == "AUTO")
+							q_gtnoa(q_name, replaceAll(q_getPara('sys.key_rc2') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+						else
+							wrServer(t_noa);
+						break;
+				}
+			}
+			
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
