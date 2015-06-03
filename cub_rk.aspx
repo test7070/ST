@@ -591,7 +591,7 @@
 						</td>
 						<td title="施工工時(分)">
 							<input id="txtBtime.*" type="text" style="float:left;width:95%;"/>
-							<input id="txtEtime.*" type="text" style="float:left;width:95%;"/>
+							<input id="txtEtime.*" type="text" style="float:left;width:95%;display:none;"/>
 						</td>
 					</tr>
 				</table>

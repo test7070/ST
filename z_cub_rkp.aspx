@@ -54,6 +54,15 @@
                         break;
                 }
             }
+            
+            /*var string = 'abcdefghijklmnopqrstuvwxy';
+            var code = '';
+            for(var i=0;i<string.length;i++){
+            	for(var j=1;j<=6;j++){
+            		code += ",'<a style=\"font-family:'+ \"'Times New Roman','標楷體', serif\"+char(59)+'\">'+"+string.substring(i,i+1)+'0'+j+" +'</a>' "+string.substring(i,i+1)+'0'+j;
+            		//code += ','+string.substring(i,i+1)+'0'+j+' nvarchar(max)'
+            	}
+            }*/
 			//function q_boxClose(s2) {}
 			function q_gtPost(s2) {}
 		</script>
