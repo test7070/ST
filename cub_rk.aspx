@@ -61,13 +61,7 @@
 				bbmMask = [['txtDatea', r_picd]];
 				bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
 				q_mask(bbmMask);
-				q_cmbParse("combProcess", '日,午,晚');
-                $("#combProcess").change(function(e) {
-					if (q_cur == 1 || q_cur == 2){
-						$('#txtProcess').val($('#combProcess').find(":selected").text());
-						$(this)[0].selectedIndex=0;
-					}
-				});
+				q_cmbParse("cmbProcess", '日,午,晚');
 			}
 
 			function q_gtPost(t_name) {
@@ -130,6 +124,7 @@
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
+				InsertBbs();
 			}
 
 			function btnModi() {
@@ -137,6 +132,40 @@
 					return;
 				_btnModi();
 				$('#txtDatea').focus();
+				InsertBbs();
+				
+			}
+			function InsertBbs(){
+				//固定6筆
+				for(var i=q_bbsCount;i<=6;i++){
+					q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq', 1);
+				}
+				noqlist = ["001","002","003","004","005","006"];
+				
+				for(var i=0;i<q_bbsCount;i++){
+					if(i>=6){
+						$('#txtNoq_'+i).parent().parent().hide();
+						$('#txtOrdeno_'+i).val('');
+					}		
+					else{
+						n = noqlist.indexOf($('#txtNoq_'+i).val());
+						if(n>=0){
+							noqlist[n] = '';
+						}
+					}
+				}
+				for(var i=0;i<noqlist.length;i++){
+					if($('#txtNoq_'+i).val().length==0){
+						t_noq = '';
+						for(var j=0;j<noqlist.length;j++){
+							if(noqlist[j].length>0){
+								$('#txtNoq_'+i).val(noqlist[j]);
+								noqlist[j] = '';
+								break;
+							}
+						}
+					}
+				}
 			}
 
 			function btnPrint() {
@@ -169,7 +198,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['custno']) {
+				if (!as['ordeno']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -186,10 +215,10 @@
 				_readonly(t_para, empty);
 				if (t_para) {
                     $('#txtDatea').datepicker('destroy');
-                    $('#combProcess').attr('disabled','disabled');
+                    $('#cmbProcess').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
-                    $('#combProcess').removeAttr('disabled');
+                    $('#cmbProcess').removeAttr('disabled');
                 }
 			}
 
@@ -455,9 +484,10 @@
 					<tr>
 						<td><span> </span><a class="lbl" >班、線別</a></td>
 						<td>
-							<select id="combProcess" class="txt c1"> </select>
-							<input id="txtProcess" type="hidden"/>
+							<select id="cmbProcess" class="txt c1"> </select>
 						</td>
+						<td><span> </span><a class="lbl">製造批號</a></td>
+						<td><input id="txtVcceno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
@@ -476,7 +506,7 @@
 			<div class='dbbs'>
 				<table id="tbbs" class='tbbs'>
 					<tr style='color:white; background:#003366;' >
-						<td style="width:20px;">
+						<td style="width:20px;display:none;">
 							<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"> </td>
@@ -499,7 +529,7 @@
 						<td style="width:100px;" align="center">施工工時(分)</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
-						<td align="center">
+						<td align="center" style="display: none;">
 							<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 							<input id="txtNoq.*" type="text" style="display: none;"/>
 						</td>
@@ -561,7 +591,7 @@
 						</td>
 						<td title="施工工時(分)">
 							<input id="txtBtime.*" type="text" style="float:left;width:95%;"/>
-							<input id="txtEtime.*" type="text" style="float:left;width:95%;"/>
+							<input id="txtEtime.*" type="text" style="float:left;width:95%;display:none;"/>
 						</td>
 					</tr>
 				</table>

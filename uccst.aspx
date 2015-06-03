@@ -97,8 +97,8 @@
 				switch (t_name) {
 					case 'uccga':
 						var as = _q_appendData("uccga", "", true);
+						t_groupano = " @ ";
 						if (as[0] != undefined) {
-							t_groupano = " @ ";
 							for ( i = 0; i < as.length; i++) {
 								t_groupano = t_groupano + (t_groupano.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
 							}

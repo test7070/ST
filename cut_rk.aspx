@@ -52,10 +52,11 @@
             }
 
             function mainPost() {
+            	
                 q_getFormat();
                 document.title = '成品進倉作業';
                 bbmMask = [['txtDatea', r_picd]];
-                bbsMask = [];
+                bbsMask = [['txtDatea',r_picd]];
                 q_mask(bbmMask);
 				q_cmbParse("cmbTypea", '製成品,再製品');
             }
@@ -159,7 +160,6 @@
 					default:
 						
 							if(t_func.substring(0,18)=='qtxt.query.getuno_'){
-								console.log('xx');
 								var n = t_func.replace('qtxt.query.getuno_','');
 								var as = _q_appendData("tmp0", "", true, true);
 								if (as[0] != undefined) {
@@ -168,16 +168,6 @@
 								}
 								getUno(n-1);
 							}
-							
-							/*t_para = JSON.parse(t_func);
-							if(t_para.action=='getUno'){
-								var as = _q_appendData("tmp0", "", true, true);
-								if (as[0] != undefined) {
-									$('#txtBno_'+t_para.n).val(as[0].uno);
-								}
-								getUno(t_para.n-1);
-							}*/
-						
 						break;
 					
 					case 'qtxt.quxery.getuno':
@@ -212,9 +202,6 @@
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
                 q_box('cuc_rk_s.aspx', q_name + '_s', "500px", "310px", q_getMsg("popSeek"));
-            }
-
-            function combPay_chg() {
             }
 
             function bbsAssign() {
@@ -556,6 +543,7 @@
 					<td style="width:200px;">棧板序號</td>
 					<td style="width:200px;">備註</td>
 					<td style="width:200px;">入庫批號</td>
+					<td style="width:100px;">轉入庫日期</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -590,6 +578,7 @@
 					<td><input id="txtSpecial.*" maxlength="20" type="text" style="float:left;width:95%;"/></td>			
 					<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtBno.*" type="text" style="float:left;width:95%;"/></td>
+					<td><input id="txtDatea.*" type="text" style="float:left;width:95%;"/></td>
 				</tr>
 			</table>
 		</div>
