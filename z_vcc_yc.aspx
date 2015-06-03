@@ -199,7 +199,14 @@
 						type : '0',//[36]
 						name : 'xproject',
 						value : q_getPara('sys.project').toUpperCase()
-					}]
+					}, {
+						type : '6', //[37]//80000
+						name : 'xyear'
+					},{
+                        type : '8', //[38]//顯示箱數 //100000
+                        name : 'xshowlengthc',
+                        value : "1@顯示箱數".split(',')
+                    }]
                 });
                 q_popAssign();
                 q_getFormat();
@@ -209,7 +216,9 @@
                 $('#txtDate1').datepicker();
                 $('#txtDate2').mask('999/99/99');
                 $('#txtDate2').datepicker();
-
+                $('#txtXyear').mask('999');
+				
+				$('#txtXyear').val(r_accy.substring(0,3));
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
