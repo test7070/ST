@@ -109,7 +109,7 @@
 										delete_report=i;
 								}
 								if($('#qReport div div').text().indexOf('發票列印')>-1)
-									$('#qReport div div')[delete_report].remove();
+									$('#qReport div div').eq(delete_report).remove();
 							}
 						}
             		break;

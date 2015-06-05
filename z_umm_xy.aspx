@@ -32,7 +32,7 @@
 									delete_report=i;
 							}
 							if($('#q_report div div').text().indexOf('業務出貨獎金明細表')>-1)
-								$('#q_report div div')[delete_report].remove()
+								$('#q_report div div').eq(delete_report).remove()
 					}
 				});
 

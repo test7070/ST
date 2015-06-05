@@ -27,7 +27,7 @@
 								delete_report=i;
 						}
 						if($('#q_report div div').text().indexOf('出貨單列印(套表)')>-1){
-							$('#q_report div div')[delete_report].remove();
+							$('#q_report div div').eq(delete_report).remove();
 							$('#q_report div div .radio').first().removeClass('nonselect').addClass('select').click();
 						}
 					}
