@@ -587,27 +587,27 @@
 					<td><input id="txtSpec.*" type="text" style="float:left;width:95%;"/></td>
 					<td>
 						<input id="txtMount.*" type="text" style="display:none;"/>
-						<input id="txtWeight.*" type="text" class="num" style="float:left;width:95%;"/>
+						<input id="txtWeight.*" type="text" class="txt num" style="float:left;width:95%;"/>
 					</td>
 					<td><input id="txtSize.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
 					<td>
 						<input id="txtSize2.*" type="text" style="float:left;width:95%;"/>
-						<input id="txtWidth.*" type="text" class="num" style="float:left;width:46%;"/>
-						<input id="txtLengthb.*" type="text" class="num" style="float:left;width:46%;"/>
+						<input id="txtWidth.*" type="text" class="txt num" style="float:left;width:46%;"/>
+						<input id="txtLengthb.*" type="text" class="txt num" style="float:left;width:46%;"/>
 					</td>
-					<td><input id="txtMount1.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtWeight1.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtMount2.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtWeight2.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtMount3.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtWeight3.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtMount4.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtWeight4.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtMount5.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtWeight5.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtWaste.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtHours.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount1.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight1.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount2.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight2.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount3.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight3.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount4.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight4.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount5.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight5.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWaste.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtHours.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
 					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
 				</tr>
 			</table>
