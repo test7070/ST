@@ -33,6 +33,7 @@
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
+            q_bbsLen = 10;
             aPop = new Array(['txtStationno', 'lblStation', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'], 
 	            ['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'], 
 	            ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'], 
