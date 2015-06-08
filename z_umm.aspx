@@ -38,7 +38,7 @@
 									delete_report=i;
 							}
 							if($('#q_report div div').text().indexOf('業務應收帳款總表')>-1)
-								$('#q_report div div').eq(delete_report).remove()
+								$('#q_report div div').eq(delete_report).hide()
 						}else{
 							$('#Paytype').hide();
 						}
@@ -58,7 +58,7 @@
 								delete_report=i;
 						}
 						if($('#q_report div div').text().indexOf('客戶收款簽收報表')>-1)
-							$('#q_report div div').eq(delete_report).remove();
+							$('#q_report div div').eq(delete_report).hide();
 					}
 					
 					if(!(q_getPara('sys.project').toUpperCase()=='YC' || q_getPara('sys.project').toUpperCase()=='FE' || q_getPara('sys.project')=='1')){
@@ -68,7 +68,7 @@
 								delete_report=i;
 						}
 						if($('#q_report div div').text().indexOf('客戶請款單(重量)')>-1)
-							$('#q_report div div').eq(delete_report).remove();
+							$('#q_report div div').eq(delete_report).hide();
 					}
 						
 				});
