@@ -25,6 +25,14 @@
 					options : [{
 						type : '6', //[1]
 						name : 'noa'
+					},{
+						type : '8', //[2]
+						name : 'xweight',
+						value : ['1@顯示計價數量']
+					},{
+						type : '8', //[3]
+						name : 'xprice',
+						value : ['1@顯示單價']
 					}]
 				});
 				q_popAssign();
