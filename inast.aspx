@@ -33,6 +33,7 @@
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
+            q_bbsLen = 10;
             aPop = new Array(['txtStationno', 'lblStation', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'], 
 	            ['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'], 
 	            ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'], 
@@ -672,9 +673,11 @@
             var uccb_readonly = false;
             var bbs_id = '';
             function bbs_readonly(id) {
-                bbs_id = id;
-                var t_where = "where=^^ noa='" + $('#txtUno_' + bbs_id).val() + "' and gweight>0 ^^";
-                q_gt('uccb', t_where, 0, 0, 0, "", r_accy);
+            	if(q_cur==1 || q_cur==2){
+	                bbs_id = id;
+	                var t_where = "where=^^ noa='" + $('#txtUno_' + bbs_id).val() + "' and gweight>0 ^^";
+	                q_gt('uccb', t_where, 0, 0, 0, "", r_accy);
+               }
             }
 
 			function distinct(arr1){
@@ -1081,6 +1084,9 @@
 					<td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:230px;"><a id='lblSizea_st'> </a></td>
+					
+					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
+					<td align="center" style="width:50px;"><a id='lblZinc'>邊</a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
@@ -1133,9 +1139,9 @@
 					<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
 					<td><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
-					<td >
-					<input  id="txtUnit.*" type="text" style="width:90%;"/>
-					</td>
+					<td ><input  id="txtSource.*" type="text" style="width:95%;"/></td>
+					<td ><input  id="txtZinc.*" type="text" style="width:95%;"/></td>
+					<td ><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td>
 					<input id="txtMount.*" type="text" class="txt num" style="width:95%;"/>
 					</td>

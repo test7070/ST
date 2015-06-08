@@ -35,10 +35,10 @@
 			brwCount2 = 4;
 			aPop = new Array(
 				//['txtPost', 'lblPost', 'addr', 'post,addr', 'txtPost', 'addr_b.aspx'],
-				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,size,unit', 'txtUno_,txtProductno_,txtProduct_,txtSize_,txtUnit_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx'],
-				['txtRackno', 'lblRackno', 'rack', 'noa,rack,storeno,store', 'txtRackno', 'rack_b.aspx']
+				['txtStoreno', 'lblStore', 'store', 'noa,store', '0txtStoreno,txtStore', 'store_b.aspx'],
+				['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,size,unit', '0txtUno_,txtProductno_,txtProduct_,txtSize_,txtUnit_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', '0txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx'],
+				['txtRackno', 'lblRackno', 'rack', 'noa,rack,storeno,store', '0txtRackno', 'rack_b.aspx']
 			);
 			function sum(){
 				if(!(q_cur==1 || q_cur==2))
@@ -379,7 +379,7 @@
 	</head>
 	<body>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id='dmain'>
+		<div id='dmain' style="width:1200px;overflow: visible;">
             <div class="dview" id="dview" >
                 <table class="tview" id="tview">
 					<tr>
