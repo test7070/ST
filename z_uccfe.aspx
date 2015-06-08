@@ -25,6 +25,9 @@
 					if (q_getPara('sys.project').toUpperCase()!='YC'){
 						$('#Xcarton').hide();
 					}
+					if (q_getPara('sys.project').toUpperCase()=='YC' && r_rank<8){
+						$('#Xcarton').hide();
+					}
 				});
 			});
 			
@@ -73,7 +76,11 @@
                         type : '0', //[13]
                         name : 'priceprecision',
                         value : q_getPara('vcc.pricePrecision')
-                    }]
+                    }, {
+						type : '8',
+						name : 'xshowprice',//[14]
+						value : "1@顯示單價".split(',')
+					}]
 				});
 				q_popAssign();
 				q_getFormat();
@@ -94,14 +101,21 @@
 				$('#Xcarton').css('width','300px').css('height','30px');
 				$('#chkXcarton').css('width','215px');
 				$('#chkXcarton span').css('width','175px');
+				$('#Xshowprice').css('width','300px').css('height','30px');
+				$('#chkXshowprice').css('width','215px');
+				$('#chkXshowprice span').css('width','175px');
 				
-				if (q_getPara('sys.project').toUpperCase()=='FE'){
+				/*if (q_getPara('sys.project').toUpperCase()=='FE'){
 					$('#btnUcf').hide();
 				}
 				
 				$('#btnUcf').click(function() {
 					q_box('ucf.aspx' + "?;;;;" + r_accy, '', "450px", "200px", $('#btnUcf').val());
-				});
+				});*/
+				
+				if (q_getPara('sys.project').toUpperCase()=='YC' && r_rank<8){
+					$('#Xcarton').hide();
+				}
 				
 				if (q_getPara('sys.project').toUpperCase()=='YC')
 					q_gt('ucc',"where=^^noa= (select MAX(noa) from ucc where left(noa,1)<'S') ^^", 0, 0, 0, "maxpno", r_accy);
@@ -189,7 +203,7 @@
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
 				<div id="q_report"> </div>
-				<input type="button" id="btnUcf" value="成本結轉" style="font-weight: bold;font-size: medium;color: red;">
+				<!--<input type="button" id="btnUcf" value="成本結轉" style="font-weight: bold;font-size: medium;color: red;">-->
 			</div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->

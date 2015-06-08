@@ -276,6 +276,10 @@
                 if(isinvosystem=='2'){//沒有發票系統
 	                $('#Xshowinvono').hide();
 				}
+				
+				$('#btnUcf').click(function() {
+					q_box('ucf.aspx' + "?;;;;" + r_accy, '', "450px", "200px", $('#btnUcf').val());
+				});
             }
 
             function q_boxClose(s2) {
@@ -299,10 +303,11 @@
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
-		<div id="q_menu"></div>
+		<div id="q_menu"> </div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
-				<div id="q_report"></div>
+				<div id="q_report"> </div>
+				<input type="button" id="btnUcf" value="成本結轉" style="font-weight: bold;font-size: medium;color: red;">
 			</div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->
