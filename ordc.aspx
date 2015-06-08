@@ -83,6 +83,17 @@
 			}
 
 			function mainPost() {
+				if (q_getPara('sys.project').toUpperCase()=='RB'){
+					aPop = new Array(
+						['txtProductno1_', 'btnProduct1_', 'ucc', 'noa,product,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_,txtMount_', 'ucc_b2.aspx'],
+						['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_,txtMount_', 'bcc_b.aspx'],
+						['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_,txtMount_', 'fixucc_b.aspx'],
+						['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+						['txtCno', 'lblAcomp', 'acomp', 'noa,acomp,addr', 'txtCno,txtAcomp,txtAddr2', 'acomp_b.aspx'],
+						['txtTggno', 'lblTgg', 'tgg', 'noa,comp,trantype,paytype,salesno,sales,tel,fax,zip_comp,addr_comp'
+						, 'txtTggno,txtTgg,cmbTrantype,txtPaytype,txtSalesno,txtSales,txtTel,txtFax,txtPost,txtAddr,txtPost2', 'tgg_b.aspx']
+					);
+				}
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd], ['txtTrandate', r_picd], ['txtEtd', r_picd], ['txtEta', r_picd], ['txtOnboarddate', r_picd]];
 				bbsMask = [['txtTrandate', r_picd]];
@@ -198,6 +209,19 @@
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
+				}
+				if(s2[0]!=undefined){
+					if(s2[0]=='ucc' && q_getPara('sys.project').toUpperCase()=='RB'){
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0)
+								return;
+							if (b_ret.length>0)
+								b_ret.splice(0, 1);
+							if (b_ret.length>0)
+								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtStdmount', b_ret.length, b_ret, 'noa,product,spec,unit,stdmount', 'txtProductno,txtProduct,txtSpec');
+						}
+					}
 				}
 				b_pop = '';
 			}

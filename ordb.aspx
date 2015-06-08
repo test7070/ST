@@ -137,6 +137,17 @@
 			}
 
 			function mainPost() {
+				if (q_getPara('sys.project').toUpperCase()=='RB'){
+					aPop = new Array(
+						['txtProductno1_', 'btnProduct1_', 'ucc', 'noa,product,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', 'ucc_b2.aspx'],
+						['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_,txtProduct_', 'bcc_b.aspx'],
+						['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_,txtProduct_', 'fixucc_b.aspx'],
+						['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+						['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
+						['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype', 'txtTggno,txtTgg,txtNick,txtPaytype', 'tgg_b.aspx']
+					);
+				}
+				
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtOmount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtPrice', 10, q_getPara('rc2.pricePrecision'), 1],
@@ -424,6 +435,20 @@
 						q_boxClose2(s2);
 						break;
 				}
+				if(s2[0]!=undefined){
+					if(s2[0]=='ucc' && q_getPara('sys.project').toUpperCase()=='RB'){
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0)
+								return;
+							if (b_ret.length>0)
+								b_ret.splice(0, 1);
+							if (b_ret.length>0)
+								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtStdmount', b_ret.length, b_ret, 'noa,product,spec,unit,stdmount', 'txtProductno,txtProduct,txtSpec');
+						}
+					}
+				}
+				b_pop = '';
 			}
 
 			function _btnSeek() {
