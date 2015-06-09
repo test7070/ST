@@ -61,7 +61,8 @@
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtWeight', 10, q_getPara('rc2.weightPrecision'), 1], ['txtLengthb', 10, 2, 1]
-								,['txtEmount2', 10, q_getPara('rc2.mountPrecision'), 1], ['txtEweight2', 10, q_getPara('rc2.weightPrecision'), 1],['txtAdjmount', 10, q_getPara('rc2.mountPrecision'), 1]];
+								,['txtEmount2', 10, q_getPara('rc2.mountPrecision'), 1], ['txtEweight2', 10, q_getPara('rc2.weightPrecision'), 1],['txtAdjmount', 10, q_getPara('rc2.mountPrecision'), 1]
+								,['txtPrice', 10, q_getPara('rc2.pricePrecision'), 1], ['txtTotal', 15, 0, 1]];
 				q_cmbParse("cmbKind", q_getPara('ucce.kind'));
 				
 				
@@ -157,6 +158,8 @@
 				_bbsAssign();
 				if (q_getPara('sys.project').toUpperCase()!='FE'){
 					$('.fe').hide();
+				}else{
+					$('.unfe').hide();
 				}
 			}
 
@@ -209,7 +212,10 @@
 				_refresh(recno);
 				if (q_getPara('sys.project').toUpperCase()!='FE'){
 					$('.fe').hide();
+				}else{
+					$('.unfe').hide();
 				}
+				
 			}
 
 			function readonly(t_para, empty) {
@@ -363,7 +369,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1200px;
+                width: 1250px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -375,7 +381,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1200px;
+                width: 1250px;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -485,6 +491,8 @@
 					<td align="center" style="width:50px;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblEmount_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblEweight_s'> </a></td>
+					<td align="center" style="width:80px;" class="unfe"><a id='lblPrice_s'> </a></td>
+					<td align="center" style="width:80px;" class="unfe"><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblEmount2_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblEweight2_s'> </a></td>
@@ -508,6 +516,8 @@
 					<td><input class="txt c1" id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num c1" id="txtMount.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num c1" id="txtWeight.*" type="text" style="width:95%;"/></td>
+					<td class="unfe"><input class="txt num c1 unfe" id="txtPrice.*" type="text" /></td>
+					<td class="unfe"><input class="txt num c1 unfe" id="txtTotal.*" type="text" /></td>
 					<td>
 						<input class="txt c1" id="txtMemo.*"type="text" style="width:95%;"/>
 						<input id="txtNoq.*" type="hidden" />

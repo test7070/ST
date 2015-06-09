@@ -227,9 +227,7 @@
 					t_mount = q_float('txtMount_' + j);
 					t_weight = q_float('txtWeight_' + j);
 					if(q_getPara('sys.project').toUpperCase()=='YC'){
-						if(q_float('txtMount_'+j)==0)
-							q_tr('txtPrice_'+j,0);
-						else
+						if( q_float('txtMweight_'+j)!=0 && q_float('txtMweight_'+j)!=0)
 							q_tr('txtPrice_'+j,round(q_div(q_mul(q_float('txtWeight_'+j),q_float('txtMweight_'+j)),q_float('txtMount_'+j)),q_getPara('vcc.weightPrecision')));
 							
 						$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
