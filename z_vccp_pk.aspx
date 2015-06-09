@@ -17,11 +17,11 @@
 		<script type="text/javascript">
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_vccpkp');       
+                q_gf('', 'z_vccp_pk');       
             });
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_vccpkp',
+					fileName : 'z_vccp_pk',
 					options : [{
 						type : '6', //[1]
 						name : 'noa'

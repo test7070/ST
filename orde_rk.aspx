@@ -152,6 +152,14 @@
                 	var t_where ='';
                 	q_box("quat_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({ordeno:t_noa,custno:t_custno,page:'orde_rk'}), "quat_orde", "95%", "95%", '');
                 });
+                var t_where = "where=^^ 1=1 group by post,addr^^";
+				q_gt('custaddr', t_where, 0, 0, 0, "");
+				$('#txtCustno').change(function() {
+					if (!emp($('#txtCustno').val())) {
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+						q_gt('custaddr', t_where, 0, 0, 0, "");
+					}
+				});
             }
             function distinct(arr1){
                 var uniArray = [];
@@ -166,6 +174,12 @@
 
             function q_popPost(s1) {
                 switch(s1) {
+                	case 'txtCustno':
+						if (!emp($('#txtCustno').val())) {
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+							q_gt('custaddr', t_where, 0, 0, 0, "");
+						}
+						break;
                     case 'txtMechno':
                        /*var t_mechno = trim($('#txtMechno').val());
                         if (t_mechno.length > 0) {
@@ -200,6 +214,29 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'getAcomp':
+						var as = _q_appendData("acomp", "", true);
+						if (as[0] != undefined) {
+							$('#txtCno').val(as[0].noa);
+							$('#txtAcomp').val(as[0].nick);
+						}
+						Unlock(1);
+						$('#txtNoa').val('AUTO');
+						$('#txtDatea').val(q_date());
+						$('#txtMon').val(q_date().substring(0, 6));
+						$('#txtDatea').focus();
+						break;
+                	case 'custaddr':
+						var as = _q_appendData("custaddr", "", true);
+						var t_item = " @ ";
+						if (as[0] != undefined) {
+							for ( i = 0; i < as.length; i++) {
+								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].post + '@' + as[i].addr;
+							}
+						}
+						document.all.combAddr.options.length = 0;
+						q_cmbParse("combAddr", t_item);
+						break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -242,9 +279,9 @@
                     $('#txtWorker2').val(r_name);
                 sum();
                 var t_noa = trim($('#txtNoa').val());
-                var t_date = trim($('#txtDatea').val());
+                var t_date = trim($('#txtDatea').val()).substring(0,3);
                 if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                    q_gtnoa(q_name, t_date,7);
                 else
                     wrServer(t_noa);
             }
@@ -293,8 +330,9 @@
 
             function btnIns() {
                 _btnIns();
-                $('#txtNoa').val('AUTO');
-                $('#txtDatea').val(q_date()).focus();
+                q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
+				var t_where = "where=^^ 1=1 group by post,addr^^";
+				q_gt('custaddr', t_where, 0, 0, 0, "");
             }
 
             function btnModi() {
@@ -395,6 +433,12 @@
             function btnCancel() {
                 _btnCancel();
             }
+            function combAddr_chg() {/// 只有 comb 開頭，才需要寫 onChange() ，其餘 cmb 連結資料庫
+				if (q_cur == 1 || q_cur == 2) {
+					$('#txtAddr2').val($('#combAddr').find("option:selected").text());
+					$('#txtPost2').val($('#combAddr').find("option:selected").val());
+				}
+			}
 		</script>
 		<style type="text/css">
             #dmain {
@@ -600,7 +644,10 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblAddr2" class="lbl"></a></td>
-						<td colspan="5"><input id="txtAddr2"  type="text" class="txt c1"/></td>
+						<td colspan="5">
+							<input id="txtAddr2"  type="text" class="txt" style="width:95%;"/>
+							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'></select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">付款方式</a></td>
