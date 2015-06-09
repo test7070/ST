@@ -213,9 +213,10 @@
 					<td style="width:6%;"><input class="txt" id="txtComp.*" type="text" style="width:95%;"/></td>
 					<td style="width:6%;"><input class="txt" id="txtGweight.*" type="text"  style="width:95%;text-align: right;"/></td>
 					<td style="width:6%;"><input class="txt" id="txtWeight.*" type="text"  style="width:95%;text-align: right;"/></td>
-					<td style="width:6%;">
+					<td style="width:15%;">
 						<input class="txt" id="txtProductno.*" type="text"  style="width:45%;"/>
 						<input class="txt" id="txtProduct.*" type="text"  style="width:45%;"/>
+						<input id="btnProduct" type="button" style="display:none;">
 					</td>
 					<td style="width:6%;"><input class="txt"  id="txtSpec.*" type="text" style="width:95%;"/></td>
 					<td style="width:6%;"><input class="txt"  id="txtSize.*" type="text" style="width:95%;"/></td>
