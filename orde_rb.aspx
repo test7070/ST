@@ -578,6 +578,10 @@
 					return;
 				}
 				
+				if(emp($('#txtDatea').val())){
+					$('#txtDatea').val(q_cdn(q_date(),1));
+				}
+				
 				for(var k=0;k<q_bbsCount;k++){
 					$('#txtDatea_'+k).val($('#txtDatea').val())
 				}
@@ -1371,7 +1375,7 @@
 					<td align="center" style="width:115px;"><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblGemounts'> </a></td>
 					<td align="center" style="display: none;"><a id='lblMemos'> </a></td>
-					<td align="center" style="width:85px;"><a id='lblDateas'> </a></td>
+					<td align="center" style="width:85px;display: none;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblEndas'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblCancels'> </a></td>
 					<!--<td align="center" style="width:43px;"><a id='lblBorn'> </a></td>
@@ -1406,7 +1410,7 @@
 						<input class="txt" id="txtNo3.*" type="text" style="width: 20%;"/>
 						<input id="recno.*" type="hidden" />
 					</td>
-					<td><input class="txt c7" id="txtDatea.*" type="text" /></td>
+					<td style="display: none;"><input class="txt c7" id="txtDatea.*" type="text" /></td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 					<td align="center"><input id="chkCancel.*" type="checkbox"/></td>
 					<!--<td align="center"><input class="btn" id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" /></td>

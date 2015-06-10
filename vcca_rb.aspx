@@ -142,27 +142,7 @@
 					t_vccno = $('#txtVccno').val();
 					
 					if(t_vccno.length>0){
-						if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1)
-							q_pop('txtVccno', "vcc_it.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtVccno').val() + "';" + ($('#txtDatea').val().substring(0, 3)<'101'?r_accy:$('#txtDatea').val().substring(0, 3)) + '_' + r_cno, 'vcc', 'noa', 'datea', "95%", "95%", q_getMsg('popVcc'), true);
-						else if (q_getPara('sys.comp').indexOf('裕承隆') > -1)
-							q_pop('txtVccno', "vccst.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtVccno').val() + "';" + r_accy + '_' + r_cno, 'vcc', 'noa', 'datea', "95%", "95%", q_getMsg('popVcc'), true);
-						else
-							q_pop('txtVccno', "vcc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtVccno').val() + "';" + r_accy + '_' + r_cno, 'vcc', 'noa', 'datea', "95%", "95%", q_getMsg('popVcc'), true);
-					}else{
-						if(q_cur==1 || q_cur==2){
-							t_vccano = $('#txtNoa').val();
-							t_custno = $('#txtCustno').val();
-							t_where = "b.custno='"+t_custno+"' and (c.noa='"+t_vccano+"' or c.noa is null)";
-							q_box("vccavcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({vccano:t_vccano,custno:t_custno}), "vccavcc", "95%", "95%", '');
-						}else{
-							var t_noa = '';
-							for(var i=0;i<q_bbtCount;i++){
-								if($('#txtVccno__'+i).val().length>0)
-									t_noa += (t_noa.length>0?" or ":"")+"noa='"+$('#txtVccno__'+i).val()+"'";
-							}
-							if(t_noa.length>0)
-								q_box("vccst.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_noa + ";" + r_accy, 'vcc', "95%", "95%", q_getMsg("popVcc"));
-						}
+						q_pop('txtVccno', "vcc_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtVccno').val() + "';" + ($('#txtDatea').val().substring(0, 3)<'101'?r_accy:$('#txtDatea').val().substring(0, 3)) + '_' + r_cno, 'vcc', 'noa', 'datea', "95%", "95%", q_getMsg('popVcc'), true);
 					}
 				});
 				
@@ -223,6 +203,10 @@
 				
 				$('#btnOk_div_batchvcca').click(function() {
 					if(!emp($('#textOrdeno').val())){
+						if(!batch_orde){
+							q_gt('view_orde', "where=^^ noa='"+$('#textOrdeno').val()+"' ^^", 0, 0, 0, "", r_accy);
+							return;
+						}
 						if(q_float('textTotal')>0 && q_float('textMoney')>0){
 							if(q_float('textTotal')%q_float('textMoney')==0){
 								var t_ordeno=$('#textOrdeno').val();
@@ -244,6 +228,7 @@
 						}else{
 							alert('訂單金額與分開金額不可為0!!');
 						}
+						batch_orde=false;
 					}else{
 						alert('訂單編號禁止空白!!');
 					}
@@ -253,6 +238,7 @@
 					$('#div_batchvcca').hide();
 				});
 			}
+			var batch_orde=false;
 			
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
@@ -308,6 +294,19 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'view_orde':
+						var as = _q_appendData("view_orde", "", true);
+						if (as[0] != undefined) {
+							if(as[0].kind=='隨貨多張'){
+								batch_orde=true;
+								$('#btnOk_div_batchvcca').click();
+							}else{
+								alert('訂單非隨貨多張!!');
+							}
+						}else{
+							alert('訂單不存在!!');
+						}
+						break;
 					case 'getAcomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
