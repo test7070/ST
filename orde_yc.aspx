@@ -129,6 +129,7 @@
 						q_gt('cust', t_where, 0, 0, 0, "");
 					}
 				});
+				
 				$('#txtAddr2').change(function() {
 					var t_custno = trim($(this).val());
 					if (!emp(t_custno)) {
@@ -305,6 +306,31 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'getcuststatus':
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							if(as[0].status<'3'){
+								check_custstatus=true;
+								btnOk();
+							}else{
+								var status=q_getPara('cust.status').split(',');
+								var t_status='';
+								for (var i=0;i<status.length;i++){
+									if(status[i].split('@')[0]==as[0].status){
+										t_status=status[i].split('@')[1];
+										break;
+									}
+								}
+								alert('【'+$('#txtComp').val()+'】客戶'+t_status+'!!!');
+								Unlock(1);
+								return;
+							}
+						}else{
+							alert('【'+$('#txtCustno').val()+'】客戶不存在!!!');
+							Unlock(1);
+							return;
+						}
+						break;
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
@@ -581,6 +607,7 @@
 				q_box("quat_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'quats', "95%", "95%", $('#btnQuat').val());
 			}
 			
+			var check_custstatus=false;
 			function btnOk() {
 				Lock(1, {
                     opacity : 0
@@ -592,6 +619,13 @@
 					Unlock(1);
 					return;
 				}
+				
+				if(!check_custstatus){
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+					q_gt('cust', t_where, 0, 0, 0, "getcuststatus");
+					return;
+				}
+				check_custstatus=false;
 				
 				for(var k=0;k<q_bbsCount;k++){
 					if(emp($('#txtDatea_'+k).val()))

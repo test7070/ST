@@ -281,6 +281,29 @@
 			function q_gtPost(t_name) {
 				var as;
 				switch (t_name) {
+					case 'getcuststatus':
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							if(as[0].status<'3'){
+								check_custstatus=true;
+								btnOk();
+							}else{
+								var status=q_getPara('cust.status').split(',');
+								var t_status='';
+								for (var i=0;i<status.length;i++){
+									if(status[i].split('@')[0]==as[0].status){
+										t_status=status[i].split('@')[1];
+										break;
+									}
+								}
+								alert('【'+$('#txtComp').val()+'】客戶'+t_status+'!!!');
+								return;
+							}
+						}else{
+							alert('【'+$('#txtCustno').val()+'】客戶不存在!!!');
+							return;
+						}
+						break;
 					case 'GetOrdeList':
 						var as = _q_appendData("view_ordes", "", true);
 						for(var k=0;k<q_bbsCount;k++){
@@ -643,6 +666,7 @@
 			
 			var check_startdate=false;
 			var check_umma=false;
+			var check_custstatus=false;
 			function btnOk() {
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')]]);
 				if (t_err.length > 0) {
@@ -658,6 +682,13 @@
 				/*if (emp($('#txtMon').val()))
 					$('#txtMon').val($('#txtDatea').val().substr(0, 6));*/
 					
+				//判斷客戶狀態	
+				if(!check_custstatus){
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+					q_gt('cust', t_where, 0, 0, 0, "getcuststatus");
+					return;
+				}
+				
 				//判斷超出預收
 				if(!check_umma && !emp($('#txtUmmano').val())){
 					var t_where = "where=^^ noa='"+$('#txtUmmano').val()+"' ^^";
@@ -665,6 +696,7 @@
 					return;
 				}
 				
+				check_custstatus=false;
 				check_umma=false;
 				check_startdate=false;
 					
