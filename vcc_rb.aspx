@@ -67,14 +67,14 @@
 
 			function sum() {
 				var t1 = 0, t_unit, t_mount, t_weight = 0,t_money=0, t_tax = 0, t_total = 0;
-				/*for (var j = 0; j < q_bbsCount; j++) {
+				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $('#txtUnit_' + j).val();
 					t_mount = q_float('txtMount_' + j);
 					t_weight=+q_float('txtMount_' + j);
 					$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
 					t_money = q_add(t_money, dec(q_float('txtTotal_' + j)));
 				}
-				if($('#chkAtax').prop('checked')){
+				/*if($('#chkAtax').prop('checked')){
 					var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
 					t_tax = round(q_mul(t_money, t_taxrate), 0);
 					t_total = q_add(t_money, t_tax);
