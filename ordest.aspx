@@ -1893,6 +1893,7 @@
                     <td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblEnda_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
+                    <td align="center" style="width:120px;"><a id='lblCustpro'>客戶產編</a></td>
                 </tr>
                 <tr style='background:#cad3ff;'>
                     <td align="center">
@@ -1984,6 +1985,7 @@
                     <td align="center">
                     <input class="btn"  id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" />
                     </td>
+                    <td><input id="txtCustpro.*" type="text" style="width:95%; float:left;"/></td>
                 </tr>
             </table>
         </div>
