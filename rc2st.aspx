@@ -1433,6 +1433,7 @@
 					<BR>
 					<a id='lblSize_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
+					<td align="center" style="width:80px;"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px;"><a>進貨<BR>寬度</a></td>
 					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
 					
@@ -1495,6 +1496,7 @@
 					<td>
 					<input id="txtSize.*" type="text" style="width:95%;"/>
 					</td>
+					<td ><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td ><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td ><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td >

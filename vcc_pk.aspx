@@ -442,6 +442,17 @@
 			var AddRet = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
+					case 'checkUmm':
+						var as = _q_appendData("umms", "", true);
+						if (as[0] != undefined) {
+							alert('單據已沖帳，禁止修改。');
+						}else{
+							_btnModi();
+							$('#txtDatea').focus();
+							size_change();
+							sum();
+						}
+						break;
 					case 'vccat':
 						var as = _q_appendData("vccat", "", true);
 						if (as[0] != undefined) {
@@ -1232,7 +1243,9 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				_btnModi();
+				var t_where = "where=^^ vccno='"+$('#txtNoa').val()+"' and isnull(paysale,0)!=0^^";	
+				q_gt('umms', t_where, 0, 0, 0, 'checkUmm');
+				
 				/* var s1 = '';
 				 for (var j = 0; j < aPop.length; j++) {
 				 if (aPop[j][0].length > 6 && aPop[j][0].substr(0, 7) == 'txtUno_') {
@@ -1252,10 +1265,7 @@
 				 break;
 				 }
 				 }*/
-
-				$('#txtDatea').focus();
-				size_change();
-				sum();
+				
 			}
 
 			function btnPrint() {

@@ -23,7 +23,7 @@
             q_desc = 1;
             q_tables = 't';
             var q_name = "orde";
-            var q_readonly = ['txtApv','txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWeight', 'txtSales'];
+            var q_readonly = ['txtApv', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWeight', 'txtSales'];
             var q_readonlys = ['txtTotal', 'txtQuatno', 'txtTheory', 'txtC1', 'txtNotv'];
             var q_readonlyt = ['txtTotal', 'txtQuatno', 'txtTheory'];
             var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1]];
@@ -50,7 +50,7 @@
             , ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx']
             , ['txtUno__', 'btnUno__', 'view_uccc', 'uno,product,productno,radius,width,dime,lengthb,mount,weight', 'txtUno__,txtProduct__,txtProductno__,txtRadius__,txtWidth__,txtDime__,txtLengthb__,txtMount__,txtWeight__', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
             , ['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']);
-            brwCount2 = 10;
+            brwCount2 = 12;
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'no2'];
@@ -619,7 +619,12 @@
             function save(){
                 var s1 = $('#txtNoa').val();
                 if (s1.length == 0 || s1 == "AUTO")/// 自動產生編號
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
+                	if(q_getPara('sys.comp').indexOf('傑期')>-1){
+                		q_gtnoa(q_name, $('#txtOdate').val().substring(0,3),r_accy,4);
+                	}else{
+                		q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
+                	}
+                    
                 else
                     wrServer(s1);
             }
@@ -1728,6 +1733,17 @@
                         <td><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
                     </tr>
                     <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td><span> </span><a id='lblCustorde' class="lbl"> </a></td>
+                        <td colspan="2">
+                        <input id="txtCustorde"   type="text" class="txt c1"/>
+                        </td>
+                    </tr>
+                    <tr>
                         <td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
                         <td colspan="4">
                         <input id="txtCno" type="text" style="float:left;width:25%;"/>
@@ -1877,6 +1893,7 @@
                     <td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblEnda_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
+                    <td align="center" style="width:200px;"><a id='lblCustpro'>客戶產編</a></td>
                 </tr>
                 <tr style='background:#cad3ff;'>
                     <td align="center">
@@ -1968,6 +1985,7 @@
                     <td align="center">
                     <input class="btn"  id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" />
                     </td>
+                    <td><input id="txtCustpro.*" type="text" style="width:95%; float:left;"/></td>
                 </tr>
             </table>
         </div>
