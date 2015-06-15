@@ -22,11 +22,11 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
+			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotal2', 'txtTax', 'txtTax2', 'txtTotalus'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory'];
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
-				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
+				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTax2', 10, 0, 1], ['txtTotal', 10, 0, 1],['txtTotal2', 10, 0, 1],
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]
 			];
 			var bbsNum = [
@@ -36,7 +36,7 @@
 				['textSize4', 10, 2, 1]
 			];
 			var bbmMask = [];
-			var bbsMask = [['txtStyle', 'A']];
+			var bbsMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwList = [];
@@ -80,10 +80,14 @@
 				$('#txtMoney').attr('readonly', true);
 				$('#txtTax').attr('readonly', true);
 				$('#txtTotal').attr('readonly', true);
+				$('#txtTax2').attr('readonly', true);
+				$('#txtTotal2').attr('readonly', true);
 				$('#txtMoney').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 				$('#txtTax').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 				$('#txtTotal').css('background-color', 'rgb(237,237,238)').css('color', 'green');
-
+				$('#txtTax2').css('background-color', 'rgb(237,237,238)').css('color', 'green');
+				$('#txtTotal2').css('background-color', 'rgb(237,237,238)').css('color', 'green');
+				
 				var t_mount = 0, t_price = 0, t_money = 0, t_moneyus = 0, t_weight = 0, t_total = 0, t_tax = 0;
 				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
 				var t_unit = '';
@@ -169,8 +173,8 @@
 							break;
 						case '5':
 							// 自定
-							$('#txtTax').attr('readonly', false);
-							$('#txtTax').css('background-color', 'white').css('color', 'black');
+							$('#txtTax2').attr('readonly', false);
+							$('#txtTax2').css('background-color', 'white').css('color', 'black');
 							t_tax = round(q_float('txtTax'), 0);
 							t_total = q_add(t_money, t_tax);
 							break;
@@ -187,8 +191,10 @@
 				}
 				$('#txtWeight').val(FormatNumber(t_weight));
 				$('#txtMoney').val(FormatNumber(t_money));
-				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
+				$('#txtTax2').val(FormatNumber(t_tax));
+				$('#txtTotal2').val(FormatNumber(t_total));
+				$('#txtTax').val(0);
+				$('#txtTotal').val(t_money);
 				if (t_float == 0)
 					$('#txtTotalus').val(0);
 				else
@@ -298,7 +304,7 @@
 				$('#txtFloata').change(function() {
 					sum();
 				});
-				$('#txtTax').change(function() {
+				$('#txtTax2').change(function() {
 					sum();
 				});
 				$('#txtPrice').change(function() {
@@ -765,7 +771,16 @@
 								alert('查無訂單資料【' + t_ordeno + '-' + t_no2 + '】');
 								Unlock(1);
 							}
-						} else if (t_name.substring(0, 11) == 'checkOrde2_') {
+						}if(t_name.substring(0, 11) == 'getproduct_'){
+     						var t_seq = parseInt(t_name.split('_')[1]);
+	                		as = _q_appendData('dbo.getproduct', "", true);
+	                		if(as[0]!=undefined){
+	                			$('#txtProduct_'+t_seq).val(as[0].product);
+	                		}else{
+	                			$('#txtProduct_'+t_seq).val('');
+	                		}
+	                		break;
+                        } else if (t_name.substring(0, 11) == 'checkOrde2_') {
 							var t_sel = parseInt(t_name.split('_')[1]);
 							var t_ordeno = t_name.split('_')[2];
 							var t_no2 = t_name.split('_')[3];
@@ -1338,14 +1353,19 @@
 						}
 						break;
 					case 'txtProductno_':
-						$('input[id*="txtProduct_"]').each(function() {
-							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
-						});
-						if (trim($('#txtStyle_' + b_seq).val()).length != 0)
-							ProductAddStyle(b_seq);
-						$('#txtStyle_' + b_seq).focus();
+						var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_' + b_seq).focus();
 						break;
+					case 'txtStyle_':
+                   		var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_'+b_seq).blur();
+                        break;
 					case 'txtUno_':
 						var t_ordeno = $.trim($('#txtOrdeno_' + b_seq).val());
 						var t_no2 = $.trim($('#txtNo2_' + b_seq).val());
@@ -1846,7 +1866,8 @@
 						<td><input id="txtMoney" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
-							<input id="txtTax" type="text" class="txt num c1 istax" />
+							<input id="txtTax" type="text" style="display:none;" />
+							<input id="txtTax2" type="text" class="txt num c1 istax" />
 							<input id="txtVccatax" type="text" class="txt num c1 " style="display:none;" />
 						</td>
 						<td>
@@ -1854,7 +1875,9 @@
 							<select id="cmbTaxtype" style="float:left;width:80px;" ></select>
 						</td>
 						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
-						<td><input id="txtTotal" type="text" class="txt num c1 istax" /></td>
+						<td><input id="txtTotal" type="text" style="display:none;" />
+							<input id="txtTotal2" type="text" class="txt num c1 istax" />
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWeight' class="lbl"> </a></td>
