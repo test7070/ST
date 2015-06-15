@@ -531,8 +531,11 @@
 						break;
 					case 'view_orde':
 						var as = _q_appendData("view_orde", "", true);
-						if (as[0] != undefined) {(trim($('#txtTel').val()) == '' ? $('#txtTel').val(as[0].tel) : '');
-							(trim($('#txtFax').val()) == '' ? $('#txtFax').val(as[0].fax) : '');
+						if (as[0] != undefined) {
+							$('#txtTel').val(as[0].fax);
+							$('#txtPost2').val(as[0].post2);
+							$('#txtAddr2').val(as[0].addr2);
+							
 							(trim($('#txtPost').val()) == '' ? $('#txtPost').val(as[0].post) : '');
 							(trim($('#txtAddr').val()) == '' ? $('#txtAddr').val(as[0].addr) : '');
 							(trim($('#txtSalesno').val()) == '' ? $('#txtSalesno').val(as[0].salesno) : '');

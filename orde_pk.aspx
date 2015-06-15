@@ -42,7 +42,7 @@
             , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
             , ['txtUno_', 'btnUno_', 'view_uccc', 'uno,class,spec,unit', 'txtUno_,txtClass_,txtSpec_,txtUnit_', 'uccc_seek_b.aspx?;;;1=0', '95%', '95%']
             , ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
-            , ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,fax,zip_comp,addr_comp', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx']
+            , ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,zip_comp,addr_comp', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtPost,txtAddr', 'cust_b.aspx']
             , ['txtUno__', 'btnUno__', 'view_uccc', 'uno,product,productno,radius,width,dime,lengthb,mount,weight', 'txtUno__,txtProduct__,txtProductno__,txtRadius__,txtWidth__,txtDime__,txtLengthb__,txtMount__,txtWeight__', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
             , ['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']);
             brwCount2 = 12;
@@ -185,6 +185,8 @@
                 q_cmbParse("cmbTrantype",q_getPara('sys.tran'));
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
                 $('#btnOrdei').hide();
+                var t_where = "where=^^ 1=1 group by post,addr^^";
+				q_gt('custaddr', t_where, 0, 0, 0, "");
                 //外銷訂單按鈕隱藏
                 
                 q_gt('spec', '', 0, 0, 0, "", r_accy);
@@ -354,6 +356,17 @@
             var t_uccArray = new Array;
             function q_gtPost(t_name) {/// 資料下載後 ...
                 switch (t_name) {
+                	case 'custaddr':
+						var as = _q_appendData("custaddr", "", true);
+						var t_item = " @ ";
+						if (as[0] != undefined) {
+							for ( i = 0; i < as.length; i++) {
+								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].post + '@' + as[i].addr;
+							}
+						}
+						document.all.combAddr.options.length = 0;
+						q_cmbParse("combAddr", t_item);
+						break;
                 	case 'flors_coin':
 						var as = _q_appendData("flors", "", true);
 						var z_coin='';
@@ -860,6 +873,8 @@
                 });
                 $('#txtKind').val('A1');
                 q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
+                var t_where = "where=^^ 1=1 group by post,addr^^";
+				q_gt('custaddr', t_where, 0, 0, 0, "");
             }
 
             function btnModi() {
@@ -997,10 +1012,11 @@
                         $('#txtStyle_' + b_seq).focus();
                         break;
                     case 'txtCustno':
-                        $('#txtPost2').val($('#txtPost').val());
-                        $('#txtAddr2').val($('#txtAddr').val());
-                        $('#txtContract').focus();
-                        break;
+                        if (!emp($('#txtCustno').val())) {
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+							q_gt('custaddr', t_where, 0, 0, 0, "");
+						}
+						break;
                     case 'txtAddr':
                         $('#txtPost2').focus();
                         break;
@@ -1100,7 +1116,12 @@
             function btnCancel() {
                 _btnCancel();
             }
-            
+            function combAddr_chg() {/// 只有 comb 開頭，才需要寫 onChange() ，其餘 cmb 連結資料庫
+				if (q_cur == 1 || q_cur == 2) {
+					$('#txtAddr2').val($('#combAddr').find("option:selected").text());
+					$('#txtPost2').val($('#combAddr').find("option:selected").val());
+				}
+			}
         </script>
         <style type="text/css">
             #dmain {
@@ -1326,9 +1347,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id='lblFax' class="lbl"> </a></td>
+                         <td><span> </span><a id='lblAddr' class="lbl"> </a></td>
                         <td colspan="4">
-                        <input id="txtFax" type="text" class="txt c1" />
+                            <input id="txtPost"  type="text" style="float:left;width:25%;"/>
+                            <input id="txtAddr"  type="text" style="float:left;width:75%;" />
                         </td>
                         <td><span> </span><a id="lblSales" class="lbl btn"> </a></td>
                         <td colspan="2">
@@ -1337,20 +1359,21 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id='lblAddr' class="lbl"> </a></td>
+                       	<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
                         <td colspan="4">
-                            <input id="txtPost"  type="text" style="float:left;width:25%;"/>
-                            <input id="txtAddr"  type="text" style="float:left;width:75%;" />
+                            <input id="txtPost2" type="text" style="float:left; width:15%;"/>
+							<input id="txtAddr2" type="text" style="float:left; width:65%;"/>
+							<select id="combAddr" style="width: 5%;" onchange='combAddr_chg()'></select>
                         </td>
                         <td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
                         <td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+                    	<td><span> </span><a class="lbl">指送電話</a></td>
                         <td colspan="4">
-                            <input id="txtPost2"  type="text" style="float:left;width:25%;"/>
-                            <input id="txtAddr2"  type="text" style="float:left;width:75%;" />
+                        <input id="txtFax" type="text" class="txt c1" />
                         </td>
+                        
                         <td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
                         <td colspan="2">
                         <input id="txtPaytype" type="text" style="float:left; width:87%;"/>
