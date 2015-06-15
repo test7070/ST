@@ -647,6 +647,7 @@
                         break;
 					case 'qtxt.query.post1':
 						var as = _q_appendData("tmp0", "", true, true);
+						var t_invono='';
 							if (as[0] != undefined) {
 								abbm[q_recno]['vccno'] = as[0].vccno;
 								$('#txtVccno').val(as[0].vccno);
@@ -656,8 +657,13 @@
 								if(!emp($('#txtVccno').val())){
 									q_func('vcc_post.post', r_accy + ',' + $('#txtVccno').val() + ',1');
 								}
+								
+								if(as[0].t_err.length>0){
+									alert(as[0].t_err);
+								}
+								t_invono=as[0].invono;
 							}
-                        	alert('成功轉出出貨單!!');
+                        	alert('成功轉出出貨單!!'+(t_invono.length>0?('發票號碼：'+t_invono):''));
                         break;
 					case 'qtxt.query.post2':
 						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)

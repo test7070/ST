@@ -1181,7 +1181,7 @@
 						<td colspan="2"><input id="txtTotal" type="text" class="txt num c1" /></td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id="lblOrde" class="lbl btn"> </a></td>
+						<td class="td1"><span> </span><a id="lblOrde" class="lbl"> </a></td>
 						<td class="td2"><input id="txtOrdeno" type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
 						<td><select id="cmbCoin" class="txt c1" onchange='coin_chg()'> </select></td>
@@ -1228,7 +1228,7 @@
 					<td align="center" style="width:100px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:100px;">已採購量<br>未採購量</td>
-					<td align="center" style="width:200px;">備註<br>訂單號碼/訂序</td>
+					<td align="center" style="width:200px;">備註</td>
 					<td align="center" style="width:100px;"><a id='lblLdates'> </a></td>
 					<td align="center" style="width:50px;">詢價<br>記錄</td>
 					<td align="center" style="width:50px;">歷史詢<br>價記錄</td>
@@ -1273,32 +1273,18 @@
 					</td>
 					<td>
 						<input id="txtMemo.*" type="text" style="float:left;width:195px;"/>
-						<input id="txtOrdeno.*" type="text" style="float:left;width:145px;" />
-						<input id="txtNo2.*" type="text" style="float:left;width:40px;" />
+						<!--<input id="txtOrdeno.*" type="text" style="float:left;width:145px;" />
+						<input id="txtNo2.*" type="text" style="float:left;width:40px;" />-->
 					</td>
 					<td><input id="txtLdate.*" type="text" class="txt c2"/></td>
-					<td align="center">
-						<input class="btn" id="btnTmprecord.*" type="button" value='.' style=" font-weight: bold;" />
-					</td>
-					<td align="center">
-						<input class="btn" id="btnRecord.*" type="button" value='.' style=" font-weight: bold;" />
-					</td>
-					<td align="center">
-						<input class="btn" id="btnOrdc.*" type="button" value='.' style=" font-weight: bold;" />
-					</td>
-					<td align="center">
-						<input class="btn" id="btnOrdc2.*" type="button" value='.' style=" font-weight: bold;" />
-					</td>
-					<td align="center">
-						<input class="btn" id="btnRc2record.*" type="button" value='.' style=" font-weight: bold;" />
-					</td>
+					<td align="center"><input class="btn" id="btnTmprecord.*" type="button" value='.' style=" font-weight: bold;" /></td>
+					<td align="center"><input class="btn" id="btnRecord.*" type="button" value='.' style=" font-weight: bold;" /></td>
+					<td align="center"><input class="btn" id="btnOrdc.*" type="button" value='.' style=" font-weight: bold;" /></td>
+					<td align="center"><input class="btn" id="btnOrdc2.*" type="button" value='.' style=" font-weight: bold;" /></td>
+					<td align="center"><input class="btn" id="btnRc2record.*" type="button" value='.' style=" font-weight: bold;" /></td>
 					<!--<td align="center"><input id="chkIsnotdeal.*" type="checkbox"/></td>-->
-                    <td align="center">
-                        <input id="chkCancel.*" type="checkbox"/>
-                    </td>
-                    <td align="center">
-                        <input id="chkEnda.*" type="checkbox"/>
-                    </td>
+                    <td align="center"><input id="chkCancel.*" type="checkbox"/></td>
+                    <td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 				</tr>
 			</table>
 		</div>
