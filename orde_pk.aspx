@@ -23,8 +23,8 @@
             var q_readonlyt = ['txtTotal', 'txtQuatno', 'txtTheory'];
             var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1]];
             // 允許 key 小數
-            var bbsNum = [['txtPrice', 15, 3, 1],['txtSprice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,1,1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
-            var bbtNum = [['txtMount', 10, 2, 1], ['txtWeight', 10, 3, 1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
+            var bbsNum = [['txtPrice', 15, 3, 1],['txtSprice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1], ['txtMount', 10, 2, 1],['txtTheory',10,1,1]];
+            var bbtNum = [['txtMount', 10, 2, 1], ['txtWeight', 10, 3, 1]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -693,16 +693,16 @@
             function bbtAssign() {
                 for (var j = 0; j < q_bbtCount; j++) {
                     $('#lblNo__' + j).text(j + 1);
-                    $('#textSize1__' + j).change(function() {
+                    $('#txtDime__' + j).change(function() {
                         sum();
                     });
-                    $('#textSize2__' + j).change(function() {
+     				$('#txtWidth__' + j).change(function() {
                         sum();
                     });
-                    $('#textSize3__' + j).change(function() {
+                    $('#txtLengthb__' + j).change(function() {
                         sum();
                     });
-                    $('#textSize4__' + j).change(function() {
+                    $('#txtRadius__' + j).change(function() {
                         sum();
                     });
                     $('#txtMount__'+j).change(function(){
@@ -986,7 +986,7 @@
                                 $('#txtLengthb_' + b_seq).val(ret[0].lengthb);
                             if (emp($('#txtDime_' + b_seq).val()) || $('#txtDime_' + b_seq).val() == 0)
                                 $('#txtDime_' + b_seq).val(ret[0].dime);
-                            $('#textSize1_' + b_seq).change();
+                            $('#txtDime_' + b_seq).change();
                         }
                         break;
                     case 'txtProductno_':
@@ -1556,18 +1556,12 @@
                     <input class="txt" id="txtProductno..*" type="text" style="width:95%;"  />
                     </td>
                     <td>
-                        <input class="txt num" id="textSize1..*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-                        <div id="x1..*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
-                        <input class="txt num" id="textSize2..*" type="text" style="float: left;width:55px;"  disabled="disabled"/>
-                        <div id="x2..*" style="float: left;display:block;width:20px;padding-top: 4px;">x</div>
-                        <input class="txt num" id="textSize3..*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-                        <div id="x3..*" style="float: left;display:block;width:20px;padding-top: 4px;">x</div>
-                        <input class="txt num" id="textSize4..*" type="text"  style="float: left;width:55px;" disabled="disabled"/>
-                        <!--上為虛擬下為實際-->
-                        <input id="txtRadius..*" type="text" style="display:none;"/>
-                        <input id="txtWidth..*" type="text" style="display:none;"/>
-                        <input id="txtDime..*" type="text" style="display:none;"/>
-                        <input id="txtLengthb..*" type="text" style="display:none;"/>
+	                    <input id="txtDime..*" type="text" style="float: left;width:23%;"/>
+	                    <div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
+	                    <input id="txtWidth..*" type="text" style="float: left;width:23%;"/>
+	                    <div id="x2.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
+	                    <input id="txtLengthb..*" type="text" style="float: left;width:23%;"/>
+	                    <input id="txtRadius..*" type="text" style="display:none;"/>
                     </td>
                     <td>
                     <input class="txt" id="txtMount..*" type="text" style="width:95%; text-align: right;"  />
