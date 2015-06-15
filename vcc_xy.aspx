@@ -126,7 +126,7 @@
 						t_where += " and productno!='' ";
 						//t_where += " and (custno='"+t_custno+"' or custno='"+t_custno.substr(0,5)+"')";
 						t_where += " and (custno='"+t_custno+"')";
-						t_where += " and (source!='2' or mount!=isnull((select SUM(tranmoney3) from view_vccs where ordeno=view_ordes"+r_accy+".noa and no2=view_ordes"+r_accy+".no2),0))";
+						t_where += " and (source!='2' or mount!=isnull((select SUM(tranmoney3) from view_vccs where ordeno=view_ordes.noa and no2=view_ordes.no2),0))";
 						if (!emp($('#txtOrdeno').val()))
 							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
 						t_where = t_where;
@@ -134,7 +134,8 @@
 						alert(q_getMsg('msgCustEmp'));
 						return;
 					}
-					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
+					q_box("ordes_b2_xy.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes_xy', "95%", "650px", q_getMsg('popOrde'));
+					//q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
 				});
 
 				$('#lblOrdeno').click(function() {
@@ -242,7 +243,7 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
-					case 'ordes':
+					case 'ordes_xy':
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)

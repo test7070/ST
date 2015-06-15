@@ -18,17 +18,19 @@
             q_tables = 's';
             var q_name = "deli";
             var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtCoinretiremoney','txtCointotal','txtCointariff','txtRetiremoney'
-            							,'txtTotal','txtTariff','txtTrade','txtCommoditytax','txtVatbase','txtVat','txtRc2no','txtPaybno'];
-            var q_readonlys = ['txtOrdcno','txtNo2'];
+            							,'txtTotal','txtTariff','txtTrade','txtCommoditytax','txtVatbase','txtVat','txtRc2no','txtPaybno','txtLctotal'];
+            var q_readonlys = ['txtOrdcno','txtNo2','txtLcmoney','txtCost'];
             var bbmNum = [['txtFloata', 15, 2, 1],['txtVatrate', 15, 2, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtTranmoney', 15, 0, 1]
             						,['txtInsurance', 15, 0, 1],['txtModification', 15, 0, 1],['txtCoinretiremoney', 15, 0, 1],['txtCointotal', 15, 0, 1]
             						,['txtCointariff', 15, 0, 1],['txtRetiremoney', 15, 0, 1],['txtTotal', 15, 0, 1],['txtTariff', 15, 0, 1]
-            						,['txtTrade', 15, 0, 1],['txtCommoditytax', 15, 0, 1]];
+            						,['txtTrade', 15, 0, 1],['txtCommoditytax', 15, 0, 1],['txtLctotal', 15, 0, 1]
+            						];
             var bbsNum = [['txtMount', 15, 0, 1],['txtInmount', 15, 0, 1],['txtPrice', 10, 2, 1],['txtMoney', 15, 0, 1],['txtCointotal', 15, 0, 1],['txtTotal', 15, 0, 1]
             						,['txtTariffrate', 5, 2, 1],['txtCointariff', 15, 0, 1],['txtTariff', 15, 0, 1],['txtTraderate', 5, 2, 1],['txtTrade', 15, 0, 1]
             						,['txtCommodityrate', 5, 2, 1],['txtCommoditytax', 15, 0, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtCasemount', 15, 0, 1]
             						,['txtMweight', 15, 2, 1],['txtCuft', 15, 2, 1],['txtWeight', 15, 2, 1],['txtInweight', 15, 2, 1]
             						,['txtDime', 15, 3, 1],['txtWidth', 15, 2, 1],['txtLengthb', 15, 2, 1],['txtDime2', 15, 3, 1],['txtLengthc', 15, 2, 1]
+            						,['txtLcmoney', 15, 0, 1],['txtCost', 15, 0, 1]
             						];
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
@@ -75,6 +77,7 @@
                 	t_tariff=q_add(t_tariff,q_float('txtTariff_'+j));
                 	t_trade=q_add(t_tariff,q_float('txtTrade_'+j));
                 	t_commoditytax=q_add(t_commoditytax,q_float('txtCommoditytax_'+j));
+                	t_lctotal=q_add(t_lctotal,q_float('txtLcmoney_'+j));
                 } // j
                 
                 q_tr('txtCoinretiremoney',t_coinretiremoney);
@@ -85,6 +88,7 @@
                 q_tr('txtTariff',t_tariff);
                 q_tr('txtTrade',t_trade);
                 q_tr('txtCommoditytax',t_commoditytax);
+                q_tr('txtLctotal',t_lctotal);
             }
             
             function bbs_sum() {
@@ -96,6 +100,11 @@
             					t_mount=q_add(t_mount,q_float('txtInmount_'+k));
             				}
             				t_cointotaldiv=(t_mount==0?0:q_div(q_float('txtInmount_'+j),t_mount));
+            			}else if($('#cmbFeetype').val()=='5'){
+            				for (var k = 0; k < q_bbsCount; k++) {
+            					t_mount=q_add(t_mount,q_float('txtInweight_'+k));
+            				}
+            				t_cointotaldiv=(t_mount==0?0:q_div(q_float('txtInweight_'+j),t_mount));
             			}else if($('#cmbFeetype').val()=='3'){
             				for (var k = 0; k < q_bbsCount; k++) {
             					t_mount=q_add(t_mount,q_float('txtMweight_'+k));
@@ -130,6 +139,8 @@
                 			q_tr('txtVatbase_'+j,q_add(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_float('txtCommoditytax_'+j)));
                 		//本幣營業稅額(本幣營業稅基 * 營業稅率)
                 			q_tr('txtVat_'+j,q_mul(q_float('txtVatbase_'+j),q_div(q_float('txtVatrate'),100)));
+                		//進貨總成本
+                			q_tr('txtCost_'+j,q_mul(q_add(q_add(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_float('txtTrade_'+j)),q_float('txtCommoditytax_'+j)),q_div(q_float('txtVatrate'),100)));
                 	} // j
                 	sum();
             }
@@ -140,14 +151,14 @@
                 					,['txtWarehousedate', r_picd],['txtNegotiatingdate', r_picd],['txtPaydate', r_picd],['txtDeclaredate', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbCredittype", ",1@可扣抵進貨及費用,2@可扣抵固定資產,3@不可扣抵進貨及費用,4@不可扣抵固定資產");
-                q_cmbParse("cmbFeetype", ",1@依進貨金額,2@依進貨數量,3@依毛重,4@依材積");
+                q_cmbParse("cmbFeetype", ",1@依進貨金額,2@依進貨數量,5@依進貨重量,3@依毛重,4@依材積");
                 
                 $('#btnOrdc').click(function() {
                 	if(q_cur==1||q_cur==2){
 	                	var t_tggno = trim($('#txtTggno').val());
 	                	var t_where='';
 	                	if (t_tggno.length > 0) {
-							t_where = "enda=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "");  ////  sql AND 語法，請用 &&
+							t_where = " isnull(view_ordcs.enda,0)=0 && isnull(view_ordcs.cancel,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "");  ////  sql AND 語法，請用 &&
 							t_where = t_where;
 						}else {
 							alert('請填入【'+q_getMsg('lblTgg')+'】!!!');
@@ -169,6 +180,14 @@
 				$('#txtModification').change(function() {bbs_sum();});
 				$('#txtFloata').change(function() {bbs_sum();});
 				$('#txtVatrate').change(function() {bbs_sum();});
+				
+				$('#btnHelp').click(function() {
+					$('#div_help').show();
+				});
+				$('#btnHelpClose').click(function() {
+					$('#div_help').hide();
+				});
+				
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
@@ -184,11 +203,22 @@
                                 $('#btnMinus_' + i).click();
                             }
                             
+                            var t_ordcno='';
+                            for (var j=0;j<b_ret.length;j++){
+                            	if(t_ordcno.length==0 || t_ordcno.indexOf(b_ret[j].noa)==-1){
+                            		t_ordcno=t_ordcno+(t_ordcno.length>0?',':'')+b_ret[j].noa;
+                            	}
+                            }
+                            
 							var i, j = 0;
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtInmount,txtOrdcno,txtNo2,txtPrice,txtMoney,txtMemo', b_ret.length, b_ret
 															   , 'productno,product,unit,mount,mount,noa,no2,price,total,memo'
 															   , 'txtProductno,txtProduct');   /// 最後 aEmpField 不可以有【數字欄位】
-							sum();bbs_sum();
+							//依據ordc 取得lcs 的開狀費
+							q_gt('ordcs_lccost', "where=^^charindex(a.lcno,'"+t_ordcno+"')>0 ^^", 0, 0, 0, "ordcs_lccost");
+							
+							sum();
+							bbs_sum();
 							bbsAssign();
 						}
 						break;
@@ -210,6 +240,20 @@
 	                		z_acomp=as[0].acomp;
 	                		z_nick=as[0].nick;
 	                	}
+                		break;
+                	case 'ordcs_lccost':
+                		var as = _q_appendData("view_ordc", "", true);
+                		for (var i = 0; i < q_bbsCount; i++) {
+                			for (var j=0;j<as.length;j++){
+                				if(emp($('#txtOrdcno_'+i).val()))
+                					break;
+                				if($('#txtOrdcno_'+i).val()==as[j].noa && $('#txtNo2_'+i).val()==as[j].no2){
+                					$('#txtLcmoney_'+i).val(as[j].lccost);
+                				}
+                			}
+                		}
+                		sum();
+						bbs_sum();
                 		break;
                     case q_name:
                         if (q_cur == 4)
@@ -617,17 +661,23 @@
 	</head>
 	<body>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id="div_help" style="display: none;">
-			<table>
-				<tr>進貨金額=進貨數量(重量)*採購單價</tr>
-				<tr>原幣完稅價格 = 原幣進貨額 + ( (原幣運費+原幣保險費+原幣加減費用) * (該筆原幣進貨額/原幣進貨額合計) )</tr>
-				<tr>本幣完稅價格 = 原幣完稅價格*匯率</tr>
-				<tr>原幣關稅 =原幣完稅價格*關稅率</tr>
-				<tr>本幣關稅 = 本幣完稅價格*關稅率</tr>
-				<tr>本推廣貿易費 = 本幣完稅價格*推廣貿易費率，小數以下捨棄</tr>
-				<tr>貨物稅額= (本幣完稅價格+本幣關稅) * 貨物稅率，小數以下捨棄</tr>
-				<tr>本幣營業稅基 = 本幣完稅價格+本幣關稅+貨物稅</tr>
-				<tr>本幣營業稅額 = 本幣營業稅基 * 營業稅率，小數以下捨棄。</tr>
+		<div id="div_help" style="position:absolute; top:300px; left:550px; display:none; width:500px; background-color: #CDFFCE; border: 5px solid gray;">
+			<table style="width:100%;" border="1" cellpadding='2'  cellspacing='0'>
+				<tr style="background-color: #f8d463;">
+					<td>
+						<a style="font-size: medium;font-weight: bold;">表身欄位計算說明：</a>
+						<input id="btnHelpClose" type="button" value="關閉" style="float: right;">
+					</td>
+				</tr>
+				<tr><td>進貨金額=進貨數量(重量)*採購單價。</td></tr>
+				<tr><td>原幣完稅價格 = 原幣進貨額 + ( (原幣運費+原幣保險費+原幣加減費用) 　　　　　　　 * (該筆原幣進貨額/原幣進貨額合計) )。</td></tr>
+				<tr><td>本幣完稅價格 = 原幣完稅價格*匯率。</td></tr>
+				<tr><td>原幣關稅 =原幣完稅價格*關稅率。</td></tr>
+				<tr><td>本幣關稅 = 本幣完稅價格*關稅率。</td></tr>
+				<tr><td>本推廣貿易費 = 本幣完稅價格*推廣貿易費率，小數以下捨棄。</td></tr>
+				<tr><td>貨物稅額= (本幣完稅價格+本幣關稅) * 貨物稅率，小數以下捨棄。</td></tr>
+				<tr><td>本幣營業稅基 = 本幣完稅價格+本幣關稅+貨物稅。</td></tr>
+				<tr><td>本幣營業稅額 = 本幣營業稅基 * 營業稅率，小數以下捨棄。</td></tr>
 			</table>
 		</div>
 		<div id='dmain' style="width: 1260px;">
@@ -750,7 +800,7 @@
 					</tr>
 					<tr class="tr11 tax">
 						<td class="td1"><span> </span><a id="lblVatrate" class="lbl" > </a></td>
-						<td class="td2"><input id="txtVatrate"  type="text"  class="txt num c3"/>&nbsp;%</td>
+						<td class="td2"><input id="txtVatrate"  type="text"  class="txt num c3"/>&nbsp; %</td>
 						<td class="td3"><span> </span><a id="lblVatbase" class="lbl" > </a></td>
 						<td class="td4"><input id="txtVatbase"  type="text"  class="txt num c1"/></td>
 						<td class="td5"><span> </span><a id="lblVat" class="lbl" > </a></td>
@@ -787,17 +837,17 @@
 						<td class="td5"><span> </span><a id="lblTariff" class="lbl" > </a></td>
 						<td class="td6"><input id="txtTariff"  type="text"  class="txt num c1"/></td>
 						<td class="td7"> </td>
-						<td class="td8"><input id="btnRc2" type="button"/></td>
+						<td class="td8"><!--<input id="btnRc2" type="button"/>--></td>
 					</tr>
 					<tr class="tr15">
 						<td class="td1"><span> </span><a id="lblTrade" class="lbl" > </a></td>
 						<td class="td2"><input id="txtTrade"  type="text"  class="txt num c1"/></td>
 						<td class="td3"><span> </span><a id="lblCommoditytax" class="lbl" > </a></td>
 						<td class="td4"><input id="txtCommoditytax"  type="text"  class="txt num c1"/></td>
-						<td class="td5"><input id="btnHelp" type="button" value="?"/></td>
-						<td class="td6"> </td>
-						<td class="td7"> </td>
-						<td class="td8"><input id="btnPayb" type="button"/></td>
+						<td class="td5"><span> </span><a id="lblLctotal" class="lbl" > </a></td>
+						<td class="td6"><input id="txtLctotal"  type="text"  class="txt num c1"/></td>
+						<td class="td7"> <input id="btnHelp" type="button" value="?" style="float: right;"/></td>
+						<td class="td8"><!--<input id="btnPayb" type="button"/>--></td>
 					</tr>
 					<!--<td class="td1"><span> </span><a id="lblLctotal" class="lbl" > </a></td>
 						<td class="td2"><input id="txtLctotal"  type="text"  class="txt num c1"/></td>
@@ -822,7 +872,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 3350px;">
+		<div class='dbbs' style="width: 3600px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  /></td>
@@ -847,11 +897,12 @@
 					<td align="center" style="width:115px;"><a id='lblTraderate_s'> </a><BR><a id='lblTrade_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblCommodityrate_s'> </a><BR><a id='lblCommoditytax_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblVatbase_s'> </a><BR><a id='lblVat_s'> </a></td>
+					<td align="center" style="width:115px;"><!--<a id='lblBlmoney_s'> </a><BR>--><a id='lblLcmoney_s'> </a></td>
+					<td align="center" style="width:115px;"><a id='lblCost_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblCaseno_s'> </a><BR><a id='lblCasetype_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblCasemount_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblMweight_s'> </a><BR><a id='lblCuft_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblInvoiceno_s'> </a></td>
-					<!--<td align="center" style="width:115px;"><a id='lblBlmoney_s'> </a><BR><a id='lblLcmoney_s'> </a></td>-->
 					<td align="center"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:130px;"><a id='lblUno2_s'> </a></td>
 				</tr>
@@ -916,6 +967,11 @@
 						<input class="txt num c1" id="txtVat.*" type="text"  />
 					</td>
 					<td >
+						<!--<input class="txt num c1" id="txtBlmoney.*" type="text"  />-->
+						<input class="txt num c1" id="txtLcmoney.*" type="text"  />
+					</td>
+					<td ><input class="txt num c1" id="txtCost.*" type="text"  /></td>
+					<td >
 						<input class="txt c1" id="txtCaseno.*" type="text"  />
 						<input class="txt c1" id="txtCasetype.*" type="text"  />
 					</td>
@@ -925,10 +981,6 @@
 						<input class="txt num c1" id="txtCuft.*" type="text"  />
 					</td>
 					<td ><input class="txt c1" id="txtInvoiceno.*" type="text"  />	</td>
-					<!--<td >
-						<input class="txt num c1" id="txtBlmoney.*" type="text"  />
-						<input class="txt num c1" id="txtLcmoney.*" type="text"  />
-					</td>-->
 					<td >
 						<input class="txt c1" id="txtMemo.*" type="text" />
 						<input class="txt c5" id="txtOrdcno.*" type="text" />
