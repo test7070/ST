@@ -1022,7 +1022,7 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
-
+				
                 if (t_para)
                     $('#btnOrdei').removeAttr('disabled');
                 else
@@ -1037,6 +1037,11 @@
                     $('#btnApv').attr('disabled', 'disabled');
                 else
                     $('#btnApv').removeAttr('disabled');
+                    
+                if(q_cur==1)
+                    $('#txtNoa').removeAttr('disabled');
+                else
+                    $('#txtNoa').attr('disabled', 'disabled');
             }
 
             function btnMinus(id) {
