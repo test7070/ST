@@ -813,6 +813,18 @@
                         		return;
                             sum();
                         });
+                        $('#txtStyle_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            $('#btnStyle_'+n).click();
+                        });
+                        $('#txtProductno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
+                        });
                         //計算理論重
                         /*$('#txtSize_'+j).change(function(e){
                             if ($.trim($(this).val()).length == 0)
@@ -1361,8 +1373,8 @@
                     <tr>
                        	<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
                         <td colspan="4">
-                            <input id="txtPost2" type="text" style="float:left; width:15%;"/>
-							<input id="txtAddr2" type="text" style="float:left; width:65%;"/>
+                            <input id="txtPost2" type="text" style="float:left; width:20%;"/>
+							<input id="txtAddr2" type="text" style="float:left; width:70%;"/>
 							<select id="combAddr" style="width: 5%;" onchange='combAddr_chg()'></select>
                         </td>
                         <td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
@@ -1473,8 +1485,8 @@
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                     <td><input class="txt" id="txtNo2.*" type="text" style="width:95%;"/></td>
                     <td>
-                    <input class="btn"  id="btnProduct.*" type="button" value='' style=" font-weight: bold;width:15px;height:25px;float:left;" />
-                    <input type="text" id="txtProductno.*"  style="width:75px; float:left;"/>
+                    <input class="btn"  id="btnProduct.*" type="button" value='' style="display:none;" />
+                    <input type="text" id="txtProductno.*"  style="width:95%; float:left;"/>
                     </td>
                     <td>
                         <input id="btnStyle.*" type="button" style="display:none;" value="."/>
