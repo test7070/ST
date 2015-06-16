@@ -41,7 +41,7 @@
 			, ['txtBuyerno', 'lblBuyer', 'cust', 'noa,comp', 'txtBuyerno,txtBuyer', 'cust_b.aspx']
 			, ['txtProductno_', 'btnProductno_', 'ucca', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucca_b.aspx']
 			
-			, ['textBuyerno', '', 'cust', 'noa,comp', 'textBuyerno,textBuyer', 'cust_b.aspx']
+			, ['textBuyerno', '', 'cust', 'noa,comp,serial', 'textBuyerno,textBuyer,textSerial', 'cust_b.aspx']
 			, ['textOrdeno', '', 'view_orde', 'noa,total,comp', 'textOrdeno,textTotal', 'orde_b.aspx']
 			);
 			q_xchg = 1;
@@ -160,7 +160,7 @@
 				
 				$('#btnBatchvcca').click(function() {
 					$("#table_batchvcca input[type='text']").val('');
-					
+					$('.batchbuyer').remove();
 					var SeekF= new Array();
 						$("#table_batchvcca input[type='text']").each(function() {
 							if($(this).attr('disabled')!='disabled')
@@ -209,13 +209,25 @@
 						}
 						if(q_float('textTotal')>0 && q_float('textMoney')>0){
 							if(q_float('textTotal')%q_float('textMoney')==0){
+								var t_buyerno='';
+								var t_buyer='';
+								var t_serial='';
+								for(var i=0;i<($('.batchbuyer').length-1);i++){
+									t_buyerno=t_buyerno+(t_buyerno.length>0?'^^':'')+$('#textBuyerno_'+i).val();
+									t_buyer=t_buyer+(t_buyer.length>0?'^^':'')+$('#textBuyer_'+i).val();
+									t_serial=t_serial+(t_serial.length>0?'^^':'')+$('#textSerial_'+i).val();
+								}
+								$('#textBuyerno').val(t_buyerno);
+								$('#textBuyer').val(t_buyer);
+								$('#textSerial').val(t_serial);
+								
 								var t_ordeno=$('#textOrdeno').val();
 								var t_total=$('#textTotal').val();
 								var t_money=$('#textMoney').val();
-								var t_buyerno=emp(trim($('#textBuyerno').val()))?'#non':$('#textBuyerno').val();
-								var t_buyer=emp(trim($('#textBuyer').val()))?'#non':$('#textBuyer').val();
-								var t_serial=emp(trim($('#textSerial').val()))?'#non':$('#textSerial').val();
 								var t_vccano=emp(trim($('#textVccano').val()))?'#non':$('#textVccano').val();
+								t_buyerno=emp(trim($('#textBuyerno').val()))?'#non':$('#textBuyerno').val();
+								t_buyer=emp(trim($('#textBuyer').val()))?'#non':$('#textBuyer').val();
+								t_serial=emp(trim($('#textSerial').val()))?'#non':$('#textSerial').val();
 								
 								q_func('qtxt.query.vcca_rb','vcca.txt,batchvcca_rb,'+encodeURI(t_ordeno) 
 								+ ';' + encodeURI(t_total) + ';' + encodeURI(t_money) + ';' + encodeURI(t_buyerno)+ ';' + encodeURI(t_buyer) 
@@ -237,9 +249,77 @@
 				$('#btnClose_div_batchvcca').click(function() {
 					$('#div_batchvcca').hide();
 				});
+				
+				$('#textOrdeno').change(function() {
+					$('.batchbuyer').remove();
+					if(q_float('textTotal')>0 && q_float('textMoney')>0){
+						if(q_float('textTotal')%q_float('textMoney')==0){
+							batchbuyerrow();
+						}else{
+							alert('訂單金額輸入除不盡!!');
+						}
+					}
+				});
+				
+				$('#textMoney').change(function() {
+					$('.batchbuyer').remove();
+					if(q_float('textTotal')>0 && q_float('textMoney')>0){
+						if(q_float('textTotal')%q_float('textMoney')==0){
+							batchbuyerrow();
+						}else{
+							alert('訂單金額輸入除不盡!!');
+						}
+					}
+				});
 			}
-			var batch_orde=false;
+			function batchbuyerrow() {
+				var tr_row=q_div(q_float('textTotal'),q_float('textMoney'));
+				rowslength=0;
+				//標題列
+				var tr = document.createElement("tr");
+				tr.className = "batchbuyer";
+				tr.id = "batchvcca_title";
+				tr.innerHTML = "<td id='nostitle' style='text-align: center;width:40px;'>序</td>";
+				tr.innerHTML += "<td id='buyernotitle' style='text-align: center;width:100px;'>買受人編號</td>";
+				tr.innerHTML+= "<td id='buyertitle' style='text-align: center;width:180px;'>買受人名稱</td>";
+				tr.innerHTML+="<td id='serialtitle' style='text-align: center;width:120px;'>統一編號</td>";
+				var tmp = document.getElementById("batchvcca_close");
+				tmp.parentNode.insertBefore(tr,tmp);
+				while (tr_row>0){
+					var tr = document.createElement("tr");
+					tr.className = "batchbuyer";
+					tr.id = "batchvcca_"+rowslength;
+					tr.innerHTML = "<td id='nos"+rowslength+"' style='text-align: center;'>"+(rowslength+1)+"</td>";
+					tr.innerHTML += "<td id='buyerno"+rowslength+"'><input id='textBuyerno_"+rowslength+"' type='text' class='txt c2' value='' /></td>";
+					tr.innerHTML+= "<td id='buyer"+rowslength+"'><input id='textBuyer_"+rowslength+"' type='text' class='txt c2' value='' /></td>";
+					tr.innerHTML+="<td id='serial"+rowslength+"'><input id='textSerial_"+rowslength+"' type='text' class='txt c2' value='' /></td>";
+					var tmp = document.getElementById("batchvcca_close");
+					tmp.parentNode.insertBefore(tr,tmp);
+					rowslength++;
+					tr_row--;
+				}
+				
+				var SeekF= new Array();
+				$("#table_batchvcca input[type='text']").each(function() {
+					if($(this).attr('disabled')!='disabled')
+						SeekF.push($(this).attr('id'));
+				});
+				
+				SeekF.push('btnOk_div_batchvcca');
+				
+				$("#table_batchvcca input[type='text']").each(function() {
+					$(this).unbind('keydown');
+					$(this).keydown(function(event) {
+						if( event.which == 13) {
+							$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
+							$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
+						}
+					});
+				});
+				
+			}
 			
+			var batch_orde=false;
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
 					case 'qtxt.query.vcca_rb':
@@ -353,6 +433,7 @@
 						if (as[0] != undefined) {
 							alert("【"+$('#textOrdeno').val()+"】訂單編號已開過發票【"+as[0].noa+"】!!!");
 							$('#textOrdeno').val('');
+							$('#textTotal').val('');
 						}
 						break;
 					case q_name:
@@ -910,35 +991,41 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id="div_batchvcca" style="position:absolute; top:300px; left:400px; display:none; width:400px; background-color: #CDFFCE; border: 5px solid gray;">
+		<div id="div_batchvcca" style="position:absolute; top:300px; left:400px; display:none; width:450px; background-color: #CDFFCE; border: 5px solid gray;">
 			<table id="table_batchvcca" style="width:100%;" border="1" cellpadding='2'  cellspacing='0'>
+				<tr style="height: 0px;  display: none;">
+					<td style="width:40px;background-color: #f8d463;"> </td>
+					<td style="width:100px;background-color: #f8d463;"> </td>
+					<td style="width:180px;background-color: #f8d463;"> </td>
+					<td style="width:120px;background-color: #f8d463;"> </td>
+				</tr>
 				<tr>
-					<td style="background-color: #f8d463;" align="center">訂單號碼</td>
+					<td style="background-color: #f8d463;" colspan="2" align="center">訂單號碼</td>
 					<td style="background-color: #f8d463;" colspan="2"><input id="textOrdeno" type="text" class="txt c2"> </td>
 				</tr>
 				<tr>
-					<td style="background-color: #f8d463;" align="center">訂單金額</td>
+					<td style="background-color: #f8d463;" colspan="2" align="center">訂單金額</td>
 					<td style="background-color: #f8d463;" colspan="2"><input id="textTotal" type="text" class="txt num c2" disabled="disabled"> </td>
 				</tr>
 				<tr>
-					<td style="background-color: #f8d463;" align="center">分開金額</td>
+					<td style="background-color: #f8d463;" colspan="2" align="center">分開金額</td>
 					<td style="background-color: #f8d463;" colspan="2"><input id="textMoney" type="text" class="txt num c2"> </td>
 				</tr>
-				<tr>
-					<td style="width:100px;background-color: #f8d463;" align="center">買受人</td>
-					<td style="width:120px;background-color: #f8d463;"><input id="textBuyerno" type="text" class="txt c3"> </td>
-					<td style="width:180px;background-color: #f8d463;"><input id="textBuyer" type="text" class="txt c3"> </td>
+				<tr style="display: none;">
+					<td style="background-color: #f8d463;" colspan="2" align="center">買受人</td>
+					<td style="background-color: #f8d463;"><input id="textBuyerno" type="text" class="txt c3"> </td>
+					<td style="background-color: #f8d463;"><input id="textBuyer" type="text" class="txt c3"> </td>
 				</tr>
-				<tr>
-					<td style="background-color: #f8d463;" align="center">統一編號</td>
+				<tr style="display: none;">
+					<td style="background-color: #f8d463;" colspan="2" align="center">統一編號</td>
 					<td style="background-color: #f8d463;" colspan="2"><input id="textSerial" type="text" class="txt c2"> </td>
 				</tr>
 				<tr>
-					<td style="background-color: #f8d463;" align="center">發票起始號</td>
+					<td style="background-color: #f8d463;" colspan="2" align="center">發票起始號</td>
 					<td style="background-color: #f8d463;" colspan="2"><input id="textVccano" type="text" class="txt c2"> </td>
 				</tr>
 				<tr id='batchvcca_close'>
-					<td align="center" colspan='3'>
+					<td align="center" colspan='4'>
 						<input id="btnOk_div_batchvcca" type="button" value="批次開立">
 						<input id="btnClose_div_batchvcca" type="button" value="關閉視窗">
 					</td>
