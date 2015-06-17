@@ -1733,17 +1733,6 @@
                         <td><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
                     </tr>
                     <tr>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
-                        <td><span> </span><a id='lblCustorde' class="lbl"> </a></td>
-                        <td colspan="2">
-                        <input id="txtCustorde"   type="text" class="txt c1"/>
-                        </td>
-                    </tr>
-                    <tr>
                         <td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
                         <td colspan="4">
                         <input id="txtCno" type="text" style="float:left;width:25%;"/>
@@ -1893,7 +1882,6 @@
                     <td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblEnda_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
-                    <td align="center" style="width:200px;"><a id='lblCustpro'>客戶產編</a></td>
                 </tr>
                 <tr style='background:#cad3ff;'>
                     <td align="center">
@@ -1985,7 +1973,6 @@
                     <td align="center">
                     <input class="btn"  id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" />
                     </td>
-                    <td><input id="txtCustpro.*" type="text" style="width:95%; float:left;"/></td>
                 </tr>
             </table>
         </div>
