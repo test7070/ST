@@ -476,7 +476,7 @@
                                     $('#txtWeight__'+t_seq).val(q_mul(t_weight,t_mount));
                                 }
                             }
-                        }if(t_name.substring(0, 11) == 'getproduct_'){
+                        }else if(t_name.substring(0, 11) == 'getproduct_'){
      						var t_seq = parseInt(t_name.split('_')[1]);
 	                		as = _q_appendData('dbo.getproduct', "", true);
 	                		if(as[0]!=undefined){
@@ -813,13 +813,13 @@
                         		return;
                             sum();
                         });
-                        $('#txtStyle_' + i).bind('contextmenu', function(e) {
+                        $('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtStyle_', '');
                             $('#btnStyle_'+n).click();
                         });
-                        $('#txtProductno_' + i).bind('contextmenu', function(e) {
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtProductno_', '');

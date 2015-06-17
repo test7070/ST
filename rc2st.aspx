@@ -34,7 +34,17 @@
 			brwNowPage = 0;
 			brwKey = 'noa';
 
-			aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,trantype,zip_fact,addr_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,cmbTrantype,txtPost,txtAddr', 'tgg_b.aspx'], ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'], ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'], ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'], ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'], ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'], ['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx'], ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'], ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'], ['txtStoreno', 'lblStoreno', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx']);
+			aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,trantype,zip_fact,addr_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,cmbTrantype,txtPost,txtAddr', 'tgg_b.aspx']
+			, ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
+			, ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
+			, ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
+			, ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
+			, ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx']
+			, ['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx']
+			, ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
+			, ['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
+			, ['txtStoreno', 'lblStoreno', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx']
+			, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']);
 			//, ['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']);
 			brwCount2 = 12;
 			var isinvosystem = false;
@@ -550,7 +560,16 @@
 							} else {
 								btnOk_checkUno(n - 1);
 							}
-						}
+						}else if(t_name.substring(0, 11) == 'getproduct_'){
+     						var t_seq = parseInt(t_name.split('_')[1]);
+	                		as = _q_appendData('dbo.getproduct', "", true);
+	                		if(as[0]!=undefined){
+	                			$('#txtProduct_'+t_seq).val(as[0].product);
+	                		}else{
+	                			$('#txtProduct_'+t_seq).val('');
+	                		}
+	                		break;
+                        }
 						break;
 				}
 			}
@@ -774,15 +793,18 @@
 						$('#txtTotal_' + j).change(function() {
 							sum();
 						});
-						$('#txtStyle_' + j).blur(function() {
-							$('input[id*="txtProduct_"]').each(function() {
-								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
-							});
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							ProductAddStyle(n);
-							sum();
-						});
+						$('#txtStyle_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            $('#btnStyle_'+n).click();
+                        });
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
+                        });
 						//計算理論重
 						$('#textSize1_' + j).change(function() {
 							sum();
@@ -921,14 +943,19 @@
 			function q_popPost(s1) {
 				switch (s1) {
 					case 'txtProductno_':
-						$('input[id*="txtProduct_"]').each(function() {
-							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
-						});
-						if (trim($('#txtStyle_' + b_seq).val()).length != 0)
-							ProductAddStyle(b_seq);
-						$('#txtStyle_' + b_seq).focus();
-						break;
+                        var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_' + b_seq).focus();
+                        break;
+                    case 'txtStyle_':
+                   		var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_'+b_seq).blur();
+                        break;
 				}
 			}
 
@@ -1426,9 +1453,9 @@
 					</td>
 					<td align="center" style="width:20px;"></td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
+					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblProduct_st'> </a></td>
+					<td align="center" style="width:80px;"><a>等級</a></td>
 					<td align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
@@ -1461,17 +1488,14 @@
 					<input id="txtUno.*" type="text" style="float:left;width:95%;" />
 					</td>
 					<td>
-					<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
-					<input type="text" id="txtProductno.*"  style="width:70%; float:left;"/>
-					<span style="display:block; width:20px;float:left;"> </span>
-					<input type="text" id="txtClass.*"  style="width:93%; float:left;"/>
+						<input id="txtProductno.*" type="text" style="width:95%;" />
+						<input type="text" id="txtProduct.*" style="width:95%;" />
+						<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
 					</td>
-					<td>
-					<input id="txtStyle.*" type="text" style="width:90%;text-align:center;" />
+					<td><input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
+						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
-					<td>
-					<input id="txtProduct.*" type="text" style="width:90%;" />
-					</td>
+					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
 					<td>
 					<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 					<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
