@@ -1113,7 +1113,7 @@
 							sum();
 							$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 						});
-						$('#txtStyle_' + i).bind('contextmenu', function(e) {
+						$('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtStyle_', '');
@@ -1236,13 +1236,13 @@
 								q_box("ordest.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + thisVal + "';" + r_accy, 'ordest', "95%", "95%", q_getMsg("popOrdest"));
 							}
 						});
-						$('#txtProductno_' + i).bind('contextmenu', function(e) {
+						$('#txtProductno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtProductno_', '');
                             $('#btnProduct_'+n).click();
                         });
-                        $('#txtUno_' + i).bind('contextmenu', function(e) {
+                        $('#txtUno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtUno_', '');

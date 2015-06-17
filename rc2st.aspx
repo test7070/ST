@@ -793,13 +793,13 @@
 						$('#txtTotal_' + j).change(function() {
 							sum();
 						});
-						$('#txtStyle_' + i).bind('contextmenu', function(e) {
+						$('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtStyle_', '');
                             $('#btnStyle_'+n).click();
                         });
-                        $('#txtProductno_' + i).bind('contextmenu', function(e) {
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtProductno_', '');
