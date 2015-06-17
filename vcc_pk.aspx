@@ -53,6 +53,7 @@
 				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
+				, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
 			);
 			brwCount2 = 12;
 			var isinvosystem = false;
@@ -774,7 +775,7 @@
 								alert('查無訂單資料【' + t_ordeno + '-' + t_no2 + '】');
 								Unlock(1);
 							}
-						}if(t_name.substring(0, 11) == 'getproduct_'){
+						}else if(t_name.substring(0, 11) == 'getproduct_'){
      						var t_seq = parseInt(t_name.split('_')[1]);
 	                		as = _q_appendData('dbo.getproduct', "", true);
 	                		if(as[0]!=undefined){
@@ -1112,6 +1113,12 @@
 							sum();
 							$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 						});
+						$('#txtStyle_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            $('#btnStyle_'+n).click();
+                        });
 						//將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
 						$('#textSize1_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
@@ -1945,8 +1952,10 @@
 						<input type="text" id="txtProduct.*" style="width:95%;" />
 						<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
 					</td>
-					<td><input type="text" id="txtStyle.*" style="width:85%;text-align:center;" /></td>
-					<td><input id="txtClass.*" type="text" style='width: 85px;'/></td>
+					<td><input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
+						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
+					</td>
+					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
 					<!--<td><input class="txt c1" id="txtSpec.*" type="text"/></td>-->
 					<td>
 						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>

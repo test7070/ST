@@ -476,7 +476,7 @@
                                     $('#txtWeight__'+t_seq).val(q_mul(t_weight,t_mount));
                                 }
                             }
-                        }if(t_name.substring(0, 11) == 'getproduct_'){
+                        }else if(t_name.substring(0, 11) == 'getproduct_'){
      						var t_seq = parseInt(t_name.split('_')[1]);
 	                		as = _q_appendData('dbo.getproduct', "", true);
 	                		if(as[0]!=undefined){
