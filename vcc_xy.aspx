@@ -120,20 +120,22 @@
 				$('#btnOrdes').click(function() {
 					var t_custno = trim($('#txtCustno').val());
 					var t_where = '';
-					if (t_custno.length > 0) {
+					//if (t_custno.length > 0) {
 						t_where = " isnull(enda,0)!=1 ";
 						//t_where += " and left(productno,2)!='##' and left(custno,2)!='##' ";//非正式編號
 						t_where += " and productno!='' ";
+						t_where += " and datea!='' ";
 						//t_where += " and (custno='"+t_custno+"' or custno='"+t_custno.substr(0,5)+"')";
-						t_where += " and (custno='"+t_custno+"')";
+						if (t_custno.length>0)
+							t_where += " and (custno='"+t_custno+"')";
 						t_where += " and (source!='2' or mount!=isnull((select SUM(tranmoney3) from view_vccs where ordeno=view_ordes.noa and no2=view_ordes.no2),0))";
 						if (!emp($('#txtOrdeno').val()))
 							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
 						t_where = t_where;
-					} else {
+					/*} else {
 						alert(q_getMsg('msgCustEmp'));
 						return;
-					}
+					}*/
 					q_box("ordes_b2_xy.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes_xy', "95%", "650px", q_getMsg('popOrde'));
 					//q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
 				});
@@ -593,6 +595,25 @@
 						$('#txtPost2').val(t_post2);
 						$('#txtAddr2').val(t_addr2);
 						
+						if (as[0] != undefined) {
+							$('#txtCustno').val(as[0].custno);
+							$('#txtComp').val(as[0].comp);
+							$('#txtNick').val(as[0].nick);
+							$('#txtPaytype').val(as[0].paytype);
+							$('#cmbTrantype').val(as[0].trantype);
+							$('#txtTel').val(as[0].tel);
+							$('#txtFax').val(as[0].fax);
+							$('#txtPost').val(as[0].post);
+							$('#txtAddr').val(as[0].addr);
+							$('#txtPost2').val(as[0].post2);
+							$('#txtAddr2').val(as[0].addr2);
+							$('#txtSalesno').val(as[0].salesno);
+							$('#txtSales').val(as[0].sales);
+							$('#cmbTaxtype').val(as[0].taxtype);
+							$('#cmbCoin').val(as[0].coin);
+							$('#txtFloata').val(as[0].floata);
+						}
+						sum();
 						break;
 					case 'cust_addr':
 						var as = _q_appendData("cust", "", true);

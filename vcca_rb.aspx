@@ -733,10 +733,10 @@
 				}
 				
 				if(t_para){
-					$('#btnOrdes').removeAttr('disabled');
+					//$('#btnOrdes').removeAttr('disabled');
 					$('#btnBatchvcca').removeAttr('disabled');
 				}else{
-					$('#btnOrdes').attr('disabled','disabled');
+					//$('#btnOrdes').attr('disabled','disabled');
 					$('#btnBatchvcca').attr('disabled','disabled');
 				}
 				$('#div_batchvcca').hide();
