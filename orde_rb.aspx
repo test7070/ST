@@ -663,7 +663,10 @@
 								}
 								t_invono=as[0].invono;
 							}
-                        	alert('成功轉出出貨單!!'+(t_invono.length>0?('發票號碼：'+t_invono):''));
+							if(q_cur==2)
+                        		alert('已更新出貨單!!');
+                        	else
+                        		alert('成功轉出出貨單!!'+(t_invono.length>0?('發票號碼：'+t_invono):''));
                         break;
 					case 'qtxt.query.post2':
 						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)

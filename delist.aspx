@@ -140,7 +140,7 @@
                 		//本幣營業稅額(本幣營業稅基 * 營業稅率)
                 			q_tr('txtVat_'+j,q_mul(q_float('txtVatbase_'+j),q_div(q_float('txtVatrate'),100)));
                 		//進貨總成本
-                			q_tr('txtCost_'+j,q_mul(q_add(q_add(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_float('txtTrade_'+j)),q_float('txtCommoditytax_'+j)),q_div(q_float('txtVatrate'),100)));
+                			q_tr('txtCost_'+j,q_add(q_add(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_float('txtTrade_'+j)),q_float('txtCommoditytax_'+j)));
                 	} // j
                 	sum();
             }
@@ -188,6 +188,13 @@
 					$('#div_help').hide();
 				});
 				
+				$('#btnRc2').click(function() {
+					if(emp($('#txtRc2no').val())){
+						q_func('qtxt.query.post1', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1');
+					}else{
+						q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
+					}
+				});
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
@@ -269,6 +276,8 @@
                     return;
                 }
                 
+                bbs_sum();
+                
                 if(q_cur==1)
 					$('#txtWorker').val(r_name);
 				else
@@ -279,6 +288,50 @@
                     q_gtnoa(q_name, replaceAll(q_getPara('sys.key_deli') + $('#txtDatea').val(), '/', ''));
                 else
                     wrServer(s1);
+            }
+            
+            function q_stPost() {
+				if (!(q_cur == 1 || q_cur == 2))
+					return false;
+				
+				if(q_cur==2 && !emp($('#txtRc2no').val())){//修改後重新產生 避免資料不對應
+					//rc2.post內容
+					q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
+				}
+			}
+            
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'rc2_post.post.a1':
+                		q_func('qtxt.query.post0', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0');
+                		break;
+                	case 'rc2_post.post.a2':
+                		q_func('qtxt.query.post2', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0');
+                		break;
+                    case 'qtxt.query.post0':
+                        q_func('qtxt.query.post1', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1');
+                        break;
+					case 'qtxt.query.post1':
+						var as = _q_appendData("tmp0", "", true, true);
+						var t_invono='';
+							if (as[0] != undefined) {
+								abbm[q_recno]['rc2no'] = as[0].rc2no;
+								$('#txtRc2no').val(as[0].rc2no);
+								
+								//rc2.post內容
+								if(!emp($('#txtRc2no').val())){
+									q_func('rc2_post.post', r_accy + ',' + $('#txtRc2no').val() + ',1');
+								}
+							}
+							if(q_cur==2)
+                        		alert('已更新進貨單!!');
+                        	else
+                        		alert('成功轉出進貨單!!');
+                        break;
+					case 'qtxt.query.post2':
+						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
+                        break;
+                }
             }
 
             function _btnSeek() {
@@ -497,7 +550,17 @@
             }
 
             function btnDele() {
-                _btnDele();
+            	if (!emp($('#txtNoa').val())){
+					if (!confirm(mess_dele))
+						return;
+					q_cur = 3;
+					
+					if(emp($('#txtRc2no').val()))
+						q_func('qtxt.query.post2', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0');
+					else
+						q_func('rc2_post.post.a2', r_accy + ',' + $('#txtRc2no').val() + ',0');
+				}
+                //_btnDele();
             }
 
             function btnCancel() {
@@ -837,7 +900,7 @@
 						<td class="td5"><span> </span><a id="lblTariff" class="lbl" > </a></td>
 						<td class="td6"><input id="txtTariff"  type="text"  class="txt num c1"/></td>
 						<td class="td7"> </td>
-						<td class="td8"><!--<input id="btnRc2" type="button"/>--></td>
+						<td class="td8"><input id="btnRc2" type="button"/></td>
 					</tr>
 					<tr class="tr15">
 						<td class="td1"><span> </span><a id="lblTrade" class="lbl" > </a></td>
