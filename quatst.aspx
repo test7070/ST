@@ -34,6 +34,7 @@
 			brwNowPage = 0;
 			brwKey = 'Datea';
 			aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
+			, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
 			, ['txtCustno', 'lblCust', 'cust', 'noa,comp,paytype,trantype,tel,fax,zip_comp,addr_comp', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx']
 			, ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 			, ['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx']
@@ -404,6 +405,17 @@
 						if (q_cur == 4)
 							q_Seek_gtPost();
 						break;
+					default:
+						if(t_name.substring(0, 11) == 'getproduct_'){
+     						var t_seq = parseInt(t_name.split('_')[1]);
+	                		as = _q_appendData('dbo.getproduct', "", true);
+	                		if(as[0]!=undefined){
+	                			$('#txtProduct_'+t_seq).val(as[0].product);
+	                		}else{
+	                			$('#txtProduct_'+t_seq).val('');
+	                		}
+	                		break;
+                        }
 				}
 			}
 
@@ -484,14 +496,18 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-						$('#txtStyle_' + j).blur(function() {
-							$('input[id*="txtProduct_"]').each(function() {
-								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-				               	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
-							});
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-							ProductAddStyle(n);
-						});
+						$('#txtStyle_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            $('#btnStyle_'+n).click();
+                        });
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
+                        });
 						$('#textSize1_' + j).change(function() {sum();});
 						$('#textSize2_' + j).change(function() {sum();});
 						$('#textSize3_' + j).change(function() {sum();});
@@ -604,7 +620,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno']) {
+				if (!as['productno'] && !as['size']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -626,14 +642,20 @@
 			function q_popPost(s1) {
 				switch (s1) {
 					case 'txtProductno_':
-						$('input[id*="txtProduct_"]').each(function() {
-							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-		                	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
-						});
-                        if(trim($('#txtStyle_' + b_seq).val()).length != 0)
-                        	ProductAddStyle(b_seq);
-						$('#txtStyle_' + b_seq).focus();
+						var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_' + b_seq).focus();
 						break;
+					case 'txtStyle_':
+						console.log(b_seq);
+                   		var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_'+b_seq).blur();
+                        break;
 					case 'txtCustno':
 						$('#txtPost2').val($('#txtPost').val());
 						$('#txtAddr2').val($('#txtAddr').val());
@@ -1185,10 +1207,9 @@
 						<input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  />
 						</td>
 						<td align="center" style="width:20px;"></td>
-						<td align="center" style="width:8%;"><a id='lblProductno_st'></a></td>
-						<td align="center" style="width:30px;"><a id='lblStyle_st'></a></td>
-						<td align="center" style="width:10%;"><a id='lblProduct_st'></a></td>
-						<td align="center" style="width:60px;"><a id='lblClass_st'></a></td>
+						<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
+						<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
+						<td align="center" style="width:80px;"><a>等級</a></td>
 						<td align="center" id='Size'><a id='lblSize_help'> </a></br><a id='lblSize_st'> </a></td>
 						<td align="center" style="width:10%;"><a id='lblSizea_st'></a><input id="btnShowInfo" type="button" value="代碼列表" onclick="showSizeInfo()"></td>
 						<td align="center" style="width:3%;"><a id='lblUnit_st'></a></td>
@@ -1207,24 +1228,20 @@
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td >
-						<input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
+							<input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
+							<input type="text" id="txtNo3.*"  style="display:none;"/>
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 						<td>
-						<input class="btn"  id="btnProduct.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-						<input type="text" id="txtProductno.*"  style="width:76%; float:left;"/>
-						<span style="display:block; width:1%;float:left;"> </span>
-						<input type="text" id="txtNo3.*"  style="width:76%; float:left;display:none;"/>
+							<input id="txtProductno.*" type="text" style="width:95%;" />
+							<input type="text" id="txtProduct.*" style="width:95%;" />
+							<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
 						</td>
-						<td >
-						<input id="txtStyle.*" type="text" class="txt c6"/>
+						<td><input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
+							<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 						</td>
-						<td >
-						<input id="txtProduct.*" type="text" class="txt c7"/>
-						</td>
-						<td >
-						<input id="txtClass.*" type="text" class="txt c6" />
-						</td>
+						<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
+						
 						<td>
 						<input class="txt num c8" id="textSize1.*" type="text" disabled="disabled"/>
 						<div id="x1.*" style="float: left">
