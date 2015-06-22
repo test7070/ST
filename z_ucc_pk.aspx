@@ -34,16 +34,8 @@
 						for ( i = 0; i < as.length; i++) {
 							t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + '.' + as[i].product;
 						}
-						q_gt('ucc', '', 0, 0, 0, "");
+						loadFinish();
 						break;
-					case 'ucc':
-                        t_ucc = '';
-                        var as = _q_appendData("ucc", "", true);
-                        for ( i = 0; i < as.length; i++) {
-                            t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa;
-                        }
-                        loadFinish();
-                        break;
 				}
 			}
 
@@ -51,117 +43,73 @@
 				$('#q_report').q_report({
 					fileName : 'z_ucc_pk',
 					options : [{
-						type : '1', //[2][3] 1
+						type : '1', //[1][2] 1
 						name : 'xdate'
 					}, {
-						type : '5', //[4] 2
+						type : '5', //[3] 2
 						name : 'xstktype',
 						value : [q_getPara('report.all')].concat(q_getPara('sys.stktype').split(','))
 					}, {
-						type : '5', //[5] 3
+						type : '5', //[4] 3
 						name : 'xitype',
 						value : [q_getPara('report.all')].concat(q_getPara('uccc.itype').split(','))
 					}, {
-						type : '2', //[6][7] 4
+						type : '2', //[5][6] 4
 						name : 'xproduct',
 						dbf : 'ucaucc',
 						index : 'noa,product',
 						src : 'ucaucc_b.aspx'
 					}, {
-						type : '5', //[5] 1
+						type : '5', //[7] 1
 						name : 'xstyle',
 						value : [q_getPara('report.all')].concat(t_style.split(','))
 					}, {
-						type : '6', //[9] 2
+						type : '6', //[8] 2
 						name : 'xwaste'
 					}, {
-						type : '1', //[10][11] 3
+						type : '1', //[9][10] 3
 						name : 'xradius'
 					}, {
-						type : '1', //[12][13] 4
+						type : '1', //[11][12] 4
 						name : 'xwidth'
 					}, {
-						type : '1', //[14][15] 1
+						type : '1', //[13][14] 1
 						name : 'xdime'
 					}, {
-						type : '1', //[16][17] 2
+						type : '1', //[15][16] 2
 						name : 'xlengthb'
 					}, {
-						type : '2', //[18] [19] 3
+						type : '2', //[17] [18] 3
 						name : 'xstoreno',
 						dbf : 'store',
 						index : 'noa,store',
 						src : 'store_b.aspx'
 					}, {
-						type : '2', //[20] [21] 4
+						type : '2', //[19] [20] 4
 						name : 'xcustno',
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
 					}, {
-						type : '5', //[22] 1
+						type : '5', //[21] 1
 						name : 'xorderstatus',
 						value : [q_getPara('report.all')].concat('1@已受訂,2@未受訂'.split(','))
 					}, {
-						type : '8', //[23] 2
+						type : '8', //[22] 2
 						name : 'xisordermemo',
 						value : "1@顯示已受訂明細".split(',')
 					}, {
-						type : '2', //[24][25] 3
-						name : 'xtggno',
-						dbf : 'tgg',
-						index : 'noa,comp',
-						src : 'tgg_b.aspx'
-					}, {//因選項位置調整,已不使用
-						type : '8', //[26] 4
-						name : 'xxxxx',
-						value : new Array()
-					}, {
-						type : '5', //[27] 1
+						type : '5', //[23] 1
 						name : 'xsortby',
-						value : 'datea@依日期,pno@依品號,sizea@依尺寸,dime@依厚度,memo@依備註'.split(',')
+						value : 'datea@依日期,productno@依品號,sizea@依尺寸,dime@依厚度,memo@依備註'.split(',')
 					}, {
-						type : '5', //[28] 2
-						name : 'xstype',
-						value : [q_getPara('report.all')].concat('A@製成品,B@在製品'.split(','))
-					}, {
-						type : '2', //[29][30] 3
-						name : 'xstoreno2',
-						dbf : 'store',
-						index : 'noa,store',
-						src : 'store_b.aspx'
-					}, {
-						type : '8', //[31] 4
-						name : 'xoption01',
-						value : q_getMsg('xoption01').split('&')
-					}, {
-						type : '8', //[32] 1
+						type : '8', //[24] 1
 						name : 'xshowprice',
 						value : "1@顯示單價".split(',')
 					}, {
-						type : '5', //[33]2
-						name : 'showtype',
-						value : q_getMsg('showtype').split('&')
-					}, {
-						type : '8', //[34]3
+						type : '8', //[25]3
 						name : 'xmerga',
 						value : "1@".split(',')
-					}, {
-                        type : '8', //[35] 4
-                        name : 'yitype',
-                        value : q_getPara('uccc.itype').split(',')
-                    }, {
-                        type : '8', //[36]1
-                        name : 'ystyle',
-                        value : t_style.split(',')
-                    }, {
-                        type : '8', //[37]2
-                        name : 'yproductno',
-                        value : t_ucc.split(',')
-                    }, {
-						type : '8', //[38] 3
-						name : 'xaction',
-						value : "rc2s@進貨,inas@入庫,cuts@裁剪,cubu@製管,vccs@出貨".split(',')
 					}]
 				});
 				q_popAssign();
