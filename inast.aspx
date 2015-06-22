@@ -38,8 +38,9 @@
 	            ['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'], 
 	            ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'], 
 	            ['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtCust', 'cust_b.aspx'], 
-	            ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'], 
-	            ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
+	            ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
+	            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
+            	, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
 	            , ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
             );
             brwCount2 = 7;
@@ -325,7 +326,16 @@
                         }
                     	break;
                     default:
-                        if (t_name.substring(0, 9) == 'checkUno_') {
+                        if(t_name.substring(0, 11) == 'getproduct_'){
+     						var t_seq = parseInt(t_name.split('_')[1]);
+	                		as = _q_appendData('dbo.getproduct', "", true);
+	                		if(as[0]!=undefined){
+	                			$('#txtProduct_'+t_seq).val(as[0].product);
+	                		}else{
+	                			$('#txtProduct_'+t_seq).val('');
+	                		}
+	                		break;
+                        }else if (t_name.substring(0, 9) == 'checkUno_') {
                             var n = t_name.split('_')[1];
                             var as = _q_appendData("view_uccb", "", true);
                             if (as[0] != undefined) {
@@ -457,13 +467,17 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                 	$('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                        $('#txtStyle_' + j).blur(function() {
-							$('input[id*="txtProduct_"]').each(function() {
-								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-				               	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
-							});
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-                            ProductAddStyle(n);
+                        $('#txtStyle_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            $('#btnStyle_'+n).click();
+                        });
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
                         });
                         $('#txtUno_' + j).change(function() {
                             var n = $(this).attr('id').replace('txtUno_', '');
@@ -577,7 +591,7 @@
             }
 
             function bbsSave(as) {
-                if (!as['uno'] && !as['productno'] && !as['product'] && !as['spec']) {
+                if (!as['uno'] && !as['productno'] && !as['product'] && !as['spec'] && !as['size']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
@@ -600,13 +614,19 @@
             function q_popPost(s1) {
                 switch (s1) {
                     case 'txtProductno_':
-                        $('input[id*="txtProduct_"]').each(function() {
-							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-		                	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
-                        });
-                        if(trim($('#txtStyle_' + b_seq).val()).length != 0)
-                        	ProductAddStyle(b_seq);
+						var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
                         $('#txtStyle_' + b_seq).focus();
+						break;
+					case 'txtStyle_':
+						console.log(b_seq);
+                   		var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_'+b_seq).blur();
                         break;
                 }
             }
@@ -1078,10 +1098,9 @@
 					</td>
 					<td align="center" style="width:20px;"></td>
 					<td align="center" style="width:280px;"><a id="lblUno_st" > </a></td>
-					<td align="center" style="width:120px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:35px;"><a id='lblStyle_st'> </a></td>
-					<td align="center" style="width:140px;"><a id='lblProduct_s'> </a></td>
-					<td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
+					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
+					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
+					<td align="center" style="width:80px;"><a>等級</a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:230px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px;"><a>進貨<BR>厚度</a></td>
@@ -1105,18 +1124,14 @@
 					<input id="txtUno.*" type="text" style="width:95%;"/>
 					</td>
 					<td>
-					<input class="btn"  id="btnProductno.*" type="button" value='' style=" font-weight: bold;width:15px;height:25px;float:left;" />
-					<input type="text" id="txtProductno.*"  style="width:75px; float:left;"/>
+						<input id="txtProductno.*" type="text" style="width:95%;" />
+						<input type="text" id="txtProduct.*" style="width:95%;" />
+						<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
 					</td>
-					<td>
-					<input id="txtStyle.*" type="text" style="width:85%;text-align:center;"/>
+					<td><input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
+						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
-					<td>
-						<span style="width:20px;height:1px;display:none;float:left;"> </span>
-						<input id="txtProduct.*" type="text" style="float:left;width:93%;"/>
-					</td><td >
-					<input id="txtClass.*" type="text" style="width:90%;text-align:center;"/>
-					</td>
+					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
 					<td>
 					<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 					<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
