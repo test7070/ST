@@ -15,7 +15,6 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-			var bbmNum = [['txtXradius1', 3, 0]];
 			var t_style = '',t_ucc='';
 			$(document).ready(function() {
 				_q_boxClose();
@@ -38,7 +37,6 @@
 						break;
 				}
 			}
-
 			function loadFinish() {
 				$('#q_report').q_report({
 					fileName : 'z_ucc_pk',
@@ -60,56 +58,52 @@
 						index : 'noa,product',
 						src : 'ucaucc_b.aspx'
 					}, {
-						type : '5', //[7] 1
+						type : '5', //[7] 5
 						name : 'xstyle',
 						value : [q_getPara('report.all')].concat(t_style.split(','))
 					}, {
-						type : '6', //[8] 2
+						type : '6', //[8] 6
 						name : 'xwaste'
 					}, {
-						type : '1', //[9][10] 3
+						type : '1', //[9][10] 7
 						name : 'xradius'
 					}, {
-						type : '1', //[11][12] 4
+						type : '1', //[11][12] 8
 						name : 'xwidth'
 					}, {
-						type : '1', //[13][14] 1
+						type : '1', //[13][14] 9
 						name : 'xdime'
 					}, {
-						type : '1', //[15][16] 2
+						type : '1', //[15][16] 10
 						name : 'xlengthb'
 					}, {
-						type : '2', //[17] [18] 3
-						name : 'xstoreno',
+						type : '2', //[17] [18] 11
+						name : 'xstore',
 						dbf : 'store',
 						index : 'noa,store',
 						src : 'store_b.aspx'
 					}, {
-						type : '2', //[19] [20] 4
-						name : 'xcustno',
+						type : '2', //[19] [20] 12
+						name : 'xcust',
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
 					}, {
-						type : '5', //[21] 1
+						type : '5', //[21] 13
 						name : 'xorderstatus',
 						value : [q_getPara('report.all')].concat('1@已受訂,2@未受訂'.split(','))
 					}, {
-						type : '8', //[22] 2
+						type : '8', //[22] 14
 						name : 'xisordermemo',
 						value : "1@顯示已受訂明細".split(',')
 					}, {
-						type : '5', //[23] 1
+						type : '5', //[23] 15
 						name : 'xsortby',
-						value : 'datea@依日期,productno@依品號,sizea@依尺寸,dime@依厚度,memo@依備註'.split(',')
+						value : 'datea@依入庫日期,productno@依品號,size@依尺寸,dime@依厚度,memo@依備註,uno@依批號,source@依鋼廠'.split(',')
 					}, {
-						type : '8', //[24] 1
+						type : '8', //[24] 16
 						name : 'xshowprice',
 						value : "1@顯示單價".split(',')
-					}, {
-						type : '8', //[25]3
-						name : 'xmerga',
-						value : "1@".split(',')
 					}]
 				});
 				q_popAssign();
