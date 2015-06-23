@@ -99,11 +99,14 @@
 					}, {
 						type : '5', //[23] 15
 						name : 'xsortby',
-						value : 'datea@依入庫日期,productno@依品號,size@依尺寸,dime@依厚度,memo@依備註,uno@依批號,source@依鋼廠'.split(',')
+						value : 'datea@依入庫日期,productno@依品號,size@依尺寸,dime@依厚度,memo@依備註,uno@依批號,source@依鋼廠,spec@依規格'.split(',')
 					}, {
 						type : '8', //[24] 16
 						name : 'xshowprice',
 						value : "1@顯示單價".split(',')
+					}, {
+						type : '6', //[25] 17
+						name : 'xspec'
 					}]
 				});
 				q_popAssign();

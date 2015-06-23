@@ -122,13 +122,25 @@
 					}
 					getTheory(j);
 					//---------------------------------------
-					t_weights = q_float('txtWeight_' + j);
-					t_prices = q_float('txtPrice_' + j);
-					t_mounts = q_float('txtMount_' + j);
-					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
-						t_moneys = q_mul(t_prices, t_weights);
-					} else {
-						t_moneys = q_mul(t_prices, t_mounts);
+					if($('#chkAprice_'+j).prop('checked')){
+						t_weights = q_float('txtWeight_' + j);
+						t_mounts = q_float('txtMount_' + j);
+						t_moneys = q_float('txtTotal_' + j);
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+							t_prices = round(q_div(t_moneys, t_weights),3);
+						} else {
+							t_prices = round(q_div(t_moneys, t_mounts),3);
+						}
+						
+					}else{
+						t_weights = q_float('txtWeight_' + j);
+						t_prices = q_float('txtPrice_' + j);
+						t_mounts = q_float('txtMount_' + j);
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+							t_moneys = q_mul(t_prices, t_weights);
+						} else {
+							t_moneys = q_mul(t_prices, t_mounts);
+						}
 					}
 					if (t_float == 0) {
 						t_moneys = round(t_moneys, 0);
@@ -1103,6 +1115,7 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#chkAprice_'+j).click(function(e){refreshBbs();});
 						$('#txtStyle_' + j).blur(function() {
 							$('input[id*="txtProduct_"]').each(function() {
 								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
@@ -1230,6 +1243,11 @@
 								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
+						$('#txtTotal_' + j).focusout(function() {
+							if (q_cur == 1 || q_cur == 2) {
+								sum();
+							}
+						});
 						$('#txtOrdeno_' + j).click(function() {
 							var thisVal = $.trim($(this).val());
 							if (thisVal.length > 0) {
@@ -1252,6 +1270,7 @@
 				}//j
 				_bbsAssign();
 				size_change();
+				refreshBbs();
 			}
 
 			function btnIns() {
@@ -1349,6 +1368,7 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
+				
 			}
 
 			var ret;
@@ -1414,8 +1434,22 @@
 					$('#txtMon').removeAttr('readonly');
 				else
 					$('#txtMon').attr('readonly', 'readonly');*/
+					
+				refreshBbs();
 			}
-
+			function refreshBbs(){
+				//金額小計自訂
+				for(var i=0;i<q_bbsCount;i++){
+					$('#txtTotal_'+i).attr('readonly','readonly');
+					if($('#chkAprice_'+i).prop('checked')){
+						$('#txtTotal_'+i).css('color','black').css('background-color','white');
+						if(q_cur==1 || q_cur==2)
+							$('#txtTotal_'+i).removeAttr('readonly');
+					}else{
+						$('#txtTotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+					}
+				}
+			}
 			function btnMinus(id) {
 				_btnMinus(id);
 				sum();
@@ -1932,6 +1966,7 @@
 					<td align="center" style="width:50px;"><a>計量單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'></a></td>
 					<td align="center" style="width:80px;">合計<br>理論重</td>
+					<td align="center" style="width:20px;">自訂<br>金額</td>
 					<td align="center" style="width:100px;"><a id='lblGweight_st'></a></td>
 					<td align="center" style="width:60px;">寄Y<BR>代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
@@ -1982,6 +2017,7 @@
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
 						<input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/>
 					</td>
+					<td><input id="chkAprice.*" type="checkbox"/></td>
 					<td><input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input class="txt" id="txtUsecoil.*" type="text" style="text-align:center;width:95%;"/></td>
 					<td>
