@@ -104,6 +104,9 @@
 						type : '8', //[24] 16
 						name : 'xshowprice',
 						value : "1@顯示單價".split(',')
+					}, {
+						type : '6', //[25] 17
+						name : 'xspec'
 					}]
 				});
 				q_popAssign();
