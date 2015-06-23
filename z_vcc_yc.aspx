@@ -15,6 +15,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
+			aPop = new Array(['txtYcustno', '', 'cust', 'noa,comp', 'txtYcustno', 'cust_b.aspx']);
             var acompItem = '';
             var uccgaItem = '';
             var partItem = '';
@@ -206,6 +207,9 @@
                         type : '8', //[38]//顯示箱數 //100000
                         name : 'xshowlengthc',
                         value : "1@顯示箱數".split(',')
+                    }, {
+                        type : '6', //[39]//200000
+                        name : 'ycustno'
                     }]
                 });
                 q_popAssign();
