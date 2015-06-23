@@ -34,9 +34,10 @@
 			brwKey = 'noa';
 			q_desc = 1;
 			aPop = new Array(
-				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
-				['txtProductno1_', 'btnProductno1_', 'bcc', 'noa,product,unit', 'txtProductno1_,txtProduct_,txtUnit_', 'bcc_b.aspx'], 
-				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'], 
+				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_', 'ucaucc_b.aspx']
+				,['txtProductno1_', 'btnProduct1_', 'bcc', 'noa,product,unit', 'txtProductno1_,txtProduct_,txtUnit_', 'bcc_b.aspx'] 
+				, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
+				,['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'], 
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'], 
 				['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'], 
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'], 
@@ -422,6 +423,17 @@
 						if (q_cur == 4)
 							q_Seek_gtPost();
 						break;
+					default:
+						if(t_name.substring(0, 11) == 'getproduct_'){
+     						var t_seq = parseInt(t_name.split('_')[1]);
+	                		as = _q_appendData('dbo.getproduct', "", true);
+	                		if(as[0]!=undefined){
+	                			$('#txtProduct_'+t_seq).val(as[0].product);
+	                		}else{
+	                			$('#txtProduct_'+t_seq).val('');
+	                		}
+	                		break;
+                        }
 				}  /// end switch
 			}
 			
@@ -532,15 +544,24 @@
 						$('#txtC1_' + j).change(function() {
 							sum();
 						});
-						$('#txtStyle_' + j).blur(function() {
-							$('input[id*="txtProduct_"]').each(function() {
-								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
-							});
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							ProductAddStyle(n);
-							sum();
-						});
+						$('#txtStyle_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            $('#btnStyle_'+n).click();
+                        });
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
+                        });
+                        $('#txtProductno1_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno1_', '');
+                            $('#btnProduct1_'+n).click();
+                        });
 						//計算理論重
 						$('#textSize1_' + j).change(function() {
 							sum();
@@ -649,7 +670,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno'] && !as['product'] && !as['spec'] && !dec(as['total'])) {//不存檔條件
+				if (!as['productno'] && !as['product'] && !as['spec'] && !as['size'] && !dec(as['total'])) {//不存檔條件
 					as[bbsKey[1]] = '';
 					/// no2 為空，不存檔
 					return;
@@ -697,14 +718,19 @@
 			function q_popPost(s1) {
 				switch (s1) {
 					case 'txtProductno_':
-						$('input[id*="txtProduct_"]').each(function() {
-							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
-						});
-						if (trim($('#txtStyle_' + b_seq).val()).length != 0)
-							ProductAddStyle(b_seq);
-						$('#txtClass_' + b_seq).focus();
+						var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_' + b_seq).focus();
 						break;
+					case 'txtStyle_':
+                   		var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_'+b_seq).blur();
+                        break;
 					case 'txtTggno':
 						$('#txtSalesno').focus();
 						break;
@@ -1182,9 +1208,9 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"></td>
-					<td align="center" style="width:120px;"><a class="st" id='lblProductno_st'> </a><a class="bcc" id='lblProductno'> </a></td>
+					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td class="st" align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblProduct_st'> </a></td>
+					<td class="st" align="center" style="width:100px;"><a>等級</a></td>
 					<td class="st" align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
@@ -1213,14 +1239,16 @@
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-					<input class="btn st"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
-					<input class="st" type="text" id="txtProductno.*"  style="width:70px; float:left;"/>
-					<span class="st" style="display:block; width:20px;float:left;"> </span>
-					<input class="st" type="text" id="txtClass.*"  style="width:70px; float:left;"/>
-					<!--下面為物料使用-->
-					<input class="btn bcc"  id="btnProductno1.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
-					<input class="bcc" type="text" id="txtProductno1.*"  style="width:75%; float:left;"/>
+						<input class="st" id="txtProductno.*" type="text" style="width:95%;" />
+						<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
+						<input class="bcc" type="text" id="txtProductno1.*"  style="width:95%;"/>
+						<input class="btn"  id="btnProductno1.*" type="button" style="display:none;"/>
+						<input type="text" id="txtProduct.*" style="width:95%;" />
 					</td>
+					<td class="st"><input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
+						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
+					</td>
+					<td class="st"><input id="txtClass.*" type="text" style='width: 95%;'/></td>
 					<td class="st">
 					<input id="txtStyle.*" type="text" style="width:90%;" />
 					</td>

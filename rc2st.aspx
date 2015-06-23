@@ -909,7 +909,7 @@
 			}
 
 			function bbsSave(as) {/// 表身 寫入資料庫前，寫入需要欄位
-				if (!as['uno'] && !as['productno'] && !as['product'] && !as['spec'] && !dec(as['total'])) {//不存檔條件
+				if (!as['uno'] && !as['productno'] && !as['product'] && !as['spec'] && !as['size'] && !dec(as['total'])) {//不存檔條件
 					as[bbsKey[1]] = '';
 					/// noq 為空，不存檔
 					return;
