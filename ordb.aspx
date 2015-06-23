@@ -441,10 +441,14 @@
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
+							for (var j = 0; j < q_bbsCount; j++) {
+								if(!emp($('#txtProductno1_'+j).val()))
+									$('#txtProductno_'+j).val($('#txtProductno1_'+j).val());
+							}
 							if (b_ret.length>0)
 								b_ret.splice(0, 1);
 							if (b_ret.length>0)
-								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtStdmount', b_ret.length, b_ret, 'noa,product,spec,unit,stdmount', 'txtProductno,txtProduct,txtSpec');
+								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProductno1,txtProduct,txtSpec,txtUnit,txtStdmount', b_ret.length, b_ret, 'noa,noa,product,spec,unit,stdmount', 'txtProductno,txtProductno1,txtProduct,txtSpec');
 						}
 					}
 				}
