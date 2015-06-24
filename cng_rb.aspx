@@ -68,6 +68,7 @@
 					var t_custno = $('#txtCustno').val();
 					if (t_custno.length > 0 && (q_cur==1 || q_cur==2)) {
 						t_where = "typea='4' and exists(select * from view_cng where custno='"+t_custno+"' and noa=a.noa) ";
+						t_where += " and mount-isnull(b.rmount,0)>0 ";
 						q_box("cngs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'cngs', "95%", "95%", q_getMsg('popCngs'));
 					}
 				});
