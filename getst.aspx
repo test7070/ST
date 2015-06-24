@@ -733,6 +733,7 @@
 					<td align="center" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
+					<td align="center" style="width:120px;"><a>尺寸</a></td>
 					<td align="center" style="width:6%;"><a id='lblGmount_st'> </a></td>
 					<td align="center" style="width:6%;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:6%;display:none;"><a id='lblWeight_st'> </a></td>
@@ -775,6 +776,9 @@
 					<input id="txtDime.*" type="hidden"/>
 					<input id="txtLengthb.*" type="hidden"/>
 					<input class="txt c1" id="txtSpec.*" type="text"/>
+					</td>
+					<td>
+					<input class="txt c1" id="txtSize.*" type="text"/>
 					</td>
 					<td>
 					<input class="txt num c1" id="txtGmount.*" type="text"/>
