@@ -458,8 +458,7 @@
                             $('#cmbCoin').val(as[0].coin);
                         }                       
                     case q_name:
-                        //t_uccArray = _q_appendData("ucc", "", true);
-                        t_uccArray = new Array();
+                        t_uccArray = _q_appendData("ucc", "", true);
                         if (q_cur == 4)// 查詢
                             q_Seek_gtPost();
                         break;
