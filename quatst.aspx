@@ -27,7 +27,7 @@
 			var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtFloata', 15, 3, 1], ['txtWeight', 15, 3, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
 			var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtWeight', 15, 3, 1], ['txtPrice', 15, 3, 1], ['txtTotal', 15, 0, 1], ['txtTheory', 15, 3, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
 			var bbmMask = [];
-			var bbsMask = [['txtStyle', 'A']];
+			var bbsMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwList = [];
