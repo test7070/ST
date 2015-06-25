@@ -374,6 +374,7 @@
 								return;
 							}
 							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style,size', '');
+							
 							//get ordes.price <Start>
 							var distinctArray = new Array;
 							var inStr = '';
@@ -425,6 +426,7 @@
 								b_ret[k].mount = t_mount;
 								b_ret[k].weight = t_weight;
 							}
+							$('#txtOrdeno').val(b_ret[0].noa);
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
 							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
 							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
@@ -557,6 +559,8 @@
 							$('#cmbTrantype').val(as[0].trantype);
 							(trim($('#txtFloata').val()) == '' ? $('#txtFloata').val(as[0].floata) : '');
 							$('#cmbCoin').val(as[0].coin);
+							
+							$('#txtTel').val(as[0].fax);
 						}
 						break;
 					case 'getAcomp':
