@@ -97,7 +97,7 @@
 				bbmNum = [	 ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1]];
 				/*,['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTranmoney', 11, 0, 1],['txtMount', 15, 0, 1]*/
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]];
-				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
+				
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
 				q_cmbParse("combPay", q_getPara('vcc.paytype'));
@@ -257,16 +257,6 @@
 						q_gt('view_ordes', t_where, 0, 0, 0, "GetOrdeList");
 					}
 				}
-			}
-			
-			function q_funcPost(t_func, result) {
-				if (result.substr(0, 5) == '<Data') {
-					var Asss = _q_appendData('sss', '', true);
-					var Acar = _q_appendData('car', '', true);
-					var Acust = _q_appendData('cust', '', true);
-					alert(Asss[0]['namea'] + '^' + Acar[0]['car'] + '^' + Acust[0]['comp']);
-				} else
-					alert(t_func + '\r' + result);
 			}
 
 			function q_boxClose(s2) {
@@ -857,6 +847,27 @@
 				if (q_cur == 1 || q_cur == 2) {
 					var s2 = xmlString.split(';');
 					abbm[q_recno]['accno'] = s2[0];
+					
+					if(q_getPara('sys.project').toUpperCase()=='RB')
+						q_func('qtxt.query.vcc2cng_rb', 'vcc.txt,vcc2cng_rb,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';' + encodeURI(r_name));
+				}
+			}
+			
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'qtxt.query.vcc2cng_rb':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							var t_cngno=as[0].cngno;
+							var t_err=as[0].err;	
+							if(t_err=='OK')
+								alert('已產生客戶歸還調撥單【' + t_cngno+'】');
+							if(t_err=='modi')
+								alert('已更新客戶歸還調撥單【' + t_cngno+'】');
+							$('#txtTranstyle').val(t_cngno);
+							abbm[q_recno]['transtyle'] = t_cngno;
+						}
+					break;
 				}
 			}
 
@@ -1229,7 +1240,7 @@
 						<td class="td4"><span> </span><a id='lblPay' class="lbl"> </a></td>
 						<td class="td5"><input id="txtPaytype" type="text" class="txt c1"/></td>
 						<td class="td6"><select id="combPay" style="width: 100%;" onchange='combPay_chg()'> </select></td>
-						<td class="td6"align="right"><input id="btnOrdes" type="button"/></td>
+						<td class="td6" align="right"><input id="btnOrdes" type="button"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblTel" class="lbl"> </a></td>
@@ -1290,7 +1301,10 @@
 						<td class="td3"><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td class="td4"><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
 						<td class="td5" colspan='2'><input id="txtAccno" type="text" class="txt c1"/></td>
-						<td class="td7"><input id="btnCngs" type="button" value="借出轉銷單"/></td>
+						<td class="td7"  align="right">
+							<input id="btnCngs" type="button" value="借出轉銷單"/>
+							<input id="txtTranstyle" type="hidden">
+						</td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
