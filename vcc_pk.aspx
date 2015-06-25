@@ -560,7 +560,7 @@
 							(trim($('#txtFloata').val()) == '' ? $('#txtFloata').val(as[0].floata) : '');
 							$('#cmbCoin').val(as[0].coin);
 							
-							$('#txtTel').val(as[0].fax);
+							$('#txtTel').val(as[0].fax.length>0?as[0].fax:as[0].tel);
 						}
 						break;
 					case 'getAcomp':
