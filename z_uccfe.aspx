@@ -26,7 +26,7 @@
 						$('#Xcarton').hide();
 					}
 					if (q_getPara('sys.project').toUpperCase()=='YC' && r_rank<8){
-						$('#Xcarton').hide();
+						$('#Xshowprice').hide();
 					}
 				});
 			});
@@ -114,7 +114,7 @@
 				});*/
 				
 				if (q_getPara('sys.project').toUpperCase()=='YC' && r_rank<8){
-					$('#Xcarton').hide();
+					$('#Xshowprice').hide();
 				}
 				
 				if (q_getPara('sys.project').toUpperCase()=='YC')
