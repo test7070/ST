@@ -370,7 +370,7 @@
                 }
  				
  				if(q_getPara('sys.comp').substring(0,2)=='傑期'){
- 					getUno_bydate(q_bbsCount-1);
+ 					getUno_bydate(0);
  				}else{
  					var t_where = '';
 	 				for(var i=0;i<q_bbsCount;i++){
@@ -408,7 +408,7 @@
             }
             function getUno_bydate(n){
             	
-            	if(n<0){
+            	if(n>=q_bbsCount){
             		if (q_cur == 1)
 						$('#txtWorker').val(r_name);
 					else
@@ -428,7 +428,7 @@
 		            	var t_comp = q_getPara('sys.comp');
 		            	q_func('qtxt.query.getuno_bydate_'+n, 'uno.txt,getuno_bydate,'+t_buno+';' + t_datea + ';' + t_style +';'+ t_comp +';');
             		}else{
-            			getUno_bydate(n-1);
+            			getUno_bydate(n+1);
             		}
             	}
             }
@@ -467,7 +467,7 @@
 	                       	if(as[0]!=undefined && as[0].uno.length>0){
 	                       		$('#txtUno_'+n).val(as[0].uno);
 	                       	}
-                    		getUno_bydate(parseInt(n)-1);
+                    		getUno_bydate(parseInt(n)+1);
                     	}
                     	break;
             	}
