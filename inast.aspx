@@ -369,15 +369,19 @@
                     return;
                 }
  				
- 				var t_where = '';
- 				for(var i=0;i<q_bbsCount;i++){
- 					if($.trim($('#txtUno_'+i).val()).length>0)
- 						t_where += (t_where.length>0?' or ':'')+"(uno='" + $.trim($('#txtUno_'+i).val()) + "' and not(accy='" + r_accy + "' and tablea='inas' and noa='" + $.trim($('#txtNoa').val())+"'))";
+ 				if(q_getPara('sys.comp').substring(0,2)=='傑期'){
+ 					getUno_bydate(q_bbsCount-1);
+ 				}else{
+ 					var t_where = '';
+	 				for(var i=0;i<q_bbsCount;i++){
+	 					if($.trim($('#txtUno_'+i).val()).length>0)
+	 						t_where += (t_where.length>0?' or ':'')+"(uno='" + $.trim($('#txtUno_'+i).val()) + "' and not(accy='" + r_accy + "' and tablea='inas' and noa='" + $.trim($('#txtNoa').val())+"'))";
+	 				}
+	 				if(t_where.length>0)
+	               		q_gt('view_uccb', "where=^^"+t_where+"^^", 0, 0, 0, 'btnOk_checkuno');
+	               	else 
+	               		getUno();
  				}
- 				if(t_where.length>0)
-               		q_gt('view_uccb', "where=^^"+t_where+"^^", 0, 0, 0, 'btnOk_checkuno');
-               	else 
-               		getUno();
             }
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
@@ -401,6 +405,32 @@
  					}	
  				}
 				q_func('qtxt.query.getuno', 'uno.txt,getuno,'+t_buno+';' + t_datea + ';' + t_style +';');
+            }
+            function getUno_bydate(n){
+            	
+            	if(n<0){
+            		if (q_cur == 1)
+						$('#txtWorker').val(r_name);
+					else
+						$('#txtWorker2').val(r_name);
+					sum();
+					var t_noa = trim($('#txtNoa').val());
+					var t_date = trim($('#txtDatea').val());
+					if (t_noa.length == 0 || t_noa == "AUTO")	 
+						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ina') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+					else
+						wrServer(t_noa);
+            	}else{
+            		if($('#txtUno_'+n).val().length==0){
+            			var t_buno = ' ';
+		            	var t_datea = $('#txtDatea').val();
+		            	var t_style = $('#txtStyle_'+n).val();
+		            	var t_comp = q_getPara('sys.comp');
+		            	q_func('qtxt.query.getuno_bydate_'+n, 'uno.txt,getuno_bydate,'+t_buno+';' + t_datea + ';' + t_style +';'+ t_comp +';');
+            		}else{
+            			getUno_bydate(n-1);
+            		}
+            	}
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
@@ -429,6 +459,17 @@
 						else
 							wrServer(t_noa);
                         break;
+                    default:
+                    	if(t_func.substring(0,25)=='qtxt.query.getuno_bydate_'){
+                    		var n = t_func.replace('qtxt.query.getuno_bydate_','');
+                    		console.log(t_func);
+                    		var as = _q_appendData("tmp0", "", true, true);
+	                       	if(as[0]!=undefined && as[0].uno.length>0){
+	                       		$('#txtUno_'+n).val(as[0].uno);
+	                       	}
+                    		getUno_bydate(parseInt(n)-1);
+                    	}
+                    	break;
             	}
   			}
 
