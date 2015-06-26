@@ -1958,6 +1958,7 @@
 						<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
 					</td>
 					<td align="center" style="width:20px;"></td>
+					<td align="center" style="width:50px;"><a>序</a></td>
 					<td align="center" style="width:230px;"><a id="lblUno_st" > </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
@@ -1979,9 +1980,9 @@
 				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td><input id="txtNoq.*" type="text" style="width:95%;" /></td>
 					<td>
 						<input id="txtUno.*" type="text" style="width:95%;"/>
 						<input class="btn" id="btnUno.*" type="button" style="display:none;"/>
