@@ -1250,12 +1250,6 @@
 					</td>
 					<td class="st"><input id="txtClass.*" type="text" style='width: 95%;'/></td>
 					<td class="st">
-					<input id="txtStyle.*" type="text" style="width:90%;" />
-					</td>
-					<td>
-					<input id="txtProduct.*" type="text" style="width:97%;" />
-					</td>
-					<td class="st">
 					<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 					<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
 						x
