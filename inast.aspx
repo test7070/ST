@@ -421,7 +421,7 @@
 					else
 						wrServer(t_noa);
             	}else{
-            		if($('#txtUno_'+n).val().length==0){
+            		if($('#txtUno_'+n).val().length==0 && q_float('txtWeight_'+n)!=0){
             			var t_buno = ' ';
 		            	var t_datea = $('#txtDatea').val();
 		            	var t_style = $('#txtStyle_'+n).val();
