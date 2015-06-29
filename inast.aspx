@@ -370,7 +370,7 @@
                 }
  				
  				if(q_getPara('sys.comp').substring(0,2)=='傑期'){
- 					getUno_bydate(q_bbsCount-1);
+ 					getUno_bydate(0);
  				}else{
  					var t_where = '';
 	 				for(var i=0;i<q_bbsCount;i++){
@@ -408,7 +408,7 @@
             }
             function getUno_bydate(n){
             	
-            	if(n<0){
+            	if(n>=q_bbsCount){
             		if (q_cur == 1)
 						$('#txtWorker').val(r_name);
 					else
@@ -421,14 +421,14 @@
 					else
 						wrServer(t_noa);
             	}else{
-            		if($('#txtUno_'+n).val().length==0){
+            		if($('#txtUno_'+n).val().length==0 && q_float('txtWeight_'+n)!=0){
             			var t_buno = ' ';
 		            	var t_datea = $('#txtDatea').val();
 		            	var t_style = $('#txtStyle_'+n).val();
 		            	var t_comp = q_getPara('sys.comp');
 		            	q_func('qtxt.query.getuno_bydate_'+n, 'uno.txt,getuno_bydate,'+t_buno+';' + t_datea + ';' + t_style +';'+ t_comp +';');
             		}else{
-            			getUno_bydate(n-1);
+            			getUno_bydate(n+1);
             		}
             	}
             }
@@ -467,7 +467,7 @@
 	                       	if(as[0]!=undefined && as[0].uno.length>0){
 	                       		$('#txtUno_'+n).val(as[0].uno);
 	                       	}
-                    		getUno_bydate(parseInt(n)-1);
+                    		getUno_bydate(parseInt(n)+1);
                     	}
                     	break;
             	}
@@ -1146,6 +1146,7 @@
 					<td align="center" style="width:230px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px;"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px;"><a>進貨<BR>寬度</a></td>
+					<td align="center" style="width:80px;"><a>進貨<BR>長度</a></td>	
 					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
@@ -1197,6 +1198,7 @@
 					<td><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td ><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td ><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td ><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td ><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td ><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
