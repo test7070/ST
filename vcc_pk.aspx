@@ -407,7 +407,7 @@
 							for (var i = 0; i < q_bbsCount; i++) {
 								$('#btnMinus_' + i).click();
 							}
-							for (var k = 0; k < b_ret.length; k++) {
+							/*for (var k = 0; k < b_ret.length; k++) {
 								var t_notv = dec(b_ret[k].notv);
 								var t_mount = dec(b_ret[k].mount);
 								var t_weight = dec(b_ret[k].weight);
@@ -425,7 +425,7 @@
 								}
 								b_ret[k].mount = t_mount;
 								b_ret[k].weight = t_weight;
-							}
+							}*/
 							$('#txtOrdeno').val(b_ret[0].noa);
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
 							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
