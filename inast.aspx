@@ -1146,6 +1146,7 @@
 					<td align="center" style="width:230px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px;"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px;"><a>進貨<BR>寬度</a></td>
+					<td align="center" style="width:80px;"><a>進貨<BR>長度</a></td>	
 					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
@@ -1197,6 +1198,7 @@
 					<td><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td ><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td ><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td ><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td ><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td ><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
