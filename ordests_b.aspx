@@ -106,10 +106,10 @@
 								$('#chkSel_' + abbs[i].rec).attr('checked', true);
 							}
 						}
-						if (abbs[i].mount <= 0 || abbs[i].weight <= 0 || abbs[i].notv <=0) {
-							abbs.splice(i, 1);
-							i--;
-						}
+						//if (abbs[i].mount <= 0 || abbs[i].weight <= 0 || abbs[i].notv <=0) {
+						//	abbs.splice(i, 1);
+						//	i--;
+						//}
 
 					}
 					maxAbbsCount = abbs.length;
