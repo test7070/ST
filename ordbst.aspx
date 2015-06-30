@@ -171,6 +171,7 @@
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbKind", q_getPara('sys.stktype')+',1@物料');
+				q_cmbParse("cmbKind2", q_getPara('ordc.kind'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
@@ -887,6 +888,7 @@
 						<td><a id='lblIsproj' class="lbl" style="float:right;"> </a><span> </span><input id="chkIsproj" type="checkbox" style="float:right;"/></td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"> </select></td>
+						<td><select id="cmbKind2" class="txt c1"></select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
