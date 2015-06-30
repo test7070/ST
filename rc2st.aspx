@@ -938,6 +938,8 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
+					
+				
 			}
 
 			function q_popPost(s1) {
@@ -967,6 +969,9 @@
 					$('#txtMon').removeAttr('readonly');
 				else
 					$('#txtMon').attr('readonly', 'readonly');
+					
+				if(q_getPara('sys.comp').substring(0,2)=='傑期')
+					$('.pk').show();
 			}
 
 			function btnMinus(id) {
@@ -1460,10 +1465,10 @@
 					<BR>
 					<a id='lblSize_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
-					<td align="center" style="width:80px;"><a>進貨<BR>厚度</a></td>
-					<td align="center" style="width:80px;"><a>進貨<BR>寬度</a></td>
-					<td align="center" style="width:80px;"><a>進貨<BR>長度</a></td>
-					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
+					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>厚度</a></td>
+					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>寬度</a></td>
+					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>長度</a></td>
+					<td align="center" style="width:50px;display:none;" class="pk"><a id='lblSource'>鋼廠</a></td>
 					
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
@@ -1521,10 +1526,10 @@
 					<td>
 					<input id="txtSize.*" type="text" style="width:95%;"/>
 					</td>
-					<td ><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td ><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td ><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td ><input  id="txtSource.*" type="text" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td >
 					<input id="txtUnit.*" type="text" style="width:95%;"/>
 					</td>

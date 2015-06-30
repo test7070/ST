@@ -16,7 +16,7 @@
 		<script type="text/javascript">
             q_tables = 's';
             var q_name = "orde";
-            var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2','txtMoney','txtTax','txtTotal','txtQuatno'];
+            var q_readonly = ['txtWorker', 'txtWorker2','txtMoney','txtTax','txtTotal','txtQuatno'];
             var q_readonlys = ['txtNo2'];
             var bbmNum = [];
             var bbsNum = [];
@@ -379,6 +379,11 @@
                     $('#txtOdate').datepicker();
                     $('#btnOrde').removeAttr('disabled');
                     $('#combPaytype').removeAttr('disabled');
+                }
+                if(q_cur==1){
+                	$('#txtNoa').removeAttr('readonly').css('color','black').css('background-color','white');
+                }else{
+                	$('#txtNoa').attr('readonly','readonly').css('color','green').css('background-color','rgb(237,237,237)');
                 }
             }
 
