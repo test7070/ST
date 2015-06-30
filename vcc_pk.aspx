@@ -161,7 +161,7 @@
 				t_total = t_money;
 				t_tax = 0;
 				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
-				if (!isinvosystem) {
+				//if (!isinvosystem) {
 					switch ($('#cmbTaxtype').val()) {
 						case '1':
 							// 應稅
@@ -197,7 +197,7 @@
 							break;
 						default:
 					}
-				}
+				//}
 				t_price = q_float('txtPrice');
 				if (t_price != 0) {
 					$('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
@@ -360,7 +360,7 @@
 
 				if (isinvosystem) {
 					$('.istax').hide();
-					$('#txtVccatax').show();
+					//$('#txtVccatax').show();
 				}
 			}
 
@@ -1917,16 +1917,16 @@
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
 							<input id="txtTax" type="text" style="display:none;" />
-							<input id="txtTax2" type="text" class="txt num c1 istax" />
+							<input id="txtTax2" type="text" class="txt num c1" />
 							<input id="txtVccatax" type="text" class="txt num c1 " style="display:none;" />
 						</td>
 						<td>
 							<span style="float:left;display:block;width:10px;"></span>
 							<select id="cmbTaxtype" style="float:left;width:80px;" ></select>
 						</td>
-						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
+						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td><input id="txtTotal" type="text" style="display:none;" />
-							<input id="txtTotal2" type="text" class="txt num c1 istax" />
+							<input id="txtTotal2" type="text" class="txt num c1" />
 						</td>
 					</tr>
 					<tr>
