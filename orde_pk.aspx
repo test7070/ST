@@ -1462,9 +1462,11 @@
                     <td align="center" style="width:140px;">規範<BR>國別</td>
                     <td align="center" style="width:300px;"><a>尺寸(厚x寬x長)</a><BR><a>規格</a></td>
                     <td align="center" style="width:240px;"><a id='lblSizea_st'> </a></td>
-                    <td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
+                    
                     <td align="center" style="width:120px;"><a id='lblMount'> </a></td>
+                    <td align="center" style="width:50px;"><a>數量<br>單位</a></td>
                     <td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
+                    <td align="center" style="width:50px;"><a>計價<br>單位</a></td>
                     <td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
                     <td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
                     <td align="center" style="width:50px;"><a id='lblOrdet_st'> </a></td>
@@ -1509,15 +1511,11 @@
 	                    <input id="txtSpec.*" type="text" style="width:95%;"/>
                     </td>
                     <td><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
-                    <td >
-                    <input  id="txtUnit.*" type="text" style="width:90%;"/>
-                    </td>
-                    <td>
-                    <input id="txtMount.*" type="text" class="txt num" style="width:95%;"/>
-                    </td>
-                    <td>
-                    <input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/>
-                    </td>
+                    
+                    <td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+                    <td><input  id="txtUnit2.*" type="text" style="width:95%;"/></td>
+                    <td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+                    <td><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
                     <td>
                     <input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>
                     </td>
