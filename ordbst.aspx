@@ -177,6 +177,11 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				
+				if(q_getPara('sys.comp').substring(0,2)=='聯琦')
+					$('#cmbKind2').show();
+				else
+					$('#cmbKind').show();
+				
 				$('#lblOrde').click(function() {
 					if(!(q_cur==1 || q_cur ==2))
 						return;
@@ -887,8 +892,10 @@
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td><a id='lblIsproj' class="lbl" style="float:right;"> </a><span> </span><input id="chkIsproj" type="checkbox" style="float:right;"/></td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
-						<td><select id="cmbKind" class="txt c1"> </select></td>
-						<td><select id="cmbKind2" class="txt c1"></select></td>
+						<td>
+							<select id="cmbKind" class="txt c1" style="display:none;"> </select>
+							<select id="cmbKind2" class="txt c1" style="display:none;"> </select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
