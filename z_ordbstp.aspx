@@ -71,7 +71,13 @@
 				$('#txtMon1').mask('999/99');
 				$('#txtMon2').mask('999/99');
 				
-				var t_date,t_year,t_month,t_day;
+				var t_para = new Array();
+	            try{
+	            	t_para = JSON.parse(q_getId()[3]);
+	            }catch(e){
+	            }  
+	            if(t_para.length==0 || t_para.noa==undefined){
+	            	var t_date,t_year,t_month,t_day;
 					t_date = new Date();
 					t_date.setDate(1);
 					t_year = t_date.getUTCFullYear()-1911;
@@ -113,6 +119,11 @@
 					t_day = t_date.getUTCDate();
 					t_day = t_day>9?t_day+'':'0'+t_day;
 					$('#txtMon2').val(t_year+'/'+t_month);
+	            }else{
+	            	$('#txtNoa1').val(t_para.noa);
+	            	$('#txtNoa2').val(t_para.noa);
+	            }
+				
 			}
 
 			function q_boxClose(s2) {

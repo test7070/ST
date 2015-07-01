@@ -26,7 +26,7 @@
 			var bbmNum = [['txtPrice', 15, 3, 1], ['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
 			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
 			var bbmMask = [];
-			var bbsMask = [['txtStyle', 'A']];
+			var bbsMask = [];
 			q_desc = 1;
 			q_sqlCount = 6;
 			brwCount = 6;
@@ -909,7 +909,7 @@
 			}
 
 			function bbsSave(as) {/// 表身 寫入資料庫前，寫入需要欄位
-				if (!as['uno'] && !as['productno'] && !as['product'] && !as['spec'] && !dec(as['total'])) {//不存檔條件
+				if (!as['uno'] && !as['productno'] && !as['product'] && !as['spec'] && !as['size'] && !dec(as['total'])) {//不存檔條件
 					as[bbsKey[1]] = '';
 					/// noq 為空，不存檔
 					return;
@@ -938,6 +938,8 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
+					
+				
 			}
 
 			function q_popPost(s1) {
@@ -967,6 +969,9 @@
 					$('#txtMon').removeAttr('readonly');
 				else
 					$('#txtMon').attr('readonly', 'readonly');
+					
+				if(q_getPara('sys.comp').substring(0,2)=='傑期')
+					$('.pk').show();
 			}
 
 			function btnMinus(id) {
@@ -1460,9 +1465,10 @@
 					<BR>
 					<a id='lblSize_st'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
-					<td align="center" style="width:80px;"><a>進貨<BR>厚度</a></td>
-					<td align="center" style="width:80px;"><a>進貨<BR>寬度</a></td>
-					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
+					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>厚度</a></td>
+					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>寬度</a></td>
+					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>長度</a></td>
+					<td align="center" style="width:50px;display:none;" class="pk"><a id='lblSource'>鋼廠</a></td>
 					
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
@@ -1520,9 +1526,10 @@
 					<td>
 					<input id="txtSize.*" type="text" style="width:95%;"/>
 					</td>
-					<td ><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td ><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td ><input  id="txtSource.*" type="text" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td >
 					<input id="txtUnit.*" type="text" style="width:95%;"/>
 					</td>

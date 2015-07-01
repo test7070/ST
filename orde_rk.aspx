@@ -16,7 +16,7 @@
 		<script type="text/javascript">
             q_tables = 's';
             var q_name = "orde";
-            var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2','txtMoney','txtTax','txtTotal','txtQuatno'];
+            var q_readonly = ['txtWorker', 'txtWorker2','txtMoney','txtTax','txtTotal','txtQuatno'];
             var q_readonlys = ['txtNo2'];
             var bbmNum = [];
             var bbsNum = [];
@@ -380,6 +380,11 @@
                     $('#btnOrde').removeAttr('disabled');
                     $('#combPaytype').removeAttr('disabled');
                 }
+                if(q_cur==1){
+                	$('#txtNoa').removeAttr('readonly').css('color','black').css('background-color','white');
+                }else{
+                	$('#txtNoa').attr('readonly','readonly').css('color','green').css('background-color','rgb(237,237,237)');
+                }
             }
 
             function btnMinus(id) {
@@ -635,8 +640,22 @@
 							<input id="txtComp"  type="text" class="txt" style="width:70%;" maxlength="50"/>
 							<input id="txtNick"  type="text" class="txt" style="display:none;" maxlength="20"/>
 						</td>
+						<td> </td>
+						<td> </td>
+						<td align="center">
+                            <input id="chkIsproj" type="checkbox"/>
+                            <span> </span><a id='lblIsproj'> </a>
+                        </td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblFax" class="lbl"></a></td>
 						<td colspan="2"><input id="txtFax"  type="text" class="txt c1" maxlength="20"/></td>
+						<td> </td>
+						<td> </td>
+						<td align="center">
+                            <input id="chkEnda" type="checkbox"/>
+                            <span> </span><a id='lblEnda'> </a>
+                        </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblAddr" class="lbl"></a></td>

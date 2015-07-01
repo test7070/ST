@@ -97,7 +97,7 @@
 				bbmNum = [	 ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1]];
 				/*,['txtPrice', 10, q_getPara('vcc.pricePrecision'), 1], ['txtTranmoney', 11, 0, 1],['txtMount', 15, 0, 1]*/
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]];
-				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
+				
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
 				q_cmbParse("combPay", q_getPara('vcc.paytype'));
@@ -133,27 +133,6 @@
 					sum();
 				});
 				
-				$('#txtPost').change(function(){
-					GetTranPrice();
-				});
-				$('#txtPost2').change(function(){
-					GetTranPrice();
-				});
-				$('#txtTranstartno').change(function(){
-					GetTranPrice();
-				});
-				/*$('#txtCardealno').change(function(){
-					GetTranPrice();
-					//取得車號下拉式選單
-					var thisVal = $(this).val();
-					var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
-					q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
-				});*/
-				
-				$('#cmbTranstyle').change(function(){
-					GetTranPrice();
-				});
-				
 				$('#btnOrdes').click(function() {
 					var t_datea = trim($('#txtDatea').val());
 					var t_custno = trim($('#txtCustno').val());
@@ -169,24 +148,6 @@
 					}
 					
 					q_box("orde_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'orde', "400px", "95%", q_getMsg('popOrde'));
-					
-					/*if (t_custno.length > 0 || t_storeno.length>0 ) {
-						t_where = "isnull(notv,0)>0  and isnull(enda,0)!=1 and isnull(cancel,0)!=1 ";
-						if (t_custno.length>0){
-							t_where += " and custno='"+t_custno+ "' ";
-						}
-						if (t_storeno.length>0){
-							t_where += " and exists (select * from view_orde where view_ordes"+r_accy+".noa=noa and postname='"+t_storeno+"' and isnull(enda,0)!=1 and isnull(cancel,0)!=1 ) ";
-						}
-						
-						if (!emp($('#txtOrdeno').val()))
-							t_where += " and charindex(noa,'" + $('#txtOrdeno').val() + "')>0";
-						t_where = t_where;
-					} else {
-						alert('【客戶編號】 或 【倉庫編號】 空白');
-						return;
-					}
-					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));*/
 				});
 
 				$('#lblOrdeno').click(function() {
@@ -251,7 +212,17 @@
 				$('#btnClose_div_stk').click(function() {
 					$('#div_stk').hide();
 				});
-					
+				
+				$('#btnCngs').click(function() {
+					var t_where = '';
+					var t_custno = $('#txtCustno').val();
+					if (t_custno.length > 0 && (q_cur==1 || q_cur==2)) {
+						t_where = "typea='4' and exists(select * from view_cng where custno='"+t_custno+"' and noa=a.noa) ";
+						t_where += " and mount-isnull(b.rmount,0)>0 ";
+						q_box("cngs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'cngs', "95%", "95%", q_getMsg('popCngs'));
+					}
+				});
+				
 			}
 			
 			function refreshBbm() {
@@ -286,35 +257,6 @@
 						q_gt('view_ordes', t_where, 0, 0, 0, "GetOrdeList");
 					}
 				}
-			}
-			
-			function GetTranPrice(){
-				var Post2 = $.trim($('#txtPost2').val());
-				var Post = $.trim($('#txtPost').val()); 
-				var Transtartno = $.trim($('#txtTranstartno').val()); 
-				var Cardealno = $.trim($('#txtCardealno').val()); 
-				var TranStyle = $.trim($('#cmbTranstyle').val());
-				var Carspecno = $.trim(thisCarSpecno);
-				var t_where = 'where=^^ 1=1 ';
-				t_where += " and post=N'" + (Post2.length>0?Post2:Post) + "' ";
-				t_where += " and transtartno=N'" + Transtartno + "' ";
-				t_where += " and cardealno=N'" + Cardealno + "' ";
-				t_where += " and transtyle=N'" + TranStyle + "' ";
-				if(Carspecno.length > 0){
-					t_where += " and carspecno=N'" + Carspecno + "' ";
-				}
-				t_where += ' ^^';
-				q_gt('addr', t_where, 0, 0, 0, "GetTranPrice");
-			}
-			
-			function q_funcPost(t_func, result) {
-				if (result.substr(0, 5) == '<Data') {
-					var Asss = _q_appendData('sss', '', true);
-					var Acar = _q_appendData('car', '', true);
-					var Acust = _q_appendData('cust', '', true);
-					alert(Asss[0]['namea'] + '^' + Acar[0]['car'] + '^' + Acust[0]['comp']);
-				} else
-					alert(t_func + '\r' + result);
 			}
 
 			function q_boxClose(s2) {
@@ -364,6 +306,18 @@
 							sum();
 						}
 						break;
+					case 'cngs':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0) {
+								b_pop = '';
+								return;
+							}
+							
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtOrdeno,txtNo2'
+								, b_ret.length, b_ret, 'productno,product,unit,umount,noa,noq', 'txtProductno,txtProduct');
+						}
+						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
@@ -401,45 +355,6 @@
 							}
 						}
 						break;
-					/*case 'getCardealCarno' :
-						var as = _q_appendData("cardeals", "", true);
-						carnoList = as;
-						var t_item = " @ ";
-						if (as[0] != undefined) {
-							for ( i = 0; i < as.length; i++) {
-								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].carno + '@' + as[i].carno;
-							}
-						}
-						for(var k=0;k<carnoList.length;k++){
-							if(carnoList[k].carno==$('#txtCarno').val()){
-								thisCarSpecno = carnoList[k].carspecno;
-								break;
-							}
-						}
-						document.all.combCarno.options.length = 0;
-						q_cmbParse("combCarno", t_item);
-						$('#combCarno').unbind('change').change(function(){
-							if (q_cur == 1 || q_cur == 2) {
-								$('#txtCarno').val($('#combCarno').find("option:selected").text());
-							}
-							for(var k=0;k<carnoList.length;k++){
-								if(carnoList[k].carno==$('#txtCarno').val()){
-									thisCarSpecno = carnoList[k].carspecno;
-									break;
-								}
-							}
-							GetTranPrice();
-						});
-						break;*/
-					/*case 'GetTranPrice' :
-						var as = _q_appendData("addr", "", true);
-						if (as[0] != undefined) {
-							$('#txtPrice').val(as[0].driverprice2);
-						}else{
-							$('#txtPrice').val(0);
-						}
-						sum();
-						break;*/
 					case 'msg_stk_all':
 						var as = _q_appendData("stkucc", "", true);
 						var rowslength=document.getElementById("table_stk").rows.length-3;
@@ -484,19 +399,6 @@
 							z_nick = as[0].nick;
 						}
 						break;
-					/*case 'flors_coin':
-						var as = _q_appendData("flors", "", true);
-						var z_coin='';
-						for ( i = 0; i < as.length; i++) {
-							z_coin+=','+as[i].coin;
-						}
-						if(z_coin.length==0) z_coin=' ';
-						
-						q_cmbParse("cmbCoin", z_coin);
-						if(abbm[q_recno])
-							$('#cmbCoin').val(abbm[q_recno].coin);
-						
-						break;*/
 					case 'msg_ucc':
 						var as = _q_appendData("ucc", "", true);
 						t_msg = '';
@@ -697,10 +599,6 @@
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
-						//取得車號下拉式選單
-						//var thisVal = $('#txtCardealno').val();
-						//var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
-						//q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
 						bbsGetOrdeList();
 						break;
 					case q_name:
@@ -728,13 +626,6 @@
 						check_startdate=true;
 						btnOk();
 						break;
-					/*case 'flors':
-						var as = _q_appendData("flors", "", true);
-						if (as[0] != undefined) {
-							q_tr('txtFloata',as[0].floata);
-							sum();
-						}
-						break;*/
 				}
 			}
 			
@@ -756,12 +647,10 @@
 				
 				check_startdate=false;
 				
-				if(!emp($('#txtStoreno').val())){
-					for (var i = 0; i < q_bbsCount; i++) {
-						if(!emp($('#txtProductno_'+i).val()) && emp($('#txtStoreno_'+i).val())){
-							$('#txtStoreno_'+i).val($('#txtStoreno').val());
-							$('#txtStore_'+i).val($('#txtStore').val());
-						}
+				for (var i = 0; i < q_bbsCount; i++) {
+					if(!emp($('#txtProductno_'+i).val())){
+						$('#txtStoreno_'+i).val($('#txtStoreno').val());
+						$('#txtStore_'+i).val($('#txtStore').val());
 					}
 				}
 					
@@ -793,11 +682,6 @@
 					$('#txtPaytype').val(cmb.value);
 				cmb.value = '';
 			}
-			
-			/*function coin_chg() {
-				var t_where = "where=^^ ('" + $('#txtDatea').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
-				q_gt('flors', t_where, 0, 0, 0, "");
-			}*/
 
 			function combAddr_chg() {
 				if (q_cur == 1 || q_cur == 2) {
@@ -963,6 +847,27 @@
 				if (q_cur == 1 || q_cur == 2) {
 					var s2 = xmlString.split(';');
 					abbm[q_recno]['accno'] = s2[0];
+					
+					if(q_getPara('sys.project').toUpperCase()=='RB')
+						q_func('qtxt.query.vcc2cng_rb', 'vcc.txt,vcc2cng_rb,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';' + encodeURI(r_name));
+				}
+			}
+			
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'qtxt.query.vcc2cng_rb':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							var t_cngno=as[0].cngno;
+							var t_err=as[0].err;	
+							if(t_err=='OK')
+								alert('已產生客戶歸還調撥單【' + t_cngno+'】');
+							if(t_err=='modi')
+								alert('已更新客戶歸還調撥單【' + t_cngno+'】');
+							$('#txtTranstyle').val(t_cngno);
+							abbm[q_recno]['transtyle'] = t_cngno;
+						}
+					break;
 				}
 			}
 
@@ -1068,13 +973,6 @@
 
 			function q_popPost(s1) {
 				switch (s1) {
-					case 'txtCardealno':
-						//取得車號下拉式選單
-						var thisVal = $('#txtCardealno').val();
-						var t_where = "where=^^ noa=N'" + thisVal + "' ^^";
-						q_gt('cardeal', t_where, 0, 0, 0, "getCardealCarno");
-						GetTranPrice();
-						break;
 					case 'txtCustno':
 						if (!emp($('#txtCustno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
@@ -1082,15 +980,6 @@
 						}
 						bbsGetOrdeList();
 						break;
-					case 'txtPost2':
-						GetTranPrice();
-						break;
-					case 'txtPost':
-						GetTranPrice();
-						break;
-					case 'txtTranstartno':
-						GetTranPrice();
-						break;	
 					case 'txtProductno_':
 						bbsGetOrdeList();
 						break;
@@ -1351,7 +1240,7 @@
 						<td class="td4"><span> </span><a id='lblPay' class="lbl"> </a></td>
 						<td class="td5"><input id="txtPaytype" type="text" class="txt c1"/></td>
 						<td class="td6"><select id="combPay" style="width: 100%;" onchange='combPay_chg()'> </select></td>
-						<td class="td6"align="right"><input id="btnOrdes" type="button"/></td>
+						<td class="td6" align="right"><input id="btnOrdes" type="button"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblTel" class="lbl"> </a></td>
@@ -1377,25 +1266,11 @@
 							<input id="txtApvmemo" type="hidden" class="txt c1"/>
 						</td>
 					</tr>
-					<!--<tr>
-						<td class="td1"><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
-						<td class="td2"><input id="txtCardealno" type="text" class="txt c1"/></td>
-						<td class="td2"><input id="txtCardeal" type="text" class="txt c1"/></td>
-						<td class="td4"><span> </span><a id='lblCarno' class="lbl"> </a></td>
-						<td class="td5">
-							<input id="txtCarno"  type="text" class="txt" style="width:75%;"/>
-							<select id="combCarno" style="width: 20%;"> </select>
-						</td>
-						<td class="td5"><select id="cmbTranstyle" style="width: 100%;"> </select></td>
-						<td class="td7"><span> </span><a id='lblMount' class="lbl"> </a></td>
-						<td class="td8"><input id="txtMount" type="text" class="txt num c1"/></td>
-					</tr>-->
 					<tr>
 						<td class="td4"><span> </span><a id="lblDdate" class="lbl"> </a></td>
 						<td class="td5" colspan="2">
 							<input id="txtZipcode" type="text" class="txt c1" style="width: 40%;"/>
 							<select id="cmbZipname" class="txt c1" style="width: 60%;"> </select>
-							<!--<input id="txtZipname" type="text" class="txt c1"/>-->
 						</td>
 						<td class="td1"><span> </span><a id="lblPart" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtPartno" type="text" class="txt c1"/></td>
@@ -1409,15 +1284,6 @@
 						<td class="td2"><input id="txtStoreno" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtStore" type="text" class="txt c1"/></td>
 					</tr>
-					<!--<tr>
-						<td class="td4"><span> </span><a id='lblTranstart' class="lbl btn"> </a></td>
-						<td class="td5"><input id="txtTranstartno" type="text" class="txt c1"/></td>
-						<td class="td6"><input id="txtTranstart" type="text" class="txt c1"/></td>
-						<td class="td7"><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
-						<td class="td8"><input id="txtTranmoney" type="text" class="txt num c1"/></td>
-						<td class="td7"><span> </span><a id='lblPrice' class="lbl"> </a></td>
-						<td class="td8"><input id="txtPrice" type="text" class="txt num c1"/></td>
-					</tr>-->
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
 						<td class="td2" colspan='2'><input id="txtMoney" type="text" class="txt num c1"/></td>
@@ -1425,24 +1291,20 @@
 						<td class="td5" colspan='2'>
 							<input id="txtTax" type="text" class="txt num c1 istax"  style="width: 49%;"/>
 							<select id="cmbTaxtype" style="width: 49%;" onchange="calTax();"> </select>
-							<!--<input id="chkAtax" type="checkbox" />-->
 						</td>
 						<td class="td7"><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
 						<td class="td8"><input id="txtTotal" type="text" class="txt num c1 istax"/></td>
 					</tr>
-					<!--<tr>
-						<td class="td1"><span> </span><a id='lblFloata' class="lbl"> </a></td>
-						<td class="td2"><select id="cmbCoin" style="width: 100%;" onchange='coin_chg()'> </select></td>
-						<td class="td3"><input id="txtFloata" type="text" class="txt num c1"/></td>
-						<td class="td4"><span> </span><a id="lblTotalus" class="lbl"> </a></td>
-						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-					</tr>-->
 					<tr>
 						<td class="td1"><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td class="td2"><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td class="td4"><span> </span><a id='lblAccc' class="lbl btn"> </a></td>
 						<td class="td5" colspan='2'><input id="txtAccno" type="text" class="txt c1"/></td>
+						<td class="td7"  align="right">
+							<input id="btnCngs" type="button" value="借出轉銷單"/>
+							<input id="txtTranstyle" type="hidden">
+						</td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>

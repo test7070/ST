@@ -38,8 +38,9 @@
             , ['txtStoreno2', 'lblStore2', 'store', 'noa,store', 'txtStoreno2,txtStore2', 'store_b.aspx'],
              ['txtAddr_post', '', 'view_road', 'memo', '0txtAddr_post', 'road_b.aspx'],
               ['txtDeivery_addr', '', 'view_road', 'memo', '0txtDeivery_addr', 'road_b.aspx'], 
-              ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,radius,dime,width,lengthb,spec,class', 'txtUno_,txtProductno_,txtProduct_,txtRadius_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtClass_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
-               ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']);
+              ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,radius,dime,width,lengthb,spec,class', 'txtUno_,txtProductno_,txtProduct_,txtRadius_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtClass_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
+               ,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
+               , ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -228,7 +229,16 @@
                             q_Seek_gtPost();
                         break;
                     default:
-                    	if(t_name.substring(0,11)=='checkOrde1_'){
+                    	if(t_name.substring(0, 11) == 'getproduct_'){
+     						var t_seq = parseInt(t_name.split('_')[1]);
+	                		as = _q_appendData('dbo.getproduct', "", true);
+	                		if(as[0]!=undefined){
+	                			$('#txtProduct_'+t_seq).val(as[0].product);
+	                		}else{
+	                			$('#txtProduct_'+t_seq).val('');
+	                		}
+	                		break;
+                        }else if(t_name.substring(0,11)=='checkOrde1_'){
                     		var t_sel = parseInt(t_name.split('_')[1]);
                     		var t_ordeno = t_name.split('_')[2];
                     		var t_no2 = t_name.split('_')[3];
@@ -371,13 +381,17 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                        $('#txtStyle_' + j).blur(function() {
-							$('input[id*="txtProduct_"]').each(function() {
-								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-				               	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
-							});
-                           var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-                            ProductAddStyle(n);
+                        $('#txtStyle_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            $('#btnStyle_'+n).click();
+                        });
+                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
                         });
                         //將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
                         $('#textSize1_' + j).change(function() {
@@ -486,7 +500,7 @@
             }
 
             function bbsSave(as) {
-                if (!as['product'] && !as['uno'] && parseFloat(as['mount'].length == 0 ? "0" : as['mount']) == 0 && parseFloat(as['weight'].length == 0 ? "0" : as['weight']) == 0) {
+                if (!as['size'] && !as['product'] && !as['uno'] && parseFloat(as['mount'].length == 0 ? "0" : as['mount']) == 0 && parseFloat(as['weight'].length == 0 ? "0" : as['weight']) == 0) {
                     as[bbsKey[1]] = '';
                     return;
                 }
@@ -510,13 +524,19 @@
             function q_popPost(s1) {
                 switch (s1) {
                     case 'txtProductno_':
-                        $('input[id*="txtProduct_"]').each(function() {
-							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
-		                	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
-                        });
-                        if(trim($('#txtStyle_' + b_seq).val()).length != 0)
-                        	ProductAddStyle(b_seq);
+						var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
                         $('#txtStyle_' + b_seq).focus();
+						break;
+					case 'txtStyle_':
+						console.log(b_seq);
+                   		var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_'+b_seq).blur();
                         break;
                     case 'txtUno_':
                         size_change();
@@ -936,9 +956,9 @@
 					</td>
 					<td align="center" style="width:20px;"></td>
 					<td align="center" style="width:250px;"><a id='lblUno_s'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
-					<td align="center" style="width:20px;"><a id='lblStyle_st'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblProduct_st'> </a></td>
+					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
+					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
+					<td align="center" style="width:80px;"><a>等級</a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
@@ -963,17 +983,14 @@
 					<input id="txtUno.*" type="text" style="width:83%;"/>
 					</td>
 					<td>
-					<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:15px;float:left;" />
-					<input  id="txtProductno.*" type="text" style="width:85px;" />
-					<span style="display:block;width:15px;"> </span>
-					<input id="txtClass.*" type="text" style='width: 85px;'/>
+						<input id="txtProductno.*" type="text" style="width:95%;" />
+						<input type="text" id="txtProduct.*" style="width:95%;" />
+						<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
 					</td>
-					<td>
-					<input type="text" id="txtStyle.*" style="float:left;width:80%;text-align:center;" />
+					<td><input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
+						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
-					<td>
-					<input type="text" id="txtProduct.*" style="width:95%;" />
-					</td>
+					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
 					<td>
 					<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 					<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >

@@ -105,9 +105,9 @@
                     t_mounts = q_float('txtMount_' + j);
                     t_prices = q_float('txtPrice_' + j);
                     if(t_unit.length==0 ||t_unit=='KG' || t_unit=='M2' || t_unit=='M' || t_unit=='批' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
-                        t_moneys = round(q_mul(t_weights,t_prices),0);              
+                        t_moneys = round(q_mul(t_weights,t_prices),2);              
                     }else{
-                        t_moneys = round(q_mul(t_mounts,t_prices),0);
+                        t_moneys = round(q_mul(t_mounts,t_prices),2);
                     }
                     if(t_float==0){
                         t_moneys = round(t_moneys,0);
@@ -120,7 +120,7 @@
                     t_money = q_add(t_money,t_moneys);
                     $('#txtTotal_' + j).val(q_tr(t_moneys));
                 }
-
+				
                 t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
                 switch ($('#cmbTaxtype').val()) {
                     case '1':
@@ -169,7 +169,7 @@
                 if(t_float==0)
                     $('#txtTotalus').val(0);
                 else
-                    $('#txtTotalus').val(q_tr(t_moneyus));
+                    $('#txtTotalus').val(t_moneyus);
             }
 
             var t_spec;
@@ -458,8 +458,7 @@
                             $('#cmbCoin').val(as[0].coin);
                         }                       
                     case q_name:
-                        //t_uccArray = _q_appendData("ucc", "", true);
-                        t_uccArray = new Array();
+                        t_uccArray = _q_appendData("ucc", "", true);
                         if (q_cur == 4)// 查詢
                             q_Seek_gtPost();
                         break;
@@ -1457,10 +1456,10 @@
                     </td>
                     <td align="center" style="width:20px;"> </td>
                     <td align="center" style="width:60px;"><a id='lblNo2'> </a></td>
-                    <td align="center" style="width:120px;"><a id='lblProductno'> </a></td>
+                    <td align="center" style="width:120px;"><a id='lblProductno'> </a><br><a id='lblProduct_s'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblStyle_st'> </a></td>
-                    <td align="center" style="width:140px;"><a id='lblProduct_s'> </a></td>
                     <td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
+                    <td align="center" style="width:140px;">規範<BR>國別</td>
                     <td align="center" style="width:300px;"><a>尺寸(厚x寬x長)</a><BR><a>規格</a></td>
                     <td align="center" style="width:240px;"><a id='lblSizea_st'> </a></td>
                     <td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
@@ -1481,24 +1480,24 @@
                 <tr style='background:#cad3ff;'>
                     <td align="center">
                         <input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+                        <input class="btn" id="btnUno.*" type="button" value='' style="display:none;float:left;width:20px;height:25px;"/>
+                        <input id="txtUno.*" type="text" style="display:none;float:left;width:100px;" />
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                     <td><input class="txt" id="txtNo2.*" type="text" style="width:95%;"/></td>
                     <td>
-                    <input class="btn"  id="btnProduct.*" type="button" value='' style="display:none;" />
-                    <input type="text" id="txtProductno.*"  style="width:95%; float:left;"/>
+	                    <input class="btn"  id="btnProduct.*" type="button" value='' style="display:none;" />
+	                    <input type="text" id="txtProductno.*"  style="width:95%; float:left;"/>
+	                    <input id="txtProduct.*" type="text" style="float:left;width:95%;"/>
                     </td>
                     <td>
                         <input id="btnStyle.*" type="button" style="display:none;" value="."/>
                         <input id="txtStyle.*" type="text" style="width:95%;text-align:center;"/>
                     </td>
+                    <td><input id="txtClass.*" type="text" style="width:95%;text-align:center;"/></td>
                     <td>
-                        <span style="width:20px;height:1px;display:none;float:left;"> </span>
-                        <input id="txtProduct.*" type="text" style="float:left;width:93%;"/>
-                        <input class="btn" id="btnUno.*" type="button" value='' style="display:none;float:left;width:20px;height:25px;"/>
-                        <input id="txtUno.*" type="text" style="display:none;float:left;width:100px;" />
-                    </td><td >
-                    <input id="txtClass.*" type="text" style="width:90%;text-align:center;"/>
+                        <input id="txtUcolor.*" type="text" style="width:95%;"/>
+                        <input id="txtScolor.*" type="text" style="width:95%;"/>
                     </td>
                     <td>
 	                    <input id="txtDime.*" type="text" style="float: left;width:23%;"/>
