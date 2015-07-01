@@ -77,18 +77,18 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
                     //---------------------------------------
-                    if (t_kind == 'A') {
-                        q_tr('txtDime_' + j, q_float('textSize1_' + j));
-                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
-                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
-                        q_tr('txtRadius_' + j, q_float('textSize4_' + j));
-                    } else if (t_kind == 'B') {
+                    if (t_kind == 'B') {
                         q_tr('txtRadius_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtDime_' + j, q_float('textSize3_' + j));
                         q_tr('txtLengthb_' + j, q_float('textSize4_' + j));
-                    } else {//鋼筋、胚
+                    } else if (t_kind == 'C')  {//鋼筋、胚
                         q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                    }else{
+                        q_tr('txtDime_' + j, q_float('textSize1_' + j));
+                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
+                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                        q_tr('txtRadius_' + j, q_float('textSize4_' + j));
                     }
                     $('#txtTheory_'+j).val(getTheory(j));
 					var t_Product = $('#txtProduct_' + j).val();
@@ -622,27 +622,7 @@
 				$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
                 var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
                 t_kind = t_kind.substr(0, 1);		
-				if (t_kind == 'A') {
-					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
-					$('.dbbs').css('width', '1530px');
-					$('#Size').css('width', '220px');
-					$('.st').show();$('.bcc').hide();
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#textSize1_' + j).show();
-						$('#textSize2_' + j).show();
-						$('#textSize3_' + j).show();
-						$('#textSize4_' + j).hide();
-						$('#x1_' + j).show();
-						$('#x2_' + j).show();
-						$('#x3_' + j).hide();
-						$('#txtSpec_'+j).css('width', '220px');
-						$('#textSize1_' + j).val($('#txtDime_' + j).val());
-						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
-						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
-						$('#textSize4_' + j).val(0);
-						$('#txtRadius_' + j).val(0);
-					}
-				} else if (t_kind == 'B') {
+				if (t_kind == 'B') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 					$('.dbbs').css('width', '1530px');
 					$('#Size').css('width', '300px');
@@ -692,7 +672,25 @@
 					$('.st').hide();
 					$('.bcc').show();
 				}else{
-					
+					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
+					$('.dbbs').css('width', '1530px');
+					$('#Size').css('width', '220px');
+					$('.st').show();$('.bcc').hide();
+					for (var j = 0; j < q_bbsCount; j++) {
+						$('#textSize1_' + j).show();
+						$('#textSize2_' + j).show();
+						$('#textSize3_' + j).show();
+						$('#textSize4_' + j).hide();
+						$('#x1_' + j).show();
+						$('#x2_' + j).show();
+						$('#x3_' + j).hide();
+						$('#txtSpec_'+j).css('width', '220px');
+						$('#textSize1_' + j).val($('#txtDime_' + j).val());
+						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
+						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
+						$('#textSize4_' + j).val(0);
+						$('#txtRadius_' + j).val(0);
+					}
 				}
 			}
 
