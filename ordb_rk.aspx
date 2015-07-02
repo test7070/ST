@@ -38,7 +38,8 @@
 			, ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 			, ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 			//['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx?;;;1=0','95%','60%'],
-			['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,fax,addr_fact,zip_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,txtFax,txtAddr,txtPost', 'tgg_b.aspx']);
+			['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,fax,addr_fact,zip_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,txtFax,txtAddr,txtPost', 'tgg_b.aspx']
+			,['txtPartno', 'lblPart', 'part', 'noa,part', 'txtPartno,txtPart', 'part_b.aspx'] );
 		   	brwCount2 = 10;
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -883,9 +884,13 @@
 						<td><input id="txtOdate" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
-						<td><a id='lblIsproj' class="lbl" style="float:right;"> </a><span> </span><input id="chkIsproj" type="checkbox" style="float:right;"/></td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1" > </select></td>
+						<td><span> </span><a id='lblPart' class="lbl btn"> </a></td>
+						<td>
+							<input id="txtPartno" type="text" class="txt" style="width:45%;"/>
+							<input id="txtPart" type="text" class="txt" style="width:55%;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
@@ -946,6 +951,9 @@
 						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()' > </select></td>
 						<td class="st"><span> </span><a id='lblWeight' class="lbl"> </a></td>
 						<td class="st"><input id="txtWeight"  type="text" class="txt num c1"/></td>
+						<td><a id='lblIsproj' class="lbl" style="float:right;"> </a><span> </span>
+						<input id="chkIsproj" type="checkbox" style="float:right;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
@@ -955,6 +963,9 @@
 						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbTaxtype" style="float:left;width:80px;" > </select></td>
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td><input id="txtTotal" type="text" class="txt num c1" /></td>
+						<td><a id='lblEnd' class="lbl" style="float:right;"> </a><span> </span>
+						<input id="chkEnda" type="checkbox" style="float:right;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
@@ -969,8 +980,8 @@
 						<td class="trX"><input id="txtOrdeweight" type="text" class="txt c1 num" /></td>
 						<td class="trX"><span> </span><a id='lblCtrlweight' class="lbl"> </a></td>
 						<td class="trX"><input id="chkIsctrlweight" type="checkbox"/></td>
-						<td class="trX"><span> </span><a id='lblEnd' class="lbl"> </a></td>
-						<td class="trX"><input id="chkEnda" type="checkbox"/></td>
+						<td class="trX"> </td>
+						<td class="trX"> </td>
 						<td class="tdZ trX"> </td>
 					</tr>
 					<tr>
