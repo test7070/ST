@@ -33,6 +33,10 @@
 					},{
 						type : '6', //[3]     1
 						name : 'noa'
+					},{
+						type : '8', //[4]
+						name : 'showprice',
+						value : "1@顯示單價".split(',')
 					}]
 				});
 				q_popAssign();
