@@ -35,7 +35,8 @@
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'no3'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+                q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
+                
             });
 			function sum(){
 				for(var i=0;i<q_bbsCount;i++){
@@ -80,10 +81,21 @@
 						input.selectionEnd = $(this).val().indexOf(n) + (n + "").length;
 					}
 				});
+				$('#combAddr').change(function (e){
+					$('#txtAddr').val($('#combAddr').find("option:selected").text());
+				});
             }
 
             function q_popPost(s1) {
                 switch(s1) {
+                	case 'txtCustno':
+						if ($('#txtCustno').val().length>0) {
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+							q_gt('custaddr', t_where, 0, 0, 0, "");
+						}else{
+							document.all.combAddr.options.length = 0;
+						}
+						break;
                     case 'txtMechno':
                        /*var t_mechno = trim($('#txtMechno').val());
                         if (t_mechno.length > 0) {
@@ -106,6 +118,30 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'custaddr':
+						var as = _q_appendData("custaddr", "", true);
+						var t_item = " @ ";
+						if (as[0] != undefined) {
+							for ( i = 0; i < as.length; i++) {
+								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].post + '@' + as[i].addr;
+							}
+						}
+						document.all.combAddr.options.length = 0;
+						q_cmbParse("combAddr", t_item);
+						break;
+                	case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						var z_coin='';
+						for ( i = 0; i < as.length; i++) {
+							z_coin+=','+as[i].coin;
+						}
+						if(z_coin.length==0) z_coin=' ';
+						
+						q_cmbParse("cmbCoin", z_coin);
+						if(abbm[q_recno])
+							$('#cmbCoin').val(abbm[q_recno].coin);
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -122,7 +158,7 @@
                     Unlock(1);
                     return;
                 }
-                
+                $('#txtAddr2').val($('#txtAddr').val());
                 if (q_cur == 1)
                     $('#txtWorker').val(r_name);
                 else
@@ -174,12 +210,21 @@
                 _btnIns();
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date()).focus();
+                var t_memo = '1.本公司僅接受自出貨日後3個月內之客訴，交易如有爭議涉訟時，雙方同意以台灣桃園地方法院為第一審管轄法院。';
+				t_memo += '\n2.雙方同意依合約簽訂交期後20天內出貨。(如因非本公司因素之不可抗力造成延誤，不在此限。)';			
+                $('#txtMemo').val(t_memo);
             }
 
             function btnModi() {
                 if (emp($('#txtNoa').val()))
                     return;
                 _btnModi();
+                if ($('#txtCustno').val().length>0) {
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+					q_gt('custaddr', t_where, 0, 0, 0, "");
+				}else{
+					document.all.combAddr.options.length = 0;
+				}
             }
 
             function btnPrint() {
@@ -213,11 +258,13 @@
                     $('#txtOdate').datepicker('destroy');
                     $('#btnOrde').attr('disabled','disabled');
                     $('#combPaytype').attr('disabled','disabled');
+                    $('#combAddr').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
                     $('#txtOdate').datepicker();
                     $('#btnOrde').removeAttr('disabled');
                     $('#combPaytype').removeAttr('disabled');
+                    $('#combAddr').removeAttr('disabled');
                 }
                 if(q_cur==1){
                 	$('#txtNoa').removeAttr('readonly').css('color','black').css('background-color','white');
@@ -516,11 +563,21 @@
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">交貨地點</a></td>
-						<td colspan="5"><input id="txtAddr"  type="text" class="txt c1" maxlength="50"/></td>
+						<td colspan="5">
+							<input id="txtAddr"  type="text" class="txt" maxlength="50" style="float:left;width:97%;"/>
+							<input id="txtAddr2"  type="text" style="display:none;"/>
+							<select id="combAddr" style="float:left;width:3%;"> </select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">交貨公差</a></td>
 						<td><input id="txtTolerance"  type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
+						<td><input id="txtFloata" type="text" class="txt num c1" /></td>
+						<td>
+							<span style="float:left;display:block;width:10px;"></span>
+							<select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'></select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a class="lbl">材料類別</a></td>

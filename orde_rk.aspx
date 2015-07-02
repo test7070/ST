@@ -640,8 +640,22 @@
 							<input id="txtComp"  type="text" class="txt" style="width:70%;" maxlength="50"/>
 							<input id="txtNick"  type="text" class="txt" style="display:none;" maxlength="20"/>
 						</td>
+						<td> </td>
+						<td> </td>
+						<td align="center">
+                            <input id="chkIsproj" type="checkbox"/>
+                            <span> </span><a id='lblIsproj'> </a>
+                        </td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblFax" class="lbl"></a></td>
 						<td colspan="2"><input id="txtFax"  type="text" class="txt c1" maxlength="20"/></td>
+						<td> </td>
+						<td> </td>
+						<td align="center">
+                            <input id="chkEnda" type="checkbox"/>
+                            <span> </span><a id='lblEnda'> </a>
+                        </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblAddr" class="lbl"></a></td>

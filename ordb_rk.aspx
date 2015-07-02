@@ -77,18 +77,18 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
                     //---------------------------------------
-                    if (t_kind == 'A') {
-                        q_tr('txtDime_' + j, q_float('textSize1_' + j));
-                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
-                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
-                        q_tr('txtRadius_' + j, q_float('textSize4_' + j));
-                    } else if (t_kind == 'B') {
+                    if (t_kind == 'B') {
                         q_tr('txtRadius_' + j, q_float('textSize1_' + j));
                         q_tr('txtWidth_' + j, q_float('textSize2_' + j));
                         q_tr('txtDime_' + j, q_float('textSize3_' + j));
                         q_tr('txtLengthb_' + j, q_float('textSize4_' + j));
-                    } else {//鋼筋、胚
+                    } else if (t_kind == 'C')  {//鋼筋、胚
                         q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                    }else{
+                        q_tr('txtDime_' + j, q_float('textSize1_' + j));
+                        q_tr('txtWidth_' + j, q_float('textSize2_' + j));
+                        q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
+                        q_tr('txtRadius_' + j, q_float('textSize4_' + j));
                     }
                     $('#txtTheory_'+j).val(getTheory(j));
 					var t_Product = $('#txtProduct_' + j).val();
@@ -170,18 +170,12 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbKind", q_getPara('sys.stktype')+',1@物料');
-				q_cmbParse("cmbKind2", q_getPara('ordc.kind'));
+				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-				
-				if(q_getPara('sys.comp').substring(0,2)=='聯琦')
-					$('#cmbKind2').show();
-				else
-					$('#cmbKind').show();
-				
+
 				$('#lblOrde').click(function() {
 					if(!(q_cur==1 || q_cur ==2))
 						return;
@@ -628,27 +622,7 @@
 				$('#cmbKind').val((($('#cmbKind').val())?$('#cmbKind').val():q_getPara('vcc.kind')));
                 var t_kind = (($('#cmbKind').val())?$('#cmbKind').val():'');
                 t_kind = t_kind.substr(0, 1);		
-				if (t_kind == 'A') {
-					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
-					$('.dbbs').css('width', '1530px');
-					$('#Size').css('width', '220px');
-					$('.st').show();$('.bcc').hide();
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#textSize1_' + j).show();
-						$('#textSize2_' + j).show();
-						$('#textSize3_' + j).show();
-						$('#textSize4_' + j).hide();
-						$('#x1_' + j).show();
-						$('#x2_' + j).show();
-						$('#x3_' + j).hide();
-						$('#txtSpec_'+j).css('width', '220px');
-						$('#textSize1_' + j).val($('#txtDime_' + j).val());
-						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
-						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
-						$('#textSize4_' + j).val(0);
-						$('#txtRadius_' + j).val(0);
-					}
-				} else if (t_kind == 'B') {
+				if (t_kind == 'B') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
 					$('.dbbs').css('width', '1530px');
 					$('#Size').css('width', '300px');
@@ -697,6 +671,26 @@
 					$('.dbbs').css('width', '1270px');
 					$('.st').hide();
 					$('.bcc').show();
+				}else{
+					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
+					$('.dbbs').css('width', '1530px');
+					$('#Size').css('width', '220px');
+					$('.st').show();$('.bcc').hide();
+					for (var j = 0; j < q_bbsCount; j++) {
+						$('#textSize1_' + j).show();
+						$('#textSize2_' + j).show();
+						$('#textSize3_' + j).show();
+						$('#textSize4_' + j).hide();
+						$('#x1_' + j).show();
+						$('#x2_' + j).show();
+						$('#x3_' + j).hide();
+						$('#txtSpec_'+j).css('width', '220px');
+						$('#textSize1_' + j).val($('#txtDime_' + j).val());
+						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
+						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
+						$('#textSize4_' + j).val(0);
+						$('#txtRadius_' + j).val(0);
+					}
 				}
 			}
 
@@ -891,10 +885,7 @@
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td><a id='lblIsproj' class="lbl" style="float:right;"> </a><span> </span><input id="chkIsproj" type="checkbox" style="float:right;"/></td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
-						<td>
-							<select id="cmbKind" class="txt c1" style="display:none;"> </select>
-							<select id="cmbKind2" class="txt c1" style="display:none;"> </select>
-						</td>
+						<td><select id="cmbKind" class="txt c1" > </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>

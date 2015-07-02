@@ -161,7 +161,7 @@
 				t_total = t_money;
 				t_tax = 0;
 				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
-				if (!isinvosystem) {
+				//if (!isinvosystem) {
 					switch ($('#cmbTaxtype').val()) {
 						case '1':
 							// 應稅
@@ -197,7 +197,7 @@
 							break;
 						default:
 					}
-				}
+				//}
 				t_price = q_float('txtPrice');
 				if (t_price != 0) {
 					$('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
@@ -360,7 +360,7 @@
 
 				if (isinvosystem) {
 					$('.istax').hide();
-					$('#txtVccatax').show();
+					//$('#txtVccatax').show();
 				}
 			}
 
@@ -429,8 +429,8 @@
 							$('#txtOrdeno').val(b_ret[0].noa);
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
 							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret
-							, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle,txtItem', b_ret.length, b_ret
+							, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style,unit2', 'txtProductno');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							for (var i = 0; i < AddRet.length; i++) {
 								$('#txtMount_' + i).change();
@@ -1917,16 +1917,16 @@
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
 							<input id="txtTax" type="text" style="display:none;" />
-							<input id="txtTax2" type="text" class="txt num c1 istax" />
+							<input id="txtTax2" type="text" class="txt num c1" />
 							<input id="txtVccatax" type="text" class="txt num c1 " style="display:none;" />
 						</td>
 						<td>
 							<span style="float:left;display:block;width:10px;"></span>
 							<select id="cmbTaxtype" style="float:left;width:80px;" ></select>
 						</td>
-						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
+						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td><input id="txtTotal" type="text" style="display:none;" />
-							<input id="txtTotal2" type="text" class="txt num c1 istax" />
+							<input id="txtTotal2" type="text" class="txt num c1" />
 						</td>
 					</tr>
 					<tr>
@@ -1968,9 +1968,9 @@
 					<td align="center" id="Size"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
-					<td align="center" style="width:50px;"><a>單位</a></td>
+					<td align="center" style="width:50px;"><a>數量<br>單位</a></td>
 					<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>
-					<td align="center" style="width:50px;"><a>計量單位</a></td>
+					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'></a></td>
 					<td align="center" style="width:80px;">合計<br>理論重</td>
 					<td align="center" style="width:20px;">自訂<br>金額</td>
