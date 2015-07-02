@@ -1228,8 +1228,11 @@
 						<td class="td2"><input id="txtCno" type="text" class="txt c1"/></td>
 						<td class="td2"><input id="txtAcomp" type="text" class="txt c1"/></td>
 						<td class="td7"><span> </span><a id='lblMon' class="lbl"> </a></td>
-						<td class="td8"><input id="txtMon" type="text" class="txt c1"/></td>
-						<td class="td8"> </td>
+						<td class="td8" colspan='2'>
+		                	<input id="txtMon" type="text" class="txt" style="width: 70px;"/>
+		                	<span> </span><a id='lblIsgenvcca' class="lbl"> </a>
+		                	<input id="chkIsgenvcca" type="checkbox" style="float: right;"/>
+		                </td>        
 						<td class="td7"><span> </span><a id='lblInvono' class="lbl btn vcca"> </a></td>
 						<td class="td8"><input id="txtInvono" type="text" class="txt c1 vcca"/></td>
 					</tr>
