@@ -86,7 +86,7 @@
 
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd],['txtDatea', r_picd]];//,['txtGtime', '99:99']
+				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd],['txtDatea', r_picd],['txtMon', r_picm]];//,['txtGtime', '99:99']
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
@@ -124,11 +124,9 @@
 				});
 				
 				$('#btnOrdetoVcc').click(function() {
-					if(emp($('#txtVccno').val())){
-						q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
-					}else{
-						q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
-					}
+					//檢查是否已轉出貨
+					var t_where = "where=^^ ordeno='"+$('#txtNoa').val()+"' ^^";
+					q_gt('view_vccs', t_where, 0, 0, 0, "checkordetoVcc");
 				});
 				
 				$('#txtTotal').change(function() {
@@ -309,6 +307,18 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'checkordetoVcc':
+						var as = _q_appendData("view_vccs", "", true);
+						if (as[0] != undefined) {
+							alert('訂單已轉出貨單【'+as[0].noa+'】，禁止轉出貨!!');
+						}else{
+							if(emp($('#txtVccno').val())){
+								q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+							}else{
+								q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
+							}
+						}
+						break;
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
@@ -557,6 +567,7 @@
 								q_func('qtxt.query.post2', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
 							else
 								q_func('vcc_post.post.a2', r_accy + ',' + $('#txtVccno').val() + ',0');
+							q_func('qtxt.query.vcca2', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
 						}
 						//_btnDele();
 						Unlock(1);
@@ -630,10 +641,24 @@
 					//vcc.post內容
 					q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
 				}
+				q_func('qtxt.query.vcca0', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
 			}
 			
 			function q_funcPost(t_func, result) {
                 switch(t_func) {
+                	case 'qtxt.query.vcca0':
+                		q_func('qtxt.query.vcca1', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+                		break;
+                	case 'qtxt.query.vcca1':
+                		var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							abbm[q_recno]['ordbno'] = as[0].invono;
+							$('#txtOrdbno').val(as[0].invono);
+							if(as[0].t_err.length>0){
+								alert(as[0].t_err);
+							}
+						}
+                		break;
                 	case 'vcc_post.post.a1':
                 		q_func('qtxt.query.post0', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
                 		break;
@@ -656,15 +681,11 @@
 									q_func('vcc_post.post', r_accy + ',' + $('#txtVccno').val() + ',1');
 								}
 								
-								if(as[0].t_err.length>0){
-									alert(as[0].t_err);
-								}
-								t_invono=as[0].invono;
 							}
-							if(q_cur==2)
+							if(q_cur==2 && !emp($('#txtVccno').val()))
                         		alert('已更新出貨單!!');
                         	else
-                        		alert('成功轉出出貨單!!'+(t_invono.length>0?('發票號碼：'+t_invono):''));
+                        		alert('成功轉出出貨單!!');
                         break;
 					case 'qtxt.query.post2':
 						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
@@ -810,6 +831,7 @@
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
 				$('#txtOdate').val(q_date());
+				$('#txtMon').val(q_date().substr(0,6));
 				$('#txtOdate').focus();
 				$('#cmbKind').val('隨貨單張');
 
@@ -1250,7 +1272,7 @@
 					<tr class="tr1">
 						<td><span> </span><a id='lblOdate' class="lbl"> </a></td>
 						<td><input id="txtOdate" type="text" class="txt c1"/></td>
-						<td> </td>
+						<td><input id="txtMon" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblStype' class="lbl"> </a></td>
 						<td><select id="cmbStype" class="txt c1"> </select></td>
 						<td> </td>
@@ -1350,7 +1372,7 @@
 						<td><input id="txtWorker2" type="text" class="txt c1" /></td>
 						<td><span> </span><a class="lbl">發票開立</a></td>
 						<td><select id="cmbKind" class="txt c1" > </select></td>
-						<td> </td><!--<input id="txtOrdbno" type="text" class="txt c1" />-->
+						<td><input id="txtOrdbno" type="text" class="txt c1" /></td>
 						<td><input style="float: right;" class="btn" id="btnVcca" type="button" value='發票開立' /></td>
 						<td colspan="2">
 							<input id="chkIsproj" type="checkbox"/>

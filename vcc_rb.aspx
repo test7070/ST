@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -238,6 +238,11 @@
                 }else{
                 	$('#txtTax').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
                 }*/
+               
+               if(!emp($('#txtInvo').val())){
+					$('#chkIsgenvcca').attr('disabled', 'disabled');
+					$('#txtInvono').attr('disabled', 'disabled');
+				}
             }
 
 			function bbsGetOrdeList(){
@@ -544,6 +549,8 @@
 							$('#txtZipcode').val(as[0].gdate);
 							$('#cmbZipname').val(as[0].gtime);
 							$('#cmbStype').val(as[0].stype);
+							$('#txtInvono').val(as[0].ordbno);
+							$('#txtInvo').val(as[0].ordbno);
 						}
 						//寫入bbs
 						for (var  j = 0; j < ass.length; j++) {
@@ -554,6 +561,7 @@
 						}
 						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', ass.length, ass, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
 						sum();
+						refreshBbm();
 						break;
 					case 'cust':
 						var as = _q_appendData("cust", "", true);
@@ -1238,7 +1246,10 @@
 		                	<input id="chkIsgenvcca" type="checkbox" style="float: right;"/>
 		                </td>        
 						<td class="td7"><span> </span><a id='lblInvono' class="lbl btn vcca"> </a></td>
-						<td class="td8"><input id="txtInvono" type="text" class="txt c1 vcca"/></td>
+						<td class="td8">
+							<input id="txtInvono" type="text" class="txt c1 vcca"/>
+							<input id="txtInvo" type="hidden" class="txt c1"/><!--有值表示訂單轉發票-->
+						</td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblCust" class="lbl btn"> </a></td>
