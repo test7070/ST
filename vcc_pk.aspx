@@ -50,7 +50,7 @@
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,productno,class,spec,style,product', '0txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 				, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
@@ -1105,7 +1105,8 @@
 				}
 				var t_Product = $('#txtProduct_' + b_seq).val();
 				if (t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0) {
-					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+					if(q_float('txtWeight_' + b_seq)=0)
+						$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
 			}
 
@@ -1122,7 +1123,8 @@
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							ProductAddStyle(n);
 							sum();
-							$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+							if(q_float('txtWeight_'+n)==0)
+								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 						});
 						$('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
@@ -1135,28 +1137,32 @@
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#textSize2_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#textSize3_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#textSize4_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#txtSize_' + j).change(function(e) {
@@ -1212,7 +1218,8 @@
 								//nothing
 							}
 							sum();
-							$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+							if(q_float('txtWeight_'+n)==0)
+								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 						});
 						//-------------------------------------------------
 						$('#txtSpec_' + j).change(function() {
@@ -1238,7 +1245,8 @@
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#txtTotal_' + j).focusout(function() {
