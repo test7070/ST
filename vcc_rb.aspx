@@ -860,6 +860,9 @@
 					var s2 = xmlString.split(';');
 					abbm[q_recno]['accno'] = s2[0];
 					
+					if(s2[1]!=undefined)
+            			abbm[q_recno]['invono'] = s2[1];
+					
 					if(q_getPara('sys.project').toUpperCase()=='RB')
 						q_func('qtxt.query.vcc2cng_rb', 'vcc.txt,vcc2cng_rb,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';' + encodeURI(r_name));
 				}

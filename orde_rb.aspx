@@ -120,13 +120,24 @@
 				});
 				
 				$('#btnVcca').click(function() {
-					q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";", 'vcc', "95%", "95%", "發票開立作業");
+					q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";", 'vcca', "95%", "95%", "發票開立作業");
+				});
+				
+				$('#txtOrdbno').click(function() {
+					if(!emp($('#txtOrdbno').val()))
+						q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'"+$('#txtOrdbno').val()+"')>0", 'vcc', "95%", "95%", "發票開立作業");
 				});
 				
 				$('#btnOrdetoVcc').click(function() {
 					//檢查是否已轉出貨
-					var t_where = "where=^^ ordeno='"+$('#txtNoa').val()+"' ^^";
-					q_gt('view_vccs', t_where, 0, 0, 0, "checkordetoVcc");
+					if(!emp($('#txtVccno').val())){ //由訂單轉出貨單 直接更新出貨單
+						//檢查是否自動產生發票
+						var t_where = "where=^^ charindex(noa,'"+$('#txtVccno').val()+"')>0 ^^";
+						q_gt('view_vcc', t_where, 0, 0, 0, "checkVcchasvcca");
+					}else{
+						var t_where = "where=^^ charindex('"+$('#txtNoa').val()+"',ordeno)>0 ^^";
+						q_gt('view_vcc', t_where, 0, 0, 0, "checkordetoVcc");
+					}
 				});
 				
 				$('#txtTotal').change(function() {
@@ -250,6 +261,13 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'vcca':
+						if (!emp($('#txtNoa').val())) {
+							//重新抓取vcca的資料
+							var t_where = "where=^^ noa='" + $('#txtNoa').val() + "' ^^";
+							q_gt('view_orde', t_where, 0, 0, 0, "vcca_orde");
+						}
+						break;
 					case 'quats':
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
@@ -307,8 +325,50 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'vcca_orde':
+						var as = _q_appendData("view_orde", "", true);
+						if (as[0] != undefined) {
+							abbm[q_recno]['ordbno'] = as[0].ordbno;
+							$('#txtOrdbno').val(as[0].ordbno);
+						}
+						break;
+					case 'delecheckVcchasvcca':
+						var as = _q_appendData("view_vcc", "", true);
+						if (as[0] != undefined) {
+							if(as[0].isgenvcca=="true")
+								alert('出貨單【自動產生發票】禁止刪除訂單!!');
+							else{
+								if (!confirm(mess_dele))
+									return;
+								q_cur = 3;
+								//刪除出貨單
+								q_func('vcc_post.post.a2', r_accy + ',' + $('#txtVccno').val() + ',0');
+								//刪除產生的發票								
+								q_func('qtxt.query.vcca2', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+							}
+						}else{
+							if (!confirm('出貨單已遺失!!'+mess_dele))
+								return;
+							q_cur = 3;
+							//刪除產生的發票								
+							q_func('qtxt.query.vcca2', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+						}
+						Unlock(1);
+						break;
+					case 'checkVcchasvcca':
+						var as = _q_appendData("view_vcc", "", true);
+						if (as[0] != undefined) {
+							if(as[0].isgenvcca=="true")
+								alert('出貨單【自動產生發票】禁止更新出貨單!!');
+							else
+								q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
+						}else{
+							alert('出貨單遺失，重新產生出貨單!!');
+							q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+						}
+						break;
 					case 'checkordetoVcc':
-						var as = _q_appendData("view_vccs", "", true);
+						var as = _q_appendData("view_vcc", "", true);
 						if (as[0] != undefined) {
 							alert('訂單已轉出貨單【'+as[0].noa+'】，禁止轉出貨!!');
 						}else{
@@ -558,19 +618,14 @@
 							}
 						}
 						
-						if (!emp($('#txtNoa').val())){
-							if (!confirm(mess_dele))
-								return;
-							q_cur = 3;
-							
-							if(emp($('#txtVccno').val()))
-								q_func('qtxt.query.post2', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
-							else
-								q_func('vcc_post.post.a2', r_accy + ',' + $('#txtVccno').val() + ',0');
-							q_func('qtxt.query.vcca2', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+						//判斷是否產生出貨單
+						if(emp($('#txtVccno').val())){//未產生可直接刪除並清除訂單產生的發票
+							q_func('qtxt.query.vcca3', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB')); //刪除產生的發票
+							Unlock(1);
+						}else{//判斷是否有自動產生發票
+							var t_where = "where=^^ charindex(noa,'"+$('#txtVccno').val()+"')>0 ^^";
+							q_gt('view_vcc', t_where, 0, 0, 0, "delecheckVcchasvcca");
 						}
-						//_btnDele();
-						Unlock(1);
 						break;
 					case q_name:
 						if (q_cur == 4)
@@ -638,9 +693,10 @@
 					return false;
 				
 				if(q_cur==2 && !emp($('#txtVccno').val())){//修改後重新產生 避免資料不對應
-					//vcc.post內容
-					q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
+					if (confirm("是否要更新出貨單?"))
+						$('#btnOrdetoVcc').click();
 				}
+				//更新發票
 				q_func('qtxt.query.vcca0', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
 			}
 			
@@ -689,6 +745,12 @@
                         break;
 					case 'qtxt.query.post2':
 						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
+                        break;
+                     case 'qtxt.query.vcca3':
+                     	if (!confirm(mess_dele))
+							return;
+							q_cur = 3;
+                     	_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
                         break;
                 }
             }
