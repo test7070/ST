@@ -368,7 +368,7 @@
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
-								return;
+								break;
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtPrice,txtMoney,txtMemo'
 							, b_ret.length, b_ret, 'productno,product,unit,mount,price,money,memo', 'txtProductno,txtProduct');
 							sum();
@@ -573,6 +573,7 @@
 				_btnIns();
 				curData.paste();
 				$('#cmbTaxtype').val(1);
+				$('#txtType').val('M'); //M手動開立 //A批次開立//E發票開立//(空白NULL)出貨單自動產生發票
 				Lock(1, {
 					opacity : 0
 				});
@@ -590,13 +591,7 @@
 			}
 
 			function btnPrint() {
-				if (q_getPara('sys.comp').indexOf('大昌') > -1) {
-					q_box('z_vccadc.aspx?;;;' + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-				} else if (q_getPara('sys.comp').indexOf('英特瑞') > -1) {
-					q_box('z_vccap_it.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
-				} else {
-					q_box('z_vccap.aspx?;;;' + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
-				}
+				q_box('z_vccap.aspx?;;;' + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
@@ -1187,6 +1182,7 @@
 						<td colspan="2">
 							<input id="btnOrdes"  type="button" value="訂單匯入"/>
 							<input id="btnBatchvcca"  type="button" value="訂單批次產生發票"/>
+							<input id="txtType"  type="hidden" class="txt c1"/>
 						</td>
 					</tr>
 				</table>

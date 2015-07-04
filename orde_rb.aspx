@@ -40,8 +40,8 @@
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
-				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', ''],
-				['txtPostname', 'lblStore', 'store', 'noa,store', 'txtPostname,txtConform', 'store_b.aspx']
+				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', '']
+				//['txtPostname', 'lblStore', 'store', 'noa,store', 'txtPostname,txtConform', 'store_b.aspx']
 			);
 			
 			$(document).ready(function() {
@@ -125,10 +125,24 @@
 				
 				$('#txtOrdbno').click(function() {
 					if(!emp($('#txtOrdbno').val()))
-						q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'"+$('#txtOrdbno').val()+"')>0", 'vcc', "95%", "95%", "發票開立作業");
+						q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'"+$('#txtOrdbno').val()+"')>0", 'vcca', "95%", "95%", "發票開立作業");
 				});
 				
+				var x_ordevccstore=false;
+				var x_ordevccumm=false;
 				$('#btnOrdetoVcc').click(function() {
+					//檢查是否已收款
+					if(!x_ordevccumm && !emp($('#txtVccno').val())){
+						var t_where = " where=^^ vccno='" + $('#txtVccno').val() + "'^^";
+						q_gt('umms', t_where, 0, 0, 0, 'ordevccumm', r_accy);
+					}
+					//只能轉自己的區域
+					if(r_rank<8 && !x_ordevccstore){
+						q_gt('store', "where=^^ tggno='"+r_partno+"' and tggno!='' ^^", 0, 0, 0, 'ordevccstore', r_accy);
+						return;
+					}
+					x_ordevccstore=false;
+					x_ordevccumm=false;
 					//檢查是否已轉出貨
 					if(!emp($('#txtVccno').val())){ //由訂單轉出貨單 直接更新出貨單
 						//檢查是否自動產生發票
@@ -272,7 +286,7 @@
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
-								return;
+								break;
 							//取得報價的第一筆匯率等資料
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "' ^^";
 							q_gt('quat', t_where, 0, 0, 0, "", r_accy);
@@ -292,8 +306,6 @@
 					if(s2[0]=='ucc'){
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
-							if (!b_ret || b_ret.length == 0)
-								return;
 							if (b_ret.length>0)
 								b_ret.splice(0, 1);
 							if (b_ret.length>0)
@@ -627,6 +639,55 @@
 							q_gt('view_vcc', t_where, 0, 0, 0, "delecheckVcchasvcca");
 						}
 						break;
+					case 'storepart':
+						$('#cmbPartstore').text('');
+						var t_part='@';
+						var x_storeno='';
+						var as = _q_appendData("store", "", true);
+						for (i=0;i<as.length;i++){
+							t_part=t_part+','+as[i].noa+"@"+as[i].store;
+							if(r_partno==as[i].tggno && as[i].tggno!='') //預設
+								x_storeno=as[i].noa;
+						}
+						q_cmbParse("cmbPartstore", t_part);
+						if(q_cur==1)
+							$('#cmbPartstore').val(x_storeno);
+						else
+							$('#cmbPartstore').val($('#txtPostname').val());
+						break;
+					case 'ordevccstore':
+						var as = _q_appendData("store", "", true);
+						var instore=false;
+						for (i=0;i<as.length;i++){
+							if($('#txtPostname').val()==as[i].noa)
+								instore=true;
+						}
+						if(instore){
+							x_ordevccstore=true;
+							$('#btnOrdetoVcc').click();
+						}
+						else{
+							alert('禁止跨區轉出貨單!!');
+						}
+						break;
+					case 'ordevccumm':
+						var as = _q_appendData("umms", "", true);
+						if (as[0] != undefined) {
+							var z_msg = "", t_paysale = 0;
+							for (var i = 0; i < as.length; i++) {
+								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								if (t_paysale != 0)
+									z_msg += String.fromCharCode(13) + '收款單號【' + as[i].noa + '】 ' + FormatNumber(t_paysale);
+							}
+							if (z_msg.length > 0) {
+								alert('已沖帳:' + z_msg);
+								return;
+							}
+						}else{
+							x_ordevccumm=true;
+							$('#btnOrdetoVcc').click();
+						}
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -663,6 +724,9 @@
 				if($('#cmbStype').val()=='4'){
 					$('#cmbKind').val('');
 				}
+				
+				$('#txtPostname').val($('#cmbPartstore').val());
+				$('#txtConform').val($('#cmbPartstore').find(":selected").text());
 				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
@@ -988,9 +1052,18 @@
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
 					$('#btnOrdetoVcc').removeAttr('disabled');
+					$('.storepart1').hide();
+					$('.storepart0').show();
 				} else {
 					$('#combAddr').removeAttr('disabled');
 					$('#btnOrdetoVcc').attr('disabled', 'disabled');
+					$('.storepart0').hide();
+					$('.storepart1').show();
+					if(r_rank<8){
+						q_gt('store', "where=^^tggno='"+r_partno+"' or partno='001'^^", 0, 0, 0, 'storepart', r_accy);
+					}else{
+						q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
+					}
 				}
 				
 				$('#div_addr2').hide();
@@ -1402,10 +1475,11 @@
 							<select id="cmbGtime" class="txt c1" style="width: 60%;"> </select>
 							<!--<input id="txtGtime" type="text" class="txt c1"/>-->
 						</td>
-						<td><span> </span><a id="lblStore" class="lbl btn"> </a></td>
+						<td><span> </span><a id="lblStore" class="lbl"> </a></td>
 						<td colspan="2">
-							<input id="txtPostname" type="text" class="txt c2"/>
-							<input id="txtConform" type="text" class="txt c3"/>
+							<select id="cmbPartstore" class="txt c1 storepart1"> </select>
+							<input id="txtPostname" type="text" class="txt c2 storepart0"/>
+							<input id="txtConform" type="text" class="txt c3 storepart0"/>
 						</td>
 					</tr>
 					<tr class="tr8">
