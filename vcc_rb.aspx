@@ -162,7 +162,7 @@
 					t_where = '';
 					t_invo = $('#txtInvono').val();
 					if (t_invo.length > 0) {
-						t_where = "noa='" + t_invo + "'";
+						t_where = "charindex(noa,'" + t_invo + "')>0";
 						q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcca', "95%", "95%", $('#lblInvono').val());
 					}
 				});
@@ -275,7 +275,7 @@
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
-								return;
+								break;
 							
 							//寫入訂單號碼
 							var t_oredeno = '';
@@ -295,7 +295,7 @@
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
-								return;
+								break;
 							
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
 							
@@ -319,8 +319,7 @@
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0) {
-								b_pop = '';
-								return;
+								break;
 							}
 							
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtOrdeno,txtNo2'
@@ -638,16 +637,34 @@
 						check_startdate=true;
 						btnOk();
 						break;
+					case 'checkisgenvcca':
+						var as = _q_appendData('vcca', '', true);
+						if (as[0] != undefined) {
+							check_startdate=false;
+							alert("該訂單已開立過發票，請勿自動產生發票!!");
+						}else{
+							check_startdate=true;
+							btnOk();
+						}
+						break;
 				}
 			}
 			
 			var check_startdate=false;
+			var check_vcca=false;
 			function btnOk() {
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
 				}
+				//判斷是否手動開過開票或再訂單已開發票
+				if(!check_vcca && $('#chkIsgenvcca').prop('checked') &&!emp($('#txtOrdeno').val())){
+					var t_where = "where=^^ trdno='"+$('#txtOrdeno').val()+"' and isnull([type],'') !='' ^^";
+					q_gt('vcca', t_where, 0, 0, 0, "checkisgenvcca", r_accy);
+					return;
+				}
+				
 				//判斷起算日,寫入帳款月份
 				if(!check_startdate&&emp($('#txtMon').val())){
 					var t_where = "where=^^ noa='"+$('#txtCustno').val()+"' ^^";
@@ -658,6 +675,7 @@
 					$('#txtMon').val($('#txtDatea').val().substr(0, 6));*/
 				
 				check_startdate=false;
+				check_vcca=false;
 				
 				for (var i = 0; i < q_bbsCount; i++) {
 					if(!emp($('#txtProductno_'+i).val())){
@@ -859,6 +877,9 @@
 				if (q_cur == 1 || q_cur == 2) {
 					var s2 = xmlString.split(';');
 					abbm[q_recno]['accno'] = s2[0];
+					
+					if(s2[1]!=undefined)
+            			abbm[q_recno]['invono'] = s2[1];
 					
 					if(q_getPara('sys.project').toUpperCase()=='RB')
 						q_func('qtxt.query.vcc2cng_rb', 'vcc.txt,vcc2cng_rb,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';' + encodeURI(r_name));

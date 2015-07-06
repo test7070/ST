@@ -58,9 +58,13 @@
                 $('#txtXnoa2').val(t_noa);
                 
                 var t_invo=q_getHref()[3]=='undefined'?'':q_getHref()[3];
-                $('#txtInvo1').val(t_invo);
-                $('#txtInvo2').val(t_invo);
-                
+                if(t_invo.indexOf(',')>-1){
+                	$('#txtInvo1').val(t_invo.split(',')[0]);
+                	$('#txtInvo2').val(t_invo.split(',')[t_invo.split(',').length-1]);
+                }else{
+                	$('#txtInvo1').val(t_invo);
+                	$('#txtInvo2').val(t_invo);
+                }
 				var t_date,t_year,t_month,t_day;
 				t_date = new Date();
 				t_date.setDate(1);
