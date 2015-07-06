@@ -161,7 +161,7 @@
 				$('#chkXisordermemo input[type="checkbox"]').click(function() {
 					$('#Xorderstatus select').change();
 				});
-				$('#Xorderstatus select').change(function() {
+				/*$('#Xorderstatus select').change(function() {
 					var showMemo = $('#chkXisordermemo input[type="checkbox"]').is(':checked');
 					var nowReport = $('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report;
 					if ((($(this).val() == '1') || ($(this).val() == '#non' && showMemo == true)) && (dec(nowReport.slice(-1)) <= 3)) {
@@ -173,7 +173,7 @@
 						$('#chkXisordermemo input[type="checkbox"]').attr('checked', false);
 						$('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0, 8);
 					}
-				});
+				});*/
 				$('#Xitype .cmb').change();
 				$('#Xstype select').val('A');
 				$('#Xitype select').val('1');
