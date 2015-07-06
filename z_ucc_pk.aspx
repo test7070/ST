@@ -107,6 +107,16 @@
 					}, {
 						type : '6', //[25] 17
 						name : 'xspec'
+					}, {
+						type : '2', //[26][27] 18
+						name : 'xtggno',
+						dbf : 'tgg',
+						index : 'noa,comp',
+						src : 'tgg_b.aspx'
+					}, {
+						type : '8', //[28] 19
+						name : 'xoption01',
+						value : q_getMsg('xoption01').split('&')
 					}]
 				});
 				q_popAssign();

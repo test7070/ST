@@ -128,7 +128,11 @@
 						} else {
 							t_prices = round(q_div(t_moneys, t_mounts),3);
 						}
-						
+						if (t_float == 0) {
+							t_moneys = round(t_moneys, 0);
+						} else {
+							t_moneyus = q_add(t_moneyus, round(q_div(t_moneys, t_float), 2));
+						}
 					}else{
 						t_weights = q_float('txtWeight_' + j);
 						t_prices = q_float('txtPrice_' + j);
@@ -138,13 +142,14 @@
 						} else {
 							t_moneys = q_mul(t_prices, t_mounts);
 						}
+						if (t_float == 0) {
+							t_moneys = round(t_moneys, 0);
+						} else {
+							t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
+							t_moneys = round(q_mul(t_moneys, t_float), 0);
+						}
 					}
-					if (t_float == 0) {
-						t_moneys = round(t_moneys, 0);
-					} else {
-						t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
-						t_moneys = round(q_mul(t_moneys, t_float), 0);
-					}
+					
 					var t_styles = $.trim($('#txtStyle_' + j).val());
 					var t_unos = $.trim($('#txtUno_' + j).val());
 					var t_dimes = $.trim($('#txtDime_' + j).val());
