@@ -107,6 +107,16 @@
 					}, {
 						type : '6', //[25] 17
 						name : 'xspec'
+					}, {
+						type : '2', //[26][27] 18
+						name : 'xtggno',
+						dbf : 'tgg',
+						index : 'noa,comp',
+						src : 'tgg_b.aspx'
+					}, {
+						type : '8', //[28] 19
+						name : 'xoption01',
+						value : q_getMsg('xoption01').split('&')
 					}]
 				});
 				q_popAssign();
@@ -151,7 +161,7 @@
 				$('#chkXisordermemo input[type="checkbox"]').click(function() {
 					$('#Xorderstatus select').change();
 				});
-				$('#Xorderstatus select').change(function() {
+				/*$('#Xorderstatus select').change(function() {
 					var showMemo = $('#chkXisordermemo input[type="checkbox"]').is(':checked');
 					var nowReport = $('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report;
 					if ((($(this).val() == '1') || ($(this).val() == '#non' && showMemo == true)) && (dec(nowReport.slice(-1)) <= 3)) {
@@ -163,7 +173,7 @@
 						$('#chkXisordermemo input[type="checkbox"]').attr('checked', false);
 						$('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0, 8);
 					}
-				});
+				});*/
 				$('#Xitype .cmb').change();
 				$('#Xstype select').val('A');
 				$('#Xitype select').val('1');
