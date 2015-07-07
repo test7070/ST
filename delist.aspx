@@ -21,12 +21,12 @@
             							,'txtTotal','txtTariff','txtTrade','txtCommoditytax','txtVatbase','txtVat','txtRc2no','txtPaybno','txtLctotal'];
             var q_readonlys = ['txtOrdcno','txtNo2','txtLcmoney','txtCost'];
             var bbmNum = [['txtFloata', 15, 3, 1],['txtVatrate', 15, 2, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtTranmoney', 15, 0, 1]
-            						,['txtInsurance', 15, 0, 1],['txtModification', 15, 0, 1],['txtCoinretiremoney', 15, 0, 1],['txtCointotal', 15, 0, 1]
-            						,['txtCointariff', 15, 0, 1],['txtRetiremoney', 15, 0, 1],['txtTotal', 15, 0, 1],['txtTariff', 15, 0, 1]
+            						,['txtInsurance', 15, 0, 1],['txtModification', 15, 0, 1],['txtCoinretiremoney', 15, 2, 1],['txtCointotal', 15, 2, 1]
+            						,['txtCointariff', 15, 2, 1],['txtRetiremoney', 15, 0, 1],['txtTotal', 15, 0, 1],['txtTariff', 15, 0, 1]
             						,['txtTrade', 15, 0, 1],['txtCommoditytax', 15, 0, 1],['txtLctotal', 15, 0, 1]
             						];
-            var bbsNum = [['txtMount', 15, 0, 1],['txtInmount', 15, 0, 1],['txtPrice', 10, 2, 1],['txtMoney', 15, 0, 1],['txtCointotal', 15, 0, 1],['txtTotal', 15, 0, 1]
-            						,['txtTariffrate', 5, 2, 1],['txtCointariff', 15, 0, 1],['txtTariff', 15, 0, 1],['txtTraderate', 5, 2, 1],['txtTrade', 15, 0, 1]
+            var bbsNum = [['txtMount', 15, 0, 1],['txtInmount', 15, 0, 1],['txtPrice', 10, 2, 1],['txtMoney', 15, 2, 1],['txtCointotal', 15, 2, 1],['txtTotal', 15, 0, 1]
+            						,['txtTariffrate', 5, 2, 1],['txtCointariff', 15, 2, 1],['txtTariff', 15, 0, 1],['txtTraderate', 5, 2, 1],['txtTrade', 15, 0, 1]
             						,['txtCommodityrate', 5, 2, 1],['txtCommoditytax', 15, 0, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtCasemount', 15, 0, 1]
             						,['txtMweight', 15, 2, 1],['txtCuft', 15, 2, 1],['txtWeight', 15, 2, 1],['txtInweight', 15, 2, 1]
             						,['txtDime', 15, 3, 1],['txtWidth', 15, 2, 1],['txtLengthb', 15, 2, 1],['txtDime2', 15, 3, 1],['txtLengthc', 15, 2, 1]
@@ -75,7 +75,7 @@
                 	t_total=q_add(t_total,q_float('txtTotal_'+j));
                 	t_cointariff=q_add(t_cointariff,q_float('txtCointariff_'+j));
                 	t_tariff=q_add(t_tariff,q_float('txtTariff_'+j));
-                	t_trade=q_add(t_tariff,q_float('txtTrade_'+j));
+                	t_trade=q_add(t_trade,q_float('txtTrade_'+j));
                 	t_commoditytax=q_add(t_commoditytax,q_float('txtCommoditytax_'+j));
                 	t_lctotal=q_add(t_lctotal,q_float('txtLcmoney_'+j));
                 } // j
@@ -124,11 +124,11 @@
             			
 						//原幣完稅價格(原幣進貨額 + ( (原幣運費+原幣保險費+原幣加減費用) * (該筆原幣進貨額/原幣進貨額合計) ))
                 		q_tr('txtCointotal_'+j,q_add(q_float('txtMoney_'+j),round(q_mul(q_add(q_add(q_float('txtTranmoney'),q_float('txtInsurance')),q_float('txtModification'))
-                		,t_cointotaldiv),0)));
+                		,t_cointotaldiv),2)));
                 		//本幣完稅價格(原幣完稅價格*匯率)
                 		q_tr('txtTotal_'+j,round(q_mul(q_float('txtCointotal_'+j),q_float('txtFloata')),0));
                 		//原幣關稅(原幣完稅價格*關稅率)
-                			q_tr('txtCointariff_'+j,round(q_mul(q_float('txtCointotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),0));
+                			q_tr('txtCointariff_'+j,round(q_mul(q_float('txtCointotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),2));
                 		//本幣關稅(本幣完稅價格*關稅率)
                 			q_tr('txtTariff_'+j,round(q_mul(q_float('txtTotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),0));
                 		//推廣貿易費(本幣完稅價格*推廣貿易費率)
@@ -394,7 +394,7 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
                         	//原幣關稅(原幣完稅價格*關稅率)
-                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),0));
+                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),2));
                 			sum();
                         });
                         $('#txtTotal_' + j).change(function () {
@@ -416,7 +416,7 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
                         	//原幣關稅(原幣完稅價格*關稅率)
-                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),0));
+                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),2));
                 			//本幣關稅(本幣完稅價格*關稅率)
                 			q_tr('txtTariff_'+b_seq,round(q_mul(q_float('txtTotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),0));
                 			//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
