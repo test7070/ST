@@ -463,14 +463,14 @@
 				switch (t_name) {
 					case 'checkUmm':
 						var as = _q_appendData("umms", "", true);
-						if (as[0] != undefined) {
+						/*if (as[0] != undefined) {
 							alert('單據已沖帳，禁止修改。');
-						}else{
+						}else{*/
 							_btnModi();
 							$('#txtDatea').focus();
 							size_change();
 							sum();
-						}
+						//}
 						break;
 					case 'vccat':
 						var as = _q_appendData("vccat", "", true);
