@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -40,8 +40,8 @@
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
-				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', ''],
-				['txtPostname', 'lblStore', 'store', 'noa,store', 'txtPostname,txtConform', 'store_b.aspx']
+				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', '']
+				//['txtPostname', 'lblStore', 'store', 'noa,store', 'txtPostname,txtConform', 'store_b.aspx']
 			);
 			
 			$(document).ready(function() {
@@ -86,7 +86,7 @@
 
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd],['txtDatea', r_picd]];//,['txtGtime', '99:99']
+				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd],['txtDatea', r_picd],['txtMon', r_picm]];//,['txtGtime', '99:99']
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
@@ -119,11 +119,38 @@
 					}
 				});
 				
+				$('#btnVcca').click(function() {
+					q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";", 'vcca', "95%", "95%", "發票開立作業");
+				});
+				
+				$('#txtOrdbno').click(function() {
+					if(!emp($('#txtOrdbno').val()))
+						q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'"+$('#txtOrdbno').val()+"')>0", 'vcca', "95%", "95%", "發票開立作業");
+				});
+				
+				var x_ordevccstore=false;
+				var x_ordevccumm=false;
 				$('#btnOrdetoVcc').click(function() {
-					if(emp($('#txtVccno').val())){
-						q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+					//檢查是否已收款
+					if(!x_ordevccumm && !emp($('#txtVccno').val())){
+						var t_where = " where=^^ vccno='" + $('#txtVccno').val() + "'^^";
+						q_gt('umms', t_where, 0, 0, 0, 'ordevccumm', r_accy);
+					}
+					//只能轉自己的區域
+					if(r_rank<8 && !x_ordevccstore){
+						q_gt('store', "where=^^ tggno='"+r_partno+"' and tggno!='' ^^", 0, 0, 0, 'ordevccstore', r_accy);
+						return;
+					}
+					x_ordevccstore=false;
+					x_ordevccumm=false;
+					//檢查是否已轉出貨
+					if(!emp($('#txtVccno').val())){ //由訂單轉出貨單 直接更新出貨單
+						//檢查是否自動產生發票
+						var t_where = "where=^^ charindex(noa,'"+$('#txtVccno').val()+"')>0 ^^";
+						q_gt('view_vcc', t_where, 0, 0, 0, "checkVcchasvcca");
 					}else{
-						q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
+						var t_where = "where=^^ charindex('"+$('#txtNoa').val()+"',ordeno)>0 ^^";
+						q_gt('view_vcc', t_where, 0, 0, 0, "checkordetoVcc");
 					}
 				});
 				
@@ -248,11 +275,18 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'vcca':
+						if (!emp($('#txtNoa').val())) {
+							//重新抓取vcca的資料
+							var t_where = "where=^^ noa='" + $('#txtNoa').val() + "' ^^";
+							q_gt('view_orde', t_where, 0, 0, 0, "vcca_orde");
+						}
+						break;
 					case 'quats':
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
-								return;
+								break;
 							//取得報價的第一筆匯率等資料
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "' ^^";
 							q_gt('quat', t_where, 0, 0, 0, "", r_accy);
@@ -272,8 +306,6 @@
 					if(s2[0]=='ucc'){
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
-							if (!b_ret || b_ret.length == 0)
-								return;
 							if (b_ret.length>0)
 								b_ret.splice(0, 1);
 							if (b_ret.length>0)
@@ -293,12 +325,6 @@
 					var openName = $(obj).attr('id').split('_')[0].substring(3).toLowerCase();
 					if (noa.length > 0) {
 						switch (openName) {
-							case 'ordbno':
-								q_box("ordb.aspx?;;;charindex(noa,'" + noa + "')>0;" + r_accy, 'ordb', "95%", "95%", q_getMsg("popOrdb"));
-								break;
-							case 'ordcno':
-								q_box("ordc.aspx?;;;noa='" + noa + "';" + r_accy, 'ordc', "95%", "95%", q_getMsg("popOrdc"));
-								break;
 							case 'quatno':
 								q_box("quat.aspx?;;;noa='" + noa + "';" + r_accy, 'quat', "95%", "95%", q_getMsg("popQuat"));
 								break;
@@ -311,6 +337,60 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'vcca_orde':
+						var as = _q_appendData("view_orde", "", true);
+						if (as[0] != undefined) {
+							abbm[q_recno]['ordbno'] = as[0].ordbno;
+							$('#txtOrdbno').val(as[0].ordbno);
+						}
+						break;
+					case 'delecheckVcchasvcca':
+						var as = _q_appendData("view_vcc", "", true);
+						if (as[0] != undefined) {
+							if(as[0].isgenvcca=="true")
+								alert('出貨單【自動產生發票】禁止刪除訂單!!');
+							else{
+								if (!confirm(mess_dele))
+									return;
+								q_cur = 3;
+								//刪除出貨單
+								q_func('vcc_post.post.a2', r_accy + ',' + $('#txtVccno').val() + ',0');
+								//刪除產生的發票								
+								q_func('qtxt.query.vcca2', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+							}
+						}else{
+							if (!confirm('出貨單已遺失!!'+mess_dele))
+								return;
+							q_cur = 3;
+							//刪除產生的發票								
+							q_func('qtxt.query.vcca2', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+						}
+						Unlock(1);
+						break;
+					case 'checkVcchasvcca':
+						var as = _q_appendData("view_vcc", "", true);
+						if (as[0] != undefined) {
+							if(as[0].isgenvcca=="true")
+								alert('出貨單【自動產生發票】禁止更新出貨單!!');
+							else
+								q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
+						}else{
+							alert('出貨單遺失，重新產生出貨單!!');
+							q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+						}
+						break;
+					case 'checkordetoVcc':
+						var as = _q_appendData("view_vcc", "", true);
+						if (as[0] != undefined) {
+							alert('訂單已轉出貨單【'+as[0].noa+'】，禁止轉出貨!!');
+						}else{
+							if(emp($('#txtVccno').val())){
+								q_func('qtxt.query.post1', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+							}else{
+								q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
+							}
+						}
+						break;
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
@@ -550,18 +630,63 @@
 							}
 						}
 						
-						if (!emp($('#txtNoa').val())){
-							if (!confirm(mess_dele))
-								return;
-							q_cur = 3;
-							
-							if(emp($('#txtVccno').val()))
-								q_func('qtxt.query.post2', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
-							else
-								q_func('vcc_post.post.a2', r_accy + ',' + $('#txtVccno').val() + ',0');
+						//判斷是否產生出貨單
+						if(emp($('#txtVccno').val())){//未產生可直接刪除並清除訂單產生的發票
+							q_func('qtxt.query.vcca3', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB')); //刪除產生的發票
+							Unlock(1);
+						}else{//判斷是否有自動產生發票
+							var t_where = "where=^^ charindex(noa,'"+$('#txtVccno').val()+"')>0 ^^";
+							q_gt('view_vcc', t_where, 0, 0, 0, "delecheckVcchasvcca");
 						}
-						//_btnDele();
-						Unlock(1);
+						break;
+					case 'storepart':
+						$('#cmbPartstore').text('');
+						var t_part='@';
+						var x_storeno='';
+						var as = _q_appendData("store", "", true);
+						for (i=0;i<as.length;i++){
+							t_part=t_part+','+as[i].noa+"@"+as[i].store;
+							if(r_partno==as[i].tggno && as[i].tggno!='') //預設
+								x_storeno=as[i].noa;
+						}
+						q_cmbParse("cmbPartstore", t_part);
+						if(q_cur==1)
+							$('#cmbPartstore').val(x_storeno);
+						else
+							$('#cmbPartstore').val($('#txtPostname').val());
+						break;
+					case 'ordevccstore':
+						var as = _q_appendData("store", "", true);
+						var instore=false;
+						for (i=0;i<as.length;i++){
+							if($('#txtPostname').val()==as[i].noa)
+								instore=true;
+						}
+						if(instore){
+							x_ordevccstore=true;
+							$('#btnOrdetoVcc').click();
+						}
+						else{
+							alert('禁止跨區轉出貨單!!');
+						}
+						break;
+					case 'ordevccumm':
+						var as = _q_appendData("umms", "", true);
+						if (as[0] != undefined) {
+							var z_msg = "", t_paysale = 0;
+							for (var i = 0; i < as.length; i++) {
+								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								if (t_paysale != 0)
+									z_msg += String.fromCharCode(13) + '收款單號【' + as[i].noa + '】 ' + FormatNumber(t_paysale);
+							}
+							if (z_msg.length > 0) {
+								alert('已沖帳:' + z_msg);
+								return;
+							}
+						}else{
+							x_ordevccumm=true;
+							$('#btnOrdetoVcc').click();
+						}
 						break;
 					case q_name:
 						if (q_cur == 4)
@@ -572,7 +697,7 @@
 			
 			function btnOk() {
 				t_err = '';
-				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')]]);
+				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')], ['cmbKind', '發票開立']]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
@@ -599,6 +724,9 @@
 				if($('#cmbStype').val()=='4'){
 					$('#cmbKind').val('');
 				}
+				
+				$('#txtPostname').val($('#cmbPartstore').val());
+				$('#txtConform').val($('#cmbPartstore').find(":selected").text());
 				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
@@ -629,13 +757,28 @@
 					return false;
 				
 				if(q_cur==2 && !emp($('#txtVccno').val())){//修改後重新產生 避免資料不對應
-					//vcc.post內容
-					q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
+					if (confirm("是否要更新出貨單?"))
+						$('#btnOrdetoVcc').click();
 				}
+				//更新發票
+				q_func('qtxt.query.vcca0', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
 			}
 			
 			function q_funcPost(t_func, result) {
                 switch(t_func) {
+                	case 'qtxt.query.vcca0':
+                		q_func('qtxt.query.vcca1', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI('RB'));
+                		break;
+                	case 'qtxt.query.vcca1':
+                		var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							abbm[q_recno]['ordbno'] = as[0].invono;
+							$('#txtOrdbno').val(as[0].invono);
+							if(as[0].t_err.length>0){
+								alert(as[0].t_err);
+							}
+						}
+                		break;
                 	case 'vcc_post.post.a1':
                 		q_func('qtxt.query.post0', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
                 		break;
@@ -658,18 +801,20 @@
 									q_func('vcc_post.post', r_accy + ',' + $('#txtVccno').val() + ',1');
 								}
 								
-								if(as[0].t_err.length>0){
-									alert(as[0].t_err);
-								}
-								t_invono=as[0].invono;
 							}
-							if(q_cur==2)
+							if(q_cur==2 && !emp($('#txtVccno').val()))
                         		alert('已更新出貨單!!');
                         	else
-                        		alert('成功轉出出貨單!!'+(t_invono.length>0?('發票號碼：'+t_invono):''));
+                        		alert('成功轉出出貨單!!');
                         break;
 					case 'qtxt.query.post2':
 						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
+                        break;
+                     case 'qtxt.query.vcca3':
+                     	if (!confirm(mess_dele))
+							return;
+							q_cur = 3;
+                     	_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
                         break;
                 }
             }
@@ -812,7 +957,9 @@
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
 				$('#txtOdate').val(q_date());
+				$('#txtMon').val(q_date().substr(0,6));
 				$('#txtOdate').focus();
+				$('#cmbKind').val('隨貨單張');
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -905,9 +1052,18 @@
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
 					$('#btnOrdetoVcc').removeAttr('disabled');
+					$('.storepart1').hide();
+					$('.storepart0').show();
 				} else {
 					$('#combAddr').removeAttr('disabled');
 					$('#btnOrdetoVcc').attr('disabled', 'disabled');
+					$('.storepart0').hide();
+					$('.storepart1').show();
+					if(r_rank<8){
+						q_gt('store', "where=^^tggno='"+r_partno+"' or partno='001'^^", 0, 0, 0, 'storepart', r_accy);
+					}else{
+						q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
+					}
 				}
 				
 				$('#div_addr2').hide();
@@ -1237,80 +1393,80 @@
 			<div class='dbbm'>
 				<table class="tbbm" id="tbbm" style="width: 872px;">
 					<tr class="tr1" style="height: 0px">
-						<td class="td1" style="width: 97px;"> </td>
-						<td class="td2" style="width: 97px;"> </td>
-						<td class="td3" style="width: 97px;"> </td>
-						<td class="td4" style="width: 97px;"> </td>
-						<td class="td5" style="width: 97px;"> </td>
-						<td class="td6" style="width: 97px;"> </td>
-						<td class="td7" style="width: 97px;"> </td>
-						<td class="td8" style="width: 97px;"> </td>
-						<td class="td9" style="width: 97px;"> </td>
-						<td class="td10"> </td>
+						<td style="width: 97px;"> </td>
+						<td style="width: 97px;"> </td>
+						<td style="width: 97px;"> </td>
+						<td style="width: 97px;"> </td>
+						<td style="width: 97px;"> </td>
+						<td style="width: 97px;"> </td>
+						<td style="width: 97px;"> </td>
+						<td style="width: 97px;"> </td>
+						<td style="width: 97px;"> </td>
+						<td> </td>
 					</tr>
 					<tr class="tr1">
-						<td class="td1"><span> </span><a id='lblOdate' class="lbl"> </a></td>
-						<td class="td2"><input id="txtOdate" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblOdate' class="lbl"> </a></td>
+						<td><input id="txtOdate" type="text" class="txt c1"/></td>
+						<td><input id="txtMon" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblStype' class="lbl"> </a></td>
+						<td><select id="cmbStype" class="txt c1"> </select></td>
 						<td> </td>
-						<td class="td3"><span> </span><a id='lblStype' class="lbl"> </a></td>
-						<td class="td4"><select id="cmbStype" class="txt c1"> </select></td>
-						<td> </td>
-						<td class="td5"><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td class="td6" colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
+						<td colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr2">
-						<td class="td1"><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
-						<td class="td2"><input id="txtCno" type="text" class="txt c1"/></td>
-						<td class="td3" colspan="4"><input id="txtAcomp" type="text" class="txt c1"/></td>
-						<!--<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
-						<td class="td6"colspan="2"><input id="txtContract" type="text" class="txt c1"/></td>-->
+						<td><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
+						<td><input id="txtCno" type="text" class="txt c1"/></td>
+						<td colspan="4"><input id="txtAcomp" type="text" class="txt c1"/></td>
+						<!--<td ><span> </span><a id='lblContract' class="lbl"> </a></td>
+						<tdcolspan="2"><input id="txtContract" type="text" class="txt c1"/></td>-->
 						<td><input style="float: right;" class="btn" id="btnOrdetoVcc" type="button" value='轉出貨單' /> </td>
 						<td colspan="2"><input id="txtVccno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr3">
-						<td class="td1">
+						<td>
 							<span> </span><a id="lblCust" class="lbl btn"> </a>
 							<input class="btn" id="btnPlusCust" type="button" value='+' style="font-weight: bold;float: right;" />
 						</td>
-						<td class="td2"><input id="txtCustno" type="text" class="txt c1"/></td>
-						<td class="td3" colspan="4"><input id="txtComp" type="text" class="txt c1"/></td>
-						<td class="td1"><span> </span><a id='lblSerial' class="lbl"> </a></td>
-						<td class="td2" colspan="2"><input id="txtCoin" type="text" class="txt c1"/></td>
+						<td><input id="txtCustno" type="text" class="txt c1"/></td>
+						<td colspan="4"><input id="txtComp" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblSerial' class="lbl"> </a></td>
+						<td colspan="2"><input id="txtCoin" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr4">
-						<td class="td1"><span> </span><a id='lblTel' class="lbl"> </a></td>
-						<td class="td2" colspan='2'><input id="txtTel" type="text" class="txt c1"/></td>
-						<td class="td5"><span> </span><a id='lblFax' class="lbl"> </a></td>
-						<td class="td6" colspan="2"><input id="txtFax" type="text" class="txt c1" /></td>
-						<td class="td5"><span> </span><a id='lblPaytype' class="lbl"> </a></td>
-						<td class="td6"><input id="txtPaytype" type="text" class="txt c1"/></td>
-						<td class="td7"><select id="combPaytype" class="txt c1" onchange='combPaytype_chg()' > </select></td>
+						<td><span> </span><a id='lblTel' class="lbl"> </a></td>
+						<td colspan='2'><input id="txtTel" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblFax' class="lbl"> </a></td>
+						<td colspan="2"><input id="txtFax" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
+						<td><input id="txtPaytype" type="text" class="txt c1"/></td>
+						<td><select id="combPaytype" class="txt c1" onchange='combPaytype_chg()' > </select></td>
 					</tr>
 					<tr class="tr5">
-						<td class="td1"><span> </span><a id='lblAddr' class="lbl"> </a></td>
-						<td class="td2"><input id="txtPost" type="text" class="txt c1"/></td>
-						<td class="td3"colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
-						<td class="td4"><span> </span><a id="lblSales" class="lbl btn"> </a></td>
-						<td class="td5" colspan="2">
+						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
+						<td><input id="txtPost" type="text" class="txt c1"/></td>
+						<td colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblSales" class="lbl btn"> </a></td>
+						<td colspan="2">
 							<input id="txtSalesno" type="text" class="txt c2"/>
 							<input id="txtSales" type="text" class="txt c3"/>
 						</td>
 					</tr>
 					<tr class="tr6">
-						<td class="td1"><span> </span><a id='lblAddr2' class="lbl"> </a></td>
-						<td class="td2"><input id="txtPost2" type="text" class="txt c1"/></td>
-						<td class="td3" colspan='4'>
+						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
+						<td><input id="txtPost2" type="text" class="txt c1"/></td>
+						<td colspan='4'>
 							<input id="txtAddr2" type="text" class="txt c1" style="width: 360px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 							<input id="txtMemo2" type="hidden" class="txt c1"/>
 						</td>
-						<td class="td7"><input id="btnAddr2" type="button" value='...' style="width: 30px;height: 21px" /></td>
-						<td class="td1"><span> </span><a class="lbl">預交日</a></td>
-						<td class="td2"><input id="txtDatea" type="text" class="txt c1"/></td>
+						<td><input id="btnAddr2" type="button" value='...' style="width: 30px;height: 21px" /></td>
+						<td><span> </span><a class="lbl">預交日</a></td>
+						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr7">
-						<td class="td1"><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-						<td class="td2" colspan="2">
+						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
+						<td colspan="2">
 							<select id="cmbTrantype" class="txt c1" name="D1" > </select>
 						</td>
 						<td><span> </span><a  id="lblGdate" class="lbl"> </a></td>
@@ -1319,41 +1475,42 @@
 							<select id="cmbGtime" class="txt c1" style="width: 60%;"> </select>
 							<!--<input id="txtGtime" type="text" class="txt c1"/>-->
 						</td>
-						<td class="td4"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
-						<td class="td5" colspan="2">
-							<input id="txtPostname" type="text" class="txt c2"/>
-							<input id="txtConform" type="text" class="txt c3"/>
+						<td><span> </span><a id="lblStore" class="lbl"> </a></td>
+						<td colspan="2">
+							<select id="cmbPartstore" class="txt c1 storepart1"> </select>
+							<input id="txtPostname" type="text" class="txt c2 storepart0"/>
+							<input id="txtConform" type="text" class="txt c3 storepart0"/>
 						</td>
 					</tr>
 					<tr class="tr8">
-						<td class="td1"><span> </span><a id='lblMoney' class="lbl"> </a></td>
-						<td class="td2" colspan='2'>
+						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
+						<td colspan='2'>
 							<input id="txtMoney" type="text" class="txt c1" style="text-align: center;"/>
 						</td>
-						<td class="td4"><span> </span><a id='lblTax' class="lbl"> </a></td>
-						<td class="td5"><input id="txtTax" type="text" class="txt num c1"/></td>
-						<td class="td6"><select id="cmbTaxtype" class="txt c1" onchange='sum()' > </select></td>
-						<td class="td7"><span> </span><a id='lblTotal' class="lbl"> </a></td>
-						<td class="td8" colspan='2'><input id="txtTotal" type="text" class="txt num c1"/></td>
+						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
+						<td><input id="txtTax" type="text" class="txt num c1"/></td>
+						<td><select id="cmbTaxtype" class="txt c1" onchange='sum()' > </select></td>
+						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
+						<td colspan='2'><input id="txtTotal" type="text" class="txt num c1"/></td>
 					</tr>
 					<!--<tr class="tr9">
-						<td class="td1"><span> </span><a id='lblFloata' class="lbl"> </a></td>
-						<td class="td2"><select id="cmbCoin" class="txt c1" onchange='coin_chg()'> </select></td>
-						<td class="td3"><input id="txtFloata" type="text" class="txt num c1" /></td>
-						<td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
-						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-						<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
-						<td class="td8"><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>
+						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
+						<td><select id="cmbCoin" class="txt c1" onchange='coin_chg()'> </select></td>
+						<td><input id="txtFloata" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
+						<td colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
+						<td><span> </span><a id="lblApv" class="lbl"> </a></td>
+						<td><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>
 					</tr>-->
 					<tr class="tr10">
-						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
-						<td class="td2"><input id="txtWorker" type="text" class="txt c1" /></td>
-						<td class="td3"><input id="txtWorker2" type="text" class="txt c1" /></td>
-						<td class="td1"><span> </span><a class="lbl">發票開立</a></td>
-						<td class="td2"><select id="cmbKind" class="txt c1" > </select></td>
-						<td> </td>
-						<td> </td>
-						<td colspan="3">
+						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
+						<td><input id="txtWorker" type="text" class="txt c1" /></td>
+						<td><input id="txtWorker2" type="text" class="txt c1" /></td>
+						<td><span> </span><a class="lbl">發票開立</a></td>
+						<td><select id="cmbKind" class="txt c1" > </select></td>
+						<td><input id="txtOrdbno" type="text" class="txt c1" /></td>
+						<td><input style="float: right;" class="btn" id="btnVcca" type="button" value='發票開立' /></td>
+						<td colspan="2">
 							<input id="chkIsproj" type="checkbox"/>
 							<span> </span><a id='lblIsproj'> </a>
 							<input id="chkEnda" type="checkbox"/>
@@ -1363,8 +1520,8 @@
 						</td>
 					</tr>
 					<tr class="tr11">
-						<td class="td1"><span> </span><a id='lblMemo' class='lbl'> </a></td>
-						<td class="td2" colspan='7'>
+						<td><span> </span><a id='lblMemo' class='lbl'> </a></td>
+						<td colspan='7'>
 							<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea>
 						</td>
 					</tr>

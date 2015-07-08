@@ -21,13 +21,13 @@
             							,'txtTotal','txtTariff','txtTrade','txtCommoditytax','txtVatbase','txtVat','txtRc2no','txtPaybno','txtLctotal'];
             var q_readonlys = ['txtOrdcno','txtNo2','txtLcmoney','txtCost'];
             var bbmNum = [['txtFloata', 15, 3, 1],['txtVatrate', 15, 2, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtTranmoney', 15, 0, 1]
-            						,['txtInsurance', 15, 0, 1],['txtModification', 15, 0, 1],['txtCoinretiremoney', 15, 0, 1],['txtCointotal', 15, 0, 1]
-            						,['txtCointariff', 15, 0, 1],['txtRetiremoney', 15, 0, 1],['txtTotal', 15, 0, 1],['txtTariff', 15, 0, 1]
+            						,['txtInsurance', 15, 0, 1],['txtModification', 15, 0, 1],['txtCoinretiremoney', 15, 2, 1],['txtCointotal', 15, 2, 1]
+            						,['txtCointariff', 15, 2, 1],['txtRetiremoney', 15, 0, 1],['txtTotal', 15, 0, 1],['txtTariff', 15, 0, 1]
             						,['txtTrade', 15, 0, 1],['txtCommoditytax', 15, 0, 1],['txtLctotal', 15, 0, 1]
             						];
-            var bbsNum = [['txtMount', 15, 0, 1],['txtInmount', 15, 0, 1],['txtPrice', 10, 2, 1],['txtMoney', 15, 0, 1],['txtCointotal', 15, 0, 1],['txtTotal', 15, 0, 1]
-            						,['txtTariffrate', 5, 2, 1],['txtCointariff', 15, 0, 1],['txtTariff', 15, 0, 1],['txtTraderate', 5, 2, 1],['txtTrade', 15, 0, 1]
-            						,['txtCommodityrate', 5, 2, 1],['txtCommoditytax', 15, 0, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtCasemount', 15, 0, 1]
+            var bbsNum = [['txtMount', 15, 0, 1],['txtInmount', 15, 0, 1],['txtPrice', 10, 2, 1],['txtMoney', 15, 2, 1],['txtCointotal', 15, 2, 1],['txtTotal', 15, 0, 1]
+            						,['txtTariffrate', 5, 4, 1],['txtCointariff', 15, 2, 1],['txtTariff', 15, 0, 1],['txtTraderate', 10, 4, 1],['txtTrade', 15, 0, 1]
+            						,['txtCommodityrate', 5, 4, 1],['txtCommoditytax', 15, 0, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtCasemount', 15, 0, 1]
             						,['txtMweight', 15, 2, 1],['txtCuft', 15, 2, 1],['txtWeight', 15, 2, 1],['txtInweight', 15, 2, 1]
             						,['txtDime', 15, 3, 1],['txtWidth', 15, 2, 1],['txtLengthb', 15, 2, 1],['txtDime2', 15, 3, 1],['txtLengthc', 15, 2, 1]
             						,['txtLcmoney', 15, 0, 1],['txtCost', 15, 0, 1]
@@ -72,10 +72,10 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                 	t_coinretiremoney=q_add(t_coinretiremoney,q_float('txtMoney_'+j));
                 	t_cointotal=q_add(t_cointotal,q_float('txtCointotal_'+j));
-                	t_total=q_add(t_total,q_float('txtCointotal_'+j));
+                	t_total=q_add(t_total,q_float('txtTotal_'+j));
                 	t_cointariff=q_add(t_cointariff,q_float('txtCointariff_'+j));
                 	t_tariff=q_add(t_tariff,q_float('txtTariff_'+j));
-                	t_trade=q_add(t_tariff,q_float('txtTrade_'+j));
+                	t_trade=q_add(t_trade,q_float('txtTrade_'+j));
                 	t_commoditytax=q_add(t_commoditytax,q_float('txtCommoditytax_'+j));
                 	t_lctotal=q_add(t_lctotal,q_float('txtLcmoney_'+j));
                 } // j
@@ -124,11 +124,11 @@
             			
 						//原幣完稅價格(原幣進貨額 + ( (原幣運費+原幣保險費+原幣加減費用) * (該筆原幣進貨額/原幣進貨額合計) ))
                 		q_tr('txtCointotal_'+j,q_add(q_float('txtMoney_'+j),round(q_mul(q_add(q_add(q_float('txtTranmoney'),q_float('txtInsurance')),q_float('txtModification'))
-                		,t_cointotaldiv),0)));
+                		,t_cointotaldiv),2)));
                 		//本幣完稅價格(原幣完稅價格*匯率)
                 		q_tr('txtTotal_'+j,round(q_mul(q_float('txtCointotal_'+j),q_float('txtFloata')),0));
                 		//原幣關稅(原幣完稅價格*關稅率)
-                			q_tr('txtCointariff_'+j,round(q_mul(q_float('txtCointotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),0));
+                			q_tr('txtCointariff_'+j,round(q_mul(q_float('txtCointotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),2));
                 		//本幣關稅(本幣完稅價格*關稅率)
                 			q_tr('txtTariff_'+j,round(q_mul(q_float('txtTotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),0));
                 		//推廣貿易費(本幣完稅價格*推廣貿易費率)
@@ -276,7 +276,8 @@
                     return;
                 }
                 
-                bbs_sum();
+                //bbs_sum();
+                sum();
                 
                 if(q_cur==1)
 					$('#txtWorker').val(r_name);
@@ -394,7 +395,7 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
                         	//原幣關稅(原幣完稅價格*關稅率)
-                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),0));
+                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),2));
                 			sum();
                         });
                         $('#txtTotal_' + j).change(function () {
@@ -416,7 +417,7 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
                         	//原幣關稅(原幣完稅價格*關稅率)
-                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),0));
+                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),2));
                 			//本幣關稅(本幣完稅價格*關稅率)
                 			q_tr('txtTariff_'+b_seq,round(q_mul(q_float('txtTotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),0));
                 			//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
@@ -449,8 +450,41 @@
 							b_seq = t_IdSeq;
                 			//本幣營業稅額(本幣營業稅基 * 營業稅率)
                 			q_tr('txtVat_'+b_seq,q_mul(q_float('txtVatbase_'+b_seq),q_div(q_float('txtVatrate'),100)));
+                			sum();
                         });
-                        
+                        //回推計算///////////////////////////////////////////
+                        //原幣關稅(原幣完稅價格*關稅率)
+                        $('#txtCointariff_'+j).change(function() {
+                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							q_tr('txtTariffrate_'+b_seq,round(q_mul(q_div(q_float('txtCointariff_'+b_seq),q_float('txtCointotal_'+b_seq)),100),4));
+							sum();
+						});
+                		//本幣關稅(本幣完稅價格*關稅率)
+                		$('#txtTariff_'+j).change(function() {
+                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							q_tr('txtTariffrate_'+b_seq,round(q_mul(q_div(q_float('txtTariff_'+b_seq),q_float('txtTotal_'+b_seq)),100),4));
+							sum();
+						});
+                		//推廣貿易費(本幣完稅價格*推廣貿易費率)
+                		$('#txtTrade_'+j).change(function() {
+                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							q_tr('txtTraderate_'+b_seq,round(q_mul(q_div(q_float('txtTrade_'+b_seq),q_float('txtTotal_'+b_seq)),100),4));
+							sum();
+						});
+                		//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
+                		$('#txtCommoditytax_'+j).change(function() {
+                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							q_tr('txtCommodityrate_'+b_seq,round(q_mul(q_div(q_float('txtCommoditytax_'+b_seq),q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq))),100),4));
+							sum();
+						});
                     }
                 }
                 _bbsAssign();

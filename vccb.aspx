@@ -156,6 +156,13 @@
 				}
 			}
             function btnOk() {
+            	var t_err = '';
+            	t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')], ['cmbCno', q_getMsg('lblCno')]]);
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}
+            	
                 if($('#txtDatea').val().length==0 || !q_cd($('#txtDatea').val())){
                 	alert(q_getMsg('lblDatea')+'錯誤。');
                 	return;

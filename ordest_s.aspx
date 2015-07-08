@@ -36,10 +36,10 @@
                 $('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
                 $('#txtNoa').focus();
-                $('#txtEdime').val(99.9);
+                $('#txtEdime').val(9999);
                 $('#txtEwidth').val(9999);
                 $('#txtElengthb').val(9999);
-                $('#txtEradius').val(999.9);
+                $('#txtEradius').val(9999);
             }
             function q_seekStr() {
             	t_kind = $.trim($('#cmbKind').val());

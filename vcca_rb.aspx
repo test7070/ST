@@ -24,8 +24,8 @@
 			var q_readonly = ['txtMoney', 'txtTotal', 'txtChkno', 'txtTax', 'txtAccno', 'txtWorker','txtVccno'];
 			var q_readonlys = [];
 			var q_readonlyt = ['txtVccaccy','txtVccno','txtVccnoq'];
-			var bbmNum = [['txtMoney', 15, 0], ['txtTax', 15, 0], ['txtTotal', 15, 0], ['textTotal', 15, 0], ['textMoney', 15, 0]];
-			var bbsNum = [['txtMount', 15, 3], ['txtGmount', 15, 4], ['txtEmount', 15, 4], ['txtPrice', 15, 3], ['txtTotal', 15, 0]];
+			var bbmNum = [['txtMoney', 15, 0,1], ['txtTax', 15, 0,1], ['txtTotal', 15, 0,1], ['textTotal', 15, 0,1], ['textMoney', 15, 0,1]];
+			var bbsNum = [['txtMount', 15, 0,1], ['txtPrice', 15, 2,1], ['txtTotal', 15, 0,1]];
 			var bbtNum = [['txtMoney',15,0,1]];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -158,6 +158,18 @@
 					}
 				});
 				
+				$('#btnOrdesMon').click(function() { //月結匯入
+					if(q_cur==1 || q_cur==2){
+						var t_custno = trim($('#txtCustno').val());
+						var t_mon=trim($('#txtMon').val());
+						if (t_custno.length > 0 && t_mon.length>0) {
+							q_gt('view_ordes', "where=^^ exists (select * from view_orde where noa=view_ordes.noa and custno='"+t_custno+"' and mon='"+t_mon+"') and not exists (select * from vcca where charindex(view_ordes.noa,trdno)>0 ) ^^", 0, 0, 0, "",'');
+						}else{
+							alert('銷貨客戶與帳款月份禁止空白!!');
+						}
+					}
+				});
+				
 				$('#btnBatchvcca').click(function() {
 					$("#table_batchvcca input[type='text']").val('');
 					$('.batchbuyer').remove();
@@ -185,6 +197,12 @@
 								$(this).val(tmp);
 							});
 						});
+						
+						if(window.parent.q_name == 'orde'){
+							var wParent = window.parent.document;
+							$('#textOrdeno').val(wParent.getElementById("txtNoa").value);
+							$('#textTotal').val(wParent.getElementById("txtTotal").value);
+						}
 					
 					$('#div_batchvcca').show();
 				});
@@ -222,8 +240,8 @@
 								$('#textSerial').val(t_serial);
 								
 								var t_ordeno=$('#textOrdeno').val();
-								var t_total=$('#textTotal').val();
-								var t_money=$('#textMoney').val();
+								var t_total=dec($('#textTotal').val());
+								var t_money=dec($('#textMoney').val());
 								var t_vccano=emp(trim($('#textVccano').val()))?'#non':$('#textVccano').val();
 								t_buyerno=emp(trim($('#textBuyerno').val()))?'#non':$('#textBuyerno').val();
 								t_buyer=emp(trim($('#textBuyer').val()))?'#non':$('#textBuyer').val();
@@ -325,9 +343,13 @@
 					case 'qtxt.query.vcca_rb':
 						var as = _q_appendData("tmp0", "", true, true);
 						if (as[0] != undefined) {
-							if(as[0].err=='vccaok')
+							if(as[0].err=='vccaok'){
 								alert('訂單批次產生發票已產生完畢!!');
-							else
+								var s2=[];
+								s2[0]=q_name + '_s';
+								s2[1]="where=^^ 1=1 ^^"
+								q_boxClose2(s2);
+							}else
 								alert(as[0].err+'!!');
 						}else{
 							alert('訂單批次產生錯誤!!');
@@ -346,7 +368,7 @@
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
-								return;
+								break;
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtPrice,txtMoney,txtMemo'
 							, b_ret.length, b_ret, 'productno,product,unit,mount,price,money,memo', 'txtProductno,txtProduct');
 							sum();
@@ -374,17 +396,33 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'view_ordes':
+						var as = _q_appendData("view_ordes", "", true);
+						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtPrice,txtMoney,txtMemo'
+							, as.length, as, 'productno,product,unit,mount,price,money,memo', 'txtProductno,txtProduct');
+							sum();
+						break;
 					case 'view_orde':
 						var as = _q_appendData("view_orde", "", true);
 						if (as[0] != undefined) {
 							if(as[0].kind=='隨貨多張'){
 								batch_orde=true;
-								$('#btnOk_div_batchvcca').click();
+								//並檢查是否已開立發票
+								q_gt('vcca', "where=^^ charindex('"+$('#textOrdeno').val()+"',trdno)>0 ^^", 0, 0, 0, "orde_vcca", r_accy);
 							}else{
 								alert('訂單非隨貨多張!!');
 							}
 						}else{
 							alert('訂單不存在!!');
+						}
+						break;
+					case 'orde_vcca':
+						var as = _q_appendData("vcca", "", true);
+						if (as[0] != undefined) {
+							batch_orde=false;
+							alert('訂單已開立過發票!!');
+						}else{
+							$('#btnOk_div_batchvcca').click();
 						}
 						break;
 					case 'getAcomp':
@@ -535,6 +573,7 @@
 				_btnIns();
 				curData.paste();
 				$('#cmbTaxtype').val(1);
+				$('#txtType').val('M'); //M手動開立 //A批次開立//E發票開立//(空白NULL)出貨單自動產生發票
 				Lock(1, {
 					opacity : 0
 				});
@@ -552,13 +591,7 @@
 			}
 
 			function btnPrint() {
-				if (q_getPara('sys.comp').indexOf('大昌') > -1) {
-					q_box('z_vccadc.aspx?;;;' + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-				} else if (q_getPara('sys.comp').indexOf('英特瑞') > -1) {
-					q_box('z_vccap_it.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
-				} else {
-					q_box('z_vccap.aspx?;;;' + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
-				}
+				q_box('z_vccap.aspx?;;;' + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
@@ -710,14 +743,16 @@
 					
 				$('#div_batchvcca').hide();
 			}
-
+			
+			var orderbopen = true;
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				
-				if (!emp($('#txtVccno').val())){
+				if (!emp($('#txtVccno').val()) || !emp($('#txtTrdno').val())){
 					$('#txtNoa').attr('disabled','disabled');
 					$('#cmbTaxtype').attr('disabled','disabled');
 					$('#btnPlus').attr('disabled','disabled');
+					$('#txtTrdno').attr('disabled','disabled');
 					
 					for (var i = 0; i < q_bbsCount; i++) {
 						$('#btnMinus_'+i).attr('disabled','disabled');
@@ -740,6 +775,13 @@
 					$('#btnBatchvcca').attr('disabled','disabled');
 				}
 				$('#div_batchvcca').hide();
+				
+				if (orderbopen && t_para && window.parent.q_name == 'orde') {
+					var wParent = window.parent.document;
+					if(wParent.getElementById("cmbKind").value=='隨貨多張' && wParent.getElementById("txtOrdbno").value=='' )
+						btnIns();
+					orderbopen = false;
+				}
 			}
 
 			function btnMinus(id) {
@@ -1130,6 +1172,7 @@
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblVccno' class="lbl btn"> </a></td>
 						<td><input id="txtVccno"  type="text" class="txt c1"/></td>
+						<td><input id="btnOrdesMon"  type="button" value="月結匯入"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAccno' class="lbl btn"> </a></td>
@@ -1139,6 +1182,7 @@
 						<td colspan="2">
 							<input id="btnOrdes"  type="button" value="訂單匯入"/>
 							<input id="btnBatchvcca"  type="button" value="訂單批次產生發票"/>
+							<input id="txtType"  type="hidden" class="txt c1"/>
 						</td>
 					</tr>
 				</table>

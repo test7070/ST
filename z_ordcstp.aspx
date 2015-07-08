@@ -43,7 +43,7 @@
 					}, {//[7]
 						type : '5',
 						name : 'xstype',
-						value : ('0@非物料,1@物料').split(',')
+						value :[q_getPara('report.all')].concat(q_getPara('sys.stktype').split(','))
 					}]
 				});
 				q_popAssign();

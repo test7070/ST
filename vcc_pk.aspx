@@ -22,11 +22,11 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotal2', 'txtTax', 'txtTax2', 'txtTotalus'];
+			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory'];
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
-				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTax2', 10, 0, 1], ['txtTotal', 10, 0, 1],['txtTotal2', 10, 0, 1],
+				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]
 			];
 			var bbsNum = [
@@ -50,7 +50,7 @@
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,productno,class,spec,style,product', '0txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 				, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
@@ -81,13 +81,10 @@
 				$('#txtMoney').attr('readonly', true);
 				$('#txtTax').attr('readonly', true);
 				$('#txtTotal').attr('readonly', true);
-				$('#txtTax2').attr('readonly', true);
-				$('#txtTotal2').attr('readonly', true);
 				$('#txtMoney').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 				$('#txtTax').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 				$('#txtTotal').css('background-color', 'rgb(237,237,238)').css('color', 'green');
-				$('#txtTax2').css('background-color', 'rgb(237,237,238)').css('color', 'green');
-				$('#txtTotal2').css('background-color', 'rgb(237,237,238)').css('color', 'green');
+
 				
 				var t_mount = 0, t_price = 0, t_money = 0, t_moneyus = 0, t_weight = 0, t_total = 0, t_tax = 0;
 				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
@@ -131,7 +128,11 @@
 						} else {
 							t_prices = round(q_div(t_moneys, t_mounts),3);
 						}
-						
+						if (t_float == 0) {
+							t_moneys = round(t_moneys, 0);
+						} else {
+							t_moneyus = q_add(t_moneyus, round(q_div(t_moneys, t_float), 2));
+						}
 					}else{
 						t_weights = q_float('txtWeight_' + j);
 						t_prices = q_float('txtPrice_' + j);
@@ -141,13 +142,14 @@
 						} else {
 							t_moneys = q_mul(t_prices, t_mounts);
 						}
+						if (t_float == 0) {
+							t_moneys = round(t_moneys, 0);
+						} else {
+							t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
+							t_moneys = round(q_mul(t_moneys, t_float), 0);
+						}
 					}
-					if (t_float == 0) {
-						t_moneys = round(t_moneys, 0);
-					} else {
-						t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
-						t_moneys = round(q_mul(t_moneys, t_float), 0);
-					}
+					
 					var t_styles = $.trim($('#txtStyle_' + j).val());
 					var t_unos = $.trim($('#txtUno_' + j).val());
 					var t_dimes = $.trim($('#txtDime_' + j).val());
@@ -186,8 +188,8 @@
 							break;
 						case '5':
 							// 自定
-							$('#txtTax2').attr('readonly', false);
-							$('#txtTax2').css('background-color', 'white').css('color', 'black');
+							$('#txtTax').attr('readonly', false);
+							$('#txtTax').css('background-color', 'white').css('color', 'black');
 							t_tax = round(q_float('txtTax'), 0);
 							t_total = q_add(t_money, t_tax);
 							break;
@@ -204,10 +206,8 @@
 				}
 				$('#txtWeight').val(FormatNumber(t_weight));
 				$('#txtMoney').val(FormatNumber(t_money));
-				$('#txtTax2').val(FormatNumber(t_tax));
-				$('#txtTotal2').val(FormatNumber(t_total));
-				$('#txtTax').val(0);
-				$('#txtTotal').val(t_money);
+				$('#txtTax').val(FormatNumber(t_tax));
+				$('#txtTotal').val(FormatNumber(t_total));
 				if (t_float == 0)
 					$('#txtTotalus').val(0);
 				else
@@ -315,9 +315,6 @@
 					}
 				});
 				$('#txtFloata').change(function() {
-					sum();
-				});
-				$('#txtTax2').change(function() {
 					sum();
 				});
 				$('#txtPrice').change(function() {
@@ -466,14 +463,14 @@
 				switch (t_name) {
 					case 'checkUmm':
 						var as = _q_appendData("umms", "", true);
-						if (as[0] != undefined) {
+						/*if (as[0] != undefined) {
 							alert('單據已沖帳，禁止修改。');
-						}else{
+						}else{*/
 							_btnModi();
 							$('#txtDatea').focus();
 							size_change();
 							sum();
-						}
+						//}
 						break;
 					case 'vccat':
 						var as = _q_appendData("vccat", "", true);
@@ -1113,7 +1110,8 @@
 				}
 				var t_Product = $('#txtProduct_' + b_seq).val();
 				if (t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0) {
-					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+					if(q_float('txtWeight_' + b_seq)=0)
+						$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
 			}
 
@@ -1128,9 +1126,10 @@
 								$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
 							});
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							ProductAddStyle(n);
+							//ProductAddStyle(n);
 							sum();
-							$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+							if(q_float('txtWeight_'+n)==0)
+								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 						});
 						$('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
@@ -1143,28 +1142,32 @@
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#textSize2_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#textSize3_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#textSize4_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#txtSize_' + j).change(function(e) {
@@ -1220,7 +1223,8 @@
 								//nothing
 							}
 							sum();
-							$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+							if(q_float('txtWeight_'+n)==0)
+								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 						});
 						//-------------------------------------------------
 						$('#txtSpec_' + j).change(function() {
@@ -1246,7 +1250,8 @@
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if(q_float('txtWeight_'+n)==0)
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
 							}
 						});
 						$('#txtTotal_' + j).focusout(function() {
@@ -1916,8 +1921,7 @@
 						<td><input id="txtMoney" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
-							<input id="txtTax" type="text" style="display:none;" />
-							<input id="txtTax2" type="text" class="txt num c1" />
+							<input id="txtTax" type="text" class="txt num c1" />
 							<input id="txtVccatax" type="text" class="txt num c1 " style="display:none;" />
 						</td>
 						<td>
@@ -1925,8 +1929,8 @@
 							<select id="cmbTaxtype" style="float:left;width:80px;" ></select>
 						</td>
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
-						<td><input id="txtTotal" type="text" style="display:none;" />
-							<input id="txtTotal2" type="text" class="txt num c1" />
+						<td>
+							<input id="txtTotal" type="text" class="txt num c1" />
 						</td>
 					</tr>
 					<tr>

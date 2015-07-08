@@ -930,6 +930,8 @@
 
 			function refresh(recno) {
 				_refresh(recno);
+				if(q_getPara('sys.comp').substring(0,2)=='傑期')
+					$('.pk').show();
 				size_change();
 				//q_popPost('txtProductno_');
 				$('input[id*="txtProduct_"]').each(function() {
@@ -963,6 +965,8 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if(q_getPara('sys.comp').substring(0,2)=='傑期')
+					$('.pk').show();
 				size_change();
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
 				if ($('#txtMemo').val().substr(0,1)=='*')
@@ -970,8 +974,7 @@
 				else
 					$('#txtMon').attr('readonly', 'readonly');
 					
-				if(q_getPara('sys.comp').substring(0,2)=='傑期')
-					$('.pk').show();
+				
 			}
 
 			function btnMinus(id) {

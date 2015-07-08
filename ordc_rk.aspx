@@ -44,6 +44,7 @@
 				['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx'], 
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'], 
 				['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,fax,addr_fact,zip_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,txtFax,txtAddr,txtPost', 'tgg_b.aspx']
+				,['txtPartno', 'lblPart', 'part', 'noa,part', 'txtPartno,txtPart', 'part_b.aspx'] 
 			);
 			brwCount2 = 10;
 			$(document).ready(function() {
@@ -1066,18 +1067,16 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblOdate' class="lbl"> </a></td>
-						<td>
-						<input id="txtOdate" type="text" class="txt c1"/>
-						</td>
+						<td><input id="txtOdate" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
-						<td>
-						<input id="txtDatea" type="text" class="txt c1"/>
-						</td>
-						<td><a id='lblIsproj' class="lbl" style="float:right;"> </a><span> </span>
-						<input id="chkIsproj" type="checkbox" style="float:right;"/>
-						</td>
+						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"> </select></td>
+						<td><span> </span><a id='lblPart' class="lbl btn"> </a></td>
+						<td>
+							<input id="txtPartno" type="text" class="txt" style="width:45%;"/>
+							<input id="txtPart" type="text" class="txt" style="width:55%;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
@@ -1122,7 +1121,6 @@
 						<input id="txtSalesno" type="text" style="float:left;width:50%;"/>
 						<input id="txtSales" type="text" style="float:left;width:50%;"/>
 						</td>
-
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
@@ -1158,6 +1156,9 @@
 						<td class="st">
 						<input id="txtWeight"  type="text" class="txt num c1"/>
 						</td>
+						<td><a id='lblIsproj' class="lbl" style="float:right;"> </a><span> </span>
+						<input id="chkIsproj" type="checkbox" style="float:right;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
@@ -1172,6 +1173,9 @@
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td>
 						<input id="txtTotal" type="text" class="txt num c1" />
+						</td>
+						<td><a id='lblEnd' class="lbl" style="float:right;"> </a><span> </span>
+						<input id="chkEnda" type="checkbox" style="float:right;"/>
 						</td>
 					</tr>
 					<tr>
@@ -1192,10 +1196,6 @@
 						<td><span> </span><a id="lblApv" class="lbl"> </a></td>
 						<td>
 						<input id="txtApv" type="text"  class="txt c1" disabled="disabled"/>
-						</td>
-						<td><span> </span><a id='lblEnd' class="lbl"> </a></td>
-						<td>
-						<input id="chkEnda" type="checkbox"/>
 						</td>
 					</tr>
 				</table>

@@ -22,6 +22,15 @@
             $(document).ready(function() {
                 q_getId();
                 q_gt('uccga', '', 0, 0, 0, "");
+                
+                $('#q_report').click(function() {
+					if (q_getPara('sys.project').toUpperCase()!='YC'){
+						$('#Xshowlengthb').hide();
+					}
+					if (q_getPara('sys.project').toUpperCase()=='YC' && r_rank<8){
+						$('#Xshowprice').hide();
+					}
+				});
             });
 
             function q_gfPost() {
@@ -58,7 +67,15 @@
                         type : '5', //[9]
                         name : 'xgroupano',
                         value : uccgaItem.split(',')
-                    }]
+                    },{
+						type : '8', //[10]
+						name : 'xshowlengthb',
+						value : "1@顯示箱數".split(',')
+					},{
+						type : '8', //[11]
+						name : 'xshowprice',
+						value : "1@顯示單價".split(',')
+					}]
                 });
                 q_popAssign();
                 q_getFormat();
@@ -94,6 +111,23 @@
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
                 $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
+                
+                if (q_getPara('sys.project').toUpperCase()!='YC'){
+					$('#Xshowlengthb').hide();
+				}
+				if (q_getPara('sys.project').toUpperCase()=='YC' && r_rank<8){
+					$('#Xshowprice').hide();
+				}
+				
+				$('#Xdate').css('width','300px').css('height','30px');
+				$('#txtXdate1').css('width','90px');
+				$('#txtXdate2').css('width','90px');
+				$('#Xshowlengthb').css('width','300px').css('height','30px');
+				$('#chkXshowlengthb').css('width','215px');
+				$('#chkXshowlengthb span').css('width','175px');
+				$('#Xshowprice').css('width','300px').css('height','30px');
+				$('#chkXshowprice').css('width','215px');
+				$('#chkXshowprice span').css('width','175px');
             }
 
             function q_boxClose(s2) {
@@ -117,10 +151,10 @@
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
-		<div id="q_menu"></div>
+		<div id="q_menu"> </div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
-				<div id="q_report"></div>
+				<div id="q_report"> </div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->

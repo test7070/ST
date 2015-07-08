@@ -105,13 +105,13 @@
                 $('#chkXstyle').children('input').attr('checked', 'checked');
                 
                 $('#txtDime1').css('text-align','right');
-                $('#txtDime2').css('text-align','right').val(9.99);
+                $('#txtDime2').css('text-align','right').val(999999);
                 $('#txtWidth1').css('text-align','right');
-                $('#txtWidth2').css('text-align','right').val(9999.99);
+                $('#txtWidth2').css('text-align','right').val(999999);
                 $('#txtLength1').css('text-align','right');
-                $('#txtLength2').css('text-align','right').val(99999);
+                $('#txtLength2').css('text-align','right').val(999999);
                 $('#txtRadius1').css('text-align','right');
-                $('#txtRadius2').css('text-align','right').val(9999.99);
+                $('#txtRadius2').css('text-align','right').val(999999);
                 
                 $('#chkYitype').children('input').eq(0).attr('checked', 'checked');
 				$('#chkYitype').children('input').eq(1).attr('checked', 'checked');
