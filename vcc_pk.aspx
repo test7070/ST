@@ -1126,7 +1126,7 @@
 								$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
 							});
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							ProductAddStyle(n);
+							//ProductAddStyle(n);
 							sum();
 							if(q_float('txtWeight_'+n)==0)
 								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
