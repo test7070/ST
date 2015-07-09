@@ -545,7 +545,7 @@
 					case 'view_orde':
 						var as = _q_appendData("view_orde", "", true);
 						if (as[0] != undefined) {
-							$('#txtTel').val(as[0].fax);
+							$('#txtTel').val(as[0].tel);
 							$('#txtPost2').val(as[0].post2);
 							$('#txtAddr2').val(as[0].addr2);
 							
@@ -558,7 +558,7 @@
 							(trim($('#txtFloata').val()) == '' ? $('#txtFloata').val(as[0].floata) : '');
 							$('#cmbCoin').val(as[0].coin);
 							
-							$('#txtTel').val(as[0].fax.length>0?as[0].fax:as[0].tel);
+							//$('#txtTel').val(as[0].fax.length>0?as[0].fax:as[0].tel);
 						}
 						break;
 					case 'getAcomp':
