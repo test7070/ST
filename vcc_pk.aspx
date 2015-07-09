@@ -30,7 +30,7 @@
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]
 			];
 			var bbsNum = [
-				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
+				['txtPrice', 15, 4, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
 				['txtMount', 10, 2, 1], ['txtTheory', 12, 3, 1], ['txtGweight', 10, 3, 1],
 				['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
 				['textSize4', 10, 2, 1]
