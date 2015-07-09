@@ -875,6 +875,8 @@
 				}
 				_bbsAssign();
 				size_change();
+				if(q_getPara('sys.comp').substring(0,2)=='傑期')
+					$('.pk').show();
 			}
 
 			function btnIns() {
