@@ -25,13 +25,15 @@
             						,['txtCointariff', 15, 2, 1],['txtRetiremoney', 15, 0, 1],['txtTotal', 15, 0, 1],['txtTariff', 15, 0, 1]
             						,['txtTrade', 15, 0, 1],['txtCommoditytax', 15, 0, 1],['txtLctotal', 15, 0, 1]
             						];
-            var bbsNum = [['txtMount', 15],['txtInmount', 15],['txtPrice', 10],['txtMoney', 15],['txtCointotal', 15],['txtTotal', 15]
+            var bbsNum = [];
+            
+            /*[['txtMount', 15],['txtInmount', 15],['txtPrice', 10],['txtMoney', 15],['txtCointotal', 15],['txtTotal', 15]
             						,['txtTariffrate', 10],['txtCointariff', 15],['txtTariff', 15],['txtTraderate', 10],['txtTrade', 15]
             						,['txtCommodityrate',10],['txtCommoditytax', 15],['txtVatbase', 15],['txtVat', 15],['txtCasemount', 15]
             						,['txtMweight', 15],['txtCuft', 15],['txtWeight', 15],['txtInweight', 15]
             						,['txtDime', 15],['txtWidth', 15],['txtLengthb', 15],['txtDime2', 15],['txtLengthc', 15],['txtLengthd', 15]
             						,['txtLcmoney', 15],['txtCost', 15]
-            						];
+            						];*/
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
             q_sqlCount = 6;
