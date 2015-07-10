@@ -875,6 +875,8 @@
 				}
 				_bbsAssign();
 				size_change();
+				if(q_getPara('sys.comp').substring(0,2)=='傑期')
+					$('.pk').show();
 			}
 
 			function btnIns() {
@@ -1473,9 +1475,10 @@
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>長度</a></td>
 					<td align="center" style="width:50px;display:none;" class="pk"><a id='lblSource'>鋼廠</a></td>
 					
-					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
+					<td align="center" style="width:50px;display:none;" class="pk"><a>數量<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
+					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
 					<td align="center" style="width:220px;"><a id='lblMemos_st'> </a>
@@ -1533,15 +1536,11 @@
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
-					<td >
-					<input id="txtUnit.*" type="text" style="width:95%;"/>
-					</td>
-					<td>
-					<input id="txtMount.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
-					<td>
-					<input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
+					
+					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
+					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td>
 					<input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>
 					</td>
