@@ -120,6 +120,9 @@
 					var t_dimes = $.trim($('#txtDime_' + j).val());
 					if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
 						t_weights = q_float('txtWeight_' + j);
+					else if(q_getPara('sys.project')=='pk'){
+						t_weights = q_float('txtWeight_' + j);
+					}
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					
@@ -1466,6 +1469,7 @@
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:80px;"><a>等級</a></td>
+					<td align="center" style="width:140px;">規範<BR>國別</td>
 					<td align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
@@ -1508,6 +1512,10 @@
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
 					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
+					<td style="display:none;" class="pk">
+                        <input id="txtUcolor.*" type="text" style="width:95%;"/>
+                        <input id="txtScolor.*" type="text" style="width:95%;"/>
+                    </td>
 					<td>
 					<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 					<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
