@@ -900,12 +900,20 @@
 							}
 						});
 						
-						$('#btnOrdemount_' + i).click(function() {
+						$('#btnOrdemount_' + j).click(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							t_where = "title='本期訂單' and bdate='"+q_cdn(q_date(),-61)+"' and edate='"+q_cdn(q_date(),+61)+"' and noa='"+$('#txtProductno_' + b_seq).val()+"' and product='"+$('#txtProduct_' + b_seq).val()+"' ";
 							q_box("z_workgorde.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'scheduled', "95%", "95%", q_getMsg('PopScheduled'));
+						});
+						
+						$('#btnS1_'+j).click(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if(q_cur==1 || q_cur==2)
+								$('#txtProduct_'+b_seq).val($('#txtProduct_'+b_seq).val()+'∮');
 						});
 					}
 				}
@@ -1559,9 +1567,7 @@
 		<div class='dbbs' style="width: 1880px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1'>
 				<tr style='color:White; background:#003366;' >
-					<td align="center" style="width:45px;">
-						<input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" />
-					</td>
+					<td align="center" style="width:45px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
 					<td align="center" style="width:200px;"><a id='lblProductno'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle'> </a></td>
@@ -1585,9 +1591,7 @@
 					<td align="center" style="width:150px;"><a id='lblUno'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
-					<td>
-						<input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
-					</td>
+					<td align="center"><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td align="center">
 						<input class="txt c6" id="txtProductno.*" maxlength='30'type="text" style="width:98%;" />
 						<input class="btn" id="btnProduct.*" type="button" value='...' style=" font-weight: bold;" />
@@ -1596,6 +1600,7 @@
 					<td>
 						<input class="txt c7" id="txtProduct.*" type="text" />
 						<input id="txtSpec.*" type="text" class="txt c1 isSpec"/>
+						<input class="btn" id="btnS1.*" type="button" value='∮' style="font-size: 10px;" />
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1 isStyle"/></td>
 					<td align="center"><input class="txt c7" id="txtUnit.*" type="text"/></td>
