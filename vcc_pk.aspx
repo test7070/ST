@@ -30,7 +30,7 @@
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]
 			];
 			var bbsNum = [
-				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
+				['txtPrice', 15, 4, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
 				['txtMount', 10, 2, 1], ['txtTheory', 12, 3, 1], ['txtGweight', 10, 3, 1],
 				['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
 				['textSize4', 10, 2, 1]
@@ -463,14 +463,14 @@
 				switch (t_name) {
 					case 'checkUmm':
 						var as = _q_appendData("umms", "", true);
-						if (as[0] != undefined) {
+						/*if (as[0] != undefined) {
 							alert('單據已沖帳，禁止修改。');
-						}else{
+						}else{*/
 							_btnModi();
 							$('#txtDatea').focus();
 							size_change();
 							sum();
-						}
+						//}
 						break;
 					case 'vccat':
 						var as = _q_appendData("vccat", "", true);
@@ -545,7 +545,7 @@
 					case 'view_orde':
 						var as = _q_appendData("view_orde", "", true);
 						if (as[0] != undefined) {
-							$('#txtTel').val(as[0].fax);
+							$('#txtTel').val(as[0].tel);
 							$('#txtPost2').val(as[0].post2);
 							$('#txtAddr2').val(as[0].addr2);
 							
@@ -558,7 +558,7 @@
 							(trim($('#txtFloata').val()) == '' ? $('#txtFloata').val(as[0].floata) : '');
 							$('#cmbCoin').val(as[0].coin);
 							
-							$('#txtTel').val(as[0].fax.length>0?as[0].fax:as[0].tel);
+							//$('#txtTel').val(as[0].fax.length>0?as[0].fax:as[0].tel);
 						}
 						break;
 					case 'getAcomp':
@@ -1126,7 +1126,7 @@
 								$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
 							});
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							ProductAddStyle(n);
+							//ProductAddStyle(n);
 							sum();
 							if(q_float('txtWeight_'+n)==0)
 								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());

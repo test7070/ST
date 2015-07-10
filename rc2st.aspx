@@ -120,6 +120,9 @@
 					var t_dimes = $.trim($('#txtDime_' + j).val());
 					if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
 						t_weights = q_float('txtWeight_' + j);
+					else if(q_getPara('sys.project')=='pk'){
+						t_weights = q_float('txtWeight_' + j);
+					}
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					
@@ -875,6 +878,8 @@
 				}
 				_bbsAssign();
 				size_change();
+				if(q_getPara('sys.comp').substring(0,2)=='傑期')
+					$('.pk').show();
 			}
 
 			function btnIns() {
@@ -1464,6 +1469,7 @@
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:80px;"><a>等級</a></td>
+					<td align="center" style="width:140px;">規範<BR>國別</td>
 					<td align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
@@ -1473,9 +1479,10 @@
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>長度</a></td>
 					<td align="center" style="width:50px;display:none;" class="pk"><a id='lblSource'>鋼廠</a></td>
 					
-					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
+					<td align="center" style="width:50px;display:none;" class="pk"><a>數量<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
+					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
 					<td align="center" style="width:220px;"><a id='lblMemos_st'> </a>
@@ -1505,6 +1512,10 @@
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
 					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
+					<td style="display:none;" class="pk">
+                        <input id="txtUcolor.*" type="text" style="width:95%;"/>
+                        <input id="txtScolor.*" type="text" style="width:95%;"/>
+                    </td>
 					<td>
 					<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 					<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
@@ -1533,15 +1544,11 @@
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
-					<td >
-					<input id="txtUnit.*" type="text" style="width:95%;"/>
-					</td>
-					<td>
-					<input id="txtMount.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
-					<td>
-					<input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
+					
+					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
+					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td>
 					<input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>
 					</td>
