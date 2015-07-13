@@ -75,10 +75,17 @@
 		    				}
 		    			}
 				        for(var i = 0;i<abbs.length;i++){
-							if (abbs[i].mount <= 0 || abbs[i].weight <= 0) {
-								abbs.splice(i, 1);
-								i--;
-							}
+				        	if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
+				        		if (abbs[i].mount <= 0 && abbs[i].weight <= 0) {
+									abbs.splice(i, 1);
+									i--;
+								}	
+				        	}else{
+				        		if (abbs[i].mount <= 0 || abbs[i].weight <= 0) {
+									abbs.splice(i, 1);
+									i--;
+								}
+				        	}
 				        }
 				        _refresh();
 						$('#checkAllCheckbox').click(function(){

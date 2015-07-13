@@ -126,10 +126,12 @@
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					
-					
-					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 						//批   裕承隆  是拿來當運費的單位   不能用
-						t_moneys = q_mul(t_prices, t_weights);
+						if(q_getPara('sys.comp').substring(0,2)=="裕承" && t_unit == '批' )
+							t_moneys = q_mul(t_prices, t_mounts);
+						else
+							t_moneys = q_mul(t_prices, t_weights);
 					} else {
 						t_moneys = q_mul(t_prices, t_mounts);
 					}
@@ -428,9 +430,17 @@
 					case 'rc2s':
 						var as = _q_appendData("rc2s", "", true);
 						for (var i = 0; i < ordcsArray.length; i++) {
-							if (ordcsArray[i].mount <= 0 || ordcsArray[i].weight <= 0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
-								ordcsArray.splice(i, 1);
-								i--;
+							if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
+								if ((ordcsArray[i].mount <= 0 && ordcsArray[i].weight <= 0) || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
+									ordcsArray.splice(i, 1);
+									i--;
+								}
+							}
+							else{
+								if (ordcsArray[i].mount <= 0 || ordcsArray[i].weight <= 0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
+									ordcsArray.splice(i, 1);
+									i--;
+								}
 							}
 						}
 						if (ordcsArray[0] != undefined) {
@@ -1469,7 +1479,7 @@
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:80px;"><a>等級</a></td>
-					<td align="center" style="width:140px;">規範<BR>國別</td>
+					<td align="center" style="width:140px;display:none;" class="pk">規範<BR>國別</td>
 					<td align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
