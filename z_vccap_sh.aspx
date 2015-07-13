@@ -34,8 +34,8 @@
                         type : '0',
                         name : 'xname',
                         value : r_name 
-                    }, {/*1-1[3]*/
-                        type : '6',
+                    }, {/*1-1[3][4]*/
+                        type : '1',
                         name : 'xnoa',
                     }]
                 });
