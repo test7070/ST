@@ -126,10 +126,12 @@
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					
-					
-					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 						//批   裕承隆  是拿來當運費的單位   不能用
-						t_moneys = q_mul(t_prices, t_weights);
+						if(q_getPara('sys.comp').substring(0,2)=="裕承" && t_unit == '批' )
+							t_moneys = q_mul(t_prices, t_mounts);
+						else
+							t_moneys = q_mul(t_prices, t_weights);
 					} else {
 						t_moneys = q_mul(t_prices, t_mounts);
 					}
