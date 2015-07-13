@@ -428,9 +428,17 @@
 					case 'rc2s':
 						var as = _q_appendData("rc2s", "", true);
 						for (var i = 0; i < ordcsArray.length; i++) {
-							if (ordcsArray[i].mount <= 0 || ordcsArray[i].weight <= 0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
-								ordcsArray.splice(i, 1);
-								i--;
+							if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
+								if ((ordcsArray[i].mount <= 0 && ordcsArray[i].weight <= 0) || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
+									ordcsArray.splice(i, 1);
+									i--;
+								}
+							}
+							else{
+								if (ordcsArray[i].mount <= 0 || ordcsArray[i].weight <= 0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
+									ordcsArray.splice(i, 1);
+									i--;
+								}
 							}
 						}
 						if (ordcsArray[0] != undefined) {
