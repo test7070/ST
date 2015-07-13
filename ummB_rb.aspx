@@ -21,8 +21,10 @@
             var q_readonlys = ['txtVccno', 'txtVccnoq', 'txtMount', 'txtTotal'];
             var bbmNum = [];
             var bbsNum = [['txtMount', 15, 0, 1], ['txtPrice', 15, 2, 1], ['txtTotal', 15, 0, 1], ['txtBkmount', 15, 0, 1], ['txtBkmoney', 15, 0, 1], ['txtSalemount', 15, 0, 1], ['txtSalemoney', 15, 0, 1]];
+            var bbtNum = [['txtMount', 15, 0, 1]];
             var bbmMask = [];
             var bbsMask = [];
+            var bbtMask = [];
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
@@ -40,6 +42,7 @@
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
+                bbtKey = ['noa', 'noq'];
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1)
                 q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
@@ -253,16 +256,6 @@
                     return;
                 }
 
-                if ($('#cmbTypea').val() == '1' && emp($('#txtBkdate').val())) {
-                    alert('請填入' + q_getMsg('lblBkdate'));
-                    return;
-                }
-
-                if (($('#cmbTypea').val() == '2' || $('#cmbTypea').val() == '4' ) && (emp($('#txtBkdate').val()) || emp($('#txtVccdate').val()))) {
-                    alert('請填入' + q_getMsg('lblBkdate') + '、' + q_getMsg('lblVccdate'));
-                    return;
-                }
-
                 if ($('#cmbTypea').val() == '3' && (emp($('#txtChgdate').val()) || emp($('#txtVccno').val()))) {
                     alert('請填入' + q_getMsg('lblChgdate') + '、' + q_getMsg('lblVccno'));
                     return;
@@ -334,6 +327,16 @@
                 _bbsAssign();
                 fieldsdisabled();
             }
+            
+            function bbtAssign() {
+                for (var i = 0; i < q_bbtCount; i++) {
+                    $('#lblNo__' + i).text(i + 1);
+                    if (!$('#btnMinut__' + i).hasClass('isAssign')) {
+                    	
+                    }
+                }
+                _bbtAssign();
+            }
 
             function btnIns() {
                 _btnIns();
@@ -382,6 +385,15 @@
                 q_nowf();
                 as['datea'] = abbm2['datea'];
 
+                return true;
+            }
+            
+            function bbtSave(as) {
+                if (!as['productno'] && !as['product']) {
+                    as[bbtKey[1]] = '';
+                    return;
+                }
+                q_nowf();
                 return true;
             }
 

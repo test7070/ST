@@ -198,6 +198,9 @@
 				else
 					$('#cmbKind').show();
 					
+				if(q_getPara('sys.comp').substring(0,2)=='傑期')	
+					$('#lblDatea').text('交貨日期');
+					
 				$("#combPaytype").change(function(e) {
 					if (q_cur == 1 || q_cur == 2)
 						$('#txtPaytype').val($('#combPaytype').find(":selected").text());
