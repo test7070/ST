@@ -1469,7 +1469,7 @@
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:80px;"><a>等級</a></td>
-					<td align="center" style="width:140px;">規範<BR>國別</td>
+					<td align="center" style="width:140px;display:none;" class="pk">規範<BR>國別</td>
 					<td align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
