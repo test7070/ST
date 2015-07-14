@@ -74,7 +74,10 @@
 					sum();
 				}).click(function(e) {			
 					sum();
-				});	
+				}).focusout(function() {
+					sum();
+				});
+				
 				$('#txtNoa').change(function(e) {
 					$('#txtNoa').val($('#txtNoa').val().toUpperCase());
 				});		
@@ -122,6 +125,7 @@
 							wrServer($('#txtNoa').val()); 
 						} else {
 							alert("發票已輸入過，請檢查發票號碼是否正確。");
+							Unlock(1);
 						}
 						break;
 					case q_name:
@@ -139,11 +143,7 @@
 			}
 			function btnOk() {	
 				Lock(1,{opacity:0});
-				if($('#cmbTaxtype').val() !=6 && emp($('#txtProductno').val())){
-					alert(q_getMsg('lblProduct')+'未填寫。');
-					Unlock(1);
-					return;
-				}
+				
 				if ($('#txtDatea').val().length==0 || !q_cd($('#txtDatea').val())){
 					alert(q_getMsg('lblDatea')+'錯誤。');
 					Unlock(1);
@@ -167,11 +167,11 @@
 				sum();
 				var t_where = '';
 				if(q_cur==1){
-					t_where = "where=^^ noa='" + $('#txtNoa').val() + "' ^^";				  
+					t_where = "where=^^ noa='" + $('#txtNoa').val() + "' ^^";
+					q_gt('rc2a', t_where, 0, 0, 0, "rc2a_btnOK", r_accy);				  
 				}else{
 					wrServer($('#txtNoa').val()); 
 				}
-				q_gt('rc2a', t_where, 0, 0, 0, "rc2a_btnOK", r_accy);
 			}
 
 			function _btnSeek() {
