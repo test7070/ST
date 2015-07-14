@@ -308,10 +308,10 @@
 			function sum() {
 				if(!(q_cur==1 || q_cur==2))
 					return;		
-				$('#txtMoney').attr('readonly',true);			
+				//$('#txtMoney').attr('readonly',true);			
 				$('#txtTax').attr('readonly',true);	
 				$('#txtTotal').attr('readonly', true);
-				$('#txtMoney').css('background-color','rgb(237,237,238)').css('color','green');
+				//$('#txtMoney').css('background-color','rgb(237,237,238)').css('color','green');
 				$('#txtTax').css('background-color','rgb(237,237,238)').css('color','green');
 				$('#txtTotal').css('background-color','rgb(237,237,238)').css('color','green');
 				
