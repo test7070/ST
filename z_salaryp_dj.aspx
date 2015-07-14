@@ -20,13 +20,13 @@
 			}
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_salaryp_rb');
+                q_gf('', 'z_salaryp_dj');
                 
             });
             
             function q_gfPost() {
                $('#q_report').q_report({
-                        fileName : 'z_salaryp_rb',
+                        fileName : 'z_salaryp_dj',
                         options : [{
 	                        type : '6',
 	                        name : 'xmon'
