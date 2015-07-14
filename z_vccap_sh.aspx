@@ -42,8 +42,11 @@
                 
                 q_popAssign();
                 
-				if(q_getHref()[1]!=undefined)
-                	$('#txtXnoa').val(q_getHref()[1]);
+				if(q_getHref()[1]!=undefined){
+					$('#txtXnoa1').val(q_getHref()[1]);
+					$('#txtXnoa2').val(q_getHref()[1]);
+				}
+                	
 				
 			}
 

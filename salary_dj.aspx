@@ -643,7 +643,7 @@
             table_change();
         }
         function btnPrint() {
-			q_box('z_salary_dj.aspx', '', "95%", "95%", q_getMsg("popPrint"));
+			q_box('z_salaryp_dj.aspx', '', "95%", "95%", q_getMsg("popPrint"));
         }
 
         function wrServer(key_value) {
