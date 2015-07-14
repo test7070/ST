@@ -28,7 +28,7 @@
             brwNowPage = 0;
             brwKey = 'Datea';
             brwCount2 = 8;
-            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
+            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,addr_fact,tel,fax', 'txtCustno,txtComp,txtNick,txtAddr,txtTel,txtFax', 'cust_b.aspx']
             	,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
             	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']);
             $(document).ready(function() {
@@ -251,7 +251,8 @@
 		                			$('#txtAddr2').val(as[0].addr);	
 		                			$('#txtPaytype').val(as[0].paytype);	
 		                			$('#txtMemo2').val(as[0].memo2);
-		                			$('#txtFax').val(as[0].fax);		
+		                			$('#txtFax').val(as[0].fax);
+		                			$('#txtTel').val(as[0].tel);		
 		                		}
                     			sum();
                     		}
@@ -648,14 +649,18 @@
                         </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblFax" class="lbl"></a></td>
-						<td colspan="2"><input id="txtFax"  type="text" class="txt c1" maxlength="20"/></td>
+						<td><span> </span><a id="lblTel" class="lbl"> </a></td>
+						<td colspan="2"><input id="txtTel"  type="text" class="txt c1" maxlength="20"/></td>
 						<td> </td>
 						<td> </td>
 						<td align="center">
                             <input id="chkEnda" type="checkbox"/>
                             <span> </span><a id='lblEnda'> </a>
                         </td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblFax" class="lbl"></a></td>
+						<td colspan="2"><input id="txtFax"  type="text" class="txt c1" maxlength="20"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblAddr" class="lbl"></a></td>

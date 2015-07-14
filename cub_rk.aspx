@@ -34,7 +34,8 @@
 			aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', '0txtProductno_,txtProduct_', 'ucc_b.aspx'],
 				['txtCustno_', 'btnCustno_', 'cust', 'noa,nick', 'txtCustno_', 'cust_b.aspx'],
-				['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']
+				['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_', 'spec_b.aspx']
+				//['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -239,6 +240,15 @@
 					}
 				}
 				_bbsAssign();
+				$('.num').each(function() {
+					$(this).keyup(function() {
+						var tmp=$(this).val();
+						tmp=tmp.match(/\d{1,}\.{0,1}\d{0,}/);
+						$(this).val(tmp);
+					});
+				}).focusin(function() {
+					$(this).select();
+				});
 			}
 			function ImportOrde(n){
 				var t_ordeno = $('#txtOrdeno_'+n).val();
