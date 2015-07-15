@@ -62,7 +62,7 @@
 				bbmMask = [['txtDatea', r_picd]];
 				bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
 				q_mask(bbmMask);
-				q_cmbParse("cmbProcess", '日,午,晚');
+				q_cmbParse("cmbProcess", '日、高溫,午,晚');
 			}
 
 			function q_gtPost(t_name) {
@@ -526,6 +526,7 @@
 						<td style="width:100px;" align="center">COIL<BR>重量(KG)</td>
 						<td style="width:100px;" align="center">前處理液<BR>總用量(KG)</td>
 						<td style="width:100px;" align="center">接著劑<BR>型號<BR>規格</td>
+						<td style="width:100px;" align="center">接著劑總用量 (kg)</td>
 						<td style="width:100px;" align="center">稀釋液<BR>用量/清洗(KG)</td>
 						<td style="width:100px;" align="center">背漆<BR>型號規格<BR>重量(KG)</td>
 						<td style="width:100px;" align="center">背漆稀釋液<BR>總用量(KG)</td>
@@ -565,6 +566,7 @@
 							<input id="txtProduct2.*" type="text" style="width:95%;"/>
 							<input id="btnProduct2.*" type="button" style="display:none;"/>
 						</td>
+						<td title="接著劑總用量 (kg)"><input id="txtNeed.*" type="text" maxlength="20" style="float:left;width:95%;"/></td>
 						<td title="稀釋液用量/清洗(KG)"><input id="txtEdime.*" type="text" class="num" style="float:left;width:95%;"/></td>
 						<td title="背漆型號規格重量(KG)">
 							<input id="txtBspec.*" type="text" style="float:left;width:95%;"/>
