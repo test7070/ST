@@ -115,7 +115,7 @@
 					t_weights = q_float('txtWeight_' + j);
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
-					if (t_kind!='1' && (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓')) {
+					if (t_kind!='1' && (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M'|| t_unit == 'MT' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓')) {
 						//物料以數量計算
 						t_moneys = q_mul(t_prices, t_weights);
 					} else {
@@ -1215,9 +1215,9 @@
 					<BR>
 					<a id='lblSize_st'> </a></td>
 					<td class="st" align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
-					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td class="st" align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
+					<td align="center" style="width:50px;"><a>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotal_st'> </a>
 					<br>
@@ -1273,15 +1273,9 @@
 					<td class="st">
 					<input id="txtSize.*" type="text" style="width:95%;"/>
 					</td>
-					<td >
-					<input id="txtUnit.*" type="text" style="width:90%;"/>
-					</td>
-					<td>
-					<input id="txtMount.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
-					<td class="st">
-					<input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
+					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td class="st"><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td>
 					<input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>
 					</td>
