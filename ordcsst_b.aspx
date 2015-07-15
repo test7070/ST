@@ -10,7 +10,7 @@
 		<script src="../script/qbox.js" type="text/javascript"> </script>
     	<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-		    var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,size,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
+		    var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,size,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit,unit2  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
 		    var t_sqlname = 'ordcs_load2'; t_postname = q_name;
 		    var isBott = false;  /// 是否已按過 最後一頁
 		    var txtfield = [], afield, t_data, t_htm;
@@ -202,6 +202,7 @@
 					<td align="center" id='FixedSize'><a id='lblSize'></a><BR><a id='lblSize_help'> </a></td>
 					<td align="center" style="width:7%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
+					<td align="center" style="width:4%;"><a>單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblInmount_text'></a></td>
 					<td align="center" style="width:10%;"><a id='lblNoa'></a></td>
@@ -219,6 +220,7 @@
 					<td align="center" id='Size'><a id='lblSize'></a><BR><a id='lblSize_help'> </a></td>
 					<td align="center" style="width:7%;"><a id='lblMount'></a></td>
 					<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
+					<td align="center" style="width:4%;"><a>單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblInmount_text'></a></td>
 					<td align="center" style="width:10%;"><a id='lblNoa'></a></td>
@@ -242,6 +244,7 @@
 					</td>
 					<td style="width:7%;"><input class="txt num c1" id="txtMount.*" type="text"/></td>
 					<td style="width:7%;"><input class="txt num c1" id="txtWeight.*" type="text" /></td>
+					<td style="width:4%;"><input class="txt c1" id="txtUnit.*" type="text"/></td>
 					<td style="width:7%;"><input class="txt num c1" id="txtPrice.*" type="text"/></td>
 					<td style="width:8%;"><input class="txt num c1" id="txtCnt.*" type="text"/></td>
 					<td style="width:10%;">

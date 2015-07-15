@@ -202,6 +202,15 @@
                     }
                 }
                 _bbsAssign();
+                $('.num').each(function() {
+					$(this).keyup(function() {
+						var tmp=$(this).val();
+						tmp=tmp.match(/\d{1,}\.{0,1}\d{0,}/);
+						$(this).val(tmp);
+					});
+				}).focusin(function() {
+					$(this).select();
+				});
             }
             function ImportOrde(n){
 				var t_ordeno = $('#txtOrdeno_'+n).val();
