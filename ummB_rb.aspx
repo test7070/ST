@@ -17,7 +17,7 @@
 
             q_tables = 't';
             var q_name = "ummb";
-            var q_readonly = ['txtNoa', 'txtDatea', 'txtBkvccno', 'txtSaleno', 'txtWorker', 'txtWorker2'];
+            var q_readonly = ['txtNoa','txtBkvccno', 'txtSaleno', 'txtWorker', 'txtWorker2'];
             var q_readonlys = ['txtVccno', 'txtVccnoq', 'txtMount', 'txtTotal'];
             var bbmNum = [];
             var bbsNum = [['txtMount', 15, 0, 1], ['txtPrice', 15, 2, 1], ['txtTotal', 15, 0, 1], ['txtBkmount', 15, 0, 1], ['txtBkmoney', 15, 0, 1], ['txtSalemount', 15, 0, 1], ['txtSalemoney', 15, 0, 1]];
@@ -74,15 +74,15 @@
                     var t_vccno = trim($('#txtVccno').val());
                     var t_where = "1=1";
                     if ($('#cmbTypea').val() == '1') {//退貨--->建立 退貨單
-                        t_where += (t_custno.length > 0 ? q_sqlPara2("custno", t_custno) : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + "&& typea='1' && noa not in (select noa from view_vcc where unpay>=0 and payed>0)" + " && " + field_mount + "-isnull((select SUM(bkmount)-SUM(salemount) from ummbs where vccno=a.noa and vccnoq=a.noq),0)!=0 ";
+                        t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + "&& typea='1' && noa not in (select noa from view_vcc where unpay>=0 and payed>0)" + " && " + field_mount + "-isnull((select SUM(bkmount)-SUM(salemount) from ummbs where vccno=a.noa and vccnoq=a.noq),0)!=0 ";
                         q_box("vccs_ummb_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_1', "95%", "95%", q_getMsg('popVccs'));
                     } else if ($('#cmbTypea').val() == '2') {//換貨--->匯入【未收】出貨單--->一次一張需整張處理完--->退舊產品：系統自動建立 退貨單, 出新產品：系統自動建立 新出貨單
                         //alert('請選擇同一出貨單號的產品!!');
-                        t_where += (t_custno.length > 0 ? q_sqlPara2("custno", t_custno) : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + " && noa in (select noa from view_vcc where isnull(payed,0)=0) && typea='1' ";
+                        t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + " && noa in (select noa from view_vcc where isnull(payed,0)=0) && typea='1' ";
                         q_box("vccs_ummb_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_2', "95%", "95%", q_getMsg('popVccs'));
                     } else if ($('#cmbTypea').val() == '4') {//已收抵貨--->匯入【已收】出貨單--->退舊產品：系統自動建立 退貨單, 出新產品：系統自動建立  新出貨單(歸已收款，不再有未收)
                         //alert('請選擇同一出貨單號的產品!!');
-                        t_where += (t_custno.length > 0 ? q_sqlPara2("custno", t_custno) : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + " && noa in (select noa from view_vcc where isnull(payed,0)>0) && typea='1' ";
+                        t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + " && noa in (select noa from view_vcc where isnull(payed,0)>0) && typea='1' ";
                         q_box("vccs_ummb_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_4', "95%", "95%", q_getMsg('popVccs'));
                     }
                 });
@@ -250,7 +250,7 @@
             }
 
             function btnOk() {
-                t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')]]);
+                t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')]]);
                 if (t_err.length > 0) {
                     alert(t_err);
                     return;
@@ -260,6 +260,80 @@
                     alert('請填入' + q_getMsg('lblChgdate') + '、' + q_getMsg('lblVccno'));
                     return;
                 }
+                
+                //判斷bbs與bbt的內容數量是否相等
+                var bbss=[];
+                var bbtt=[];
+                for (var i = 0; i < q_bbsCount; i++) {
+                	var t_productno=$('#txtProductno_'+i).val();
+                	var t_mount=dec($('#txtBkmount_'+i).val());
+                	var t_find=false;
+                	if(t_productno.length>0){
+                		if(bbss==undefined){
+	                		bbss.push({
+	                			productno:t_productno,
+	                			mount:t_mount
+	                		});
+	                	}else{
+	                		for (var j = 0; j < bbss.length; j++) {
+	                			if(bbss[j].productno==t_productno){
+	                				bbss[j].mount=q_add(bbss[j].mount,t_mount)
+	                				t_find=true;
+	                			}
+	                		}
+	                		if(!t_find){
+	                			bbss.push({
+		                			productno:t_productno,
+		                			mount:t_mount
+		                		});
+	                		}
+	                	}	
+                	}
+                }
+                
+                for (var i = 0; i < q_bbtCount; i++) {
+                	var t_productno=$('#txtProductno__'+i).val();
+                	var t_mount=dec($('#txtMount__'+i).val());
+                	var t_find=false;
+                	if(bbtt==undefined){
+                		bbtt.push({
+                			productno:t_productno,
+                			mount:t_mount
+                		});
+                	}else{
+                		for (var j = 0; j < bbtt.length; j++) {
+                			if(bbtt[j].productno==t_productno){
+                				bbtt[j].mount=q_add(bbtt[j].mount,t_mount)
+                				t_find=true;
+                			}
+                		}
+                		if(!t_find){
+                			bbtt.push({
+	                			productno:t_productno,
+	                			mount:t_mount
+	                		});
+                		}
+                	}
+                }
+                	
+                for (var i = 0; i < bbss.length; i++) {
+                	for (var j = 0; j < bbtt.length; j++) {
+                		if(bbss[i].productno==bbtt[j].productno && bbss[i].mount==bbtt[j].mount){
+                			bbss.splice(i, 1);
+                			i--;
+                			break;
+                		}
+                	}	
+                }
+                
+                if(bbss.length>0){
+                	alert("表身(藍色區塊)與表尾(紅色區塊)產品數量不符!!");
+                	return;
+                }
+                
+                
+                $('#txtBkdate').val($('#txtDatea').val());
+                $('#txtVccdate').val($('#txtDatea').val());
 
                 if (q_cur == 1) {
                     $('#txtWorker').val(r_name);
@@ -356,7 +430,7 @@
                     Lock(1, {
                         opacity : 0
                     });
-                    var t_where = " where=^^ charindex(vccno,'" + $('#txtBkvccno').val() + ',' + $('#txtSaleno').val() + "' )>0 ^^";
+                    var t_where = " where=^^ charindex(vccno,'" + $('#txtBkvccno').val() + ',' + $('#txtSaleno').val() + "' )>0 and len(vccno)>5 ^^";
                     q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
                 } else {
                     _btnModi();
@@ -466,7 +540,7 @@
                     Lock(1, {
                         opacity : 0
                     });
-                    var t_where = " where=^^ charindex(vccno,'" + $('#txtBkvccno').val() + ',' + $('#txtSaleno').val() + "' )>0 ^^";
+                    var t_where = " where=^^ charindex(vccno,'" + $('#txtBkvccno').val() + ',' + $('#txtSaleno').val() + "' )>0 and len(vccno)>5 ^^";
                     q_gt('umms', t_where, 0, 0, 0, 'btnDele', r_accy);
                 } else {
                     _btnDele();
@@ -756,24 +830,24 @@
 						<td class="td6"><input id="txtChgdate"  type="text"  class="txt c1" style="display: none;"/></td>
 					</tr>
 					<tr>
-						<td class="td5"><span> </span><a id='lblBkdate' class="lbl" > </a></td>
-						<td class="td6"><input id="txtBkdate"  type="text" class="txt c1"/></td>
-						<td class="td5"><span> </span><a id='lblVccdate' class="lbl" > </a></td>
-						<td class="td6"><input id="txtVccdate"  type="text" class="txt c1"/></td>
-						<td class="td5"><span> </span><a id='lblWorker' class="lbl"> </a></td>
-						<td class="td6"><input id="txtWorker"  type="text"  class="txt c1"/></td>
-					</tr>
-					<tr>
 						<td class="td1"><span> </span><a id='lblBkvccno' class="lbl" > </a></td>
 						<td class="td2"><input id="txtBkvccno"  type="text" class="txt c1"/></td>
 						<td class="td3"><span> </span><a id='lblSaleno' class="lbl" > </a></td>
 						<td class="td4"><input id="txtSaleno"  type="text" class="txt c1"/></td>
-						<td class="td7"><span> </span><a id='lblWorker2' class="lbl"> </a></td>
-						<td class="td8"><input id="txtWorker2"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblMemo' class="lbl"> </a></td>
 						<td class="td2" colspan='5' ><input id="txtMemo"  type="text"  style="width: 98%;"/></td>
+					</tr>
+					<tr>
+						<td class="td5"><span> </span><a id='lblWorker' class="lbl"> </a></td>
+						<td class="td6"><input id="txtWorker"  type="text"  class="txt c1"/></td>
+						<td class="td7"><span> </span><a id='lblWorker2' class="lbl"> </a></td>
+						<td class="td8"><input id="txtWorker2"  type="text"  class="txt c1"/></td>
+						<!--<td class="td5"><span> </span><a id='lblBkdate' class="lbl" > </a></td>-->
+						<td class="td6"><input id="txtBkdate"  type="hidden" class="txt c1"/></td>
+						<!--<td class="td5"><span> </span><a id='lblVccdate' class="lbl" > </a></td>-->
+						<td class="td6"><input id="txtVccdate"  type="hidden" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
