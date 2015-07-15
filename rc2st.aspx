@@ -469,7 +469,8 @@
 									newB_ret.push(ordcsArray[j]);
 								}
 							}
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit', newB_ret.length, newB_ret, 'uno,productno,product,spec,size,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,class,style,unit', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit,txtUnit2', newB_ret.length, newB_ret
+							, 'uno,productno,product,spec,size,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,class,style,unit,unit2', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							t_where = "where=^^ noa='" + newB_ret[0].noa + "'";
 							q_gt('ordc', t_where, 0, 0, 0, "", r_accy);
@@ -890,6 +891,8 @@
 				size_change();
 				if(q_getPara('sys.comp').substring(0,2)=='傑期')
 					$('.pk').show();
+				if(q_getPara('sys.comp').substring(0,2)=='聯琦')
+					$('.rk').show();
 			}
 
 			function btnIns() {
@@ -913,7 +916,7 @@
 			function btnPrint() {
 				t_where = "noa=" + $('#txtNoa').val();
 				if(q_getPara('sys.comp').substring(0,2)=='聯琦')
-					q_box("z_rc2_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+					q_box("z_rc2_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_rk', "95%", "95%", m_print);
 				else
 					q_box("z_rc2stp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
 			}
@@ -950,6 +953,8 @@
 				_refresh(recno);
 				if(q_getPara('sys.comp').substring(0,2)=='傑期')
 					$('.pk').show();
+				if(q_getPara('sys.comp').substring(0,2)=='聯琦')
+					$('.rk').show();	
 				size_change();
 				//q_popPost('txtProductno_');
 				$('input[id*="txtProduct_"]').each(function() {
@@ -985,6 +990,9 @@
 				_readonly(t_para, empty);
 				if(q_getPara('sys.comp').substring(0,2)=='傑期')
 					$('.pk').show();
+				if(q_getPara('sys.comp').substring(0,2)=='聯琦')
+					$('.rk').show();	
+					
 				size_change();
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
 				if ($('#txtMemo').val().substr(0,1)=='*')
