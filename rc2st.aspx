@@ -912,7 +912,10 @@
 
 			function btnPrint() {
 				t_where = "noa=" + $('#txtNoa').val();
-				q_box("z_rc2stp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				if(q_getPara('sys.comp').substring(0,2)=='聯琦')
+					q_box("z_rc2_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				else
+					q_box("z_rc2stp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {
