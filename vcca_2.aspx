@@ -122,6 +122,8 @@
 					sum();
 				}).click(function(e) {			
 					sum();
+				}).focusout(function() {
+					sum();
 				});	
 				$('#txtNoa').change(function(e) {
 					$('#txtNoa').val($('#txtNoa').val().toUpperCase());
@@ -173,6 +175,7 @@
 						var as = _q_appendData("vccar", "", true);
 						if (as[0] == undefined) {
 							alert("請檢查發票日期及公司有無設定，或發票已輸入。");
+							Unlock(1);
 						} else {
 							//3聯須輸入統編
 							if (as[0].rev=='3' && $('#cmbTaxtype').val()!='6' && checkId($('#txtSerial').val())!=2){										
@@ -205,11 +208,7 @@
 			}
 			function btnOk() {	
 				Lock(1,{opacity:0});
-				if($('#cmbTaxtype').val() !=6 && emp($('#txtProductno').val())){
-					alert(q_getMsg('lblProduct')+'未填寫。');
-					Unlock(1);
-					return;
-				}
+				
 				if ($('#txtDatea').val().length==0 || !q_cd($('#txtDatea').val())){
 					alert(q_getMsg('lblDatea')+'錯誤。');
 					Unlock(1);
