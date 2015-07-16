@@ -632,6 +632,13 @@
 							var n = replaceAll($(this).attr('id'), 'btnRecord_', '');
 							q_box("z_rc2record.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";tgg=" + $('#txtTggno').val() + "&product=" + $('#txtProductno_' + n).val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
 						});
+						$('#btnS1_'+j).click(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if(q_cur==1 || q_cur==2)
+								$('#txtProduct_'+b_seq).val($('#txtProduct_'+b_seq).val()+'∮');
+						});
 					}
 				}
 				_bbsAssign();
@@ -1167,6 +1174,7 @@
 					<td>
 						<input type="text" id="txtProduct.*" class="txt c1"/>
 						<input type="text" id="txtSpec.*" class="txt c1 isSpec"/>
+						<input class="btn" id="btnS1.*" type="button" value='∮' style="font-size: 10px;float: left;" />
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
