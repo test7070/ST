@@ -15,16 +15,10 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-            aPop = new Array(['txtXpart', '', 'part', 'noa,part', 'txtXpart', "part_b.aspx"]);
-
             $(document).ready(function() {
                 q_getId();
                 q_gf('', 'z_umm_pk');
 
-                $('#q_report').click(function(e) {
-                    if (q_getPara('sys.isAcccUs') != '1')
-                        $('#Xcoin').hide();
-                });
             });
 
             function q_gfPost() {
@@ -67,6 +61,8 @@
 						value : "1@顯示未付".split(',')
 					}]
                 });
+                q_popAssign();
+                q_langShow();
                 
                 $('#txtXdate1').mask('999/99/99');
                 $('#txtXdate1').datepicker();
@@ -75,12 +71,22 @@
                 
                 $('#txtXmon1').mask('999/99');
                 $('#txtXmon2').mask('999/99');
+                //--------------------------------
+                $('#Xmemo1').css('width','98%');
+                $('#txtXmemo1').css('width','85%');
+                $('#Xmemo2').css('width','98%');
+                $('#txtXmemo2').css('width','85%');
+                $('#Xmemo3').css('width','98%');
+                $('#txtXmemo3').css('width','85%');
+                $('#Xmemo4').css('width','98%');
+                $('#txtXmemo4').css('width','85%');
+                $('#Xmemo5').css('width','98%');
+                $('#txtXmemo5').css('width','85%');
             }
 
             function q_boxClose(s2) {
             }
 
-            var z_coin = '';
             function q_gtPost(t_name) {
                 switch (t_name) {
                     default:
