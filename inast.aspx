@@ -204,6 +204,7 @@
                 q_cmbParse("cmbItype", q_getPara('uccc.itype'));
                 q_cmbParse("cmbKind", q_getPara('sys.stktype'));
                 q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
+                
                 /* 若非本會計年度則無法存檔 */
                 $('#txtDatea').focusout(function() {
                     if ($(this).val().substr(0, 3) != r_accy) {
@@ -599,6 +600,10 @@
                     uccb_readonly = true;
                     bbs_readonly(0);
                 }
+                if(q_getPara('sys.comp').substring(0,2)=='傑期'){
+                	$('.pk').show();
+                	$('#lblUnit').html('計價<BR>單位');
+                }
             }
 
             function btnIns() {
@@ -650,6 +655,10 @@
 					thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 		            $(this).attr('OldValue',$('#txtProductno_'+thisId).val());
 				});
+				if(q_getPara('sys.comp').substring(0,2)=='傑期'){
+                	$('.pk').show();
+                	$('#lblUnit').html('計價<BR>單位');
+                }
             }
 
             function q_popPost(s1) {
@@ -675,6 +684,10 @@
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
                 size_change();
+                if(q_getPara('sys.comp').substring(0,2)=='傑期'){
+                	$('.pk').show();
+                	$('#lblUnit').html('計價<BR>單位');
+                }
             }
 
             function btnMinus(id) {
@@ -1144,13 +1157,14 @@
 					<td align="center" style="width:80px;"><a>等級</a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:230px;"><a id='lblSizea_st'> </a></td>
-					<td align="center" style="width:80px;"><a>進貨<BR>厚度</a></td>
-					<td align="center" style="width:80px;"><a>進貨<BR>寬度</a></td>
-					<td align="center" style="width:80px;"><a>進貨<BR>長度</a></td>	
+					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>厚度</a></td>
+					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>寬度</a></td>
+					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>長度</a></td>	
 					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
-					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:50px; display:none;" class="pk"><a id='lblUnit2'>數量<BR>單位</a></td>
 					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
@@ -1196,13 +1210,15 @@
 					<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
 					<td><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
-					<td ><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td ><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td ><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td ><input  id="txtSource.*" type="text" style="width:95%;"/></td>
-					<td ><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
+					
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input  id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td ><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
