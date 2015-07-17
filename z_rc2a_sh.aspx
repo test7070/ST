@@ -46,6 +46,12 @@
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
+                    }, {/*1-4 [9][10] 含子科目*/
+                        type : '2',
+                        name : 'xacc',
+                        dbf : 'acc',
+                        index : 'acc1,acc2',
+                        src : "acc_b.aspx"
                     }]
                 });
                 q_popAssign();

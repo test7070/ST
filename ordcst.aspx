@@ -1226,7 +1226,7 @@
 					<td class="st" align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
-					<td class="st" align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
+					<td class="st" align="center" style="width:250px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td class="st" align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
