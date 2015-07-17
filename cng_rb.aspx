@@ -20,7 +20,7 @@
 			var q_readonly = ['txtNoa','txtStorein','txtStore','txtNamea', 'txtWorker', 'txtWorker2','txtTranstart','txtComp'];
 			var q_readonlys = ['txtRetno','txtRetnoq'];
 			var bbmNum = [];
-			var bbsNum = [['txtMount', 15, 2, 1]];
+			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_sqlCount = 6;
@@ -58,6 +58,7 @@
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd],['txtPost', r_picd],['txtTranstyle', '99:99']];
+				bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('cng.typea'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
@@ -66,10 +67,16 @@
 				$('#btnRet').click(function() {
 					var t_where = '';
 					var t_custno = $('#txtCustno').val();
-					if (t_custno.length > 0 && (q_cur==1 || q_cur==2)) {
-						t_where = "typea='4' and exists(select * from view_cng where custno='"+t_custno+"' and noa=a.noa) ";
-						t_where += " and mount-isnull(b.rmount,0)>0 ";
-						q_box("cngs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'cngs', "95%", "95%", q_getMsg('popCngs'));
+					if (t_custno.length > 0 ){
+						if((q_cur==1 || q_cur==2)){
+							t_where ="typea='4' and custno='"+t_custno+"' "
+							t_where += "and exists (select * from view_cngs ca outer apply (select sum(mount)rmount,sum(weight) rweight from view_cngs where retno=ca.noa and retnoq=ca.noq ) cb where ca.noa=view_cng.noa and ca.mount-isnull(cb.rmount,0)>0 )";
+							//t_where = "typea='4' and exists(select * from view_cng where custno='"+t_custno+"' and noa=a.noa) ";
+							//t_where += " and mount-isnull(b.rmount,0)>0 ";
+							q_box("cng_rb_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'cng', "500px", "95%", q_getMsg('popCngs'));
+						}
+					}else{
+						alert("請輸入客戶編號!!");
 					}
 				});
 				
@@ -81,6 +88,19 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'cng':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0) {
+								b_pop = '';
+								return;
+							}
+							if(b_ret[0].noa!=undefined){
+								var t_where = "where=^^typea='4' and noa='"+b_ret[0].noa+"' and mount-isnull(b.rmount,0)>0 ^^";
+								q_gt('cngs_re', t_where, 0, 0, 0, "", r_accy);	
+							}
+						}
+						break;
 					case 'cngs':
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
@@ -125,6 +145,11 @@
 			var thisCarSpecno = '';
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'cngs_re':
+						var as = _q_appendData("view_cngs", "", true);
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtRetno,txtRetnoq'
+								, as.length, as, 'productno,product,unit,umount,noa,noq', 'txtProductno,txtProduct');
+						break;
 					case 'msg_stk':
 						var as = _q_appendData("stkucc", "", true);
 						var stkmount = 0;
@@ -150,7 +175,7 @@
 				}
 				
 				if($('#cmbTypea').val()=='4' || $('#cmbTypea').val()=='5'){
-					t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
+					t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')],['txtStoreno', q_getMsg('lblStore')],['txtStoreinno', q_getMsg('lblStorein')]]);
 					if (t_err.length > 0) {
 						alert(t_err);
 						return;
@@ -200,6 +225,16 @@
 									var t_where = "where=^^ ['" + q_date() + "','"+t_storeno+"','"+$('#txtProductno_' + b_seq).val()+"')  ^^";
 									q_gt('calstk', t_where, 0, 0, 0, "msg_stk", r_accy);
 								}
+							}
+						});
+						
+						$('#txtRetno_'+i).click(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if (!(q_cur == 1 || q_cur == 2) &&!emp($('#txtRetno_'+b_seq).val())) {
+								var t_noa=trim($('#txtRetno_'+b_seq).val());
+								q_box("cng_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + t_noa+ "';" + r_accy, 'cng_rb', "95%", "95%", '借出調撥單');
 							}
 						});
 					}

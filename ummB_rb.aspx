@@ -57,7 +57,6 @@
                 mainForm(1);
             }
 
-            var field_mount = 'mount';
             function mainPost() {
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtChgdate', r_picd], ['txtBkdate', r_picd], ['txtVccdate', r_picd], ['txtVbdate', r_picd], ['txtVedate', r_picd]];
@@ -74,16 +73,18 @@
                     var t_vccno = trim($('#txtVccno').val());
                     var t_where = "1=1";
                     if ($('#cmbTypea').val() == '1') {//退貨--->建立 退貨單
-                        t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + "&& typea='1' && noa not in (select noa from view_vcc where unpay>=0 and payed>0)" + " && " + field_mount + "-isnull((select SUM(bkmount)-SUM(salemount) from ummbs where vccno=a.noa and vccnoq=a.noq),0)!=0 ";
-                        q_box("vccs_ummb_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_1', "95%", "95%", q_getMsg('popVccs'));
+                        t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") 
+                        + "&& typea='1' && pay=0 && unpay!=0 "
+                        +"&& exists (select * from view_vccs where noa=view_vcc.noa and mount-isnull((select SUM(bkmount)-SUM(salemount) from ummbs where vccno=view_vccs.noa and vccnoq=view_vccs.noq),0)!=0)";
+                        q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_1', "95%", "95%", q_getMsg('popVccs'));
                     } else if ($('#cmbTypea').val() == '2') {//換貨--->匯入【未收】出貨單--->一次一張需整張處理完--->退舊產品：系統自動建立 退貨單, 出新產品：系統自動建立 新出貨單
                         //alert('請選擇同一出貨單號的產品!!');
-                        t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + " && noa in (select noa from view_vcc where isnull(payed,0)=0) && typea='1' ";
-                        q_box("vccs_ummb_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_2', "95%", "95%", q_getMsg('popVccs'));
+                        t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + " && isnull(payed,0)=0 && typea='1' ";
+                        q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_2', "95%", "95%", q_getMsg('popVccs'));
                     } else if ($('#cmbTypea').val() == '4') {//已收抵貨--->匯入【已收】出貨單--->退舊產品：系統自動建立 退貨單, 出新產品：系統自動建立  新出貨單(歸已收款，不再有未收)
                         //alert('請選擇同一出貨單號的產品!!');
-                        t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + " && noa in (select noa from view_vcc where isnull(payed,0)>0) && typea='1' ";
-                        q_box("vccs_ummb_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_4', "95%", "95%", q_getMsg('popVccs'));
+                        t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") + " && pay>0 && typea='1' ";
+                        q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_4', "95%", "95%", q_getMsg('popVccs'));
                     }
                 });
 
@@ -111,8 +112,7 @@
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
-                var
-                ret;
+                var ret;
                 switch (b_pop) {
                     case 'vccs_1':
                         if (q_cur > 0 && q_cur < 4) {
@@ -124,8 +124,10 @@
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             }
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', b_ret.length, b_ret, 'productno,product,' + field_mount + ',price,total,' + field_mount + ',total,noa,noq', '');
-                            fieldsdisabled();
+                            for (var i = 0; i < b_ret.length; i++) {
+                                var t_where = " where=^^ a.noa='"+b_ret[i].noa+"' and mount-isnull((select SUM(bkmount)-SUM(salemount) from ummbs where vccno=a.noa and vccnoq=a.noq),0)!=0 ^^";
+								q_gt('vccs_ummb', t_where, 0, 0, 0, 'vccs_1', r_accy);
+                            }                            
                         }
                         break;
                     case 'vccs_2':
@@ -134,7 +136,7 @@
                             ///  q_box() 執行後，選取的資料
                             if (!b_ret || b_ret.length == 0)
                                 return;
-                            var t_noa = '';
+							var t_noa = '';
                             for (var i = 0; i < b_ret.length; i++) {
                                 if (t_noa.length > 0) {
                                     if (t_noa != b_ret[i].noa) {
@@ -149,8 +151,10 @@
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             }
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', b_ret.length, b_ret, 'productno,product,' + field_mount + ',price,total,' + field_mount + ',total,noa,noq', '');
-                            fieldsdisabled();
+                            for (var i = 0; i < b_ret.length; i++) {
+                                var t_where = " where=^^ a.noa='"+b_ret[i].noa+"' ^^";
+								q_gt('vccs_ummb', t_where, 0, 0, 0, 'vccs_2', r_accy);
+                            }
                         }
                         break;
                     case 'vccs_4':
@@ -174,8 +178,10 @@
                             for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
                             }
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', b_ret.length, b_ret, 'productno,product,' + field_mount + ',price,total,' + field_mount + ',total,noa,noq', '');
-                            fieldsdisabled();
+                            for (var i = 0; i < b_ret.length; i++) {
+                                var t_where = " where=^^ a.noa='"+b_ret[i].noa+"' ^^";
+								q_gt('vccs_ummb', t_where, 0, 0, 0, 'vccs_4', r_accy);
+                            }
                         }
                         break;
                     case q_name + '_s':
@@ -189,6 +195,33 @@
             var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'vccs_1':
+                		var as = _q_appendData("ummbs", "", true);
+                		for (var i = 0; i < as.length; i++) {
+                			as[i].emount=dec(as[i].mount)-dec(as[i].bkmount);
+                			as[i].emoney=dec(as[i].total)-dec(as[i].bkmoney);
+                		}
+                		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', as.length, as, 'productno,product,mount,price,total,emount,emoney,noa,noq', 'txtVccno');
+                        fieldsdisabled();
+                		break;
+                	case 'vccs_2':
+                		var as = _q_appendData("ummbs", "", true);
+                		for (var i = 0; i < as.length; i++) {
+                			as[i].emount=dec(as[i].mount)-dec(as[i].bkmount);
+                			as[i].emoney=dec(as[i].total)-dec(as[i].bkmoney);
+                		}
+                		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', b_ret.length, b_ret, 'productno,product,mount,price,total,emount,emoney,noa,noq', 'txtVccno');
+                        fieldsdisabled();
+                		break;
+                	case 'vccs_4':
+                		var as = _q_appendData("ummbs", "", true);
+                		for (var i = 0; i < as.length; i++) {
+                			as[i].emount=dec(as[i].mount)-dec(as[i].bkmount);
+                			as[i].emoney=dec(as[i].total)-dec(as[i].bkmoney);
+                		}
+                		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', b_ret.length, b_ret, 'productno,product,mount,price,total,emount,emoney,noa,noq', 'txtVccno');
+                        fieldsdisabled();
+                		break;
                     case 'stpostBkvccno':
                         var as = _q_appendData("ummb", "", true);
                         if (as[0] != undefined) {
@@ -242,13 +275,59 @@
                             z_nick = as[0].nick;
                         }
                         break;
+                    case 'vccs_btnOK':
+                    	var as = _q_appendData("ummbs", "", true);
+                    	var vccbk=[];
+                    	for (var i = 0; i < q_bbsCount; i++) {
+		                	var t_product=$('#txtProduct_'+i).val();
+		                	var t_vccno=$('#txtVccno_'+i).val();
+		                	var t_vccnoq=$('#txtVccnoq_'+i).val();
+		                	var t_mount=dec($('#txtMount_'+i).val());
+		                	var t_bkmount=dec($('#txtBkmount_'+i).val());
+		                	var t_find=false;
+		                	if(t_vccno.length>0){
+			                	vccbk.push({
+			                		vccno:t_vccno,
+			                		vccnoq:t_vccnoq,
+			                		product:t_product,
+			                		mount:t_mount-t_bkmount
+			                	});
+			                }
+		                }
+		                
+		                for (var i = 0; i < as.length; i++) {
+		                	for (var j = 0; j < vccbk.length; j++) {
+		                		if(vccbk[j].vccno==as[i].vccno && vccbk[j].vccnoq==as[i].vccnoq){
+		                			vccbk[j].mount=dec(vccbk[j].mount)-dec(as[i].bkmount);
+		                		}
+		                	}
+		                }
+		                
+		                for (var j = 0; j < vccbk.length; j++) {
+		                	if(vccbk[j].mount>=0){
+		                		vccbk.splice(j, 1);
+                				j--;
+		                	}
+		                }
+		                if(vccbk.length>0){
+		                	var t_err="";
+		                	for (var j = 0; j < vccbk.length; j++) {
+		                		t_err+=(t_err.length>0?'\n':'')+vccbk[j].product+"總退貨量超出原出貨單數量";
+		                	}
+		                	alert(t_err);
+		                }else{
+		                	check_umms=true;
+                    		btnOk();
+		                }
+                    	break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
                         break;
                 }  /// end switch
             }
-
+			
+			var check_umms=false;
             function btnOk() {
                 t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')]]);
                 if (t_err.length > 0) {
@@ -260,6 +339,21 @@
                     alert('請填入' + q_getMsg('lblChgdate') + '、' + q_getMsg('lblVccno'));
                     return;
                 }
+                
+                if(!check_umms){
+					var vccno='1=0';
+					for (var i = 0; i < q_bbsCount; i++) {
+						if(!emp($('#txtVccno_'+i).val())){
+							vccno+=" or vccno+'-'+vccnoq='"+$('#txtVccno_'+i).val()+'-'+$('#txtVccnoq_'+i).val()+"' ";
+						}
+					}
+					var t_where = " where=^^ exists (select * from ummbs where ummb.noa=noa and ("+vccno+")) and noa!='"+$('#txtNoa').val()+"' ^^";
+					q_gt('ummb', t_where, 0, 0, 0, 'vccs_btnOK', r_accy);
+					
+                	return;
+                }
+                
+                check_umms=false;
                 
                 //判斷bbs與bbt的內容數量是否相等
                 var bbss=[];
