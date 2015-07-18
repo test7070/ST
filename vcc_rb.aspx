@@ -31,7 +31,7 @@
 			brwKey = 'datea';
 
 			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel,fax,zip_comp,addr_comp,paytype,trantype,salesno,sales', 'txtCustno,txtComp,txtTel,txtFax,txtPost,txtAddr,txtPaytype,cmbTrantype,txtSalesno,txtSales', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel,fax,zip_comp,addr_comp,paytype,trantype,salesno,sales,custno2,cust2', 'txtCustno,txtComp,txtTel,txtFax,txtPost,txtAddr,txtPaytype,cmbTrantype,txtSalesno,txtSales,txtCustno2,txtComp2', 'cust_b.aspx'],
 				['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
@@ -552,6 +552,10 @@
 						$('#txtApvmemo').val(t_consignee);
 						if (as[0] != undefined){
 							$('#txtCustno').val(as[0].custno);
+							//取得收款客戶
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+							q_gt('cust', t_where, 0, 0, 0, "cust_cust2");
+							
 							$('#txtComp').val(as[0].comp);
 							$('#txtTel').val(as[0].tel);
 							$('#txtFax').val(as[0].fax);
@@ -581,6 +585,13 @@
 						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', ass.length, ass, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
 						sum();
 						refreshBbm();
+						break;
+					case 'cust_cust2':
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							$('#txtCustno2').val(as[0].custno2)
+							$('#txtComp2').val(as[0].cust2)
+						}
 						break;
 					case 'cust':
 						var as = _q_appendData("cust", "", true);
@@ -1342,6 +1353,11 @@
 						<td class="td1"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtStoreno" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtStore" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td class="td1"><span> </span><a id='lblCust2' class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtCustno2" type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtComp2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
