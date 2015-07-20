@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -25,15 +25,13 @@
             						,['txtCointariff', 15, 2, 1],['txtRetiremoney', 15, 0, 1],['txtTotal', 15, 0, 1],['txtTariff', 15, 0, 1]
             						,['txtTrade', 15, 0, 1],['txtCommoditytax', 15, 0, 1],['txtLctotal', 15, 0, 1]
             						];
-            var bbsNum = [];
+            var bbsNum = [['txtMount', 15, 0, 1],['txtInmount', 15, 0, 1],['txtPrice', 10, 2, 1],['txtMoney', 15, 2, 1],['txtCointotal', 15, 2, 1],['txtTotal', 15, 0, 1]
+									,['txtTariffrate', 5, 4, 1],['txtCointariff', 15, 2, 1],['txtTariff', 15, 0, 1],['txtTraderate', 10, 4, 1],['txtTrade', 15, 0, 1]
+									,['txtCommodityrate', 5, 4, 1],['txtCommoditytax', 15, 0, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtCasemount', 15, 0, 1]
+									,['txtMweight', 15, 2, 1],['txtCuft', 15, 2, 1],['txtWeight', 15, 2, 1],['txtInweight', 15, 2, 1]
+									,['txtDime', 15, 3, 1],['txtWidth', 15, 2, 1],['txtLengthb', 15, 2, 1],['txtDime2', 15, 3, 1],['txtLengthc', 15, 2, 1],['txtLengthd', 15, 2, 1]
+									,['txtLcmoney', 15, 0, 1],['txtCost', 15, 0, 1]];
             
-            /*[['txtMount', 15],['txtInmount', 15],['txtPrice', 10],['txtMoney', 15],['txtCointotal', 15],['txtTotal', 15]
-            						,['txtTariffrate', 10],['txtCointariff', 15],['txtTariff', 15],['txtTraderate', 10],['txtTrade', 15]
-            						,['txtCommodityrate',10],['txtCommoditytax', 15],['txtVatbase', 15],['txtVat', 15],['txtCasemount', 15]
-            						,['txtMweight', 15],['txtCuft', 15],['txtWeight', 15],['txtInweight', 15]
-            						,['txtDime', 15],['txtWidth', 15],['txtLengthb', 15],['txtDime2', 15],['txtLengthc', 15],['txtLengthd', 15]
-            						,['txtLcmoney', 15],['txtCost', 15]
-            						];*/
             var bbmMask = [];
             var bbsMask = [['txtStyle', 'A']];
             q_sqlCount = 6;
@@ -47,9 +45,9 @@
             ,['txtBcompno', 'lblBcomp', 'tgg', 'noa,comp', 'txtBcompno,txtBcomp', 'tgg_b.aspx']
             ,['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtClass_', 'ucaucc_b.aspx']
             ,['txtStoreno_', 'btnProductno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
-            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
-            	, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
-	            , ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
+            ,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
+            ,['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
+	        ,['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
             );
             
             $(document).ready(function() {
@@ -158,18 +156,28 @@
                 q_cmbParse("cmbCredittype", ",1@可扣抵進貨及費用,2@可扣抵固定資產,3@不可扣抵進貨及費用,4@不可扣抵固定資產");
                 q_cmbParse("cmbFeetype", ",1@依進貨金額,2@依進貨數量,5@依進貨重量,3@依毛重,4@依材積");
                 
+                if(q_getPara('sys.project').toUpperCase()=='PK'){
+                	bbsNum=[];
+                }
+                
+                if(q_getPara('sys.project').toUpperCase()=='RK'){
+                	$('#btnRc2').hide();
+                }
+                
                 $('#btnOrdc').click(function() {
                 	if(q_cur==1||q_cur==2){
 	                	var t_tggno = trim($('#txtTggno').val());
 	                	var t_where='';
 	                	if (t_tggno.length > 0) {
-							t_where = " isnull(view_ordcs.enda,0)=0 && isnull(view_ordcs.cancel,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "");  ////  sql AND 語法，請用 &&
-							t_where = t_where;
+							//t_where = " isnull(view_ordcs.enda,0)=0 && isnull(view_ordcs.cancel,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "");  ////  sql AND 語法，請用 &&
+							//t_where = t_where;
+							//q_box("ordcs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
+							t_where = " view_ordcs.enda='0'  and b.enda='0' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
+							q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
 						}else {
 							alert('請填入【'+q_getMsg('lblTgg')+'】!!!');
 							return;
 						}
-						q_box("ordcs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
 					}
 				});
 				 $('#lblSino').click(function() {
@@ -201,12 +209,32 @@
 					}
 				});
             }
-
+			
+			var ordcsArray = new Array;
             function q_boxClose(s2) {///   q_boxClose 2/4
                 var
                 ret;
                 switch (b_pop) {
                 	case 'ordcs':
+						if (q_cur > 0 && q_cur < 4) {
+							ordcsArray = getb_ret();
+							if (ordcsArray && ordcsArray[0] != undefined) {
+								var distinctArray = new Array;
+								var inStr = '';
+								for (var i = 0; i < ordcsArray.length; i++) {
+									distinctArray.push(ordcsArray[i].noa);
+								}
+								distinctArray = distinct(distinctArray);
+								for (var i = 0; i < distinctArray.length; i++) {
+									inStr += "'" + distinctArray[i] + "',";
+								}
+								inStr = inStr.substring(0, inStr.length - 1);
+								var t_where = "where=^^ ordeno in(" + inStr + ") ^^";
+								q_gt('rc2s', t_where, 0, 0, 0, "", r_accy);
+							}
+						}
+						break;
+                	/*case 'ordcs':
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
@@ -233,7 +261,7 @@
 							bbs_sum();
 							bbsAssign();
 						}
-						break;
+						break;*/
                     case q_name + '_s':
                         q_boxClose2(s2);
                         ///   q_boxClose 3/4
@@ -241,10 +269,74 @@
                 }/// end Switch
                 b_pop = '';
             }
+            
+            function distinct(arr1) {
+				var uniArray = [];
+				for (var i = 0; i < arr1.length; i++) {
+					var val = arr1[i];
+					if ($.inArray(val, uniArray) === -1) {
+						uniArray.push(val);
+					}
+				}
+				return uniArray;
+			}
 			
 			var z_cno=r_cno,z_acomp=r_comp,z_nick=r_comp.substr(0,2);
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'rc2s':
+						var as = _q_appendData("rc2s", "", true);
+						for (var i = 0; i < ordcsArray.length; i++) {
+							if(q_getPara('sys.project').toUpperCase()=='RK'){
+								if ((ordcsArray[i].mount <= 0 && ordcsArray[i].weight <= 0) || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
+									ordcsArray.splice(i, 1);
+									i--;
+								}
+							}else{
+								if (ordcsArray[i].mount <= 0 || ordcsArray[i].weight <= 0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
+									ordcsArray.splice(i, 1);
+									i--;
+								}
+							}
+						}
+						if (ordcsArray[0] != undefined) {
+							for (var i = 0; i < q_bbsCount; i++) {
+								$('#btnMinus_' + i).click();
+							}
+							var newB_ret = new Array;
+							for (var j = 0; j < ordcsArray.length; j++) {
+								if (dec(ordcsArray[j].cnt) > 1) {
+									var n_mount = round(q_div(dec(ordcsArray[j].mount), dec(ordcsArray[j].cnt)), 0);
+									var n_weight = round(q_div(ordcsArray[j].weight, dec(ordcsArray[j].cnt)), 0);
+									if ((ordcsArray[j].product).indexOf('捲') == -1) {
+										ordcsArray[j].mount = n_mount;
+										ordcsArray[j].weight = n_weight;
+									} else {
+										ordcsArray[j].weight = round(q_div(ordcsArray[j].weight, dec(ordcsArray[j].mount)), 0);
+										ordcsArray[j].mount = 1;
+									}
+									ordcsArray[j].uno = '';
+									for (var i = 0; i < dec(ordcsArray[j].cnt); i++) {
+										newB_ret.push(ordcsArray[j]);
+									}
+									ordcsArray.splice(j, 1);
+									j--;
+								} else {
+									newB_ret.push(ordcsArray[j]);
+								}
+							}
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtOrdcno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit', newB_ret.length, newB_ret
+							, 'uno,productno,product,spec,size,dime,width,lengthb,noa,no2,price,mount,weight,total,memo,class,style,unit', 'txtProductno,txtProduct,txtSpec');
+							/// 最後 aEmpField 不可以有【數字欄位】
+							
+							//依據ordc 取得lcs 的開狀費
+							q_gt('ordcs_lccost', "where=^^a.noa='" + newB_ret[0].noa + "' ^^", 0, 0, 0, "ordcs_lccost");
+							
+							bbsAssign();
+							sum();
+						}
+						ordcsArray = new Array;
+						break;
                 	case 'cno_acomp':
                 		var as = _q_appendData("acomp", "", true);
                 		if (as[0] != undefined) {
@@ -530,6 +622,13 @@
                     }
                 }
                 _bbsAssign();
+                if(q_getPara('sys.project').toUpperCase()!='PK'){
+                	$('.dime2').hide();
+                	$('.lengthc').hide();
+                	$('.lengthd').hide();
+                	$('.dbbs').css('width','3350px');
+                }
+                
             }
 
             function btnIns() {
@@ -846,7 +945,7 @@
 						<td align="center" style="width:35%"><a id='vewDatea'> </a></td>
 					</tr>
 					<tr>
-						<td >
+						<td>
 						<input id="chkBrow.*" type="checkbox" style=' '/>
 						</td>
 						<td align="center" id='noa'>~noa</td>
@@ -1039,9 +1138,9 @@
 					<td align="center" style="width:60px;"><a>等級</a></td>
 					<td align="center" style="width:220px;"><a id='lblSizea_s'> </a><BR><a id='lblSpec_s'> </a></td>
 					<td align="center" style="width:130px;"><a id='lblSize_s'> </a></td>
-					<td align="center" style="width:60px;"><a>實際<BR>厚度</a></td>
-					<td align="center" style="width:60px;"><a>實際<BR>寬度</a></td>
-					<td align="center" style="width:60px;"><a>實際<BR>長度</a></td>	
+					<td align="center" style="width:60px;" class="dime2"><a>實際<BR>厚度</a></td>
+					<td align="center" style="width:60px;" class="lengthc"><a>實際<BR>寬度</a></td>
+					<td align="center" style="width:60px;" class="lengthd"><a>實際<BR>長度</a></td>	
 					<td align="center" style="width:40px;"><a id='lblSource_s'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblInmount_s'> </a><BR><a id='lblMount_s'> </a></td>
@@ -1065,8 +1164,8 @@
 					<td align="center" style="width:130px;"><a id='lblUno2_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
-					<td ><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
-					<td ><input class="txt c1" id="txtUno.*" type="text"  /></td>
+					<td><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
+					<td><input class="txt c1" id="txtUno.*" type="text"  /></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:95%;" />
 						<input type="text" id="txtProduct.*" style="width:95%;" />
@@ -1076,7 +1175,7 @@
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
 					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
-					<td >
+					<td>
 						<input class="txt num" id="txtDime.*" type="text" style="float: left;width:55px;"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
 						<input class="txt num" id="txtWidth.*" type="text" style="float: left;width:55px;"/>
@@ -1085,70 +1184,70 @@
 						<BR>
 						<input class="txt c1" id="txtSpec.*" type="text"/>
 					</td>
-					<td ><input class="txt c1" id="txtSize.*" type="text"/>	</td>.
-					<td ><input class="txt num c1" id="txtDime2.*" type="text"  /></td>
-					<td ><input class="txt num c1" id="txtLengthc.*" type="text"  /></td>
-					<td ><input class="txt num c1" id="txtLengthd.*" type="text"  /></td>
-					<td ><input class="txt c1" id="txtSource.*" type="text"  /></td>
-					<td ><input class="txt c1" id="txtUnit.*" type="text"/>	</td>
-					<td >
+					<td><input class="txt c1" id="txtSize.*" type="text"/>	</td>.
+					<td class='dime2'><input class="txt num c1 dime2" id="txtDime2.*" type="text"  /></td>
+					<td class='lengthc'><input class="txt num c1 lengthc" id="txtLengthc.*" type="text"  /></td>
+					<td class='lengthd'><input class="txt num c1 lengthd" id="txtLengthd.*" type="text"  /></td>
+					<td><input class="txt c1" id="txtSource.*" type="text"  /></td>
+					<td><input class="txt c1" id="txtUnit.*" type="text"/>	</td>
+					<td>
 						<input class="txt num c1" id="txtInmount.*" type="text"  />
 						<input class="txt num c1" id="txtMount.*" type="text"  />
 					</td>
-					<td >
+					<td>
 						<input class="txt num c1" id="txtInweight.*" type="text"  />
 						<input class="txt num c1" id="txtWeight.*" type="text"  />
 					</td>
-					<td ><input class="txt num c1" id="txtPrice.*" type="text"  /></td>
-					<td ><input class="txt num c1" id="txtMoney.*" type="text"  /></td>
+					<td><input class="txt num c1" id="txtPrice.*" type="text"  /></td>
+					<td><input class="txt num c1" id="txtMoney.*" type="text"  /></td>
 					<td style="text-align: left;">
 						<input  id="txtStoreno.*" type="text" style="width:80%;" />
 						<input class="btn"  id="btnStoreno.*" type="button" value='.' style="width:1%;"  />
 						<input  id="txtStore.*" type="text" style="width:80%;" />
 					</td>
-					<td >
+					<td>
 						<input class="txt num c1" id="txtCointotal.*" type="text"  />
 						<input class="txt num c1" id="txtTotal.*" type="text"  />
 					</td>
-					<td ><input class="txt num c1" id="txtTariffrate.*" type="text"  /></td>
-					<td >
+					<td><input class="txt num c1" id="txtTariffrate.*" type="text"  /></td>
+					<td>
 						<input class="txt num c1" id="txtCointariff.*" type="text"  />
 						<input class="txt num c1" id="txtTariff.*" type="text"  />
 					</td>
-					<td >
+					<td>
 						<input class="txt num c1" id="txtTraderate.*" type="text"  />
 						<input class="txt num c1" id="txtTrade.*" type="text"  />
 					</td>
-					<td >
+					<td>
 						<input class="txt num c1" id="txtCommodityrate.*" type="text"  />
 						<input class="txt num c1" id="txtCommoditytax.*" type="text"  />
 					</td>
-					<td >
+					<td>
 						<input class="txt num c1" id="txtVatbase.*" type="text"  />
 						<input class="txt num c1" id="txtVat.*" type="text"  />
 					</td>
-					<td >
+					<td>
 						<!--<input class="txt num c1" id="txtBlmoney.*" type="text"  />-->
 						<input class="txt num c1" id="txtLcmoney.*" type="text"  />
 					</td>
-					<td ><input class="txt num c1" id="txtCost.*" type="text"  /></td>
-					<td >
+					<td><input class="txt num c1" id="txtCost.*" type="text"  /></td>
+					<td>
 						<input class="txt c1" id="txtCaseno.*" type="text"  />
 						<input class="txt c1" id="txtCasetype.*" type="text"  />
 					</td>
-					<td ><input class="txt num c1" id="txtCasemount.*" type="text"  />	</td>
-					<td >
+					<td><input class="txt num c1" id="txtCasemount.*" type="text"  />	</td>
+					<td>
 						<input class="txt num c1" id="txtMweight.*" type="text"  />
 						<input class="txt num c1" id="txtCuft.*" type="text"  />
 					</td>
-					<td ><input class="txt c1" id="txtInvoiceno.*" type="text"  />	</td>
-					<td >
+					<td><input class="txt c1" id="txtInvoiceno.*" type="text"  />	</td>
+					<td>
 						<input class="txt c1" id="txtMemo.*" type="text" />
 						<input class="txt c5" id="txtOrdcno.*" type="text" />
 						<input class="txt c4" id="txtNo2.*" type="text" />
 						<input id="txtNoq.*" type="hidden" /><input id="recno.*" type="hidden" />
 					</td>
-					<td ><input class="txt c1" id="txtUno2.*" type="text"  /></td>
+					<td><input class="txt c1" id="txtUno2.*" type="text"  /></td>
 				</tr>
 			</table>
 		</div>

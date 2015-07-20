@@ -64,12 +64,24 @@
                 q_gt('part', '', 0, 0, 0, "");
                 q_cmbParse("cmbTypea", q_getPara('payb.typea'));
                 
+                $('#cmbTypea').change(function() {
+                	typea_field();
+                });
+                
+                $('#lblEntryno').click(function() {
+                	if(!emp($('#txtEntryno').val())){
+                		t_where = "entryno='" + $('#txtEntryno').val() + "'";
+						q_box("delist.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'delist', "95%", "95%", '報關/贖單作業');
+					}
+				});
+                
                 $("#cmbCno").focus(function() {
                     var len = $(this).children().length > 0 ? $(this).children().length : 1;
                     $(this).attr('size', len + "");
                 }).blur(function() {
                     $(this).attr('size', '1');
                 });
+                
                 $("#cmbPartno").focus(function() {
                     var len = $(this).children().length > 0 ? $(this).children().length : 1;
                     $(this).attr('size', len + "");
@@ -477,27 +489,9 @@
 							
                 		});
                 		$('#txtMount_' + j).change(function(e) {
-                			//var n = $(this).attr('id').replace('txtMount_','');
-                			//var string = q_float('txtMount_'+n)+'@'+q_float('txtPrice_'+n)
-                			//var t_memo = $.trim($('#txtMemo_'+n).val());
-                			//if((/.*(\d\u0040\d).*/g).test(t_memo)){
-                			//	t_memo = t_memo.replace(/(\d+\u0040\d+)/g,string);
-                			//}else{
-                			//	t_memo = string + t_memo;
-                			//}
-                			//$('#txtMemo_'+n).val(t_memo);
 	                        sum();
 	                    });
 	                    $('#txtPrice_' + j).change(function(e) {
-	                    	//var n = $(this).attr('id').replace('txtPrice_','');
-                			//var string = q_float('txtMount_'+n)+'@'+q_float('txtPrice_'+n)
-                			//var t_memo = $.trim($('#txtMemo_'+n).val());
-                			//if((/.*(\d+\u0040\d+).*/g).test(t_memo)){
-                			//	t_memo = t_memo.replace(/(\d+\u0040\d+)/g,string);
-                			//}else{
-                			//	t_memo = string + t_memo;
-                			//}
-                			//$('#txtMemo_'+n).val(t_memo);
 	                        sum();
 	                    });
                 		$('#txtMoney_' + j).change(function(e) {
@@ -512,6 +506,7 @@
                 	}
                 }
                 _bbsAssign();
+                typea_field();
             }
 
             function btnIns() {
@@ -573,6 +568,7 @@
 
             function refresh(recno) {
                 _refresh(recno);
+                typea_field();
             }
 
             function readonly(t_para, empty) {
@@ -582,7 +578,7 @@
                 } else {
                     $('#btnFix').removeAttr('disabled');
                 }
-
+                typea_field();
             }
 
             function btnMinus(id) {
@@ -707,6 +703,15 @@
 						}
 			        break;
 		    	}
+			}
+			
+			function typea_field() {
+		    	if($('#cmbTypea').val()=='2'){
+		    		$('.typea2').show();
+		    	}else{
+		    		$('.typea2').hide();
+		    	}
+		    	
 			}
 		</script>
 		<style type="text/css">
@@ -857,7 +862,7 @@
 						<td> </td>
 						<td> </td>
 						<td> </td>
-						<td class="tdZ"></td>
+						<td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTypea'class="lbl" > </a></td>
@@ -873,13 +878,13 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblAcomp" class="lbl btn" > </a></td>
-						<td colspan="2">
+						<td colspan="4">
 							<select id="cmbCno" class="txt c1"> </select>
 							<input id="txtAcomp" type="text"  style="display:none;"/>
 						</td>	
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblPart" class="lbl btn" > </a></td>
+						<td><span> </span><a id="lblPart" class="lbl" > </a></td>
 						<td>
 							<select id="cmbPartno" class="txt c1"> </select>
 							<input id="txtPart"  type="text" style="display: none;"/>
@@ -893,13 +898,11 @@
 					<tr>
 						<td><span> </span><a id="lblTgg"  class="lbl btn"> </a></td>
 						<td colspan="3">
-						<input id="txtTggno" type="text" style="float:left; width:20%;"/>
-						<input id="txtComp"  type="text" style="float:left; width:80%;"/>
-						<input id="txtNick"  type="text" style="display:none;"/>
+							<input id="txtTggno" type="text" style="float:left; width:20%;"/>
+							<input id="txtComp"  type="text" style="float:left; width:80%;"/>
+							<input id="txtNick"  type="text" style="display:none;"/>
 						</td>
-						<td>
-						<input type="button" id="btnFix"  value="單據匯入">
-						</td>
+						<td><input type="button" id="btnFix"  value="單據匯入"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblPayc' class="lbl" style="font-size: 14px;"> </a></td>
@@ -915,14 +918,14 @@
 						<td><span> </span><a id='lblVdate'class="lbl" > </a></td>
 						<td>	<input id="txtVbdate" type="text"  class="txt c1"/></td>
 						<td><input id="txtVedate" type="text"  class="txt c1"/></td>
-						
+						<td class="typea2"><span> </span><a id='lblEntryno' class="lbl"> </a></td>
+						<td class="typea2"><input id="txtEntryno" type="text" class="txt c1 typea2"/></td>
 					</tr>						
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
 						<td><input id="txtMoney" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td><input id="txtTax" type="text"  class="txt num c1" /></td>
-						
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDiscount' class="lbl"> </a></td>
@@ -950,8 +953,8 @@
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
 						<td colspan="3" ><textarea id="txtMemo" cols="10" rows="5" style="width: 99%; height:50px;"> </textarea></td>
 						<td class="td8">
-						<input id="btnTgg" type="button"/>
-						<input id="btnUcc" type="button"/>
+							<input id="btnTgg" type="button"/>
+							<input id="btnUcc" type="button"/>
 						</td>
 					</tr>
 				</table>

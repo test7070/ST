@@ -116,9 +116,13 @@
 				}
 				var t_where = '';
 				inStr = inStr.substring(0,inStr.length-1);
-				if(trim(inStr)!='')
+				if(trim(inStr)!=''){
 					t_where = "where=^^ ordeno in("+inStr+") ^^";
-				q_gt('view_rc2s', t_where , 0, 0, 0, "",r_accy);
+					q_gt('view_rc2s', t_where , 0, 0, 0, "",r_accy);
+				}else{
+					_refresh();
+					size_change();
+				}
 		    }
 		    
 		    function size_change () {
