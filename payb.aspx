@@ -145,6 +145,10 @@
                 $('#txtPayc').change(function(e){
                 	getIndate($('#txtDatea').val());
                 });
+                
+                $('#txtFloata').change(function() {
+                	sum();
+				});
             }
             
             function getNextMonth(date){

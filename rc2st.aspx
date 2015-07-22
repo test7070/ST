@@ -22,9 +22,9 @@
 			q_tables = 's';
 			var q_name = "rc2";
 			var q_readonly = ['txtRc2atax', 'txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
-			var q_readonlys = ['txtMoney'];
+			var q_readonlys = ['txtMoney','txtSprice'];
 			var bbmNum = [['txtPrice', 15, 3, 1], ['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
-			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
+			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_desc = 1;
@@ -121,7 +121,7 @@
 					var t_dimes = $.trim($('#txtDime_' + j).val());
 					if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
 						t_weights = q_float('txtWeight_' + j);
-					else if(q_getPara('sys.project')=='pk'){
+					else if(q_getPara('sys.project')=='pk' || q_getPara('sys.project')=='rk'){
 						t_weights = q_float('txtWeight_' + j);
 					}
 					t_prices = q_float('txtPrice_' + j);
@@ -136,11 +136,11 @@
 					} else {
 						t_moneys = q_mul(t_prices, t_mounts);
 					}
-					console.log(t_styles == '' && t_unos == '' && t_dimes == 0);
-					console.log(t_unit);
-					console.log(t_prices);
-					console.log(t_weights);
-					console.log(t_moneys);
+					//console.log(t_styles == '' && t_unos == '' && t_dimes == 0);
+					//console.log(t_unit);
+					//console.log(t_prices);
+					//console.log(t_weights);
+					//console.log(t_moneys);
 					
 					if (t_float == 0) {
 						t_moneys = round(t_moneys, 0);
@@ -261,7 +261,7 @@
 				});
 				
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('#lblLcno').text('報關匯入/號碼').addClass('btn');
+					$('#lblLcno').text('報關號碼');
 				}
 				
 				$('#lblLcno').click(function() {
@@ -502,7 +502,7 @@
 							if(q_getPara('sys.project').toUpperCase()=='RK'){
 								var distinctArray = new Array;
 								var inStr = '';
-								for (var i = 0; i < q_bbsCount.length; i++) {
+								for (var i = 0; i < q_bbsCount; i++) {
 									if(!emp($('#txtOrdeno_'+i).val()))
 										distinctArray.push($('#txtOrdeno_'+i).val()+'-'+$('#txtNo2_'+i).val());
 								}
@@ -525,7 +525,7 @@
 							var t_cost=0;
 							for (var j = 0; j < as.length; j++) {
 								if($('#txtOrdeno_'+i).val()==as[j].ordcno && $('#txtNo2_'+i).val()==as[j].no2){
-									var pbmoney=dec(as[j].pbtotalus)!=0?dec(as[j].pbtotalus):dec(as[j].pbmoney);//payb費用
+									var pbmoney=dec(as[j].pbtotalus)!=0?dec(as[j].pbtotalus):q_div(dec(as[j].pbmoney),dec(as[j].floata));//payb費用
 									//deli費用分攤方式
 									if(as[j].feetype=='2'){
 										t_cost=q_add(t_cost,q_mul(pbmoney,q_div(dec(as[j].inmount),dec(as[j].tinmount))));
@@ -551,7 +551,7 @@
 								if(t_sprice==Infinity){
 									$('#txtSprice_'+i).val($('#txtPrice_'+i).val());
 								}else{
-									$('#txtSprice_'+i).val(t_sprice);
+									$('#txtSprice_'+i).val(round(t_sprice,3));
 								}
 							}else{
 								$('#txtSprice_'+i).val($('#txtPrice_'+i).val());
@@ -1498,7 +1498,7 @@
 							<select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'> </select>
 						</td>
 						<td><span> </span><a id='lblLcno' class="lbl"> </a></td>
-						<td colspan="2"><input id="txtLcno"  type="text" class="txt num c1"/></td>
+						<td colspan="2"><input id="txtLcno"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
