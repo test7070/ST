@@ -18,14 +18,15 @@
 
             q_tables = 's';
             var q_name = "payb";
-            var q_readonly = ['txtVccno','txtAccno','txtNoa', 'txtMoney', 'txtTax', 'txtDiscount', 'txtTotal', 'txtWorker','txtWorker2'];
+            var q_readonly = ['txtVccno','txtAccno','txtNoa', 'txtMoney', 'txtTax', 'txtDiscount', 'txtTotal', 'txtWorker','txtWorker2','txtTotalus'];
             var q_readonlys = ['txtTotal','txtMoney'];
-            var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtDiscount', 10, 0, 1]];
+            var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtDiscount', 10, 0, 1], ['txtTotalus', 15, 2, 1], ['txtFloata', 15, 2, 1]];
             var bbsNum = [['txtPrice', 10, 0, 1], ['txtDiscount', 10, 0, 1], ['txtMount', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
-            brwCount = 6;
+            brwCount = -1;
+            brwCount2 = 15;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
@@ -42,8 +43,9 @@
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1)
-
+                q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
             });
+            
             function main() {
                 if (dataErr) {
                     dataErr = false;
@@ -52,9 +54,11 @@
                 mainForm(1);
 
             }
+            
             function pop(form) {
                 b_pop = form;
             }
+            
             function mainPost() {
                 q_getFormat();
                 bbmMask = [['txtIndate', r_picd],['txtDatea', r_picd], ['txtMon', r_picm], ['txtVbdate', r_picd], ['txtVedate', r_picd], ['txtPaydate', r_picd]];
@@ -142,12 +146,14 @@
                 	getIndate($('#txtDatea').val());
                 });
             }
+            
             function getNextMonth(date){
             	t_date = new Date(date.getFullYear(), date.getMonth(), 25);
             	t_date = new Date(t_date.getTime()+ 10*(1000 * 60 * 60 * 24));
             	t_date.setDate(1);
             	return t_date;     	
             }
+            
             function getPaydate(date){
             	//付款日(立帳日次月第4個星期5)
             	if(q_cur==1 && date.length>0 && q_cd(date)){
@@ -169,6 +175,7 @@
 		    		$('#txtPaydate').val(t_year+'/'+t_mon+'/'+t_date);
         		}
             }
+            
             function getIndate(date){
             	//到期日(立帳日期(月) + 3個月又25天)
             	if(q_cur==1 && $('#txtPayc').val().indexOf('支票')>=0 && date.length>0 && q_cd(date)){
@@ -190,6 +197,11 @@
 	        		$('#txtIndate').val(t_year+'/'+t_mon+'/'+t_date);
         		}
             }
+            
+            function coin_chg() {
+				var t_where = "where=^^ ('" + $('#txtDatea').val() + "' between bdate and edate) and coin='"+$('#cmbCoin').find("option:selected").text()+"' ^^";
+				q_gt('flors', t_where, 0, 0, 0, "");
+			}
 
             function q_boxClose(s2) {
                 var ret;
@@ -379,6 +391,26 @@
                             }
                         }
                         break;
+                    case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						var z_coin='';
+						for ( i = 0; i < as.length; i++) {
+							z_coin+=','+as[i].coin;
+						}
+						if(z_coin.length==0) z_coin=' ';
+						
+						q_cmbParse("cmbCoin", z_coin);
+						if(abbm[q_recno])
+							$('#cmbCoin').val(abbm[q_recno].coin);
+						
+						break;
+					case 'flors':
+						var as = _q_appendData("flors", "", true);
+						if (as[0] != undefined) {
+							q_tr('txtFloata',as[0].floata);
+							sum();
+						}
+						break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -389,6 +421,7 @@
                         break;
                 }  /// end switch
             }
+            
 			function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
@@ -400,6 +433,7 @@
                 //$('#txtUnpay').val(xmlString.split(";")[2]);
                 Unlock(1);
             }
+            
             function btnOk() {
             	Lock(1,{opacity:0});
                 if ($.trim($('#txtNick').val()).length == 0)
@@ -548,22 +582,39 @@
             }
 
             function sum() {
-            	var t_money,t_total,t_tax,t_discount;
+            	var t_money=0,t_total=0,t_tax=0,t_discount=0;
             	var tot_money=0,tot_tax=0,tot_discount=0,tot_total=0;
+            	var t_float = q_float('txtFloata');
+            	var t_moneys = 0;
             	for (var j = 0; j < q_bbsCount; j++) {
-            		t_money = q_float('txtMount_'+j).mul(q_float('txtPrice_'+j)).round(0);
-            		t_total = t_money.add(q_float('txtTax_'+j)).sub(q_float('txtDiscount_'+j))    		
-            		$('#txtMoney_'+j).val(FormatNumber(t_money));
-            		$('#txtTotal_'+j).val(FormatNumber(t_total));
-            		tot_money = tot_money.add(t_money);
-            		tot_tax = tot_tax.add(q_float('txtTax_'+j));
-            		tot_discount = tot_discount.add(q_float('txtDiscount_'+j));
-            		tot_total = tot_total.add(t_total);
+            		if (t_float == 0) {
+            			t_money = q_float('txtMount_'+j).mul(q_float('txtPrice_'+j)).round(0);
+            			t_total = t_money.add(q_float('txtTax_'+j)).sub(q_float('txtDiscount_'+j));
+	            		$('#txtMoney_'+j).val(FormatNumber(t_money));
+	            		$('#txtTotal_'+j).val(FormatNumber(t_total));
+	            		tot_money = tot_money.add(t_money);
+	            		tot_tax = tot_tax.add(q_float('txtTax_'+j));
+	            		tot_discount = tot_discount.add(q_float('txtDiscount_'+j));
+	            		tot_total = tot_total.add(t_total);
+	            		t_money=0;
+            		}else{
+            			//外幣合計
+            			t_money = q_add(t_money,q_float('txtMount_'+j).mul(q_float('txtPrice_'+j)).round(0));
+            			t_moneys = round(q_mul(q_float('txtMount_'+j).mul(q_float('txtPrice_'+j)).round(0), t_float), 0);
+            			$('#txtMoney_'+j).val(FormatNumber(t_moneys));
+            			t_total = t_moneys.add(q_float('txtTax_'+j)).sub(q_float('txtDiscount_'+j));
+            			$('#txtTotal_'+j).val(FormatNumber(t_total));
+            			tot_money = tot_money.add(t_moneys);
+	            		tot_tax = tot_tax.add(q_float('txtTax_'+j));
+	            		tot_discount = tot_discount.add(q_float('txtDiscount_'+j));
+	            		tot_total = tot_total.add(t_total);
+            		}
             	}
                 $('#txtMoney').val(FormatNumber(tot_money));
             	$('#txtTax').val(FormatNumber(tot_tax));
             	$('#txtDiscount').val(FormatNumber(tot_discount));
             	$('#txtTotal').val(FormatNumber(tot_total));
+            	$('#txtTotalus').val(FormatNumber(t_money));
             }
 
             function refresh(recno) {
@@ -759,7 +810,7 @@
                 height: 35px;
             }
             .tbbm tr td {
-                width: 10%;
+                width: 13%;
             }
             .tbbm .tdZ {
                 width: 1%;
@@ -934,6 +985,13 @@
 						<td><input id="txtTotal" type="text" class="txt num c1" /></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
+						<td><input id="txtTotalus" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
+						<td><select id="cmbCoin" class="txt c1" onchange='coin_chg()'> </select></td>
+						<td><input id="txtFloata" type="text" class="txt num c1"/></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblVccno' class="lbl"> </a></td>
 						<td><input id="txtVccno"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
@@ -953,8 +1011,8 @@
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
 						<td colspan="3" ><textarea id="txtMemo" cols="10" rows="5" style="width: 99%; height:50px;"> </textarea></td>
 						<td class="td8">
-							<input id="btnTgg" type="button"/>
-							<input id="btnUcc" type="button"/>
+							<input id="btnTgg" type="button" style="float: left;"/>
+							<input id="btnUcc" type="button" style="float: left;"/>
 						</td>
 					</tr>
 				</table>
