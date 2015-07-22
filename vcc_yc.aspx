@@ -503,11 +503,11 @@
 							t_addr2 = t_addr2+(t_addr2.length>0?';':'')+as[i].addr2;
 						}
 						$('#txtMemo').val(t_memo);
-						$('#txtPost').val(t_post);
-						$('#txtAddr').val(t_addr);
-						$('#txtPost2').val(t_post2);
-						$('#txtAddr2').val(t_addr2);
 						if (as[0] != undefined){
+							$('#txtPost').val(as[0].post);
+							$('#txtAddr').val(as[0].addr);
+							$('#txtPost2').val(as[0].post2);
+							$('#txtAddr2').val(as[0].addr2);
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
 							$('#cmbTaxtype').val(as[0].taxtype);

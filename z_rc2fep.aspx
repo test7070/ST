@@ -18,20 +18,22 @@
             if (location.href.indexOf('?') < 0) {
                 location.href = location.href + "?;;;;"+((new Date()).getUTCFullYear()-1911);
             }
+            var first_init=true;
             $(document).ready(function() {
             	q_getId();
                 q_gf('', 'z_rc2fep');
                 
-                $('#q_report').click(function(e) {
+                $('#q_report').click(function() {
 					if(q_getPara('sys.project').toUpperCase()!='FE'){
 						var delete_report=0;
 						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
 							if($('#q_report').data().info.reportData[i].report=='z_rc2fep1')
 								delete_report=i;
 						}
-						if($('#q_report div div').text().indexOf('進/退貨單(套表)')>-1){
+						if($('#q_report div div').text().indexOf('進/退貨單(套表)')>-1 && first_init){
 							$('#q_report div div').eq(delete_report).hide();
-							$('#q_report div div .radio').first().removeClass('nonselect').addClass('select').click();
+							first_init=false;
+							$('#q_report div div .radio').last().removeClass('nonselect').addClass('select').click();
 						}
 					}
 				});

@@ -1156,7 +1156,7 @@
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:80px;"><a>等級</a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
-					<td align="center" style="width:230px;"><a id='lblSizea_st'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>寬度</a></td>
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>長度</a></td>	
