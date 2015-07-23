@@ -68,6 +68,7 @@
 				$('#txtXdate2').datepicker();  
 				
 				$('#chkShowprice input').prop('checked',true);
+				$('#q_report div div .radio').last().removeClass('nonselect').addClass('select').click();
 	              
 	            var t_para = new Array();
 	            try{
@@ -100,6 +101,8 @@
 	            	$('#txtXnoa').val(t_para.noa);
 	            	$('#txtYnoa1').val(t_para.noa);
 	            	$('#txtYnoa2').val(t_para.noa);
+	            	
+	            	$('#btnOk').click();
 	            }
                 
             }

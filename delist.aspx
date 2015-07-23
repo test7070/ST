@@ -71,7 +71,7 @@
             }
             
             function sum() {
-                var t_coinretiremoney=0,t_cointotal=0,t_total=0,t_cointariff=0,t_tariff=0,t_trade=0,t_commoditytax=0,t_lctotal=0;
+                var t_coinretiremoney=0,t_cointotal=0,t_total=0,t_cointariff=0,t_tariff=0,t_trade=0,t_commoditytax=0,t_lctotal=0,t_vatbase=0,t_vat=0;
                 for (var j = 0; j < q_bbsCount; j++) {
                 	t_coinretiremoney=q_add(t_coinretiremoney,q_float('txtMoney_'+j));
                 	t_cointotal=q_add(t_cointotal,q_float('txtCointotal_'+j));
@@ -81,6 +81,8 @@
                 	t_trade=q_add(t_trade,q_float('txtTrade_'+j));
                 	t_commoditytax=q_add(t_commoditytax,q_float('txtCommoditytax_'+j));
                 	t_lctotal=q_add(t_lctotal,q_float('txtLcmoney_'+j));
+                	t_vatbase=q_add(t_vatbase,q_float('txtVatbase_'+j));
+                	t_vat=q_add(t_vat,q_float('txtVat_'+j));
                 } // j
                 
                 q_tr('txtCoinretiremoney',t_coinretiremoney);
@@ -92,6 +94,8 @@
                 q_tr('txtTrade',t_trade);
                 q_tr('txtCommoditytax',t_commoditytax);
                 q_tr('txtLctotal',t_lctotal);
+                q_tr('txtVatbase',t_vatbase);
+                q_tr('txtVat',t_vat);
             }
             
             function bbs_sum() {
@@ -325,8 +329,8 @@
 									newB_ret.push(ordcsArray[j]);
 								}
 							}
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtOrdcno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit', newB_ret.length, newB_ret
-							, 'uno,productno,product,spec,size,dime,width,lengthb,noa,no2,price,mount,weight,total,memo,class,style,unit', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtOrdcno,txtNo2,txtPrice,txtMount,txtWeight,txtInmount,txtInweight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit', newB_ret.length, newB_ret
+							, 'uno,productno,product,spec,size,dime,width,lengthb,noa,no2,price,mount,weight,mount,weight,total,memo,class,style,unit', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							
 							//依據ordc 取得lcs 的開狀費

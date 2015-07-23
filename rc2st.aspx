@@ -22,9 +22,9 @@
 			q_tables = 's';
 			var q_name = "rc2";
 			var q_readonly = ['txtRc2atax', 'txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
-			var q_readonlys = ['txtMoney'];
+			var q_readonlys = ['txtMoney','txtSprice'];
 			var bbmNum = [['txtPrice', 15, 3, 1], ['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
-			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
+			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_desc = 1;
@@ -46,6 +46,7 @@
 			, ['txtStoreno', 'lblStoreno', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx']
 			, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']);
 			//, ['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']);
+			
 			brwCount2 = 12;
 			var isinvosystem = false;
 			//購買發票系統
@@ -120,7 +121,7 @@
 					var t_dimes = $.trim($('#txtDime_' + j).val());
 					if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
 						t_weights = q_float('txtWeight_' + j);
-					else if(q_getPara('sys.project')=='pk'){
+					else if(q_getPara('sys.project')=='pk' || q_getPara('sys.project')=='rk'){
 						t_weights = q_float('txtWeight_' + j);
 					}
 					t_prices = q_float('txtPrice_' + j);
@@ -135,11 +136,11 @@
 					} else {
 						t_moneys = q_mul(t_prices, t_mounts);
 					}
-					console.log(t_styles == '' && t_unos == '' && t_dimes == 0);
-					console.log(t_unit);
-					console.log(t_prices);
-					console.log(t_weights);
-					console.log(t_moneys);
+					//console.log(t_styles == '' && t_unos == '' && t_dimes == 0);
+					//console.log(t_unit);
+					//console.log(t_prices);
+					//console.log(t_weights);
+					//console.log(t_moneys);
 					
 					if (t_float == 0) {
 						t_moneys = round(t_moneys, 0);
@@ -260,7 +261,7 @@
 				});
 				
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('#lblLcno').text('報關匯入/號碼').addClass('btn');
+					$('#lblLcno').text('報關號碼');
 				}
 				
 				$('#lblLcno').click(function() {
@@ -451,13 +452,12 @@
 					case 'rc2s':
 						var as = _q_appendData("rc2s", "", true);
 						for (var i = 0; i < ordcsArray.length; i++) {
-							if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
+							if(q_getPara('sys.project').toUpperCase()=='RK'){
 								if ((ordcsArray[i].mount <= 0 && ordcsArray[i].weight <= 0) || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
 									ordcsArray.splice(i, 1);
 									i--;
 								}
-							}
-							else{
+							}else{
 								if (ordcsArray[i].mount <= 0 || ordcsArray[i].weight <= 0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
 									ordcsArray.splice(i, 1);
 									i--;
@@ -498,8 +498,73 @@
 							bbsAssign();
 							size_change();
 							sum();
+							
+							if(q_getPara('sys.project').toUpperCase()=='RK'){
+								var distinctArray = new Array;
+								var inStr = '';
+								for (var i = 0; i < q_bbsCount; i++) {
+									if(!emp($('#txtOrdeno_'+i).val()))
+										distinctArray.push($('#txtOrdeno_'+i).val()+'-'+$('#txtNo2_'+i).val());
+								}
+								distinctArray = distinct(distinctArray);
+								for (var i = 0; i < distinctArray.length; i++) {
+									inStr += "'" + distinctArray[i] + "',";
+								}
+								inStr = inStr.substring(0, inStr.length - 1);
+							
+								//抓取報關成本
+								var t_where = "where=^^ b.ordcno+'-'+b.no2 in (" + inStr + ") "+(emp($('#txtLcno').val())?"":(" and charindex(a.entryno,'"+$('#txtLcno').val()+"')>0 ") ) +" ^^";
+								q_gt('deli_payb', t_where, 0, 0, 0, "", r_accy);
+							}
 						}
 						ordcsArray = new Array;
+						break;
+					case 'deli_payb':
+						var as = _q_appendData("deli", "", true);
+						for (var i = 0; i < q_bbsCount; i++) {
+							var t_cost=0;
+							for (var j = 0; j < as.length; j++) {
+								if($('#txtOrdeno_'+i).val()==as[j].ordcno && $('#txtNo2_'+i).val()==as[j].no2){
+									var pbmoney=dec(as[j].pbtotalus)!=0?dec(as[j].pbtotalus):q_div(dec(as[j].pbmoney),dec(as[j].floata));//payb費用
+									//deli費用分攤方式
+									if(as[j].feetype=='2'){
+										t_cost=q_add(t_cost,q_mul(pbmoney,q_div(dec(as[j].inmount),dec(as[j].tinmount))));
+									}else if(as[j].feetype=='5'){
+										t_cost=q_add(t_cost,q_mul(pbmoney,q_div(dec(as[j].inweight),dec(as[j].tinweight))));
+									}else  if(as[j].feetype=='3'){
+										t_cost=q_add(t_cost,q_mul(pbmoney,q_div(dec(as[j].mweight),dec(as[j].tmweight))));
+									}else  if(as[j].feetype=='4'){
+										t_cost=q_add(t_cost,q_mul(pbmoney,q_div(dec(as[j].cuft),dec(as[j].tcuft))));
+									}else{
+										t_cost=q_add(t_cost,q_mul(pbmoney,q_div(dec(as[j].money),dec(as[j].tmoney))));
+									}
+								}
+							}
+							if(t_cost!=0){
+								var t_unit = $.trim($('#txtUnit_' + i).val()).toUpperCase();
+								var t_sprice=0;
+								if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+									t_sprice=q_div(q_add(q_float('txtTotal_'+i),t_cost),q_float('txtWeight_'+i));
+								}else{
+									t_sprice=q_div(q_add(q_float('txtTotal_'+i),t_cost),q_float('txtMount_'+i));
+								}
+								if(t_sprice==Infinity){
+									$('#txtSprice_'+i).val($('#txtPrice_'+i).val());
+								}else{
+									$('#txtSprice_'+i).val(round(t_sprice,3));
+								}
+							}else{
+								$('#txtSprice_'+i).val($('#txtPrice_'+i).val());
+							}
+						}
+						
+						var t_lcno=$('#txtLcno').val();
+						for (var j = 0; j < as.length; j++) {
+							if(t_lcno.indexOf(as[j].entryno)==-1){
+								t_lcno+=(t_lcno.length>0?',':'')+as[j].entryno;
+							}
+						}
+						$('#txtLcno').val(t_lcno);
 						break;
 					case 'ordc':
 						var as = _q_appendData("ordc", "", true);
@@ -1433,7 +1498,7 @@
 							<select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'> </select>
 						</td>
 						<td><span> </span><a id='lblLcno' class="lbl"> </a></td>
-						<td colspan="2"><input id="txtLcno"  type="text" class="txt num c1"/></td>
+						<td colspan="2"><input id="txtLcno"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
@@ -1498,7 +1563,7 @@
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
 					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
-					<td align="center" style="width:80px;display:none;" class="sprice"><a id='lblSprices_st'> </a></td>
+					<td align="center" style="width:80px;display:none;" class="sprice"><a id='lblSprices_st'>成本單價</a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
 					<td align="center">
 						<a id='lblMemos_st'> </a><br>
