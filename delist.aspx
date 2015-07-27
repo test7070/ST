@@ -1140,6 +1140,7 @@
 					<td align="center" style="width:100px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'>型</a></td>
 					<td align="center" style="width:60px;"><a>等級</a></td>
+					<td align="center" style="width:140px;">規範<BR>國別</td>
 					<td align="center" style="width:220px;"><a id='lblSizea_s'> </a><BR><a id='lblSpec_s'> </a></td>
 					<td align="center" style="width:130px;"><a id='lblSize_s'> </a></td>
 					<td align="center" style="width:60px;" class="dime2"><a>實際<BR>厚度</a></td>
@@ -1181,6 +1182,10 @@
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
 					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
+					<td>
+                        <input id="txtUcolor.*" type="text" style="width:95%;"/>
+                        <input id="txtScolor.*" type="text" style="width:95%;"/>
+                    </td>
 					<td>
 						<input class="txt num" id="txtDime.*" type="text" style="float: left;width:55px;"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
