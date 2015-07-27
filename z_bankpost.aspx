@@ -21,28 +21,26 @@
             });
             
             function q_gfPost() {
-            	t_s="薪資 獎金";
 				$('#q_report').q_report({
 					fileName : 'z_bankpost',
 					options : [{
-						type:'5',//[1]
-						name: 'salary',
-						value:['薪資','獎金']
-											
-					},{
-						type: '6',//[2]
-						name: 'month'	
-					},{
-						type:'6',//[3]
-						name:'xdate'
-					}
-					
-]				});
+							type:'5',//[1]
+							name: 'salary',
+							value:['薪資','獎金']
+						},{
+							type: '6',//[2]
+							name: 'month'	
+						},{
+							type:'6',//[3]
+							name:'xdate'
+						}
+					]});
+
 				q_popAssign();
 				$('#txtMonth').mask('999/99');
-				
-				$('#txtMonth').datepicker();
-	           $('#txtXdate').mask('999/99/99');
+				$('#txtMonth').val(q_date().substr(0,6));
+				$('#txtXdate').mask('999/99/99');
+				$('#txtXdate').val(q_date());
 				$('#txtXdate').datepicker();
             }
 
@@ -52,8 +50,11 @@
                         break;
                 }
             }
-			//function q_boxClose(s2) {}
-			function q_gtPost(s2) {}
+            
+			
+			function q_gtPost(s2) {
+				
+			}
 		</script>
 	</head>
 	<body ondragstart="return false" draggable="false"
