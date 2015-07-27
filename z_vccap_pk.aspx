@@ -15,17 +15,17 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-			aPop = new Array(['txtCarno', 'lblCarno', 'car2', 'a.noa,driverno,driver', 'txtCarno', 'car2_b.aspx']
-			,['txtCarplateno', 'lblCarplate', 'carplate', 'noa,carplate,driver', 'txtCarplateno', 'carplate_b.aspx']
-			,['txtXproductno', 'lblXproductno', 'fixucc', 'noa,namea', 'txtXproductno', 'fixucc_b.aspx']);
+			/*aPop = new Array(['txtXcarno', 'lblXcarno', 'car2', 'a.noa,driverno,driver', 'txtXcarno', 'car2_b.aspx']
+			,['txtXcarplateno', 'lblXcarplate', 'carplate', 'noa,carplate,driver', 'txtXcarplateno', 'carplate_b.aspx']
+			,['txtXproductno', 'lblXproductno', 'fixucc', 'noa,namea', 'txtXproductno', 'fixucc_b.aspx']);*/
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
-				q_gf('', 'z_rc2a_sh');
+				q_gf('', 'z_vccap_pk');
 			});  
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_rc2a_sh',
+                    fileName : 'z_vccap_pk',
                     options : [{/* [1]*/
                         type : '0',
                         name : 'accy',
@@ -36,58 +36,17 @@
                         value : r_name 
                     }, {/*1-1[3][4]*/
                         type : '1',
-                        name : 'mon'
-                    }, {/*1-2[5][6]*/
-                        type : '1',
-                        name : 'date'
-                    },{/*1-3 [7][8]*/
-                        type : '2',
-                        name : 'tgg',
-                        dbf : 'tgg',
-                        index : 'noa,comp',
-                        src : 'tgg_b.aspx'
-                    }, {/*1-4 [9][10] 含子科目*/
-                        type : '2',
-                        name : 'xacc',
-                        dbf : 'acc',
-                        index : 'acc1,acc2',
-                        src : "acc_b.aspx"
+                        name : 'xnoa',
                     }]
                 });
+                
                 q_popAssign();
-				q_getFormat();
-				q_langShow();
-
-				
-				$('#txtMon1').mask('999/99');
-				$('#txtMon2').mask('999/99');
-			
-				$('#txtDate1').mask('999/99/99');
-                $('#txtDate1').datepicker();
-                $('#txtDate2').mask('999/99/99');
-                $('#txtDate2').datepicker();
-                               
-				var t_date, t_year, t_month, t_day;
-				t_date = new Date();
-				t_date.setDate(1);
-				t_year = t_date.getUTCFullYear() - 1911;
-				t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-				t_month = t_date.getUTCMonth() + 1;
-				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-				t_day = t_date.getUTCDate();
-				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-				$('#txtMon1').val(t_year + '/' + t_month);
-
-				t_date = new Date();
-				t_date.setDate(35);
-				t_date.setDate(0);
-				t_year = t_date.getUTCFullYear() - 1911;
-				t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-				t_month = t_date.getUTCMonth() + 1;
-				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-				t_day = t_date.getUTCDate();
-				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-				$('#txtMon2').val(t_year + '/' + t_month);
+                
+				if(q_getHref()[1]!=undefined){
+					$('#txtXnoa1').val(q_getHref()[1]);
+					$('#txtXnoa2').val(q_getHref()[1]);
+				}
+                	
 				
 			}
 

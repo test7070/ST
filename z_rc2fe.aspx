@@ -80,7 +80,11 @@
                         type : '0', //[15]
                         name : 'worker',
                         value : r_name
-                    }]
+                    },{
+						type : '0',//[16]
+						name : 'xproject',
+						value : q_getPara('sys.project').toUpperCase()
+					}]
                 });
                 q_popAssign();
 				q_langShow();

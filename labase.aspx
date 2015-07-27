@@ -107,6 +107,11 @@
             	q_gt('labhealth', t_where, 0, 0, 0, "", r_accy);
             });
             
+            $('#btnUploadsalary').click(function() {
+            	if (confirm("確定要更新提繳金額?\n(健保輔助與個人勞退提繳不變動)"))
+            		q_func('qtxt.query.upload', 'labase.txt,upload_salary,' + encodeURI(r_name));
+			});
+            
             $('#txtSalary').change(function () {
             	if(emp($('#txtNoa').val())){
             		alert('請先輸入員工編號!!!');
@@ -530,8 +535,7 @@
                 return;
             }
 			
-			
-              if(q_cur==1)
+			if(q_cur==1)
 	           	$('#txtWorker').val(r_name);
 	        else
 	           	$('#txtWorker2').val(r_name);
@@ -608,6 +612,7 @@
 		    $('#txtInsur_fund').val(0.025);
 			//$('#txtInsur_disaster').val(0.34);
         }
+        
         function btnModi() {
             if (emp($('#txtNoa').val()))
                 return;
@@ -622,8 +627,9 @@
             	var t_where = "where=^^ noa='"+$('#txtNoa').val()+"' ^^ top=1";
             	q_gt('labased', t_where, 0, 0, 0, "", r_accy);
         }
+        
         function btnPrint() {
-		q_box('z_labase.aspx', '', "95%", "95%", q_getMsg("popPrint"));
+			q_box('z_labase.aspx', '', "95%", "95%", q_getMsg("popPrint"));
         }
 
         function wrServer(key_value) {
@@ -661,14 +667,11 @@
 
         function readonly(t_para, empty) {
             _readonly(t_para, empty);
-            
             if (t_para) {
-		            $('#btnUmmb').removeAttr('disabled');	          
-		        }
-		        else {
-		        	$('#btnUmmb').attr('disabled', 'disabled');	 
-		        }
-		        
+				$('#btnUmmb').removeAttr('disabled');	          
+			}else {
+				$('#btnUmmb').attr('disabled', 'disabled');	 
+			}
         }
 
         function btnMinus(id) {
@@ -719,6 +722,15 @@
         function btnCancel() {
             _btnCancel();
         }
+        
+        function q_funcPost(t_func, result) {
+			switch(t_func) {
+				case 'qtxt.query.upload':
+					alert('更新完畢!!');
+					location.href=location.href;
+					break;
+			}
+		}
         
     </script>
     <style type="text/css">
@@ -875,16 +887,15 @@
         <div class="dview" id="dview" style="float: left;  width:32%;"  >
            <table class="tview" id="tview"   border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
             <tr>
-                <td align="center" style="width:5%"><a id='vewChk'></a></td>
-                <td align="center" style="width:20%"><a id='vewNoa'></a></td>
-                <td align="center" style="width:20%"><a id='vewNamea'></a></td>
+                <td align="center" style="width:5%"><a id='vewChk'> </a></td>
+                <td align="center" style="width:20%"><a id='vewNoa'> </a></td>
+                <td align="center" style="width:20%"><a id='vewNamea'> </a></td>
                 
             </tr>
              <tr>
                    <td ><input id="chkBrow.*" type="checkbox" style=' '/></td>
                    <td align="center" id='noa'>~noa</td>
                    <td align="center" id='namea'>~namea</td>
-                  
             </tr>
         </table>
         </div>
@@ -904,7 +915,7 @@
             <td class="td2"><input id="txtInsur_fund" type="text" class="txt num c1" /></td>
             <td class='td3'><span> </span><a id="lblInsur_disaster" class="lbl"> </a></td>
             <td class="td4"><input id="txtInsur_disaster" type="text" class="txt num c1" /></td>
-            <td class='td5'  colspan="2" ></td>
+            <td class='td5'  colspan="2" > </td>
             <td class="td6" colspan="2"><span> </span><input id="btnLabased" type="button"/></td> 
         </tr>
         <tr class="tr2">
@@ -921,7 +932,10 @@
             <td class="td4"><input id="txtSalary" type="text" class="txt num c1" /></td>
             <td class='td5'><span> </span><a id="lblCustno" class="lbl btn"> </a></td>
             <td class="td6"><input id="txtCustno" type="text" class="txt c1" /></td>
-            <td class="td7"><input id="txtComp" type="text" class="txt c1" /></td>
+            <td class="td7" colspan="2">
+            	<input id="txtComp" type="text" class="txt c1" style="width: 50%;" />
+            	<input id="btnUploadsalary" type="button"/>
+            </td>
             <!--<td class="td5" colspan="2"><span> </span><input id="btnUmmb" type="button" style="float: right;"/></td>
             <td class="td7"><span> </span><a id="lblMon" class="lbl"> </a></td>
             <td class="td8"><input id="txtMon" type="text" class="txt c1" /></td>-->

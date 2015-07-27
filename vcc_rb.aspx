@@ -31,7 +31,7 @@
 			brwKey = 'datea';
 
 			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel,fax,zip_comp,addr_comp,paytype,trantype,salesno,sales', 'txtCustno,txtComp,txtTel,txtFax,txtPost,txtAddr,txtPaytype,cmbTrantype,txtSalesno,txtSales', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel,fax,zip_comp,addr_comp,paytype,trantype,salesno,sales,custno2,cust2', 'txtCustno,txtComp,txtTel,txtFax,txtPost,txtAddr,txtPaytype,cmbTrantype,txtSalesno,txtSales,txtCustno2,txtComp2', 'cust_b.aspx'],
 				['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
@@ -218,9 +218,11 @@
 					var t_custno = $('#txtCustno').val();
 					if (t_custno.length > 0) {
 						if((q_cur==1 || q_cur==2)){
-							t_where = "typea='4' and exists(select * from view_cng where custno='"+t_custno+"' and noa=a.noa) ";
-							t_where += " and mount-isnull(b.rmount,0)>0 ";
-							q_box("cngs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'cngs', "95%", "95%", q_getMsg('popCngs'));
+							t_where ="typea='4' and custno='"+t_custno+"' "
+							t_where += "and exists (select * from view_cngs ca outer apply (select sum(mount)rmount,sum(weight) rweight from view_cngs where retno=ca.noa and retnoq=ca.noq ) cb where ca.noa=view_cng.noa and ca.mount-isnull(cb.rmount,0)>0 )";
+							//t_where = "typea='4' and exists(select * from view_cng where custno='"+t_custno+"' and noa=a.noa) ";
+							//t_where += " and mount-isnull(b.rmount,0)>0 ";
+							q_box("cng_rb_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'cng', "500px", "95%", q_getMsg('popCngs'));
 						}
 					}else{
 						alert("請輸入客戶編號!!");
@@ -315,6 +317,19 @@
 							sum();
 						}
 						break;
+					case 'cng':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0) {
+								b_pop = '';
+								return;
+							}
+							if(b_ret[0].noa!=undefined){
+								var t_where = "where=^^typea='4' and noa='"+b_ret[0].noa+"' and mount-isnull(b.rmount,0)>0 ^^";
+								q_gt('cngs_re', t_where, 0, 0, 0, "", r_accy);	
+							}
+						}
+						break;
 					case 'cngs':
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
@@ -341,6 +356,11 @@
 			function q_gtPost(t_name) {
 				var as;
 				switch (t_name) {
+					case 'cngs_re':
+						var as = _q_appendData("view_cngs", "", true);
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtRetno,txtRetnoq'
+								, as.length, as, 'productno,product,unit,umount,noa,noq', 'txtProductno,txtProduct');
+						break;
 					case 'getpart':
 						var as = _q_appendData("part", "", true);
 						if (as[0] != undefined) {
@@ -532,6 +552,10 @@
 						$('#txtApvmemo').val(t_consignee);
 						if (as[0] != undefined){
 							$('#txtCustno').val(as[0].custno);
+							//取得收款客戶
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+							q_gt('cust', t_where, 0, 0, 0, "cust_cust2");
+							
 							$('#txtComp').val(as[0].comp);
 							$('#txtTel').val(as[0].tel);
 							$('#txtFax').val(as[0].fax);
@@ -561,6 +585,13 @@
 						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', ass.length, ass, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
 						sum();
 						refreshBbm();
+						break;
+					case 'cust_cust2':
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							$('#txtCustno2').val(as[0].custno2)
+							$('#txtComp2').val(as[0].cust2)
+						}
 						break;
 					case 'cust':
 						var as = _q_appendData("cust", "", true);
@@ -1322,6 +1353,11 @@
 						<td class="td1"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtStoreno" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtStore" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td class="td1"><span> </span><a id='lblCust2' class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtCustno2" type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtComp2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>

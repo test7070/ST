@@ -17,15 +17,15 @@
 		<script type="text/javascript">
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_cub_rkp');       
+                q_gf('', 'z_rc2_rkp');       
             });
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_cub_rkp',
+					fileName : 'z_rc2_rkp',
 					options : [{
 						type : '0', //[1]
 						name : 'path',
-						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_cub_rkp.aspx','')
+						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_rc2_rkp.aspx','')
 					},{
 						type : '0', //[2]
 						name : 'db',
@@ -55,15 +55,6 @@
                 }
             }
             
-            /*var string = 'abcdefghijklmnopqrstuvwxy';
-            var code = '';
-            for(var i=0;i<string.length;i++){
-            	for(var j=1;j<=6;j++){
-            		code += ",'<a style=\"font-family:'+ \"'Times New Roman','標楷體', serif\"+char(59)+'\">'+"+string.substring(i,i+1)+'0'+j+" +'</a>' "+string.substring(i,i+1)+'0'+j;
-            		//code += ','+string.substring(i,i+1)+'0'+j+' nvarchar(max)'
-            	}
-            }*/
-			//function q_boxClose(s2) {}
 			function q_gtPost(s2) {}
 		</script>
 		
