@@ -42,10 +42,24 @@
 				$('#txtXdate').mask('999/99/99');
 				$('#txtXdate').val(q_date());
 				$('#txtXdate').datepicker();
+				
+				$('#btnPost').click(function() {
+					var t_typea=$('#Salary select').val();
+					var t_mon=$('#txtMonth').val();
+					var t_datea=$('#txtXdate').val();
+					
+					if(t_typea.length>0 && t_mon.length>0 && t_datea.length>0)
+	            		q_func('qtxt.query.postmedia', 'bankpost.txt,bankpost_media,' +encodeURI(t_typea)+';'+encodeURI(t_mon)+';'+encodeURI(t_datea));
+	            });
             }
 
 			function q_funcPost(t_func, result) {
                 switch(t_func) {
+                	case 'qtxt.query.postmedia':
+                		var s1 = location.href;
+		        		var t_path = (s1.substr(7, 5) == 'local' ? xlsPath : s1.substr(0, s1.indexOf('/', 10)) + '/htm/');
+		        		window.open(t_path + 'htm/PSBP-PAY-NEW.txt', "_blank", 'directories=no,location=no,menubar=no,resizable=1,scrollbars=1,status=0,toolbar=1');
+                		break;
                     default:
                         break;
                 }
@@ -65,6 +79,7 @@
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
 				<div id="q_report"> </div>
+				<input id="btnPost" type="button"/>
 			</div>
 			<div class="prt" style="margin-left: -40px;">			
 				<!--#include file="../inc/print_ctrl.inc"-->
