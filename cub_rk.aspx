@@ -14,6 +14,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
+		
 			this.errorHandler = null;
 			q_tables = 's';
 			var toIns = true;
@@ -498,6 +499,10 @@
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblMonth" class+"lbl"></a></td>
+						<td><input id="txtMonth" type="text" class="txt c1"/></td>
 					</tr>
 					<tr></tr>
 					<tr></tr>
