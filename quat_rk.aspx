@@ -30,7 +30,7 @@
             brwCount2 = 15;
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial', 'txtCustno,txtComp,txtNick,txtSerial', 'cust_b.aspx']
             	,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
-            	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']);
+            	,['txtSpec_', 'btnSpec_', 'ucc', 'noa,product', 'txtSpec_,txtClass_', 'ucc_b.aspx']);
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'no3'];
@@ -239,7 +239,7 @@
             }
 
             function bbsSave(as) {
-                if (!as['productno']) {
+                if (!as['product']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
@@ -622,7 +622,8 @@
 					<td style="width:100px;">保護膜</td>
 					<td style="width:60px;">單位</td>
 					<td style="width:80px;">數量</td>
-					<td style="width:80px;">單價(KG)</td>
+					<td style="width:80px;">重量</td>
+					<td style="width:80px;">單價</td>
 					<td style="width:120px;display:none;">P/O</td>
 					<td style="width:120px;display:none;">P/N</td>
 				</tr>
@@ -652,6 +653,7 @@
 					
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
+					<td><input id="txtWeight.*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt c1 num"/></td>
 					<td style="display:none;"><input id="txtPo.*" type="text" class="txt c1"/></td>
 					<td style="display:none;"><input id="txtPn.*" type="text" class="txt c1"/></td>
