@@ -725,10 +725,10 @@
 			}
 
 			function btnPrint() {
-				var hasStyle = q_getPara('sys.isstyle');
-				if(hasStyle=='1'){
+				//var hasStyle = q_getPara('sys.isstyle');
+				if(q_getPara('sys.isstyle') == '1'){
 					q_box("z_rc2_ra.aspx?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-				}else if(sys.project == 'sh'){
+				}else if(q_getPara('sys.project') == 'sh'){
 					q_box("z_rc2p_sh.aspx?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 				}else{
 					q_box("z_rc2p.aspx?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
