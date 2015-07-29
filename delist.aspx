@@ -1140,15 +1140,18 @@
 					<td align="center" style="width:100px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'>型</a></td>
 					<td align="center" style="width:60px;"><a>等級</a></td>
+					<td align="center" style="width:140px;">規範<BR>國別</td>
 					<td align="center" style="width:220px;"><a id='lblSizea_s'> </a><BR><a id='lblSpec_s'> </a></td>
 					<td align="center" style="width:130px;"><a id='lblSize_s'> </a></td>
 					<td align="center" style="width:60px;" class="dime2"><a>實際<BR>厚度</a></td>
 					<td align="center" style="width:60px;" class="lengthc"><a>實際<BR>寬度</a></td>
 					<td align="center" style="width:60px;" class="lengthd"><a>實際<BR>長度</a></td>	
 					<td align="center" style="width:40px;"><a id='lblSource_s'> </a></td>
-					<td align="center" style="width:50px;"><a id='lblUnit_s'> </a></td>
+					
 					<td align="center" style="width:115px;"><a id='lblInmount_s'> </a><BR><a id='lblMount_s'> </a></td>
+						<td align="center" style="width:50px;"><a>數量<BR>單位</a></td>
 					<td align="center" style="width:115px;"><a id='lblInweight_s'> </a><BR><a id='lblWeight_s'> </a></td>
+						<td align="center" style="width:50px;"><a>計價<BR>單位</a></td>
 					<td align="center" style="width:115px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblMoney_s'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblStore_s'> </a></td>
@@ -1180,6 +1183,10 @@
 					</td>
 					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
 					<td>
+                        <input id="txtUcolor.*" type="text" style="width:95%;"/>
+                        <input id="txtScolor.*" type="text" style="width:95%;"/>
+                    </td>
+					<td>
 						<input class="txt num" id="txtDime.*" type="text" style="float: left;width:55px;"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
 						<input class="txt num" id="txtWidth.*" type="text" style="float: left;width:55px;"/>
@@ -1193,15 +1200,17 @@
 					<td class='lengthc'><input class="txt num c1 lengthc" id="txtLengthc.*" type="text"  /></td>
 					<td class='lengthd'><input class="txt num c1 lengthd" id="txtLengthd.*" type="text"  /></td>
 					<td><input class="txt c1" id="txtSource.*" type="text"  /></td>
-					<td><input class="txt c1" id="txtUnit.*" type="text"/>	</td>
+					
 					<td>
 						<input class="txt num c1" id="txtInmount.*" type="text"  />
 						<input class="txt num c1" id="txtMount.*" type="text"  />
 					</td>
+					<td><input class="txt c1" id="txtUnit2.*" type="text"/>	</td>
 					<td>
 						<input class="txt num c1" id="txtInweight.*" type="text"  />
 						<input class="txt num c1" id="txtWeight.*" type="text"  />
 					</td>
+					<td><input class="txt c1" id="txtUnit.*" type="text"/>	</td>
 					<td><input class="txt num c1" id="txtPrice.*" type="text"  /></td>
 					<td><input class="txt num c1" id="txtMoney.*" type="text"  /></td>
 					<td style="text-align: left;">

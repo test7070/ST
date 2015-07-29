@@ -40,6 +40,11 @@
                 $('#txtEwidth').val(9999);
                 $('#txtElengthb').val(9999);
                 $('#txtEradius').val(9999);
+                
+                if(q_getPara('sys.comp').substring(0,2)=="傑期")
+		        {
+		        	$('.pk').show();
+		        }
             }
             function q_seekStr() {
             	t_kind = $.trim($('#cmbKind').val());
@@ -51,7 +56,8 @@
 		        t_comp = $.trim($('#txtComp').val());
 		        t_uno = $.trim($('#txtUno').val());
 		        t_salesno = $.trim($('#txtSalesno').val());
-
+				t_custorde = $.trim($('#txtCustorde').val());
+							
 		        t_bdate = $('#txtBdate').val();
 		        t_edate = $('#txtEdate').val();
 		        
@@ -71,6 +77,11 @@
 		        + q_sqlPara2("datea", t_bdate, t_edate)     
 		        + q_sqlPara2("custno", t_custno)
 		        + q_sqlPara2("salesno", t_salesno);
+		        
+		        if(q_getPara('sys.comp').substring(0,2)=="傑期")
+		        {
+		        	t_where += q_sqlPara2("custorde", t_custorde);
+		        }
 		        
 		        if(t_apv=='1')
 		        	t_where += " and len(isnull(apv,''))>0";
@@ -199,6 +210,10 @@
 					<span style="display:inline-block; vertical-align:middle">&sim;</span>
 					<input class="txt" id="txtEradius" type="text" style="width:93px; font-size:medium;" />
 					</td>
+				</tr>
+				<tr class='seek_tr pk' style="display:none;">
+					<td class='seek'  style="width:20%;"><a id='lblCustorde'></a></td>
+					<td><input class="txt" id="txtCustorde" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->

@@ -83,7 +83,9 @@
 				//q_tr('txtTotalus', q_mul(q_float('txtMoney'), q_float('txtFloata')));
 				calTax();
 			}
-
+			
+			var x_ordevccstore=false;
+			var x_ordevccumm=false;
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd],['txtDatea', r_picd],['txtMon', r_picm]];//,['txtGtime', '99:99']
@@ -128,8 +130,6 @@
 						q_box("vcca_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'"+$('#txtOrdbno').val()+"')>0", 'vcca', "95%", "95%", "發票開立作業");
 				});
 				
-				var x_ordevccstore=false;
-				var x_ordevccumm=false;
 				$('#btnOrdetoVcc').click(function() {
 					//檢查是否已收款
 					if(!x_ordevccumm && !emp($('#txtVccno').val())){
@@ -1060,7 +1060,7 @@
 					$('.storepart0').hide();
 					$('.storepart1').show();
 					if(r_rank<8){
-						q_gt('store', "where=^^tggno='"+r_partno+"' or partno='001'^^", 0, 0, 0, 'storepart', r_accy);
+						q_gt('store', "where=^^tggno='"+r_partno+"' or tggno='001'^^", 0, 0, 0, 'storepart', r_accy);
 					}else{
 						q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
 					}
