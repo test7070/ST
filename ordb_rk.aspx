@@ -33,7 +33,7 @@
 			brwNowPage = 0;
 			brwKey = 'noa';
 			q_desc = 1;
-			aPop = new Array(['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
+			aPop = new Array(['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
 			,['txtProductno1_', 'btnProduct1_', 'bcc', 'noa,product,unit', 'txtProductno1_,txtProduct_,txtUnit_', 'bcc_b.aspx']
 			, ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 			, ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
@@ -1007,6 +1007,8 @@
 					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
 					<td class="st" align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblProduct_st'> </a></td>
+					
+					
 					<td class="st" align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>

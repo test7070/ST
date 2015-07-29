@@ -81,10 +81,10 @@
 					<td align="center" style="width:10%;">皮膜</td>
 					<td align="center" style="width:5%;">背面<br>處理</td>
 					<td align="center" style="width:5%;">保護膜</td>
-					<td align="center" style="width:5%;">數量</td>
+					<td align="center" style="width:5%;">數量<BR>重量</td>
 					<td align="center" style="width:8%;">備註</td>
-					<td align="center" style="width:5%;">已訂<BR>數量</td>
-					<td align="center" style="width:5%;">未訂<BR>數量</td>
+					<td align="center" style="width:5%;">已訂數量<BR>已訂重量</td>
+					<td align="center" style="width:5%;">未訂數量<BR>未訂重量</td>
 				</tr>
 			</table>
 		</div>
@@ -102,10 +102,10 @@
 					<td align="center" style="width:10%;">皮膜</td>
 					<td align="center" style="width:5%;">背面<br>處理</td>
 					<td align="center" style="width:5%;">保護膜</td>
-					<td align="center" style="width:5%;">數量</td>
+					<td align="center" style="width:5%;">數量<BR>重量</td>
 					<td align="center" style="width:8%;">備註</td>
-					<td align="center" style="width:5%;">已訂<BR>數量</td>
-					<td align="center" style="width:5%;">未訂<BR>數量</td>
+					<td align="center" style="width:5%;">已訂數量<BR>已訂重量</td>
+					<td align="center" style="width:5%;">未訂數量<BR>未訂重量</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td style="width:2%;"><input type="checkbox" class="ccheck" id="chkSel.*"/></td>
@@ -131,17 +131,18 @@
 					<td style="width:5%;"><input id="txtSource.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
 					<td style="width:5%;">
 						<input id="txtMount.*" type="text" style="float:left;width:100%;"  readonly="readonly" />
-						<input id="txtWeight.*" type="text" style="display:none;"  readonly="readonly" />
+						<input id="txtWeight.*" type="text" style="float:left;width:100%;"   readonly="readonly" />
 					</td>
 					<td style="width:8%;"><input id="txtMemo.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
 					<td style="width:5%;">
 						<input id="txtOmount.*" type="text" style="float:left;width:100%;"  readonly="readonly" />
-						<input id="txtOweight.*" type="text" style="display:none;"  readonly="readonly" />
+						<input id="txtOweight.*" type="text" style="float:left;width:100%;"   readonly="readonly" />
 					</td>
 					<td style="width:5%;">
 						<input id="txtEmount.*" type="text" style="float:left;width:100%;"  readonly="readonly" />
-						<input id="txtEweight.*" type="text" style="display:none;"  readonly="readonly" />
+						<input id="txtEweight.*" type="text" style="float:left;width:100%;"   readonly="readonly" />
 					</td>
+					
 				</tr>
 			</table>
 		</div>

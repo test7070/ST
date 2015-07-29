@@ -30,7 +30,7 @@
             brwCount2 = 8;
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,addr_fact,tel,fax', 'txtCustno,txtComp,txtNick,txtAddr,txtTel,txtFax', 'cust_b.aspx']
             	,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
-            	,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']);
+            	,['txtSpec_', 'btnSpec_', 'ucc', 'noa,product', 'txtSpec_,txtClass_', 'ucc_b.aspx']);
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'no2'];
@@ -196,8 +196,8 @@
                 	case 'quat_orde':
                         if (b_ret != null) {
                         	as = b_ret;
-                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtQuatno,txtNo3,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtUcolor,txtSource,txtUnit,txtMount,txtPrice'
-                        	, as.length, as, 'noa,no3,productno,product,dime,radius,width,lengthb,spec,class,ucolor,source,unit,emount,price', '','');
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtQuatno,txtNo3,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtUcolor,txtSource,txtUnit,txtMount,txtWeight,txtPrice'
+                        	, as.length, as, 'noa,no3,productno,product,dime,radius,width,lengthb,spec,class,ucolor,source,unit,emount,eweight,price', '','');
                         	
                         	var t_quatno = $('#txtQuatno_0').length>0?$('#txtQuatno_0').val():'';
                         	q_gt('view_quat', "where=^^ noa='"+t_quatno+"' ^^", 0, 0, 0, JSON.stringify({action:'importQuat'}));
@@ -728,7 +728,7 @@
 					<td style="width:60px;">單位</td>
 					<td style="width:80px;">數量</td>
 					<td style="width:80px;">重量</td>
-					<td style="width:80px;">單價(KG)</td>
+					<td style="width:80px;">單價</td>
 					<td style="width:80px;">金額</td>
 					<td style="width:200px;">P/O<br>P/N</td>
 				</tr>
