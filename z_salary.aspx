@@ -32,6 +32,11 @@
 	            		$('#Xnoa').hide();
 	            		$('#txtXnoa').val('');
 	            	}
+	            	if($(".select")[0].nextSibling.innerText=='個人薪資表(本國)'){
+                		$('#btnSendmail').show();
+                	}else{
+                		$('#btnSendmail').hide();
+                	}
 				});
             });
             function q_gfPost() {
@@ -119,6 +124,26 @@
             		$('#Xnoa').hide();
             		$('#txtXnoa').val('');
             	}
+            	
+            	$('#btnSendmail').click(function() {
+            		var t_mom=emp($('#txtXmon').val())?'#non':$('#txtXmon').val();
+            		var t_bsno=emp($('#txtSssno1a').val())?'#non':$('#txtSssno1a').val();
+            		var t_esno=emp($('#txtSssno2a').val())?'#non':$('#txtSssno2a').val();
+            		var t_kind=emp($('#Xkind select').val())?'#non':$('#Xkind select').val();
+            		if(t_mom.length>0 && t_bsno.length>0 && t_esno.length>0 && t_kind.length>0){
+            			q_func('salary.sendmail', t_mom+','+t_bsno+','+t_esno+','+t_kind);
+            			$('#btnSendmail').attr('disabled','disabled').val('發送中...');
+            		}
+				});
+            	
+			}
+			
+			function q_funcPost(t_func, result) {
+				if (t_func == 'salary.sendmail') {
+		            alert('發送完成!!!');
+		            $('#btnSendmail').removeAttr('disabled').val(q_getMsg("btnSendmail"));
+		            return;
+		        }
 			}
 
             function q_boxClose(s2) {
@@ -135,6 +160,7 @@
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;">
 			<div id="container">
 				<div id="q_report"> </div>
+				<input id="btnSendmail" type="button" style="display: none;"/>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->
