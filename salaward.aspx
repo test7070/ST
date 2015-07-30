@@ -76,11 +76,8 @@
 				case 'sss':
 					for (var i = 0; i < q_bbsCount; i++) {$('#btnMinus_' + i).click();}
 					var as = _q_appendData("sss", "", true);
-					for (var i = 0; i < as.length; i++) {
-						as[i].taxrate=5;
-					}
-					q_gridAddRow(bbsHtm, 'tbbs', 'txtSssno,txtNamea,txtPartno,txtPart,txtJob,txtTaxrate'
-						, as.length, as, 'noa,namea,partno,part,job,taxrate', '');
+					q_gridAddRow(bbsHtm, 'tbbs', 'txtSssno,txtNamea,txtPartno,txtPart,txtJob'
+						, as.length, as, 'noa,namea,partno,part,job', '');
 					break;
 				case q_name: 
 					if (q_cur == 4)   // 查詢
@@ -116,11 +113,46 @@
 		function bbsAssign() {  /// 表身運算式
 			for(var j = 0; j < q_bbsCount; j++) {
 		   		if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-		   			$('#txtTotal1_'+j).change(function() {sum();});
-		   			$('#txtTotal2_'+j).change(function() {sum();});
-		   			$('#txtTotal3_'+j).change(function() {sum();});
-		   			$('#txtTotal4_'+j).change(function() {sum();});
-		   			$('#txtTotal5_'+j).change(function() {sum();});
+		   			$('#txtTotal1_'+j).change(function() {
+		   				t_IdSeq = -1;
+	                    q_bodyId($(this).attr('id'));
+	                    b_seq = t_IdSeq;
+		   				if(q_float('txtTotal1_'+b_seq)+q_float('txtTotal2_'+b_seq)+q_float('txtTotal3_'+b_seq)+q_float('txtTotal4_'+b_seq)+q_float('txtTotal5_'+b_seq)>73000)
+		   					$('#txtTaxrate_'+b_seq).val(5);
+		   				sum();
+		   			});
+		   			$('#txtTotal2_'+j).change(function() {
+		   				t_IdSeq = -1;
+	                    q_bodyId($(this).attr('id'));
+	                    b_seq = t_IdSeq;
+	                    if(q_float('txtTotal1_'+b_seq)+q_float('txtTotal2_'+b_seq)+q_float('txtTotal3_'+b_seq)+q_float('txtTotal4_'+b_seq)+q_float('txtTotal5_'+b_seq)>73000)
+		   					$('#txtTaxrate_'+b_seq).val(5);
+		   				sum();
+		   			});
+		   			$('#txtTotal3_'+j).change(function() {
+		   				t_IdSeq = -1;
+	                    q_bodyId($(this).attr('id'));
+	                    b_seq = t_IdSeq;
+	                    if(q_float('txtTotal1_'+b_seq)+q_float('txtTotal2_'+b_seq)+q_float('txtTotal3_'+b_seq)+q_float('txtTotal4_'+b_seq)+q_float('txtTotal5_'+b_seq)>73000)
+		   					$('#txtTaxrate_'+b_seq).val(5);
+		   				sum();
+		   			});
+		   			$('#txtTotal4_'+j).change(function() {
+		   				t_IdSeq = -1;
+	                    q_bodyId($(this).attr('id'));
+	                    b_seq = t_IdSeq;
+	                    if(q_float('txtTotal1_'+b_seq)+q_float('txtTotal2_'+b_seq)+q_float('txtTotal3_'+b_seq)+q_float('txtTotal4_'+b_seq)+q_float('txtTotal5_'+b_seq)>73000)
+		   					$('#txtTaxrate_'+b_seq).val(5);
+		   				sum();
+		   			});
+		   			$('#txtTotal5_'+j).change(function() {
+		   				t_IdSeq = -1;
+	                    q_bodyId($(this).attr('id'));
+	                    b_seq = t_IdSeq;
+	                    if(q_float('txtTotal1_'+b_seq)+q_float('txtTotal2_'+b_seq)+q_float('txtTotal3_'+b_seq)+q_float('txtTotal4_'+b_seq)+q_float('txtTotal5_'+b_seq)>73000)
+		   					$('#txtTaxrate_'+b_seq).val(5);
+		   				sum();
+		   			});
 		   			$('#txtTotal6_'+j).change(function() {sum();});
 		   			$('#txtTax_'+j).change(function() {sum();});
 		   			$('#txtTaxrate_'+j).change(function() {sum();});
