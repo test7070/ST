@@ -15,61 +15,72 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
+            if (location.href.indexOf('?') < 0) {
+                location.href = location.href + "?;;;;"+((new Date()).getUTCFullYear()-1911);
+            }
             $(document).ready(function() {
             	q_getId();
-                q_gf('', 'z_bankpost');       
-            }); 
-            
+                q_gf('', 'z_rc2p_sh');
+            });
             function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_bankpost',
+					fileName : 'z_rc2p_sh',
 					options : [{
-							type:'5',//[1]
-							name: 'salary',
-							value:['薪資','獎金']
-						},{
-							type: '6',//[2]
-							name: 'month'	
-						},{
-							type:'6',//[3]
-							name:'xdate'
-						}
-					]});
-
-				q_popAssign();
-				$('#txtMonth').mask('999/99');
-				$('#txtMonth').val(q_date().substr(0,6));
-				$('#txtXdate').mask('999/99/99');
-				$('#txtXdate').val(q_date());
-				$('#txtXdate').datepicker();
-				
-				$('#btnPost').click(function() {
-					var t_typea=$('#Salary select').val();
-					var t_mon=$('#txtMonth').val();
-					var t_datea=$('#txtXdate').val();
-					
-					if(t_typea.length>0 && t_mon.length>0 && t_datea.length>0)
-	            		q_func('qtxt.query.postmedia', 'bankpost.txt,bankpost_media,' +encodeURI(t_typea)+';'+encodeURI(t_mon)+';'+encodeURI(t_datea));
-	            });
+						type : '0', //[1]
+						name : 'accy',
+						value : r_accy
+					}, {
+						type : '0',//[2]
+						name : 'addr2',
+                        value : q_getPara('sys.addr2')
+                    }, {
+						type : '0',//[3]
+						name : 'addr',
+                        value : q_getPara('sys.addr')
+                    }, 
+                    {
+						type : '0',//[4]
+						name : 'tel',
+                        value : q_getPara('sys.tel2')
+                    },
+                    {
+						type : '0',//[5]
+						name : 'fax',
+                        value : q_getPara('sys.tel')
+                    },
+                      
+					{
+						type : '1', //[6][7]
+						name : 'xnoa'
+					}]
+				});
+                    
+                q_popAssign();
+                
+                //$('#txtXdate1').mask('999/99/99');
+                //$('#txtXdate2').mask('999/99/99');
+                
+                //$('#txtXdate1').val(q_cdn(q_date(),1));
+                //$('#txtXdate2').val(q_cdn(q_date(),1));
+	                
+	            var t_noa=typeof(q_getId()[3])=='undefined'?'':q_getId()[3];
+                t_noa  =  t_noa.replace('noa=','');
+                $('#txtXnoa1').val(t_noa);
+                $('#txtXnoa2').val(t_noa);
+	                
             }
 
-			function q_funcPost(t_func, result) {
-                switch(t_func) {
-                	case 'qtxt.query.postmedia':
-                		var s1 = location.href;
-		        		var t_path = (s1.substr(7, 5) == 'local' ? xlsPath : s1.substr(0, s1.indexOf('/', 10)) + '/htm/');
-		        		window.open(t_path + 'htm/PSBP-PAY-NEW.txt', "_blank", 'directories=no,location=no,menubar=no,resizable=1,scrollbars=1,status=0,toolbar=1');
-                		break;
-                    default:
-                        break;
-                }
+            function q_boxClose(s2) {
             }
             
-			
-			function q_gtPost(s2) {
-				
-			}
+            function q_gtPost(s2) {
+            }
 		</script>
+		<style type="text/css">
+			#frameReport table{
+					border-collapse: collapse;
+				}
+		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
@@ -79,9 +90,8 @@
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
 				<div id="q_report"> </div>
-				<input id="btnPost" type="button"/>
 			</div>
-			<div class="prt" style="margin-left: -40px;">			
+			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->
 			</div>
 		</div>
