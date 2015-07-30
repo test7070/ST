@@ -43,19 +43,25 @@
                         type : '0', //[4]
                         name : 'priceprecision',
                         value : q_getPara('vcc.pricePrecision')
-                    }, {
-                        type : '5',
-                        name : 'typea',
-                        value : [q_getPara('report.all')].concat(q_getPara('getfe.typea').split(','))
-                    }, {
-                        type : '1',
-                        name : 'xdate'
                     },{
-						type : '0',//[8]
+						type : '0',//[5]
 						name : 'xproject',
 						value : q_getPara('sys.project').toUpperCase()
 					}, {
-                        type : '5', //[9]
+                        type : '1',//[6][7]
+                        name : 'xdate'
+                    }, {
+                        type : '2', //[8][9]
+                        name : 'xproduct',
+                        dbf : 'ucaucc',
+                        index : 'noa,product',
+                        src : 'ucaucc_b.aspx'
+                    }, {
+                        type : '5',//[10]
+                        name : 'typea',
+                        value : [q_getPara('report.all')].concat(q_getPara('getfe.typea').split(','))
+                    }, {
+                        type : '5', //[11]
                         name : 'xgroupano',
                         value : uccgaItem.split(',')
                     }]
