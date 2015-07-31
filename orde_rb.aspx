@@ -1060,7 +1060,7 @@
 					$('.storepart0').hide();
 					$('.storepart1').show();
 					if(r_rank<8){
-						q_gt('store', "where=^^tggno='"+r_partno+"' or tggno='001'^^", 0, 0, 0, 'storepart', r_accy);
+						q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
 					}else{
 						q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
 					}
