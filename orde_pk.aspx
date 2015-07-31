@@ -902,8 +902,12 @@
             }
 
             function btnPrint() {
-                t_where = "noa='" + $('#txtNoa').val() + "'";
-                q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+            	if (q_getPara('sys.project') == 'pk') {
+					q_box('z_orde_pk.aspx' + "?;;;noa=" + trim($('#txtNoa').val())+";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				}else{
+                	t_where = "noa='" + $('#txtNoa').val() + "'";
+                	q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                }	
             }
 
             function wrServer(key_value) {
