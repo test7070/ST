@@ -18,7 +18,7 @@
             $(document).ready(function() {
             	q_getId();
                 q_gf('', 'z_bankpost');       
-            });
+            }); 
             
             function q_gfPost() {
 				$('#q_report').q_report({
