@@ -10,7 +10,7 @@
 		<script src="../script/qbox.js" type="text/javascript"> </script>
     	<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-		    var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,size,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit,unit2  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
+		    var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,size,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit,unit2,scolor,ucolor  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
 		    var t_sqlname = 'ordcs_load2'; t_postname = q_name;
 		    var isBott = false;  /// 是否已按過 最後一頁
 		    var txtfield = [], afield, t_data, t_htm;
@@ -46,9 +46,16 @@
 				parent.$.fn.colorbox.resize({
 					height : "750px"
 				});
+				
+				$('#btnTop').hide();
+				$('#btnPrev').hide();
+				$('#btnNext').hide();
+				$('#btnBott').hide();
+				
+				
 		    }
 		    function bbsAssign() {  /// checked 
-		        _bbsAssign();
+		        
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#txtCnt_'+j).change(function(){
 						var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
@@ -59,6 +66,10 @@
 							$('#chkSel_'+n).attr('checked',false);
 						}
 					});
+				}
+				_bbsAssign();
+				if(q_getPara('sys.comp').substring(0,2)=="傑期"){
+					$('.pk').show();
 				}
 		    }
 		
@@ -202,15 +213,16 @@
 					</td>
 					<td align="center" style="width:6%;"><a id='lblProductno_st'></a></td>
 					<td align="center" style="width:8%;"><a id='lblProduct'></a></td>
+					<td align="center" style="width:4%;display:none;" class="pk">規範<BR>國別</td>
 					<td align="center" style="width:8%;"><a id='lblSpec'></a></td>
-					<td align="center" id='FixedSize'><a id='lblSize'></a><BR><a id='lblSize_help'> </a></td>
+					<td align="center" id='FixedSize'><a id='lblSize_help'> </a><BR><a id='lblSize'> </a></td>
 					<td align="center" style="width:7%;"><a id='lblMount'></a></td>
+					<td align="center" class="pk" style="width:4%;display:none;"><a>數量單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
 					<td align="center" style="width:4%;"><a>單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblInmount_text'></a></td>
-					<td align="center" style="width:10%;"><a id='lblNoa'></a></td>
-					<td align="center"><a id='lblMemo'></a></td>
+					<td align="center" style="width:15%;"><a id='lblNoa'></a><br><a id='lblMemo'></a></td>
 				</tr>
 			</table>
 		</div>
@@ -220,20 +232,25 @@
 					<td align="center" style="width:1%;"><input type="checkbox" id="checkAllCheckbox"/></td>
 					<td align="center" style="width:6%;"><a id='lblProductno_st'></a></td>
 					<td align="center" style="width:8%;"><a id='lblProduct'></a></td>
+					<td align="center" style="width:4%;display:none;" class="pk">規範<BR>國別</td>
 					<td align="center" style="width:8%;"><a id='lblSpec'></a></td>
-					<td align="center" id='Size'><a id='lblSize'></a><BR><a id='lblSize_help'> </a></td>
+					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize'> </a></td>
 					<td align="center" style="width:7%;"><a id='lblMount'></a></td>
+					<td align="center" class="pk" style="width:4%;display:none;"><a>數量單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
 					<td align="center" style="width:4%;"><a>單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblInmount_text'></a></td>
-					<td align="center" style="width:10%;"><a id='lblNoa'></a></td>
-					<td align="center"><a id='lblMemo'></a></td>
+					<td align="center" style="width:15%;"><a id='lblNoa'></a><br><a id='lblMemo'></a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td style="width:1%;" align="center"><input id="chkSel.*" type="checkbox"/></td>
 					<td style="width:6%;"><input class="txt c1"  id="txtProductno.*" type="text" /></td>
 					<td style="width:8%;"><input class="txt c1" id="txtProduct.*" type="text"/></td>
+					<td style="width:4%;display:none;" class="pk">
+                        <input id="txtUcolor.*" type="text" style="width:95%;"/>
+                        <input id="txtScolor.*" type="text" style="width:95%;"/>
+                    </td>
 					<td style="width:8%;"><input class="txt c1" id="txtSpec.*" type="text" /></td>
 					<td id="FixedSize">
 						<input class="txt num c8" id="txtSize1.*" type="text"/><div id="x1" style="float: left"> x</div>
@@ -245,20 +262,20 @@
 						<input  id="txtWidth.*" type="hidden"/>
 						<input  id="txtDime.*" type="hidden"/>
 						<input id="txtLengthb.*" type="hidden"/>
+						<input id="txtSize.*" type="text" style="width:95%;"/>
 					</td>
 					<td style="width:7%;"><input class="txt num c1" id="txtMount.*" type="text"/></td>
+					<td class="pk" style="width:4%;display:none;"><input class="txt c1" id="txtUnit2.*" type="text"/></td>
 					<td style="width:7%;"><input class="txt num c1" id="txtWeight.*" type="text" /></td>
 					<td style="width:4%;"><input class="txt c1" id="txtUnit.*" type="text"/></td>
 					<td style="width:7%;"><input class="txt num c1" id="txtPrice.*" type="text"/></td>
 					<td style="width:8%;"><input class="txt num c1" id="txtCnt.*" type="text"/></td>
-					<td style="width:10%;">
-						<input class="txt c1" id="txtNoa.*" type="text"/>
-						<input class="txt c1" id="txtNo2.*" type="text" />
-					</td>
-					<td>
+					<td style="width:15%;">
+						<input class="txt" id="txtNoa.*" type="text" style="width:75%;"/>
+						<input class="txt" id="txtNo2.*" type="text" style="width:20%;"/>
 						<input class="txt c1" id="txtMemo.*" type="text"/>
-						<input id="txtKind.*" type="hidden" />
-						<input id="recno.*" type="hidden" />
+						<input id="txtKind.*" style="display:none;" />
+						<input id="recno.*" style="display:none;" />
 					</td>
 				</tr>
 			</table>
