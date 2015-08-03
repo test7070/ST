@@ -75,7 +75,7 @@
 		    				}
 		    			}
 				        for(var i = 0;i<abbs.length;i++){
-				        	if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
+				        	if(q_getPara('sys.comp').substring(0,2)=="聯琦" || q_getPara('sys.comp').substring(0,2)=="傑期"){
 				        		if (abbs[i].mount <= 0 && abbs[i].weight <= 0) {
 									abbs.splice(i, 1);
 									i--;
