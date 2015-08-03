@@ -127,31 +127,31 @@
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					
-					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
-						//批   裕承隆  是拿來當運費的單位   不能用
-						if(q_getPara('sys.comp').substring(0,2)=="裕承" && t_unit == '批' )
+					if($('#chkAprice_'+j).prop('checked')){
+						t_moneys = q_float('txtTotal_' + j);
+					}
+					else{
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+							//批   裕承隆  是拿來當運費的單位   不能用
+							if(q_getPara('sys.comp').substring(0,2)=="裕承" && t_unit == '批' )
+								t_moneys = q_mul(t_prices, t_mounts);
+							else
+								t_moneys = q_mul(t_prices, t_weights);
+						} else {
 							t_moneys = q_mul(t_prices, t_mounts);
-						else
-							t_moneys = q_mul(t_prices, t_weights);
-					} else {
-						t_moneys = q_mul(t_prices, t_mounts);
+						}
+						if (t_float == 0) {
+							t_moneys = round(t_moneys, 0);
+						} else {
+							t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
+							t_moneys = round(q_mul(t_moneys, t_float), 0);
+						}
+						$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 					}
-					//console.log(t_styles == '' && t_unos == '' && t_dimes == 0);
-					//console.log(t_unit);
-					//console.log(t_prices);
-					//console.log(t_weights);
-					//console.log(t_moneys);
-					
-					if (t_float == 0) {
-						t_moneys = round(t_moneys, 0);
-					} else {
-						t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
-						t_moneys = round(q_mul(t_moneys, t_float), 0);
-					}
+
 					t_weight = q_add(t_weight, t_weights);
 					t_mount = q_add(t_mount, t_mounts);
 					t_money = q_add(t_money, t_moneys);
-					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 				}
 				t_total = t_money;
 				t_tax = 0;
@@ -863,6 +863,7 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#chkAprice_'+j).click(function(e){refreshBbs();});
 						$('#btnCert_' + j).click(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							btnCert_Seq = n;
@@ -975,6 +976,7 @@
 				}
 				_bbsAssign();
 				size_change();
+				refreshBbs();
 				if(q_getPara('sys.project').toUpperCase()=='PK')
 					$('.pk').show();
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
@@ -1091,9 +1093,21 @@
 				else
 					$('#txtMon').attr('readonly', 'readonly');
 					
-				
+				refreshBbs();
 			}
-
+			function refreshBbs(){
+				//金額小計自訂
+				for(var i=0;i<q_bbsCount;i++){
+					$('#txtTotal_'+i).attr('readonly','readonly');
+					if($('#chkAprice_'+i).prop('checked')){
+						$('#txtTotal_'+i).css('color','black').css('background-color','white');
+						if(q_cur==1 || q_cur==2)
+							$('#txtTotal_'+i).removeAttr('readonly');
+					}else{
+						$('#txtTotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+					}
+				}
+			}
 			function btnMinus(id) {
 				_btnMinus(id);
 				sum();
@@ -1565,6 +1579,7 @@
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:80px;display:none;" class="sprice"><a id='lblSprices_st'>成本單價</a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
+					<td align="center" style="width:20px;">自訂<br>金額</td>
 					<td align="center">
 						<a id='lblMemos_st'> </a><br>
 						<a id='lblCert_st' style="display:none;"> </a>
@@ -1628,6 +1643,7 @@
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
 						<input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/>
 					</td>
+					<td><input id="chkAprice.*" type="checkbox"/></td>
 					<td>
 						<input id="txtMemo.*" type="text" style="width:95%;"/>
 						<input id="btnCert.*" class="btnCert" type="button" style="width:95%;"/>
