@@ -101,8 +101,8 @@
                         value : q_getPara('sys.d4taxtype')
                     }, {
                         type : '0', //[3] //判斷顯示小數點
-                        name : 'acomp',
-                        value : q_getPara('sys.comp')
+                        name : 'project',
+                        value : q_getPara('sys.project').toUpperCase()
                     }, {
                         type : '1', //[4][5]//1
                         name : 'date'
@@ -200,16 +200,29 @@
                 q_popAssign();
                 q_getFormat();
                 q_langShow();
-
-                $('#txtDate1').mask('999/99/99');
-                $('#txtDate1').datepicker();
-                $('#txtDate2').mask('999/99/99');
-                $('#txtDate2').datepicker();
+				
+				var r_1911=1911;
+				if(r_len==4){//西元年
+					r_picd='9999/99/99'
+					r_picm='9999/99'
+					r_1911=0;
+				}else{
+					$('#txtDate1').datepicker();
+					$('#txtDate2').datepicker();
+					$('#txtVdate1').datepicker();
+	                $('#txtVdate2').datepicker();
+	                $('#txtUdate1').datepicker();
+	                $('#txtUdate2').datepicker();
+	                $('#txtOdate').datepicker();
+				}
+				
+                $('#txtDate1').mask(r_picd);
+                $('#txtDate2').mask(r_picd);
 
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
-                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_date.getUTCFullYear() - r_1911;
                 t_year = t_year > 99 ? t_year + '' : '0' + t_year;
                 t_month = t_date.getUTCMonth() + 1;
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
@@ -220,19 +233,20 @@
                 t_date = new Date();
                 t_date.setDate(35);
                 t_date.setDate(0);
-                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_date.getUTCFullYear() - r_1911;
                 t_year = t_year > 99 ? t_year + '' : '0' + t_year;
                 t_month = t_date.getUTCMonth() + 1;
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                
                 $('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
-                $('#txtMon1').val(r_accy + '/01').mask('999/99');
-                $('#txtMon2').val(r_accy + '/12').mask('999/99');
-                $('#txtXbmon1').val(r_accy + '/01').mask('999/99');
-                $('#txtXbmon2').val(r_accy + '/12').mask('999/99');
-                $('#txtXemon1').val(r_accy + '/01').mask('999/99');
-                $('#txtXemon2').val(r_accy + '/12').mask('999/99');
+                $('#txtMon1').val(r_accy + '/01').mask(r_picd);
+                $('#txtMon2').val(r_accy + '/12').mask(r_picd);
+                $('#txtXbmon1').val(r_accy + '/01').mask(r_picd);
+                $('#txtXbmon2').val(r_accy + '/12').mask(r_picd);
+                $('#txtXemon1').val(r_accy + '/01').mask(r_picd);
+                $('#txtXemon2').val(r_accy + '/12').mask(r_picd);
                 $('#Xmemo').removeClass('a2').addClass('a1');
                 $('#txtXmemo').css('width', '85%');
                 $('#Xgroupano select').css('width', '150px');
@@ -244,20 +258,15 @@
                 $('#chkXshowinvono').css('width', '220px').css('margin-top', '5px');
                 $('#chkXshowinvono span').css('width','180px')
                 
-                $('#txtVmon1').mask('999/99');
-                $('#txtVmon2').mask('999/99');
-                $('#txtVmon1').val(q_date().substr(0,6));
-                $('#txtVmon2').val(q_date().substr(0,6));
-                $('#txtVdate1').mask('999/99/99');
-                $('#txtVdate1').datepicker();
-                $('#txtVdate2').mask('999/99/99');
-                $('#txtVdate2').datepicker();              
-                $('#txtUdate1').mask('999/99/99');
-                $('#txtUdate1').datepicker();
-                $('#txtUdate2').mask('999/99/99');
-                $('#txtUdate2').datepicker();
-                $('#txtOdate').mask('999/99/99');
-                $('#txtOdate').datepicker();
+                $('#txtVmon1').mask(r_picd);
+                $('#txtVmon2').mask(r_picd);
+                $('#txtVmon1').val(q_date().substr(0,r_lenm));
+                $('#txtVmon2').val(q_date().substr(0,r_lenm));
+                $('#txtVdate1').mask(r_picd);
+                $('#txtVdate2').mask(r_picd);
+                $('#txtUdate1').mask(r_picd);
+                $('#txtUdate2').mask(r_picd);
+                $('#txtOdate').mask(r_picd);
                 
                 if(isinvosystem=='2'){//沒有發票系統
 	                $('#Xshowinvono').hide();
