@@ -203,8 +203,6 @@
 				
 				var r_1911=1911;
 				if(r_len==4){//西元年
-					r_picd='9999/99/99'
-					r_picm='9999/99'
 					r_1911=0;
 				}else{
 					$('#txtDate1').datepicker();
