@@ -85,15 +85,20 @@
 				q_popAssign();
 				q_getFormat();
 				q_langShow();
-
-				$('#txtEdate').mask('999/99/99');
-				$('#txtEdate').val(q_date());
-				$('#txtEdate').datepicker();
 				
-				$('#txtXdate1').mask('999/99/99');
-				$('#txtXdate1').datepicker();
-				$('#txtXdate2').mask('999/99/99');
-				$('#txtXdate2').datepicker();
+				var r_1911=1911;
+				if(r_len==4){//西元年
+					r_1911=0;
+				}else{
+					$('#txtEdate').datepicker();
+					$('#txtXdate1').datepicker();
+					$('#txtXdate2').datepicker();
+				}
+
+				$('#txtEdate').mask(r_picd);
+				$('#txtEdate').val(q_date());
+				$('#txtXdate1').mask(r_picd);
+				$('#txtXdate2').mask(r_picd);
 				
 				$('#Xoption01').css('width','300px').css('height','30px');
 				$('#chkXoption01').css('width','215px');
