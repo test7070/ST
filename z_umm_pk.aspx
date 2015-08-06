@@ -59,6 +59,10 @@
 						type : '8', //[13] 10
 						name : 'xisunpay',
 						value : "1@顯示未付".split(',')
+					}, {
+						type : '8', //[14] 11
+						name : 'xisweight',
+						value : "1@顯示重量".split(',')
 					}]
                 });
                 q_popAssign();
