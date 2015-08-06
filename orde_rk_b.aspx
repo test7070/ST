@@ -30,7 +30,7 @@
 	            	t_para = JSON.parse(decodeURIComponent(q_getId()[5]));
 	            	t_content = "where=^^['"+t_para.vccno+"','"+t_para.custno+"','"+t_para.page+"')^^";
 	            	
-	            	
+	            	 
 	            }catch(e){
 	            }    
                 brwCount = -1;
