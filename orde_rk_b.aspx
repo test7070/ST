@@ -28,8 +28,13 @@
                 var t_para = new Array();
 	            try{
 	            	t_para = JSON.parse(decodeURIComponent(q_getId()[5]));
-	            	t_content = "where=^^['"+t_para.vccno+"','"+t_para.custno+"','"+t_para.page+"')^^";
 	            	
+	            	if(t_para.page=='cub_rk'){
+	            		q_name = "orde_cub"
+	            		t_content = "where=^^['"+t_para.cubno+"','"+t_para.page+"')^^";
+	            	}else{
+	            		t_content = "where=^^['"+t_para.vccno+"','"+t_para.custno+"','"+t_para.page+"')^^";
+	            	}
 	            	 
 	            }catch(e){
 	            }    

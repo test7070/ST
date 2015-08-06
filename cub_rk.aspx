@@ -40,7 +40,6 @@
 				,['txtCustno_', 'btnCustno_', 'cust', 'noa,nick', 'txtCustno_', 'cust_b.aspx']
 				,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_', 'spec_b.aspx']
 				,['txtProductno__', 'btnProduct__', 'bcc', 'noa,product', '0txtProductno__,txtProduct__', 'bcc_b.aspx']
-				//['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -89,10 +88,11 @@
 					if(!(q_cur==1 || q_cur==2))
 						return;
 					var t_noa = $('#txtNoa').val();
-                	var t_custno = $('#txtCustno').val();
                 	var t_where ='';
-                	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({vccno:t_noa,custno:t_custno,page:'cub_rk'}), "orde_vcc", "95%", "95%", '');
+                	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cubno:t_noa,page:'cub_rk'}), "orde_cub", "95%", "95%", '');
 				});
+				
+				
 			}
 
 			function q_gtPost(t_name) {
@@ -146,6 +146,16 @@
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
+					default:
+						if(b_pop.substring(0,8)=='get_cub_'){
+							var n = b_pop.replace('get_cub_','');
+							b_ret = getb_ret();
+							if(b_ret.length>0){
+								$('#txtUno_'+n).val(b_ret[0].uno);
+								$('#txtGweight_'+n).val(b_ret[0].eweight);
+							}
+						}
+						break;
 				}
 				b_pop = '';
 			}
@@ -164,7 +174,6 @@
 				_btnModi();
 				$('#txtDatea').focus();
 				InsertBbs();
-				
 			}
 			function InsertBbs(){
 				//固定6筆
@@ -340,6 +349,17 @@
 							refreshBbt();
 							bbtAssign();
 						});
+						$('#txtUno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtUno_', '');
+                            
+							if(!(q_cur==1 || q_cur==2))
+								return;
+							var t_noa = $('#txtNoa').val();
+		                	var t_where ='';
+		                	q_box("get_cub_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cubno:t_noa,n:n,page:'cub_rk'}), "get_cub_"+n, "95%", "95%", '');
+                        });
 					}
 				}
 				_bbsAssign();
