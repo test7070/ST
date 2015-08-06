@@ -39,7 +39,7 @@
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', '0txtProductno_,txtProduct_', 'ucc_b.aspx']
 				,['txtCustno_', 'btnCustno_', 'cust', 'noa,nick', 'txtCustno_', 'cust_b.aspx']
 				,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_', 'spec_b.aspx']
-				,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', '0txtProductno__,txtProduct__', 'ucc_b.aspx']
+				,['txtProductno__', 'btnProduct__', 'bcc', 'noa,product', '0txtProductno__,txtProduct__', 'bcc_b.aspx']
 				//['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']
 			);
 			$(document).ready(function() {
@@ -83,6 +83,15 @@
 				}).bind('contextmenu', function(e) {
 					if(e.target.nodeName!='INPUT')
 						e.preventDefault();
+				});
+				
+				$('#btnOrde').click(function() {
+					if(!(q_cur==1 || q_cur==2))
+						return;
+					var t_noa = $('#txtNoa').val();
+                	var t_custno = $('#txtCustno').val();
+                	var t_where ='';
+                	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({vccno:t_noa,custno:t_custno,page:'cub_rk'}), "orde_vcc", "95%", "95%", '');
 				});
 			}
 
@@ -247,9 +256,11 @@
 				if (t_para) {
                     $('#txtDatea').datepicker('destroy');
                     $('#cmbProcess').attr('disabled','disabled');
+                    $('#btnOrde').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
                     $('#cmbProcess').removeAttr('disabled');
+                    $('#btnOrde').removeAttr('disabled');
                 }
 			}
 			
@@ -315,6 +326,7 @@
 							n = parseInt(n);
 							ImportOrde(n);
 						});
+						
 						$('#rbNum_'+i).click(function(e){
 							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 							var noq = $('#txtNoq_'+n).val(); 
@@ -345,6 +357,12 @@
                 for (var i = 0; i < q_bbtCount; i++) {
                     $('#lblNo__' + i).text(i + 1);
                     if (!$('#btnMinut__' + i).hasClass('isAssign')) {
+                    	$('#txtProductno__' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno__', '');
+                            $('#btnProduct__'+n).click();
+                        });
                     }
                 }
                 _bbtAssign();
@@ -643,8 +661,10 @@
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblMonth" class+"lbl"></a></td>
+						<td><span> </span><a id="lblMonth" class="lbl">月份</a></td>
 						<td><input id="txtMonth" type="text" class="txt c1"/></td>
+						<td> </td>
+						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
 					</tr>
 					<tr></tr>
 					<tr></tr>
