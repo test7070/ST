@@ -16,15 +16,18 @@
 		<script type="text/javascript">
 		
 			this.errorHandler = null;
-			q_tables = 's';
+			q_tables = 't';
 			var toIns = true;
 			var q_name = "cub";
 			var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
-			var q_readonlys = ['txtCustno','txtComp'];
+			var q_readonlys = ['txtCustno','txtComp','txtNoq'];
+			var q_readonlyt = ['txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
+			var bbtNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
+			var bbtMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwList = [];
@@ -33,14 +36,16 @@
 			q_desc = 1;
 			brwCount2 = 5;
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', '0txtProductno_,txtProduct_', 'ucc_b.aspx'],
-				['txtCustno_', 'btnCustno_', 'cust', 'noa,nick', 'txtCustno_', 'cust_b.aspx'],
-				['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_', 'spec_b.aspx']
+				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', '0txtProductno_,txtProduct_', 'ucc_b.aspx']
+				,['txtCustno_', 'btnCustno_', 'cust', 'noa,nick', 'txtCustno_', 'cust_b.aspx']
+				,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_', 'spec_b.aspx']
+				,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', '0txtProductno__,txtProduct__', 'ucc_b.aspx']
 				//['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
+				bbtKey = ['noa', 'noq'];
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 			});
@@ -64,6 +69,21 @@
 				bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
 				q_mask(bbmMask);
 				q_cmbParse("cmbProcess", '日、高溫,午,晚');
+				
+				$('#dbbt').mousedown(function(e) {
+					if(e.button==2){			   		
+						$(this).data('xtop',parseInt($(this).css('top')) - e.clientY);
+						$(this).data('xleft',parseInt($(this).css('left')) - e.clientX);
+					}
+				}).mousemove(function(e) {
+					if(e.button==2 && e.target.nodeName!='INPUT'){ 
+						$(this).css('top',$(this).data('xtop')+e.clientY);
+						$(this).css('left',$(this).data('xleft')+e.clientX);
+					}
+				}).bind('contextmenu', function(e) {
+					if(e.target.nodeName!='INPUT')
+						e.preventDefault();
+				});
 			}
 
 			function q_gtPost(t_name) {
@@ -185,6 +205,7 @@
                 else
                     $('#txtWorker2').val(r_name);
                 sum();
+                refreshBbt();
                 var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtDatea').val());
                 if (t_noa.length == 0 || t_noa == "AUTO")
@@ -208,6 +229,14 @@
 				as['noa'] = abbm2['noa'];
 				return true;
 			}
+			function bbtSave(as) {
+				if (!as['productno'] && !as['product'] && !as['mount'] && !as['weight'] && !as['memo']) {
+					as[bbsKey[1]] = '';
+					return;
+				}
+				q_nowf();
+				return true;
+			}
 
 			function refresh(recno) {
 				_refresh(recno);
@@ -223,7 +252,55 @@
                     $('#cmbProcess').removeAttr('disabled');
                 }
 			}
-
+			
+			function getPosition(element) {
+			    var xPosition = 0;
+			    var yPosition = 0;
+			  
+			    while(element) {
+			        xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+			        yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+			        element = element.offsetParent;
+			    }
+			    return { x: xPosition, y: yPosition };
+			}
+			
+			function refreshBbt(){
+				if($('input:radio:checked[name="rbNum"]').length>0){
+	                var n = $('input:radio:checked[name="rbNum"]').attr('id').replace(/^(.*)_(\d+)$/,'$2');
+	                var t_noq = $('#txtNoq_'+n).val();
+	                for(var i=0;i<q_bbtCount;i++){
+	                	if($('#txtProductno__'+i).val().length==0
+	                		&& $('#txtProduct__'+i).val().length==0
+	                		&& $('#txtMemo__'+i).val().length==0
+	                		&& q_float('txtMount__'+i)==0
+	                		&& q_float('txtWeight__'+i)==0){
+	                		if($('#txtNor__'+i).val().length!=0){
+								$('#txtNor__'+i).val(t_noq);      
+	                		}		
+                		}else{
+                			
+                		}
+                		if($('#txtNor__'+i).val().length==0){
+							$('#txtNor__'+i).val(t_noq);      
+                		}
+	                }
+	                
+	                
+	                /*
+	                $('#dbbt').find('tr').hide();
+	                $('#dbbt').find('tr').eq(0).show();
+	                var m = 0;
+	                for(var i=0;i<q_bbtCount;i++){
+	                	if($('#txtNor__'+i).val() == t_noq || $('#txtNor__'+i).val().length==0){
+	                		$('#lblNo__' + i).text(m++ + 1);
+	                		$('#txtNor__'+i).parent().parent().show();
+	                	}
+	                }*/
+                }
+				
+			}
+			
 			function bbsAssign() {
 				for (var i = 0; i < q_bbsCount; i++) {
 					$('#lblNo_' + i).text(i + 1);
@@ -238,6 +315,19 @@
 							n = parseInt(n);
 							ImportOrde(n);
 						});
+						$('#rbNum_'+i).click(function(e){
+							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+							var noq = $('#txtNoq_'+n).val(); 
+							
+							var top = getPosition(this).y + 30;
+							var left = getPosition(this).x + 20;
+							//alert($(this).css('top')+'_'+top+'__'+left);
+							$('#dbbt').css('top',top);
+							$('#dbbt').css('left',left);
+							$('#dbbt').show();
+							refreshBbt();
+							bbtAssign();
+						});
 					}
 				}
 				_bbsAssign();
@@ -251,6 +341,27 @@
 					$(this).select();
 				});
 			}
+			function bbtAssign() {
+                for (var i = 0; i < q_bbtCount; i++) {
+                    $('#lblNo__' + i).text(i + 1);
+                    if (!$('#btnMinut__' + i).hasClass('isAssign')) {
+                    }
+                }
+                _bbtAssign();
+                if($('input:radio:checked[name="rbNum"]').length>0){
+	                var n = $('input:radio:checked[name="rbNum"]').attr('id').replace(/^(.*)_(\d+)$/,'$2');
+	                var t_noq = $('#txtNoq_'+n).val();
+	                $('#dbbt').find('tr').hide();
+	                $('#dbbt').find('tr').eq(0).show();
+	                var m = 0;
+	                for(var i=0;i<q_bbtCount;i++){
+	                	if($('#txtNor__'+i).val() == t_noq || $('#txtNor__'+i).val().length==0){
+	                		$('#lblNo__' + i).text(m++ + 1);
+	                		$('#txtNor__'+i).parent().parent().show();
+	                	}
+	                }
+                }
+            }
 			function ImportOrde(n){
 				var t_ordeno = $('#txtOrdeno_'+n).val();
 				var t_no2 = $('#txtNo2_'+n).val();
@@ -453,6 +564,27 @@
 				margin: -1px;
 				font-size: medium;
 			}
+			#dbbt {
+                width: 800px;
+            }
+            #tbbt {
+                margin: 0;
+                padding: 2px;
+                border: 2px pink double;
+                border-spacing: 1;
+                border-collapse: collapse;
+                font-size: medium;
+                color: blue;
+                background: pink;
+                width: 100%;
+            }
+            #tbbt tr {
+                height: 35px;
+            }
+            #tbbt tr td {
+                text-align: center;
+                border: 2px pink double;
+            }
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -525,6 +657,7 @@
 							<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"> </td>
+						<td style="width:40px;"> </td>
 						<td style="width:200px;" align="center">訂單號碼</td>
 						<td style="width:100px;" align="center">客戶</td>
 						<td style="width:100px;" align="center">COIL<BR>規格<BR>尺寸(厚X寬)</td>
@@ -543,15 +676,19 @@
 						<td style="width:100px;" align="center">廢料重量(KG)</td>
 						<td style="width:100px;" align="center">包裝數量<BR>/LOT</td>
 						<td style="width:100px;" align="center">施工工時(分)</td>
+						<td style="width:100px;" align="center">耗料重</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center" style="display: none;">
 							<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
-							<input id="txtNoq.*" type="text" style="display: none;"/>
+						</td>
+						<td>
+							<input type="radio" id="rbNum.*" name="rbNum"/>
+							<input id="txtNoq.*" type="text" style="display:none;"/>
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 						<td>
-							<input id="txtOrdeno.*" type="text" style="float:left;width:75%;"/>
+							<input id="txtOrdeno.*" type="text" style="float:left;width:70%;"/>
 							<input id="txtNo2.*" type="text" style="float:left;width:20%;"/>
 						</td>
 						<td>
@@ -610,9 +747,44 @@
 							<input id="txtBtime.*" type="text" style="float:left;width:95%;"/>
 							<input id="txtEtime.*" type="text" style="float:left;width:95%;display:none;"/>
 						</td>
+						<td>
+							<input id="txtGweight.*" type="text" class="num" style="float:left;width:95%;"/>
+						</td>
 					</tr>
 				</table>
 			</div>
 		<input id="q_sys" type="hidden" />
+		<div id="dbbt" style="position: absolute; z-index: 2;top:100px;left:600px;display:none;" >
+			<table id="tbbt">
+				<tbody>
+					<tr class="head" style="color:white; background:#003366;">
+						<td style="width:20px;">
+						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
+						</td>
+						<td style="width:20px;"><input type="button" value="關閉" onclick="$('#dbbt').hide();"/></td>
+						<td style="width:200px; text-align: center;">品名</td>
+						<td style="width:100px; text-align: center;">數量</td>
+						<td style="width:100px; text-align: center;">重量</td>
+						<td style="width:200px; text-align: center;">備註</td>
+					</tr>
+					<tr>
+						<td>
+							<input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+							<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
+							<input class="txt" id="txtNor..*" type="text" style="display: none;"/>
+						</td>
+						<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+						<td>
+							<input class="txt" id="txtProductno..*" type="text" style="width:45%;float:left;"/>
+							<input class="txt" id="txtProduct..*" type="text" style="width:45%;float:left;"/>
+							<input id="btnProduct..*" type="button" style="display:none;">
+						</td>
+						<td><input class="txt" id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;" /></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</body>
 </html>
