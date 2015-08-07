@@ -39,7 +39,7 @@
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', '0txtProductno_,txtProduct_', 'ucc_b.aspx']
 				,['txtCustno_', 'btnCustno_', 'cust', 'noa,nick', 'txtCustno_', 'cust_b.aspx']
 				,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_', 'spec_b.aspx']
-				,['txtProductno__', 'btnProduct__', 'bcc', 'noa,product', '0txtProductno__,txtProduct__', 'bcc_b.aspx']
+				,['txtProductno__', 'btnProduct__', 'bcc', 'noa,product', 'txtProductno__,txtProduct__', 'bcc_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -146,8 +146,8 @@
 					case 'orde_cub':
                         if (b_ret != null) {
                         	as = b_ret;
-                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtCustno,txtComp,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtUcolor,txtScolor,txtRackno,txtUnit,txtPrice'
-                        	, as.length, as, 'noa,no2,custno,comp,productno,product,dime,radius,width,lengthb,spec,class,ucolor,scolor,source,unit,price', '','');             	
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtCustno,txtComp,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtUcolor,txtScolor,txtRackno,txtUnit,txtPrice,txtSize'
+                        	, as.length, as, 'noa,no2,custno,comp,productno,product,dime,radius,width,lengthb,spec,class,ucolor,scolor,source,unit,price,size', '','');             	
                         }else{
                         	Unlock(1);
                         }
