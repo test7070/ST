@@ -143,6 +143,15 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'orde_cub':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtCustno,txtComp,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtUcolor,txtScolor,txtRackno,txtUnit,txtPrice'
+                        	, as.length, as, 'noa,no2,custno,comp,productno,product,dime,radius,width,lengthb,spec,class,ucolor,scolor,source,unit,price', '','');             	
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
@@ -150,7 +159,7 @@
 						if(b_pop.substring(0,8)=='get_cub_'){
 							var n = b_pop.replace('get_cub_','');
 							b_ret = getb_ret();
-							if(b_ret.length>0){
+							if(b_ret != null && b_ret.length>0){
 								$('#txtUno_'+n).val(b_ret[0].uno);
 								$('#txtGweight_'+n).val(b_ret[0].eweight);
 							}
@@ -576,7 +585,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 1730px;
+				width: 1830px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -712,7 +721,7 @@
 						<td style="width:100px;" align="center">PVC皮<BR>總用量M/KG</td>
 						<td style="width:100px;" align="center">PE膜<BR>型號<BR>用量M</td>
 						<td style="width:100px;" align="center">RECOIL<BR>重量(KG)</td>
-						<td style="width:100px;" align="center">UNCOIL<BR>RECOIL編號</td>
+						<td style="width:200px;" align="center">UNCOIL<BR>RECOIL編號</td>
 						<td style="width:100px;" align="center">廢料重量(KG)</td>
 						<td style="width:100px;" align="center">包裝數量<BR>/LOT</td>
 						<td style="width:100px;" align="center">施工工時(分)</td>
@@ -732,7 +741,7 @@
 							<input id="txtNo2.*" type="text" style="float:left;width:20%;"/>
 						</td>
 						<td>
-							<input id="txtCustno.*" type="text" style="display:none;"/>
+							<input id="txtCustno.*" type="text" style="float:left;width:95%;"/>
 							<input id="txtComp.*" type="text" style="float:left;width:95%;"/>
 							<input id="btnCust.*" type="button" style="display:none;"/>
 						</td>
