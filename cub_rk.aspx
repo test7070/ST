@@ -161,7 +161,10 @@
 							b_ret = getb_ret();
 							if(b_ret != null && b_ret.length>0){
 								$('#txtUno_'+n).val(b_ret[0].uno);
-								$('#txtGweight_'+n).val(b_ret[0].eweight);
+								$('#txtWeight_'+n).val(b_ret[0].eweight);
+								$('#txtSize_'+n).val(b_ret[0].size);
+								$('#txtDime_'+n).val(b_ret[0].dime);
+								$('#txtWidth_'+n).val(b_ret[0].width);
 							}
 						}
 						break;
@@ -585,7 +588,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 1830px;
+				width: 2000px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -709,6 +712,7 @@
 						<td style="width:40px;"> </td>
 						<td style="width:200px;" align="center">訂單號碼</td>
 						<td style="width:100px;" align="center">客戶</td>
+						<td style="width:200px;" align="center">鋼捲編號</td>
 						<td style="width:100px;" align="center">COIL<BR>規格<BR>尺寸(厚X寬)</td>
 						<td style="width:100px;" align="center">COIL<BR>重量(KG)</td>
 						<td style="width:100px;" align="center">前處理液<BR>總用量(KG)</td>
@@ -721,7 +725,7 @@
 						<td style="width:100px;" align="center">PVC皮<BR>總用量M/KG</td>
 						<td style="width:100px;" align="center">PE膜<BR>型號<BR>用量M</td>
 						<td style="width:100px;" align="center">RECOIL<BR>重量(KG)</td>
-						<td style="width:200px;" align="center">UNCOIL<BR>RECOIL編號</td>
+						<td style="width:200px;" align="center">RECOIL編號</td>
 						<td style="width:100px;" align="center">廢料重量(KG)</td>
 						<td style="width:100px;" align="center">包裝數量<BR>/LOT</td>
 						<td style="width:100px;" align="center">施工工時(分)</td>
@@ -744,6 +748,9 @@
 							<input id="txtCustno.*" type="text" style="float:left;width:95%;"/>
 							<input id="txtComp.*" type="text" style="float:left;width:95%;"/>
 							<input id="btnCust.*" type="button" style="display:none;"/>
+						</td>
+						<td title="鋼捲編號">
+							<input id="txtUno.*" type="text" style="float:left;width:95%;"/>
 						</td>
 						<td>
 							<input id="txtSize.*" type="text" style="float:left;width:95%;"/>
@@ -782,8 +789,7 @@
 						<td title="RECOIL重量(KG)">
 							<input id="txtHweight.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
-						<td title="UNCOILRECOIL編號">
-							<input id="txtUno.*" type="text" style="float:left;width:95%;"/>
+						<td title="RECOIL編號">
 							<input id="txtOth.*" type="text" style="float:left;width:95%;"/>
 						</td>
 						<td title="廢料重量(KG)">
