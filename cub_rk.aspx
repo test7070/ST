@@ -317,18 +317,6 @@
 							$('#txtNor__'+i).val(t_noq);      
                 		}
 	                }
-	                
-	                
-	                /*
-	                $('#dbbt').find('tr').hide();
-	                $('#dbbt').find('tr').eq(0).show();
-	                var m = 0;
-	                for(var i=0;i<q_bbtCount;i++){
-	                	if($('#txtNor__'+i).val() == t_noq || $('#txtNor__'+i).val().length==0){
-	                		$('#lblNo__' + i).text(m++ + 1);
-	                		$('#txtNor__'+i).parent().parent().show();
-	                	}
-	                }*/
                 }
 				
 			}
@@ -375,6 +363,7 @@
 					}
 				}
 				_bbsAssign();
+				refreshBbt();
 				$('.num').each(function() {
 					$(this).keyup(function() {
 						var tmp=$(this).val();
