@@ -39,8 +39,7 @@
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', '0txtProductno_,txtProduct_', 'ucc_b.aspx']
 				,['txtCustno_', 'btnCustno_', 'cust', 'noa,nick', 'txtCustno_', 'cust_b.aspx']
 				,['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_', 'spec_b.aspx']
-				,['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', '0txtProductno__,txtProduct__', 'ucc_b.aspx']
-				//['txtSpec_', 'btnSpec_', 'spec', 'noa,product', 'txtSpec_,txtClass_', 'spec_b.aspx']
+				,['txtProductno__', 'btnProduct__', 'bcc', 'noa,product', 'txtProductno__,txtProduct__', 'bcc_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -84,6 +83,16 @@
 					if(e.target.nodeName!='INPUT')
 						e.preventDefault();
 				});
+				
+				$('#btnOrde').click(function() {
+					if(!(q_cur==1 || q_cur==2))
+						return;
+					var t_noa = $('#txtNoa').val();
+                	var t_where ='';
+                	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cubno:t_noa,page:'cub_rk'}), "orde_cub", "95%", "95%", '');
+				});
+				
+				
 			}
 
 			function q_gtPost(t_name) {
@@ -134,8 +143,30 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'orde_cub':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtCustno,txtComp,txtProductno,txtProduct,txtDime,txtRadius,txtWidth,txtLengthb,txtSpec,txtClass,txtUcolor,txtScolor,txtRackno,txtUnit,txtPrice,txtSize'
+                        	, as.length, as, 'noa,no2,custno,comp,productno,product,dime,radius,width,lengthb,spec,class,ucolor,scolor,source,unit,price,size', '','');             	
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
 					case q_name + '_s':
 						q_boxClose2(s2);
+						break;
+					default:
+						if(b_pop.substring(0,8)=='get_cub_'){
+							var n = b_pop.replace('get_cub_','');
+							b_ret = getb_ret();
+							if(b_ret != null && b_ret.length>0){
+								$('#txtUno_'+n).val(b_ret[0].uno);
+								$('#txtWeight_'+n).val(b_ret[0].eweight);
+								$('#txtSize_'+n).val(b_ret[0].size);
+								$('#txtDime_'+n).val(b_ret[0].dime);
+								$('#txtWidth_'+n).val(b_ret[0].width);
+							}
+						}
 						break;
 				}
 				b_pop = '';
@@ -155,7 +186,6 @@
 				_btnModi();
 				$('#txtDatea').focus();
 				InsertBbs();
-				
 			}
 			function InsertBbs(){
 				//固定6筆
@@ -247,9 +277,11 @@
 				if (t_para) {
                     $('#txtDatea').datepicker('destroy');
                     $('#cmbProcess').attr('disabled','disabled');
+                    $('#btnOrde').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
                     $('#cmbProcess').removeAttr('disabled');
+                    $('#btnOrde').removeAttr('disabled');
                 }
 			}
 			
@@ -315,6 +347,7 @@
 							n = parseInt(n);
 							ImportOrde(n);
 						});
+						
 						$('#rbNum_'+i).click(function(e){
 							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 							var noq = $('#txtNoq_'+n).val(); 
@@ -328,6 +361,17 @@
 							refreshBbt();
 							bbtAssign();
 						});
+						$('#txtUno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtUno_', '');
+                            
+							if(!(q_cur==1 || q_cur==2))
+								return;
+							var t_noa = $('#txtNoa').val();
+		                	var t_where ='';
+		                	q_box("get_cub_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cubno:t_noa,n:n,page:'cub_rk'}), "get_cub_"+n, "95%", "95%", '');
+                        });
 					}
 				}
 				_bbsAssign();
@@ -345,6 +389,12 @@
                 for (var i = 0; i < q_bbtCount; i++) {
                     $('#lblNo__' + i).text(i + 1);
                     if (!$('#btnMinut__' + i).hasClass('isAssign')) {
+                    	$('#txtProductno__' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno__', '');
+                            $('#btnProduct__'+n).click();
+                        });
                     }
                 }
                 _bbtAssign();
@@ -538,7 +588,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 1730px;
+				width: 2000px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -643,8 +693,10 @@
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblMonth" class+"lbl"></a></td>
+						<td><span> </span><a id="lblMonth" class="lbl">月份</a></td>
 						<td><input id="txtMonth" type="text" class="txt c1"/></td>
+						<td> </td>
+						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
 					</tr>
 					<tr></tr>
 					<tr></tr>
@@ -660,6 +712,7 @@
 						<td style="width:40px;"> </td>
 						<td style="width:200px;" align="center">訂單號碼</td>
 						<td style="width:100px;" align="center">客戶</td>
+						<td style="width:200px;" align="center">鋼捲編號</td>
 						<td style="width:100px;" align="center">COIL<BR>規格<BR>尺寸(厚X寬)</td>
 						<td style="width:100px;" align="center">COIL<BR>重量(KG)</td>
 						<td style="width:100px;" align="center">前處理液<BR>總用量(KG)</td>
@@ -672,7 +725,7 @@
 						<td style="width:100px;" align="center">PVC皮<BR>總用量M/KG</td>
 						<td style="width:100px;" align="center">PE膜<BR>型號<BR>用量M</td>
 						<td style="width:100px;" align="center">RECOIL<BR>重量(KG)</td>
-						<td style="width:100px;" align="center">UNCOIL<BR>RECOIL編號</td>
+						<td style="width:200px;" align="center">RECOIL編號</td>
 						<td style="width:100px;" align="center">廢料重量(KG)</td>
 						<td style="width:100px;" align="center">包裝數量<BR>/LOT</td>
 						<td style="width:100px;" align="center">施工工時(分)</td>
@@ -692,9 +745,12 @@
 							<input id="txtNo2.*" type="text" style="float:left;width:20%;"/>
 						</td>
 						<td>
-							<input id="txtCustno.*" type="text" style="display:none;"/>
+							<input id="txtCustno.*" type="text" style="float:left;width:95%;"/>
 							<input id="txtComp.*" type="text" style="float:left;width:95%;"/>
 							<input id="btnCust.*" type="button" style="display:none;"/>
+						</td>
+						<td title="鋼捲編號">
+							<input id="txtUno.*" type="text" style="float:left;width:95%;"/>
 						</td>
 						<td>
 							<input id="txtSize.*" type="text" style="float:left;width:95%;"/>
@@ -733,8 +789,7 @@
 						<td title="RECOIL重量(KG)">
 							<input id="txtHweight.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
-						<td title="UNCOILRECOIL編號">
-							<input id="txtUno.*" type="text" style="float:left;width:95%;"/>
+						<td title="RECOIL編號">
 							<input id="txtOth.*" type="text" style="float:left;width:95%;"/>
 						</td>
 						<td title="廢料重量(KG)">

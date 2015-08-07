@@ -1637,7 +1637,9 @@
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
-					<td><input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/></td>
+					<td>
+						<input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>
+					</td>
 					<td style="display:none;" class="sprice"><input id="txtSprice.*" type="text"  class="txt num sprice" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
