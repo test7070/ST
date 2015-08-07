@@ -133,7 +133,7 @@
                     q_box('Tgg.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtTggno').val()), '', "95%", "600px", "廠商主檔");
                 });
                 $('#btnUcc').click(function() {
-                    q_box('ucc.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "600px", "電子檔製作");
+                    q_box('chgitem.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "600px", "費用主檔");
 
                 });
                 //--------------------------------------------
