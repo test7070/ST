@@ -58,13 +58,14 @@
                 bbsMask = [];
                 q_mask(bbmMask);
                 q_cmbParse("cmbTypea", '分條作業,十呎裁切,四呎裁切,三呎裁切,二呎裁切');
-                
 				
-				
-                $('#btnOrde').click(function(e){
-                	
-                	
-                });
+                $('#btnOrde').click(function() {
+					if(!(q_cur==1 || q_cur==2))
+						return;
+					var t_noa = $('#txtNoa').val();
+                	var t_where ='';
+                	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cucno:t_noa,page:'cuc_rk'}), "orde_cuc", "95%", "95%", '');
+				});
             }
 
             function q_popPost(s1) {
@@ -82,6 +83,15 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'orde_cuc':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtSpec,txtClass,txtSize'
+                        	, as.length, as, 'noa,no2,spec,class,size', '','');             	
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
@@ -484,6 +494,8 @@
 							<input id="txtMechno"  type="text" class="txt" style="width:30%;"/>
 							<input id="txtMech"  type="text" class="txt" style="width:65%;"/>
 						</td>
+						<td> </td>
+						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>

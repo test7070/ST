@@ -32,6 +32,15 @@
 	            	if(t_para.page=='cub_rk'){
 	            		q_name = "orde_cub"
 	            		t_content = "where=^^['"+t_para.cubno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cuc_rk'){
+	            		q_name = "orde_cuc"
+	            		t_content = "where=^^['"+t_para.cucno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cud_rk'){
+	            		q_name = "orde_cud"
+	            		t_content = "where=^^['"+t_para.cudno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cut_rk'){
+	            		q_name = "orde_cut"
+	            		t_content = "where=^^['"+t_para.cutno+"','"+t_para.page+"')^^";
 	            	}else{
 	            		t_content = "where=^^['"+t_para.vccno+"','"+t_para.custno+"','"+t_para.page+"')^^";
 	            	}
