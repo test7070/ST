@@ -452,7 +452,7 @@
 					case 'rc2s':
 						var as = _q_appendData("rc2s", "", true);
 						for (var i = 0; i < ordcsArray.length; i++) {
-							if(q_getPara('sys.project').toUpperCase()=='RK'){
+							if(q_getPara('sys.project').toUpperCase()=='RK' || q_getPara('sys.comp').substring(0,2)=="傑期"){
 								if ((ordcsArray[i].mount <= 0 && ordcsArray[i].weight <= 0) || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
 									ordcsArray.splice(i, 1);
 									i--;
