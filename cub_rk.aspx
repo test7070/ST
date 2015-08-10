@@ -704,12 +704,14 @@
 						<td style="width:200px;" align="center">鋼捲編號</td>
 						<td style="width:100px;" align="center">COIL<BR>規格<BR>尺寸(厚X寬)</td>
 						<td style="width:100px;" align="center">COIL<BR>重量(KG)</td>
-						<td style="width:100px;" align="center">前處理液<BR>總用量(KG)</td>
+							
+						<!--<td style="width:100px;" align="center">前處理液<BR>總用量(KG)</td>
 						<td style="width:100px;" align="center">接著劑<BR>型號<BR>規格</td>
 						<td style="width:100px;" align="center">接著劑總用量 (kg)</td>
 						<td style="width:100px;" align="center">稀釋液<BR>用量/清洗(KG)</td>
 						<td style="width:100px;" align="center">背漆<BR>型號規格<BR>重量(KG)</td>
-						<td style="width:100px;" align="center">背漆稀釋液<BR>總用量(KG)</td>
+						<td style="width:100px;" align="center">背漆稀釋液<BR>總用量(KG)</td>-->
+							
 						<td style="width:100px;" align="center">PVC皮<BR>型號<BR>規格</td>
 						<td style="width:100px;" align="center">PVC皮<BR>總用量M/KG</td>
 						<td style="width:100px;" align="center">PE膜<BR>型號<BR>用量M</td>
@@ -747,7 +749,7 @@
 							<input id="txtWidth.*" type="text" class="num" style="float:left;width:45%;"/>
 						</td>
 						<td><input id="txtWeight.*" type="text" class="num" style="float:left;width:95%;"/></td>
-						<td title="前處理液總用量(KG)"><input id="txtBdime.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<!--<td title="前處理液總用量(KG)"><input id="txtBdime.*" type="text" class="num" style="float:left;width:95%;"/></td>
 						<td title="接著劑型號規格">
 							<input id="txtProductno2.*" type="text" style="width:95%;"/>
 							<input id="txtProduct2.*" type="text" style="width:95%;"/>
@@ -761,7 +763,7 @@
 						</td>
 						<td title="背漆稀釋液總用量(KG)">
 							<input id="txtWmount.*" type="text" class="num" style="float:left;width:95%;"/>
-						</td>
+						</td>-->
 						<td title="PVC皮型號規格">
 							<input id="txtSpec.*" type="text" style="float:left;width:95%;"/>
 							<input id="txtRadius.*" type="text" class="num" style="float:left;width:45%;"/>
@@ -808,7 +810,7 @@
 						<td style="width:20px;"><input type="button" value="關閉" onclick="$('#dbbt').hide();"/></td>
 						<td style="width:200px; text-align: center;">品名</td>
 						<td style="width:100px; text-align: center;">數量</td>
-						<td style="width:100px; text-align: center;">重量</td>
+						<td style="display:none;width:100px; text-align: center;">重量</td>
 						<td style="width:200px; text-align: center;">備註</td>
 					</tr>
 					<tr>
@@ -824,7 +826,7 @@
 							<input id="btnProduct..*" type="button" style="display:none;">
 						</td>
 						<td><input class="txt" id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
-						<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
+						<td style="display:none;"><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
 						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;" /></td>
 					</tr>
 				</tbody>
