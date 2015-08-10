@@ -59,6 +59,14 @@
                 bbsMask = [['txtDatea',r_picd]];
                 q_mask(bbmMask);
 				q_cmbParse("cmbTypea", '製成品,再製品');
+				
+				$('#btnOrde').click(function() {
+					if(!(q_cur==1 || q_cur==2))
+						return;
+					var t_noa = $('#txtNoa').val();
+                	var t_where ='';
+                	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cutno:t_noa,page:'cut_rk'}), "orde_cut", "95%", "95%", '');
+				});
             }
 
             function q_popPost(s1) {
@@ -76,6 +84,15 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'orde_cut':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtSpec,txtClass,txtMount,txtWeight,txtCustno,txtComp'
+                        	, as.length, as, 'noa,no2,spec,class,mount,weight,custno,comp', '','');             	
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
@@ -271,8 +288,10 @@
                 _readonly(t_para, empty);
                 if (t_para) {
                     $('#txtDatea').datepicker('destroy');
+                    $('#btnOrde').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
+                    $('#btnOrde').removeAttr('disabled');
                 }
             }
 
@@ -515,6 +534,8 @@
 					<tr>
 						<td><span> </span><a class="lbl">入庫類型</a></td>
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
+						<td></td>
+						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>

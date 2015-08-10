@@ -57,6 +57,14 @@
                 bbmMask = [['txtDatea', r_picd]];
                 bbsMask = [];
                 q_mask(bbmMask);
+                
+                $('#btnOrde').click(function() {
+					if(!(q_cur==1 || q_cur==2))
+						return;
+					var t_noa = $('#txtNoa').val();
+                	var t_where ='';
+                	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cudno:t_noa,page:'cud_rk'}), "orde_cud", "95%", "95%", '');
+				});
             }
 
             function q_popPost(s1) {
@@ -74,6 +82,15 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'orde_cud':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtSpec,txtClass,txtDime,txtRadius,txtWidth,txtLengthb'
+                        	, as.length, as, 'noa,no2,spec,class,dime,radius,width,lengthb', '','');             	
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
@@ -479,6 +496,12 @@
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"></a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
 					</tr>
 				</table>
 			</div>
