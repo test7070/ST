@@ -95,6 +95,19 @@
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
+                    default:
+						if(b_pop.substring(0,8)=='get_cuc_'){
+							var n = b_pop.replace('get_cuc_','');
+							b_ret = getb_ret();
+							if(b_ret != null && b_ret.length>0){
+								$('#txtUno_'+n).val(b_ret[0].uno);
+								$('#txtWeight_'+n).val(b_ret[0].eweight);
+								$('#txtSize_'+n).val(b_ret[0].size);
+								$('#txtDime_'+n).val(b_ret[0].dime);
+								$('#txtWidth_'+n).val(b_ret[0].width);
+							}
+						}
+						break;
                 }
                 b_pop = '';
             }
@@ -209,6 +222,17 @@
                     	$('#txtWeight5_'+i).change(function(e){
                     		sum();
                     	});
+                    	$('#txtUno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtUno_', '');
+                            
+							if(!(q_cur==1 || q_cur==2))
+								return;
+							var t_noa = $('#txtNoa').val();
+		                	var t_where ='';
+		                	q_box("get_cub_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cucno:t_noa,n:n,page:'cuc_rk'}), "get_cuc_"+n, "95%", "95%", '');
+                        });
                     }
                 }
                 _bbsAssign();
@@ -518,6 +542,7 @@
 					<td style="width:20px;"></td>
 					<td style="width:200px;"></td>
 					<td style="width:60px;"></td>
+					<td style="width:150px;"></td>
 					<td style="width:80px;"></td>
 					<td style="width:200px;"></td>
 					<td style="width:120px;"></td>
@@ -534,13 +559,13 @@
 					<td style="width:60px;"></td>
 					<td style="width:60px;"></td>
 					<td style="width:100px;"></td>
-					<td style="width:120px;"></td>
 				</tr>
 				<tr style='color:white; background:#003366;' >
 					<td rowspan="2"><input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
 					<td rowspan="2">項<BR>次</td>
 					<td>訂單號碼</td>
 					<td rowspan="2">皮膜<BR>編號</td>
+					<td rowspan="2">COIL編號</td>
 					<td rowspan="2">半成品<BR>進料<BR>重量(KG)</td>
 					<td>SHEET(COIL)</td>
 					<td rowspan="2">作業條件</td>
@@ -552,7 +577,7 @@
 					<td colspan="2">待修品</td>
 					<td rowspan="2">廢料重量<BR>(KG)</td>
 					<td rowspan="2">裁剪(包裝)<BR>工時(分)</td>
-					<td rowspan="2">COIL編號</td>
+					
 				</tr>
 				<tr style='color:white; background:#003366;' >
 					<td>製造批號</td>
@@ -576,6 +601,7 @@
 					<td style="width:20px;"></td>
 					<td style="width:200px;"></td>
 					<td style="width:60px;"></td>
+					<td style="width:150px;"></td>
 					<td style="width:80px;"></td>
 					<td style="width:200px;"></td>
 					<td style="width:120px;"></td>
@@ -592,7 +618,6 @@
 					<td style="width:60px;"></td>
 					<td style="width:60px;"></td>
 					<td style="width:100px;"></td>
-					<td style="width:120px;"></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -606,6 +631,7 @@
 						<input id="txtCubno.*" type="text" style="float:left;width:95%;"/>
 					</td>
 					<td><input id="txtSpec.*" type="text" style="float:left;width:95%;"/></td>
+					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
 					<td>
 						<input id="txtMount.*" type="text" style="display:none;"/>
 						<input id="txtWeight.*" type="text" class="txt num" style="float:left;width:95%;"/>
@@ -629,7 +655,7 @@
 					<td><input id="txtWeight5.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
 					<td><input id="txtWaste.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
 					<td><input id="txtHours.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
-					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
+					
 				</tr>
 			</table>
 		</div>

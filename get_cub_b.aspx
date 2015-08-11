@@ -28,9 +28,19 @@
                 var t_para = new Array();
 	            try{
 	            	t_para = JSON.parse(decodeURIComponent(q_getId()[5]));
-	            	t_content = "where=^^['"+t_para.cubno+"','"+t_para.page+"')^^";
-	    
-	            	 
+	            	if(t_para.page=='cub_rk'){
+	            		q_name = "get_cub";
+	            		t_content = "where=^^['"+t_para.cubno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cuc_rk'){
+	            		q_name = "get_cuc";
+	            		t_content = "where=^^['"+t_para.cucno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cud_rk'){
+	            		q_name = "get_cud";
+	            		t_content = "where=^^['"+t_para.cudno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cut_rk'){
+	            		q_name = "get_cut";
+	            		t_content = "where=^^['"+t_para.cutno+"','"+t_para.page+"')^^";
+	            	}
 	            }catch(e){
 	            }    
                 brwCount = -1;
