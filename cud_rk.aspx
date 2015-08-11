@@ -101,9 +101,11 @@
 							if(b_ret != null && b_ret.length>0){
 								$('#txtUno_'+n).val(b_ret[0].uno);
 								$('#txtWeight_'+n).val(b_ret[0].eweight);
-								$('#txtSize_'+n).val(b_ret[0].size);
+								//$('#txtSize_'+n).val(b_ret[0].size);
 								$('#txtDime_'+n).val(b_ret[0].dime);
 								$('#txtWidth_'+n).val(b_ret[0].width);
+								$('#txtLengthb_'+n).val(b_ret[0].lengthb);
+								$('#txtRadius_'+n).val(b_ret[0].radius);
 							}
 						}
 						break;
