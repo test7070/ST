@@ -590,7 +590,6 @@
 					<td style="width:200px;">入庫批號</td>
 					<td style="width:200px;">棧板序號</td>
 					<td style="width:200px;">備註</td>
-					
 					<td style="width:100px;">轉入庫日期</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
