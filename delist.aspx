@@ -33,7 +33,7 @@
 									,['txtLcmoney', 15, 0, 1],['txtCost', 15, 0, 1]];
             
             var bbmMask = [];
-            var bbsMask = [['txtStyle', 'A']];
+            var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
@@ -43,7 +43,7 @@
             ,['txtCno', 'lblCno', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
             ,['txtTranno', 'lblTranno', 'tgg', 'noa,comp', 'txtTranno,txtTrancomp', 'tgg_b.aspx']
             ,['txtBcompno', 'lblBcomp', 'tgg', 'noa,comp', 'txtBcompno,txtBcomp', 'tgg_b.aspx']
-            ,['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtClass_', 'ucaucc_b.aspx']
+            //,['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtClass_', 'ucaucc_b.aspx']
             ,['txtStoreno_', 'btnProductno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
             ,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
             ,['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
@@ -460,6 +460,7 @@
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+                    	
                         $('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
@@ -688,7 +689,6 @@
                         $('#txtStyle_' + b_seq).focus();
 						break;
 					case 'txtStyle_':
-						console.log(b_seq);
                    		var t_productno = $.trim($('#txtProductno_'+b_seq).val());
 	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
 	                	var t_comp = q_getPara('sys.comp');          	
