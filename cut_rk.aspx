@@ -19,7 +19,7 @@
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 3, 1], ['txtWeight', 10, 3, 1]];
+            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 0, 1], ['txtWeight', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -643,13 +643,13 @@
 						<input id="txtProduct.*" type="text" style="display:none;"/>
 						<input id="txtUcolor.*" type="text" style="display:none;"/>
 						<input id="txtSource.*" type="text" style="display:none;"/>
-						<input id="txtDime.*" type="text" class="num" style="float:left;width:22%;"/>
-						<input id="txtRadius.*" type="text" class="num" style="float:left;width:22%;"/>
-						<input id="txtWidth.*" type="text" class="num" style="float:left;width:22%;"/>
-						<input id="txtLengthb.*" type="text" class="num" style="float:left;width:22%;"/>
+						<input id="txtDime.*" type="text" class="txt num" style="float:left;width:22%;"/>
+						<input id="txtRadius.*" type="text" class="txt num" style="float:left;width:22%;"/>
+						<input id="txtWidth.*" type="text" class="txt num" style="float:left;width:22%;"/>
+						<input id="txtLengthb.*" type="text" class="txt num" style="float:left;width:22%;"/>
 					</td>
-					<td><input id="txtMount.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtWeight.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
 					<td>
 						<input id="txtCustno.*" type="text" style="float:left;width:45%;"/>
 						<input id="txtComp.*" type="text" style="float:left;width:45%;"/>

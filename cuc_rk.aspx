@@ -19,7 +19,7 @@
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 3, 1], ['txtWeight', 10, 3, 1]];
+            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 0, 1], ['txtWeight', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
             q_sqlCount = 6;
