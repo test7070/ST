@@ -13,6 +13,8 @@
 		<script src="css/jquery/ui/jquery.ui.core.js"></script>
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
+		
+		<!--<script src="http://59.125.143.170/jquery/js/jquery.mask.js" type="text/javascript"></script>-->
 		<script type="text/javascript">
 		
 			this.errorHandler = null;
@@ -26,7 +28,7 @@
 			var bbsNum = [];
 			var bbtNum = [];
 			var bbmMask = [];
-			var bbsMask = [];
+			var bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
 			var bbtMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
@@ -57,15 +59,41 @@
 			}
 
 			function sum() {
-				for (var j = 0; j < q_bbsCount; j++) {
+				for (var i = 0; i < q_bbsCount; i++) {
+					$('#txtMins_'+i).val(getMins($('#txtBtime_'+i).val(),$('#txtEtime_'+i).val()));	
 				}
+			}
+			function getMins(btime,etime){
+				var mins = 0;
+				var patt = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/g;
+				var bhr = btime.replace(patt,'$1');
+				var bmin = btime.replace(patt,'$2');
+				var ehr = etime.replace(patt,'$1');
+				var emin = etime.replace(patt,'$2');
+				
+				try{
+					bhr = parseInt(bhr);
+					bmin = parseInt(bmin);
+					ehr = parseInt(ehr);
+					emin = parseInt(emin);
+				}catch(e){
+					bhr=0;
+					bmin=0;
+					ehr=0;
+					emin=0;
+				}
+				mins = (ehr+(ehr<bhr || (ehr=bhr && emin<bmin)?24:0)-bhr)*60 + (emin-bmin);
+				mins = isNumber(mins)?mins:0;
+				return mins;
+			}
+			function isNumber(n) {
+			  return !isNaN(parseFloat(n)) && isFinite(n);
 			}
 
 			function mainPost() {
 				q_getFormat();
 				document.title = '生產作業';
 				bbmMask = [['txtDatea', r_picd]];
-				bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
 				q_mask(bbmMask);
 				q_cmbParse("cmbProcess", '日、高溫,午,晚');
 				
@@ -91,7 +119,7 @@
                 	var t_where ='';
                 	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cubno:t_noa,page:'cub_rk'}), "orde_cub", "95%", "95%", '');
 				});
-				
+			
 				
 			}
 
@@ -325,6 +353,12 @@
 				for (var i = 0; i < q_bbsCount; i++) {
 					$('#lblNo_' + i).text(i + 1);
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+						$('#txtBtime_'+i).focusout(function(e){
+							sum();							
+						});
+						$('#txtEtime_'+i).focusout(function(e){
+							sum();							
+						});
 						$('#txtOrdeno_'+i).change(function(e){
 							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 							n = parseInt(n);
@@ -719,7 +753,9 @@
 						<td style="width:200px;" align="center">RECOIL編號</td>
 						<td style="width:100px;" align="center">廢料重量(KG)</td>
 						<td style="width:100px;" align="center">包裝數量<BR>/LOT</td>
-						<td style="width:100px;" align="center">施工工時(分)</td>
+						<td style="width:100px;" align="center">開始時間</td>
+						<td style="width:100px;" align="center">結束時間</td>	
+						<td style="width:80px;" align="center">施工工時(分)</td>
 						<td style="width:100px;" align="center">耗料重</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
@@ -789,10 +825,9 @@
 						<td title="包裝數量/LOT">
 							<input id="txtMount.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
-						<td title="施工工時(分)">
-							<input id="txtBtime.*" type="text" style="float:left;width:95%;"/>
-							<input id="txtEtime.*" type="text" style="float:left;width:95%;display:none;"/>
-						</td>
+						<td><input id="txtBtime.*" type="text" style="float:left;width:95%;"/></td>
+						<td><input id="txtEtime.*" type="text" style="float:left;width:95%;"/></td>
+						<td><input id="txtMins.*" type="text" class="num" style="float:left;width:95%;"/></td>
 						<td>
 							<input id="txtGweight.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
