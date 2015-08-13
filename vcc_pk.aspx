@@ -123,15 +123,22 @@
 						t_weights = q_float('txtWeight_' + j);
 						t_mounts = q_float('txtMount_' + j);
 						t_moneys = q_float('txtTotal_' + j);
+						
+						
 						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							t_prices = round(q_div(t_moneys, t_weights),3);
+							if (t_float != 0) 
+								t_moneyus = q_add(t_moneyus,q_float('txtPrice_' + j) * t_weights);
 						} else {
 							t_prices = round(q_div(t_moneys, t_mounts),3);
+							if (t_float != 0) 
+								t_moneyus =q_add(t_moneyus,q_float('txtPrice_' + j)  * t_mounts);
 						}
 						if (t_float == 0) {
 							t_moneys = round(t_moneys, 0);
+							
 						} else {
-							t_moneyus = q_add(t_moneyus, round(q_div(t_moneys, t_float), 2));
+							//t_moneyus = q_add(t_moneyus, round(q_div(t_moneys, t_float), 2));
 						}
 					}else{
 						t_weights = q_float('txtWeight_' + j);

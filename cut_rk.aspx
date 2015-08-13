@@ -59,6 +59,14 @@
                 bbsMask = [['txtDatea',r_picd]];
                 q_mask(bbmMask);
 				q_cmbParse("cmbTypea", '製成品,再製品');
+				
+				$('#btnOrde').click(function() {
+					if(!(q_cur==1 || q_cur==2))
+						return;
+					var t_noa = $('#txtNoa').val();
+                	var t_where ='';
+                	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cutno:t_noa,page:'cut_rk'}), "orde_cut", "95%", "95%", '');
+				});
             }
 
             function q_popPost(s1) {
@@ -76,9 +84,33 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'orde_cut':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtSpec,txtClass,txtMount,txtWeight,txtCustno,txtComp,txtDime,txtWidth,txtLengthb,txtRadius'
+                        	, as.length, as, 'noa,no2,spec,class,mount,weight,custno,comp,dime,width,lengthb,radius', '','');             	
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
+                    default:
+						if(b_pop.substring(0,8)=='get_cut_'){
+							var n = b_pop.replace('get_cut_','');
+							b_ret = getb_ret();
+							if(b_ret != null && b_ret.length>0){
+								$('#txtSpecial_'+n).val(b_ret[0].uno);
+								$('#txtWeight_'+n).val(b_ret[0].eweight);
+								$('#txtSize_'+n).val(b_ret[0].size);
+								$('#txtDime_'+n).val(b_ret[0].dime);
+								$('#txtWidth_'+n).val(b_ret[0].width);
+								$('#txtLengthb_'+n).val(b_ret[0].lengthb);
+								$('#txtRadius_'+n).val(b_ret[0].radius);
+							}
+						}
+						break;
                 }
                 b_pop = '';
             }
@@ -218,6 +250,17 @@
 							n = parseInt(n);
 							ImportOrde(n);
 						});
+						$('#txtSpecial_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtSpecial_', '');
+                            
+							if(!(q_cur==1 || q_cur==2))
+								return;
+							var t_noa = $('#txtNoa').val();
+		                	var t_where ='';
+		                	q_box("get_cub_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cutno:t_noa,n:n,page:'cut_rk'}), "get_cut_"+n, "95%", "95%", '');
+                        });
                     }
                 }
                 _bbsAssign();
@@ -271,8 +314,10 @@
                 _readonly(t_para, empty);
                 if (t_para) {
                     $('#txtDatea').datepicker('destroy');
+                    $('#btnOrde').attr('disabled','disabled');
                 } else {	
                     $('#txtDatea').datepicker();
+                    $('#btnOrde').removeAttr('disabled');
                 }
             }
 
@@ -515,6 +560,8 @@
 					<tr>
 						<td><span> </span><a class="lbl">入庫類型</a></td>
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
+						<td></td>
+						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
@@ -535,14 +582,14 @@
 					<td style="width:20px;"><input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
 					<td style="width:20px;"></td>
 					<td style="width:200px;">訂單號碼</td>
+					<td style="width:200px;">Coil編號</td>
 					<td style="width:200px;">規格</td>
 					<td style="width:80px;">數量</td>
 					<td style="width:80px;">重量</td>
 					<td style="width:200px;">客戶</td>
-					<td style="width:200px;">Coil編號</td>
+					<td style="width:200px;">入庫批號</td>
 					<td style="width:200px;">棧板序號</td>
 					<td style="width:200px;">備註</td>
-					<td style="width:200px;">入庫批號</td>
 					<td style="width:100px;">轉入庫日期</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -555,6 +602,7 @@
 						<input id="txtOrdeno.*" type="text" style="float:left;width:72%;"/>
 						<input id="txtNo2.*" type="text" style="float:left;width:20%;"/>
 					</td>
+					<td><input id="txtSpecial.*" maxlength="20" type="text" style="float:left;width:95%;"/></td>			
 					<td>
 						<input id="txtSpec.*" type="text" style="float:left;width:45%;"/>
 						<input id="txtClass.*" type="text" style="float:left;width:45%;"/>
@@ -575,7 +623,6 @@
 						<input id="btnCust.*" type="button" style="display:none;">
 					</td>
 					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
-					<td><input id="txtSpecial.*" maxlength="20" type="text" style="float:left;width:95%;"/></td>			
 					<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtBno.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtDatea.*" type="text" style="float:left;width:95%;"/></td>

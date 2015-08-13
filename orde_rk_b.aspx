@@ -28,7 +28,23 @@
                 var t_para = new Array();
 	            try{
 	            	t_para = JSON.parse(decodeURIComponent(q_getId()[5]));
-	            	t_content = "where=^^['"+t_para.vccno+"','"+t_para.custno+"','"+t_para.page+"')^^";
+	            	
+	            	if(t_para.page=='cub_rk'){
+	            		q_name = "orde_cub"
+	            		t_content = "where=^^['"+t_para.cubno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cuc_rk'){
+	            		q_name = "orde_cuc"
+	            		t_content = "where=^^['"+t_para.cucno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cud_rk'){
+	            		q_name = "orde_cud"
+	            		t_content = "where=^^['"+t_para.cudno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cut_rk'){
+	            		q_name = "orde_cut"
+	            		t_content = "where=^^['"+t_para.cutno+"','"+t_para.page+"')^^";
+	            	}else{
+	            		t_content = "where=^^['"+t_para.vccno+"','"+t_para.custno+"','"+t_para.page+"')^^";
+	            	}
+	            	 
 	            }catch(e){
 	            }    
                 brwCount = -1;
@@ -72,6 +88,7 @@
 				<tr style='color:white; background:#003366;' >
 					<th align="center" style="width:2%;"><input type="checkbox" id="checkAllCheckbox"/></th>
 					<td align="center" style="width:10%;">單號</td>
+					<td align="center" style="width:5%;">客戶</td>
 					<td align="center" style="width:20%;">品名</td>
 					<td align="center" style="width:5%;">厚</td>
 					<td align="center" style="width:5%;">皮膜厚</td>
@@ -93,6 +110,7 @@
 				<tr style="display:none;">
 					<th align="center" style="width:2%;"></th>
 					<td align="center" style="width:10%;">單號</td>
+					<td align="center" style="width:5%;">客戶</td>
 					<td align="center" style="width:20%;">品名</td>
 					<td align="center" style="width:5%;">厚</td>
 					<td align="center" style="width:5%;">皮膜厚</td>
@@ -114,6 +132,7 @@
 						<input id="txtNoa.*" type="text" style="float:left;width:85%;"  readonly="readonly" />
 						<input id="txtNo2.*" type="text" style="float:left;width:15%;"  readonly="readonly" />
 					</td>
+					<td style="width:5%;"><input id="txtNick.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
 					<td style="width:20%;">
 						<input id="txtProductno.*" type="text" style="float:left;width:45%;"  readonly="readonly" />
 						<input id="txtProduct.*" type="text" style="float:left;width:55%;"  readonly="readonly" />
