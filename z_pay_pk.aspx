@@ -36,21 +36,48 @@
 				$('#q_report').q_report({
 					fileName : 'z_pay_pk',
 					options : [{
-						type : '5', //[1]
+						type : '5', //[1]         1
 						name : 'xcno',
 						value : t_acomp.split(',')
-					}, {
-						type : '2', //[2][3]
+					}, { 
+						type : '2', //[2][3]      2
 						name : 'xtgg',
 						dbf : 'tgg',
 						index : 'noa,comp',
 						src : 'tgg_b.aspx'
 					}, {
-						type : '1', //[4][5]
+						type : '1', //[4][5]      3
 						name : 'xdate'
 					}, {
-						type : '1', //[6][7]
+						type : '1', //[6][7]      4
 						name : 'xmon'
+					}, {
+                        type : '6', //[8]   5
+                        name : 'xmemo1'
+                    }, {
+                        type : '6', //[9]   6
+                        name : 'xmemo2'
+                    }, {
+                        type : '6', //[10]   7
+                        name : 'xmemo3'
+                    }, {
+                        type : '6', //[11]   8
+                        name : 'xmemo4'
+                    }, {
+                        type : '6', //[12]   9
+                        name : 'xmemo5'
+                    }, {
+						type : '8', //[13] 10
+						name : 'xispayed',
+						value : "1@顯示已付".split(',')
+					}, {
+						type : '8', //[14] 11
+						name : 'xisunpay',
+						value : "1@顯示未付".split(',')
+					}, {
+						type : '8', //[15] 12
+						name : 'xisweight',
+						value : "1@顯示重量".split(',')
 					}]
 				});
 				q_popAssign();
