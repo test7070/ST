@@ -51,11 +51,7 @@
 					}, {
 						type : '1', //[6][7]
 						name : 'xmon'
-					}, {//[8]
-                        type : '8',
-                        name : 'xoption01',
-                        value : ['明細']
-                    }]
+					}]
 				});
 				q_popAssign();
 				q_langShow();
