@@ -22,43 +22,37 @@
             function q_gfPost() {
 				$('#q_report').q_report({
 					fileName : 'z_cub_rk',
-					options : [{
-						type : '0', //[1]
-						name : 'path',
-						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_cub_rk.aspx','')
-					},{
-						type : '0', //[2]
-						name : 'db',
-						value : q_db
-					},{
-						type : '6', //[3]
-						name : 'noa'
-					},{
-						type : '1', //[4]
+					options : [{							
+						type : '6', //[1][2]
 						name : 'xdate'
 					}
 					]
 				});
+				q_langShow();
 				q_popAssign();
+					
 				
-			//	$('#txtMonth').mask('999/99/99');
-			//	$('#txtMonth').datepicker();
-				$('#txtXdate1').mask('999/99/99');
-				$('#txtXdate1').datepicker();
-				$('#txtXdate2').mask('999/99/99');
-				$('#txtXdate2').datepicker();
-			//	$('#txtNoa').val(t_para.noa);
+
+				$('#txtXdate').mask('999/99');
+				//$('#txtXdate1').datepicker();
+			//	$('#txtXdate2').mask('999/99');
+				//$('#txtXdate2').datepicker();
 				
-	        /*    var t_para = new Array();
-	            try{
-	            	t_para = JSON.parse(q_getId()[4]);
-	            }catch(e){
-	            }    
-	            if(t_para.length==0 || t_para.noa==undefined){	            	
-	            }else{
-	            	
-	            	
-	            }*/
+				var t_date, t_year, t_month, t_day;
+				t_date = new Date();
+				t_date.setDate(1);
+				t_year = t_date.getUTCFullYear() - 1911;
+				t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+				t_month = t_date.getUTCMonth() + 1;
+				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+				t_day = t_date.getUTCDate();
+				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+				$('#txtdate').val(t_year + '/' + t_month);
+
+					
+				q_getFormat();
+				
+		
             }
 			
 			function q_funcPost(t_func, result) {

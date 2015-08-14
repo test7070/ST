@@ -46,6 +46,17 @@
 					},{
 						type :'1',//[8][9]
 						name : 'Mon'
+					},{
+						type:'8',//[10]
+						name:'clerk',
+						value :['在職員工','離職員工']
+					},{
+						type:'8',//[11]
+						name:'sex',
+						value :['男','女']
+					},{
+						type :'1',//[12][13]
+						name : 'yage'
 					}]});
 					
 					q_langShow();
@@ -60,10 +71,15 @@
 					
 					$('#txtMon1').mask('999/99');
                 	$('#txtMon2').mask('999/99');
+                	
+                	$('#txtYage1').mask('99年99月');
+                	$('#txtYage2').mask('99年99月');
+                	$('#txtYage1').val('00年05月')	;
+                	$('#txtYage2').val('05年00月')
 				
 					
 					
-						var t_date, t_year, t_month, t_day;
+				var t_date, t_year, t_month, t_day;
 				t_date = new Date();
 				t_date.setDate(1);
 				t_year = t_date.getUTCFullYear() - 1911;
