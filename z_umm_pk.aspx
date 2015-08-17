@@ -54,11 +54,11 @@
                     }, {
 						type : '8', //[12] 9
 						name : 'xispayed',
-						value : "1@顯示已付".split(',')
+						value : "1@顯示已收".split(',')
 					}, {
 						type : '8', //[13] 10
 						name : 'xisunpay',
-						value : "1@顯示未付".split(',')
+						value : "1@顯示未收".split(',')
 					}, {
 						type : '8', //[14] 11
 						name : 'xisweight',

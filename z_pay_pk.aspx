@@ -24,7 +24,7 @@
                 switch (t_name) {
                     case 'acomp':
                         var as = _q_appendData("acomp", "", true);
-                        t_acomp = " @全部";
+                        t_acomp = "";
                         for ( i = 0; i < as.length; i++) {
                             t_acomp = t_acomp + (t_acomp.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
                         }
@@ -111,7 +111,19 @@
 				t_day = t_date.getUTCDate();
 				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
 				$('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
-
+				//--------------------------------
+                $('#Xmemo1').css('width','98%');
+                $('#txtXmemo1').css('width','85%');
+                $('#Xmemo2').css('width','98%');
+                $('#txtXmemo2').css('width','85%');
+                $('#Xmemo3').css('width','98%');
+                $('#txtXmemo3').css('width','85%');
+                $('#Xmemo4').css('width','98%');
+                $('#txtXmemo4').css('width','85%');
+                $('#Xmemo5').css('width','98%');
+                $('#txtXmemo5').css('width','85%');
+                $('#Xcno').css('width','98%');
+                $('#Xcno select').css('width','85%');
 			}
 
 			function q_boxClose(s2) {
