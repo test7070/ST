@@ -124,6 +124,10 @@
                 $('#txtXmemo5').css('width','85%');
                 $('#Xcno').css('width','98%');
                 $('#Xcno select').css('width','85%');
+                
+                $('#chkXispayed input[type="checkbox"]').prop("checked",true);
+                $('#chkXisunpay input[type="checkbox"]').prop("checked",true);
+                $('#chkXisweight input[type="checkbox"]').prop("checked",true);
 			}
 
 			function q_boxClose(s2) {

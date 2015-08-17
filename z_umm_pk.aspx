@@ -86,6 +86,10 @@
                 $('#txtXmemo4').css('width','85%');
                 $('#Xmemo5').css('width','98%');
                 $('#txtXmemo5').css('width','85%');
+                
+                $('#chkXispayed input[type="checkbox"]').prop("checked",true);
+                $('#chkXisunpay input[type="checkbox"]').prop("checked",true);
+                $('#chkXisweight input[type="checkbox"]').prop("checked",true);
             }
 
             function q_boxClose(s2) {
