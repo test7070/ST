@@ -254,7 +254,7 @@
 								b_ret[i].tranmoney3=0;
 								b_ret[i].tranmoney2=0;
 								b_ret[i].width=0;
-								if(b_ret[i].source=='2'){//寄出
+								if(b_ret[i].source=='2'){//庫出
 									b_ret[i].tranmoney3=b_ret[i].mount;
 									b_ret[i].mount=0;
 								}else if(b_ret[i].source=='1'){//寄庫
@@ -520,14 +520,14 @@
 						var as = _q_appendData("view_vccs", "", true);
 						if (as[0] != undefined) {
 							if(dec(as[0].stkmount)==0){
-								alert("無寄庫量，不得寄出貨!!");
+								alert("無寄庫量，不得庫出貨!!");
 								$('#txtTranmoney3_' + b_seq).val(0);
 							}else if (dec($('#txtTranmoney3_' + b_seq).val())>dec(as[0].stkmount)){
 								alert("【"+q_getMsg('lblTranmoney3_s')+"】不得大於【寄庫量】!!");
 								$('#txtTranmoney3_' + b_seq).val(dec(as[0].stkmount));
 							}
 						}else{
-							alert("無寄庫量，不得寄出貨!!");
+							alert("無寄庫量，不得庫出貨!!");
 							$('#txtTranmoney3_' + b_seq).val(0);	
 						}
 						break;	
@@ -728,7 +728,7 @@
 				t_err='';
 				for (var i = 0; i < q_bbsCount; i++) {
 					if(!emp($('#txtProductno_'+i).val()) && q_float('txtWidth_'+i)==0 && q_float('txtTranmoney2_'+i)==0 && q_float('txtTranmoney3_'+i)==0){
-						t_err=t_err+(t_err.length>0?'\n':'')+$('#txtProduct_'+i).val()+'數量為0，請確認出貨、寄庫、寄出數量!!';
+						t_err=t_err+(t_err.length>0?'\n':'')+$('#txtProduct_'+i).val()+'數量為0，請確認出貨、寄庫、庫出數量!!';
 					}
 				}
 				if (t_err.length > 0) {
