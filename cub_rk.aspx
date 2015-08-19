@@ -757,6 +757,11 @@
 						<td style="width:100px;" align="center">結束時間</td>	
 						<td style="width:80px;" align="center">施工工時(分)</td>
 						<td style="width:100px;" align="center">耗料重</td>
+						<td style="width:100px;" align="center">不良損耗</td>
+						<td style="width:100px;" align="center">尺寸損耗</td>
+						<td style="width:100px;" align="center">頭尾損耗 </td>
+						<td style="width:100px;" align="center">樣品重</td>
+						<td style="width:100px;" align="center">廢料重</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center" style="display: none;">
@@ -828,9 +833,12 @@
 						<td><input id="txtBtime.*" type="text" style="float:left;width:95%;"/></td>
 						<td><input id="txtEtime.*" type="text" style="float:left;width:95%;"/></td>
 						<td><input id="txtMins.*" type="text" class="num" style="float:left;width:95%;"/></td>
-						<td>
-							<input id="txtGweight.*" type="text" class="num" style="float:left;width:95%;"/>
-						</td>
+						<td><input id="txtGweight.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW01.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW02.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW03.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW04.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW05.*" type="text" class="num" style="float:left;width:95%;"/></td>
 					</tr>
 				</table>
 			</div>
