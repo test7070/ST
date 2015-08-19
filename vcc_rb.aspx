@@ -17,7 +17,7 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore','txtOrdeno'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore','txtOrdeno','txtAcc2'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -44,7 +44,8 @@
 				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
 				/*['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],*/
 				['txtPartno', 'lblPart', 'part', 'noa,part','txtPartno,txtPart', 'part_b.aspx'],
-				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx']
+				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
+				['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
 			);
 
 			$(document).ready(function() {
@@ -229,6 +230,9 @@
 					}
 				});
 				
+				$('#txtAcc1').change(function() {
+					sum();
+				});
 			}
 			
 			function refreshBbm() {
@@ -346,6 +350,7 @@
 						break;
 				}
 				b_pop = '';
+				sum();
 			}
 
 			var t_msg = '';
@@ -1107,6 +1112,9 @@
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
 				$('#txtTotal').val(FormatNumber(t_total));
+				
+				if($('#txtAcc1').val().length>0)
+					$('#txtTotal').val(0);
 			}
 			
 		</script>
@@ -1358,6 +1366,9 @@
 						<td class="td1"><span> </span><a id='lblCust2' class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCustno2" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtComp2" type="text" class="txt c1"/></td>
+						<td class="td1"><span> </span><a id='lblAcc1' class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtAcc1" type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtAcc2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>
