@@ -366,6 +366,21 @@
 					$('.istax').hide();
 					//$('#txtVccatax').show();
 				}
+				
+				//上方插入空白行
+		        $('#lblTop_row').mousedown(function (e) {
+		            if (e.button == 0) {
+		                mouse_div = false;
+		                q_bbs_addrow(row_bbsbbt, row_b_seq, 0);
+		            }
+		        });
+		        //下方插入空白行
+		        $('#lblDown_row').mousedown(function (e) {
+		            if (e.button == 0) {
+		                mouse_div = false;
+		                q_bbs_addrow(row_bbsbbt, row_b_seq, 1);
+		            }
+		        });
 			}
 
 			function q_boxClose(s2) {/// q_boxClose 2/4
@@ -955,6 +970,28 @@
 				Lock(1, {
 					opacity : 0
 				});
+				//補NOQ,假如NOQ有空白的就當作有做插入,全部重排
+				var isExist = false;
+				for(var i=0;i<q_bbsCount;i++){
+					if($('#txtNoq_'+i).val().length==0){
+						isExist = true;						
+						break;
+					}
+				}
+				if(isExist){
+					for(var i=0;i<q_bbsCount;i++){
+						$('#txtNoq_'+i).val(('00'+(i+1)).substring(('00'+(i+1)).length-3,3));
+					}
+					/*var t_noa = $('#txtNoa').val();
+					for(var i=0;i<abbs.length;i++){
+						if(abbs[i].noa==t_noa)
+							abbs.splice(i,1);
+					}
+					for(var i=0;i<abbsNow.length;i++){
+						if(abbsNow[i].noa==t_noa)
+							abbsNow.splice(i,1);
+					}*/
+				}
 
 				$('#txtOrdeno').val(GetOrdenoList());
 
@@ -1117,7 +1154,7 @@
 				}
 				var t_Product = $('#txtProduct_' + b_seq).val();
 				if (t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0) {
-					if(q_float('txtWeight_' + b_seq)=0)
+					if(q_float('txtWeight_' + b_seq)==0)
 						$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
 			}
@@ -1283,6 +1320,21 @@
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtUno_', '');
                             $('#btnUno_'+n).click();
+                        });
+                        $('#btnMinus_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            mouse_div = false;
+	                        ////////////控制顯示位置
+	                        $('#div_row').css('top', e.pageY);
+	                        $('#div_row').css('left', e.pageX);
+	                        ////////////
+	                        t_IdSeq = -1;
+	                        q_bodyId($(this).attr('id'));
+	                        b_seq = t_IdSeq;
+	                        $('#div_row').show();
+	                        row_b_seq = b_seq;
+	                        row_bbsbbt = 'bbs';
                         });
 					}
 				}//j
@@ -1786,6 +1838,16 @@
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
+		<div id="div_row" style="position:absolute; top:300px; left:500px; display:none; width:150px; background-color: #ffffff; ">
+			<table id="table_row"  class="table_row" style="width:100%;" border="1" cellpadding='1'  cellspacing='0'>
+				<tr>
+					<td align="center" ><a id="lblTop_row" class="lbl btn">上方插入空白行</a></td>
+				</tr>
+				<tr>
+					<td align="center" ><a id="lblDown_row" class="lbl btn">下方插入空白行</a></td>
+				</tr>
+			</table>
+		</div>
 		<div style="overflow: auto;display:block;">
 			<!--#include file="../inc/toolbar.inc"-->
 		</div>

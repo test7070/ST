@@ -36,7 +36,10 @@
 					}]
 				});
 				q_popAssign();
-	              
+              
+              	$('#chkXweight input[type="checkbox"]').prop("checked",true);
+                $('#chkXprice input[type="checkbox"]').prop("checked",true);
+                
 	            var t_para = new Array();
 	            try{
 	            	t_para = JSON.parse(q_getId()[3]);

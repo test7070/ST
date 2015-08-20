@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -20,7 +20,7 @@
 			var decbbs = ['money', 'total', 'mount', 'price', 'sprice', 'dime', 'width', 'lengthb', 'weight2'];
 			var decbbm = ['payed', 'unpay', 'usunpay', 'uspayed', 'ustotal', 'discount', 'money', 'tax', 'total', 'weight', 'floata', 'mount', 'price', 'totalus'];
 			var q_readonly = ['txtNoa', 'txtAcomp', 'txtTgg', 'txtWorker', 'txtWorker2','txtMoney','txtTotal'];
-			var q_readonlys = ['txtNoq'];
+			var q_readonlys = ['txtNoq','txtTotal'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -64,7 +64,16 @@
 					t_unit = $('#txtUnit_' + j).val();
 					t_mount = q_float('txtMount_' + j);
 					t_weight=+q_float('txtMount_' + j);
-					$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
+					
+					if($('#chkAprice_'+j).prop('checked')){
+						if(t_mount==0)
+							$('#txtPrice_' + j).val(0);
+						else
+							$('#txtPrice_' + j).val(round(q_div(q_float('txtTotal_' + j), dec(t_mount)), 2));
+					}else{
+						$('#txtTotal_' + j).val(round(q_mul(q_float('txtPrice_' + j), dec(t_mount)), 0));
+					}
+					
 					t_money = q_add(t_money, q_float('txtTotal_' + j));
 				}
 				if($('#chkAtax').prop('checked')){
@@ -219,6 +228,20 @@
                 	$('#txtTax').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
                 }
             }
+            
+            function refreshBbs(){
+				//金額小計自訂
+				for(var i=0;i<q_bbsCount;i++){
+					$('#txtTotal_'+i).attr('readonly','readonly');
+					if($('#chkAprice_'+i).prop('checked')){
+						$('#txtTotal_'+i).css('color','black').css('background-color','white');
+						if(q_cur==1 || q_cur==2)
+							$('#txtTotal_'+i).removeAttr('readonly');
+					}else{
+						$('#txtTotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+					}
+				}
+			}
 
 			function q_boxClose(s2) {
 				var ret;
@@ -583,28 +606,28 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							var t_unit = $('#txtUnit_' + b_seq).val();
-							var t_mount = $('#txtMount_' + b_seq).val();
-							$('#txtTotal_' + b_seq).val(round(q_mul(dec($('#txtPrice_' + b_seq).val()), dec(t_mount)), 0));
+							//var t_unit = $('#txtUnit_' + b_seq).val();
+							//var t_mount = $('#txtMount_' + b_seq).val();
+							//$('#txtTotal_' + b_seq).val(round(q_mul(dec($('#txtPrice_' + b_seq).val()), dec(t_mount)), 0));
 						});
 						$('#txtMount_' + j).change(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							var t_unit = $('#txtUnit_' + b_seq).val();
+							//var t_unit = $('#txtUnit_' + b_seq).val();
 							//var t_mount = (!t_unit || emp(t_unit) || trim( t_unit).toLowerCase() != 'kg' ? $('#txtMount_' + b_seq).val() : $('#txtWeight_' +b_seq).val()); // 計價量
-							var t_mount = $('#txtMount_' + b_seq).val();
-							$('#txtTotal_' + b_seq).val(round(q_mul(dec($('#txtPrice_' + b_seq).val()), dec(t_mount)), 0));
+							//var t_mount = $('#txtMount_' + b_seq).val();
+							//$('#txtTotal_' + b_seq).val(round(q_mul(dec($('#txtPrice_' + b_seq).val()), dec(t_mount)), 0));
 							sum();
 						});
 						$('#txtPrice_' + j).change(function() {
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							var t_unit = $('#txtUnit_' + b_seq).val();
+							//var t_unit = $('#txtUnit_' + b_seq).val();
 							//var t_mount = (!t_unit || emp(t_unit) || trim( t_unit).toLowerCase() != 'kg' ? $('#txtMount_' + b_seq).val() : $('#txtWeight_' +b_seq).val()); // 計價量
-							var t_mount = $('#txtMount_' + b_seq).val();
-							$('#txtTotal_' + b_seq).val(round(q_mul(dec($('#txtPrice_' + b_seq).val()), dec(t_mount)), 0));
+							//var t_mount = $('#txtMount_' + b_seq).val();
+							//$('#txtTotal_' + b_seq).val(round(q_mul(dec($('#txtPrice_' + b_seq).val()), dec(t_mount)), 0));
 							sum();
 						});
 						$('#txtTotal_' + j).focusout(function() {
@@ -621,11 +644,15 @@
 							var n = replaceAll($(this).attr('id'), 'btnRecord_', '');
 							q_box("z_rc2record.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";tgg=" + $('#txtTggno').val() + "&product=" + $('#txtProductno_' + n).val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
 						});
+						
+						$('#chkAprice_'+j).click(function(e){refreshBbs();});
 					}
 				}
 				_bbsAssign();
 				HiddenTreat();
 				refreshBbm();
+				refreshBbs();
+				$('#lblAprice_s').text('自訂金額');
 			}
 
 			function btnIns() {
@@ -1082,7 +1109,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1300px;">
+		<div class='dbbs' style="width: 1260px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;">
@@ -1095,6 +1122,7 @@
 					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblAprice_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblStore_s'> </a></td>
 					<td align="center" style="width:80px;" class="isRack"><a id='lblRackno_s'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblMemos'> </a></td>
@@ -1118,6 +1146,7 @@
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtTotal.*" type="text" class="txt num c1" /></td>
+					<td><input id="chkAprice.*" type="checkbox" class="txt c1" /></td>
 					<td>
 						<input id="txtStoreno.*" type="text" class="txt c1" style="width: 65%"/>
 						<input class="btn" id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;" />

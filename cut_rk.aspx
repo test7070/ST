@@ -19,7 +19,7 @@
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 3, 1], ['txtWeight', 10, 3, 1]];
+            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 0, 1], ['txtWeight', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -36,12 +36,36 @@
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
             });
-			function sum(){
-				for(var i=0;i<q_bbsCount;i++){
-					
-					
+			function sum() {
+				for (var i = 0; i < q_bbsCount; i++) {
+					$('#txtMins_'+i).val(getMins($('#txtBtime_'+i).val(),$('#txtEtime_'+i).val()));	
 				}
+			}
+			function getMins(btime,etime){
+				var mins = 0;
+				var patt = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/g;
+				var bhr = btime.replace(patt,'$1');
+				var bmin = btime.replace(patt,'$2');
+				var ehr = etime.replace(patt,'$1');
+				var emin = etime.replace(patt,'$2');
 				
+				try{
+					bhr = parseInt(bhr);
+					bmin = parseInt(bmin);
+					ehr = parseInt(ehr);
+					emin = parseInt(emin);
+				}catch(e){
+					bhr=0;
+					bmin=0;
+					ehr=0;
+					emin=0;
+				}
+				mins = (ehr+(ehr<bhr || (ehr=bhr && emin<bmin)?24:0)-bhr)*60 + (emin-bmin);
+				mins = isNumber(mins)?mins:0;
+				return mins;
+			}
+			function isNumber(n) {
+			  return !isNaN(parseFloat(n)) && isFinite(n);
 			}
             function main() {
                 if (dataErr) {
@@ -56,7 +80,7 @@
                 q_getFormat();
                 document.title = '成品進倉作業';
                 bbmMask = [['txtDatea', r_picd]];
-                bbsMask = [['txtDatea',r_picd]];
+                bbsMask = [['txtDatea',r_picd],['txtBtime','99:99'],['txtEtime','99:99']];
                 q_mask(bbmMask);
 				q_cmbParse("cmbTypea", '製成品,再製品');
 				
@@ -240,6 +264,12 @@
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	$('#txtBtime_'+i).focusout(function(e){
+							sum();							
+						});
+						$('#txtEtime_'+i).focusout(function(e){
+							sum();							
+						});
                     	$('#txtOrdeno_'+i).change(function(e){
 							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 							n = parseInt(n);
@@ -463,7 +493,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1500px;
+                width: 1700px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -591,6 +621,9 @@
 					<td style="width:200px;">棧板序號</td>
 					<td style="width:200px;">備註</td>
 					<td style="width:100px;">轉入庫日期</td>
+					<td align="center" style="width:100px;">開始時間</td>
+					<td align="center" style="width:100px;">結束時間</td>	
+					<td align="center" style="width:80px;">施工工時(分)</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -610,13 +643,13 @@
 						<input id="txtProduct.*" type="text" style="display:none;"/>
 						<input id="txtUcolor.*" type="text" style="display:none;"/>
 						<input id="txtSource.*" type="text" style="display:none;"/>
-						<input id="txtDime.*" type="text" class="num" style="float:left;width:22%;"/>
-						<input id="txtRadius.*" type="text" class="num" style="float:left;width:22%;"/>
-						<input id="txtWidth.*" type="text" class="num" style="float:left;width:22%;"/>
-						<input id="txtLengthb.*" type="text" class="num" style="float:left;width:22%;"/>
+						<input id="txtDime.*" type="text" class="txt num" style="float:left;width:22%;"/>
+						<input id="txtRadius.*" type="text" class="txt num" style="float:left;width:22%;"/>
+						<input id="txtWidth.*" type="text" class="txt num" style="float:left;width:22%;"/>
+						<input id="txtLengthb.*" type="text" class="txt num" style="float:left;width:22%;"/>
 					</td>
-					<td><input id="txtMount.*" type="text" class="num" style="float:left;width:95%;"/></td>
-					<td><input id="txtWeight.*" type="text" class="num" style="float:left;width:95%;"/></td>
+					<td><input id="txtMount.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
+					<td><input id="txtWeight.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
 					<td>
 						<input id="txtCustno.*" type="text" style="float:left;width:45%;"/>
 						<input id="txtComp.*" type="text" style="float:left;width:45%;"/>
@@ -626,6 +659,9 @@
 					<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtBno.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtDatea.*" type="text" style="float:left;width:95%;"/></td>
+					<td><input id="txtBtime.*" type="text" class="txt" style="float:left;width:95%;"/></td>
+					<td><input id="txtEtime.*" type="text" class="txt" style="float:left;width:95%;"/></td>
+					<td><input id="txtMins.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
 				</tr>
 			</table>
 		</div>

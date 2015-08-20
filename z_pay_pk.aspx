@@ -15,67 +15,103 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-            $(document).ready(function() {
-                q_getId();
-                q_gf('', 'z_umm_pk');
-
-            });
-
-            function q_gfPost() {
-                $('#q_report').q_report({
-                    fileName : 'z_umm_pk',
-                    options : [{
-                        type : '2', //[1][2]  1
-                        name : 'xcust',
-                        dbf : 'cust',
-                        index : 'noa,comp',
-                        src : 'cust_b.aspx'
-                    }, {
-                        type : '1', //[3][4]  2
-                        name : 'xdate'
-                    }, {
-                        type : '1', //[5][6]  3
-                        name : 'xmon'
-                    }, {
-                        type : '6', //[7]   4
+			var t_acomp = '';
+			$(document).ready(function() {
+				q_getId();
+				q_gt('acomp', '', 0, 0, 0, "");
+			});
+			function q_gtPost(t_name) {
+                switch (t_name) {
+                    case 'acomp':
+                        var as = _q_appendData("acomp", "", true);
+                        t_acomp = "";
+                        for ( i = 0; i < as.length; i++) {
+                            t_acomp = t_acomp + (t_acomp.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
+                        }
+                        q_gf('', 'z_pay_pk');
+                        break;
+                }
+            }
+			function q_gfPost() {
+				$('#q_report').q_report({
+					fileName : 'z_pay_pk',
+					options : [{
+						type : '5', //[1]         1
+						name : 'xcno',
+						value : t_acomp.split(',')
+					}, { 
+						type : '2', //[2][3]      2
+						name : 'xtgg',
+						dbf : 'tgg',
+						index : 'noa,comp',
+						src : 'tgg_b.aspx'
+					}, {
+						type : '1', //[4][5]      3
+						name : 'xdate'
+					}, {
+						type : '1', //[6][7]      4
+						name : 'xmon'
+					}, {
+                        type : '6', //[8]   5
                         name : 'xmemo1'
                     }, {
-                        type : '6', //[8]   5
+                        type : '6', //[9]   6
                         name : 'xmemo2'
                     }, {
-                        type : '6', //[9]   6
+                        type : '6', //[10]   7
                         name : 'xmemo3'
                     }, {
-                        type : '6', //[10]   7
+                        type : '6', //[11]   8
                         name : 'xmemo4'
                     }, {
-                        type : '6', //[11]   8
+                        type : '6', //[12]   9
                         name : 'xmemo5'
                     }, {
-						type : '8', //[12] 9
-						name : 'xispayed',
-						value : "1@顯示已收".split(',')
-					}, {
 						type : '8', //[13] 10
-						name : 'xisunpay',
-						value : "1@顯示未收".split(',')
+						name : 'xispayed',
+						value : "1@顯示已付".split(',')
 					}, {
 						type : '8', //[14] 11
+						name : 'xisunpay',
+						value : "1@顯示未付".split(',')
+					}, {
+						type : '8', //[15] 12
 						name : 'xisweight',
 						value : "1@顯示重量".split(',')
 					}]
-                });
-                q_popAssign();
-                q_langShow();
-                
-                $('#txtXdate1').mask('999/99/99');
-                $('#txtXdate1').datepicker();
-                $('#txtXdate2').mask('999/99/99');
-                $('#txtXdate2').datepicker();
-                
-                $('#txtXmon1').mask('999/99');
-                $('#txtXmon2').mask('999/99');
-                //--------------------------------
+				});
+				q_popAssign();
+				q_langShow();
+				
+				$('#txtXdate1').mask('999/99/99');
+				$('#txtXdate1').datepicker();
+				$('#txtXdate2').mask('999/99/99');
+				$('#txtXdate2').datepicker();
+				$('#txtXmon1').mask('999/99');
+				$('#txtXmon2').mask('999/99');
+
+				var t_date, t_year, t_month, t_day;
+				t_date = new Date();
+				t_date.setDate(1);
+				t_year = t_date.getUTCFullYear() - 1911;
+				t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+				t_month = t_date.getUTCMonth() + 1;
+				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+				t_day = t_date.getUTCDate();
+				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+				$('#txtXdate1').val(t_year + '/' + t_month + '/' + t_day);
+
+				t_date = new Date();
+				t_date.setDate(35);
+				t_date.setDate(0);
+				t_year = t_date.getUTCFullYear() - 1911;
+				t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+				t_month = t_date.getUTCMonth() + 1;
+				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+				t_day = t_date.getUTCDate();
+				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+				$('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
+				//--------------------------------
                 $('#Xmemo1').css('width','98%');
                 $('#txtXmemo1').css('width','85%');
                 $('#Xmemo2').css('width','98%');
@@ -86,21 +122,18 @@
                 $('#txtXmemo4').css('width','85%');
                 $('#Xmemo5').css('width','98%');
                 $('#txtXmemo5').css('width','85%');
+                $('#Xcno').css('width','98%');
+                $('#Xcno select').css('width','85%');
                 
                 $('#chkXispayed input[type="checkbox"]').prop("checked",true);
                 $('#chkXisunpay input[type="checkbox"]').prop("checked",true);
                 $('#chkXisweight input[type="checkbox"]').prop("checked",true);
-            }
+			}
 
-            function q_boxClose(s2) {
-            }
+			function q_boxClose(s2) {
+			}
 
-            function q_gtPost(t_name) {
-                switch (t_name) {
-                    default:
-                        break;
-                }
-            }
+			
 
 		</script>
 	</head>

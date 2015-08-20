@@ -19,9 +19,9 @@
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 3, 1], ['txtWeight', 10, 3, 1]];
+            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 0, 1], ['txtWeight', 10, 2, 1]];
             var bbmMask = [];
-            var bbsMask = [];
+            var bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
@@ -36,12 +36,36 @@
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
             });
-			function sum(){
-				for(var i=0;i<q_bbsCount;i++){
-					
-					
+			function sum() {
+				for (var i = 0; i < q_bbsCount; i++) {
+					$('#txtMins_'+i).val(getMins($('#txtBtime_'+i).val(),$('#txtEtime_'+i).val()));	
 				}
+			}
+			function getMins(btime,etime){
+				var mins = 0;
+				var patt = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/g;
+				var bhr = btime.replace(patt,'$1');
+				var bmin = btime.replace(patt,'$2');
+				var ehr = etime.replace(patt,'$1');
+				var emin = etime.replace(patt,'$2');
 				
+				try{
+					bhr = parseInt(bhr);
+					bmin = parseInt(bmin);
+					ehr = parseInt(ehr);
+					emin = parseInt(emin);
+				}catch(e){
+					bhr=0;
+					bmin=0;
+					ehr=0;
+					emin=0;
+				}
+				mins = (ehr+(ehr<bhr || (ehr=bhr && emin<bmin)?24:0)-bhr)*60 + (emin-bmin);
+				mins = isNumber(mins)?mins:0;
+				return mins;
+			}
+			function isNumber(n) {
+			  return !isNaN(parseFloat(n)) && isFinite(n);
 			}
             function main() {
                 if (dataErr) {
@@ -55,7 +79,6 @@
                 q_getFormat();
                 document.title = '烘板作業';
                 bbmMask = [['txtDatea', r_picd]];
-                bbsMask = [];
                 q_mask(bbmMask);
                 
                 $('#btnOrde').click(function() {
@@ -180,6 +203,12 @@
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	$('#txtBtime_'+i).focusout(function(e){
+							sum();							
+						});
+						$('#txtEtime_'+i).focusout(function(e){
+							sum();							
+						});
                     	$('#txtOrdeno_'+i).change(function(e){
 							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 							n = parseInt(n);
@@ -447,7 +476,7 @@
             input[type="text"], input[type="button"] {
                 font-size: medium;
             }
-            .dbbs{width: 1700px;}
+            .dbbs{width: 1980px;}
             .tbbs {
                 margin: 0;
                 padding: 2px;
@@ -553,6 +582,9 @@
 					<td style="width:100px;"></td>
 					<td style="width:100px;"></td>
 					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:80px;"></td>
 				</tr>
 				<tr style='color:white; background:#003366;' >
 					<td rowspan="4">
@@ -574,6 +606,9 @@
 					<td align="center" colspan="2">變形及摺痕</td>
 					<td align="center" rowspan="2">板邊<BR>波浪</td>
 					<td align="center" rowspan="2">背面刮傷<BR>背面黑點</td>
+					<td align="center" rowspan="4">開始時間</td>
+					<td align="center" rowspan="4">結束時間</td>	
+					<td align="center" rowspan="4">施工工時(分)</td>
 				</tr>
 				<tr style='color:white; background:#003366;' >
 					<td align="center">廠內</td>
@@ -629,6 +664,9 @@
 					<td style="width:100px;"></td>
 					<td style="width:100px;"></td>
 					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:80px;"></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -698,7 +736,9 @@
 						<input id="txtMount10.*" type="text" class="num" style="float:left;width:95%;"/>
 						<input id="txtWeight10.*" type="text" class="num" style="float:left;width:95%;"/>
 					</td>
-					
+					<td><input id="txtBtime.*" type="text" class="txt" style="float:left;width:95%;"/></td>
+					<td><input id="txtEtime.*" type="text" class="txt" style="float:left;width:95%;"/></td>
+					<td><input id="txtMins.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
 				</tr>
 			</table>
 		</div>

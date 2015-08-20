@@ -960,6 +960,7 @@
 				$('#txtMon').val(q_date().substr(0,6));
 				$('#txtOdate').focus();
 				$('#cmbKind').val('隨貨單張');
+				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");

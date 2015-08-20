@@ -659,7 +659,7 @@
 							<input id="txtBdate"  type="text" class="txt c2"/><a style="float: left;">~</a>
 							<input id="txtEdate"  type="text" class="txt c2"/>
 						</td>
-						<td class="td4" colspan="2"><input id="btnVccimport" type="button" value="出貨、寄出匯入"/></td>
+						<td class="td4" colspan="2"><input id="btnVccimport" type="button" value="出貨、庫出匯入"/></td>
 					</tr>
 					<tr class="tr6">
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
