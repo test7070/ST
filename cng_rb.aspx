@@ -563,14 +563,14 @@
 						<td align="center" style="width:15%"><a id='vewDatea'> </a></td>
 						<td align="center" style="width:25%"><a id='vewStore'> </a></td>
 						<td align="center" style="width:25%"><a id='vewStorein'> </a></td>
-						<td align="center" style="width:25%"><a id='vewTgg'> </a></td>
+						<td align="center" style="width:25%"><a id='vewCust'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
 						<td align="center" id='datea'>~datea</td>
 						<td align="center" id='store,8' class="it">~store,8</td>
 						<td align="center" id='storein,8' class="it">~storein,8</td>
-						<td align="center" id='tgg,8' class="it">~tgg,8</td>
+						<td align="center" id='comp,8' class="it">~comp,8</td>
 					</tr>
 				</table>
 			</div>

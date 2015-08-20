@@ -68,6 +68,15 @@
                 q_gt('part', '', 0, 0, 0, "");
                 q_cmbParse("cmbTypea", q_getPara('payb.typea'));
                 
+                var kind=q_getPara('vcct.kind').split(',');
+                 var t_kind='@';
+                for(var i=0;i<kind.length;i++){
+					if(kind[i].split('@')[0].substr(0,1)=='2')
+						t_kind=t_kind+(t_kind.length>0?',':'')+kind[i];
+	               
+                }
+                q_cmbParse("cmbVtype", t_kind,'s');
+                
                 $('#cmbTypea').change(function() {
                 	typea_field();
                 });
@@ -1034,8 +1043,9 @@
 					<td align="center" style="width:120px;"><a id='lblChgitem'> </a></td>
 					<!--<td align="center" style="width:60px;">#<a id='lblKind'> </a></td>-->
 					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblMoneys'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblMoneys'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblInvonos'> </a><BR><a id='lblTaxs'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblVtypes'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblBal'> </a></td>
@@ -1066,6 +1076,7 @@
 						<input id="txtInvono.*" type="text" style="width: 95%;"/>
 						<input id="txtTax.*" type="text" style="text-align: right; width: 95%;" />
 					</td>
+					<td><select id="cmbVtype.*" style="width: 95%;"> </select></td>
 					<td><input id="txtTotal.*" type="text" style="text-align: right; width: 95%;" /></td>
 					<td>
 						<input id="txtMemo.*" type="text" style=" width: 95%;"/>	
