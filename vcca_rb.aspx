@@ -572,7 +572,7 @@
 				curData.copy();
 				_btnIns();
 				curData.paste();
-				$('#cmbTaxtype').val(1);
+				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
 				$('#txtType').val('M'); //M手動開立 //A批次開立//E發票開立//(空白NULL)出貨單自動產生發票
 				Lock(1, {
 					opacity : 0

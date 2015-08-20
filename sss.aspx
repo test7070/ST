@@ -456,10 +456,12 @@
 			}
 
 			function btnPrint() {
-				if (q_getPara('sys.comp').indexOf('永勝') > -1)
+				if (q_getPara('sys.project').toUpperCase()=='UU')
 					q_box('z_sssp_uu.aspx', '', "95%", "95%", q_getMsg("popPrint"));
-				else if (q_getPara('sys.comp').indexOf('英特瑞') > -1|| q_getPara('sys.comp').indexOf('安美得') > -1)
+				if (q_getPara('sys.project').toUpperCase()=='IT')
 					q_box('z_sssp_it.aspx', '', "95%", "95%", q_getMsg("popPrint"));
+				if (q_getPara('sys.project').toUpperCase()=='RB')
+					q_box('z_sssp_rb.aspx', '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function q_stPost() {
