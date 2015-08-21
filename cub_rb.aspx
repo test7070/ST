@@ -637,13 +637,19 @@
 							<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"> </td>
-						<td style="width:100px;"><a id='lblProcessno_s'>製程編號</a></td>
-						<td style="width:150px;"><a id='lblProcess'>製程名稱</a></td>
+						<td style="width:150px;"><a id='lblDatea'>帳款日期</a></td>
 						<td style="width:150px;"><a id='lblTggno_s'>廠商編號</a></td>
 						<td style="width:180px;"><a id='lblTgg'>廠商名稱</a></td>
+						<td style="width:100px;"><a id='lblProductno_s'>產品編號</a></td>
+						<td style="width:150px;"><a id='lblProduct'>產品名稱</a></td>	
+						<td style="width:120px;"><a id='lblUnit'>單位</a></td>			
 						<td style="width:120px;"><a id='lblMount'>數量</a></td>
+						<td style="width:150px;"><a id='lblPrice'>單價</a></td>
+						<td style="width:150px;"><a id='lblMoney'>金額</a></td>
 						<td style="width:150px;"><a id='lblNeed'>製造要求</a></td>
 						<td style="width:150px;"><a id='lblMemo_s'>備註</a></td>
+						<td style="width:150px;"><a id='lblGmount'>耗用量</a></td>
+						<td style="width:50px;"><a id='lblPays'>請款</a></td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center">
@@ -651,19 +657,27 @@
 							<input id="txtNoq.*" type="text" style="display: none;"/>
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						<td>
-							<input id="txtProcessno.*" type="text" class="txt c1" style="width: 75%;"/>
-							<input class="btn"  id="btnProcessno.*" type="button" value='.' style=" font-weight: bold;" />
-						</td>
-						<td><input id="txtProcess.*" type="text" class="txt c1"/></td>
+						
+						<td><input id="txtDatea.*" type="text" class="txt c1"/></td>
 						<td>
 							<input id="txtTggno.*" type="text" class="txt c1" style="width: 83%;"/>
 							<input class="btn"  id="btnTggno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
 						<td><input id="txtTgg.*" type="text" class="txt c1"/></td>
+						
+						<td>
+							<input id="txtProcessno.*" type="text" class="txt c1" style="width: 75%;"/>
+							<input class="btn"  id="btnProcessno.*" type="button" value='.' style=" font-weight: bold;" />
+						</td>
+						<td><input id="txtProcess.*" type="text" class="txt c1"/></td>
+						<td><input id="txtUnit.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
+						<td><input id="txtPrice.*" type="text" class="txt c1"/></td>
+						<td><input id="txtMo.*" type="text" class="txt c1"/></td>
 						<td><input id="txtNeed.*" type="text" class="txt c1"/></td>
 						<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
+						<td><input id="txtGweight.*" type="text" class="txt c1"/></td>
+						<td><input id="chkCut.*" type="checkbox" class="txt c1"  style="width: 50%;"/></td>
 					</tr>
 				</table>
 			</div>
