@@ -22,7 +22,8 @@
 				q_gf('', 'z_ucc_pk');
 			});
 			function q_gfPost() {
-				q_gt('style', '', 0, 0, 0, "");
+				//傑期 因為型太多,所以只顯示A~N
+				q_gt('style', "where=^^noa between 'A' and 'N'^^", 0, 0, 0, "");
 			}
 
 			function q_gtPost(t_name) {
@@ -32,6 +33,15 @@
 						var as = _q_appendData("style", "", true);
 						for ( i = 0; i < as.length; i++) {
 							t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + '.' + as[i].product;
+						}
+						
+						q_gt('ucc', '', 0, 0, 0, "");
+						break;
+					case 'ucc':
+						t_ucc = '';
+						var as = _q_appendData("ucc", "", true);
+						for ( i = 0; i < as.length; i++) {
+							t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa;
 						}
 						loadFinish();
 						break;
@@ -117,6 +127,14 @@
 						type : '8', //[28] 19
 						name : 'xoption01',
 						value : q_getMsg('xoption01').split('&')
+					}, {
+						type : '8', //[29] 20
+						name : 'xproduct2',
+						value : t_ucc.split(',')
+					}, {
+						type : '8', //[30] 21
+						name : 'xstyle2',
+						value : t_style.split(',')
 					}]
 				});
 				q_popAssign();
