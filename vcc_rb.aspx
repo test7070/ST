@@ -363,7 +363,7 @@
 				switch (t_name) {
 					case 'cngs_re':
 						var as = _q_appendData("view_cngs", "", true);
-							q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtRetno,txtRetnoq'
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtOrdeno,txtNo2'
 								, as.length, as, 'productno,product,unit,umount,noa,noq', 'txtProductno,txtProduct');
 						break;
 					case 'getpart':

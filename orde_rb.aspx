@@ -501,7 +501,7 @@
 							}
 						}
 						t_msg = t_msg + "最近出貨單價：" + vcc_price;
-						q_msg($('#txtPrice_' + b_seq), t_msg);
+						q_msg($('#txtPrice_' + b_seq), t_msg,30);
 						break;
 					case 'msg_stk':
 						var as = _q_appendData("stkucc", "", true);
@@ -511,9 +511,10 @@
 							stkmount = q_add(stkmount, dec(as[i].mount));
 						}
 						t_msg = "庫存量：" + stkmount;
+						q_msg($('#txtMount_' + b_seq), t_msg,30);
 						//平均成本
-						var t_where = "where=^^ productno ='" + $('#txtProductno_' + b_seq).val() + "' order by datea desc ^^ stop=1";
-						q_gt('wcost', t_where, 0, 0, 0, "msg_wcost", r_accy);
+						//var t_where = "where=^^ productno ='" + $('#txtProductno_' + b_seq).val() + "' order by datea desc ^^ stop=1";
+						//q_gt('wcost', t_where, 0, 0, 0, "msg_wcost", r_accy);
 						break;
 					case 'msg_wcost':
 						var as = _q_appendData("wcost", "", true);
@@ -528,7 +529,7 @@
 						}
 						if (wcost_price != undefined) {
 							t_msg = t_msg + "<BR>平均成本：" + wcost_price;
-							q_msg($('#txtMount_' + b_seq), t_msg);
+							q_msg($('#txtMount_' + b_seq), t_msg,30);
 						} else {
 							//原料成本
 							var t_where = "where=^^ productno ='" + $('#txtProductno_' + b_seq).val() + "' order by mon desc ^^ stop=1";
@@ -544,7 +545,7 @@
 						if (costs_price != undefined) {
 							t_msg = t_msg + "<BR>平均成本：" + costs_price;
 						}
-						q_msg($('#txtMount_' + b_seq), t_msg);
+						q_msg($('#txtMount_' + b_seq), t_msg,30);
 						break;
 					case 'custaddr':
 						var as = _q_appendData("custaddr", "", true);

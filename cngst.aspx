@@ -184,6 +184,7 @@
 
 			function bbsAssign() {
 				for (var j = 0; j < q_bbsCount; j++) {
+					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
@@ -639,6 +640,7 @@
 					<td align="center">
 					<input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  />
 					</td>
+					<td style="width:2%;"></td>
 					<td align="center" style="width: 15%;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'>型</a></td>
@@ -655,6 +657,7 @@
 					<td style="width:1%;">
 					<input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" />
 					</td>
+					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
 					<input class="btn"  id="btnUno.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
 					<input id="txtUno.*" type="text" style="width:80%;"/>

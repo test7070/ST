@@ -121,8 +121,8 @@
                         q_boxClose2(s2);
                         break;
                     default:
-						if(b_pop.substring(0,8)=='get_cut_'){
-							var n = b_pop.replace('get_cut_','');
+						if(b_pop.substring(0,8)=='cng_cut_'){
+							var n = b_pop.replace('cng_cut_','');
 							b_ret = getb_ret();
 							if(b_ret != null && b_ret.length>0){
 								$('#txtSpecial_'+n).val(b_ret[0].uno);
@@ -289,7 +289,7 @@
 								return;
 							var t_noa = $('#txtNoa').val();
 		                	var t_where ='';
-		                	q_box("get_cub_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cutno:t_noa,n:n,page:'cut_rk'}), "get_cut_"+n, "95%", "95%", '');
+		                	q_box("cng_cub_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cutno:t_noa,n:n,page:'cut_rk'}), "cng_cut_"+n, "95%", "95%", '');
                         });
                     }
                 }
