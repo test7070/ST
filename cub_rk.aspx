@@ -455,7 +455,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('cub_rk_s.aspx', q_name + '_s', "500px", "350px", q_getMsg("popSeek"));
+				q_box('cub_rk_s.aspx', q_name + '_s', "500px", "500px", q_getMsg("popSeek"));
 			}
 
 			function btnTop() {
