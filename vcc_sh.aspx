@@ -875,7 +875,7 @@
 				HiddenTreat();
 				refreshBbm();
 				
-				if((q_cur==1 || q_cur==2)){
+				/*if((q_cur==1 || q_cur==2)){
 					if(q_bbsCount>=10){
 						$('#btnPlus').attr('disabled', 'disabled');
 					}else{
@@ -884,7 +884,7 @@
 				}
 				for (var i = 10; i < q_bbsCount; i++) {
 					$('#bbsseq_'+i).hide();
-				}
+				}*/
 			}
 			
 			function check_store2(t_seq) {

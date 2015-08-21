@@ -68,6 +68,9 @@
                 q_gt('part', '', 0, 0, 0, "");
                 q_cmbParse("cmbTypea", q_getPara('payb.typea'));
                 
+                if(q_db.substr( 0,2)!='dc')
+                	$('#btnFix').hide();
+                
                 var kind=q_getPara('vcct.kind').split(',');
                  var t_kind='@';
                 for(var i=0;i<kind.length;i++){
@@ -1048,7 +1051,7 @@
 					<td align="center" style="width:40px;"><a id='lblVtypes'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblBal'> </a></td>
+					<td align="center" style="width:120px;display:none;"><a id='lblBal'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td>
@@ -1084,7 +1087,7 @@
 						<input type="text" id="txtAcc1.*"  style="float: left;width:40%;"/>
 						<input type="text" id="txtAcc2.*"  style="float: left;width:40%;"/>
 					</td>
-					<td><input id="txtBal.*" type="text" style="width: 95%;" /></td>
+					<td style="display:none"><input id="txtBal.*" type="text" style="width: 95%;" /></td>
 				</tr>
 			</table>
 		</div>

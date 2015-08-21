@@ -929,12 +929,21 @@
 						if (as[0] != undefined) {
 							var t_cngno=as[0].cngno;
 							var t_err=as[0].err;	
-							if(t_err=='OK')
+							if(t_err=='OK'){
 								alert('已產生客戶歸還調撥單【' + t_cngno+'】');
-							if(t_err=='modi')
+								$('#txtTranstyle').val(t_cngno);
+								abbm[q_recno]['transtyle'] = t_cngno;
+							}
+							if(t_err=='modi'){
 								alert('已更新客戶歸還調撥單【' + t_cngno+'】');
-							$('#txtTranstyle').val(t_cngno);
-							abbm[q_recno]['transtyle'] = t_cngno;
+								$('#txtTranstyle').val(t_cngno);
+								abbm[q_recno]['transtyle'] = t_cngno;
+							}
+							if(t_err=='dele'){
+								alert('已刪除客戶歸還調撥單【' + t_cngno+'】');
+								$('#txtTranstyle').val('');
+								abbm[q_recno]['transtyle'] = '';
+							}
 						}
 					break;
 				}
