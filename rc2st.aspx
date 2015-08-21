@@ -785,10 +785,14 @@
 						t_datea += '&';
 						t_style += '&';
 					}
-					if ($('#txtUno_' + i).val().length == 0) {
-						t_buno += '';
-						t_datea += $('#txtDatea').val();
-						t_style += $('#txtStyle_' + i).val();
+					if ($('#txtUno_' + i).val().length == 0 ) {
+						if(q_getPara('sys.comp').substring(0,2)=='傑期' && $('#txtProductno_'+i).val().toUpperCase()=='OEM'){
+							
+						}else{
+							t_buno += '';
+							t_datea += $('#txtDatea').val();
+							t_style += $('#txtStyle_' + i).val();
+						}
 					}
 				}
 				q_func('qtxt.query.getuno', 'uno.txt,getuno,' + t_buno + ';' + t_datea + ';' + t_style + ';');
@@ -804,7 +808,11 @@
 							} else {
 								for (var i = 0; i < q_bbsCount; i++) {
 									if ($('#txtUno_' + i).val().length == 0) {
-										$('#txtUno_' + i).val(as[i].uno);
+										if(q_getPara('sys.comp').substring(0,2)=='傑期' && $('#txtProductno_'+i).val().toUpperCase()=='OEM'){
+							
+										}else{
+											$('#txtUno_' + i).val(as[i].uno);
+										}
 									}
 								}
 							}
