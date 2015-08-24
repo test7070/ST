@@ -593,18 +593,7 @@
 							<span> </span><a id='lblCopy' class="lbl" style="float:left;"> </a>
 						</td>
 					</tr>
-					<tr>
-						<td><span> </span><a id="lblCust" class="lbl btn" >客戶</a></td>
-						<td><input id="txtCustno" type="text" class="txt c1"/></td>
-						<td colspan="2"><input id="txtComp" type="text" class="txt c1"/></td>
-						<td> <input id="btnOrdes" type="button" value='訂單匯入'  style="float:right;"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblOrdeno" class="lbl" >訂單編號</a></td>
-						<td><input id="txtOrdeno" type="text" class="txt c1"/></td>
-						<td><span> </span><a id="lblNo2" class="lbl" >訂序</a></td>
-						<td><input id="txtNo2" type="text" class="txt c1"/></td>
-					</tr>
+		
 					<tr>
 						<td><span> </span><a id="lblProduct" class="lbl btn" >製成品</a></td>
 						<td><input id="txtProductno" type="text" class="txt c1"/></td>
@@ -672,11 +661,11 @@
 						<td><input id="txtProcess.*" type="text" class="txt c1"/></td>
 						<td><input id="txtUnit.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
-						<td><input id="txtPrice.*" type="text" class="txt c1"/></td>
-						<td><input id="txtMo.*" type="text" class="txt c1"/></td>
+						<td><input id="txtPrice.*" type="text" class="txt c1 num"/></td>
+						<td><input id="txtMo.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtNeed.*" type="text" class="txt c1"/></td>
 						<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
-						<td><input id="txtGweight.*" type="text" class="txt c1"/></td>
+						<td><input id="txtGweight.*" type="text" class="txt c1 num"/></td>
 						<td><input id="chkCut.*" type="checkbox" class="txt c1"  style="width: 50%;"/></td>
 					</tr>
 				</table>
