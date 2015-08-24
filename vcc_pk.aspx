@@ -972,8 +972,8 @@
 				});
 				//補NOQ,假如NOQ有空白的就當作有做插入,全部重排
 				var isExist = false;
-				for(var i=0;i<q_bbsCount;i++){
-					if($('#txtNoq_'+i).val().length==0){
+				for(var i=0;i<q_bbsCount-1;i++){
+					if($('#txtNoq_'+i).val().length==0 && $('#txtNoq_'+(i+1)).val().length!=0){
 						isExist = true;						
 						break;
 					}
@@ -991,6 +991,16 @@
 						if(abbsNow[i].noa==t_noa)
 							abbsNow.splice(i,1);
 					}*/
+				}
+				//檢查NOQ是否重覆
+				for(var i=0;i<q_bbsCount-1;i++){
+					for(var j=1;j<q_bbsCount;j++){
+						if(i!=j && $('#txtNoq_'+i).val().length!=0 && $('#txtNoq_'+i).val()==$('#txtNoq_'+j).val()){
+							alert('序【'+$('#txtNoq_'+i).val()+'】重複請檢查!');
+							Unlock(1);
+							return;
+						}						
+					}
 				}
 
 				$('#txtOrdeno').val(GetOrdenoList());
