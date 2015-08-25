@@ -747,9 +747,9 @@
 						<td style="width:100px;" align="center">背漆稀釋液<BR>總用量(KG)</td>-->
 						<td style="width:150px;" align="center">PVC皮批號</td>	
 						<td style="width:100px;" align="center">PVC皮<BR>型號<BR>規格</td>
-						<td style="width:100px;" align="center">PVC皮<BR>總用量M/KG</td>
+						<td style="width:100px;" align="center">PVC皮<BR>用量M<BR>KG</td>
 						<td style="width:150px;" align="center">PE膜批號</td>	
-						<td style="width:100px;" align="center">PE膜<BR>型號<BR>用量M</td>
+						<td style="width:100px;" align="center">PE膜<BR>用量M<BR>KG</td>
 						<td style="width:100px;" align="center">RECOIL<BR>重量(KG)</td>
 						<td style="width:200px;" align="center">RECOIL編號</td>
 						<td style="width:100px;" align="center">廢料重量(KG)</td>
@@ -812,14 +812,15 @@
 							<input id="txtRadius.*" type="text" class="num" style="float:left;width:45%;"/>
 							<input id="txtLengthb.*" type="text" class="num" style="float:left;width:45%;"/>
 						</td>
-						<td title="PVC皮總用量M/KG">
+						<td title="PVC皮用量M/KG">
 							<input id="txtHard.*" type="text" class="num" style="float:left;width:95%;"/>
 							<input id="txtLengthb2.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
 						<td><input id="txtUno3.*" type="text" style="float:left;width:95%;"/></td>
-						<td title="PE膜型號用量M">
-							<input id="txtSource.*" type="text" style="float:left;width:95%;"/>
+						<td title="PE膜用量M/KG">
+							<input id="txtSource.*" type="text" style="float:left;width:95%;display:none;"/>
 							<input id="txtLengthc.*" type="text" class="num" style="float:left;width:95%;"/>
+							<input id="txtW06.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
 						<td title="RECOIL重量(KG)">
 							<input id="txtHweight.*" type="text" class="num" style="float:left;width:95%;"/>
