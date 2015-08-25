@@ -60,9 +60,8 @@
                 q_mask(bbmMask);
             }
 
-            function q_boxClose(s2) {///   q_boxClose 2/4
-                var
-                ret;
+            function q_boxClose(s2) {                
+            	var ret;
                 b_ret = getb_ret();
                 switch (b_pop) {
                     case q_name + '_s':
@@ -99,7 +98,6 @@
                 else
                     wrServer(t_noa);
             }
-
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
