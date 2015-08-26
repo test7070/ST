@@ -154,6 +154,11 @@
 					}
 					q_box("ordes_b_xy.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordes', "95%", "650px", q_getMsg('popOrde'));
 				});
+				
+				$('#txtPrice').change(function(){
+					sum();
+				});
+				$('#txtMo_0').val("123")
 			}
 
 			function q_gtPost(t_name) {
@@ -187,6 +192,8 @@
 								$('#txtProduct').val(b_ret[0].product);
 								$('#txtSpec').val(b_ret[0].spec);
 								$('#txtTotal').val(b_ret[0].mount);
+								$('#txtPrice').val(b_ret[0].price);
+								$('#txtMo').val(b_ret[0].mo);
 								$('#txtMemo').val(b_ret[0].memo);
 							}
 						}
@@ -400,6 +407,18 @@
 			        break;
 			   	}
 			}
+		
+			function sum() {
+				var t_price=0,t_mount=0,t_total=0;
+				var tranPrice=0;tranTotal=0;
+				for (var j = 0; j < q_bbsCount; j++) {
+					t_mount = dec($('#txtMount_' + j).val());
+					t_price = dec($('#txtPrice_' + j).val());
+					t_total = q_add(t_total,round(q_mul(t_price,t_mount), 0));
+					$('#txtMo_' + j).val(round(q_mul(t_price,t_mount), 0));
+				}
+				$('#txtMo').val(t_total);
+			}
 			
 		</script>
 		<style type="text/css">
@@ -606,6 +625,10 @@
 					<tr>
 						<td><span> </span><a id="lblMount" class="lbl" >數量</a></td>
 						<td><input id="txtTotal" type="text" class="txt num c1"/></td>
+						<td><span> </span><a id="lblPrice" class="lbl" >單價</a></td>
+						<td><input id="txtPrice" type="text" class="txt num c1"/></td>
+						<td><span> </span><a id="lblMoney" class="lbl" >總計</a></td>
+						<td><input id="txtMo" type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl" > </a></td>

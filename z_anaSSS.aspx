@@ -22,6 +22,7 @@
 				_q_boxClose();
 				q_getId();
 				q_gf('', 'z_anaSSS');
+				 
 			});  
             function q_gfPost() {
             	$('#q_report').q_report({
@@ -47,32 +48,65 @@
 						type :'1',//[8][9]
 						name : 'Mon'
 					},{
-						type:'8',//[10]
-						name:'clerk',
-						value :['在職員工','離職員工']
+						type :'1',//[10][11]
+						name : 'Bmon'
 					},{
-						type:'8',//[11]
+						type:'8',//[12]
 						name:'sex',
 						value :['男','女']
 					},{
-						type :'1',//[12][13]
+						type :'1',//[13][14]
 						name : 'yage'
-					}]});
-					
-			
-					
+					},{
+						type :'1',//[15][16]
+						name : 'Smon'
+					},{
+						type:'8',//[17]
+						name:'clerk',
+						value :['現況在職','現況離職']
+					}, {
+                        type : '2',//[18][19]
+                        name : 'sssno',
+                        dbf : 'sss',
+                        index : 'noa,namea',
+                        src : 'sss_b.aspx'
+                    },{
+                            type : '8',//[20]
+                            name : 'xoption',
+                        value : ["in@在職", "out@離職"]
+                    },  {
+                        type : '5',//[21]
+                        name : 'xsort',
+                        value : ["noa@編號", "partno@部門"]
+                    },{
+                        type : '0',//[22]
+                        name : 'accy',
+                        value : q_getId()[4]
+                    }, {
+                        type : '0',//[23]
+                        name : 'namea',
+                        value : r_name
+                    }
+					]});
+					$('#chkXoption').children('input').attr('checked', 'checked');
+					$('#chkSex').children('input').attr('checked', 'checked');
+					$('#chkClerk').children('input').attr('checked', 'checked');
 					q_langShow();
 					q_popAssign();
 					
 					$(txtAge1).val('20');
 					$(txtAge2).val('50');
 					$(txtWage1).val('1');
-					$(txtWage2).val('15');
+					$(txtWage2).val('10');
 					$(txtRage).val('5');
 					$(txtRwage).val('1');
 					
 					$('#txtMon1').mask('999/99');
                 	$('#txtMon2').mask('999/99');
+                	$('#txtSmon1').mask('999/99');
+                	$('#txtSmon2').mask('999/99');
+                	$('#txtBmon1').mask('99');
+                	$('#txtBmon2').mask('99');
                 	
                 	$('#txtYage1').mask('99年99月');
                 	$('#txtYage2').mask('99年99月');
@@ -80,7 +114,9 @@
                 	$('#txtYage2').val('05年00月')
 				
 					
-					
+					$('#txtBmon1').val('01');
+                	$('#txtBmon2').val('12');
+                	
 				var t_date, t_year, t_month, t_day;
 				t_date = new Date();
 				t_date.setDate(1);
@@ -91,7 +127,7 @@
 				t_day = t_date.getUTCDate();
 				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
 				$('#txtMon1').val(t_year + '/' + t_month);
-
+				$('#txtSmon1').val(t_year + '/' + t_month);
 				t_date = new Date();
 				t_date.setDate(35);
 				t_date.setDate(0);
@@ -102,7 +138,7 @@
 				t_day = t_date.getUTCDate();
 				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
 				$('#txtMon2').val(t_year + '/' + t_month);
-					
+				$('#txtSmon2').val(t_year + '/' + t_month);	
 					q_getFormat();
 					
              }
