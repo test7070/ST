@@ -55,7 +55,7 @@
                 q_getFormat();
                 bbmMask = [['txtMon', r_picm]];
                 bbsMask = [];
-                q_cmbParse("cmbMech", t_mech, 's');
+                q_cmbParse("cmbMechno", t_mech, 's');
                 q_mask(bbmMask);
             }
 
@@ -369,11 +369,11 @@
 					<td><input id="txtMon" type="text" class="txt c1"/></td>
 				</tr>
 				<tr>
-					<td><span> </span><a class="lblWages" >直接人工</a></td>
+					<td><span> </span><a id="lblWages" class="lbl">直接人工</a></td>
 					<td><input id="txtWages" type="text" class="txt num c1"/> </td>
 				</tr>
 				<tr>
-					<td><span> </span><a class="lblMakeless" >製造費用</a></td>
+					<td><span> </span><a id="lblMakeless" class="lbl">製造費用</a></td>
 					<td><input id="txtMakeless" type="text" class="txt num c1"/> </td>
 				</tr>
 			</table>
@@ -386,7 +386,11 @@
 						</td>
 						<td style="width:20px;"> </td>
 						<td style="width:100px;" align="center">機台</td>
-						<td style="width:100px;" align="center">費用</td>
+						<td style="width:150px;" align="center">品名</td>
+						<td style="width:150px;" align="center">科目</td>
+						<td style="width:80px;" align="center">數量</td>
+						<td style="width:80px;" align="center">單價</td>
+						<td style="width:80px;" align="center">費用小計</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center" style="display: none;">
@@ -394,7 +398,12 @@
 							<input id="txtNoq.*" type="text" style="display:none;"/>
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						<td><select id="cmbMechno" style="float:left;width:95%;"> </select></td>
+						<td><select id="cmbMechno.*" style="float:left;width:95%;"> </select></td>
+						<td>
+							<input id="txtProductno.*" type="text" style="float:left;width:95%;"/> 
+							<input id="txtProduct.*" type="text" style="float:left;width:95%;"/>
+							<input id="btnProduct.*" type="button" style="display:none;"/>
+						</td>
 						<td><input id="txtMoney.*" type="text" class="num" style="float:left;width:95%;"/> </td>
 					</tr>
 				</table>
