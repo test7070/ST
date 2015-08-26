@@ -32,7 +32,7 @@
 						}
 						//月結客戶刪除業務應收帳款總表>>>月結會不知道帳要沖到哪一個業務
 						if(q_getPara('sys.project').toUpperCase()!='XY'){
-							var delete_report=0;
+							var delete_report=999;
 							for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
 								if($('#q_report').data().info.reportData[i].report=='z_umm12')
 									delete_report=i;
@@ -52,7 +52,7 @@
 						$('#Xcoin').hide();
 					
 					if(q_getPara('sys.project').toUpperCase()!='YC'){
-						var delete_report=0;
+						var delete_report=999;
 						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
 							if($('#q_report').data().info.reportData[i].report=='z_umm15')
 								delete_report=i;
@@ -62,7 +62,7 @@
 					}
 					
 					if(!(q_getPara('sys.project').toUpperCase()=='YC' || q_getPara('sys.project').toUpperCase()=='FE' || q_getPara('sys.project')=='1')){
-						var delete_report=0;
+						var delete_report=999;
 						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
 							if($('#q_report').data().info.reportData[i].report=='z_umm16')
 								delete_report=i;
