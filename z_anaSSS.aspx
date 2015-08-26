@@ -84,7 +84,7 @@
                         value : q_getId()[4]
                     }, {
                         type : '0',//[23]
-                        name : 'namea',
+                        name : 'name',
                         value : r_name
                     }
 					]});

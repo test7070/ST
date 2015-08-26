@@ -158,6 +158,9 @@
 				$('#txtPrice').change(function(){
 					sum();
 				});
+				$('#txtMount').change(function(){
+					sum();
+				});
 				$('#txtMo_0').val("123")
 			}
 
@@ -406,14 +409,15 @@
 			   			
 			        break;
 			   	}
+			   	
 			}
 		
 			function sum() {
 				var t_price=0,t_mount=0,t_total=0;
-				var tranPrice=0;tranTotal=0;
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_mount = dec($('#txtMount_' + j).val());
 					t_price = dec($('#txtPrice_' + j).val());
+					
 					t_total = q_add(t_total,round(q_mul(t_price,t_mount), 0));
 					$('#txtMo_' + j).val(round(q_mul(t_price,t_mount), 0));
 				}
@@ -660,7 +664,7 @@
 						<td style="width:150px;"><a id='lblMoney'>金額</a></td>
 						<td style="width:150px;"><a id='lblNeed'>製造要求</a></td>
 						<td style="width:150px;"><a id='lblMemo_s'>備註</a></td>
-						<td style="width:150px;"><a id='lblGmount'>耗用量</a></td>
+						<td style="width:150px;"><a id='lblGmount'>單據編號</a></td>
 						<td style="width:50px;"><a id='lblPays'>請款</a></td>
 					</tr>
 					<tr style='background:#cad3ff;'>
@@ -688,7 +692,7 @@
 						<td><input id="txtMo.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtNeed.*" type="text" class="txt c1"/></td>
 						<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
-						<td><input id="txtGweight.*" type="text" class="txt c1 num"/></td>
+						<td><input id="txtNoa.*" type="text" class="txt c1 num"/></td>
 						<td><input id="chkCut.*" type="checkbox" class="txt c1"  style="width: 50%;"/></td>
 					</tr>
 				</table>
