@@ -30,8 +30,10 @@
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Noa';
-            aPop = new Array();
-			
+            aPop = new Array(
+				['txtProductno_', 'btnProduct_', 'chgitem', 'noa,item,acc1,acc2', 'txtProductno_,txtProduct_,txtAcc1_,txtAcc2_', 'chgitem_b.aspx']
+				['txtAcc1_', 'btnAcc1_', 'acc', 'acc1,acc2', 'txtAcc1_,txtAcc2_', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]);
+			var t_mech = '';
 			function sum() {
                 
             }
@@ -55,8 +57,8 @@
                 q_getFormat();
                 bbmMask = [['txtMon', r_picm]];
                 bbsMask = [];
-                q_cmbParse("cmbMechno", t_mech, 's');
                 q_mask(bbmMask);
+                q_cmbParse("cmbMechno", t_mech, 's');
             }
 
             function q_boxClose(s2) {                
@@ -75,7 +77,7 @@
                     case 'mech':
                         var as = _q_appendData("mech", "", true);
                         t_mech = '';
-                        if(as[0]!=null){
+                        if(as[0]!=undefined){
                         	for(var i=0;i<as.length;i++){
                         		t_mech += (t_mech.length>0?',':'') + as[i].noa+'@'+as[i].mech;
                         	}	
@@ -107,6 +109,18 @@
                 for (var i = 0; i < q_bbsCount; i++) {
 					$('#lblNo_' + i).text(i + 1);
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+					/*	$('#txtProductno_' + i).bind('contextmenu', function(e) {
+                            /滑鼠右鍵/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            $('#btnProduct_'+n).click();
+                        });
+                        $('#txtAcc1_' + i).bind('contextmenu', function(e) {
+                            /滑鼠右鍵/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtAcc1_', '');
+                            $('#btnAcc1_'+n).click();
+                        });*/
 					}
 				}
                 _bbsAssign();
@@ -404,6 +418,13 @@
 							<input id="txtProduct.*" type="text" style="float:left;width:95%;"/>
 							<input id="btnProduct.*" type="button" style="display:none;"/>
 						</td>
+						<td>
+							<input id="txtAcc1.*" type="text" style="float:left;width:95%;"/> 
+							<input id="txtAcc2.*" type="text" style="float:left;width:95%;"/>
+							<input id="btnAcc1.*" type="button" style="display:none;"/>
+						</td>
+						<td><input id="txtMount.*" type="text" class="num" style="float:left;width:95%;"/> </td>
+						<td><input id="txtPrice.*" type="text" class="num" style="float:left;width:95%;"/> </td>
 						<td><input id="txtMoney.*" type="text" class="num" style="float:left;width:95%;"/> </td>
 					</tr>
 				</table>
