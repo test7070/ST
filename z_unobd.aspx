@@ -21,7 +21,7 @@
 				
 				$('#q_report').click(function(e) {
 					if(q_getPara('sys.project').toUpperCase()!='RA'){
-						var delete_report=0;
+						var delete_report=999;
 							for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
 								if($('#q_report').data().info.reportData[i].report=='z_unobd04')
 									delete_report=i;

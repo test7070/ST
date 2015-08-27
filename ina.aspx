@@ -219,6 +219,8 @@
 							sum();
 						});
 					}
+					
+				
 				}
 				_bbsAssign();
 				HiddenTreat()
@@ -611,6 +613,7 @@
 					<td align="center" style="width:9%;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:10%;"><a id='lblTotal_s'> </a></td>
 					<td align="center"><a id='lblMemo_st'> </a></td>
+				
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
@@ -632,6 +635,7 @@
 						<input id="txtNoq.*" type="text" style="display:none;" />
 						<input id="recno.*" type="text" style="display:none;" />
 					</td>
+					
 				</tr>
 			</table>
 		</div>
