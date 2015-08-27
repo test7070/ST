@@ -1042,6 +1042,7 @@
 					</td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:120px;"><a id='lblPayno'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblProj'>專案代號</a></td>
 					<td align="center" style="width:90px;"><a id='lblDatea_s'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblChgitem'> </a></td>
 					<!--<td align="center" style="width:60px;">#<a id='lblKind'> </a></td>-->
@@ -1050,7 +1051,7 @@
 					<td align="center" style="width:120px;"><a id='lblInvonos'> </a><BR><a id='lblTaxs'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblVtypes'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>				
 					<td align="center" style="width:120px;display:none;"><a id='lblBal'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1060,6 +1061,7 @@
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td><input id="txtPayno.*" type="text"  style="width: 95%;"/></td>
+					<td><input id="txtProj.*" type="text" style="float: left;"></td>
 					<td><input id="txtDatea.*" type="text"  style="width: 95%;"/></td>
 					<td>
 						<input id="txtChgitemno.*" type="text" style="text-align: left; width: 80%;" />
@@ -1087,6 +1089,7 @@
 						<input type="text" id="txtAcc1.*"  style="float: left;width:40%;"/>
 						<input type="text" id="txtAcc2.*"  style="float: left;width:40%;"/>
 					</td>
+				
 					<td style="display:none"><input id="txtBal.*" type="text" style="width: 95%;" /></td>
 				</tr>
 			</table>
