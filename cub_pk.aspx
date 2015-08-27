@@ -576,8 +576,8 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td style="display:none;"></td>
-						<td style="display:none;"></td>
+						<td></td>
+						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
