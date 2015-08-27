@@ -706,8 +706,8 @@
 						<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 					</td>
 					<td style="width:20px;"></td>
-					<td style="width:120px; text-align: center;">原批號</td>
-					<td style="width:200px; text-align: center;">原批號領料數</td>
+					<td style="width:200px; text-align: center;">原批號</td>
+					<td style="width:120px; text-align: center;">原批號領料數</td>
 					<td style="width:120px; text-align: center;">領料重</td>
 					<td style="width:200px; text-align: center;">裁剪備註</td>
 					<td style="width:120px; text-align: center;">餘料寬</td>
