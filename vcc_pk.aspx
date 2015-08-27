@@ -448,8 +448,8 @@
 							$('#txtOrdeno').val(b_ret[0].noa);
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
 							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle,txtItem', b_ret.length, b_ret
-							, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style,unit2', 'txtProductno');
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle,txtItem,txtClass', b_ret.length, b_ret
+							, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style,unit2,class', 'txtProductno');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							for (var i = 0; i < AddRet.length; i++) {
 								$('#txtMount_' + i).change();
