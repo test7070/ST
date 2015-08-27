@@ -40,6 +40,7 @@
 				['txtProductno', 'lblProduct', 'ucc', 'noa,product,spec', 'txtProductno,txtProduct,txtSpec', 'ucc_b.aspx'],
 				['txtTggno_', '', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', ""],
 				['txtProcessno_', 'btnProcessno_', 'process', 'noa,process,tggno,tgg', 'txtProcessno_,txtProcess_,txtTggno_,txtTgg_', 'process_b.aspx'],
+				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucc_b.aspx'],
 				['txtProductno__', 'btnProductno__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
 			);
 
@@ -133,7 +134,7 @@
 				bbmMask = [['txtDatea', r_picd], ['txtBdate', r_picd], ['txtEdate', r_picd]];
 				bbsMask = [['txtDate2', r_picd], ['txtDatea', r_picd]];
 				q_mask(bbmMask);
-				bbsNum = [['txtMount', 15, q_getPara('vcc.mountPrecision'), 1]];
+				bbsNum = [['txtMount', 15, q_getPara('vcc.mountPrecision'), 1],['txtPrice', 15, q_getPara('vcc.pricePrecision'), 1],['txtMo', 15, 0, 1],['txtGweight', 15, q_getPara('vcc.mountPrecision'), 1]];
 				bbtNum = [['txtMount', 15, q_getPara('vcc.mountPrecision'), 1]];
 				
 				//$('title').text("連續製令單"); //IE8會有問題
@@ -161,6 +162,49 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'stpost_rc2_0':
+						var as = _q_appendData("view_rc2", "", true);
+						for(var i=0 ; i<as.length ; i++){
+							q_func('rc2_post.post', as[i].accy + ',' + as[i].noa + ',0');
+						}
+						q_gt('view_ina', "where=^^product='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "stpost_ina_0");
+						break;
+					case 'stpost_rc2_1':
+						var as = _q_appendData("view_rc2", "", true);
+						for(var i=0 ; i<as.length ; i++){
+							q_func('rc2_post.post', as[i].accy + ',' + as[i].noa + ',1');
+						}
+						q_gt('view_ina', "where=^^product='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "stpost_ina_1");
+						break;
+					case 'stpost_rc2_3':
+						var as = _q_appendData("view_rc2", "", true);
+						for(var i=0 ; i<as.length ; i++){
+							q_func('rc2_post.post', as[i].accy + ',' + as[i].noa + ',0');
+						}
+						q_gt('view_ina', "where=^^product='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "stpost_ina_3");
+						break;	
+					case 'stpost_ina_0':
+						var as = _q_appendData("view_ina", "", true);
+						for(var i=0 ; i<as.length ; i++){
+							q_func('ina_post.post', as[i].accy + ',' + as[i].noa + ',0');
+						}
+						//執行txt
+						q_func('qtxt.query.cubs2rc2_rb_0', 'cub.txt,cubs2rc2_rb,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI(q_getPara('sys.key_rc2'))+ ';' + encodeURI(q_getPara('sys.key_ina')) );
+						break;
+					case 'stpost_ina_1':
+						var as = _q_appendData("view_ina", "", true);
+						for(var i=0 ; i<as.length ; i++){
+							q_func('ina_post.post', as[i].accy + ',' + as[i].noa + ',1');
+						}
+						break;
+					case 'stpost_ina_3':
+						var as = _q_appendData("view_ina", "", true);
+						for(var i=0 ; i<as.length ; i++){
+							q_func('ina_post.post', as[i].accy + ',' + as[i].noa + ',0');
+						}
+						//執行txt
+						q_func('qtxt.query.cubs2rc2_rb_3', 'cub.txt,cubs2rc2_rb,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI(q_getPara('sys.key_rc2'))+ ';' + encodeURI(q_getPara('sys.key_ina')) );
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -175,7 +219,24 @@
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
 				
-			}s
+				if(!emp($('#txtNoa').val())){
+					q_gt('view_rc2', "where=^^postname='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "stpost_rc2_0");
+				}
+			}
+			
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'qtxt.query.cubs2rc2_rb_0':
+						q_func('qtxt.query.cubs2rc2_rb_1', 'cub.txt,cubs2rc2_rb,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;' + encodeURI(q_getPara('sys.key_rc2'))+ ';' + encodeURI(q_getPara('sys.key_ina')) );
+						break;
+					case 'qtxt.query.cubs2rc2_rb_1':
+						q_gt('view_rc2', "where=^^postname='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "stpost_rc2_1");
+						break;
+					case 'qtxt.query.cubs2rc2_rb_3':
+						_btnOk($('#txtNoa').val(), bbmKey[0], ( bbsHtm ? bbsKey[1] : ''), '', 3)
+						break;
+				}
+			}
 
 			function q_boxClose(s2) {
 				var ret;
@@ -415,7 +476,15 @@
 			}
 
 			function btnDele() {
-				_btnDele();
+				//_btnDele();
+				if (emp($('#txtNoa').val()))
+					return;
+					
+				if (!confirm(mess_dele))
+					return;
+				q_cur = 3;
+				
+				q_gt('view_rc2', "where=^^postname='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "stpost_rc2_3");
 			}
 
 			function btnCancel() {
@@ -715,20 +784,18 @@
 							<input id="txtNoq.*" type="text" style="display: none;"/>
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						
 						<td><input id="txtDatea.*" type="text" class="txt c1"/></td>
 						<td>
 							<input id="txtTggno.*" type="text" class="txt c1" style="width: 70%;"/>
 							<input class="btn"  id="btnTggno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
 						<td><input id="txtTgg.*" type="text" class="txt c1"/></td>
-						
 						<td>
 							<input id="txtProcessno.*" type="text" class="txt c1" style="width: 70%;"/>
 							<input class="btn"  id="btnProcessno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
-						<td><input id="txtProcess.*" type="text" class="txt c1"/></td>
-						<td><input id="txtUnit.*" type="text" class="txt c1 num"/></td>
+						<td><input id="txtProduct.*" type="text" class="txt c1"/></td>
+						<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 						<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtPrice.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtMo.*" type="text" class="txt c1 num"/></td>
@@ -738,6 +805,7 @@
 							<input id="txtNoa.*" type="text" class="txt c1 num" style="color:blue;width: 90%;text-align:left;"/>
 						</td>
 						<td><input id="chkCut.*" type="checkbox" class="txt c1"  style="width: 50%;"/></td>
+
 					</tr>
 				</table>
 			</div>

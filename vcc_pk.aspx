@@ -50,7 +50,7 @@
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,productno,class,spec,style,product', '0txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,productno,class,spec,style,product', '0txtUno_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 				, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
@@ -125,7 +125,7 @@
 						t_moneys = q_float('txtTotal_' + j);
 						
 						
-						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							t_prices = round(q_div(t_moneys, t_weights),3);
 							if (t_float != 0) 
 								t_moneyus = q_add(t_moneyus,q_float('txtPrice_' + j) * t_weights);
@@ -144,7 +144,7 @@
 						t_weights = q_float('txtWeight_' + j);
 						t_prices = q_float('txtPrice_' + j);
 						t_mounts = q_float('txtMount_' + j);
-						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							t_moneys = q_mul(t_prices, t_weights);
 						} else {
 							t_moneys = q_mul(t_prices, t_mounts);
@@ -972,8 +972,8 @@
 				});
 				//補NOQ,假如NOQ有空白的就當作有做插入,全部重排
 				var isExist = false;
-				for(var i=0;i<q_bbsCount;i++){
-					if($('#txtNoq_'+i).val().length==0){
+				for(var i=0;i<q_bbsCount-1;i++){
+					if($('#txtNoq_'+i).val().length==0 && $('#txtNoq_'+(i+1)).val().length!=0){
 						isExist = true;						
 						break;
 					}
@@ -991,6 +991,16 @@
 						if(abbsNow[i].noa==t_noa)
 							abbsNow.splice(i,1);
 					}*/
+				}
+				//檢查NOQ是否重覆
+				for(var i=0;i<q_bbsCount-1;i++){
+					for(var j=1;j<q_bbsCount;j++){
+						if(i!=j && $('#txtNoq_'+i).val().length!=0 && $('#txtNoq_'+i).val()==$('#txtNoq_'+j).val()){
+							alert('序【'+$('#txtNoq_'+i).val()+'】重複請檢查!');
+							Unlock(1);
+							return;
+						}						
+					}
 				}
 
 				$('#txtOrdeno').val(GetOrdenoList());
