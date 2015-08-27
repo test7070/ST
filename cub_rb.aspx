@@ -850,7 +850,7 @@
 			</div>
 		</div>
 		<input id="q_sys" type="hidden" />
-		<div id="dbbt" class='dbbt'>
+		<div id="dbbt" class='dbbt' style="display: none;">
 			<table id="tbbt" class="tbbt">
 				<tr class="head" style="color:white; background:#003366;">
 					<td style="width:20px;">
