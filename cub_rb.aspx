@@ -406,6 +406,11 @@
 					as[bbsKey[1]] = '';
 					return;
 				}
+				
+				if(!as['product'] && !as['productno'] && !as['memo']){
+					as[bbsKey[1]]='';
+					return;
+				}
 				q_nowf();
 				as['noa'] = abbm2['noa'];
 				return true;
@@ -579,6 +584,7 @@
 		<style type="text/css">
 			#dmain {
 				/*overflow: hidden;*/
+				width: 1260px;
 			}
 			.dview {
 				float: left;
@@ -672,7 +678,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 1260px;
+				width: 1480px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -808,14 +814,14 @@
 						<td style="width:100px;"><a id='lblDatea_s'>帳款日期</a></td>
 						<td style="width:120px;"><a id='lblTggno_s'>廠商編號</a></td>
 						<td style="width:150px;"><a id='lblTgg_s'>廠商名稱</a></td>
+						<td style="width:60px;"><a id='lblNeed_s'>製程</a></td>	
 						<td style="width:150px;"><a id='lblProductno_s'>產品編號</a></td>
-						<td style="width:200px;"><a id='lblProduct_s'>產品名稱</a></td>	
+						<td style="width:200px;"><a id='lblProduct_s'>產品名稱</a></td>						
 						<td style="width:40px;"><a id='lblUnit_s'>單位</a></td>			
 						<td style="width:100px;"><a id='lblMount_s'>數量</a></td>
 						<td style="width:100px;"><a id='lblPrice_s'>單價</a></td>
-						<td style="width:120px;"><a id='lblMoney_s'>金額</a></td>
-						<td style="width:150px;display:none;"><a id='lblNeed_s'>製造要求</a></td>
-						<td style="width:150px;"><a id='lblMemo_s'>備註</a></td>
+						<td style="width:120px;"><a id='lblMoney_s'>金額</a></td>					
+						<td style="width:250px;"><a id='lblMemo_s'>備註</a></td>
 						<td style="width:150px;"><a id='lblOrdeno_s'>進貨單編號</a></td>
 						<td style="width:40px;"><a id='lblPay_s'>請款</a></td>
 					</tr>
@@ -826,21 +832,24 @@
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 						<td><input id="txtDatea.*" type="text" class="txt c1"/></td>
+						
 						<td>
 							<input id="txtTggno.*" type="text" class="txt c1" style="width: 70%;"/>
 							<input class="btn"  id="btnTggno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
 						<td><input id="txtTgg.*" type="text" class="txt c1"/></td>
+						<td ><input id="txtNeed.*" type="text" class="txt   c1" /></td>
 						<td>
-							<input id="txtProcessno.*" type="text" class="txt c1" style="width: 70%;"/>
+							<input id="txtProductno.*" type="text" class="txt c1" style="width: 70%;"/>
 							<input class="btn"  id="btnProcessno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
 						<td><input id="txtProduct.*" type="text" class="txt c1"/></td>
+						
 						<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
 						<td><input id="txtMount.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtPrice.*" type="text" class="txt c1 num"/></td>
 						<td><input id="txtMo.*" type="text" class="txt c1 num"/></td>
-						<td style="display:none;"><input id="txtNeed.*" type="text" class="txt c1"/></td>
+						
 						<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
 						<td><input id="txtOrdeno.*" type="text" class="txt c1 num" style="color:blue;width: 90%;text-align:left;"/></td>
 						<td><input id="chkCut.*" type="checkbox" class="txt c1"  style="width: 50%;"/></td>

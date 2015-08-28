@@ -47,7 +47,7 @@
 				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
 				t_day = t_date.getUTCDate();
 				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-				$('#txtdate').val(t_year + '/' + t_month);
+				$('#txtXdate').val(t_year + '/' + t_month);
 
 					
 				q_getFormat();
