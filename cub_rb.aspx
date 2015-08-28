@@ -406,6 +406,11 @@
 					as[bbsKey[1]] = '';
 					return;
 				}
+				
+				if(!as['product'] && !as['productno'] && !as['memo']){
+					as[bbsKey[1]]='';
+					return;
+				}
 				q_nowf();
 				as['noa'] = abbm2['noa'];
 				return true;
@@ -579,6 +584,7 @@
 		<style type="text/css">
 			#dmain {
 				/*overflow: hidden;*/
+				width: 1260px;
 			}
 			.dview {
 				float: left;
@@ -832,7 +838,7 @@
 						</td>
 						<td><input id="txtTgg.*" type="text" class="txt c1"/></td>
 						<td>
-							<input id="txtProcessno.*" type="text" class="txt c1" style="width: 70%;"/>
+							<input id="txtProductno.*" type="text" class="txt c1" style="width: 70%;"/>
 							<input class="btn"  id="btnProcessno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
 						<td><input id="txtProduct.*" type="text" class="txt c1"/></td>
