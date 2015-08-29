@@ -154,6 +154,10 @@
 							}
 						}
 					}
+					if(q_getPara('sys.project').toUpperCase()=='XY'){
+						var t_where =" noa='"+$('#txtTggno').val()+"'";
+						q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytggdata");
+					}
 				});
 				$('#txtAddr').change(function() {
 					var t_tggno = trim($(this).val());
@@ -241,6 +245,12 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'xytggdata':
+						var as = _q_appendData("tgg", "", true);
+						if (as[0] != undefined) {
+							$('#cmbTaxtype').val(as[0].conn);
+						}
+						break;
 					case 'GetOrdct':
 						var as = _q_appendData("ordct", "", true);
 						if(as.length > 0){
@@ -758,6 +768,10 @@
 						if (!emp($('#txtTggno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
+							if(q_getPara('sys.project').toUpperCase()=='XY'){
+								var t_where =" noa='"+$('#txtTggno').val()+"'";
+								q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytggdata");
+							}
 						}
 						break;
 				}

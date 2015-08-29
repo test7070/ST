@@ -19,9 +19,9 @@
 			q_tables = 's';
 			var q_name = "vcce";
 			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtSales','txtDriver','txtCardeal','txtWeight','txtTotal'];
-			var q_readonlys = ['txtCustno','txtComp','txtOrdeno','txtOdate','txtAdjweight'];
+			var q_readonlys = ['txtCustno','txtComp','txtOrdeno','txtOdate','txtAdjweight','txtEcount'];
 			var bbmNum = [['txtWeight', 15, 0, 1],['txtTotal', 15, 0, 1]];
-			var bbsNum = [['txtAdjcount', 10, 0, 1], ['txtAdjweight', 10, 0, 1]];
+			var bbsNum = [['txtAdjcount', 10, 0, 1], ['txtAdjweight', 10, 0, 1], ['txtEcount', 10, 0, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_sqlCount = 6;
@@ -75,7 +75,6 @@
 						t_edate='999/99/99'
 					}
 					t_where+=" and (datea between '"+t_bdate+"' and '"+t_edate+"')";
-					
 					
 					q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcc', "95%", "95%", $('#btnVccimport').val());
 				});
@@ -135,7 +134,7 @@
                                 }
                             }
 							
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtCustno,txtComp,txtOdate,txtAdjweight', b_ret.length, b_ret, 'noa,custno,comp,datea,total', 'txtOrdeno');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtCustno,txtComp,txtOdate,txtAdjweight,txtEcount', b_ret.length, b_ret, 'noa,custno,comp,datea,total,unpay', 'txtOrdeno');
 						}
 						sum();
 						break;
@@ -190,7 +189,7 @@
 									as_vcc[i].total=-1*dec(as_vcc[i].total);
 								}
                             }
-							q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtCustno,txtComp,txtOdate,txtAdjweight', as_vcc.length, as_vcc, 'noa,custno,comp,datea,total', 'txtOrdeno');
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtCustno,txtComp,txtOdate,txtAdjweight,txtEcount', as_vcc.length, as_vcc, 'noa,custno,comp,datea,total,unpay', 'txtOrdeno');
 						}else{
 							alert('出貨單已派車或無出貨資料!!');
 						}
@@ -247,7 +246,7 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							if($(this).prop('checked')){
-								q_tr('txtAdjcount_'+b_seq,q_float('txtAdjweight_'+b_seq));
+								q_tr('txtAdjcount_'+b_seq,q_float('txtEcount_'+b_seq));
 							}
 							sum();
 						});
@@ -259,7 +258,7 @@
 						if($('#chkEnda').prop('checked')){
 							for (var j = 0; j < q_bbsCount; j++) {
 								$('#chkEnda_'+j).prop('checked',true);
-								q_tr('txtAdjcount_'+j,q_float('txtAdjweight_'+j));
+								q_tr('txtAdjcount_'+j,q_float('txtEcount_'+j));
 							}
 						}else{
 							for (var j = 0; j < q_bbsCount; j++) {
@@ -327,7 +326,8 @@
 						$('#txtAdjcount_'+j).val(0);
 					}
 					
-					t_weight=q_add(t_weight,q_float('txtAdjweight_'+j));
+					//t_weight=q_add(t_weight,q_float('txtAdjweight_'+j));
+					t_weight=q_add(t_weight,q_float('txtEcount_'+j));
 					t_total=q_add(t_total,q_float('txtAdjcount_'+j));
 				}
 				q_tr('txtWeight',t_weight);
@@ -688,6 +688,7 @@
 						<td align="center" style="width:10%;">出貨單號</td>
 						<td align="center" style="width:10%;">出貨日期</td>
 						<td align="center" style="width:10%;">出貨金額</td>
+						<td align="center" style="width:10%;">未收金額</td>
 						<td align="center" style="width:6%;">已送貨<input id="chkEnda" type="checkbox"/></td>
 						<td align="center" style="width:10%;">已收金額</td>
 						<td align="center"><a id='lblMemo_s'> </a></td>
@@ -702,6 +703,7 @@
 						<td><input class="txt c1" id="txtOrdeno.*" type="text" /></td>
 						<td><input class="txt c1" id="txtOdate.*" type="text" /></td>
 						<td><input class="txt num c1" id="txtAdjweight.*" type="text"/></td>
+						<td><input class="txt num c1" id="txtEcount.*" type="text"/></td>
 						<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 						<td><input class="txt num c1" id="txtAdjcount.*" type="text" /></td>
 						<td><input class="txt c1" id="txtMemo.*" type="text" /></td>

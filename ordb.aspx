@@ -215,6 +215,10 @@
 				});
 				$('#txtTggno').change(function() {
 					loadCustAddr($.trim($(this).val()));
+					if(q_getPara('sys.project').toUpperCase()=='XY'){
+						var t_where =" noa='"+$('#txtTggno').val()+"'";
+						q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytggdata");
+					}
 				});
 				$('#btnOrdc').click(function(e) {
 					$('#exportordc').toggle();
@@ -306,6 +310,12 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'xytggdata':
+						var as = _q_appendData("tgg", "", true);
+						if (as[0] != undefined) {
+							$('#cmbTaxtype').val(as[0].conn);
+						}
+						break;
 					case 'ucctgg':
 						var as = _q_appendData("ucctgg", "", true);
 						var ass = _q_appendData("ucctggs", "", true);
@@ -795,6 +805,10 @@
 						break;
 					case 'txtTggno':
 						loadCustAddr($.trim($('#txtTggno').val()));
+						if(q_getPara('sys.project').toUpperCase()=='XY'){
+							var t_where =" noa='"+$('#txtTggno').val()+"'";
+							q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytggdata");
+						}
 						break;
 					default:
 						break;
