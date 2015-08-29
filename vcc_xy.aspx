@@ -259,6 +259,7 @@
 								b_ret[i].tranmoney3=0;
 								b_ret[i].tranmoney2=0;
 								b_ret[i].width=0;
+								b_ret[i].dime=b_ret[i].mount;
 								if(b_ret[i].source=='2'){//庫出
 									b_ret[i].tranmoney3=b_ret[i].mount;
 									b_ret[i].mount=0;
@@ -269,8 +270,8 @@
 								}
 							}
 								
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtTranmoney2,txtTranmoney3,txtPrice,txtMemo,txtOrdeno,txtNo2,cmbItemno', b_ret.length, b_ret
-							, 'productno,product,spec,unit,mount,width,tranmoney2,tranmoney3,price,memo,noa,no2,source', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtDime,txtMount,txtWidth,txtTranmoney2,txtTranmoney3,txtPrice,txtMemo,txtOrdeno,txtNo2,cmbItemno', b_ret.length, b_ret
+							, 'productno,product,spec,unit,dime,mount,width,tranmoney2,tranmoney3,price,memo,noa,no2,source', 'txtProductno,txtProduct,txtSpec');
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
