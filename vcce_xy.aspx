@@ -76,7 +76,6 @@
 					}
 					t_where+=" and (datea between '"+t_bdate+"' and '"+t_edate+"')";
 					
-					
 					q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcc', "95%", "95%", $('#btnVccimport').val());
 				});
 
