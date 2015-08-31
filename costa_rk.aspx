@@ -75,14 +75,14 @@
             function q_gtPost(t_name) {
                 switch (t_name) {
                     case 'mech':
-                        var as = _q_appendData("mech", "", true);
+                      /*  var as = _q_appendData("mech", "", true);
                         t_mech = '';
                         if(as[0]!=undefined){
                         	for(var i=0;i<as.length;i++){
                         		t_mech += (t_mech.length>0?',':'') + as[i].noa+'@'+as[i].mech;
                         	}	
-                        }
-                        q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+                        }*/
+                        q_gt(q_name, q_content, q_sqlCount, 1, 0);
                         break;
                     case q_name:
                         if (q_cur == 4)
@@ -106,10 +106,10 @@
             }
 
             function bbsAssign() {
-                for (var i = 0; i < q_bbsCount; i++) {
+                /*for (var i = 0; i < q_bbsCount; i++) {
 					$('#lblNo_' + i).text(i + 1);
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
-					/*	$('#txtProductno_' + i).bind('contextmenu', function(e) {
+						$('#txtProductno_' + i).bind('contextmenu', function(e) {
                             /滑鼠右鍵/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtProductno_', '');
@@ -120,9 +120,9 @@
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtAcc1_', '');
                             $('#btnAcc1_'+n).click();
-                        });*/
+                        });
 					}
-				}
+				}*/
                 _bbsAssign();
             }
 
