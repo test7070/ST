@@ -56,7 +56,6 @@
             function mainPost() {
                 q_getFormat();
                 bbmMask = [['txtMon', r_picm]];
-                bbsMask = [];
                 q_mask(bbmMask);
                 q_cmbParse("cmbMechno", t_mech, 's');
             }
