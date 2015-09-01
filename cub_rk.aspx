@@ -22,7 +22,7 @@
 			var toIns = true;
 			var q_name = "cub";
 			var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
-			var q_readonlys = ['txtCustno','txtComp','txtNoq','txtUcolor'];
+			var q_readonlys = ['txtCustno','txtComp','txtNoq','txtMakeno'];
 			var q_readonlyt = ['txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -267,8 +267,8 @@
             	var t_manufactureno = $.trim($('#txtVcceno').val());
             	if(t_manufactureno.length>0){
             		for(var i=0;i<q_bbsCount;i++){
-                		if($('#txtUcolor_'+i).val().length==0){
-                			$('#txtUcolor_'+i).val(t_manufactureno+'-'+(i+1));
+                		if($('#txtMakeno_'+i).val().length==0){
+                			$('#txtMakeno_'+i).val(t_manufactureno+'-'+(i+1));
                 		}
                 	}	
             	}    
@@ -856,7 +856,7 @@
 						<td><input id="txtW03.*" type="text" class="num" style="float:left;width:95%;"/></td>
 						<td><input id="txtW04.*" type="text" class="num" style="float:left;width:95%;"/></td>
 						<td><input id="txtW05.*" type="text" class="num" style="float:left;width:95%;"/></td>
-						<td><input id="txtUcolor.*" type="text" style="float:left;width:95%;"/></td>
+						<td><input id="txtMakeno.*" type="text" style="float:left;width:95%;"/></td>
 					</tr>
 				</table>
 			</div>
