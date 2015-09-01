@@ -21,12 +21,12 @@
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
-				q_gf('', 'z_anaSSS');
+				q_gf('', 'z_anasss');
 				 
 			});  
             function q_gfPost() {
             	$('#q_report').q_report({
-            		fileName : 'z_anaSSS',						
+            		fileName : 'z_anasss',						
 					 options : [{
 						type : '1', //[1][2]
 						name : 'age',
