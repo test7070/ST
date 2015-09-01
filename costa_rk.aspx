@@ -32,7 +32,7 @@
             brwKey = 'Noa';
             aPop = new Array(
 				['txtProductno_', 'btnProduct_', 'chgitem', 'noa,item,acc1,acc2', 'txtProductno_,txtProduct_,txtAcc1_,txtAcc2_', 'chgitem_b.aspx']
-				['txtAcc1_', 'btnAcc1_', 'acc', 'acc1,acc2', 'txtAcc1_,txtAcc2_', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]);
+				,['txtAcc1_', 'btnAcc1_', 'acc', 'acc1,acc2', 'txtAcc1_,txtAcc2_', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]);
 			var t_mech = '';
 			function sum() {
                 
@@ -74,13 +74,13 @@
             function q_gtPost(t_name) {
                 switch (t_name) {
                     case 'mech':
-                      /*  var as = _q_appendData("mech", "", true);
+                        var as = _q_appendData("mech", "", true);
                         t_mech = '';
                         if(as[0]!=undefined){
                         	for(var i=0;i<as.length;i++){
                         		t_mech += (t_mech.length>0?',':'') + as[i].noa+'@'+as[i].mech;
                         	}	
-                        }*/
+                        }
                         q_gt(q_name, q_content, q_sqlCount, 1, 0);
                         break;
                     case q_name:
@@ -105,7 +105,7 @@
             }
 
             function bbsAssign() {
-                /*for (var i = 0; i < q_bbsCount; i++) {
+                for (var i = 0; i < q_bbsCount; i++) {
 					$('#lblNo_' + i).text(i + 1);
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
 						$('#txtProductno_' + i).bind('contextmenu', function(e) {
@@ -121,7 +121,7 @@
                             $('#btnAcc1_'+n).click();
                         });
 					}
-				}*/
+				}
                 _bbsAssign();
             }
 
@@ -394,7 +394,7 @@
 		<div class='dbbs'>
 				<table id="tbbs" class='tbbs'>
 					<tr style='color:white; background:#003366;' >
-						<td style="width:20px;display:none;">
+						<td style="width:20px;">
 							<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"> </td>
@@ -406,7 +406,7 @@
 						<td style="width:80px;" align="center">費用小計</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
-						<td align="center" style="display: none;">
+						<td align="center">
 							<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 							<input id="txtNoq.*" type="text" style="display:none;"/>
 						</td>
