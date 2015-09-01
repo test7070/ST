@@ -101,7 +101,9 @@
                             var t_where = "where=^^ enda=0 and mechno='" + t_mechno + "' ^^";
                             q_gt('view_ordes', t_where, 0, 0, 0, "", r_accy);
                         }*/
-                        break
+                        break;
+                    default:
+                    	break;
                 }
             }
 
@@ -591,7 +593,7 @@
 						<td><span> </span><a class="lbl">入庫類型</a></td>
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
 						<td></td>
-						<!--<td><input type="button" id="btnOrde" value="訂單匯入" /></td>-->
+						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
@@ -611,7 +613,7 @@
 				<tr style='color:white; background:#003366;' >
 					<td style="width:20px;"><input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
 					<td style="width:20px;"></td>
-					<!--<td style="width:200px;">訂單號碼</td>-->
+					<td style="width:200px;">訂單號碼</td>
 					<td style="width:200px;">製造批號</td>
 					<td style="width:200px;">Coil編號</td>
 					<td style="width:200px;">規格</td>
@@ -632,10 +634,10 @@
 						<input id="txtNoq.*" type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<!--<td>
+					<td>
 						<input id="txtOrdeno.*" type="text" style="float:left;width:72%;"/>
 						<input id="txtNo2.*" type="text" style="float:left;width:20%;"/>
-					</td>-->
+					</td>
 					<td><input id="txtCname.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtSpecial.*" maxlength="20" type="text" style="float:left;width:95%;"/></td>			
 					<td>

@@ -22,7 +22,7 @@
 			var toIns = true;
 			var q_name = "cub";
 			var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
-			var q_readonlys = ['txtCustno','txtComp','txtNoq'];
+			var q_readonlys = ['txtCustno','txtComp','txtNoq','txtUcolor'];
 			var q_readonlyt = ['txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -262,6 +262,18 @@
                     $('#txtWorker').val(r_name);
                 else
                     $('#txtWorker2').val(r_name);
+                
+                //製造批號
+            	var t_manufactureno = $.trim($('#txtVcceno').val());
+            	if(t_manufactureno.length>0){
+            		for(var i=0;i<q_bbsCount;i++){
+                		if($('#txtUcolor_'+i).val().length==0){
+                			$('#txtUcolor_'+i).val(t_manufactureno+'-'+(i+1));
+                		}
+                	}	
+            	}    
+                
+                
                 sum();
                 refreshBbt();
                 var t_noa = trim($('#txtNoa').val());
@@ -763,6 +775,7 @@
 						<td style="width:100px;" align="center">頭尾損耗 </td>
 						<td style="width:100px;" align="center">樣品重</td>
 						<td style="width:100px;" align="center">廢料重</td>
+						<td style="width:150px;" align="center">製造批號</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center" style="display: none;">
@@ -843,6 +856,7 @@
 						<td><input id="txtW03.*" type="text" class="num" style="float:left;width:95%;"/></td>
 						<td><input id="txtW04.*" type="text" class="num" style="float:left;width:95%;"/></td>
 						<td><input id="txtW05.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtUcolor.*" type="text" style="float:left;width:95%;"/></td>
 					</tr>
 				</table>
 			</div>
