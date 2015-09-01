@@ -20,8 +20,8 @@
             var q_name = "costa";
             var q_readonly = ['txtNoa'];
             var q_readonlys = [];
-            var bbmNum = [];
-            var bbsNum = [['txtMoney', 15, 0, 1]];
+            var bbmNum = [['txtWages',15,0,1],['txtMakeless',15,0,1]];
+            var bbsNum = [['txtMount', 15, 2, 1],['txtPrice', 15, 2, 1],['txtMoney', 15, 0, 1]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
