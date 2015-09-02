@@ -228,7 +228,7 @@
 							}
 						break;
 					
-					case 'qtxt.quxery.getuno':
+					case 'qtxt.query.getuno':
 						var as = _q_appendData("tmp0", "", true, true);
 						if (as[0] != undefined) {
 							if (as.length != q_bbsCount) {
