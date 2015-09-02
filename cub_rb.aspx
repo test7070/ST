@@ -292,10 +292,10 @@
 						}
 						break;
 					case 'pays':
-						var as=_q_appendData("pays", "",true);					
+						var as =_q_appendData("pays", "",true);					
 						if (as[0] != undefined) {							
 							for (var j = 0; j < q_bbsCount; j++) {
-								if($('#txtOrdeno_'+j).val()==as[0].rc2no){
+								if($('#txtOrdeno_'+j).val()==as[0].rc2no && !emp($("#txtDatea_"+j).val())){
 									$("#btnMinus_"+j).attr('disabled','disabled');
 									$("#txtDatea_"+j).attr('disabled','disabled');
 									$("#txtTggno_"+j).attr('disabled','disabled');
@@ -309,13 +309,12 @@
 									$("#txtMo_"+j).attr('disabled','disabled');
 									$("#chkSale_"+j).attr('disabled','disabled');
 									$("#txtW01_"+j).attr('disabled','disabled');
-									$("#txtMemo_"+j).attr('disabled','disabled');
-									$("#txtOrdeno_"+j).attr('disabled','disabled');
+									$("#txtMemo_"+j).attr('disabled','disabled');			
 									$("#chkCut_"+j).attr('disabled','disabled');
-									alert(as[0].rc2no);
+								//	alert(as[0].rc2no);
 								}
 							}
-							break;	
+							
 							
 						}	
 						break;	
@@ -543,7 +542,8 @@
 						//	t_IdSeq = -1;  
 						//	q_bodyId($(this).attr('id'));
 						//	b_seq = t_IdSeq;
-							q_gt('pays', "where=^^rc2no='"+$('#txtOrdeno_' + i)+"'^^", 0, 0, 0, "pays");
+							t_where="where=^^ rc2no='"+trim($('#txtOrdeno_' + i).val())+"'^^";
+							q_gt('pays',t_where, 0, 0, 0, "pays",r_accy);
 							
 						//});
 					
@@ -897,7 +897,7 @@
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 						<td><input id="txtDatea.*" type="text" class="txt c1"/></td>
-						<td>
+						<td> 
 							<input id="txtTggno.*" type="text" class="txt c1" style="width: 70%;"/>
 							<input class="btn"  id="btnTggno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
