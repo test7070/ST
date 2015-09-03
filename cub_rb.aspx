@@ -295,7 +295,7 @@
 						var as =_q_appendData("pays", "",true);					
 						if (as[0] != undefined) {							
 							for (var j = 0; j < q_bbsCount; j++) {
-								if($('#txtOrdeno_'+j).val()==as[0].rc2no && !emp($("#txtDatea_"+j).val())){
+								if($('#txtOrdeno_'+j).val()==as[0].rc2no && !emp($("#txtDatea_"+j).val()) && !emp($('#txtOrdeno_'+j).val())){
 									$("#btnMinus_"+j).attr('disabled','disabled');
 									$("#txtDatea_"+j).attr('disabled','disabled');
 									$("#txtTggno_"+j).attr('disabled','disabled');
