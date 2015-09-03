@@ -78,7 +78,7 @@
 					},{
                         type : '5', //[20]
                         name : 'vccstype',
-                        value : (' @全部,'+q_getPara('vcc.stype')).split(',')
+                        value : (' @全部,'+q_getPara('rc2.stype')).split(',')
 					}, {
 						type : '6', //[21]
 						name : 'lostdate'
@@ -105,7 +105,7 @@
 				$('#txtXmon1').mask(r_picm);
 				$('#txtXmon2').mask(r_picm);
 				
-				var t_date, t_year, t_month, t_day;
+			var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
                 t_year = t_date.getUTCFullYear() - r_1911;
@@ -114,6 +114,20 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtXdate1').val(t_year + '/' + t_month + '/' + t_day);
+                $('#txtXmon1').val(t_year + '/' + t_month);
+
+                t_date = new Date();
+                t_date.setDate(35);
+                t_date.setDate(0);
+                t_year = t_date.getUTCFullYear() - r_1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
+                $('#txtXmon2').val(t_year + '/' + t_month);
 				
 				$('#txtXyear').mask('9999'.substr(0,r_len));
 				$('#txtXyear').val(t_year);
@@ -136,13 +150,13 @@
                         for ( i = 0; i < as.length; i++) {
                             uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa +' . '+as[i].namea;
                         }
-						q_gt('custtype', '', 0, 0, 0, "");
+						q_gt('tggtype', '', 0, 0, 0, "");
                         break;
-					case 'custtype':
-                        var as = _q_appendData("custtype", "", true);
+					case 'tggtype':
+                        var as = _q_appendData("tggtype", "", true);
                         custtypeItem = " @全部";
                         for ( i = 0; i < as.length; i++) {
-                            custtypeItem = custtypeItem + (custtypeItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa +' . '+as[i].namea;
+                            custtypeItem = custtypeItem + (custtypeItem.length > 0 ? ',' : '') + $.trim(as[i].noa) + '@' + $.trim(as[i].namea);
                         }
 						q_gf('', 'z_anarc2fe');
 						break;
