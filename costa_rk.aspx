@@ -150,13 +150,11 @@
             }
 
             function bbsSave(as) {
-                if (!as['mechno']) {
+                if (!as['productno'] && !as['product']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
-
                 q_nowf();
-                //as['mon'] = abbm2['mon'];
                 return true;
             }
 
@@ -167,16 +165,11 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
-
             }
-
-            
-
             function btnMinus(id) {
                 _btnMinus(id);
                 sum();
             }
-
             function btnPlus(org_htm, dest_tag, afield) {
                 _btnPlus(org_htm, dest_tag, afield);
             }

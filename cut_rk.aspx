@@ -113,8 +113,8 @@
                 	case 'orde_cut':
                         if (b_ret != null) {
                         	as = b_ret;
-                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtSpec,txtClass,txtMount,txtWeight,txtCustno,txtComp,txtDime,txtWidth,txtLengthb,txtRadius,txtCname'
-                        	, as.length, as, 'noa,no2,spec,class,mount,weight,custno,comp,dime,width,lengthb,radius,makeno', '','');             	
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtSpec,txtClass,txtMount,txtWeight,txtCustno,txtComp,txtDime,txtWidth,txtLengthb,txtRadius'
+                        	, as.length, as, 'noa,no2,spec,class,mount,weight,custno,comp,dime,width,lengthb,radius', '','');             	
                         }else{
                         	Unlock(1);
                         }
