@@ -107,7 +107,7 @@
 							var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
 							if(as[0].noa!=t_noa){
 								//第二次出貨 代表上次發票已隨貨全開完
-								var delete_report=0;
+								var delete_report=999;
 								for(var i=0;i<$('#qReport').data().info.reportData.length;i++){
 									if($('#qReport').data().info.reportData[i].report=='z_vccp_rb02')
 										delete_report=i;

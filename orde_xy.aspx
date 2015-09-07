@@ -152,7 +152,7 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("combClassa",' ,便品,印刷','s');
-				q_cmbParse("cmbSource",'0@ ,1@寄庫,2@寄出','s');
+				q_cmbParse("cmbSource",'0@ ,1@寄庫,2@庫出','s');
 
 				var t_where = "where=^^ 1=1 group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");

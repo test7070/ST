@@ -51,7 +51,8 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
-                q_cmbParse("cmbGroupano", t_groupano);
+                if(t_groupano.length>0)
+                	q_cmbParse("cmbGroupano", t_groupano);
 				if (abbm[q_recno] != undefined) {
 					$("#cmbGroupano").val(abbm[q_recno].groupano);
 				}
@@ -77,8 +78,8 @@
 							for ( i = 0; i < as.length; i++) {
 								t_groupano = t_groupano + (t_groupano.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
 							}
-							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 						}
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 						break;
                     case q_name:
                         if (q_cur == 4)
@@ -154,7 +155,8 @@
           		$('#txtNoa').focus();
             }
             function btnPrint() {
-                q_box("z_uccfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'drp', "95%", "95%", m_print);
+            	if(q_getPara('sys.project').toUpperCase()!="VU")
+                	q_box("z_uccfe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'drp', "95%", "95%", m_print);
             }
             function wrServer(key_value) {
                 var i;

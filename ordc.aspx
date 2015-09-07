@@ -22,7 +22,7 @@
 			q_tables = 't';
 			var q_name = "ordc";
 			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2'];
-			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount'];
+			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount','txtTotal'];
 			var q_readonlyt = [];
 
 			var bbmNum = [
@@ -71,7 +71,14 @@
 				var t1 = 0, t_unit, t_mount, t_weight = 0;
 				var t_money = 0;
 				for (var j = 0; j < q_bbsCount; j++) {
-					q_tr('txtTotal_' + j, q_mul(q_float('txtMount_' + j), q_float('txtPrice_' + j)));
+					if($('#chkAprice_'+j).prop('checked')){
+						if(q_float('txtMount_' + j)==0)
+							q_tr('txtPrice_' + j, 0);
+						else
+							q_tr('txtPrice_' + j, round(q_div(q_float('txtTotal_' + j), q_float('txtMount_' + j)), 2));
+					}else{
+						q_tr('txtTotal_' + j, q_mul(q_float('txtMount_' + j), q_float('txtPrice_' + j)));
+					}
 					q_tr('txtNotv_' + j, q_sub(q_float('txtMount_' + j), q_float('txtC1' + j)));
 					t_money = q_add(t_money, q_float('txtTotal_' + j));
 				}
@@ -146,6 +153,10 @@
 								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
 							}
 						}
+					}
+					if(q_getPara('sys.project').toUpperCase()=='XY'){
+						var t_where =" noa='"+$('#txtTggno').val()+"'";
+						q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytggdata");
 					}
 				});
 				$('#txtAddr').change(function() {
@@ -234,6 +245,12 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'xytggdata':
+						var as = _q_appendData("tgg", "", true);
+						if (as[0] != undefined) {
+							$('#cmbTaxtype').val(as[0].conn);
+						}
+						break;
 					case 'GetOrdct':
 						var as = _q_appendData("ordct", "", true);
 						if(as.length > 0){
@@ -489,11 +506,34 @@
 							}
 						});
 						
+						$('#chkAprice_'+j).click(function(e){refreshBbs();});
 					}
 				}
 				_bbsAssign();
 				product_change();
+				refreshBbs();
+				$('#lblAprice_s').text('自訂金額');
 			}
+			
+			function refreshBbs(){
+				if(q_getPara('sys.project').toUpperCase()=='RB'){
+					$('.aprice').show();
+				}else{
+					$('.aprice').hide();
+				}
+				//金額小計自訂
+				for(var i=0;i<q_bbsCount;i++){
+					$('#txtTotal_'+i).attr('readonly','readonly');
+					if($('#chkAprice_'+i).prop('checked')){
+						$('#txtTotal_'+i).css('color','black').css('background-color','white');
+						if(q_cur==1 || q_cur==2)
+							$('#txtTotal_'+i).removeAttr('readonly');
+					}else{
+						$('#txtTotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+					}
+				}
+			}
+			
 			function bbtAssign() {
                 for (var i = 0; i < q_bbtCount; i++) {
                     $('#lblNo__' + i).text(i + 1);
@@ -728,6 +768,10 @@
 						if (!emp($('#txtTggno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
+							if(q_getPara('sys.project').toUpperCase()=='XY'){
+								var t_where =" noa='"+$('#txtTggno').val()+"'";
+								q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytggdata");
+							}
 						}
 						break;
 				}
@@ -1094,6 +1138,7 @@
 					<td align="center" style="width:100px;"><a id='lblOmount_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a></td>
+					<td class="aprice" align="center" style="width:40px;"><a id='lblAprice_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTrandates'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblGemounts'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
@@ -1127,6 +1172,7 @@
 					</td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtTotal.*" type="text" class="txt num c1" /></td>
+					<td class="aprice"><input id="chkAprice.*" type="checkbox" class="txt c1" /></td>
 					<td><input id="txtTrandate.*" type="text" class="txt c1"/></td>
 					<td>
 						<input class="txt num c1" id="txtC1.*" type="text" />
@@ -1138,9 +1184,7 @@
 						<input class="txt" id="txtNo3.*" type="text" style="width:20%;" />
 						<input id="recno.*" type="hidden" />
 					</td>
-					<td align="center">
-						<input class="btn" id="btnRc2record.*" type="button" value='.' style=" font-weight: bold;" />
-					</td>
+					<td align="center"><input class="btn" id="btnRc2record.*" type="button" value='.' style=" font-weight: bold;" /></td>
 					<td align="center"><input class="btn" id="chkCancel.*" type="checkbox"/></td>
 					<td align="center"><input class="btn" id="chkEnda.*" type="checkbox"/></td>
 				</tr>

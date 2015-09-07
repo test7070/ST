@@ -13,6 +13,8 @@
 		<script src="css/jquery/ui/jquery.ui.core.js"></script>
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
+		
+		<!--<script src="http://59.125.143.170/jquery/js/jquery.mask.js" type="text/javascript"></script>-->
 		<script type="text/javascript">
 		
 			this.errorHandler = null;
@@ -20,13 +22,13 @@
 			var toIns = true;
 			var q_name = "cub";
 			var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
-			var q_readonlys = ['txtCustno','txtComp','txtNoq'];
+			var q_readonlys = ['txtCustno','txtComp','txtNoq','txtMakeno'];
 			var q_readonlyt = ['txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbtNum = [];
 			var bbmMask = [];
-			var bbsMask = [];
+			var bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
 			var bbtMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
@@ -57,15 +59,41 @@
 			}
 
 			function sum() {
-				for (var j = 0; j < q_bbsCount; j++) {
+				for (var i = 0; i < q_bbsCount; i++) {
+					$('#txtMins_'+i).val(getMins($('#txtBtime_'+i).val(),$('#txtEtime_'+i).val()));	
 				}
+			}
+			function getMins(btime,etime){
+				var mins = 0;
+				var patt = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/g;
+				var bhr = btime.replace(patt,'$1');
+				var bmin = btime.replace(patt,'$2');
+				var ehr = etime.replace(patt,'$1');
+				var emin = etime.replace(patt,'$2');
+				
+				try{
+					bhr = parseInt(bhr);
+					bmin = parseInt(bmin);
+					ehr = parseInt(ehr);
+					emin = parseInt(emin);
+				}catch(e){
+					bhr=0;
+					bmin=0;
+					ehr=0;
+					emin=0;
+				}
+				mins = (ehr+(ehr<bhr || (ehr=bhr && emin<bmin)?24:0)-bhr)*60 + (emin-bmin);
+				mins = isNumber(mins)?mins:0;
+				return mins;
+			}
+			function isNumber(n) {
+			  return !isNaN(parseFloat(n)) && isFinite(n);
 			}
 
 			function mainPost() {
 				q_getFormat();
 				document.title = '生產作業';
 				bbmMask = [['txtDatea', r_picd]];
-				bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
 				q_mask(bbmMask);
 				q_cmbParse("cmbProcess", '日、高溫,午,晚');
 				
@@ -91,7 +119,7 @@
                 	var t_where ='';
                 	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cubno:t_noa,page:'cub_rk'}), "orde_cub", "95%", "95%", '');
 				});
-				
+			
 				
 			}
 
@@ -156,12 +184,15 @@
 						q_boxClose2(s2);
 						break;
 					default:
-						if(b_pop.substring(0,8)=='get_cub_'){
-							var n = b_pop.replace('get_cub_','');
+						if(b_pop.substring(0,8)=='cng_cub_'){
+							var n = b_pop.replace('cng_cub_','');
 							b_ret = getb_ret();
 							if(b_ret != null && b_ret.length>0){
 								$('#txtUno_'+n).val(b_ret[0].uno);
-								$('#txtGweight_'+n).val(b_ret[0].eweight);
+								$('#txtWeight_'+n).val(b_ret[0].eweight);
+								$('#txtSize_'+n).val(b_ret[0].size);
+								$('#txtDime_'+n).val(b_ret[0].dime);
+								$('#txtWidth_'+n).val(b_ret[0].width);
 							}
 						}
 						break;
@@ -231,6 +262,18 @@
                     $('#txtWorker').val(r_name);
                 else
                     $('#txtWorker2').val(r_name);
+                
+                //製造批號
+            	var t_manufactureno = $.trim($('#txtVcceno').val());
+            	if(t_manufactureno.length>0){
+            		for(var i=0;i<q_bbsCount;i++){
+                		if($('#txtMakeno_'+i).val().length==0){
+                			$('#txtMakeno_'+i).val(t_manufactureno+'-'+(i+1));
+                		}
+                	}	
+            	}    
+                
+                
                 sum();
                 refreshBbt();
                 var t_noa = trim($('#txtNoa').val());
@@ -314,18 +357,6 @@
 							$('#txtNor__'+i).val(t_noq);      
                 		}
 	                }
-	                
-	                
-	                /*
-	                $('#dbbt').find('tr').hide();
-	                $('#dbbt').find('tr').eq(0).show();
-	                var m = 0;
-	                for(var i=0;i<q_bbtCount;i++){
-	                	if($('#txtNor__'+i).val() == t_noq || $('#txtNor__'+i).val().length==0){
-	                		$('#lblNo__' + i).text(m++ + 1);
-	                		$('#txtNor__'+i).parent().parent().show();
-	                	}
-	                }*/
                 }
 				
 			}
@@ -334,6 +365,12 @@
 				for (var i = 0; i < q_bbsCount; i++) {
 					$('#lblNo_' + i).text(i + 1);
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+						$('#txtBtime_'+i).focusout(function(e){
+							sum();							
+						});
+						$('#txtEtime_'+i).focusout(function(e){
+							sum();							
+						});
 						$('#txtOrdeno_'+i).change(function(e){
 							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 							n = parseInt(n);
@@ -367,11 +404,12 @@
 								return;
 							var t_noa = $('#txtNoa').val();
 		                	var t_where ='';
-		                	q_box("get_cub_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cubno:t_noa,n:n,page:'cub_rk'}), "get_cub_"+n, "95%", "95%", '');
+		                	q_box("cng_cub_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cubno:t_noa,n:n,page:'cub_rk'}), "cng_cub_"+n, "95%", "95%", '');
                         });
 					}
 				}
 				_bbsAssign();
+				refreshBbt();
 				$('.num').each(function() {
 					$(this).keyup(function() {
 						var tmp=$(this).val();
@@ -429,7 +467,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('cub_rk_s.aspx', q_name + '_s', "500px", "350px", q_getMsg("popSeek"));
+				q_box('cub_rk_s.aspx', q_name + '_s', "500px", "500px", q_getMsg("popSeek"));
 			}
 
 			function btnTop() {
@@ -585,7 +623,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 1830px;
+				width: 2500px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -690,8 +728,8 @@
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblMonth" class="lbl">月份</a></td>
-						<td><input id="txtMonth" type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblMonth" class="lbl" style="display:none;">月份</a></td>
+						<td><input id="txtMonth" type="text" class="txt c1" style="display:none;"/></td>
 						<td> </td>
 						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
 					</tr>
@@ -709,23 +747,35 @@
 						<td style="width:40px;"> </td>
 						<td style="width:200px;" align="center">訂單號碼</td>
 						<td style="width:100px;" align="center">客戶</td>
+						<td style="width:200px;" align="center">鋼捲編號</td>
 						<td style="width:100px;" align="center">COIL<BR>規格<BR>尺寸(厚X寬)</td>
 						<td style="width:100px;" align="center">COIL<BR>重量(KG)</td>
-						<td style="width:100px;" align="center">前處理液<BR>總用量(KG)</td>
+							
+						<!--<td style="width:100px;" align="center">前處理液<BR>總用量(KG)</td>
 						<td style="width:100px;" align="center">接著劑<BR>型號<BR>規格</td>
 						<td style="width:100px;" align="center">接著劑總用量 (kg)</td>
 						<td style="width:100px;" align="center">稀釋液<BR>用量/清洗(KG)</td>
 						<td style="width:100px;" align="center">背漆<BR>型號規格<BR>重量(KG)</td>
-						<td style="width:100px;" align="center">背漆稀釋液<BR>總用量(KG)</td>
+						<td style="width:100px;" align="center">背漆稀釋液<BR>總用量(KG)</td>-->
+						<td style="width:150px;" align="center">PVC皮批號</td>	
 						<td style="width:100px;" align="center">PVC皮<BR>型號<BR>規格</td>
-						<td style="width:100px;" align="center">PVC皮<BR>總用量M/KG</td>
-						<td style="width:100px;" align="center">PE膜<BR>型號<BR>用量M</td>
+						<td style="width:100px;" align="center">PVC皮<BR>用量M<BR>KG</td>
+						<td style="width:150px;" align="center">PE膜批號</td>	
+						<td style="width:100px;" align="center">PE膜<BR>用量M<BR>KG</td>
 						<td style="width:100px;" align="center">RECOIL<BR>重量(KG)</td>
-						<td style="width:200px;" align="center">UNCOIL<BR>RECOIL編號</td>
+						<td style="width:200px;" align="center">RECOIL編號</td>
 						<td style="width:100px;" align="center">廢料重量(KG)</td>
 						<td style="width:100px;" align="center">包裝數量<BR>/LOT</td>
-						<td style="width:100px;" align="center">施工工時(分)</td>
+						<td style="width:100px;" align="center">開始時間</td>
+						<td style="width:100px;" align="center">結束時間</td>	
+						<td style="width:80px;" align="center">施工工時(分)</td>
 						<td style="width:100px;" align="center">耗料重</td>
+						<td style="width:100px;" align="center">不良損耗</td>
+						<td style="width:100px;" align="center">尺寸損耗</td>
+						<td style="width:100px;" align="center">頭尾損耗 </td>
+						<td style="width:100px;" align="center">樣品重</td>
+						<td style="width:100px;" align="center">廢料重</td>
+						<td style="width:150px;" align="center">製造批號</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center" style="display: none;">
@@ -745,13 +795,16 @@
 							<input id="txtComp.*" type="text" style="float:left;width:95%;"/>
 							<input id="btnCust.*" type="button" style="display:none;"/>
 						</td>
+						<td title="鋼捲編號">
+							<input id="txtUno.*" type="text" style="float:left;width:95%;"/>
+						</td>
 						<td>
 							<input id="txtSize.*" type="text" style="float:left;width:95%;"/>
 							<input id="txtDime.*" type="text" class="num" style="float:left;width:45%;"/>
 							<input id="txtWidth.*" type="text" class="num" style="float:left;width:45%;"/>
 						</td>
 						<td><input id="txtWeight.*" type="text" class="num" style="float:left;width:95%;"/></td>
-						<td title="前處理液總用量(KG)"><input id="txtBdime.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<!--<td title="前處理液總用量(KG)"><input id="txtBdime.*" type="text" class="num" style="float:left;width:95%;"/></td>
 						<td title="接著劑型號規格">
 							<input id="txtProductno2.*" type="text" style="width:95%;"/>
 							<input id="txtProduct2.*" type="text" style="width:95%;"/>
@@ -765,25 +818,27 @@
 						</td>
 						<td title="背漆稀釋液總用量(KG)">
 							<input id="txtWmount.*" type="text" class="num" style="float:left;width:95%;"/>
-						</td>
+						</td>-->
+						<td><input id="txtUno2.*" type="text" style="float:left;width:95%;"/></td>
 						<td title="PVC皮型號規格">
 							<input id="txtSpec.*" type="text" style="float:left;width:95%;"/>
 							<input id="txtRadius.*" type="text" class="num" style="float:left;width:45%;"/>
 							<input id="txtLengthb.*" type="text" class="num" style="float:left;width:45%;"/>
 						</td>
-						<td title="PVC皮總用量M/KG">
+						<td title="PVC皮用量M/KG">
 							<input id="txtHard.*" type="text" class="num" style="float:left;width:95%;"/>
 							<input id="txtLengthb2.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
-						<td title="PE膜型號用量M">
-							<input id="txtSource.*" type="text" style="float:left;width:95%;"/>
+						<td><input id="txtUno3.*" type="text" style="float:left;width:95%;"/></td>
+						<td title="PE膜用量M/KG">
+							<input id="txtSource.*" type="text" style="float:left;width:95%;display:none;"/>
 							<input id="txtLengthc.*" type="text" class="num" style="float:left;width:95%;"/>
+							<input id="txtW06.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
 						<td title="RECOIL重量(KG)">
 							<input id="txtHweight.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
-						<td title="UNCOILRECOIL編號">
-							<input id="txtUno.*" type="text" style="float:left;width:95%;"/>
+						<td title="RECOIL編號">
 							<input id="txtOth.*" type="text" style="float:left;width:95%;"/>
 						</td>
 						<td title="廢料重量(KG)">
@@ -792,13 +847,16 @@
 						<td title="包裝數量/LOT">
 							<input id="txtMount.*" type="text" class="num" style="float:left;width:95%;"/>
 						</td>
-						<td title="施工工時(分)">
-							<input id="txtBtime.*" type="text" style="float:left;width:95%;"/>
-							<input id="txtEtime.*" type="text" style="float:left;width:95%;display:none;"/>
-						</td>
-						<td>
-							<input id="txtGweight.*" type="text" class="num" style="float:left;width:95%;"/>
-						</td>
+						<td><input id="txtBtime.*" type="text" style="float:left;width:95%;"/></td>
+						<td><input id="txtEtime.*" type="text" style="float:left;width:95%;"/></td>
+						<td><input id="txtMins.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtGweight.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW01.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW02.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW03.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW04.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtW05.*" type="text" class="num" style="float:left;width:95%;"/></td>
+						<td><input id="txtMakeno.*" type="text" style="float:left;width:95%;"/></td>
 					</tr>
 				</table>
 			</div>

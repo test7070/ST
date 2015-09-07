@@ -19,9 +19,9 @@
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 3, 1], ['txtWeight', 10, 3, 1]];
+            var bbsNum = [['txtHours', 10, 0, 1], ['txtMount', 10, 0, 1], ['txtWeight', 10, 2, 1]];
             var bbmMask = [];
-            var bbsMask = [];
+            var bbsMask = [['txtBtime','99:99'],['txtEtime','99:99']];
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
@@ -36,12 +36,36 @@
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
             });
-			function sum(){
-				for(var i=0;i<q_bbsCount;i++){
-					
-					
+			function sum() {
+				for (var i = 0; i < q_bbsCount; i++) {
+					$('#txtMins_'+i).val(getMins($('#txtBtime_'+i).val(),$('#txtEtime_'+i).val()));	
 				}
+			}
+			function getMins(btime,etime){
+				var mins = 0;
+				var patt = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/g;
+				var bhr = btime.replace(patt,'$1');
+				var bmin = btime.replace(patt,'$2');
+				var ehr = etime.replace(patt,'$1');
+				var emin = etime.replace(patt,'$2');
 				
+				try{
+					bhr = parseInt(bhr);
+					bmin = parseInt(bmin);
+					ehr = parseInt(ehr);
+					emin = parseInt(emin);
+				}catch(e){
+					bhr=0;
+					bmin=0;
+					ehr=0;
+					emin=0;
+				}
+				mins = (ehr+(ehr<bhr || (ehr=bhr && emin<bmin)?24:0)-bhr)*60 + (emin-bmin);
+				mins = isNumber(mins)?mins:0;
+				return mins;
+			}
+			function isNumber(n) {
+			  return !isNaN(parseFloat(n)) && isFinite(n);
 			}
             function main() {
                 if (dataErr) {
@@ -55,8 +79,15 @@
                 q_getFormat();
                 document.title = '烘板作業';
                 bbmMask = [['txtDatea', r_picd]];
-                bbsMask = [];
                 q_mask(bbmMask);
+                
+                $('#btnOrde').click(function() {
+					if(!(q_cur==1 || q_cur==2))
+						return;
+					var t_noa = $('#txtNoa').val();
+                	var t_where ='';
+                	q_box("orde_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cudno:t_noa,page:'cud_rk'}), "orde_cud", "95%", "95%", '');
+				});
             }
 
             function q_popPost(s1) {
@@ -74,9 +105,33 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'orde_cud':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtSpec,txtClass,txtDime,txtRadius,txtWidth,txtLengthb'
+                        	, as.length, as, 'noa,no2,spec,class,dime,radius,width,lengthb', '','');             	
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
+                    default:
+						if(b_pop.substring(0,8)=='cng_cud_'){
+							var n = b_pop.replace('cng_cud_','');
+							b_ret = getb_ret();
+							if(b_ret != null && b_ret.length>0){
+								$('#txtUno_'+n).val(b_ret[0].uno);
+								$('#txtWeight_'+n).val(b_ret[0].eweight);
+								//$('#txtSize_'+n).val(b_ret[0].size);
+								$('#txtDime_'+n).val(b_ret[0].dime);
+								$('#txtWidth_'+n).val(b_ret[0].width);
+								$('#txtLengthb_'+n).val(b_ret[0].lengthb);
+								$('#txtRadius_'+n).val(b_ret[0].radius);
+							}
+						}
+						break;
                 }
                 b_pop = '';
             }
@@ -138,7 +193,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('cuc_rk_s.aspx', q_name + '_s', "500px", "310px", q_getMsg("popSeek"));
+                q_box('cuc_rk_s.aspx', q_name + '_s', "500px", "500px", q_getMsg("popSeek"));
             }
 
             function combPay_chg() {
@@ -148,6 +203,12 @@
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	$('#txtBtime_'+i).focusout(function(e){
+							sum();							
+						});
+						$('#txtEtime_'+i).focusout(function(e){
+							sum();							
+						});
                     	$('#txtOrdeno_'+i).change(function(e){
 							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 							n = parseInt(n);
@@ -194,6 +255,17 @@
                     	$('#txtWeight5_'+i).change(function(e){
                     		sum();
                     	});
+                    	$('#txtUno_' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtUno_', '');
+                            
+							if(!(q_cur==1 || q_cur==2))
+								return;
+							var t_noa = $('#txtNoa').val();
+		                	var t_where ='';
+		                	q_box("cng_cub_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({cudno:t_noa,n:n,page:'cud_rk'}), "cng_cud_"+n, "95%", "95%", '');
+                        });
                     }
                 }
                 _bbsAssign();
@@ -404,7 +476,7 @@
             input[type="text"], input[type="button"] {
                 font-size: medium;
             }
-            .dbbs{width: 1700px;}
+            .dbbs{width: 1980px;}
             .tbbs {
                 margin: 0;
                 padding: 2px;
@@ -480,6 +552,12 @@
 						<td><span> </span><a id="lblWorker2" class="lbl"></a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
+					</tr>
 				</table>
 			</div>
 		</div>
@@ -489,6 +567,7 @@
 					<td style="width:20px;"></td>
 					<td style="width:20px;"></td>
 					<td style="width:200px;"></td>
+					<td style="width:100px;"></td>
 					<td style="width:60px;"></td>
 					<td style="width:200px;"></td>
 					<td style="width:100px;"></td>
@@ -504,6 +583,8 @@
 					<td style="width:100px;"></td>
 					<td style="width:100px;"></td>
 					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:80px;"></td>
 				</tr>
 				<tr style='color:white; background:#003366;' >
 					<td rowspan="4">
@@ -511,6 +592,7 @@
 					</td>
 					<td align="center" rowspan="4">項<BR><BR>次</td>
 					<td align="center" rowspan="2">訂單號碼</td>
+					<td align="center" rowspan="4">COIL<BR>編號</td>
 					<td align="center" rowspan="4">皮膜<BR>編號</td>
 					<td align="center" rowspan="4">SHEET(COIL)規格尺寸</td>
 					<td align="center" rowspan="2">進料</td>
@@ -524,7 +606,9 @@
 					<td align="center" colspan="2">變形及摺痕</td>
 					<td align="center" rowspan="2">板邊<BR>波浪</td>
 					<td align="center" rowspan="2">背面刮傷<BR>背面黑點</td>
-					<td align="center" rowspan="4">COIL<BR>編號</td>
+					<td align="center" rowspan="4">開始時間</td>
+					<td align="center" rowspan="4">結束時間</td>	
+					<td align="center" rowspan="4">施工工時(分)</td>
 				</tr>
 				<tr style='color:white; background:#003366;' >
 					<td align="center">廠內</td>
@@ -565,6 +649,7 @@
 					<td style="width:20px;"></td>
 					<td style="width:20px;"></td>
 					<td style="width:200px;"></td>
+					<td style="width:100px;"></td>
 					<td style="width:60px;"></td>
 					<td style="width:200px;"></td>
 					<td style="width:100px;"></td>
@@ -580,6 +665,8 @@
 					<td style="width:100px;"></td>
 					<td style="width:100px;"></td>
 					<td style="width:100px;"></td>
+					<td style="width:100px;"></td>
+					<td style="width:80px;"></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -592,6 +679,7 @@
 						<input id="txtNo2.*" type="text" style="float:left;width:20%;"/>
 						<input id="txtMemo.*" type="text" style="float:left;width:95%;"/>
 					</td>
+					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtSpec.*" type="text" style="float:left;width:95%;"/></td>
 					<td>
 						<input id="txtDime.*" type="text" class="num" style="float:left;width:22%;"/>
@@ -648,7 +736,9 @@
 						<input id="txtMount10.*" type="text" class="num" style="float:left;width:95%;"/>
 						<input id="txtWeight10.*" type="text" class="num" style="float:left;width:95%;"/>
 					</td>
-					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
+					<td><input id="txtBtime.*" type="text" class="txt" style="float:left;width:95%;"/></td>
+					<td><input id="txtEtime.*" type="text" class="txt" style="float:left;width:95%;"/></td>
+					<td><input id="txtMins.*" type="text" class="txt num" style="float:left;width:95%;"/></td>
 				</tr>
 			</table>
 		</div>

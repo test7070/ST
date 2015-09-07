@@ -17,7 +17,7 @@
  
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore','txtOrdeno'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore','txtOrdeno','txtAcc2'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -44,7 +44,8 @@
 				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
 				/*['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],*/
 				['txtPartno', 'lblPart', 'part', 'noa,part','txtPartno,txtPart', 'part_b.aspx'],
-				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx']
+				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
+				['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
 			);
 
 			$(document).ready(function() {
@@ -229,6 +230,9 @@
 					}
 				});
 				
+				$('#txtAcc1').change(function() {
+					sum();
+				});
 			}
 			
 			function refreshBbm() {
@@ -346,6 +350,7 @@
 						break;
 				}
 				b_pop = '';
+				sum();
 			}
 
 			var t_msg = '';
@@ -358,7 +363,7 @@
 				switch (t_name) {
 					case 'cngs_re':
 						var as = _q_appendData("view_cngs", "", true);
-							q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtRetno,txtRetnoq'
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtOrdeno,txtNo2'
 								, as.length, as, 'productno,product,unit,umount,noa,noq', 'txtProductno,txtProduct');
 						break;
 					case 'getpart':
@@ -660,7 +665,7 @@
 							$('#txtMon').val($('#txtDatea').val().substr(0, 6));
 						}else{
 							var t_date=$('#txtDatea').val();
-							var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,dec(t_date.substr(7,2)));
+							var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,1);
 				    		nextdate.setMonth(nextdate.getMonth() +1)
 				    		t_date=''+(nextdate.getFullYear()-1911)+'/'+(nextdate.getMonth()<9?'0':'')+(nextdate.getMonth()+1);
 							$('#txtMon').val(t_date);
@@ -924,12 +929,21 @@
 						if (as[0] != undefined) {
 							var t_cngno=as[0].cngno;
 							var t_err=as[0].err;	
-							if(t_err=='OK')
+							if(t_err=='OK'){
 								alert('已產生客戶歸還調撥單【' + t_cngno+'】');
-							if(t_err=='modi')
+								$('#txtTranstyle').val(t_cngno);
+								abbm[q_recno]['transtyle'] = t_cngno;
+							}
+							if(t_err=='modi'){
 								alert('已更新客戶歸還調撥單【' + t_cngno+'】');
-							$('#txtTranstyle').val(t_cngno);
-							abbm[q_recno]['transtyle'] = t_cngno;
+								$('#txtTranstyle').val(t_cngno);
+								abbm[q_recno]['transtyle'] = t_cngno;
+							}
+							if(t_err=='dele'){
+								alert('已刪除客戶歸還調撥單【' + t_cngno+'】');
+								$('#txtTranstyle').val('');
+								abbm[q_recno]['transtyle'] = '';
+							}
 						}
 					break;
 				}
@@ -1107,6 +1121,9 @@
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
 				$('#txtTotal').val(FormatNumber(t_total));
+				
+				if($('#txtAcc1').val().length>0)
+					$('#txtTotal').val(0);
 			}
 			
 		</script>
@@ -1358,6 +1375,9 @@
 						<td class="td1"><span> </span><a id='lblCust2' class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCustno2" type="text" class="txt c1"/></td>
 						<td class="td3"><input id="txtComp2" type="text" class="txt c1"/></td>
+						<td class="td1"><span> </span><a id='lblAcc1' class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtAcc1" type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtAcc2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblMoney" class="lbl"> </a></td>

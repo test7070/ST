@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -15,65 +15,43 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
+			aPop = new Array();
+			if (location.href.indexOf('?') < 0) {
+				location.href = location.href + "?;;;;" + ((new Date()).getUTCFullYear() - 1911);
+			}
 			$(document).ready(function() {
 				q_getId();
-				q_gf('', 'z_unobd');
-				
-				$('#q_report').click(function(e) {
-					if(q_getPara('sys.project').toUpperCase()!='RA'){
-						var delete_report=999;
-							for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
-								if($('#q_report').data().info.reportData[i].report=='z_unobd04')
-									delete_report=i;
-							}
-							if($('#q_report div div').text().indexOf('批號庫存表')>-1)
-								$('#q_report div div').eq(delete_report).hide()
-					}
-				});
+				q_gf('', 'z_sssp_rb');
 			});
-			function q_gfPost(t_name) {
+			function q_gfPost() {
 				$('#q_report').q_report({
-					fileName : 'z_unobd',
+					fileName : 'z_sssp_rb',
 					options : [{
 						type : '0', //[1]
-						name : 'accy',
-						value : r_accy
-					}, {/*1*/
-						type : '6', //[2]
-						name : 'xnoa'
+						name : 'xsss',
+						value : r_userno
 					}, {
-						type : '0', //[3]
-						name : 'xcubtype',
-						value : q_getPara('cubpi.typea')
-					}, {/*2*/
+						type : '6', //[2]
+						name : 'xmon'
+					}, {
+						type : '5', //[3]
+						name : 'xkind',
+						value : (('').concat(new Array("本月", "上期", "下期"))).split(',')
+					}, {
 						type : '6', //[4]
-						name : 'xenddate'
-					}, {/*3*/
-                        type : '2',
-                        name : 'product',//[5][6]
-                        dbf : 'ucaucc',
-                        index : 'noa,product',
-                        src : 'ucaucc_b.aspx'
-                    }]
+						name : 'xyear'
+					}]
 				});
-				q_langShow();
 				q_popAssign();
-				var t_noa = q_getId()[3];
-				if (t_noa.length > 0) {//used by z_uccstk
-					$('#txtXnoa').val(t_noa);
-					$('#btnOk').click();
-				}
-				
-				$('#txtXenddate').val(q_date());
-				$('#txtXenddate').mask('999/99/99');
-				$('#txtXenddate').datepicker();
-				
-			}
+                q_getFormat();
+                q_langShow();
 
-			function q_boxClose(s2) {
-			}
+				$('#txtXmon').mask(r_picm);
+				$('#txtXyear').mask(r_pic);
 
-			function q_gtPost() {
+				$('#txtXmon').val(q_date().substr(0,r_lenm));
+				$('#txtXyear').val(q_date().substr(0,r_len));
+
 			}
 		</script>
 	</head>
@@ -81,10 +59,10 @@
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
-		<div id="q_menu"></div>
+		<div id="q_menu"> </div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
-				<div id="q_report"></div>
+				<div id="q_report"> </div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->

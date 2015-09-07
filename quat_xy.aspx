@@ -20,8 +20,8 @@
 			var q_name = "quat";
 			var decbbs = ['price', 'weight', 'mount', 'total', 'dime', 'width', 'lengthb', 'c1', 'notv', 'theory'];
 			var decbbm = ['money', 'tax', 'total', 'weight', 'floata', 'mount', 'price', 'totalus'];
-			var q_readonly = ['txtNoa','txtWorker', 'txtCno', 'txtAcomp', 'txtSales', 'txtWorker2','txtMoney','txtTotal','txtTotalus','txtComp'];
-			var q_readonlys = ['txtNo3','txtTotal'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtCno', 'txtAcomp', 'txtSales', 'txtWorker2','txtMoney','txtTotal','txtTotalus','txtComp','txtConn'];
+			var q_readonlys = ['txtNo3','txtTotal','txtAdd1'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -36,6 +36,8 @@
 				['txtProductno_', '', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,invoicetitle','txtCustno,txtComp,txtNick,txtTel', 'cust_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+				['txtBoss', '', 'sss', 'noa,namea', 'txtBoss,txtConn', 'sss_b.aspx'],
+				['txtAddno1_', '', 'tgg', 'noa,nick', 'txtAddno1_,txtAdd1_', 'tgg_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			);
 			$(document).ready(function() {
@@ -1067,6 +1069,10 @@
 					$('#checkEweight').removeAttr('disabled');
 					$('#btnEmailpost').attr('disabled', 'disabled');
 					$('#btnFaxpost').attr('disabled', 'disabled');
+					if (r_rank<9){
+						$('.boss').attr('disabled', 'disabled');
+					}
+					
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#combGroupbno_'+j).removeAttr('disabled');
 						$('#combClassa_'+j).removeAttr('disabled');
@@ -1315,7 +1321,7 @@
 				float: left;
 			}
 			.txt.c2 {
-				width: 48%;
+				width: 45%;
 				float: left;
 			}
 			.txt.c3 {
@@ -1549,7 +1555,7 @@
 							<input id="txtMemo" type="text" style="width: 99%;"/>
 						</td>
 					</tr>
-					<tr class="tr11">
+					<tr class="tr11" >
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
@@ -1564,7 +1570,9 @@
 							<input id="chkCancel" type="checkbox"/>
 							<span> </span><a id='lblCancel'> </a>
 						</td>
-						<td colspan="2">
+					</tr>
+					<tr class="tr11">
+						<td colspan="2" style="text-align: right;">
 							<span> </span>
 							<input id="checkGweight" type="checkbox"/>
 							<input id="txtGweight" type="hidden" />
@@ -1573,11 +1581,14 @@
 							<input id="txtEweight" type="hidden" class="bonus" />
 							<span class="bonus"> </span><a class="bonus">獎金</a>
 						</td>
+						<td><span> </span><a id='lblBoss' class="lbl">美編</a></td>
+						<td><input id="txtBoss" type="text" class="txt c1 boss"/></td>
+						<td><input id="txtConn" type="text" class="txt c1 boss"/></td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1640px;">
+		<div class='dbbs' style="width: 1900px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
@@ -1597,6 +1608,7 @@
 					<td align="center" style="width:40px;" class="bonus"><a>獎金</a></td>
 					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
 					<td align="center" style="width:40px;"><a>成交</a></td>
+					<td align="center" style="width:200px;"><a>廠商</a></td>
 					<td align="center" style="width:40px;"><a id='lblEnda_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblCancels'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblVccrecord'> </a></td>
@@ -1641,6 +1653,10 @@
 					<td align="center">
 						<input id="checkGweight.*" type="checkbox"/>
 						<input id="txtGweight.*" type="hidden" />
+					</td>
+					<td>
+						<input id="txtAddno1.*" type="text" class="txt c2 boss"/>
+						<input id="txtAdd1.*" type="text" class="txt c3 boss"/>
 					</td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 					<td align="center"><input id="chkCancel.*" type="checkbox"/></td>

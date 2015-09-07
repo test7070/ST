@@ -585,6 +585,8 @@
 							sum();
 						});
 						$('#txtSize_' + j).change(function(e) {
+							if(q_getPara('sys.comp').substring(0,2)=='傑期')
+								return;
 							if ($.trim($(this).val()).length == 0)
 								return;
 							var n = $(this).attr('id').replace('txtSize_', '');

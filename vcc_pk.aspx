@@ -50,7 +50,7 @@
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
 				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,productno,class,spec,style,product', '0txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,productno,class,spec,style,product', '0txtUno_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 				, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
@@ -123,21 +123,28 @@
 						t_weights = q_float('txtWeight_' + j);
 						t_mounts = q_float('txtMount_' + j);
 						t_moneys = q_float('txtTotal_' + j);
-						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+						
+						
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == '㎡' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							t_prices = round(q_div(t_moneys, t_weights),3);
+							if (t_float != 0) 
+								t_moneyus = q_add(t_moneyus,q_float('txtPrice_' + j) * t_weights);
 						} else {
 							t_prices = round(q_div(t_moneys, t_mounts),3);
+							if (t_float != 0) 
+								t_moneyus =q_add(t_moneyus,q_float('txtPrice_' + j)  * t_mounts);
 						}
 						if (t_float == 0) {
 							t_moneys = round(t_moneys, 0);
+							
 						} else {
-							t_moneyus = q_add(t_moneyus, round(q_div(t_moneys, t_float), 2));
+							//t_moneyus = q_add(t_moneyus, round(q_div(t_moneys, t_float), 2));
 						}
 					}else{
 						t_weights = q_float('txtWeight_' + j);
 						t_prices = q_float('txtPrice_' + j);
 						t_mounts = q_float('txtMount_' + j);
-						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == '㎡' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							t_moneys = q_mul(t_prices, t_weights);
 						} else {
 							t_moneys = q_mul(t_prices, t_mounts);
@@ -359,6 +366,21 @@
 					$('.istax').hide();
 					//$('#txtVccatax').show();
 				}
+				
+				//上方插入空白行
+		        $('#lblTop_row').mousedown(function (e) {
+		            if (e.button == 0) {
+		                mouse_div = false;
+		                q_bbs_addrow(row_bbsbbt, row_b_seq, 0);
+		            }
+		        });
+		        //下方插入空白行
+		        $('#lblDown_row').mousedown(function (e) {
+		            if (e.button == 0) {
+		                mouse_div = false;
+		                q_bbs_addrow(row_bbsbbt, row_b_seq, 1);
+		            }
+		        });
 			}
 
 			function q_boxClose(s2) {/// q_boxClose 2/4
@@ -426,8 +448,8 @@
 							$('#txtOrdeno').val(b_ret[0].noa);
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
 							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle,txtItem', b_ret.length, b_ret
-							, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style,unit2', 'txtProductno');
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle,txtItem,txtClass', b_ret.length, b_ret
+							, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style,unit2,class', 'txtProductno');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							for (var i = 0; i < AddRet.length; i++) {
 								$('#txtMount_' + i).change();
@@ -948,6 +970,38 @@
 				Lock(1, {
 					opacity : 0
 				});
+				//補NOQ,假如NOQ有空白的就當作有做插入,全部重排
+				var isExist = false;
+				for(var i=0;i<q_bbsCount-1;i++){
+					if($('#txtNoq_'+i).val().length==0 && $('#txtNoq_'+(i+1)).val().length!=0){
+						isExist = true;						
+						break;
+					}
+				}
+				if(isExist){
+					for(var i=0;i<q_bbsCount;i++){
+						$('#txtNoq_'+i).val(('00'+(i+1)).substring(('00'+(i+1)).length-3,3));
+					}
+					/*var t_noa = $('#txtNoa').val();
+					for(var i=0;i<abbs.length;i++){
+						if(abbs[i].noa==t_noa)
+							abbs.splice(i,1);
+					}
+					for(var i=0;i<abbsNow.length;i++){
+						if(abbsNow[i].noa==t_noa)
+							abbsNow.splice(i,1);
+					}*/
+				}
+				//檢查NOQ是否重覆
+				for(var i=0;i<q_bbsCount-1;i++){
+					for(var j=1;j<q_bbsCount;j++){
+						if(i!=j && $('#txtNoq_'+i).val().length!=0 && $('#txtNoq_'+i).val()==$('#txtNoq_'+j).val()){
+							alert('序【'+$('#txtNoq_'+i).val()+'】重複請檢查!');
+							Unlock(1);
+							return;
+						}						
+					}
+				}
 
 				$('#txtOrdeno').val(GetOrdenoList());
 
@@ -1110,7 +1164,7 @@
 				}
 				var t_Product = $('#txtProduct_' + b_seq).val();
 				if (t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0) {
-					if(q_float('txtWeight_' + b_seq)=0)
+					if(q_float('txtWeight_' + b_seq)==0)
 						$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
 			}
@@ -1276,6 +1330,21 @@
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtUno_', '');
                             $('#btnUno_'+n).click();
+                        });
+                        $('#btnMinus_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            mouse_div = false;
+	                        ////////////控制顯示位置
+	                        $('#div_row').css('top', e.pageY);
+	                        $('#div_row').css('left', e.pageX);
+	                        ////////////
+	                        t_IdSeq = -1;
+	                        q_bodyId($(this).attr('id'));
+	                        b_seq = t_IdSeq;
+	                        $('#div_row').show();
+	                        row_b_seq = b_seq;
+	                        row_bbsbbt = 'bbs';
                         });
 					}
 				}//j
@@ -1779,6 +1848,16 @@
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
+		<div id="div_row" style="position:absolute; top:300px; left:500px; display:none; width:150px; background-color: #ffffff; ">
+			<table id="table_row"  class="table_row" style="width:100%;" border="1" cellpadding='1'  cellspacing='0'>
+				<tr>
+					<td align="center" ><a id="lblTop_row" class="lbl btn">上方插入空白行</a></td>
+				</tr>
+				<tr>
+					<td align="center" ><a id="lblDown_row" class="lbl btn">下方插入空白行</a></td>
+				</tr>
+			</table>
+		</div>
 		<div style="overflow: auto;display:block;">
 			<!--#include file="../inc/toolbar.inc"-->
 		</div>

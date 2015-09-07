@@ -26,7 +26,7 @@
 
                 $('#q_report').click(function(e) {
 					if(r_rank<9){
-						var delete_report=0;
+						var delete_report=999;
 							for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
 								if($('#q_report').data().info.reportData[i].report=='z_umm_xy3')
 									delete_report=i;

@@ -104,6 +104,10 @@
 				q_popAssign();
 				q_getFormat();
 				q_langShow();
+				$('#txtXdate1').mask('999/99/99');
+				$('#txtXdate1').datepicker();
+				$('#txtXdate2').mask('999/99/99');
+				$('#txtXdate2').datepicker();
 				$('#txtXodate1').mask('999/99/99');
 				$('#txtXodate1').datepicker();
 				$('#txtXodate2').mask('999/99/99');

@@ -37,7 +37,9 @@
             , ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick', 'txtTggno,txtComp,txtNick', 'tgg_b.aspx']
             , ['txtSalesno2', 'lblSales2', 'sss', 'noa,namea', 'txtSalesno2,txtSales2', 'sss_b.aspx']
             , ['txtPayinvo_', '', 'invo', 'noa,comp', 'txtPayinvo_', '']
-            , ['txtChgitemno_', 'btnChgitemno_', 'chgitem', 'noa,item,acc1,acc2', 'txtChgitemno_,txtChgitem_,txtAcc1_,txtAcc2_,txtMount_', 'chgitem_b.aspx']);
+            , ['txtChgitemno_', 'btnChgitemno_', 'chgitem', 'noa,item,acc1,acc2', 'txtChgitemno_,txtChgitem_,txtAcc1_,txtAcc2_,txtMount_', 'chgitem_b.aspx']
+            , ['txtProj_', '', 'proj', 'noa,proj', 'txtProj_', '']
+            );
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
@@ -67,6 +69,18 @@
                 q_gt('acomp', '', 0, 0, 0, "");
                 q_gt('part', '', 0, 0, 0, "");
                 q_cmbParse("cmbTypea", q_getPara('payb.typea'));
+                
+                if(q_db.substr( 0,2)!='dc')
+                	$('#btnFix').hide();
+                
+                var kind=q_getPara('vcct.kind').split(',');
+                 var t_kind='@';
+                for(var i=0;i<kind.length;i++){
+					if(kind[i].split('@')[0].substr(0,1)=='2')
+						t_kind=t_kind+(t_kind.length>0?',':'')+kind[i];
+	               
+                }
+                q_cmbParse("cmbVtype", t_kind,'s');
                 
                 $('#cmbTypea').change(function() {
                 	typea_field();
@@ -133,7 +147,7 @@
                     q_box('Tgg.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtTggno').val()), '', "95%", "600px", "廠商主檔");
                 });
                 $('#btnUcc').click(function() {
-                    q_box('ucc.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "600px", "電子檔製作");
+                    q_box('chgitem.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "600px", "費用主檔");
 
                 });
                 //--------------------------------------------
@@ -1030,15 +1044,18 @@
 					</td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:120px;"><a id='lblPayno'> </a></td>
+					
 					<td align="center" style="width:90px;"><a id='lblDatea_s'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblChgitem'> </a></td>
 					<!--<td align="center" style="width:60px;">#<a id='lblKind'> </a></td>-->
 					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblMoneys'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblMoneys'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblInvonos'> </a><BR><a id='lblTaxs'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblVtypes'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblBal'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>				
+					<td align="center" style="width:120px;display:none;"><a id='lblBal'> </a></td>
+					<td align="center" style="width:150px;"><a id='lblProj_s'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td>
@@ -1047,6 +1064,7 @@
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td><input id="txtPayno.*" type="text"  style="width: 95%;"/></td>
+			
 					<td><input id="txtDatea.*" type="text"  style="width: 95%;"/></td>
 					<td>
 						<input id="txtChgitemno.*" type="text" style="text-align: left; width: 80%;" />
@@ -1066,6 +1084,7 @@
 						<input id="txtInvono.*" type="text" style="width: 95%;"/>
 						<input id="txtTax.*" type="text" style="text-align: right; width: 95%;" />
 					</td>
+					<td><select id="cmbVtype.*" style="width: 95%;"> </select></td>
 					<td><input id="txtTotal.*" type="text" style="text-align: right; width: 95%;" /></td>
 					<td>
 						<input id="txtMemo.*" type="text" style=" width: 95%;"/>	
@@ -1073,7 +1092,8 @@
 						<input type="text" id="txtAcc1.*"  style="float: left;width:40%;"/>
 						<input type="text" id="txtAcc2.*"  style="float: left;width:40%;"/>
 					</td>
-					<td><input id="txtBal.*" type="text" style="width: 95%;" /></td>
+					<td style="display:none"><input id="txtBal.*" type="text" style="width: 95%;" /></td>
+					<td><input id="txtProj.*" type="text" style="float: left;"></td>
 				</tr>
 			</table>
 		</div>

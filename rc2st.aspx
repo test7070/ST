@@ -131,7 +131,7 @@
 						t_moneys = q_float('txtTotal_' + j);
 					}
 					else{
-						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							//批   裕承隆  是拿來當運費的單位   不能用
 							if(q_getPara('sys.comp').substring(0,2)=="裕承" && t_unit == '批' )
 								t_moneys = q_mul(t_prices, t_mounts);
@@ -452,7 +452,7 @@
 					case 'rc2s':
 						var as = _q_appendData("rc2s", "", true);
 						for (var i = 0; i < ordcsArray.length; i++) {
-							if(q_getPara('sys.project').toUpperCase()=='RK'){
+							if(q_getPara('sys.project').toUpperCase()=='RK' || q_getPara('sys.comp').substring(0,2)=="傑期"){
 								if ((ordcsArray[i].mount <= 0 && ordcsArray[i].weight <= 0) || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
 									ordcsArray.splice(i, 1);
 									i--;
@@ -543,7 +543,7 @@
 							if(t_cost!=0){
 								var t_unit = $.trim($('#txtUnit_' + i).val()).toUpperCase();
 								var t_sprice=0;
-								if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+								if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 									t_sprice=q_div(q_add(q_float('txtTotal_'+i),t_cost),q_float('txtWeight_'+i));
 								}else{
 									t_sprice=q_div(q_add(q_float('txtTotal_'+i),t_cost),q_float('txtMount_'+i));
@@ -632,7 +632,7 @@
 							$('#txtMon').val($('#txtDatea').val().substr(0, 6));
 						}else{
 							var t_date=$('#txtDatea').val();
-							var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,dec(t_date.substr(7,2)));
+							var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,1);
 				    		nextdate.setMonth(nextdate.getMonth() +1)
 				    		t_date=''+(nextdate.getFullYear()-1911)+'/'+(nextdate.getMonth()<9?'0':'')+(nextdate.getMonth()+1);
 							$('#txtMon').val(t_date);
@@ -679,6 +679,9 @@
 				var t_where = '';
 				t_where = " view_ordcs.enda='0' and kind='" + $('#cmbKind').val() + "' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
 				t_where += " and b.enda='0'";
+				if(q_getPara('sys.comp').substring(0,2)=="傑期")
+					t_where += " order by noa,no2";
+				
 				q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
 			}
 			
@@ -785,10 +788,14 @@
 						t_datea += '&';
 						t_style += '&';
 					}
-					if ($('#txtUno_' + i).val().length == 0) {
-						t_buno += '';
-						t_datea += $('#txtDatea').val();
-						t_style += $('#txtStyle_' + i).val();
+					if ($('#txtUno_' + i).val().length == 0 ) {
+						if(q_getPara('sys.comp').substring(0,2)=='傑期' && $('#txtProductno_'+i).val().toUpperCase()=='OEM'){
+							
+						}else{
+							t_buno += '';
+							t_datea += $('#txtDatea').val();
+							t_style += $('#txtStyle_' + i).val();
+						}
 					}
 				}
 				q_func('qtxt.query.getuno', 'uno.txt,getuno,' + t_buno + ';' + t_datea + ';' + t_style + ';');
@@ -804,7 +811,11 @@
 							} else {
 								for (var i = 0; i < q_bbsCount; i++) {
 									if ($('#txtUno_' + i).val().length == 0) {
-										$('#txtUno_' + i).val(as[i].uno);
+										if(q_getPara('sys.comp').substring(0,2)=='傑期' && $('#txtProductno_'+i).val().toUpperCase()=='OEM'){
+							
+										}else{
+											$('#txtUno_' + i).val(as[i].uno);
+										}
 									}
 								}
 							}
@@ -996,6 +1007,9 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+				if(q_getPara('sys.project').toUpperCase()=='PK' && !emp($('#txtOrdeno').val())){
+					alert('由報關單轉來禁止修改');
+				}
 				_btnModi();
 				$('#txtDatea').focus();
 				size_change();
@@ -1158,6 +1172,10 @@
 			}
 
 			function btnDele() {
+				if(q_getPara('sys.project').toUpperCase()=='PK' && !emp($('#txtOrdeno').val())){
+					alert('由報關單轉來禁止刪除');
+				}
+				
 				var t_where = 'where=^^ uno in(' + getBBSWhere('Uno') + ') ^^';
 				q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
 			}
@@ -1548,7 +1566,10 @@
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
-						<td><input id="txtAccno" type="text"  class="txt c1"/></td>
+						<td>
+							<input id="txtAccno" type="text"  class="txt c1"/>
+							<input id="txtOrdeno" type="hidden"  class="txt c1"/>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -1637,7 +1658,9 @@
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
-					<td><input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/></td>
+					<td>
+						<input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>
+					</td>
 					<td style="display:none;" class="sprice"><input id="txtSprice.*" type="text"  class="txt num sprice" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>

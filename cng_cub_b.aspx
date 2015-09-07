@@ -10,7 +10,7 @@
 		<script src="../script/qbox.js" type="text/javascript"></script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-            var q_name = "get_cub", t_content = "where=^^['','')^^", bbsKey = ['uno'], as;
+            var q_name = "cng_cub", t_content = "where=^^['','')^^", bbsKey = ['uno'], as;
             var isBott = false;
             var txtfield = [], afield, t_data, t_htm, t_bbsTag = 'tbbs';
        		brwCount = -1;
@@ -28,9 +28,19 @@
                 var t_para = new Array();
 	            try{
 	            	t_para = JSON.parse(decodeURIComponent(q_getId()[5]));
-	            	t_content = "where=^^['"+t_para.cubno+"','"+t_para.page+"')^^";
-	    
-	            	 
+	            	if(t_para.page=='cub_rk'){
+	            		q_name = "cng_cub";
+	            		t_content = "where=^^['"+t_para.cubno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cuc_rk'){
+	            		q_name = "cng_cuc";
+	            		t_content = "where=^^['"+t_para.cucno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cud_rk'){
+	            		q_name = "cng_cud";
+	            		t_content = "where=^^['"+t_para.cudno+"','"+t_para.page+"')^^";
+	            	}else if(t_para.page=='cut_rk'){
+	            		q_name = "cng_cut";
+	            		t_content = "where=^^['"+t_para.cutno+"','"+t_para.page+"')^^";
+	            	}
 	            }catch(e){
 	            }    
                 brwCount = -1;
@@ -74,10 +84,11 @@
 				<tr style='color:white; background:#003366;' >
 					<th align="center" style="width:2%;"><input type="checkbox" id="checkAllCheckbox" style="display:none;"/></th>
 					<td align="center" style="width:20%;">批號</td>
+					<td align="center" style="width:10%;">品名</td>
+					<td align="center" style="width:15%;">尺寸</td>
 					<td align="center" style="width:8%;">總重</td>
 					<td align="center" style="width:8%;">已領重</td>
 					<td align="center" style="width:8%;">餘重</td>
-					<td align="center" style="width:15%;">尺寸</td>
 				</tr>
 			</table>
 		</div>
@@ -86,19 +97,23 @@
 				<tr style="display:none;">
 					<th align="center" style="width:2%;"></th>
 					<td align="center" style="width:20%;">批號</td>
+					<td align="center" style="width:10%;">品名</td>
+					<td align="center" style="width:15%;">尺寸</td>
 					<td align="center" style="width:8%;">總重</td>
 					<td align="center" style="width:8%;">已領重</td>
 					<td align="center" style="width:8%;">餘重</td>
-					<td align="center" style="width:15%;">尺寸</td>
+					
 				</tr>
 				<tr style='background:#cad3ff;'>
-					<td style="width:2%;"><input type="radio" id="chkSel.*"/></td>
+					<td style="width:2%;"><input type="radio" id="chkSel.*" name="sel"/></td>
 					<!--<td style="width:2%;"><input type="checkbox" class="ccheck" id="chkSel.*"/></td>-->
 					<td style="width:20%;"><input id="txtUno.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
+					<td style="width:10%;"><input id="txtProduct.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
+					<td style="width:15%;"><input id="txtSize.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
 					<td style="width:8%;"><input id="txtWeight.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
 					<td style="width:8%;"><input id="txtGweight.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
 					<td style="width:8%;"><input id="txtEweight.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
-					<td style="width:15%;"><input id="txtSize.*" type="text" style="float:left;width:100%;"  readonly="readonly" /></td>
+					
 				</tr>
 			</table>
 		</div>

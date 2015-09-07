@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -18,7 +18,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtCno', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtWorker', 'txtWorker2','txtComp2','txtPrice'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq','txtMount','txtProduct','txtSpec','txtStore','txtStore2'];
+			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq','txtProduct','txtSpec','txtStore','txtStore2','txtMount'];
 			var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1]];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -38,7 +38,7 @@
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCustno2', 'lblCust2', 'cust', 'noa,comp', 'txtCustno2,txtComp2', 'cust_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx']
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucaucc_b.aspx']
 			);
 
 			var isinvosystem = false;
@@ -87,7 +87,10 @@
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 0, 1]];
-				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtWidth', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1], ['txtTranmoney2', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTranmoney3', 9, q_getPara('vcc.mountPrecision'), 1]];
+				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 10, q_getPara('vcc.mountPrecision'), 1]
+				, ['txtWidth', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]
+				, ['txtTranmoney2', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTranmoney3', 9, q_getPara('vcc.mountPrecision'), 1]
+				, ['txtDime', 9, q_getPara('vcc.mountPrecision'), 1]];
 				//q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
@@ -97,6 +100,8 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				var t_where = "where=^^ 1=1  group by post,addr^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				//104/08/17 要跟訂單一樣 單行判斷出貨.寄庫.庫出
+				q_cmbParse("cmbItemno",'0@ ,1@寄庫,2@庫出','s');
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
@@ -254,7 +259,8 @@
 								b_ret[i].tranmoney3=0;
 								b_ret[i].tranmoney2=0;
 								b_ret[i].width=0;
-								if(b_ret[i].source=='2'){//寄出
+								b_ret[i].dime=b_ret[i].mount;
+								if(b_ret[i].source=='2'){//庫出
 									b_ret[i].tranmoney3=b_ret[i].mount;
 									b_ret[i].mount=0;
 								}else if(b_ret[i].source=='1'){//寄庫
@@ -264,8 +270,8 @@
 								}
 							}
 								
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtMount,txtWidth,txtTranmoney2,txtTranmoney3,txtPrice,txtMemo,txtOrdeno,txtNo2', b_ret.length, b_ret
-							, 'productno,product,spec,unit,mount,width,tranmoney2,tranmoney3,price,memo,noa,no2', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit,txtDime,txtMount,txtWidth,txtTranmoney2,txtTranmoney3,txtPrice,txtMemo,txtOrdeno,txtNo2,cmbItemno', b_ret.length, b_ret
+							, 'productno,product,spec,unit,dime,mount,width,tranmoney2,tranmoney3,price,memo,noa,no2,source', 'txtProductno,txtProduct,txtSpec');
 							//寫入訂單號碼
 							var t_oredeno = '';
 							for (var i = 0; i < b_ret.length; i++) {
@@ -520,14 +526,14 @@
 						var as = _q_appendData("view_vccs", "", true);
 						if (as[0] != undefined) {
 							if(dec(as[0].stkmount)==0){
-								alert("無寄庫量，不得寄出貨!!");
+								alert("無寄庫量，不得庫出貨!!");
 								$('#txtTranmoney3_' + b_seq).val(0);
 							}else if (dec($('#txtTranmoney3_' + b_seq).val())>dec(as[0].stkmount)){
 								alert("【"+q_getMsg('lblTranmoney3_s')+"】不得大於【寄庫量】!!");
 								$('#txtTranmoney3_' + b_seq).val(dec(as[0].stkmount));
 							}
 						}else{
-							alert("無寄庫量，不得寄出貨!!");
+							alert("無寄庫量，不得庫出貨!!");
 							$('#txtTranmoney3_' + b_seq).val(0);	
 						}
 						break;	
@@ -706,7 +712,7 @@
 							$('#txtMon').val($('#txtDatea').val().substr(0, 6));
 						}else{
 							var t_date=$('#txtDatea').val();
-							var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,dec(t_date.substr(7,2)));
+							var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,1);
 				    		nextdate.setMonth(nextdate.getMonth() +1)
 				    		t_date=''+(nextdate.getFullYear()-1911)+'/'+(nextdate.getMonth()<9?'0':'')+(nextdate.getMonth()+1);
 							$('#txtMon').val(t_date);
@@ -727,14 +733,32 @@
 				//判斷只要有商品 數量(出貨 寄庫/出) 為0 彈出警告視窗
 				t_err='';
 				for (var i = 0; i < q_bbsCount; i++) {
-					if(!emp($('#txtProductno_'+i).val()) && q_float('txtWidth_'+i)==0 && q_float('txtTranmoney2_'+i)==0 && q_float('txtTranmoney3_'+i)==0){
-						t_err=t_err+(t_err.length>0?'\n':'')+$('#txtProduct_'+i).val()+'數量為0，請確認出貨、寄庫、寄出數量!!';
+					if(!emp($('#txtProductno_'+i).val()) && q_float('txtWidth_'+i)==0 && q_float('txtTranmoney2_'+i)==0 && q_float('txtTranmoney3_'+i)==0 && q_float('txtMount_'+i)==0 && q_float('txtDime_'+i)==0){
+						t_err=t_err+(t_err.length>0?'\n':'')+$('#txtProduct_'+i).val()+'數量為0，請確認出貨、寄庫、庫出數量!!';
 					}
 				}
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
 				}
+				
+				for (var i = 0; i < q_bbsCount; i++) {
+					if($('#cmbItemno_'+i).val()=='1'){//寄庫
+						$('#txtTranmoney2_'+i).val($('#txtDime_'+i).val());
+						$('#txtTranmoney3_'+i).val(0);
+						$('#txtWidth_'+i).val(0);
+					}else if($('#cmbItemno_'+i).val()=='2'){//庫出
+						$('#txtTranmoney3_'+i).val($('#txtDime_'+i).val());
+						$('#txtTranmoney2_'+i).val(0);
+						$('#txtWidth_'+i).val(0);
+					}else{//出貨
+						$('#txtWidth_'+i).val($('#txtDime_'+i).val());
+						$('#txtTranmoney3_'+i).val(0);
+						$('#txtTranmoney2_'+i).val(0);
+					}
+				}
+				
+				sum();
 				
 				//104/02/26 判斷寄庫倉編號要與客戶編號相似
 				t_err='';
@@ -832,6 +856,34 @@
 							sum();
 						});
 						
+						$('#txtDime_' + i).focusout(function() {
+							if (q_cur == 1 || q_cur == 2){
+								t_IdSeq = -1;
+								q_bodyId($(this).attr('id'));
+								b_seq = t_IdSeq;
+								var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
+								if (t_err.length > 0) {
+									alert(t_err);
+									$(this).val('');
+									return;
+								}
+								if($('#cmbItemno_'+b_seq).val()=='1'){//寄庫
+									$('#txtTranmoney2_'+b_seq).val($('#txtDime_'+b_seq).val());
+									$('#txtTranmoney3_'+b_seq).val(0);
+									$('#txtWidth_'+b_seq).val(0);
+								}else if($('#cmbItemno_'+b_seq).val()=='2'){//庫出
+									$('#txtTranmoney3_'+b_seq).val($('#txtDime_'+b_seq).val());
+									$('#txtTranmoney2_'+b_seq).val(0);
+									$('#txtWidth_'+b_seq).val(0);
+								}else{//出貨
+									$('#txtWidth_'+b_seq).val($('#txtDime_'+b_seq).val());
+									$('#txtTranmoney3_'+b_seq).val(0);
+									$('#txtTranmoney2_'+b_seq).val(0);
+								}
+								sum();
+							}
+						});
+						
 						$('#txtMount_' + i).focusout(function() {
 							if (q_cur == 1 || q_cur == 2){
 								var t_err = q_chkEmpField([['txtCustno', q_getMsg('lblCust')]]);
@@ -842,6 +894,31 @@
 								}
 								sum();
 							}
+						});
+						
+						$('#cmbItemno_' + i).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if($('#cmbItemno_'+b_seq).val()=='1'){//寄庫
+									$('#txtTranmoney2_'+b_seq).val($('#txtDime_'+b_seq).val());
+									$('#txtTranmoney3_'+b_seq).val(0);
+									$('#txtWidth_'+b_seq).val(0);
+							}else if($('#cmbItemno_'+b_seq).val()=='2'){//庫出
+								$('#txtTranmoney3_'+b_seq).val($('#txtDime_'+b_seq).val());
+								$('#txtTranmoney2_'+b_seq).val(0);
+								$('#txtWidth_'+b_seq).val(0);
+							}else{//出貨
+								$('#txtWidth_'+b_seq).val($('#txtDime_'+b_seq).val());
+								$('#txtTranmoney3_'+b_seq).val(0);
+								$('#txtTranmoney2_'+b_seq).val(0);
+							}
+							sum();
+							
+							if(!emp($('#txtMemo_'+b_seq).val()))
+								$('#txtMemo_'+b_seq).val($('#cmbItemno_' + b_seq).find("option:selected").text()+'：'+$('#txtMount_' + b_seq).val()+$('#txtUnit_' + b_seq).val()+','+$('#txtMemo_'+b_seq).val());
+							else
+								$('#txtMemo_'+b_seq).val($('#cmbItemno_' + b_seq).find("option:selected").text()+'：'+$('#txtMount_' + b_seq).val()+$('#txtUnit_' + b_seq).val());
 						});
 						
 						$('#txtWidth_' + i).focusout(function() {
@@ -873,7 +950,7 @@
 							AutoNoq();
 						});
 						
-						$('#txtMount_' + i).focusin(function() {
+						/*$('#txtMount_' + i).focusin(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								t_IdSeq = -1;
 								q_bodyId($(this).attr('id'));
@@ -884,7 +961,7 @@
 									q_gt('calstk', t_where, 0, 0, 0, "msg_stk", r_accy);
 								}
 							}
-						});
+						});*/
 						
 						$('#txtPrice_' + i).focusin(function() {
 							if (q_cur == 1 || q_cur == 2) {
@@ -1596,7 +1673,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 2080px;">
+		<div class='dbbs' style="width: 2000px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;width:" /></td>
@@ -1605,14 +1682,15 @@
 					<td align="center" style="width:180px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblSpec_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
-					<td align="center" style="width:80px;">請款數量</td>
+					<td align="center" style="width:80px;display: none;">請款數量</td>
 					<td align="center" style="width:80px;">出貨數量</td>
+					<td align="center" style="width:70px;"><a >寄/出庫</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width:120px;">出貨倉庫</td>
 					<td class="store2" align="center" style="width:120px;"><a id='lblStore2_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblTranmoney2_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblTranmoney3_s'> </a></td>
+					<td align="center" style="width:80px;display: none;"><a id='lblTranmoney2_s'> </a></td>
+					<td align="center" style="width:80px;display: none;"><a id='lblTranmoney3_s'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:150px;">訂單號碼</td>
 					<td align="center" style="width:40px;"><a id='lblRecord_s'> </a></td>
@@ -1628,8 +1706,10 @@
 					<td><input id="txtProduct.*" type="text" class="txt c1" /></td>
 					<td><input id="txtSpec.*" type="text" class="txt c1" /></td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
-					<td><input id="txtMount.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtWidth.*" type="text" class="txt num c1"/></td>
+					<td style="display: none;"><input id="txtMount.*" type="text" class="txt num c1"/></td>
+					<td style="display: none;"><input id="txtWidth.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtDime.*" type="text" class="txt num c1"/></td>
+					<td><select id="cmbItemno.*" class="txt c1"> </select></td>
 					<td><input id="txtPrice.*" type="text" class="txt num c1"/>
 						<input id="txtSprice.*" type="hidden" class="txt num c1"/>
 					</td>
@@ -1644,8 +1724,8 @@
 						<input class="btn"  id="btnStoreno2.*" type="button" value='.' style=" font-weight: bold;" />
 						<input id="txtStore2.*" type="text" class="txt c1 store2" style="width: 50%"/>
 					</td>
-					<td><input id="txtTranmoney2.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtTranmoney3.*" type="text" class="txt num c1"/></td>
+					<td style="display: none;"><input id="txtTranmoney2.*" type="text" class="txt num c1"/></td>
+					<td style="display: none;"><input id="txtTranmoney3.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtMemo.*" type="text" class="txt c1"/></td>
 					<td>
 						<input id="txtOrdeno.*" type="text"  class="txt" style="width:65%;"/>

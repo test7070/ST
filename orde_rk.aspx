@@ -19,7 +19,7 @@
             var q_readonly = ['txtWorker', 'txtWorker2','txtMoney','txtTax','txtTotal','txtQuatno'];
             var q_readonlys = ['txtNo2'];
             var bbmNum = [];
-            var bbsNum = [];
+            var bbsNum = [['txtMount', 10, 0, 1], ['txtWeight', 10, 2, 1]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;

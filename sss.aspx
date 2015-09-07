@@ -38,11 +38,15 @@
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				q_brwCount();
-				if (r_rank >= 7)
+				
+				if (r_rank >= 7){
 					q_content = "";
-				else
-					q_content = "where=^^noa='" + r_userno + "'^^";
-				q_gt(q_name, q_content, q_sqlCount, 1);
+					q_gt(q_name, q_content, q_sqlCount, 1);
+				}else{
+					//q_content = "where=^^noa='" + r_userno + "'^^";
+					t_where = "where=^^ a.noa='" + q_name + "' and a.sssno='"+r_userno+"' ^^";
+					q_gt('authority', t_where, 0, 0, 0, "", r_accy);
+				}
 				
 			});
 
@@ -395,11 +399,12 @@
 						break;
 					case 'authority':
 						var as = _q_appendData('authority', '', true);
-						if (as.length > 0 && as[0]["pr_run"] == "true")
-							q_content = "";
-						else
-							q_content = "where=^^noa='" + r_userno + "'^^";
-
+						q_content = "where=^^noa='" + r_userno + "'^^";
+						if (as[0] != undefined) {
+							if (as[0]["pr_dele"] == "true"){
+								q_content = "";
+							}
+						}
 						q_gt(q_name, q_content, q_sqlCount, 1);
 						break;
 					case 'part':
@@ -448,7 +453,7 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				_btnModi(1);
+				_btnModi();
 				refreshBbm();
 				/// 允許修改
 				$('#txtNamea').focus();
@@ -456,10 +461,12 @@
 			}
 
 			function btnPrint() {
-				if (q_getPara('sys.comp').indexOf('永勝') > -1)
+				if (q_getPara('sys.project').toUpperCase()=='UU')
 					q_box('z_sssp_uu.aspx', '', "95%", "95%", q_getMsg("popPrint"));
-				else if (q_getPara('sys.comp').indexOf('英特瑞') > -1|| q_getPara('sys.comp').indexOf('安美得') > -1)
+				if (q_getPara('sys.project').toUpperCase()=='IT')
 					q_box('z_sssp_it.aspx', '', "95%", "95%", q_getMsg("popPrint"));
+				if (q_getPara('sys.project').toUpperCase()=='RB')
+					q_box('z_sssp_rb.aspx', '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function q_stPost() {

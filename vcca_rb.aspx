@@ -150,8 +150,11 @@
 					if(q_cur==1 || q_cur==2){
 						var t_ordeno = trim($('#txtTrdno').val());
 						if (t_ordeno.length > 0) {
-							t_where = " noa='"+t_ordeno+"' ";
-							q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where + ";" + r_accy, 'ordes', "95%", "95%", q_getMsg("popOrdes"));
+							var t_where=" a.noa='"+t_ordeno+"' ";
+							t_where=t_where+" group by b.productno,b.product,b.unit,b.price,c.vmount ";
+							t_where=t_where+" having SUM(b.mount)-sum(isnull(c.vmount,0))>0 ";
+							q_gt('orde_vcca_rb', "where=^^ "+t_where+" ^^", 0, 0, 0, "",'');						
+							//q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where + ";" + r_accy, 'ordes', "95%", "95%", q_getMsg("popOrdes"));
 						}else{
 							alert('訂單編號禁止空白!!');
 						}
@@ -163,7 +166,12 @@
 						var t_custno = trim($('#txtCustno').val());
 						var t_mon=trim($('#txtMon').val());
 						if (t_custno.length > 0 && t_mon.length>0) {
-							q_gt('view_ordes', "where=^^ exists (select * from view_orde where noa=view_ordes.noa and custno='"+t_custno+"' and mon='"+t_mon+"') and not exists (select * from vcca where charindex(view_ordes.noa,trdno)>0 ) ^^", 0, 0, 0, "",'');
+							var t_where=" a.custno='"+t_custno+"' and a.mon='"+t_mon+"' ";
+							t_where=t_where+" group by b.productno,b.product,b.unit,b.price,c.vmount ";
+							t_where=t_where+" having SUM(b.mount)-sum(isnull(c.vmount,0))>0 ";
+							q_gt('orde_vcca_rb', "where=^^ "+t_where+" ^^", 0, 0, 0, "",'');	
+							
+							//q_gt('view_ordes', "where=^^ exists (select * from view_orde where noa=view_ordes.noa and custno='"+t_custno+"' and mon='"+t_mon+"') and not exists (select * from vcca where charindex(view_ordes.noa,trdno)>0 ) ^^", 0, 0, 0, "",'');
 						}else{
 							alert('銷貨客戶與帳款月份禁止空白!!');
 						}
@@ -374,19 +382,6 @@
 							sum();
 						}
 						break;
-					case 'vccavcc':
-                        if (b_ret != null) {
-                        	$("#dbbt").show();
-                        	as = b_ret;
-                        	for(var i=0;i<q_bbtCount;i++){
-                        		$('#btnMinut__'+i).click();
-                        	}
-                    		q_gridAddRow(bbtHtm, 'tbbt', 'txtVccaccy,txtVccno,txtVccnoq,txtProduct,txtMount,txtWeight,txtPrice,txtMoney'
-                        	, as.length, as, 'accy,noa,noq,product,mount,weight,price,total', '','');
-                        }else{
-                        	Unlock(1);
-                        }
-                        break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
@@ -396,6 +391,40 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'orde_money':
+						var as = _q_appendData("view_orde", "", true);
+						if (as[0] != undefined) {
+							ordemoney=dec(as[0].total);
+							t_where = "where=^^ trdno='"+$('#txtTrdno').val()+"' and noa!='"+$('#txtNoa').val()+"' ^^";
+							q_gt('vcca', t_where, 0, 0, 0, "vcca_money", r_accy);
+						}else{
+							alert('無該訂單!!');
+						}
+						break;
+					case 'vcca_money':
+						var as = _q_appendData("vcca", "", true);
+						vccamoney=0;
+						if (as[0] != undefined) {
+							for(var i=0;i<as.length;i++){
+								vccamoney+=dec(as[i].total);
+							}
+						}
+						if(ordemoney>=vccamoney+dec($('#txtTotal').val())){
+							ordemoney_check=true;
+							btnOk();
+						}else{
+							alert('本張發票金額:'+$('#txtTotal').val()+'\訂單已開發票金額:'+vccamoney+'\n訂單可開發票金額:'+ordemoney+'\n--------------------------\n發票超出金額:'+(vccamoney+dec($('#txtTotal').val())-ordemoney));
+						}
+						break;
+					case 'orde_vcca_rb':
+						var as = _q_appendData("view_orde", "", true);
+						for(var i=0;i<q_bbsCount;i++){
+                        	$('#btnMinus_'+i).click();
+                        }
+						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtPrice,txtMoney'
+							, as.length, as, 'productno,product,unit,emount,price,etotal', '');
+							sum();
+						break;
 					case 'view_ordes':
 						var as = _q_appendData("view_ordes", "", true);
 						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtPrice,txtMoney,txtMemo'
@@ -490,21 +519,26 @@
 				$('#txtChkno').val(xmlString.split(";")[1]);
 				Unlock(1);
 			}
-
+			
+			var ordemoney_check=false,ordemoney=0,vccamoney=0;
 			function btnOk() {
 				Lock(1, {
 					opacity : 0
 				});
+				
 				if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
 					alert(q_getMsg('lblDatea') + '錯誤。');
 					return;
 				}
+				
 				$('#txtNoa').val($.trim($('#txtNoa').val()));
+				
 				if ($('#txtNoa').val().length > 0 && !(/^[a-z,A-Z]{2}[0-9]{8}$/g).test($('#txtNoa').val())) {
 					alert(q_getMsg('lblNoa') + '錯誤。');
 					Unlock(1);
 					return;
 				}
+				
 				if ($.trim($('#txtMon').val()).length == 0)
 					$('#txtMon').val($('#txtDatea').val().substring(0, 6));
 				$('#txtMon').val($.trim($('#txtMon').val()));
@@ -513,8 +547,19 @@
 					Unlock(1);
 					return;
 				}
+				//檢查發票金額是否超出訂單金額
+				if($('#txtTrdno').val().length>0 && !ordemoney_check){
+					t_where = "where=^^ noa='"+$('#txtTrdno').val()+"' ^^";
+					q_gt('view_orde', t_where, 0, 0, 0, "orde_money", r_accy);
+					Unlock(1);
+					return;
+				}
+				ordemoney_check=false;
+				
 				$('#txtWorker').val(r_name);
+				
 				sum();
+				
 				var t_where = '';
 				if (q_cur == 1) {
 					t_where = "where=^^ cno='" + $('#txtCno').val() + "' and ('" + $('#txtDatea').val() + "' between bdate and edate) " + " and exists(select noa from vccars where vccars.noa=vccar.noa and ('" + $('#txtNoa').val() + "' between binvono and einvono))" + " and not exists(select noa from vcca where noa='" + $('#txtNoa').val() + "') ^^";
@@ -572,7 +617,7 @@
 				curData.copy();
 				_btnIns();
 				curData.paste();
-				$('#cmbTaxtype').val(1);
+				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
 				$('#txtType').val('M'); //M手動開立 //A批次開立//E發票開立//(空白NULL)出貨單自動產生發票
 				Lock(1, {
 					opacity : 0
@@ -591,7 +636,7 @@
 			}
 
 			function btnPrint() {
-				q_box('z_vccap.aspx?;;;' + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
+				//q_box('z_vccap.aspx?;;;' + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
@@ -747,8 +792,8 @@
 			var orderbopen = true;
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
-				
-				if (!emp($('#txtVccno').val()) || !emp($('#txtTrdno').val())){
+				//08/19 開放給他們改
+				/*if (!emp($('#txtVccno').val()) || !emp($('#txtTrdno').val())){
 					$('#txtNoa').attr('disabled','disabled');
 					$('#cmbTaxtype').attr('disabled','disabled');
 					$('#btnPlus').attr('disabled','disabled');
@@ -765,7 +810,7 @@
 						$('#txtMoney_'+i).attr('disabled','disabled');
 						$('#txtMemo_'+i).attr('disabled','disabled');
 					}
-				}
+				}*/
 				
 				if(t_para){
 					//$('#btnOrdes').removeAttr('disabled');
