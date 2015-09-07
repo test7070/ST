@@ -19,7 +19,7 @@
             q_tables = 's';
             var q_name = "costa";
             var q_readonly = ['txtNoa'];
-            var q_readonlys = [];
+            var q_readonlys = ['txtMoney'];
             var bbmNum = [['txtWages',15,0,1],['txtMakeless',15,0,1]];
             var bbsNum = [['txtMount', 15, 2, 1],['txtPrice', 15, 2, 1],['txtMoney', 15, 0, 1]];
             var bbmMask = [];
@@ -35,7 +35,9 @@
 				,['txtAcc1_', 'btnAcc1_', 'acc', 'acc1,acc2', 'txtAcc1_,txtAcc2_', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]);
 			var t_mech = '';
 			function sum() {
-                
+            	for(var i=0;i<q_bbsCount;i++){
+            		$('#txtMoney_'+i).val(round(q_mul(q_float('txtMount_'+i),q_float('txtPrice_'+i)),0));
+            	}    
             }
             
             $(document).ready(function() {
@@ -91,6 +93,8 @@
             }
 
             function btnOk() {
+            	sum();
+            	
                 var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtMon').val());
                 if (t_noa.length == 0 || t_noa == "AUTO")
@@ -109,17 +113,19 @@
 					$('#lblNo_' + i).text(i + 1);
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
 						$('#txtProductno_' + i).bind('contextmenu', function(e) {
-                            /滑鼠右鍵/
+                            //滑鼠右鍵/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtProductno_', '');
                             $('#btnProduct_'+n).click();
                         });
                         $('#txtAcc1_' + i).bind('contextmenu', function(e) {
-                            /滑鼠右鍵/
+                            //滑鼠右鍵/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtAcc1_', '');
                             $('#btnAcc1_'+n).click();
                         });
+                        $('#txtMount_'+i).change(function(e){sum();});
+                        $('#txtPrice_'+i).change(function(e){sum();});
 					}
 				}
                 _bbsAssign();
@@ -150,7 +156,23 @@
             }
 
             function bbsSave(as) {
-                if (!as['productno'] && !as['product']) {
+            	var chkNum = false;
+            	try{
+            		var t_mount = $.trim(as['mount']);
+            		var t_price = $.trim(as['price']);
+            		t_mount = t_mount.replace(',','');
+            		t_price = t_price.replace(',','');
+            		t_mount = t_mount.length==0?0:parseFloat(t_mount);
+            		t_price = t_price.length==0?0:parseFloat(t_price);
+            		
+            		//console.log(t_mount+'_'+t_price);
+            		//console.log(as['mount']+'_'+as['price']);
+            		if(t_mount!=0 || t_price!=0)
+            			chkNum = true;
+            	}catch(e){}
+            	
+            	
+                if (!as['productno'] && !as['product'] && !as['acc1'] && !as['acc2'] && !chkNum) {
                     as[bbsKey[1]] = '';
                     return;
                 }

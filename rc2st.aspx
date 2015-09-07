@@ -679,6 +679,9 @@
 				var t_where = '';
 				t_where = " view_ordcs.enda='0' and kind='" + $('#cmbKind').val() + "' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
 				t_where += " and b.enda='0'";
+				if(q_getPara('sys.comp').substring(0,2)=="傑期")
+					t_where += " order by noa,no2";
+				
 				q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
 			}
 			
@@ -1004,6 +1007,9 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+				if(q_getPara('sys.project').toUpperCase()=='PK' && !emp($('#txtOrdeno').val())){
+					alert('由報關單轉來禁止修改');
+				}
 				_btnModi();
 				$('#txtDatea').focus();
 				size_change();
@@ -1166,6 +1172,10 @@
 			}
 
 			function btnDele() {
+				if(q_getPara('sys.project').toUpperCase()=='PK' && !emp($('#txtOrdeno').val())){
+					alert('由報關單轉來禁止刪除');
+				}
+				
 				var t_where = 'where=^^ uno in(' + getBBSWhere('Uno') + ') ^^';
 				q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
 			}
@@ -1556,7 +1566,10 @@
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
-						<td><input id="txtAccno" type="text"  class="txt c1"/></td>
+						<td>
+							<input id="txtAccno" type="text"  class="txt c1"/>
+							<input id="txtOrdeno" type="hidden"  class="txt c1"/>
+						</td>
 					</tr>
 				</table>
 			</div>

@@ -623,7 +623,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 2300px;
+				width: 2500px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -728,8 +728,8 @@
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblMonth" class="lbl">月份</a></td>
-						<td><input id="txtMonth" type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblMonth" class="lbl" style="display:none;">月份</a></td>
+						<td><input id="txtMonth" type="text" class="txt c1" style="display:none;"/></td>
 						<td> </td>
 						<td><input type="button" id="btnOrde" value="訂單匯入" /></td>
 					</tr>

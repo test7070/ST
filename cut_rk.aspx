@@ -507,7 +507,7 @@
                 color: blue;
                 /*background: #cad3ff;*/
                 background: lightgrey;
-                width: 1700px;
+                width: 1900px;
             }
             .dbbs .tbbs tr {
                 height: 35px;
@@ -616,7 +616,7 @@
 					<td style="width:200px;">訂單號碼</td>
 					<td style="width:200px;">製造批號</td>
 					<td style="width:200px;">Coil編號</td>
-					<td style="width:200px;">規格</td>
+					<td style="width:400px;">規格</td>
 					<td style="width:80px;">數量</td>
 					<td style="width:80px;">重量</td>
 					<td style="width:200px;">客戶</td>
@@ -639,7 +639,7 @@
 						<input id="txtNo2.*" type="text" style="float:left;width:20%;"/>
 					</td>
 					<td><input id="txtCname.*" type="text" style="float:left;width:95%;"/></td>
-					<td><input id="txtSpecial.*" maxlength="20" type="text" style="float:left;width:95%;"/></td>			
+					<td><input id="txtUno.*" maxlength="20" type="text" style="float:left;width:95%;"/></td>			
 					<td>
 						<input id="txtSpec.*" type="text" style="float:left;width:45%;"/>
 						<input id="txtClass.*" type="text" style="float:left;width:45%;"/>
@@ -659,8 +659,8 @@
 						<input id="txtComp.*" type="text" style="float:left;width:45%;"/>
 						<input id="btnCust.*" type="button" style="display:none;">
 					</td>
-					<td><input id="txtUno.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtBno.*" type="text" style="float:left;width:95%;"/></td>
+					<td><input id="txtSpecial.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtDatea.*" type="text" style="float:left;width:95%;"/></td>
 					<td><input id="txtBtime.*" type="text" class="txt" style="float:left;width:95%;"/></td>

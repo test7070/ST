@@ -37,7 +37,9 @@
             , ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick', 'txtTggno,txtComp,txtNick', 'tgg_b.aspx']
             , ['txtSalesno2', 'lblSales2', 'sss', 'noa,namea', 'txtSalesno2,txtSales2', 'sss_b.aspx']
             , ['txtPayinvo_', '', 'invo', 'noa,comp', 'txtPayinvo_', '']
-            , ['txtChgitemno_', 'btnChgitemno_', 'chgitem', 'noa,item,acc1,acc2', 'txtChgitemno_,txtChgitem_,txtAcc1_,txtAcc2_,txtMount_', 'chgitem_b.aspx']);
+            , ['txtChgitemno_', 'btnChgitemno_', 'chgitem', 'noa,item,acc1,acc2', 'txtChgitemno_,txtChgitem_,txtAcc1_,txtAcc2_,txtMount_', 'chgitem_b.aspx']
+            , ['txtProj_', '', 'proj', 'noa,proj', 'txtProj_', '']
+            );
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
@@ -1053,7 +1055,7 @@
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>				
 					<td align="center" style="width:120px;display:none;"><a id='lblBal'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblProj'>專案代號</a></td>
+					<td align="center" style="width:150px;"><a id='lblProj_s'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td>
@@ -1090,7 +1092,6 @@
 						<input type="text" id="txtAcc1.*"  style="float: left;width:40%;"/>
 						<input type="text" id="txtAcc2.*"  style="float: left;width:40%;"/>
 					</td>
-					
 					<td style="display:none"><input id="txtBal.*" type="text" style="width: 95%;" /></td>
 					<td><input id="txtProj.*" type="text" style="float: left;"></td>
 				</tr>
