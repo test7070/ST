@@ -134,20 +134,27 @@
                 		,t_cointotaldiv),2)));
                 		//本幣完稅價格(原幣完稅價格*匯率)
                 		q_tr('txtTotal_'+j,round(q_mul(q_float('txtCointotal_'+j),q_float('txtFloata')),0));
+                		//本幣單價
+						var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+							q_tr('txtPrice2_'+j,round(q_div(q_float('txtTotal_'+j),q_float('txtInweight_'+j)),3));
+                        }else{
+                        	q_tr('txtPrice2_'+j,round(q_div(q_float('txtTotal_'+j),q_float('txtInmount_'+j)),3));
+                        }
                 		//原幣關稅(原幣完稅價格*關稅率)
-                			q_tr('txtCointariff_'+j,round(q_mul(q_float('txtCointotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),2));
+                		q_tr('txtCointariff_'+j,round(q_mul(q_float('txtCointotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),2));
                 		//本幣關稅(本幣完稅價格*關稅率)
-                			q_tr('txtTariff_'+j,round(q_mul(q_float('txtTotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),0));
+                		q_tr('txtTariff_'+j,round(q_mul(q_float('txtTotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),0));
                 		//推廣貿易費(本幣完稅價格*推廣貿易費率)
-                			q_tr('txtTrade_'+j,round(q_mul(q_float('txtTotal_'+j),q_div(q_float('txtTraderate_'+j),100)),0));
+                		q_tr('txtTrade_'+j,round(q_mul(q_float('txtTotal_'+j),q_div(q_float('txtTraderate_'+j),100)),0));
                 		//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
-                			q_tr('txtCommoditytax_'+j,round(q_mul(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_div(q_float('txtCommodityrate_'+j),100)),0));
+                		q_tr('txtCommoditytax_'+j,round(q_mul(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_div(q_float('txtCommodityrate_'+j),100)),0));
                 		//本幣營業稅基(本幣完稅價格+本幣關稅+貨物稅)
-                			q_tr('txtVatbase_'+j,q_add(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_float('txtCommoditytax_'+j)));
+                		q_tr('txtVatbase_'+j,q_add(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_float('txtCommoditytax_'+j)));
                 		//本幣營業稅額(本幣營業稅基 * 營業稅率)
-                			q_tr('txtVat_'+j,q_mul(q_float('txtVatbase_'+j),q_div(q_float('txtVatrate'),100)));
+                		q_tr('txtVat_'+j,q_mul(q_float('txtVatbase_'+j),q_div(q_float('txtVatrate'),100)));
                 		//進貨總成本
-                			q_tr('txtCost_'+j,q_add(q_add(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_float('txtTrade_'+j)),q_float('txtCommoditytax_'+j)));
+                		q_tr('txtCost_'+j,q_add(q_add(q_add(q_float('txtTotal_'+j),q_float('txtTariff_'+j)),q_float('txtTrade_'+j)),q_float('txtCommoditytax_'+j)));
                 	} // j
                 	sum();
             }

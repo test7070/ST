@@ -1004,6 +1004,9 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+				if(q_getPara('sys.project').toUpperCase()=='PK' && !emp($('#txtOrdeno').val())){
+					alert('由報關單轉來禁止修改');
+				}
 				_btnModi();
 				$('#txtDatea').focus();
 				size_change();
@@ -1166,6 +1169,10 @@
 			}
 
 			function btnDele() {
+				if(q_getPara('sys.project').toUpperCase()=='PK' && !emp($('#txtOrdeno').val())){
+					alert('由報關單轉來禁止刪除');
+				}
+				
 				var t_where = 'where=^^ uno in(' + getBBSWhere('Uno') + ') ^^';
 				q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
 			}
@@ -1556,7 +1563,10 @@
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
-						<td><input id="txtAccno" type="text"  class="txt c1"/></td>
+						<td>
+							<input id="txtAccno" type="text"  class="txt c1"/>
+							<input id="txtOrdeno" type="hidden"  class="txt c1"/>
+						</td>
 					</tr>
 				</table>
 			</div>
