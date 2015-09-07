@@ -113,13 +113,13 @@
 					$('#lblNo_' + i).text(i + 1);
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
 						$('#txtProductno_' + i).bind('contextmenu', function(e) {
-                            /滑鼠右鍵/
+                            //滑鼠右鍵/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtProductno_', '');
                             $('#btnProduct_'+n).click();
                         });
                         $('#txtAcc1_' + i).bind('contextmenu', function(e) {
-                            /滑鼠右鍵/
+                            //滑鼠右鍵/
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtAcc1_', '');
                             $('#btnAcc1_'+n).click();
