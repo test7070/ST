@@ -679,6 +679,9 @@
 				var t_where = '';
 				t_where = " view_ordcs.enda='0' and kind='" + $('#cmbKind').val() + "' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
 				t_where += " and b.enda='0'";
+				if(q_getPara('sys.comp').substring(0,2)=="傑期")
+					t_where += " order by noa,no2";
+				
 				q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
 			}
 			
