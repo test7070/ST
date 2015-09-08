@@ -135,6 +135,10 @@
 						type : '8', //[30] 21
 						name : 'xstyle2',
 						value : t_style.split(',')
+					}, {
+						type : '8', //[31] 22
+						name : 'xexclude',
+						value : ('H@排除Ｈ').split('&')
 					}]
 				});
 				q_popAssign();
