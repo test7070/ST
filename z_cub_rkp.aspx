@@ -46,24 +46,38 @@
 	            }else{
 	            	$('#txtNoa').val(t_para.noa);
 	            }
+	            
+	            $('#textBmon').mask('999/99');
+                $('#textEmon').mask('999/99');
+                
+                $('#btnCostbcc').click(function(e) {
+                    $('#divExport').toggle();
+                });
+                $('#btnDivexport').click(function(e) {
+                    $('#divExport').hide();
+                });
+                $('#btnExport').click(function(e) {
+                    var t_bmon = $('#textBmon').val();
+                    var t_emon = $('#textBmon').val();
+                    if (t_bmon.length > 0 && t_emon.length > 0) {
+                        Lock(1, {
+                            opacity : 0
+                        });
+                        q_func( 'ucf.bcc' , t_bmon+","+t_emon);
+                    } else
+                        alert('請輸入月份。');
+                });
             }
-
 			function q_funcPost(t_func, result) {
                 switch(t_func) {
+                    case 'ucf.bcc':
+                        alert('計算完成。');
+                        Unlock(1);
+                        break;
                     default:
                         break;
                 }
             }
-            
-            /*var string = 'abcdefghijklmnopqrstuvwxy';
-            var code = '';
-            for(var i=0;i<string.length;i++){
-            	for(var j=1;j<=6;j++){
-            		code += ",'<a style=\"font-family:'+ \"'Times New Roman','標楷體', serif\"+char(59)+'\">'+"+string.substring(i,i+1)+'0'+j+" +'</a>' "+string.substring(i,i+1)+'0'+j;
-            		//code += ','+string.substring(i,i+1)+'0'+j+' nvarchar(max)'
-            	}
-            }*/
-			//function q_boxClose(s2) {}
 			function q_gtPost(s2) {}
 		</script>
 		
@@ -79,6 +93,7 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 		<div id="q_menu"> </div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
+			<input type="button" id="btnCostbcc" value="物料成本計算"/>
 			<div id="container">
 				<div id="q_report"> </div>
 			</div>
@@ -86,6 +101,32 @@
 				<!--#include file="../inc/print_ctrl.inc"-->
 			</div>
 		</div>
+		<div id="divExport" style="display:none;position:absolute;top:100px;left:600px;width:400px;height:120px;background:RGB(237,237,237);">
+            <table style="border:4px solid gray; width:100%; height: 100%;">
+                <tr style="height:1px;background-color: pink;">
+                    <td style="width:25%;"></td>
+                    <td style="width:25%;"></td>
+                    <td style="width:25%;"></td>
+                    <td style="width:25%;"></td>
+                </tr>
+                <tr>
+                    <td style="padding: 2px;text-align: center;border-width: 0px;background-color: pink;color: blue;"><a>月份</a></td>
+                    <td colspan="3" style="padding: 2px;text-align: center;border-width: 0px;background-color: pink;">
+                    	<input type="text" id="textBmon" style="float:left;width:40%;"/>
+                    	<span style="display:block;width:20px;float:left;">～</span>
+                    	<input type="text" id="textEmon" style="float:left;width:40%;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="background-color: pink;">
+                    <input type="button" id="btnExport" value="計算"/>
+                    </td>
+                    <td colspan="2" align="center" style=" background-color: pink;">
+                    <input type="button" id="btnDivexport" value="關閉"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
 	</body>
 </html>
            

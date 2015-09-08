@@ -135,6 +135,18 @@
 						type : '8', //[30] 21
 						name : 'xstyle2',
 						value : t_style.split(',')
+					}, {
+						type : '5', //[31] 22
+						name : 'xbproduct3',
+						value : t_ucc.split(',')
+					}, {
+						type : '5', //[32] 23
+						name : 'xeproduct3',
+						value : t_ucc.split(',')
+					}, {
+						type : '8', //[33] 24
+						name : 'xexclude',
+						value : ('H@排除Ｈ').split('&')
 					}]
 				});
 				q_popAssign();
@@ -200,6 +212,10 @@
 				$('#chkYitype').children('input').eq(1).attr('checked', 'checked');
 				$('#chkYstyle').children('input').attr('checked', 'checked');
 				//$('#chkYproductno').children('input').attr('checked', 'checked');
+				
+				$('#Xbproduct3 select').change(function(e){
+					$('#Xeproduct3 select').val($('#Xbproduct3 select').val());
+				});
 			}
 
 			function q_boxClose(s2) {

@@ -870,7 +870,7 @@
 						</td>
 						<td style="width:20px;"><input type="button" value="關閉" onclick="$('#dbbt').hide();"/></td>
 						<td style="width:200px; text-align: center;">品名</td>
-						<td style="width:100px; text-align: center;">數量</td>
+						<!--<td style="width:100px; text-align: center;">數量</td>-->
 						<td style="width:100px; text-align: center;">重量</td>
 						<td style="width:200px; text-align: center;">備註</td>
 					</tr>
@@ -886,8 +886,9 @@
 							<input class="txt" id="txtProduct..*" type="text" style="width:45%;float:left;"/>
 							<input id="btnProduct..*" type="button" style="display:none;">
 						</td>
+						<!-- 物料都用ＭＯＵＮＴ計算 -->
 						<td><input class="txt" id="txtMount..*" type="text" style="width:95%;text-align: right;"/></td>
-						<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>
+						<!--<td><input class="txt" id="txtWeight..*" type="text" style="width:95%;text-align: right;"/></td>-->
 						<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;" /></td>
 					</tr>
 				</tbody>
