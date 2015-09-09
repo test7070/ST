@@ -20,43 +20,23 @@
             }
             $(document).ready(function() {
                 q_getId();
-                q_gf('', 'z_cub_xyp');
+                q_gf('', 'z_model_rs');
             });
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_cub_xyp',
-                    options : [{//[1]
-                        type : '0',
-                        name : 'accy',
-                        value : r_accy
-                    }, {
-                        type : '0', //[2]
-                        name : 'mountprecision',
-                        value : q_getPara('vcc.mountPrecision')
-                    }, {
-                        type : '0', //[3]
-                        name : 'weightprecision',
-                        value : q_getPara('vcc.weightPrecision')
-                    }, {
-                        type : '0', //[4]
-                        name : 'priceprecision',
-                        value : q_getPara('vcc.pricePrecision')
-                    }, {//[5]
-                        type : '0',
-                        name : 'worker',
-                        value : r_name
-                    }, {//[6][7]
-                        type : '1',
+                    fileName : 'z_model_rs',
+                    options : [ {//[1]
+                        type : '6',
                         name : 'xnoa'
-                    }, {//[8][9]
+                    }, {//[2]
+                        type : '6',
+                        name : 'xframe',
+                    }, {//[3]
+                        type : '6',
+                        name : 'xtgg'
+                    }, {//[4][5]
                     	type : '1',
                     	name :'xdate'
-                    },{//[10][11]
-                        type : '2', //[12][13]
-                        name : 'xpoduct',
-                        dbf : 'process',
-                        index : 'noa,product',
-                        src : 'ucc_b.aspx'
                     }]
                 });
                 

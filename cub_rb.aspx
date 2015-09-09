@@ -19,7 +19,7 @@
 			q_tables = 't';
 			var q_name = "cub";
 			var q_readonly = ['txtNoa','txtComp','txtProduct','txtSpec','txtWorker','txtWorker2','txtVcceno'];
-			var q_readonlys = ['txtDate2', 'txtOrdeno', 'txtNo2'];
+			var q_readonlys = ['txtDate2', 'txtOrdeno', 'txtNo2','txtW01'];
 			var q_readonlyt = [];
 			var bbmNum = [['txtTotal',10,0,1]];
 			var bbsNum = [];
@@ -60,12 +60,10 @@
 					
 					t_total = q_add(t_total,round(q_mul(t_price,t_mount), 0));
 					$('#txtMo_' + j).val(round(q_mul(t_price,t_mount), 0));
-					if($('#chkSale_'+j).is(':checked')==true){													
-						var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
-						$('#txtW01_'+j).val(round(q_add(q_mul($('#txtMo_'+j).val(),t_taxrate),$('#txtMo_'+j).val()),0));
-					}else{
-						$('#txtW01_'+j).val(0)
-					}
+															
+					var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
+					$('#txtW01_'+j).val(round(q_add($('#txtW02_'+j).val(),$('#txtMo_'+j).val()),0));
+					
 				}
 				
 				
@@ -161,7 +159,7 @@
 				bbsMask = [['txtDate2', r_picd], ['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				bbmNum = [['txtTotal',15,0,1],['txtPrice',15,q_getPara('rc2.pricePrecision'),1],['txtMo',15,0,1]];
-				bbsNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1],['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1],['txtMo', 0, 0],['txtGweight', 15, q_getPara('rc2.mountPrecision'), 1]];
+				bbsNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1],['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1],['txtMo', 15, 0,1],['txtW02', 15, 0,1],['txtGweight', 15, q_getPara('rc2.mountPrecision'), 1]];
 				bbtNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1]];
 				
 				//$('title').text("連續製令單"); //IE8會有問題
@@ -415,9 +413,14 @@
 			}
 
 			function btnModi() {
+				
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
+				for (var i = 0; i < q_bbsCount; i++) {
+					if($('#chkSale_'+i).is(':checked')){
+						$('#txtW02_'+i).css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');}
+				}
 				$('#txtDatea').focus();
 			}
 
@@ -475,6 +478,9 @@
 			}
 
 			function refresh(recno) {
+						
+						
+		
 				_refresh(recno);
 				//取得類別
 				//q_gt('cub_typea', '', 0, 0, 0, "cub_typea");
@@ -538,6 +544,27 @@
 								q_box("rc2_rb.aspx?"+ r_userno + ";" + r_name + ";" + q_time + ";" + t_where, q_name , "98%", "98%", q_getMsg("popSeek"));
 							}
 						});
+						
+						
+						if($('#chkSale_'+i).is(':checked'))
+							$('#txtW02_'+i).css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+						$('#chkSale_' + i).change(function(){
+							t_IdSeq = -1;  
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if($('#chkSale_'+b_seq).is(':checked')){
+								var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
+							//	$('#txtW02_'+b_seq).val(round(q_mul($('#txtW02_'+j).val(),t_taxrate),0));
+								$('#txtW02_'+b_seq).css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+								$('#txtW02_'+b_seq).val(round(q_mul($('#txtMo_'+b_seq).val(),t_taxrate),0));
+							}else
+								$('#txtW02_'+b_seq).css('color', 'black').css('background', 'white').removeAttr('readonly'); 
+							sum();
+						})
+						$('#txtW02_'+i).change(function(){
+							sum();
+						})
+						
 						//$('#txtOrdeno_' + i).click(function() {
 						//	t_IdSeq = -1;  
 						//	q_bodyId($(this).attr('id'));
@@ -884,7 +911,8 @@
 						<td style="width:60px;"><a id='lblMount_s'>數量</a></td>
 						<td style="width:60px;"><a id='lblPrice_s'>單價</a></td>
 						<td style="width:60px;"><a id='lblMoney_s'>金額</a></td>	
-						<td style="width:40px;"><a id='lblSale_s'>含稅</a></td>	
+						<td style="width:40px;"><a id='lblSale_s'>含稅</a></td>
+						<td style="width:60px;"><a id='lblTxa_s'>稅金</a></td>		
 						<td style="width:60px;"><a id='lblW01_s'>總金額</a></td>				
 						<td style="width:180px;"><a id='lblMemo_s'>備註</a></td>
 						<td style="width:150px;"><a id='lblOrdeno_s'>進貨單編號</a></td>
@@ -898,12 +926,12 @@
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 						<td><input id="txtDatea.*" type="text" class="txt c1"/></td>
 						<td> 
-							<input id="txtTggno.*" type="text" class="txt c1" style="width: 70%;"/>
+							<input id="txtTggno.*" type="text" class="txt c1" style="width: 50%;"/>
 							<input class="btn"  id="btnTggno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
 						<td><input id="txtTgg.*" type="text" class="txt c1"/></td>
 						<td>
-							<input id="txtProcessno.*" type="text" class="txt c1" style="width: 70%;"/>
+							<input id="txtProcessno.*" type="text" class="txt c1" style="width: 50%;"/>
 							<input class="btn"  id="btnProcessno.*" type="button" value='.' style=" font-weight: bold;" />
 						</td>
 						<td><input id="txtProcess.*" type="text" class="txt c1"/></td>
@@ -913,7 +941,8 @@
 						<td><input id="txtMo.*" type="text" class="txt c1 num"/>	
 						</td>
 						<td><input id="chkSale.*" type="checkbox" class="txt c1" /></td>
-						<td><input id="txtW01.*" type="text" class="txt c1" style="text-align:right;"/></td>
+						<td><input id="txtW02.*" type="text" class="txt c1" style="text-align:right;"/></td>
+						<td><input id="txtW01.*" type="text" class="txt c1" style="text-align:right; "/></td>
 						<td><input id="txtMemo.*" type="text" class="txt c1" /></td>
 						<td><input id="txtOrdeno.*" type="text" class="txt c1 num" style="color:blue;width: 90%;text-align:left;"/></td>
 						<td><input id="chkCut.*" type="checkbox" class="txt c1"  style="width: 50%;"/></td>
