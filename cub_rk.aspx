@@ -206,6 +206,8 @@
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
 				InsertBbs();
+				$('#rbNum_0').prop('checked',true);
+				$('#rbNum_'+i).click();
 			}
 
 			function btnModi() {
@@ -214,6 +216,8 @@
 				_btnModi();
 				$('#txtDatea').focus();
 				InsertBbs();
+				$('#rbNum_0').prop('checked',true);
+				$('#rbNum_'+i).click();
 			}
 			function InsertBbs(){
 				//固定6筆

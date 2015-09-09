@@ -29,10 +29,10 @@
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'style':
-						t_style = '';
+						t_style = 'A,B@捲、板';
 						var as = _q_appendData("style", "", true);
 						for ( i = 0; i < as.length; i++) {
-							t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + '.' + as[i].product;
+							t_style += (t_style.length > 0 ? '&' : '') + as[i].noa + '@' + as[i].noa + '.' + as[i].product;
 						}
 						
 						q_gt('ucc', '', 0, 0, 0, "");
@@ -41,7 +41,7 @@
 						t_ucc = '';
 						var as = _q_appendData("ucc", "", true);
 						for ( i = 0; i < as.length; i++) {
-							t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa;
+							t_ucc += (t_ucc.length > 0 ? '&' : '') + as[i].noa + '@' + as[i].noa;
 						}
 						loadFinish();
 						break;
@@ -70,7 +70,7 @@
 					}, {
 						type : '5', //[7] 5
 						name : 'xstyle',
-						value : [q_getPara('report.all')].concat(t_style.split(','))
+						value : [q_getPara('report.all')].concat(t_style.split('&'))
 					}, {
 						type : '6', //[8] 6
 						name : 'xwaste'
@@ -130,13 +130,21 @@
 					}, {
 						type : '8', //[29] 20
 						name : 'xproduct2',
-						value : t_ucc.split(',')
+						value : t_ucc.split('&')
 					}, {
 						type : '8', //[30] 21
 						name : 'xstyle2',
-						value : t_style.split(',')
+						value : t_style.split('&')
 					}, {
-						type : '8', //[31] 22
+						type : '5', //[31] 22
+						name : 'xbproduct3',
+						value : t_ucc.split('&')
+					}, {
+						type : '5', //[32] 23
+						name : 'xeproduct3',
+						value : t_ucc.split('&')
+					}, {
+						type : '8', //[33] 24
 						name : 'xexclude',
 						value : ('H@排除Ｈ').split('&')
 					}]
@@ -204,6 +212,10 @@
 				$('#chkYitype').children('input').eq(1).attr('checked', 'checked');
 				$('#chkYstyle').children('input').attr('checked', 'checked');
 				//$('#chkYproductno').children('input').attr('checked', 'checked');
+				
+				$('#Xbproduct3 select').change(function(e){
+					$('#Xeproduct3 select').val($('#Xbproduct3 select').val());
+				});
 			}
 
 			function q_boxClose(s2) {
