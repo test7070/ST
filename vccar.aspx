@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -123,6 +123,11 @@
                     	$('#txtEinvono_'+(i-1)).val(t_invono);
                     }
                 });
+                
+                $('.rb').hide();
+                if (q_getPara('sys.project').toUpperCase()=='RB'){
+                	$('.rb').show();
+                }
             }
 
             function q_boxClose(s2) {
@@ -190,7 +195,8 @@
             function btnIns() {
                 _btnIns();
                 $('#txtNoa').val('AUTO');
-                $('#chkIselectric').prop('checked',true);
+                if (q_getPara('sys.project').toUpperCase()=='RB')
+                	$('#chkIselectric').prop('checked',true);
                 $('#txtNoa').focus();
             }
 
@@ -580,7 +586,7 @@
 							<input id="txtSeq" type="text" style="display:none;"/>
 						</td>
 					</tr>
-					<tr>
+					<tr class='rb'>
 						<td><span> </span><a id="lblIselectric" class="lbl"> </a></td>
 						<td><input id="chkIselectric"  type="checkbox" style="float:left;" /></td>
 					</tr>
