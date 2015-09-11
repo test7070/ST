@@ -854,6 +854,10 @@
 						<td> </td>
 						<td class="tdZ"> </td>
 					</tr>
+					<td align="center">
+							<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+							<input id="txtNoq.*" type="text" style="display: none;"/>
+					</td>
 					<tr>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
