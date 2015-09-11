@@ -33,7 +33,10 @@
 					},{
 						type : '6', //[3]
 						name : 'noa'
-					}]
+					},{//[4][5]
+                        type : '1',
+                        name : 'xmon'
+                    }]
 				});
 				q_popAssign();
 
@@ -46,7 +49,9 @@
 	            }else{
 	            	$('#txtNoa').val(t_para.noa);
 	            }
-	            
+	            $('#txtXmon1').mask('999/99');
+                $('#txtXmon2').mask('999/99');
+                
 	            $('#textBmon').mask('999/99');
                 $('#textEmon').mask('999/99');
                 
