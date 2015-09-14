@@ -44,7 +44,11 @@
 				$('#txtDate1').mask('999/99/99');
                 $('#txtDate1').datepicker();
                 $('#txtDate2').mask('999/99/99');
-                $('#txtDate2').datepicker();                   
+                $('#txtDate2').datepicker();     
+                
+                 var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
+                $('#txtXnoa1').val(t_noa);
+                $('#txtXnoa2').val(t_noa);              
 									
 			}
 
