@@ -94,6 +94,8 @@
 					var t_where = " where=^^ noa=(select MIN(noa) from view_vcc where ordeno='" + t_ordeno + "') ^^";
 					q_gt('view_vcc', t_where, 0, 0, 0, 'view_vcc', r_accy);
 				}
+				
+				
             }
 
             function q_boxClose(s2) {
