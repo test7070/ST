@@ -21,6 +21,44 @@
             $(document).ready(function() {
             	q_getId();
                 q_gf('', 'z_vccp_rb');
+                
+                $('#q_report').click(function(e) {
+					if(window.parent.q_name=="vcca"){
+						var delete_report=999;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_vccp_rb01')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('出貨單列印')>-1){
+							$('#q_report div div').eq(delete_report).hide();
+						}
+						delete_report=999;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_vccp_rb03')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('劃撥單列印')>-1){
+							$('#q_report div div').eq(delete_report).hide();
+						}
+						delete_report=999;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_vccp_rb04')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('信用卡單')>-1){
+							$('#q_report div div').eq(delete_report).hide();
+						}
+						
+						var t_first=true;
+						$('#q_report div div .radio').parent().each(function(index) {
+							if(!$(this).is(':hidden') && t_first){
+								$(this).children().removeClass('nonselect').addClass('select');
+								t_first=false;
+							}
+						});
+					}
+				});
+                
             });
             function q_gfPost() {
 				$('#q_report').q_report({
@@ -94,8 +132,6 @@
 					var t_where = " where=^^ noa=(select MIN(noa) from view_vcc where ordeno='" + t_ordeno + "') ^^";
 					q_gt('view_vcc', t_where, 0, 0, 0, 'view_vcc', r_accy);
 				}
-				
-				
             }
 
             function q_boxClose(s2) {
