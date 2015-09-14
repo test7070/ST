@@ -60,7 +60,7 @@
 					ehr=0;
 					emin=0;
 				}
-				mins = (ehr+(ehr<bhr || (ehr=bhr && emin<bmin)?24:0)-bhr)*60 + (emin-bmin);
+				mins = (ehr+(ehr<bhr || (ehr==bhr && emin<bmin)?24:0)-bhr)*60 + (emin-bmin);
 				mins = isNumber(mins)?mins:0;
 				return mins;
 			}

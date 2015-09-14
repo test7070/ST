@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -177,7 +177,11 @@
 					if (q_cur == 1) {
 						return;
 					}
-					q_box("salAdjust.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'saladjust', "95%", "95%", q_getMsg("popSaladjust"));
+					if (q_getPara('sys.project').toUpperCase()=='DJ'){
+						q_box("saladjust_dj.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'saladjust', "95%", "95%", q_getMsg("popSaladjust"));
+					}else{
+						q_box("salAdjust.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'saladjust', "95%", "95%", q_getMsg("popSaladjust"));
+					}
 				});
 				
 				$('#btnSssr').click(function(e) {
@@ -329,7 +333,7 @@
 					sum();
 				});
                 //-----------------------------------------------------
-                
+                $('#lblBarcode').text('卡號');
 			}
 			
 			function sum() {

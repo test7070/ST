@@ -767,6 +767,18 @@
 							sum();
 						}
 						break;
+					case 'quatimport':
+						var as = _q_appendData("view_quats", "", true);
+						if(as[0]!=undefined){
+							//取得報價的第一筆匯率等資料
+							var t_where = "where=^^ noa='" + as[0].noa + "' ^^";
+							q_gt('quat', t_where, 0, 0, 0, "", r_accy);
+						}
+						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSizea,txtDime,txtUnit,txtPrice,txtMount,txtQuatno,txtNo3,txtClassa,txtClass'
+						, as.length, as, 'productno,product,spec,sizea,dime,unit,price,mount,noa,no3,classa,class', 'txtProductno,txtProduct,txtSpec');
+						sum();
+						bbsAssign();
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -788,7 +800,10 @@
 					t_where+=" and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and datea>='"+$('#txtOdate').val()+"'";
 					//104/03/04 只有成交才能匯入//所以不用簽核
 					t_where+=" and isnull(gweight,0)=1 ";
-					q_box("quat_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'quats', "95%", "95%", $('#btnQuat').val());
+					
+					//104/09/10 直接匯入
+					q_gt('view_quats', "where=^^"+t_where+"^^", 0, 0, 0, "quatimport");
+					//q_box("quat_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'quats', "95%", "95%", $('#btnQuat').val());
 				}else {
 					alert(q_getMsg('msgCustEmp'));
 				}
@@ -808,6 +823,13 @@
 				if(!$('#div_spec').is(':hidden')){
 					$('#spec_txtSpec_0').focus();
 					return;
+				}
+				
+				//出貨單數量0不存檔 104/09/10
+				for(var k=0;k<q_bbsCount;k++){
+					if(dec($('#txtMount_'+k).val())==0){
+						$('#btnMinus_'+k).click();
+					}
 				}
 				
 				t_err = '';
@@ -890,6 +912,7 @@
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#btnMinus_' + j).click(function() {
 							btnMinus($(this).attr('id'));
+							AutoNo2();
 						});
 						$('#btnProductno_' + j).click(function() {
 							t_IdSeq = -1;
@@ -1472,6 +1495,7 @@
 						$('#txtSizea_'+j).attr('disabled', 'disabled');
 						$('#txtDime_'+j).attr('disabled', 'disabled');
 						$('#txtUnit_'+j).attr('disabled', 'disabled');
+						$('#txtPrice_'+j).attr('disabled', 'disabled');
 						$('#btnProduct_'+j).attr('disabled', 'disabled');
 						$('#combGroupbno_'+j).attr('disabled', 'disabled');
 						$('#combClassa_'+j).attr('disabled', 'disabled');
@@ -1483,6 +1507,7 @@
 						$('#txtSizea_'+j).removeAttr('disabled');
 						$('#txtDime_'+j).removeAttr('disabled');
 						$('#txtUnit_'+j).removeAttr('disabled');
+						$('#txtPrice_'+j).removeAttr('disabled');
 						$('#btnProduct_'+j).removeAttr('disabled');
 						$('#combGroupbno_'+j).removeAttr('disabled');
 						$('#combClassa_'+j).removeAttr('disabled');

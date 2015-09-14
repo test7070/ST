@@ -82,7 +82,7 @@
 					ehr=0;
 					emin=0;
 				}
-				mins = (ehr+(ehr<bhr || (ehr=bhr && emin<bmin)?24:0)-bhr)*60 + (emin-bmin);
+				mins = (ehr+(ehr<bhr || (ehr==bhr && emin<bmin)?24:0)-bhr)*60 + (emin-bmin);
 				mins = isNumber(mins)?mins:0;
 				return mins;
 			}
@@ -253,7 +253,7 @@
 			}
 
 			function btnPrint() {
-				q_box("z_cub_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cub_rk', "95%", "95%", m_print);
+				q_box("z_cubp_rk.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'cub_rk', "95%", "95%", m_print);
             }
 
 			function btnOk() {
