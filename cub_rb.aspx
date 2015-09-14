@@ -55,25 +55,29 @@
 			function sum() {
 				var t_price=0,t_mount=0,t_total=0;
 				for (var j = 0; j < q_bbsCount; j++) {
-					t_mount = dec($('#txtMount_' + j).val());
-					t_price = dec($('#txtPrice_' + j).val());
+				//	if($('#txtMount_' + j).val().val()>0){
+						t_mount = dec($('#txtMount_' + j).val());
+						t_price = dec($('#txtPrice_' + j).val());
 					
-					t_total = q_add(t_total,round(q_mul(t_price,t_mount), 0));
-					$('#txtMo_' + j).val(round(q_mul(t_price,t_mount), 0));
+						t_total = q_add(t_total,round(q_mul(t_price,t_mount), 0));
+						$('#txtMo_' + j).val(round(q_mul(t_price,t_mount), 0));
 															
-					var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
-					$('#txtW01_'+j).val(round(q_add($('#txtW02_'+j).val(),$('#txtMo_'+j).val()),0));
-					
+						var	t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
+						if($('#chkSale_'+b_seq).is(':checked'))
+							$('#txtW02_'+b_seq).val(round(q_mul($('#txtMo_'+b_seq).val(),t_taxrate),0));
+						$('#txtW01_'+j).val(round(q_add($('#txtW02_'+j).val(),$('#txtMo_'+j).val()),0));
+				
+				//	}
 				}
 				
 				
-				
-				$('#txtMo').val(t_total);
-				$('#txtPrice').val(round(q_div(t_total,dec($('#txtTotal').val())),dec(q_getPara('rc2.pricePrecision'))));
-				if($('#txtTotal').val()==0){
-					$('#txtPrice').val(0);
-				}
-			
+				//if($('#txtMount_' + j).val().val()>0){
+					$('#txtMo').val(t_total);
+					$('#txtPrice').val(round(q_div(t_total,dec($('#txtTotal').val())),dec(q_getPara('rc2.pricePrecision'))));
+					if($('#txtTotal').val()==0){
+						$('#txtPrice').val(0);
+					}
+				//}
 			}
 
 			function main() {
@@ -159,7 +163,7 @@
 				bbsMask = [['txtDate2', r_picd], ['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				bbmNum = [['txtTotal',15,0,1],['txtPrice',15,q_getPara('rc2.pricePrecision'),1],['txtMo',15,0,1]];
-				bbsNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1],['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1],['txtMo', 15, 0,1],['txtW02', 15, 0,1],['txtGweight', 15, q_getPara('rc2.mountPrecision'), 1]];
+				bbsNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1],['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1],['txtMo', 15,  0,1],['txtW02', 15, 0,1],['txtW02', 15, 0,1],['txtGweight', 15, q_getPara('rc2.mountPrecision'), 1]];
 				bbtNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1]];
 				
 				//$('title').text("連續製令單"); //IE8會有問題
@@ -190,6 +194,7 @@
 				});
 				
 				$('#txtMo').change(function() {
+					
 					$('#txtPrice').val(round(q_div($('#txtMo').val(),$('#txtTotal').val()),dec(q_getPara('rc2.pricePrecision'))));
 				});
 				
@@ -526,10 +531,12 @@
 						});
 						
 						$('#txtMo_'+i).change(function() {
+							
 							t_IdSeq = -1;  
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							$('#txtPrice_'+b_seq).val(round(q_div($('#txtMo_'+b_seq).val(),$('#txtMount_'+b_seq).val()),dec(q_getPara('rc2.pricePrecision'))));
+							if($('#txtMount_'+b_seq).val() >0)
+								$('#txtPrice_'+b_seq).val(round(q_div($('#txtMo_'+b_seq).val(),$('#txtMount_'+b_seq).val()),dec(q_getPara('rc2.pricePrecision'))));
 							sum();
 						});
 					
@@ -824,7 +831,30 @@
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
-		<!--#include file="../inc/toolbar.inc"-->
+		<div id="toolbar">
+  <div id="q_menu"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input id="btnXchg" type="button" style="display:none;background:url(../image/xchg_24.png) no-repeat;width:28px;height:26px"/>
+  <a id='lblQcopy' style="display:none;"></a>
+  <input id="chekQcopy" type="checkbox" style="display:none;"/>
+  <input id="btnIns" type="button"/>
+  <input id="btnModi" type="button"/>
+  <input id="btnDele" type="button"/>
+  <input id="btnSeek" type="button"/>
+  <input id="btnPrint" type="button"/>
+  <input id="btnPrevPage" type="button"/>
+  <input id="btnPrev" type="button"/>
+  <input id="btnNext" type="button"/>
+  <input id="btnNextPage" type="button"/>
+  <input id="btnOk" type="button" disabled="disabled" />
+  <input id="btnCancel" type="button" disabled="disabled"/>&nbsp;&nbsp;
+  <input id="btnAuthority" type="button" />&nbsp;&nbsp;
+  <span id="btnSign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
+  <span id="btnAsign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
+  <span id="btnLogout" style="text-decoration: underline;color:orange;"></span>&nbsp;&nbsp;
+  <input id="pageNow" type="text"  style="position: relative;text-align:center;"  size="2"/> /
+  <input id="pageAll" type="text"  style="position: relative;text-align:center;"  size="2"/>
+  <div id="q_acDiv"></div>
+</div>
 		<div id='dmain'>
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview" >
@@ -854,10 +884,6 @@
 						<td> </td>
 						<td class="tdZ"> </td>
 					</tr>
-					<td align="center">
-							<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
-							<input id="txtNoq.*" type="text" style="display: none;"/>
-					</td>
 					<tr>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
@@ -986,3 +1012,4 @@
 		</div>
 	</body>
 </html>
+

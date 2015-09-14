@@ -23,7 +23,7 @@
 			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
-			var pNoq =1;
+			var pNoq =0;
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwCount2 = 5;
@@ -47,6 +47,9 @@
 				}
 				mainForm(0);
 			}
+			var wheel1=" ,主輪,立輪,導縫輪,熔接輪"	;
+			var wheel2=" ,主輪,立輪,十字輪,出口輪"	;
+			var wheel3=" ,主輪,立輪,導縫輪,熔接輪,十字輪,出口輪"	
 			function mainPost() {
 				q_getFormat();
 				var bbmMask = [['txtDatea', r_picd]];
@@ -66,8 +69,13 @@
 						}
 					}
 				});
+				q_cmbParse("cmbModel",' ,成型段,定徑段','s');
+				q_cmbParse("cmbWheel",wheel3,'s');
+				var nb7=" ,TH1T,TH1B,TH2T,TH2B"
+				q_cmbParse("cmbNumber",nb7,'s');
 				
 				
+		
 			}
 
 			function q_boxClose(s2) {
@@ -100,11 +108,13 @@
 						break;
 					case 'checkProductno':
 						var as = _q_appendData("models", "", true);
-						if (as[0] != undefined) {
+
+						
+						if (as[0] != undefined ) {
 							qPno=qPno+1;
 						}else
 							qPno=1;
-						$('#txtProductno_'+j).val($('#txtNoa').val()+$('#txtNumber_'+j).val()+pNoq);
+					
 						break;	
 					case q_name:
 						if (q_cur == 4)
@@ -144,92 +154,108 @@
 			function _btnSeek() {
 
 			}
-			function changeWheel(){
-				var nb1="F1T,F1B,F2T,F2B,F3T,F3B,F4T,F4B,F5T,F5B,F6T,F6B,F7T,F7B"
-				var nb2="SGT,SGB"
-				var nb3="SQT,SQB"
-				var nb4="FS1,FS2,FS3,FS4,FS41,FS5,FS6,IR,FS4-1"
-				var nb5="S1T,S1B,S2T,S2B,S3T,S3B,S4T,S4B,S5T,S5B"
-				var nb6="SS1,SS2,SS3,SS4,SS5"
-				var nb7="TH1T,TH1B,TH2T,TH2B"
-				var nb8="THG"
+			function changeWheel(count){
+				var nb1=" ,F1T,F1B,F2T,F2B,F3T,F3B,F4T,F4B,F5T,F5B,F6T,F6B,F7T,F7B"
+				var nb2=" ,SGT,SGB"
+				var nb3=" ,SQT,SQB"
+				var nb4=" ,FS1,FS2,FS3,FS4,FS41,FS5,FS6,IR,FS4-1"
+				var nb5=" ,S1T,S1B,S2T,S2B,S3T,S3B,S4T,S4B,S5T,S5B"
+				var nb6=" ,SS1,SS2,SS3,SS4,SS5"
+				var nb7=" ,TH1T,TH1B,TH2T,TH2B"
+				var nb8=" ,THG"
 				
 				
-					for (var j = 0; j < q_bbsCount; j++) {
-					if(!emp($('#txtModel_'+j).val()) && !emp($('#txtWheel_'+j).val())){
-						if( $('#txtModel_'+j).val()=='成型段'){
-							var wh= $('#txtWheel_'+j).val();
-							switch(wh){
-								case '主輪':
-									q_cmbParse("cmbNumber_"+j,nb1);
-									break;
-								case '立輪':
-									q_cmbParse("cmbNumber_"+j,nb2);
-									break;
-								case '導縫輪':
-									q_cmbParse("cmbNumber_"+j,nb3);
-									break;
-								case '熔接輪':
-									q_cmbParse("cmbNumber_"+j,nb4);
-									break;
+						
+				if(!emp($('#txtModel_'+count).val()) && !emp($('#txtWheel_'+j).val())){
+					if( $('#txtModel_'+count).val()=='成型段'){
+					//	q_cmbParse("cmbWheel",wheel1,'s');
+						var wh= $('#txtWheel_'+count).val();
+						switch(wh){
+							case '主輪':
+								q_cmbParse("cmbNumber",nb1,'s');
+								break;
+							case '立輪':
+								q_cmbParse("cmbNumber",nb2,'s');
+								break;
+							case '導縫輪':
+								q_cmbParse("cmbNumber",nb3,'s');
+								break;
+							case '熔接輪':
+								q_cmbParse("cmbNumber",nb4,'s');
+								break;
 								
 							}
 								
 						}
 						
-						else if($('#txtModel_'+j).val()=='定徑段')
-							var wh= $('#txtWheel_'+j).val();
+						else if($('#txtModel_'+count).val()=='定徑段'){
+							q_cmbParse("cmbWheel",wheel2,'s');
+							var wh= $('#txtWheel_'+count).val();
 								switch(wh){
 									case '主輪':
-										q_cmbParse("cmbNumber_"+j,nb5);
+										q_cmbParse("cmbNumber",nb5,'s');
 										break;
 									case '立輪':
-										q_cmbParse("cmbNumber_"+j,nb6);
+										q_cmbParse("cmbNumber",nb6,'s');
 										break;
 									case '十字輪':
-										q_cmbParse("cmbNumber_"+j,nb7);
+										q_cmbParse("cmbNumber",nb7,'s');
 										break;
 									case '出口輪':
-										q_cmbParse("cmbNumber_"+j,nb8);
+										q_cmbParse("cmbNumber",nb8,'s');
 										break;
-							}
-						if(!emp('#txtNumber_'+j)){
-						var t_productno='';
-							t_productno=$('#txtProductno_'+j).val($('#txtNoa').val()+$('#txtNumber_'+j).val()+pNoq);
-							var t_where="where=^^ productno='"+t_productno+"'^^";
+							}}
 						
-							q_gt('models',t_where,0,0,0,"checkProductno")
-							
-						//	pNoq=pNoq+1
+					}
+				
+			}
+			function autoNoa(count){
+				var flag =0;
+				if(!emp('#txtNumber_'+count)){
+					var bs =[];
+					var max =0;
+					for (var j = 0; j < q_bbsCount; j++) {
+						bs[j]=$('#txtNumber_'+j).val();						
+					}
+					for (var i =0 ;i < q_bbsCount; i++){
+						if($('#txtNumber_'+count).val()==bs[i]){
+							var tmp=0;
+							tmp=$('#txtProductno_'+i).val().substring($('#txtProductno_'+i).val().length-1,$('#txtProductno_'+i).val().length)
+							if(parseInt(tmp) > max)
+								max = parseInt(tmp);
+							flag =1;
 						}
 					}
+					if (flag == 1)
+						pNoq=max+1;
+					else
+						pNoq=0;
+				//	pNoq=max+1;
+					$('#txtProductno_'+count).val($('#txtNoa').val()+$('#txtNumber_'+count).val()+pNoq);
+					//	pNoq=pNoq+1
 				}
 			}
-
+			var flag =0;
 			function bbsAssign() {
-				var wheel="主輪,立輪,導縫輪,熔接輪,十字輪,出口輪"
-				
-				
+								
 				for (var j = 0; j < q_bbsCount; j++) {
-				if(emp($('#cmbModel_'+j).val()))	
-						q_cmbParse("cmbModel_"+j,'成型段,定徑段');
-					if(emp($('#cmbWheel_'+j).val()))
-						q_cmbParse("cmbWheel_"+j,wheel);
+			
 			
 				$('#cmbModel_'+j).change(function(){
 					t_IdSeq = -1;  
 					q_bodyId($(this).attr('id'));
 					b_seq = t_IdSeq;
 					$('#txtModel_'+b_seq).val($('#cmbModel_'+b_seq).find("option:selected").text());
+					autoNoa(b_seq);
 				});
-						
+									
 				$('#cmbWheel_'+j).change(function(){
 					t_IdSeq = -1;  
 					q_bodyId($(this).attr('id'));
 					b_seq = t_IdSeq;
 					
 					$('#txtWheel_'+b_seq).val($('#cmbWheel_'+b_seq).find("option:selected").text());
-					changeWheel();
+					autoNoa(b_seq);
 				});
 				
 				
@@ -239,7 +265,7 @@
 					q_bodyId($(this).attr('id'));
 					b_seq = t_IdSeq;
 					$('#txtNumber_'+b_seq).val($('#cmbNumber_'+b_seq).find("option:selected").text());
-					changeWheel();
+					autoNoa(b_seq);
 				});
 									
 				}
@@ -532,9 +558,10 @@
 					</td>
 					<td align="center" style="width:18%;"><a id='lblProductno_s'></a></td>
 					<td align="center" style="width:15%;"><a id='lblModelre_s'></a></td>
-					<td align="center" style="width:15%;"><a id='lblMemors_s'></a></td>				
-					<td align="center" style="width:15%;"><a id='lblBottom_s'></a></td>
-					<td align="center" style="width:15%;"><a id='lblMount'></a></td>				
+					<td align="center" style="width:10%;"><a id='lblWheel_s'></a></td>	
+					<td align="center" style="width:10%;"><a id='lblNumber_s'></a></td>				
+					<td align="center" style="width:10%;"><a id='lblBottom_s'></a></td>
+					<td align="center" style="width:10%;"><a id='lblMount'></a></td>				
 					<td align="center" style="width:20%;"><a id='lblMemors2_s'></a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -545,17 +572,17 @@
 					<td>
 						<input id="txtProductno.*" type="text"/>
 					</td>
-					<td><input id="txtModel.*" type="text" style="width:80%;"/>
-						<select id="cmbModel.*" type="button" value='.' style=" width:20px;font-size: medium;" /select>
+					<td><input id="txtModel.*" type="text" class="txt c1" style="width:80%;"/>
+						<select id="cmbModel.*" class="txt" style="width: 20px;">  </select>
 					</td>
-					<td>
-						<input id="txtWheel.*" type="text" style="width:30%;"/>
-						<select id="cmbWheel.*" type="button" value='.' style=" width:20px;font-size: medium;" /select>
-						<input id="txtNumber.*" type="text" style="width:30%;"/>
-						<select id="cmbNumber.*" type="button" value='.' style=" width:20px;font-size: medium;" /select>
-					</td>
-					<td><input id="txtBottom.*" type="text" style="width:95%;" /></td>
-					<td><input id="txtMount.*" type="text" style="width:95%;" /></td>
+					<td><input id="txtWheel.*" type="text" class="txt c1" style="width:75%;"/>	
+						<select id="cmbWheel.*" class="txt" style="width: 20px;">  </select></td>					
+					<td><input id="txtNumber.*" type="text" class="txt c1" style="width:80%;"/>
+						<select id="cmbNumber.*" class="txt" style="width: 20px;">  </select>
+					</td>						
+					
+					<td ><input id="txtBottom.*" type="text" class="num c1" style="width:95%;" /></td>
+					<td ><input id="txtMount.*" type="text" class="num c1"style="width:95%;" /></td>
 					<td><input id="txtMemo2.*" type="text" style="width:95%;" /></td>
 				</tr>
 			</table>
