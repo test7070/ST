@@ -19,11 +19,11 @@
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
-				q_gf('', 'z_modeq_rs');
+				q_gf('', 'z_modfixb_rs');
 			});  
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_modeq_rs',
+                    fileName : 'z_modfixb_rs',
                     options : [{/* [1]*/
                         type : '0',
                         name : 'accy',

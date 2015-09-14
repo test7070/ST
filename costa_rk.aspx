@@ -18,9 +18,9 @@
             q_desc = 1;
             q_tables = 's';
             var q_name = "costa";
-            var q_readonly = ['txtNoa'];
-            var q_readonlys = ['txtMoney'];
-            var bbmNum = [['txtWages',15,0,1],['txtMakeless',15,0,1]];
+            var q_readonly = ['txtNoa','txtMoney'];
+            var q_readonlys = [];
+            var bbmNum = [['txtWages',15,0,1],['txtMakeless',15,0,1],['txtMoney',15,0,1]];
             var bbsNum = [['txtMount', 15, 2, 1],['txtPrice', 15, 2, 1],['txtMoney', 15, 0, 1]];
             var bbmMask = [];
             var bbsMask = [];
@@ -31,13 +31,14 @@
             brwNowPage = 0;
             brwKey = 'Noa';
             aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'chgitem', 'noa,item,acc1,acc2', 'txtProductno_,txtProduct_,txtAcc1_,txtAcc2_', 'chgitem_b.aspx']
-				,['txtAcc1_', 'btnAcc1_', 'acc', 'acc1,acc2', 'txtAcc1_,txtAcc2_', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]);
+				['txtProductno_', 'btnProduct_', 'chgitem', 'noa,item', 'txtProductno_,txtProduct_', 'chgitem_b.aspx']);
 			var t_mech = '';
 			function sum() {
+				var t_money=0;
             	for(var i=0;i<q_bbsCount;i++){
-            		$('#txtMoney_'+i).val(round(q_mul(q_float('txtMount_'+i),q_float('txtPrice_'+i)),0));
+            		t_money = q_add(t_money,q_float('txtMoney_'+i));
             	}    
+            	$('#txtMoney').val(t_money);
             }
             
             $(document).ready(function() {
@@ -118,14 +119,8 @@
                             var n = $(this).attr('id').replace('txtProductno_', '');
                             $('#btnProduct_'+n).click();
                         });
-                        $('#txtAcc1_' + i).bind('contextmenu', function(e) {
-                            //滑鼠右鍵/
-                            e.preventDefault();
-                            var n = $(this).attr('id').replace('txtAcc1_', '');
-                            $('#btnAcc1_'+n).click();
-                        });
-                        $('#txtMount_'+i).change(function(e){sum();});
-                        $('#txtPrice_'+i).change(function(e){sum();});
+                       
+                        $('#txtMoney_'+i).change(function(e){sum();});
 					}
 				}
                 _bbsAssign();
@@ -142,6 +137,7 @@
                 if (emp($('#txtNoa').val()))
                     return;
                 _btnModi();
+                sum();
             }
 
             function btnPrint() {
@@ -333,7 +329,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 1000px;
+				width: 800px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -404,6 +400,10 @@
 					<td><span> </span><a id="lblMakeless" class="lbl">製造費用</a></td>
 					<td><input id="txtMakeless" type="text" class="txt num c1"/> </td>
 				</tr>
+				<tr>
+					<td><span> </span><a id="lblMoney" class="lbl">變動成本</a></td>
+					<td><input id="txtMoney" type="text" class="txt num c1"/> </td>
+				</tr>
 			</table>
 		</div>	
 		<div class='dbbs'>
@@ -413,12 +413,10 @@
 							<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"> </td>
-						<td style="width:100px;" align="center">機台</td>
-						<td style="width:150px;" align="center">品名</td>
-						<td style="width:150px;" align="center">科目</td>
-						<td style="width:80px;" align="center">數量</td>
-						<td style="width:80px;" align="center">單價</td>
-						<td style="width:80px;" align="center">費用小計</td>
+						<td style="width:150px;" align="center">製造批號</td>
+						<td style="width:80px;" align="center">工時比率</td>
+						<td style="width:200px;" align="center">品名</td>
+						<td style="width:100px;" align="center">變動成本</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center">
@@ -426,19 +424,13 @@
 							<input id="txtNoq.*" type="text" style="display:none;"/>
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						<td><select id="cmbMechno.*" style="float:left;width:95%;"> </select></td>
+						<td><input id="txtMakeno.*" type="text" style="float:left;width:95%;"/> </td>
+						<td><input id="txtMount.*" type="text" class="num" style="float:left;width:95%;"/> </td>
 						<td>
-							<input id="txtProductno.*" type="text" style="float:left;width:95%;"/> 
-							<input id="txtProduct.*" type="text" style="float:left;width:95%;"/>
+							<input id="txtProductno.*" type="text" style="float:left;width:40%;"/> 
+							<input id="txtProduct.*" type="text" style="float:left;width:50%;"/>
 							<input id="btnProduct.*" type="button" style="display:none;"/>
 						</td>
-						<td>
-							<input id="txtAcc1.*" type="text" style="float:left;width:95%;"/> 
-							<input id="txtAcc2.*" type="text" style="float:left;width:95%;"/>
-							<input id="btnAcc1.*" type="button" style="display:none;"/>
-						</td>
-						<td><input id="txtMount.*" type="text" class="num" style="float:left;width:95%;"/> </td>
-						<td><input id="txtPrice.*" type="text" class="num" style="float:left;width:95%;"/> </td>
 						<td><input id="txtMoney.*" type="text" class="num" style="float:left;width:95%;"/> </td>
 					</tr>
 				</table>
