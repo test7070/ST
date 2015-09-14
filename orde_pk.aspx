@@ -161,8 +161,9 @@
                 if (t_price != 0) {
                     $('#txtTranmoney').val(q_tr(round(q_mul(t_weight,t_price),0)));
                 }
+                //2015/09/14 鄭小姐 又說要帶入
                 //2015/08/17 鄭小姐  說不要帶  他自己輸入
-                //$('#txtWeight').val(q_tr(t_weight));
+                $('#txtWeight').val(q_tr(t_weight));
 
                 $('#txtMoney').val(q_tr(t_money));
                 $('#txtTax').val(q_tr(t_tax));
@@ -749,9 +750,10 @@
                     round:1
                 };
                 q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
+                //2015/09/14 鄭小姐說要帶
                 //2015/08/17 鄭小姐  說不要帶  他自己輸入
-                /*if(q_float('txtWeight_'+ b_seq)==0)
-                	$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());*/
+                if(q_float('txtWeight_'+ b_seq)==0)
+                	$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
             }
 
             function bbsAssign() {/// 表身運算式
@@ -797,8 +799,9 @@
                         		return;
 							var n = $(this).attr('id').replace('txtMount_','');
 							sum();
-							////2015/08/17 鄭小姐  說不要帶  他自己輸入
-							//$('#txtWeight_'+n).val($('#txtTheory_'+n).val());
+							//2015/09/14 鄭小姐  說要帶
+							//2015/08/17 鄭小姐  說不要帶  他自己輸入
+							$('#txtWeight_'+n).val($('#txtTheory_'+n).val());
                         });
                         $('#btnBorn_' + j).click(function() {
                             var n = $(this).attr('id').replace('btnBorn_','');
