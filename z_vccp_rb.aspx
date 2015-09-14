@@ -55,6 +55,9 @@
 								$(this).children().removeClass('nonselect').addClass('select');
 								t_first=false;
 							}
+							if($(this).is(':hidden')){
+								$(this).children().removeClass('select').addClass('nonselect');
+							}
 						});
 					}
 				});
@@ -132,6 +135,8 @@
 					var t_where = " where=^^ noa=(select MIN(noa) from view_vcc where ordeno='" + t_ordeno + "') ^^";
 					q_gt('view_vcc', t_where, 0, 0, 0, 'view_vcc', r_accy);
 				}
+				
+				$('#q_report div div .radio.select').click();
             }
 
             function q_boxClose(s2) {

@@ -14,13 +14,13 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
-			var q_name = "modfixb_s";
-			var aPop = new Array();
+			
+			var q_name = "modeq_s";
+			var aPop = new Array(['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']);
 				
 			$(document).ready(function() {
 				main();
-			});
-			/// end ready
+			});// end ready
 
 			function main() {
 				mainSeek();
@@ -30,23 +30,19 @@
 			function q_gfPost() {
 				q_getFormat();
 				q_langShow();
-
-				bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd],['txtBfixadate', r_picd], ['txtEfixadate', r_picd]];
-				q_mask(bbmMask);
-				$('#txtBdate').datepicker();
-				$('#txtEdate').datepicker(); 
-				$('#txtNoa').focus();
+				bbmMask = [];
+				q_mask(bbmMask);			
 			}
 
 			function q_seekStr() {
-				t_bdate = $.trim($('#txtBdate').val());
-				t_edate = $.trim($('#txtEdate').val());
 				t_noa = $.trim($('#txtNoa').val());
+				t_years = $.trim($('#txtYears').val());
+				t_tggno = $('#txtTggno').val();
 				
 				var t_where = " 1=1 "
-					+q_sqlPara2("datea", t_bdate, t_edate)
-					+q_sqlPara2("fixadate", t_bfixadate, t_efixadate)
-					+q_sqlPara2("noa", t_noa);
+					+q_sqlPara2("noa", t_noa)
+					+q_sqlPara2("years", t_years)
+					+q_sqlPara2("tggno", t_tggno);
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
 			}
@@ -64,17 +60,21 @@
 		<div style='width:400px; text-align:center;padding:15px;' >
 			<table id="seek"  border="1"   cellpadding='3' cellspacing='2' style='width:100%;' >
 				<tr class='seek_tr'>
-					<td style="width:35%;" ><a id='lblDatea'></a></td>
-					<td style="width:65%;  ">
-					<input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
-					<span style="display:inline-block; vertical-align:middle">&sim;</span>
-					<input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
-					</td>
-				</tr>
-				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
 					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
-				</tr>				
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblYears'></a></td>
+					<td><input class="txt" id="txtYears" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblTggno'></a></td>
+					<td><input class="txt" id="txtTggno" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblTgg'></a></td>
+					<td><input class="txt" id="txtTgg" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->
 		</div>
