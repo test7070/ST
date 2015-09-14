@@ -329,7 +329,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 600px;
+				width: 800px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -413,7 +413,8 @@
 							<input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
 						</td>
 						<td style="width:20px;"> </td>
-						<td style="width:100px;" align="center">機台</td>
+						<td style="width:150px;" align="center">製造批號</td>
+						<td style="width:80px;" align="center">工時比率</td>
 						<td style="width:200px;" align="center">品名</td>
 						<td style="width:100px;" align="center">變動成本</td>
 					</tr>
@@ -423,7 +424,8 @@
 							<input id="txtNoq.*" type="text" style="display:none;"/>
 						</td>
 						<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-						<td><select id="cmbMechno.*" style="float:left;width:95%;"> </select></td>
+						<td><input id="txtMakeno.*" type="text" style="float:left;width:95%;"/> </td>
+						<td><input id="txtMount.*" type="text" class="num" style="float:left;width:95%;"/> </td>
 						<td>
 							<input id="txtProductno.*" type="text" style="float:left;width:40%;"/> 
 							<input id="txtProduct.*" type="text" style="float:left;width:50%;"/>
