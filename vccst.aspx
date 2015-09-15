@@ -1266,7 +1266,7 @@
 				}
 
 				q_nowf();
-				as['type'] = abbm2['type'];
+				as['typea'] = abbm2['typea'];
 				as['mon'] = abbm2['mon'];
 				as['noa'] = abbm2['noa'];
 				as['datea'] = abbm2['datea'];
