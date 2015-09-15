@@ -31,9 +31,13 @@
 						type : '0',
 						name : 'xkind',
                         value : q_getPara('sys.stktype')
-                    },{//2  [3][4]
+                    },{//1-1  [3][4]
                         type : '1',
                         name : 'xnoa'
+                    },{//1-2 [5]
+                        type : '8',
+                        name : 'xoption01',
+                        value : q_getMsg('toption01').split('&')
                     }]
                 });
                 q_popAssign();

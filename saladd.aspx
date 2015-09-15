@@ -330,7 +330,7 @@
 						<td align="center" style="width:30%; color:black;"><a id='vewNamea'> </a></td>
 					</tr>
 					<tr>
-						<td ><input id="chkBrow.*" type="checkbox" style=' '/></td>
+						<td ><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td id='datea' style="text-align: center;">~datea</td>
 						<td id='noa' style="text-align: center;">~noa</td>
 						<td id='namea' style="text-align: center;">~namea</td>
@@ -373,7 +373,7 @@
 						<td><span> </span><a id='lblHours' class="lbl"> </a></td>
 						<td><input id="txtHours" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblIsapv' class="lbl"> </a></td>
-						<td><input id="chkIspav" type="checkbox"/></td>
+						<td><input id="chkIsapv" type="checkbox"/></td>
 					</tr>
 					<tr>									
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
