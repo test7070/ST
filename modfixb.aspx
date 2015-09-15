@@ -61,7 +61,7 @@
 		    
             function mainPost() {
             	q_getFormat();
-				bbmMask = [['txtDatea', '999/99/99'],['txtBtime','99:99'],['txtEtime','99:99'],['txtBaddtime','99:99'],['txtEaddtime','99:99']];
+				bbmMask = [['txtDatea', r_picd],['txtBdate', r_picd],['txtBtime','99:99'],['txtEdate', r_picd],['txtEtime','99:99'],['txtBadddate', r_picd],['txtBaddtime','99:99'],['txtEadddate', r_picd],['txtEaddtime','99:99']];
 				q_mask(bbmMask);
 				
 				q_cmbParse("cmbWay", '委外,自修');
@@ -147,7 +147,7 @@
 		        if (t_noa.length == 0 || t_noa == "AUTO")
 		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfixb') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
 		        else
-		            wrServer(t_noa);
+		            wrServer(t_noa);  
             }
             
 		    function wrServer(key_value) {
@@ -393,17 +393,29 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblBtime' class="lbl"> </a></td>
-						<td><input id="txtBtime" type="text" class="txt c1"/></td>
+						<td colspan="1">
+							<input id="txtBdate"  type="text" style="width:60%;"/>
+							<input id="txtBtime"  type="text" style="width:40%;"/>
+						</td>	
 						<td><span> </span><a id='lblEtime' class="lbl"> </a></td>
-						<td><input id="txtEtime" type="text" class="txt c1"/></td>
+						<td colspan="1">
+							<input id="txtEdate"  type="text" style="width:60%;"/>
+							<input id="txtEtime"  type="text" style="width:40%;"/>
+						</td>	
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblBaddtime' class="lbl"> </a></td>
-						<td><input id="txtBaddtime" type="text" class="txt c1"/></td>
+						<td colspan="1">
+							<input id="txtBadddate"  type="text" style="width:60%;"/>
+							<input id="txtBaddtime"  type="text" style="width:40%;"/>
+						</td>	
 						<td><span> </span><a id='lblEaddtime' class="lbl"> </a></td>
-						<td><input id="txtEaddtime" type="text" class="txt c1"/></td>
+						<td colspan="1">
+							<input id="txtEadddate"  type="text" style="width:60%;"/>
+							<input id="txtEaddtime"  type="text" style="width:40%;"/>
+						</td>	
 						<td><span> </span><a id='lblAddworker' class="lbl"> </a></td>
 						<td><input id="txtAddworker" type="text" class="txt c1"/></td>
 					</tr>					
@@ -422,6 +434,7 @@
 					<td align="center" style="width:5%;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:5%;"><a id='lblMount_s'> </a></td>					
 					<td align="center" style="width:5%;"><a id='lblMoney_s'> </a></td>
+					<td align="center" style="width:2%;"><a id='lblRetired_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -445,7 +458,8 @@
 					
 					<td><input id="txtPrice.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
-					<td><input id="txtMoney.*" type="text" class="txt num c1" /></td>				
+					<td><input id="txtMoney.*" type="text" class="txt num c1" /></td>	
+					<td align="center"><input id="chkRetired.*" type="checkbox"/></td>				
 				</tr>
 				
 			</table>
