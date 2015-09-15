@@ -1061,7 +1061,7 @@
 					$('#btnOrdetoVcc').attr('disabled', 'disabled');
 					$('.storepart0').hide();
 					$('.storepart1').show();
-					if(r_rank<8){
+					if(r_rank<8 && r_partno!='23'){
 						q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
 					}else{
 						q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);

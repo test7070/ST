@@ -778,7 +778,7 @@
 						<td style="width:100px;" align="center">尺寸損耗</td>
 						<td style="width:100px;" align="center">頭尾損耗 </td>
 						<td style="width:100px;" align="center">樣品重</td>
-						<td style="width:100px;" align="center">廢料重</td>
+						<td style="width:100px;" align="center">報廢重</td>
 						<td style="width:150px;" align="center">製造批號</td>
 					</tr>
 					<tr style='background:#cad3ff;'>
