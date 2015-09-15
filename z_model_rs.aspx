@@ -78,8 +78,8 @@
                 $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
 
                 if (q_getId()[3] != undefined) {
-                    $('#txtXnoa1').val(q_getId()[3].replace('noa=', ''));
-                    $('#txtXnoa2').val(q_getId()[3].replace('noa=', ''));
+                    $('#txtXnoa').val(q_getId()[3].replace('noa=', ''));
+                 
                 }
             }
 

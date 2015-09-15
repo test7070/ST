@@ -112,7 +112,9 @@
 		    }
 		    
 		    function sum() {
-		    	
+		    	for (var j = 0; j < q_bbsCount; j++) {
+					q_tr('txtMoney_' + j, q_mul(q_float('txtMount_' + j), q_float('txtPrice_' + j)));
+				}
 		    }
 		    
 			function bbsSave(as) {
@@ -136,7 +138,7 @@
 		    }
 
 		    function btnPrint() {
-
+				q_box('z_modfixb_rs.aspx' + "?;;;noa='" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
 		    }
 		    
 			function btnOk() {
