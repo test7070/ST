@@ -677,6 +677,7 @@
 							$('#txtQuatno_'+b_seq).val(as[0].noa);
 							$('#txtNo3_'+b_seq).val(as[0].no3);	
 							sum();
+							HiddenTreat();
 						}
 						break;
 					case 'btnOk_xy':
@@ -1685,7 +1686,9 @@
 						break;
 					case 'txtProductno_':
 						if(!emp($('#txtProductno_'+b_seq).val())){
-							var t_custno = trim($('#txtCustno').val());
+							var t_custno=$('#txtCustno').val().substr(0,$('#txtCustno').val().indexOf('-'));
+							if(t_custno=='') 
+								t_custno=$('#txtCustno').val();
 							var t_where = '';
 							if (t_custno.length > 0) {
 								//12/11 核准判斷暫時拿掉 等上線後再放入 不用apv 抓sign
