@@ -49,7 +49,6 @@
 			}
 			var wheel1=" ,主輪,立輪,導縫輪,熔接輪"	;
 			var wheel2=" ,主輪,立輪,十字輪,出口輪"	;
-			var wheel3=" ,主輪,立輪,導縫輪,熔接輪,十字輪,出口輪"	
 			function mainPost() {
 				q_getFormat();
 				var bbmMask = [['txtDatea', r_picd]];
@@ -70,9 +69,7 @@
 					}
 				});
 				q_cmbParse("cmbModel",' ,成型段,定徑段','s');
-				q_cmbParse("cmbWheel",wheel3,'s');
-				var nb7=" ,TH1T,TH1B,TH2T,TH2B"
-				q_cmbParse("cmbNumber",nb7,'s');
+
 				
 				
 		
@@ -149,6 +146,8 @@
 				} else {
 					wrServer(t_noa);
 				}
+				
+				
 			}
 
 			function _btnSeek() {
@@ -163,25 +162,22 @@
 				var nb6=" ,SS1,SS2,SS3,SS4,SS5"
 				var nb7=" ,TH1T,TH1B,TH2T,TH2B"
 				var nb8=" ,THG"
-				
-				
-						
-				if(!emp($('#txtModel_'+count).val()) && !emp($('#txtWheel_'+j).val())){
+								
 					if( $('#txtModel_'+count).val()=='成型段'){
-					//	q_cmbParse("cmbWheel",wheel1,'s');
+						q_cmbParse("combWheel_"+count,wheel1);	
 						var wh= $('#txtWheel_'+count).val();
 						switch(wh){
 							case '主輪':
-								q_cmbParse("cmbNumber",nb1,'s');
+								q_cmbParse("combNumber_"+count,nb1);
 								break;
 							case '立輪':
-								q_cmbParse("cmbNumber",nb2,'s');
+								q_cmbParse("combNumber_"+count,nb2);
 								break;
 							case '導縫輪':
-								q_cmbParse("cmbNumber",nb3,'s');
+								q_cmbParse("combNumber_"+count,nb3);
 								break;
 							case '熔接輪':
-								q_cmbParse("cmbNumber",nb4,'s');
+								q_cmbParse("combNumber_"+count,nb4);
 								break;
 								
 							}
@@ -189,25 +185,26 @@
 						}
 						
 						else if($('#txtModel_'+count).val()=='定徑段'){
-							q_cmbParse("cmbWheel",wheel2,'s');
+							q_cmbParse("combWheel_"+count,wheel2);
 							var wh= $('#txtWheel_'+count).val();
 								switch(wh){
 									case '主輪':
-										q_cmbParse("cmbNumber",nb5,'s');
+										q_cmbParse("combNumber_"+count,nb5);
 										break;
 									case '立輪':
-										q_cmbParse("cmbNumber",nb6,'s');
+										q_cmbParse("combNumber_"+count,nb6);
 										break;
 									case '十字輪':
-										q_cmbParse("cmbNumber",nb7,'s');
+										q_cmbParse("combNumber_"+count,nb7);
 										break;
 									case '出口輪':
-										q_cmbParse("cmbNumber",nb8,'s');
+										q_cmbParse("combNumber_"+count,nb8);
 										break;
-							}}
+							}
 						
 					}
-				
+			
+	
 			}
 			function autoNoa(count){
 				var flag =0;
@@ -218,7 +215,7 @@
 						bs[j]=$('#txtNumber_'+j).val();						
 					}
 					for (var i =0 ;i < q_bbsCount; i++){
-						if($('#txtNumber_'+count).val()==bs[i]){
+						if($('#txtNumber_'+count).val()==bs[i] && count != i){
 							var tmp=0;
 							tmp=$('#txtProductno_'+i).val().substring($('#txtProductno_'+i).val().length-1,$('#txtProductno_'+i).val().length)
 							if(parseInt(tmp) > max)
@@ -230,43 +227,50 @@
 						pNoq=max+1;
 					else
 						pNoq=0;
-				//	pNoq=max+1;
 					$('#txtProductno_'+count).val($('#txtNoa').val()+$('#txtNumber_'+count).val()+pNoq);
-					//	pNoq=pNoq+1
 				}
 			}
 			var flag =0;
 			function bbsAssign() {
-								
+							
 				for (var j = 0; j < q_bbsCount; j++) {
-			
-			
-				$('#cmbModel_'+j).change(function(){
-					t_IdSeq = -1;  
-					q_bodyId($(this).attr('id'));
-					b_seq = t_IdSeq;
-					$('#txtModel_'+b_seq).val($('#cmbModel_'+b_seq).find("option:selected").text());
-					autoNoa(b_seq);
-				});
-									
-				$('#cmbWheel_'+j).change(function(){
-					t_IdSeq = -1;  
-					q_bodyId($(this).attr('id'));
-					b_seq = t_IdSeq;
+							
+												
+					$('#combWheel_'+j).change(function(){
+						t_IdSeq = -1;  
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
 					
-					$('#txtWheel_'+b_seq).val($('#cmbWheel_'+b_seq).find("option:selected").text());
-					autoNoa(b_seq);
-				});
-				
-				
-				
-				$('#cmbNumber_'+j).change(function(){
-					t_IdSeq = -1;  
-					q_bodyId($(this).attr('id'));
-					b_seq = t_IdSeq;
-					$('#txtNumber_'+b_seq).val($('#cmbNumber_'+b_seq).find("option:selected").text());
-					autoNoa(b_seq);
-				});
+						$('#txtWheel_'+b_seq).val($('#combWheel_'+b_seq).find("option:selected").text());
+						$('#txtNumber_'+b_seq).val('');
+						$("#combNumber_"+b_seq).empty();
+						changeWheel(b_seq);
+					});
+						
+					changeWheel(j);
+
+					$('#cmbModel_'+j).change(function(){
+						t_IdSeq = -1;  
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						$('#txtModel_'+b_seq).val($('#cmbModel_'+b_seq).find("option:selected").text());
+						$('#txtWheel_'+b_seq).val('');
+						$('#txtNumber_'+b_seq).val('');
+						$("#combWheel_"+b_seq).empty();
+						$("#combNumber_"+b_seq).empty();
+						changeWheel(b_seq);
+						
+					});
+									
+						
+								
+					$('#combNumber_'+j).change(function(){
+						t_IdSeq = -1;  
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						$('#txtNumber_'+b_seq).val($('#combNumber_'+b_seq).find("option:selected").text());
+						autoNoa(b_seq);
+					});
 									
 				}
 				_bbsAssign();
@@ -298,12 +302,17 @@
 			}
 
 			function bbsSave(as) {
-			
+				if (!as['productno'] ) {
+					as[bbsKey[1]] = '';
+					return;
+				}
 				q_nowf();
 				return true;
 			}
 
 			function refresh(recno) {
+				
+					
 				_refresh(recno);		
 				refreshBbm();
 			}
@@ -576,9 +585,9 @@
 						<select id="cmbModel.*" class="txt" style="width: 20px;">  </select>
 					</td>
 					<td><input id="txtWheel.*" type="text" class="txt c1" style="width:75%;"/>	
-						<select id="cmbWheel.*" class="txt" style="width: 20px;">  </select></td>					
+						<select id="combWheel.*" class="txt c1" style="width: 20px;">  </select></td>					
 					<td><input id="txtNumber.*" type="text" class="txt c1" style="width:80%;"/>
-						<select id="cmbNumber.*" class="txt" style="width: 20px;">  </select>
+						<select id="combNumber.*" class="txt" style="width: 20px;">  </select>
 					</td>						
 					
 					<td ><input id="txtBottom.*" type="text" class="num c1" style="width:95%;" /></td>

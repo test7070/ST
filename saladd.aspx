@@ -20,7 +20,7 @@
             }
 			
             var q_name = "saladd";
-            var q_readonly = [];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtNamea'];
             var bbmNum = [['txtHours', 10, 1, 1]];
             var bbmMask = [];
             q_sqlCount = 6;
@@ -46,10 +46,11 @@
                 }
                 mainForm(0);
             }
-
+			
+			var x_datea='#non',x_sssno='#non';
             function mainPost() {
             	q_getFormat();
-				bbmMask = [['txtDatea','999/99/99'],['txtBtime','99:99'],['txtEtime','99:99']];
+				bbmMask = [['txtDatea',r_picd],['txtBtime','99:99'],['txtEtime','99:99']];
 				q_mask(bbmMask);
 				
 				 $('#txtBtime').blur(function() {
@@ -119,19 +120,44 @@
                	$('#txtDatea').val(q_date());
                		                     
 			}
-            function btnModi() {            
+            function btnModi() {
+            	x_datea=$('#txtDatea').val();
+            	x_sssno=$('#txtSssno').val();
                 _btnModi();
             }
 
             function btnPrint() {
             	
             }
+            
 			function q_stPost() {
-                
+                x_datea=x_datea.length==0?'#non':x_datea;
+				x_sssno=x_sssno.length==0?'#non':x_sssno;
+				
+				q_func('qtxt.query.updatesalpresent', 'saladd.txt,updatesalpresent,' + encodeURI(x_datea) + ';' + encodeURI(x_sssno));
+				
+				if(q_cur==1 || q_cur==2)
+					q_func('qtxt.query.updatesalpresent', 'saladd.txt,updatesalpresent,' + encodeURI($('#txtDatea').val()) + ';' + encodeURI($('#txtSssno').val()));
+				
+				x_datea='#non',x_sssno='#non';
             }
+            
             function btnOk() {
+            	var t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')], ['txtSssno', q_getMsg('lblSssno')]]);
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}
+            	
               	var t_noa = trim($('#txtNoa').val());
 		        var t_date = trim($('#txtDatea').val());
+		        
+		        if(q_cur==1){
+		        	$('#txtWorker').val(r_name);
+		        }else{
+		        	$('#txtWorker2').val(r_name);
+		        }
+		        
 		        if (t_noa.length == 0 || t_noa == "AUTO")
 		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_saladd') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
 		        else
@@ -150,6 +176,12 @@
 			
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                
+                if(q_cur==1||q_cur==2){
+                	if(!q_authRun(3) && r_rank<8){
+                		$('#chkIsapv').attr('disabled', 'disabled');
+                	}
+                }
             }
 
             function btnMinus(id) {
@@ -197,6 +229,8 @@
             }
 
             function btnDele() {
+            	x_datea=$('#txtDatea').val();
+            	x_sssno=$('#txtSssno').val();
                 _btnDele();
             }
 
@@ -325,8 +359,8 @@
 				<table class="tview" id="tview">
 					<tr>
 						<td align="center" style="width:1%; color:black;"><a id='vewChk'> </a></td>
-						<td align="center" style="width:30%; color:black;"><a id='vewDatea'> </a></td>
-						<td align="center" style="width:30%; color:black;"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:25%; color:black;"><a id='vewDatea'> </a></td>
+						<td align="center" style="width:35%; color:black;"><a id='vewNoa'> </a></td>
 						<td align="center" style="width:30%; color:black;"><a id='vewNamea'> </a></td>
 					</tr>
 					<tr>
@@ -348,7 +382,7 @@
 					</tr>				
 					<tr>									
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td><input id="txtNoa" type="text" style="color:green;" class="txt c1"/></td>
+						<td><input id="txtNoa" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
@@ -358,7 +392,7 @@
 						<td><span> </span><a id="lblSssno" class="lbl btn"> </a></td>
 						<td colspan="2">
 							<input id="txtSssno"  type="text" style="width:50%;"/>
-							<input id="txtNamea"  type="text" style="width:50%; color:green;"/>
+							<input id="txtNamea"  type="text" style="width:50%;"/>
 						</td>											
 					</tr>
 					<tr>
@@ -371,9 +405,13 @@
 					</tr>
 					<tr>									
 						<td><span> </span><a id='lblHours' class="lbl"> </a></td>
-						<td><input id="txtHours" type="text" class="txt c1"/></td>
+						<td><input id="txtHours" type="text" class="txt num c1"/></td>
 						<td><span> </span><a id='lblIsapv' class="lbl"> </a></td>
 						<td><input id="chkIsapv" type="checkbox"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
+						<td colspan="3"><input id="txtMemo"  type="text" class="txt c1"/></td>													
 					</tr>
 					<tr>									
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
@@ -381,12 +419,6 @@
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
-					<tr>
-						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="3">
-							<input id="txtMemo"  type="text" class="txt c1"/>
-						</td>													
-					</tr>	
 				</table>
 			</div>
 		</div>
