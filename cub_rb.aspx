@@ -65,7 +65,7 @@
 						var	t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
 						if($('#chkSale_'+b_seq).is(':checked'))
 							$('#txtW02_'+b_seq).val(round(q_mul($('#txtMo_'+b_seq).val(),t_taxrate),0));
-						$('#txtW01_'+j).val(round(q_add($('#txtW02_'+j).val(),$('#txtMo_'+j).val()),0));
+						$('#txtW01_'+j).val(round(q_add(dec($('#txtW02_'+j).val()),dec($('#txtMo_'+j).val())),0));
 				
 				//	}
 				}
@@ -163,7 +163,7 @@
 				bbsMask = [['txtDate2', r_picd], ['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				bbmNum = [['txtTotal',15,0,1],['txtPrice',15,q_getPara('rc2.pricePrecision'),1],['txtMo',15,0,1]];
-				bbsNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1],['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1],['txtMo', 15,  0,1],['txtW02', 15, 0,1],['txtW02', 15, 0,1],['txtGweight', 15, q_getPara('rc2.mountPrecision'), 1]];
+				bbsNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1],['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1],['txtMo', 15, 0,1],['txtW01', 15, 0,1],['txtW02', 15, 0,1],['txtGweight', 15, q_getPara('rc2.mountPrecision'), 1]];
 				bbtNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1]];
 				
 				//$('title').text("連續製令單"); //IE8會有問題
@@ -195,7 +195,7 @@
 				
 				$('#txtMo').change(function() {
 					
-					$('#txtPrice').val(round(q_div($('#txtMo').val(),$('#txtTotal').val()),dec(q_getPara('rc2.pricePrecision'))));
+					$('#txtPrice').val(round(q_div($dec(('#txtMo').val()),dec($('#txtTotal').val())),dec(q_getPara('rc2.pricePrecision'))));
 				});
 				
 				$('#btnProcess').click(function(){											
@@ -535,8 +535,8 @@
 							t_IdSeq = -1;  
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
-							if($('#txtMount_'+b_seq).val() >0)
-								$('#txtPrice_'+b_seq).val(round(q_div($('#txtMo_'+b_seq).val(),$('#txtMount_'+b_seq).val()),dec(q_getPara('rc2.pricePrecision'))));
+							if(dec($('#txtMount_'+b_seq).val()) >0)
+								$('#txtPrice_'+b_seq).val(round(q_div(dec($('#txtMo_'+b_seq).val()),dec($('#txtMount_'+b_seq).val())),dec(q_getPara('rc2.pricePrecision'))));
 							sum();
 						});
 					
@@ -563,7 +563,7 @@
 								var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
 							//	$('#txtW02_'+b_seq).val(round(q_mul($('#txtW02_'+j).val(),t_taxrate),0));
 								$('#txtW02_'+b_seq).css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-								$('#txtW02_'+b_seq).val(round(q_mul($('#txtMo_'+b_seq).val(),t_taxrate),0));
+								$('#txtW02_'+b_seq).val(round(q_mul(dec($('#txtMo_'+b_seq).val()),t_taxrate),0));
 							}else
 								$('#txtW02_'+b_seq).css('color', 'black').css('background', 'white').removeAttr('readonly'); 
 							sum();
