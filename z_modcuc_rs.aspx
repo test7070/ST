@@ -23,7 +23,7 @@
 			});  
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_modfixb_rs',
+                    fileName : 'z_modcuc_rs',
                     options : [{/* [1]*/
                         type : '0',
                         name : 'accy',
