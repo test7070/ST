@@ -121,11 +121,13 @@
 		    }
 		    
 			function btnOk() {
+				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')]]);
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}
               	var t_noa = trim($('#txtNoa').val());	        
-		        if (t_noa.length == 0)
-		            alert('設備編號不可為空');
-		        else
-		            wrServer(t_noa);
+		        wrServer(t_noa);
             }
             
 		    function wrServer(key_value) {

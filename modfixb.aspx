@@ -142,6 +142,12 @@
 		    }
 		    
 			function btnOk() {
+				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}
+				
               	var t_noa = trim($('#txtNoa').val());
 		        var t_date = trim($('#txtDatea').val());
 		        if (t_noa.length == 0 || t_noa == "AUTO")
