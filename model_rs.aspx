@@ -155,9 +155,9 @@
 			}
 			function changeWheel(count){
 				var nb1=" ,F1T,F1B,F2T,F2B,F3T,F3B,F4T,F4B,F5T,F5B,F6T,F6B,F7T,F7B"
-				var nb2=" ,SGT,SGB"
+				var nb2=" ,FS1,FS2,FS3,FS4,FS41,FS5,FS6,IR,FS4-1"			
 				var nb3=" ,SQT,SQB"
-				var nb4=" ,FS1,FS2,FS3,FS4,FS41,FS5,FS6,IR,FS4-1"
+				var nb4=" ,SGT,SGB"
 				var nb5=" ,S1T,S1B,S2T,S2B,S3T,S3B,S4T,S4B,S5T,S5B"
 				var nb6=" ,SS1,SS2,SS3,SS4,SS5"
 				var nb7=" ,TH1T,TH1B,TH2T,TH2B"

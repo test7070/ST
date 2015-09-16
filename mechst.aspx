@@ -81,26 +81,17 @@
  
 		}
 		function btnOk() {
-			var t_err = '';
-			t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtComp', q_getMsg('lblComp')] ]);
-			if( t_err.length > 0) {
-				alert(t_err);
-				return;
-			}
-			var t_noa = trim($('#txtNoa').val());
-			if ( t_noa.length==0 )
-				q_gtnoa(q_name, t_noa);
-			else
-				wrServer(  t_noa);
+			var t_noa = trim($('#txtNoa').val());	        
+		        if (t_noa.length == 0)
+		            alert('模具不可為空');
+		        else
+		            wrServer(t_noa);
 		}
 
 		function wrServer( key_value) {
 			var i;
-			xmlSql = '';
-			if (q_cur == 2) 
-				xmlSql = q_preXml();
-			$('#txt' + bbmKey[0].substr( 0,1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
-			_btnOk(key_value, bbmKey[0], '','',2);
+		    $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
+		    _btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
 		}
 	  
 		function refresh(recno) {
