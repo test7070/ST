@@ -626,6 +626,17 @@
 						t_msg = "庫存量：" + stkmount;
 						q_msg($('#txtMount_' + b_seq), t_msg);
 						break;
+					case 'source_stk':
+						var as = _q_appendData("view_vccs", "", true);
+						if (as[0] != undefined) {
+							if(dec(as[0].stkmount)>=$('#txtMount_'+b_seq).val())
+								$('#cmbSource_'+b_seq).val('2').change();
+							else
+								$('#cmbSource_'+b_seq).val('0').change();
+						}else{
+							$('#cmbSource_'+b_seq).val('0').change();
+						}
+						break;
 					case 'custaddr':
 						var as = _q_appendData("custaddr", "", true);
 						var t_item = " @ ";
@@ -771,14 +782,34 @@
 						break;
 					case 'quatimport':
 						var as = _q_appendData("view_quats", "", true);
+						//移除相同的報價單
+						for(var i = 0; i < as.length; i++){
+							for (var j = 0; j < q_bbsCount; j++) {
+								if(as[i].noa==$('#txtQuatno_'+j).val() && as[i].no3==$('#txtNo3_'+j).val()){
+									as.splice(i, 1);
+									i--;
+									break;
+								}
+							}
+						}
+						
 						if(as[0]!=undefined){
 							//取得報價的第一筆匯率等資料
 							var t_where = "where=^^ noa='" + as[0].noa + "' ^^";
 							q_gt('quat', t_where, 0, 0, 0, "", r_accy);
 						}
+						
 						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSizea,txtDime,txtUnit,txtPrice,txtMount,txtQuatno,txtNo3,txtClassa,txtClass'
 						, as.length, as, 'productno,product,spec,sizea,dime,unit,price,mount,noa,no3,classa,class', 'txtProductno,txtProduct,txtSpec');
 						sum();
+						
+						if(as.length>0){
+							for (var i = 0; i < q_bbsCount; i++) {
+								if(dec($('#txtMount_'+i).val())==0)
+									$('#txtMount_'+i).val('');
+							}
+						}
+						$('#txtMount_0').focus();
 						bbsAssign();
 						break;
 					case q_name:
@@ -852,11 +883,11 @@
 				check_quat_xy=false;
 				
 				for(var k=0;k<q_bbsCount;k++){
-					if(emp($('#txtDatea_'+k).val()))
-						$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),15))
+					//if(emp($('#txtDatea_'+k).val()))
+					//	$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),15))
 						
-					if($('#txtClass_'+k).val()=='')
-						$('#txtClass_'+k).val(100);
+					//if($('#txtClass_'+k).val()=='')
+					//	$('#txtClass_'+k).val(100);
 				}
 				
 				//1030419 當專案沒有勾 BBM的取消和結案被打勾BBS也要寫入
@@ -947,7 +978,20 @@
 							sum();
 						});
 						$('#txtMount_' + j).focusout(function() {
-							sum();
+							if (q_cur == 1 || q_cur == 2) {
+								t_IdSeq = -1;
+								q_bodyId($(this).attr('id'));
+								b_seq = t_IdSeq;
+								if (!emp($('#txtProductno_' + b_seq).val())) {
+									var t_custno=$('#txtCustno').val().substr(0,$('#txtCustno').val().indexOf('-'));
+									if(t_custno=='') 
+										t_custno=$('#txtCustno').val();
+									
+									var t_where = "where=^^ a.storeno2 like '"+t_custno +"%' and isnull(a.productno,'')='"+$('#txtProductno_' + b_seq).val()+"' ^^";
+									q_gt('vcc_xy_store2', t_where, 0, 0, 0, "source_stk", r_accy);
+								}
+								sum();
+							}
 						});
 						$('#txtTotal_' + j).focusout(function() {
 							sum();
@@ -1645,7 +1689,8 @@
 							var t_where = '';
 							if (t_custno.length > 0) {
 								//12/11 核准判斷暫時拿掉 等上線後再放入 不用apv 抓sign
-								t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "+q_sqlPara2("a.custno", t_custno)+" and a.datea>='"+q_date()+"' group by b.productno)";
+								t_where="where=^^ noa+'_'+odate+'_'+productno in (select MIN(a.noa)+'_'+MIN(a.odate)+'_'+b.productno from view_quat a left join view_quats b on a.noa=b.noa where isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 "
+								+q_sqlPara2("a.custno", t_custno.substr(0,5))+" and a.datea>='"+q_date()+"' group by b.productno)";
 								t_where+=" and productno='"+$('#txtProductno_'+b_seq).val()+"' and isnull(enda,0)=0 and isnull(cancel,0)=0 "+q_sqlPara2("custno", t_custno) +" and datea>='"+q_date()+"' ^^";
 							}else {
 								alert(q_getMsg('msgCustEmp'));
@@ -2081,12 +2126,12 @@
 					<td align="center" style="width:70px;"><a >寄/出庫</a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblTotal_s'> </a></td>
+					<td align="center" style="width:85px;"><a id='lblDateas'> </a></td>
 					<!--<td align="center" style="width:85px;" class="bonus"><a>獎金比例</a></td>-->
 					<td align="center" style="width:85px;"><a id='lblGemounts'> </a></td>
 					<td align="center" style="width:85px;"><a>未交量</a></td>
 					<td align="center" style="width:175px;"><a>備註</a></td>
 					<td align="center" style="width:175px;"><a>報價單號</a></td>
-					<td align="center" style="width:85px;"><a id='lblDateas'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblEndas'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblCancels'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblBorn'> </a></td>
@@ -2120,6 +2165,7 @@
 					<td><select id="cmbSource.*" class="txt c1"> </select></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtTotal.*" type="text" /></td>
+					<td><input class="txt c7" id="txtDatea.*" type="text" /></td>
 					<!--<td class="bonus"><input class="txt num c7 bonus" id="txtClass.*" type="text" /></td>-->
 					<td><input class="txt num c1" id="txtC1.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtNotv.*" type="text" /></td>
@@ -2129,7 +2175,6 @@
 						<input class="txt" id="txtNo3.*" type="text" style="width: 20%;"/>
 						<input id="recno.*" type="hidden" />
 					</td>
-					<td><input class="txt c7" id="txtDatea.*" type="text" /></td>
 					<td align="center"><input id="chkEnda.*" type="checkbox"/></td>
 					<td align="center"><input id="chkCancel.*" type="checkbox"/></td>
 					<td align="center"><input class="btn" id="btnBorn.*" type="button" value='.' style=" font-weight: bold;" /></td>

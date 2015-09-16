@@ -21,7 +21,7 @@
 			var decbbs = ['price', 'weight', 'mount', 'total', 'dime', 'width', 'lengthb', 'c1', 'notv', 'theory'];
 			var decbbm = ['money', 'tax', 'total', 'weight', 'floata', 'mount', 'price', 'totalus'];
 			var q_readonly = ['txtNoa','txtWorker', 'txtCno', 'txtAcomp', 'txtSales', 'txtWorker2','txtMoney','txtTotal','txtTotalus','txtComp','txtConn'];
-			var q_readonlys = ['txtNo3','txtTotal','txtAdd1'];
+			var q_readonlys = ['txtTotal','txtAdd1'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -413,12 +413,19 @@
 						break;
 					case 'view_ordes':
 						var as = _q_appendData("view_ordes", "", true);
-						if (as[0] != undefined) {
+						//暫不鎖定
+						/*if (as[0] != undefined) {
 							alert('已轉訂單禁止修改!!!');
 						}else{
 							orde_quat=true;
 							btnModi();
+						}*/
+						
+						if (as[0] != undefined) {
+							quat_no3_disabled=true;
 						}
+						orde_quat=true;
+						btnModi();
 						break;
 					case 'cust_detail':
 						var as = _q_appendData("cust", "", true);
@@ -486,6 +493,30 @@
 				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtSalesno', q_getMsg('lblSales')], ['txtOdate', q_getMsg('lblOdate')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
+					return;
+				}
+				
+				var t_repeat=false;
+				for (var i = 0; i < q_bbsCount; i++) {
+					if(emp($('#txtProductno_'+i).val()) && emp($('#txtProduct_'+i).val())){
+						$('#btnMinus_'+i).click();
+					}
+				}
+				for (var i = 0; i < q_bbsCount; i++) {
+					if(!emp($('#txtNo3_'+i).val())){
+						for (var j = i+1; j < q_bbsCount; j++) {
+							if($('#txtNo3_'+i).val()==$('#txtNo3_'+j).val() && i!=j){
+								t_repeat=true;
+								break;
+							}
+						}
+						if(t_repeat){
+							break;
+						}
+					}
+				}
+				if(t_repeat){
+					alert('項次重複!!');
 					return;
 				}
 				
@@ -933,6 +964,14 @@
 				if (r_rank<9){
 					$('.bonus').hide();
 				}
+				
+				for (var j = 0; j < q_bbsCount; j++) {
+					if(quat_no3_disabled && q_cur!=1){
+						$('#txtNo3_'+j).attr('disabled', 'disabled');
+					}else{
+						$('#txtNo3_'+j).removeAttr('disabled');
+					}
+				}
 			}
 
 			function btnIns() {
@@ -962,17 +1001,18 @@
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 			}
 			
-			var orde_quat=false;
+			var orde_quat=false,quat_no3_disabled=false;
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				/*if(!orde_quat){
+				if(!orde_quat){
 					var t_where = "where=^^ quatno='" + $('#txtNoa').val() + "' ^^";
 					q_gt('view_ordes', t_where, 0, 0, 0, "");
 					return;
-				}*/
+				}
 				
 				_btnModi();
+				bbsAssign();
 				$('#txtCustno').focus();
 
 				if (!emp($('#txtCustno').val())) {
