@@ -146,6 +146,36 @@
 				/*$('#lblVccno').click(function() {
 					q_pop('txtVccno', "trd.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtTrdno').val() + "';" + r_accy + '_' + r_cno, 'trd', 'noa', 'datea', "95%", "95%", q_getMsg('popTrd'), true);
 				});*/
+				
+				$('#btnShowVcc').click(function() {
+					var t_vccno=$('#txtVccno').val();
+					var t_cno=$('#txtCno').val();
+					var t_custno=$('#txtCustno').val();
+					var t_mon=$('#txtMon').val();
+					if (q_getPara('sys.project').toUpperCase()=='YC'){
+						if(t_vccno.length>0)
+							q_box("vcc_yc.aspx?;;;charindex(noa,'"+t_vccno+"')>0;" + r_accy, '', "95%", "95%", $('#btnVcc').val());
+						else {
+							var t_where = "1=1"+ q_sqlPara2("cno", t_cno)+ q_sqlPara2("custno", t_custno)+ q_sqlPara2("mon", t_mon);
+							q_box("vcc_yc.aspx?;;;"+t_where+";" + r_accy, '', "95%", "95%", $('#btnVcc').val());
+						}
+					}else if (q_getPara('sys.project').toUpperCase()=='IT'){
+						if(t_vccno.length>0)
+							q_box("vcc_it.aspx?;;;charindex(noa,'"+t_vccno+"')>0;" + r_accy, '', "95%", "95%", $('#btnVcc').val());
+						else 
+							q_box("vcc_it.aspx?;;;;" + r_accy, '', "95%", "95%", $('#btnVcc').val());
+					}else if (q_getPara('sys.project').toUpperCase()=='SH'){
+						if(t_vccno.length>0)
+							q_box("vcc_sh.aspx?;;;charindex(noa,'"+t_vccno+"')>0;" + r_accy, '', "95%", "95%", $('#btnVcc').val());
+						else 
+							q_box("vcc_sh.aspx?;;;;" + r_accy, '', "95%", "95%", $('#btnVcc').val());
+					}else{
+						if(t_vccno.length>0)
+							q_box("vcc.aspx?;;;charindex(noa,'"+t_vccno+"')>0;" + r_accy, '', "95%", "95%", $('#btnVcc').val());
+						else 
+							q_box("vcc.aspx?;;;;" + r_accy, '', "95%", "95%", $('#btnVcc').val());
+					}
+				});
 			}
 			
 			function q_boxClose(s2) {///   q_boxClose 2/4 /// 查詢視窗、客戶視窗、報價視窗  關閉時執行
@@ -162,7 +192,6 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) { 
-					
 					case 'cust':
 						var as = _q_appendData("cust", "", true);
 						if (as[0] != undefined) {
@@ -246,7 +275,7 @@
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
 
-				q_box('vcca_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
+				q_box('vcca_s.aspx', q_name + '_s', "500px", "450px", q_getMsg("popSeek"));
 			}
 
 			function btnIns() {
@@ -286,11 +315,9 @@
 			}
 
 			function btnPrint() {
-				if (q_getPara('sys.comp').indexOf('大昌') > -1) {
-					q_box('z_vccadc.aspx?;;;' + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-				} else if (q_getPara('sys.comp').indexOf('英特瑞') > -1) {
+				if (q_getPara('sys.project').toUpperCase()=='IT'){
 					q_box('z_vccap_it.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
-				}else if (q_getPara('sys.project') == 'sh') {
+				}else if (q_getPara('sys.project').toUpperCase()=='SH'){
 					q_box('z_vccap_sh.aspx' + "?;;;noa=" + trim($('#txtNoa').val())+";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 				}else {
 					q_box('z_vccap.aspx?;;;' + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
@@ -611,11 +638,11 @@
 			<div class="dview" id="dview">
 				<table class="tview" id="tview">
 					<tr>
-						<td align="center" style="width:20px; color:black;"><a id='vewChk'></a></td>
-						<td align="center" style="width:120px; color:black;"><a id='vewNoa'></a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewDatea'></a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewBuyer'></a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewTotal'></a></td>
+						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
+						<td align="center" style="width:120px; color:black;"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewDatea'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewBuyer'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewTotal'> </a></td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=' '/></td>
@@ -711,7 +738,8 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblVccno' class="lbl"> </a></td>
-						<td colspan="2"><input id="txtVccno"  type="text" class="txt c1"/>	</td>
+						<td colspan="2"><input id="txtVccno"  type="text" class="txt c1"/></td>
+						<td><input id="btnShowVcc" type="button" value="出貨單"></td>
 					</tr>
 				</table>
 			</div>

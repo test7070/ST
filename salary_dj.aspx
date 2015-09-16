@@ -435,8 +435,8 @@
 		                    		//as[i].tax_other=dec(as[i].tax_other)+dec(as[i].bo_born)+dec(as[i].bo_night)+dec(as[i].bo_day);
 		                   		//加班時數
 		                   		var t_fir =46,bef_fir01,bef_fir02;
-		                   		as[i].addh21=as[i].saddh1;
-		                   		as[i].addh22=as[i].saddh2;
+		                   		as[i].addh21=as[i].addh1;
+		                   		as[i].addh22=as[i].addh2;
 		                   		as[i].addh46_1=0;
 		                   		as[i].addh46_2=0;
 		                   		if($('#cmbMonkind').find("option:selected").text().indexOf('本月')>-1){
@@ -451,7 +451,7 @@
 		                    		}
 		                    	}else{//上下期計算
 		                    		if($('#cmbMonkind').find("option:selected").text().indexOf('下期')>-1){
-		                    			if((dec(as[i].saddh1)+dec(as[i].saddh2)+dec(as[i].addh3)+dec(as[i].addh4))>46){//加班超過46小時
+		                    			if((dec(as[i].addh1)+dec(as[i].addh2)+dec(as[i].addh3)+dec(as[i].addh4))>46){//加班超過46小時
 		                    				
 		                    				if((dec(as[i].addh3)+dec(as[i].addh4))>46){//上期已超過46小時
 		                    					as[i].addh21=0;
@@ -470,7 +470,7 @@
 				                    		}
 		                    			}
 		                    		}else{
-		                    			if((dec(as[i].saddh1)+dec(as[i].saddh2))>46){//上期加班超過46小時
+		                    			if((dec(as[i].addh1)+dec(as[i].addh2))>46){//上期加班超過46小時
 				                    		bef_fir01=Math.min(dec(as[i].addh1),t_fir);
 				                    		as[i].addh21=bef_fir01;
 				                    		as[i].addh46_1=dec(as[i].addh1)-bef_fir01;
