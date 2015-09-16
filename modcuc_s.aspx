@@ -14,7 +14,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
-			var q_name = "modfixb_s";
+			var q_name = "modcuc_s";
 			var aPop = new Array();
 				
 			$(document).ready(function() {
