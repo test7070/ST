@@ -971,6 +971,40 @@
 					}else{
 						$('#txtNo3_'+j).removeAttr('disabled');
 					}
+					//獎金已完成不能修改
+					/*if($('#checkEweight_'+j).prop('checked') && r_rank<9){
+						$('#txtProductno_'+j).attr('disabled', 'disabled');
+						$('#btnProduct_'+j).attr('disabled', 'disabled');
+						$('#txtProduct_'+j).attr('disabled', 'disabled');
+						$('#combGroupbno_'+j).attr('disabled', 'disabled');
+						$('#txtSpec_'+j).attr('disabled', 'disabled');
+						$('#txtClassa_'+j).attr('disabled', 'disabled');
+						$('#combClassa_'+j).attr('disabled', 'disabled');
+						$('#txtSizea_'+j).attr('disabled', 'disabled');
+						$('#txtDime_'+j).attr('disabled', 'disabled');
+						$('#txtUnit_'+j).attr('disabled', 'disabled');
+						$('#txtMount_'+j).attr('disabled', 'disabled');
+						$('#txtPrice_'+j).attr('disabled', 'disabled');
+						$('#txtTotal_'+j).attr('disabled', 'disabled');
+						$('#txtMemo_'+j).attr('disabled', 'disabled');
+						$('#txtAddno1_'+j).attr('disabled', 'disabled');
+					}else{
+						$('#txtProductno_'+j).removeAttr('disabled');
+						$('#btnProduct_'+j).removeAttr('disabled');
+						$('#txtProduct_'+j).removeAttr('disabled');
+						$('#combGroupbno_'+j).removeAttr('disabled');
+						$('#txtSpec_'+j).removeAttr('disabled');
+						$('#txtClassa_'+j).removeAttr('disabled');
+						$('#combClassa_'+j).removeAttr('disabled');
+						$('#txtSizea_'+j).removeAttr('disabled');
+						$('#txtDime_'+j).removeAttr('disabled');
+						$('#txtUnit_'+j).removeAttr('disabled');
+						$('#txtMount_'+j).removeAttr('disabled');
+						$('#txtPrice_'+j).removeAttr('disabled');
+						$('#txtTotal_'+j).removeAttr('disabled');
+						$('#txtMemo_'+j).removeAttr('disabled');
+						$('#txtAddno1_'+j).removeAttr('disabled');
+					}*/
 				}
 			}
 

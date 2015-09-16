@@ -915,10 +915,12 @@
 							}
 							sum();
 							
-							if(!emp($('#txtMemo_'+b_seq).val()))
-								$('#txtMemo_'+b_seq).val($('#cmbItemno_' + b_seq).find("option:selected").text()+'：'+$('#txtMount_' + b_seq).val()+$('#txtUnit_' + b_seq).val()+','+$('#txtMemo_'+b_seq).val());
-							else
-								$('#txtMemo_'+b_seq).val($('#cmbItemno_' + b_seq).find("option:selected").text()+'：'+$('#txtMount_' + b_seq).val()+$('#txtUnit_' + b_seq).val());
+							if($('#cmbItemno_' + b_seq).val()!='0'){
+								if(!emp($('#txtMemo_'+b_seq).val()))
+									$('#txtMemo_'+b_seq).val($('#cmbItemno_' + b_seq).find("option:selected").text()+'：'+$('#txtMount_' + b_seq).val()+$('#txtUnit_' + b_seq).val()+','+$('#txtMemo_'+b_seq).val());
+								else
+									$('#txtMemo_'+b_seq).val($('#cmbItemno_' + b_seq).find("option:selected").text()+'：'+$('#txtMount_' + b_seq).val()+$('#txtUnit_' + b_seq).val());
+							}
 						});
 						
 						$('#txtWidth_' + i).focusout(function() {
