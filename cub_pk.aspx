@@ -227,16 +227,48 @@
 					alert(q_getMsg('lblDatea') + '錯誤。');
 					return;
 				}
-				sum();
-				$('#txtWorker').val(r_name);
-
-				var t_noa = trim($('#txtNoa').val());
-				var t_date = trim($('#txtDatea').val());
-				if (t_noa.length == 0 || t_noa == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cub') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-				else
-					wrServer(t_noa);
+				getUno_bydate(0);
 			}
+			function getUno_bydate(n){
+            	
+            	if(n>=q_bbtCount){
+            		if (q_cur == 1)
+						$('#txtWorker').val(r_name);
+					else
+						$('#txtWorker2').val(r_name);
+					sum();
+					var t_noa = trim($('#txtNoa').val());
+					var t_date = trim($('#txtDatea').val());
+					if (t_noa.length == 0 || t_noa == "AUTO")	 
+						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_cub') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+					else
+						wrServer(t_noa);
+            	}else{
+            		if($('#txtUno__'+n).val().length!=0 && q_float('txtWeight__'+n)!=0){
+            			var t_buno = ' ';
+		            	var t_datea = $('#txtDatea').val();
+		            	var t_style = $('#txtStyle__'+n).val();
+		            	var t_comp = q_getPara('sys.comp');
+		            	q_func('qtxt.query.getuno_bydate_'+n, 'uno.txt,getuno_bydate,'+t_buno+';' + t_datea + ';' + t_style +';'+ t_comp +';');
+            		}else{
+            			getUno_bydate(n+1);
+            		}
+            	}
+            }
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                    default:
+                    	if(t_func.substring(0,25)=='qtxt.query.getuno_bydate_'){
+                    		var n = t_func.replace('qtxt.query.getuno_bydate_','');
+                    		var as = _q_appendData("tmp0", "", true, true);
+	                       	if(as[0]!=undefined && as[0].uno.length>0){
+	                       		$('#txtBno__'+n).val(as[0].uno);
+	                       	}
+                    		getUno_bydate(parseInt(n)+1);
+                    	}
+                    	break;
+            	}
+  			}
 
 			function wrServer(key_value) {
 				var i;
