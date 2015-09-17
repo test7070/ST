@@ -744,7 +744,7 @@
 					return;
 				q_cur = 3;
 				if(emp($('#txtRc2no').val()))
-					q_func('qtxt.query.c0', 'rc2b.txt,post_ra,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+					q_func('qtxt.query.c2', 'rc2b.txt,post_ra,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
 				else
 					q_func('rc2_post.post.a2', r_accy + ',' + $('#txtRc2no').val() + ',0');
 			}

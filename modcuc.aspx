@@ -21,7 +21,7 @@
 
 		    q_tables = 's';
 		    var q_name = "modcuc";
-		    var q_readonly = ['txtNoa'];
+		    var q_readonly = ['txtNoa','txtWorker'];
 		    var q_readonlys = ['txtDevice'];
 		    var bbmNum = [];
 		    var bbsNum = [];
@@ -127,6 +127,8 @@
 					alert(t_err);
 					return;
 				}
+				
+				$('#txtWorker').val(r_name);
 				
               	var t_noa = trim($('#txtNoa').val());
 		        var t_date = trim($('#txtDatea').val());

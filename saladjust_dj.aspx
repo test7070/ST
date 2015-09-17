@@ -251,9 +251,9 @@
 						q_tr('txtBo_traffic_'+b_seq,salrank[0].bo_traffic);
 						q_tr('txtBo_special_'+b_seq,salrank[0].bo_special);
 						q_tr('txtBo_oth_'+b_seq,salrank[0].bo_oth);
-						q_tr('txtBo_full_'+b_seq,salrank[0].bo_full);
 						salranks = _q_appendData("salranks", "", true);
 						if(salranks[0]!=undefined){
+							q_tr('txtBo_full_'+b_seq,round(dec(salranks[dec($('#txtLevel2_'+b_seq).val())-1].money)/10,0));
 							q_tr('txtMoney_'+b_seq,salranks[dec($('#txtLevel2_'+b_seq).val())-1].money);
 						}
 						q_tr('txtSalary_'+b_seq,q_float('txtMoney_'+b_seq)+q_float('txtBo_admin_'+b_seq)+q_float('txtBo_traffic_'+b_seq)+q_float('txtBo_special_'+b_seq)+q_float('txtBo_oth_'+b_seq)+q_float('txtBo_full_'+b_seq)+q_float('txtBo_money1_'+b_seq));
