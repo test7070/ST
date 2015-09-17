@@ -1471,7 +1471,7 @@
                     <td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
                     <td align="center" style="width:140px;">規範<BR>國別</td>
                     <td align="center" style="width:300px;"><a>尺寸(厚x寬x長)</a><BR><a>規格</a></td>
-                    <td align="center" style="width:240px;"><a id='lblSizea_st'> </a></td>
+                    <td align="center" style="width:300px;"><a id='lblSizea_st'> </a></td>
                     
                     <td align="center" style="width:120px;"><a id='lblMount'> </a></td>
                     <td align="center" style="width:50px;"><a>數量<br>單位</a></td>
