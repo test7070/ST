@@ -42,7 +42,7 @@
             , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
             , ['txtUno_', 'btnUno_', 'view_uccc', 'uno,class,spec,unit', 'txtUno_,txtClass_,txtSpec_,txtUnit_', 'uccc_seek_b.aspx?;;;1=0', '95%', '95%']
             , ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
-            , ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,zip_comp,addr_comp', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtPost,txtAddr', 'cust_b.aspx']
+            , ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,zip_comp,addr_comp,memo2', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtPost,txtAddr,txtMemo', 'cust_b.aspx']
             , ['txtUno__', 'btnUno__', 'view_uccc', 'uno,product,productno,radius,width,dime,lengthb,mount,weight', 'txtUno__,txtProduct__,txtProductno__,txtRadius__,txtWidth__,txtDime__,txtLengthb__,txtMount__,txtWeight__', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
             , ['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']);
             brwCount2 = 12;
@@ -187,7 +187,7 @@
                 q_cmbParse("cmbTrantype",q_getPara('sys.tran'));
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
                 $('#btnOrdei').hide();
-                var t_where = "where=^^ 1=1 group by post,addr^^";
+                var t_where = "where=^^ 1=1^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
                 //外銷訂單按鈕隱藏
                 
@@ -890,7 +890,7 @@
                 });
                 $('#txtKind').val('A1');
                 q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
-                var t_where = "where=^^ 1=1 group by post,addr^^";
+                var t_where = "where=^^ 1=1^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
             }
 
@@ -904,6 +904,8 @@
                     $('#btnOrdei').show();
                 else
                     $('#btnOrdei').hide();
+                var t_where = "where=^^ noa='"+$('#txtCustno').val()+"'^^";
+				q_gt('custaddr', t_where, 0, 0, 0, "");
                 sum();
             }
 
