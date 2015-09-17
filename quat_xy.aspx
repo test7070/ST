@@ -967,12 +967,24 @@
 				
 				for (var j = 0; j < q_bbsCount; j++) {
 					if(quat_no3_disabled && q_cur!=1){
+						$('#btnMinus_'+j).attr('disabled', 'disabled');
 						$('#txtNo3_'+j).attr('disabled', 'disabled');
+						$('#txtProductno_'+j).attr('disabled', 'disabled');
+						$('#btnProduct_'+j).attr('disabled', 'disabled');
+						$('#txtProduct_'+j).attr('disabled', 'disabled');
+						$('#combGroupbno_'+j).attr('disabled', 'disabled');
 					}else{
+						$('#btnMinus_'+j).removeAttr('disabled');
 						$('#txtNo3_'+j).removeAttr('disabled');
+						$('#txtProductno_'+j).removeAttr('disabled');
+						$('#btnProduct_'+j).removeAttr('disabled');
+						$('#txtProduct_'+j).removeAttr('disabled');
+						$('#combGroupbno_'+j).removeAttr('disabled');
 					}
 					//獎金已完成不能修改
 					/*if($('#checkEweight_'+j).prop('checked') && r_rank<9){
+						$('#btnMinus_'+j).attr('disabled', 'disabled');
+						$('#txtNo3_'+j).attr('disabled', 'disabled');
 						$('#txtProductno_'+j).attr('disabled', 'disabled');
 						$('#btnProduct_'+j).attr('disabled', 'disabled');
 						$('#txtProduct_'+j).attr('disabled', 'disabled');
@@ -989,6 +1001,8 @@
 						$('#txtMemo_'+j).attr('disabled', 'disabled');
 						$('#txtAddno1_'+j).attr('disabled', 'disabled');
 					}else{
+						$('#btnMinus_'+j).removeAttr('disabled');
+						$('#txtNo3_'+j).removeAttr('disabled');
 						$('#txtProductno_'+j).removeAttr('disabled');
 						$('#btnProduct_'+j).removeAttr('disabled');
 						$('#txtProduct_'+j).removeAttr('disabled');
