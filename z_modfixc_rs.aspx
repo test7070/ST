@@ -36,6 +36,8 @@
                 
                  var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
                 $('#txtXnoa').val(t_noa);
+                
+            
                         
 									
 			}

@@ -28,6 +28,18 @@
                     {// [1]
                         type : '6',
                         name : 'xnoa'
+                    },{// [2]
+                        type : '6',
+                        name : 'xnob'
+                    },{//[3][4]
+                    	type : '1',
+                    	name : 'xdatea'
+                    },{//[5]
+                    	type : '6',
+                    	name : 'xworker'
+                    },{//[6]
+                    	type : '6',
+                    	name : 'xframe'
                     }]
                 });
                 q_popAssign();
@@ -37,7 +49,42 @@
                  var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
                 $('#txtXnoa').val(t_noa);
                         
-									
+				      var r_1911=1911;
+				if(r_len==4){//西元年
+					r_1911=0;
+				}else{
+					$('#txtXdatea1').datepicker();
+					$('#txtXdatea2').datepicker();
+				}
+                 
+                 $('#txtXdatea1').mask(r_picd);
+	             $('#txtXdatea2').mask(r_picd);
+
+           
+                
+                 var t_date, t_year, t_month, t_day;
+                t_date = new Date();
+                t_date.setDate(1);
+                t_year = t_date.getUTCFullYear() - r_1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtXdatea1').val(t_year + '/' + t_month + '/' + t_day);
+				
+				
+                t_date = new Date();
+                t_date.setDate(35);
+                t_date.setDate(0);
+                t_year = t_date.getUTCFullYear() - r_1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtXdatea2').val(t_year + '/' + t_month + '/' + t_day);
+ 					
 			}
 
 			function q_boxClose(s2) {
