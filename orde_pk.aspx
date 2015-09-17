@@ -601,6 +601,12 @@
                     return false;
                 q_gt('orde',"where=^^ noa='"+$.trim($('#txtNoa').val())+"'^^", 0, 0, 0, 'refreshEnd2', r_accy);
                 Unlock(1);
+                
+                //orde2cub
+                if (q_cur == 1 || emp($('#txtNoa').val()))
+					q_func('qtxt.query.c0', 'orde2cub_pk.txt,orde2cub_pk,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;');
+				else
+					q_func('orde_post.post.a1', r_accy + ',' + $('#txtNoa').val() + ',0');
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
@@ -696,6 +702,29 @@
                         }
                         save();
                         break;
+                    //orde2cub    
+                   	case 'orde_post.post.a1':
+						q_func('qtxt.query.c0', 'orde2cub_pk.txt,orde2cub_pk,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;');
+						break;
+					case 'orde_post.post.a2':
+						q_func('qtxt.query.c2', 'orde2cub_pk.txt,orde2cub_pk,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;');
+						break;
+					case 'qtxt.query.c0':
+						q_func('qtxt.query.c1', 'orde2cub_pk.txt,orde2cub_pk,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';1;');
+						break;
+					case 'qtxt.query.c1':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							abbm[q_recno]['noa'] = as[0].noa;
+							$('#txtNoa').val(as[0].noa);
+							
+							if(!emp(as[0].noa))
+								q_func('orde_post.post', r_accy + ',' + $('#txtNoa').val() + ',1');
+						}
+						break;
+					case 'qtxt.query.c2':
+						_btnOk($('#txtNoa').val(), bbmKey[0], ( bbsHtm ? bbsKey[1] : ''), '', 3)
+						break;
                 }
             }
             function _btnSeek() {
@@ -1131,7 +1160,14 @@
             }
 
             function btnDele() {
-                _btnDele();
+               //_btnDele();
+				if (!confirm(mess_dele))
+					return;
+				q_cur = 3;
+				if(emp($('#txtNoa').val()))
+					q_func('qtxt.query.c2', 'orde2cub_pk.txt,orde2cub_pk,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;');
+				else
+					q_func('orde_post.post.a2', r_accy + ',' + $('#txtNoa').val() + ',0');
             }
 
             function btnCancel() {
