@@ -477,7 +477,7 @@
 			}
 
 			function btnDele() {
-				var t_where = 'where=^^ uno in(' + getBBTWhere('Uno') + ') ^^';
+				var t_where = 'where=^^ uno in(' + getBBTWhere('Bno') + ') ^^';
 				q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
 			}
 
