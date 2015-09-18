@@ -99,7 +99,7 @@
 	                        t_where = "isnull(b.enda,0)=0 && isnull(view_ordcs.enda,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "") + "&& " + (t_ordeno.length > 0 ? q_sqlPara("noa", t_ordeno) : "");
 	                    else
 	                        t_where = "isnull(b.enda,0)=0 && isnull(view_ordcs.enda,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "");
-	                    t_where = t_where;
+	                    t_where = t_where+" order by view_ordcs.noa desc,view_ordcs.no2";
 	                } else {
 	                    alert(q_getMsg('msgTggEmp'));
 	                    return;
@@ -180,8 +180,8 @@
 
                             $('#txtOrdcno').val(b_ret[0].noa);
                             ret = q_gridAddRow(bbsHtm, 'tbbt'
-                            	, 'txtUno,txtProductno,txtSpec,txtProduct,txtUnit,txtMount,txtOrdeno,txtNo2,txtPrice,txtTotal,txtMemo', b_ret.length, b_ret
-                            	, 'uno,productno,spec,product,unit,mount,noa,no2,price,total,memo', 'txtProductno,txtProduct');
+                            	, 'txtGmount,txtGweight', b_ret.length, b_ret
+                            	, 'mount,weight', 'txtProductno,txtProduct');
                             bbsAssign();
                             sum();
                         }
