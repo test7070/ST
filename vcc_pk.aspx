@@ -233,7 +233,7 @@
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
 				q_gt('spec', '', 0, 0, 0, "", r_accy);
-				var t_where = "where=^^ 1=1 group by post,addr^^";
+				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				//=======================================================
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入
@@ -1360,7 +1360,7 @@
 					opacity : 0
 				});
 				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
-				var t_where = "where=^^ 1=1 group by post,addr^^";
+				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 			}
 
@@ -1369,7 +1369,8 @@
 					return;
 				var t_where = "where=^^ vccno='"+$('#txtNoa').val()+"' and isnull(paysale,0)!=0^^";	
 				q_gt('umms', t_where, 0, 0, 0, 'checkUmm');
-				
+				var t_where = "where=^^ noa='"+$('#txtCustno').val()+"'^^";
+				q_gt('custaddr', t_where, 0, 0, 0, "");
 				/* var s1 = '';
 				 for (var j = 0; j < aPop.length; j++) {
 				 if (aPop[j][0].length > 6 && aPop[j][0].substr(0, 7) == 'txtUno_') {
