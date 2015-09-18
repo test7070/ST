@@ -14,7 +14,8 @@
             function onPageError(error) {
                 alert("An error occurred:\r\n" + error.Message);
             }
-
+			
+			q_bbsLen=20;
             q_tables = 's';
             var q_name = "deli";
             var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtCoinretiremoney','txtCointotal','txtCointariff','txtRetiremoney'
@@ -1139,7 +1140,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 3600px;">
+		<div class='dbbs' style="width: 3800px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  /></td>
