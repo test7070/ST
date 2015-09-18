@@ -35,6 +35,7 @@
 			brwCount2 = 5;
 			aPop = new Array(
 				['textTggno', 'lblxTggno', 'tgg', 'noa,comp', 'textTggno', 'tgg_b.aspx']
+				,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,class,spec,style,product', '0txtUno__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
 				,['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx']
 			);
 
@@ -428,6 +429,12 @@
 				for (var i = 0; i < q_bbtCount; i++) {
 					$('#lblNo__' + i).text(i + 1);
 					if (!$('#btnMinut__' + i).hasClass('isAssign')) {
+						$('#txtUno__' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtUno__', '');
+                            $('#btnUno__'+n).click();
+                        });
 					}
 				}
 				_bbtAssign();
