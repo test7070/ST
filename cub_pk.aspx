@@ -34,7 +34,8 @@
 			q_desc = 1;
 			brwCount2 = 5;
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx']
+				['textTggno', 'lblxTggno', 'tgg', 'noa,comp', 'textTggno', 'tgg_b.aspx']
+				,['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx']
 			);
 
 			$(document).ready(function() {
@@ -87,6 +88,31 @@
 						var t_where = "noa='" + trim($('#txtNoa').val()) + "'";
 						q_box("cubu_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";"+r_accy, 'cubu', "95%", "95%", q_getMsg('popCubu'));
 					}
+				});
+				$('#btnOrdc').click(function(e){
+					
+					var t_tggno = trim($('#textTggno').val());
+	                var t_ordeno = trim($('#txtOrdeno').val());
+	                var t_where = '';
+	                if (t_tggno.length > 0) {
+	                    if (t_ordeno.length > 0)
+	                        t_where = "isnull(b.enda,0)=0 && isnull(view_ordcs.enda,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "") + "&& " + (t_ordeno.length > 0 ? q_sqlPara("noa", t_ordeno) : "");
+	                    else
+	                        t_where = "isnull(b.enda,0)=0 && isnull(view_ordcs.enda,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "");
+	                    t_where = t_where;
+	                } else {
+	                    alert(q_getMsg('msgTggEmp'));
+	                    return;
+	                }
+	                q_box("ordcs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
+					/*var t_tggno = trim($('#txtTggno').val());
+					var t_where = '';
+					t_where = " view_ordcs.enda='0' and kind='" + $('#cmbKind').val() + "' " + (t_tggno.length > 0 ? q_sqlPara2("tggno", t_tggno) : "");
+					t_where += " and b.enda='0'";
+					if(q_getPara('sys.comp').substring(0,2)=="傑期")
+						t_where += " order by noa,no2";
+					q_box("ordcsst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'ordcs', "95%", "95%", q_getMsg('popOrdcs'));
+					*/
 				});
 			}
 
@@ -141,6 +167,25 @@
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'ordcs':
+						if (q_cur > 0 && q_cur < 4) {
+                            b_ret = getb_ret();
+                            if (!b_ret || b_ret.length == 0) {
+                                b_pop = '';
+                                return;
+                            }
+                            //取得採購的資料
+                            var t_where = "where=^^ noa='" + b_ret[0].noa + "' ^^";
+                            q_gt('ordc', t_where, 0, 0, 0, "", r_accy);
+
+                            $('#txtOrdcno').val(b_ret[0].noa);
+                            ret = q_gridAddRow(bbsHtm, 'tbbt'
+                            	, 'txtUno,txtProductno,txtSpec,txtProduct,txtUnit,txtMount,txtOrdeno,txtNo2,txtPrice,txtTotal,txtMemo', b_ret.length, b_ret
+                            	, 'uno,productno,spec,product,unit,mount,noa,no2,price,total,memo', 'txtProductno,txtProduct');
+                            bbsAssign();
+                            sum();
+                        }
+						break;
 					case 'ordes':
 						if (q_cur > 0 && q_cur < 4) {
 							if (!b_ret || b_ret.length == 0) {
@@ -302,6 +347,13 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if(t_para){
+					$('#btnOrdeImport').attr('disabled','disabled');
+					$('#btnOrdc').attr('disabled','disabled');
+				}else{
+					$('#btnOrdeImport').removeAttr('disabled');
+					$('#btnOrdc').removeAttr('disabled');
+				}
 			}
 
 			function btnMinus(id) {
@@ -650,6 +702,9 @@
 						<td style="display:none;"><input type="button" id="btnCubu" style="width:120px;"></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblxTggno" class="lbl">廠商編號</a></td>
+						<td><input id="textTggno" type="text" class="txt c1"/></td>
+						<td><input id="btnOrdc" type="button" value="採購匯入"/></td>
 						<td style="display:none;"><span> </span><a id="lblWaste" class="lbl" ></a></td>
 						<td style="display:none;"><input id="txtWaste" type="text" class="txt c1 num"/></td>
 						<td style="display:none;"><span> </span><a id="lblMo" class="lbl" ></a></td>
