@@ -35,7 +35,7 @@
 			aPop = new Array(
 			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
 				['txtNoa','lblNoa','model','noa','txtNoa','model_c.aspx'],
-				['txtMech','lblMech','modeq','namea','txtMech','modeq_b2.aspx']
+				['txtMachine','lblMech','modeq','namea','txtMachine','modeq_b2.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -371,7 +371,7 @@
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
 						<td id="noa" style="text-align: center;">~noa</td>
-						<td id="mech" style="text-align: center;">~mech</td>
+						<td id="mech" style="text-align: center;">~machine</td>
 						
 					</tr>
 				</table>
@@ -389,7 +389,7 @@
 						<td><span> </span><a id='lblNoa' class="lbl btn" ></a></td>
 						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
 						<td><span> </span><a id='lblMech' class="lbl btn"></a></td>
-						<td><input id="txtMech" type="text" class="txt c1"/></td>
+						<td><input id="txtMachine" type="text" class="txt c1"/></td>
 						<td></td>
 					</tr>
 
