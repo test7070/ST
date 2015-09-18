@@ -34,7 +34,8 @@
 			
 			aPop = new Array(
 			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
-				['','lblNoa','model','noa','txtNoa','model_c.aspx']
+				['txtNoa','lblNoa','model','noa','txtNoa','model_c.aspx'],
+				['txtMech','lblMech','modeq','namea','txtMech','modeq_b2.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -55,7 +56,7 @@
 				q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
 				$('#btnIn').click(function(){				
-					if(!emp($('#txtNoa').val())){
+					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2)){
 						q_gt('models', "where=^^noa='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "ins_models");
 					}
 					
@@ -78,7 +79,7 @@
 					case 'ins_models':
 					
 						var as = _q_appendData("models", "", true);
-						btnModi();
+					//	btnModi();
 						//var i=0
 						if(as.length-q_bbsCount >=0){
 							for(var i=0;i<as.length;i++){
@@ -394,23 +395,25 @@
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblNoa' class="lbl" ></a></td>
+						<td><span> </span><a id='lblNoa' class="lbl btn" ></a></td>
 						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
-						<td><span> </span><a id='lblMech' class="lbl"></a></td>
+						<td><span> </span><a id='lblMech' class="lbl btn"></a></td>
 						<td><input id="txtMech" type="text" class="txt c1"/></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
 						<td><input id="txtDatea" type="text" class="txt c1 num" style="float: left;"/></a></td>
-						<td><span> </span><a id='' class="lbl"></a></td>
-						<td><span> </span><input id="btnIn" type="Button"  style="float: left;"/></td>
+						
+						
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id='' class="lbl"></a></td>
+						<td><span> </span><input id="btnIn" type="Button"  style="float: left;"/></td>
 
 					</tr>
 						

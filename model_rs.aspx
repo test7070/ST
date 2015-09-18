@@ -468,6 +468,7 @@
 				border-width: 1px;
 				padding: 0px;
 				margin: -1px;
+				width: 95%;
 				float: left;
 			}
 			.tbbm select {
@@ -521,32 +522,32 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl" ></a></td>
-						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
+						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 145% ;"/></td>
 						<td><span> </span><a id='lblTgg' class="lbl"></a></td>
 						<td><input id="txtTgg" type="text" class="txt c1"/></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTube' class="lbl"></a></td>
-						<td><input id="txtTube" type="text" class="txt c1 num" style="float: left;"/></td>
+						<td><input id="txtTube" type="text" class="txt c1 "/></td>
 						<td><span> </span><a id='lblHeart' class="lbl"> </a></td>
-						<td><input id="txtHeart" type="text" class="txt c1 num"/></td>
+						<td><input id="txtHeart" type="text" class="c1 num"/></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblSpec' class="lbl"></a></td>
-						<td><input id="txtSpec" type="text" class="txt c1 num"/></td>
+						<td><input id="txtSpec" type="text" class="txt c1 "/></td>
 						<td><span> </span><a id='lblFrame' class="lbl"></a></td>
-						<td><input id="txtFrame" type="text" class="txt c1 num"/></td>
+						<td><input id="txtFrame" type="text" class="c1 num"/></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblUsetype' class="lbl"></a></td>						
 						<td><select id="cmbUsetype"  class="txt c1"></select></td>
 						<td><span> </span><a id='lblSaver' class="lbl"> </a></td>
-						<td><input id="txtSaver" type="text" class="txt c1 num"/></td>
+						<td><input id="txtSaver" type="text" class="txt c1 "/></td>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
-						<td><input id="txtDatea" type="text" class="txt c1 num"/></td>
+						<td><input id="txtDatea" type="text" class="txt c1 "/></td>
 						<td></td>
 					</tr>
 					<tr>
