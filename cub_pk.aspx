@@ -35,6 +35,7 @@
 			brwCount2 = 5;
 			aPop = new Array(
 				['textTggno', 'lblxTggno', 'tgg', 'noa,comp', 'textTggno', 'tgg_b.aspx']
+				,['txtUno__', 'btnUno__', 'view_uccc2', 'uno,productno,class,spec,style,product', '0txtUno__', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%']
 				,['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx']
 			);
 
@@ -99,7 +100,7 @@
 	                        t_where = "isnull(b.enda,0)=0 && isnull(view_ordcs.enda,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "") + "&& " + (t_ordeno.length > 0 ? q_sqlPara("noa", t_ordeno) : "");
 	                    else
 	                        t_where = "isnull(b.enda,0)=0 && isnull(view_ordcs.enda,0)=0 && " + (t_tggno.length > 0 ? q_sqlPara("tggno", t_tggno) : "");
-	                    t_where = t_where;
+	                    t_where = t_where+" order by view_ordcs.noa desc,view_ordcs.no2";
 	                } else {
 	                    alert(q_getMsg('msgTggEmp'));
 	                    return;
@@ -175,14 +176,14 @@
                                 return;
                             }
                             //取得採購的資料
-                            var t_where = "where=^^ noa='" + b_ret[0].noa + "' ^^";
-                            q_gt('ordc', t_where, 0, 0, 0, "", r_accy);
+                            //var t_where = "where=^^ noa='" + b_ret[0].noa + "' ^^";
+                           // q_gt('ordc', t_where, 0, 0, 0, "", r_accy);
 
                             $('#txtOrdcno').val(b_ret[0].noa);
-                            ret = q_gridAddRow(bbsHtm, 'tbbt'
-                            	, 'txtUno,txtProductno,txtSpec,txtProduct,txtUnit,txtMount,txtOrdeno,txtNo2,txtPrice,txtTotal,txtMemo', b_ret.length, b_ret
-                            	, 'uno,productno,spec,product,unit,mount,noa,no2,price,total,memo', 'txtProductno,txtProduct');
-                            bbsAssign();
+                            ret = q_gridAddRow(bbtHtm, 'tbbt'
+                            	, 'txtOrdcno,txtOrdcno2,txtGmount,txtGweight,txtStyle', b_ret.length, b_ret
+                            	, 'noa,no2,mount,weight,txtStyle', 'txtProductno,txtProduct');
+                            bbtAssign();
                             sum();
                         }
 						break;
@@ -428,6 +429,12 @@
 				for (var i = 0; i < q_bbtCount; i++) {
 					$('#lblNo__' + i).text(i + 1);
 					if (!$('#btnMinut__' + i).hasClass('isAssign')) {
+						$('#txtUno__' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtUno__', '');
+                            $('#btnUno__'+n).click();
+                        });
 					}
 				}
 				_bbtAssign();
@@ -470,7 +477,7 @@
 			}
 
 			function btnDele() {
-				var t_where = 'where=^^ uno in(' + getBBTWhere('Uno') + ') ^^';
+				var t_where = 'where=^^ uno in(' + getBBTWhere('Bno') + ') ^^';
 				q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
 			}
 
@@ -827,7 +834,11 @@
 						<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td><input id="txtUno..*" type="text" class="txt c1"/></td>
+					<td>
+						<input id="txtUno..*" type="text" class="txt c1"/>
+						<input id="txtOrdcno..*" type="text" class="txt" style="width:73%;float:left;"/>
+						<input id="txtOrdcno2..*" type="text" class="txt" style="width:20%;float:left;"/>
+					</td>
 					<td><input id="txtGmount..*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtGweight..*" type="text" class="txt c1 num"/></td>
 					<td><input id="txtMemo2..*" type="text" class="txt c1"/></td>

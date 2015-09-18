@@ -33,7 +33,7 @@
 				['txtPrice', 15, 4, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
 				['txtMount', 10, 2, 1], ['txtTheory', 12, 3, 1], ['txtGweight', 10, 3, 1],
 				['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
-				['textSize4', 10, 2, 1]
+				['textSize4', 10, 2, 1], ['txtTranmoney', 10, 2, 1], ['txtTranmoney2', 10, 3, 1]
 			];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -2051,10 +2051,12 @@
 					<td align="center" style="width:80px;"><a>等級</a></td>
 					<td align="center" id="Size"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>
-					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
+					<td align="center" style="width:80px;"><a>貨單<BR>數量</a></td>
 					<td align="center" style="width:50px;"><a>數量<br>單位</a></td>
-					<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>
+					<td align="center" style="width:80px;"><a>貨單<BR>重量</a></td>
 					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
+					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
+					<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'></a></td>
 					<td align="center" style="width:80px;">合計<br>理論重</td>
 					<td align="center" style="width:20px;">自訂<br>金額</td>
@@ -2099,10 +2101,12 @@
 						<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
 					<td><input id="txtSize.*" type="text" style="width:95%;" /></td>
-					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtTranmoney.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtItem.*" type="text" class="txt num" style="width:95%;text-align: center;"/></td>
-					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtTranmoney2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" class="txt num" style="width:95%;text-align: center;"/></td>
+					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>

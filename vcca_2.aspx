@@ -739,7 +739,7 @@
 					<tr>
 						<td><span> </span><a id='lblVccno' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtVccno"  type="text" class="txt c1"/></td>
-						<td><input id="btnShowVcc" type="button" value="出貨單"></td>
+						<td><input id="btnShowVcc" type="button" value="當月出貨單"></td>
 					</tr>
 				</table>
 			</div>
