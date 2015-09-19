@@ -18,11 +18,11 @@
 			q_tables = 's';
 			var q_name = "modout";
 			var q_readonly = ['txtWorker', 'txtWorker2'];
-			var q_readonlys = [];
+			var q_readonlys = ['txtNob','txtCode','txtDetail'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
-			var bbsMask = [['txtDatea_',r_picd]];
+			var bbsMask = [['txtDatea',r_picd]];
 			var pNoq =1;
 			q_sqlCount = 6;
 			brwCount = 6;
@@ -34,7 +34,8 @@
 					
 			aPop = new Array(
 			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
-				['','lblNoa','model','noa','txtNoa','model_c.aspx']
+				['txtNoa','lblNoa','model','noa','txtNoa','model_c.aspx'],
+				['txtMachine','lblMech','modeq','namea','txtMachine','modeq_b2.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -51,11 +52,11 @@
 			}
 			function mainPost() {
 				q_getFormat();
-				bbsMask = [['txtDatea_',r_picd]];
+				bbsMask = [['txtDatea',r_picd]];
 				q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
 				$('#btnIn').click(function(){				
-					if(!emp($('#txtNoa').val())){
+					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2) ){
 						q_gt('modfixc', "where=^^noa='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "ins_modfixcs");
 					}
 					
@@ -79,7 +80,7 @@
 					case 'ins_modfixcs':
 					
 						var as = _q_appendData("modfixcs", "", true);
-						btnModi();
+						//btnModi();
 						//var i=0
 						if(as.length-q_bbsCount >=0){
 							for(var i=0;i<as.length;i++){
@@ -167,7 +168,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['datea'] ) {
+				if (!as['datea'] || !as['nob']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -370,7 +371,7 @@
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
 						<td id="noa" style="text-align: center;">~noa</td>
-						<td id="mech" style="text-align: center;">~mech</td>
+						<td id="mech" style="text-align: center;">~machine</td>
 						
 					</tr>
 				</table>
@@ -385,23 +386,20 @@
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblNoa' class="lbl" ></a></td>
+						<td><span> </span><a id='lblNoa' class="lbl btn" ></a></td>
 						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
-						<td><span> </span><a id='lblMech' class="lbl"></a></td>
-						<td><input id="txtMech" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblMech' class="lbl btn"></a></td>
+						<td><input id="txtMachine" type="text" class="txt c1"/></td>
 						<td></td>
 					</tr>
-					<tr>
-						<td><span> </span><a id='' class="lbl"></a></td>
-						<td><span> </span><input id="btnIn" type="Button" /></td>
-				
-					</tr>
+
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
-
+						<td><span> </span><a id='' class="lbl"></a></td>
+						<td><span> </span><input id="btnIn" type="Button" /></td>
 					</tr>
 						
 				</table>

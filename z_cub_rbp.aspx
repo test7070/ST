@@ -15,54 +15,66 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-			
-			$(document).ready(function() {
-				_q_boxClose();
-				q_getId();
-				q_gf('', 'z_modout_rs');
-			});  
+            if (location.href.indexOf('?') < 0) {
+                location.href = location.href + "?;;;;" + ((new Date()).getUTCFullYear() - 1911);
+            }
+            $(document).ready(function() {
+                q_getId();
+                q_gf('', 'z_cub_rbp');
+            });
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_modout_rs',
-                    options : [
-                    {// [1]
-                        type : '6',
+                    fileName : 'z_cub_rbp',
+                    options : [{//[1]
+                        type : '0',
+                        name : 'accy',
+                        value : r_accy
+                    }, {
+                        type : '0', //[2]
+                        name : 'mountprecision',
+                        value : q_getPara('vcc.mountPrecision')
+                    }, {
+                        type : '0', //[3]
+                        name : 'weightprecision',
+                        value : q_getPara('vcc.weightPrecision')
+                    }, {
+                        type : '0', //[4]
+                        name : 'priceprecision',
+                        value : q_getPara('vcc.pricePrecision')
+                    }, {//[5]
+                        type : '0',
+                        name : 'worker',
+                        value : r_name
+                    }, {//[6][7]
+                        type : '1',
                         name : 'xnoa'
-                    },{// [2]
-                        type : '6',
-                        name : 'xnob'
-                    },{//[3][4]
+                    }, {//[8][9]
                     	type : '1',
-                    	name : 'xdatea'
-                    },{//[5]
-                    	type : '6',
-                    	name : 'xworker'
-                    },{//[6]
-                    	type : '6',
-                    	name : 'xframe'
+                    	name :'xdate'
+                    },{//[10][11]
+                        type : '2', //[12][13]
+                        name : 'xpoduct',
+                        dbf : 'process',
+                        index : 'noa,product',
+                        src : 'ucc_b.aspx'
                     }]
                 });
-                q_popAssign();
-				q_getFormat();
-				q_langShow();   
                 
-                 var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
-                $('#txtXnoa').val(t_noa);
-                        
-				      var r_1911=1911;
+                q_popAssign();
+                q_getFormat();
+                q_langShow();
+                
+                var r_1911=1911;
 				if(r_len==4){//西元年
 					r_1911=0;
 				}else{
-					$('#txtXdatea1').datepicker();
-					$('#txtXdatea2').datepicker();
+					$('#txtXdate1').datepicker();
+					$('#txtXdate2').datepicker();
 				}
-                 
-                 $('#txtXdatea1').mask(r_picd);
-	             $('#txtXdatea2').mask(r_picd);
-
-           
+				$('#txtXdate1').mask(r_picd);
+                $('#txtXdate2').mask(r_picd);
                 
-                 var t_date, t_year, t_month, t_day;
+                var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
                 t_year = t_date.getUTCFullYear() - r_1911;
@@ -71,9 +83,9 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtXdatea1').val(t_year + '/' + t_month + '/' + t_day);
-				
-				
+                $('#txtXdate1').val(t_year + '/' + t_month + '/' + t_day);
+                
+
                 t_date = new Date();
                 t_date.setDate(35);
                 t_date.setDate(0);
@@ -83,30 +95,33 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtXdatea2').val(t_year + '/' + t_month + '/' + t_day);
- 					
-			}
+                $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
 
-			function q_boxClose(s2) {
-			}
+                if (q_getId()[3] != undefined) {
+                    $('#txtXnoa1').val(q_getId()[3].replace('noa=', ''));
+                    $('#txtXnoa2').val(q_getId()[3].replace('noa=', ''));
+                }
+            }
 
-			function q_gtPost(s2) {
-			}
+            function q_boxClose(s2) {
+            }
+
+            function q_gtPost(s2) {
+            }
 		</script>
 	</head>
 	<body ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-	>
+	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 		<div id="q_menu"></div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
 				<div id="q_report"></div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
-                <!--#include file="../inc/print_ctrl.inc"-->
-            </div>
+				<!--#include file="../inc/print_ctrl.inc"-->
+			</div>
 		</div>
 	</body>
 </html>
