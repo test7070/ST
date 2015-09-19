@@ -152,7 +152,7 @@
                 	var t_where ='';
                 	q_box("quat_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({ordeno:t_noa,custno:t_custno,page:'orde_rk'}), "quat_orde", "95%", "95%", '');
                 });
-                var t_where = "where=^^ 1=1 group by post,addr^^";
+                var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				$('#txtCustno').change(function() {
 					if (!emp($('#txtCustno').val())) {
@@ -332,7 +332,7 @@
             function btnIns() {
                 _btnIns();
                 q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
-				var t_where = "where=^^ 1=1 group by post,addr^^";
+				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
             }
 
