@@ -42,7 +42,7 @@
             , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
             , ['txtUno_', 'btnUno_', 'view_uccc', 'uno,class,spec,unit', 'txtUno_,txtClass_,txtSpec_,txtUnit_', 'uccc_seek_b.aspx?;;;1=0', '95%', '95%']
             , ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
-            , ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,zip_comp,addr_comp', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtPost,txtAddr', 'cust_b.aspx']
+            , ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,paytype,trantype,tel,zip_comp,addr_comp,memo2', 'txtCustno,txtComp,txtNick,txtPaytype,cmbTrantype,txtTel,txtPost,txtAddr,txtMemo', 'cust_b.aspx']
             , ['txtUno__', 'btnUno__', 'view_uccc', 'uno,product,productno,radius,width,dime,lengthb,mount,weight', 'txtUno__,txtProduct__,txtProductno__,txtRadius__,txtWidth__,txtDime__,txtLengthb__,txtMount__,txtWeight__', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
             , ['txtProductno__', 'btnProductno__', 'assignproduct', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']);
             brwCount2 = 12;
@@ -187,7 +187,7 @@
                 q_cmbParse("cmbTrantype",q_getPara('sys.tran'));
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
                 $('#btnOrdei').hide();
-                var t_where = "where=^^ 1=1 group by post,addr^^";
+                var t_where = "where=^^ 1=1^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
                 //外銷訂單按鈕隱藏
                 
@@ -602,7 +602,7 @@
                 q_gt('orde',"where=^^ noa='"+$.trim($('#txtNoa').val())+"'^^", 0, 0, 0, 'refreshEnd2', r_accy);
                 Unlock(1);
                 
-                //orde2cub
+                 //orde2cub
                 if (q_cur == 1 || emp($('#txtNoa').val()))
 					q_func('qtxt.query.c0', 'orde2cub_pk.txt,orde2cub_pk,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;');
 				else
@@ -713,18 +713,12 @@
 						q_func('qtxt.query.c1', 'orde2cub_pk.txt,orde2cub_pk,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';1;');
 						break;
 					case 'qtxt.query.c1':
-						var as = _q_appendData("tmp0", "", true, true);
-						if (as[0] != undefined) {
-							abbm[q_recno]['noa'] = as[0].noa;
-							$('#txtNoa').val(as[0].noa);
-							
-							if(!emp(as[0].noa))
-								q_func('orde_post.post', r_accy + ',' + $('#txtNoa').val() + ',1');
-						}
+						q_func('orde_post.post', r_accy + ',' + $('#txtNoa').val() + ',1');
+						
 						break;
 					case 'qtxt.query.c2':
 						_btnOk($('#txtNoa').val(), bbmKey[0], ( bbsHtm ? bbsKey[1] : ''), '', 3)
-						break;
+						break;    
                 }
             }
             function _btnSeek() {
@@ -919,7 +913,7 @@
                 });
                 $('#txtKind').val('A1');
                 q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
-                var t_where = "where=^^ 1=1 group by post,addr^^";
+                var t_where = "where=^^ 1=1^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
             }
 
@@ -933,6 +927,8 @@
                     $('#btnOrdei').show();
                 else
                     $('#btnOrdei').hide();
+                var t_where = "where=^^ noa='"+$('#txtCustno').val()+"'^^";
+				q_gt('custaddr', t_where, 0, 0, 0, "");
                 sum();
             }
 
@@ -1160,7 +1156,7 @@
             }
 
             function btnDele() {
-               //_btnDele();
+                //_btnDele();
 				if (!confirm(mess_dele))
 					return;
 				q_cur = 3;
@@ -1315,7 +1311,30 @@
     ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
     >
         <div style="overflow: auto;display:block;width:1050px;">
-            <!--#include file="../inc/toolbar.inc"-->
+            <div id="toolbar">
+  <div id="q_menu"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input id="btnXchg" type="button" style="display:none;background:url(../image/xchg_24.png) no-repeat;width:28px;height:26px"/>
+  <a id='lblQcopy' style="display:none;"></a>
+  <input id="chekQcopy" type="checkbox" style="display:none;"/>
+  <input id="btnIns" type="button"/>
+  <input id="btnModi" type="button"/>
+  <input id="btnDele" type="button"/>
+  <input id="btnSeek" type="button"/>
+  <input id="btnPrint" type="button"/>
+  <input id="btnPrevPage" type="button"/>
+  <input id="btnPrev" type="button"/>
+  <input id="btnNext" type="button"/>
+  <input id="btnNextPage" type="button"/>
+  <input id="btnOk" type="button" disabled="disabled" />
+  <input id="btnCancel" type="button" disabled="disabled"/>&nbsp;&nbsp;
+  <input id="btnAuthority" type="button" />&nbsp;&nbsp;
+  <span id="btnSign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
+  <span id="btnAsign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
+  <span id="btnLogout" style="text-decoration: underline;color:orange;"></span>&nbsp;&nbsp;
+  <input id="pageNow" type="text"  style="position: relative;text-align:center;"  size="2"/> /
+  <input id="pageAll" type="text"  style="position: relative;text-align:center;"  size="2"/>
+  <div id="q_acDiv"></div>
+</div>
         </div>
         <div style="overflow: auto;display:block;width:1280px;">
             <div class="dview" id="dview" >
@@ -1665,3 +1684,4 @@
         <input id="q_sys" type="hidden" />
     </body>
 </html>
+
