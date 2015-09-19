@@ -139,7 +139,15 @@
 			function bbsAssign() {
 								
 				for (var j = 0; j < q_bbsCount; j++) {	
-				
+					$('#txtDatea1_'+j).click(function(){						
+						t_IdSeq = -1;  
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;	
+						$('#txtDatea1_'+j).val($('#txtDatea').val()+'-00:00');
+						
+					}					
+						
+				);
 				}
 				_bbsAssign();
 			}
