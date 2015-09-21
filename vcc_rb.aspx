@@ -106,7 +106,7 @@
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbZipname", ",08:00~09:00,09:00~10:00,10:00~11:00,11:00~12:00,12:00~13:00,13:00~14:00,14:00~15:00,15:00~16:00,16:00~17:00,17:00~18:00,18:00~19:00,19:00~20:00,21:00~22:00");
 				
-				var t_where = "where=^^ 1=1  group by post,addr^^";
+				var t_where = "where=^^ 1=1  ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#lblPart').text('運費所屬部門');
@@ -205,7 +205,7 @@
 
 				$('#txtCustno').change(function() {
 					if (!emp($('#txtCustno').val())) {
-						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'  ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
 				});
@@ -643,7 +643,7 @@
 						$('#txtDatea').focus();
 
 						if (!emp($('#txtCustno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
 						bbsGetOrdeList();
@@ -853,7 +853,7 @@
 				$('#cmbTypea').val('1');
 				$('#txtDatea').focus();
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
-				var t_where = "where=^^ 1=1  group by post,addr^^";
+				var t_where = "where=^^ 1=1  ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				$('#txtMount').val(1);
 				$('#txtPartno').val(r_partno);
@@ -1053,7 +1053,7 @@
 				switch (s1) {
 					case 'txtCustno':
 						if (!emp($('#txtCustno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
 						bbsGetOrdeList();

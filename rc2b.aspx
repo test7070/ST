@@ -114,7 +114,7 @@
 				q_cmbParse("cmbQcresult", ',AC,RE');
 				q_cmbParse("cmbQcresult", ',AC,RE','s');
 				
-				var t_where = "where=^^ 1=1 group by post,addr^^";
+				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
@@ -182,7 +182,7 @@
 				
 				$('#txtTggno').change(function() {
 					if (!emp($('#txtTggno').val())) {
-						var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
+						var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
 				});
@@ -639,7 +639,7 @@
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
 				$('#cmbTaxtype').val(1);
-				var t_where = "where=^^ 1=1 group by post,addr^^";
+				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 			}
 

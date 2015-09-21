@@ -105,7 +105,7 @@
 				$('#lblStore').text('倉庫');
 				$('#lblSerial').text('統一編號');
 
-				var t_where = "where=^^ 1=1 group by post,addr^^";
+				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#btnPlusCust').click(function(){
@@ -611,7 +611,7 @@
 						Unlock(1);
 						$('#txtOdate').focus();
 						if (!emp($('#txtCustno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'  ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
 						break;
@@ -963,7 +963,7 @@
 				$('#cmbKind').val('隨貨單張');
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
 
-				var t_where = "where=^^ 1=1 group by post,addr^^";
+				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#txtSalesno').val(r_userno);
@@ -1152,7 +1152,7 @@
 				switch (s1) {
 					case 'txtCustno':
 						if (!emp($('#txtCustno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr^^";
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
 						break;

@@ -133,7 +133,7 @@
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
                 
                 //指送地址列表
-                var t_where = "where=^^ 1=1 group by post,addr^^";
+                var t_where = "where=^^ 1=1  ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#txtAddr').change(function() {
@@ -415,7 +415,7 @@
                 $('#txtDatea').val(q_cdn(q_date(),15));
                 $('#txtOdate').focus();
                 
-                var t_where = "where=^^ 1=1 group by post,addr^^";
+                var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
             }
 
@@ -427,7 +427,7 @@
                 sum();
                 
                 if (!emp($('#txtCustno').val())) {
-					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
             }
@@ -526,7 +526,7 @@
 				switch (s1) {
 					case 'txtCustno':
 						if (!emp($('#txtCustno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr^^";
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
 						break;

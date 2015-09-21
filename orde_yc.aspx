@@ -103,7 +103,7 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 
-				var t_where = "where=^^ 1=1 group by post,addr^^";
+				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#lblPrice').text('扣');
@@ -543,7 +543,7 @@
 						$('#txtOdate').focus();
 						$('#txtApv').val('');
 						if (!emp($('#txtCustno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
 							q_gt('cust', t_where, 0, 0, 0, "custgetaddr");
@@ -941,7 +941,7 @@
 				$('#txtOdate').focus();
 				$('#cmbTaxtype').val('1');
 
-				var t_where = "where=^^ 1=1 group by post,addr^^";
+				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#combAddr').text('');
@@ -966,7 +966,7 @@
 					$('#txtOdate').focus();
 					$('#txtApv').val('');
 					if (!emp($('#txtCustno').val())) {
-						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr ^^";
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'  ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
 						q_gt('cust', t_where, 0, 0, 0, "custgetaddr");
@@ -1138,7 +1138,7 @@
 				switch (s1) {
 					case 'txtCustno':
 						if (!emp($('#txtCustno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' group by post,addr^^";
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
 							q_gt('cust', t_where, 0, 0, 0, "custgetaddr");

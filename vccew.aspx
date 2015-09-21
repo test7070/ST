@@ -75,7 +75,7 @@
 				bbmNum = [['txtWeight', 15, q_getPara('vcc.weightPrecision'), 1]];
 				bbsNum = [['txtMount', 10, q_getPara('vcc.mountPrecision'), 1],['txtWeight', 10, q_getPara('vcc.weightPrecision'), 1]];
 
-				var t_where = "where=^^ 1=1  group by post,addr^^";
+				var t_where = "where=^^ 1=1  ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 
 				
@@ -247,7 +247,7 @@
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
-				var t_where = "where=^^ 1=1  group by post,addr^^";
+				var t_where = "where=^^ 1=1  ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 			}
 
