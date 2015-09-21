@@ -642,7 +642,7 @@
 				switch (s1) {
 					case 'txtTggno':
 						if (!emp($('#txtTggno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' group by post,addr^^";
+							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
 						break;
