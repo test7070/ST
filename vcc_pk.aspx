@@ -392,7 +392,8 @@
 								b_pop = '';
 								return;
 							}
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style,size', '');
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtTranmoney,txtTranmoney2,txtPrice,txtStyle,txtSize'
+							, b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,mount,weight,price,style,size', '');
 							
 							//get ordes.price <Start>
 							var distinctArray = new Array;
@@ -2051,9 +2052,9 @@
 					<td align="center" style="width:80px;"><a>等級</a></td>
 					<td align="center" id="Size"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>
-					<td align="center" style="width:80px;"><a>貨單<BR>數量</a></td>
+					<td align="center" style="width:80px;"><a>計價<BR>數量</a></td>
 					<td align="center" style="width:50px;"><a>數量<br>單位</a></td>
-					<td align="center" style="width:80px;"><a>貨單<BR>重量</a></td>
+					<td align="center" style="width:80px;"><a>計價<BR>重量</a></td>
 					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
 					<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>

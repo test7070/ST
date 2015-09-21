@@ -68,6 +68,16 @@
 
 		    function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'checkModeqno_btnOk':
+						var as = _q_appendData("modeq", "", true);
+						if (as[0] != undefined){
+							alert('已存在 ' + as[0].noa + ' ' + as[0].device);
+							Unlock();
+							return;
+						}else{
+							wrServer($.trim($('#txtNoa').val()));
+						}
+						break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();

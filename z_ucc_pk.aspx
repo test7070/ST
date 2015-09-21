@@ -145,13 +145,16 @@
 						value : t_ucc.split('&')
 					}, {
 						type : '8', //[33] 24
-						name : 'xexclude',
-						value : ('H@排除Ｈ').split('&')
+						name : 'xoption',
+						value : ('01@排除Ｈ&02@現貨&03@期貨').split('&')
 					}]
 				});
 				q_popAssign();
 				q_getFormat();
 				q_langShow();
+				$('#Xoption').find('input[type=checkbox]').eq(1).prop('checked',true);
+				$('#Xoption').find('input[type=checkbox]').eq(2).prop('checked',true);
+				
 				$('#Xdate').css('width', '350px');
 				$('#Xstktype').css('width', '250px');
 				$('#txtXdate1').mask('999/99/99');
