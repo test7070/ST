@@ -121,7 +121,12 @@
 			}
 
 			function btnOk() {
-				var t_noa = trim($('#txtNoa').val());	        
+				var t_noa = trim($('#txtNoa').val());	
+				if (q_cur == 1)
+					$('#txtWorker').val(r_name);
+				else
+					$('#txtWorker2').val(r_name);
+				        
 		        if (t_noa.length == 0)
 		            alert('模具編號不可為空');
 		        else
@@ -131,23 +136,37 @@
 			function _btnSeek() {
 
 			}
-		
 				
-			
 
 			var flag =0;
 			function bbsAssign() {
 								
 				for (var j = 0; j < q_bbsCount; j++) {	
-					$('#txtDatea1_'+j).click(function(){						
+					$('#txtDatea2_'+j).click(function(){						
 						t_IdSeq = -1;  
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;	
-						$('#txtDatea1_'+j).val($('#txtDatea').val()+'-00:00');
-						
-					}					
-						
-				);
+						var min=$('#txtDatea1_'+b_seq).val().substring($('#txtDatea1_'+b_seq).val().length-2,$('#txtDatea1_'+b_seq).val().length);
+						var hour=$('#txtDatea1_'+b_seq).val().substring($('#txtDatea1_'+b_seq).val().length-5,$('#txtDatea1_'+b_seq).val().length-3);
+						var nmin,nhour;
+						nmin = parseInt(min)+30 >= 60 ? parseInt(min)+30-60 : parseInt(min)+30;
+						nhour = parseInt(min)+30 >= 60 ? parseInt(hour)+1 : parseInt(hour);
+						nmin =  nmin < 10 ? "0"+nmin : nmin
+						nhour = nhour < 10 ? "0"+nhour : nhour
+						$('#txtDatea2_'+b_seq).val(
+							$('#txtDatea1_'+b_seq).val().substring(0,9)+'-'+nhour+':'+nmin
+						);
+					});
+					
+					$('#txtWay_'+j).change(function(){
+						t_IdSeq = -1;  
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						if($('#txtWay_'+b_seq).val()>4 || $('#txtWay').val() <1){
+							alert('研磨方式請輸入數字1~4之間');
+							$('#txtWay_'+b_seq).val(1);
+						}
+					});
 				}
 				_bbsAssign();
 			}

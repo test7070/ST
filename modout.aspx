@@ -120,11 +120,17 @@
 			}
 
 			function btnOk() {
-				var t_noa = trim($('#txtNoa').val());	        
+				var t_noa = trim($('#txtNoa').val());
+				if (q_cur == 1)
+					$('#txtWorker').val(r_name);
+				else
+					$('#txtWorker2').val(r_name);	        
 		        if (t_noa.length == 0)
 		            alert('模具編號不可為空');
 		        else
 		            wrServer(t_noa);
+		            
+		        
 			}
 
 			function _btnSeek() {
