@@ -54,8 +54,11 @@
                 
                  var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
                 $('#txtXnoa1').val(t_noa);
-                $('#txtXnoa2').val(t_noa);              
-									
+                $('#txtXnoa2').val(t_noa); 
+                
+                if(window.parent.q_name != 'modfixb'){  
+                	$('#q_report div div').eq('0').hide();       
+				}					
 			}
 
 			function q_boxClose(s2) {
