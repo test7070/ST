@@ -72,7 +72,7 @@
 					//t_weight = t_weight + dec( $('#txtWeight_' + j).val()) ; // 重量合計
 					$('#txtTotal_' + j).val(round(q_mul(dec($('#txtPrice_' + j).val()), dec(t_mount)), 0));
 
-					q_tr('txtNotv_' + j, q_sub(q_float('txtMount_' + j), q_float('txtC1' + j)));
+					q_tr('txtNotv_' + j, q_sub(q_float('txtMount_' + j), q_float('txtC1_' + j)));
 					t1 = q_add(t1, dec($('#txtTotal_' + j).val()));
 				}
 				$('#txtMoney').val(round(t1, 0));
