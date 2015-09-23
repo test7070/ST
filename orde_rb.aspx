@@ -962,6 +962,8 @@
 				$('#txtOdate').focus();
 				$('#cmbKind').val('隨貨單張');
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
+				$('#txtOrdbno').val('');
+				$('#txtVccno').val('');
 
 				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
