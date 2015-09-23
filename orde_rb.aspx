@@ -36,7 +36,7 @@
 			q_copy=1;
 			
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucaucc_b2.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucaucc_b2.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
@@ -303,7 +303,7 @@
 						break;
 				}
 				if(s2[0]!=undefined){
-					if(s2[0]=='ucaucc'){
+					if(s2[0]=='view_ucaucc'){
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (b_ret.length>0)
