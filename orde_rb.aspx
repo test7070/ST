@@ -303,7 +303,7 @@
 						break;
 				}
 				if(s2[0]!=undefined){
-					if(s2[0]=='ucc'){
+					if(s2[0]=='ucaucc'){
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (b_ret.length>0)
