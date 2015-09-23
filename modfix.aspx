@@ -17,12 +17,12 @@
 
 			q_tables = 's';
 			var q_name = "modfix";
-			var q_readonly = ['txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtWorker', 'txtWorker2','txtModNoa'];
 			var q_readonlys = ['txtDetail1','txtDetail2','txtModel','txtNob','txtWheel1','txtCode1'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
-			var bbsMask = [];
+			var bbsMask = [['txtFrame1','99']];
 			var pNoq =1;
 			q_sqlCount = 6;
 			brwCount = 6;
@@ -128,6 +128,15 @@
 			}
 
 			function btnOk() {
+				if (q_cur == 1)
+					$('#txtWorker').val(r_name);
+				else
+					$('#txtWorker2').val(r_name);
+				var t_modnoa = trim($('#txtModNoa').val());	
+				var t_date = trim($('#txtDatea').val());
+				if (t_modnoa.length == 0 || t_noa == "AUTO")
+		            $('#txtModNoa').val(replaceAll(q_getPara('sys.key_modfix') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+				
 				var t_noa = trim($('#txtNoa').val());	        
 		        if (t_noa.length == 0)
 		            alert('模具編號不可為空');
@@ -147,7 +156,15 @@
 			function bbsAssign() {
 								
 				for (var j = 0; j < q_bbsCount; j++) {	
-				
+					$('#txtWay1_'+j).change(function(){
+						t_IdSeq = -1;  
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						if($('#txtWay1_'+b_seq).val()>4 || $('#txtWay1').val() <1){
+							alert('研磨方式請輸入數字1~4之間');
+							$('#txtWay1_'+b_seq).val(1);
+						}
+					})
 				}
 				_bbsAssign();
 			}
@@ -157,6 +174,8 @@
 
 			function btnIns() {
 				_btnIns();
+				$('#txtModNoa').val('AUTO');
+               	$('#txtDatea').val(q_date()); 
 				refreshBbm();
 
 			}
@@ -399,6 +418,8 @@
 						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
 						<td><span> </span><a id='lblMech' class="lbl btn"></a></td>
 						<td><input id="txtMech" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblModNoa' class="lbl "></a></td>
+						<td><input id="txtModNoa" type="text" class="txt c1"/></td>
 						<td></td>
 					</tr>
 					<tr>

@@ -36,7 +36,7 @@
 			q_copy=1;
 			
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucc_b2.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucaucc_b2.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
@@ -72,7 +72,7 @@
 					//t_weight = t_weight + dec( $('#txtWeight_' + j).val()) ; // 重量合計
 					$('#txtTotal_' + j).val(round(q_mul(dec($('#txtPrice_' + j).val()), dec(t_mount)), 0));
 
-					q_tr('txtNotv_' + j, q_sub(q_float('txtMount_' + j), q_float('txtC1' + j)));
+					q_tr('txtNotv_' + j, q_sub(q_float('txtMount_' + j), q_float('txtC1_' + j)));
 					t1 = q_add(t1, dec($('#txtTotal_' + j).val()));
 				}
 				$('#txtMoney').val(round(t1, 0));
@@ -303,7 +303,7 @@
 						break;
 				}
 				if(s2[0]!=undefined){
-					if(s2[0]=='ucc'){
+					if(s2[0]=='ucaucc'){
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (b_ret.length>0)
@@ -962,6 +962,8 @@
 				$('#txtOdate').focus();
 				$('#cmbKind').val('隨貨單張');
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
+				$('#txtOrdbno').val('');
+				$('#txtVccno').val('');
 
 				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
