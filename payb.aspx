@@ -163,6 +163,9 @@
                 $('#txtFloata').change(function() {
                 	sum();
 				});
+				if (q_getPara('sys.project').toUpperCase() == 'RB') {
+					$('.rbnoshow').hide();
+				}
             }
             
             function getNextMonth(date){
@@ -934,8 +937,8 @@
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblTypea'class="lbl" > </a></td>
-						<td>	<select id="cmbTypea" class="txt c1"> </select></td>
+						<td class="rbnoshow"><span> </span><a id='lblTypea'class="lbl" > </a></td>
+						<td class="rbnoshow"><select id="cmbTypea" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa"   type="text"  class="txt c1"/></td>
 					</tr>
