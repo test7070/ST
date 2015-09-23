@@ -18,7 +18,7 @@
 			q_tables = 's';
 			var q_name = "model";
 			var q_readonly = ['txtWorker', 'txtWorker2'];
-			var q_readonlys = ['txtProductno'];
+			var q_readonlys = ['txtProductno','txtWheel'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -242,7 +242,7 @@
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;
 						$("#txtWheel_"+b_seq).val($('#combWheel_'+b_seq).find("option:selected").text())
-
+						
 						$("#combNumber_"+b_seq).empty();
 						changeWheel(b_seq);
 					});
@@ -275,7 +275,7 @@
 						t_IdSeq = -1;  
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;
-						var nb=$('#txtNumber_'+b_seq).val()
+						var nb=$('#txtNumber_'+b_seq).val();
 						var nb1=q_getPara('model.nbtype1');
 						var nb2=q_getPara('model.nbtype2');		
 						var nb3=q_getPara('model.nbtype3');
@@ -285,49 +285,45 @@
 						var nb7=q_getPara('model.nbtype7');
 						var nb8=q_getPara('model.nbtype8');
 						var model,wheel;
-						switch(nb){						
-							case nb1.match(nb):
+											
+						if(nb1.match(nb)){
 								model ="1";
 								wheel ="主輪";
-								break;
-							case nb2.match(nb):
+						}
+						if(nb2.match(nb)){
 								model ="1";
 								wheel ="立倫";
-								break;
-							case nb3.match(nb):
+						}
+						if( nb3.match(nb)){
 								model ="1";
 								wheel ="導縫輪";
-								break;
-							case nb4.match(nb):
+						}
+						if(nb4.match(nb)){
 								model ="1";
 								wheel ="熔接輪";
-								break;
-							case nb5.match(nb):
+						}
+						if(nb5.match(nb)){
 								model ="2";
 								wheel ="主輪";
-								break;
-							case nb6.match(nb):
+						}
+						if(nb6.match(nb)){
 								model ="2";
 								wheel ="立輪";
-								break;
-							case nb7.match(nb):
+						}
+						if(nb7.match(nb)){
 								model ="2";
 								wheel ="十字輪";
-								break;
-							case nb8.match(nb):
+						}
+						if(nb8.match(nb)){
 								model ="2";
-								wheel ="出口輪";
-								break;
-							 default:
-								$("#combWheel_"+b_seq).empty();
-								$("#combNumber_"+b_seq).empty();
-								$('#cmbModel_'+b_seq).val(model);
-								changeWheel(b_seq);
-								$('#txtWheel_'+b_seq).val(wheel);
-								break;
-							
+								wheel ="出口輪";				
 						}						
 						
+						$("#combWheel_"+b_seq).empty();
+						$("#combNumber_"+b_seq).empty();
+						$('#cmbModel_'+b_seq).val(model);
+						changeWheel(b_seq);
+						$('#txtWheel_'+b_seq).val(wheel);
 					});
 									
 				}

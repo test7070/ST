@@ -17,7 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "modout";
-			var q_readonly = ['txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtWorker', 'txtWorker2','txtNoa','txtModnoa'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -34,7 +34,7 @@
 					
 			aPop = new Array(
 			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
-				['txtNoa','lblNoa','model','noa','txtNoa','model_c.aspx'],
+				['txtFixnoa','lblFixnoa','model','noa,modnoa','txtFixnoa,txtModnoa','modfixc_b.aspx'],
 				['txtMachine','lblMech','modeq','namea','txtMachine','modeq_b2.aspx']
 			);
 			$(document).ready(function() {
@@ -56,8 +56,8 @@
 				q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
 				$('#btnIn').click(function(){				
-					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2) ){
-						q_gt('modfixc', "where=^^noa='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "ins_modfixcs");
+					if(!emp($('#txtFixnoa').val()) && (q_cur == 1 || q_cur == 2) ){
+						q_gt('modfixc', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixcs");
 					}
 					
 				});
@@ -72,6 +72,7 @@
 						q_boxClose2(s2);
 						break;
 				}
+			
 				b_pop = '';
 			}
 			var delId='';
@@ -113,22 +114,46 @@
 													
 						
 						break;
-					case 'chk_models':
-					
+					case 'checkModelno_btnOk':
+						var as = _q_appendData("modout", "", true);
+						if (as[0] != undefined) {
+							alert('已存在 ' + as[0].noa );
+							Unlock();
+							return;
+						} else {
+							wrServer($.trim($('#txtNoa').val()));
+						}
 						break;
 				}
 			}
 
 			function btnOk() {
-				var t_noa = trim($('#txtNoa').val());
+		
+			/*	t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}*/
+				
+				var t_noa = trim($.trim($('#txtNoa').val()));
+				var t_date = trim(q_date());
+				
+				if (t_noa.length == 0 || t_noa == "AUTO")
+		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfixc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
-					$('#txtWorker2').val(r_name);	        
-		        if (t_noa.length == 0)
-		            alert('模具編號不可為空');
-		        else
-		            wrServer(t_noa);
+					$('#txtWorker2').val(r_name);
+				
+				if (q_cur == 1) {
+					
+					t_where = "where=^^ noa='" + t_noa + "'^^";
+					q_gt('modout', t_where, 0, 0, 0, "checkModelno_btnOk", r_accy);
+				} else {
+					wrServer(t_noa);
+				}
+			
 		            
 		        
 			}
@@ -164,7 +189,7 @@
 			}
 
 			function btnPrint() {
-				q_box('z_modout_rs.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				q_box('z_modout_rs.aspx' + "?;;;noa=" + trim($('#txtModnoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
@@ -276,7 +301,7 @@
 			}
 			.dbbm {
 				float: left;
-				width: 750px;
+				width: 850px;
 				/*margin: -1px;
 				 border: 1px black solid;*/
 				border-radius: 5px;
@@ -392,13 +417,17 @@
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblNoa' class="lbl btn" ></a></td>
-						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
+						<td><span> </span><a id='lblFixnoa' class="lbl btn" ></a></td>
+						<td><input id="txtFixnoa" type="text" class="txt  c1" style="width : 95% ;"/></td>
+						<td><span> </span><a id='lblModnoa' class="lbl " ></a></td>
+						<td><input id="txtModnoa" type="text" class="txt  c1" style="width : 95% ;"/></td>
+						<td><span> </span><a id='lblNoa' class="lbl " ></a></td>
+						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 95% ;"/></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblMech' class="lbl btn"></a></td>
 						<td><input id="txtMachine" type="text" class="txt c1"/></td>
-						<td></td>
 					</tr>
-
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
@@ -406,6 +435,7 @@
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='' class="lbl"></a></td>
 						<td><span> </span><input id="btnIn" type="Button" /></td>
+						
 					</tr>
 						
 				</table>
