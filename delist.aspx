@@ -639,7 +639,7 @@
                 	$('.dime2').hide();
                 	$('.lengthc').hide();
                 	$('.lengthd').hide();
-                	$('.dbbs').css('width','3350px');
+                	$('.dbbs').css('width','3550px');
                 }
                 
             }
