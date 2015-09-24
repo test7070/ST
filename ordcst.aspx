@@ -19,14 +19,17 @@
 				alert("An error occurred:\r\n" + error.Message);
 			}
 
-			q_tables = 's';
+			q_tables = 't';
 			var q_name = "ordc";
 			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
 			var q_readonlys = ['txtC1', 'txtNotv', 'txtNo3', 'txtOrdbno', 'txtNo2'];
+			var q_readonlyt = [];
 			var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
 			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
+			var bbtNum = [['txtWeight', 10, 3, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
+			var bbtMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwList = [];
@@ -44,15 +47,15 @@
 				['txtAddr2', '', 'view_road', 'memo,zipcode', '0txtAddr2,txtPost2', 'road_b.aspx'], 
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'], 
 				['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,fax,addr_fact,zip_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,txtFax,txtAddr,txtPost', 'tgg_b.aspx']
+				,['txtCustno__', 'btnCust__', 'cust', 'noa,nick,comp', 'txtCustno__,txtCust__', 'cust_b.aspx']
 			);
-			brwCount2 = 10;
+			brwCount2 = 11;
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'no2'];
+				bbtKey = ['noa', 'noq'];
 				q_brwCount();
 				q_gt('style', '', 0, 0, 0, '');
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 			});
 
 			function main() {
@@ -192,6 +195,10 @@
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+				
+				q_cmbParse("cmbCoin", t_coin);
+				/*if(abbm[q_recno]) $('#cmbCoin').val(abbm[q_recno].coin);*/
+							
 
 				if(q_getPara('sys.comp').substring(0,2)=='聯琦')
 					$('#cmbKind2').show();
@@ -300,10 +307,26 @@
 				b_pop = '';
 			}
 
-			var StyleList = '';
+			var StyleList = '',t_coin='';
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'style' :
+						var as = _q_appendData("style", "", true);
+						StyleList = new Array();
+						StyleList = as;
+						q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
+						break;
+					case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						t_coin='';
+						for ( i = 0; i < as.length; i++) {
+							t_coin+=','+as[i].coin;
+						}
+						if(t_coin.length==0) 
+							t_coin=' ';
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						break;	
 					case 'refreshEnd2':
                         var as = _q_appendData("ordc", "", true);
                         var obj = $('.control_noa');
@@ -336,19 +359,7 @@
 						$('#txtOdate').focus();
 						size_change();
 						break;
-					case 'flors_coin':
-						var as = _q_appendData("flors", "", true);
-						var z_coin='';
-						for ( i = 0; i < as.length; i++) {
-							z_coin+=','+as[i].coin;
-						}
-						if(z_coin.length==0) z_coin=' ';
-						
-						q_cmbParse("cmbCoin", z_coin);
-						if(abbm[q_recno])
-							$('#cmbCoin').val(abbm[q_recno].coin);
-						
-						break;
+					
 					case 'flors':
 						var as = _q_appendData("flors", "", true);
 						if (as[0] != undefined) {
@@ -412,11 +423,7 @@
 							}
 						}
 						break;
-					case 'style' :
-						var as = _q_appendData("style", "", true);
-						StyleList = new Array();
-						StyleList = as;
-						break;
+					
 					case 'cust' :
 						var as = _q_appendData("cust", "", true);
 						if (as[0] != undefined) {
@@ -650,8 +657,43 @@
 				size_change();
 				if(q_getPara('sys.comp').substring(0,2)=='傑期')
 					$('.pk').show();
+					
+				genNo2();	
 			}
-
+			function bbtAssign() {
+                for (var i = 0; i < q_bbtCount; i++) {
+                    $('#lblNo__' + i).text(i + 1);
+                    if (!$('#btnMinut__' + i).hasClass('isAssign')) {
+                    	$('#txtCustno__' + i).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace('txtCustno__', '');
+                            $('#btnCust__'+n).click();
+                        });
+                    }
+                }
+                _bbtAssign();
+            }
+			function genNo2(){
+				//自動增加NO2
+				var maxno2 = 0;
+				for(var i=0;i<q_bbsCount;i++){
+					maxno2 = q_float('txtNo2_'+i)>maxno2?q_float('txtNo2_'+i):maxno2;
+				}
+				//console.log(maxno2+"__"+q_bbsCount);
+				for(var i=0;i<q_bbsCount;i++){
+					
+					if($('#txtNo2_'+i).val().length==0){
+						maxno2++;
+						t_no2 = '000'+maxno2;
+						t_no2 = t_no2.substring(t_no2.length-3,t_no2.length);
+						//console.log(q_float(t_no2));
+						$('#txtNo2_'+i).val(t_no2);
+						//$('#txtNo2_'+i).val(maxno2);
+					}
+				}
+			}
+			
 			function btnIns() {
 				_btnIns();
 				$('#cmbTaxtype').val(1);
@@ -659,6 +701,7 @@
 					opacity : 0
 				});
 				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
+				genNo2();
 			}
 
 			function btnModi() {
@@ -697,7 +740,15 @@
 
 				return true;
 			}
-
+			function bbtSave(as) {
+                if (!as['no2']) {
+                    as[bbtKey[1]] = '';
+                    return;
+                }
+                q_nowf();
+                return true;
+            }
+            
 			function refresh(recno) {
                 _refresh(recno);
                 var obj = $('.control_end2');
@@ -722,10 +773,6 @@
                 }
 				size_change();
 				//q_popPost('txtProductno_');
-				$('input[id*="txtProduct_"]').each(function() {
-					thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-					$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
-				});
 				if(q_getPara('sys.comp').substring(0,2)=='傑期')
 					$('.pk').show();
 			}
@@ -912,132 +959,133 @@
 			}
 		</script>
 		<style type="text/css">
-			#dmain {
-				/*overflow: hidden;*/
-			}
-			.dview {
-				float: left;
-				width: 300px;
-				border-width: 0px;
-			}
-			.tview {
-				border: 5px solid gray;
-				font-size: medium;
-				background-color: black;
-			}
-			.tview tr {
-				height: 30px;
-			}
-			.tview td {
-				padding: 2px;
-				text-align: center;
-				border-width: 0px;
-				background-color: #FFFF66;
-				color: blue;
-			}
-			.dbbm {
-				float: left;
-				width: 800px;
-				/*margin: -1px;
-				 border: 1px black solid;*/
-				border-radius: 5px;
-			}
-			.tbbm {
-				padding: 0px;
-				border: 1px white double;
-				border-spacing: 0;
-				border-collapse: collapse;
-				font-size: medium;
-				color: blue;
-				background: #cad3ff;
-				width: 100%;
-			}
-			.tbbm tr {
-				height: 35px;
-			}
-			.tbbm tr td {
-				width: 10%;
-			}
-			.tbbm .tdZ {
-				width: 1%;
-			}
-			.tbbm tr td span {
-				float: right;
-				display: block;
-				width: 5px;
-				height: 10px;
-			}
-			.tbbm tr td .lbl {
-				float: right;
-				color: black;
-				font-size: medium;
-			}
-			.tbbm tr td .lbl.btn {
-				color: #4297D7;
-				font-weight: bolder;
-			}
-			.tbbm tr td .lbl.btn:hover {
-				color: #FF8F19;
-			}
-			.txt.c1 {
-				width: 100%;
-				float: left;
-			}
-			.txt.num {
-				text-align: right;
-			}
-			.tbbm td {
-				margin: 0 -1px;
-				padding: 0;
-			}
-			.tbbm td input[type="text"] {
-				border-width: 1px;
-				padding: 0px;
-				margin: -1px;
-				float: left;
-			}
-			.tbbm select {
-				border-width: 1px;
-				padding: 0px;
-				margin: -1px;
-			}
-			.dbbs {
-				width: 1530px;
-			}
-			.tbbs a {
-				font-size: medium;
-			}
-			input[type="text"], input[type="button"] {
-				font-size: medium;
-			}
-			.num {
-				text-align: right;
-			}
-			select {
-				font-size: medium;
-			}
-			#dbbt {
-				width: 1525px;
-			}
-			#tbbt {
-				margin: 0;
-				padding: 2px;
-				border: 2px pink double;
-				border-spacing: 1;
-				border-collapse: collapse;
-				font-size: medium;
-				color: blue;
-				background: pink;
-				width: 100%;
-			}
-			#tbbt tr {
-				height: 35px;
-			}
-			#tbbt tr td {
-				text-align: center;
-				border: 2px pink double;
-			}
-		</style>
+            #dmain {
+                /*overflow: hidden;*/
+                
+            }
+            .dview {
+                float: left;
+                width: 320px;
+                border-width: 0px;
+            }
+            .tview {
+                border: 5px solid gray;
+                font-size: medium;
+                background-color: black;
+            }
+            .tview tr {
+                height: 30px;
+            }
+            .tview td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                background-color: #FFFF66;
+                color: blue;
+            }
+            .dbbm {
+                float: left;
+                width: 800px;
+                /*margin: -1px;
+                 border: 1px black solid;*/
+                border-radius: 5px;
+            }
+            .tbbm {
+                padding: 0px;
+                border: 1px white double;
+                border-spacing: 0;
+                border-collapse: collapse;
+                font-size: medium;
+                color: blue;
+                background: #cad3ff;
+                width: 100%;
+            }
+            .tbbm tr {
+                height: 35px;
+            }
+            .tbbm tr td {
+                width: 10%;
+            }
+            .tbbm .tdZ {
+                width: 1%;
+            }
+            .tbbm tr td span {
+                float: right;
+                display: block;
+                width: 5px;
+                height: 10px;
+            }
+            .tbbm tr td .lbl {
+                float: right;
+                color: black;
+                font-size: medium;
+            }
+            .tbbm tr td .lbl.btn {
+                color: #4297D7;
+                font-weight: bolder;
+            }
+            .tbbm tr td .lbl.btn:hover {
+                color: #FF8F19;
+            }
+            .txt.c1 {
+                width: 100%;
+                float: left;
+            }
+            .txt.num {
+                text-align: right;
+            }
+            .tbbm td {
+                margin: 0 -1px;
+                padding: 0;
+            }
+            .tbbm td input[type="text"] {
+                border-width: 1px;
+                padding: 0px;
+                margin: -1px;
+                float: left;
+            }
+            .tbbm select {
+                border-width: 1px;
+                padding: 0px;
+                margin: -1px;
+            }
+            .dbbs {
+                width: 2000px;
+            }
+            .tbbs a {
+                font-size: medium;
+            }
+            input[type="text"], input[type="button"] {
+                font-size: medium;
+            }
+            .num {
+                text-align: right;
+            }
+            select {
+                font-size: medium;
+            }
+            #dbbt {
+                width: 800px;
+            }
+            #tbbt {
+                margin: 0;
+                padding: 2px;
+                border: 2px pink double;
+                border-spacing: 1;
+                border-collapse: collapse;
+                font-size: medium;
+                color: blue;
+                background: pink;
+                width: 100%;
+            }
+            #tbbt tr {
+                height: 35px;
+            }
+            #tbbt tr td {
+                text-align: center;
+                border: 2px pink double;
+            }
+        </style>
 	</head>
 	<body ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
@@ -1228,6 +1276,7 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"></td>
+					<td align="center" style="width:80px;"><a>序</a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td class="st" align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td class="st" align="center" style="width:100px;"><a>等級</a></td>
@@ -1257,9 +1306,9 @@
 				<tr style='background:#cad3ff;'>
 					<td align="center">
 					<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-					<input id="txtNo2.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td><input id="txtNo2.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input class="st" id="txtProductno.*" type="text" style="width:95%;" />
 						<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
@@ -1336,6 +1385,33 @@
 				</tr>
 			</table>
 		</div>
+		<div id="dbbt">
+            <table id="tbbt" class='tbbt'  border="2"  cellpadding='2' cellspacing='1'>
+                <tr style='color:white; background:#003366;' >
+                    <td class="td1" align="center" style="width:1%; max-width:20px;">
+                    <input class="btn"  id="btnPlut" type="button" value='+' style="font-weight: bold;"  />
+                    </td>
+                    <td align="center" style="width:20px;"></td>
+                    <td align="center" style="width:80px;"><a>序</a><a style="color:red;">*必填</a></td>
+                    <td align="center" style="width:200px;"><a>客戶</a></td>
+                    <td align="center" style="width:100px;"><a>重量</a></td>
+                </tr>
+                <tr>
+                    <td align="center">
+                    	<input class="btn"  id="btnMinut..*" type="button" value='-' style="font-weight: bold; "  />
+                    	<input class="txt" id="txtNoq..*" type="text" style="display:none;"  />
+                    </td>
+                    <td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+                    <td><input class="txt" id="txtNo2..*" type="text" style="width:95%;"/></td>
+                    <td>
+                    	<input type="text" id="txtCustno..*" class="txt" style="width:45%;"  />
+                    	<input type="text" id="txtCust..*" class="txt" style="width:50%;"  />
+                    	<input type="button" id="btnCust..*" value="." style="display:none;">
+                    </td>
+                    <td><input class="txt" id="txtWeight..*" type="text" style="width:95%; text-align: right;"/></td>
+                </tr>
+            </table>
+        </div>
 		<input id="q_sys" type="hidden" />
 	</body>
 </html>
