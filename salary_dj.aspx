@@ -340,7 +340,7 @@
             		var t_where4 = "where[4]=^^ sssno=a.noa and noa between '"+date_3+"' and '"+date_4+"' and noa>=a.indate ^^";
 	            	var t_where5 = "where[5]=^^ sssno=a.noa and bdate between '"+date_1+"' and '"+date_2+"' and bdate>=a.indate ^^";
 	            	var t_where6 = "where[6]=^^ noa=a.noa and datea<='"+date_2+"' ^^";
-					var t_where7 = "where[7]=^^ sssno=a.noa and datea between '"+date_1+"' and '"+date_2+"'^^";
+					var t_where7 = "where[7]=^^ sssno=a.noa and datea between '"+date_1+"' and '"+date_2+"' and isnull(isapv,0)=1 ^^";
 					
 			        q_gt('salary_dj_import', t_where+t_where1+t_where2+t_where3+t_where4+t_where5+t_where6+t_where7 , 0, 0, 0, "", r_accy);
 			        

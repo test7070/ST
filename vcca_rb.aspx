@@ -153,8 +153,10 @@
 							var t_where=" a.noa='"+t_ordeno+"' ";
 							t_where=t_where+" group by b.productno,b.product,b.unit,b.price,c.vmount ";
 							t_where=t_where+" having SUM(b.mount)-sum(isnull(c.vmount,0))>0 ";
-							q_gt('orde_vcca_rb', "where=^^ "+t_where+" ^^", 0, 0, 0, "",'');						
+							q_gt('orde_vcca_rb', "where=^^ "+t_where+" ^^", 0, 0, 0, "",'');
 							//q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where + ";" + r_accy, 'ordes', "95%", "95%", q_getMsg("popOrdes"));
+							var t_where=" noa='"+t_ordeno+"' ";
+							q_gt('view_orde', "where=^^ "+t_where+" ^^", 0, 0, 0, "getorde",'');
 						}else{
 							alert('訂單編號禁止空白!!');
 						}
@@ -501,6 +503,25 @@
 							alert("【"+$('#textOrdeno').val()+"】訂單編號已開過發票【"+as[0].noa+"】!!!");
 							$('#textOrdeno').val('');
 							$('#textTotal').val('');
+						}
+						break;
+					case 'getorde':
+						var as = _q_appendData("view_orde", "", true);
+						if (as[0] != undefined) {
+							$('#txtCustno').val(as[0].custno);
+							$('#txtComp').val(as[0].comp);
+							$('#txtSerial').val(as[0].coin);
+							$('#cmbTaxtype').val(as[0].trantype);
+							var t_where=" noa='"+as[0].custno+"' ";
+							q_gt('cust', "where=^^ "+t_where+" ^^", 0, 0, 0, "ordecust",'');
+							sum();
+						}
+						break;
+					case 'ordecust':
+						var as = _q_appendData("cust", "", true);
+						if (as[0] != undefined) {
+							$('#txtZip').val(as[0].zip_invo);
+							$('#txtAddress').val(as[0].addr_invo);
 						}
 						break;
 					case q_name:
