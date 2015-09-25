@@ -140,18 +140,36 @@
 						} else {
 							t_moneys = q_mul(t_prices, t_mounts);
 						}
-						if (t_float == 0) {
+						
+						if(q_getPara('sys.project').toUpperCase()=='RK'){
+							t_moneys = round(t_moneys,0);
+						}else{
+							if (t_float == 0) {
 							t_moneys = round(t_moneys, 0);
-						} else {
-							t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
-							t_moneys = round(q_mul(t_moneys, t_float), 0);
+							} else {
+								t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
+								t_moneys = round(q_mul(t_moneys, t_float), 0);
+							}	
 						}
+						
 						$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 					}
 
 					t_weight = q_add(t_weight, t_weights);
 					t_mount = q_add(t_mount, t_mounts);
-					t_money = q_add(t_money, t_moneys);
+					
+					if(q_getPara('sys.project').toUpperCase()=='RK'){
+						if (t_float == 0) {
+							t_money = q_add(t_money,round(t_moneys, 0));
+							t_moneyus=0;
+						} else {
+							t_money = q_add(t_money, round(q_mul(t_moneys, t_float), 0));
+							t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
+						}
+					}else{
+						t_money = q_add(t_money, t_moneys);
+					}
+					
 				}
 				t_total = t_money;
 				t_tax = 0;

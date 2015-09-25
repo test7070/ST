@@ -105,16 +105,19 @@
                     }else{
                     	t_moneys = q_mul(t_prices,t_mounts);
                     }
-                    if(t_float==0){
-                    	t_moneys = round(t_moneys,0);
-                    }else{
-                    	t_moneyus = q_add(t_moneyus,round(t_moneys,2));
-                    	t_moneys = round(q_mul(t_moneys,t_float),0);
-                    }
+                    
+                    t_moneys = round(t_moneys,0);
                     t_weight = q_add(t_weight,t_weights);
                     t_mount = q_add(t_mount,t_mounts);
-                    t_money = q_add(t_money,t_moneys);
                     $('#txtTotal_' + j).val(FormatNumber(t_moneys));
+                    
+                    if (t_float == 0) {
+						t_money = q_add(t_money,round(t_moneys, 0));
+						t_moneyus=0;
+					} else {
+						t_money = q_add(t_money, round(q_mul(t_moneys, t_float), 0));
+						t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
+					}
                 }
                 t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
                 switch ($('#cmbTaxtype').val()) {
@@ -161,6 +164,7 @@
                 $('#txtMoney').val(FormatNumber(t_money));
                 $('#txtTax').val(FormatNumber(t_tax));
                 $('#txtTotal').val(FormatNumber(t_total));
+                
                 if(t_float==0)
                 	$('#txtTotalus').val(0);
                 else
