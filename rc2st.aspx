@@ -992,6 +992,7 @@
 					$('.pk').show();
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					$('.sprice').show();
+					$('.rk').show();
 				}
 			}
 
@@ -1069,8 +1070,6 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
-					
-				
 			}
 
 			function q_popPost(s1) {
@@ -1364,7 +1363,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 2150px;
+				width: 2250px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1592,7 +1591,7 @@
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>寬度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>長度</a></td>
-					<td align="center" style="width:50px;display:none;" class="pk"><a id='lblSource'>鋼廠</a></td>
+					<td align="center" style="width:50px;display:none;" class="pk rk"><a id='lblSource'>鋼廠</a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:50px;display:none;" class="pk"><a>數量<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
@@ -1653,7 +1652,7 @@
 					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td style="display:none;" class="pk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
+					<td style="display:none;" class="pk rk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
