@@ -20,32 +20,37 @@
             }
             $(document).ready(function() {
                 q_getId();
-                q_gf('', 'z_vcc_pi');
+                q_gf('', 'z_vcc_pe');
             });
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_vcc_pi',
+                    fileName : 'z_vcc_pe',
                     options : [{
-                    	type : '1', //[1]     
+                    	type : '1', //[1][2]    
 						name : 'xmon'            	
                     },{
-                    	type : '2', //[8][9]//4
+                    	type : '2', //[3][4]
                         name : 'xcustno',
                         dbf : 'cust',
                         index : 'noa,comp',
                         src : 'cust_b.aspx'
                     },{
-                    	type : '2', //[8][9]//4
+                    	type : '2', //[5][6]
                         name : 'xtggno',
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
                     },{
-                    	type :'5',
-                    	name :'xtype',
+                    	type :'5', //[7]
+                    	name :'xtype1',
                     	value:q_getPara('vcc_pi.type').split(',')
                     	
-                    }]
+                    },{
+                    	type :'5', //[8]
+                    	name :'xclass',
+                    	value:q_getPara('vcc_pi.type2').split(',')
+                    	
+                    } ]
                 });
                 
                 q_popAssign();
