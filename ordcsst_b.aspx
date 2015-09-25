@@ -52,7 +52,9 @@
 				$('#btnNext').hide();
 				$('#btnBott').hide();
 				
-				
+				if(q_getPara('sys.comp').substring(0,2)!="傑期"){
+					$('.pk').show();
+				}
 		    }
 		    function bbsAssign() {  /// checked 
 		        
@@ -220,7 +222,7 @@
 					<td align="center" class="pk" style="width:4%;display:none;"><a>數量單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
 					<td align="center" style="width:4%;"><a>單位</a></td>
-					<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
+					<td align="center" style="width:7%;display:none;"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblInmount_text'></a></td>
 					<td align="center" style="width:15%;"><a id='lblNoa'></a><br><a id='lblMemo'></a></td>
 				</tr>
@@ -239,7 +241,7 @@
 					<td align="center" class="pk" style="width:4%;display:none;"><a>數量單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
 					<td align="center" style="width:4%;"><a>單位</a></td>
-					<td align="center" style="width:7%;"><a id='lblPrice'></a></td>
+					<td align="center" style="width:7%;" class="pk"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblInmount_text'></a></td>
 					<td align="center" style="width:15%;"><a id='lblNoa'></a><br><a id='lblMemo'></a></td>
 				</tr>
@@ -268,7 +270,7 @@
 					<td class="pk" style="width:4%;display:none;"><input class="txt c1" id="txtUnit2.*" type="text"/></td>
 					<td style="width:7%;"><input class="txt num c1" id="txtWeight.*" type="text" /></td>
 					<td style="width:4%;"><input class="txt c1" id="txtUnit.*" type="text"/></td>
-					<td style="width:7%;"><input class="txt num c1" id="txtPrice.*" type="text"/></td>
+					<td style="width:7%;display:none;" class="pk"><input class="txt num c1" id="txtPrice.*" type="text"/></td>
 					<td style="width:8%;"><input class="txt num c1" id="txtCnt.*" type="text"/></td>
 					<td style="width:15%;">
 						<input class="txt" id="txtNoa.*" type="text" style="width:75%;"/>
