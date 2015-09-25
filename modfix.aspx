@@ -17,7 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "modfix";
-			var q_readonly = ['txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtWorker', 'txtWorker2','txtNoa'];
 			var q_readonlys = ['txtDetail1','txtDetail2','txtModel','txtNob','txtWheel1','txtCode1'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -29,12 +29,12 @@
 			brwCount2 = 5;
 			brwList = [];
 			brwNowPage = 0;
-			brwKey = 'Noa';
+			brwKey = 'noa';
 			q_desc = 1;
 			
 			aPop = new Array(
 			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
-				['txtNoa','lblNoa','model','noa','txtNoa','model_c.aspx'],
+				['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
 				['txtMech','lblMech','modeq','namea','txtMech','modeq_b2.aspx']
 			);
 			$(document).ready(function() {
@@ -56,8 +56,8 @@
 				q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
 				$('#btnIn').click(function(){				
-					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2)){
-						q_gt('models', "where=^^noa='"+$('#txtNoa').val()+"'^^", 0, 0, 0, "ins_models");
+					if(!emp($('#txtModnoa').val()) && (q_cur == 1 || q_cur == 2)){
+						q_gt('models', "where=^^noa='"+$('#txtModnoa').val()+"'^^", 0, 0, 0, "ins_models");
 					}
 					
 				});
@@ -109,10 +109,15 @@
 								if(as[i]!= undefined){	
 																
 										$('#txtNob_'+ seq ).val(as[i].productno);
-										$('#txtModel_'+ seq ).val(as[i].model);
+										$('#txtModel_'+ seq ).val(as[i].model.substring(0,1)+as[i].model.substring(1,as[i].model.length));
 										$('#txtWheel1_'+ seq).val(as[i].wheel);
 										$('#txtCode1_'+ seq).val(as[i].number);
-										$('#txtDetail1_'+ seq ).val(as[i].model+as[i].wheel+as[i].number);
+										var model =''
+										if(as[i].model=='1')
+											model ='成型段'
+										if(as[i].model=='2')
+											model ='定徑段'
+										$('#txtDetail1_'+ seq ).val(model+as[i].wheel+as[i].number);
 										seq=seq+1
 								}									
 							}
@@ -121,18 +126,45 @@
 													
 						
 						break;
-					case 'chk_models':
-					
+					case 'checkModelno_btnOk':
+						var as = _q_appendData("modfix", "", true);
+						if (as[0] != undefined) {
+							alert('已存在 ' + as[0].noa );
+							Unlock();
+							return;
+						} else {
+							wrServer($.trim($('#txtNoa').val()));
+						}
 						break;
+						
 				}
 			}
 
 			function btnOk() {
-				var t_noa = trim($('#txtNoa').val());	        
-		        if (t_noa.length == 0)
-		            alert('模具編號不可為空');
-		        else
-		            wrServer(t_noa);
+				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}
+				
+				var t_noa = trim($('#txtNoa').val());
+				var t_date = trim($('#txtDatea').val());
+				
+				if (t_noa.length == 0 || t_noa == "AUTO")
+		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfix') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+				
+				if (q_cur == 1)
+					$('#txtWorker').val(r_name);
+				else
+					$('#txtWorker2').val(r_name);
+				
+				if (q_cur == 1) {
+					
+					t_where = "where=^^ noa='" + t_noa + "'^^";
+					q_gt('modfix', t_where, 0, 0, 0, "checkModelno_btnOk", r_accy);
+				} else {
+					wrServer(t_noa);
+				}
 				
 			}
 
@@ -147,7 +179,15 @@
 			function bbsAssign() {
 								
 				for (var j = 0; j < q_bbsCount; j++) {	
-				
+					$('#txtWay1_'+j).change(function(){
+						t_IdSeq = -1;  
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						if($('#txtWay1_'+b_seq).val()>4 || $('#txtWay1').val() <1){
+							alert('研磨方式請輸入數字1~4之間');
+							$('#txtWay1_'+b_seq).val(1);
+						}
+					})
 				}
 				_bbsAssign();
 			}
@@ -157,6 +197,8 @@
 
 			function btnIns() {
 				_btnIns();
+				$('#txtNoa').val('AUTO');
+               	$('#txtDatea').val(q_date()); 
 				refreshBbm();
 
 			}
@@ -167,7 +209,7 @@
 			}
 
 			function btnPrint() {
-				q_box('z_modfix_rs.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				q_box('z_modfix_rs.aspx' + "?;;;noa=" + trim($('#txtModnoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
@@ -395,10 +437,12 @@
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblNoa' class="lbl btn" ></a></td>
-						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
+						<td><span> </span><a id='lblModnoa' class="lbl btn" ></a></td>
+						<td><input id="txtModnoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
 						<td><span> </span><a id='lblMech' class="lbl btn"></a></td>
 						<td><input id="txtMech" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblNoa' class="lbl "></a></td>
+						<td><input id="txtNoa" type="text" class="txt c1"/></td>
 						<td></td>
 					</tr>
 					<tr>

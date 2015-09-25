@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -33,7 +33,7 @@
 				['txtRackno', 'lblRackno', 'rack', 'noa,rack,storeno,store', 'txtRackno', 'rack_b.aspx'],
 				['txtStoreinno', 'lblStorein', 'store', 'noa,store', 'txtStoreinno,txtStorein', 'store_b.aspx'],
 				['txtRackinno', 'lblRackinno', 'rack', 'noa,rack,storeno,store', 'txtRackinno', 'rack_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucc_b2.aspx'],
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b2.aspx'],
 				['txtSssno', 'lblSssno', 'sss', 'noa,namea', 'txtSssno,txtNamea', 'sss_b.aspx'],
 				['txtTranstartno', 'lblPart', 'part', 'noa,part', 'txtTranstartno,txtTranstart', 'part_b.aspx'],
 				['txtCustno', 'lblCust', 'cust', 'noa,comp,addr_home,tel', 'txtCustno,txtComp,txtAddr,txtTel', 'cust_b.aspx']
@@ -119,7 +119,7 @@
 						break;
 				}
 				if(s2[0]!=undefined){
-					if(s2[0]=='ucc' && q_getPara('sys.project').toUpperCase()=='RB'){
+					if(s2[0]=='view_ucaucc' && q_getPara('sys.project').toUpperCase()=='RB'){
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)

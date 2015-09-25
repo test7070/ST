@@ -18,7 +18,7 @@
 			q_tables = 's';
 			var q_name = "model";
 			var q_readonly = ['txtWorker', 'txtWorker2'];
-			var q_readonlys = [];
+			var q_readonlys = ['txtProductno','txtWheel'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -32,7 +32,7 @@
 			brwKey = 'Noa';
 			q_desc = 1;
 			aPop = new Array(
-				
+				['txtTgg','lblTgg','tgg','comp','txtTgg','tgg_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -47,13 +47,13 @@
 				}
 				mainForm(0);
 			}
-			var wheel1=" ,主輪,立輪,導縫輪,熔接輪"	;
-			var wheel2=" ,主輪,立輪,十字輪,出口輪"	;
+			var wheel1=q_getPara('model.wheeltype1');
+			var wheel2=q_getPara('model.wheeltype2');
 			function mainPost() {
 				q_getFormat();
 				var bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);				
-				q_cmbParse("cmbUsetype", '設備課,製造課');
+				q_cmbParse("cmbUsetype", q_getPara('model.usetype'));
 			
 				$('#txtNoa').change(function(e) {
 					$(this).val($.trim($(this).val()).toUpperCase());
@@ -68,7 +68,7 @@
 						}
 					}
 				});
-				q_cmbParse("cmbModel",' ,成型段,定徑段','s');
+				q_cmbParse("cmbModel",q_getPara('model.type'),'s');
 
 				
 				
@@ -154,29 +154,30 @@
 
 			}
 			function changeWheel(count){
-				var nb1=" ,F1T,F1B,F2T,F2B,F3T,F3B,F4T,F4B,F5T,F5B,F6T,F6B,F7T,F7B"
-				var nb2=" ,FS1,FS2,FS3,FS4,FS41,FS5,FS6,IR,FS4-1"			
-				var nb3=" ,SQT,SQB"
-				var nb4=" ,SGT,SGB"
-				var nb5=" ,S1T,S1B,S2T,S2B,S3T,S3B,S4T,S4B,S5T,S5B"
-				var nb6=" ,SS1,SS2,SS3,SS4,SS5"
-				var nb7=" ,TH1T,TH1B,TH2T,TH2B"
-				var nb8=" ,THG"
-								
-					if( $('#txtModel_'+count).val()=='成型段'){
+				var nb1=q_getPara('model.nbtype1')
+				var nb2=q_getPara('model.nbtype2')			
+				var nb3=q_getPara('model.nbtype3')
+				var nb4=q_getPara('model.nbtype4')
+				var nb5=q_getPara('model.nbtype5')
+				var nb6=q_getPara('model.nbtype6')
+				var nb7=q_getPara('model.nbtype7')
+				var nb8=q_getPara('model.nbtype8')
+				var wheel1=q_getPara('model.wheeltype1');
+				var wheel2=q_getPara('model.wheeltype2');				
+					if( $('#cmbModel_'+count).val()==1){
 						q_cmbParse("combWheel_"+count,wheel1);	
 						var wh= $('#txtWheel_'+count).val();
 						switch(wh){
-							case '主輪':
+							case "主輪":
 								q_cmbParse("combNumber_"+count,nb1);
 								break;
-							case '立輪':
+							case "立輪":
 								q_cmbParse("combNumber_"+count,nb2);
 								break;
-							case '導縫輪':
+							case "導縫輪":
 								q_cmbParse("combNumber_"+count,nb3);
 								break;
-							case '熔接輪':
+							case "熔接輪":
 								q_cmbParse("combNumber_"+count,nb4);
 								break;
 								
@@ -184,20 +185,20 @@
 								
 						}
 						
-						else if($('#txtModel_'+count).val()=='定徑段'){
+						else if($('#cmbModel_'+count).val()==2){
 							q_cmbParse("combWheel_"+count,wheel2);
 							var wh= $('#txtWheel_'+count).val();
 								switch(wh){
-									case '主輪':
+									case "主輪":
 										q_cmbParse("combNumber_"+count,nb5);
 										break;
-									case '立輪':
+									case "立輪":
 										q_cmbParse("combNumber_"+count,nb6);
 										break;
-									case '十字輪':
+									case "十字輪":
 										q_cmbParse("combNumber_"+count,nb7);
 										break;
-									case '出口輪':
+									case "出口輪":
 										q_cmbParse("combNumber_"+count,nb8);
 										break;
 							}
@@ -208,14 +209,14 @@
 			}
 			function autoNoa(count){
 				var flag =0;
-				if(!emp('#txtNumber_'+count)){
+				if(!emp('#combNumber_'+count)){
 					var bs =[];
 					var max =0;
 					for (var j = 0; j < q_bbsCount; j++) {
-						bs[j]=$('#txtNumber_'+j).val();						
+						bs[j]=$('#combNumber_'+j).find("option:selected").text();						
 					}
 					for (var i =0 ;i < q_bbsCount; i++){
-						if($('#txtNumber_'+count).val()==bs[i] && count != i){
+						if($('#combNumber_'+count).find("option:selected").text()==bs[i] && count != i){
 							var tmp=0;
 							tmp=$('#txtProductno_'+i).val().substring($('#txtProductno_'+i).val().length-1,$('#txtProductno_'+i).val().length)
 							if(parseInt(tmp) > max)
@@ -240,22 +241,19 @@
 						t_IdSeq = -1;  
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;
-					
-						$('#txtWheel_'+b_seq).val($('#combWheel_'+b_seq).find("option:selected").text());
-						$('#txtNumber_'+b_seq).val('');
+						$("#txtWheel_"+b_seq).val($('#combWheel_'+b_seq).find("option:selected").text())
+						
 						$("#combNumber_"+b_seq).empty();
 						changeWheel(b_seq);
 					});
-						
-					changeWheel(j);
+			
+						changeWheel(j);
 
 					$('#cmbModel_'+j).change(function(){
 						t_IdSeq = -1;  
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;
-						$('#txtModel_'+b_seq).val($('#cmbModel_'+b_seq).find("option:selected").text());
-						$('#txtWheel_'+b_seq).val('');
-						$('#txtNumber_'+b_seq).val('');
+
 						$("#combWheel_"+b_seq).empty();
 						$("#combNumber_"+b_seq).empty();
 						changeWheel(b_seq);
@@ -268,8 +266,64 @@
 						t_IdSeq = -1;  
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;
-						$('#txtNumber_'+b_seq).val($('#combNumber_'+b_seq).find("option:selected").text());
+						$("#txtNumber_"+b_seq).val($('#combNumber_'+b_seq).find("option:selected").text())
 						autoNoa(b_seq);
+						
+					});
+					
+					$('#txtNumber_'+j).change(function(){
+						t_IdSeq = -1;  
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						var nb=$('#txtNumber_'+b_seq).val();
+						var nb1=q_getPara('model.nbtype1');
+						var nb2=q_getPara('model.nbtype2');		
+						var nb3=q_getPara('model.nbtype3');
+						var nb4=q_getPara('model.nbtype4');
+						var nb5=q_getPara('model.nbtype5');
+						var nb6=q_getPara('model.nbtype6');
+						var nb7=q_getPara('model.nbtype7');
+						var nb8=q_getPara('model.nbtype8');
+						var model,wheel;
+											
+						if(nb1.match(nb)){
+								model ="1";
+								wheel ="主輪";
+						}
+						if(nb2.match(nb)){
+								model ="1";
+								wheel ="立倫";
+						}
+						if( nb3.match(nb)){
+								model ="1";
+								wheel ="導縫輪";
+						}
+						if(nb4.match(nb)){
+								model ="1";
+								wheel ="熔接輪";
+						}
+						if(nb5.match(nb)){
+								model ="2";
+								wheel ="主輪";
+						}
+						if(nb6.match(nb)){
+								model ="2";
+								wheel ="立輪";
+						}
+						if(nb7.match(nb)){
+								model ="2";
+								wheel ="十字輪";
+						}
+						if(nb8.match(nb)){
+								model ="2";
+								wheel ="出口輪";				
+						}						
+						
+						$("#combWheel_"+b_seq).empty();
+						$("#combNumber_"+b_seq).empty();
+						$('#cmbModel_'+b_seq).val(model);
+						changeWheel(b_seq);
+						$('#txtWheel_'+b_seq).val(wheel);
 					});
 									
 				}
@@ -523,7 +577,7 @@
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl" ></a></td>
 						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 145% ;"/></td>
-						<td><span> </span><a id='lblTgg' class="lbl"></a></td>
+						<td><span> </span><a id='lblTgg' class="lbl btn"></a></td>
 						<td><input id="txtTgg" type="text" class="txt c1"/></td>
 						<td></td>
 					</tr>
@@ -582,13 +636,13 @@
 					<td>
 						<input id="txtProductno.*" type="text"/>
 					</td>
-					<td><input id="txtModel.*" type="text" class="txt c1" style="width:80%;"/>
-						<select id="cmbModel.*" class="txt" style="width: 20px;">  </select>
+					<td><select id="cmbModel.*" type="text" class="txt c1" style="width:85%;"/select>
+						
 					</td>
 					<td><input id="txtWheel.*" type="text" class="txt c1" style="width:75%;"/>	
-						<select id="combWheel.*" class="txt c1" style="width: 20px;">  </select></td>					
-					<td><input id="txtNumber.*" type="text" class="txt c1" style="width:80%;"/>
-						<select id="combNumber.*" class="txt" style="width: 20px;">  </select>
+						<select id="combWheel.*" type="text" class="txt c1" style="width:20%;"/select>			
+					<td><input id="txtNumber.*" type="text" class="txt c1" style="width:75%;"/>
+						<select id="combNumber.*" type="text" class="txt c1" style="width:20%;"/select>
 					</td>						
 					
 					<td ><input id="txtBottom.*" type="text" class="num c1" style="width:95%;" /></td>

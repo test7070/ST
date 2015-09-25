@@ -481,6 +481,8 @@
 				}
 				_bbsAssign();
 				size_change();
+				if(q_getPara('sys.project').toUpperCase()=='RK')
+					$('.source').show();
 			}
 
 			function btnIns() {
@@ -804,7 +806,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 1530px;
+				width: 1630px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -933,7 +935,6 @@
 						<input id="txtSalesno" type="text" style="float:left;width:50%;"/>
 						<input id="txtSales" type="text" style="float:left;width:50%;"/>
 						</td>
-						
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
@@ -943,8 +944,8 @@
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
 							<input id="txtPaytype" type="text" style="float:left; width:115px;"/>
-							<select id="combPaytype" style="float:left; width:26px;"></select>
-							<select id="cmbTrantype" class="txt" name="D1" style="float:left; width:60px;"></select>
+							<select id="combPaytype" style="float:left; width:26px;"> </select>
+							<select id="cmbTrantype" class="txt" name="D1" style="float:left; width:60px;"> </select>
 						</td>
 					</tr>
 					<tr>
@@ -952,7 +953,7 @@
 						<td>	<input id="txtTotalus" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
 						<td><input id="txtFloata" type="text" class="txt num c1" /></td>
-						<td><span style="float:left;display:block;width:10px;"></span><select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()' > </select></td>
+						<td><span style="float:left;display:block;width:10px;"> </span><select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()' > </select></td>
 						<td class="st"><span> </span><a id='lblWeight' class="lbl"> </a></td>
 						<td class="st"><input id="txtWeight"  type="text" class="txt num c1"/></td>
 					</tr>
@@ -967,9 +968,7 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
-						<td colspan="7">
-						<input id="txtMemo" type="text" class="txt c1"/>
-						</td>
+						<td colspan="7"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="trX"><span> </span><a id='lblOrdgweight' class="lbl"> </a></td>
@@ -1014,6 +1013,7 @@
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a><br><a id='lblTheorys' class="st"> </a></td>
 					<td align="center" style="width:80px;"><a id='lblC1s'> </a><br><a id='lblNotvs'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
+					<td align="center" style="width:80px;display: none;" class="source"><a id='lblSource_st'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td class="st" align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
 				</tr>
@@ -1072,12 +1072,9 @@
 						<input id="txtOrdeno.*" type="text"  style="width:65%;float:left;"/>
 						<input id="txtNo2.*" type="text"  style="width:25%;float:left;"/>
 					</td>
-					<td>
-						<input id="txtUno.*" type="text" style="float:left;width:97%;" />
-					</td>
-					<td class="st">
-					<input id="txtSize.*" type="text" style="width:97%;"/>
-					</td>
+					<td class="source" style="display: none;"><input id="txtSource.*" type="text"  class="txt" style="width:95%;"/></td>
+					<td><input id="txtUno.*" type="text" style="float:left;width:97%;" /></td>
+					<td class="st"><input id="txtSize.*" type="text" style="width:97%;"/></td>
 				</tr>
 			</table>
 		</div>

@@ -13,7 +13,7 @@
 			this.errorHandler = null;
 
 			q_tables = 't';
-			var q_name = "cuw";
+			var q_name = "modcuw";
 			var q_readonly = ['txtNoa','txtStation','txtWorker'];
 			var q_readonlys = ['txtBorntime','txtAddtime','txtWorkmount','txtMount'];
 			var q_readonlyt = ['txtHours','txtAddhours'];
@@ -38,7 +38,7 @@
 			brwNowPage = 0;
 			brwKey = 'noa';
 			q_desc = 1;
-			brwCount2 = 10;
+			brwCount2 = 3;
 			aPop = new Array(
 				['txtStationno', 'lblStationno', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'],
 				['txtMechno_', 'btnMechno_', 'mech', 'noa,mech', 'txtMechno_,txtMech_', 'mech_b.aspx'],
@@ -270,7 +270,7 @@
 			}
 
 			function btnPrint() {
-				q_box('z_cuwp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
+				//q_box('z_cuwp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function btnOk() {
@@ -804,7 +804,7 @@
 			</div>
 		</div>
 		<div id="dbbt" >
-			<table id="tbbt">
+			<table id="tbbt" style="display: none;">
 				<tbody>
 					<tr class="head" style="color:white; background:#003366;">
 						<td style="width:20px;">
