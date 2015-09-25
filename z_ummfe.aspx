@@ -69,6 +69,13 @@
 						type : '0', //[26] 
 						name : 'xproject',
 						value : q_getPara('sys.project').toUpperCase()
+					}, {//[14]
+                        type : '0',
+                        name : 'xname',
+                        value : r_name 
+                    }, {
+						type : '1', //[15][16]   9
+						name : 'zdate'
 					}]
 				});
 				q_popAssign();
@@ -84,6 +91,10 @@
 				$('#txtYdate1').datepicker();
 				$('#txtYdate2').mask('999/99/99');
 				$('#txtYdate2').datepicker();
+				$('#txtZdate1').mask('999/99/99');
+				$('#txtZdate1').datepicker();
+				$('#txtZdate2').mask('999/99/99');
+				$('#txtZdate2').datepicker();
 				
 				$('#txtYmon').mask('999/99');
 				
