@@ -34,7 +34,7 @@
 					
 			aPop = new Array(
 			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
-				['txtFixnoa','lblFixnoa','model','noa,modnoa','txtFixnoa,txtModnoa','modfixc_b.aspx'],
+				['txtFixnoa','lblFixnoa','modfixc','noa,modnoa','txtFixnoa,txtModnoa','modfixc_b.aspx'],
 				['txtMachine','lblMech','modeq','namea','txtMachine','modeq_b2.aspx']
 			);
 			$(document).ready(function() {
