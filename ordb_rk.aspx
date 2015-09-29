@@ -41,12 +41,13 @@
 			['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,fax,addr_fact,zip_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,txtFax,txtAddr,txtPost', 'tgg_b.aspx']
 			,['txtPartno', 'lblPart', 'part', 'noa,part', 'txtPartno,txtPart', 'part_b.aspx'] );
 		   	brwCount2 = 10;
-		   	t_coin = '';
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'no3'];
 				q_brwCount();
 				q_gt('style', '', 0, 0, 0, '');
+				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 			});
 
 			function main() {
@@ -104,19 +105,16 @@
                     }else{
                     	t_moneys = q_mul(t_prices,t_mounts);
                     }
-                    
-                    t_moneys = round(t_moneys,0);
+                    if(t_float==0){
+                    	t_moneys = round(t_moneys,0);
+                    }else{
+                    	t_moneyus = q_add(t_moneyus,round(t_moneys,2));
+                    	t_moneys = round(q_mul(t_moneys,t_float),0);
+                    }
                     t_weight = q_add(t_weight,t_weights);
                     t_mount = q_add(t_mount,t_mounts);
+                    t_money = q_add(t_money,t_moneys);
                     $('#txtTotal_' + j).val(FormatNumber(t_moneys));
-                    
-                    if (t_float == 0) {
-						t_money = q_add(t_money,round(t_moneys, 0));
-						t_moneyus=0;
-					} else {
-						t_money = q_add(t_money, round(q_mul(t_moneys, t_float), 0));
-						t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
-					}
                 }
                 t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
                 switch ($('#cmbTaxtype').val()) {
@@ -163,7 +161,6 @@
                 $('#txtMoney').val(FormatNumber(t_money));
                 $('#txtTax').val(FormatNumber(t_tax));
                 $('#txtTotal').val(FormatNumber(t_total));
-                
                 if(t_float==0)
                 	$('#txtTotalus').val(0);
                 else
@@ -179,10 +176,6 @@
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-				
-				q_cmbParse("cmbCoin", t_coin);
-				//if(abbm[q_recno])
-					//$('#cmbCoin').val(abbm[q_recno].coin);
 
 				$('#lblOrde').click(function() {
 					if(!(q_cur==1 || q_cur ==2))
@@ -319,26 +312,19 @@
 						var as = _q_appendData("style", "", true);
 						StyleList = new Array();
 						StyleList = as;
-						q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 						break;
 					case 'flors_coin':
 						var as = _q_appendData("flors", "", true);
-						t_coin='';
+						var z_coin='';
 						for ( i = 0; i < as.length; i++) {
-							t_coin+=','+as[i].coin;
+							z_coin+=','+as[i].coin;
 						}
-						if(t_coin.length==0) t_coin=' ';
+						if(z_coin.length==0) z_coin=' ';
 						
-						break;
-					case 'combSpec':
-						var as = _q_appendData("spec", "", true);
-						t_coin=' ';
-						for ( i = 0; i < as.length; i++) {
-							t_coin+=','+as[i].coin;
-						}
-						if(t_coin.length==0) t_coin=' ';
+						q_cmbParse("cmbCoin", z_coin);
+						if(abbm[q_recno])
+							$('#cmbCoin').val(abbm[q_recno].coin);
 						
-						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 						break;
 					case 'flors':
 						var as = _q_appendData("flors", "", true);
