@@ -368,6 +368,8 @@
 						$('#btnOk_div_batchvcca').removeAttr('disabled').val('批次開立');
 						$('#div_batchvcca').hide();
 						break;
+					case 'qtxt.query.orde_change':
+						break;
 				}
 			}
 
@@ -539,6 +541,9 @@
 				$('#txtAccno').val(xmlString.split(";")[0]);
 				$('#txtChkno').val(xmlString.split(";")[1]);
 				Unlock(1);
+				
+				if(q_cur==2 && !emp($('#txtNoa').val()) && $('#cmbTaxtype').val()=='6' && !emp($('#txtTrdno').val()) )
+					q_func('qtxt.query.orde_change','vcca.txt,changeorde_rb,'+encodeURI($('#txtNoa').val()));
 			}
 			
 			var ordemoney_check=false,ordemoney=0,vccamoney=0;

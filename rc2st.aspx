@@ -140,18 +140,36 @@
 						} else {
 							t_moneys = q_mul(t_prices, t_mounts);
 						}
-						if (t_float == 0) {
+						
+						if(q_getPara('sys.project').toUpperCase()=='RK'){
+							t_moneys = round(t_moneys,0);
+						}else{
+							if (t_float == 0) {
 							t_moneys = round(t_moneys, 0);
-						} else {
-							t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
-							t_moneys = round(q_mul(t_moneys, t_float), 0);
+							} else {
+								t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
+								t_moneys = round(q_mul(t_moneys, t_float), 0);
+							}	
 						}
+						
 						$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 					}
 
 					t_weight = q_add(t_weight, t_weights);
 					t_mount = q_add(t_mount, t_mounts);
-					t_money = q_add(t_money, t_moneys);
+					
+					if(q_getPara('sys.project').toUpperCase()=='RK'){
+						if (t_float == 0) {
+							t_money = q_add(t_money,round(t_moneys, 0));
+							t_moneyus=0;
+						} else {
+							t_money = q_add(t_money, round(q_mul(t_moneys, t_float), 0));
+							t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
+						}
+					}else{
+						t_money = q_add(t_money, t_moneys);
+					}
+					
 				}
 				t_total = t_money;
 				t_tax = 0;
@@ -992,6 +1010,7 @@
 					$('.pk').show();
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					$('.sprice').show();
+					$('.rk').show();
 				}
 			}
 
@@ -1069,8 +1088,6 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
-					
-				
 			}
 
 			function q_popPost(s1) {
@@ -1364,7 +1381,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 2150px;
+				width: 2250px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1592,7 +1609,7 @@
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>寬度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>長度</a></td>
-					<td align="center" style="width:50px;display:none;" class="pk"><a id='lblSource'>鋼廠</a></td>
+					<td align="center" style="width:50px;display:none;" class="pk rk"><a id='lblSource'>鋼廠</a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:50px;display:none;" class="pk"><a>數量<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
@@ -1653,7 +1670,7 @@
 					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td style="display:none;" class="pk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
+					<td style="display:none;" class="pk rk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>

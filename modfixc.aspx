@@ -189,6 +189,8 @@
 							$('#txtWay_'+b_seq).val(1);
 						}
 					});
+					
+					
 				}
 				_bbsAssign();
 			}
