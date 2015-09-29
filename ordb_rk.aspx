@@ -41,13 +41,12 @@
 			['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,fax,addr_fact,zip_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,txtFax,txtAddr,txtPost', 'tgg_b.aspx']
 			,['txtPartno', 'lblPart', 'part', 'noa,part', 'txtPartno,txtPart', 'part_b.aspx'] );
 		   	brwCount2 = 10;
+		   	t_coin = '';
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'no3'];
 				q_brwCount();
 				q_gt('style', '', 0, 0, 0, '');
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 			});
 
 			function main() {
@@ -176,6 +175,10 @@
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+				
+				q_cmbParse("cmbCoin", t_coin);
+				//if(abbm[q_recno])
+					//$('#cmbCoin').val(abbm[q_recno].coin);
 
 				$('#lblOrde').click(function() {
 					if(!(q_cur==1 || q_cur ==2))
@@ -312,19 +315,26 @@
 						var as = _q_appendData("style", "", true);
 						StyleList = new Array();
 						StyleList = as;
+						q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 						break;
 					case 'flors_coin':
 						var as = _q_appendData("flors", "", true);
-						var z_coin='';
+						t_coin='';
 						for ( i = 0; i < as.length; i++) {
-							z_coin+=','+as[i].coin;
+							t_coin+=','+as[i].coin;
 						}
-						if(z_coin.length==0) z_coin=' ';
+						if(t_coin.length==0) t_coin=' ';
 						
-						q_cmbParse("cmbCoin", z_coin);
-						if(abbm[q_recno])
-							$('#cmbCoin').val(abbm[q_recno].coin);
+						break;
+					case 'combSpec':
+						var as = _q_appendData("spec", "", true);
+						t_coin=' ';
+						for ( i = 0; i < as.length; i++) {
+							t_coin+=','+as[i].coin;
+						}
+						if(t_coin.length==0) t_coin=' ';
 						
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 						break;
 					case 'flors':
 						var as = _q_appendData("flors", "", true);
