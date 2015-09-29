@@ -313,7 +313,7 @@
 						<td><input id="txtNoa" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
-						<td><span> </span><a class="lbl">皮膜</a></td>
+						<td><span> </span><a class="lbl">規格</a></td>
 						<td colspan="2"><input id="txtProduct" type="text" class="txt c1" /></td>
 					</tr>
 				</table>
