@@ -97,7 +97,7 @@
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-				q_cmbParse("cmbKind", ',隨貨單張,隨貨多張,批次未開,批次已開');
+				q_cmbParse("cmbKind", ',隨貨單張,隨貨多張,批次未開,批次已開,作廢');//104/09/25 發票作廢訂單上的開立發票顯示作廢 蔡's
 				
 				q_cmbParse("cmbGtime", ",08:00~09:00,09:00~10:00,10:00~11:00,11:00~12:00,12:00~13:00,13:00~14:00,14:00~15:00,15:00~16:00,16:00~17:00,17:00~18:00,18:00~19:00,19:00~20:00,21:00~22:00");
 				
@@ -608,6 +608,15 @@
 							}
 						}
 						_btnModi();
+						
+						//104/09/25 已產生出貨單仍可以修改 蔡's
+						if(!emp($('#txtVccno').val())){
+							$('.dbbs input').attr('disabled','disabled');
+						}
+						
+						if($('#cmbKind').val()=='作廢')
+							$('#cmbKind').attr('disabled','disabled');
+						
 						Unlock(1);
 						$('#txtOdate').focus();
 						if (!emp($('#txtCustno').val())) {
@@ -704,6 +713,11 @@
 					return;
 				}
 				
+				if(q_cur==1 && $('#cmbKind').val()=='作廢'){
+					alert('發票開立禁止選擇【作廢】!!');
+					return;
+				}
+				
 				if(emp($('#txtDatea').val())){
 					$('#txtDatea').val(q_cdn(q_date(),1));
 				}
@@ -762,7 +776,8 @@
 						$('#btnOrdetoVcc').click();
 				}
 				//更新發票
-				q_func('qtxt.query.vcca0', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+				if($('#cmbKind').val()!='作廢')
+					q_func('qtxt.query.vcca0', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
 			}
 			
 			function q_funcPost(t_func, result) {
@@ -981,10 +996,11 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				if(!emp($('#txtVccno').val())){
+				//104/09/25 已產生出貨單仍可以修改 蔡's
+				/*if(!emp($('#txtVccno').val())){
 					alert("已轉出貨單禁止修改!!");
 					return;
-				}
+				}*/
 					
 				Lock(1, {
 					opacity : 0
