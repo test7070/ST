@@ -35,7 +35,7 @@
 			aPop = new Array(
 			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
 				['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
-				['txtMech','lblMech','modeq','namea','txtMech','modeq_b2.aspx']
+				['txtMech','lblMech','mech','noa,mech','txtMech','mech_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -233,11 +233,7 @@
 			}
 
 			function refreshBbm() {
-				if (q_cur == 1) {
-					$('#txtNoa').css('color', 'black').css('background', 'white').removeAttr('readonly');
-				} else {
-					$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-				}
+				$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 			}
 
 			function readonly(t_para, empty) {
@@ -447,7 +443,7 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
-						<td><input id="txtDatea" type="text" class="txt c1 num" style="float: left;"/></a></td>
+						<td><input id="txtDatea" type="text" class="txt c1" style="float: left;"/></a></td>
 						
 						
 					</tr>

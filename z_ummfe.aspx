@@ -64,7 +64,7 @@
 					}, {//[12]                 8
                         type : '8',
                         name : 'yoption01',
-                        value : ['依業務','僅印異常']
+                        value : ['依業務','僅印異常','出貨-預收+','出貨-預收-']
                     }, {
 						type : '0', //[26] 
 						name : 'xproject',
@@ -130,6 +130,17 @@
 				
 				$('#txtXmon1').val(t_year + '/' + t_month);
 				
+				//出貨-預收(2選1)
+				$('#chkYoption01 [value="出貨-預收+"]').click(function(){
+					if($('#chkYoption01 [value="出貨-預收-"]').prop('checked')){
+						$('#chkYoption01 [value="出貨-預收-"]').prop("checked",false);			
+					}	
+				})
+				$('#chkYoption01 [value="出貨-預收-"]').click(function(){
+					if($('#chkYoption01 [value="出貨-預收+"]').prop('checked')){
+						$('#chkYoption01 [value="出貨-預收+"]').prop("checked",false);			
+					}	
+				})
 			}
 
 			function q_boxClose(s2) {

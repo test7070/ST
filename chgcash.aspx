@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -220,12 +220,13 @@
 		        }
 		       
 		       //104/05/13 開放1111可以輸入
-		       if($('#cmbDc').val() == 3){
+		       //104/09/30 拿掉 除大昌有限制
+		       /*if($('#cmbDc').val() == 3){
 		        	if( ($('#txtAcc1').val() == '') || ($('#txtAcc2').val() == '') || ($('#txtAcc1').val().substring(0,4) !='1111' && $('#txtAcc1').val().substring(0,4) !='1112') ){
 		        		alert('請輸入' + q_getMsg('lblAcc1') + '且為1111或1112開頭' );
 		        		return;
 		        	}
-		        }
+		        }*/
 		        
 		        //104/05/13 判斷表身一定要有資料才能存檔
 		        var bbs_count=false;

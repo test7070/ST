@@ -17,7 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "modfixc";
-			var q_readonly = ['txtWorker', 'txtWorker2','txtModnoa'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','txtModnoa'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -34,7 +34,7 @@
 					
 			aPop = new Array(
 			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
-				['txtInnoa','lblInnoa','model','noa,modnoa','txtInnoa,txtModnoa','modfix_b.aspx'],
+				['txtInnoa','lblInnoa','modfix','noa,modnoa','txtInnoa,txtModnoa','modfix_b.aspx'],
 				['txtMech','lblMech','modeq','namea','txtMech','modeq_b2.aspx']
 			);
 			$(document).ready(function() {
@@ -58,12 +58,8 @@
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2)){
 						q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");
-						
-					}
-					
+					}	
 				});
-				
-				
 			}
 			          	 
 
@@ -236,11 +232,7 @@
 			}
 
 			function refreshBbm() {
-				if (q_cur == 1) {
-					$('#txtNoa').css('color', 'black').css('background', 'white').removeAttr('readonly');
-				} else {
-					$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-				}
+				$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 			}
 
 			function readonly(t_para, empty) {

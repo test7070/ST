@@ -32,7 +32,7 @@
 			brwKey = 'Noa';
 			q_desc = 1;
 			aPop = new Array(
-				['txtTgg','lblTgg','tgg','comp','txtTgg','tgg_b.aspx']
+				['txtTggno', 'lblTgg', 'tgg', 'noa,nick', 'txtTggno,txtTgg', 'tgg_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -576,10 +576,12 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl" ></a></td>
-						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 145% ;"/></td>
-						<td><span> </span><a id='lblTgg' class="lbl btn"></a></td>
-						<td><input id="txtTgg" type="text" class="txt c1"/></td>
-						<td></td>
+						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
+						<td><span> </span><a id="lblTgg" class="lbl btn"> </a></td>
+						<td colspan="3">
+							<input id="txtTggno"  type="text" style="width:25%;"/>
+							<input id="txtTgg"  type="text" style="width:75%; color:green;"/>
+						</td>		
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTube' class="lbl"></a></td>
