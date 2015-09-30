@@ -42,6 +42,7 @@
             , ['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx']
             , ['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
             , ['txtProj_', '', 'proj', 'noa,proj', 'txtProj_', '']
+            , ['textPart_', '', 'acpart', 'noa,part', 'cmbPartno_,txtPart_', 'acpart_b.aspx']
             );
 
 		//1030726拿掉 	['txtMemo', '', 'qphr', 'code,phr', 'txtMemo,txtMemo', "qPhr_b.aspx", 'txtAcc1'],
@@ -204,6 +205,12 @@
 		    }
 
 		    function btnOk() {
+		    	var t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')], ['cmbDc', q_getMsg('lblDc')], ['cmbChgpartno', q_getMsg('lblChgpart')]]);
+				if (t_err.length > 0) {
+					alert(t_err);
+					return;
+				}
+		    	
 		        for (var i = 0; i < q_bbsCount; i++) {
 		            $('#txtPart_' + i).val($('#cmbPartno_' + i).find(":selected").text());
 		        }
@@ -279,13 +286,23 @@
 		                    sum();
 		                });
 		                $('#txtAcc1_' + i).change(function (e) {
-		                    var str = $.trim($(this).val());
-		                    if ((/^[0-9]{4}$/g).test(str))
-		                        $(this).val(str + '.');
+		                    var s1 = trim($(this).val());
+				            if (s1.length > 4 && s1.indexOf('.') < 0)
+				                $(this).val(s1.substr(0, 4) + '.' + s1.substr(4));
+				            if (s1.length == 4)
+				                $(this).val(s1 + '.');
 		                });
 		            }
 		        }
 		        _bbsAssign();
+		        if(q_getPara('sys.project').toUpperCase()=='RB'){
+		        	$('.iscmbpart').hide();
+		        	$('.istxtpart').show();
+		        }else{
+		        	$('.iscmbpart').show();
+		        	$('.istxtpart').hide();
+		        }
+		        
 		    }
 
 		    function sum() {
@@ -353,6 +370,10 @@
 		            $(".custchg").css('display', '');
 		        else
 		            $(".custchg").css('display', 'none');
+		            
+				for (var i = 0; i < q_bbsCount; i++) {
+					$('#textPart_'+i).val($('#cmbPartno_'+i).val());
+		        }
 		    }
 
 		    function readonly(t_para, empty) {
@@ -539,7 +560,7 @@
                 color: #FF8F19;
             }
             .txt.c1 {
-                width: 100%;
+                width: 98%;
                 float: left;
             }
             .txt.c2 {
@@ -688,11 +709,10 @@
 					<td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:80px;"><a id='lblPart_s'> </a></td>
-					
 					<td align="center" style="width:200px;"><a id='lblAcc_s'> </a></td>
 					<td align="center" style="width:300px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblProj_s'></a></td>
+					<td align="center" style="width:80px;"><a id='lblProj_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -700,11 +720,13 @@
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td>
+					<td class="istxtpart" style="display: none;">
+						<input id="textPart.*"  type="text" class="txt c1"/>
+					</td>
+					<td class="iscmbpart">
 						<select id="cmbPartno.*" class="txt c1"> </select>
 						<input id="txtPart.*"  type="text" style="display: none;"/>
 					</td>
-					
 					<td>
 						<input class="btn"  id="btnAcc.*" type="button" value='.' style=" font-weight: bold;width:1%;" />
 						<input type="text" id="txtAcc1.*"  style="width:35%;"/>
@@ -712,8 +734,7 @@
 					</td>
 					<td ><input type="text" id="txtMemo.*" style="width:95%;" /></td>
 					<td><input type="text" id="txtMoney.*" style="width:95%;text-align: right;" /></td>
-					<td><input type="text" id="txtProj.*"  /></td>
-
+					<td><input type="text" id="txtProj.*" class="txt c1" /></td>
 				</tr>
 			</table>
 		</div>
