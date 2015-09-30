@@ -15,8 +15,9 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
+
 			var bbmNum = [['txtXradius1', 3, 0]];
-			var t_style = '',t_ucc='';
+			var t_style = '',t_ucc='',t_spec='';
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
@@ -42,8 +43,16 @@
                         for ( i = 0; i < as.length; i++) {
                             t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa;
                         }
-                        loadFinish();
+                        q_gt('spec', '', 0, 0, 0, "");
                         break;
+                    case 'spec':
+						t_spec = ' @全部';
+						var as = _q_appendData("spec", "", true);
+						for ( i = 0; i < as.length; i++) {
+							t_spec += (t_spec.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].product;
+						}
+						loadFinish();
+						break;
 				}
 			}
 
@@ -66,7 +75,7 @@
 						name : 'xitype',
 						value : [q_getPara('report.all')].concat(q_getPara('uccc.itype').split(','))
 					}, {
-						type : '2', //[6][7] 4
+						type : '2', //[6][7] 4                 1
 						name : 'xproduct',
 						dbf : 'ucaucc',
 						index : 'noa,product',
@@ -82,7 +91,7 @@
 						type : '1', //[10][11] 3
 						name : 'xradius'
 					}, {
-						type : '1', //[12][13] 4
+						type : '1', //[12][13] 4                  2
 						name : 'xwidth'
 					}, {
 						type : '1', //[14][15] 1
@@ -97,7 +106,7 @@
 						index : 'noa,store',
 						src : 'store_b.aspx'
 					}, {
-						type : '2', //[20] [21] 4
+						type : '2', //[20] [21] 4                   3  
 						name : 'xcustno',
 						dbf : 'cust',
 						index : 'noa,comp',
@@ -117,7 +126,7 @@
 						index : 'noa,comp',
 						src : 'tgg_b.aspx'
 					}, {//因選項位置調整,已不使用
-						type : '8', //[26] 4
+						type : '8', //[26] 4                          4
 						name : 'xxxxx',
 						value : new Array()
 					}, {
@@ -135,7 +144,7 @@
 						index : 'noa,store',
 						src : 'store_b.aspx'
 					}, {
-						type : '8', //[31] 4
+						type : '8', //[31] 4                            5
 						name : 'xoption01',
 						value : q_getMsg('xoption01').split('&')
 					}, {
@@ -151,7 +160,7 @@
 						name : 'xmerga',
 						value : "1@".split(',')
 					}, {
-                        type : '8', //[35] 4
+                        type : '8', //[35] 4                               6
                         name : 'yitype',
                         value : q_getPara('uccc.itype').split(',')
                     }, {
@@ -166,11 +175,19 @@
 						type : '8', //[38] 3
 						name : 'xaction',
 						value : "rc2s@進貨,inas@入庫,cuts@裁剪,cubu@製管,vccs@出貨".split(',')
+					}, {
+                        type : '5', //[39]4                                  7
+                        name : 'xspec',
+                        value : t_spec.split(',')
+                    }, {
+						type : '6', //[40] 1
+						name : 'xsource'
 					}]
 				});
 				q_popAssign();
 				q_getFormat();
 				q_langShow();
+				
 				$('#Xdate').css('width', '350px');
 				$('#Xstktype').css('width', '250px');
 				$('#txtXdate1').mask('999/99/99');
