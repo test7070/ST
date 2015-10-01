@@ -41,7 +41,7 @@
             , ['txtCustno', 'lblCustno', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx']
             , ['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx']
             , ['txtAcc1', 'lblAcc1', 'acc', 'acc1,acc2', 'txtAcc1,txtAcc2', "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno]
-            , ['txtProj_', '', 'proj', 'noa,proj', 'txtProj_', '']
+            , ['txtProj_', '', 'proj', 'noa,proj', 'txtProj_', 'proj_b.aspx']
             , ['textPart_', '', 'acpart', 'noa,part', 'cmbPartno_,txtPart_', 'acpart_b.aspx']
             );
 
@@ -712,7 +712,7 @@
 					<td align="center" style="width:200px;"><a id='lblAcc_s'> </a></td>
 					<td align="center" style="width:300px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblProj_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblProj_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">

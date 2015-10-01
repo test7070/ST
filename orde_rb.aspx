@@ -137,7 +137,7 @@
 						q_gt('umms', t_where, 0, 0, 0, 'ordevccumm', r_accy);
 					}
 					//只能轉自己的區域
-					if(r_rank<8 && !x_ordevccstore){
+					if(r_rank<8 && !x_ordevccstore && r_partno!='23' ){
 						q_gt('store', "where=^^ tggno='"+r_partno+"' and tggno!='' ^^", 0, 0, 0, 'ordevccstore', r_accy);
 						return;
 					}
