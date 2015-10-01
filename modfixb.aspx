@@ -189,7 +189,7 @@
 			function _btnSeek() {
             	if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('modfixb_s.aspx', q_name + '_s', "500px", "50%", q_getMsg("popSeek"));
+				q_box('modfixb_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
             }
 		    function btnTop() {
 		        _btnTop();

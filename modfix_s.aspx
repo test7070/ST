@@ -14,8 +14,8 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
-			var q_name = "modfixb_s";
-			var aPop = new Array(['txtDeviceno', 'lblDeviceno', 'modeq', 'noa,device', 'txtDeviceno,txtDevice', 'modeq_b.aspx']);
+			var q_name = "modfix_s";
+			var aPop = new Array(['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']);
 				
 			$(document).ready(function() {
 				main();
@@ -35,21 +35,19 @@
 				q_mask(bbmMask);
 				$('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
-				$('#txtNoa').focus();
+				$('#txtMechno').focus();
 			}
 
 			function q_seekStr() {
+				t_mechno = $('#txtMechno').val();
+				t_noa = $.trim($('#txtNoa').val());
 				t_bdate = $.trim($('#txtBdate').val());
 				t_edate = $.trim($('#txtEdate').val());
-				t_noa = $.trim($('#txtNoa').val());
-				t_deviceno = $('#txtDeviceno').val();
-				t_ordeno = $('#txtOrdeno').val();
 				
 				var t_where = " 1=1 "
-					+q_sqlPara2("datea", t_bdate, t_edate)
+					+q_sqlPara2("mechno", t_mechno)
 					+q_sqlPara2("noa", t_noa)
-					+q_sqlPara2("deviceno", t_deviceno)
-					+q_sqlPara2("ordeno", t_ordeno);
+					+q_sqlPara2("datea", t_bdate, t_edate)
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
 			}
@@ -67,6 +65,18 @@
 		<div style='width:400px; text-align:center;padding:15px;' >
 			<table id="seek"  border="1"   cellpadding='3' cellspacing='2' style='width:100%;' >
 				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblMechno'></a></td>
+					<td><input class="txt" id="txtMechno" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblMech'></a></td>
+					<td><input class="txt" id="txtMech" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
+					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
 					<td style="width:35%;" ><a id='lblDatea'></a></td>
 					<td style="width:65%;  ">
 					<input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
@@ -74,22 +84,6 @@
 					<input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
 					</td>
 				</tr>
-				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
-					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
-				</tr>
-				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblDeviceno'></a></td>
-					<td><input class="txt" id="txtDeviceno" type="text" style="width:215px; font-size:medium;" /></td>
-				</tr>
-				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblDevice'></a></td>
-					<td><input class="txt" id="txtDevice" type="text" style="width:215px; font-size:medium;" /></td>
-				</tr>
-				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblOrdeno'></a></td>
-					<td><input class="txt" id="txtOrdeno" type="text" style="width:215px; font-size:medium;" /></td>
-				</tr>	
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->
 		</div>

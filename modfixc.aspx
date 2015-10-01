@@ -35,7 +35,7 @@
 			aPop = new Array(
 			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
 				['txtInnoa','lblInnoa','modfix','noa,modnoa','txtInnoa,txtModnoa','modfix_b.aspx'],
-				['txtMech','lblMech','modeq','namea','txtMech','modeq_b2.aspx']
+				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -121,6 +121,11 @@
 							wrServer($.trim($('#txtNoa').val()));
 						}
 						break;
+						
+					case q_name:
+                        if (q_cur == 4)
+                            q_Seek_gtPost();
+                   		 break;  	
 				}
 			}
 
@@ -152,7 +157,9 @@
 			}
 
 			function _btnSeek() {
-
+				if (q_cur > 0 && q_cur < 4)
+					return;
+				q_box('modfixc_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
 			}
 				
 
@@ -440,8 +447,11 @@
 						<td><input id="txtNoa" type="text" class="txt c1" style="width : 95% ;"/></td>
 						
 					</tr>
-						<td><span> </span><a id='lblMech' class="lbl btn"></a></td>
-						<td><input id="txtMech" type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblMechno" class="lbl btn"> </a></td>
+						<td colspan="3">
+							<input id="txtMechno"  type="text" style="width:25%;"/>
+							<input id="txtMech"  type="text" style="width:75%; color:green;"/>
+						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1"/></td>
 					<tr>

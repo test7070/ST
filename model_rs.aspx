@@ -151,7 +151,9 @@
 			}
 
 			function _btnSeek() {
-
+				if (q_cur > 0 && q_cur < 4)
+					return;
+				q_box('model_rs_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
 			}
 			function changeWheel(count){
 				var nb1=q_getPara('model.nbtype1')

@@ -210,7 +210,7 @@
                 			as[i].emount=dec(as[i].mount)-dec(as[i].bkmount);
                 			as[i].emoney=dec(as[i].total)-dec(as[i].bkmoney);
                 		}
-                		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', b_ret.length, b_ret, 'productno,product,mount,price,total,emount,emoney,noa,noq', 'txtVccno');
+                		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', as.length, as, 'productno,product,mount,price,total,emount,emoney,noa,noq', 'txtVccno');
                         fieldsdisabled();
                 		break;
                 	case 'vccs_4':
@@ -219,7 +219,7 @@
                 			as[i].emount=dec(as[i].mount)-dec(as[i].bkmount);
                 			as[i].emoney=dec(as[i].total)-dec(as[i].bkmoney);
                 		}
-                		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', b_ret.length, b_ret, 'productno,product,mount,price,total,emount,emoney,noa,noq', 'txtVccno');
+                		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', as.length, as, 'productno,product,mount,price,total,emount,emoney,noa,noq', 'txtVccno');
                         fieldsdisabled();
                 		break;
                     case 'stpostBkvccno':
