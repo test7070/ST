@@ -20,9 +20,9 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'noa';
+			brwCount2 = 8;
 			$(document).ready(function() {
 				bbmKey = ['noa'];
-				brwCount2 = 8
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1);
 			});
@@ -37,6 +37,7 @@
 
 			function mainPost() {
 				q_mask(bbmMask);
+				
 				$('#txtNoa').change(function(e) {
 					if ($(this).val().length > 0) {
 						t_where = "where=^^ noa='" + $(this).val() + "'^^";
@@ -111,13 +112,15 @@
 
 			function btnOk() {
 				Lock();
+				if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
+					$('#txtProduct').val($('#txtNoa').val());
+				}
 				if (q_cur == 1) {
 					t_where = "where=^^ noa='" + $('#txtNoa').val() + "'^^";
 					q_gt('spec', t_where, 0, 0, 0, "checkSpecno_btnOk", r_accy);
 				} else {
 					wrServer($('#txtNoa').val());
 				}
-
 			}
 
 			function wrServer(key_value) {
@@ -136,6 +139,9 @@
 					$('#txtNoa').css('color', 'black').css('background', 'white').removeAttr('readonly');
 				} else {
 					$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+				}
+				if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
+					$('#txtProduct').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				}
 			}
 
@@ -288,7 +294,7 @@
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td align="center" style="width:100px; color:black;">編號</td>
-						<td align="center" style="width:280px; color:black;">皮膜</td>
+						<td align="center" style="width:280px; color:black;">規格</td>
 					</tr>
 					<tr>
 						<td >
@@ -315,6 +321,12 @@
 					<tr>
 						<td><span> </span><a class="lbl">規格</a></td>
 						<td colspan="2"><input id="txtProduct" type="text" class="txt c1" /></td>
+					</tr>
+					<tr>
+						<td><span> </span><a class="lbl">備註</a></td>
+						<td colspan="2">
+							<textarea id="txtMemo" rows="5" class="txt c1"> </textarea>
+						</td>
 					</tr>
 				</table>
 			</div>

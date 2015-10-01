@@ -14,7 +14,7 @@
 			function onPageError(error) {
 				alert("An error occurred:\r\n" + error.Message);
 			}
- 
+ 			q_copy=1;
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore','txtOrdeno','txtAcc2'];
@@ -41,7 +41,7 @@
 				['txtCustno2', 'lblCust2', 'cust', 'noa,comp', 'txtCustno2,txtComp2', 'cust_b.aspx'],
 				['txtPost', 'lblAddr', 'addr2', 'noa,post', 'txtPost', 'addr2_b.aspx'],
 				['txtPost2', 'lblAddr2', 'addr2', 'noa,post', 'txtPost2', 'addr2_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b.aspx'],
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc_b2.aspx'],
 				/*['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],*/
 				['txtPartno', 'lblPart', 'part', 'noa,part','txtPartno,txtPart', 'part_b.aspx'],
 				['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
@@ -348,6 +348,17 @@
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
+				}
+				if(s2[0]!=undefined){
+					if(s2[0]=='view_ucaucc'){
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (b_ret.length>0)
+								b_ret.splice(0, 1);
+							if (b_ret.length>0)
+								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtUnit', b_ret.length, b_ret, 'noa,product,spec,unit', 'txtProductno,txtProduct,txtSpec');
+						}
+					}
 				}
 				b_pop = '';
 				sum();
@@ -848,6 +859,10 @@
 
 			function btnIns() {
 				_btnIns();
+				$('#txtInvono').val('');
+				$('#chkIsgenvcca').prop('checked',false);
+				$('#txtMon').val('');
+				
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
