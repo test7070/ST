@@ -14,7 +14,7 @@
 			function onPageError(error) {
 				alert("An error occurred:\r\n" + error.Message);
 			}
- 
+ 			q_copy=1;
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore','txtOrdeno','txtAcc2'];
@@ -219,7 +219,7 @@
 					var t_custno = $('#txtCustno').val();
 					if (t_custno.length > 0) {
 						if((q_cur==1 || q_cur==2)){
-							t_where ="typea='4' and custno='"+t_custno+"' "
+							t_where ="typea='4' and custno='"+t_custno+"' and isnull(tranadd,0)=0 "
 							t_where += "and exists (select * from view_cngs ca outer apply (select sum(mount)rmount,sum(weight) rweight from view_cngs where retno=ca.noa and retnoq=ca.noq ) cb where ca.noa=view_cng.noa and ca.mount-isnull(cb.rmount,0)>0 )";
 							//t_where = "typea='4' and exists(select * from view_cng where custno='"+t_custno+"' and noa=a.noa) ";
 							//t_where += " and mount-isnull(b.rmount,0)>0 ";
@@ -859,6 +859,10 @@
 
 			function btnIns() {
 				_btnIns();
+				$('#txtInvono').val('');
+				$('#chkIsgenvcca').prop('checked',false);
+				$('#txtMon').val('');
+				
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);

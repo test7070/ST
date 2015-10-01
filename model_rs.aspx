@@ -177,10 +177,10 @@
 								q_cmbParse("combNumber_"+count,nb2);
 								break;
 							case "導縫輪":
-								q_cmbParse("combNumber_"+count,nb3);
+								q_cmbParse("combNumber_"+count,nb4);
 								break;
 							case "熔接輪":
-								q_cmbParse("combNumber_"+count,nb4);
+								q_cmbParse("combNumber_"+count,nb3);
 								break;
 								
 							}
@@ -211,25 +211,27 @@
 			}
 			function autoNoa(count){
 				var flag =0;
-				if(!emp('#combNumber_'+count)){
+				if(!emp('#txtNumber_'+count)){
 					var bs =[];
-					var max =0;
+					var max = 0;
 					for (var j = 0; j < q_bbsCount; j++) {
-						bs[j]=$('#combNumber_'+j).find("option:selected").text();						
+						bs[j]=$('#txtNumber_'+j).val();						
 					}
 					for (var i =0 ;i < q_bbsCount; i++){
-						if($('#combNumber_'+count).find("option:selected").text()==bs[i] && count != i){
+						if($('#txtNumber_'+count).val()==bs[i] && count != i){
 							var tmp=0;
 							tmp=$('#txtProductno_'+i).val().substring($('#txtProductno_'+i).val().length-1,$('#txtProductno_'+i).val().length)
 							if(parseInt(tmp) > max)
 								max = parseInt(tmp);
-							flag =1;
+							flag = 1;
 						}
 					}
-					if (flag == 1)
+					if (flag == 1){
+						
 						pNoq=max+1;
+						}
 					else
-						pNoq=0;
+						pNoq=1;
 					$('#txtProductno_'+count).val($('#txtNoa').val()+$('#txtNumber_'+count).val()+pNoq);
 				}
 			}
@@ -243,10 +245,11 @@
 						t_IdSeq = -1;  
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;
-						$("#txtWheel_"+b_seq).val($('#combWheel_'+b_seq).find("option:selected").text())
-						
-						$("#combNumber_"+b_seq).empty();
-						changeWheel(b_seq);
+						if (q_cur == 1 || q_cur == 2){
+							$("#txtWheel_"+b_seq).val($('#combWheel_'+b_seq).find("option:selected").text())
+							$("#combNumber_"+b_seq).empty();
+							changeWheel(b_seq);
+						}
 					});
 			
 						changeWheel(j);
@@ -268,8 +271,11 @@
 						t_IdSeq = -1;  
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;
-						$("#txtNumber_"+b_seq).val($('#combNumber_'+b_seq).find("option:selected").text())
-						autoNoa(b_seq);
+						if (q_cur == 1 || q_cur == 2){
+							$("#txtNumber_"+b_seq).val($('#combNumber_'+b_seq).find("option:selected").text())
+							autoNoa(b_seq);
+						}
+						
 						
 					});
 					
