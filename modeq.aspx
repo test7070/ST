@@ -391,7 +391,7 @@
 						<td><span> </span><a id="lblProduct" class="lbl"> </a></td>
 						<td><input id="txtProduct" type="text" class="txt c1"/></td>	
 						<td><span> </span><a id="lblForm" class="lbl"> </a></td>
-						<td><input id="txtForm" type="text" class="txt num c1"/></td>																	
+						<td><input id="txtForm" type="text" class="txt c1"/></td>																	
 					</tr>
 				</table>
 			</div>
@@ -427,7 +427,7 @@
 					</td>
 					
 					<td><input id="txtSpec.*" type="text" class="txt" /></td>
-					<td><input id="txtHpower.*" type="text" class="txt num c1" /></td>
+					<td><input id="txtHpower.*" type="text" class="txt c1" /></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtDatea.*" type="text" class="txt" /></td>	
 					<td><input id="txtMemo.*" type="text" class="txt" /></td>		

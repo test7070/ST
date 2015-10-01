@@ -53,7 +53,11 @@
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd]];
-				q_mask(bbmMask);				
+				q_mask(bbmMask);
+				
+				q_cmbParse("cmbWay1",'傳統車床(砂紙研磨),傳統車床(砂輪機研磨),CNC車修,不須車修或研磨','s');
+				q_cmbParse("cmbModel",q_getPara('model.type'),'s');
+				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtModnoa').val()) && (q_cur == 1 || q_cur == 2)){
@@ -135,7 +139,7 @@
 						} else {
 							wrServer($.trim($('#txtNoa').val()));
 						}
-						break;
+						break;	
 					case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -481,7 +485,7 @@
 					<td align="center" style="width:12%;"><a id='lblDetail1_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblFrame1_s'></a></td>	
 					<td align="center" style="width:5%;"><a id='lblMount1_s'></a></td>				
-					<td align="center" style="width:5%;"><a id='lblWay1_s'></a></td>
+					<td align="center" style="width:10%;"><a id='lblWay1_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblWeight1_s'></a></td>
 					<td style="display:none;"align="center" style="width:8%;"><a id='lblWheel2_s'></a></td>				
 					<td style="display:none;" align="center" style="width:8%;"><a id='lblCode2_s'></a></td>
@@ -503,7 +507,7 @@
 					<td><input id="txtDetail1.*" type="text" class="txt c1" style="width : 95% ;"/></td>
 					<td><input id="txtFrame1.*" type="text" class="num c1" style="width : 95% ;"/></td>					
 					<td><input id="txtMount1.*" type="text" class="num c1" style="width : 95% ;"/></td>						
-					<td ><input id="txtWay1.*" type="text" class="num c1"  style="width : 95% ;"/></td>
+					<td ><select id="cmbWay1.*" type="text" class="txt c1" style="width : 95%;"/select></td>
 					<td ><input id="txtWeight1.*" type="text" class="num c1" style="width : 95% ;"/></td>
 					<td style="display:none;"><input id="txtWheel2.*" type="text"  style="width : 70% ;"/>
 						
