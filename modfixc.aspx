@@ -55,6 +55,7 @@
 				bbsMask = [['txtDatea1',r_picd+'-99:99'],['txtDatea2',r_picd+'-99:99']];
 				//q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
+				q_cmbParse("cmbWay",'傳統車床(砂紙研磨),傳統車床(砂輪機研磨),CNC車修,不須車修或研磨','s');
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2)){
 						q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");
@@ -473,14 +474,14 @@
 					<td  align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width:12%;"><a id='lblNob_s' ></a></td>
+					<td align="center" style="width:8%;"><a id='lblNob_s' ></a></td>
 					<td style="display: none;" align="center" style="width:5%;"><a id='lblModel_s'></a></td>
 					<td style="display: none;" align="center" style="width:5%;"><a id='lblWheel_s'></a></td>
 					<td align="center" style="width:4%;"><a id='lblCode_s'></a></td>
-					<td align="center" style="width:12%;"><a id='lblDetail_s'></a></td>
-					<td align="center" style="width:3%;"><a id='lblFrame_s'></a></td>	
+					<td align="center" style="width:8%;"><a id='lblDetail_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblFrame_s'></a></td>	
 					<td align="center" style="width:5%;"><a id='lblMount_s'></a></td>				
-					<td align="center" style="width:3%;"><a id='lblWay_s'></a></td>
+					<td align="center" style="width:8%;"><a id='lblWay_s'></a></td>
 					<td align="center" style="width:3%;"><a id='lblBebottom_s'></a></td>
 					<td align="center" style="width:3%;"><a id='lblEnbottom_s'></a></td>
 					<td align="center" style="width:8%;"><a id='lblDatea1_s'></a></td>
@@ -500,7 +501,7 @@
 					<td><input id="txtDetail.*" type="text" class="txt c1" style="width : 95% ;"/></td>
 					<td><input id="txtFrame.*" type="text" class="num c1" style="width : 95% ;"/></td>					
 					<td><input id="txtMount.*" type="text" class="num c1" style="width : 95% ;"/></td>						
-					<td ><input id="txtWay.*" type="text" class="num c1"  style="width : 95% ;"/></td>
+					<td ><select id="cmbWay.*" type="text" class="txt c1" style="width : 95%;"/select></td>
 					<td ><input id="txtBebottom.*" type="text" class="num c1" style="width : 95% ;"/></td>
 					<td ><input id="txtEnbottom.*" type="text" class="num c1" style="width : 95% ;"/></td>
 					<td ><input id="txtDatea1.*" type="text" class="txt c1" style="width : 95% ;"/></td>
