@@ -693,8 +693,6 @@
 			function sum() {
 				if (!(q_cur == 1 || q_cur == 2))
 					return;
-				if (!emp($('#txtVccno').val()))	//103/03/07 出貨單轉來發票金額一律不改
-					return;
 					
 				$('#txtTax').attr('readonly', 'readonly');
 				var t_mounts, t_prices, t_moneys, t_mount = 0, t_money = 0, t_taxrate, t_tax, t_total;

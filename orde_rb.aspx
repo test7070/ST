@@ -39,7 +39,7 @@
 				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucaucc_b2.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtNick,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
 				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', '']
 				//['txtPostname', 'lblStore', 'store', 'noa,store', 'txtPostname,txtConform', 'store_b.aspx']
 			);
@@ -1405,7 +1405,7 @@
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td align="center" id='odate'>~odate</td>
 						<td align="center" id='noa'>~noa</td>
-						<td align="center" id='custno comp,4'>~custno ~comp,4</td>
+						<td align="center" id='custno nick'>~custno ~nick</td>
 						<td align="center" id='vccno'>~vccno</td>
 					</tr>
 				</table>
@@ -1449,7 +1449,10 @@
 							<input class="btn" id="btnPlusCust" type="button" value='+' style="font-weight: bold;float: right;" />
 						</td>
 						<td><input id="txtCustno" type="text" class="txt c1"/></td>
-						<td colspan="4"><input id="txtComp" type="text" class="txt c1"/></td>
+						<td colspan="4">
+							<input id="txtComp" type="text" class="txt c1"/>
+							<input id="txtNick" type="text" class="txt c1"/>
+						</td>
 						<td><span> </span><a id='lblSerial' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtCoin" type="text" class="txt c1"/></td>
 					</tr>
