@@ -1306,8 +1306,8 @@
 					</tr>
 				</table>
 			</div>
-			<div class='dbbm'>
-				<table class="tbbm"  id="tbbm" style="width: 872px;">
+			<div class='dbbm' style="width: 882px;">
+				<table class="tbbm"  id="tbbm" style="width: 882px;">
 					<tr style="height: 1px;">
 						<td class="td1" style="width: 108px;"> </td>
 						<td class="td2" style="width: 108px;"> </td>
@@ -1316,7 +1316,7 @@
 						<td class="td5" style="width: 108px;"> </td>
 						<td class="td6" style="width: 108px;"> </td>
 						<td class="td7" style="width: 108px;"> </td>
-						<td class="td8" style="width: 108px;"> </td>
+						<td class="td8" style="width: 140px;"> </td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblType' class="lbl"> </a></td>
