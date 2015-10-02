@@ -23,8 +23,8 @@
 		    var q_name = "modeq";
 		    var q_readonly = [];
 		    var q_readonlys = [];
-		    var bbmNum = [];
-		    var bbsNum = [];
+		    var bbmNum = [['txtGen', 15, 0],['txtGenmon', 15, 0]];
+		    var bbsNum = [['txtMount', 15, 0]];
 		    var bbmMask = [];
 		    var bbsMask = [];
 		    q_sqlCount = 6;
