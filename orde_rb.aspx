@@ -1451,7 +1451,7 @@
 						<td><input id="txtCustno" type="text" class="txt c1"/></td>
 						<td colspan="4">
 							<input id="txtComp" type="text" class="txt c1"/>
-							<input id="txtNick" type="text" class="txt c1"/>
+							<input id="txtNick" type="hidden" class="txt c1"/>
 						</td>
 						<td><span> </span><a id='lblSerial' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtCoin" type="text" class="txt c1"/></td>
