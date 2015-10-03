@@ -67,6 +67,7 @@
 
                 $('#btnVccs').click(function() {
                     //換單 不匯入直接在BBM打單號和換單帳款月份
+                    //104/10/02 只提供退貨 >>換貨變成流程為 先退貨 在去 vcc出貨
                     var t_custno = trim($('#txtCustno').val());
                     var t_vbdate = trim($('#txtVbdate').val());
                     var t_vedate = trim($('#txtVedate').val());
@@ -74,7 +75,7 @@
                     var t_where = "1=1";
                     if ($('#cmbTypea').val() == '1') {//退貨--->建立 退貨單
                         t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") 
-                        + "&& typea='1' && payed=0 && unpay!=0 "
+                        + "&& typea='1' && payed=0 " // && unpay!=0
                         +"&& exists (select * from view_vccs where noa=view_vcc.noa and mount-isnull((select SUM(bkmount)-SUM(salemount) from ummbs where vccno=view_vccs.noa and vccnoq=view_vccs.noq),0)!=0)";
                         q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_1', "500px", "95%", q_getMsg('popVccs'));
                     } else if ($('#cmbTypea').val() == '2') {//換貨--->匯入【未收】出貨單--->一次一張需整張處理完--->退舊產品：系統自動建立 退貨單, 出新產品：系統自動建立 新出貨單
@@ -582,6 +583,7 @@
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
                 fieldsdisabled();
+                $('#cmbTypea').attr('disabled','disabled');
             }
 
             function btnMinus(id) {
