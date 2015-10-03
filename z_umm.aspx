@@ -79,6 +79,22 @@
 			}
 
 			function q_boxClose(s2) {
+				var ret;
+                switch (b_pop) {
+                	case 'cust':
+                        ret = getb_ret();
+                        if(ret==null)
+                        	return;
+                        var xcust='';
+                        if(ret[0]!=undefined){
+                        	for (var i = 0; i < ret.length; i++) {
+                        		xcust+=ret[i].noa+'.'
+                        	}
+                        }
+                        xcust=xcust.substr(0,xcust.length-1);
+                        $('#txtMultcust').val(xcust);
+                        break;	
+                }	
 			}
 
 			var z_coin='';
@@ -195,7 +211,11 @@
 							type : '8', //[28]
 							name : 'showordetotal', //顯示單據小計
 							value : "1@顯示單據小計".split(',')
-						}]
+						}, {
+                        	type : '6', //[29] //4-4
+                      	  	name : 'multcust'
+                    
+                    }]
 					});
 					q_popAssign();
 					$('#txtDate1').mask('999/99/99');
@@ -270,6 +290,13 @@
 					if(q_getPara('sys.project').toUpperCase()=='RB'){
 						$('#chkShowordetotal input').prop('checked',true)
 					}
+					
+					$('#Multcust').css("width","605px");
+					$('#txtMultcust').css("width","515px");
+					$('#lblMultcust').css("color","#0000ff");
+					$('#lblMultcust').click(function(e) {
+                	q_box("cust_b2.aspx?;;;;", 'cust', "600px", "90%", q_getMsg("popCust"));
+                });
                 }
 	         }
 

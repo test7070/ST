@@ -59,6 +59,7 @@
 		    
             function mainPost() {
             	q_getFormat();
+            	bbmMask = [['txtYears', r_picm]];
 				bbsMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				
