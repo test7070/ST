@@ -59,8 +59,11 @@
 		    
             function mainPost() {
             	q_getFormat();
-				bbsMask = [['txtDatea', r_picd]];
+            	bbmMask = [['txtYears', '99:99']];
 				q_mask(bbmMask);
+				
+				bbsMask = [['txtDatea', r_picd]];
+				
 				
 				q_cmbParse("cmbWorker", '機台組員,CNC車床組員');
 								
