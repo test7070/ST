@@ -24,12 +24,12 @@
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney','txtTotal'];
             var q_readonlys = [];
             var q_readonlyt = [];
-            var bbmNum = [['txtMoney', 10, 0, 1],['txtTotal', 10, 0, 1]];
+            var bbmNum = [];
             var bbsNum = [];
             var bbtNum = [];
-            var bbmMask = [['txtDatea', '999/99/99']];
-            var bbsMask = [['txtDatea', '999/99/99']];
-            var bbtMask = [['txtDatea', '999/99/99']];
+            var bbmMask = [];
+            var bbsMask = [];
+            var bbtMask = [];
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
@@ -38,8 +38,8 @@
             brwCount2 = 3;
 
             aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax', 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'Tgg_b.aspx']
-            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', "ucc_b.aspx?" ]
-            , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', "ucc_b.aspx?" ]
+            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtStoreno_', "ucaucc_b2.aspx?" ]
+            , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product,unit', 'txtProductno__,txtProduct__,txtUnit__,txtStoreno__', "uca_b.aspx?" ]
             , ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_', "store_b.aspx?" ]
             , ['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__', "store_b.aspx?" ]);
 
@@ -63,7 +63,13 @@
             function mainPost() {
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
+                bbsMask = [['txtDatea', r_picd]];
+                bbtMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
+                
+                bbsNum = [['txtMount', 15, q_getPara('vcc.mountPrecision'), 1], ['txtWeight', 15, q_getPara('vcc.weightPrecision'), 1]];
+                bbtNum = [['txtMount', 15, q_getPara('vcc.mountPrecision'), 1], ['txtWeight', 15, q_getPara('vcc.weightPrecision'), 1]];
+                
                 document.title='產品組合領料'
             }
             function q_boxClose(s2) {
@@ -73,6 +79,17 @@
                         q_boxClose2(s2);
                         break;
                 }
+                if(s2[0]!=undefined){
+					if(s2[0]=='view_ucaucc'){
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (b_ret.length>0)
+								b_ret.splice(0, 1);
+							if (b_ret.length>0)
+								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit', b_ret.length, b_ret, 'noa,product,unit', 'txtProductno,txtProduct');
+						}
+					}
+				}
                 b_pop = '';
             }
 
@@ -118,13 +135,15 @@
 							/*滑鼠右鍵*/
 							e.preventDefault();
 							var n = $(this).attr('id').replace('txtProductno_', '');
-							$('#btnProduct_'+n).click();
+							if(q_cur==1 || q_cur==2)
+								$('#btnProduct_'+n).click();
 						});
 						$('#txtStoreno_' + i).bind('contextmenu', function(e) {
 							/*滑鼠右鍵*/
 							e.preventDefault();
 							var n = $(this).attr('id').replace('txtStoreno_', '');
-							$('#btnStore_'+n).click();
+							if(q_cur==1 || q_cur==2)
+								$('#btnStore_'+n).click();
 						});
                         $('#txtMount_'+i).change(function(e){
                             sum();
@@ -136,6 +155,7 @@
                 }
                 _bbsAssign();
             }
+            
             function bbtAssign() {
                 for (var i = 0; i < q_bbtCount; i++) {
                     $('#lblNo__' + i).text(i + 1);
@@ -144,13 +164,15 @@
 							/*滑鼠右鍵*/
 							e.preventDefault();
 							var n = $(this).attr('id').replace('txtProductno__', '');
-							$('#btnProduct__'+n).click();
+							if(q_cur==1 || q_cur==2)
+								$('#btnProduct__'+n).click();
 						});
 						$('#txtStoreno__' + i).bind('contextmenu', function(e) {
 							/*滑鼠右鍵*/
 							e.preventDefault();
 							var n = $(this).attr('id').replace('txtStoreno__', '');
-							$('#btnStore__'+n).click();
+							if(q_cur==1 || q_cur==2)
+								$('#btnStore__'+n).click();
 						});
                         $('#txtMount__'+i).change(function(e){
                             sum();
@@ -383,7 +405,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 950px;
+                width: 1250px;
             }
             .tbbs a {
                 font-size: medium;
@@ -404,7 +426,7 @@
                 background-color: bisque;
             }
             #dbbt {
-                width: 950px;
+                width: 1250px;
             }
             #tbbt {
                 margin: 0;
@@ -465,14 +487,14 @@
                         <td><input id="txtNoa"type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblDatea" class="lbl"> </a></td>
                         <td><input id="txtDatea"  type="text" class="txt c1"/></td>
-                        <td style="display :none;"><span> </span><a id='lblEnda' class="lbl"> </a></td>
+                        <!--<td style="display :none;"><span> </span><a id='lblEnda' class="lbl"> </a></td>
                     	<td style="display :none;">
                     		<input id="chkEnda" type="checkbox"/>
                     		<span> </span><a id='lblCancel'> </a>
 							<input id="chkCancel" type="checkbox"/>
-                    	</td>
+                    	</td>-->
                     </tr>
-                    <tr style="display :none;">
+                    <!--<tr style="display :none;">
                         <td style="display :none;"><span> </span><a id="lblTgg" class="lbl"> </a></td>
                         <td style="display :none;" colspan="2">
                         	<input id="txtTggno"  type="text" class="txt" style="width:45%;"/>
@@ -510,7 +532,7 @@
                         <td style="display :none;"><input id="txtOmount" type="text" class="txt c1 num" /></td>
                         <td style="display :none;"><span> </span><a id='lblOweight' class="lbl"> </a></td>
                         <td style="display :none;"><input id="txtOweight" type="text" class="txt c1 num" /></td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td><span> </span><a id="lblMemo"  class="lbl"> </a></td>
                         <td colspan="5"><input id="txtMemo"  type="text" class="txt c1" /></td>
@@ -533,11 +555,10 @@
                         </td>
                         <td style="width:20px;"> </td>
                         <td style="width:150px; text-align: center;">物品編號</td>
-                        <td style="width:200px; text-align: center;">物品名稱</td>
-                        <td style="width:80px; text-align: center;">倉庫</td>
-                        <td style="width:80px; text-align: center; display :none;">米</td>
-                        <td style="width:80px; text-align: center;">單位</td>
-                        <td style="width:120px; text-align: center;">入庫日</td>
+                        <td style="width:300px; text-align: center;">物品名稱</td>
+                        <td style="width:120px; text-align: center;">倉庫</td>
+                        <td style="width:40px; text-align: center;">單位</td>
+                        <td style="width:100px; text-align: center;">入庫日</td>
                         <td style="width:100px; text-align: center;">入庫數量</td>
                         <td style="width:100px; text-align: center;">入庫重量</td>
                         <td style="width:200px; text-align: center;">備註</td>
@@ -549,15 +570,14 @@
                         </td>
                         <td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                         <td>
-                        	<input id="btnProduct..*" type="button" style="display:none;"/>
-                        	<input id="txtProductno..*" type="text" style="float:left;width:95%;"/>
+                        	<input id="btnProduct..*" type="button" style="width:20px;" value="."/>
+                        	<input id="txtProductno..*" type="text" style="float:left;width:80%;"/>
                     	</td>
                         <td><input id="txtProduct..*" type="text" style="float:left;width:95%;"/></td>
                         <td>
-                        	<input id="txtStoreno..*" type="text" style="float:left;width:95%;"/>
-                    		<input id="btnStore..*" type="button" style="display:none;"/>
+                        	<input id="txtStoreno..*" type="text" style="float:left;width:80%;"/>
+                    		<input id="btnStore..*" type="button" style="width:20px;" value="."/>
                     	</td>
-                        <td style=" display :none;"><input id="txtLengthb..*"  type="text" style="width:95%; text-align: right;"/></td>
                         <td><input id="txtUnit..*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtDatea..*" type="text" style="float:left;width:95%;"/></td>
                         <td><input id="txtMount..*"  type="text" style="width:95%; text-align: right;"/></td>
@@ -567,18 +587,16 @@
                 </tbody>
             </table>
         </div>
-        
         <div class='dbbs'>
             <table id="tbbs" class='tbbs' style=' text-align:center'>
                 <tr style='color:white; background:#003366;' >
                     <td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
                     <td align="center" style="width:20px;"> </td>
                     <td style="width:150px; text-align: center;">物品編號</td>
-                    <td style="width:200px; text-align: center;">物品名稱</td>
-                    <td style="width:80px; text-align: center;">倉庫</td>
-                    <td style="width:80px; text-align: center;  display :none;">米</td>
-                    <td style="width:80px; text-align: center;">單位</td>
-                    <td style="width:120px; text-align: center;">領料日</td>
+                    <td style="width:300px; text-align: center;">物品名稱</td>
+                    <td style="width:120px; text-align: center;">倉庫</td>
+                    <td style="width:40px; text-align: center;">單位</td>
+                    <td style="width:100px; text-align: center;">領料日</td>
                     <td style="width:100px; text-align: center;">領料數量</td>
                     <td style="width:100px; text-align: center;">領料重量</td>
                     <td style="width:200px; text-align: center;">備註</td>
@@ -590,15 +608,14 @@
                     </td>
                     <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                     <td>
-                    	<input id="btnProduct.*" type="button" style="display:none;"/>
-                    	<input id="txtProductno.*" type="text" style="float:left;width:95%;"/>
+                    	<input id="btnProduct.*" type="button" style="width:20px;" value="."/>
+                    	<input id="txtProductno.*" type="text" style="float:left;width:80%;"/>
                 	</td>
                 	<td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
                     <td>
-                    	<input id="txtStoreno.*" type="text" style="float:left;width:95%;"/>
-                    	<input id="btnStore.*" type="button" style="display:none;"/>
+                    	<input id="txtStoreno.*" type="text" style="float:left;width:80%;"/>
+                    	<input id="btnStore.*" type="button" style="width:20px;" value="."/>
                     </td>
-                    <td style ="display :none;"><input id="txtLengthb.*"  type="text" style="width:95%; text-align: right;"/></td>
                     <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtDatea.*" type="text" style="float:left;width:95%;"/></td>
                     <td><input id="txtMount.*"  type="text" style="width:95%; text-align: right;"/></td>
@@ -608,6 +625,5 @@
             </table>
         </div>
         <input id="q_sys" type="hidden" />
-        
     </body>
 </html>

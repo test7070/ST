@@ -132,7 +132,7 @@
 				
 				var t_ordeno=q_getHref()[5]=='undefined'?'':q_getHref()[5];
 				if(t_ordeno!=''){
-					var t_where = " where=^^ noa=(select MIN(noa) from view_vcc where ordeno='" + t_ordeno + "') ^^";
+					var t_where = " where=^^ noa=(select MIN(noa) from view_vcc where charindex('"+t_ordeno+"',ordeno)=1) ^^";
 					q_gt('view_vcc', t_where, 0, 0, 0, 'view_vcc', r_accy);
 				}
 				

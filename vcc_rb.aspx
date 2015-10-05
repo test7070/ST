@@ -889,8 +889,12 @@
 				q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
 			}
 
-			function btnPrint() {				
-				q_box('z_vccp_rb.aspx' + "?;;;noa='" + trim($('#txtNoa').val()) + "' and invo='" + trim($('#txtInvono').val())  + "' and ordeno='" + trim($('#txtInvono').val())+"';" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+			function btnPrint() {
+				var t_invono=trim($('#txtInvono').val()).split(',');
+				var t_tinvono=t_invono[0]+','+t_invono[(t_invono.length-1)];
+				var t_xinvono=trim($('#txtInvono').val()).substr(0,15);
+				
+				q_box('z_vccp_rb.aspx' + "?;;;noa='" + trim($('#txtNoa').val()) + "' and invo='" + t_tinvono  + "' and ordeno='" + t_xinvono+"';" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
