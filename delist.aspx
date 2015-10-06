@@ -468,7 +468,9 @@
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                    	
+                    	$('.lengthd.num,.dime2.num,.lengthc.num').change(function() {
+                    		$(this).val(dec($(this).val()));
+						});
                         $('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
