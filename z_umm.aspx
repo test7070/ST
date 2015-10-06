@@ -288,7 +288,8 @@
 					}
 					
 					if(q_getPara('sys.project').toUpperCase()=='RB'){
-						$('#chkShowordetotal input').prop('checked',true)
+						$('#chkShowordetotal input').prop('checked',true);
+						$('#chkShowunpay input').prop('checked',true);
 					}
 					
 					$('#Multcust').css("width","605px");
