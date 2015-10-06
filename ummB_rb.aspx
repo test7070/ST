@@ -890,6 +890,7 @@
 						<td class="td2" style="display: none;"><select id="cmbTypea" class="txt c1"> </select></td>
 						<td class="td3"><span> </span><a id='lblDatea' class="lbl" > </a></td>
 						<td class="td4"><input id="txtDatea"  type="text" class="txt c1"/></td>
+						<td> </td>
 						<td class="td5"><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td class="td6"><input id="txtNoa"   type="text" class="txt c1"/></td>
 					</tr>
@@ -928,8 +929,8 @@
 					<tr>
 						<td class="td1"><span> </span><a id='lblBkvccno' class="lbl" > </a></td>
 						<td class="td2"><input id="txtBkvccno"  type="text" class="txt c1"/></td>
-						<td class="td3"><span> </span><a id='lblSaleno' class="lbl" > </a></td>
-						<td class="td4"><input id="txtSaleno"  type="text" class="txt c1"/></td>
+						<td class="td3" style="display: none;"><span> </span><a id='lblSaleno' class="lbl" > </a></td>
+						<td class="td4" style="display: none;"><input id="txtSaleno"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblMemo' class="lbl"> </a></td>
