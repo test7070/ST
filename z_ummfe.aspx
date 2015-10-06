@@ -19,6 +19,7 @@
 			$(document).ready(function() {
 				q_getId();
 				q_gt('acomp', '', 0, 0, 0, "");
+				
 			});
 			function q_gtPost(t_name) {
                 switch (t_name) {
@@ -36,7 +37,7 @@
 				$('#q_report').q_report({
 					fileName : 'z_ummfe',
 					options : [{
-						type : '5', //[1]  1
+						type : '5', //[1]      1
 						name : 'xcno',
 						value : t_acomp.split(',')
 					}, {
@@ -51,32 +52,42 @@
 					}, {
 						type : '1', //[6][7]   4
 						name : 'xmon'
-					}, {//[8]                  5
+					}, {            //[8]      5
                         type : '8',
                         name : 'xoption01',
                         value : ['明細']
                     }, {
-						type : '1', //[9][10]   6
+						type : '1', //[9][10]  6
 						name : 'ydate'
 					}, {
 						type : '6', //[11]     7
 						name : 'ymon'
-					}, {//[12]                 8
+					}, {            //[12]     8
                         type : '8',
                         name : 'yoption01',
                         value : ['依業務','僅印異常','出貨-預收+','出貨-預收-']
                     }, {
-						type : '0', //[26] 
+						type : '0', //[13] 
 						name : 'xproject',
 						value : q_getPara('sys.project').toUpperCase()
-					}, {//[14]
-                        type : '0',
+					}, {
+                        type : '0', //[14]
                         name : 'xname',
                         value : r_name 
                     }, {
 						type : '1', //[15][16]   9
 						name : 'zdate'
-					}]
+					}, {
+						type : '2', //[17][18]   10
+						name : 'xsss',
+						dbf : 'sss',
+						index : 'noa,namea',
+						src : 'sss_b.aspx'
+					}, {
+                        type : '8', //[19]       11
+                        name : 'zoption01',
+                        value : ['依業務']
+                    }]
 				});
 				q_popAssign();
 				q_langShow();
@@ -141,6 +152,7 @@
 						$('#chkYoption01 [value="出貨-預收+"]').prop("checked",false);			
 					}	
 				})
+				
 			}
 
 			function q_boxClose(s2) {
