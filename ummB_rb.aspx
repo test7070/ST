@@ -75,7 +75,7 @@
                     var t_where = "1=1";
                     if ($('#cmbTypea').val() == '1') {//退貨--->建立 退貨單
                         t_where += (t_custno.length > 0 ? " and custno='"+t_custno+"'" : "") + q_sqlPara2("datea", t_vbdate, t_vedate) + (t_vccno.length > 0 ? q_sqlPara2("noa", t_vccno) : "") 
-                        + "&& typea='1' && payed=0 " // && unpay!=0
+                        + "&& typea='1'  " // && payed=0 && unpay!=0
                         +"&& exists (select * from view_vccs where noa=view_vcc.noa and mount-isnull((select SUM(bkmount)-SUM(salemount) from ummbs where vccno=view_vccs.noa and vccnoq=view_vccs.noq),0)!=0)";
                         q_box("vcc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vccs_1', "500px", "95%", q_getMsg('popVccs'));
                     } else if ($('#cmbTypea').val() == '2') {//換貨--->匯入【未收】出貨單--->一次一張需整張處理完--->退舊產品：系統自動建立 退貨單, 出新產品：系統自動建立 新出貨單
@@ -886,10 +886,11 @@
 			<div class='dbbm' style="width: 68%;float: left;">
 				<table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='0'>
 					<tr>
-						<td class="td1"><span> </span><a id='lblTypea' class="lbl"> </a></td>
-						<td class="td2"><select id="cmbTypea" class="txt c1"> </select></td>
+						<td class="td1" style="display: none;"><span> </span><a id='lblTypea' class="lbl"> </a></td>
+						<td class="td2" style="display: none;"><select id="cmbTypea" class="txt c1"> </select></td>
 						<td class="td3"><span> </span><a id='lblDatea' class="lbl" > </a></td>
 						<td class="td4"><input id="txtDatea"  type="text" class="txt c1"/></td>
+						<td> </td>
 						<td class="td5"><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td class="td6"><input id="txtNoa"   type="text" class="txt c1"/></td>
 					</tr>
@@ -928,8 +929,8 @@
 					<tr>
 						<td class="td1"><span> </span><a id='lblBkvccno' class="lbl" > </a></td>
 						<td class="td2"><input id="txtBkvccno"  type="text" class="txt c1"/></td>
-						<td class="td3"><span> </span><a id='lblSaleno' class="lbl" > </a></td>
-						<td class="td4"><input id="txtSaleno"  type="text" class="txt c1"/></td>
+						<td class="td3" style="display: none;"><span> </span><a id='lblSaleno' class="lbl" > </a></td>
+						<td class="td4" style="display: none;"><input id="txtSaleno"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblMemo' class="lbl"> </a></td>
@@ -948,7 +949,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1260px;">
+		<div class='dbbs' style="width: 1000px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width: 35px;">
@@ -960,8 +961,8 @@
 					<td align="center" style="width: 100px;"><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width: 100px;"><a id='lblBkmount_s'> </a></td>
 					<td align="center" style="width: 100px;"><a id='lblBkmoney_s'> </a></td>
-					<td align="center" style="width: 100px;"><a id='lblSalemount_s'> </a></td>
-					<td align="center" style="width: 100px;"><a id='lblSalemoney_s'> </a></td>
+					<td align="center" style="width: 100px;display: none;"><a id='lblSalemount_s'> </a></td>
+					<td align="center" style="width: 100px;display: none;"><a id='lblSalemoney_s'> </a></td>
 					<td align="center"><a id='lblMemo_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -976,8 +977,8 @@
 					<td ><input  id="txtTotal.*" type="text" class="txt num c1"/></td>
 					<td ><input  id="txtBkmount.*" type="text" class="txt num c1"/></td>
 					<td ><input  id="txtBkmoney.*" type="text" class="txt num c1"/></td>
-					<td ><input  id="txtSalemount.*" type="text" class="txt num c1"/></td>
-					<td ><input  id="txtSalemoney.*" type="text" class="txt num c1"/></td>
+					<td style="display: none;"><input  id="txtSalemount.*" type="text" class="txt num c1"/></td>
+					<td style="display: none;"><input  id="txtSalemoney.*" type="text" class="txt num c1"/></td>
 					<td >
 						<input id="txtMemo.*" type="text"  class="txt c1"/>
 						<input  id="txtVccno.*" type="text"  class="txt c1" style="width:75%"/>
