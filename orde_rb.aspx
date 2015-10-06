@@ -611,7 +611,8 @@
 						
 						//104/09/25 已產生出貨單仍可以修改 蔡's
 						if(!emp($('#txtVccno').val())){
-							$('.dbbs input').attr('disabled','disabled');
+							//104/10/06 表身也要開放 
+							//$('.dbbs input').attr('disabled','disabled');
 						}
 						
 						if($('#cmbKind').val()=='作廢')
