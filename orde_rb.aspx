@@ -603,8 +603,8 @@
 							}
 							if (z_msg.length > 0) {
 								alert('已沖帳:' + z_msg);
-								Unlock(1);
-								return;
+								//Unlock(1);
+								//return;
 							}
 						}
 						_btnModi();
