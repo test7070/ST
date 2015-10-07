@@ -637,8 +637,8 @@
 						break;
 					case 'btnModi':
 						var as = _q_appendData("umms", "", true);
+						var z_msg = "", t_paysale = 0;
 						if (as[0] != undefined) {
-							var z_msg = "", t_paysale = 0;
 							for (var i = 0; i < as.length; i++) {
 								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
 								if (t_paysale != 0)
@@ -646,12 +646,21 @@
 							}
 							if (z_msg.length > 0) {
 								alert('已沖帳:' + z_msg);
-								Unlock(1);
-								return;
+								//Unlock(1);
+								//return;
 							}
 						}
 						_btnModi();
 						Unlock(1);
+						
+						//104/10/07 出貨 已收款 ，只開放表頭修改
+						if(!emp($('#txtVccno').val())){
+							$('.dbbs input').attr('disabled','disabled');
+							$('#cmbTaxtype').attr('disabled','disabled');
+							$('#btnOrdes').attr('disabled','disabled');
+							$('#btnCngs').attr('disabled','disabled');
+						}
+						
 						$('#txtDatea').focus();
 
 						if (!emp($('#txtCustno').val())) {
@@ -694,6 +703,25 @@
 							check_startdate=true;
 							btnOk();
 						}
+						break;
+					case 'umms':
+						var as = _q_appendData("umms", "", true);
+						var z_msg = "", t_paysale = 0,t_tpaysale=0;
+						if (as[0] != undefined) {
+							for (var i = 0; i < as.length; i++) {
+								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								t_tpaysale+= parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								if (t_paysale != 0)
+									z_msg += (as[i].noa+';');
+							}
+							
+							if (z_msg.length > 0) {
+								z_msg='已收款：'+FormatNumber(t_tpaysale)+'，收款單號【'+z_msg.substr(0,z_msg.length-1)+ '】。 '
+							}
+						}else{
+							z_msg='未收款。'
+						}
+						$('#textStatus').val(z_msg);
 						break;
 				}
 			}
@@ -975,6 +1003,10 @@
 				_refresh(recno);
 				HiddenTreat();
 				refreshBbm();
+				if(!emp($('#txtNoa').val())){
+					var t_where = " where=^^ vccno='" + $('#txtNoa').val() + "'^^";
+					q_gt('umms', t_where, 0, 0, 0, '', r_accy);
+				}
 			}
 
 			function HiddenTreat(returnType){
@@ -998,6 +1030,8 @@
 				_readonly(t_para, empty);
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
+					$('#btnOrdes').removeAttr('disabled');
+					$('#btnCngs').removeAttr('disabled');
 				} else {
 					$('#combAddr').removeAttr('disabled');
 				}
@@ -1441,6 +1475,10 @@
 					<tr>
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td class="td2" colspan='7'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea></td>
+					</tr>
+					<tr>
+						<td class="td1"><span> </span><a class="lbl">收款情況</a></td>
+						<td class="td2" colspan='7'><input id="textStatus" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>

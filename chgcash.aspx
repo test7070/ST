@@ -574,7 +574,7 @@
             }
             .dbbm {
                 float: left;
-                width: 950px;
+                width: 1100px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -663,7 +663,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 950px;
+                width: 1100px;
             }
             .tbbs a {
                 font-size: medium;
@@ -787,8 +787,8 @@
 					<td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:80px;"><a id='lblPart_s'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblAcc_s'> </a></td>
-					<td align="center" style="width:300px;"><a id='lblMemo_s'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblAcc_s'> </a></td>
+					<td align="center" style="width:400px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblProj_s'> </a></td>
 				</tr>
@@ -808,7 +808,7 @@
 					<td>
 						<input class="btn"  id="btnAcc.*" type="button" value='.' style=" font-weight: bold;width:1%;" />
 						<input type="text" id="txtAcc1.*"  style="width:35%;"/>
-						<input type="text" id="txtAcc2.*"  style="width:45%;"/>
+						<input type="text" id="txtAcc2.*"  style="width:50%;"/>
 					</td>
 					<td ><input type="text" id="txtMemo.*" style="width:95%;" /></td>
 					<td><input type="text" id="txtMoney.*" style="width:95%;text-align: right;" /></td>
