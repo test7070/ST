@@ -188,7 +188,7 @@
 						}, {
 							type : '8', //[22]
 							name : 'showunpay', //只顯示未收
-							value : "1@只顯示未收".split(',')
+							value : "1@只顯示未收,2@顯示貨單備註".split(',')
 						}, {
 							type : '2', //[23][24]
 							name : 'xctype',
@@ -231,9 +231,6 @@
 					$('.q_report .report').css('width', '460px');
 					$('.q_report .report div').css('width', '220px');
 					
-					$('#Showunpay').css('width','300px');
-					$('#chkShowunpay').css('width','220px');
-					$('#chkShowunpay span').css('width','180px');
 					$('#Showordetotal').css('width','300px');
 					$('#chkShowordetotal').css('width','220px');
 					$('#chkShowordetotal span').css('width','180px');

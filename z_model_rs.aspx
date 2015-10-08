@@ -44,7 +44,7 @@
                 q_getFormat();
                 q_langShow();
                 
-                var r_1911=1911;
+                /*var r_1911=1911;
 				if(r_len==4){//西元年
 					r_1911=0;
 				}else{
@@ -75,7 +75,7 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
+                $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);*/
 
                 if (q_getId()[3] != undefined) {
                     $('#txtXnoa').val(q_getId()[3].replace('noa=', ''));
