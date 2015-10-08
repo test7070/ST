@@ -664,6 +664,7 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+				q_reLoad();
 				_btnModi();
 				$('#txtDatea').focus();
 				$('#txtNoa').attr('readonly', true).css('color', 'green').css('background-color', 'rgb(237,237,237)');

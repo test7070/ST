@@ -650,6 +650,7 @@
 								//return;
 							}
 						}
+						q_reLoad();
 						_btnModi();
 						Unlock(1);
 						

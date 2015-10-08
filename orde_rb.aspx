@@ -357,8 +357,8 @@
 								abbm[q_recno]['ordbno'] = as[0].ordbno;
 								abbm[q_recno]['kind'] = as[0].kind;
 								$('#txtOrdbno').val(as[0].ordbno);
-								$('#cmbKind').val(as[0].kind);
-								if($('#cmbKind').val()=='作廢')
+								if(as[0].kind=='作廢')
+									$('#cmbKind').val(as[0].kind);
 									$('#cmbKind').attr('disabled','disabled');
 							}
 						}
@@ -628,6 +628,7 @@
 								//return;
 							}
 						}
+						q_reLoad();
 						_btnModi();
 						
 						if (!emp($('#txtNoa').val())) {
