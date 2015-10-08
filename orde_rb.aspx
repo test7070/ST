@@ -340,9 +340,30 @@
 					case 'vcca_orde':
 						var as = _q_appendData("view_orde", "", true);
 						if (as[0] != undefined) {
-							abbm[q_recno]['ordbno'] = as[0].ordbno;
-							$('#txtOrdbno').val(as[0].ordbno);
+							if($('#txtNoa').val()==as[0].noa){
+								abbm[q_recno]['ordbno'] = as[0].ordbno;
+								abbm[q_recno]['kind'] = as[0].kind;
+								$('#txtOrdbno').val(as[0].ordbno);
+								$('#cmbKind').val(as[0].kind);
+								if($('#cmbKind').val()=='作廢')
+									$('#cmbKind').attr('disabled','disabled');
+							}
 						}
+						break;
+					case 'btnOk_vcca_orde':
+						var as = _q_appendData("view_orde", "", true);
+						if (as[0] != undefined) {
+							if($('#txtNoa').val()==as[0].noa){
+								abbm[q_recno]['ordbno'] = as[0].ordbno;
+								abbm[q_recno]['kind'] = as[0].kind;
+								$('#txtOrdbno').val(as[0].ordbno);
+								$('#cmbKind').val(as[0].kind);
+								if($('#cmbKind').val()=='作廢')
+									$('#cmbKind').attr('disabled','disabled');
+							}
+						}
+						var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+						wrServer(s1);
 						break;
 					case 'delecheckVcchasvcca':
 						var as = _q_appendData("view_vcc", "", true);
@@ -609,6 +630,12 @@
 						}
 						_btnModi();
 						
+						if (!emp($('#txtNoa').val())) {
+							//重新抓取vcca的資料
+							var t_where = "where=^^ noa='" + $('#txtNoa').val() + "' ^^";
+							q_gt('view_orde', t_where, 0, 0, 0, "vcca_orde");
+						}
+						
 						//104/09/25 已產生出貨單仍可以修改 蔡's
 						if(!emp($('#txtVccno').val())){
 							//104/10/06 表身也要開放 
@@ -737,7 +764,7 @@
 					}
 				}
 				
-				if($('#cmbStype').val()=='4'){
+				if(q_cur==1 && $('#cmbStype').val()=='4'){
 					$('#cmbKind').val('');
 				}
 				
@@ -750,12 +777,16 @@
 					$('#txtWorker2').val(r_name);
 					
 				sum();
-
-				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-				if (s1.length == 0 || s1 == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
-				else
-					wrServer(s1);
+				
+				if (q_cur==2 && !emp($('#txtNoa').val())) {
+					//重新抓取vcca的資料
+					var t_where = "where=^^ noa='" + $('#txtNoa').val() + "' ^^";
+					q_gt('view_orde', t_where, 0, 0, 0, "btnOk_vcca_orde");
+				}else{
+					var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+					if (s1.length == 0 || s1 == "AUTO")
+						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
+				}
 			}
 			
 			function wrServer(key_value) {
