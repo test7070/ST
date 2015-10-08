@@ -628,7 +628,7 @@
 								//return;
 							}
 						}
-						q_reLoad();
+						
 						_btnModi();
 						
 						if (!emp($('#txtNoa').val())) {
