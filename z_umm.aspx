@@ -70,6 +70,10 @@
 						if($('#q_report div div').text().indexOf('客戶請款單(重量)')>-1)
 							$('#q_report div div').eq(delete_report).hide();
 					}
+					
+					if(q_getPara('sys.project').toUpperCase()!='XY'){
+						$('#Acckey').hide();
+					}
 						
 				});
 			});
@@ -211,11 +215,13 @@
 							type : '8', //[28]
 							name : 'showordetotal', //顯示單據小計
 							value : "1@顯示單據小計".split(',')
-						}, {
+						},{
                         	type : '6', //[29] //4-4
                       	  	name : 'multcust'
-                    
-                    }]
+                    	},{
+                        	type : '6', //[30] 
+                      	  	name : 'acckey'
+                    	}]
 					});
 					q_popAssign();
 					$('#txtDate1').mask('999/99/99');
@@ -293,8 +299,14 @@
 					$('#txtMultcust').css("width","515px");
 					$('#lblMultcust').css("color","#0000ff");
 					$('#lblMultcust').click(function(e) {
-                	q_box("cust_b2.aspx?;;;;", 'cust', "600px", "90%", q_getMsg("popCust"));
-                });
+	                	q_box("cust_b2.aspx?;;;;", 'cust', "600px", "90%", q_getMsg("popCust"));
+	                });
+	                
+	                $('#Acckey').css("width","605px");
+					$('#txtAcckey').css("width","515px");
+					$('#txtAcckey').click(function(e) {
+	                	q_msg($(this),'多關鍵字請用,隔開');
+	                });
                 }
 	         }
 
