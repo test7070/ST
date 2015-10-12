@@ -49,6 +49,7 @@
 			
 			brwCount2 = 12;
 			var isinvosystem = false;
+			t_spec='';
 			//購買發票系統
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -236,6 +237,10 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+				q_cmbParse("cmbSpec", t_spec,'s');
+				
+				
+				
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
@@ -397,6 +402,21 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
+					case 'style' :
+						var as = _q_appendData("style", "", true);
+						StyleList = new Array();
+						StyleList = as;
+						q_gt('spec', '', 0, 0, 0, '');
+						break;
+					case 'spec':
+						var as = _q_appendData("spec", "", true);
+						t_spec='';
+						for ( i = 0; i < as.length; i++) {
+							t_spec+=','+as[i].noa+'@'+as[i].product;
+						}
+						if(t_spec.length==0) t_spec=' ';
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						break;
 					case 'getRc2atax':
 						var as = _q_appendData("rc2a", "", true);
 						if (as[0] != undefined) {
@@ -508,8 +528,8 @@
 									newB_ret.push(ordcsArray[j]);
 								}
 							}
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit,txtUnit2', newB_ret.length, newB_ret
-							, 'uno,productno,product,spec,size,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,class,style,unit,unit2', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,cmbSpec,txtSize,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit,txtUnit2', newB_ret.length, newB_ret
+							, 'uno,productno,product,spec,spec,size,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,class,style,unit,unit2', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							t_where = "where=^^ noa='" + newB_ret[0].noa + "'";
 							q_gt('ordc', t_where, 0, 0, 0, "", r_accy);
@@ -600,12 +620,7 @@
 							$('#txtAddr2').val(as[0].addr2);
 						}
 						break;
-					case 'style' :
-						var as = _q_appendData("style", "", true);
-						StyleList = new Array();
-						StyleList = as;
-						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-						break;
+					
 					case 'cust' :
 						var as = _q_appendData("cust", "", true);
 						if (as[0] != undefined) {
@@ -739,6 +754,12 @@
 				Lock(1, {
 					opacity : 0
 				});
+				
+				for(var i=0;i<q_bbsCount;i++){
+					if($('#cmbSpec_'+i).is(":visible")){
+						$('#txtSpec_'+i).val($('#cmbSpec_'+i).val());						
+					}
+				}
 				
 				$('#txtOrdcno').val(GetOrdcnoList());
 				//日期檢查
@@ -1090,6 +1111,13 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
+					
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					for(var i=0;i<q_bbsCount;i++){
+						$('#cmbSpec_'+i).show();
+						$('#txtSpec_'+i).hide();	
+					}
+				}
 			}
 
 			function q_popPost(s1) {
@@ -1667,6 +1695,7 @@
 						<input id="txtDime.*" type="text" style="display:none;"/>
 						<input id="txtLengthb.*" type="text" style="display:none;"/>
 						<input id="txtSpec.*" type="text" style="float:left;"/>
+						<select id='cmbSpec.*' style="width:95%;display:none;"> </select>
 					</td>
 					<td><input id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
