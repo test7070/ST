@@ -39,7 +39,7 @@
 				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucaucc_b2.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtNick,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
 				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', '']
 				//['txtPostname', 'lblStore', 'store', 'noa,store', 'txtPostname,txtConform', 'store_b.aspx']
 			);
@@ -340,9 +340,30 @@
 					case 'vcca_orde':
 						var as = _q_appendData("view_orde", "", true);
 						if (as[0] != undefined) {
-							abbm[q_recno]['ordbno'] = as[0].ordbno;
-							$('#txtOrdbno').val(as[0].ordbno);
+							if($('#txtNoa').val()==as[0].noa){
+								abbm[q_recno]['ordbno'] = as[0].ordbno;
+								abbm[q_recno]['kind'] = as[0].kind;
+								$('#txtOrdbno').val(as[0].ordbno);
+								$('#cmbKind').val(as[0].kind);
+								if($('#cmbKind').val()=='作廢')
+									$('#cmbKind').attr('disabled','disabled');
+							}
 						}
+						break;
+					case 'btnOk_vcca_orde':
+						var as = _q_appendData("view_orde", "", true);
+						if (as[0] != undefined) {
+							if($('#txtNoa').val()==as[0].noa){
+								abbm[q_recno]['ordbno'] = as[0].ordbno;
+								abbm[q_recno]['kind'] = as[0].kind;
+								$('#txtOrdbno').val(as[0].ordbno);
+								if(as[0].kind=='作廢')
+									$('#cmbKind').val(as[0].kind);
+									$('#cmbKind').attr('disabled','disabled');
+							}
+						}
+						var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+						wrServer(s1);
 						break;
 					case 'delecheckVcchasvcca':
 						var as = _q_appendData("view_vcc", "", true);
@@ -603,15 +624,23 @@
 							}
 							if (z_msg.length > 0) {
 								alert('已沖帳:' + z_msg);
-								Unlock(1);
-								return;
+								//Unlock(1);
+								//return;
 							}
 						}
+						
 						_btnModi();
+						
+						if (!emp($('#txtNoa').val())) {
+							//重新抓取vcca的資料
+							var t_where = "where=^^ noa='" + $('#txtNoa').val() + "' ^^";
+							q_gt('view_orde', t_where, 0, 0, 0, "vcca_orde");
+						}
 						
 						//104/09/25 已產生出貨單仍可以修改 蔡's
 						if(!emp($('#txtVccno').val())){
-							$('.dbbs input').attr('disabled','disabled');
+							//104/10/06 表身也要開放 
+							//$('.dbbs input').attr('disabled','disabled');
 						}
 						
 						if($('#cmbKind').val()=='作廢')
@@ -736,7 +765,7 @@
 					}
 				}
 				
-				if($('#cmbStype').val()=='4'){
+				if(q_cur==1 && $('#cmbStype').val()=='4'){
 					$('#cmbKind').val('');
 				}
 				
@@ -749,12 +778,16 @@
 					$('#txtWorker2').val(r_name);
 					
 				sum();
-
-				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-				if (s1.length == 0 || s1 == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
-				else
-					wrServer(s1);
+				
+				if (q_cur==2 && !emp($('#txtNoa').val())) {
+					//重新抓取vcca的資料
+					var t_where = "where=^^ noa='" + $('#txtNoa').val() + "' ^^";
+					q_gt('view_orde', t_where, 0, 0, 0, "btnOk_vcca_orde");
+				}else{
+					var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+					if (s1.length == 0 || s1 == "AUTO")
+						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_orde') + $('#txtOdate').val(), '/', ''));
+				}
 			}
 			
 			function wrServer(key_value) {
@@ -1405,7 +1438,7 @@
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td align="center" id='odate'>~odate</td>
 						<td align="center" id='noa'>~noa</td>
-						<td align="center" id='custno comp,4'>~custno ~comp,4</td>
+						<td align="center" id='custno nick'>~custno ~nick</td>
 						<td align="center" id='vccno'>~vccno</td>
 					</tr>
 				</table>
@@ -1449,7 +1482,10 @@
 							<input class="btn" id="btnPlusCust" type="button" value='+' style="font-weight: bold;float: right;" />
 						</td>
 						<td><input id="txtCustno" type="text" class="txt c1"/></td>
-						<td colspan="4"><input id="txtComp" type="text" class="txt c1"/></td>
+						<td colspan="4">
+							<input id="txtComp" type="text" class="txt c1"/>
+							<input id="txtNick" type="hidden" class="txt c1"/>
+						</td>
 						<td><span> </span><a id='lblSerial' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtCoin" type="text" class="txt c1"/></td>
 					</tr>
@@ -1553,7 +1589,7 @@
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
 					<td align="center" style="width:160px;"><a id='lblProductno'> </a></td>
-					<td align="center"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:350px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle'> </a></td>
 					<td align="center" style="width:55px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblMount'> </a></td>

@@ -22,7 +22,7 @@
 			q_tables = 't';
 			var q_name = "vcca";
 			var q_readonly = ['txtMoney', 'txtTotal', 'txtChkno', 'txtTax', 'txtAccno', 'txtWorker','txtVccno'];
-			var q_readonlys = [];
+			var q_readonlys = ['txtOrdeno','txtNo2'];
 			var q_readonlyt = ['txtVccaccy','txtVccno','txtVccnoq'];
 			var bbmNum = [['txtMoney', 15, 0,1], ['txtTax', 15, 0,1], ['txtTotal', 15, 0,1], ['textTotal', 15, 0,1], ['textMoney', 15, 0,1]];
 			var bbsNum = [['txtMount', 15, 0,1], ['txtPrice', 15, 2,1], ['txtTotal', 15, 0,1]];
@@ -151,9 +151,9 @@
 						var t_ordeno = trim($('#txtTrdno').val());
 						if (t_ordeno.length > 0) {
 							var t_where=" a.noa='"+t_ordeno+"' ";
-							t_where=t_where+" group by b.productno,b.product,b.unit,b.price,c.vmount ";
+							t_where=t_where+" group by b.noa,b.no2,b.productno,b.product,b.unit,b.price,c.vmount ";
 							t_where=t_where+" having SUM(b.mount)-sum(isnull(c.vmount,0))>0 ";
-							q_gt('orde_vcca_rb', "where=^^ "+t_where+" ^^", 0, 0, 0, "",'');
+							q_gt('orde_vcca_rb2', "where=^^ "+t_where+" ^^", 0, 0, 0, "",'');
 							//q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where + ";" + r_accy, 'ordes', "95%", "95%", q_getMsg("popOrdes"));
 							var t_where=" noa='"+t_ordeno+"' ";
 							q_gt('view_orde', "where=^^ "+t_where+" ^^", 0, 0, 0, "getorde",'');
@@ -429,6 +429,16 @@
 							, as.length, as, 'productno,product,unit,emount,price,etotal', '');
 							sum();
 						break;
+					case 'orde_vcca_rb2':
+						var as = _q_appendData("view_orde", "", true);
+						for(var i=0;i<q_bbsCount;i++){
+                        	$('#btnMinus_'+i).click();
+                        }
+						q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdeno,txtNo2,txtProductno,txtProduct,txtUnit,txtMount,txtPrice,txtMoney'
+							, as.length, as, 'noa,no2,productno,product,unit,emount,price,etotal', '');
+							sum();
+						break;
+						break;
 					case 'view_ordes':
 						var as = _q_appendData("view_ordes", "", true);
 						q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtPrice,txtMoney,txtMemo'
@@ -654,6 +664,7 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+				
 				_btnModi();
 				$('#txtDatea').focus();
 				$('#txtNoa').attr('readonly', true).css('color', 'green').css('background-color', 'rgb(237,237,237)');
@@ -692,8 +703,6 @@
 
 			function sum() {
 				if (!(q_cur == 1 || q_cur == 2))
-					return;
-				if (!emp($('#txtVccno').val()))	//103/03/07 出貨單轉來發票金額一律不改
 					return;
 					
 				$('#txtTax').attr('readonly', 'readonly');
@@ -757,13 +766,6 @@
 						$('#txtTax').removeAttr('readonly');
 						t_tax = round(q_float('txtTax'), 0);
 						t_total = t_money + t_tax;
-						if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1) {
-							$('#txtMoney').removeAttr('readonly');
-							t_money = dec($('#txtMoney').val());
-							$('#txtTax').removeAttr('readonly');
-							t_tax = round(q_float('txtTax'), 0);
-							t_total = t_money + t_tax;
-						}
 						break;
 					case '6':
 						// 作廢-清空資料
@@ -1289,7 +1291,10 @@
 					<td><input id="txtMount.*" type="text" style="float:left;width: 95%; text-align: right;"/></td>
 					<td><input id="txtPrice.*" type="text" style="float:left;width: 95%; text-align: right;"/></td>
 					<td><input id="txtMoney.*" type="text" style="float:left;width: 95%; text-align: right;"/></td>
-					<td><input id="txtMemo.*" type="text" style="float:left;width: 95%;"/></td>
+					<td><input id="txtMemo.*" type="text" style="float:left;width: 95%;"/>
+						<input id="txtOrdeno.*" type="text" style="float:left;width: 70%;"/>
+						<input id="txtNo2.*" type="text" style="float:left;width: 25%;"/>
+					</td>
 				</tr>
 			</table>
 		</div>

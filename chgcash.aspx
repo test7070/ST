@@ -55,6 +55,10 @@
 		        q_brwCount();
 
 		        q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+		    }).mousedown(function (e) {
+		        if (!$('#div_row').is(':hidden')) {
+					$('#div_row').hide();
+		        }
 		    });
 		    function main() {
 		        if (dataErr) {
@@ -135,6 +139,19 @@
 		            q_pop('txtCarchgno', "carchg.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy + '_' + r_cno, 'custchg', 'noa', 'datea', "92%", "1000px", q_getMsg('popCarchg'), true);
 		        });
 		        //alert('mainpost');
+		        
+		        //上方插入空白行
+		        $('#lblTop_row').mousedown(function (e) {
+		            if (e.button == 0) {
+		                q_bbs_addrow(row_bbsbbt, row_b_seq, 0);
+		            }
+		        });
+		        //下方插入空白行
+		        $('#lblDown_row').mousedown(function (e) {
+		            if (e.button == 0) {
+		                q_bbs_addrow(row_bbsbbt, row_b_seq, 1);
+		            }
+		        });
 		    }
 		    function q_funcPost(t_func, result) {
 		        switch (t_func) {
@@ -282,6 +299,22 @@
 		        for (var i = 0; i < q_bbsCount; i++) {
 		            $('#lblNo_' + i).text(i + 1);
 		            if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+		            	$('#btnMinus_' + i).click(function() {
+							btnMinus($(this).attr('id'));
+						}).bind('contextmenu',function(e){ 
+							e.preventDefault();
+							////////////控制顯示位置
+							$('#div_row').css('top', e.pageY);
+							$('#div_row').css('left', e.pageX);
+							////////////
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							$('#div_row').show();
+							row_b_seq = b_seq;
+							row_bbsbbt = 'bbs';
+						});
+		            	
 		                $('#txtMoney_' + i).change(function (e) {
 		                    sum();
 		                });
@@ -479,6 +512,41 @@
 		        }
 		        return 0; //錯誤
 		    }
+		    
+		    var row_bbsbbt = ''; //判斷是bbs或bbt增加欄位
+		    var row_b_seq = ''; //判斷第幾個row
+		    //插入欄位
+		    function q_bbs_addrow(bbsbbt, row, topdown) {
+		        //取得目前行
+		        var rows_b_seq = dec(row) + dec(topdown);
+		        if (bbsbbt == 'bbs') {
+		            q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq', 1);
+		            //目前行的資料往下移動
+		            for (var i = q_bbsCount - 1; i >= rows_b_seq; i--) {
+		                for (var j = 0; j < fbbs.length; j++) {
+		                    if (i != rows_b_seq)
+		                        $('#' + fbbs[j] + '_' + i).val($('#' + fbbs[j] + '_' + (i - 1)).val());
+		                    else
+		                        $('#' + fbbs[j] + '_' + i).val('');
+		                }
+		            }
+		        }
+		        if (bbsbbt == 'bbt') {
+		            q_gridAddRow(bbtHtm, 'tbbt', fbbt, 1, '', '', '', '__');
+		            //目前行的資料往下移動
+		            for (var i = q_bbtCount - 1; i >= rows_b_seq; i--) {
+		                for (var j = 0; j < fbbt.length; j++) {
+		                    if (i != rows_b_seq)
+		                        $('#' + fbbt[j] + '__' + i).val($('#' + fbbt[j] + '__' + (i - 1)).val());
+		                    else
+		                        $('#' + fbbt[j] + '__' + i).val('');
+		                }
+		            }
+		        }
+		        $('#div_row').hide();
+		        row_bbsbbt = '';
+		        row_b_seq = '';
+		    }
 		</script>
 		<style type="text/css">
             #dmain {
@@ -506,7 +574,7 @@
             }
             .dbbm {
                 float: left;
-                width: 950px;
+                width: 1100px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -595,7 +663,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 950px;
+                width: 1100px;
             }
             .tbbs a {
                 font-size: medium;
@@ -613,6 +681,16 @@
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
+		<div id="div_row" style="position:absolute; top:300px; left:500px; display:none; width:150px; background-color: #ffffff; ">
+            <table id="table_row"  class="table_row" style="width:100%;" border="1" cellpadding='1'  cellspacing='0'>
+                <tr>
+                    <td align="center" ><a id="lblTop_row" class="lbl btn">上方插入空白行</a></td>
+                </tr>
+                <tr>
+                    <td align="center" ><a id="lblDown_row" class="lbl btn">下方插入空白行</a></td>
+                </tr>
+            </table>
+        </div>
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' >
 			<div class="dview" id="dview">
@@ -709,8 +787,8 @@
 					<td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:80px;"><a id='lblPart_s'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblAcc_s'> </a></td>
-					<td align="center" style="width:300px;"><a id='lblMemo_s'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblAcc_s'> </a></td>
+					<td align="center" style="width:400px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblProj_s'> </a></td>
 				</tr>
@@ -730,7 +808,7 @@
 					<td>
 						<input class="btn"  id="btnAcc.*" type="button" value='.' style=" font-weight: bold;width:1%;" />
 						<input type="text" id="txtAcc1.*"  style="width:35%;"/>
-						<input type="text" id="txtAcc2.*"  style="width:45%;"/>
+						<input type="text" id="txtAcc2.*"  style="width:50%;"/>
 					</td>
 					<td ><input type="text" id="txtMemo.*" style="width:95%;" /></td>
 					<td><input type="text" id="txtMoney.*" style="width:95%;text-align: right;" /></td>

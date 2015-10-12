@@ -22,21 +22,28 @@
                 q_getId();
                 q_gf('', 'z_model_rs');
             });
+            
+            aPop = new Array(
+				['txtXnoa1', '', 'model', 'noa', 'txtXnoa1', 'model_b.aspx'],
+				['txtXnoa2', '', 'model', 'noa', 'txtXnoa1', 'model_b.aspx']
+			);
+            
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_model_rs',
-                    options : [ {//[1]
-                        type : '6',
-                        name : 'xnoa'
-                    }, {//[2]
-                        type : '6',
-                        name : 'xframe',
-                    }, {//[3]
-                        type : '6',
-                        name : 'xtgg'
-                    }, {//[4][5]
+                    options : [ 
+                    {//[1][2]
                     	type : '1',
                     	name :'xdate'
+                    }, {//[3][4]
+						type : '1', 
+						name : 'xnoa',
+						dbf : 'model',
+						index : 'noa,model',
+						src : 'model_b.aspx'
+					}, {//[5][6]
+                        type : '1',
+                        name : 'xframe',
                     }]
                 });
                 
@@ -44,7 +51,18 @@
                 q_getFormat();
                 q_langShow();
                 
-                var r_1911=1911;
+                $('#txtXdate1').datepicker();
+				$('#txtXdate2').datepicker();
+				
+				$('#txtXdate1').css('width','200px');
+				$('#txtXdate2').css('width','200px');
+				$('#txtXnoa1').css('width','200px');
+				$('#txtXnoa2').css('width','200px');
+				$('#txtXframe1').css('width','200px');
+				$('#txtXframe2').css('width','200px');
+				
+                
+                /*var r_1911=1911;
 				if(r_len==4){//西元年
 					r_1911=0;
 				}else{
@@ -75,7 +93,7 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
+                $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);*/
 
                 if (q_getId()[3] != undefined) {
                     $('#txtXnoa').val(q_getId()[3].replace('noa=', ''));

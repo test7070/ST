@@ -16,7 +16,8 @@
 		<script type="text/javascript">
 			
 			var q_name = "model_rs_s";
-			var aPop = new Array(['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']);
+			var aPop = new Array(['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx'],
+								 ['txtNoa', '', 'model', 'noa', 'txtNoa', 'model_b.aspx']	);
 				
 			$(document).ready(function() {
 				main();

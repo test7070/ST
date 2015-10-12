@@ -70,6 +70,10 @@
 						if($('#q_report div div').text().indexOf('客戶請款單(重量)')>-1)
 							$('#q_report div div').eq(delete_report).hide();
 					}
+					
+					if(q_getPara('sys.project').toUpperCase()!='XY'){
+						$('#Acckey').hide();
+					}
 						
 				});
 			});
@@ -79,6 +83,22 @@
 			}
 
 			function q_boxClose(s2) {
+				var ret;
+                switch (b_pop) {
+                	case 'cust':
+                        ret = getb_ret();
+                        if(ret==null)
+                        	return;
+                        var xcust='';
+                        if(ret[0]!=undefined){
+                        	for (var i = 0; i < ret.length; i++) {
+                        		xcust+=ret[i].noa+'.'
+                        	}
+                        }
+                        xcust=xcust.substr(0,xcust.length-1);
+                        $('#txtMultcust').val(xcust);
+                        break;	
+                }	
 			}
 
 			var z_coin='';
@@ -172,7 +192,7 @@
 						}, {
 							type : '8', //[22]
 							name : 'showunpay', //只顯示未收
-							value : "1@只顯示未收".split(',')
+							value : "1@只顯示未收,2@顯示貨單備註".split(',')
 						}, {
 							type : '2', //[23][24]
 							name : 'xctype',
@@ -195,7 +215,13 @@
 							type : '8', //[28]
 							name : 'showordetotal', //顯示單據小計
 							value : "1@顯示單據小計".split(',')
-						}]
+						},{
+                        	type : '6', //[29] //4-4
+                      	  	name : 'multcust'
+                    	},{
+                        	type : '6', //[30] 
+                      	  	name : 'acckey'
+                    	}]
 					});
 					q_popAssign();
 					$('#txtDate1').mask('999/99/99');
@@ -211,9 +237,6 @@
 					$('.q_report .report').css('width', '460px');
 					$('.q_report .report div').css('width', '220px');
 					
-					$('#Showunpay').css('width','300px');
-					$('#chkShowunpay').css('width','220px');
-					$('#chkShowunpay span').css('width','180px');
 					$('#Showordetotal').css('width','300px');
 					$('#chkShowordetotal').css('width','220px');
 					$('#chkShowordetotal span').css('width','180px');
@@ -268,8 +291,22 @@
 					}
 					
 					if(q_getPara('sys.project').toUpperCase()=='RB'){
-						$('#chkShowordetotal input').prop('checked',true)
+						$('#chkShowordetotal input').prop('checked',true);
+						$('#chkShowunpay input').prop('checked',true);
 					}
+					
+					$('#Multcust').css("width","605px");
+					$('#txtMultcust').css("width","515px");
+					$('#lblMultcust').css("color","#0000ff");
+					$('#lblMultcust').click(function(e) {
+	                	q_box("cust_b2.aspx?;;;;", 'cust', "600px", "90%", q_getMsg("popCust"));
+	                });
+	                
+	                $('#Acckey').css("width","605px");
+					$('#txtAcckey').css("width","515px");
+					$('#txtAcckey').click(function(e) {
+	                	q_msg($(this),'多關鍵字請用,隔開');
+	                });
                 }
 	         }
 

@@ -215,7 +215,7 @@
 				
 				$('#btnRc2').click(function() {
 					if(emp($('#txtRc2no').val())){
-						q_func('qtxt.query.post1', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1');
+						q_func('qtxt.query.post1', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;'+r_userno);
 					}else{
 						q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
 					}
@@ -424,13 +424,13 @@
             function q_funcPost(t_func, result) {
                 switch(t_func) {
                 	case 'rc2_post.post.a1':
-                		q_func('qtxt.query.post0', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0');
+                		q_func('qtxt.query.post0', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;'+r_userno);
                 		break;
                 	case 'rc2_post.post.a2':
-                		q_func('qtxt.query.post2', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0');
+                		q_func('qtxt.query.post2', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;'+r_userno);
                 		break;
                     case 'qtxt.query.post0':
-                        q_func('qtxt.query.post1', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1');
+                        q_func('qtxt.query.post1', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;'+r_userno);
                         break;
 					case 'qtxt.query.post1':
 						var as = _q_appendData("tmp0", "", true, true);
@@ -468,7 +468,9 @@
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                    	
+                    	$('.lengthd.num,.dime2.num,.lengthc.num').change(function() {
+                    		$(this).val(dec($(this).val()));
+						});
                         $('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
@@ -761,7 +763,7 @@
 					q_cur = 3;
 					
 					if(emp($('#txtRc2no').val()))
-						q_func('qtxt.query.post2', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0');
+						q_func('qtxt.query.post2', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;'+r_userno);
 					else
 						q_func('rc2_post.post.a2', r_accy + ',' + $('#txtRc2no').val() + ',0');
 				}

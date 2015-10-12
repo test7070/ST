@@ -23,8 +23,8 @@
 		    var q_name = "modeq";
 		    var q_readonly = [];
 		    var q_readonlys = [];
-		    var bbmNum = [];
-		    var bbsNum = [];
+		    var bbmNum = [['txtGen', 15, 0],['txtGenmon', 15, 0]];
+		    var bbsNum = [['txtMount', 15, 0]];
 		    var bbmMask = [];
 		    var bbsMask = [];
 		    q_sqlCount = 6;
@@ -59,8 +59,11 @@
 		    
             function mainPost() {
             	q_getFormat();
-				bbsMask = [['txtDatea', r_picd]];
+            	bbmMask = [['txtYears', r_picm]];
 				q_mask(bbmMask);
+				
+				bbsMask = [['txtDatea', r_picd]];
+				
 				
 				q_cmbParse("cmbWorker", '機台組員,CNC車床組員');
 								

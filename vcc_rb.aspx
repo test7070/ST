@@ -17,7 +17,7 @@
  			q_copy=1;
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore','txtOrdeno','txtAcc2'];
+			var q_readonly = ['txtNoa', 'txtAccno', 'txtComp','txtCardeal','txtSales', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtWorker', 'txtWorker2','txtTranstart','txtPart','txtStore','txtOrdeno','txtAcc2','textStatus'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -25,13 +25,13 @@
 			var bbsMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
-			brwCount2 = 12;
+			brwCount2 = 14;
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'datea';
 
 			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel,fax,zip_comp,addr_comp,paytype,trantype,salesno,sales,custno2,cust2', 'txtCustno,txtComp,txtTel,txtFax,txtPost,txtAddr,txtPaytype,cmbTrantype,txtSalesno,txtSales,txtCustno2,txtComp2', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,fax,zip_comp,addr_comp,paytype,trantype,salesno,sales,custno2,cust2', 'txtCustno,txtComp,txtNick,txtTel,txtFax,txtPost,txtAddr,txtPaytype,cmbTrantype,txtSalesno,txtSales,txtCustno2,txtComp2', 'cust_b.aspx'],
 				['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
@@ -573,6 +573,7 @@
 							q_gt('cust', t_where, 0, 0, 0, "cust_cust2");
 							
 							$('#txtComp').val(as[0].comp);
+							$('#txtNick').val(as[0].nick);
 							$('#txtTel').val(as[0].tel);
 							$('#txtFax').val(as[0].fax);
 							
@@ -636,8 +637,8 @@
 						break;
 					case 'btnModi':
 						var as = _q_appendData("umms", "", true);
+						var z_msg = "", t_paysale = 0;
 						if (as[0] != undefined) {
-							var z_msg = "", t_paysale = 0;
 							for (var i = 0; i < as.length; i++) {
 								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
 								if (t_paysale != 0)
@@ -645,12 +646,21 @@
 							}
 							if (z_msg.length > 0) {
 								alert('已沖帳:' + z_msg);
-								Unlock(1);
-								return;
+								//Unlock(1);
+								//return;
 							}
 						}
 						_btnModi();
 						Unlock(1);
+						
+						//104/10/07 出貨 已收款 ，只開放表頭修改
+						if(!emp($('#txtVccno').val())){
+							$('.dbbs input').attr('disabled','disabled');
+							$('#cmbTaxtype').attr('disabled','disabled');
+							$('#btnOrdes').attr('disabled','disabled');
+							$('#btnCngs').attr('disabled','disabled');
+						}
+						
 						$('#txtDatea').focus();
 
 						if (!emp($('#txtCustno').val())) {
@@ -693,6 +703,25 @@
 							check_startdate=true;
 							btnOk();
 						}
+						break;
+					case 'umms':
+						var as = _q_appendData("umms", "", true);
+						var z_msg = "", t_paysale = 0,t_tpaysale=0;
+						if (as[0] != undefined) {
+							for (var i = 0; i < as.length; i++) {
+								t_paysale = parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								t_tpaysale+= parseFloat(as[i].paysale.length == 0 ? "0" : as[i].paysale);
+								if (t_paysale != 0)
+									z_msg += (as[i].noa+';');
+							}
+							
+							if (z_msg.length > 0) {
+								z_msg='已收款：'+FormatNumber(t_tpaysale)+'，收款單號【'+z_msg.substr(0,z_msg.length-1)+ '】。 '
+							}
+						}else{
+							z_msg='未收款。'
+						}
+						$('#textStatus').val(z_msg);
 						break;
 				}
 			}
@@ -888,8 +917,12 @@
 				q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
 			}
 
-			function btnPrint() {				
-				q_box('z_vccp_rb.aspx' + "?;;;noa='" + trim($('#txtNoa').val()) + "' and invo='" + trim($('#txtInvono').val())  + "' and ordeno='" + trim($('#txtInvono').val())+"';" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+			function btnPrint() {
+				var t_invono=trim($('#txtInvono').val()).split(',');
+				var t_tinvono=t_invono[0]+','+t_invono[(t_invono.length-1)];
+				var t_xinvono=trim($('#txtInvono').val()).substr(0,15);
+				
+				q_box('z_vccp_rb.aspx' + "?;;;noa='" + trim($('#txtNoa').val()) + "' and invo='" + t_tinvono  + "' and ordeno='" + t_xinvono+"';" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
@@ -970,6 +1003,10 @@
 				_refresh(recno);
 				HiddenTreat();
 				refreshBbm();
+				if(!emp($('#txtNoa').val())){
+					var t_where = " where=^^ vccno='" + $('#txtNoa').val() + "'^^";
+					q_gt('umms', t_where, 0, 0, 0, '', r_accy);
+				}
 			}
 
 			function HiddenTreat(returnType){
@@ -993,6 +1030,8 @@
 				_readonly(t_para, empty);
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
+					$('#btnOrdes').removeAttr('disabled');
+					$('#btnCngs').removeAttr('disabled');
 				} else {
 					$('#combAddr').removeAttr('disabled');
 				}
@@ -1301,36 +1340,54 @@
 						<td align="center" id='typea=vcc.typea'>~typea=vcc.typea</td>
 						<td align="center" id='datea'>~datea</td>
 						<td align="center" id='noa'>~noa</td>
-						<td align="center" id='comp,4'>~comp,4</td>
+						<td align="center" id='nick'>~nick</td>
 					</tr>
 				</table>
 			</div>
-			<div class='dbbm'>
-				<table class="tbbm"  id="tbbm" style="width: 872px;">
+			<div class='dbbm' style="width: 882px;">
+				<table class="tbbm"  id="tbbm" style="width: 882px;">
+					<tr style="height: 1px;">
+						<td class="td1" style="width: 108px;"> </td>
+						<td class="td2" style="width: 108px;"> </td>
+						<td class="td3" style="width: 108px;"> </td>
+						<td class="td4" style="width: 108px;"> </td>
+						<td class="td5" style="width: 108px;"> </td>
+						<td class="td6" style="width: 108px;"> </td>
+						<td class="td7" style="width: 108px;"> </td>
+						<td class="td8" style="width: 140px;"> </td>
+					</tr>
 					<tr>
-						<td class="td1" style="width: 108px;"><span> </span><a id='lblType' class="lbl"> </a></td>
-						<td class="td2" style="width: 108px;">
+						<td class="td1"><span> </span><a id='lblType' class="lbl"> </a></td>
+						<td class="td2">
 							<select id="cmbTypea"> </select>
 							<span style="float: right;"> </span>
 							<a id='lblStype' class="lbl" style="float: right;"> </a>
 						</td>
-						<td class="td3" style="width: 108px;"><select id="cmbStype"> </select></td>
-						<td class="td4" style="width: 108px;"><span> </span><a id='lblDatea' class="lbl"> </a></td>
-						<td class="td5" style="width: 108px;"><input id="txtDatea" type="text"  class="txt c1"/></td>
-						<td class="td6" style="width: 108px;"> </td>
-						<td class="td7" style="width: 108px;"><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td class="td8" style="width: 108px;"><input id="txtNoa" type="text" class="txt c1" /></td>
+						<td class="td3"><select id="cmbStype"> </select></td>
+						<td class="td4" colspan="3">
+							<a id='lblDatea' class="lbl" style="float: left;"> </a><span style="float: left;"> </span>
+							<input id="txtDatea" type="text"  class="txt c1" style="width: 80px;float: left;"/>
+							<span style="float: left;"> </span><span style="float: left;"> </span><span style="float: left;"> </span>
+							<a id='lblMon' class="lbl" style="float: left;"> </a> <span style="float: left;"> </span>
+							<input id="txtMon" type="text" class="txt c1" style="width: 80px;float: left;"/>
+						</td>
+						<td class="td7"><span> </span><a id='lblNoa' class="lbl"> </a></td>
+						<td class="td8"><input id="txtNoa" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblAcomp" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtCno" type="text" class="txt c1"/></td>
-						<td class="td2"><input id="txtAcomp" type="text" class="txt c1"/></td>
-						<td class="td7"><span> </span><a id='lblMon' class="lbl"> </a></td>
-						<td class="td8" colspan='2'>
-		                	<input id="txtMon" type="text" class="txt" style="width: 70px;"/>
-		                	<span> </span><a id='lblIsgenvcca' class="lbl"> </a>
-		                	<input id="chkIsgenvcca" type="checkbox" style="float: right;"/>
-		                </td>        
+						<td class="td2" colspan="4"><input id="txtAcomp" type="text" class="txt c1"/></td>
+						<td class="td7"><span> </span><a id='lblIsgenvcca' class="lbl"> </a></td>
+						<td class="td8"><input id="chkIsgenvcca" type="checkbox"/></td>
+					</tr>
+					<tr>
+						<td class="td1"><span> </span><a id="lblCust" class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtCustno" type="text" class="txt c1"/></td>
+						<td class="td3" colspan="4">
+							<input id="txtComp" type="text" class="txt c1"/>
+							<input id="txtNick" type="hidden" class="txt c1"/>
+						</td>
 						<td class="td7"><span> </span><a id='lblInvono' class="lbl btn vcca"> </a></td>
 						<td class="td8">
 							<input id="txtInvono" type="text" class="txt c1 vcca"/>
@@ -1338,28 +1395,25 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id="lblCust" class="lbl btn"> </a></td>
-						<td class="td2"><input id="txtCustno" type="text" class="txt c1"/></td>
-						<td class="td2"><input id="txtComp" type="text" class="txt c1"/></td>
-						<td class="td4"><span> </span><a id='lblPay' class="lbl"> </a></td>
-						<td class="td5"><input id="txtPaytype" type="text" class="txt c1"/></td>
-						<td class="td6"><select id="combPay" style="width: 100%;" onchange='combPay_chg()'> </select></td>
-						<td class="td6" align="right"><input id="btnOrdes" type="button"/></td>
-					</tr>
-					<tr>
 						<td class="td1"><span> </span><a id="lblTel" class="lbl"> </a></td>
 						<td class="td2" colspan='2'><input id="txtTel" type="text" class="txt c1"/></td>
 						<td class="td1"><span> </span><a id="lblFax" class="lbl"> </a></td>
 						<td class="td2" colspan='2'><input id="txtFax" type="text" class="txt c1"/></td>
+						<td class="td7" align="right"><input id="btnOrdes" type="button"/></td>
+					</tr>
+					<tr>
+						<td class="td1"><span> </span><a id='lblPay' class="lbl"> </a></td>
+						<td class="td2"><input id="txtPaytype" type="text" class="txt c1"/></td>
+						<td class="td3"><select id="combPay" style="width: 100%;" onchange='combPay_chg()'> </select></td>
 						<td class="td4"><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-						<td class="td5"><select id="cmbTrantype" style="width: 100%;"> </select></td>
+						<td class="td5" colspan="2"><select id="cmbTrantype" style="width: 100%;"> </select></td>
+						<td class="td7"><span> </span><a id='lblOrdeno' class="lbl btn"> </a></td>
+						<td class="td8"><input id="txtOrdeno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblAddr" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtPost" type="text" class="txt c1"/></td>
 						<td class="td3" colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
-						<td class="td7"><span> </span><a id='lblOrdeno' class="lbl btn"> </a></td>
-						<td class="td8"><input id="txtOrdeno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblAddr2' class="lbl btn"> </a></td>
@@ -1422,17 +1476,21 @@
 						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
 						<td class="td2" colspan='7'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea></td>
 					</tr>
+					<tr>
+						<td class="td1"><span> </span><a class="lbl">收款情況</a></td>
+						<td class="td2" colspan='7'><input id="textStatus" type="text" class="txt c1"/></td>
+					</tr>
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1150px;">
+		<div class='dbbs' style="width: 1260px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:40px;">
 						<input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;width:" />
 					</td>
 					<td align="center" style="width:150px"><a id='lblProductno_s'> </a></td>
-					<td align="center" style="width:280px;"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:350px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle_s'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
