@@ -74,6 +74,10 @@
                 q_gt('part', '', 0, 0, 0, "");
                 q_cmbParse("cmbTypea", q_getPara('payb.typea'));
                 
+                if (q_getPara('sys.project').toUpperCase() == 'RB') {
+                	$('.dbbs').css('width','1400px');
+                }
+                
                 if(q_db.substr( 0,2)!='dc')
                 	$('#btnFix').hide();
                 
@@ -1130,10 +1134,10 @@
 					<!--<td align="center" style="width:60px;">#<a id='lblKind'> </a></td>-->
 					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMoneys'> </a></td>
-					<td align="center" style="width:120px;"><a id='lblInvonos'> </a><BR><a id='lblTaxs'> </a></td>
-					<td align="center" style="width:40px;"><a id='lblVtypes'> </a></td>
+					<td align="center" style="width:130px;"><a id='lblInvonos'> </a><BR><a id='lblTaxs'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblVtypes'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>				
+					<td align="center" ><a id='lblMemos'> </a></td>				
 					<td align="center" style="width:120px;display:none;"><a id='lblBal'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblProj_s'> </a></td>
 				</tr>
