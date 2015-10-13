@@ -25,7 +25,7 @@
             
             aPop = new Array(
 				['txtXnoa1', '', 'model', 'noa', 'txtXnoa1', 'model_b.aspx'],
-				['txtXnoa2', '', 'model', 'noa', 'txtXnoa1', 'model_b.aspx']
+				['txtXnoa2', '', 'model', 'noa', 'txtXnoa2', 'model_b.aspx']
 			);
             
             function q_gfPost() {
@@ -38,9 +38,6 @@
                     }, {//[3][4]
 						type : '1', 
 						name : 'xnoa',
-						dbf : 'model',
-						index : 'noa,model',
-						src : 'model_b.aspx'
 					}, {//[5][6]
                         type : '1',
                         name : 'xframe',
@@ -54,12 +51,12 @@
                 $('#txtXdate1').datepicker();
 				$('#txtXdate2').datepicker();
 				
-				$('#txtXdate1').css('width','200px');
-				$('#txtXdate2').css('width','200px');
-				$('#txtXnoa1').css('width','200px');
-				$('#txtXnoa2').css('width','200px');
-				$('#txtXframe1').css('width','200px');
-				$('#txtXframe2').css('width','200px');
+				$('#txtXdate1').css('width','130px');
+				$('#txtXdate2').css('width','130px');
+				$('#txtXnoa1').css('width','130px');
+				$('#txtXnoa2').css('width','130px');
+				$('#txtXframe1').css('width','130px');
+				$('#txtXframe2').css('width','130px');
 				
                 
                 /*var r_1911=1911;

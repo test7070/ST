@@ -21,13 +21,19 @@
 				q_getId();
 				q_gf('', 'z_modfix_rs');
 			});  
+			
+			aPop = new Array(
+				['txtXmodnoa1', '', 'model', 'noa', 'txtXmodnoa1', 'model_b.aspx'],
+				['txtXmodnoa2', '', 'model', 'noa', 'txtXmodnoa2', 'model_b.aspx']
+			);
+			
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_modfix_rs',
                     options : [
-                    {// [1]
-                        type : '6',
-                        name : 'xnoa'
+                    {// [1][2]
+                        type : '1',
+                        name : 'xmodnoa'
                     }]
                 });
                 q_popAssign();
@@ -36,7 +42,9 @@
                 
                  var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
                 $('#txtXnoa').val(t_noa);
-                        
+                
+                $('#txtXmodnoa1').css('width','130px');
+				$('#txtXmodnoa2').css('width','130px');        
 									
 			}
 
