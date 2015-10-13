@@ -35,8 +35,10 @@
             	['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'], 
             	['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'], 
             	['txtVccno', '', 'view_vcc', 'noa,salesno,sales', 'txtVccno,txtSalesno,txtSales', ''], 
-            	['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'],
-            	['txtProductno__', 'btnProductno__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
+            	['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b2.aspx'],
+            	['txtProductno__', 'btnProductno__', 'ucaucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucaucc_b2.aspx']
+            	//['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'],
+            	//['txtProductno__', 'btnProductno__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
             );
 
             $(document).ready(function() {
