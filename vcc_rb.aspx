@@ -110,6 +110,7 @@
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#lblPart').text('運費所屬部門');
+				$('#lblPart2').text('手開發票');
 				$('#lblDdate').text('配送時間');
 				//$('#lblMount').text('箱數');
 				
@@ -1478,7 +1479,9 @@
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a class="lbl">收款情況</a></td>
-						<td class="td2" colspan='7'><input id="textStatus" type="text" class="txt c1"/></td>
+						<td class="td2" colspan='3'><input id="textStatus" type="text" class="txt c1"/></td>
+						<td class="td5"><span> </span><a id="lblPart2" class="lbl"> </a></td>
+						<td class="td6" colspan='3'><input id="txtPart2" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
