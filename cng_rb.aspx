@@ -254,6 +254,9 @@
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
+				//104/10/14 禁止改單別 避免借出轉銷單錯誤
+				$('#cmbTypea').attr('disabled', 'disabled');
+				
 				//判斷是否由撥料作業轉來>>鎖定欄位
 				if(!emp($('#txtWorkkno').val()) || !emp($('#txtWorklno').val())){
 					$('#cmbTypea').attr('disabled', 'disabled');
