@@ -17,7 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "modout";
-			var q_readonly = ['txtWorker', 'txtWorker2','txtNoa','txtModnoa'];
+			var q_readonly = ['txtNoa','txtModnoa','txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail'];
 			var bbmNum = [];
 			var bbsNum = [];
@@ -143,7 +143,7 @@
 				var t_date = trim(q_date());
 				
 				if (t_noa.length == 0 || t_noa == "AUTO")
-		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfixc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modout') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
 				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
@@ -172,10 +172,9 @@
 			
 
 			var flag =0;
-			function bbsAssign() {
-								
+			function bbsAssign() {			
 				for (var j = 0; j < q_bbsCount; j++) {	
-				
+					
 				}
 				_bbsAssign();
 			}
@@ -185,6 +184,8 @@
 
 			function btnIns() {
 				_btnIns();
+				$('#txtNoa').val('AUTO');
+				$('#txtDatea').val(q_date()); 
 				refreshBbm();
 
 			}
@@ -205,11 +206,12 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['datea'] || !as['nob']) {
+				if (!as['nob']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
 				q_nowf();
+				as['date'] = abbm2['date'];
 				return true;
 			}
 
@@ -219,11 +221,8 @@
 			}
 
 			function refreshBbm() {
-				if (q_cur == 1) {
-					$('#txtNoa').css('color', 'black').css('background', 'white').removeAttr('readonly');
-				} else {
-					$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-				}
+				$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+				
 			}
 
 			function readonly(t_para, empty) {
@@ -420,15 +419,17 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
+						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblFixnoa' class="lbl btn" ></a></td>
-						<td><input id="txtFixnoa" type="text" class="txt  c1" style="width : 95% ;"/></td>
+						<td><input id="txtFixnoa" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblModnoa' class="lbl " ></a></td>
-						<td><input id="txtModnoa" type="text" class="txt  c1" style="width : 95% ;"/></td>
+						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblNoa' class="lbl " ></a></td>
-						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 95% ;"/></td>
+						<td><input id="txtNoa" type="text" class="txt  c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMechno" class="lbl btn"> </a></td>
@@ -436,6 +437,8 @@
 							<input id="txtMechno"  type="text" style="width:25%;"/>
 							<input id="txtMech"  type="text" style="width:75%; color:green;"/>
 						</td>	
+						<td><span> </span><a id='lblDatea' class="lbl " ></a></td>
+						<td><input id="txtDatea" type="text" class="txt  c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
@@ -459,7 +462,6 @@
 					<td align="center" style="width:15%;"><a id='lblNob_s' ></a></td>
 					<td style="display: none;" align="center" style="width:5%;"><a id='lblModel_s'></a></td>
 					<td style="display: none;" align="center" style="width:5%;"><a id='lblWheel_s'></a></td>
-					<td align="center" style="width:15%;"><a id='lblDatea_s'></a></td>
 					<td align="center" style="width:10%;"><a id='lblCode_s'></a></td>
 					<td align="center" style="width:15%;"><a id='lblDetail_s'></a></td>
 					<td align="center" style="width:10%;"><a id='lblFrame_s'></a></td>	
@@ -475,13 +477,12 @@
 					</td>
 					<td ><input id="txtNob.*" type="text" class="txt c1" style="width : 95% ;"/></td>
 					<td style="display: none;"><input id="txtModel.*" type="text" class="txt c1" style="width : 95% ;"/></td>
-					<td style="display: none;"><input id="txtWheel.*" type="text"  style="width : 95% ;"/></td>
-					<td><input id="txtDatea.*" type="text" class="txt c1" style="width : 95% ;"/></td>
+					<td style="display: none;"><input id="txtWheel.*" type="text"  style="width : 95% ;"/></td>				
 					<td><input id="txtCode.*" type="text"  style="width : 95% ;"/></td>
 					<td><input id="txtDetail.*" type="text" class="txt c1" style="width : 95% ;"/></td>
 					<td><input id="txtFrame.*" type="text" class="num c1" style="width : 95% ;"/></td>					
 					<td><input id="txtMount.*" type="text" class="num c1" style="width : 95% ;"/></td>						
-					<td ><input id="txtMemo.*" type="text" class="num c1"  style="width : 95% ;"/></td>
+					<td ><input id="txtMemo.*" type="text" class="txt c1"  style="width : 95% ;"/></td>
 
 	
 				</tr>
