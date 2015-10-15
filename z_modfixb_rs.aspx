@@ -46,18 +46,25 @@
                 q_popAssign();
 				q_getFormat();
 				q_langShow();
+				
+				$('#txtXnoa1').css('width','130px');
+				$('#txtXnoa2').css('width','130px');
+				$('#txtXdno1').css('width','130px');
+				$('#txtXdno2').css('width','130px');
 			
 				$('#txtDate1').mask('999/99/99');
                 $('#txtDate1').datepicker();
                 $('#txtDate2').mask('999/99/99');
                 $('#txtDate2').datepicker();     
                 
-                 var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
+                var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
                 $('#txtXnoa1').val(t_noa);
                 $('#txtXnoa2').val(t_noa); 
                 
                 if(window.parent.q_name != 'modfixb'){  
-                	$('#q_report div div').eq('0').hide();       
+                	$('#q_report div div').eq('0').hide();   
+                	$('#Xnoa').hide();  
+                	$('#Xdno').show();  
 				}					
 			}
 

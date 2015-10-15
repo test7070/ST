@@ -270,7 +270,7 @@
                 width: 100%;
             }
             .tbbm tr {
-                height: 35px;
+                height: 37px;
             }
             .tbbm tr td {
                 width: 9%;
@@ -428,7 +428,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1150px;">
+		<div class='dbbs' style="width: 1105px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:1%;">

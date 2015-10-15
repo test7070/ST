@@ -221,7 +221,7 @@
             }
             .dview {
                 float: left;
-                width: 20%; 
+                width: 25%; 
                 border-width: 0px; 
             }
             .tview {
@@ -257,7 +257,7 @@
                 width: 100%;
             }
             .tbbm tr {
-                height: 35px;
+                height: 38px;
             }
             .tbbm tr td {
                 width: 9%;
@@ -336,8 +336,8 @@
 				<table class="tview" id="tview">
 					<tr>
 						<td align="center" style="width:1%; color:black;"><a id='vewChk'> </a></td>
-						<td align="center" style="width:15%; color:black;"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:15%; color:black;"><a id='vewDevice'> </a></td>
+						<td align="center" style="width:12%; color:black;"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:20%; color:black;"><a id='vewDevice'> </a></td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=' '/></td>						
@@ -399,7 +399,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1150px;">
+		<div class='dbbs' style="width: 1165px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:1%;">

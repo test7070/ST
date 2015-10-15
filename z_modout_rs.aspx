@@ -43,7 +43,7 @@
                     },{//[7]
                     	type : '6',
                     	name : 'xworker'
-                    },{//[8]
+                    },{//[8][9]
                     	type : '1',
                     	name : 'xframe'
                     }]
