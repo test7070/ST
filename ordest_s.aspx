@@ -70,6 +70,8 @@
 				t_bradius = q_float('txtBradius');
 		        t_eradius = q_float('txtEradius');
 				
+				t_custpro = $.trim($('#txtCustpro').val());
+				
 		        var t_where = " 1=1 " 
 		        + q_sqlPara2("kind", t_kind)
 		        + q_sqlPara2("stype", t_stype)
@@ -103,7 +105,9 @@
 		       		+" and isnull(view_ordes"+r_accy+".width,0) between "+t_bwidth+" and "+t_ewidth
 		       		+" and isnull(view_ordes"+r_accy+".lengthb,0) between "+t_blengthb+" and "+t_elengthb
 		       		+" and isnull(view_ordes"+r_accy+".radius,0) between "+t_bradius+" and "+t_eradius+")))";
-		       	
+		       	if(t_custpro.length>0){
+		       		t_where += " and exists(select noa from view_ordes"+r_accy+" where view_ordes"+r_accy+".noa=view_orde"+r_accy+".noa and view_ordes"+r_accy+".custpro='"+t_custpro+"')";
+		       	}
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
             }
@@ -214,6 +218,10 @@
 				<tr class='seek_tr pk' style="display:none;">
 					<td class='seek'  style="width:20%;"><a id='lblCustorde'></a></td>
 					<td><input class="txt" id="txtCustorde" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr pk' style="display:none;">
+					<td class='seek'  style="width:20%;"><a id='lblCustpro'>客戶產編</a></td>
+					<td><input class="txt" id="txtCustpro" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->
