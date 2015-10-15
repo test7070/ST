@@ -31,10 +31,10 @@
                 $('#q_report').q_report({
                     fileName : 'z_modfixc_rs',
                     options : [
-                    {// [1]
+                    {  //[1][2]
                         type : '1',
                         name : 'xnoa'
-                    },{//[2]
+                    },{//[3][4]
                     	type : '1',
                     	name : 'xdatea'
                     	

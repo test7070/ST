@@ -237,6 +237,8 @@
 						$('#txtTotal_'+i).css('color','black').css('background-color','white');
 						if(q_cur==1 || q_cur==2)
 							$('#txtTotal_'+i).removeAttr('readonly');
+						else
+							$('#txtTotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
 					}else{
 						$('#txtTotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
 					}
@@ -726,6 +728,7 @@
 				HiddenTreat();
 				stype_chang();
 				refreshBbm();
+				refreshBbs();
 			}
 
 			function HiddenTreat(returnType){
