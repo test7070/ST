@@ -35,7 +35,7 @@
             	['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'], 
             	['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'], 
             	['txtVccno', '', 'view_vcc', 'noa,salesno,sales', 'txtVccno,txtSalesno,txtSales', ''], 
-            	['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b2.aspx'],
+            	//['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b2.aspx'],
             	['txtProductno__', 'btnProductno__', 'ucaucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucaucc_b2.aspx']
             	//['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx'],
             	//['txtProductno__', 'btnProductno__', 'ucc', 'noa,product', 'txtProductno__,txtProduct__', 'ucc_b.aspx']
@@ -192,6 +192,17 @@
                         ///   q_boxClose 3/4
                         break;
                 }/// end Switch
+                if(s2[0]!=undefined){
+					if(s2[0]=='view_ucaucc'){
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (b_ret.length>0)
+								b_ret.splice(0, 1);
+							if (b_ret.length>0)
+								ret = q_gridAddRow(bbtHtm, 'tbbt', 'txtProductno,txtProduct', b_ret.length, b_ret, 'noa,product', 'txtProductno,txtProduct');
+						}
+					}
+				}
                 b_pop = '';
             }
 
@@ -970,7 +981,7 @@
 				<tr  style='background:#cad3ff;'>
 					<td style="width:1%;" align="center"><input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;width: 100%;" /></td>
 					<td >
-						<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width: 1%;" />
+						<!--<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width: 1%;" />-->
 						<input  id="txtProductno.*" type="text"  class="txt c3" style="width:85%"/>
 						<input  id="txtProduct.*" type="text"  class="txt c1"/>
 					</td>
