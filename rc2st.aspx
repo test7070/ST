@@ -1412,7 +1412,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 2250px;
+				width: 2350px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1653,6 +1653,7 @@
 						<a id='lblMemos_st'> </a><br>
 						<a id='lblCert_st' style="display:none;"> </a>
 					</td>
+					<td align="center" style="width:100px;display:none;" class="rk">包裝方式</td>
 					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
