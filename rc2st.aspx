@@ -1112,12 +1112,7 @@
 				if (isinvosystem)
 					$('.istax').hide();
 					
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					for(var i=0;i<q_bbsCount;i++){
-						$('#cmbSpec_'+i).show();
-						$('#txtSpec_'+i).hide();	
-					}
-				}
+				
 			}
 
 			function q_popPost(s1) {
@@ -1304,6 +1299,12 @@
 						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
 						$('#textSize4_' + j).val(0);
 						$('#txtRadius_' + j).val(0);
+					}
+				}
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					for(var i=0;i<q_bbsCount;i++){
+						$('#cmbSpec_'+i).show();
+						$('#txtSpec_'+i).hide();	
 					}
 				}
 			}
@@ -1719,6 +1720,7 @@
 						<input id="txtMemo.*" type="text" style="width:95%;"/>
 						<input id="btnCert.*" class="btnCert" type="button" style="width:95%;"/>
 					</td>
+					<td style="display:none;" class="rk"><input id="txtDescr.*" type="text" style="width:95%;" maxlength="20"/></td>
 					<td ><input id="txtUno2.*" type="text" style="width:90%;"/></td>
 					<td>
 						<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
