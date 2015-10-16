@@ -49,40 +49,6 @@
 			q_copy = 1;
 			brwCount2 = 20;
 
-			function currentData() {
-			}
-			currentData.prototype = {
-				data : [],
-				/*新增時複製的欄位*/
-				include : ['txtNoa'],
-				/*記錄當前的資料*/
-				copy : function() {
-					curData.data = new Array();
-					for (var i in fbbm) {
-						var isInclude = false;
-						for (var j in curData.include) {
-							if (fbbm[i] == curData.include[j]) {
-								isInclude = true;
-								break;
-							}
-						}
-						if (isInclude) {
-							curData.data.push({
-								field : fbbm[i],
-								value : $('#' + fbbm[i]).val()
-							});
-						}
-					}
-				},
-				/*貼上資料*/
-				paste : function() {
-					for (var i in curData.data) {
-						$('#' + curData.data[i].field).val(curData.data[i].value);
-					}
-				}
-			};
-			var curData = new currentData();
-
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
@@ -120,6 +86,8 @@
 				
 				$('#txtNoa').change(function(e) {
 					$('#txtNoa').val($('#txtNoa').val().toUpperCase());
+				}).click(function() {
+					q_msg($(this),'發票號碼保持空白，電子發票號碼將由系統自動產生');
 				});
 				
 				$('#txtTax').change(function() {
@@ -350,6 +318,23 @@
 			var batch_orde=false;
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
+					case 'qtxt.query.getvccano':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							if(as[0].err.length>0){
+								alert(as[0].err);
+							}else{
+								if(as[0].vccano.length>0){
+									$('#txtNoa').val(as[0].vccano);
+									btnOk();
+								}else{
+									alert('無可使用的發票號碼!!');
+								}
+							}
+						}else{
+							alert('無可使用的發票號碼!!');
+						}
+						break;
 					case 'qtxt.query.vcca_rb':
 						var as = _q_appendData("tmp0", "", true, true);
 						if (as[0] != undefined) {
@@ -475,16 +460,6 @@
 							$('#txtAcomp').val(as[0].nick);
 						}
 						Unlock(1);
-						//發票號碼+1
-						var t_noa = trim($('#txtNoa').val());
-						var str = '00000000' + (parseInt(t_noa.substring(2, 10)) + 1);
-						str = str.substring(str.length - 8, str.length);
-						if (!isNaN(parseFloat(str)) && isFinite(str)) {
-							t_noa = t_noa.substring(0, 2) + str;
-							$('#txtNoa').val(t_noa);
-						}
-						$('#txtDatea').val(q_date());
-						$('#txtDatea').focus();
 						break;
 					case 'vccar':
 						var as = _q_appendData("vccar", "", true);
@@ -492,19 +467,6 @@
 							alert("請檢查發票號碼主檔設定，或發票已輸入。");
 							Unlock(1);
 						} else {
-							//紙本發票才需判斷，先註解
-							/*//3聯須輸入統編
-							 if (as[0].rev=='3' && $('#cmbTaxtype').val()!='6' && checkId($('#txtSerial').val())!=2){
-							 alert(q_getMsg('lblSerial')+'錯誤。');
-							 Unlock(1);
-							 return;
-							 }
-							 //2聯不須輸入統編
-							 if (as[0].rev=='2' && $('#txtSerial').val().length>0 && $('#cmbTaxtype').val()!='6' && checkId($('#txtSerial').val())!=2){
-							 alert(q_getMsg('lblSerial')+'錯誤。');
-							 Unlock(1);
-							 return;
-							 }*/
 							wrServer($('#txtNoa').val());
 							return;
 						}
@@ -562,9 +524,25 @@
 					opacity : 0
 				});
 				
+				if ($('#txtCno').val().length == 0 ) {
+					alert(q_getMsg('lblAcomp') + '禁止空白。');
+					Unlock(1);
+					return;
+				}
+				
 				if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
 					alert(q_getMsg('lblDatea') + '錯誤。');
+					Unlock(1);
 					return;
+				}
+				
+				if($('#txtNoa').val().length==0){
+					var t_cno=$('#txtCno').val();
+					var t_datea=$('#txtDatea').val();
+					if(t_cno.length>0 && t_datea.length>0){
+						q_func('qtxt.query.getvccano','vcca.txt,getvccano_rb,'+encodeURI(t_cno)+ ';' + encodeURI(t_datea));
+						return;
+					}
 				}
 				
 				$('#txtNoa').val($.trim($('#txtNoa').val()));
@@ -577,12 +555,14 @@
 				
 				if ($.trim($('#txtMon').val()).length == 0)
 					$('#txtMon').val($('#txtDatea').val().substring(0, 6));
+					
 				$('#txtMon').val($.trim($('#txtMon').val()));
 				if (!(/^[0-9]{3}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())) {
 					alert(q_getMsg('lblMon') + '錯誤。');
 					Unlock(1);
 					return;
 				}
+				
 				//檢查發票金額是否超出訂單金額
 				if($('#txtTrdno').val().length>0 && !ordemoney_check){
 					t_where = "where=^^ noa='"+$('#txtTrdno').val()+"' ^^";
@@ -650,9 +630,11 @@
             }
 
 			function btnIns() {
-				curData.copy();
 				_btnIns();
-				curData.paste();
+				$('#txtChkno').val('');
+				$('#txtMon').val('');
+				$('#txtDatea').val(q_date());
+				$('#txtDatea').focus();
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
 				$('#txtType').val('M'); //M手動開立 //A批次開立//E發票開立//(空白NULL)出貨單自動產生發票
 				Lock(1, {

@@ -40,6 +40,16 @@
                 q_popAssign();
 				q_getFormat();
 				q_langShow();
+				
+				$('#btnOk').click(function(e) {
+					var t_date1 = $.trim($('#txtDate1').val());
+                    var t_date2 = $.trim($('#txtDate2').val());	
+                    if (t_date1.length == 0) {
+                        alert('請輸入起始日期');                    
+                    }else if (t_date2.length == 0) {
+                        alert('請輸入終止日期');                    
+                    }
+				});
 			
 				$('#txtDate1').mask('999/99/99');
                 $('#txtDate1').datepicker();
@@ -57,7 +67,7 @@
 				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
 				$('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);				
 								
-				t_date.setDate(t_date.getDate() + 4);
+				t_date.setDate(t_date.getDate() + 6);
 				t_year = t_date.getUTCFullYear() - 1911;
 				t_month = t_date.getUTCMonth() + 1;
 				t_month = t_month > 9 ? t_month + '' : '0' + t_month;

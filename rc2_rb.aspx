@@ -397,6 +397,8 @@
 							$('#cmbCoin').val(ordc[0].coin);
 							$('#txtPost2').val(ordc[0].post2);
 							$('#txtAddr2').val(ordc[0].addr2);
+							ordc[0].memo=replaceAll(ordc[0].memo,'chr(10)','\n')
+							$('#txtMemo').val(ordc[0].memo);
 						}
 						break;
 					case 'startdate':
@@ -1066,7 +1068,6 @@
 							<input id="txtAddr2" type="text" class="txt" style="width: 95%;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
-						
 					</tr>
 					<tr class="tr6">
 						<td class="td4"><span> </span><a id='lblPaytype' class="lbl"> </a></td>
@@ -1102,7 +1103,7 @@
 					</tr>
 					<tr class="tr10">
 						<td class="td1"><span> </span><a id='lblMemo' class="lbl"> </a></td>
-						<td class="td2" colspan='7' ><input id="txtMemo" type="text" class="txt" style="width:98%;"/></td>
+						<td class="td2" colspan='7'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea></td>
 					</tr>
 					<tr class="tr11">
 						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
