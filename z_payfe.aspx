@@ -51,10 +51,14 @@
 					}, {
 						type : '1', //[6][7]
 						name : 'xmon'
-					}, {//[8]
-                        type : '8',
+					}, {
+                        type : '8', //[8]
                         name : 'xoption01',
                         value : ['明細']
+                    }, {
+                        type : '0', //[9]
+                        name : 'xname',
+                        value : r_name 
                     }]
 				});
 				q_popAssign();
