@@ -9,6 +9,10 @@
 		<script src="../script/qbox.js" type="text/javascript"></script>
 		<script src='../script/mask.js' type="text/javascript"></script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
+		<link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+		<script src="css/jquery/ui/jquery.ui.core.js"></script>
+		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
+		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			this.errorHandler = null;
 			function onPageError(error) {
@@ -37,12 +41,22 @@
 				,['txtCustno', 'lblCustno', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
+			
+			var para = new Array();//若有值就自動新增修改
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
-				q_gt('style', '', 0, 0, 0, '');
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+				
+	            try{
+	            	para = JSON.parse(q_getId()[3].replace('1=1^^',''));
+	            	if(para.noa==undefined || para.length==0){
+		            }else{
+		            	q_content = "where=^^noa='"+para.noa+"'^^ ";
+		            }
+	            }catch(e){
+	            }    
+	            q_gt('style', '', 0, 0, 0, '');
 			});
 			function main() {
 				if (dataErr) {
@@ -125,6 +139,32 @@
 						var as = _q_appendData("style", "", true);
 						StyleList = new Array();
 						StyleList = as;
+						if(para.noa==undefined || para.noa.length==0){
+							q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						}else{
+							q_gt('view_get', q_content, 0, 0, 0, 'isExistGet');
+						}
+						break;
+					case 'isExistGet' :
+						//判斷要執行 新增 OR 修改 
+						var as = _q_appendData("view_get", "", true);
+						if(as[0]!=undefined && as[0].noa.length>0){
+							para.auto = function(){btnModi();};	
+							para.insdisabled = true;
+						}else{
+							para.auto = function(){btnIns();};	
+							para.insdisabled = false;
+						}	
+						q_gt('view_vcc', q_content, 0, 0, 0, 'getVcc');
+						break;	
+					case 'getVcc':
+						var as = _q_appendData("view_vcc", "", true);
+						if(as[0]!=undefined){
+							para.custno = as[0].custno;
+							para.comp = as[0].comp;	
+						}
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						
 						break;
 					case q_name:
 						t_uccArray = _q_appendData("ucc", "", true);
@@ -275,7 +315,13 @@
 				_btnIns();
 				$('#cmbKind').val(q_getPara('vcc.kind'));
 				size_change();
-				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
+				if(para.noa==undefined || para.noa.length==0){
+					$('#txtNoa').val('AUTO');
+				}else{
+					$('#txtNoa').val(para.noa);
+					$('#txtCustno').val(para.custno);
+					$('#txtComp').val(para.comp);
+				}
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
 				$('#cmbTypea').val('領料');
@@ -362,6 +408,12 @@
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				size_change();
+				//alert(empty);
+				if(empty==undefined &&!(para.noa==undefined || para.noa.length==0) && (para.flag==undefined || para.flag==false)){
+					para.flag = true;
+					//alert(q_cur);
+					para.auto();
+				}
 			}
 
 			function btnMinus(id) {

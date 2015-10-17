@@ -1112,12 +1112,7 @@
 				if (isinvosystem)
 					$('.istax').hide();
 					
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					for(var i=0;i<q_bbsCount;i++){
-						$('#cmbSpec_'+i).show();
-						$('#txtSpec_'+i).hide();	
-					}
-				}
+				
 			}
 
 			function q_popPost(s1) {
@@ -1306,6 +1301,12 @@
 						$('#txtRadius_' + j).val(0);
 					}
 				}
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					for(var i=0;i<q_bbsCount;i++){
+						$('#cmbSpec_'+i).show();
+						$('#txtSpec_'+i).hide();	
+					}
+				}
 			}
 
 			function FormatNumber(n) {
@@ -1411,7 +1412,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 2250px;
+				width: 2350px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1652,6 +1653,7 @@
 						<a id='lblMemos_st'> </a><br>
 						<a id='lblCert_st' style="display:none;"> </a>
 					</td>
+					<td align="center" style="width:100px;display:none;" class="rk">包裝方式</td>
 					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
@@ -1719,6 +1721,7 @@
 						<input id="txtMemo.*" type="text" style="width:95%;"/>
 						<input id="btnCert.*" class="btnCert" type="button" style="width:95%;"/>
 					</td>
+					<td style="display:none;" class="rk"><input id="txtDescr.*" type="text" style="width:95%;" maxlength="20"/></td>
 					<td ><input id="txtUno2.*" type="text" style="width:90%;"/></td>
 					<td>
 						<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />

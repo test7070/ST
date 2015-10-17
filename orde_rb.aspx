@@ -137,7 +137,7 @@
 						q_gt('umms', t_where, 0, 0, 0, 'ordevccumm', r_accy);
 					}
 					//只能轉自己的區域
-					if(r_rank<8 && !x_ordevccstore && r_partno!='23' ){
+					if(r_rank<8 && !x_ordevccstore && r_partno!='08' ){
 						q_gt('store', "where=^^ tggno='"+r_partno+"' and tggno!='' ^^", 0, 0, 0, 'ordevccstore', r_accy);
 						return;
 					}
@@ -808,8 +808,8 @@
 					if (confirm("是否要更新出貨單?"))
 						$('#btnOrdetoVcc').click();
 				}
-				//更新發票
-				if($('#cmbKind').val()!='作廢')
+				//更新發票 104/10/16 金額大於0 才產生發票
+				if($('#cmbKind').val()!='作廢' && dec($('#txtMoney').val())>0)
 					q_func('qtxt.query.vcca0', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
 			}
 			
@@ -1112,7 +1112,7 @@
 					$('#btnOrdetoVcc').attr('disabled', 'disabled');
 					$('.storepart0').hide();
 					$('.storepart1').show();
-					if(r_rank<8 && r_partno!='23'){
+					if(r_rank<8 && r_partno!='08'){
 						q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
 					}else{
 						q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
