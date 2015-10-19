@@ -1034,6 +1034,7 @@
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					$('.sprice').show();
 					$('.rk').show();
+					$('.RK_hide').hide();
 				}
 			}
 
@@ -1102,6 +1103,7 @@
 					$('.pk').show();
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					$('.sprice').show();
+					$('.RK_hide').hide();
 				}
 				size_change();
 				//q_popPost('txtProductno_');
@@ -1140,6 +1142,7 @@
 					$('.pk').show();
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					$('.sprice').show();
+					$('.RK_hide').hide();
 				}
 					
 				size_change();
@@ -1630,13 +1633,13 @@
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
-					<td align="center" style="width:80px;"><a>等級</a></td>
+					<td align="center" style="width:80px;" class="RK_hide"><a>等級</a></td>
 					<td align="center" style="width:140px;display:none;" class="pk">規範<BR>國別</td>
 					<td align="center" style="width:340px;" id='Size'>
 						<a id='lblSize_help'> </a><BR>
 						<a id='lblSize_st'> </a>
 					</td>
-					<td align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
+					<td align="center" style="width:150px;" class="RK_hide"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>寬度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>長度</a></td>
@@ -1678,7 +1681,7 @@
 						<input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
-					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
+					<td class="RK_hide"><input id="txtClass.*" type="text" style='width: 95%;'/></td>
 					<td style="display:none;" class="pk">
                         <input id="txtUcolor.*" type="text" style="width:95%;"/>
                         <input id="txtScolor.*" type="text" style="width:95%;"/>
@@ -1699,7 +1702,7 @@
 						<input id="txtSpec.*" type="text" style="float:left;"/>
 						<select id='cmbSpec.*' style="width:95%;display:none;"> </select>
 					</td>
-					<td><input id="txtSize.*" type="text" style="width:95%;"/></td>
+					<td class="RK_hide"><input id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
