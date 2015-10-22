@@ -135,6 +135,7 @@
 					if(!x_ordevccumm && !emp($('#txtVccno').val())){
 						var t_where = " where=^^ vccno='" + $('#txtVccno').val() + "'^^";
 						q_gt('umms', t_where, 0, 0, 0, 'ordevccumm', r_accy);
+						return;
 					}
 					//只能轉自己的區域
 					if(r_rank<8 && !x_ordevccstore && r_partno!='08' ){
