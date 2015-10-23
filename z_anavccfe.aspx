@@ -16,15 +16,55 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
+			var gfrun = false;
 			var uccgaItem = '';
 			var custtypeItem = '';
+			var t_acomp = '';
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
 				if(uccgaItem.length == 0){
 					q_gt('uccga', '', 0, 0, 0, "");
 				}
+				if(custtypeItem.length == 0){
+					q_gt('custtype', '', 0, 0, 0, "");
+				}
+				if(t_acomp.length == 0){
+					q_gt('acomp', '', 0, 0, 0, "");
+				}
+				
 			});
+			
+			function q_gtPost(t_name) {
+				switch (t_name) {
+					case 'uccga':
+                        var as = _q_appendData("uccga", "", true);
+						uccgaItem = " @全部";
+                        for ( i = 0; i < as.length; i++) {
+                            uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa +' . '+as[i].namea;
+                        }						
+                        break;
+					case 'custtype':
+                        var as = _q_appendData("custtype", "", true);
+                        custtypeItem = " @全部";
+                        for ( i = 0; i < as.length; i++) {
+                            custtypeItem = custtypeItem + (custtypeItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa +' . '+as[i].namea;
+                        }						
+						break;
+                    case 'acomp':
+                        var as = _q_appendData("acomp", "", true);
+                        t_acomp = " @全部";
+                        for ( i = 0; i < as.length; i++) {
+                            t_acomp = t_acomp + (t_acomp.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
+                        }                    
+                        break;
+				}
+				if (uccgaItem.length > 0 && custtypeItem.length > 0 && t_acomp.length > 0 && !gfrun) {
+                	gfrun = true;
+                    q_gf('', 'z_anavccfe');
+                }
+			}
+			
 			function q_gfPost() {
 				$('#q_report').q_report({
 					fileName : 'z_anavccfe',
@@ -87,6 +127,10 @@
                         type : '5', //[22]
                         name : 'lostorder',
                         value : "0@交易日,1@業務".split(',')
+					},{
+						type : '5', //[23]
+						name : 'xcno',
+						value : t_acomp.split(',')
 					}]
 				});
 				q_popAssign();
@@ -129,26 +173,7 @@
 			function q_boxClose(s2) {
 			}
 
-			function q_gtPost(t_name) {
-				switch (t_name) {
-					case 'uccga':
-                        var as = _q_appendData("uccga", "", true);
-						uccgaItem = " @全部";
-                        for ( i = 0; i < as.length; i++) {
-                            uccgaItem = uccgaItem + (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa +' . '+as[i].namea;
-                        }
-						q_gt('custtype', '', 0, 0, 0, "");
-                        break;
-					case 'custtype':
-                        var as = _q_appendData("custtype", "", true);
-                        custtypeItem = " @全部";
-                        for ( i = 0; i < as.length; i++) {
-                            custtypeItem = custtypeItem + (custtypeItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa +' . '+as[i].namea;
-                        }
-						q_gf('', 'z_anavccfe');
-						break;
-				}
-			}
+			
 		</script>
 	</head>
 	<body id="z_accc" ondragstart="return false" draggable="false"
