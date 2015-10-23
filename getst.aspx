@@ -778,6 +778,7 @@
 					<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
 					</td>
 					<td align="center" style="width:1%;"></td>
+					<td align="center" style="width:60px;"><a>序</a></td>
 					<td align="center" style="width:20%;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
@@ -795,7 +796,10 @@
 					<td>
 					<input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
 					</td>
-					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td><td>
+					
+					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td><input id="txtNor.*" type="text" style='width: 95%;'/></td>
+					<td>
 					<input class="btn" id="btnUno.*" type="button" value='.' style=" font-weight: bold;width:1%;" />
 					<input id="txtUno.*" type="text" style="width:75%;"/>
 					</td>
