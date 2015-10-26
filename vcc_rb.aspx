@@ -892,6 +892,7 @@
 				$('#txtInvono').val('');
 				$('#chkIsgenvcca').prop('checked',false);
 				$('#txtMon').val('');
+				$('#txtTranstyle').val('');
 				
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
 				$('#txtCno').val(z_cno);
