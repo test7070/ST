@@ -195,6 +195,10 @@
                         type : '5', //[35]//40000
                         name : 'xcno',
                         value : acompItem.split(',')
+                    },{
+                        type : '5', //[36]//40000
+                        name : 'taxtype',
+                        value : [q_getPara('report.all')].concat(q_getPara('sys.taxtype').split(','))
                     }]
                 });
                 q_popAssign();
