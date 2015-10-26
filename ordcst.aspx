@@ -717,8 +717,14 @@
 			}
 
 			function btnPrint() {
-				t_where = "noa='" + $('#txtNoa').val() + "'";
-				q_box("z_ordcstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				
+				if(q_getPara('sys.comp').substring(0,2)=='傑期')
+					q_box("z_ordc_pk.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'ordc', "95%", "95%", m_print);
+				else{
+					t_where = "noa='" + $('#txtNoa').val() + "'";
+					q_box("z_ordcstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				}
+					
 			}
 
 			function wrServer(key_value) {

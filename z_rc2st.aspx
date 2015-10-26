@@ -23,7 +23,23 @@
                 q_gf('', 'z_rc2st');
             });
             function q_gfPost() {
-                $('#q_report').q_report({
+            	q_gt('style', "", 0, 0, 0, "");    
+            }
+			function q_gtPost(t_name) {
+				switch (t_name) {
+					case 'style':
+						t_style = 'A,B@捲、板';
+						var as = _q_appendData("style", "", true);
+						for ( i = 0; i < as.length; i++) {
+							t_style += (t_style.length > 0 ? '&' : '') + as[i].noa + '@' + as[i].noa + '.' + as[i].product;
+						}
+						
+						loadFinish();
+						break;
+				}
+			}
+			function loadFinish(){
+				$('#q_report').q_report({
                     fileName : 'z_rc2st',
                     options : [
                     {// [1]
@@ -66,7 +82,11 @@
                     }, {//9 [18][19]
                         type : '1',
                         name : 'xradius'
-                    }]
+                    }, {
+						type : '5', //10 [20]
+						name : 'xstyle',
+						value : [q_getPara('report.all')].concat(t_style.split('&'))
+					}]
                 });
                 q_popAssign();
                 
@@ -77,31 +97,28 @@
                 $('#txtMon1').mask('999/99');
                 $('#txtMon2').mask('999/99');
                 var t_date,t_year,t_month,t_day;
-	                t_date = new Date();
-	                t_date.setDate(1);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate1').val(t_year+'/'+t_month+'/'+t_day);
-	                
-	                t_date = new Date();
-	                t_date.setDate(35);
-	                t_date.setDate(0);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate2').val(t_year+'/'+t_month+'/'+t_day);
-            }
-
+                t_date = new Date();
+                t_date.setDate(1);
+                t_year = t_date.getUTCFullYear()-1911;
+                t_year = t_year>99?t_year+'':'0'+t_year;
+                t_month = t_date.getUTCMonth()+1;
+                t_month = t_month>9?t_month+'':'0'+t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day>9?t_day+'':'0'+t_day;
+                $('#txtDate1').val(t_year+'/'+t_month+'/'+t_day);
+                
+                t_date = new Date();
+                t_date.setDate(35);
+                t_date.setDate(0);
+                t_year = t_date.getUTCFullYear()-1911;
+                t_year = t_year>99?t_year+'':'0'+t_year;
+                t_month = t_date.getUTCMonth()+1;
+                t_month = t_month>9?t_month+'':'0'+t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day>9?t_day+'':'0'+t_day;
+                $('#txtDate2').val(t_year+'/'+t_month+'/'+t_day);
+			}
             function q_boxClose(s2) {
-            }
-            function q_gtPost(s2) {
             }
 		</script>
 	</head>
