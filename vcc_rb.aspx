@@ -771,8 +771,10 @@
 				sum();
 
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-				if (s1.length == 0 || s1 == "AUTO")
+				if ((s1.length == 0 || s1 == "AUTO") && $('#cmbTypea').val() == '1')
 					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_vcc') + $('#txtDatea').val(), '/', ''));
+				else if ((s1.length == 0 || s1 == "AUTO") && $('#cmbTypea').val() == '2')
+					q_gtnoa(q_name, replaceAll('B' + $('#txtDatea').val(), '/', ''));
 				else
 					wrServer(s1);
 			}
