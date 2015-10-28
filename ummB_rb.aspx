@@ -100,16 +100,16 @@
 
                 $('#txtBkvccno').click(function() {
                     if ($('#txtBkvccno').val().length > 0)
-                        q_box("vcc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'" + $(this).val() + "')>0;" + $('#txtDatea').val().substr(0, 3), "vcc", "95%", "95%", q_getMsg("popVcc"));
+                        q_box("vcc_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'" + $(this).val() + "')>0;" + $('#txtDatea').val().substr(0, 3), "vcc", "95%", "95%", q_getMsg("popVcc"));
                 });
                 $('#txtVccno').click(function() {
                     if ($('#txtVccno').val().length > 0 && q_cur != 1 && q_cur != 2)
-                        q_box("vcc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'" + $(this).val() + "')>0;" + $('#txtVccno').val().substr(1, 3), "vcc", "95%", "95%", q_getMsg("popVcc"));
+                        q_box("vcc_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'" + $(this).val() + "')>0;" + $('#txtDatea').val().substr(0, 3), "vcc", "95%", "95%", q_getMsg("popVcc"));
                 });
 
                 $('#txtSaleno').click(function() {
                     if ($('#txtSaleno').val().length > 0)
-                        q_box("vcc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + $('#txtDatea').val().substr(0, 3), "vcc", "95%", "95%", q_getMsg("popVcc"));
+                        q_box("vcc_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + $('#txtDatea').val().substr(0, 3), "vcc", "95%", "95%", q_getMsg("popVcc"));
                 });
 
             }
@@ -475,7 +475,7 @@
                     $('#txtVccno_' + i).bind('contextmenu', function(e) {
                         /*滑鼠右鍵*/
                         e.preventDefault();
-                        q_box("vcc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + $(this).val().substr(1, 3), "vcc", "95%", "95%", q_getMsg("popVcc"));
+                        q_box("vcc_rb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + $('#txtDatea').val().substr(0, 3), "vcc", "95%", "95%", q_getMsg("popVcc"));
                     });
 
                     $('#txtPrice_' + i).change(function() {
