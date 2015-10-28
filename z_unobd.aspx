@@ -67,7 +67,8 @@
 				$('#txtXenddate').val(q_date());
 				$('#txtXenddate').mask('999/99/99');
 				$('#txtXenddate').datepicker();
-				
+				$('#Xnoa').css('width','98%');
+                $('#txtXnoa').css('width','85%');
 			}
 
 			function q_boxClose(s2) {
