@@ -1017,6 +1017,12 @@
 				var t_where = "where=^^ 1=1 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
+				if(r_rank<8 && r_partno!='08'){
+					q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
+				}else{
+					q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
+				}
+				
 				$('#txtSalesno').val(r_userno);
 				$('#txtSales').val(r_name);
 				
@@ -1094,6 +1100,15 @@
                 	if($('#vtvccno_'+i).text()!="")
                 		$('#vtvccno_'+i).text("V");
                 }
+                
+                if(q_cur==1 || q_cur==2){
+                	if(r_rank<8 && r_partno!='08'){
+						q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
+					}else{
+						q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
+					}
+                }
+                
 			}
 
 			function readonly(t_para, empty) {
@@ -1113,11 +1128,6 @@
 					$('#btnOrdetoVcc').attr('disabled', 'disabled');
 					$('.storepart0').hide();
 					$('.storepart1').show();
-					if(r_rank<8 && r_partno!='08'){
-						q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
-					}else{
-						q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
-					}
 				}
 				
 				$('#div_addr2').hide();
