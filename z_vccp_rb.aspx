@@ -15,6 +15,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
+			var t_first=true;
             if (location.href.indexOf('?') < 0) {
                 location.href = location.href + "?;;;;"+((new Date()).getUTCFullYear()-1911);
             }
@@ -49,13 +50,12 @@
 							$('#q_report div div').eq(delete_report).hide();
 						}
 						
-						var t_first=true;
 						$('#q_report div div .radio').parent().each(function(index) {
 							if(!$(this).is(':hidden') && t_first){
 								$(this).children().removeClass('nonselect').addClass('select');
 								t_first=false;
 							}
-							if($(this).is(':hidden')){
+							if($(this).is(':hidden') && t_first){
 								$(this).children().removeClass('select').addClass('nonselect');
 							}
 						});
