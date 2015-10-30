@@ -1,18 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<title></title>
-		<script src="../script/jquery.min.js" type="text/javascript"></script>
-		<script src='../script/qj2.js' type="text/javascript"></script>
-		<script src='qset.js' type="text/javascript"></script>
-		<script src='../script/qj_mess.js' type="text/javascript"></script>
-		<script src='../script/mask.js' type="text/javascript"></script>
-		<link href="../qbox.css" rel="stylesheet" type="text/css" />
-		<link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-		<script src="css/jquery/ui/jquery.ui.core.js"></script>
-		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
-		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
-		<script type="text/javascript">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+    <head>
+        <title></title>
+        <script src="../script/jquery.min.js" type="text/javascript"></script>
+        <script src='../script/qj2.js' type="text/javascript"></script>
+        <script src='qset.js' type="text/javascript"></script>
+        <script src='../script/qj_mess.js' type="text/javascript"></script>
+        <script src="../script/qbox.js" type="text/javascript"></script>
+        <script src='../script/mask.js' type="text/javascript"></script>
+        <link href="../qbox.css" rel="stylesheet" type="text/css" />
+        <link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+        <script src="css/jquery/ui/jquery.ui.core.js"></script>
+        <script src="css/jquery/ui/jquery.ui.widget.js"></script>
+        <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
+        <script type="text/javascript">
 		
 			var q_name = 'cubm', t_bbsTag = 'tbbs', t_content = " ", afilter = [], bbsKey = [], t_count = 0, as, brwCount2 = 10;
 			var t_sqlname = 'cubm_load'; t_postname = q_name;
@@ -27,7 +28,8 @@
 			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
-			aPop = new Array(['txtMechno_', 'btnMech_', 'mech', 'noa,mech', 'txtMecho_,txtMech','mech_b.aspx']);
+			aPop = new Array(['txtMechno_', 'btnMech_', 'mech', 'noa,mech', 'txtMechno_,txtMech_','mech_b.aspx']
+				, ['txtUno_', 'btnUno_', 'view_uccc', 'uno,product,productno,radius,width,dime,lengthb,mount,weight', '0txtUno_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']);
 			$(document).ready(function () {
 				bbmKey = [];
 				bbsKey = ['noa', 'noq'];
@@ -48,7 +50,7 @@
 
 			function mainPost() {
 				q_getFormat();
-				bbsMask = [['txtDatea', r_picd]];
+				bbsMask = [['txtDatea', r_picd],['txtBtime','99:99'],['txtEtime','99:99']];
 				q_mask(bbsMask);
 				
 				/*var no_auth=true;
@@ -75,6 +77,12 @@
 	                            e.preventDefault();
 	                            var n = $(this).attr('id').replace('txtMechno_', '');
 	                            $('#btnMech_'+n).click();
+	                        });
+	                        $('#txtUno_' + j).bind('contextmenu', function(e) {
+	                            /*滑鼠右鍵*/
+	                            e.preventDefault();
+	                            var n = $(this).attr('id').replace('txtUno_', '');
+	                            $('#btnUno_'+n).click();
 	                        });
 					}
 				}
@@ -200,10 +208,14 @@
 						<input type="text" id="txtOrdeno.*" class="txt" style="width:75%;float:left;"/>
 						<input type="text" id="txtNo2.*" class="txt" style="width:15%;float:left;"/>
 					</td>
-					<td ><input type="text" id="txtUno.*" class="txt c1"/></td>
+					<td >
+						<input type="text" id="txtUno.*" class="txt c1"/>
+						<input type="button" id="btnUno.*" style="display:none;"/>
+					</td>
 					<td>
 						<input type="text" id="txtMechno.*" class="txt" style="width:45%;float:left;"/>
 						<input type="text" id="txtMech.*" class="txt" style="width:45%;float:left;"/>
+						<input type="button" id="btnMech.*" style="display:none;"/>
 					</td>
 					<td>
 						<input type="text" id="txtBtime.*" class="txt" style="width:40%;float:left;"/>
