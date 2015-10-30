@@ -220,6 +220,15 @@
                 q_nowf();
                 return true;
             }
+            
+            function bbtSave(as) {
+                if (!as['product']) {
+                    as[bbtKey[1]] = '';
+                    return;
+                }
+                q_nowf();
+                return true;
+            }
 
             function sum() {
             	var t_imount=0,t_iweight=0,t_omount=0,t_oweight=0;
@@ -546,6 +555,43 @@
                 </table>
             </div>
         </div>
+        <div class='dbbs'>
+            <table id="tbbs" class='tbbs' style=' text-align:center'>
+                <tr style='color:white; background:#003366;' >
+                    <td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+                    <td align="center" style="width:20px;"> </td>
+                    <td style="width:150px; text-align: center;">物品編號</td>
+                    <td style="width:300px; text-align: center;">物品名稱</td>
+                    <td style="width:120px; text-align: center;">倉庫</td>
+                    <td style="width:40px; text-align: center;">單位</td>
+                    <td style="width:100px; text-align: center;">入庫日</td>
+                    <td style="width:100px; text-align: center;">入庫數量</td>
+                    <td style="width:100px; text-align: center;">入庫重量</td>
+                    <td style="width:200px; text-align: center;">備註</td>
+                </tr>
+                <tr id="trSel.*" style='background:#cad3ff;'>
+                    <td style="width:1%;">
+                    <input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+                    <input id="txtNoq.*" type="text" style="display: none;" />
+                    </td>
+                    <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+                    <td>
+                    	<input id="btnProduct.*" type="button" style="width:20px;" value="."/>
+                    	<input id="txtProductno.*" type="text" style="float:left;width:80%;"/>
+                	</td>
+                	<td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
+                    <td>
+                    	<input id="txtStoreno.*" type="text" style="float:left;width:80%;"/>
+                    	<input id="btnStore.*" type="button" style="width:20px;" value="."/>
+                    </td>
+                    <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
+                    <td><input id="txtDatea.*" type="text" style="float:left;width:95%;"/></td>
+                    <td><input id="txtMount.*"  type="text" style="width:95%; text-align: right;"/></td>
+                    <td><input id="txtWeight.*"  type="text" style="width:95%; text-align: right;"/></td>
+                	<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
+                </tr>
+            </table>
+        </div>
         <div id="dbbt">
             <table id="tbbt">
                 <tbody>
@@ -558,9 +604,9 @@
                         <td style="width:300px; text-align: center;">物品名稱</td>
                         <td style="width:120px; text-align: center;">倉庫</td>
                         <td style="width:40px; text-align: center;">單位</td>
-                        <td style="width:100px; text-align: center;">入庫日</td>
-                        <td style="width:100px; text-align: center;">入庫數量</td>
-                        <td style="width:100px; text-align: center;">入庫重量</td>
+                        <td style="width:100px; text-align: center;">領料日</td>
+                        <td style="width:100px; text-align: center;">領料數量</td>
+                        <td style="width:100px; text-align: center;">領料重量</td>
                         <td style="width:200px; text-align: center;">備註</td>
                     </tr>
                     <tr>
@@ -585,43 +631,6 @@
                     	<td><input id="txtMemo..*" type="text" style="float:left;width:95%;"/></td>
                     </tr>
                 </tbody>
-            </table>
-        </div>
-        <div class='dbbs'>
-            <table id="tbbs" class='tbbs' style=' text-align:center'>
-                <tr style='color:white; background:#003366;' >
-                    <td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
-                    <td align="center" style="width:20px;"> </td>
-                    <td style="width:150px; text-align: center;">物品編號</td>
-                    <td style="width:300px; text-align: center;">物品名稱</td>
-                    <td style="width:120px; text-align: center;">倉庫</td>
-                    <td style="width:40px; text-align: center;">單位</td>
-                    <td style="width:100px; text-align: center;">領料日</td>
-                    <td style="width:100px; text-align: center;">領料數量</td>
-                    <td style="width:100px; text-align: center;">領料重量</td>
-                    <td style="width:200px; text-align: center;">備註</td>
-                </tr>
-                <tr id="trSel.*" style='background:#cad3ff;'>
-                    <td style="width:1%;">
-                    <input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-                    <input id="txtNoq.*" type="text" style="display: none;" />
-                    </td>
-                    <td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-                    <td>
-                    	<input id="btnProduct.*" type="button" style="width:20px;" value="."/>
-                    	<input id="txtProductno.*" type="text" style="float:left;width:80%;"/>
-                	</td>
-                	<td><input id="txtProduct.*" type="text" style="float:left;width:95%;"/></td>
-                    <td>
-                    	<input id="txtStoreno.*" type="text" style="float:left;width:80%;"/>
-                    	<input id="btnStore.*" type="button" style="width:20px;" value="."/>
-                    </td>
-                    <td><input id="txtUnit.*" type="text" style="float:left;width:95%;"/></td>
-                    <td><input id="txtDatea.*" type="text" style="float:left;width:95%;"/></td>
-                    <td><input id="txtMount.*"  type="text" style="width:95%; text-align: right;"/></td>
-                    <td><input id="txtWeight.*"  type="text" style="width:95%; text-align: right;"/></td>
-                	<td><input id="txtMemo.*" type="text" style="float:left;width:95%;"/></td>
-                </tr>
             </table>
         </div>
         <input id="q_sys" type="hidden" />
