@@ -27,7 +27,7 @@
 			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
-			aPop = new Array(['txtJobno_', 'txtJobno_', 'salm', 'noa,job,level1', 'txtJobno_,txtJob_,txtLevel1_','salm_b.aspx']);
+			aPop = new Array(['txtMechno_', 'btnMech_', 'mech', 'noa,mech', 'txtMecho_,txtMech','mech_b.aspx']);
 			$(document).ready(function () {
 				bbmKey = [];
 				bbsKey = ['noa', 'noq'];
@@ -70,7 +70,12 @@
 				for(var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-						
+							$('#txtMechno_' + j).bind('contextmenu', function(e) {
+	                            /*滑鼠右鍵*/
+	                            e.preventDefault();
+	                            var n = $(this).attr('id').replace('txtMechno_', '');
+	                            $('#btnMech_'+n).click();
+	                        });
 					}
 				}
 				_bbsAssign();
