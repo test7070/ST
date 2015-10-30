@@ -169,18 +169,19 @@
 					<td align="center" style="width:1%;">
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center"><a id='lblDatea'>作業日期</a></td>
-					<td align="center"><a id='lblOrdeno'>訂單號碼</a></td>
-					<td align="center"><a id='lblUno'>批號</a></td>
-					<td align="center"><a id='lblMech'>機台</a></td>
-					<td align="center"><a id='lblTime'>加工時間</a></td>
-					<td align="center"><a id='lblGmount'>領料數</a></td>
-					<td align="center"><a id='lblGweight'>領料重</a></td>
-					<td align="center"><a id='lblLength'>加工米數</a></td>
-					<td align="center"><a id='lblMount'>入庫數</a></td>
-					<td align="center"><a id='lblWeight'>入庫重 </a></td>
-					<td align="center"><a id='lblWorker'>製作人員 </a></td>
-					<td align="center"><a id='lblWorker2'>品管人員 </a></td>
+					<td align="center" style="width:20px;"> </td>
+					<td align="center" style="width:100px;"><a id='lblDatea'>作業日期</a></td>
+					<td align="center" style="width:100px;"><a id='lblOrdeno'>訂單號碼</a></td>
+					<td align="center" style="width:120px;"><a id='lblUno'>批號</a></td>
+					<td align="center" style="width:100px;"><a id='lblMech'>機台</a></td>
+					<td align="center" style="width:150px;"><a id='lblTime'>加工時間</a></td>
+					<td align="center" style="width:70px;"><a id='lblGmount'>領料數</a></td>
+					<td align="center" style="width:70px;"><a id='lblGweight'>領料重</a></td>
+					<td align="center" style="width:70px;"><a id='lblLength'>加工米數</a></td>
+					<td align="center" style="width:70px;"><a id='lblMount'>入庫數</a></td>
+					<td align="center" style="width:70px;"><a id='lblWeight'>入庫重 </a></td>
+					<td align="center" style="width:70px;"><a id='lblWorker'>製作人員 </a></td>
+					<td align="center" style="width:70px;"><a id='lblWorker2'>品管人員 </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td ><input class="btn"  id="btnMinus.*" type="button" value='-' style="font-weight: bold; "  /></td>
@@ -191,24 +192,24 @@
 						<input type="text" id="txtNoq.*" style="display:none;"/>
 					</td>
 					<td>
-						<input type="text" id="txtOrdeno.*" class="txt" style="width:80%;"/>
-						<input type="text" id="txtNo2.*" class="txt" style="width:15%;"/>
+						<input type="text" id="txtOrdeno.*" class="txt" style="width:75%;float:left;"/>
+						<input type="text" id="txtNo2.*" class="txt" style="width:15%;float:left;"/>
 					</td>
 					<td ><input type="text" id="txtUno.*" class="txt c1"/></td>
 					<td>
-						<input type="text" id="txtMechno.*" class="txt" style="width:45%;"/>
-						<input type="text" id="txtMech.*" class="txt" style="width:45%;"/>
+						<input type="text" id="txtMechno.*" class="txt" style="width:45%;float:left;"/>
+						<input type="text" id="txtMech.*" class="txt" style="width:45%;float:left;"/>
 					</td>
 					<td>
-						<input type="text" id="txtBtime.*" class="txt" style="width:45%;"/>
-						<span style="display:block;width:10px;">～</span>
-						<input type="text" id="txtEtime.*" class="txt" style="width:45%;"/>
+						<input type="text" id="txtBtime.*" class="txt" style="width:40%;float:left;"/>
+						<span style="display:block;width:10px;float:left;">～</span>
+						<input type="text" id="txtEtime.*" class="txt" style="width:40%;float:left;"/>
 					</td>
-					<td><input type="text" id="txtGmount.*" class="txt num" style="width:45%;"/></td>
-					<td><input type="text" id="txtGweight.*" class="txt num" style="width:45%;"/></td>
-					<td><input type="text" id="txtLength.*" class="txt num" style="width:45%;"/></td>
-					<td><input type="text" id="txtMount.*" class="txt num" style="width:45%;"/></td>
-					<td><input type="text" id="txtWeight.*" class="txt num" style="width:45%;"/></td>
+					<td><input type="text" id="txtGmount.*" class="txt num" style="width:95%;"/></td>
+					<td><input type="text" id="txtGweight.*" class="txt num" style="width:95%;"/></td>
+					<td><input type="text" id="txtLength.*" class="txt num" style="width:95%;"/></td>
+					<td><input type="text" id="txtMount.*" class="txt num" style="width:95%;"/></td>
+					<td><input type="text" id="txtWeight.*" class="txt num" style="width:95%;"/></td>
 					<td ><input type="text" id="txtWorker.*" class="txt c1"/></td>
 					<td ><input type="text" id="txtWorker2.*" class="txt c1"/></td>
 				</tr>
