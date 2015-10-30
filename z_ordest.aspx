@@ -15,12 +15,28 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
+			var t_ucc='';
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
 				q_gf('', 'z_ordest');
 			});
 			function q_gfPost() {
+				q_gt('ucc', '', 0, 0, 0, "");
+			}
+			function q_gtPost(t_name) {
+				switch (t_name) {
+					case 'ucc':
+						t_ucc = '';
+						var as = _q_appendData("ucc", "", true);
+						for ( i = 0; i < as.length; i++) {
+							t_ucc += (t_ucc.length > 0 ? '&' : '') + as[i].noa + '@' + as[i].noa;
+						}
+						loadFinish();
+						break;
+				}
+			}
+			function loadFinish() {
 				$('#q_report').q_report({
 					fileName : 'z_ordest',
 					options : [{
@@ -99,7 +115,15 @@
                     }, {
                         type : '1', //[32][33]   19
                         name : 'ylengthb'
-                    }]
+                    }, {
+						type : '5', //[34] 20
+						name : 'xbproduct3',
+						value : t_ucc.split('&')
+					}, {
+						type : '5', //[35] 21
+						name : 'xeproduct3',
+						value : t_ucc.split('&')
+					}]
 				});
 				q_popAssign();
 				q_getFormat();
@@ -117,6 +141,9 @@
 				size_change();
 				$('#Xstktype select').change(function() {
 					size_change();
+				});
+				$('#Xbproduct3 select').change(function(e){
+					$('#Xeproduct3 select').val($('#Xbproduct3 select').val());
 				});
 				var t_key = q_getHref();
 				if (t_key[1] != undefined)
@@ -207,9 +234,6 @@
 			}
 
 			function q_boxClose(s2) {
-			}
-
-			function q_gtPost(s2) {
 			}
 		</script>
 		<style type="text/css">
