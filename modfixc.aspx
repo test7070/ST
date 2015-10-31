@@ -52,6 +52,8 @@
 			}
 			function mainPost() {
 				q_getFormat();
+				bbmMask = [['txtDatea',r_picd]];
+				q_mask(bbmMask);
 				bbsMask = [['txtDatea1',r_picd+'-99:99'],['txtDatea2',r_picd+'-99:99']];
 				//q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
