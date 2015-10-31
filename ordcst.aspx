@@ -275,8 +275,7 @@
 
 			var ordbsArray = new Array;
 			function q_boxClose(s2) {///   q_boxClose 2/4
-				var
-				ret;
+				var ret;
 				switch (b_pop) {
 					case 'ordbs':
 						if (q_cur > 0 && q_cur < 4) {
@@ -440,7 +439,24 @@
 							q_Seek_gtPost();
 						break;
 					default:
-						if(t_name.substring(0, 11) == 'getproduct_'){
+                    	try{
+                    		t_para = JSON.parse(t_name);
+                    		if(t_para.action == 'importOrde'){
+                    			var as = _q_appendData("view_ordes", "", true);
+		                		if (as[0] != undefined) {
+		                			$('#txtCustno__'+t_para.n).val(as[0].custno);	
+		                			$('#txtCust__'+t_para.n).val(as[0].comp);	
+		                			$('#txtWeight__'+t_para.n).val(as[0].weight);	
+		                		}else{
+		                			alert('找不到訂單【'+t_para.ordeno+'-'+t_para.no2+'】');
+		                		}
+                    			sum();
+                    		}
+                    		break;
+                    	}catch(e){
+                    		
+                    	}
+                    	if(t_name.substring(0, 11) == 'getproduct_'){
      						var t_seq = parseInt(t_name.split('_')[1]);
 	                		as = _q_appendData('dbo.getproduct', "", true);
 	                		if(as[0]!=undefined){
@@ -448,8 +464,8 @@
 	                		}else{
 	                			$('#txtProduct_'+t_seq).val('');
 	                		}
-	                		break;
                         }
+                    	break;
 				}  /// end switch
 			}
 			
@@ -667,6 +683,16 @@
                 for (var i = 0; i < q_bbtCount; i++) {
                     $('#lblNo__' + i).text(i + 1);
                     if (!$('#btnMinut__' + i).hasClass('isAssign')) {
+                    	$('#txtOrdeno__'+i).change(function(e){
+							var n = $(this).attr('id').replace(/^(.*)__(\d+)$/,'$2');
+							n = parseInt(n);
+							ImportOrde(n);
+						});
+						$('#txtNo4__'+i).change(function(e){
+							var n = $(this).attr('id').replace(/^(.*)__(\d+)$/,'$2');
+							n = parseInt(n);
+							ImportOrde(n);
+						});
                     	$('#txtCustno__' + i).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
@@ -677,6 +703,14 @@
                 }
                 _bbtAssign();
             }
+            function ImportOrde(n){
+				var t_ordeno = $('#txtOrdeno__'+n).val();
+				var t_no2 = $('#txtNo4__'+n).val();
+				if(t_ordeno.length>0 && t_no2.length>0){
+					var t_where = "where=^^ noa='"+t_ordeno+"' and no2='" + t_no2 + "' ^^";
+                	q_gt('view_ordes', t_where, 0, 0, 0, JSON.stringify({action:'importOrde',n:n,ordeno:t_ordeno,no2:t_no2}), r_accy);
+				}
+			}
 			function genNo2(){
 				//自動增加NO2
 				var maxno2 = 0;
@@ -1362,6 +1396,7 @@
                     </td>
                     <td align="center" style="width:20px;"> </td>
                     <td align="center" style="width:80px;"><a>序</a><a style="color:red;">*必填</a></td>
+                    <td align="center" style="width:200px;"><a>訂單</a></td>
                     <td align="center" style="width:200px;"><a>客戶</a></td>
                     <td align="center" style="width:100px;"><a>重量</a></td>
                 </tr>
@@ -1372,6 +1407,11 @@
                     </td>
                     <td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
                     <td><input class="txt" id="txtNo2..*" type="text" style="width:95%;"/></td>
+                    <td>
+                    	<input type="text" id="txtOrdeno..*" class="txt" style="width:80%;"  />
+                    	<input type="text" id="txtNo4..*" class="txt" style="width:15%;"  />
+                    	<input type="button" id="btnOrdeno..*" value="." style="display:none;">
+                    </td>
                     <td>
                     	<input type="text" id="txtCustno..*" class="txt" style="width:45%;"  />
                     	<input type="text" id="txtCust..*" class="txt" style="width:50%;"  />
