@@ -52,7 +52,7 @@
 			}
 			function mainPost() {
 				q_getFormat();
-				bbsMask = [['txtDatea',r_picd]];
+				bbmMask = [['txtDatea',r_picd]];
 				q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
 				$('#btnIn').click(function(){				
