@@ -456,7 +456,7 @@
 							<input id="txtMech"  type="text" style="width:75%; color:green;"/>
 						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
-						<td><input id="txtDatea"  type="text"  class="txt c1"/></td>
+						<td><input id="txtDatea"  type="text"  class="txt c1" style="width : 95% ;"/></td>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
