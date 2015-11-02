@@ -59,7 +59,7 @@
 				$('#txtXframe2').css('width','130px');
 				
                 
-                /*var r_1911=1911;
+                var r_1911=1911;
 				if(r_len==4){//西元年
 					r_1911=0;
 				}else{
@@ -69,6 +69,7 @@
 				$('#txtXdate1').mask(r_picd);
                 $('#txtXdate2').mask(r_picd);
                 
+                /*
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
