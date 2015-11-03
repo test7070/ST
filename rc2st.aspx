@@ -132,7 +132,14 @@
 						t_moneys = q_float('txtTotal_' + j);
 					}
 					else{
-						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+						if(q_getPara('sys.project').toUpperCase()=='RK'){
+							if(t_unit=='KG' || t_unit=='公斤' || t_unit=='噸' || t_unit=='頓'){
+		                    	t_moneys = q_mul(t_prices,t_weights);
+		                    }else{
+		                    	t_moneys = q_mul(t_prices,t_mounts);
+		                    }
+						}
+						else if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							//批   裕承隆  是拿來當運費的單位   不能用
 							if(q_getPara('sys.comp').substring(0,2)=="裕承" && t_unit == '批' )
 								t_moneys = q_mul(t_prices, t_mounts);
@@ -239,9 +246,9 @@
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
 				q_cmbParse("cmbSpec", t_spec,'s');
 				
-				
-				
-				
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					$('#lblLcno').text('報關號碼');
+				}
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
 					if ($('#txtMemo').val().substr(0,1)=='*')
@@ -283,9 +290,7 @@
 					}
 				});
 				
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('#lblLcno').text('報關號碼');
-				}
+				
 				
 				$('#lblLcno').click(function() {
 					t_where = '';
@@ -1035,6 +1040,7 @@
 					$('.sprice').show();
 					$('.rk').show();
 					$('.RK_hide').hide();
+					$('#lblWeights_st').text('重量/M');
 				}
 			}
 
