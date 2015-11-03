@@ -1200,7 +1200,9 @@
 					opacity : 0
 				});
 				
-				var t_where = " where=^^ vccno='" + $('#txtVccno').val() + "'^^";
+				var t_vccno=!emp($('#txtVccno').val())?$('#txtVccno').val():$('#txtNoa').val();
+				
+				var t_where = " where=^^ vccno='" + t_vccno + "'^^";
 				q_gt('umms', t_where, 0, 0, 0, 'btnDele', r_accy);
 				
 				//_btnDele();

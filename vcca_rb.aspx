@@ -682,7 +682,8 @@
 				q_nowf();
 				return true;
 			}
-
+			
+			//1041103轉來發票不計算金額
 			function sum() {
 				if (!(q_cur == 1 || q_cur == 2))
 					return;
@@ -694,7 +695,8 @@
 					t_mounts = q_float('txtMount_' + k);
 					t_prices = q_float('txtPrice_' + k);
 					t_moneys = round(t_mounts * t_prices, 0);
-					$('#txtMoney_' + k).val(t_moneys);
+					if($('#txtType').val()!='E')
+						$('#txtMoney_' + k).val(t_moneys);
 					t_money += t_moneys;
 					t_mount += t_mounts;
 				}
@@ -775,9 +777,11 @@
 						break;
 					default:
 				}
-				$('#txtMoney').val(t_money);
-				$('#txtTax').val(t_tax);
-				$('#txtTotal').val(t_total);
+				if($('#txtType').val()!='E'){
+					$('#txtMoney').val(t_money);
+					$('#txtTax').val(t_tax);
+					$('#txtTotal').val(t_total);
+				}
 			}
 
 			function refresh(recno) {
