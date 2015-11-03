@@ -33,7 +33,7 @@
                     options : [
                     {// [1][2]
                         type : '1',
-                        name : 'xmodnoa'
+                        name : 'xnoa'
                     }]
                 });
                 q_popAssign();
@@ -41,11 +41,11 @@
 				q_langShow();   
                 
                 var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
-                $('#txtXmodnoa1').val(t_noa);
-                $('#txtXmodnoa2').val(t_noa);
+                $('#txtXnoa1').val(t_noa);
+                $('#txtXnoa2').val(t_noa);
                 
-                $('#txtXmodnoa1').css('width','130px');
-				$('#txtXmodnoa2').css('width','130px');        
+                $('#txtXnoa1').css('width','130px');
+				$('#txtXnoa2').css('width','130px');        
 									
 			}
 

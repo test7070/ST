@@ -218,7 +218,7 @@
 			}
 
 			function btnPrint() {
-				q_box('z_modfixc_rs.aspx' + "?;;;noa=" + trim($('#txtModnoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				q_box('z_modfixc_rs.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
 
 			function wrServer(key_value) {
@@ -456,7 +456,7 @@
 							<input id="txtMech"  type="text" style="width:75%; color:green;"/>
 						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
-						<td><input id="txtDatea"  type="text"  class="txt c1"/></td>
+						<td><input id="txtDatea"  type="text"  class="txt c1" style="width : 95% ;"/></td>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>

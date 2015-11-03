@@ -34,7 +34,8 @@
 		    brwKey = 'noa';
 		    brwCount2 = 6;
 		    
-		    aPop = new Array(['txtDeviceno_', 'btnDeviceno_', 'modeq', 'noa,device', 'txtDeviceno_,txtDevice_', 'modeq_b.aspx']);
+		    aPop = new Array(['txtDeviceno_', 'btnDeviceno_', 'modeq', 'noa,device', 'txtDeviceno_,txtDevice_', 'modeq_b.aspx'],
+		    				 ['txtDeviceno_', 'btnDeviceno_', 'model', 'noa,model' , 'txtDeviceno_,txtDevice_', 'model_b.aspx']);
 			
 		    $(document).ready(function () {
 		        bbmKey = ['noa'];
@@ -62,6 +63,7 @@
 				bbmMask = [['txtDatea', r_picd]];
 				bbsMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
+				
 								
             }
 
@@ -380,7 +382,7 @@
 					</td>								
 					
 					<td>
-					<input id="txtNoq.*" type="hidden" />	
+					<input id="txtNoq.*" type="hidden" />
 					<input id="txtDeviceno.*" type="text" class="txt" style="width:35%;"/>
 					<input id="txtDevice.*"type="text" class="txt" style="width:50%;"/>
 					<input id="btnDeviceno.*" type="button" value=".." style="width:7%;" />
