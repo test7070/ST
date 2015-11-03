@@ -445,7 +445,7 @@
                     			var as = _q_appendData("view_ordes", "", true);
 		                		if (as[0] != undefined) {
 		                			$('#txtCustno__'+t_para.n).val(as[0].custno);	
-		                			$('#txtCust__'+t_para.n).val(as[0].comp);	
+		                			$('#txtCust__'+t_para.n).val(as[0].cust);	
 		                			$('#txtWeight__'+t_para.n).val(as[0].weight);	
 		                		}else{
 		                			alert('找不到訂單【'+t_para.ordeno+'-'+t_para.no2+'】');
