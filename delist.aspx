@@ -296,6 +296,20 @@
 			var z_cno=r_cno,z_acomp=r_comp,z_nick=r_comp.substr(0,2);
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'btnOk_checkuno':
+						var as = _q_appendData("view_uccb", "", true);
+						if (as[0] != undefined) {
+							var msg = '';
+							for (var i = 0; i < as.length; i++) {
+								msg += (msg.length > 0 ? '\n' : '') + as[i].uno + ' 此批號已存在!!\n【' + as[i].action + '】單號：' + as[i].noa;
+							}
+							alert(msg);
+							Unlock(1);
+							return;
+						} else {
+							getUno();
+						}
+						break;
                 	case 'rc2s':
 						var as = _q_appendData("rc2s", "", true);
 						for (var i = 0; i < ordcsArray.length; i++) {
@@ -395,35 +409,41 @@
                     alert(t_err);
                     return;
                 }
-                
-                //bbs_sum();
-                sum();
-                
-                if(q_cur==1)
-					$('#txtWorker').val(r_name);
-				else
-					$('#txtWorker2').val(r_name);
-                
-                var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-                if (s1.length == 0 || s1 == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_deli') + $('#txtDatea').val(), '/', ''));
-                else
-                    wrServer(s1);
-            }
-            
-            function q_stPost() {
-				if (!(q_cur == 1 || q_cur == 2))
-					return false;
-				
-				if(q_cur==2 && !emp($('#txtRc2no').val())){//修改後重新產生 避免資料不對應
-					//rc2.post內容
-					q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
+                var t_where = '';
+				for (var i = 0; i < q_bbsCount; i++) {
+					if ($.trim($('#txtUno_' + i).val()).length > 0)
+						t_where += (t_where.length > 0 ? ' or ' : '') + "(uno='" + $.trim($('#txtUno_' + i).val()) + "' and not(accy='" + r_accy + "' and tablea='rc2s' and noa='" + $.trim($('#txtNoa').val()) + "'))";
 				}
+				if (t_where.length > 0)
+					q_gt('view_uccb', "where=^^" + t_where + "^^", 0, 0, 0, 'btnOk_checkuno');
+				else
+					getUno();
+            }
+            function getUno() {
+				var t_buno = '　';
+				var t_datea = '　';
+				var t_style = '　';
+				for (var i = 0; i < q_bbsCount; i++) {
+					if (i != 0) {
+						t_buno += '&';
+						t_datea += '&';
+						t_style += '&';
+					}
+					if ($('#txtUno_' + i).val().length == 0 ) {
+						if(q_getPara('sys.comp').substring(0,2)=='傑期' && $('#txtProductno_'+i).val().toUpperCase()=='OEM'){
+							
+						}else{
+							t_buno += '';
+							t_datea += $('#txtDatea').val();
+							t_style += $('#txtStyle_' + i).val();
+						}
+					}
+				}
+				q_func('qtxt.query.getuno', 'uno.txt,getuno,' + t_buno + ';' + t_datea + ';' + t_style + ';');
 			}
-            
-            function q_funcPost(t_func, result) {
-                switch(t_func) {
-                	case 'rc2_post.post.a1':
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'rc2_post.post.a1':
                 		q_func('qtxt.query.post0', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;'+r_userno);
                 		break;
                 	case 'rc2_post.post.a2':
@@ -450,10 +470,55 @@
                         		alert('成功轉出進貨單!!');
                         break;
 					case 'qtxt.query.post2':
-						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3)
+						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3);
                         break;
-                }
-            }
+					case 'qtxt.query.getuno':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							if (as.length != q_bbsCount) {
+								alert('批號取得異常。');
+							} else {
+								for (var i = 0; i < q_bbsCount; i++) {
+									if ($('#txtUno_' + i).val().length == 0) {
+										if(q_getPara('sys.comp').substring(0,2)=='傑期' && $('#txtProductno_'+i).val().toUpperCase()=='OEM'){
+							
+										}else{
+											$('#txtUno_' + i).val(as[i].uno);
+										}
+									}
+								}
+							}
+						}
+						if (q_cur == 1)
+							$('#txtWorker').val(r_name);
+						else
+							$('#txtWorker2').val(r_name);
+						sum();
+						var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
+		                if (s1.length == 0 || s1 == "AUTO")
+		                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_deli') + $('#txtDatea').val(), '/', ''));
+		                else
+		                    wrServer(s1);
+						/*var t_noa = trim($('#txtNoa').val());
+						var t_date = trim($('#txtDatea').val());
+						if (t_noa.length == 0 || t_noa == "AUTO")
+							q_gtnoa(q_name, replaceAll(q_getPara('sys.key_rc2') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+						else
+							wrServer(t_noa);
+						break;*/
+						
+				}
+			}
+            
+            function q_stPost() {
+				if (!(q_cur == 1 || q_cur == 2))
+					return false;
+				
+				if(q_cur==2 && !emp($('#txtRc2no').val())){//修改後重新產生 避免資料不對應
+					//rc2.post內容
+					q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
+				}
+			}
 
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
