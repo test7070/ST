@@ -42,7 +42,8 @@
 				['txtProductno3_', 'btnProduct3_', 'fixucc', 'noa,namea,unit', 'txtProductno3_,txtProduct_,txtUnit_,txtProduct_', 'fixucc_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype', 'txtTggno,txtTgg,txtNick,txtPaytype', 'tgg_b.aspx']
+				['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype', 'txtTggno,txtTgg,txtNick,txtPaytype', 'tgg_b.aspx'],
+				['txtCustno_', 'btnCustno_', 'cust', 'noa,comp', 'txtCustno_,txtComp_', 'cust_b.aspx']
 			);
 
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
@@ -147,7 +148,6 @@
 						['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype', 'txtTggno,txtTgg,txtNick,txtPaytype', 'tgg_b.aspx']
 					);
 				}
-				
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtOmount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtPrice', 10, q_getPara('rc2.pricePrecision'), 1],
@@ -662,6 +662,9 @@
 				var isStyle = (hasStyle.toString()=='1'?$('.isStyle').show():$('.isStyle').hide());
 				var hasSpec = q_getPara('sys.isspec');
 				var isSpec = (hasSpec.toString()=='1'?$('.isSpec').show():$('.isSpec').hide());
+				if (q_getPara('sys.project').toUpperCase()!='XY'){
+					$('.isCust').hide();
+				}
 			}
 
 			function btnMinus(id) {
@@ -1247,6 +1250,7 @@
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a></td>
 					<td align="center" style="width:100px;">已採購量<br>未採購量</td>
 					<td align="center" style="width:200px;">備註</td>
+					<td align="center" style="width:250px;" class="isCust"><a id='lblCustnos'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblLdates'> </a></td>
 					<td align="center" style="width:50px;">詢價<br>記錄</td>
 					<td align="center" style="width:50px;">歷史詢<br>價記錄</td>
@@ -1293,6 +1297,11 @@
 						<input id="txtMemo.*" type="text" style="float:left;width:195px;"/>
 						<!--<input id="txtOrdeno.*" type="text" style="float:left;width:145px;" />
 						<input id="txtNo2.*" type="text" style="float:left;width:40px;" />-->
+					</td>
+					<td class="isCust">
+						<input id="txtCustno.*" type="text" class="txt" style="width:35%;"/>
+						<input id="txtComp.*"type="text" class="txt" style="width:50%;"/>
+						<input id="btnCustno.*" type="button" value="." style="width:7%;" />
 					</td>
 					<td><input id="txtLdate.*" type="text" class="txt c2"/></td>
 					<td align="center"><input class="btn" id="btnTmprecord.*" type="button" value='.' style=" font-weight: bold;" /></td>
