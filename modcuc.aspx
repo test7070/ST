@@ -61,9 +61,8 @@
             function mainPost() {
             	q_getFormat();
 				bbmMask = [['txtDatea', r_picd]];
-				bbsMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
-				
+				bbsNum = [['txtMount', 15, 0]];
 								
             }
 
