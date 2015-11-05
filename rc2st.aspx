@@ -240,7 +240,7 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
-				q_cmbParse("cmbSpec", t_spec,'s');
+				q_cmbParse("combSpec", t_spec,'s');
 				
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					$('#lblLcno').text('報關號碼');
@@ -529,7 +529,7 @@
 									newB_ret.push(ordcsArray[j]);
 								}
 							}
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,cmbSpec,txtSize,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit,txtUnit2', newB_ret.length, newB_ret
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,combSpec,txtSize,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit,txtUnit2', newB_ret.length, newB_ret
 							, 'uno,productno,product,spec,spec,size,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,class,style,unit,unit2', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							t_where = "where=^^ noa='" + newB_ret[0].noa + "'";
@@ -757,11 +757,11 @@
 				});
 				
 				for(var i=0;i<q_bbsCount;i++){
-					if($('#cmbSpec_'+i).is(":visible")){
-						$('#txtSpec_'+i).val($('#cmbSpec_'+i).val());						
+					if($('#combSpec_'+i).is(":visible")){
+						$('#txtSpec_'+i).val($('#combSpec_'+i).val());						
 					}
 				}
-				
+				//alert($('#txtSpec_0').val()+'____'+$('#cmbSpec_0').val());
 				$('#txtOrdcno').val(GetOrdcnoList());
 				//日期檢查
 				if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
@@ -867,6 +867,7 @@
 						else
 							$('#txtWorker2').val(r_name);
 						sum();
+						
 						var t_noa = trim($('#txtNoa').val());
 						var t_date = trim($('#txtDatea').val());
 						if (t_noa.length == 0 || t_noa == "AUTO")
@@ -1159,6 +1160,7 @@
 			function refreshBbs(){
 				//金額小計自訂
 				for(var i=0;i<q_bbsCount;i++){
+					$('#combSpec_'+i).val($('#txtSpec_'+i).val());
 					$('#txtTotal_'+i).attr('readonly','readonly');
 					if($('#chkAprice_'+i).prop('checked')){
 						$('#txtTotal_'+i).css('color','black').css('background-color','white');
@@ -1308,7 +1310,7 @@
 				}
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					for(var i=0;i<q_bbsCount;i++){
-						$('#cmbSpec_'+i).show();
+						$('#combSpec_'+i).show();
 						$('#txtSpec_'+i).hide();	
 					}
 				}
@@ -1702,7 +1704,7 @@
 						<input id="txtDime.*" type="text" style="display:none;"/>
 						<input id="txtLengthb.*" type="text" style="display:none;"/>
 						<input id="txtSpec.*" type="text" style="float:left;"/>
-						<select id='cmbSpec.*' style="width:95%;display:none;"> </select>
+						<select id='combSpec.*' style="width:95%;display:none;"> </select>
 					</td>
 					<td class="RK_hide"><input id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
