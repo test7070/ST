@@ -47,7 +47,8 @@
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp,addr', 'txtCno,txtAcomp,txtAddr2', 'acomp_b.aspx'],
 				['txtTggno', 'lblTgg', 'tgg', 'noa,comp,trantype,paytype,salesno,sales,tel,fax,zip_comp,addr_comp'
-				, 'txtTggno,txtTgg,cmbTrantype,txtPaytype,txtSalesno,txtSales,txtTel,txtFax,txtPost,txtAddr,txtPost2', 'tgg_b.aspx']
+				, 'txtTggno,txtTgg,cmbTrantype,txtPaytype,txtSalesno,txtSales,txtTel,txtFax,txtPost,txtAddr,txtPost2', 'tgg_b.aspx'],
+				['txtCustno_', 'btnCustno_', 'cust', 'noa,comp', 'txtCustno_,txtComp_', 'cust_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -522,6 +523,9 @@
 				}else{
 					$('.aprice').hide();
 				}
+				if(q_getPara('sys.project').toUpperCase()!='XY'){
+					$('.isCust').hide();
+				}	
 				//金額小計自訂
 				for(var i=0;i<q_bbsCount;i++){
 					$('#txtTotal_'+i).attr('readonly','readonly');
@@ -1124,7 +1128,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' >
+		<div class='dbbs' style="width:1650px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td  align="center" style="width:30px;">
@@ -1136,13 +1140,14 @@
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyles'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMount_st'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblOmount_st'> </a></td>
+					<td align="center" style="width:110px;"><a id='lblOmount_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a></td>
 					<td class="aprice" align="center" style="width:40px;"><a id='lblAprice_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTrandates'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblGemounts'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblMemos'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblGemounts'> </a></td>
+					<td align="center" ><a id='lblMemos'> </a></td>
+					<td align="center" style="width:130px;" class="isCust"><a id='lblCustnos'> </a></td>
 					<td align="center" style="width:45px;"><a id='lblRc2record'> </a></td>
 					<td align="center" style="width:45px;"><a id='lblCancels'> </a></td>
 					<td align="center" style="width:45px;"><a id='lblEndas'> </a></td>
@@ -1184,6 +1189,11 @@
 						<input class="txt" id="txtOrdbno.*" type="text" style="width:70%;" />
 						<input class="txt" id="txtNo3.*" type="text" style="width:20%;" />
 						<input id="recno.*" type="hidden" />
+					</td>
+					<td class="isCust">
+						<input id="txtCustno.*" type="text" class="txt c1" style="width:80%;"/>
+						<input id="btnCustno.*" type="button" value="." style=" font-weight: bold" />
+						<input id="txtComp.*"type="text" class="txt c1" />
 					</td>
 					<td align="center"><input class="btn" id="btnRc2record.*" type="button" value='.' style=" font-weight: bold;" /></td>
 					<td align="center"><input class="btn" id="chkCancel.*" type="checkbox"/></td>
