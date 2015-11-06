@@ -186,10 +186,21 @@
 						input.selectionEnd = $(this).val().indexOf(n) + (n + "").length;
 					}
 				});
-
+				
+				$('#btnOrde').hide();
+				if (q_getPara('sys.project').toUpperCase()=='XY'){
+					$('#btnOrde').show();
+				}
 				$('#btnOrde').click(function() {
-					var t_where =" isnull(enda,'0')='0' and ISNULL(cancel,'0')='0' and noa+'_'+no2 not in (select isnull(ordeno,'')+'_'+isnull(no2,'') from view_ordbs" + r_accy + " where noa!='" + $('#txtNoa').val() + "') and productno in ( select noa from ucc)";
-					q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+";"+r_accy, 'ordes', "95%", "95%", q_getMsg('popOrde'));
+					//var t_where =" isnull(enda,'0')='0' and ISNULL(cancel,'0')='0' and noa+'_'+no2 not in (select isnull(ordeno,'')+'_'+isnull(no2,'') from view_ordbs" + r_accy + " where noa!='" + $('#txtNoa').val() + "') and productno in ( select noa from ucc)";
+					//q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+";"+r_accy, 'ordes', "95%", "95%", q_getMsg('popOrde'));
+					
+					if (q_getPara('sys.project').toUpperCase()=='XY'){
+						var t_where =" isnull(enda,'0')='0' and ISNULL(cancel,'0')='0' ";
+						//排除已出過貨
+						t_where +=" and not exists(select * from view_vcc where ordeno=view_ordes"+r_accy+".noa and no2=view_ordes"+r_accy+".no2)";
+						q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+";"+r_accy, 'ordes', "95%", "95%", q_getMsg('popOrde'));
+					}
 				});
 
 				//變動按鈕
@@ -1168,9 +1179,7 @@
 						<td class="td2" colspan="3"><input id="txtTel" type="text" class="txt c1"/></td>
 						<td class="td5"><span> </span><a id='lblFax' class="lbl"> </a></td>
 						<td class="td6" colspan="2"><input id="txtFax" type="text" class="txt c1"/></td>
-					   <td class="td8" align="center">
-                            <!--<input id="btnOrde" type="button" style="text-align: center;"/>-->
-                        </td>
+						<td class="td8" align="center"><input id="btnOrde" type="button" style="text-align: center;"/></td>
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id='lblAddr' class="lbl"> </a></td>
@@ -1295,8 +1304,8 @@
 					</td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c2" style="float:left;"/>
-						<!--<input id="txtOrdeno.*" type="text" style="float:left;width:145px;" />
-						<input id="txtNo2.*" type="text" style="float:left;width:40px;" />-->
+						<input id="txtOrdeno.*" type="hidden" style="float:left;width:145px;" />
+						<input id="txtNo2.*" type="hidden" style="float:left;width:40px;" />
 					</td>
 					<td class="isCust">
 						<input id="txtCustno.*" type="text" class="txt c1" style="width:70%;"/>

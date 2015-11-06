@@ -36,14 +36,17 @@
                         name : 'xnoa'
                     },{//[3][4]
                         type : '1',
-                        name : 'xnob'
+                        name : 'xmodnoa'
                     },{//[5][6]
+                        type : '1',
+                        name : 'xnob'
+                    },{//[7][8]
                     	type : '1',
                     	name : 'xdatea'
-                    },{//[7]
+                    },{//[9]
                     	type : '6',
                     	name : 'xworker'
-                    },{//[8][9]
+                    },{//[10][11]
                     	type : '1',
                     	name : 'xframe'
                     }]
@@ -55,6 +58,15 @@
                 var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
                 $('#txtXnoa1').val(t_noa);
                 $('#txtXnoa2').val(t_noa);
+                
+                var t_modnoa=q_getHref()[3]=='undefined'?'':q_getHref()[3];
+                $('#txtXmodnoa1').val(t_modnoa);
+                $('#txtXmodnoa2').val(t_modnoa);
+                
+                $('#txtXnoa1').css('width','130px');
+				$('#txtXnoa2').css('width','130px'); 
+				$('#txtXmodnoa1').css('width','130px');
+				$('#txtXmodnoa2').css('width','130px'); 
                         
 				      var r_1911=1911;
 				if(r_len==4){//西元年
