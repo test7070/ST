@@ -301,13 +301,18 @@
 						if (as[0] != undefined) {
 							var msg = '';
 							for (var i = 0; i < as.length; i++) {
-								msg += (msg.length > 0 ? '\n' : '') + as[i].uno + ' 此批號已存在!!\n【' + as[i].action + '】單號：' + as[i].noa;
+								if($('#txtRc2no').val()!=as[i].noa)
+									msg += (msg.length > 0 ? '\n' : '') + as[i].uno + ' 此批號已存在!!\n【' + as[i].action + '】單號：' + as[i].noa;
 							}
-							alert(msg);
-							Unlock(1);
-							return;
+							if(msg.length>0){
+								alert('ERROR:'+msg);
+								Unlock(1);
+								return;
+							}else{
+								getUno(0);
+							}
 						} else {
-							getUno();
+							getUno(0);
 						}
 						break;
                 	case 'rc2s':
@@ -417,29 +422,31 @@
 				if (t_where.length > 0)
 					q_gt('view_uccb', "where=^^" + t_where + "^^", 0, 0, 0, 'btnOk_checkuno');
 				else
-					getUno();
+					getUno(0)
             }
-            function getUno() {
-				var t_buno = '　';
-				var t_datea = '　';
-				var t_style = '　';
-				for (var i = 0; i < q_bbsCount; i++) {
-					if (i != 0) {
-						t_buno += '&';
-						t_datea += '&';
-						t_style += '&';
+            function getUno(n) {
+				if(n<q_bbsCount){
+					t_buno = ' 　';
+					t_datea = $('#txtDatea').val();
+					t_style = $('#txtStyle_' + n).val();
+					if($('#txtUno_' + n).val().length == 0 && $('#txtProductno_'+n).val().toUpperCase()!='OEM' && $('#txtStyle_' + n).val().toUpperCase()>='A' && $('#txtStyle_' + n).val().toUpperCase()<='M'){
+						q_func('qtxt.query.getuno_'+n, 'uno.txt,getuno_bydate,' + t_buno + ';' + t_datea + ';' + t_style + ';');	
+					}else{
+						getUno(n+1);
 					}
-					if ($('#txtUno_' + i).val().length == 0 ) {
-						if(q_getPara('sys.comp').substring(0,2)=='傑期' && $('#txtProductno_'+i).val().toUpperCase()=='OEM' && $('#txtStyle_' + i).val().toUpperCase()>='A' && $('#txtStyle_' + i).val().toUpperCase()<='M'){
-							
-						}else{
-							t_buno += '';
-							t_datea += $('#txtDatea').val();
-							t_style += $('#txtStyle_' + i).val();
-						}
-					}
+				}else{
+					if (q_cur == 1)
+						$('#txtWorker').val(r_name);
+					else
+						$('#txtWorker2').val(r_name);
+					sum();
+					var t_noa = trim($('#txtNoa').val());
+					var t_date = trim($('#txtDatea').val());
+					if (t_noa.length == 0 || t_noa == "AUTO")
+						q_gtnoa(q_name, replaceAll(q_getPara('sys.key_rc2') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+					else
+						wrServer(t_noa);
 				}
-				q_func('qtxt.query.getuno', 'uno.txt,getuno_bydate,' + t_buno + ';' + t_datea + ';' + t_style + ';');
 			}
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
@@ -472,40 +479,16 @@
 					case 'qtxt.query.post2':
 						_btnOk($('#txtNoa').val(), bbmKey[0],'', '', 3);
                         break;
-					case 'qtxt.query.getuno':
-						var as = _q_appendData("tmp0", "", true, true);
-						if (as[0] != undefined) {
-							if (as.length != q_bbsCount) {
-								//alert('批號取得異常。');
-							} else {
-								for (var i = 0; i < q_bbsCount; i++) {
-									if ($('#txtUno_' + i).val().length == 0) {
-										if(q_getPara('sys.comp').substring(0,2)=='傑期' && $('#txtProductno_'+i).val().toUpperCase()=='OEM' && $('#txtStyle_' + i).val().toUpperCase()>='A' && $('#txtStyle_' + i).val().toUpperCase()<='M'){
-							
-										}else{
-											$('#txtUno_' + i).val(as[i].uno);
-										}
-									}
-								}
+					default:
+						if(t_func.substring(0,18)=='qtxt.query.getuno_'){
+							var n = t_func.replace('qtxt.query.getuno_','');
+							var as = _q_appendData("tmp0", "", true, true);
+							if (as[0] != undefined) {
+								$('#txtUno_' + n).val(as[0].uno);
 							}
+							getUno(parseInt(n)+1);
 						}
-						if (q_cur == 1)
-							$('#txtWorker').val(r_name);
-						else
-							$('#txtWorker2').val(r_name);
-						sum();
-						var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
-		                if (s1.length == 0 || s1 == "AUTO")
-		                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_deli') + $('#txtDatea').val(), '/', ''));
-		                else
-		                    wrServer(s1);
-						/*var t_noa = trim($('#txtNoa').val());
-						var t_date = trim($('#txtDatea').val());
-						if (t_noa.length == 0 || t_noa == "AUTO")
-							q_gtnoa(q_name, replaceAll(q_getPara('sys.key_rc2') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-						else
-							wrServer(t_noa);
-						break;*/
+						break;
 						
 				}
 			}
