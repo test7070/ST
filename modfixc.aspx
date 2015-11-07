@@ -50,6 +50,7 @@
 				}
 				mainForm(0);
 			}
+			
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtDatea',r_picd]];
@@ -57,13 +58,13 @@
 				bbsMask = [['txtDatea1',r_picd+'-99:99'],['txtDatea2',r_picd+'-99:99']];
 				//q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
-				q_cmbParse("cmbMech2", q_getPara('modfixc.mech'));
 				q_cmbParse("cmbWay",'傳統車床(砂紙研磨),傳統車床(砂輪機研磨),CNC車修,不須車修或研磨','s');
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2)){
 						q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");
 					}	
 				});
+					
 			}
 			          	 
 
@@ -77,6 +78,7 @@
 				b_pop = '';
 			}
 			var delId='';
+			var z_indate='';
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'ins_modfixs':
@@ -125,20 +127,39 @@
 							wrServer($.trim($('#txtNoa').val()));
 						}
 						break;
-						
+					case 'modfix':
+						var as = _q_appendData("modfix", "", true);
+						if (as[0] != undefined) {
+							z_indate = as[0].datea;
+						}
+						break;
 					case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
                    		 break;  	
 				}
 			}
-
+			
+			function compareDate () {
+			  	var t_innoa = trim($('#txtInnoa').val());
+				t_where = "where=^^ noa='" + t_innoa + "' ^^";
+				q_gt('modfix', t_where, 0, 0, 0, "");
+			}
+			
 			function btnOk() {
 				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
+				}				
+				
+				compareDate();
+				var t_date  = trim($('#txtDatea').val());
+				if(t_date < z_indate){
+					alert('維修日期錯誤:\n　　維修日期('+t_date+')早於入庫日期('+z_indate+')');
+					return;
 				}
+							
 				
 				var t_noa = trim($('#txtNoa').val());
 				var t_date = trim($('#txtDatea').val());
@@ -229,7 +250,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['nob'] || !as['way'] || !as['bebottom'] || !as['enbottom'] ) {
+				if (!as['nob']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -239,6 +260,7 @@
 
 			function refresh(recno) {
 				_refresh(recno);		
+				compareDate();
 				refreshBbm();
 			}
 
@@ -453,9 +475,8 @@
 					</tr>
 						<td><span> </span><a id="lblMechno" class="lbl btn"> </a></td>
 						<td colspan="3">
-							<input id="txtMechno"  type="text" style="width:20%;"/>
-							<input id="txtMech"  type="text" style="width:30%; color:green;"/>
-							<select id="cmbMech2" type="text" class="txt c1" style="width : 50%;"/select>
+							<input id="txtMechno"  type="text" style="width:40%;"/>
+							<input id="txtMech"  type="text" style="width:60%; color:green;"/>						
 						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1" style="width : 95% ;"/></td>

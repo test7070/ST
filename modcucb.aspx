@@ -20,9 +20,9 @@
 		    }
 
 		    q_tables = 's';
-		    var q_name = "modcuc";
+		    var q_name = "modcucb";
 		    var q_readonly = ['txtNoa','txtWorker'];
-		    var q_readonlys = ['txtDevice'];
+		    var q_readonlys = ['txtMech'];
 		    var bbmNum = [];
 		    var bbsNum = [];
 		    var bbmMask = [];
@@ -34,8 +34,7 @@
 		    brwKey = 'noa';
 		    brwCount2 = 3;
 		    
-		    aPop = new Array(['txtDeviceno_', 'btnDeviceno_', 'modeq', 'noa,device', 'txtDeviceno_,txtDevice_', 'modeq_b.aspx'],
-		    				 ['txtDeviceno_', 'btnDeviceno_', 'model', 'noa,model' , 'txtDeviceno_,txtDevice_', 'model_b.aspx']);
+		    aPop = new Array(['txtMechno_', 'btnMech_', 'mech', 'noa,mech', 'txtMechno_,txtMech_', 'mech_b.aspx']);
 			
 		    $(document).ready(function () {
 		        bbmKey = ['noa'];
@@ -63,7 +62,8 @@
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				bbsNum = [['txtMount', 15, 0]];
-								
+				
+				q_cmbParse("cmbMech2", q_getPara('modfixc.mech'),'s');				
             }
 
 		    function q_gtPost(t_name) {
@@ -99,12 +99,11 @@
 		    }
 		    
 			function bbsSave(as) {
-		        if (!as['device']) {
+		        if (!as['mech2']) {
 		            as[bbsKey[1]] = '';
 		            return;
 		        }
 		        q_nowf();
-		        as['datea'] = abbm2['datea'];
 		        return true;
 		    }		    
 
@@ -119,7 +118,7 @@
 		    }
 
 		    function btnPrint() {
-				q_box('z_modcuc_rs.aspx' + "?;;;noa='" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
+				q_box('z_modcucb_rs.aspx' + "?;;;noa='" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
 		    }
 		    
 			function btnOk() {
@@ -172,7 +171,7 @@
 			function _btnSeek() {
             	if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('modcuc_s.aspx', q_name + '_s', "500px", "50%", q_getMsg("popSeek"));
+				q_box('modcucb_s.aspx', q_name + '_s', "500px", "50%", q_getMsg("popSeek"));
             }
 		    function btnTop() {
 		        _btnTop();
@@ -331,9 +330,9 @@
 			<div class="dview" id="dview">
 				<table class="tview" id="tview">
 					<tr>
-						<td align="center" style="width:1%; color:black;"><a id='vewChk'> </a></td>
-						<td align="center" style="width:15%; color:black;"><a id='vewDatea'> </a></td>
-						<td align="center" style="width:15%; color:black;"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:1%; color:black;"><a id='vewChk'></a>選</td>
+						<td align="center" style="width:15%; color:black;"><a id='vewDatea'></a>日期</td>
+						<td align="center" style="width:15%; color:black;"><a id='vewNoa'></a>電腦編號</td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=' '/></td>								
@@ -350,30 +349,29 @@
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
+						<td><span> </span><a id="lblDatea" class="lbl"></a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>						
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
+						<td><span> </span><a id="lblNoa" class="lbl"></a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>						
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
+						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>						
 					</tr>			
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 900px;">
+		<div class='dbbs' style="width: 800px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:1%;">
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>					
-					<td align="center" style="width:10%;"><a id='lblDeviceno_s'> </a></td>
-					<td align="center" style="width:3%;"><a id='lblWorkerno_s'> </a></td>				
-					<td align="center" style="width:10%;"><a id='lblMemo_s'> </a></td>
-					<td align="center" style="width:3%;"><a id='lblMount_s'> </a></td>
+					<td align="center" style="width:300px;"><a id='lblMech_s'></a>機台</td>
+					<td align="center" style="width:50px"><a id='lblSpec_s'></a>規格</td>								
+					<td align="center" style="width:30px"><a id='lblMount_s'></a>數量</td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -382,13 +380,13 @@
 					
 					<td>
 					<input id="txtNoq.*" type="hidden" />
-					<input id="txtDeviceno.*" type="text" class="txt" style="width:35%;"/>
-					<input id="txtDevice.*"type="text" class="txt" style="width:50%;"/>
-					<input id="btnDeviceno.*" type="button" value="." style="width:7%;" />
+					<select id="cmbMech2.*" type="text" class="txt c1" style="width :42%;"/select>
+					<input id="txtMechno.*" type="text" class="txt" style="width:15%;"/>
+					<input id="txtMech.*"type="text" class="txt" style="width:33%;"/>
+					<input id="btnMechno.*" type="button" value="." style="width:5%;" />
 					</td>
 					
-					<td><input id="txtWorkerno.*" type="text" class="txt" /></td>					
-					<td><input id="txtMemo.*" type="text" class="txt" /></td>		
+					<td><input id="txtSpec.*" type="text" class="txt" /></td>					
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
 				</tr>
 				
