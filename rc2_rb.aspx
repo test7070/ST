@@ -528,6 +528,18 @@
 					alert(t_err);
 					return;
 				}
+				//1106 存檔檢查倉庫是否有填入
+				var nostore=false;
+				for (var i = 0; i < q_bbsCount; i++) {
+					if(emp($('#txtStoreno_'+i).val()) && !emp($('#txtProductno_'+i).val())){
+						nostore=true;
+					}
+				}
+				if (nostore) {
+					alert("倉庫空白!!!");
+					return;
+				}
+				
 				/*$('#txtMon').val($.trim($('#txtMon').val()));
 				if ($('#txtMon').val().length > 0 && !(/^[0-9]{3}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())) {
 					alert(q_getMsg('lblMon') + '錯誤。');
