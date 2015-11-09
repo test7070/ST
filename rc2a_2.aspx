@@ -26,7 +26,7 @@
 			brwKey = 'Noa';
 			q_desc=1;
 			aPop = new Array(['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
-			,['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick', '0txtTggno,txtComp,txtNick', 'tgg_b.aspx']
+			,['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,serial', '0txtTggno,txtComp,txtNick,txtSerial', 'tgg_b.aspx']
 			,['txtProductno', 'lblProduct', 'ucca', 'noa,product,unit', 'txtProductno,txtProduct,txtUnit', 'ucca_b.aspx']
 			);
 			brwCount2 = 10;
