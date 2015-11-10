@@ -180,20 +180,23 @@
 			}*/
 			
 			var repeats=false;
-			for (var i = 0; i < q_bbsCount; i++) {
-				if(!emp($('#cmbCno_'+i).val())){
-					for (var j = i+1; j < q_bbsCount; j++) {
-						if($('#cmbCno_'+i).val()==$('#cmbCno_'+j).val()){
-							repeats=true;
-							break;
+			if(q_getPara('sys.project') != 'sh'){
+				for (var i = 0; i < q_bbsCount; i++) {
+					if(!emp($('#cmbCno_'+i).val())){
+						for (var j = i+1; j < q_bbsCount; j++) {
+							if($('#cmbCno_'+i).val()==$('#cmbCno_'+j).val()){
+								repeats=true;
+								break;
+							}
 						}
 					}
-				}
-				if(repeats){
-					alert('所屬公司重覆!!');
-					break;
+					if(repeats){
+						alert('所屬公司重覆!!');
+						break;
+					}
 				}
 			}
+			
 			if(repeats){
 				Unlock();
 				return;
