@@ -165,9 +165,9 @@
             	for (var j = 0; j < q_bbsCount; j++) {
             		var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
 					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
-						q_tr('textSprice_'+j,round(q_div(q_float('txtCost_'+j),q_float('txtWeight_'+j)),3));
+						$('#textSprice_'+j).val(round(q_div(q_float('txtCost_'+j),q_float('txtWeight_'+j)),3));
                     }else{
-                       	q_tr('textSprice_'+j,round(q_div(q_float('txtCost_'+j),q_float('txttxtMount_'+j)),3));
+                    	$('#textSprice_'+j).val(round(q_div(q_float('txtCost_'+j),q_float('txtMount_'+j)),3));
                     }
             	}
             }

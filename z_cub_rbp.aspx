@@ -54,9 +54,9 @@
                     },{//[10][11]
                         type : '2', //[12][13]
                         name : 'xpoduct',
-                        dbf : 'process',
+                        dbf : 'ucaucc',
                         index : 'noa,product',
-                        src : 'ucc_b.aspx'
+                        src : 'ucaucc_b.aspx'
                     }]
                 });
                 
