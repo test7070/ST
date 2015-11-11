@@ -695,7 +695,7 @@
 					t_mounts = q_float('txtMount_' + k);
 					t_prices = q_float('txtPrice_' + k);
 					t_moneys = round(t_mounts * t_prices, 0);
-					if($('#txtType').val()!='E')
+					if($('#txtType').val()!='E' || $('#txtType').val()!='T')
 						$('#txtMoney_' + k).val(t_moneys);
 					t_money += t_moneys;
 					t_mount += t_mounts;
@@ -777,7 +777,7 @@
 						break;
 					default:
 				}
-				if($('#txtType').val()!='E'){
+				if($('#txtType').val()!='E' || $('#txtType').val()!='T'){
 					$('#txtMoney').val(t_money);
 					$('#txtTax').val(t_tax);
 					$('#txtTotal').val(t_total);
