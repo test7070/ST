@@ -35,6 +35,15 @@
                     }, {/*1-1 [3][4]*/
                         type : '1',
                         name : 'date'
+                    }, {/*1-2 [6]*/
+                        type : '6',
+                        name : 'xbal'
+                    }, {/*1-3 [6][7]*/
+                        type : '2',
+                        name : 'acc',
+                        dbf : 'acc',
+                        index : 'acc1,acc2',
+                        src : "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno
                     }]
                 });
                 q_popAssign();
