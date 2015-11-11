@@ -61,6 +61,7 @@
             	q_getFormat();
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
+				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtMount', 15, 0]];
 				
 				q_cmbParse("cmbMech2", q_getPara('modfixc.mech'),'s');				
@@ -99,12 +100,12 @@
 		    }
 		    
 			function bbsSave(as) {
-		        if (!as['mech2']) {
-		            as[bbsKey[1]] = '';
-		            return;
-		        }
+		        if (!as['mech']) {
+					as[bbsKey[1]] = '';
+					return;
+				}
 		        q_nowf();
-		        return true;
+				return true;
 		    }		    
 
 		    function btnIns() {
@@ -364,30 +365,33 @@
 			</div>
 		</div>
 		<div class='dbbs' style="width: 800px;">
-			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
+			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'>
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:1%;">
-					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
-					</td>					
+					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"/>
+					</td>				
+					<td align="center" style="width:50px;"><a id='lblMech_s'></a>維修日期</td>	
 					<td align="center" style="width:300px;"><a id='lblMech_s'></a>機台</td>
 					<td align="center" style="width:50px"><a id='lblSpec_s'></a>規格</td>								
 					<td align="center" style="width:30px"><a id='lblMount_s'></a>數量</td>
 				</tr>
-				<tr  style='background:#cad3ff;'>
+				<tr style='background:#cad3ff;'>
 					<td align="center">
-					<input id="btnMinus.*" type="button" class="btn" value='-' style=" font-weight: bold;" />			
-					</td>								
-					
+					<input id="btnMinus.*" type="button" class="btn" value='-' style=" font-weight: bold;"/>			
+					</td>			
+										
+					<td><input id="txtDatea.*" type="text" class="txt" style="width :96%;"/></td>	
+						
 					<td>
-					<input id="txtNoq.*" type="hidden" />
+					<input id="txtNoq.*" type="hidden"/>
 					<select id="cmbMech2.*" type="text" class="txt c1" style="width :42%;"/select>
 					<input id="txtMechno.*" type="text" class="txt" style="width:15%;"/>
 					<input id="txtMech.*"type="text" class="txt" style="width:33%;"/>
-					<input id="btnMechno.*" type="button" value="." style="width:5%;" />
+					<input id="btnMech.*" type="button" value="." style="width:5%;"/>
 					</td>
 					
-					<td><input id="txtSpec.*" type="text" class="txt" /></td>					
-					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
+					<td><input id="txtSpec.*" type="text" class="txt" style="width :96%;"/></td>					
+					<td><input id="txtMount.*" type="text" class="txt num c1" style="width :95%;"/></td>
 				</tr>
 				
 			</table>
