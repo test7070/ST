@@ -917,6 +917,10 @@
 				Lock(1, {
 					opacity : 0
 				});
+				
+				//1110 禁止修改貨單
+				$('#cmbTypea').attr('disabled', 'disabled');
+				
 				var t_where = " where=^^ vccno='" + $('#txtNoa').val() + "'^^";
 				q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
 			}
