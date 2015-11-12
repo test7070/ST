@@ -49,7 +49,6 @@
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
                 q_gt('style', '', 0, 0, 0, '');
-                q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
             });
 
             var abbsModi = [];
@@ -204,6 +203,7 @@
                 q_cmbParse("cmbItype", q_getPara('uccc.itype'));
                 q_cmbParse("cmbKind", q_getPara('sys.stktype'));
                 q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
+                q_cmbParse("combSpec", t_spec,'s');
                 
                 /* 若非本會計年度則無法存檔 */
                 $('#txtDatea').focusout(function() {
@@ -283,10 +283,20 @@
                             }
                         }
                         break;
+                    case 'spec':
+						var as = _q_appendData("spec", "", true);
+						t_spec='';
+						for ( i = 0; i < as.length; i++) {
+							t_spec+=','+as[i].noa+'@'+as[i].product;
+						}
+						if(t_spec.length==0) t_spec=' ';
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						break;
                     case 'style' :
                         var as = _q_appendData("style", "", true);
                         StyleList = new Array();
                         StyleList = as;
+                        q_gt('spec', '', 0, 0, 0, '');
                         break;
                     case q_name:
                         t_uccArray = _q_appendData("ucc", "", true);
@@ -369,7 +379,12 @@
                     Unlock(1);
                     return;
                 }
- 				
+ 				for(var i=0;i<q_bbsCount;i++){
+					if($('#combSpec_'+i).is(":visible")){
+						$('#txtSpec_'+i).val($('#combSpec_'+i).val());						
+					}
+				}
+				
  				if(q_getPara('sys.comp').substring(0,2)=='傑期'){
  					getUno_bydate(0);
  				}else{
@@ -659,6 +674,10 @@
                 	$('.pk').show();
                 	$('#lblUnit').html('計價<BR>單位');
                 }
+                
+                for(var i=0;i<q_bbsCount;i++){
+					$('#combSpec_'+i).val($('#txtSpec_'+i).val());
+				}
             }
 
             function q_popPost(s1) {
@@ -785,6 +804,7 @@
                 t_kind = t_kind.substr(0, 1);				
 				if (t_kind == 'A') {
 					$('*[id="lblSize_help"]').text(q_getPara('sys.lblSizea'));
+					$('#Size').css('width', '220px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
 						$('#textSize2_' + j).show();
@@ -793,7 +813,6 @@
 						$('#x1_' + j).show();
 						$('#x2_' + j).show();
 						$('#x3_' + j).hide();
-						$('*[id="Size"]').css('width', '220px');
 						$('#txtSpec_' + j).css('width', '220px');
 						$('#textSize1_' + j).val($('#txtDime_' + j).val());
 						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
@@ -809,7 +828,7 @@
 						$('#x1__' + j).show();
 						$('#x2__' + j).show();
 						$('#x3__' + j).hide();
-						$('*[id="Sizet"]').css('width', '230px');
+						$('#txtSpec_' + j).css('width', '300px');
 						$('#textSize1__' + j).val($('#txtDime__' + j).val());
 						$('#textSize2__' + j).val($('#txtWidth__' + j).val());
 						$('#textSize3__' + j).val($('#txtLengthb__' + j).val());
@@ -826,7 +845,6 @@
 						$('#x1_' + j).show();
 						$('#x2_' + j).show();
 						$('#x3_' + j).show();
-						$('*[id="Size"]').css('width', '300px');
 						$('#txtSpec_' + j).css('width', '300px');
 						$('#textSize1_' + j).val($('#txtRadius_' + j).val());
 						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
@@ -857,7 +875,6 @@
 						$('#x1_' + j).hide();
 						$('#x2_' + j).hide();
 						$('#x3_' + j).hide();
-						$('*[id="Size"]').css('width', '55px');
 						$('#txtSpec_' + j).css('width', '55px');
 						$('#textSize1_' + j).val(0);
 						$('#txtDime_' + j).val(0);
@@ -883,6 +900,12 @@
 						$('#textSize3__' + j).val($('#txtLengthb_' + j).val());
 						$('#textSize4__' + j).val(0);
 						$('#txtRadius__' + j).val(0);
+					}
+				}
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					for(var i=0;i<q_bbsCount;i++){
+						$('#combSpec_'+i).show();
+						$('#txtSpec_'+i).hide();	
 					}
 				}
 			}
@@ -989,7 +1012,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 1600px;
+                width: 2200px;
             }
             .tbbs a {
                 font-size: medium;
@@ -1208,6 +1231,7 @@
 					<input id="txtDime.*" type="text" style="display:none;"/>
 					<input id="txtLengthb.*" type="text" style="display:none;"/>
 					<input id="txtSpec.*" type="text" style="float:left;"/>
+					<select id='combSpec.*' style="width:95%;display:none;"> </select>
 					</td>
 					<td><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
