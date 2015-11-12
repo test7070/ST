@@ -119,7 +119,7 @@
 						var t_ordeno = trim($('#txtTrdno').val());
 						if (t_ordeno.length > 0) {
 							var t_where=" a.noa='"+t_ordeno+"' ";
-							t_where=t_where+" group by b.noa,b.no2,b.productno,b.product,b.unit,b.price,c.vmount ";
+							t_where=t_where+" group by b.noa,b.no2,b.productno,b.product,b.unit,case when a.taxtype='3' then case when b.mount=0 then round(b.price/1.05,2) else round((b.total/1.05/b.mount),2) end else b.price end,c.vmount ";
 							t_where=t_where+" having SUM(b.mount)-sum(isnull(c.vmount,0))>0 ";
 							q_gt('orde_vcca_rb2', "where=^^ "+t_where+" ^^", 0, 0, 0, "",'');
 							//q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where + ";" + r_accy, 'ordes', "95%", "95%", q_getMsg("popOrdes"));
@@ -137,7 +137,7 @@
 						var t_mon=trim($('#txtMon').val());
 						if (t_custno.length > 0 && t_mon.length>0) {
 							var t_where=" a.custno='"+t_custno+"' and a.mon='"+t_mon+"' ";
-							t_where=t_where+" group by b.productno,b.product,b.unit,b.price,c.vmount ";
+							t_where=t_where+" group by b.productno,b.product,b.unit,case when a.taxtype='3' then case when b.mount=0 then round(b.price/1.05,2) else round((b.total/1.05/b.mount),2) end else b.price end,c.vmount ";
 							t_where=t_where+" having SUM(b.mount)-sum(isnull(c.vmount,0))>0 ";
 							q_gt('orde_vcca_rb', "where=^^ "+t_where+" ^^", 0, 0, 0, "",'');	
 							
@@ -485,7 +485,9 @@
 							$('#txtCustno').val(as[0].custno);
 							$('#txtComp').val(as[0].comp);
 							$('#txtSerial').val(as[0].coin);
-							$('#cmbTaxtype').val(as[0].trantype);
+							if(as[0].taxtype=='3')
+								as[0].taxtype='1'
+							$('#cmbTaxtype').val(as[0].taxtype);
 							var t_where=" noa='"+as[0].custno+"' ";
 							q_gt('cust', "where=^^ "+t_where+" ^^", 0, 0, 0, "ordecust",'');
 							sum();
@@ -635,7 +637,7 @@
 				$('#txtMon').val('');
 				$('#txtDatea').val(q_date());
 				$('#txtDatea').focus();
-				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
+				$('#cmbTaxtype').val('1');
 				$('#txtType').val('M'); //M手動開立 //A批次開立//E發票開立//(空白NULL)出貨單自動產生發票
 				Lock(1, {
 					opacity : 0

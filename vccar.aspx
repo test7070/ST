@@ -106,8 +106,8 @@
                     }
                     var t_invono = t_binvono, t_string = '';                
                     for( i = 1; i <= n/50; i++){
-                    	t_string = ('00' + i);
-                    	t_string = t_string.substring(t_string.length-2,t_string.length);
+                    	t_string = ('000' + i);
+                    	t_string = t_string.substring(t_string.length-3,t_string.length);
                     	$('#txtNo2_'+(i-1)).val(t_string);
                     	if(i==1)
                     		$('#txtBinvono_'+(i-1)).val(t_invono);
