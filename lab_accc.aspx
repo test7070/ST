@@ -53,6 +53,8 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtBdate', r_picd], ['txtEdate', r_picd],['txtMon', r_picm]];
                 q_mask(bbmMask);
+                                                      
+                
                 /*if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
 					q_cmbParse("cmbTypea", q_getPara('lab_accc.typea_it'));	//IR
 				else*/
@@ -61,12 +63,12 @@
                 $('#lblAccno').click(function() {
                     q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtMon').val().substr( 0,3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "95%", "95%", q_getMsg('popAcc'), true);
                 });
-                $('#lblVccno').click(function() {
+                /*$('#lblVccno').click(function() {
 			        t_bvccno = $('#txtBvccno').val();
 			        t_evccno = $('#txtEvccno').val();
         			var t_where = " 1=1 " + q_sqlPara2("noa", t_bvccno,t_evccno);
 					q_pop('txtBvccno', "vcctran.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+ t_where +";" + r_accy + '_' + r_cno, 'vcc', 'noa', 'datea', "95%", "95%", q_getMsg('popVcc'), true);
-                });
+                });*/
                 $('#txtDatea').focusout(function() {
                     q_cd($(this).val(), $(this));
                 });
@@ -150,18 +152,18 @@
 						
             function btnOk() {
                 $('#txtWorker').val(r_name);
-                if($('#txtSalesno').val()==0){
+                /*if($('#txtSalesno').val()==0){
                     alert(q_getMsg('lblSalesno') + '錯誤。');
                     return;
-                }
+                }*/
                 if ($('#txtDatea').val().length==0 || !q_cd($('#txtDatea').val())) {
                     alert(q_getMsg('lblDatea') + '錯誤。');
                     return;
                 }
-                if ($('#txtMon').val().length > 0 && !(/^[0-9]{3}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())){
+                /*if ($('#txtMon').val().length > 0 && !(/^[0-9]{3}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())){
                     alert(q_getMsg('lblMon')+'錯誤。'); 
                     return;
-                }
+                }*/
 	            if (!q_cd($('#txtBdate').val())){
                 	alert(q_getMsg('lblDate')+'錯誤。');
                 	return;
@@ -199,7 +201,7 @@
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
                 hiddenField();
-                $('#txtMon').val(q_date().substring(0,6));
+                $('#txtMon').val(q_date().substring(0,r_lenm));
                 $('#txtDatea').focus();
             }
 
@@ -493,20 +495,20 @@
 						</td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblMon' class="lbl"> </a></td>
+						<!--<td><span> </span><a id='lblMon' class="lbl"> </a></td>
 						<td>
 						<input id="txtMon"  type="text" class="txt c1"/>
-						</td>
+						</td>-->
 						<td><span> </span><a id='lblTypea' class="lbl"> </a></td>
 						<td><select id="cmbTypea" class="txt c1" > </select></td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td><span> </span><a id='lblSalesno' class="lbl btn"> </a></td>
 						<td colspan="2">
 						<input id="txtSalesno"  type="text" style="float:left; width:40%;"/>
 						<input id="txtSales"  type="text" style="float:left; width:60%;"/>
 						</td>
-					</tr>
+					</tr>-->
 					<tr id="hiddenCust">
 						<td><span> </span><a id='lblBcustno' class="lbl"> </a></td>
 						<td colspan="2">
@@ -514,13 +516,13 @@
 							<input id="txtBcust"  type="text" style="float:left; width:60%;"/>
 						</td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td><span> </span><a id='lblPart' class="lbl"> </a></td>
 						<td>
 							<input id="txtPartno"  type="text" style="display:none;"/>
 							<input id="txtPart"  type="text" class="txt c1"/>
 						</td>
-					</tr>
+					</tr>-->
 					<!--<tr>
 						<td><span> </span><a id='lblAcc1' class="lbl btn"> </a></td>
 						<td colspan="3">

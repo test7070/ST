@@ -49,6 +49,13 @@
                        		type : '5',
                        		name : 'xkind',
                         	value : [q_getPara('report.all')].concat(replaceAll(q_getPara('vcct.kind'),'@,','').split(','))
+                    	}, {//2-3 [10][11]
+							type : '1', 
+							name : 'xmon'
+						}, {//2-4 [12]
+                       		type : '5',
+                       		name : 'ytypea',
+                        	value : [q_getPara('report.all')].concat('二聯式,三聯式'.split(','))
                     	}]
                     });
                 q_popAssign();
@@ -59,6 +66,10 @@
                 $('#txtXdate1').datepicker();
                 $('#txtXdate2').mask('999/99/99');
                 $('#txtXdate2').datepicker();
+                
+                 $('#txtXmon1').mask('999/99');
+                 $('#txtXmon2').mask('999/99');
+                 
                 
                 var t_date,t_year,t_month,t_day;
 				t_date = new Date();

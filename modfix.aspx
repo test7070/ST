@@ -63,9 +63,7 @@
 					if(!emp($('#txtModnoa').val()) && (q_cur == 1 || q_cur == 2)){
 						q_gt('models', "where=^^noa='"+$('#txtModnoa').val()+"'^^", 0, 0, 0, "ins_models");
 					}
-					
 				});
-				
 			}
 
 			function q_boxClose(s2) {
@@ -81,54 +79,24 @@
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'ins_models':
-					
 						var as = _q_appendData("models", "", true);
-					//	btnModi();
-						//var i=0
-						if(as.length-q_bbsCount >=0){
-							for(var i=0;i<as.length;i++){
-								q_bbs_addrow('bbs','a','') ;					
-							}
-						}
-						var nob=[];
-										
-						var i;
-						var seq=0;
-						var flag ='0';
-						for(i=0;i<q_bbsCount;i++){
-							var check =0;
-							$.each(as,function(index,element){	
-								if(element != undefined)														
-									if($('#txtNoa_'+ i ).val()== element.productno )
-										check=1;																
-					
-							});
-							/*for(var j =0 ;j<q_bbsCount;j++)	{
-								if(as[i]!= undefined){	
-									if($('#txtCode1_'+ j).val()==as[i].number)
-										check=1;
-									}
-							}*/
-							if(check == 0){	
-								if(as[i]!= undefined){	
-																
-										$('#txtNob_'+ seq ).val(as[i].productno);
-										$('#txtModel_'+ seq ).val(as[i].model.substring(0,1)+as[i].model.substring(1,as[i].model.length));
-										$('#txtWheel1_'+ seq).val(as[i].wheel);
-										$('#txtCode1_'+ seq).val(as[i].number);
-										var model =''
-										if(as[i].model=='1')
-											model ='成型段'
-										if(as[i].model=='2')
-											model ='定徑段'
-										$('#txtDetail1_'+ seq ).val(model+as[i].wheel+as[i].number);
-										seq=seq+1
-								}									
-							}
-						}							
-
-													
 						
+						var str = '';
+						for(var i=0 ;i<q_bbsCount ;i++){
+							//as[i].memo = '';
+							var isexist = 0;
+							$.each(as, function(index, elm){
+								if($('#txtNob_'+i).val() == elm.productno){
+									isexist = 1;
+									str = str+$('#txtNob_'+i).val()+'y'+'\n';
+								}
+							});
+							if(isexist == 0){
+								str = str+$('#txtNob_'+i).val()+'n'+'\n';
+							}
+							
+						}
+							alert(str);			
 						break;
 					case 'checkModelno_btnOk':
 						var as = _q_appendData("modfix", "", true);
