@@ -18,7 +18,7 @@
 			q_tables = 's';
 			var q_name = "modfixc";
 			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','txtModnoa'];
-			var q_readonlys = ['txtNob','txtCode','txtDetail'];
+			var q_readonlys = ['txtNob','txtCode','txtDetail','txtMech'];
 			var bbmNum = [];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -58,7 +58,7 @@
 				bbsMask = [['txtDatea1',r_picd+'-99:99'],['txtDatea2',r_picd+'-99:99']];
 				//q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
-				q_cmbParse("cmbWay",'傳統車床(砂紙研磨),傳統車床(砂輪機研磨),CNC車修,不須車修或研磨','s');
+				q_cmbParse("cmbWay",q_getPara('modfixc.way'),'s');
 				q_cmbParse("cmbWorktype",'正工,加班','s');
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2)){
@@ -83,41 +83,29 @@
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'ins_modfixs':
-					
-						var as = _q_appendData("modfixs", "", true);
-						//btnModi();
-						//var i=0
-						if(as.length-q_bbsCount >=0){
-							for(var i=0;i<as.length;i++){
-								q_bbs_addrow('bbs','a','') ;					
-							}
+					var as = _q_appendData("modfixs", "", true);
+						var str = '';
+						var pos = q_bbsCount;
+						var isexist = 0;
+						for(var i=0; i<q_bbsCount ;i++){//判斷bbs是否有資料存在pos->y:q_bbsCount,n:0
+							str=str+trim($('#txtNob_'+i).val());
 						}
-						var nob=[];
-										
-						var i;
-						var flag ='0';
-						for(i=0;i<q_bbsCount;i++){
-							var check =0;
-							$.each(as,function(index,element){	
-								if(element != undefined)														
-									if($('#txtNoa_'+ i ).val()== element)
-										check=1;																
-					
-							});
-							if(check == 0){	
-								if(as[i]!= undefined){										
-									$('#txtNob_'+ i ).val(as[i].nob);
-									$('#txtModel_'+ i ).val(as[i].model);
-									$('#txtWheel_'+ i).val(as[i].wheel1);
-									$('#txtCode_'+ i).val(as[i].code1);
-									$('#txtDetail_'+ i ).val(as[i].detail1);	
-								}									
+						pos = (str.length==0?0:q_bbsCount);	
+						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
+							isexist = 0;
+							for(var i=0; i<q_bbsCount ;i++){							
+								if(elm.nob == $('#txtNob_'+i).val()){								
+									isexist = 1;				
+								}
 							}
-						}							
-
-													
-						
-						break;
+							if(isexist == 0){//bbs插入該筆未存在資料列													
+								q_bbs_addrow('bbs',pos++,0);
+								$('#txtNob_'+(pos-1)).val(elm.nob);
+								$('#txtCode_'+(pos-1)).val(elm.code1);
+								$('#txtDetail_'+(pos-1)).val(elm.detial1);
+							}
+						});	
+						break;					
 					case 'checkModelno_btnOk':
 						var as = _q_appendData("modfix", "", true);
 						if (as[0] != undefined) {
@@ -187,16 +175,29 @@
 					return;
 				q_box('modfixc_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
 			}
-				
+			
+			function changeWay(pos){
+				var way = $('#cmbWay_'+pos).val();
+				switch(way){
+					case "傳統車床(砂紙研磨)":	
+					   // q_cmbParse("cmbMech_"+pos,' ');
+						break;
+					case "傳統車床(砂輪機研磨)":
+						q_cmbParse("cmbMech_"+pos,'F01,F02,F03,F05,鑽床,銑床,插床');
+						break;
+					case "CNC車修":
+						q_cmbParse("cmbMech_"+pos,'G01,G02');	
+						break;
+					}	
+			}
 
 			var flag =0;
-			function bbsAssign() {
-								
-				for (var j = 0; j < q_bbsCount; j++) {	
+			function bbsAssign() {			
+				for (var j = 0; j < q_bbsCount; j++) {
 					$('#txtDatea2_'+j).click(function(){						
-						t_IdSeq = -1;  
+						t_IdSeq = -1;
 						q_bodyId($(this).attr('id'));
-						b_seq = t_IdSeq;	
+						b_seq = t_IdSeq;
 						var min=$('#txtDatea1_'+b_seq).val().substring($('#txtDatea1_'+b_seq).val().length-2,$('#txtDatea1_'+b_seq).val().length);
 						var hour=$('#txtDatea1_'+b_seq).val().substring($('#txtDatea1_'+b_seq).val().length-5,$('#txtDatea1_'+b_seq).val().length-3);
 						var nmin,nhour;
@@ -209,24 +210,31 @@
 						);
 					});
 					
-					$('#txtWay_'+j).change(function(){
-						t_IdSeq = -1;  
+					changeWay(j);
+					
+					$('#cmbWay_'+j).change(function(){
+						t_IdSeq = -1;
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;
-						if($('#txtWay_'+b_seq).val()>4 || $('#txtWay').val() <1){
-							alert('研磨方式請輸入數字1~4之間');
-							$('#txtWay_'+b_seq).val(1);
-						}
+						if (q_cur == 1 || q_cur == 2){
+							$("#cmbMech_"+b_seq).empty();
+							changeWay(b_seq);
+						}	
 					});
-					
-					
+					var mech = [];
+					$('#cmbMech_'+j).change(function(){
+						t_IdSeq = -1;
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						if (q_cur == 1 || q_cur == 2){
+							$("#txtMech_"+b_seq).val($('#cmbMech_'+b_seq).find("option:selected").text());
+						}
+					});	
+					$("#cmbMech_"+j).val($('#txtMech_'+j).val());		
 				}
 				_bbsAssign();
 			}
 			
-
-			
-
 			function btnIns() {
 				_btnIns();
 					$('#txtDatea').val(q_date()); 
@@ -495,7 +503,7 @@
 			</div>
 		</div>
 		<div class='dbbs'>
-			<table id="tbbs" class='tbbs'>
+			<table id="tbbs" class='tbbs' style="width:1350px;">
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
@@ -508,6 +516,7 @@
 					<td align="center" style="width:2.5%;"><a id='lblFrame_s'></a></td>	
 					<td align="center" style="width:4%;"><a id='lblMount_s'></a></td>				
 					<td align="center" style="width:10%;"><a id='lblWay_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblMech_s'></a></td>
 					<td align="center" style="width:3%;"><a id='lblBebottom_s'></a></td>
 					<td align="center" style="width:3%;"><a id='lblEnbottom_s'></a></td>
 					<td align="center" style="width:3.5%;"><a id='lblWorktype_s'></a></td>
@@ -529,6 +538,9 @@
 					<td><input id="txtFrame.*" type="text" class="num c1" style="width : 88% ;"/></td>					
 					<td><input id="txtMount.*" type="text" class="num c1" style="width : 93% ;"/></td>						
 					<td><select id="cmbWay.*" type="text" class="txt c1" style="width : 98%;"/select></td>
+					<td><input id="txtMech.*" type="text" class="txt c1" style="display: none;"/>
+						<select id="cmbMech.*" type="text" class="txt c1" style="width:95%;"/select>
+					</td>
 					<td><input id="txtBebottom.*" type="text" class="num c1" style="width : 90% ;"/></td>
 					<td><input id="txtEnbottom.*" type="text" class="num c1" style="width : 90% ;"/></td>
 					<td><select id="cmbWorktype.*" type="text" class="txt c1" style="width : 100%;"/select></td>

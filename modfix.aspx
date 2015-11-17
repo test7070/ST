@@ -80,23 +80,27 @@
 				switch (t_name) {
 					case 'ins_models':
 						var as = _q_appendData("models", "", true);
-						
 						var str = '';
-						for(var i=0 ;i<q_bbsCount ;i++){
-							//as[i].memo = '';
-							var isexist = 0;
-							$.each(as, function(index, elm){
-								if($('#txtNob_'+i).val() == elm.productno){
-									isexist = 1;
-									str = str+$('#txtNob_'+i).val()+'y'+'\n';
-								}
-							});
-							if(isexist == 0){
-								str = str+$('#txtNob_'+i).val()+'n'+'\n';
-							}
-							
+						var pos = q_bbsCount;
+						var isexist = 0;
+						for(var i=0; i<q_bbsCount ;i++){//判斷bbs是否有資料存在pos->y:q_bbsCount,n:0
+							str=str+trim($('#txtNob_'+i).val());
 						}
-							alert(str);			
+						pos = (str.length==0?0:q_bbsCount);	
+						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
+							isexist = 0;
+							for(var i=0; i<q_bbsCount ;i++){							
+								if(elm.productno == $('#txtNob_'+i).val()){								
+									isexist = 1;				
+								}
+							}
+							if(isexist == 0){//bbs插入該筆未存在資料列													
+								q_bbs_addrow('bbs',pos++,0);
+								$('#txtNob_'+(pos-1)).val(elm.productno);
+								$('#txtCode1_'+(pos-1)).val(elm.number);
+								$('#txtDetail1_'+(pos-1)).val((elm.model=='1'?'成型段':'定徑段')+elm.wheel+elm.number);
+							}
+						});	
 						break;
 					case 'checkModelno_btnOk':
 						var as = _q_appendData("modfix", "", true);

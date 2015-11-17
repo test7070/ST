@@ -185,11 +185,8 @@
 							case "熔接輪":
 								q_cmbParse("combNumber_"+count,nb3);
 								break;
-								
 							}
-								
 						}
-						
 						else if($('#cmbModel_'+count).val()==2){
 							q_cmbParse("combWheel_"+count,wheel2);
 							var wh= $('#txtWheel_'+count).val();
@@ -207,10 +204,7 @@
 										q_cmbParse("combNumber_"+count,nb8);
 										break;
 							}
-						
 					}
-			
-	
 			}
 			function autoNoa(count){
 				var flag =0;

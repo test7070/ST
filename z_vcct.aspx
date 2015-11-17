@@ -55,7 +55,7 @@
 						}, {//2-4 [12]
                        		type : '5',
                        		name : 'ytypea',
-                        	value : [q_getPara('report.all')].concat('二聯式,三聯式'.split(','))
+                        	value : [q_getPara('report.all')].concat('2@二聯式,3@三聯式'.split(','))
                     	}]
                     });
                 q_popAssign();
@@ -81,6 +81,7 @@
 				t_day = t_date.getUTCDate();
 				t_day = t_day>9?t_day+'':'0'+t_day;
 				$('#txtXdate1').val(t_year+'/'+t_month+'/'+t_day);
+				$('#txtXmon1').val(t_year+'/'+t_month);
 	                
 				t_date = new Date();
 				t_date.setDate(35);
@@ -92,6 +93,7 @@
 				t_day = t_date.getUTCDate();
 				t_day = t_day>9?t_day+'':'0'+t_day;
 				$('#txtXdate2').val(t_year+'/'+t_month+'/'+t_day);
+				$('#txtXmon2').val(t_year+'/'+t_month);
 	                
             }
 
