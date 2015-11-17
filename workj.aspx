@@ -799,14 +799,14 @@
             }*/
 			function createImg(n){
 				var t_picno = $('#txtPicno_'+n).val();
-				q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg",n:n}));	
+				q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg",n:n}),r_accy,1);	
 			};
 			function createImg_btnOk(n){
 				//console.log(n);
 				if(n>=0){				
 					var t_picno = $('#txtPicno_'+n).val();
 					if(t_picno.length>0){
-						q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg_btnOk",n:n}));	
+						q_gt('img', "where=^^noa='"+t_picno+"'^^", 0, 0, 0, JSON.stringify({action:"createimg_btnOk",n:n}),r_accy,1);	
 					}else{
 						createImg_btnOk(n-1)
 					}
