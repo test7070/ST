@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			this.errorHandler = null;
 
-			q_tables = 't';
+			q_tables = 's';
 			var q_name = "modcuw";
 			var q_readonly = ['txtNoa','txtStation','txtWorker'];
 			var q_readonlys = ['txtBorntime','txtAddtime','txtWorkmount','txtMount'];
