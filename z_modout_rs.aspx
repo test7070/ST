@@ -49,6 +49,9 @@
                     },{//[10][11]
                     	type : '1',
                     	name : 'xframe'
+                    },{//[12]
+                    	type : '6',
+                    	name : 'ydatea'
                     }]
                 });
                 q_popAssign();
@@ -68,7 +71,7 @@
 				$('#txtXmodnoa1').css('width','130px');
 				$('#txtXmodnoa2').css('width','130px'); 
                         
-				      var r_1911=1911;
+				var r_1911=1911;
 				if(r_len==4){//西元年
 					r_1911=0;
 				}else{
@@ -78,10 +81,12 @@
                  
                  $('#txtXdatea1').mask(r_picd);
 	             $('#txtXdatea2').mask(r_picd);
-
-           
+	             
+	             $('#txtYdatea').datepicker();
+	             $('#txtYdatea').mask(r_picd);
+	             $('#txtYdatea').val(q_date);
                 
-                 var t_date, t_year, t_month, t_day;
+                var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
                 t_year = t_date.getUTCFullYear() - r_1911;

@@ -102,7 +102,7 @@
 								q_bbs_addrow('bbs',pos++,0);
 								$('#txtNob_'+(pos-1)).val(elm.nob);
 								$('#txtCode_'+(pos-1)).val(elm.code1);
-								$('#txtDetail_'+(pos-1)).val(elm.detial1);
+								$('#txtDetail_'+(pos-1)).val(elm.detail1);
 							}
 						});	
 						break;					
