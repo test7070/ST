@@ -755,7 +755,12 @@
 				Lock(1, {
 					opacity : 0
 				});
-				
+				if(q_getPara('sys.project')=='rk')
+					for(var i=0;i<q_bbsCount;i++){
+						if(q_float('txtWeight_'+i)>0 && q_float('txtMount_'+i)==0){
+							$('#txtMount_'+i).val(1);						
+						}
+					}
 				for(var i=0;i<q_bbsCount;i++){
 					if($('#combSpec_'+i).is(":visible")){
 						$('#txtSpec_'+i).val($('#combSpec_'+i).val());						
