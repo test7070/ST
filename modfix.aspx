@@ -61,7 +61,8 @@
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtModnoa').val()) && (q_cur == 1 || q_cur == 2)){
-						q_gt('models', "where=^^noa='"+$('#txtModnoa').val()+"'^^", 0, 0, 0, "ins_models");
+						t_where = "where=^^noa='"+$('#txtModnoa').val()+"'^^"
+						q_gt('models', t_where, 0, 0, 0, "ins_models");
 					}
 				});
 			}
@@ -87,20 +88,20 @@
 							str=str+trim($('#txtNob_'+i).val());
 						}
 						pos = (str.length==0?0:q_bbsCount);	
-						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
+						for(var i=as.length-1; i>=0; i--){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
 							isexist = 0;
-							for(var i=0; i<q_bbsCount ;i++){							
-								if(elm.productno == $('#txtNob_'+i).val()){								
+							for(var j=0; j<q_bbsCount ;j++){							
+								if(as[i].productno == $('#txtNob_'+j).val()){								
 									isexist = 1;				
 								}
 							}
 							if(isexist == 0){//bbs插入該筆未存在資料列													
 								q_bbs_addrow('bbs',pos++,0);
-								$('#txtNob_'+(pos-1)).val(elm.productno);
-								$('#txtCode1_'+(pos-1)).val(elm.number);
-								$('#txtDetail1_'+(pos-1)).val((elm.model=='1'?'成型段':'定徑段')+elm.wheel+elm.number);
+								$('#txtNob_'+(pos-1)).val(as[i].productno);
+								$('#txtCode1_'+(pos-1)).val(as[i].number);
+								$('#txtDetail1_'+(pos-1)).val((as[i].model=='1'?'成型段':'定徑段')+as[i].wheel+as[i].number);
 							}
-						});	
+						}	
 						break;
 					case 'checkModelno_btnOk':
 						var as = _q_appendData("modfix", "", true);
@@ -454,7 +455,7 @@
 					<td style="display: none;" align="center" style="width:8%;"><a id='lblModel_s'></a></td>
 					<td style="display: none;" align="center" style="width:8%;"><a id='lblWheel1_s'></a></td>
 					<td align="center" style="width:8%;"><a id='lblCode1_s'></a></td>
-					<td align="center" style="width:12%;"><a id='lblDetail1_s'></a></td>
+					<td align="center" style="width:10%;"><a id='lblDetail1_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblFrame1_s'></a></td>	
 					<td align="center" style="width:5%;"><a id='lblMount1_s'></a></td>				
 					<td align="center" style="width:10%;"><a id='lblWay1_s'></a></td>
