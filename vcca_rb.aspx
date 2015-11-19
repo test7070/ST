@@ -25,7 +25,7 @@
 			var q_readonlys = ['txtOrdeno','txtNo2'];
 			var q_readonlyt = ['txtVccaccy','txtVccno','txtVccnoq'];
 			var bbmNum = [['txtMoney', 15, 0,1], ['txtTax', 15, 0,1], ['txtTotal', 15, 0,1], ['textTotal', 15, 0,1], ['textMoney', 15, 0,1]];
-			var bbsNum = [['txtMount', 15, 0,1], ['txtPrice', 15, 2,1], ['txtTotal', 15, 0,1]];
+			var bbsNum = [['txtMount', 15, 0,1], ['txtPrice', 15, 3,1], ['txtTotal', 15, 0,1]];
 			var bbtNum = [['txtMoney',15,0,1]];
 			var bbmMask = [];
 			var bbsMask = [];
