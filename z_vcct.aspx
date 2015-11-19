@@ -49,6 +49,13 @@
                        		type : '5',
                        		name : 'xkind',
                         	value : [q_getPara('report.all')].concat(replaceAll(q_getPara('vcct.kind'),'@,','').split(','))
+                    	}, {//2-3 [10][11]
+							type : '1', 
+							name : 'xmon'
+						}, {//2-4 [12]
+                       		type : '5',
+                       		name : 'ytypea',
+                        	value : [q_getPara('report.all')].concat('2@二聯式,3@三聯式'.split(','))
                     	}]
                     });
                 q_popAssign();
@@ -60,6 +67,10 @@
                 $('#txtXdate2').mask('999/99/99');
                 $('#txtXdate2').datepicker();
                 
+                 $('#txtXmon1').mask('999/99');
+                 $('#txtXmon2').mask('999/99');
+                 
+                
                 var t_date,t_year,t_month,t_day;
 				t_date = new Date();
 				t_date.setDate(1);
@@ -70,6 +81,7 @@
 				t_day = t_date.getUTCDate();
 				t_day = t_day>9?t_day+'':'0'+t_day;
 				$('#txtXdate1').val(t_year+'/'+t_month+'/'+t_day);
+				$('#txtXmon1').val(t_year+'/'+t_month);
 	                
 				t_date = new Date();
 				t_date.setDate(35);
@@ -81,6 +93,7 @@
 				t_day = t_date.getUTCDate();
 				t_day = t_day>9?t_day+'':'0'+t_day;
 				$('#txtXdate2').val(t_year+'/'+t_month+'/'+t_day);
+				$('#txtXmon2').val(t_year+'/'+t_month);
 	                
             }
 

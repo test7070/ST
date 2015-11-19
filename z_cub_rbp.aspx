@@ -52,7 +52,7 @@
                     	type : '1',
                     	name :'xdate'
                     },{//[10][11]
-                        type : '2', //[12][13]
+                        type : '2',
                         name : 'xpoduct',
                         dbf : 'ucaucc',
                         index : 'noa,product',

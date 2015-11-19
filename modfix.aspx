@@ -63,9 +63,7 @@
 					if(!emp($('#txtModnoa').val()) && (q_cur == 1 || q_cur == 2)){
 						q_gt('models', "where=^^noa='"+$('#txtModnoa').val()+"'^^", 0, 0, 0, "ins_models");
 					}
-					
 				});
-				
 			}
 
 			function q_boxClose(s2) {
@@ -81,54 +79,28 @@
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'ins_models':
-					
 						var as = _q_appendData("models", "", true);
-					//	btnModi();
-						//var i=0
-						if(as.length-q_bbsCount >=0){
-							for(var i=0;i<as.length;i++){
-								q_bbs_addrow('bbs','a','') ;					
-							}
+						var str = '';
+						var pos = q_bbsCount;
+						var isexist = 0;
+						for(var i=0; i<q_bbsCount ;i++){//判斷bbs是否有資料存在pos->y:q_bbsCount,n:0
+							str=str+trim($('#txtNob_'+i).val());
 						}
-						var nob=[];
-										
-						var i;
-						var seq=0;
-						var flag ='0';
-						for(i=0;i<q_bbsCount;i++){
-							var check =0;
-							$.each(as,function(index,element){	
-								if(element != undefined)														
-									if($('#txtNoa_'+ i ).val()== element.productno )
-										check=1;																
-					
-							});
-							/*for(var j =0 ;j<q_bbsCount;j++)	{
-								if(as[i]!= undefined){	
-									if($('#txtCode1_'+ j).val()==as[i].number)
-										check=1;
-									}
-							}*/
-							if(check == 0){	
-								if(as[i]!= undefined){	
-																
-										$('#txtNob_'+ seq ).val(as[i].productno);
-										$('#txtModel_'+ seq ).val(as[i].model.substring(0,1)+as[i].model.substring(1,as[i].model.length));
-										$('#txtWheel1_'+ seq).val(as[i].wheel);
-										$('#txtCode1_'+ seq).val(as[i].number);
-										var model =''
-										if(as[i].model=='1')
-											model ='成型段'
-										if(as[i].model=='2')
-											model ='定徑段'
-										$('#txtDetail1_'+ seq ).val(model+as[i].wheel+as[i].number);
-										seq=seq+1
-								}									
+						pos = (str.length==0?0:q_bbsCount);	
+						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
+							isexist = 0;
+							for(var i=0; i<q_bbsCount ;i++){							
+								if(elm.productno == $('#txtNob_'+i).val()){								
+									isexist = 1;				
+								}
 							}
-						}							
-
-													
-						
+							if(isexist == 0){//bbs插入該筆未存在資料列													
+								q_bbs_addrow('bbs',pos++,0);
+								$('#txtNob_'+(pos-1)).val(elm.productno);
+								$('#txtCode1_'+(pos-1)).val(elm.number);
+								$('#txtDetail1_'+(pos-1)).val((elm.model=='1'?'成型段':'定徑段')+elm.wheel+elm.number);
+							}
+						});	
 						break;
 					case 'checkModelno_btnOk':
 						var as = _q_appendData("modfix", "", true);
