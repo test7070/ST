@@ -69,7 +69,7 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+				q_cmbParse("cmbTaxtype", q_getPara('vcca.taxtype'));
 				
 				$('#lblTrdno').text('訂單號碼');
 
