@@ -87,7 +87,8 @@
 				$('#txtNoa').change(function(e) {
 					$('#txtNoa').val($('#txtNoa').val().toUpperCase());
 				}).click(function() {
-					q_msg($(this),'發票號碼保持空白，電子發票號碼將由系統自動產生');
+					if(q_cur==1)
+						q_msg($(this),'發票號碼保持空白，電子發票號碼將由系統自動產生');
 				});
 				
 				$('#txtTax').change(function() {
@@ -693,7 +694,7 @@
 			
 			//1041103轉來發票不計算金額
 			function sum() {
-				if (!(q_cur == 1 || q_cur == 2))
+				if (!(q_cur == 1 || q_cur == 2) || ($('#txtType').val()=='E' && $('#cmbTaxtype').val()!='6') )
 					return;
 					
 				$('#txtTax').attr('readonly', 'readonly');
@@ -703,8 +704,7 @@
 					t_mounts = q_float('txtMount_' + k);
 					t_prices = q_float('txtPrice_' + k);
 					t_moneys = round(t_mounts * t_prices, 0);
-					if($('#txtType').val()!='E' || $('#txtType').val()!='T')
-						$('#txtMoney_' + k).val(t_moneys);
+					$('#txtMoney_' + k).val(t_moneys);
 					t_money += t_moneys;
 					t_mount += t_mounts;
 				}
@@ -785,11 +785,9 @@
 						break;
 					default:
 				}
-				if($('#txtType').val()!='E' || $('#txtType').val()!='T'){
-					$('#txtMoney').val(t_money);
-					$('#txtTax').val(t_tax);
-					$('#txtTotal').val(t_total);
-				}
+				$('#txtMoney').val(t_money);
+				$('#txtTax').val(t_tax);
+				$('#txtTotal').val(t_total);
 			}
 
 			function refresh(recno) {
@@ -1278,7 +1276,7 @@
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="float:left;width: 80%;"/>
-						<input id="btnProductno.*" type="button" value=".." style="float:left;width: 15%;"/>
+						<input id="btnProductno.*" type="button" value="." style="float:left;width: 15%;"/>
 					</td>
 					<td><input id="txtProduct.*" type="text" style="float:left;width: 95%;"/></td>
 					<td><input id="txtUnit.*" type="text" style="float:left;width: 95%;"/></td>
