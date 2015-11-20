@@ -105,13 +105,9 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				//q_box('modfix_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
+				q_box('modcuw_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
 			}
-		
-				
-			
 
-			var flag =0;
 			function bbsAssign() {
 								
 				for (var j = 0; j < q_bbsCount; j++) {	
@@ -119,9 +115,6 @@
 				}
 				_bbsAssign();
 			}
-			
-
-			
 
 			function btnIns() {
 				_btnIns();
