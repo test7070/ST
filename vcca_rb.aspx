@@ -69,7 +69,7 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbTaxtype", q_getPara('vcca.taxtype'));
+				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				
 				$('#lblTrdno').text('訂單號碼');
 
@@ -534,6 +534,12 @@
 				
 				if ($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())) {
 					alert(q_getMsg('lblDatea') + '錯誤。');
+					Unlock(1);
+					return;
+				}
+				
+				if ($('#cmbTaxtype').val()!='3' ) {
+					alert(q_getMsg('lblTaxtype') + '禁止內含。');
 					Unlock(1);
 					return;
 				}
