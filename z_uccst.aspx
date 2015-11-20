@@ -241,8 +241,13 @@
 					}
 				});
 				$('#Xitype .cmb').change();
-				$('#Xstype select').val('A');
 				$('#Xitype select').val('1');
+				
+				if(q_getPara('sys.project')=='rk'){
+					$('#Xstype').hide();
+					$('#Xstype select').val('#non');
+				}else
+					$('#Xstype select').val('A');
 				
 				$('#chkYitype').children('input').eq(0).attr('checked', 'checked');
 				$('#chkYitype').children('input').eq(1).attr('checked', 'checked');
