@@ -55,7 +55,7 @@
 				q_getFormat();
 				bbmMask = [['txtDatea',r_picd]];
 				q_mask(bbmMask);
-				bbsMask = [['txtDatea1',r_picd+'-99:99'],['txtDatea2',r_picd+'-99:99']];
+				bbsMask = [['txtDatea1',r_picd+'-99:99'],['txtDatea2',r_picd+'-99:99'],['txtMount', 15, 0],['txtWeight', 15, 0],['txtFixmount', 15, 0]];
 				//q_mask(bbmMask);				
 				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
 				q_cmbParse("cmbWay",q_getPara('modfixc.way'),'s');
@@ -103,8 +103,9 @@
 								$('#txtNob_'+(pos-1)).val(elm.nob);
 								$('#txtCode_'+(pos-1)).val(elm.code1);
 								$('#txtDetail_'+(pos-1)).val(elm.detail1);
+								$('#txtWeight_'+(pos-1)).val(elm.weight1);
 							}
-						});	
+						});
 						break;					
 					case 'checkModelno_btnOk':
 						var as = _q_appendData("modfix", "", true);
@@ -231,6 +232,11 @@
 						}
 					});	
 					$("#cmbMech_"+j).val($('#txtMech_'+j).val());		
+					
+					//已維修(數量=維修數量)不顯示 2015/11/20
+					if(($('#txtMount_'+j).val()!="") && ($('#txtFixmount_'+j).val()!="") && ($('#txtFixmount_'+j).val()==$('#txtMount_'+j).val())){
+						$('.ishide_'+j).hide();
+					}
 				}
 				_bbsAssign();
 			}
@@ -503,7 +509,7 @@
 			</div>
 		</div>
 		<div class='dbbs'>
-			<table id="tbbs" class='tbbs' style="width:1350px;">
+			<table id="tbbs" class='tbbs' style="width:1450px;">
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
@@ -519,18 +525,20 @@
 					<td align="center" style="width:4%;"><a id='lblMech_s'></a></td>
 					<td align="center" style="width:3%;"><a id='lblBebottom_s'></a></td>
 					<td align="center" style="width:3%;"><a id='lblEnbottom_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblWeight_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblFixmount_s'></a></td>
 					<td align="center" style="width:3.5%;"><a id='lblWorktype_s'></a></td>
 					<td align="center" style="width:8%;"><a id='lblDatea1_s'></a></td>
 					<td align="center" style="width:8%;"><a id='lblDatea2_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblWorker_s'></a></td>
 
 				</tr>
-				<tr  style='background:#cad3ff;'>
+				<tr  style='background:#cad3ff;' class="ishide.*">
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
-					<td ><input id="txtNob.*" type="text" class="txt c1" style="width : 97% ;"/></td>
+					<td><input id="txtNob.*" type="text" class="txt c1" style="width : 97% ;"/></td>
 					<td style="display: none;"><input id="txtModel.*" type="text" class="txt c1" style="width : 95% ;"/></td>
 					<td style="display: none;"><input id="txtWheel.*" type="text"  style="width : 95% ;"/></td>
 					<td><input id="txtCode.*" type="text"  style="width : 93% ;"/></td>
@@ -543,6 +551,8 @@
 					</td>
 					<td><input id="txtBebottom.*" type="text" class="num c1" style="width : 90% ;"/></td>
 					<td><input id="txtEnbottom.*" type="text" class="num c1" style="width : 90% ;"/></td>
+					<td><input id="txtWeight.*" type="text" class="num c1" style="width : 93% ;"/></td>
+					<td><input id="txtFixmount.*" type="text" class="num c1" style="width : 93% ;"/></td>
 					<td><select id="cmbWorktype.*" type="text" class="txt c1" style="width : 100%;"/select></td>
 					<td><input id="txtDatea1.*" type="text" class="txt c1" style="width : 96% ;"/></td>
 					<td><input id="txtDatea2.*" type="text" class="txt c1" style="width : 96% ;"/></td>
