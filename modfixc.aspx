@@ -103,8 +103,9 @@
 								$('#txtNob_'+(pos-1)).val(elm.nob);
 								$('#txtCode_'+(pos-1)).val(elm.code1);
 								$('#txtDetail_'+(pos-1)).val(elm.detail1);
+								$('#txtWeight_'+(pos-1)).val(elm.weight1);
 							}
-						});	
+						});
 						break;					
 					case 'checkModelno_btnOk':
 						var as = _q_appendData("modfix", "", true);
@@ -232,8 +233,9 @@
 					});	
 					$("#cmbMech_"+j).val($('#txtMech_'+j).val());		
 					
-					if($('#txtMount_'+j).val() == $('#txtFixmount_'+j).val()){
-						$('.tr_'+j).hide();
+					//已維修(數量=維修數量)不顯示 2015/11/20
+					if(($('#txtMount_'+j).val()!="") && ($('#txtFixmount_'+j).val()!="") && ($('#txtFixmount_'+j).val()==$('#txtMount_'+j).val())){
+						$('.ishide_'+j).hide();
 					}
 				}
 				_bbsAssign();
@@ -531,7 +533,7 @@
 					<td align="center" style="width:5%;"><a id='lblWorker_s'></a></td>
 
 				</tr>
-				<tr  style='background:#cad3ff;' class="tr.*">
+				<tr  style='background:#cad3ff;' class="ishide.*">
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 						<input id="txtNoq.*" type="text" style="display: none;" />
