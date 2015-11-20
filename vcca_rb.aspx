@@ -539,7 +539,7 @@
 					return;
 				}
 				
-				if ($('#cmbTaxtype').val()!='3' ) {
+				if ($('#cmbTaxtype').val()=='3' ) {
 					alert(q_getMsg('lblTaxtype') + '禁止內含。');
 					Unlock(1);
 					return;
