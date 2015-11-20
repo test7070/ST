@@ -103,6 +103,8 @@
 								$('#txtNob_'+(pos-1)).val(elm.nob);
 								$('#txtCode_'+(pos-1)).val(elm.code1);
 								$('#txtDetail_'+(pos-1)).val(elm.detail1);
+								$('#txtFrame_'+(pos-1)).val(elm.frame1);
+								$('#txtMount_'+(pos-1)).val(elm.mount1);
 								$('#txtWeight_'+(pos-1)).val(elm.weight1);
 							}
 						});
