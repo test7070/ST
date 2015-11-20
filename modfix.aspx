@@ -62,6 +62,8 @@
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtModnoa').val()) && (q_cur == 1 || q_cur == 2)){
 						t_where = "where=^^noa='"+$('#txtModnoa').val()+"'^^"
+						q_gt('model', t_where, 0, 0, 0, "ins_model");
+						t_where = "where=^^noa='"+$('#txtModnoa').val()+"'^^"
 						q_gt('models', t_where, 0, 0, 0, "ins_models");
 					}
 				});
@@ -77,6 +79,7 @@
 				b_pop = '';
 			}
 			var delId='';
+			var z_frame='';
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'ins_models':
@@ -100,9 +103,16 @@
 								$('#txtNob_'+(pos-1)).val(as[i].productno);
 								$('#txtCode1_'+(pos-1)).val(as[i].number);
 								$('#txtDetail1_'+(pos-1)).val((as[i].model=='1'?'成型段':'定徑段')+as[i].wheel+as[i].number);
+								$('#txtFrame1_'+(pos-1)).val(z_frame);
 							}
 						}	
 						break;
+					case 'ins_model':
+						var as = _q_appendData("model", "", true);
+						if (as[0] != undefined) {
+							z_frame = as[0].frame;
+						}
+						break;	
 					case 'checkModelno_btnOk':
 						var as = _q_appendData("modfix", "", true);
 						if (as[0] != undefined) {

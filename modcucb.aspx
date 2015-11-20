@@ -333,7 +333,7 @@
 					<tr>
 						<td align="center" style="width:1%; color:black;"><a id='vewChk'></a>選</td>
 						<td align="center" style="width:15%; color:black;"><a id='vewDatea'></a>日期</td>
-						<td align="center" style="width:15%; color:black;"><a id='vewNoa'></a>電腦編號</td>
+						<td align="center" style="width:15%; color:black;"><a id='vewNoa'></a></td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=' '/></td>								
