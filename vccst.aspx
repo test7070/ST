@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -22,18 +22,19 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
+			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus','textMweight','txtBenifit'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory'];
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
-				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]
+				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1],
+				['txtBenifit', 10, 0, 1],['textMweight', 10, 1, 1]
 			];
 			var bbsNum = [
 				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
 				['txtMount', 10, 2, 1], ['txtTheory', 12, 3, 1], ['txtGweight', 10, 3, 1],
 				['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
-				['textSize4', 10, 2, 1]
+				['textSize4', 10, 2, 1],['txtMweight', 10, 1, 1],['txtSprice', 15, 3, 1],
 			];
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
@@ -85,12 +86,13 @@
 				$('#txtTotal').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 
 				var t_mount = 0, t_price = 0, t_money = 0, t_moneyus = 0, t_weight = 0, t_total = 0, t_tax = 0;
-				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
+				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0,t_sprices=0;
 				var t_unit = '';
 				var t_float = q_float('txtFloata');
 				var t_tranmoney = dec($('#txtTranmoney').val());
 				var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
 				t_kind = t_kind.substr(0, 1);
+				var t_mweight=0,t_benifit=0;
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
 					t_product = $.trim($('#txtProduct_' + j).val());
@@ -120,6 +122,7 @@
 					t_weights = q_float('txtWeight_' + j);
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
+					
 					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 						t_moneys = q_mul(t_prices, t_weights);
 					} else {
@@ -131,6 +134,14 @@
 						t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
 						t_moneys = round(q_mul(t_moneys, t_float), 0);
 					}
+					
+					t_sprices = q_float('txtSprice_' + j);
+					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+						t_benifit=q_add(t_benifit,q_div(t_moneys,q_mul(t_weights,t_sprices)));
+					} else {
+						t_benifit=q_add(t_benifit,q_div(t_moneys,q_mul(t_mounts,t_sprices)));
+					}
+					
 					var t_styles = $.trim($('#txtStyle_' + j).val());
 					var t_unos = $.trim($('#txtUno_' + j).val());
 					var t_dimes = $.trim($('#txtDime_' + j).val());
@@ -139,7 +150,11 @@
 					t_mount = q_add(t_mount, t_mounts);
 					t_money = q_add(t_money, t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
+					
+					t_mweight=q_add(t_mweight,dec($('#txtMweight_'+j).val()));
 				}
+				$('#textMweight').val(t_mweight);
+				$('#txtBenifit').val(t_benifit);
 				/*t_money = q_add(t_money,t_tranmoney);*/
 				t_total = t_money;
 				t_tax = 0;
@@ -342,6 +357,12 @@
 				if (isinvosystem) {
 					$('.istax').hide();
 					$('#txtVccatax').show();
+				}
+				if (q_getPara('sys.project').toUpperCase()=='PE'){
+					$('.pe').show();
+					$('.pe_no').hide();
+					$('#lblMweight').text('毛重');
+					$('#lblBenifit').text('損益');
 				}
 			}
 
@@ -1187,6 +1208,16 @@
 								sum();
 							}
 						});
+						$('#txtMweight_' + j).focusout(function() {
+							if (q_cur == 1 || q_cur == 2) {
+								sum();
+							}
+						});
+						$('#txtSprice_' + j).focusout(function() {
+							if (q_cur == 1 || q_cur == 2) {
+								sum();
+							}
+						});
 						$('#txtMount_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
@@ -1204,6 +1235,14 @@
 				}//j
 				_bbsAssign();
 				size_change();
+				if (q_getPara('sys.project').toUpperCase()=='PE'){
+					$('.pe').show();
+					$('#lblSize_st').text('版面');
+					$('#lblProductno_st').text('品號');
+					$('#lblTotals_st').text('小計');
+					$('#lblGweight_st').text('實際重量');
+					$('.pe_no').hide();
+				}
 			}
 
 			function btnIns() {
@@ -1303,6 +1342,16 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
+					
+				mweight_sum();
+			}
+			
+			function mweight_sum() {
+				var t_mweight=0;
+				for (var j = 0; j < q_bbsCount; j++) {
+					t_mweight=q_add(t_mweight,dec($('#txtMweight_'+j).val()));
+				}
+				$('#textMweight').val(t_mweight);
 			}
 
 			var ret;
@@ -1352,6 +1401,7 @@
 					}
 				}
 				size_change();
+				mweight_sum();
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
 				} else {
@@ -1368,6 +1418,7 @@
 			function btnMinus(id) {
 				_btnMinus(id);
 				sum();
+				mweight_sum();
 			}
 
 			function btnPlus(org_htm, dest_tag, afield) {
@@ -1662,7 +1713,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 1740px;
+				width: 1800px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1706,25 +1757,25 @@
 			<div class="dbbm">
 				<table class="tbbm" id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td class="tdZ"></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblType' class="lbl"> </a></td>
 						<td>
-							<select id="cmbTypea" class="txt" style="width:40%;"></select>
-							<select id="cmbStype" class="txt" style="width:60%;"></select>
+							<select id="cmbTypea" class="txt" style="width:40%;"> </select>
+							<select id="cmbStype" class="txt" style="width:60%;"> </select>
 						</td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
-						<td><select id="cmbKind" class="txt c1"></select></td>
-						<td></td>
+						<td><select id="cmbKind" class="txt c1"> </select></td>
+						<td> </td>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
 						<td class="tdZ">
@@ -1736,8 +1787,10 @@
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblMon' class="lbl"> </a></td>
 						<td><input id="txtMon" type="text" class="txt c1"/></td>
-						<td></td>
-						<td></td>
+						<td colspan="2">
+							<input id="btnImportVcce" type="button"/>
+							<input id="btnVcceImport" type="button" title="cut cubu"/>
+						</td>
 						<td colspan="2">
 							<input type="checkbox" id="chkIsgenvcca" style="float:left;"/>
 							<a id='lblIsgenvcca' class="lbl" style="float:left;"> </a>
@@ -1781,19 +1834,19 @@
 							<input id="txtAddr" type="text" style="float:left; width:369px;"/>
 						</td>
 						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>
+						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" > </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
 						<td colspan="4" >
 							<input id="txtPost2" type="text" style="float:left; width:70px;"/>
 							<input id="txtAddr2" type="text" style="float:left; width:347px;"/>
-							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'></select>
+							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
 						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
 						<td colspan="2">
 							<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
-							<select id="combPaytype" style="float:left; width:26px;"></select>
+							<select id="combPaytype" style="float:left; width:26px;"> </select>
 						</td>
 					</tr>
 					<tr>
@@ -1805,20 +1858,16 @@
 						<td><span> </span><a id='lblCarno' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtCarno" type="text" class="txt c1" /></td>
 					</tr>
-					<tr>
+					<tr class="pe_no">
 						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td><input id="txtTotalus" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
 						<td><input id="txtFloata" type="text" class="txt num c1" /></td>
 						<td>
-							<span style="float:left;display:block;width:10px;"></span>
-							<select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'></select>
+							<span style="float:left;display:block;width:10px;"> </span>
+							<select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'> </select>
 						</td>
-						<td></td>
-						<td colspan="2">
-							<input id="btnImportVcce" type="button"/>
-							<input id="btnVcceImport" type="button" title="cut cubu"/>
-						</td>
+						<td> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
@@ -1829,8 +1878,8 @@
 							<input id="txtVccatax" type="text" class="txt num c1 " style="display:none;" />
 						</td>
 						<td>
-							<span style="float:left;display:block;width:10px;"></span>
-							<select id="cmbTaxtype" style="float:left;width:80px;" ></select>
+							<span style="float:left;display:block;width:10px;"> </span>
+							<select id="cmbTaxtype" style="float:left;width:80px;" > </select>
 						</td>
 						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
 						<td><input id="txtTotal" type="text" class="txt num c1 istax" /></td>
@@ -1840,6 +1889,7 @@
 						<td><input id="txtWeight" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblPrices' class="lbl"> </a></td>
 						<td><input id="txtPrice" type="text" class="txt num c1" /></td>
+						<td> </td>
 						<td><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
 						<td><input id="txtTranmoney" type="text" class="txt num c1" /></td>
 					</tr>
@@ -1847,14 +1897,19 @@
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
 						<td colspan="7"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
+					<tr class="pe" style="display: none;">
+						<td class="pe" style="display: none;"><span> </span><a id="lblMweight" class="lbl"> </a></td>
+						<td class="pe" style="display: none;"><input id="textMweight" type="text" class="txt num c1"/></td>
+						<td class="pe" style="display: none;"><span> </span><a id='lblBenifit' class="lbl"> </a></td>
+						<td class="pe" style="display: none;"><input id="txtBenifit" type="text" class="txt num c1"/></td>
+					</tr>
 					<tr>
+						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
+						<td><input id="txtAccno" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
-						<td></td>
-						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
-						<td><input id="txtAccno" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
@@ -1862,25 +1917,25 @@
 		<div class='dbbs'>
 			<table id="tbbs" class='tbbs' style=' text-align:center'>
 				<tr style='color:white; background:#003366;' >
-					<td align="center" style="width:30px;">
-						<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
-					</td>
-					<td align="center" style="width:20px;"></td>
+					<td align="center" style="width:30px;"><input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" /></td>
+					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:230px;"><a id="lblUno_st" > </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProduct_st'> </a></td>
 					<td align="center" id="Size"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>
-					<td align="center" style="width:30px;"><a id='lblUnit'></a></td>
-					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
-					<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>
-					<td align="center" style="width:80px;"><a id='lblPrices_st'></a></td>
-					<td align="center" style="width:80px;">合計<br>理論重</td>
-					<td align="center" style="width:100px;"><a id='lblGweight_st'></a></td>
+					<td align="center" style="width:180px;"><a id='lblSizea_st'> </a></td>
+					<td align="center" style="width:30px;"><a id='lblUnit'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblWeight_st'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
+					<td align="center" style="width:100px;display: none;"  class="pe"><a id='lblMweight_st'> </a></td>
+					<td align="center" style="width:100px;display: none;"  class="pe"><a id='lblSprice_st'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:60px;">寄Y<BR>代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblMemos_st'></a></td>
+					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -1896,7 +1951,7 @@
 						<input class="btn" id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:15px;float:left;" />
 						<input id="txtProductno.*" type="text" style="width:85px;" />
 						<span style="display:block;width:15px;"> </span>
-						<input id="txtClass.*" type="text" style='width: 85px;'/>
+						<input id="txtClass.*" type="text" style='width: 85px;' class="pe_no"/>
 					</td>
 					<td><input type="text" id="txtStyle.*" style="width:85%;text-align:center;" /></td>
 					<td><input type="text" id="txtProduct.*" style="width:95%;" /></td>
@@ -1923,8 +1978,10 @@
 					<td><input id="txtPrice.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
-						<input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/>
+						<input id="txtTheory.*" type="text" class="txt num pe_no" style="width:95%;"/>
 					</td>
+					<td class="pe" style="display: none;"><input id="txtMweight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td class="pe" style="display: none;"><input id="txtSprice.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input class="txt" id="txtUsecoil.*" type="text" style="text-align:center;width:95%;"/></td>
 					<td>
