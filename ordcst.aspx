@@ -21,7 +21,7 @@
 
 			q_tables = 't';
 			var q_name = "ordc";
-			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
+			var q_readonly = ['txtTgg', 'txtAcomp', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
 			var q_readonlys = ['txtC1', 'txtNotv', 'txtNo3', 'txtOrdbno', 'txtNo2'];
 			var q_readonlyt = [];
 			var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
@@ -1263,6 +1263,10 @@
 						</td>
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td><input id="txtTotal" type="text" class="txt num c1" /></td>
+						<td>
+							<a id='lblEnd' class="lbl" style="float:right;"> </a><span> </span>
+							<input id="chkEnda" type="checkbox" style="float:right;"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
@@ -1275,8 +1279,8 @@
 						<td><input id="txtWorker2"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblApv" class="lbl"> </a></td>
 						<td><input id="txtApv" type="text"  class="txt c1" disabled="disabled"/></td>
-						<td><span> </span><a id='lblEnd' class="lbl"> </a></td>
-						<td><input id="chkEnda" type="checkbox"/></td>
+						<td><span> </span><a class="lbl">連絡人</a></td>
+						<td><input id="txtPostname"  type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
