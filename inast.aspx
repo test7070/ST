@@ -658,7 +658,7 @@
                 }
                 q_nowf();
                 as['date'] = abbm2['date'];
-
+				as['storeno'] = abbm2['storeno'];
                 return true;
             }
 
@@ -1196,6 +1196,7 @@
 				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+						<input id="txtStoreno.*" type="text" style="display: none;" />
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
