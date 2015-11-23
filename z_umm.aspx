@@ -20,9 +20,13 @@
 				location.href = location.href + "?;;;;" + ((new Date()).getUTCFullYear() - 1911);
 			}
 			t_isinit = false;
+			var custtypeItem = '';
 			$(document).ready(function() {
 				q_getId();
-				q_gf('', 'z_umm');
+				if(custtypeItem.length == 0){
+					q_gt('custtype', '', 0, 0, 0, "custtype");
+				}
+				//q_gf('', 'z_umm');
 				
 				$('#q_report').click(function(e) {
 					//客戶請款單與應收對帳簡要表>>正常隱藏業務選項>>>不然會造成金額問題
@@ -125,8 +129,15 @@
 						}
 						if(z_coin!='#non@本幣')//有外幣
 							z_coin+=',ALL@全部';
-						
                 	break;
+                	case 'custtype':
+                        var as = _q_appendData("custtype", "", true);
+                        custtypeItem = " @全部";
+                        for ( i = 0; i < as.length; i++) {
+                            custtypeItem = custtypeItem + (custtypeItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].namea;
+                        }
+						q_gf('', 'z_umm');
+						break;
                 }
                 if(!t_isinit && z_coin.length>0){
                 	t_isinit=true;
@@ -221,7 +232,11 @@
                     	},{
                         	type : '6', //[30] 
                       	  	name : 'acckey'
-                    	}]
+                    	}, {
+							type : '5', //[31]
+							name : 'custtype', 
+							value : custtypeItem.split(',')
+						}]
 					});
 					q_popAssign();
 					$('#txtDate1').mask('999/99/99');
