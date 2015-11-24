@@ -80,6 +80,19 @@
 				});
 				q_popAssign();
 				q_langShow();
+				
+				if(q_getPara('sys.project').toUpperCase()=='PE'){
+					$('#q_report div div').eq(0).hide();
+					$('#q_report div div').eq(2).hide();
+					$('#q_report div div').eq(3).hide();
+					$('#q_report div div').eq(4).hide();
+					$('#q_report div div').eq(6).hide();
+					$('#q_report div div').eq(7).hide();
+					$('#q_report div div').eq(8).hide();
+				}else{
+					$('#q_report div div').eq(9).hide();
+				}
+				
 				$('#txtXmon1').mask('999/99');
 				$('#txtXmon2').mask('999/99');
 				$('#txtXdate1').mask('999/99/99');
