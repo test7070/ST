@@ -245,6 +245,11 @@
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					$('#lblLcno').text('報關號碼');
 				}
+				
+				if(q_getPara('sys.project').toUpperCase()=='PE'){
+					$('.PE_hide').hide();
+				}
+				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
 					if ($('#txtMemo').val().substr(0,1)=='*')
@@ -1580,7 +1585,7 @@
 						<td><span> </span><a id='lblCarno' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtCarno" type="text" class="txt c1" /></td>
 					</tr>
-					<tr>
+					<tr class = "PE_hide">
 						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td><input id="txtTotalus" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
