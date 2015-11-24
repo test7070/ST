@@ -572,6 +572,20 @@
 					return;
 				}
 				
+				//1124 因自動產生發票不會變動金額，故存檔檢查單價*數量=金額
+				var t_err='';
+				for (var j = 0; j < q_bbsCount; j++) {
+					var t_mount=dec($('#txtMount_'+j).val()),t_price=dec($('#txtPrice_'+j).val()),t_total=dec($('#txtMoney_'+j).val());
+					if(q_mul(t_mount,t_price)!=t_total){
+						t_err=t_err+(t_err.length>0?'\n':'')+($('#txtProduct_'+j).val()+"單價*金額 不等於 發票金額");
+					}
+				}
+				if(t_err.length>0){
+					alert(t_err);
+					Unlock(1);
+					return;
+				}
+				
 				//檢查發票金額是否超出訂單金額
 				if($('#txtTrdno').val().length>0 && !ordemoney_check){
 					t_where = "where=^^ noa='"+$('#txtTrdno').val()+"' ^^";
