@@ -23,7 +23,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotalus','txtTotal2','txtBenifit'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory'];
+			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2'];
 			var bbmNum = [
 				['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -135,7 +135,7 @@
 				
 				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
 				if($('#chkAtax').prop('checked'))
-					t_tax = q_mul(t_money,t_taxrate);
+					t_tax = round(q_mul(t_money,t_taxrate),0);
 				else
 					t_tax = q_float('txtTax');
 				t_total=q_add(t_money,t_tax)
@@ -447,7 +447,6 @@
 					case 'unostk':
 						var unostkList = _q_appendData("unostktmp", "", true);
 						var unostkList_Tmp = new Array();
-						;
 						var ErrStr = '';
 						if (unostkList.length > 0 && unostkList[0] != undefined) {
 							for (var j = 0; j < unostkList.length; j++) {
@@ -719,9 +718,9 @@
 				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
 				var t_where = "where=^^ 1=1^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
-				if (q_getPara('sys.project').toUpperCase()=='PE'){
-					$('#cmbKind').val('A1');
-				}
+				
+				$('#cmbKind').val('A1');
+				
 			}
 
 			function btnModi() {
