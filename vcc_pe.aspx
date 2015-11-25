@@ -23,7 +23,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotalus','txtTotal2','txtBenifit'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2'];
+			var q_readonlys = ['txtTotal'];
 			var bbmNum = [
 				['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -293,6 +293,13 @@
 					}
 				});
 				
+				$('#btnImportCut').click(function() {
+					var t_custno = $('#txtCustno').val();
+					var t_where = '1=1 ';
+					t_where += q_sqlPara2('custno', t_custno) ;
+					q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "900px", "95%", q_getMsg('popVcceImport'));
+				});
+				
 				$('#lblMweight').text('毛重');
 				$('#lblBenifit').text('損益');
 			}
@@ -300,45 +307,15 @@
 			function q_boxClose(s2) {/// q_boxClose 2/4
 				var ret;
 				switch (b_pop) {
-					case 'ordes':
-						if (q_cur > 0 && q_cur < 4) {// q_cur： 0 = 瀏覽狀態 1=新增 2=修改 3=刪除 4=查詢
-							b_ret = getb_ret();
-							/// q_box() 執行後，選取的資料
+					case 'view_vcce_import':
+						if (q_cur > 0 && q_cur < 4) {
 							if (!b_ret || b_ret.length == 0) {
 								b_pop = '';
 								return;
 							}
-							for (var i = 0; i < q_bbsCount; i++) {
-								$('#btnMinus_' + i).click();
-							}
-							for (var k = 0; k < b_ret.length; k++) {
-								var t_notv = dec(b_ret[k].notv);
-								var t_mount = dec(b_ret[k].mount);
-								var t_weight = dec(b_ret[k].weight);
-								var t_kind = trim(b_ret[k].kind).toUpperCase();
-								if (t_kind.substring(0, 1) == 'B') {
-									if (t_notv != t_mount) {
-										t_weight = round(q_mul(q_div(t_weight, t_mount), t_notv), 0);
-									}
-									t_mount = t_notv;
-								} else {
-									if (t_notv != t_weight) {
-										t_mount = round(q_mul(q_div(t_mount, t_weight), t_notv), 0);
-									}
-									t_weight = t_notv;
-								}
-								b_ret[k].mount = t_mount;
-								b_ret[k].weight = t_weight;
-							}
-							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
-							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret, 'productno,product,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
-							/// 最後 aEmpField 不可以有【數字欄位】
-							for (var i = 0; i < AddRet.length; i++) {
-								$('#txtMount_' + i).change();
-							}
-							sum();
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,productno,product,width,dime,lengthb,spec,mount,weight,price,style,size', '');
 						}
+						sum();
 						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
@@ -526,10 +503,7 @@
 								$('#txtLengthb_' + t_sel).val(as[0].lengthb);
 								$('#txtSize_' + t_sel).val(as[0].size);
 								sum();
-							} else {//找不到訂單 回view_uccb找尺寸
-								alert('警告：查無訂單【' + $('#txtOrdeno_' + t_sel).val() + '-' + $('#txtNo2_' + t_sel).val() + '】');
-								q_gt('view_uccb', "where=^^ uno='" + $.trim($('#txtUno_' + t_sel).val()) + "'^^", 0, 0, 0, 'afterPopUno2_' + t_sel, r_accy);
-							}
+							} 
 						} else if (t_name.substring(0, 13) == 'afterPopUno2_') {
 							var t_sel = parseInt(t_name.split('_')[1]);
 							var as = _q_appendData("view_uccb", "", true);
@@ -807,15 +781,9 @@
 						$('#txtStyle_' + b_seq).focus();
 						break;
 					case 'txtUno_':
-						var t_ordeno = $.trim($('#txtOrdeno_' + b_seq).val());
-						var t_no2 = $.trim($('#txtNo2_' + b_seq).val());
 						var t_uno = $.trim($('#txtUno_' + b_seq).val());
 						if (ret != undefined && ret.length > 0) {
-							if (t_ordeno.length > 0 && t_no2 > 0) {
-								q_gt('view_ordes', "where=^^ noa='" + t_ordeno + "' and no2='" + t_no2 + "'^^", 0, 0, 0, 'afterPopUno1_' + b_seq, r_accy);
-							} else if (t_uno.length > 0) {
-								q_gt('view_uccb', "where=^^ uno='" + t_uno + "'^^", 0, 0, 0, 'afterPopUno2_' + b_seq, r_accy);
-							}
+							q_gt('view_uccb', "where=^^ uno='" + t_uno + "'^^", 0, 0, 0, 'afterPopUno2_' + b_seq, r_accy);
 						}
 						break;
 				}
