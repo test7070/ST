@@ -162,6 +162,10 @@
             }
             _bbsAssign();
             size_change();
+            if(q_getPara('sys.project').toUpperCase()=='PE'){
+				$('.pe_hide').hide();
+				$('#lblProductno_st').val('品號');
+			}
         }
         
         function q_popPost(s1) {
@@ -179,6 +183,8 @@
             $('#txtDatea').val(q_date());
             $('#txtDatea').focus();
             $('#cmbKind').val(q_getPara('vcc.kind'));
+            if(q_getPara('sys.project').toUpperCase()=='PE')
+				$('#cmbKind').val('A1');
             size_change();
         }
         function btnModi() {
@@ -480,29 +486,27 @@
                 <td align="center" style="width:5%"><a id='vewChk'> </a></td>
                 <td align="center" style="width:20%"><a id='vewNoa'> </a></td>
                 <td align="center" style="width:25%"><a id='vewDatea'> </a></td>
-                
             </tr>
              <tr>
                    <td ><input id="chkBrow.*" type="checkbox" style=' '/></td>
                    <td align="center" id='noa'>~noa</td>
                    <td align="center" id='datea'>~datea</td>
-                  
             </tr>
         </table>
         </div>
         <div class='dbbm' style="width: 68%;float:left">
         <table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='0'>
-        <tr class="tr1">
-            <td class='td1'><span> </span><a id="lblNoa" class="lbl"> </a></td>
-            <td class='td2'><input id="txtNoa"  type="text" class="txt c1"/></td>
-            <td class='td3'><span> </span><a id="lblDatea" class="lbl"> </a></td>
-            <td class='td4'><input id="txtDatea"  type="text" class="txt c1"/></td>
-            <td class='td5'><span> </span><a id="lblKind" class="lbl"> </a></td>
-            <td class='td6'><select id="cmbKind" class="txt c1"> </select></td>
+        <tr>
+            <td><span> </span><a id="lblNoa" class="lbl"> </a></td>
+            <td><input id="txtNoa"  type="text" class="txt c1"/></td>
+            <td><span> </span><a id="lblDatea" class="lbl"> </a></td>
+            <td><input id="txtDatea"  type="text" class="txt c1"/></td>
+            <td class="pe_hide"><span> </span><a id="lblKind" class="lbl"> </a></td>
+            <td class="pe_hide"><select id="cmbKind" class="txt c1"> </select></td>
         </tr>
-        <tr class="tr2">
-            <td class='td1'><span> </span><a id="lblStore" class="lbl btn"> </a></td>
-            <td class='td2'  colspan='5'>
+        <tr>
+            <td><span> </span><a id="lblStore" class="lbl btn"> </a></td>
+            <td  colspan='5'>
             	<input id="txtStoreno" type="text" class="txt c4"/>
             	<input id="txtStore" type="text" class="txt c5"/>
             	<span style="float: left;"> </span>
@@ -514,9 +518,9 @@
             	<input id="txtStore2" type="text" class="txt c5"/>
             </td>
         </tr>
-        <tr class="tr3">
-            <td class='td1'><span> </span><a id="lblWaste" class="lbl"> </a></td>
-            <td class='td2'><input id="txtWaste"  type="text" class="txt c1"/></td>
+        <tr>
+            <td><span> </span><a id="lblWaste" class="lbl"> </a></td>
+            <td><input id="txtWaste"  type="text" class="txt c1"/></td>
         </tr>                
         </table>
         </div>
@@ -532,7 +536,7 @@
                 <td align="center" style="width:6%;"><a id='lblMount_s'> </a></td>
                 <td align="center" style="width:6%;"><a id='lblPrice_s'> </a></td>
                 <td align="center" style="width:7%;"><a id='lblTotal_s'> </a></td>
-                <td align="center" style="width:7%;"><a id='lblEweight_s'></a>/<BR><a id='lblAdjweight_s'> </a></td>
+                <td align="center" style="width:7%;"><a id='lblEweight_s'> </a>/<BR><a id='lblAdjweight_s'> </a></td>
                 <td align="center" style="width:7%;"><a id='lblEweight2_s'> </a></td>
                 <td align="center"><a id='lblMemo_s'> </a></td>
             </tr>
@@ -548,7 +552,7 @@
                 <td>
 					<input class="btn"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
                     <input type="text" id="txtProductno.*"  style="width:70%;"/>
-                    <input id="txtClass.*" type="text" style="width: 92%;"/>
+                    <input id="txtClass.*" type="text" style="width: 92%;"  class="pe_hide"/>
 				</td>
 				<td><input type="text" id="txtProduct.*"  class="txt c1"/></td>
 				 <td><input class="txt num c8" id="textSize1.*" type="text" disabled="disabled"/><div id="x1.*" style="float: left"> x</div>
