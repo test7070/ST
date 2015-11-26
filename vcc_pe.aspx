@@ -23,7 +23,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotalus','txtTotal2','txtBenifit'];
-			var q_readonlys = ['txtTotal'];
+			var q_readonlys = ['txtTotal','txtSprice'];
 			var bbmNum = [
 				['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -1063,30 +1063,7 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<div style="overflow: auto;display:block;">
-			<div id="toolbar">
-  <div id="q_menu"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <input id="btnXchg" type="button" style="display:none;background:url(../image/xchg_24.png) no-repeat;width:28px;height:26px"/>
-  <a id='lblQcopy' style="display:none;"></a>
-  <input id="chekQcopy" type="checkbox" style="display:none;"/>
-  <input id="btnIns" type="button"/>
-  <input id="btnModi" type="button"/>
-  <input id="btnDele" type="button"/>
-  <input id="btnSeek" type="button"/>
-  <input id="btnPrint" type="button"/>
-  <input id="btnPrevPage" type="button"/>
-  <input id="btnPrev" type="button"/>
-  <input id="btnNext" type="button"/>
-  <input id="btnNextPage" type="button"/>
-  <input id="btnOk" type="button" disabled="disabled" />
-  <input id="btnCancel" type="button" disabled="disabled"/>&nbsp;&nbsp;
-  <input id="btnAuthority" type="button" />&nbsp;&nbsp;
-  <span id="btnSign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
-  <span id="btnAsign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
-  <span id="btnLogout" style="text-decoration: underline;color:orange;"></span>&nbsp;&nbsp;
-  <input id="pageNow" type="text"  style="position: relative;text-align:center;"  size="2"/> /
-  <input id="pageAll" type="text"  style="position: relative;text-align:center;"  size="2"/>
-  <div id="q_acDiv"></div>
-</div>
+			<!--#include file="../inc/toolbar.inc"-->
 		</div>
 		<div style="overflow: auto;display:block;width:1280px;">
 			<div class="dview" id="dview">
@@ -1157,7 +1134,7 @@
 						</td>
 						<td> </td>
 						<td colspan="2">
-							<input id="btnImportCut" type="button" value="材剪匯入"/>
+							<input id="btnImportCut" type="button" value="裁剪匯入"/>
 						</td>
 					</tr>
 					<tr>
