@@ -296,7 +296,7 @@
 				$('#btnImportCut').click(function() {
 					var t_custno = $('#txtCustno').val();
 					var t_where = '1=1 ';
-					t_where += q_sqlPara2('custno', t_custno) ;
+					t_where += q_sqlPara2('custno', t_custno) +" and (mount>0 or weight>0) " ;
 					q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "900px", "95%", q_getMsg('popVcceImport'));
 				});
 				
@@ -313,7 +313,8 @@
 								b_pop = '';
 								return;
 							}
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,productno,product,width,dime,lengthb,spec,mount,weight,price,style,size', '');
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize,txtGweight,txtSprice'
+							, b_ret.length, b_ret, 'uno,productno,product,width,dime,lengthb,spec,mount,weight,price,style,size,weight,sprice', '');
 						}
 						sum();
 						break;
@@ -1109,11 +1110,11 @@
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblMon' class="lbl"> </a></td>
 						<td><input id="txtMon" type="text" class="txt c1"/></td>
-						<td> </td>
+						<!--<td> </td>
 						<td colspan="2">
 							<input type="checkbox" id="chkIsgenvcca" style="float:left;"/>
 							<a id='lblIsgenvcca' class="lbl" style="float:left;"> </a>
-						</td>
+						</td>-->
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
@@ -1121,8 +1122,8 @@
 							<input id="txtCno" type="text" style="float:left;width:25%;"/>
 							<input id="txtAcomp" type="text" style="float:left;width:75%;"/>
 						</td>
-						<td><span> </span><a id='lblInvono' class="lbl btn"> </a></td>
-						<td colspan="2"><input id="txtInvono" type="text" class="txt c1"/></td>
+						<!--<td><span> </span><a id='lblInvono' class="lbl btn"> </a></td>
+						<td colspan="2"><input id="txtInvono" type="text" class="txt c1"/></td>-->
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblCust" class="lbl btn"> </a></td>
