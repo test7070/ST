@@ -22,13 +22,13 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus','textMweight','txtBenifit'];
+			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus','txtTotal2','txtBenifit'];
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory'];
 			var bbmNum = [
-				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
-				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
+				['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
+				['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1],
-				['txtBenifit', 10, 0, 1],['textMweight', 10, 1, 1]
+				['txtBenifit', 10, 0, 1],['txtTotal2', 10, 1, 1]
 			];
 			var bbsNum = [
 				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
@@ -51,7 +51,7 @@
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
 				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
@@ -104,21 +104,6 @@
 						$('#txtUnit_' + j).val(t_unit);
 					}
 					//---------------------------------------
-					if (t_kind == 'A') {
-						q_tr('txtDime_' + j, q_float('textSize1_' + j));
-						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
-						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
-						q_tr('txtRadius_' + j, q_float('textSize4_' + j));
-					} else if (t_kind == 'B') {
-						q_tr('txtRadius_' + j, q_float('textSize1_' + j));
-						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
-						q_tr('txtDime_' + j, q_float('textSize3_' + j));
-						q_tr('txtLengthb_' + j, q_float('textSize4_' + j));
-					} else {//鋼筋、胚
-						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
-					}
-					getTheory(j);
-					//---------------------------------------
 					t_weights = q_float('txtWeight_' + j);
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
@@ -137,9 +122,9 @@
 					
 					t_sprices = q_float('txtSprice_' + j);
 					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
-						t_benifit=q_add(t_benifit,q_div(t_moneys,q_mul(t_weights,t_sprices)));
+						t_benifit=q_add(t_benifit,q_sub(t_moneys,q_mul(t_weights,t_sprices)));
 					} else {
-						t_benifit=q_add(t_benifit,q_div(t_moneys,q_mul(t_mounts,t_sprices)));
+						t_benifit=q_add(t_benifit,q_sub(t_moneys,q_mul(t_mounts,t_sprices)));
 					}
 					
 					var t_styles = $.trim($('#txtStyle_' + j).val());
@@ -153,7 +138,7 @@
 					
 					t_mweight=q_add(t_mweight,dec($('#txtMweight_'+j).val()));
 				}
-				$('#textMweight').val(t_mweight);
+				$('#txtTotal2').val(t_mweight);
 				$('#txtBenifit').val(t_benifit);
 				/*t_money = q_add(t_money,t_tranmoney);*/
 				t_total = t_money;
@@ -249,7 +234,6 @@
 				}).blur(function() {
 					$(this).attr('size', '1');
 				}).click(function(e) {
-					size_change();
 					sum();
 				});
 				$("#cmbTaxtype").change(function(e) {
@@ -283,13 +267,6 @@
 					} else {
 						$('#btnOk').removeAttr('disabled');
 					}
-				});
-				$('#btnVcceImport').click(function() {
-					var t_ordeno = $('#txtOrdeno').val();
-					var t_custno = $('#txtCustno').val();
-					var t_where = '1=1 ';
-					t_where += q_sqlPara2('ordeno', t_ordeno) + q_sqlPara2('custno', t_custno) + " and ((len(gmemo)=0) or gmemo='cubu') and kind='" + $('#cmbKind').val() + "'";
-					q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "95%", "95%", q_getMsg('popVcceImport'));
 				});
 				$('#btnOrdeno').click(function() {
 					if (!(q_cur == 1 || q_cur == 2))
@@ -344,6 +321,16 @@
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
 				});
+				
+				$('#lblInvono').click(function() {
+					if ($('#txtInvono').val().length > 0)
+						q_pop('txtInvono', "vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtInvono').val() + "';" + r_accy, 'vcca', 'noa', 'datea', "95%", "95%px", q_getMsg('lblInvono'), true);
+					else{
+						var t_where = "where=^^ vccno='" + $('#txtNoa').val() + "' ^^";
+						//console.log(t_where);
+						q_gt('vccat', t_where, 0, 0, 0, "");						
+					}
+				});
 				$('#lblInvono').click(function() {
 					if ($('#txtInvono').val().length > 0)
 						q_pop('txtInvono', "vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtInvono').val() + "';" + r_accy, 'vcca', 'noa', 'datea', "95%", "95%px", q_getMsg('lblInvono'), true);
@@ -358,45 +345,15 @@
 					$('.istax').hide();
 					$('#txtVccatax').show();
 				}
-				if (q_getPara('sys.project').toUpperCase()=='PE'){
-					$('.pe').show();
-					$('.pe_no').hide();
-					$('#lblMweight').text('毛重');
-					$('#lblBenifit').text('損益');
-				}
+				
+				
+				$('#lblMweight').text('毛重');
+				$('#lblBenifit').text('損益');
 			}
 
 			function q_boxClose(s2) {/// q_boxClose 2/4
 				var ret;
 				switch (b_pop) {
-					case 'view_vcce_import':
-						if (q_cur > 0 && q_cur < 4) {
-							if (!b_ret || b_ret.length == 0) {
-								b_pop = '';
-								return;
-							}
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,ordeno,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style,size', '');
-							//get ordes.price <Start>
-							var distinctArray = new Array;
-							var inStr = '';
-							for (var i = 0; i < b_ret.length; i++) {
-								distinctArray.push(b_ret[i].ordeno);
-							}
-							distinctArray = distinct(distinctArray);
-							for (var i = 0; i < distinctArray.length; i++) {
-								inStr += "'" + distinctArray[i] + "',";
-							}
-							inStr = inStr.substring(0, inStr.length - 1);
-							if (trim(inStr).length > 0) {
-								var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
-								q_gt('view_ordes', t_where, 0, 0, 0, "", r_accy);
-							}
-							//get ordes.price <End>
-							/// 最後 aEmpField 不可以有【數字欄位】
-							size_change();
-						}
-						sum();
-						break;
 					case 'ordes':
 						if (q_cur > 0 && q_cur < 4) {// q_cur： 0 = 瀏覽狀態 1=新增 2=修改 3=刪除 4=查詢
 							b_ret = getb_ret();
@@ -429,7 +386,7 @@
 							}
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
 							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret, 'productno,product,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							for (var i = 0; i < AddRet.length; i++) {
 								$('#txtMount_' + i).change();
@@ -558,7 +515,6 @@
 						$('#txtDatea').val(q_date());
 						$('#txtMon').val(q_date().substring(0, 6));
 						$('#txtDatea').focus();
-						size_change();
 						break;
 					case 'flors_coin':
 						var as = _q_appendData("flors", "", true);
@@ -704,8 +660,7 @@
 							for (var i = 0; i < q_bbsCount; i++) {
 								$('#btnMinus_' + i).click();
 							};
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtStyle,txtOrdeno,txtNo2,txtSize', vcces_as.length, vcces_as, 'uno,productno,product,spec,radius,dime,width,lengthb,mount,weight,price,style,ordeno,no2,size', 'txtUno');
-							size_change();
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtStyle,txtOrdeno,txtNo2,txtSize', vcces_as.length, vcces_as, 'uno,productno,product,spec,dime,width,lengthb,mount,weight,price,style,ordeno,no2,size', 'txtUno');
 							sum();
 							//get ordes.price <Start>
 							var distinctArray = new Array;
@@ -828,9 +783,7 @@
 								$('#txtDime_' + t_sel).val(as[0].dime);
 								$('#txtWidth_' + t_sel).val(as[0].width);
 								$('#txtLengthb_' + t_sel).val(as[0].lengthb);
-								$('#txtRadius_' + t_sel).val(as[0].radius);
 								$('#txtSize_' + t_sel).val(as[0].size);
-								size_change();
 								sum();
 							} else {//找不到訂單 回view_uccb找尺寸
 								alert('警告：查無訂單【' + $('#txtOrdeno_' + t_sel).val() + '-' + $('#txtNo2_' + t_sel).val() + '】');
@@ -843,16 +796,13 @@
 								$('#txtDime_' + t_sel).val(as[0].dime);
 								$('#txtWidth_' + t_sel).val(as[0].width);
 								$('#txtLengthb_' + t_sel).val(as[0].lengthb);
-								$('#txtRadius_' + t_sel).val(as[0].radius);
 								$('#txtSize_' + t_sel).val(as[0].size);
 							} else {
 								$('#txtDime_' + t_sel).val('');
 								$('#txtWidth_' + t_sel).val('');
 								$('#txtLengthb_' + t_sel).val('');
-								$('#txtRadius_' + t_sel).val('');
 								$('#txtSize_' + t_sel).val('');
 							}
-							size_change();
 							sum();
 						}
 				} /// end switch
@@ -1059,37 +1009,6 @@
 				q_box('vccst_s.aspx', q_name + '_s', "550px", "640px", q_getMsg("popSeek"));
 			}
 
-			function getTheory(b_seq) {
-				t_Radius = dec($('#txtRadius_' + b_seq).val());
-				t_Width = dec($('#txtWidth_' + b_seq).val());
-				t_Dime = dec($('#txtDime_' + b_seq).val());
-				t_Lengthb = dec($('#txtLengthb_' + b_seq).val());
-				t_Mount = dec($('#txtMount_' + b_seq).val());
-				t_Style = $('#txtStyle_' + b_seq).val();
-				t_Productno = $('#txtProductno_' + b_seq).val();
-				var theory_setting = {
-					calc : StyleList,
-					ucc : t_uccArray,
-					radius : t_Radius,
-					width : t_Width,
-					dime : t_Dime,
-					lengthb : t_Lengthb,
-					mount : t_Mount,
-					style : t_Style,
-					productno : t_Productno,
-					round : 3
-				};
-				if ($('#cmbKind').val().substr(1, 1) == '4') {//鋼胚
-					q_tr('txtTheory_' + b_seq, round(t_Mount * theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), t_Dime, t_Width, t_Lengthb), 0));
-				} else {
-					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
-				}
-				var t_Product = $('#txtProduct_' + b_seq).val();
-				if (t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0) {
-					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
-				}
-			}
-
 			function bbsAssign() {/// 表身運算式
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
@@ -1234,20 +1153,22 @@
 					}
 				}//j
 				_bbsAssign();
-				size_change();
-				if (q_getPara('sys.project').toUpperCase()=='PE'){
-					$('.pe').show();
-					$('#lblSize_st').text('版面');
-					$('#lblProductno_st').text('品號');
-					$('#lblTotals_st').text('小計');
-					$('#lblGweight_st').text('實際重量');
-					$('.pe_no').hide();
-				}
+				
+				$('#lblUno_st').text('鋼捲批號');
+				$('#lblSpec_st').text('板面');
+				$('#lblProductno_st').text('品號');
+				$('#lblTotals_st').text('小計');
+				$('#lblGweight_st').text('實際重量');
+				$('#lblDime_st').text('厚度mm');
+				$('#lblWidth_st').text('寬度mm');
+				$('#lblLengthb_st').text('長度mm');
+				$('#lblWeight_st').text('貨單重量');
+				$('#lblPrices_st').text('實際單價');
 			}
 
 			function btnIns() {
 				_btnIns();
-				$('#cmbTaxtype').val(1);
+				//$('#cmbTaxtype').val(1);
 				Lock(1, {
 					opacity : 0
 				});
@@ -1263,28 +1184,7 @@
 				if (emp($('#txtNoa').val()))
 					return;
 				_btnModi();
-				/* var s1 = '';
-				 for (var j = 0; j < aPop.length; j++) {
-				 if (aPop[j][0].length > 6 && aPop[j][0].substr(0, 7) == 'txtUno_') {
-				 aPop[j][8] = '';
-				 for (var i = 0; i < q_bbsCount; i++) {
-				 s1 = $('#txtUno_' + i).val();
-				 if (s1 && s1.length > 0)
-				 aPop[j][8] += s1 + ',';
-				 }
-
-				 if (aPop[j][8].length > 0) {
-				 s1 = aPop[j][8];
-				 s1 = s1.substr(0, s1.length - 1);
-				 aPop[j][8] = 'uno={' + s1 + '}';
-				 }
-
-				 break;
-				 }
-				 }*/
-
 				$('#txtDatea').focus();
-				size_change();
 				sum();
 			}
 
@@ -1337,24 +1237,13 @@
 				if (r_rank < 9) {
 					$('#btnImportVcce').css('display', 'none');
 				}
-				size_change();
-				//q_popPost('txtProductno_');
+				
 				$('input[id*="txtProduct_"]').each(function() {
 					thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 					$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
 				});
 				if (isinvosystem)
 					$('.istax').hide();
-					
-				mweight_sum();
-			}
-			
-			function mweight_sum() {
-				var t_mweight=0;
-				for (var j = 0; j < q_bbsCount; j++) {
-					t_mweight=q_add(t_mweight,dec($('#txtMweight_'+j).val()));
-				}
-				$('#textMweight').val(t_mweight);
 			}
 
 			var ret;
@@ -1390,12 +1279,11 @@
 						}
 						break;
 				}
-
 			}
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
-				var WantDisabledArray = ['btnImportVcce', 'btnVcceImport'];
+				var WantDisabledArray = ['btnImportVcce'];
 				for (var k = 0; k < WantDisabledArray.length; k++) {
 					if (q_cur == 1 || q_cur == 2) {
 						$("#" + WantDisabledArray[k]).removeAttr('disabled', 'disabled');
@@ -1403,8 +1291,6 @@
 						$("#" + WantDisabledArray[k]).attr('disabled', 'disabled');
 					}
 				}
-				size_change();
-				mweight_sum();
 				if (t_para) {
 					$('#combAddr').attr('disabled', 'disabled');
 				} else {
@@ -1421,12 +1307,10 @@
 			function btnMinus(id) {
 				_btnMinus(id);
 				sum();
-				mweight_sum();
 			}
 
 			function btnPlus(org_htm, dest_tag, afield) {
 				_btnPlus(org_htm, dest_tag, afield);
-				size_change();
 				if (q_tables == 's')
 					bbsAssign();
 			}
@@ -1475,73 +1359,6 @@
 				_btnCancel();
 			}
 
-			function size_change() {
-				if (q_cur == 1 || q_cur == 2) {
-					$('input[id*="textSize"]').removeAttr('disabled');
-				} else {
-					$('input[id*="textSize"]').attr('disabled', 'disabled');
-				}
-				$('#cmbKind').val((($('#cmbKind').val()) ? $('#cmbKind').val() : q_getPara('vcc.kind')));
-				var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
-				t_kind = t_kind.substr(0, 1);
-				if (t_kind == 'A') {
-					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#textSize1_' + j).show();
-						$('#textSize2_' + j).show();
-						$('#textSize3_' + j).show();
-						$('#textSize4_' + j).hide();
-						$('#x1_' + j).show();
-						$('#x2_' + j).show();
-						$('#x3_' + j).hide();
-						$('#Size').css('width', '220px');
-						$('#txtSpec_' + j).css('width', '220px');
-						$('#textSize1_' + j).val($('#txtDime_' + j).val());
-						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
-						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
-						$('#textSize4_' + j).val(0);
-						$('#txtRadius_' + j).val(0);
-					}
-				} else if (t_kind == 'B') {
-					$('#lblSize_help').text(q_getPara('sys.lblSizeb'));
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#textSize1_' + j).show();
-						$('#textSize2_' + j).show();
-						$('#textSize3_' + j).show();
-						$('#textSize4_' + j).show();
-						$('#x1_' + j).show();
-						$('#x2_' + j).show();
-						$('#x3_' + j).show();
-						$('#Size').css('width', '300px');
-						$('#txtSpec_' + j).css('width', '300px');
-						$('#textSize1_' + j).val($('#txtRadius_' + j).val());
-						$('#textSize2_' + j).val($('#txtWidth_' + j).val());
-						$('#textSize3_' + j).val($('#txtDime_' + j).val());
-						$('#textSize4_' + j).val($('#txtLengthb_' + j).val());
-					}
-				} else {//鋼筋和鋼胚
-					$('#lblSize_help').text(q_getPara('sys.lblSizec'));
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#textSize1_' + j).hide();
-						$('#textSize2_' + j).hide();
-						$('#textSize3_' + j).show();
-						$('#textSize4_' + j).hide();
-						$('#x1_' + j).hide();
-						$('#x2_' + j).hide();
-						$('#x3_' + j).hide();
-						$('#Size').css('width', '55px');
-						$('#txtSpec_' + j).css('width', '55px');
-						$('#textSize1_' + j).val(0);
-						$('#txtDime_' + j).val(0);
-						$('#textSize2_' + j).val(0);
-						$('#txtWidth_' + j).val(0);
-						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
-						$('#textSize4_' + j).val(0);
-						$('#txtRadius_' + j).val(0);
-					}
-				}
-			}
-
 			function FormatNumber(n) {
 				var xx = "";
 				if (n < 0) {
@@ -1578,9 +1395,8 @@
 			}
 
 			function tipInit() {
-				tip($('#btnOrdeno'), '<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">點擊【' + q_getMsg('btnOrdeno') + '】匯入訂單</a>', 0, -15);
-				tip($('#btnImportVcce'), '<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">↓匯入派車單資料。</a>', -20, -15);
-				tip($('#btnVcceImport'), '<a style="color:darkblue;font-size:16px;font-weight:bold;width:350px;display:block;">↑匯入裁剪、製管資料，需有訂單(未結案)。</a>', -20, 20);
+				tip($('#btnOrdeno'), '<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">點擊【' + q_getMsg('btnOrdeno') + '】匯入訂單</a>', -20, -15);
+				tip($('#btnImportVcce'), '<a style="color:darkblue;font-size:16px;font-weight:bold;width:300px;display:block;">匯入派車單資料。</a>', -20, 20);
 			}
 
 			function tip(obj, msg, x, y) {
@@ -1716,7 +1532,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 1800px;
+				width: 2100px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1738,7 +1554,30 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<div style="overflow: auto;display:block;">
-			<!--#include file="../inc/toolbar.inc"-->
+			<div id="toolbar">
+  <div id="q_menu"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input id="btnXchg" type="button" style="display:none;background:url(../image/xchg_24.png) no-repeat;width:28px;height:26px"/>
+  <a id='lblQcopy' style="display:none;"></a>
+  <input id="chekQcopy" type="checkbox" style="display:none;"/>
+  <input id="btnIns" type="button"/>
+  <input id="btnModi" type="button"/>
+  <input id="btnDele" type="button"/>
+  <input id="btnSeek" type="button"/>
+  <input id="btnPrint" type="button"/>
+  <input id="btnPrevPage" type="button"/>
+  <input id="btnPrev" type="button"/>
+  <input id="btnNext" type="button"/>
+  <input id="btnNextPage" type="button"/>
+  <input id="btnOk" type="button" disabled="disabled" />
+  <input id="btnCancel" type="button" disabled="disabled"/>&nbsp;&nbsp;
+  <input id="btnAuthority" type="button" />&nbsp;&nbsp;
+  <span id="btnSign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
+  <span id="btnAsign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
+  <span id="btnLogout" style="text-decoration: underline;color:orange;"></span>&nbsp;&nbsp;
+  <input id="pageNow" type="text"  style="position: relative;text-align:center;"  size="2"/> /
+  <input id="pageAll" type="text"  style="position: relative;text-align:center;"  size="2"/>
+  <div id="q_acDiv"></div>
+</div>
 		</div>
 		<div style="overflow: auto;display:block;width:1280px;">
 			<div class="dview" id="dview">
@@ -1776,24 +1615,16 @@
 							<select id="cmbTypea" class="txt" style="width:40%;"> </select>
 							<select id="cmbStype" class="txt" style="width:60%;"> </select>
 						</td>
-						<td class="pe_no"><span> </span><a id='lblKind' class="lbl"> </a></td>
-						<td class="pe_no"><select id="cmbKind" class="txt c1"> </select></td>
-						<td class="pe_no"> </td>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
-						<td class="tdZ">
-							<input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/>
-						</td>
+						<td><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblMon' class="lbl"> </a></td>
 						<td><input id="txtMon" type="text" class="txt c1"/></td>
-						<td colspan="2">
-							<input id="btnImportVcce" type="button"/>
-							<input id="btnVcceImport" type="button" title="cut cubu"/>
-						</td>
+						<td> </td>
 						<td colspan="2">
 							<input type="checkbox" id="chkIsgenvcca" style="float:left;"/>
 							<a id='lblIsgenvcca' class="lbl" style="float:left;"> </a>
@@ -1815,11 +1646,10 @@
 							<input id="txtComp" type="text" style="float:left;width:75%;"/>
 							<input id="txtNick" type="text" style="display:none;"/>
 						</td>
-						<td>
-							<input id="btnOrdeno" type="button" class="lbl"/>
-							<!--<span> </span><a id='lblOrdeno' class="lbl btn"> </a>-->
+						<td> </td>
+						<td colspan="2">
+							<input id="btnImportCut" type="button" value="裁剪匯入"/>
 						</td>
-						<td colspan="2"><input id="txtOrdeno" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTel' class="lbl"> </a></td>
@@ -1861,7 +1691,7 @@
 						<td><span> </span><a id='lblCarno' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtCarno" type="text" class="txt c1" /></td>
 					</tr>
-					<tr class="pe_no">
+					<tr style="display: none;">
 						<td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td><input id="txtTotalus" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblFloata' class="lbl"> </a></td>
@@ -1890,29 +1720,26 @@
 					<tr>
 						<td><span> </span><a id='lblWeight' class="lbl"> </a></td>
 						<td><input id="txtWeight" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblPrices' class="lbl"> </a></td>
-						<td><input id="txtPrice" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id="lblMweight" class="lbl"> </a></td>
+						<td><input id="txtTotal2" type="text" class="txt num c1"/></td>
 						<td> </td>
-						<td><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
-						<td><input id="txtTranmoney" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblBenifit' class="lbl"> </a></td>
+						<td><input id="txtBenifit" type="text" class="txt num c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
 						<td colspan="7"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
-					<tr class="pe" style="display: none;">
-						<td class="pe" style="display: none;"><span> </span><a id="lblMweight" class="lbl"> </a></td>
-						<td class="pe" style="display: none;"><input id="textMweight" type="text" class="txt num c1"/></td>
-						<td class="pe" style="display: none;"><span> </span><a id='lblBenifit' class="lbl"> </a></td>
-						<td class="pe" style="display: none;"><input id="txtBenifit" type="text" class="txt num c1"/></td>
-					</tr>
 					<tr>
-						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
-						<td><input id="txtAccno" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
+						<td> </td>
+						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
+						<td><input id="txtAccno" type="text" class="txt c1"/></td>
+						<td style="display: none;"><span> </span><a id='lblKind' class="lbl"> </a></td>
+						<td style="display: none;"><select id="cmbKind" class="txt c1"> </select></td>
 					</tr>
 				</table>
 			</div>
@@ -1926,19 +1753,22 @@
 					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProduct_st'> </a></td>
-					<td align="center" id="Size"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblSpec_st'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblDime_st'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblWidth_st'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblLengthb_st'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblSizea_st'> </a></td>
-					<td align="center" style="width:30px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblWeight_st'> </a></td>
+					<td align="center" style="width:45px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
-					<td align="center" style="width:100px;display: none;"  class="pe"><a id='lblMweight_st'> </a></td>
-					<td align="center" style="width:100px;display: none;"  class="pe"><a id='lblSprice_st'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblMweight_st'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblSprice_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:60px;">寄Y<BR>代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -1953,50 +1783,33 @@
 					<td>
 						<input class="btn" id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:15px;float:left;" />
 						<input id="txtProductno.*" type="text" style="width:85px;" />
-						<span style="display:block;width:15px;"> </span>
-						<input id="txtClass.*" type="text" style='width: 85px;' class="pe_no"/>
 					</td>
-					<td><input type="text" id="txtStyle.*" style="width:85%;text-align:center;" /></td>
-					<td><input type="text" id="txtProduct.*" style="width:95%;" /></td>
-					<!--<td><input class="txt c1" id="txtSpec.*" type="text"/></td>-->
-					<td>
-						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
-						<input class="txt num" id="textSize2.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-						<div id="x2.*" style="float: left;display:block;width:20px;padding-top: 4px;">x</div>
-						<input class="txt num" id="textSize3.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-						<div id="x3.*" style="float: left;display:block;width:20px;padding-top: 4px;">x</div>
-						<input class="txt num" id="textSize4.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-						<!--上為虛擬下為實際-->
-						<input id="txtRadius.*" type="text" style="display:none;"/>
-						<input id="txtWidth.*" type="text" style="display:none;"/>
-						<input id="txtDime.*" type="text" style="display:none;"/>
-						<input id="txtLengthb.*" type="text" style="display:none;"/>
-						<input id="txtSpec.*" type="text" style="float:left;"/>
-					</td>
+					<td><input id="txtStyle.*" type="text" style="width:85%;text-align:center;" /></td>
+					<td><input id="txtProduct.*" type="text" style="width:95%;" /></td>
+					<td><input id="txtSpec.*" type="text" style="width:95%;" /></td>
+					<td><input id="txtDime.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtWidth.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtLengthb.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtSize.*" type="text" style="width:95%;" /></td>
-					<td><input id="txtUnit.*" type="text" class="txt num" style="width:95%;text-align: center;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtUnit.*" type="text" class="txt" style="width:95%;text-align: center;"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td>
-						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
-						<input id="txtTheory.*" type="text" class="txt num pe_no" style="width:95%;"/>
+						<input id="txtMemo.*" type="text" class="txt" style="width:95%;"/>
+						<input id="txtOrdeno.*" type="text" style="width:65%;" />
+						<input id="txtNo2.*" type="text" style="width:20%;" />
+						<input id="recno.*" type="hidden" />
 					</td>
-					<td class="pe" style="display: none;"><input id="txtMweight.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td class="pe" style="display: none;"><input id="txtSprice.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtMweight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtSprice.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input class="txt" id="txtUsecoil.*" type="text" style="text-align:center;width:95%;"/></td>
 					<td>
 						<input class="btn" id="btnStoreno2.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;display:none;" />
 						<input id="txtStoreno2.*" type="text" style="width:95%;" />
 						<input id="txtStore2.*" type="text" style='width: 95%;'/>
-					</td>
-					<td>
-						<input id="txtMemo.*" type="text" class="txt" style="width:95%;"/>
-						<input id="txtOrdeno.*" type="text" style="width:65%;" />
-						<input id="txtNo2.*" type="text" style="width:20%;" />
-						<input id="recno.*" type="hidden" />
 					</td>
 				</tr>
 			</table>
