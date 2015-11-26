@@ -23,7 +23,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotalus','txtTotal2','txtBenifit'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory'];
+			var q_readonlys = ['txtTotal','txtSprice'];
 			var bbmNum = [
 				['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -135,7 +135,7 @@
 				
 				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
 				if($('#chkAtax').prop('checked'))
-					t_tax = q_mul(t_money,t_taxrate);
+					t_tax = round(q_mul(t_money,t_taxrate),0);
 				else
 					t_tax = q_float('txtTax');
 				t_total=q_add(t_money,t_tax)
@@ -293,6 +293,13 @@
 					}
 				});
 				
+				$('#btnImportCut').click(function() {
+					var t_custno = $('#txtCustno').val();
+					var t_where = '1=1 ';
+					t_where += q_sqlPara2('custno', t_custno) +" and (mount>0 or weight>0) " ;
+					q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "900px", "95%", q_getMsg('popVcceImport'));
+				});
+				
 				$('#lblMweight').text('毛重');
 				$('#lblBenifit').text('損益');
 			}
@@ -300,45 +307,16 @@
 			function q_boxClose(s2) {/// q_boxClose 2/4
 				var ret;
 				switch (b_pop) {
-					case 'ordes':
-						if (q_cur > 0 && q_cur < 4) {// q_cur： 0 = 瀏覽狀態 1=新增 2=修改 3=刪除 4=查詢
-							b_ret = getb_ret();
-							/// q_box() 執行後，選取的資料
+					case 'view_vcce_import':
+						if (q_cur > 0 && q_cur < 4) {
 							if (!b_ret || b_ret.length == 0) {
 								b_pop = '';
 								return;
 							}
-							for (var i = 0; i < q_bbsCount; i++) {
-								$('#btnMinus_' + i).click();
-							}
-							for (var k = 0; k < b_ret.length; k++) {
-								var t_notv = dec(b_ret[k].notv);
-								var t_mount = dec(b_ret[k].mount);
-								var t_weight = dec(b_ret[k].weight);
-								var t_kind = trim(b_ret[k].kind).toUpperCase();
-								if (t_kind.substring(0, 1) == 'B') {
-									if (t_notv != t_mount) {
-										t_weight = round(q_mul(q_div(t_weight, t_mount), t_notv), 0);
-									}
-									t_mount = t_notv;
-								} else {
-									if (t_notv != t_weight) {
-										t_mount = round(q_mul(q_div(t_mount, t_weight), t_notv), 0);
-									}
-									t_weight = t_notv;
-								}
-								b_ret[k].mount = t_mount;
-								b_ret[k].weight = t_weight;
-							}
-							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
-							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret, 'productno,product,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
-							/// 最後 aEmpField 不可以有【數字欄位】
-							for (var i = 0; i < AddRet.length; i++) {
-								$('#txtMount_' + i).change();
-							}
-							sum();
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize,txtGweight,txtSprice'
+							, b_ret.length, b_ret, 'uno,productno,product,width,dime,lengthb,spec,mount,weight,price,style,size,weight,sprice', '');
 						}
+						sum();
 						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
@@ -447,7 +425,6 @@
 					case 'unostk':
 						var unostkList = _q_appendData("unostktmp", "", true);
 						var unostkList_Tmp = new Array();
-						;
 						var ErrStr = '';
 						if (unostkList.length > 0 && unostkList[0] != undefined) {
 							for (var j = 0; j < unostkList.length; j++) {
@@ -527,10 +504,7 @@
 								$('#txtLengthb_' + t_sel).val(as[0].lengthb);
 								$('#txtSize_' + t_sel).val(as[0].size);
 								sum();
-							} else {//找不到訂單 回view_uccb找尺寸
-								alert('警告：查無訂單【' + $('#txtOrdeno_' + t_sel).val() + '-' + $('#txtNo2_' + t_sel).val() + '】');
-								q_gt('view_uccb', "where=^^ uno='" + $.trim($('#txtUno_' + t_sel).val()) + "'^^", 0, 0, 0, 'afterPopUno2_' + t_sel, r_accy);
-							}
+							} 
 						} else if (t_name.substring(0, 13) == 'afterPopUno2_') {
 							var t_sel = parseInt(t_name.split('_')[1]);
 							var as = _q_appendData("view_uccb", "", true);
@@ -699,13 +673,13 @@
 				_bbsAssign();
 				
 				$('#lblUno_st').text('鋼捲批號');
-				$('#lblSpec_st').text('版面');
+				$('#lblSpec_st').text('規格');
 				$('#lblProductno_st').text('品號');
 				$('#lblTotals_st').text('小計');
 				$('#lblGweight_st').text('實際重量');
-				$('#lblDime_st').text('厚度mm');
-				$('#lblWidth_st').text('寬度mm');
-				$('#lblLengthb_st').text('長度mm');
+				$('#lblDime_st').text('厚度');
+				$('#lblWidth_st').text('寬度');
+				$('#lblLengthb_st').text('長度');
 				$('#lblWeight_st').text('貨單重量');
 				$('#lblPrices_st').text('實際單價');
 			}
@@ -719,9 +693,9 @@
 				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
 				var t_where = "where=^^ 1=1^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
-				if (q_getPara('sys.project').toUpperCase()=='PE'){
-					$('#cmbKind').val('A1');
-				}
+				
+				$('#cmbKind').val('A1');
+				
 			}
 
 			function btnModi() {
@@ -733,8 +707,7 @@
 			}
 
 			function btnPrint() {
-				//q_box('z_vccstp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
-				q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
+				q_box("z_vcc_pep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {
@@ -808,15 +781,9 @@
 						$('#txtStyle_' + b_seq).focus();
 						break;
 					case 'txtUno_':
-						var t_ordeno = $.trim($('#txtOrdeno_' + b_seq).val());
-						var t_no2 = $.trim($('#txtNo2_' + b_seq).val());
 						var t_uno = $.trim($('#txtUno_' + b_seq).val());
 						if (ret != undefined && ret.length > 0) {
-							if (t_ordeno.length > 0 && t_no2 > 0) {
-								q_gt('view_ordes', "where=^^ noa='" + t_ordeno + "' and no2='" + t_no2 + "'^^", 0, 0, 0, 'afterPopUno1_' + b_seq, r_accy);
-							} else if (t_uno.length > 0) {
-								q_gt('view_uccb', "where=^^ uno='" + t_uno + "'^^", 0, 0, 0, 'afterPopUno2_' + b_seq, r_accy);
-							}
+							q_gt('view_uccb', "where=^^ uno='" + t_uno + "'^^", 0, 0, 0, 'afterPopUno2_' + b_seq, r_accy);
 						}
 						break;
 				}
@@ -1142,11 +1109,11 @@
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblMon' class="lbl"> </a></td>
 						<td><input id="txtMon" type="text" class="txt c1"/></td>
-						<td> </td>
+						<!--<td> </td>
 						<td colspan="2">
 							<input type="checkbox" id="chkIsgenvcca" style="float:left;"/>
 							<a id='lblIsgenvcca' class="lbl" style="float:left;"> </a>
-						</td>
+						</td>-->
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAcomp' class="lbl btn"> </a></td>
@@ -1154,8 +1121,8 @@
 							<input id="txtCno" type="text" style="float:left;width:25%;"/>
 							<input id="txtAcomp" type="text" style="float:left;width:75%;"/>
 						</td>
-						<td><span> </span><a id='lblInvono' class="lbl btn"> </a></td>
-						<td colspan="2"><input id="txtInvono" type="text" class="txt c1"/></td>
+						<!--<td><span> </span><a id='lblInvono' class="lbl btn"> </a></td>
+						<td colspan="2"><input id="txtInvono" type="text" class="txt c1"/></td>-->
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblCust" class="lbl btn"> </a></td>
@@ -1166,7 +1133,7 @@
 						</td>
 						<td> </td>
 						<td colspan="2">
-							<input id="btnImportCut" type="button" value="材剪匯入"/>
+							<input id="btnImportCut" type="button" value="裁剪匯入"/>
 						</td>
 					</tr>
 					<tr>
