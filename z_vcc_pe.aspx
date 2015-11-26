@@ -25,75 +25,95 @@
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_vcc_pe',
-                    options : [{
-                    	type : '1', //[1][2]    
+                    options : [
+                    {  //1-1  [1]
+                    	type :'5', 
+                    	name :'xtype',
+                    	value:[q_getPara('report.all')].concat(q_getPara('vcc_pe.stype').split(','))
+                    },{//1-2  [2]
+                    	type :'5',
+                    	name :'ytype',
+                    	value:[q_getPara('report.all')].concat(q_getPara('rc2_pe.stype').split(','))           
+                    },{//1-3  [3][4]   
+                    	type : '1',  
 						name : 'xmon'            	
-                    },{
-                    	type : '2', //[3][4]
+                    },{//1-4  [5][6]  
+                    	type : '1',   
+						name : 'xdate'            	
+                    },{//2-1  [7][8]
+                    	type : '2', 
                         name : 'xcustno',
                         dbf : 'cust',
                         index : 'noa,comp',
                         src : 'cust_b.aspx'
-                    },{
-                    	type : '2', //[5][6]
+                    },{//2-2  [9][10]
+                    	type : '2', 
                         name : 'xtggno',
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
-                    },{
-                    	type :'5', //[7]
-                    	name :'xtype1',
-                    	value:q_getPara('vcc_pi.type').split(',')
-                    	
-                    },{
-                    	type :'5', //[8]
-                    	name :'xclass',
-                    	value:q_getPara('vcc_pi.type2').split(',')
-                    	
-                    } ]
+                    },{//2-3  [11]
+						type : '8', 
+						name : 'show',
+						value : "1@貨單金額,2@依帳款月份,3@鋼捲編號,4@僅顯示退貨".split(',')
+					}]
                 });
                 
                 q_popAssign();
                 q_getFormat();
                 q_langShow();
                 
-                var r_1911=1911;
-				if(r_len==4){//西元年
-					r_1911=0;
-				}else{
-					$('#txtXmon1').datepicker();
-					$('#txtXmon2').datepicker();
-				}
 				$('#txtXmon1').mask(r_picm);
                 $('#txtXmon2').mask(r_picm);
+                $('#txtXdate1').mask(r_picd);
+                $('#txtXdate2').mask(r_picd);
+                $('#Xmon').hide();
+                $('#Xdate').show();
                 
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
-                t_year = t_date.getUTCFullYear() - r_1911;
+                t_year = t_date.getUTCFullYear() - 1911;
                 t_year = t_year > 99 ? t_year + '' : '0' + t_year;
                 t_month = t_date.getUTCMonth() + 1;
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-             //   t_day = t_date.getUTCDate();
-             //   t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+             	t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
                 $('#txtXmon1').val(t_year + '/' + t_month );
+                $('#txtXdate1').val(t_year + '/' + t_month + '/' + t_day);
                 
 
                 t_date = new Date();
-                t_date.setDate(35);
-                t_date.setDate(0);
-                t_year = t_date.getUTCFullYear() - r_1911;
+                t_year = t_date.getUTCFullYear() - 1911;
                 t_year = t_year > 99 ? t_year + '' : '0' + t_year;
                 t_month = t_date.getUTCMonth() + 1;
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-             //   t_day = t_date.getUTCDate();
-             //  t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
                 $('#txtXmon2').val(t_year + '/' + t_month );
-
-                if (q_getId()[3] != undefined) {
-                    $('#txtXnoa').val(q_getId()[3].replace('noa=', ''));
-                 
-                }
+                $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
+                
+                $('#chkShow input').eq(0).click(function(){
+					if($('#chkShow input').eq(2).prop('checked')){
+						$('#chkShow input').eq(2).prop("checked",false);			
+					}	
+				})
+				$('#chkShow input').eq(2).click(function(){
+					if($('#chkShow input').eq(0).prop('checked')){
+						$('#chkShow input').eq(0).prop("checked",false);			
+					}	
+				})
+				
+				$('#chkShow input').eq(1).click(function(){
+					if($('#chkShow input').eq(1).prop('checked')){
+						$('#Xdate').hide();
+						$('#Xmon').show();			
+					}else{
+						$('#Xdate').show();
+						$('#Xmon').hide();
+					}	
+				})
+			
             }
 
             function q_boxClose(s2) {
