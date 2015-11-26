@@ -576,7 +576,7 @@
 				var t_err='';
 				for (var j = 0; j < q_bbsCount; j++) {
 					var t_mount=dec($('#txtMount_'+j).val()),t_price=dec($('#txtPrice_'+j).val()),t_total=dec($('#txtMoney_'+j).val());
-					if(round(q_mul(t_mount,t_price),0)!=t_total){
+					if(round(q_mul(t_mount,t_price),0)!=t_total && Math.abs(q_sub(round(q_mul(t_mount,t_price),0),t_total))>5 ){
 						t_err=t_err+(t_err.length>0?'\n':'')+($('#txtProduct_'+j).val()+" 單價*數量 不等於 發票金額");
 					}
 				}
