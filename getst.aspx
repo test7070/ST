@@ -363,7 +363,6 @@
 			function btnIns() {
 				_btnIns();
 				$('#cmbKind').val(q_getPara('vcc.kind'));
-				size_change();
 				if(para.noa==undefined || para.noa.length==0){
 					$('#txtNoa').val('AUTO');
 				}else{
@@ -377,6 +376,8 @@
 				
 				if(q_getPara('sys.project').toUpperCase()=='PE')
 					$('#cmbKind').val('A1');
+					
+				size_change();
 			}
 
 			function btnModi() {
