@@ -673,13 +673,13 @@
 				_bbsAssign();
 				
 				$('#lblUno_st').text('鋼捲批號');
-				$('#lblSpec_st').text('版面');
+				$('#lblSpec_st').text('規格');
 				$('#lblProductno_st').text('品號');
 				$('#lblTotals_st').text('小計');
 				$('#lblGweight_st').text('實際重量');
-				$('#lblDime_st').text('厚度mm');
-				$('#lblWidth_st').text('寬度mm');
-				$('#lblLengthb_st').text('長度mm');
+				$('#lblDime_st').text('厚度');
+				$('#lblWidth_st').text('寬度');
+				$('#lblLengthb_st').text('長度');
 				$('#lblWeight_st').text('貨單重量');
 				$('#lblPrices_st').text('實際單價');
 			}
@@ -707,8 +707,7 @@
 			}
 
 			function btnPrint() {
-				//q_box('z_vccstp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
-				q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
+				q_box("z_vcc_pep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {

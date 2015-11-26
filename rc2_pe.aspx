@@ -658,12 +658,12 @@
 				_bbsAssign();
 				
 				$('#lblUno_st').text('鋼捲批號');
-				$('#lblSpec_st').text('版面');
+				$('#lblSpec_st').text('規格');
 				$('#lblProductno_st').text('品號');
 				$('#lblTotals_st').text('小計');
-				$('#lblDime_st').text('厚度mm');
-				$('#lblWidth_st').text('寬度mm');
-				$('#lblLengthb_st').text('長度mm');
+				$('#lblDime_st').text('厚度');
+				$('#lblWidth_st').text('寬度');
+				$('#lblLengthb_st').text('長度');
 			}
 
 			function btnIns() {
@@ -689,7 +689,7 @@
 
 			function btnPrint() {
 				t_where = "noa=" + $('#txtNoa').val();
-				q_box("z_rc2stp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				q_box("z_rc2_pep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {
