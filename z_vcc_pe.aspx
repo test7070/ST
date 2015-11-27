@@ -33,7 +33,7 @@
                     },{//1-2  [2]
                     	type :'5',
                     	name :'ytype',
-                    	value:[q_getPara('report.all')].concat(q_getPara('vccst.stype').split(','))           
+                    	value:[q_getPara('report.all')].concat(q_getPara('rc2st.stype').split(','))           
                     },{//1-3  [3][4]   
                     	type : '1',  
 						name : 'xmon'            	
