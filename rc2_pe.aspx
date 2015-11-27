@@ -24,7 +24,8 @@
 			var q_readonly = ['txtRc2atax', 'txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotalus'];
 			var q_readonlys = ['txtTotal'];
 			var bbmNum = [['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
-			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1]];
+			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 0, 1], ['txtMount', 10, 0, 1], ['txtWeight', 10, 1, 1],
+			['txtDime', 10, 3, 1], ['txtWidth', 10, 2, 1],['txtLengthb', 10, 1, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_desc = 1;
@@ -144,6 +145,7 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				//q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+				q_cmbParse("cmbStype", q_getPara('rc2st.stype'));
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
@@ -297,6 +299,7 @@
 							Unlock(1);
 							return;
 						} else {
+							check_uno=true;
 							btnOk();
 						}
 						break;
@@ -656,12 +659,12 @@
 				_bbsAssign();
 				
 				$('#lblUno_st').text('鋼捲批號');
-				$('#lblSpec_st').text('版面');
+				$('#lblSpec_st').text('規格');
 				$('#lblProductno_st').text('品號');
 				$('#lblTotals_st').text('小計');
-				$('#lblDime_st').text('厚度mm');
-				$('#lblWidth_st').text('寬度mm');
-				$('#lblLengthb_st').text('長度mm');
+				$('#lblDime_st').text('厚度');
+				$('#lblWidth_st').text('寬度');
+				$('#lblLengthb_st').text('長度');
 			}
 
 			function btnIns() {
@@ -687,7 +690,7 @@
 
 			function btnPrint() {
 				t_where = "noa=" + $('#txtNoa').val();
-				q_box("z_rc2stp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				q_box("z_rc2_pep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {
@@ -1009,9 +1012,10 @@
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa"   type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblStype' class="lbl"> </a></td>
+						<td><select id="cmbStype" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblKind' class="lbl" style="display: none;"> </a></td>
 						<td><select id="cmbKind" class="txt c1" style="display: none;"> </select></td>
-						<td> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>

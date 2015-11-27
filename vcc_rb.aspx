@@ -1509,7 +1509,7 @@
 					<td align="center" style="display: none;"><a id='lblStore_s'> </a></td>
 					<td align="center" style="width:100px;" class="isRack"><a id='lblRackno_s'> </a></td>
 					<td align="center" ><a id='lblMemo_s'> </a></td>
-					<td align="center" style="width:40px;"><a id='lblRecord_s'> </a></td>
+					<!--<td align="center" style="width:40px;"><a id='lblRecord_s'> </a></td>-->
 					<td align="center" style="width:40px;"><a id='lblStk_s'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1545,9 +1545,7 @@
 						<input id="txtOrdeno.*" type="text"  class="txt" style="width:60%;"/>
 						<input id="txtNo2.*" type="text" class="txt" style="width:18%;"/>
 					</td>
-					<td align="center">
-						<input class="btn"  id="btnRecord.*" type="button" value='.' style=" font-weight: bold;" />
-					</td>
+					<!--<td align="center"><input class="btn"  id="btnRecord.*" type="button" value='.' style=" font-weight: bold;" /></td>-->
 					<td align="center"><input class="btn"  id="btnStk.*" type="button" value='.' style="width:1%;"/></td>
 				</tr>
 			</table>

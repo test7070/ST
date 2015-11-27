@@ -23,7 +23,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotalus','txtTotal2','txtBenifit'];
-			var q_readonlys = ['txtTotal'];
+			var q_readonlys = ['txtTotal','txtSprice'];
 			var bbmNum = [
 				['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -296,7 +296,7 @@
 				$('#btnImportCut').click(function() {
 					var t_custno = $('#txtCustno').val();
 					var t_where = '1=1 ';
-					t_where += q_sqlPara2('custno', t_custno) ;
+					t_where += q_sqlPara2('custno', t_custno) +" and (mount>0 or weight>0) " ;
 					q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "900px", "95%", q_getMsg('popVcceImport'));
 				});
 				
@@ -313,7 +313,8 @@
 								b_pop = '';
 								return;
 							}
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,productno,product,width,dime,lengthb,spec,mount,weight,price,style,size', '');
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize,txtGweight,txtSprice'
+							, b_ret.length, b_ret, 'uno,productno,product,width,dime,lengthb,spec,mount,weight,price,style,size,weight,sprice', '');
 						}
 						sum();
 						break;
@@ -672,13 +673,13 @@
 				_bbsAssign();
 				
 				$('#lblUno_st').text('鋼捲批號');
-				$('#lblSpec_st').text('版面');
+				$('#lblSpec_st').text('規格');
 				$('#lblProductno_st').text('品號');
 				$('#lblTotals_st').text('小計');
 				$('#lblGweight_st').text('實際重量');
-				$('#lblDime_st').text('厚度mm');
-				$('#lblWidth_st').text('寬度mm');
-				$('#lblLengthb_st').text('長度mm');
+				$('#lblDime_st').text('厚度');
+				$('#lblWidth_st').text('寬度');
+				$('#lblLengthb_st').text('長度');
 				$('#lblWeight_st').text('貨單重量');
 				$('#lblPrices_st').text('實際單價');
 			}
@@ -706,8 +707,7 @@
 			}
 
 			function btnPrint() {
-				//q_box('z_vccstp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
-				q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
+				q_box("z_vcc_pep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {
@@ -1062,30 +1062,7 @@
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
 		<div style="overflow: auto;display:block;">
-			<div id="toolbar">
-  <div id="q_menu"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <input id="btnXchg" type="button" style="display:none;background:url(../image/xchg_24.png) no-repeat;width:28px;height:26px"/>
-  <a id='lblQcopy' style="display:none;"></a>
-  <input id="chekQcopy" type="checkbox" style="display:none;"/>
-  <input id="btnIns" type="button"/>
-  <input id="btnModi" type="button"/>
-  <input id="btnDele" type="button"/>
-  <input id="btnSeek" type="button"/>
-  <input id="btnPrint" type="button"/>
-  <input id="btnPrevPage" type="button"/>
-  <input id="btnPrev" type="button"/>
-  <input id="btnNext" type="button"/>
-  <input id="btnNextPage" type="button"/>
-  <input id="btnOk" type="button" disabled="disabled" />
-  <input id="btnCancel" type="button" disabled="disabled"/>&nbsp;&nbsp;
-  <input id="btnAuthority" type="button" />&nbsp;&nbsp;
-  <span id="btnSign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
-  <span id="btnAsign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
-  <span id="btnLogout" style="text-decoration: underline;color:orange;"></span>&nbsp;&nbsp;
-  <input id="pageNow" type="text"  style="position: relative;text-align:center;"  size="2"/> /
-  <input id="pageAll" type="text"  style="position: relative;text-align:center;"  size="2"/>
-  <div id="q_acDiv"></div>
-</div>
+			<!--#include file="../inc/toolbar.inc"-->
 		</div>
 		<div style="overflow: auto;display:block;width:1280px;">
 			<div class="dview" id="dview">
@@ -1156,7 +1133,7 @@
 						</td>
 						<td> </td>
 						<td colspan="2">
-							<input id="btnImportCut" type="button" value="材剪匯入"/>
+							<input id="btnImportCut" type="button" value="裁剪匯入"/>
 						</td>
 					</tr>
 					<tr>
