@@ -145,6 +145,7 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				//q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+				q_cmbParse("cmbStype", q_getPara('rc2st.stype'));
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
@@ -1011,9 +1012,10 @@
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa"   type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblStype' class="lbl"> </a></td>
+						<td><select id="cmbStype" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblKind' class="lbl" style="display: none;"> </a></td>
 						<td><select id="cmbKind" class="txt c1" style="display: none;"> </select></td>
-						<td> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
