@@ -48,8 +48,8 @@
 
         var t_where = " 1=1 "
         		+ q_sqlPara2("odate", t_bdate, t_edate) 
-        		+ q_sqlPara2("noa", t_noa) + q_sqlPara2("comp", t_comp) 
-        		+q_sqlPara2("salesno", t_salesno) + q_sqlPara2("custno", t_custno)
+        		+ q_sqlPara2("noa", t_noa) + q_sqlPara2("nick", t_comp) 
+        		+ q_sqlPara2("salesno", t_salesno) + q_sqlPara2("custno", t_custno)
         		+ q_sqlPara2("vccno", t_vccno);
         		
         if(t_vcctype=='1')
@@ -59,6 +59,7 @@
         	t_where=t_where+" and isnull(vccno,'')='' ";	 
 		       		
         t_where = ' where=^^' + t_where + '^^ ';
+        
         return t_where;
     }
 </script>
@@ -82,7 +83,8 @@
              </tr>
              <tr class='seek_tr'>
                 <td class='seek'  style="width:20%;"><a id='lblCustno'> </a></td>
-                <td><input class="txt" id="txtCustno" type="text" style="width:90px; font-size:medium;" />&nbsp;<input class="txt" id="txtComp" type="text" style="width:115px;font-size:medium;" /></td>
+                <td><input class="txt" id="txtCustno" type="text" style="width:90px; font-size:medium;" />&nbsp;
+                	<input class="txt" id="txtComp" type="text" style="width:115px;font-size:medium;" /></td>
              </tr>
              <tr class='seek_tr'>
                 <td class='seek'  style="width:20%;"><a id='lblNoa'> </a></td>
