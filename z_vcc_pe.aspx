@@ -52,32 +52,16 @@
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
-                    },{//2-3  [11]
+                    },{//2-3  [11]   
+                    	type : '6',  
+						name : 'xuno'            	
+                    },{//2-4  [12]   
+                    	type : '6',  
+						name : 'xedate'            	
+                    },{//3-1  [13]
 						type : '8', 
-						name : 'option1',
-						value : "1@貨單金額,2@依帳款月份,3@鋼捲編號,4@僅顯示退貨".split(',')
-					},{//2-4  [12][13]
-						type : '2',
-						name : 'xproductno',
-						dbf : 'ucc',
-						index : 'noa,product',
-						src : 'ucc_b.aspx'
-					},{//3-1  [14]
-						type : '6',
-						name : 'xspec',
-					},{//3-2  [15][16]
-						type : '1',
-						name : 'xdime',
-					},{//3-3  [17][18]
-						type : '1',
-						name : 'xwidth',
-					},{//3-4  [19][20]
-						type : '1',
-						name : 'xlengthb',
-					},{//4-1  [21]
-						type : '8', 
-						name : 'option2',
-						value : "1@重量總計,2@鋼捲明細".split(',')
+						name : 'nozero',
+						value : "nozero@不顯示低於0的庫存".split(',')
 					}]
                 });
                 
@@ -89,32 +73,9 @@
                 $('#txtXmon2').mask(r_picm);
                 $('#txtXdate1').mask(r_picd);
                 $('#txtXdate2').mask(r_picd);
+                $('#txtXedate').mask(r_picd);
+                $('#txtXedate').val(q_date());
 
-                $('#txtXwidth1').val(0).addClass('num').focusout(function(){
-					$(this).val(dec($(this).val()));
-					if($(this).val() == 'NaN') $(this).val(0);
-				});
-				$('#txtXwidth2').val(9999.99).addClass('num').focusout(function(){
-					$(this).val(dec($(this).val()));
-					if($(this).val() == 'NaN') $(this).val(9999.99);
-				});
-				$('#txtXdime1').val(0).addClass('num').focusout(function(){
-					$(this).val(dec($(this).val()));
-					if($(this).val() == 'NaN') $(this).val(0);
-				});
-				$('#txtXdime2').val(9999.99).addClass('num').focusout(function(){
-					$(this).val(dec($(this).val()));
-					if($(this).val() == 'NaN') $(this).val(9999.99);
-				});
-				$('#txtXlengthb1').val(0).addClass('num').focusout(function(){
-					$(this).val(dec($(this).val()));
-					if($(this).val() == 'NaN') $(this).val(0);
-				});
-				$('#txtXlengthb2').val(99999.9).addClass('num').focusout(function(){
-					$(this).val(dec($(this).val()));
-					if($(this).val() == 'NaN') $(this).val(99999.9);
-				});
-                
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
@@ -127,7 +88,6 @@
                 $('#txtXmon1').val(t_year + '/' + t_month );
                 $('#txtXdate1').val(t_year + '/' + t_month + '/' + t_day);
                 
-
                 t_date = new Date();
                 t_year = t_date.getUTCFullYear() - 1911;
                 t_year = t_year > 99 ? t_year + '' : '0' + t_year;
@@ -137,28 +97,8 @@
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
                 $('#txtXmon2').val(t_year + '/' + t_month );
                 $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
-                
-                $('#chkOption1 input').eq(0).click(function(){
-					if($('#chkOption1 input').eq(2).prop('checked')){
-						$('#chkOption1 input').eq(2).prop("checked",false);			
-					}	
-				})
-				$('#chkOption1 input').eq(2).click(function(){
-					if($('#chkOption1 input').eq(0).prop('checked')){
-						$('#chkOption1 input').eq(0).prop("checked",false);			
-					}	
-				})
 				
-				$('#chkOption1 input').eq(1).click(function(){
-					if($('#chkOption1 input').eq(1).prop('checked')){
-						$('#Xdate').hide();
-						$('#Xmon').show();			
-					}else{
-						$('#Xdate').show();
-						$('#Xmon').hide();
-					}	
-				})
-			
+				$("#chkNozero [type='checkbox']").prop('checked',true);
             }
 
             function q_boxClose(s2) {
