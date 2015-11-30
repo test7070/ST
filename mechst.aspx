@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -39,6 +39,15 @@
 		function mainPost() { 
 			q_mask(bbmMask);
 			q_cmbParse("cmbTypea", q_getPara('mech.typea'));
+			
+			if (q_getPara('sys.project').toUpperCase()=='VU'){
+				document.title='加工組別主檔';
+				$('.vu_hide').hide();
+				$('#vewMech').text('組別名稱');
+				$('#lblMech').text('組別名稱');
+				$('#lblMemo').text('組員名單');
+				$('.dview').css('width','300px');
+			}
 		}
 
 		function q_boxClose( s2) { 
@@ -96,6 +105,14 @@
 	  
 		function refresh(recno) {
 			_refresh(recno);
+			if (q_getPara('sys.project').toUpperCase()=='VU'){
+				document.title='加工組別主檔';
+				$('.vu_hide').hide();
+				$('#vewMech').text('組別名稱');
+				$('#lblMech').text('組別名稱');
+				$('#lblMemo').text('組員名單');
+				$('.dview').css('width','300px');
+			}
 		}
 
 		function readonly(t_para, empty) {
@@ -255,67 +272,71 @@
 			<div class="dview" id="dview" style="float: left;  width:32%;"  >
 				<table class="tview" id="tview" border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
-						<td align="center" style="width:5%"><a id='vewChk'></a></td>
-						<td align="center" style="width:5%"><a id='vewNoa'></a></td>
-						<td align="center" style="width:25%"><a id='vewMech'></a></td>
-						<td align="center" style="width:25%"><a id='vewTypea'></a></td>
+						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
+						<td align="center" style="width:5%"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:25%"><a id='vewMech'> </a></td>
+						<td align="center" style="width:25%" class="vu_hide"><a id='vewTypea'> </a></td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td align="center" id='noa'>~noa</td>
 						<td align="center" id='mech'>~mech</td>
-						<td align="center" id='typea=mech.typea'>~typea=mech.typea</td>
+						<td align="center" id='typea=mech.typea' class="vu_hide">~typea=mech.typea</td>
 					</tr>
 				</table>
 			</div>
 			<div class='dbbm' style="width: 68%;float:left">
 				<table class="tbbm" id="tbbm" border="0" cellpadding='2' cellspacing='5'>
 					<tr>
-						<td class="td1"><span> </span><a id="lblNoa" class="lbl"></a></td>
+						<td class="td1"><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td class="td2"><input id="txtNoa"  type="text"  class="txt c1"/></td>
-						<td class="td3"></td>
-						<td class="td4"></td>
-						<td class="td5"></td>
-						<td class="td6"></td>
+						<td class="td3"> </td>
+						<td class="td4"> </td>
+						<td class="td5"> </td>
+						<td class="td6"> </td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id="lblMech" class="lbl"></a></td>
+						<td class="td1"><span> </span><a id="lblMech" class="lbl"> </a></td>
 						<td class="td2"><input id="txtMech"  type="text"  class="txt c1"/></td>
-						<td class="td3"></td>
-						<td class="td4"></td>
-						<td class="td5"></td>
-						<td class="td6"></td>
+						<td class="td3"> </td>
+						<td class="td4"> </td>
+						<td class="td5"> </td>
+						<td class="td6"> </td>
 					</tr>
-					<tr>
-						<td class="td1"><span> </span><a id="lblTypea" class="lbl"></a></td>
-						<td class="td2"><select id="cmbTypea" class="txt c1"></select></td>
-						<td class="td3"></td>
-						<td class="td4"></td>
-						<td class="td5"></td>
-						<td class="td6"></td>
+					<tr class="vu_hide">
+						<td class="td1"><span> </span><a id="lblTypea" class="lbl"> </a></td>
+						<td class="td2"><select id="cmbTypea" class="txt c1"> </select></td>
+						<td class="td3"> </td>
+						<td class="td4"> </td>
+						<td class="td5"> </td>
+						<td class="td6"> </td>
 					</tr>
-					<tr>
-						<td class="td1"><span> </span><a id="lblStore" class="lbl btn"></a></td>
+					<tr class="vu_hide">
+						<td class="td1"><span> </span><a id="lblStore" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtStoreno"  type="text"  class="txt c1"/></td>
 						<td class="td3" colspan="2" ><input id="txtStore"  type="text"  class="txt c1"/></td>
-						<td class="td5"></td>
-						<td class="td6"></td>
+						<td class="td5"> </td>
+						<td class="td6"> </td>
 					</tr>
-					<tr>
-						<td class="td1"><span> </span><a id="lblGen" class="lbl"></a></td>
+					<tr class="vu_hide">
+						<td class="td1"><span> </span><a id="lblGen" class="lbl"> </a></td>
 						<td class="td2"><input id="txtGen"  type="text"  class="txt c1 num"/></td>
 						<td align="left">M/Hr</td>
-						<td class="td4"></td>
-						<td class="td5"></td>
-						<td class="td6"></td>
+						<td class="td4"> </td>
+						<td class="td5"> </td>
+						<td class="td6"> </td>
+					</tr>
+					<tr class="vu_hide">
+						<td class="td1"><span> </span><a id="lblDime" class="lbl"> </a></td>
+						<td class="td2"><input id="txtDime1"  type="text"  class="txt num c1" /></td>
+						<td align="center"><a id="lblSymbol" style="font-weight: bolder;font-size: 20px;"> </a></td>
+						<td class="td4"><input id="txtDime2"  type="text"  class="txt num c1" /></td>
+						<td class="td5" > </td>
+						<td class="td6"> </td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id="lblDime" class="lbl"></a></td>
-						<td class="td2"><input id="txtDime1"  type="text"  class="txt num c1" /></td>
-						<td align="center"><a id="lblSymbol" style="font-weight: bolder;font-size: 20px;"></a></td>
-						<td class="td4"><input id="txtDime2"  type="text"  class="txt num c1" /></td>
-						<td class="td5" ></td>
-						<td class="td6"></td>
+						<td class="td1"><span> </span><a id="lblMemo" class="lbl"> </a></td>
+						<td class="td2" colspan='3'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea></td>
 					</tr>
 				</table>
 			</div>
