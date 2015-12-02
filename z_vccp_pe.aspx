@@ -38,7 +38,7 @@
                     }, {//1-2 [5]
 						type : '8', 
 						name : 'showprice',
-						value : "showprice@僅顯示單價".split(',')
+						value : "1@顯示單價".split(',')
 					}]
                 });
                 q_popAssign();
