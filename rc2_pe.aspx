@@ -535,7 +535,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
-				q_box('rc2st_s.aspx', q_name + '_s', "500px", "530px", q_getMsg("popSeek"));
+				q_box('rc2_pe_s.aspx', q_name + '_s', "500px", "450px", q_getMsg("popSeek"));
 			}
 			
 			var btnCert_Seq = -1;
@@ -556,7 +556,7 @@
 							}
 						});
 						$('#txtUno_' + j).change(function(e) {
-							if ($('#cmbTypea').val() != '2') {
+							if ($('#cmbTypea').val() != '2' && $.trim($('#txtUno_' + i).val()).substr(0,1)!='-') {
 								var n = $(this).attr('id').replace('txtUno_', '');
 								var t_uno = $.trim($(this).val());
 								var t_noa = $.trim($('#txtNoa').val());
@@ -931,7 +931,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 2100px;
+				width: 2200px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1148,6 +1148,7 @@
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblSource_st'> </a></td>
 					<td align="center"><a id='lblMemos_st'> </a><br></td>
+					<td align="center" style="width:90px;"><a id='lblCert_st'> </a><br></td>
 					<td align="center" style="width:170px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
 				</tr>
@@ -1182,6 +1183,7 @@
 					<td><input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMemo.*" type="text" style="width:95%;"/></td>
+					<td><input id="btnCert.*" class="btnCert" type="button" style="width:95%;"/></td>
 					<td>
 						<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
 						<input type="text" id="txtStoreno.*"  style="width:70px; float:left;"/>

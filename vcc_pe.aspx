@@ -608,8 +608,8 @@
 				if (strSplit.length >= 2) {
 					abbm[q_recno]['accno'] = strSplit[0];
 					$('#txtAccno').val(strSplit[0]);
-					abbm[q_recno]['invono'] = strSplit[1];
-					$('#txtInvono').val(strSplit[1]);
+					/*abbm[q_recno]['invono'] = strSplit[1];
+					$('#txtInvono').val(strSplit[1]);*/
 					if (strSplit[1].length > 0)
 						q_gt('vcca', "where=^^noa='" + strSplit[1] + "'^^", 0, 0, 0, 'getVccatax', r_accy);
 				}
@@ -620,7 +620,7 @@
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
 
-				q_box('vccst_s.aspx', q_name + '_s', "550px", "640px", q_getMsg("popSeek"));
+				q_box('vcc_pe_s.aspx', q_name + '_s', "500px", "540px", q_getMsg("popSeek"));
 			}
 
 			function bbsAssign() {/// 表身運算式
@@ -1102,7 +1102,7 @@
 						</td>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
-						<td><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
+						<!--<td><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>-->
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
