@@ -336,6 +336,31 @@
                         	getUno();
                         }
                     	break;
+                    case 'btnOk_checkuno_pe':
+                    	var as = _q_appendData("view_uccb", "", true);
+                        if (as[0] != undefined) {
+                        	var msg = '';
+                        	for(var i=0;i<as.length;i++){
+                        		msg += (msg.length>0?'\n':'')+as[i].uno+' 此批號已存在!!\n【' + as[i].action + '】單號：' + as[i].noa;
+                        	}
+                          	alert(msg);
+                            Unlock(1);
+                            return;
+                        }else{
+                        	if (q_cur == 1)
+								$('#txtWorker').val(r_name);
+							else
+								$('#txtWorker2').val(r_name);
+								
+							sum();
+							var t_noa = trim($('#txtNoa').val());
+							var t_date = trim($('#txtDatea').val());
+							if (t_noa.length == 0 || t_noa == "AUTO")	 
+								q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ina') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+							else
+								wrServer(t_noa);
+                        }
+                    	break;
                     default:
                         if(t_name.substring(0, 11) == 'getproduct_'){
      						var t_seq = parseInt(t_name.split('_')[1]);
@@ -387,6 +412,28 @@
 				
  				if(q_getPara('sys.comp').substring(0,2)=='傑期'){
  					getUno_bydate(0);
+ 				}else if(q_getPara('sys.project').toUpperCase()=='PE'){
+ 					var t_where = '';
+	 				for(var i=0;i<q_bbsCount;i++){
+	 					if($.trim($('#txtUno_'+i).val()).length>0 && $.trim($('#txtUno_' + i).val()).substr(0,1)!='-')
+	 						t_where += (t_where.length>0?' or ':'')+"(uno='" + $.trim($('#txtUno_'+i).val()) + "' and not(accy='" + r_accy + "' and tablea='inas' and noa='" + $.trim($('#txtNoa').val())+"'))";
+	 				}
+	 				if(t_where.length>0)
+	               		q_gt('view_uccb', "where=^^"+t_where+"^^", 0, 0, 0, 'btnOk_checkuno_pe');
+	               	else{
+	               		if (q_cur == 1)
+							$('#txtWorker').val(r_name);
+						else
+							$('#txtWorker2').val(r_name);
+							
+						sum();
+						var t_noa = trim($('#txtNoa').val());
+						var t_date = trim($('#txtDatea').val());
+						if (t_noa.length == 0 || t_noa == "AUTO")	 
+							q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ina') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+						else
+							wrServer(t_noa);
+ 					}
  				}else{
  					var t_where = '';
 	 				for(var i=0;i<q_bbsCount;i++){
@@ -402,7 +449,12 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('inast_s.aspx', q_name + '_s', "550px", "500px", q_getMsg("popSeek"));
+                    
+				if(q_getPara('sys.project').toUpperCase()=='PE'){
+                	q_box('inast_s.aspx', q_name + '_s', "500px", "500px", q_getMsg("popSeek"));
+                }else{
+                	q_box('inast_s.aspx', q_name + '_s', "500px", "600px", q_getMsg("popSeek"));
+                }
             }
             function getUno(){
             	var t_buno='　';
@@ -537,8 +589,11 @@
                             $('#btnProduct_'+n).click();
                         });
                         $('#txtUno_' + j).change(function() {
-                            var n = $(this).attr('id').replace('txtUno_', '');
+                        	var n = $(this).attr('id').replace('txtUno_', '');
                             var t_uno = $.trim($(this).val());
+                        	if(q_getPara('sys.project').toUpperCase()=='PE' && $.trim(t_uno).substr(0,1)=='-'){
+                        		return;
+                        	}
                             var t_noa = $.trim($('#txtNoa').val());
                             q_gt('view_uccb', "where=^^uno='" + t_uno + "' and not(accy='" + r_accy + "' and tablea='inas' and noa='" + t_noa + "')^^", 0, 0, 0, 'checkUno_' + n);
                         });
