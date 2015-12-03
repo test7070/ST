@@ -497,7 +497,8 @@
 					}
 				}
 				
-				if(!check_uno){
+				//進退不用判斷批號
+				if(!check_uno && $('#cmbTypea').val()=='1'){
 					var t_where = '';
 					for (var i = 0; i < q_bbsCount; i++) {
 						if ($.trim($('#txtUno_' + i).val()).length > 0 && $.trim($('#txtUno_' + i).val()).substr(0,1)!='-')
@@ -524,8 +525,6 @@
 				else
 					wrServer(t_noa);
 			}
-
-			
 
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
@@ -690,7 +689,7 @@
 
 			function btnPrint() {
 				t_where = "noa=" + $('#txtNoa').val();
-				q_box("z_rc2_pep.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				q_box("z_rc2p_pe.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
 			}
 
 			function wrServer(key_value) {
@@ -1014,8 +1013,8 @@
 						<td colspan="2"><input id="txtNoa"   type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblStype' class="lbl"> </a></td>
 						<td><select id="cmbStype" class="txt c1"> </select></td>
-						<td><span> </span><a id='lblKind' class="lbl" style="display: none;"> </a></td>
-						<td><select id="cmbKind" class="txt c1" style="display: none;"> </select></td>
+						<td style="display: none;"><span> </span><a id='lblKind' class="lbl" style="display: none;"> </a></td>
+						<td style="display: none;"><select id="cmbKind" class="txt c1" style="display: none;"> </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
