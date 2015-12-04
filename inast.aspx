@@ -676,7 +676,7 @@
                 }
                 if(q_getPara('sys.project').toUpperCase()=='PE'){
 					$('.pe_hide').hide();
-					$('.dbbs').css('width','1260px');
+					$('.dbbs').css('width','1250px');
 					$('#lblMount').text('數量');
 				}
             }
@@ -1121,7 +1121,7 @@
 		<div style="overflow: auto;display:block;width:1050px;">
 			<!--#include file="../inc/toolbar.inc"-->
 		</div>
-		<div style="overflow: auto;display:block;width:1280px;">
+		<div style="overflow: auto;display:block;width:1260px;">
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview">
 					<tr>
@@ -1297,7 +1297,7 @@
 						<input id="txtTheory.*" type="text" class="txt num pe_hide" style="width:95%;"/>
 					</td>
 					<td class="pe_hide"><input class="txt c1" id="txtUno2.*" type="text" /></td>
-					<td><input class="txt c1" id="txtMemo.*" type="text" /></td>
+					<td><input class="txt c1" id="txtMemo.*" type="text" style="width:95%;" /></td>
 				</tr>
 			</table>
 		</div>
