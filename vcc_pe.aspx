@@ -520,7 +520,16 @@
 								$('#txtSize_' + t_sel).val('');
 							}
 							sum();
-						}
+						}else if(t_name.substring(0, 11) == 'getproduct_'){
+     						var t_seq = parseInt(t_name.split('_')[1]);
+	                		as = _q_appendData('dbo.getproduct', "", true);
+	                		if(as[0]!=undefined){
+	                			$('#txtProduct_'+t_seq).val(as[0].product);
+	                		}else{
+	                			$('#txtProduct_'+t_seq).val('');
+	                		}
+	                		break;
+                        }
 				} /// end switch
 			}
 			
@@ -761,8 +770,7 @@
 				});
 			}
 
-			var ret;
-			//勿刪
+			var ret; //勿刪
 			var x_bseq = 0;
 			function q_popPost(s1) {
 				switch (s1) {
@@ -773,13 +781,19 @@
 						}
 						break;
 					case 'txtProductno_':
-						$('input[id*="txtProduct_"]').each(function() {
-							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
-						});
-						if (trim($('#txtStyle_' + b_seq).val()).length != 0)
-						$('#txtStyle_' + b_seq).focus();
-						break;
+                        var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_' + b_seq).focus();
+                        break;
+                    case 'txtStyle_':
+                   		var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_'+b_seq).blur();
+                        break;
 					case 'txtUno_':
 						var t_uno = $.trim($('#txtUno_' + b_seq).val());
 						if (ret != undefined && ret.length > 0) {

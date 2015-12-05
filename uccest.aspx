@@ -79,9 +79,30 @@
 
         function q_gtPost(t_name) {  
             switch (t_name) {
-                case q_name: if (q_cur == 4)   
+                case q_name: 
+               		if (q_cur == 4)   
                         q_Seek_gtPost();
                     break;
+				default:
+					if (t_name.substring(0, 9) == 'checkUno_') {
+						var n = t_name.split('_')[1];
+						var as = _q_appendData("view_uccb", "", true);
+						if (as[0] != undefined) {
+							var t_uno = $('#txtUno_' + n).val();
+							alert(t_uno + ' 此批號已存在!!\n【' + as[0].action + '】單號：' + as[0].noa);
+							$('#txtUno_' + n).focus();
+						}
+					}else if(t_name.substring(0, 11) == 'getproduct_'){
+     					var t_seq = parseInt(t_name.split('_')[1]);
+	                	as = _q_appendData('dbo.getproduct', "", true);
+	                	if(as[0]!=undefined){
+	                		$('#txtProduct_'+t_seq).val(as[0].product);
+	                	}else{
+	                		$('#txtProduct_'+t_seq).val('');
+	                	}
+	                	break;
+					}
+					break;
             }  /// end switch
         }
 
@@ -164,7 +185,7 @@
             size_change();
             if(q_getPara('sys.project').toUpperCase()=='PE'){
 				$('.pe_hide').hide();
-				$('#lblProductno_st').val('品號');
+				$('#lblProductno_st').text('品號');
 			}
         }
         
@@ -173,7 +194,19 @@
 				case 'txtProductno_':
 					if($('#txtProductno_'+b_seq).val().substr(0,1)=='W' && $('#txtProduct_'+b_seq).val().indexOf('廢料')>-1)
 						$('#txtUno_'+b_seq).val($('#txtProductno_'+b_seq).val());
-				break;
+					var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+					var t_style = $.trim($('#txtStyle_'+b_seq).val());
+					var t_comp = q_getPara('sys.comp');          	
+					q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+					$('#txtStyle_' + b_seq).focus();
+					break;
+				case 'txtStyle_':
+					var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+					var t_style = $.trim($('#txtStyle_'+b_seq).val());
+					var t_comp = q_getPara('sys.comp');          	
+					q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+					$('#txtStyle_'+b_seq).blur();
+					break;
 			}
 		}
 
