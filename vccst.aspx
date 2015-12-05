@@ -615,7 +615,6 @@
 					case 'unostk':
 						var unostkList = _q_appendData("unostktmp", "", true);
 						var unostkList_Tmp = new Array();
-						;
 						var ErrStr = '';
 						if (unostkList.length > 0 && unostkList[0] != undefined) {
 							for (var j = 0; j < unostkList.length; j++) {
@@ -821,7 +820,16 @@
 							}
 							size_change();
 							sum();
-						}
+						} else if(t_name.substring(0, 11) == 'getproduct_'){
+     						var t_seq = parseInt(t_name.split('_')[1]);
+	                		as = _q_appendData('dbo.getproduct', "", true);
+	                		if(as[0]!=undefined){
+	                			$('#txtProduct_'+t_seq).val(as[0].product);
+	                		}else{
+	                			$('#txtProduct_'+t_seq).val('');
+	                		}
+	                		break;
+                        }
 				} /// end switch
 			}
 			
@@ -1271,14 +1279,19 @@
 						}
 						break;
 					case 'txtProductno_':
-						$('input[id*="txtProduct_"]').each(function() {
-							thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-							$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
-						});
-						if (trim($('#txtStyle_' + b_seq).val()).length != 0)
-							ProductAddStyle(b_seq);
-						$('#txtStyle_' + b_seq).focus();
-						break;
+                        var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_' + b_seq).focus();
+                        break;
+                    case 'txtStyle_':
+                   		var t_productno = $.trim($('#txtProductno_'+b_seq).val());
+	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
+	                	var t_comp = q_getPara('sys.comp');          	
+	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
+                        $('#txtStyle_'+b_seq).blur();
+                        break;
 					case 'txtUno_':
 						var t_ordeno = $.trim($('#txtOrdeno_' + b_seq).val());
 						var t_no2 = $.trim($('#txtNo2_' + b_seq).val());
