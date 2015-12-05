@@ -54,6 +54,10 @@
                         dbf : 'ucaucc',
                         index : 'noa,product',
                         src : 'ucaucc_b.aspx'
+                    }, {/*4*/
+                        type : '8', //[7] 
+                        name : 'traceback',
+                        value : ('Y@回溯').split(',')
                     }]
 				});
 				q_langShow();
