@@ -748,7 +748,10 @@
 				switch ($('#cmbTaxtype').val()) {
 					case '1':
 						// 應稅
-						t_tax = round(t_money * t_taxrate, 0);
+						if(t_money<=10)
+							t_tax = 0;
+						else 
+							t_tax = round(t_money * t_taxrate, 0);
 						t_total = t_money + t_tax;
 						break;
 					case '2':
