@@ -33,7 +33,19 @@
                     },{
                         type : '6',
                         name : 'xnoa'
-                    }]
+                    },{
+						type : '0', //[5]
+						name : 'path',
+						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_quatstp.aspx','')
+					},{
+						type : '0', //[6]
+						name : 'db',
+						value : q_db
+					},{
+						type : '0', //[6]
+						name : 'proj',
+						value : q_getPara('sys.project')
+					}]
                 });
                 q_popAssign();
                 q_getFormat();

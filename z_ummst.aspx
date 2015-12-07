@@ -116,6 +116,20 @@
 							type : '5', //[22]
 							name : 'xcoin', //幣別
 							value : z_coin.split(',')
+						}, {
+							type : '2', //[23][24]
+							name : 'xctype',
+							dbf : 'custtype',
+							index : 'noa,namea',
+							src : 'custtype_b.aspx'
+						}, {
+							type : '8', //[25]
+							name : 'showunpay', //只顯示未收
+							value : "1@只顯示未收,2@顯示貨單備註".split(',')
+						}, {
+							type : '0', //[26] //判斷vcc是內含或應稅 內含不抓vcca
+							name : 'vcctax',
+							value : q_getPara('sys.d4taxtype')
 						}]
 	                });
 	                q_popAssign();
