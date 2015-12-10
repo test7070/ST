@@ -45,7 +45,8 @@
 			brwKey = 'noa';
 			//ajaxPath = "";
 			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype'
+				, 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype,txtPost2', 'cust_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
@@ -265,6 +266,9 @@
 						var t_where = "where=^^ noa='" + t_custno + "' ^^";
 						q_gt('cust', t_where, 0, 0, 0, "");
 					}
+				}).keydown(function(e) {
+					if(e.which==13)
+						$('#txtMemo').focus();
 				});
 
 				$('#txtCustno').change(function() {
@@ -272,7 +276,11 @@
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
+				}).keydown(function(e) {
+					if(e.which==13)
+						$('#txtPost2').focus();
 				});
+				
 				
 				$('#lblInvono').click(function() {
 					if ($('#txtInvono').val().length > 0)
@@ -1165,8 +1173,11 @@
 							<input id="txtPost" type="text" style="float:left; width:70px;"/>
 							<input id="txtAddr" type="text" style="float:left; width:369px;"/>
 						</td>
-						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" > </select></td>
+						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
+						<td colspan="2">
+							<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
+							<select id="combPaytype" style="float:left; width:26px;"> </select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
@@ -1175,11 +1186,8 @@
 							<input id="txtAddr2" type="text" style="float:left; width:347px;"/>
 							<select id="combAddr" style="width: 20px" onchange='combAddr_chg()'> </select>
 						</td>
-						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
-						<td colspan="2">
-							<input id="txtPaytype" type="text" style="float:left; width:87%;"/>
-							<select id="combPaytype" style="float:left; width:26px;"> </select>
-						</td>
+						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
+						<td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" > </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblCardeal' class="lbl btn"> </a></td>

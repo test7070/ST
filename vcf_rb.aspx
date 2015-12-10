@@ -39,7 +39,7 @@
 
             aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax', 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'Tgg_b.aspx']
             , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtStoreno_', "ucaucc_b2.aspx?" ]
-            , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product,unit', 'txtProductno__,txtProduct__,txtUnit__,txtStoreno__', "uca_b.aspx?" ]
+            , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product,unit', 'txtProductno__,txtProduct__,txtUnit__,txtStoreno__', "ucc_b.aspx?" ]
             , ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_', "store_b.aspx?" ]
             , ['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__', "store_b.aspx?" ]);
 
