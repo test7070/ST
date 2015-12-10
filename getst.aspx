@@ -244,6 +244,13 @@
 					Unlock(1);
 					return;
 				}
+				//倉庫
+				if($.trim($('#txtStoreno').val()).length>0)
+				{
+					for(var i=0;i<=q_bbsCount;i++){
+						$('#txtStoreno_'+i).val($.trim($('#txtStoreno').val()));
+					}
+				}
 				$('#txtWorker').val(r_name);
 				sum();
 				var t_noa = trim($('#txtNoa').val());
@@ -849,6 +856,7 @@
 					<td align="center" style="width:80px;"><a id='lblGmount_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:50px;display:none;"><a id='lblWeight_st'> </a></td>
+					<td align="center" style="width:50px;" class="pe_hide"><a>倉庫</a></td>
 					<td align="center" style="width:200px;"><a id='lblMemo_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -897,6 +905,7 @@
 					<td><input class="txt num" id="txtGmount.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num" id="txtGweight.*" type="text" style="width:95%;"/></td>
 					<td style="display:none;"><input class="txt num" id="txtWeight.*" type="text" style="width:95%;"/></td>
+					<td><input class="txt " id="txtStoreno.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input class="txt" id="txtMemo.*" type="text" style="width:95%;"/>
 						<input class="txt pe_hide" id="txtOrdeno.*" style="float:left;width:70%;">

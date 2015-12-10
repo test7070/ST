@@ -409,6 +409,13 @@
 						$('#txtSpec_'+i).val($('#combSpec_'+i).val());						
 					}
 				}
+				//倉庫
+				if($.trim($('#txtStoreno').val()).length>0)
+				{
+					for(var i=0;i<=q_bbsCount;i++){
+						$('#txtStoreno_'+i).val($.trim($('#txtStoreno').val()));
+					}
+				}
 				
  				if(q_getPara('sys.comp').substring(0,2)=='傑期'){
  					getUno_bydate(0);
@@ -722,7 +729,6 @@
                 }
                 q_nowf();
                 as['date'] = abbm2['date'];
-				as['storeno'] = abbm2['storeno'];
                 return true;
             }
 
@@ -1233,6 +1239,7 @@
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>寬度</a></td>
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>長度</a></td>	
 					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
+					<td align="center" style="width:50px;"><a id='lblStores'>倉庫</a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:50px; display:none;" class="pk"><a id='lblUnit2'>數量<BR>單位</a></td>
 					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
@@ -1245,7 +1252,6 @@
 				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-						<input id="txtStoreno.*" type="text" style="display: none;" />
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
@@ -1287,6 +1293,7 @@
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td ><input  id="txtSource.*" type="text" style="width:95%;"/></td>
+					<td ><input  id="txtStoreno.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
