@@ -386,7 +386,7 @@
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
 							$('#txtCno').val(as[0].noa);
-							$('#txtAcomp').val(as[0].nick);
+							$('#txtAcomp').val(as[0].acomp);
 						}
 						Unlock(1);
 						$('#txtNoa').val('AUTO');
