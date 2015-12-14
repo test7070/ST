@@ -231,7 +231,11 @@
 						input.selectionEnd = $(this).val().indexOf(n) + (n + "").length;
 					}
 				});
-
+				
+				$('#txtTggno').keydown(function(e) {
+					if(e.which==13 && q_cur==1)
+						$('#txtUno_0').focus();
+				});
 			}
 
 			function q_boxClose(s2) {///   q_boxClose 2/4 /// 查詢視窗、廠商視窗、訂單視窗  關閉時執行
@@ -307,13 +311,13 @@
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
 							$('#txtCno').val(as[0].noa);
-							$('#txtAcomp').val(as[0].nick);
+							$('#txtAcomp').val(as[0].acomp);
 						}
 						Unlock(1);
 						$('#txtNoa').val('AUTO');
 						$('#txtDatea').val(q_date());
 						//$('#txtMon').val(q_date().substring(0, 6));
-						$('#txtDatea').focus();
+						//$('#txtDatea').focus();
 						break;
 					case 'flors_coin':
 						var as = _q_appendData("flors", "", true);
@@ -674,6 +678,7 @@
 				});
 				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
 				$('#cmbKind').val('A1');
+				$('#txtTggno').focus();
 			}
 
 			function btnModi() {
@@ -931,7 +936,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 2200px;
+				width: 2100px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1132,7 +1137,7 @@
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProduct_st'> </a></td>
