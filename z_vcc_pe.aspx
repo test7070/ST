@@ -59,9 +59,9 @@
                     	type : '6',  
 						name : 'xedate'            	
                     },{//3-1  [13]
-						type : '8', 
+						type : '5', 
 						name : 'nozero',
-						value : "nozero@不顯示低於0的庫存".split(',')
+						value : "#non@全部,nozero@不顯示低於0的庫存,zero@顯示低於0的庫存".split(',')
 					}]
                 });
                 
@@ -98,7 +98,8 @@
                 $('#txtXmon2').val(t_year + '/' + t_month );
                 $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
 				
-				$("#chkNozero [type='checkbox']").prop('checked',true);
+				$("#Nozero select ").val('nozero');
+				$("#Nozero select ").css('width','150px');
             }
 
             function q_boxClose(s2) {
