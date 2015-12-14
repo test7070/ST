@@ -24,7 +24,7 @@
 			var q_readonly = ['txtRc2atax', 'txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotalus'];
 			var q_readonlys = ['txtTotal'];
 			var bbmNum = [['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
-			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 0, 1], ['txtMount', 10, 0, 1], ['txtWeight', 10, 1, 1],
+			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 0, 1], ['txtMount', 10, 0, 1], ['txtWeight', 10, 3, 1],
 			['txtDime', 10, 3, 1], ['txtWidth', 10, 2, 1],['txtLengthb', 10, 1, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
