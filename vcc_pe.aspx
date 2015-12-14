@@ -27,14 +27,14 @@
 			var bbmNum = [
 				['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
-				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1],
+				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtFloata', 10, 4, 1],
 				['txtBenifit', 10, 0, 1],['txtTotal2', 10, 1, 1]
 			];
 			var bbsNum = [
 				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1],
-				['txtMount', 10, 2, 1], ['txtGweight', 10, 3, 1],
+				['txtMount', 10, 2, 1], ['txtGweight', 10, 2, 1],
 				['txtDime', 10, 3, 1], ['txtWidth', 10, 2, 1],['txtLengthb', 10, 1, 1],
-				['txtMweight', 10, 1, 1],['txtSprice', 15, 3, 1]
+				['txtMweight', 10, 2, 1],['txtSprice', 15, 3, 1]
 			];
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
