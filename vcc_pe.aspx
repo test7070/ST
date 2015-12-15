@@ -37,7 +37,7 @@
 				['txtMweight', 10, 2, 1],['txtSprice', 15, 3, 1]
 			];
 			var bbmMask = [];
-			var bbsMask = [['txtStyle', 'A']];
+			var bbsMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
 			brwList = [];
@@ -54,7 +54,9 @@
 				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
 				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,spec,style,product,emount,eweight,sprice', 'txtUno_,txtUno_,txtProductno_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_,txtSprice_,txtProductno_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
-				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
+				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
+				['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
+				
 			);
 			brwCount2 = 8;
 			//購買發票系統
