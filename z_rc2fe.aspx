@@ -98,7 +98,6 @@
 					$('#txtXdate2').datepicker();
 				}
 				
-				
                 $('#txtXmon1').mask(r_picm);
                 $('#txtXmon2').mask(r_picm);
                 $('#txtXdate1').mask(r_picd);
@@ -133,6 +132,25 @@
                 $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
                 $('#txtXmon2').val(t_year + '/' + t_month);
                 
+                if(window.parent.q_name=='rc2a'){ //1041215
+                	var t_report=999;
+					for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+						if($('#q_report').data().info.reportData[i].report=='z_rc2fe3'){
+							t_report=i;
+							$('#q_report div div .radio').eq(t_report).removeClass('nonselect').addClass('select').click();
+						}
+					}
+                	
+                	$('#txtXtgg1a').val(window.parent.$('#txtTggno').val());
+                	$('#txtXtgg1b').val(window.parent.$('#txtComp').val());
+                	$('#txtXtgg2a').val(window.parent.$('#txtTggno').val());
+                	$('#txtXtgg2b').val(window.parent.$('#txtComp').val());
+                	$('#txtXmon1').val(window.parent.$('#txtMon').val());
+                	$('#txtXmon2').val(window.parent.$('#txtMon').val());
+                	$('#txtXdate1').val('');
+                	$('#txtXdate2').val('');
+                	$('#btnOk').click();
+                }
             }
 
             function q_boxClose(s2) {

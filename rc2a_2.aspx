@@ -97,6 +97,9 @@
 					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0,3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('popAccc'), true);
 				});
 				
+				$('#btnZ_rc2fe').click(function() {
+					q_box('z_rc2fe.aspx', 'z_rc2fe', "95%", "95%", $('#btnZ_rc2fe').val());
+				});
 			}
 			
 			function q_boxClose(s2) {///   q_boxClose 2/4 /// 查詢視窗、客戶視窗、報價視窗  關閉時執行
@@ -613,6 +616,7 @@
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblAccno' class="lbl btn"> </a></td>
 						<td><input id="txtAccno"  type="text" class="txt c1"/>	</td>
+						<td><input id="btnZ_rc2fe" type="button" class="txt c1" style="width: 95px;" value="進貨明細表"></td>
 					</tr>
 				</table>
 			</div>
