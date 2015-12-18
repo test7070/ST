@@ -152,7 +152,8 @@
 				else
 					$('#txtTotalus').val(FormatNumber(t_moneyus));
 			}
-
+			
+			
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
@@ -481,13 +482,14 @@
 						}
 						document.all.combAddr.options.length = 0;
 						q_cmbParse("combAddr", t_item);
-						break;
+						break;	
 					case 'startdate':
 						var as = _q_appendData('cust', '', true);
 						var t_startdate = '';
+						
 						if (as[0] != undefined) {
 							t_startdate = as[0].startdate;
-						}
+						}	
 						if (t_startdate.length == 0 || ('00' + t_startdate).slice(-2) == '00' || $('#txtDatea').val().substr(7, 2) < ('00' + t_startdate).slice(-2)) {
 							$('#txtMon').val($('#txtDatea').val().substr(0, 6));
 						} else {
@@ -584,7 +586,7 @@
 				}
 
 				//判斷起算日,寫入帳款月份
-				if (!check_startdate && emp($('#txtMon').val())) {
+				if (!check_startdate) {
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
 					q_gt('cust', t_where, 0, 0, 0, "startdate", r_accy);
 					return;
@@ -710,7 +712,7 @@
 				Lock(1, {
 					opacity : 0
 				});
-				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
+				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);				
 				var t_where = "where=^^ 1=1^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
