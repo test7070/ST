@@ -134,6 +134,10 @@
 						type : '0', //[28]
 						name : 'db',
 						value : q_db
+					},{
+						type : '0', //[29]
+						name : 'proj',
+						value : q_getPara('sys.project')
 					}]
                 });
                 q_popAssign();
