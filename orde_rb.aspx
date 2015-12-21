@@ -105,7 +105,7 @@
 				$('#lblStore').text('倉庫');
 				$('#lblSerial').text('統一編號');
 
-				var t_where = "where=^^ 1=1 ^^";
+				var t_where = "where=^^ 1=0 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#btnPlusCust').click(function(){
@@ -1013,9 +1013,11 @@
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
 				$('#txtOrdbno').val('');
 				$('#txtVccno').val('');
-
-				var t_where = "where=^^ 1=1 ^^";
-				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
+				if (!emp($('#txtCustno').val())) {
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+					q_gt('custaddr', t_where, 0, 0, 0, "");
+				}
 				
 				if(r_rank<8 && r_partno!='08'){
 					q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
