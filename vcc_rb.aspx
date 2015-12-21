@@ -304,6 +304,17 @@
 							if (!b_ret || b_ret.length == 0)
 								break;
 							
+							//1221 檢查 訂單是否重覆匯入
+							for (var i = 0; i < b_ret.length; i++) {
+								for (var j = 0; j < q_bbsCount; j++) {
+									if(b_ret[i].noa==$('#txtOrdeno_'+j).val() && b_ret[i].no2==$('#txtNo2_'+j).val()){
+										b_ret.splice(i, 1);
+	                                	i--;
+	                                	break;
+									}
+                                }
+							}
+							
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
 							
 							//寫入訂單號碼
@@ -594,6 +605,16 @@
 							$('#txtInvo').val(as[0].ordbno);
 						}
 						//寫入bbs
+						//1221 檢查 訂單是否重覆匯入
+						for (var i = 0; i < ass.length; i++) {
+							for (var j = 0; j < q_bbsCount; j++) {
+								if(ass[i].noa==$('#txtOrdeno_'+j).val() && ass[i].no2==$('#txtNo2_'+j).val()){
+									ass.splice(i, 1);
+	                               	i--;
+	                               	break;
+								}
+							}
+						}
 						for (var  j = 0; j < ass.length; j++) {
 							if(ass[j].enda=="true" || ass[j].cancel=="true"){
 								ass.splice(j, 1);

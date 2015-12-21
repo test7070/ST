@@ -423,7 +423,7 @@
  					var t_where = '';
 	 				for(var i=0;i<q_bbsCount;i++){
 	 					if($.trim($('#txtUno_'+i).val()).length>0 && $.trim($('#txtUno_' + i).val()).substr(0,1)!='-')
-	 						t_where += (t_where.length>0?' or ':'')+"(uno='" + $.trim($('#txtUno_'+i).val()) + "' and not(accy='" + r_accy + "' and tablea='inas' and noa='" + $.trim($('#txtNoa').val())+"'))";
+	 						t_where += (t_where.length>0?' or ':'')+"(uno='" + replaceAll($.trim($('#txtUno_'+i).val()),"'","~#$") + "' and not(accy='" + r_accy + "' and tablea='inas' and noa='" + $.trim($('#txtNoa').val())+"'))";
 	 				}
 	 				if(t_where.length>0)
 	               		q_gt('view_uccb', "where=^^"+t_where+"^^", 0, 0, 0, 'btnOk_checkuno_pe');
@@ -445,7 +445,7 @@
  					var t_where = '';
 	 				for(var i=0;i<q_bbsCount;i++){
 	 					if($.trim($('#txtUno_'+i).val()).length>0)
-	 						t_where += (t_where.length>0?' or ':'')+"(uno='" + $.trim($('#txtUno_'+i).val()) + "' and not(accy='" + r_accy + "' and tablea='inas' and noa='" + $.trim($('#txtNoa').val())+"'))";
+	 						t_where += (t_where.length>0?' or ':'')+"(uno='" + replaceAll($.trim($('#txtUno_'+i).val()),"'","~#$") + "' and not(accy='" + r_accy + "' and tablea='inas' and noa='" + $.trim($('#txtNoa').val())+"'))";
 	 				}
 	 				if(t_where.length>0)
 	               		q_gt('view_uccb', "where=^^"+t_where+"^^", 0, 0, 0, 'btnOk_checkuno');
@@ -597,7 +597,7 @@
                         });
                         $('#txtUno_' + j).change(function() {
                         	var n = $(this).attr('id').replace('txtUno_', '');
-                            var t_uno = $.trim($(this).val());
+                            var t_uno = replaceAll($.trim($(this).val()),"'","~#$");
                         	if(q_getPara('sys.project').toUpperCase()=='PE' && $.trim(t_uno).substr(0,1)=='-'){
                         		return;
                         	}
@@ -838,7 +838,7 @@
             function bbs_readonly(id) {
             	if(q_cur==1 || q_cur==2){
 	                bbs_id = id;
-	                var t_where = "where=^^ noa='" + $('#txtUno_' + bbs_id).val() + "' and gweight>0 ^^";
+	                var t_where = "where=^^ noa='" + replaceAll($('#txtUno_' + bbs_id).val(),"'","~#$") + "' and gweight>0 ^^";
 	                q_gt('uccb', t_where, 0, 0, 0, "", r_accy);
                }
             }
@@ -857,7 +857,10 @@
             function getBBSWhere(objname) {
                 var tempArray = new Array();
                 for (var j = 0; j < q_bbsCount; j++) {
-                    tempArray.push($('#txt' + objname + '_' + j).val());
+                    if(objname=='Uno')
+						tempArray.push(replaceAll($('#txt' + objname + '_' + j).val(),"'","~#$"));
+					else
+						tempArray.push($('#txt' + objname + '_' + j).val());
                 }
                 var TmpStr = distinct(tempArray).sort();
                 TmpStr = TmpStr.toString().replace(/,/g, "','").replace(/^/, "'").replace(/$/, "'");

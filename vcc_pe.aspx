@@ -558,7 +558,7 @@
 			function GetUnoList() {
 				var ReturnStr = new Array;
 				for (var i = 0; i < q_bbsCount; i++) {
-					var thisVal = trim($('#txtUno_' + i).val());
+					var thisVal = replaceAll(trim($('#txtUno_' + i).val()),"'","~#$");
 					if (thisVal.length > 0)
 						ReturnStr.push(thisVal);
 				}
@@ -812,7 +812,7 @@
                         $('#txtStyle_'+b_seq).blur();
                         break;
 					case 'txtUno_':
-						var t_uno = $.trim($('#txtUno_' + b_seq).val());
+						var t_uno = replaceAll($.trim($('#txtUno_' + b_seq).val()),"'","~#$");
 						if (t_uno != undefined && t_uno.length > 0) {
 							q_gt('view_uccb', "where=^^ uno='" + t_uno + "'^^", 0, 0, 0, 'afterPopUno2_' + b_seq, r_accy);
 						}

@@ -506,7 +506,7 @@
 					var t_where = '';
 					for (var i = 0; i < q_bbsCount; i++) {
 						if ($.trim($('#txtUno_' + i).val()).length > 0 && $.trim($('#txtUno_' + i).val()).substr(0,1)!='-')
-							t_where += (t_where.length > 0 ? ' or ' : '') + "(uno='" + $.trim($('#txtUno_' + i).val()) + "' and not(accy='" + r_accy + "' and tablea='rc2s' and noa='" + $.trim($('#txtNoa').val()) + "'))";
+							t_where += (t_where.length > 0 ? ' or ' : '') + "(uno='" + replaceAll($.trim($('#txtUno_' + i).val()),"'","~#$") + "' and not(accy='" + r_accy + "' and tablea='rc2s' and noa='" + $.trim($('#txtNoa').val()) + "'))";
 					}
 					if (t_where.length > 0){
 						q_gt('view_uccb', "where=^^" + t_where + "^^", 0, 0, 0, 'btnOk_checkuno');
@@ -563,7 +563,7 @@
 							if ($('#cmbTypea').val() != '2' && $.trim($('#txtUno_' + i).val()).substr(0,1)!='-') {
 								var n = $(this).attr('id').replace('txtUno_', '');
 								var t_uno = $.trim($(this).val());
-								var t_noa = $.trim($('#txtNoa').val());
+								var t_noa = replaceAll($.trim($('#txtNoa').val()),"'","~#$");
 								q_gt('view_uccb', "where=^^uno='" + t_uno + "' and not(accy='" + r_accy + "' and tablea='rc2s' and noa='" + t_noa + "')^^", 0, 0, 0, 'checkUno_' + n);
 							}
 						});
@@ -815,7 +815,7 @@
 					alert('由報關單轉來禁止刪除');
 				}
 				
-				var t_where = 'where=^^ uno in(' + getBBSWhere('Uno') + ') ^^';
+				var t_where = 'where=^^ uno in (' + getBBSWhere('Uno') + ') ^^';
 				q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
 			}
 
@@ -826,7 +826,10 @@
 			function getBBSWhere(objname) {
 				var tempArray = new Array();
 				for (var j = 0; j < q_bbsCount; j++) {
-					tempArray.push($('#txt' + objname + '_' + j).val());
+					if(objname=='Uno')
+						tempArray.push(replaceAll($('#txt' + objname + '_' + j).val(),"'","~#$"));
+					else
+						tempArray.push($('#txt' + objname + '_' + j).val());
 				}
 				var TmpStr = distinct(tempArray).sort();
 				TmpStr = TmpStr.toString().replace(/,/g, "','").replace(/^/, "'").replace(/$/, "'");
