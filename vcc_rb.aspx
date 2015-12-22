@@ -751,7 +751,7 @@
 			var check_startdate=false;
 			var check_vcca=false;
 			function btnOk() {
-				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')]]);
+				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')],['txtStoreno', q_getMsg('lblStore')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
@@ -942,11 +942,11 @@
 					opacity : 0
 				});
 				
-				if(!emp($('#txtAccno').val())){
+				/*if(!emp($('#txtAccno').val())){
 					alert('已轉傳票禁止修改!!');
 					Unlock(1);
 					return;
-				}
+				}*/
 				
 				//1110 禁止修改貨單
 				$('#cmbTypea').attr('disabled', 'disabled');
