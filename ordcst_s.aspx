@@ -57,10 +57,10 @@
 		        if (t_tgg.length>0)
                     t_where += " and charindex('" + t_tgg + "',tgg)>0";
 		       	if(t_enda=='0'){
-		       		t_where += " and (enda=0 and exists(select noa from ordcs"+r_accy+" where ordcs"+r_accy+".noa=ordc"+r_accy+".noa and ordcs"+r_accy+".enda=0))";
+		       		t_where += " and (enda=0 and exists(select noa from view_ordcs"+r_accy+" where view_ordcs"+r_accy+".noa=view_ordc"+r_accy+".noa and view_ordcs"+r_accy+".enda=0))";
 		       	}
 		       	if(t_enda=='1'){
-		       		t_where += " and (enda=1 or exists(select noa from ordcs"+r_accy+" where ordcs"+r_accy+".noa=ordc"+r_accy+".noa and ordcs"+r_accy+".enda=1))";
+		       		t_where += " and (enda=1 or exists(select noa from view_ordcs"+r_accy+" where view_ordcs"+r_accy+".noa=view_ordc"+r_accy+".noa and view_ordcs"+r_accy+".enda=1))";
 		       	}
 		       	
 		        t_where = ' where=^^' + t_where + '^^ ';
