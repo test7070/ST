@@ -341,6 +341,9 @@
 								return;
 							}
 							if(b_ret[0].noa!=undefined){
+								$('#txtStoreno').val(b_ret[0].storeno);
+								$('#txtStore').val(b_ret[0].store);
+								
 								var t_where = "where=^^typea='4' and noa='"+b_ret[0].noa+"' and mount-isnull(b.rmount,0)>0 ^^";
 								q_gt('cngs_re', t_where, 0, 0, 0, "", r_accy);	
 							}
