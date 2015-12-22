@@ -393,7 +393,7 @@
 						var as = _q_appendData("view_vcc", "", true);
 						if (as[0] != undefined) {
 							if(as[0].isgenvcca=="true")
-								alert('出貨單【自動產生發票】禁止更新出貨單!!');
+								alert('出貨單【自動產生發票】，不更新出貨單!!');
 							else
 								q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
 						}else{
@@ -1195,6 +1195,11 @@
 					return;
 				if(!emp($('#txtVccno').val())){
 					alert("已轉出貨單禁止刪除!!");
+					return;
+				}
+				
+				if(!emp($('#txtOrdbno').val())){
+					alert("已開立發票禁止刪除!!");
 					return;
 				}
 				
