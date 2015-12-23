@@ -737,7 +737,7 @@
 			
 			function btnOk() {
 				t_err = '';
-				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')], ['cmbKind', '發票開立'], ['txtPostname', '倉庫']]);
+				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')], ['cmbKind', '發票開立'], ['cmbPartstore', '倉庫']]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
