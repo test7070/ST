@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -109,33 +109,19 @@
                         name : 'xoption01',
                         value : q_getMsg('toption01').split('&')
                     }, {
-						type : '5', //[22]
-						name : 'xcoin', //幣別
-						value : z_coin.split(',')
-					}, {
-						type : '2', //[23][24]
-						name : 'xctype',
-						dbf : 'custtype',
-						index : 'noa,namea',
-						src : 'custtype_b.aspx'
-					}, {
-						type : '8', //[25]
-						name : 'showunpay', //只顯示未收
-						value : "1@只顯示未收,2@顯示貨單備註".split(',')
-					}, {
-						type : '0', //[26] //判斷vcc是內含或應稅 內含不抓vcca
+						type : '0', //[22] //判斷vcc是內含或應稅 內含不抓vcca
 						name : 'vcctax',
 						value : q_getPara('sys.d4taxtype')
 					},{
-						type : '0', //[27]  圖片路徑
+						type : '0', //[23]  圖片路徑
 						name : 'path',
 						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_ummst.aspx','')
 					},{
-						type : '0', //[28]
+						type : '0', //[24]
 						name : 'db',
 						value : q_db
 					},{
-						type : '0', //[29]
+						type : '0', //[25]
 						name : 'proj',
 						value : q_getPara('sys.project')
 					}]
