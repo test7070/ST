@@ -89,6 +89,9 @@
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
+				
+				$('.tr9').hide();
+				
 				q_cmbParse("cmbStype", q_getPara('orde.stype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
@@ -1121,11 +1124,11 @@
 					<tr class="tr1">
 						<td class="td1"><span> </span><a id='lblOdate' class="lbl"> </a></td>
 						<td class="td2"><input id="txtOdate" type="text" class="txt c1"/></td>
-						<td class="td3"><span> </span><a id='lblStype' class="lbl"> </a></td>
-						<td class="td4"><select id="cmbStype" class="txt c1"></select></td>
+						<td class="td3"><span> </span><a id='lblStype' class="lbl" style="display:none;"> </a></td>
+						<td class="td4"><select id="cmbStype" class="txt c1" style="display:none;"></select></td>
 						<td class="td5"><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td class="td6" colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
-						<td class="td8" align="center"><input id="btnOrdei" type="button" /></td>
+						<td class="td8" align="center"><input id="btnOrdei" type="button" style="display:none;"/></td>
 					</tr>
 					<tr class="tr2">
 						<td class="td1"><span> </span><a id="lblAcomp" class="lbl btn"></a></td>
@@ -1133,7 +1136,7 @@
 						<td class="td3" colspan="2"><input id="txtAcomp" type="text" class="txt c1"/></td>
 						<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
 						<td class="td6"colspan="2"><input id="txtContract" type="text" class="txt c1"/></td>
-						<td class="td8" align="center"><input id="btnOrdem" type="button"/></td>
+						<td class="td8" align="center"><input id="btnOrdem" type="button" style="display:none;"/></td>
 					</tr>
 					<tr class="tr3">
 						<td class="td1"><span> </span><a id="lblCust" class="lbl btn"> </a></td>
@@ -1182,8 +1185,8 @@
 							<input id="txtSalesno" type="text" class="txt c2"/>
 							<input id="txtSales" type="text" class="txt c3"/>
 						</td>
-						<td class="td7"><span> </span><a id='lblCustorde' class="lbl"> </a></td>
-						<td class="td8"><input id="txtCustorde" type="text" class="txt c1"/></td>
+						<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
+						<td class="td8"><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>					
 					</tr>
 					<tr class="tr8">
 						<td class="td1"><span> </span><a id='lblMoney' class="lbl"> </a></td>
@@ -1202,8 +1205,8 @@
 						<td class="td3"><input id="txtFloata" type="text" class="txt num c1" /></td>
 						<td class="td4"><span> </span><a id='lblTotalus' class="lbl"> </a></td>
 						<td class="td5" colspan='2'><input id="txtTotalus" type="text" class="txt num c1"/></td>
-						<td class="td7"><span> </span><a id="lblApv" class="lbl"> </a></td>
-						<td class="td8"><input id="txtApv" type="text" class="txt c1" disabled="disabled"/></td>
+						<td class="td7"><span> </span><a id='lblCustorde' class="lbl"> </a></td>
+						<td class="td8"><input id="txtCustorde" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="tr10">
 						<td class="td1"><span> </span><a id='lblWorker' class="lbl"> </a></td>
@@ -1248,7 +1251,7 @@
 					<td align="center" style="width:160px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyle'> </a></td>
 					<td align="center" style="width:55px;"><a id='lblUnit'> </a></td>
-					<td align="center" style="width:85px;"><a >米數</a></td>
+					<!--<td align="center" style="width:85px;"><a >米數</a></td>-->
 					<td align="center" style="width:85px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblWeight'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblPrices'> </a></td>
@@ -1278,7 +1281,7 @@
 					</td>
 					<td class="isStyle"><input id="txtStyle.*" type="text" class="txt c1"/></td>
 					<td align="center"><input class="txt c7" id="txtUnit.*" type="text"/></td>
-					<td><input class="txt num c7" id="txtLengthb.*" type="text" /></td>
+					<!--<td><input class="txt num c7" id="txtLengthb.*" type="text" /></td>-->
 					<td><input class="txt num c7" id="txtMount.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtWeight.*" type="text" /></td>
 					<td><input class="txt num c7" id="txtPrice.*" type="text" /></td>
