@@ -105,7 +105,7 @@
 				$('#lblStore').text('倉庫');
 				$('#lblSerial').text('統一編號');
 
-				var t_where = "where=^^ 1=1 ^^";
+				var t_where = "where=^^ 1=0 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#btnPlusCust').click(function(){
@@ -393,7 +393,7 @@
 						var as = _q_appendData("view_vcc", "", true);
 						if (as[0] != undefined) {
 							if(as[0].isgenvcca=="true")
-								alert('出貨單【自動產生發票】禁止更新出貨單!!');
+								alert('出貨單【自動產生發票】，不更新出貨單!!');
 							else
 								q_func('vcc_post.post.a1', r_accy + ',' + $('#txtVccno').val() + ',0');
 						}else{
@@ -737,7 +737,7 @@
 			
 			function btnOk() {
 				t_err = '';
-				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')], ['cmbKind', '發票開立']]);
+				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')], ['cmbKind', '發票開立'], ['cmbPartstore', '倉庫']]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
@@ -1013,9 +1013,11 @@
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
 				$('#txtOrdbno').val('');
 				$('#txtVccno').val('');
-
-				var t_where = "where=^^ 1=1 ^^";
-				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
+				if (!emp($('#txtCustno').val())) {
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+					q_gt('custaddr', t_where, 0, 0, 0, "");
+				}
 				
 				if(r_rank<8 && r_partno!='08'){
 					q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
@@ -1193,6 +1195,11 @@
 					return;
 				if(!emp($('#txtVccno').val())){
 					alert("已轉出貨單禁止刪除!!");
+					return;
+				}
+				
+				if(!emp($('#txtOrdbno').val())){
+					alert("已開立發票禁止刪除!!");
 					return;
 				}
 				

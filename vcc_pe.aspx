@@ -52,7 +52,7 @@
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
 				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,spec,style,product,emount,eweight,sprice', 'txtUno_,txtUno_,txtProductno_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_,txtSprice_,txtProductno_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,spec,style,product,dime,width,lengthb,size,emount,eweight,sprice', 'txtUno_,txtUno_,txtProductno_,txtSpec_,txtStyle_,txtProduct_,txtDime_,txtWidth_,txtLengthb_,txtSize_,txtMount_,txtWeight_,txtSprice_,txtProductno_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
 				['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
@@ -307,9 +307,13 @@
 				
 				$('#btnImportCut').click(function() {
 					var t_custno = $('#txtCustno').val();
-					var t_where = '1=1 ';
-					t_where += q_sqlPara2('custno', t_custno) +" and (mount>0 or weight>0) " ;
-					q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "900px", "95%", q_getMsg('popVcceImport'));
+					var t_where = '1=1 and weight>0 ';
+					if(t_custno.length>0){
+						t_where += q_sqlPara2('custno', t_custno) ;
+						q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "900px", "95%", q_getMsg('popVcceImport'));
+					}else{
+						alert('請輸入客戶編號!!');
+					}
 				});
 				
 				$('#lblMweight').text('毛重');
@@ -448,16 +452,16 @@
 							}
 							for (var i = 0; i < q_bbsCount; i++) {
 								bbsUno = $.trim($('#txtUno_' + i).val());
-								bbsMount = dec($('#txtMount_' + i).val());
+								bbsWeight = dec($('#txtWeight_' + i).val());
 								for (var k = 0; k < unostkList_Tmp.length; k++) {
 									if (bbsUno == $.trim(unostkList_Tmp[k].uno)) {
-										unostkList_Tmp[k].mount = dec(unostkList_Tmp[k].mount) - bbsMount;
+										unostkList_Tmp[k].weight = dec(unostkList_Tmp[k].weight) - bbsWeight;
 									}
 								}
 							}
 							for (var k = 0; k < unostkList_Tmp.length; k++) {
-								if (dec(unostkList_Tmp[k].mount) < 0) {
-									ErrStr += '批號：' + unostkList_Tmp[k].uno + ' 庫存量：' + dec(unostkList[k].mount) + ' 本次出貨量：' + (dec(unostkList[k].mount) - dec(unostkList_Tmp[k].mount)) + '\n';
+								if (dec(unostkList_Tmp[k].weight) < 0) {
+									ErrStr += '批號：' + unostkList_Tmp[k].uno + ' 庫存量：' + dec(unostkList[k].weight) + ' 本次出貨量：' + (dec(unostkList[k].weight) - dec(unostkList_Tmp[k].weight)) + '\n';
 								}
 							}
 							if ($.trim(ErrStr).length > 0) {
@@ -554,7 +558,7 @@
 			function GetUnoList() {
 				var ReturnStr = new Array;
 				for (var i = 0; i < q_bbsCount; i++) {
-					var thisVal = trim($('#txtUno_' + i).val());
+					var thisVal = replaceAll(trim($('#txtUno_' + i).val()),"'","~#$");
 					if (thisVal.length > 0)
 						ReturnStr.push(thisVal);
 				}
@@ -808,8 +812,8 @@
                         $('#txtStyle_'+b_seq).blur();
                         break;
 					case 'txtUno_':
-						var t_uno = $.trim($('#txtUno_' + b_seq).val());
-						if (ret != undefined && ret.length > 0) {
+						var t_uno = replaceAll($.trim($('#txtUno_' + b_seq).val()),"'","~#$");
+						if (t_uno != undefined && t_uno.length > 0) {
 							q_gt('view_uccb', "where=^^ uno='" + t_uno + "'^^", 0, 0, 0, 'afterPopUno2_' + b_seq, r_accy);
 						}
 						break;

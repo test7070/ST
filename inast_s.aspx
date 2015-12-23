@@ -46,8 +46,8 @@
                 t_noa = $.trim($('#txtNoa').val());
 		        t_tggno = $.trim($('#txtTggno').val());
 		        t_comp = $.trim($('#txtComp').val());
-		        t_uno = $.trim($('#txtUno').val());
-		        t_uno2 = $.trim($('#txtUno2').val());
+		        t_uno = replaceAll($.trim($('#txtUno').val()),"'","~#$");
+		        t_uno2 = replaceAll($.trim($('#txtUno2').val()),"'","~#$");
 
 		        t_bdate = $('#txtBdate').val();
 		        t_edate = $('#txtEdate').val();

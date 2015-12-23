@@ -114,7 +114,7 @@
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-				var t_where = "where=^^ 1=1 ^^";
+				var t_where = "where=^^ 1=0 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				$('#cmbKind').change(function() {
 					for (var j = 0; j < q_bbsCount; j++) {
@@ -558,8 +558,10 @@
 				$('#txtCno').val(z_cno);
 				$('#txtAcomp').val(z_acomp);
 				product_change();
-				var t_where = "where=^^ 1=1 ^^";
-				q_gt('custaddr', t_where, 0, 0, 0, "");
+				if (!emp($('#txtTggno').val())) {
+					var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
+					q_gt('custaddr', t_where, 0, 0, 0, "");
+				}
 				
 				$('#cmbKind').val('1').change();
 			}

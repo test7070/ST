@@ -106,7 +106,7 @@
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbZipname", ",08:00~09:00,09:00~10:00,10:00~11:00,11:00~12:00,12:00~13:00,13:00~14:00,14:00~15:00,15:00~16:00,16:00~17:00,17:00~18:00,18:00~19:00,19:00~20:00,21:00~22:00");
 				
-				var t_where = "where=^^ 1=1  ^^";
+				var t_where = "where=^^ 1=0  ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				
 				$('#lblPart').text('運費所屬部門');
@@ -304,6 +304,17 @@
 							if (!b_ret || b_ret.length == 0)
 								break;
 							
+							//1221 檢查 訂單是否重覆匯入
+							for (var i = 0; i < b_ret.length; i++) {
+								for (var j = 0; j < q_bbsCount; j++) {
+									if(b_ret[i].noa==$('#txtOrdeno_'+j).val() && b_ret[i].no2==$('#txtNo2_'+j).val()){
+										b_ret.splice(i, 1);
+	                                	i--;
+	                                	break;
+									}
+                                }
+							}
+							
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtPrice,txtMount,txtMemo', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2,price,notv,memo', 'txtProductno,txtProduct,txtSpec');
 							
 							//寫入訂單號碼
@@ -330,6 +341,9 @@
 								return;
 							}
 							if(b_ret[0].noa!=undefined){
+								$('#txtStoreno').val(b_ret[0].storeno);
+								$('#txtStore').val(b_ret[0].store);
+								
 								var t_where = "where=^^typea='4' and noa='"+b_ret[0].noa+"' and mount-isnull(b.rmount,0)>0 ^^";
 								q_gt('cngs_re', t_where, 0, 0, 0, "", r_accy);	
 							}
@@ -594,6 +608,16 @@
 							$('#txtInvo').val(as[0].ordbno);
 						}
 						//寫入bbs
+						//1221 檢查 訂單是否重覆匯入
+						for (var i = 0; i < ass.length; i++) {
+							for (var j = 0; j < q_bbsCount; j++) {
+								if(ass[i].noa==$('#txtOrdeno_'+j).val() && ass[i].no2==$('#txtNo2_'+j).val()){
+									ass.splice(i, 1);
+	                               	i--;
+	                               	break;
+								}
+							}
+						}
 						for (var  j = 0; j < ass.length; j++) {
 							if(ass[j].enda=="true" || ass[j].cancel=="true"){
 								ass.splice(j, 1);
@@ -730,7 +754,7 @@
 			var check_startdate=false;
 			var check_vcca=false;
 			function btnOk() {
-				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')]]);
+				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')],['txtStoreno', q_getMsg('lblStore')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
@@ -904,8 +928,10 @@
 				$('#cmbTypea').val('1');
 				$('#txtDatea').focus();
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
-				var t_where = "where=^^ 1=1  ^^";
-				q_gt('custaddr', t_where, 0, 0, 0, "");
+				if (!emp($('#txtCustno').val())) {
+					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
+					q_gt('custaddr', t_where, 0, 0, 0, "");
+				}
 				$('#txtMount').val(1);
 				$('#txtPartno').val(r_partno);
 				var t_where = "where=^^ noa='"+r_partno+"' ^^";
@@ -918,6 +944,12 @@
 				Lock(1, {
 					opacity : 0
 				});
+				
+				/*if(!emp($('#txtAccno').val())){
+					alert('已轉傳票禁止修改!!');
+					Unlock(1);
+					return;
+				}*/
 				
 				//1110 禁止修改貨單
 				$('#cmbTypea').attr('disabled', 'disabled');
@@ -1106,6 +1138,13 @@
 				Lock(1, {
 					opacity : 0
 				});
+				
+				if(!emp($('#txtAccno').val())){
+					alert('已轉傳票禁止刪除!!');
+					Unlock(1);
+					return;
+				}
+				
 				var t_where = " where=^^ vccno='" + $('#txtNoa').val() + "'^^";
 				q_gt('umms', t_where, 0, 0, 0, 'btnDele', r_accy);
 			}
