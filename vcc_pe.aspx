@@ -52,7 +52,7 @@
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
 				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,spec,style,product,dime,width,lengthb,size,emount,eweight,sprice', 'txtUno_,txtUno_,txtProductno_,txtSpec_,txtStyle_,txtProduct_,txtDime_,txtWidth_,txtLengthb_,txtSize_,txtMount_,txtWeight_,txtSprice_,txtProductno_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				//['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,spec,style,product,dime,width,lengthb,size,emount,eweight,sprice', 'txtUno_,txtUno_,txtProductno_,txtSpec_,txtStyle_,txtProduct_,txtDime_,txtWidth_,txtLengthb_,txtSize_,txtMount_,txtWeight_,txtSprice_,txtProductno_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
 				['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
@@ -323,6 +323,26 @@
 			function q_boxClose(s2) {/// q_boxClose 2/4
 				var ret;
 				switch (b_pop) {
+					case 'uccc_seek_b2':
+						if (q_cur > 0 && q_cur < 4) {
+							if (!b_ret || b_ret.length == 0) {
+								b_pop = '';
+								return;
+							}
+							$('#txtUno_' + b_seq).val(b_ret[0].uno);
+							$('#txtProductno_' + b_seq).val(b_ret[0].productno);
+							$('#txtSpec_' + b_seq).val(b_ret[0].spec);
+							$('#txtStyle_' + b_seq).val(b_ret[0].style);
+							$('#txtProduct_' + b_seq).val(b_ret[0].product);
+							$('#txtMount_' + b_seq).val(b_ret[0].emount);
+							$('#txtWeight_' + b_seq).val(b_ret[0].eweight);
+							$('#txtSprice_' + b_seq).val(b_ret[0].sprice);
+							$('#txtDime_' + b_seq).val(b_ret[0].dime);
+							$('#txtWidth_' + b_seq).val(b_ret[0].width);
+							$('#txtLengthb_' + b_seq).val(b_ret[0].lengthb);
+							$('#txtSize_' + b_seq).val(b_ret[0].size);
+						}
+						break;
 					case 'view_vcce_import':
 						if (q_cur > 0 && q_cur < 4) {
 							if (!b_ret || b_ret.length == 0) {
@@ -514,14 +534,23 @@
 					default:
 						if (t_name.substring(0, 13) == 'afterPopUno1_') {
 							var t_sel = parseInt(t_name.split('_')[1]);
-							var as = _q_appendData("view_ordes", "", true);
+							var as = _q_appendData("view_uccc2", "", true);
 							if (as[0] != undefined) {
+								$('#txtProductno_' + t_sel).val(as[0].productno);
+								$('#txtSpec_' + t_sel).val(as[0].spec);
+								$('#txtStyle_' + t_sel).val(as[0].style);
+								$('#txtProduct_' + t_sel).val(as[0].product);
+								$('#txtMount_' + t_sel).val(as[0].emount);
+								$('#txtWeight_' + t_sel).val(as[0].eweight);
+								$('#txtSprice_' + t_sel).val(as[0].sprice);
 								$('#txtDime_' + t_sel).val(as[0].dime);
 								$('#txtWidth_' + t_sel).val(as[0].width);
 								$('#txtLengthb_' + t_sel).val(as[0].lengthb);
 								$('#txtSize_' + t_sel).val(as[0].size);
 								sum();
-							} 
+							}else{
+								$('#btnUno_' + t_sel).click();
+							}
 						} else if (t_name.substring(0, 13) == 'afterPopUno2_') {
 							var t_sel = parseInt(t_name.split('_')[1]);
 							var as = _q_appendData("view_uccb", "", true);
@@ -693,6 +722,19 @@
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
 							}
+						});
+						$('#txtUno_' + j).change(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							var t_uno = replaceAll($.trim($('#txtUno_' + n).val()),"'","~#$");
+							if (t_uno != undefined && t_uno.length > 0) {
+								q_gt('view_uccc2', "where=^^ uno='" + t_uno + "'^^", 0, 0, 0, 'afterPopUno1_' + n, r_accy);
+							}
+						});
+						$('#btnUno_' + j).click(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							q_box("uccc_seek_b2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";1=0;" + r_accy, 'uccc_seek_b2', "900px", "95%", '');
 						});
 					}
 				}//j

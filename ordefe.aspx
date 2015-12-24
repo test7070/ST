@@ -167,6 +167,7 @@
 					readonly_addr2();
 					$('#div_addr2').show();
 				});
+				
 				$('#btnAddr_plus').click(function() {
 					var rowslength=document.getElementById("table_addr2").rows.length-2;
 					var tr = document.createElement("tr");
@@ -177,6 +178,7 @@
 						var tmp = document.getElementById("addr2_close");
 						tmp.parentNode.insertBefore(tr,tmp);
 				});
+				
 				$('#btnClose_div_addr2').click(function() {
 					if(q_cur==1||q_cur==2){
 						var rows=document.getElementById("table_addr2").rows.length-3;
@@ -193,9 +195,11 @@
 					}
 					$('#div_addr2').hide();
 				});
+				
 				$('#btnOrdem').click(function() {
 					q_box("ordem_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtNoa').val() + "';" + r_accy + ";" + q_cur, 'ordem', "95%", "95%", q_getMsg('popOrdem'));
 				});
+				
 				$('#chkCancel').click(function(){
 					if($(this).prop('checked')){
 						for(var k=0;k<q_bbsCount;k++){
@@ -203,6 +207,10 @@
 						}
 					}
 				});
+				
+                $('#btnClose_div_stk').click(function() {
+                    $('#div_stk').toggle();
+                });
 			}
 			
 			//addr2控制事件vvvvvv-------------------
@@ -383,6 +391,42 @@
 						}
 						q_msg($('#txtMount_' + b_seq), t_msg);
 						break;
+					 case 'msg_stk_all':
+                        var as = _q_appendData("stkucc", "", true);
+                        var rowslength = document.getElementById("table_stk").rows.length - 3;
+                        for (var j = 1; j < rowslength; j++) {
+                            document.getElementById("table_stk").deleteRow(3);
+                        }
+                        var stk_row = 0;
+
+                        var stkmount = 0;
+                        for (var i = 0; i < as.length; i++) {
+                            //倉庫庫存
+                            if (dec(as[i].mount) != 0) {
+                                var tr = document.createElement("tr");
+                                tr.id = "bbs_" + j;
+                                tr.innerHTML = "<td id='assm_tdStoreno_" + stk_row + "'><input id='assm_txtStoreno_" + stk_row + "' type='text' class='txt c1' value='" + as[i].storeno + "' disabled='disabled'/></td>";
+                                tr.innerHTML += "<td id='assm_tdStore_" + stk_row + "'><input id='assm_txtStore_" + stk_row + "' type='text' class='txt c1' value='" + as[i].store + "' disabled='disabled' /></td>";
+                                tr.innerHTML += "<td id='assm_tdMount_" + stk_row + "'><input id='assm_txtMount_" + stk_row + "' type='text' class='txt c1 num' value='" + as[i].mount + "' disabled='disabled'/></td>";
+                                var tmp = document.getElementById("stk_close");
+                                tmp.parentNode.insertBefore(tr, tmp);
+                                stk_row++;
+                            }
+                            //庫存總計
+                            stkmount = stkmount + dec(as[i].mount);
+                        }
+                        var tr = document.createElement("tr");
+                        tr.id = "bbs_" + j;
+                        tr.innerHTML = "<td colspan='2' id='stk_tdStore_" + stk_row + "' style='text-align: right;'><span id='stk_txtStore_" + stk_row + "' class='txt c1' >倉庫總計：</span></td>";
+                        tr.innerHTML += "<td id='stk_tdMount_" + stk_row + "'><span id='stk_txtMount_" + stk_row + "' type='text' class='txt c1 num' > " + stkmount + "</span></td>";
+                        var tmp = document.getElementById("stk_close");
+                        tmp.parentNode.insertBefore(tr, tmp);
+                        stk_row++;
+
+                        $('#div_stk').css('top', mouse_point.pageY - parseInt($('#div_stk').css('height')));
+                        $('#div_stk').css('left', mouse_point.pageX - parseInt($('#div_stk').css('width')));
+                        $('#div_stk').toggle();
+                        break;	
 					case 'custaddr':
 						var as = _q_appendData("custaddr", "", true);
 						var t_item = " @ ";
@@ -644,7 +688,8 @@
 					$('#txtPost2').val($('#combAddr').find("option:selected").val());
 				}
 			}
-
+			
+			var mouse_point;
 			function bbsAssign() {
 				for (var j = 0; j < (q_bbsCount == 0 ? 1 : q_bbsCount); j++) {
 					$('#lblNo_' + j).text(j + 1);
@@ -770,6 +815,20 @@
 							t_where = "title='本期訂單' and bdate='"+q_cdn(q_date(),-61)+"' and edate='"+q_cdn(q_date(),+61)+"' and noa='"+$('#txtProductno_' + b_seq).val()+"' and product='"+$('#txtProduct_' + b_seq).val()+"' ";
 							q_box("z_workgorde.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'scheduled', "95%", "95%", q_getMsg('PopScheduled'));
 						});
+						
+						$('#btnStk_' + j).mousedown(function(e) {
+                            t_IdSeq = -1;
+                            q_bodyId($(this).attr('id'));
+                            b_seq = t_IdSeq;
+                            if (!emp($('#txtProductno_' + b_seq).val()) && $("#div_stk").is(":hidden")) {
+                                mouse_point = e;
+                                document.getElementById("stk_productno").innerHTML = $('#txtProductno_' + b_seq).val();
+                                document.getElementById("stk_product").innerHTML = $('#txtProduct_' + b_seq).val();
+                                //庫存
+                                var t_where = "where=^^ ['" + q_date() + "','','" + $('#txtProductno_' + b_seq).val() + "') ^^";
+                                q_gt('calstk', t_where, 0, 0, 0, "msg_stk_all", r_accy);
+                            }
+                        });
 					}
 				}
 				_bbsAssign();
@@ -1092,6 +1151,28 @@
 				</tr>
 			</table>
 		</div>
+		<div id="div_stk" style="position:absolute; top:300px; left:400px; display:none; width:400px; background-color: #CDFFCE; border: 5px solid gray;">
+			<table id="table_stk" style="width:100%;" border="1" cellpadding='2'  cellspacing='0'>
+				<tr>
+					<td style="background-color: #f8d463;" align="center">產品編號</td>
+					<td style="background-color: #f8d463;" colspan="2" id='stk_productno'></td>
+				</tr>
+				<tr>
+					<td style="background-color: #f8d463;" align="center">產品名稱</td>
+					<td style="background-color: #f8d463;" colspan="2" id='stk_product'></td>
+				</tr>
+				<tr id='stk_top'>
+					<td align="center" style="width: 30%;">倉庫編號</td>
+					<td align="center" style="width: 45%;">倉庫名稱</td>
+					<td align="center" style="width: 25%;">倉庫數量</td>
+				</tr>
+				<tr id='stk_close'>
+					<td align="center" colspan='3'>
+					<input id="btnClose_div_stk" type="button" value="關閉視窗">
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div id='dmain' style="overflow:hidden;width: 1260px;">
 			<div class="dview" id="dview">
 				<table class="tview" id="tview">
@@ -1266,6 +1347,7 @@
 					<td align="center" style="width:43px;"><a id='lblVccrecord'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblOrdemount'> </a></td>
 					<td align="center" style="width:43px;"><a id='lblScheduled'> </a></td>
+					<td align="center" style="width:43px;"><a id='lblStk'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td>
@@ -1316,6 +1398,10 @@
 					<td align="center">
 						<input class="btn" id="btnScheduled.*" type="button" value='.' style=" font-weight: bold;" />
 					</td>
+					<td align="center">
+					<input class="btn"  id="btnStk.*" type="button" value='.' style=" font-weight: bold;"/>
+					</td>
+
 				</tr>
 			</table>
 		</div>
