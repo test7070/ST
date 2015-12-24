@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
     <head>
-        <title></title>
+        <title> </title>
         <script src="../script/jquery.min.js" type="text/javascript"></script>
         <script src='../script/qj2.js' type="text/javascript"></script>
         <script src='qset.js' type="text/javascript"></script>
@@ -46,6 +46,8 @@
             function mainPost() {
                 q_getFormat();
                 q_mask(bbmMask);
+                
+                $('.'+q_getPara('sys.project')).show();
                 
                 $('#btnImport').click(function(e){
                 	var t_date = $('#txtDatea').val();
@@ -132,6 +134,7 @@
                     }
                 }
                 _bbsAssign();
+                $('.'+q_getPara('sys.project')).show();
             }
             function btnIns() {
                 _btnIns();
@@ -167,6 +170,7 @@
             }
             function refresh(recno) {
                 _refresh(recno);
+                $('.'+q_getPara('sys.project')).show();
             }
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
@@ -349,16 +353,16 @@
             <div class="dbbm">
                 <table class="tbbm"  id="tbbm">
                     <tr style="height:1px;">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td class="tdZ"></td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td class="tdZ"> </td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblNoa" class="lbl"> </a></td>
                         <td><input id="txtNoa" type="text" class="txt c1"/></td>
-                        <td></td>
+                        <td> </td>
                         
                     </tr>
                     <tr>
@@ -368,7 +372,7 @@
                     <tr>
                     	<td><span> </span><a id="lblEdate" class="lbl">庫存運算截止日</a></td>
                         <td><input id="txtEdate" type="text" class="txt c1"/></td>
-                        <td style="text-align: center;"><input type="button" id="btnImport" value="匯入" class="txt" style="width:75%;"></td>
+                        <td style="text-align: center;display:none;" class="fe"><input type="button" id="btnImport" value="匯入" class="txt" style="width:75%;"></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblWorker" class="lbl"> </a></td>
@@ -385,9 +389,10 @@
                     <td  align="center" style="width:30px;">
                     <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
-                    <td align="center" style="width:20px;"></td>
+                    <td align="center" style="width:20px;"> </td>
                     <td align="center" style="width:100px;"><a id='lblProductno_s'>物品編號</a></td>
   					<td align="center" style="width:150px;"><a id='lblProduct_s'>物品名稱</a></td>
+  					<td align="center" class="rk"style="width:80px;display:none;"><a id='lblDime_s'>厚度</a></td>
   					<td align="center" style="width:100px;"><a id='lblSprice_s'>基價</a></td>
   					<td align="center" style="width:100px;"><a id='lblLprice_s'>上次基價</a></td>
   					<td align="center" style="width:100px;"><a id='lblLdate_s'>上次基價日</a></td>
@@ -405,6 +410,7 @@
                     	<input type="text" id="txtDatea.*" style="display:none;"/>
                     </td>
                     <td><input type="text" id="txtProduct.*" style="width:95%;"/></td>
+                    <td class="rk" style="display:none;"><input type="text" id="txtDime.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtSprice.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtLprice.*" style="width:95%;"/></td>
                     <td><input type="text" id="txtLdate.*" style="width:95%;"/></td>
