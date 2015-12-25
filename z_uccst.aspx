@@ -101,18 +101,21 @@
 						type : '1', //[15][16] 9
 						name : 'xlengthb'
 					}, {
-						type : '5', //[17] 10
+						type : '6', //[17] 10
+						name : 'xuno'
+					}, {
+						type : '6', //[18] 11
+						name : 'xsource'
+					}, {
+						type : '5', //[19] 12
 						name : 'xstyle',
 						value : [q_getPara('report.all')].concat(t_style.split(','))
 					}, {
-                        type : '5', //[18] 11
+                        type : '5', //[20] 13
                         name : 'xspec',
                         value : t_spec.split(',')
                     }, {
-						type : '6', //[19] 12
-						name : 'xsource'
-					}, {
-						type : '5', //[20] 13
+						type : '5', //[21] 14
 						name : 'xsortby',
 						value : 'datea@依日期,pno@依品號,sizea@依尺寸,dime@依厚度,memo@依備註'.split(',')
 					}]
@@ -131,6 +134,10 @@
 				$('#Xstktype .label').css('width', '5px');
 				$('#Xitype').css('width', '120px');
 				$('#Xstktype').css('width', '120px');
+				
+				$('#Xbproduct select').change(function(e){
+					$('#Xeproduct select').val($('#Xbproduct select').val());
+				});
 			}
 
 			function q_boxClose(s2) {
