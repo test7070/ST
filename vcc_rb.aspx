@@ -679,7 +679,7 @@
 						Unlock(1);
 						
 						//104/10/07 出貨 已收款 ，只開放表頭修改
-						if(!emp($('#txtVccno').val())){
+						if(z_msg.length>0){
 							$('.dbbs input').attr('disabled','disabled');
 							$('#cmbTaxtype').attr('disabled','disabled');
 							$('#btnOrdes').attr('disabled','disabled');
