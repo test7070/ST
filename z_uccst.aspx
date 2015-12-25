@@ -37,7 +37,7 @@
 						q_gt('ucc', '', 0, 0, 0, "");
 						break;
 					case 'ucc':
-                        t_ucc = '';
+                        t_ucc = ' @';
                         var as = _q_appendData("ucc", "", true);
                         for ( i = 0; i < as.length; i++) {
                             t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa;
@@ -67,124 +67,54 @@
 						name : 'db',
 						value : q_db
 					},{
-						type : '1', //[2][3] 1
+						type : '1', //[3][4] 1
 						name : 'xdate'
 					}, {
-						type : '5', //[4] 2
+						type : '5', //[5] 2
 						name : 'xstktype',
 						value : [q_getPara('report.all')].concat(q_getPara('sys.stktype').split(','))
 					}, {
-						type : '5', //[5] 3
+						type : '5', //[6] 3
 						name : 'xitype',
 						value : [q_getPara('report.all')].concat(q_getPara('uccc.itype').split(','))
 					}, {
-						type : '2', //[6][7] 4                 1
-						name : 'xproduct',
-						dbf : 'ucaucc',
-						index : 'noa,product',
-						src : 'ucaucc_b.aspx'
+						type : '5', //[7] 4
+						name : 'xbproduct',
+						value : t_ucc.split(',')
 					}, {
-						type : '5', //[5] 1
-						name : 'xstyle',
-						value : [q_getPara('report.all')].concat(t_style.split(','))
+						type : '5', //[8] 5
+						name : 'xeproduct',
+						value : t_ucc.split(',')
 					}, {
-						type : '6', //[9] 2
-						name : 'xwaste'
-					}, {
-						type : '1', //[10][11] 3
-						name : 'xradius'
-					}, {
-						type : '1', //[12][13] 4                  2
-						name : 'xwidth'
-					}, {
-						type : '1', //[14][15] 1
-						name : 'xdime'
-					}, {
-						type : '1', //[16][17] 2
-						name : 'xlengthb'
-					}, {
-						type : '2', //[18] [19] 3
+						type : '2', //[9] [10] 6
 						name : 'xstoreno',
 						dbf : 'store',
 						index : 'noa,store',
 						src : 'store_b.aspx'
 					}, {
-						type : '2', //[20] [21] 4                   3  
-						name : 'xcustno',
-						dbf : 'cust',
-						index : 'noa,comp',
-						src : 'cust_b.aspx'
+						type : '1', //[11][12] 7
+						name : 'xwidth'
 					}, {
-						type : '5', //[22] 1
-						name : 'xorderstatus',
-						value : [q_getPara('report.all')].concat('1@已受訂,2@未受訂'.split(','))
+						type : '1', //[13][14] 8
+						name : 'xdime'
 					}, {
-						type : '8', //[23] 2
-						name : 'xisordermemo',
-						value : "1@顯示已受訂明細".split(',')
+						type : '1', //[15][16] 9
+						name : 'xlengthb'
 					}, {
-						type : '2', //[24][25] 3
-						name : 'xtggno',
-						dbf : 'tgg',
-						index : 'noa,comp',
-						src : 'tgg_b.aspx'
-					}, {//因選項位置調整,已不使用
-						type : '8', //[26] 4                          4
-						name : 'xxxxx',
-						value : new Array()
+						type : '5', //[17] 10
+						name : 'xstyle',
+						value : [q_getPara('report.all')].concat(t_style.split(','))
 					}, {
-						type : '5', //[27] 1
-						name : 'xsortby',
-						value : 'datea@依日期,pno@依品號,sizea@依尺寸,dime@依厚度,memo@依備註'.split(',')
-					}, {
-						type : '5', //[28] 2
-						name : 'xstype',
-						value : [q_getPara('report.all')].concat('A@製成品,B@在製品'.split(','))
-					}, {
-						type : '2', //[29][30] 3
-						name : 'xstoreno2',
-						dbf : 'store',
-						index : 'noa,store',
-						src : 'store_b.aspx'
-					}, {
-						type : '8', //[31] 4                            5
-						name : 'xoption01',
-						value : q_getMsg('xoption01').split('&')
-					}, {
-						type : '8', //[32] 1
-						name : 'xshowprice',
-						value : "1@顯示單價".split(',')
-					}, {
-						type : '5', //[33]2
-						name : 'showtype',
-						value : q_getMsg('showtype').split('&')
-					}, {
-						type : '8', //[34]3
-						name : 'xmerga',
-						value : "1@".split(',')
-					}, {
-                        type : '8', //[35] 4                               6
-                        name : 'yitype',
-                        value : q_getPara('uccc.itype').split(',')
-                    }, {
-                        type : '8', //[36]1
-                        name : 'ystyle',
-                        value : t_style.split(',')
-                    }, {
-                        type : '8', //[37]2
-                        name : 'yproductno',
-                        value : t_ucc.split(',')
-                    }, {
-						type : '8', //[38] 3
-						name : 'xaction',
-						value : "rc2s@進貨,inas@入庫,cuts@裁剪,cubu@製管,vccs@出貨".split(',')
-					}, {
-                        type : '5', //[39]4                                  7
+                        type : '5', //[18] 11
                         name : 'xspec',
                         value : t_spec.split(',')
                     }, {
-						type : '6', //[40] 1
+						type : '6', //[19] 12
 						name : 'xsource'
+					}, {
+						type : '5', //[20] 13
+						name : 'xsortby',
+						value : 'datea@依日期,pno@依品號,sizea@依尺寸,dime@依厚度,memo@依備註'.split(',')
 					}]
 				});
 				q_popAssign();
@@ -197,151 +127,13 @@
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');
 				$('#txtXdate2').datepicker();
-				$('#Xtggno').hide();
 				$('#Xitype .label').css('width', '5px');
 				$('#Xstktype .label').css('width', '5px');
 				$('#Xitype').css('width', '120px');
 				$('#Xstktype').css('width', '120px');
-				$('#Xshowprice').css('width', '300px').css('height', '30px');
-				$('#Xshowprice .label').css('width', '0px');
-				$('#chkXshowprice').css('padding-top', '5px');
-				$('#Xisordermemo').css('width', '300px').css('height', '30px');
-				$('#Xisordermemo .label').css('width', '0px');
-				$('#chkXisordermemo').css('padding-top', '5px');
-				$('#txtXedate').mask('999/99/99');
-				$('#txtXedate').val(q_date());
-				$('#Xstktype select').change(function() {
-					size_change();
-				});
-				$('#Xstktype select').val('A1').change();
-				setDefaultValue();
-				size_change();
-				$('#Xitype .cmb').change(function() {
-					if ($('#Xitype .cmb').val() == '1') {
-						$('#Xtggno').hide();
-					} else {
-						$('#Xtggno').show();
-					}
-				});
-				$('.report').click(function() {
-					size_change();
-					$('#Xorderstatus select').change();
-				});
-				$('#chkXisordermemo input[type="checkbox"]').click(function() {
-					$('#Xorderstatus select').change();
-				});
-				$('#Xorderstatus select').change(function() {
-					var showMemo = $('#chkXisordermemo input[type="checkbox"]').is(':checked');
-					var nowReport = $('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report;
-					if ((($(this).val() == '1') || ($(this).val() == '#non' && showMemo == true)) && (dec(nowReport.slice(-1)) <= 3)) {
-						$('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0, 8) + 'A';
-						if ($(this).val() == '1') {
-							$('#chkXisordermemo input[type="checkbox"]').attr('checked', false);
-						}
-					} else {
-						$('#chkXisordermemo input[type="checkbox"]').attr('checked', false);
-						$('#q_report').data('info').reportData[$('#q_report').data('info').radioIndex].report = nowReport.substring(0, 8);
-					}
-				});
-				$('#Xitype .cmb').change();
-				$('#Xitype select').val('1');
-				
-				if(q_getPara('sys.project')=='rk'){
-					$('#Xstype').hide();
-					$('#Xstype select').val('#non');
-				}else
-					$('#Xstype select').val('A');
-				
-				$('#chkYitype').children('input').eq(0).attr('checked', 'checked');
-				$('#chkYitype').children('input').eq(1).attr('checked', 'checked');
-				$('#chkYstyle').children('input').attr('checked', 'checked');
-				//$('#chkYproductno').children('input').attr('checked', 'checked');
 			}
 
 			function q_boxClose(s2) {
-			}
-
-			function setDefaultValue() {
-				$('#txtXradius1').val(0).addClass('num').focusout(function() {
-					$(this).val(dec($(this).val()));
-					if ($(this).val() == 'NaN')
-						$(this).val(0);
-				});
-				$('#txtXradius2').val(9999.99).addClass('num').focusout(function() {
-					$(this).val(dec($(this).val()));
-					if ($(this).val() == 'NaN')
-						$(this).val(9999.99);
-				});
-				$('#txtXwidth1').val(0).addClass('num').focusout(function() {
-					$(this).val(dec($(this).val()));
-					if ($(this).val() == 'NaN')
-						$(this).val(0);
-				});
-				$('#txtXwidth2').val(9999.99).addClass('num').focusout(function() {
-					$(this).val(dec($(this).val()));
-					if ($(this).val() == 'NaN')
-						$(this).val(9999.99);
-				});
-				$('#txtXdime1').val(0).addClass('num').focusout(function() {
-					$(this).val(dec($(this).val()));
-					if ($(this).val() == 'NaN')
-						$(this).val(0);
-				});
-				$('#txtXdime2').val(9999.99).addClass('num').focusout(function() {
-					$(this).val(dec($(this).val()));
-					if ($(this).val() == 'NaN')
-						$(this).val(9999.99);
-				});
-				$('#txtXlengthb1').val(0).addClass('num').focusout(function() {
-					$(this).val(dec($(this).val()));
-					if ($(this).val() == 'NaN')
-						$(this).val(0);
-				});
-				$('#txtXlengthb2').val(99999.9).addClass('num').focusout(function() {
-					$(this).val(dec($(this).val()));
-					if ($(this).val() == 'NaN')
-						$(this).val(99999.9);
-				});
-			}
-
-			function size_change() {
-				var SelectedVal = $('#Xstktype select').val().toUpperCase();
-				if (!($('#Xstktype').is(":hidden"))) {
-					switch (SelectedVal.substring(0,1)) {
-						case 'A':
-							$('#Xradius').hide();
-							$('#Xwidth').show();
-							$('#lblXwidth').text('厚度');
-							$('#lblXdime').text('寬度');
-							$('#Xdime').show();
-							$('#Xlengthb').show();
-							break;
-						case 'B':
-							$('#Xradius').show();
-							$('#Xwidth').show();
-							$('#lblXwidth').text('長徑');
-							$('#lblXdime').text('厚度');
-							$('#Xdime').show();
-							$('#Xlengthb').show();
-							break;
-						case 'C':
-							$('#Xradius').hide();
-							$('#Xwidth').hide();
-							$('#Xdime').hide();
-							$('#Xlengthb').show();
-							break;
-						default:
-							$('#Xradius').show();
-							$('#Xwidth').show();
-							$('#lblXwidth').text('長徑');
-							$('#lblXdime').text('厚度');
-							$('#Xdime').show();
-							$('#Xlengthb').show();
-							break;
-					}
-					setDefaultValue();
-					$('#Xitype .cmb').change();
-				}
 			}
 
 		</script>
