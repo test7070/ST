@@ -184,9 +184,9 @@
                 	bbsNum=[];
                 }
                 
-                if(q_getPara('sys.project').toUpperCase()=='RK'){
+                /*if(q_getPara('sys.project').toUpperCase()=='RK'){
                 	$('#btnRc2').hide();
-                }
+                }*/
                 
                 $('#btnOrdc').click(function() {
                 	if(q_cur==1||q_cur==2){
@@ -1246,7 +1246,7 @@
 					<td align="center" style="width:60px;" class="lengthd"><a>實際<BR>長度</a></td>	
 					<td align="center" style="width:40px;"><a id='lblSource_s'> </a></td>
 					
-					<td align="center" style="width:115px;"><a id='lblInmount_s'> </a><BR><a id='lblMount_s'> </a></td>
+					<td align="center" style="width:115px;"><a id='lblInmount_s'> </a><BR><a id='lblMount_s'> </a>(必填)</td>
 						<td align="center" style="width:50px;"><a>數量<BR>單位</a></td>
 					<td align="center" style="width:115px;"><a id='lblInweight_s'> </a><BR><a id='lblWeight_s'> </a></td>
 						<td align="center" style="width:50px;"><a>計價<BR>單位</a></td>

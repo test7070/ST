@@ -16,7 +16,6 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 
-			var bbmNum = [['txtXradius1', 3, 0]];
 			var t_style = '',t_ucc='',t_spec='';
 			$(document).ready(function() {
 				_q_boxClose();
@@ -61,9 +60,13 @@
 					fileName : 'z_uccst',
 					options : [{
 						type : '0', //[1]
-						name : 'accy',
-						value : q_getId()[4]
-					}, {
+						name : 'path',
+						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_orde_rkp.aspx','')
+					},{
+						type : '0', //[2]
+						name : 'db',
+						value : q_db
+					},{
 						type : '1', //[2][3] 1
 						name : 'xdate'
 					}, {
