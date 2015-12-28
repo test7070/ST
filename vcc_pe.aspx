@@ -23,7 +23,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTotalus','txtTotal2','txtBenifit','txtCardeal'];
-			var q_readonlys = ['txtTotal','txtSprice'];
+			var q_readonlys = ['txtTotal','txtSprice','txtTheory'];
 			var bbmNum = [
 				['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -34,7 +34,7 @@
 				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 2, 1],
 				['txtMount', 10, 2, 1], ['txtGweight', 10, 2, 1],
 				['txtDime', 10, 3, 1], ['txtWidth', 10, 2, 1],['txtLengthb', 10, 1, 1],
-				['txtMweight', 10, 2, 1],['txtSprice', 15, 3, 1]
+				['txtMweight', 10, 2, 1],['txtSprice', 15, 3, 1],['txtTheory', 15, 3, 1]
 			];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -97,6 +97,7 @@
 							t_unit = 'KG';
 						$('#txtUnit_' + j).val(t_unit);
 					}
+					getTheory(j);
 					//---------------------------------------
 					t_weights = q_float('txtWeight_' + j);
 					t_prices = q_float('txtPrice_' + j);
@@ -677,7 +678,38 @@
 
 				q_box('vcc_pe_s.aspx', q_name + '_s', "500px", "540px", q_getMsg("popSeek"));
 			}
-
+			
+			function getTheory(b_seq) {
+				t_Radius = dec($('#txtRadius_' + b_seq).val());
+				t_Width = dec($('#txtWidth_' + b_seq).val());
+				t_Dime = dec($('#txtDime_' + b_seq).val());
+				t_Lengthb = dec($('#txtLengthb_' + b_seq).val());
+				t_Mount = dec($('#txtMount_' + b_seq).val());
+				t_Style = $('#txtStyle_' + b_seq).val();
+				t_Productno = $('#txtProductno_' + b_seq).val();
+				var theory_setting = {
+					calc : StyleList,
+					ucc : t_uccArray,
+					radius : t_Radius,
+					width : t_Width,
+					dime : t_Dime,
+					lengthb : t_Lengthb,
+					mount : t_Mount,
+					style : t_Style,
+					productno : t_Productno,
+					round : 3
+				};
+				if ($('#cmbKind').val().substr(1, 1) == '4') {//鋼胚
+					q_tr('txtTheory_' + b_seq, round(t_Mount * theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), t_Dime, t_Width, t_Lengthb), 0));
+				} else {
+					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
+				}
+				var t_Product = $('#txtProduct_' + b_seq).val();
+				if (t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0) {
+					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+				}
+			}
+			
 			function bbsAssign() {/// 表身運算式
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
@@ -1314,6 +1346,7 @@
 					<td align="center" style="width:100px;"><a id='lblMweight_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblSprice_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblGweight_st'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblTheory'> </a></td>
 					<td align="center" style="width:60px;">寄Y<BR>代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
 				</tr>
@@ -1350,6 +1383,7 @@
 					<td><input id="txtMweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtSprice.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input class="txt" id="txtUsecoil.*" type="text" style="text-align:center;width:95%;"/></td>
 					<td>
 						<input class="btn" id="btnStoreno2.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;display:none;" />
