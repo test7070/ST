@@ -239,7 +239,8 @@
 					if(emp($('#txtRc2no').val())){
 						q_func('qtxt.query.post1', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';1;'+r_userno);
 					}else{
-						q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
+						var t_rc2no=$('#txtRc2no').val();
+						q_gt('view_rc2', "where=^^ noa='"+t_rc2no+"' ^^", 0, 0, 0, "check_rc2");
 					}
 				});
             }
@@ -318,6 +319,15 @@
 			var z_cno=r_cno,z_acomp=r_comp,z_nick=r_comp.substr(0,2);
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'check_rc2':
+                		var as = _q_appendData("view_rc2", "", true);
+						if (as[0] != undefined) {
+							//rc2.post內容
+							q_func('rc2_post.post.a1', r_accy + ',' + as[0].noa + ',0');		
+						}else{
+							q_func('qtxt.query.post0', 'deli.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;'+r_userno);
+						}
+                		break;
                 	case 'btnOk_checkuno':
 						var as = _q_appendData("view_uccb", "", true);
 						if (as[0] != undefined) {
@@ -520,8 +530,8 @@
 					return false;
 				
 				if(q_cur==2 && !emp($('#txtRc2no').val())){//修改後重新產生 避免資料不對應
-					//rc2.post內容
-					q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
+					var t_rc2no=$('#txtRc2no').val();
+					q_gt('view_rc2', "where=^^ noa='"+t_rc2no+"' ^^", 0, 0, 0, "check_rc2");
 				}
 			}
 
