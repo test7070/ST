@@ -563,7 +563,8 @@
 							b_seq = t_IdSeq;
 							//進貨金額
 							var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
-							if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+							if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
+							|| q_getPara('sys.project').toUpperCase()=='RK' ) { //1229 RK 一律用重量
                         		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInweight_'+b_seq),q_float('txtPrice_'+b_seq)));
                         	}else{
                         		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInmount_'+b_seq),q_float('txtPrice_'+b_seq)));
