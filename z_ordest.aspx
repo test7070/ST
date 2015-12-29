@@ -136,7 +136,7 @@
 				$('#txtXodate1').datepicker();
 				$('#txtXodate2').mask('999/99/99');
 				$('#txtXodate2').datepicker();
-				$('#Xstktype select').val('A1').change();
+				$('#Xstktype select').val('').change();
 				setDefaultValue();
 				size_change();
 				$('#Xstktype select').change(function() {

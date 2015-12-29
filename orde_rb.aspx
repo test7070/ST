@@ -138,7 +138,9 @@
 						return;
 					}
 					//只能轉自己的區域
-					if(r_rank<8 && !x_ordevccstore && r_partno!='08' ){
+					//if(r_rank<8 && !x_ordevccstore && r_partno!='08' ){
+						
+					if(!(r_rank>=8 || (q_db=='st' && r_partno=='08') || (q_db=='st3' && (r_partno=='A' || r_partno=='B'))) && !x_ordevccstore){
 						q_gt('store', "where=^^ tggno='"+r_partno+"' and tggno!='' ^^", 0, 0, 0, 'ordevccstore', r_accy);
 						return;
 					}
@@ -1019,10 +1021,10 @@
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
 				
-				if(r_rank<8 && r_partno!='08'){
-					q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
-				}else{
+				if(r_rank>=8 || (q_db=='st' && r_partno=='08') || (q_db=='st3' && (r_partno=='A' || r_partno=='B'))){
 					q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
+				}else{
+					q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
 				}
 				
 				$('#txtSalesno').val(r_userno);
@@ -1104,10 +1106,10 @@
                 }
                 
                 if(q_cur==1 || q_cur==2){
-                	if(r_rank<8 && r_partno!='08'){
-						q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
-					}else{
+                	if(r_rank>=8 || (q_db=='st' && r_partno=='08') || (q_db=='st3' && (r_partno=='A' || r_partno=='B'))){
 						q_gt('store', "where=^^1=1^^", 0, 0, 0, 'storepart', r_accy);
+					}else{
+						q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
 					}
                 }
                 
