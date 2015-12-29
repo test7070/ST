@@ -137,7 +137,8 @@
                 		q_tr('txtTotal_'+j,round(q_mul(q_float('txtCointotal_'+j),q_float('txtFloata')),0));
                 		//本幣單價
 						var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
-						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
+						|| q_getPara('sys.project').toUpperCase()=='RK' ) {
 							q_tr('txtPrice2_'+j,round(q_div(q_float('txtTotal_'+j),q_float('txtInweight_'+j)),3));
                         }else{
                         	q_tr('txtPrice2_'+j,round(q_div(q_float('txtTotal_'+j),q_float('txtInmount_'+j)),3));
@@ -164,7 +165,8 @@
             function bbs_textsprice() {
             	for (var j = 0; j < q_bbsCount; j++) {
             		var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
-					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
+					|| q_getPara('sys.project').toUpperCase()=='RK' ) {
 						$('#textSprice_'+j).val(round(q_div(q_float('txtCost_'+j),q_float('txtWeight_'+j)),3));
                     }else{
                     	$('#textSprice_'+j).val(round(q_div(q_float('txtCost_'+j),q_float('txtMount_'+j)),3));
@@ -577,7 +579,8 @@
 							b_seq = t_IdSeq;
 							//進貨金額
 							var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
-							if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+							if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
+							|| q_getPara('sys.project').toUpperCase()=='RK' ) {
                         		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInweight_'+b_seq),q_float('txtPrice_'+b_seq)));
                         	}else{
                         		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInmount_'+b_seq),q_float('txtPrice_'+b_seq)));
@@ -590,7 +593,8 @@
 							b_seq = t_IdSeq;
 							//進貨金額
 							var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
-                        	if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+                        	if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
+                        	|| q_getPara('sys.project').toUpperCase()=='RK' ) {
                         		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInweight_'+b_seq),q_float('txtPrice_'+b_seq)));
                         	}else{
                         		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInmount_'+b_seq),q_float('txtPrice_'+b_seq)));
