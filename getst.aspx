@@ -905,7 +905,7 @@
 					<td><input class="txt num" id="txtGmount.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num" id="txtGweight.*" type="text" style="width:95%;"/></td>
 					<td style="display:none;"><input class="txt num" id="txtWeight.*" type="text" style="width:95%;"/></td>
-					<td><input class="txt " id="txtStoreno.*" type="text" style="width:95%;"/></td>
+					<td class="pe_hide"><input class="txt " id="txtStoreno.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input class="txt" id="txtMemo.*" type="text" style="width:95%;"/>
 						<input class="txt pe_hide" id="txtOrdeno.*" style="float:left;width:70%;">
