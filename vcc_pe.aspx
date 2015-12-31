@@ -543,6 +543,7 @@
 								$('#txtProduct_' + t_sel).val(as[0].product);
 								$('#txtMount_' + t_sel).val(as[0].emount);
 								$('#txtWeight_' + t_sel).val(as[0].eweight);
+								$('#txtGweight_' + t_sel).val(as[0].eweight);
 								$('#txtSprice_' + t_sel).val(as[0].sprice);
 								$('#txtDime_' + t_sel).val(as[0].dime);
 								$('#txtWidth_' + t_sel).val(as[0].width);
