@@ -346,6 +346,7 @@
 							$('#txtWidth_' + b_seq).val(b_ret[0].width);
 							$('#txtLengthb_' + b_seq).val(b_ret[0].lengthb);
 							$('#txtSize_' + b_seq).val(b_ret[0].size);
+							$('#txtMemo_' + b_seq).val(b_ret[0].memo);
 							sum();
 							q_gt('view_vccs', "where=^^ uno='" + b_ret[0].uno + "' order by datea desc,noa desc ^^ stop=1 ", 0, 0, 0, 'getprice_' + b_seq, r_accy);
 						}
@@ -558,6 +559,7 @@
 								$('#txtWidth_' + t_sel).val(as[0].width);
 								$('#txtLengthb_' + t_sel).val(as[0].lengthb);
 								$('#txtSize_' + t_sel).val(as[0].size);
+								$('#txtMemo_' + t_sel).val(as[0].memo);
 								//讀取上次出貨金額
 								q_gt('view_vccs', "where=^^ uno='" + as[0].uno + "' order by datea desc,noa desc ^^ stop=1 ", 0, 0, 0, 'getprice_' + t_sel, r_accy);
 								sum();
