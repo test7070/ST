@@ -337,11 +337,14 @@
 							$('#txtProduct_' + b_seq).val(b_ret[0].product);
 							$('#txtMount_' + b_seq).val(b_ret[0].emount);
 							$('#txtWeight_' + b_seq).val(b_ret[0].eweight);
+							$('#txtGweight_' + b_seq).val(b_ret[0].eweight);
 							$('#txtSprice_' + b_seq).val(b_ret[0].sprice);
 							$('#txtDime_' + b_seq).val(b_ret[0].dime);
 							$('#txtWidth_' + b_seq).val(b_ret[0].width);
 							$('#txtLengthb_' + b_seq).val(b_ret[0].lengthb);
 							$('#txtSize_' + b_seq).val(b_ret[0].size);
+							sum();
+							q_gt('view_vccs', "where=^^ uno='" + b_ret[0].uno + "' order by datea desc,noa desc ^^ stop=1 ", 0, 0, 0, 'getprice_' + b_seq, r_accy);
 						}
 						break;
 					case 'view_vcce_import':
@@ -543,11 +546,14 @@
 								$('#txtProduct_' + t_sel).val(as[0].product);
 								$('#txtMount_' + t_sel).val(as[0].emount);
 								$('#txtWeight_' + t_sel).val(as[0].eweight);
+								$('#txtGweight_' + t_sel).val(as[0].eweight);
 								$('#txtSprice_' + t_sel).val(as[0].sprice);
 								$('#txtDime_' + t_sel).val(as[0].dime);
 								$('#txtWidth_' + t_sel).val(as[0].width);
 								$('#txtLengthb_' + t_sel).val(as[0].lengthb);
 								$('#txtSize_' + t_sel).val(as[0].size);
+								//讀取上次出貨金額
+								q_gt('view_vccs', "where=^^ uno='" + as[0].uno + "' order by datea desc,noa desc ^^ stop=1 ", 0, 0, 0, 'getprice_' + t_sel, r_accy);
 								sum();
 							}else{
 								$('#btnUno_' + t_sel).click();
@@ -575,6 +581,16 @@
 	                		}else{
 	                			$('#txtProduct_'+t_seq).val('');
 	                		}
+	                		break;
+                        }else if(t_name.substring(0, 9) == 'getprice_'){
+     						var t_seq = parseInt(t_name.split('_')[1]);
+	                		as = _q_appendData('view_vccs', "", true);
+	                		if(as[0]!=undefined){
+	                			$('#txtPrice_'+t_seq).val(as[0].price);
+	                		}else{
+	                			$('#txtPrice_'+t_seq).val(0);
+	                		}
+	                		sum();
 	                		break;
                         }
 				} /// end switch
