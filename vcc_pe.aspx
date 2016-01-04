@@ -335,7 +335,10 @@
 							$('#txtSpec_' + b_seq).val(b_ret[0].spec);
 							$('#txtStyle_' + b_seq).val(b_ret[0].style);
 							$('#txtProduct_' + b_seq).val(b_ret[0].product);
-							$('#txtMount_' + b_seq).val(b_ret[0].emount);
+							if(dec(b_ret[0].emount)<0)
+								$('#txtMount_' + b_seq).val(1);
+							else
+								$('#txtMount_' + b_seq).val(b_ret[0].emount);
 							$('#txtWeight_' + b_seq).val(b_ret[0].eweight);
 							$('#txtGweight_' + b_seq).val(b_ret[0].eweight);
 							$('#txtSprice_' + b_seq).val(b_ret[0].sprice);
@@ -544,7 +547,10 @@
 								$('#txtSpec_' + t_sel).val(as[0].spec);
 								$('#txtStyle_' + t_sel).val(as[0].style);
 								$('#txtProduct_' + t_sel).val(as[0].product);
-								$('#txtMount_' + t_sel).val(as[0].emount);
+								if(dec(as[0].emount)<0)
+									$('#txtMount_' + t_sel).val(1);
+								else 
+									$('#txtMount_' + t_sel).val(as[0].emount);
 								$('#txtWeight_' + t_sel).val(as[0].eweight);
 								$('#txtGweight_' + t_sel).val(as[0].eweight);
 								$('#txtSprice_' + t_sel).val(as[0].sprice);
