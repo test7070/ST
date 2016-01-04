@@ -33,7 +33,9 @@
             brwKey = 'Noa';
             q_desc = 1;
             brwCount2 = 10;
-            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno', 'cust_b.aspx']
+            q_bbsLen = 20;
+            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtCust', 'cust_b.aspx']
+            , ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
             , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
             , ['txtStraddrno','','addr2','noa,addr','txtStraddrno,txtStraddr','addr2_b.aspx']
             , ['txtEndaddrno','','addr2','noa,addr','txtEndaddrno,txtEndaddr','addr2_b.aspx']
@@ -57,8 +59,8 @@
               //  bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
                 
-                $('#txtBdate').datepicker();
-                $('#txtEdate').datepicker();
+                $('#txtBdate').val(q_date());
+                $('#txtEdate').val(q_date());
                 $('#btnImport').click(function(e){
                 	var t_bdate = $('#txtBdate').val();
                 	var t_edate = $('#txtEdate').val();
@@ -222,7 +224,14 @@
             }
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
-                
+                if(t_para){
+                	$('#txtBdate').datepicker('destroy');
+                	$('#txtEdate').datepicker('destroy');
+                	
+                }else{
+                	$('#txtBdate').datepicker();
+                	$('#txtEdate').datepicker();
+                }
             }
             function btnMinus(id) {
                 _btnMinus(id);
@@ -391,13 +400,15 @@
                 <table class="tview" id="tview">
                     <tr>
                         <td align="center" style="width:20px; color:black;"><a id="vewChk"> </a></td>
+                        <td align="center" style="width:120px; color:black;"><a id="vewDate">出貨日期</a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewCust"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewSales"> </a></td>
                     </tr>
                     <tr>
                         <td><input id="chkBrow.*" type="checkbox"/></td>
-                        <td id="custno" style="text-align: center;">~custno</td>
-                        <td id="salesno" style="text-align: center;">~salesno</td>
+                        <td id="bdate edate" style="text-align: center;">~bdate ~edate</td>
+                        <td id="cust" style="text-align: center;">~cust</td>
+                        <td id="sales" style="text-align: center;">~sales</td>
                     </tr>
                 </table>
             </div>
@@ -428,9 +439,15 @@
                     </tr>
                     <tr>
                     	<td><span> </span><a id="lblCust" class="lbl">客戶</a></td>
-                        <td><input id="txtCustno" type="text" class="txt c1"/></td>
+                        <td>
+                        	<input id="txtCustno" type="text" class="txt" style="float:left;width:50%;"/>
+                        	<input id="txtCust" type="text" class="txt" style="float:left;width:50%;"/>
+                        </td>
                     	<td><span> </span><a id="lblSales" class="lbl">業務</a></td>
-                        <td><input id="txtSalesno" type="text" class="txt c1"/></td>
+                        <td>
+                        	<input id="txtSalesno" type="text" class="txt" style="float:left;width:50%;"/>
+                        	<input id="txtSales" type="text" class="txt" style="float:left;width:50%;"/>
+                        </td>
                     </tr>
                     <tr>
                     	<td><span> </span><a id="lblProfit" class="lbl">毛利合計</a></td>
