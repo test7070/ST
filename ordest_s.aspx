@@ -36,10 +36,10 @@
                 $('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
                 $('#txtNoa').focus();
-                $('#txtEdime').val(9999);
-                $('#txtEwidth').val(9999);
-                $('#txtElengthb').val(9999);
-                $('#txtEradius').val(9999);
+                /*$('#txtEdime').val(99999);
+                $('#txtEwidth').val(99999);
+                $('#txtElengthb').val(99999);
+                $('#txtEradius').val(99999);*/
                 
                 if(q_getPara('sys.comp').substring(0,2)=="傑期")
 		        {
@@ -99,12 +99,46 @@
 		       	if(t_enda=='1'){
 		       		t_where += " and (enda=1 or exists(select noa from view_ordes"+r_accy+" where view_ordes"+r_accy+".noa=view_orde"+r_accy+".noa and view_ordes"+r_accy+".enda=1))";
 		       	}
-		       	t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
+		       	if(t_bdime!=0){
+		       		t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
 		       		+" (exists (select * from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa "
-		       		+" and isnull(view_ordes"+r_accy+".dime,0) between "+t_bdime+" and "+t_edime
-		       		+" and isnull(view_ordes"+r_accy+".width,0) between "+t_bwidth+" and "+t_ewidth
-		       		+" and isnull(view_ordes"+r_accy+".lengthb,0) between "+t_blengthb+" and "+t_elengthb
-		       		+" and isnull(view_ordes"+r_accy+".radius,0) between "+t_bradius+" and "+t_eradius+")))";
+		       		+" and isnull(view_ordes"+r_accy+".dime,0) >= "+t_bdime+")))";
+		       	}
+		       	if(t_edime!=0){
+		       		t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
+		       		+" (exists (select * from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa "
+		       		+" and isnull(view_ordes"+r_accy+".dime,0) <= "+t_edime+")))";
+		       	}
+		       	if(t_bwidth!=0){
+		       		t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
+		       		+" (exists (select * from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa "
+		       		+" and isnull(view_ordes"+r_accy+".width,0) >= "+t_bwidth+")))";
+		       	}
+		       	if(t_ewidth!=0){
+		       		t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
+		       		+" (exists (select * from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa "
+		       		+" and isnull(view_ordes"+r_accy+".width,0) <= "+t_ewidth+")))";
+		       	}
+		       	if(t_blengthb!=0){
+		       		t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
+		       		+" (exists (select * from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa "
+		       		+" and isnull(view_ordes"+r_accy+".lengthb,0) >= "+t_blengthb+")))";
+		       	}
+		       	if(t_elengthb!=0){
+		       		t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
+		       		+" (exists (select * from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa "
+		       		+" and isnull(view_ordes"+r_accy+".lengthb,0) <= "+t_elengthb+")))";
+		       	}
+		       	if(t_bradius!=0){
+		       		t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
+		       		+" (exists (select * from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa "
+		       		+" and isnull(view_ordes"+r_accy+".radius,0) >= "+t_bradius+")))";
+		       	}
+		       	if(t_eradius=0){
+		       		t_where += " and ( not exists(select top 1 noa from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa) or " 
+		       		+" (exists (select * from view_ordes"+r_accy+" where view_orde"+r_accy+".noa=view_ordes"+r_accy+".noa "
+		       		+" and isnull(view_ordes"+r_accy+".radius,0) <= "+t_eradius+")))";
+		       	}
 		       	if(t_custpro.length>0){
 		       		t_where += " and exists(select noa from view_ordes"+r_accy+" where view_ordes"+r_accy+".noa=view_orde"+r_accy+".noa and view_ordes"+r_accy+".custpro='"+t_custpro+"')";
 		       	}

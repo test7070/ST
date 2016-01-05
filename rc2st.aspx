@@ -404,6 +404,38 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
+					case 'deli_dele':
+						var as = _q_appendData("deli", "", true);
+						var t_delino='';
+						if (as[0] != undefined){
+							t_delino=as[0].noa;
+						}
+						if(t_delino.length>0){
+							alert('禁止刪除，請由進報關/贖單【'+t_delino+'】刪除。');
+						}else{
+							var t_where = 'where=^^ uno in(' + getBBSWhere('Uno') + ') ^^';
+							q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
+						}
+						break;
+					case 'deli_modi':
+						var as = _q_appendData("deli", "", true);
+						var t_delino='';
+						if (as[0] != undefined){
+							t_delino=as[0].noa;
+						}
+						//聯琦需要可以自己修改資料
+						if(t_delino.length>0 && q_getPara('sys.project').toUpperCase()!='RK'){
+							alert('禁止修改，請由進報關/贖單【'+t_delino+'】修改。');
+						}else{
+							if(t_delino.length>0 && q_getPara('sys.project').toUpperCase()=='RK'){
+								alert('警告，此單由進報關/贖單【'+t_delino+'】轉來。');
+							}
+							_btnModi();
+							$('#txtDatea').focus();
+							size_change();
+							sum();
+						}
+						break;
 					case 'style' :
 						var as = _q_appendData("style", "", true);
 						StyleList = new Array();
@@ -1059,13 +1091,7 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				if(q_getPara('sys.project').toUpperCase()=='PK' && !emp($('#txtOrdeno').val())){
-					alert('由報關單轉來禁止修改');
-				}
-				_btnModi();
-				$('#txtDatea').focus();
-				size_change();
-				sum();
+				q_gt('deli', "where=^^ rc2no='"+$('#txtNoa').val()+"' ^^", 0, 0, 0, 'deli_modi', r_accy);
 			}
 
 			function btnPrint() {
@@ -1227,12 +1253,7 @@
 			}
 
 			function btnDele() {
-				if(q_getPara('sys.project').toUpperCase()=='PK' && !emp($('#txtOrdeno').val())){
-					alert('由報關單轉來禁止刪除');
-				}
-				
-				var t_where = 'where=^^ uno in(' + getBBSWhere('Uno') + ') ^^';
-				q_gt('uccy', t_where, 0, 0, 0, 'deleUccy', r_accy);
+				q_gt('deli', "where=^^ rc2no='"+$('#txtNoa').val()+"' ^^", 0, 0, 0, 'deli_dele', r_accy);
 			}
 
 			function btnCancel() {

@@ -109,7 +109,7 @@
             
             $('#btnUploadsalary').click(function() {
             	if (confirm("確定要更新提繳金額?\n(健保輔助與個人勞退提繳不變動)"))
-            		q_func('qtxt.query.upload', 'labase.txt,upload_salary,' + encodeURI(r_name));
+            		q_func('qtxt.query.upload', 'labase.txt,upload_salary,' + encodeURI(r_name)+';'+encodeURI(r_len));
 			});
             
             $('#txtSalary').change(function () {
@@ -654,7 +654,7 @@
         function sum() {
             var t1 = 0, t_unit, t_mount=0, t_weight = 0;
             for (var j = 0; j < q_bbsCount; j++) {
-            	if(!emp($('#txtNamea_'+j).val()))
+            	if(!emp($('#txtNamea_'+j).val()) && (q_date()<=$('#txtOutdate_'+j).val() || emp($('#txtOutdate_'+j).val())))
 					t_mount++;
             }  // j
             $('#txtMount').val(t_mount);
@@ -941,7 +941,7 @@
             <td class="td8"><input id="txtMon" type="text" class="txt c1" /></td>-->
         </tr>
         <tr class="tr4">
-            <td class='td1'><span> </span><a id="lblSa_retire" class="lbl" > </a></td>
+            <td class='td1'><span> </span><a id="lblSa_retire" class="lbl btn" > </a></td>
             <td class="td2"><input id="txtSa_retire" type="text" class="txt num c1" /></td>
             <td class='td3'><span> </span><a id="lblRe_comp" class="lbl"> </a></td>
             <td class="td4"><input id="txtRe_comp" type="text" class="txt num c1" /></td>
@@ -951,7 +951,7 @@
             <td class="td6"><input id="txtPlus2" type="text" class="txt num c1" /></td>-->
         </tr>
         <tr class="tr5">
-            <td class='td1'><span> </span><a id="lblSa_labor" class="lbl" > </a></td>
+            <td class='td1'><span> </span><a id="lblSa_labor" class="lbl btn" > </a></td>
             <td class="td2"><input id="txtSa_labor" type="text" class="txt num c1" /></td>
             <td class='td7'><span> </span><a id="lblLa_comp" class="lbl"> </a></td>
             <td class="td8"><input id="txtLa_comp" type="text" class="txt num c1" /></td>
@@ -961,7 +961,7 @@
             <td class="td4"><input id="txtAs_labor" type="text" class="txt num c1" /></td>
         </tr>
         <tr class="tr6">
-            <td class='td1'><span> </span><a id="lblSa_health" class="lbl" > </a></td>
+            <td class='td1'><span> </span><a id="lblSa_health" class="lbl btn" > </a></td>
             <td class="td2"><input id="txtSa_health" type="text" class="txt num c1" /></td>
             <td class='td7'><span> </span><a id="lblHe_comp" class="lbl"> </a></td>
             <td class="td8"><input id="txtHe_comp" type="text" class="txt num c1" /></td>
