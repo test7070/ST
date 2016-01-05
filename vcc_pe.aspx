@@ -335,7 +335,10 @@
 							$('#txtSpec_' + b_seq).val(b_ret[0].spec);
 							$('#txtStyle_' + b_seq).val(b_ret[0].style);
 							$('#txtProduct_' + b_seq).val(b_ret[0].product);
-							$('#txtMount_' + b_seq).val(b_ret[0].emount);
+							if(dec(b_ret[0].emount)<0)
+								$('#txtMount_' + b_seq).val(1);
+							else
+								$('#txtMount_' + b_seq).val(b_ret[0].emount);
 							$('#txtWeight_' + b_seq).val(b_ret[0].eweight);
 							$('#txtGweight_' + b_seq).val(b_ret[0].eweight);
 							$('#txtSprice_' + b_seq).val(b_ret[0].sprice);
@@ -343,6 +346,7 @@
 							$('#txtWidth_' + b_seq).val(b_ret[0].width);
 							$('#txtLengthb_' + b_seq).val(b_ret[0].lengthb);
 							$('#txtSize_' + b_seq).val(b_ret[0].size);
+							$('#txtMemo_' + b_seq).val(b_ret[0].memo);
 							sum();
 							q_gt('view_vccs', "where=^^ uno='" + b_ret[0].uno + "' order by datea desc,noa desc ^^ stop=1 ", 0, 0, 0, 'getprice_' + b_seq, r_accy);
 						}
@@ -544,7 +548,10 @@
 								$('#txtSpec_' + t_sel).val(as[0].spec);
 								$('#txtStyle_' + t_sel).val(as[0].style);
 								$('#txtProduct_' + t_sel).val(as[0].product);
-								$('#txtMount_' + t_sel).val(as[0].emount);
+								if(dec(as[0].emount)<0)
+									$('#txtMount_' + t_sel).val(1);
+								else 
+									$('#txtMount_' + t_sel).val(as[0].emount);
 								$('#txtWeight_' + t_sel).val(as[0].eweight);
 								$('#txtGweight_' + t_sel).val(as[0].eweight);
 								$('#txtSprice_' + t_sel).val(as[0].sprice);
@@ -552,6 +559,7 @@
 								$('#txtWidth_' + t_sel).val(as[0].width);
 								$('#txtLengthb_' + t_sel).val(as[0].lengthb);
 								$('#txtSize_' + t_sel).val(as[0].size);
+								$('#txtMemo_' + t_sel).val(as[0].memo);
 								//讀取上次出貨金額
 								q_gt('view_vccs', "where=^^ uno='" + as[0].uno + "' order by datea desc,noa desc ^^ stop=1 ", 0, 0, 0, 'getprice_' + t_sel, r_accy);
 								sum();
