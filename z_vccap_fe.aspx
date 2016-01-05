@@ -29,15 +29,18 @@
 				});
 				q_popAssign();
 
-	            var t_para = new Array();
-	            try{
-	            	t_para = JSON.parse(q_getId()[3]);
-	            }catch(e){
-	            }    
-	            if(t_para.length==0 || t_para.noa==undefined){
-	            }else{
-	            	$('#txtNoa').val(t_para.noa);
-	            }
+	            // var t_para = new Array();
+	            // try{
+	            	// t_para = JSON.parse(q_getId()[3]);
+	            // }catch(e){
+	            // }    
+	            // if(t_para.length==0 || t_para.noa==undefined){
+	            // }else{
+	            	// $('#txtNoa').val(t_para.noa);
+	            // }
+	            if(q_getHref()[1]!=undefined){
+					$('#txtNoa').val(q_getHref()[1]);
+				}
             }
 			function q_boxClose(s2) {
 			}
