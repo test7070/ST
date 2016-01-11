@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -162,6 +162,7 @@
                         orde_n=n;
                         if(confirm("確定要結案?")){
                         	q_func('qtxt.query.ordeenda', 'drv.txt,ordeenda,'+$('#orde_noa'+n).text()+';'+r_accy+';'+r_userno+';'+r_name);
+                        	enda_page=dec($('#textCurPage').val());
                         }
                     });
                     
@@ -273,7 +274,17 @@
                     }
                     this.totPage = Math.ceil(this.data.length / this.tbCount);
                     $('#textTotPage').val(this.totPage);
-                    this.sort('noa', false);
+                    this.sort('datea', false);
+                    
+                    if(enda_page>1){
+                    	if(enda_page>dec($('#textTotPage').val()))
+                    		enda_page=dec($('#textTotPage').val());
+                    	this.curPage=enda_page;
+	                    $('#textCurPage').val(this.curPage);
+	                    enda_page=1;
+	                    this.refresh();
+                    }
+                    
                     Unlock();
                 },
                 sort : function(index, isFloat) {
@@ -853,17 +864,18 @@
 				}
 			}
 			
+			var enda_page=1;
 			function q_funcPost(t_func, result) {
                 switch(t_func) {
                 	case 'qtxt.query.drv2vcce':
                 		alert("已轉至派車單!!");
-						var t_where = "1=1 and isnull(enda,'0')!='1' and isnull(cancel,'0')!='1'";
+						var t_where = "1=1 and isnull(enda,'0')!='1' and isnull(cancel,'0')!='1' ";
 	                    t_where="where=^^"+t_where+"^^";
 	                    Lock();
 						q_gt('view_orde', t_where, 0, 0, 0,'aaa', r_accy);
                 	break;
                 	case 'qtxt.query.ordeenda':
-                		var t_where = "1=1 and isnull(enda,'0')!='1' and isnull(cancel,'0')!='1'";
+                		var t_where = "1=1 and isnull(enda,'0')!='1' and isnull(cancel,'0')!='1' ";
 	                    t_where="where=^^"+t_where+"^^";
 	                    Lock();
 						q_gt('view_orde', t_where, 0, 0, 0,'aaa', r_accy);
