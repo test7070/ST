@@ -26,7 +26,7 @@
 			var pNoq =1;
 			q_sqlCount = 6;
 			brwCount = 6;
-			brwCount2 = 5;
+			brwCount2 = 3;
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'Noa';
@@ -328,19 +328,22 @@
 				border-width: 0px;
 			}
 			.tview {
-				border: 5px solid gray;
+				margin: 0;
+				padding: 2px;
+				border: 1px black double;
+				border-spacing: 0;
 				font-size: medium;
-				background-color: black;
+				background-color: #FFFF66;
+				color: blue;
+				width: 100%;
 			}
 			.tview tr {
 				height: 30px;
 			}
 			.tview td {
-				padding: 2px;
+				padding: 5px;
 				text-align: center;
-				border-width: 0px;
-				background-color: #FFFF66;
-				color: blue;
+				border: 1px black solid;
 			}
 			.dbbm {
 				float: left;
@@ -360,7 +363,7 @@
 				width: 100%;
 			}
 			.tbbm tr {
-				height: 35px;
+				height: 43px;
 			}
 			.tbbm tr td {
 				width: 10%;
@@ -457,24 +460,25 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
+						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblInnoa' class="lbl btn" ></a></td>
-						<td><input id="txtInnoa" type="text" class="txt  c1" style="width : 95% ;"/></td>
+						<td><input id="txtInnoa" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblModnoa' class="lbl " ></a></td>
-						<td><input id="txtModnoa" type="text" class="txt  c1" style="width : 95% ;"/></td>
+						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblNoa' class="lbl " ></a></td>
-						<td><input id="txtNoa" type="text" class="txt c1" style="width : 95% ;"/></td>
-						
+						<td><input id="txtNoa" type="text" class="txt c1" /></td>						
 					</tr>
 						<td><span> </span><a id="lblMechno" class="lbl btn"> </a></td>
 						<td colspan="3">
-							<input id="txtMechno"  type="text" style="width:40%;"/>
-							<input id="txtMech"  type="text" style="width:60%; color:green;"/>						
+							<input id="txtMechno"  type="text" style="width:34%;"/>
+							<input id="txtMech"  type="text" style="width:66%; color:green;"/>						
 						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
-						<td><input id="txtDatea"  type="text"  class="txt c1" style="width : 95% ;"/></td>
+						<td><input id="txtDatea"  type="text"  class="txt c1" /></td>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
@@ -482,7 +486,6 @@
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a class="lbl"></a></td>
 						<td><span> </span><input id="btnIn" type="Button" /></td>
-
 					</tr>
 						
 				</table>
@@ -515,7 +518,7 @@
 				</tr>
 				<tr  style='background:#cad3ff;' class="ishide.*">
 					<td align="center">
-						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+						<input id="btnMinus.*" type="button" style="font-size:medium; font-weight:bold; width:90%;" value="-"/>
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><input id="txtNob.*" type="text" class="txt c1" style="width : 97% ;"/></td>
