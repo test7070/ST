@@ -17,7 +17,7 @@
             this.errorHandler = null;
             q_tables = 't';
             var q_name = "cub";
-            var q_readonly = ['txtNoa', 'txtComp', 'txtProduct', 'txtStore','txtSpec', 'txtWorker', 'txtWorker2', 'txtVcceno'];
+            var q_readonly = ['txtNoa', 'txtComp', 'txtProduct', 'txtStore','txtSpec', 'txtWorker', 'txtWorker2', 'txtVcceno','txtMo'];
             var q_readonlys = ['txtDate2', 'txtOrdeno', 'txtNo2', 'txtW01'];
             var q_readonlyt = [];
             var bbmNum = [['txtTotal', 10, 0, 1]];
@@ -54,9 +54,10 @@
             function sum() {
                 var t_price = 0, t_mount = 0, t_mo = 0,t_total = 0;
                 for (var j = 0; j < q_bbsCount; j++) {
-                    t_mount = dec($('#txtMount_' + j).val());
-                    t_price = dec($('#txtPrice_' + j).val());
-                    t_total = q_add(t_total, round(q_mul(t_price, t_mount), 0));                                                                          
+                    //t_mount = dec($('#txtMount_' + j).val());
+                    //t_price = dec($('#txtPrice_' + j).val());
+                    //t_total = q_add(t_total, round(q_mul(t_price, t_mount), 0));           
+                    t_total = q_add(t_total, dec($('#txtMo_' + j).val()));                                                               
 
                     var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
                     if ($('#chkSale_' + b_seq).is(':checked'))

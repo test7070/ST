@@ -23,22 +23,22 @@
                 $('#q_report').q_report({
                     fileName : 'z_uccafe',
                     options : [{
-                        type : '1', //[1][2]
+                        type : '1', //[1][2] 1
                         name : 'date'
                     }, {
-                        type : '2', //[3][4]
+                        type : '2', //[3][4] 2
                         name : 'xsss',
                         dbf : 'sss',
                         index : 'noa,namea',
                         src : 'sss_b.aspx'
                     }, {
-                        type : '2', //[5][6]
+                        type : '2', //[5][6] 3
                         name : 'xcust',
                         dbf : 'cust',
                         index : 'noa,comp',
                         src : 'cust_b.aspx'
                     }, {
-                        type : '2', //[7][8]
+                        type : '2', //[7][8] 4
                         name : 'xucc',
                         dbf : 'ucc',
                         index : 'noa,product',
