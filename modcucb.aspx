@@ -21,10 +21,10 @@
 
 		    q_tables = 's';
 		    var q_name = "modcucb";
-		    var q_readonly = ['txtNoa','txtWorker'];
+		    var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
 		    var q_readonlys = ['txtMech'];
 		    var bbmNum = [];
-		    var bbsNum = [];
+		    var bbsNum = [['txtMount', 15, 0, 0]];
 		    var bbmMask = [];
 		    var bbsMask = [];
 		    q_sqlCount = 6;
@@ -56,13 +56,11 @@
 		        
 		    }
 
-		    
             function mainPost() {
             	q_getFormat();
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
-				bbsNum = [['txtMount', 15, 0]];
 				
 				q_cmbParse("cmbMech2", q_getPara('modfixc.mech'),'s');				
             }
@@ -129,7 +127,10 @@
 					return;
 				}
 				
-				$('#txtWorker').val(r_name);
+				if (q_cur == 1)
+					$('#txtWorker').val(r_name);
+                else
+                    $('#txtWorker2').val(r_name);
 				
               	var t_noa = trim($('#txtNoa').val());
 		        var t_date = trim($('#txtDatea').val());
@@ -237,7 +238,7 @@
 			}
             .dbbm {
                 float: left;
-                width: 300px;                
+                width: 500px;                
                 /*margin: -1px;        
                 border: 1px black solid;*/
                 border-radius: 5px;
@@ -346,7 +347,9 @@
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
 						<td> </td>
-						<td> </td>					
+						<td> </td>	
+						<td> </td>
+						<td> </td>				
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
@@ -359,12 +362,14 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
-						<td><input id="txtWorker" type="text" class="txt c1"/></td>						
+						<td><input id="txtWorker" type="text" class="txt c1"/></td>	
+						<td><span> </span><a id="lblWorker2" class="lbl"></a></td>
+						<td><input id="txtWorker2" type="text" class="txt c1"/></td>						
 					</tr>			
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 800px;">
+		<div class='dbbs' style="width: 755px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'>
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:1%;">

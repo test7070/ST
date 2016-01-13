@@ -133,7 +133,7 @@
             }
 
             function btnPrint() {
-
+				q_box('z_inchgs_fe.aspx' + "?;;;noa='" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
             }
 
             function wrServer(key_value) {
@@ -292,7 +292,7 @@
                 float: left;
             }
             .txt.c2 {
-                width: 38%;
+                width: 35%;
                 float: left;
             }
             .txt.c3 {

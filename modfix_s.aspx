@@ -35,7 +35,7 @@
 				q_mask(bbmMask);
 				$('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
-				$('#txtMechno').focus();
+				$('#txtNoa').focus();
 			}
 
 			function q_seekStr() {
@@ -65,14 +65,6 @@
 		<div style='width:400px; text-align:center;padding:15px;' >
 			<table id="seek"  border="1"   cellpadding='3' cellspacing='2' style='width:100%;' >
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblMechno'></a></td>
-					<td><input class="txt" id="txtMechno" type="text" style="width:215px; font-size:medium;" /></td>
-				</tr>
-				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblMech'></a></td>
-					<td><input class="txt" id="txtMech" type="text" style="width:215px; font-size:medium;" /></td>
-				</tr>
-				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
 					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
@@ -83,6 +75,14 @@
 					<span style="display:inline-block; vertical-align:middle">&sim;</span>
 					<input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
 					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblMechno'></a></td>
+					<td><input class="txt" id="txtMechno" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblMech'></a></td>
+					<td><input class="txt" id="txtMech" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->

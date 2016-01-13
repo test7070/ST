@@ -20,7 +20,7 @@
 			var q_readonly = ['txtNoa','txtModnoa','txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail'];
 			var bbmNum = [];
-			var bbsNum = [];
+			var bbsNum = [['txtMount',15,0,0]];
 			var bbmMask = [];
 			var bbsMask = [['txtDatea',r_picd]];
 			var pNoq =1;
@@ -75,54 +75,29 @@
 			
 				b_pop = '';
 			}
-			var delId='';
+			
+			var pos = 0;
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'ins_modfixcs':
-					
-						var as = _q_appendData("modfixcs", "", true);
-						//btnModi();
-						//var i=0
-						if(as.length-q_bbsCount >=0){
-							for(var i=0;i<as.length;i++){
-								q_bbs_addrow('bbs','a','') ;					
+					var as = _q_appendData("modfixcs", "", true);
+						var str = '';
+						var isexist = 0;
+						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
+							isexist = 0;
+							for(var i=0; i<q_bbsCount ;i++){							
+								if(elm.nob == $('#txtNob_'+i).val()){								
+									isexist = 1;				
+								}
 							}
-						}
-						var nob=[];
-										
-						var i;
-						var flag ='0';
-						for(i=0;i<q_bbsCount;i++){
-							var check =0;
-							$.each(as,function(index,element){	
-								if(element != undefined)														
-									if($('#txtNoa_'+ i ).val()== element)
-										check=1;																
-					
-							});
-							if(check == 0){	
-								if(as[i]!= undefined){										
-									$('#txtNob_'+ i ).val(as[i].nob);
-									$('#txtModel_'+ i ).val(as[i].model);
-									$('#txtWheel_'+ i).val(as[i].wheel);
-									$('#txtCode_'+ i).val(as[i].code);
-									$('#txtDetail_'+ i ).val(as[i].detail);	
-								}									
+							if(isexist == 0){//bbs插入該筆未存在資料列													
+								q_bbs_addrow('bbs',pos++,0);
+								$('#txtNob_'+(pos-1)).val(elm.nob);
+								$('#txtCode_'+(pos-1)).val(elm.code);
+								$('#txtDetail_'+(pos-1)).val(elm.detail);
+								$('#txtFrame_'+(pos-1)).val(elm.frame);
 							}
-						}							
-
-													
-						
-						break;
-					case 'checkModelno_btnOk':
-						var as = _q_appendData("modout", "", true);
-						if (as[0] != undefined) {
-							alert('已存在 ' + as[0].noa );
-							Unlock();
-							return;
-						} else {
-							wrServer($.trim($('#txtNoa').val()));
-						}
+						});
 						break;
 					case q_name:
                         if (q_cur == 4)
@@ -132,34 +107,24 @@
 			}
 
 			function btnOk() {
-		
-			/*	t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
+				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
-				}*/
-				
-				var t_noa = trim($.trim($('#txtNoa').val()));
-				var t_date = trim(q_date());
-				
-				if (t_noa.length == 0 || t_noa == "AUTO")
-		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modout') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+				}
 				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
 				
-				if (q_cur == 1) {
-					
-					t_where = "where=^^ noa='" + t_noa + "'^^";
-					q_gt('modout', t_where, 0, 0, 0, "checkModelno_btnOk", r_accy);
-				} else {
-					wrServer(t_noa);
-				}
-			
-		            
-		        
+				var t_noa = trim($('#txtNoa').val());
+			    var t_date = trim($('#txtDatea').val());
+			    if (t_noa.length == 0 || t_noa == "AUTO")
+			    	q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modout') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+			    else
+			    	wrServer(t_noa);
+								
 			}
 
 			function _btnSeek() {

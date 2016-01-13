@@ -17,10 +17,10 @@
 
 			q_tables = 's';
 			var q_name = "modfix";
-			var q_readonly = ['txtWorker', 'txtWorker2','txtNoa'];
+			var q_readonly = ['txtWorker', 'txtWorker2','txtNoa','txtMech'];
 			var q_readonlys = ['txtDetail1','txtDetail2','txtModel','txtNob','txtWheel1','txtCode1'];
 			var bbmNum = [];
-			var bbsNum = [];
+			var bbsNum = [['txtMount1',15,0,0], ['txtWeight1',15,0,0]];
 			var bbmMask = [];
 			var bbsMask = [];
 			var pNoq =1;
@@ -43,6 +43,7 @@
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1);
 			});
+			
 			function main() {
 				if (dataErr) {
 					dataErr = false;
@@ -50,6 +51,7 @@
 				}
 				mainForm(0);
 			}
+			
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd]];
@@ -58,7 +60,6 @@
 				q_cmbParse("cmbWay1",'傳統車床(砂紙研磨),傳統車床(砂輪機研磨),CNC車修,不須車修或研磨','s');
 				q_cmbParse("cmbModel",q_getPara('model.type'),'s');
 				
-				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtModnoa').val()) && (q_cur == 1 || q_cur == 2)){
 						t_where = "where=^^noa='"+$('#txtModnoa').val()+"'^^"
@@ -78,19 +79,15 @@
 				}
 				b_pop = '';
 			}
-			var delId='';
+			
+			var pos = 0;
 			var z_frame='';
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'ins_models':
 						var as = _q_appendData("models", "", true);
 						var str = '';
-						var pos = q_bbsCount;
 						var isexist = 0;
-						for(var i=0; i<q_bbsCount ;i++){//判斷bbs是否有資料存在pos->y:q_bbsCount,n:0
-							str=str+trim($('#txtNob_'+i).val());
-						}
-						pos = (str.length==0?0:q_bbsCount);	
 						for(var i=as.length-1; i>=0; i--){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
 							isexist = 0;
 							for(var j=0; j<q_bbsCount ;j++){							
@@ -113,16 +110,6 @@
 							z_frame = as[0].frame;
 						}
 						break;	
-					case 'checkModelno_btnOk':
-						var as = _q_appendData("modfix", "", true);
-						if (as[0] != undefined) {
-							alert('已存在 ' + as[0].noa );
-							Unlock();
-							return;
-						} else {
-							wrServer($.trim($('#txtNoa').val()));
-						}
-						break;	
 					case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -137,25 +124,17 @@
 					return;
 				}
 				
-				var t_noa = trim($('#txtNoa').val());
-				var t_date = trim($('#txtDatea').val());
-				
-				if (t_noa.length == 0 || t_noa == "AUTO")
-		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfix') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
-				else
-					$('#txtWorker2').val(r_name);
+                else
+                    $('#txtWorker2').val(r_name);
 				
-				if (q_cur == 1) {
-					
-					t_where = "where=^^ noa='" + t_noa + "'^^";
-					q_gt('modfix', t_where, 0, 0, 0, "checkModelno_btnOk", r_accy);
-				} else {
-					wrServer(t_noa);
-				}
-				
+				var t_noa = trim($('#txtNoa').val());
+			    var t_date = trim($('#txtDatea').val());
+			    if (t_noa.length == 0 || t_noa == "AUTO")
+			    	q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfix') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+			    else
+			    	wrServer(t_noa);
 			}
 
 			function _btnSeek() {
@@ -163,9 +142,6 @@
 					return;
 				q_box('modfix_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
 			}
-		
-				
-			
 
 			var flag =0;
 			function bbsAssign() {
@@ -183,16 +159,12 @@
 				}
 				_bbsAssign();
 			}
-			
-
-			
 
 			function btnIns() {
 				_btnIns();
 				$('#txtNoa').val('AUTO');
                	$('#txtDatea').val(q_date()); 
 				refreshBbm();
-
 			}
 
 			function btnModi() {			
@@ -211,7 +183,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['nob'] || !as['frame1'] || !as['weight1'] || !as['mount1'] || !as['way1']) {
+				if (!as['nob'] || !as['frame1'] || !as['mount1']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
