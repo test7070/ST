@@ -18,7 +18,7 @@
 			q_tables = 's';
 			var q_name = "ordb";
 			var q_readonly = ['txtOrdcno','txtWorkgno', 'txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTotalus','txtApv'];
-			var q_readonlys = ['txtNo3','txtStdmount', 'txtNo2', 'txtTotal', 'txtC1', 'txtNotv', 'txtOmount','chkEnda'];
+			var q_readonlys = ['txtNo3','txtStdmount', 'txtNo2', 'txtTotal', 'txtC1', 'txtNotv', 'txtOmount','chkEnda','txtOrdeno','txtNo2'];
 			var bbmNum = [
 				['txtFloata', 10, 5, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],
 				['txtTotal', 10, 0, 1], ['txtTotalus', 10, 0, 1]
@@ -448,7 +448,7 @@
 								$('#btnMinus_' + j).click();
 							}
 							var i, j = 0;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtSpec,txtMount,txtPrice,txtOrdeno,txtNo2', b_ret.length, b_ret, 'productno,product,unit,spec,mount,price,noa,no2', 'txtOrdeno,txtNo2');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtSpec,txtMount,txtPrice,txtOrdeno,txtNo2,txtCustno,txtComp', b_ret.length, b_ret, 'productno,product,unit,spec,mount,price,noa,no2,custno,comp', 'txtOrdeno,txtNo2');
 							sum();
 						}
 						break;
@@ -675,6 +675,9 @@
 				var isSpec = (hasSpec.toString()=='1'?$('.isSpec').show():$('.isSpec').hide());
 				if (q_getPara('sys.project').toUpperCase()!='XY'){
 					$('.isCust').hide();
+				}else{
+					$('.bbsorde').show();
+					$('.dbbs').css('width','1850px');
 				}
 			}
 
@@ -1304,8 +1307,8 @@
 					</td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c2" style="float:left;"/>
-						<input id="txtOrdeno.*" type="hidden" style="float:left;width:145px;" />
-						<input id="txtNo2.*" type="hidden" style="float:left;width:40px;" />
+						<input id="txtOrdeno.*" type="text" class="bbsorde" style="float:left;width:145px;display: none;" />
+						<input id="txtNo2.*" type="text" class="bbsorde" style="float:left;width:40px;display: none;" />
 					</td>
 					<td class="isCust">
 						<input id="txtCustno.*" type="text" class="txt c1" style="width:70%;"/>
