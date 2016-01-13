@@ -24,7 +24,7 @@
 		    var q_readonly = ['txtNoa','txtDevice'];
 		    var q_readonlys = ['txtProduct','txtTgg'];
 		    var bbmNum = [];
-		    var bbsNum = new Array(['txtPrice', 10, 1], ['txtMount', 10, 1], ['txtMoney', 10, 0]);
+		    var bbsNum = [['txtPrice', 10, 1], ['txtMount', 10, 1], ['txtMoney', 10, 0]];
 		    var bbmMask = [];
 		    var bbsMask = [];
 		    q_sqlCount = 6;

@@ -20,7 +20,7 @@
 			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','txtModnoa'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail','txtMech'];
 			var bbmNum = [];
-			var bbsNum = [];
+			var bbsNum = [['txtMount',15,0,0], ['txtBebottom',15,0,0], ['txtEnbottom',15,0,0], ['txtWeight',15,0,0], ['txtFixmount',15,0,0]];
 			var bbmMask = [];
 			var bbsMask = [];
 			var pNoq =1;
@@ -78,19 +78,15 @@
 				}
 				b_pop = '';
 			}
-			var delId='';
+			
+			var pos = 0;
 			var z_indate='';
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'ins_modfixs':
 					var as = _q_appendData("modfixs", "", true);
 						var str = '';
-						var pos = q_bbsCount;
 						var isexist = 0;
-						for(var i=0; i<q_bbsCount ;i++){//判斷bbs是否有資料存在pos->y:q_bbsCount,n:0
-							str=str+trim($('#txtNob_'+i).val());
-						}
-						pos = (str.length==0?0:q_bbsCount);	
 						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
 							isexist = 0;
 							for(var i=0; i<q_bbsCount ;i++){							
@@ -108,16 +104,6 @@
 								$('#txtWeight_'+(pos-1)).val(elm.weight1);
 							}
 						});
-						break;					
-					case 'checkModelno_btnOk':
-						var as = _q_appendData("modfix", "", true);
-						if (as[0] != undefined) {
-							alert('已存在 ' + as[0].noa );
-							Unlock();
-							return;
-						} else {
-							wrServer($.trim($('#txtNoa').val()));
-						}
 						break;
 					case 'modfix':
 						var as = _q_appendData("modfix", "", true);
@@ -143,34 +129,26 @@
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
-				}				
+				}			
+				
+				if (q_cur == 1)
+					$('#txtWorker').val(r_name);
+				else
+					$('#txtWorker2').val(r_name);	
 				
 				compareDate();
 				var t_date  = trim($('#txtDatea').val());
 				if(t_date < z_indate){
 					alert('維修日期錯誤:\n　　維修日期('+t_date+')早於入庫日期('+z_indate+')');
 					return;
-				}
-							
+				}			
 				
 				var t_noa = trim($('#txtNoa').val());
-				var t_date = trim($('#txtDatea').val());
-				
-				if (t_noa.length == 0 || t_noa == "AUTO")
-		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfixc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-				
-				if (q_cur == 1)
-					$('#txtWorker').val(r_name);
-				else
-					$('#txtWorker2').val(r_name);
-				
-				if (q_cur == 1) {
-					
-					t_where = "where=^^ noa='" + t_noa + "'^^";
-					q_gt('modfix', t_where, 0, 0, 0, "checkModelno_btnOk", r_accy);
-				} else {
-					wrServer(t_noa);
-				}
+			    var t_date = trim($('#txtDatea').val());
+			    if (t_noa.length == 0 || t_noa == "AUTO")
+			    	q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfixc') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+			    else
+			    	wrServer(t_noa);
 			}
 
 			function _btnSeek() {

@@ -17,16 +17,17 @@
 
 			q_tables = 's';
 			var q_name = "modcuw";
-			var q_readonly = ['txtWorker', 'txtNoa'];
+			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtMech'];
 			var bbmNum = [];
-			var bbsNum = [];
+			var bbsNum = [['txtBorntime',15,0,0], ['txtAddtime',15,0,0], ['txtChgfre',15,0,0], ['txtChgtime',15,0,0], ['txtFaulttime',15,0,0], 
+						  ['txtDelaytime',15,0,0], ['txtWaittime',15,0,0], ['txtWaitfedtime',15,0,0], ['txtLacksss',15,0,0]];
 			var bbmMask = [];
 			var bbsMask = [];
 			var pNoq =1;
 			q_sqlCount = 6;
 			brwCount = 6;
-			brwCount2 = 5;
+			brwCount2 = 3;
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'noa';
@@ -83,23 +84,23 @@
 					return;
 				}
 				
+				if (q_cur == 1)
+					$('#txtWorker').val(r_name);
+                else
+                    $('#txtWorker2').val(r_name);
+				
 				var t_noa = trim($('#txtNoa').val());
 				var t_date = trim($('#txtDatea').val());
 				
 				if (t_noa.length == 0 || t_noa == "AUTO")
 		            q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfix') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
 				
-				if (q_cur == 1)
-					$('#txtWorker').val(r_name);
-				
-				if (q_cur == 1) {
-					
-					t_where = "where=^^ noa='" + t_noa + "'^^";
-					q_gt('modfix', t_where, 0, 0, 0, "checkModelno_btnOk", r_accy);
-				} else {
-					wrServer(t_noa);
-				}
-				
+				var t_noa = trim($('#txtNoa').val());
+			    var t_date = trim($('#txtDatea').val());
+			    if (t_noa.length == 0 || t_noa == "AUTO")
+			    	q_gtnoa(q_name, replaceAll(q_getPara('sys.key_modfix') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+			    else
+			    	wrServer(t_noa);				
 			}
 
 			function _btnSeek() {
@@ -222,19 +223,22 @@
 				border-width: 0px;
 			}
 			.tview {
-				border: 5px solid gray;
+				margin: 0;
+				padding: 2px;
+				border: 1px black double;
+				border-spacing: 0;
 				font-size: medium;
-				background-color: black;
+				background-color: #FFFF66;
+				color: blue;
+				width: 100%;
 			}
 			.tview tr {
 				height: 30px;
 			}
 			.tview td {
-				padding: 2px;
+				padding: 5px;
 				text-align: center;
-				border-width: 0px;
-				background-color: #FFFF66;
-				color: blue;
+				border: 1px black solid;
 			}
 			.dbbm {
 				float: left;
@@ -254,7 +258,7 @@
 				width: 100%;
 			}
 			.tbbm tr {
-				height: 35px;
+				height: 43px;
 			}
 			.tbbm tr td {
 				width: 10%;
@@ -348,6 +352,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
@@ -361,6 +366,8 @@
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
+						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>						
 					</tr>
 						
 				</table>
