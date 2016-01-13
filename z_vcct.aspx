@@ -56,7 +56,11 @@
                        		type : '5',
                        		name : 'ytypea',
                         	value : [q_getPara('report.all')].concat('2@二聯式,3@三聯式'.split(','))
-                    	}]
+                    	}, {
+							type : '0', //[13] 
+							name : 'xproject',
+							value : q_getPara('sys.project').toUpperCase()
+						}]
                     });
                 q_popAssign();
                 
