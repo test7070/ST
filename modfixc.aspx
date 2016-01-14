@@ -79,7 +79,6 @@
 				b_pop = '';
 			}
 			
-			var pos = 0;
 			var z_indate='';
 			function q_gtPost(t_name) {
 				switch (t_name) {
@@ -87,6 +86,11 @@
 					var as = _q_appendData("modfixs", "", true);
 						var str = '';
 						var isexist = 0;
+						var pos = 0;
+						for(var i=0; i<q_bbsCount; i++){
+							if($('#txtNob_'+i).val().length>0)
+								pos = i+1;
+						}
 						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
 							isexist = 0;
 							for(var i=0; i<q_bbsCount ;i++){							

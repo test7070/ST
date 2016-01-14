@@ -169,6 +169,17 @@
 				$('#txtXemon2').val(t_year+'/12').mask(r_picm);
 				$('#txtLostdate').val(100);
 				//$('#Xuccgroupano select').css('width','150px');
+				
+				if(q_getPara('sys.project')=='vu'){	
+					var report='';	
+					for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+						report = $('#q_report').data().info.reportData[i].report
+						if(report=='z_anavccfe4' || report=='z_anavccfe5'){
+							delete_report=i;
+							$('#q_report div div').eq(i).hide();
+						}
+					}
+				}
 			}
 
 			function q_boxClose(s2) {
