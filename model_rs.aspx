@@ -490,23 +490,26 @@
 				border-width: 0px;
 			}
 			.tview {
-				border: 5px solid gray;
+				margin: 0;
+				padding: 2px;
+				border: 1px black double;
+				border-spacing: 0;
 				font-size: medium;
-				background-color: black;
+				background-color: #FFFF66;
+				color: blue;
+				width: 100%;
 			}
 			.tview tr {
 				height: 30px;
 			}
 			.tview td {
-				padding: 2px;
+				padding: 5px;
 				text-align: center;
-				border-width: 0px;
-				background-color: #FFFF66;
-				color: blue;
+				border: 1px black solid;
 			}
 			.dbbm {
 				float: left;
-				width: 750px;
+				width: 800px;
 				/*margin: -1px;
 				 border: 1px black solid;*/
 				border-radius: 5px;
@@ -522,10 +525,10 @@
 				width: 100%;
 			}
 			.tbbm tr {
-				height: 35px;
+				height: 38px;
 			}
 			.tbbm tr td {
-				width: 10%;
+				width: 9%;
 			}
 			.tbbm .tdZ {
 				width: 1%;
@@ -618,84 +621,80 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
+						<td></td>			
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl" ></a></td>
-						<td><input id="txtNoa" type="text" class="txt  c1" style="width : 130% ;"/></td>
+						<td><input id="txtNoa" type="text" class="txt  c1"/></td>
 						<td><span> </span><a id="lblTgg" class="lbl btn"> </a></td>
 						<td colspan="3">
-							<input id="txtTggno"  type="text" style="width:25%;"/>
-							<input id="txtTgg"  type="text" style="width:75%; color:green;"/>
+							<input id="txtTggno"  type="text" style="width:32%;"/>
+							<input id="txtTgg"  type="text" style="width:66%; color:green;"/>
 						</td>		
+					</tr>					
+					<tr>
+						<td><span> </span><a id='lblSpec' class="lbl"></a></td>
+						<td><input id="txtSpec" type="text" class="txt c1 "/></td>
+						<td><span> </span><a id='lblFrame' class="lbl"></a></td>
+						<td><input id="txtFrame" type="text" class="c1 num"/></td>
+						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
+						<td><input id="txtDatea" type="text" class="txt c1 "/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTube' class="lbl"></a></td>
 						<td><input id="txtTube" type="text" class="txt c1 "/></td>
 						<td><span> </span><a id='lblHeart' class="lbl"> </a></td>
 						<td><input id="txtHeart" type="text" class="c1 num"/></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id='lblSpec' class="lbl"></a></td>
-						<td><input id="txtSpec" type="text" class="txt c1 "/></td>
-						<td><span> </span><a id='lblFrame' class="lbl"></a></td>
-						<td><input id="txtFrame" type="text" class="c1 num"/></td>
-						<td></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblUsetype' class="lbl"></a></td>						
 						<td><select id="cmbUsetype"  class="txt c1"></select></td>
 						<td><span> </span><a id='lblSaver' class="lbl"> </a></td>
-						<td><input id="txtSaver" type="text" class="txt c1 "/></td>
-						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
-						<td><input id="txtDatea" type="text" class="txt c1 "/></td>
-						<td></td>
+						<td><input id="txtSaver" type="text" class="txt c1 "/></td>						
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
-
 					</tr>
 				</table>
 			</div>
 		</div>
 		<div class='dbbs'>
-			<table id="tbbs" class='tbbs'>
-				<tr style='color:white; background:#003366;' >
+			<table id="tbbs" class='tbbs' style="width: 1050px;">
+				<tr style="color:white; background:#003366;">
 					<td  align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width:18%;"><a id='lblProductno_s'></a></td>
-					<td align="center" style="width:15%;"><a id='lblModelre_s'></a></td>
-					<td align="center" style="width:10%;"><a id='lblWheel_s'></a></td>	
-					<td align="center" style="width:10%;"><a id='lblNumber_s'></a></td>				
+					<td align="center" style="width:20%;"><a id='lblProductno_s'></a></td>
+					<td align="center" style="width:10%;"><a id='lblModelre_s'></a></td>
+					<td align="center" style="width:12%;"><a id='lblWheel_s'></a></td>	
+					<td align="center" style="width:12%;"><a id='lblNumber_s'></a></td>				
 					<td align="center" style="width:10%;"><a id='lblBottom_s'></a></td>
 					<td align="center" style="width:10%;"><a id='lblMount'></a></td>				
-					<td align="center" style="width:20%;"><a id='lblMemors2_s'></a></td>
+					<td align="center" ><a id='lblMemors2_s'></a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
-					<td align="center">
-						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+					<td align="center" >
+						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold; width:25px" value="-"/>
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
+					<td><input id="txtProductno.*" type="text" style="width:98%;"/></td>
+					<td><select id="cmbModel.*" type="text" class="txt c1"/select></td>
 					<td>
-						<input id="txtProductno.*" type="text"/>
-					</td>
-					<td><select id="cmbModel.*" type="text" class="txt c1" style="width:85%;"/select>
-						
-					</td>
-					<td><input id="txtWheel.*" type="text" class="txt c1" style="width:75%;"/>	
-						<select id="combWheel.*" type="text" class="txt c1" style="width:20%;"/select>			
-					<td><input id="txtNumber.*" type="text" class="txt c1" style="width:75%;"/>
+						<input id="txtWheel.*" type="text" class="txt c1" style="width:75%;"/>	
+						<select id="combWheel.*" type="text" class="txt c1" style="width:20%;"/select>
+					</td>				
+					<td>
+						<input id="txtNumber.*" type="text" class="txt c1" style="width:75%;"/>
 						<select id="combNumber.*" type="text" class="txt c1" style="width:20%;"/select>
 					</td>						
-					
-					<td ><input id="txtBottom.*" type="text" class="num c1" style="width:95%;" /></td>
-					<td ><input id="txtMount.*" type="text" class="num c1"style="width:95%;" /></td>
-					<td><input id="txtMemo2.*" type="text" style="width:95%;" /></td>
+					<td ><input id="txtBottom.*" type="text" class="num c1" style="width:98%;" /></td>
+					<td ><input id="txtMount.*" type="text" class="num c1" style="width:98%;" /></td>
+					<td><input id="txtMemo2.*" type="text" style="width:98%;" /></td>
 				</tr>
 			</table>
 		</div>
