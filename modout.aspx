@@ -26,14 +26,13 @@
 			var pNoq =1;
 			q_sqlCount = 6;
 			brwCount = 6;
-			brwCount2 = 5;
+			brwCount2 = 3;
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'Noa';
 			q_desc = 1;
 					
 			aPop = new Array(
-			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
 				['txtFixnoa','lblFixnoa','modfixc','noa,modnoa','txtFixnoa,txtModnoa','modfixc_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
@@ -63,7 +62,6 @@
 				});
 				
 			}
-			          	 
 
 			function q_boxClose(s2) {
 				var ret;
@@ -132,9 +130,6 @@
 					return;
 				q_box('modout_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
 			}
-		
-				
-			
 
 			var flag =0;
 			function bbsAssign() {			
@@ -143,9 +138,6 @@
 				}
 				_bbsAssign();
 			}
-			
-
-			
 
 			function btnIns() {
 				_btnIns();
@@ -258,16 +250,23 @@
 				border: 5px solid gray;
 				font-size: medium;
 				background-color: black;
+			}.tview {
+				margin: 0;
+				padding: 2px;
+				border: 1px black double;
+				border-spacing: 0;
+				font-size: medium;
+				background-color: #FFFF66;
+				color: blue;
+				width: 100%;
 			}
 			.tview tr {
 				height: 30px;
 			}
 			.tview td {
-				padding: 2px;
+				padding: 5px;
 				text-align: center;
-				border-width: 0px;
-				background-color: #FFFF66;
-				color: blue;
+				border: 1px black solid;
 			}
 			.dbbm {
 				float: left;
@@ -287,7 +286,7 @@
 				width: 100%;
 			}
 			.tbbm tr {
-				height: 35px;
+				height: 43px;
 			}
 			.tbbm tr td {
 				width: 10%;
@@ -366,14 +365,12 @@
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id='vewNoa'></a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewMech'></a></td>
-						
+						<td align="center" style="width:80px; color:black;"><a id='vewMech'></a></td>				
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
 						<td id="noa" style="text-align: center;">~noa</td>
 						<td id="mech" style="text-align: center;">~mech</td>
-						
 					</tr>
 				</table>
 			</div>
@@ -399,8 +396,8 @@
 					<tr>
 						<td><span> </span><a id="lblMechno" class="lbl btn"> </a></td>
 						<td colspan="3">
-							<input id="txtMechno"  type="text" style="width:25%;"/>
-							<input id="txtMech"  type="text" style="width:75%; color:green;"/>
+							<input id="txtMechno"  type="text" style="width:34%;"/>
+							<input id="txtMech"  type="text" style="width:66%; color:green;"/>
 						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl " ></a></td>
 						<td><input id="txtDatea" type="text" class="txt  c1" /></td>
@@ -411,14 +408,12 @@
 						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='' class="lbl"></a></td>
-						<td><span> </span><input id="btnIn" type="Button" /></td>
-						
-					</tr>
-						
+						<td><span> </span><input id="btnIn" type="Button" /></td>	
+					</tr>		
 				</table>
 			</div>
 		</div>
-		<div class='dbbs'>
+		<div class='dbbs' style="width:1080px">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:1%;">
@@ -432,24 +427,20 @@
 					<td align="center" style="width:10%;"><a id='lblFrame_s'></a></td>	
 					<td align="center" style="width:10%;"><a id='lblMount_s'></a></td>				
 					<td align="center" style="width:15%;"><a id='lblMemo_s'></a></td>
-
-
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
-						<input id="btnMinus.*" type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+						<input id="btnMinus.*" type="button" style="font-size:medium; font-weight:bold; width:85%" value="-"/>
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
-					<td ><input id="txtNob.*" type="text" class="txt c1" style="width : 95% ;"/></td>
-					<td style="display: none;"><input id="txtModel.*" type="text" class="txt c1" style="width : 95% ;"/></td>
-					<td style="display: none;"><input id="txtWheel.*" type="text"  style="width : 95% ;"/></td>				
-					<td><input id="txtCode.*" type="text"  style="width : 95% ;"/></td>
-					<td><input id="txtDetail.*" type="text" class="txt c1" style="width : 95% ;"/></td>
-					<td><input id="txtFrame.*" type="text" class="num c1" style="width : 95% ;"/></td>					
-					<td><input id="txtMount.*" type="text" class="num c1" style="width : 95% ;"/></td>						
-					<td ><input id="txtMemo.*" type="text" class="txt c1"  style="width : 95% ;"/></td>
-
-	
+					<td ><input id="txtNob.*" type="text" class="txt c1" style="width:98%;"/></td>
+					<td style="display: none;"><input id="txtModel.*" type="text" class="txt c1" style="width:98%;"/></td>
+					<td style="display: none;"><input id="txtWheel.*" type="text"  style="width:98%;"/></td>				
+					<td><input id="txtCode.*" type="text"  style="width:98%;"/></td>
+					<td><input id="txtDetail.*" type="text" class="txt c1" style="width:98%;"/></td>
+					<td><input id="txtFrame.*" type="text" class="num c1" style="width:98%;"/></td>					
+					<td><input id="txtMount.*" type="text" class="num c1" style="width:98%;"/></td>						
+					<td ><input id="txtMemo.*" type="text" class="txt c1"  style="width:98%;"/></td>
 				</tr>
 			</table>
 		</div>
