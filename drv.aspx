@@ -135,6 +135,7 @@
 					chk_handle2=new Array();
 					chk_store=new Array();
 					
+					$('.orde_chk').unbind('click');
                     $('.orde_chk').click(function(e) {
                         $(".orde_chk").not(this).prop('checked', false);
                         $(".orde_chk").not(this).parent().parent().find('td').css('background', 'pink');
@@ -156,6 +157,7 @@
                     });
                     
                     //結案
+                    $('.orde_btn').unbind('click');
                     $('.orde_btn').click(function(e) {
                         //顯示BBS的資料
                         var n=$(this).attr('id').replace('btnEnda_','')
@@ -166,6 +168,7 @@
                         }
                     });
                     
+                    $('.orde_chk_vcce').unbind('click');
                     $('.orde_chk_vcce').click(function(e) {
                         //儲存核取的訂單
                         var n=$(this).attr('id').replace('orde_chk_vcce','')
@@ -230,6 +233,7 @@
 						}
                     });
                     
+                    $('.handle').unbind('blur');
                     $('.handle').blur(function(e) {
                         var n=$(this).attr('id').replace('textHandle_','')
                         
@@ -248,6 +252,7 @@
 						}
                     });
                     
+                    $('.handle2').unbind('blur');
                     $('.handle2').blur(function(e) {
                         var n=$(this).attr('id').replace('textHandle2_','')
                         
