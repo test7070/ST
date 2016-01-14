@@ -344,7 +344,7 @@
 								q_tr('txtPrice_'+b_seq,ass[0].price);
 							}
 						}
-					break;
+						break;
 					case 'check_accu':
 						var bbs_total=0,accu_total=0,ordb_total=0;
 						var as = _q_appendData("accu", "", true);
@@ -428,6 +428,25 @@
 							q_Seek_gtPost();
 						break;
 				}
+				if(t_name.substring(0,11)=='ordesucctgg'){
+					var n = parseInt(t_name.split('_')[1]);
+                    var as = _q_appendData("ucctgg", "", true);
+					var ass = _q_appendData("ucctggs", "", true);
+					var mount=dec($('#txtMount_'+n).val())==0?1:dec($('#txtMount_'+n).val());
+					if (as[0] != undefined) {
+						for ( var i = 0; i < ass.length; i++) {
+							ass[i].dmoumt=q_sub(mount,dec(ass[i].mount));
+							if(ass[i].dmoumt<0){
+								ass.splice(i, 1);
+	                               i--;
+							}
+						}
+						ass.sort(function(a,b){return a.dmoumt-b.dmoumt;})
+						if (ass[0] != undefined) {
+							q_tr('txtPrice_'+n,ass[0].price);
+						}
+					}
+				}
 			}
 
 			function q_boxClose(s2) {
@@ -448,8 +467,18 @@
 								$('#btnMinus_' + j).click();
 							}
 							var i, j = 0;
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtSpec,txtMount,txtPrice,txtOrdeno,txtNo2,txtCustno,txtComp', b_ret.length, b_ret, 'productno,product,unit,spec,mount,price,noa,no2,custno,comp', 'txtOrdeno,txtNo2');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProductno1,txtProduct,txtUnit,txtSpec,txtMount,txtPrice,txtOrdeno,txtNo2,txtCustno,txtComp', b_ret.length, b_ret, 'productno,productno,product,unit,spec,mount,price,noa,no2,custno,comp', 'txtOrdeno,txtNo2');
 							sum();
+							
+							if(q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val())){
+								for (var j = 0; j < q_bbsCount; j++) {
+									if (!emp($('#txtProductno1_'+j).val())){
+										var t_where =" tggno='"+$('#txtTggno').val()+"' and productno='" + $('#txtProductno1_'+j).val() + "'";
+										q_gt('ucctgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "ordesucctgg_"+j);
+									}
+								}
+							}
+							
 						}
 						break;
 					case q_name + '_s':
