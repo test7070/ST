@@ -147,20 +147,12 @@
 				q_box('modfix_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
 			}
 
-			var flag =0;
-			function bbsAssign() {
-								
-				for (var j = 0; j < q_bbsCount; j++) {	
-					$('#txtWay1_'+j).change(function(){
-						t_IdSeq = -1;  
-						q_bodyId($(this).attr('id'));
-						b_seq = t_IdSeq;
-						if($('#txtWay1_'+b_seq).val()>4 || $('#txtWay1').val() <1){
-							alert('研磨方式請輸入數字1~4之間');
-							$('#txtWay1_'+b_seq).val(1);
-						}
-					})
-				}
+			function bbsAssign() {		
+				$('#cmbWay1_0').change(function(){	
+					for (var j=1; j<q_bbsCount; j++){
+						$('#cmbWay1_'+j).val($('#cmbWay1_0').val());
+					}
+				});							
 				_bbsAssign();
 			}
 

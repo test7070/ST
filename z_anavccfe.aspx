@@ -159,6 +159,10 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                if(t_month == '00'){
+                	t_year = t_year - 1;
+                	t_month = '12';
+                }                	
                 $('#txtXdate1').val(t_year+'/'+t_month+'/'+t_day);//上個月1號
 				
 				$('#txtXyear').mask('9999'.substr(0,r_len));

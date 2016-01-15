@@ -55,19 +55,16 @@
 				q_getFormat();
 				bbmMask = [['txtDatea',r_picd]];
 				q_mask(bbmMask);
-				bbsMask = [['txtDatea1',r_picd+'-99:99'],['txtDatea2',r_picd+'-99:99'],['txtMount', 15, 0],['txtWeight', 15, 0],['txtFixmount', 15, 0]];
-				//q_mask(bbmMask);				
-				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
-				q_cmbParse("cmbWay",q_getPara('modfixc.way'),'s');
+				bbsMask = [['txtBdate',r_picd+'-99:99'],['txtEdate',r_picd+'-99:99']];
+				q_cmbParse("cmbWay",'傳統車床(研磨),CNC車修','s');
 				q_cmbParse("cmbWorktype",'正工,加班','s');
+				q_cmbParse("cmbWorktype2",'正工,加班','s');
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2)){
 						q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");
 					}	
 				});
-					
-			}
-			          	 
+			}          	 
 
 			function q_boxClose(s2) {
 				var ret;
@@ -160,14 +157,11 @@
 					return;
 				q_box('modfixc_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
 			}
-			
+
 			function changeWay(pos){
 				var way = $('#cmbWay_'+pos).val();
 				switch(way){
-					case "傳統車床(砂紙研磨)":	
-					   // q_cmbParse("cmbMech_"+pos,' ');
-						break;
-					case "傳統車床(砂輪機研磨)":
+					case "傳統車床(研磨)":
 						q_cmbParse("cmbMech_"+pos,'F01,F02,F03,F05,鑽床,銑床,插床');
 						break;
 					case "CNC車修":
@@ -175,28 +169,27 @@
 						break;
 					}	
 			}
-
-			var flag =0;
-			function bbsAssign() {			
+			
+			function bbsAssign() {						
 				for (var j = 0; j < q_bbsCount; j++) {
-					$('#txtDatea2_'+j).click(function(){						
+					$('#txtEdate_'+j).click(function(){						
 						t_IdSeq = -1;
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;
-						var min=$('#txtDatea1_'+b_seq).val().substring($('#txtDatea1_'+b_seq).val().length-2,$('#txtDatea1_'+b_seq).val().length);
-						var hour=$('#txtDatea1_'+b_seq).val().substring($('#txtDatea1_'+b_seq).val().length-5,$('#txtDatea1_'+b_seq).val().length-3);
+						var min=$('#txtBdate_'+b_seq).val().substring($('#txtBdate_'+b_seq).val().length-2,$('#txtBdate_'+b_seq).val().length);
+						var hour=$('#txtBdate_'+b_seq).val().substring($('#txtBdate_'+b_seq).val().length-5,$('#txtBdate_'+b_seq).val().length-3);
 						var nmin,nhour;
 						nmin = parseInt(min)+30 >= 60 ? parseInt(min)+30-60 : parseInt(min)+30;
 						nhour = parseInt(min)+30 >= 60 ? parseInt(hour)+1 : parseInt(hour);
 						nmin =  nmin < 10 ? "0"+nmin : nmin
 						nhour = nhour < 10 ? "0"+nhour : nhour
-						$('#txtDatea2_'+b_seq).val(
-							$('#txtDatea1_'+b_seq).val().substring(0,9)+'-'+nhour+':'+nmin
+						$('#txtEdate_'+b_seq).val(
+							$('#txtBdate_'+b_seq).val().substring(0,9)+'-'+nhour+':'+nmin
 						);
 					});
 					
 					changeWay(j);
-					
+
 					$('#cmbWay_'+j).change(function(){
 						t_IdSeq = -1;
 						q_bodyId($(this).attr('id'));
@@ -206,6 +199,7 @@
 							changeWay(b_seq);
 						}	
 					});
+					
 					var mech = [];
 					$('#cmbMech_'+j).change(function(){
 						t_IdSeq = -1;
@@ -222,6 +216,15 @@
 						$('.ishide_'+j).hide();
 					}
 				}
+				$('#cmbWay_0').change(function(){
+					$("#cmbMech_0").empty();
+					changeWay(0);					
+					for (var i=1; i<q_bbsCount; i++){
+						$('#cmbWay_'+i).val($('#cmbWay_0').val());
+						$("#cmbMech_"+i).empty();
+						changeWay(i);
+					}
+				});		
 				_bbsAssign();
 			}
 			
@@ -496,7 +499,7 @@
 			</div>
 		</div>
 		<div class='dbbs'>
-			<table id="tbbs" class='tbbs' style="width:1500px;">
+			<table id="tbbs" class='tbbs' style="width:1800px;">
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
@@ -507,16 +510,21 @@
 					<td align="center" style="width:4%;"><a id='lblCode_s'></a></td>
 					<td align="center" style="width:8%;"><a id='lblDetail_s'></a></td>
 					<td align="center" style="width:2.5%;"><a id='lblFrame_s'></a></td>	
-					<td align="center" style="width:4%;"><a id='lblMount_s'></a></td>				
+					<td align="center" style="width:4%;"><a id='lblWeight_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblMount_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblFixmount_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblBottom_s'></a></td>			
+					<td align="center" style="width:3%;"><a id='lblBebottom_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblLastloss_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblBrepair_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblErepair_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblLoss_s'></a></td>
+					<td align="center" style="width:3%;"><a id='lblEnbottom_s'></a></td>
 					<td align="center" style="width:10%;"><a id='lblWay_s'></a></td>
 					<td align="center" style="width:4%;"><a id='lblMech_s'></a></td>
-					<td align="center" style="width:3%;"><a id='lblBebottom_s'></a></td>
-					<td align="center" style="width:3%;"><a id='lblEnbottom_s'></a></td>
-					<td align="center" style="width:4%;"><a id='lblWeight_s'></a></td>
-					<td align="center" style="width:4%;"><a id='lblFixmount_s'></a></td>
 					<td align="center" style="width:3.5%;"><a id='lblWorktype_s'></a></td>
-					<td align="center" style="width:8%;"><a id='lblDatea1_s'></a></td>
-					<td align="center" style="width:8%;"><a id='lblDatea2_s'></a></td>
+					<td align="center" style="width:8%;"><a id='lblBdate_s'></a></td>
+					<td align="center" style="width:8%;"><a id='lblEdate_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblWorker_s'></a></td>
 
 				</tr>
@@ -531,19 +539,46 @@
 					<td><input id="txtCode.*" type="text"  style="width : 93% ;"/></td>
 					<td><input id="txtDetail.*" type="text" class="txt c1" style="width : 96% ;"/></td>
 					<td><input id="txtFrame.*" type="text" class="num c1" style="width : 88% ;"/></td>					
-					<td><input id="txtMount.*" type="text" class="num c1" style="width : 93% ;"/></td>						
-					<td><select id="cmbWay.*" type="text" class="txt c1" style="width : 98%;"/select></td>
+					<td><input id="txtWeight.*" type="text" class="num c1" style="width : 93% ;"/></td>
+					<td><input id="txtMount.*" type="text" class="num c1" style="width : 93% ;"/></td>		
+					<td><input id="txtFixmount.*" type="text" class="num c1" style="width : 93% ;"/></td>
+					<td><input id="txtBottom.*" type="text" class="num c1" style="width : 90% ;"/></td>				
+					<td><input id="txtBebottom.*" type="text" class="num c1" style="width : 90% ;"/></td>
+					<td><input id="txtLastloss.*" type="text" class="num c1" style="width : 90% ;"/></td>
+					<td><input id="txtBrepair.*" type="text" class="num c1" style="width : 90% ;"/></td>
+					<td><input id="txtErepair.*" type="text" class="num c1" style="width : 90% ;"/></td>
+					<td><input id="txtLoss.*" type="text" class="num c1" style="width : 90% ;"/></td>
+					<td><input id="txtEnbottom.*" type="text" class="num c1" style="width : 90% ;"/></td>
+					<td>
+						<input id="btnSec.*" type="button" style="text-align:left; font-size:8pt; height:23px; width:23%;" value="第2次"/>
+						<input id="txtWay.*" type="text" class="txt c1" style="display: none;"/>
+						<select id="cmbWay.*" type="text" class="txt c1" style="float:right;width:77%;"/select>
+						<input id="txtWay2.*" type="text" class="txt c1" style="display: none;"/>	
+						<select id="cmbWay2.*" type="text" class="txt c1" style="float:right;width:77%;"/select>						
+					</td>
 					<td><input id="txtMech.*" type="text" class="txt c1" style="display: none;"/>
 						<select id="cmbMech.*" type="text" class="txt c1" style="width:95%;"/select>
+						<input id="txtMech2.*" type="text" class="txt c1" style="display: none;"/>	
+						<select id="cmbMech2.*" type="text" class="txt c1" style="width:95%;"/select>
 					</td>
-					<td><input id="txtBebottom.*" type="text" class="num c1" style="width : 90% ;"/></td>
-					<td><input id="txtEnbottom.*" type="text" class="num c1" style="width : 90% ;"/></td>
-					<td><input id="txtWeight.*" type="text" class="num c1" style="width : 93% ;"/></td>
-					<td><input id="txtFixmount.*" type="text" class="num c1" style="width : 93% ;"/></td>
-					<td><select id="cmbWorktype.*" type="text" class="txt c1" style="width : 100%;"/select></td>
-					<td><input id="txtDatea1.*" type="text" class="txt c1" style="width : 96% ;"/></td>
-					<td><input id="txtDatea2.*" type="text" class="txt c1" style="width : 96% ;"/></td>
-					<td><input id="txtWorker.*" type="text" class="txt c1" style="width : 94% ;"/></td>
+					<td>
+						<input id="txtWorktype.*" type="text" class="txt c1" style="display: none;"/>
+						<select id="cmbWorktype.*" type="text" class="txt c1" style="width:100%;"/select>
+						<input id="txtWorktype2.*" type="text" class="txt c1" style="display: none;"/>	
+						<select id="cmbWorktype2.*" type="text" class="txt c1" style="width:100%;"/select>
+					</td>
+					<td>
+						<input id="txtBdate.*" type="text" class="txt c1" style="width:96%;"/>
+						<input id="txtBdate2.*" type="text" class="txt c1" style="width:96%;"/>
+					</td>
+					<td>
+						<input id="txtEdate.*" type="text" class="txt c1" style="width:96%;"/>
+						<input id="txtEdate2.*" type="text" class="txt c1" style="width:96%;"/>
+					</td>
+					<td>
+						<input id="txtWorker.*" type="text" class="txt c1" style="width:94%;"/>
+						<input id="txtWorker2.*" type="text" class="txt c1" style="width:94%;"/>
+					</td>
 	
 				</tr>
 			</table>
