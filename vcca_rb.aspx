@@ -95,6 +95,10 @@
 					sum();
 				});
 				
+				$('#chkAtax').change(function() {
+					sum();
+				});
+				
 				$('#txtMoney').change(function() {
 					sum();
 				});
@@ -711,7 +715,7 @@
 				if (!(q_cur == 1 || q_cur == 2) || ($('#txtType').val()=='E' && $('#cmbTaxtype').val()!='6') )
 					return;
 					
-				$('#txtTax').attr('readonly', 'readonly');
+				$('#txtTax').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				var t_mounts, t_prices, t_moneys, t_mount = 0, t_money = 0, t_taxrate, t_tax, t_total;
 
 				for (var k = 0; k < q_bbsCount; k++) {
@@ -739,6 +743,7 @@
 				//買受人
 				$('#txtBuyerno').attr('readonly', false);
 				$('#txtBuyer').attr('readonly', false);
+				
 				for (var k = 0; k < q_bbsCount; k++) {
 					$('#txtMount_'+k).attr('readonly', false);
 					$('#txtMoney_'+k).attr('readonly', false);
@@ -748,7 +753,10 @@
 				switch ($('#cmbTaxtype').val()) {
 					case '1':
 						// 應稅
-						if(t_money<=10)
+						if($('#chkAtax').prop('checked')){
+							t_tax=round(q_float('txtTax'), 0);
+							$('#txtTax').css('color', 'black').css('background', 'white').removeAttr('readonly');  
+						}else if(t_money<=10)
 							t_tax = 0;
 						else 
 							t_tax = round(t_money * t_taxrate, 0);
@@ -772,7 +780,7 @@
 						break;
 					case '5':
 						// 自定
-						$('#txtTax').removeAttr('readonly');
+						$('#txtTax').css('color', 'black').css('background', 'white').removeAttr('readonly');  
 						t_tax = round(q_float('txtTax'), 0);
 						t_total = t_money + t_tax;
 						break;
@@ -1241,7 +1249,10 @@
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
 						<td><input id="txtMoney"  type="text"  class="txt num c1"/></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
-						<td><input id="txtTax"  type="text"  class="txt num c1"/></td>
+						<td>
+							<input id="txtTax"  type="text"  class="txt num c1" style="width: 90%;"/>
+							<input id="chkAtax" type="checkbox" onchange='sum()' />
+						</td>
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td><input id="txtTotal"  type="text"  class="txt num c1"/></td>
 					</tr>
