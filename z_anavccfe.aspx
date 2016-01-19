@@ -159,6 +159,10 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                if(t_month == '00'){
+                	t_year = t_year - 1;
+                	t_month = '12';
+                }                	
                 $('#txtXdate1').val(t_year+'/'+t_month+'/'+t_day);//上個月1號
 				
 				$('#txtXyear').mask('9999'.substr(0,r_len));
@@ -169,6 +173,17 @@
 				$('#txtXemon2').val(t_year+'/12').mask(r_picm);
 				$('#txtLostdate').val(100);
 				//$('#Xuccgroupano select').css('width','150px');
+				
+				if(q_getPara('sys.project')=='vu'){	
+					var report='';	
+					for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+						report = $('#q_report').data().info.reportData[i].report
+						if(report=='z_anavccfe4' || report=='z_anavccfe5'){
+							delete_report=i;
+							$('#q_report div div').eq(i).hide();
+						}
+					}
+				}
 			}
 
 			function q_boxClose(s2) {

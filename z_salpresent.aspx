@@ -13,14 +13,27 @@
 		<link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 		<script src="css/jquery/ui/jquery.ui.core.js"></script>
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
-		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
+		<script src="css/jquery/ui/jquery.ui.datepicker.js"></script>
 		<script type="text/javascript">
             if (location.href.indexOf('?') < 0) {
                 location.href = location.href + "?;;;;" + ((new Date()).getUTCFullYear() - 1911);
             }
             $(document).ready(function() {
                 q_getId();
-                q_gf('', 'z_salpresent');
+                q_gf('', 'z_salpresent');   
+                
+                $.datepicker.regional['zh-TW']={
+				   dayNames:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],
+				   dayNamesMin:["日","一","二","三","四","五","六"],
+				   monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+				   monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+				   prevText:"上月",
+				   nextText:"次月",
+				   weekHeader:"週"
+				};
+				//將預設語系設定為中文
+				$.datepicker.setDefaults($.datepicker.regional["zh-TW"]);  
+				                       
             });
             function q_gfPost() {
                 $('#q_report').q_report({
@@ -75,11 +88,14 @@
                 $('#txtDate2').mask(r_picd);
                 
                 var t_1911=1911;
-                if(r_len!=4){
-	                $('#txtDate1').datepicker();
-	                $('#txtDate2').datepicker();
+                if(r_len!=4){	                           
+	                $('#txtDate1').datepicker({dateFormat : 'yy/mm/dd'});
+                	$('#txtDate2').datepicker({dateFormat : 'yy/mm/dd'});
 				}else {
 					t_1911=0
+					
+					$('#txtDate1').datepicker({dateFormat : 'yy/mm/dd'});
+                	$('#txtDate2').datepicker({dateFormat : 'yy/mm/dd'});
 				}
 
                 var t_date, t_year, t_month, t_day;
