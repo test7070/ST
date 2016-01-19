@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -79,7 +79,7 @@
                 });
                 
                 $('#cmbTypea').change(function() {
-                    if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1) {
+                    if(q_getPara('sys.project').toUpperCase()=='IT') {
 	                	if($('#cmbTypea').val()=='1' || $('#cmbTypea').val()=='3'){
 		                	for (var j = 0; j < q_bbsCount; j++) {
 		                		$('#txtTotal_'+j).attr('disabled', 'disabled');
@@ -230,7 +230,7 @@
                 $('#txtDatea').focus();
                 $("#cmbCno").val(z_cno);
                 typea_chg();
-                if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1) {
+                if(q_getPara('sys.project').toUpperCase()=='IT') {
                 	if($('#cmbTypea').val()=='1' || $('#cmbTypea').val()=='3'){
 	                	for (var j = 0; j < q_bbsCount; j++) {
 	                		$('#txtTotal_'+j).attr('disabled', 'disabled');
@@ -244,7 +244,7 @@
                     return;
                 _btnModi();
                 $('#txtDatea').focus();
-                if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1) {
+                if(q_getPara('sys.project').toUpperCase()=='IT') {
                 	if($('#cmbTypea').val()=='1' || $('#cmbTypea').val()=='3'){
 	                	for (var j = 0; j < q_bbsCount; j++) {
 	                		$('#txtTotal_'+j).attr('disabled', 'disabled');
@@ -263,12 +263,24 @@
 					$('#txtTggno').val('');
 					$('#txtTgg').val('');
 					$('#lblVccno').text('預收單號');
+					aPop = new Array(
+			             ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial,addr_invo', 'txtCustno,txtComp,txtNick,txtSerial,txtAddr', 'cust_b.aspx']
+			            , ['txtInvono_', '', 'vcca', 'noa,datea,serial,custno,comp,cno,acomp,productno,product,price,mount,money,tax,taxtype', '0txtInvono_,txtIdate_,txtSerial_,txtCustno_,txtComp_,txtCno_,txtAcomp_,txtProductno_,txtProduct_,txtPrice_,txtMount_,txtTotal_,txtTax_,cmbTaxtype_', 'vcca_b.aspx']
+			       		, ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,serial,addr_invo', 'txtTggno,txtTgg,txtSerial,txtAddr', 'tgg_b.aspx']
+			            , ['txtProductno_', 'btnProductno_', 'ucca', 'noa,product', 'txtProductno_,txtProduct_', 'ucca_b.aspx']);
+            
 				}else if($('#cmbTypea').val() == 3 || $('#cmbTypea').val() == 4){
 					$('#Cust').hide();
 					$('#txtCustno').val('');
 					$('#txtComp').val('');
 					$('#Tgg').show();
 					$('#lblVccno').text('預付單號');
+					aPop = new Array(
+			             ['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial,addr_invo', 'txtCustno,txtComp,txtNick,txtSerial,txtAddr', 'cust_b.aspx']
+						, ['txtSerial', 'lblSerial', 'vccabuyer', 'serial,buyer', '0txtSerial,txtComp', 'vccabuyer_b.aspx']
+			            , ['txtInvono_', '', 'rc2a', 'noa,datea,serial,tggno,comp,cno,acomp,money,tax,taxtype', '0txtInvono_,txtIdate_,txtSerial_,txtCustno_,txtComp_,txtCno_,txtAcomp_,txtTotal_,txtTax_,cmbTaxtype_', 'vcca_b.aspx']
+			       		, ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,serial,addr_invo', 'txtTggno,txtTgg,txtSerial,txtAddr', 'tgg_b.aspx']
+			            , ['txtProductno_', 'btnProductno_', 'ucca', 'noa,product', 'txtProductno_,txtProduct_', 'ucca_b.aspx']);
 				}
 			}
             function wrServer(key_value) {
@@ -321,7 +333,7 @@
 
             function btnPlus(org_htm, dest_tag, afield) {
                 _btnPlus(org_htm, dest_tag, afield);
-                if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1) {
+                if(q_getPara('sys.project').toUpperCase()=='IT') {
                 	if($('#cmbTypea').val()=='1' || $('#cmbTypea').val()=='3'){
 	                	for (var j = 0; j < q_bbsCount; j++) {
 	                		$('#txtTotal_'+j).attr('disabled', 'disabled');
