@@ -19,11 +19,11 @@
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
-				q_gf('', 'z_inchgs_fe');
+				q_gf('', 'z_inchg_fe');
 			});  
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_inchgs_fe',
+                    fileName : 'z_inchg_fe',
                     options : [{/* [1]*/
                         type : '0',
                         name : 'accy',
@@ -39,7 +39,7 @@
                         type : '2',
                         name : 'xsss',
                         dbf : 'sss',
-                        index : 'sss,name',
+                        index : 'noa,namea',
                         src : 'sss_b.aspx'
                     }]
                 });

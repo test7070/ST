@@ -426,7 +426,7 @@
 			</div>
 		</div>
 		<div class='dbbs'>
-			<table id="tbbs" class='tbbs' style="width:1135px;">
+			<table id="tbbs" class='tbbs' style="width:1130px;">
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />

@@ -33,7 +33,7 @@
 			q_desc = 1;
 					
 			aPop = new Array(
-				['txtFixnoa','lblFixnoa','modfixc','noa,modnoa','txtFixnoa,txtModnoa','modfixc_b.aspx'],
+				['txtFixnoa','lblFixnoa','modfixc','noa,modnoa,mechno,mech','txtFixnoa,txtModnoa,txtMechno,txtMech','modfixc_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
 			$(document).ready(function() {
@@ -53,14 +53,12 @@
 				q_getFormat();
 				bbmMask = [['txtDatea',r_picd]];
 				q_mask(bbmMask);				
-				//q_cmbParse("cmbType",' ,繪圖,領休,送修');	
+
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtFixnoa').val()) && (q_cur == 1 || q_cur == 2) ){
 						q_gt('modfixc', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixcs");
 					}
-					
 				});
-				
 			}
 
 			function q_boxClose(s2) {
@@ -70,7 +68,6 @@
 						q_boxClose2(s2);
 						break;
 				}
-			
 				b_pop = '';
 			}
 			
