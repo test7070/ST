@@ -46,10 +46,10 @@
                     },{//[9]
                     	type : '6',
                     	name : 'xworker'
-                    },{//[10][11]
-                    	type : '1',
+                    },{//[10]
+                    	type : '6',
                     	name : 'xframe'
-                    },{//[12]
+                    },{//[11]
                     	type : '6',
                     	name : 'ydatea'
                     }]
@@ -66,10 +66,17 @@
                 $('#txtXmodnoa1').val(t_modnoa);
                 $('#txtXmodnoa2').val(t_modnoa);
                 
-                $('#txtXnoa1').css('width','130px');
-				$('#txtXnoa2').css('width','130px'); 
-				$('#txtXmodnoa1').css('width','130px');
-				$('#txtXmodnoa2').css('width','130px'); 
+                $('#txtXnoa1').css('width','180px');
+				$('#txtXnoa2').css('width','180px'); 
+				$('#txtXmodnoa1').css('width','180px');
+				$('#txtXmodnoa2').css('width','180px');
+				$('#txtXnob1').css('width','180px');
+				$('#txtXnob2').css('width','180px'); 
+				$('#txtXdatea1').css('width','180px');
+				$('#txtXdatea2').css('width','180px');
+				$('#txtXworker').css('width','180px');
+				$('#txtXframe').css('width','180px');
+				$('#txtydatea').css('width','180px');
                         
 				var r_1911=1911;
 				if(r_len==4){//西元年

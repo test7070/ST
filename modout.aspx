@@ -82,7 +82,7 @@
 							if($('#txtNob_'+i).val().length>0)
 								pos = i+1;
 						}
-						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
+						$.each(as, function(index, elm){//判斷modfixc.nob是否已存在於bbs內:isexist->y:1,n:0
 							isexist = 0;
 							for(var i=0; i<q_bbsCount ;i++){							
 								if(elm.nob == $('#txtNob_'+i).val()){								
@@ -95,6 +95,7 @@
 								$('#txtCode_'+(pos-1)).val(elm.code);
 								$('#txtDetail_'+(pos-1)).val(elm.detail);
 								$('#txtFrame_'+(pos-1)).val(elm.frame);
+								$('#txtMount_'+(pos-1)).val(elm.mount);
 							}
 						});
 						break;
@@ -414,7 +415,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width:1080px">
+		<div class='dbbs' style="width:1075px">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:1%;">

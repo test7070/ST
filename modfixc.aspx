@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title> </title>
+		<title></title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -37,12 +37,14 @@
 				['txtInnoa','lblInnoa','modfix','noa,modnoa,mechno,mech','txtInnoa,txtModnoa,txtMechno,txtMech','modfix_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
+			
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1);
 			});
+			
 			function main() {
 				if (dataErr) {
 					dataErr = false;
@@ -68,6 +70,7 @@
 					}	
 				});
 				
+				//結案若被勾選則不得再更動bbm資料
 				$('#chkEnda').click(function(){				
 					if($('#chkEnda').prop("checked")){
 						$("#txtInnoa").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
@@ -109,7 +112,7 @@
 							if($('#txtNob_'+i).val().length>0)
 								pos = i+1;
 						}
-						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內:isexist->y:1,n:0
+						$.each(as, function(index, elm){//判斷modfixs.nob是否已存在於bbs內:isexist->y:1,n:0
 							isexist = 0;
 							for(var i=0; i<q_bbsCount ;i++){							
 								if(elm.nob == $('#txtNob_'+i).val()){								
@@ -155,6 +158,7 @@
 				}
 			}
 			
+			//取前一次圖檔底徑、車修後底徑、磨耗作為本次圖檔底徑、車修前底徑、前次磨耗
 			function getLast(){
 				var btm,ebtm,loss,noa;
 			  	for(var i=0; i<t_data1.length; i++){	
@@ -162,7 +166,7 @@
 			  		ebtm = '';
 			  		loss = '';
 			  		noa  = '';		  		  		
-			  		for(var j=0; j<t_data2.length; j++){
+			  		for(var j=0; j<t_data2.length; j++){//從modfixcs找相同nob且noa最大者視為前一次
 			  			if(t_data1[i].nob==t_data2[j].nob && t_data2[j].noa>noa){		  				
 			  				btm  = t_data2[j].bottom;
 			  				ebtm = t_data2[j].enbottom;
@@ -170,7 +174,7 @@
 			  				noa  = t_data2[j].noa;
 			  			}
 			  		}//j-loop
-			  		if(btm == ''){
+			  		if(btm == ''){//若圖檔底徑為空則取models.bottom
 			  			for(var j=0; j<t_data3.length; j++){
 				  			if(t_data1[i].nob==t_data3[j].productno ){	  				
 				  				btm  = t_data3[j].bottom;				  				
@@ -195,7 +199,7 @@
 				else
 					$('#txtWorker2').val(r_name);	
 				
-				//檢查日期
+				//檢查維修日期(modfixc.datea)>入庫日期(modfix.datea)?
 				var t_date = trim($('#txtDatea').val());
 				if(t_date < t_indate){
 					alert('維修日期錯誤:\n　　維修日期('+t_date+')早於入庫日期('+t_indate+')');
@@ -229,6 +233,7 @@
 			}
 			
 			function bbsAssign() {
+				//結案若被勾選則不得再更動bbs資料
 				$('#chkEnda').click(function(){		
 					if($('#chkEnda').prop("checked")){
 						lockBbs();											    

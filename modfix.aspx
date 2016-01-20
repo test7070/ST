@@ -20,7 +20,7 @@
 			var q_readonly = ['txtWorker', 'txtWorker2','txtNoa','txtMech'];
 			var q_readonlys = ['txtDetail1','txtDetail2','txtModel','txtNob','txtWheel1','txtCode1'];
 			var bbmNum = [];
-			var bbsNum = [['txtMount1',15,0,0], ['txtWeight1',15,0,0]];
+			var bbsNum = [['txtMount1',15,0,0], ['txtWeight1',15,1,0]];
 			var bbmMask = [];
 			var bbsMask = [];
 			var pNoq =1;
@@ -32,8 +32,7 @@
 			brwKey = 'noa';
 			q_desc = 1;
 			
-			aPop = new Array(
-			//	['txtTggno_', 'btnTggno_', 'tgg', 'noa,comp', 'txtTggno_,txtTgg_', "tgg_b.aspx"],
+			aPop = new Array(			
 				['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
@@ -92,7 +91,7 @@
 							if($('#txtNob_'+i).val().length>0)
 								pos = i+1;
 						}
-						for(var i=as.length-1; i>=0; i--){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
+						for(var i=as.length-1; i>=0; i--){//判斷model.productno是否已存在於bbs內:isexist->y:1,n:0
 							isexist = 0;
 							for(var j=0; j<q_bbsCount ;j++){							
 								if(as[i].productno == $('#txtNob_'+j).val()){								
@@ -148,6 +147,7 @@
 			}
 
 			function bbsAssign() {		
+				//自動抓取第一筆資料
 				$('#cmbWay1_0').change(function(){	
 					for (var j=1; j<q_bbsCount; j++){
 						$('#cmbWay1_'+j).val($('#cmbWay1_0').val());
@@ -436,9 +436,9 @@
 					<td style="display: none;" align="center" style="width:8%;"><a id='lblWheel1_s'></a></td>
 					<td align="center" style="width:8%;"><a id='lblCode1_s'></a></td>
 					<td align="center" style="width:10%;"><a id='lblDetail1_s'></a></td>
-					<td align="center" style="width:5%;"><a id='lblFrame1_s'></a></td>	
-					<td align="center" style="width:5%;"><a id='lblMount1_s'></a></td>				
+					<td align="center" style="width:5%;"><a id='lblFrame1_s'></a></td>										
 					<td align="center" style="width:10%;"><a id='lblWay1_s'></a></td>
+					<td align="center" style="width:5%;"><a id='lblMount1_s'></a></td>
 					<td align="center" style="width:5%;"><a id='lblWeight1_s'></a></td>
 					<td style="display:none;"align="center" style="width:8%;"><a id='lblWheel2_s'></a></td>				
 					<td style="display:none;" align="center" style="width:8%;"><a id='lblCode2_s'></a></td>
@@ -458,9 +458,9 @@
 					<td style="display: none;"><input id="txtWheel1.*" type="text"  style="width : 98% ;"/></td>
 					<td><input id="txtCode1.*" type="text"  style="width : 98% ;"/></td>
 					<td><input id="txtDetail1.*" type="text" class="txt c1" style="width:98%;"/></td>
-					<td><input id="txtFrame1.*" type="text" class="num c1" style="width:98%;"/></td>					
-					<td><input id="txtMount1.*" type="text" class="num c1" style="width:98%;"/></td>						
+					<td><input id="txtFrame1.*" type="text" class="num c1" style="width:98%;"/></td>																
 					<td ><select id="cmbWay1.*" type="text" class="txt c1" style="width:99%;"/select></td>
+					<td><input id="txtMount1.*" type="text" class="num c1" style="width:98%;"/></td>
 					<td ><input id="txtWeight1.*" type="text" class="num c1" style="width:95%;"/></td>
 					<td style="display:none;"><input id="txtWheel2.*" type="text"  style="width:70%;"/></td>	
 					<td style="display:none;"><input id="txtCode2.*" type="text" style="width:70%;"/></td>
