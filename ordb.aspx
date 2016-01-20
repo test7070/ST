@@ -571,7 +571,7 @@
 					return;
 				}
 				
-				if(q_getPara('ordb.accu')=='1' && !chack_accu &&q_getPara('sys.comp').indexOf('彩虹') > -1){
+				if(q_getPara('ordb.accu')=='1' && !chack_accu &&q_getPara('sys.project').toUpperCase()=='RB'){
 					var t_year = $.trim($('#txtOdate').val()).substr(0,3);
 					var t_where='',t_where1='';
 					t_where="where=^^left(a.datea,3)='"+t_year+"' and isnull(a.cancel,0)=0 and isnull(b.cancel,0)=0 and a.noa!='"+$('#txtNoa').val()+"'^^"
