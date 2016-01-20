@@ -105,11 +105,11 @@
 						var str = '';
 						var isexist = 0;
 						var pos = 0;
-						for(var i=0; i<q_bbsCount; i++){
+						for(var i=0; i<q_bbsCount; i++){//bbs最後一列之行數
 							if($('#txtNob_'+i).val().length>0)
 								pos = i+1;
 						}
-						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內isexist->y:1,n:0
+						$.each(as, function(index, elm){//判斷model.productno是否已存在於bbs內:isexist->y:1,n:0
 							isexist = 0;
 							for(var i=0; i<q_bbsCount ;i++){							
 								if(elm.nob == $('#txtNob_'+i).val()){								
@@ -172,7 +172,7 @@
 			  		}//j-loop
 			  		if(btm == ''){
 			  			for(var j=0; j<t_data3.length; j++){
-				  			if(t_data1[i].nob==t_data3[j].productno ){		  				
+				  			if(t_data1[i].nob==t_data3[j].productno ){	  				
 				  				btm  = t_data3[j].bottom;				  				
 				  			}
 				  		}//j-loop	
@@ -195,6 +195,7 @@
 				else
 					$('#txtWorker2').val(r_name);	
 				
+				//檢查日期
 				var t_date = trim($('#txtDatea').val());
 				if(t_date < t_indate){
 					alert('維修日期錯誤:\n　　維修日期('+t_date+')早於入庫日期('+t_indate+')');
@@ -372,7 +373,7 @@
 			function btnIns() {
 				_btnIns();
 				$('#txtNoa').val('AUTO');
-				$('#txtDatea').val(q_date()); 				
+				$('#txtDatea').val(q_date());				
 				refreshBbm();
 				refreshBbs();
 			}
