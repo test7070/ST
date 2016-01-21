@@ -20,7 +20,7 @@
 			var q_readonly = ['txtNoa', 'txtModnoa', 'txtMech', 'txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail'];
 			var bbmNum = [];
-			var bbsNum = [['txtWeight',15,1,0], ['txtMount',15,0,0], ['txtFixmount',15,0,0], ['txtBottom',15,3,0], ['txtBebottom',15,1,0], ['txtEnbottom',15,1,0], 
+			var bbsNum = [['txtWeight',15,1,0], ['txtMount',15,0,0], ['txtFixmount',15,0,0], ['txtBottom',15,2,0], ['txtBebottom',15,2,0], ['txtEnbottom',15,2,0], 
 						  ['txtLastloss',15,1,0], ['txtLoss',15,1,0], ['txtBrepair',15,1,0], ['txtErepair',15,1,0]];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -240,7 +240,18 @@
 					}else{		
 						unlockBbs();									    									
 					}	
-				});		
+				});
+				$('#chkFixed').click(function(){		
+					if($('#chkFixed').prop("checked")){
+						for(var j = 0; j < q_bbsCount; j++)
+							$('.ishide_'+j).show();										    
+					}else{		
+						for(var j = 0; j < q_bbsCount; j++){
+							if(($('#txtMount_'+j).val()!="") && ($('#txtFixmount_'+j).val()!="") && ($('#txtFixmount_'+j).val()==$('#txtMount_'+j).val()))
+								$('.ishide_'+j).hide();
+						}									    									
+					}	
+				});
 				
 				for (var j = 0; j < q_bbsCount; j++) {					
 					//完成訖時間=完成起時間+30min
@@ -314,7 +325,7 @@
 					$("#cmbMech2_"+j).val($('#txtMech2_'+j).val());
 					
 					//已維修(數量=維修數量)不顯示 2015/11/20
-					if(($('#txtMount_'+j).val()!="") && ($('#txtFixmount_'+j).val()!="") && ($('#txtFixmount_'+j).val()==$('#txtMount_'+j).val())){
+					if(($('#txtMount_'+j).val()!="") && ($('#txtFixmount_'+j).val()!="") && ($('#txtFixmount_'+j).val()==$('#txtMount_'+j).val()) && $('#chkFixed').prop("checked")==false){
 						$('.ishide_'+j).hide();
 					}
 					
@@ -336,7 +347,17 @@
 							$("#cmbMech2_"+i).empty();
 							changeWay("2",i);
 						}
-					});					
+					});
+					$('#txtWorker_0').change(function(){				
+						for (var i=1; i<q_bbsCount; i++){
+							$('#txtWorker_'+i).val($('#txtWorker_0').val());
+						}
+					});
+					$('#txtWorker2_0').change(function(){				
+						for (var i=1; i<q_bbsCount; i++){
+							$('#txtWorker2_'+i).val($('#txtWorker2_0').val());
+						}
+					});			
 					
 					//磨耗=補正前-補正後,車修後底徑=圖檔底徑+補正後
 					$('#txtBrepair_'+j).change(function(){	
@@ -429,7 +450,7 @@
 			
 			function refreshBbs(){
 				for (var i = 0; i < q_bbsCount; i++) {
-            		if($("#txtBdate2_"+i).val()!=''|| $("#txtEdate2_"+i).val()!=''|| $("#txtWorker2_"+i).val()!=''){
+            		if($("#txtBdate2_"+i).val()!=''|| $("#txtEdate2_"+i).val()!=''){
             			$("#cmbWay2_"+i).css("display", "block");
 						$("#cmbMech2_"+i).css("display", "block");
 						$("#cmbWorktype2_"+i).css("display", "block");
@@ -444,7 +465,9 @@
 						lockBbs();									    
 					}else{		
 						unlockBbs();								    									
-					}
+					}		
+					
+					
 	            }            	
 			}
 					
@@ -510,11 +533,11 @@
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				
-				if(q_cur==1 || q_cur==2){
-                	if(r_rank < 8){
-                		$('#chkEnda').attr('disabled', 'disabled');
-                	}
-                }
+				// if(q_cur==1 || q_cur==2){
+                	// if(r_rank < 8){
+                		// $('#chkEnda').attr('disabled', 'disabled');
+                	// }
+                // }
 			}
 
 			function btnMinus(id) {
@@ -712,6 +735,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
@@ -734,11 +758,14 @@
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
-						<td colspan="2" align="right">
+						<td colspan="3" align="right">
 							<input id="btnIn" type="Button"/>
-							<span> </span><a id="lblEnda">　　　</a>
+							<span> </span><a id="">　</a>
 							<input id="chkEnda" type="checkbox" disabled="disabled">
 							<span> </span><a id="lblEnda">結案</a>
+							<span> </span><a id="">　</a>
+							<input id="chkFixed" type="checkbox" disabled="disabled">
+							<span> </span><a id="lblFixed">已維修</a>
 						</td>
 					</tr>
 						
@@ -767,11 +794,11 @@
 					<td align="center" style="width:1.5%;"><a id='lblErepair_s'></a></td>
 					<td align="center" style="width:1.5%;"><a id='lblLoss_s'></a></td>
 					<td align="center" style="width:1.5%;"><a id='lblEnbottom_s'></a></td>
-					<td align="center" style="width:4%;"><a id='lblWay_s'></a></td>
+					<td align="center" style="width:4.5%;"><a id='lblWay_s'></a></td>
 					<td align="center" style="width:1.5%;"><a id='lblMech_s'></a></td>
 					<td align="center" style="width:1.5%;"><a id='lblWorktype_s'></a></td>
-					<td align="center" style="width:3%;"><a id='lblBdate_s'></a></td>
-					<td align="center" style="width:3%;"><a id='lblEdate_s'></a></td>
+					<td align="center" style="width:3.5%;"><a id='lblBdate_s'></a></td>
+					<td align="center" style="width:3.5%;"><a id='lblEdate_s'></a></td>
 					<td align="center" style="width:1.5%;"><a id='lblWorker_s'></a></td>
 					<td align="center" style="width:8%;"><a id='lblMemo_s'></a></td>
 				</tr>
@@ -815,11 +842,11 @@
 						<select id="cmbWorktype2.*" type="text" class="txt c1" style="display:none; width:100%;"/select>
 					</td>
 					<td>
-						<input id="txtBdate.*" type="text" class="txt c1" style="width:96%;"/>
+						<input id="txtBdate.*" type="text" class="txt c1" style="width:97%;"/>
 						<input id="txtBdate2.*" type="text" class="txt c1" style="display: none; width:96%;"/>
 					</td>
 					<td>
-						<input id="txtEdate.*" type="text" class="txt c1" style="width:96%;"/>
+						<input id="txtEdate.*" type="text" class="txt c1" style="width:97%;"/>
 						<input id="txtEdate2.*" type="text" class="txt c1" style="display:none; width:96%;"/>
 					</td>
 					<td>

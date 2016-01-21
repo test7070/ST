@@ -19,28 +19,22 @@
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
-				q_gf('', 'z_modfixc_rs');
+				q_gf('', 'z_cubm_pk');
 			});  
 			
-			aPop = new Array(
-				['txtXnoa1', '', 'model', 'noa', 'txtXnoa1', 'model_b.aspx'],
-				['txtXnoa2', '', 'model', 'noa', 'txtXnoa2', 'model_b.aspx']
-			);
+			aPop = new Array(['txtXuno', '', 'view_uccc', 'uno', 'txtUno', 'uccc_b.aspx']);
 			
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_modfixc_rs',
+                    fileName : 'z_cubm_pk',
                     options : [
                     {  //[1][2]
-                        type : '1',
-                        name : 'xnoa'
-                    },{//[3][4]
                     	type : '1',
                     	name : 'xdate'
                     	
-                    },{//[5]
+                    },{//[3]
                     	type : '6',
-                    	name : 'xframe'
+                    	name : 'xuno'
                     	
                     }]
                 });
@@ -48,20 +42,35 @@
 				q_getFormat();
 				q_langShow();   
                 
-                var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
-                $('#txtXnoa1').val(t_noa);    
-				$('#txtXnoa2').val(t_noa);
-                        
-				var r_1911=1911;
-				if(r_len==4){//西元年
-					r_1911=0;
-				}else{
-					$('#txtXdate1').datepicker();
-					$('#txtXdate2').datepicker();
-				}
-                 
-                 $('#txtXdate1').mask(r_picd);
-	             $('#txtXdate2').mask(r_picd);                       
+                $('#txtXdate1').mask(r_picd);
+	            $('#txtXdate2').mask(r_picd);
+	            $('#txtXdate1').datepicker();
+				$('#txtXdate2').datepicker(); 
+				
+				$('#txtXuno').css('width','240px');
+				$('#Xuno').css('width','610px');
+	             
+	            var t_date, t_year, t_month, t_day;
+                t_date = new Date();
+                t_date.setDate(1);
+                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtXdate1').val(t_year + '/' + t_month + '/' + t_day);
+
+                t_date = new Date();
+                t_date.setDate(35);
+                t_date.setDate(0);
+                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);                     
                 				
 			}
 
