@@ -37,9 +37,9 @@
             brwKey = 'Datea';
             brwCount2 = 3;
 
-            aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax', 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'Tgg_b.aspx']
-            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtStoreno_', "ucaucc_b2.aspx?" ]
-            , ['txtProductno__', 'btnProduct__', 'ucc', 'noa,product,unit', 'txtProductno__,txtProduct__,txtUnit__,txtStoreno__', "ucc_b.aspx?" ]
+            aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,tel,fax', 'txtTggno,txtTgg,txtNick,txtTel,txtFax', 'tgg_b.aspx']
+            , ['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_,txtStoreno_', "ucaucc_b2.aspx?" ]
+            , ['txtProductno__', 'btnProduct__', 'ucaucc', 'noa,product,unit', 'txtProductno__,txtProduct__,txtUnit__,txtStoreno__', "ucaucc_b2.aspx?" ]
             , ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_', "store_b.aspx?" ]
             , ['txtStoreno__', 'btnStore__', 'store', 'noa,store', 'txtStoreno__', "store_b.aspx?" ]);
 
@@ -85,8 +85,13 @@
 							b_ret = getb_ret();
 							if (b_ret.length>0)
 								b_ret.splice(0, 1);
-							if (b_ret.length>0)
-								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit', b_ret.length, b_ret, 'noa,product,unit', 'txtProductno,txtProduct');
+							if (b_ret.length>0){
+								if(ucaucc_bbst=='bbs')
+									ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit', b_ret.length, b_ret, 'noa,product,unit', 'txtProductno,txtProduct');
+								if(ucaucc_bbst=='bbt')
+									ret = q_gridAddRow(bbtHtm, 'tbbt', 'txtProductno,txtProduct,txtUnit', b_ret.length, b_ret, 'noa,product,unit', 'txtProductno,txtProduct');
+								ucaucc_bbst='';
+							}
 						}
 					}
 				}
@@ -108,6 +113,26 @@
                     alert(q_getMsg('lblDatea') + '錯誤。');
                     return;
                 }
+                
+                //1050121
+                for (var i = 0; i < q_bbsCount; i++) {
+                	if(emp($('#txtDatea_'+i).val())){
+                		$('#txtDatea_'+i).val($('#txtDatea').val());
+                	}
+                }
+                
+                for (var i = 0; i < q_bbtCount; i++) {
+                	if(emp($('#txtDatea__'+i).val())){
+                		$('#txtDatea__'+i).val($('#txtDatea').val());
+                	}
+                	
+                	if(!emp($('#txtStoreno__0').val())){
+                		if(i !=0 && emp($('#txtStoreno__'+i).val())){
+                			$('#txtStoreno__'+i).val($('#txtStoreno__0').val());
+                		}
+                	}
+                }
+                
                 if(q_cur==1)
                     $('#txtWorker').val(r_name);
                 else
@@ -126,7 +151,8 @@
                     return;
                 q_box('vcf_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
             }
-
+			
+			var ucaucc_bbst='';
             function bbsAssign() {
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
@@ -137,6 +163,9 @@
 							var n = $(this).attr('id').replace('txtProductno_', '');
 							if(q_cur==1 || q_cur==2)
 								$('#btnProduct_'+n).click();
+						});
+						$('#btnProduct_' + i).click(function(e) {
+							ucaucc_bbst='bbs';
 						});
 						$('#txtStoreno_' + i).bind('contextmenu', function(e) {
 							/*滑鼠右鍵*/
@@ -166,6 +195,9 @@
 							var n = $(this).attr('id').replace('txtProductno__', '');
 							if(q_cur==1 || q_cur==2)
 								$('#btnProduct__'+n).click();
+						});
+						$('#btnProduct__' + i).click(function(e) {
+							ucaucc_bbst='bbt';
 						});
 						$('#txtStoreno__' + i).bind('contextmenu', function(e) {
 							/*滑鼠右鍵*/
@@ -213,7 +245,7 @@
             }
 
             function bbsSave(as) {
-                if (!as['product']) {
+                if (!as['product'] && !as['productno']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
@@ -222,7 +254,7 @@
             }
             
             function bbtSave(as) {
-                if (!as['product']) {
+                if (!as['product'] && !as['productno']) {
                     as[bbtKey[1]] = '';
                     return;
                 }

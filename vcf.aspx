@@ -88,6 +88,19 @@
                     alert(q_getMsg('lblDatea') + '錯誤。');
                     return;
                 }
+                
+                for (var i = 0; i < q_bbsCount; i++) {
+                	if(emp($('#txtDatea_'+i).val())){
+                		$('#txtDatea_'+i).val($('#txtDatea').val());
+                	}
+                }
+                
+                for (var i = 0; i < q_bbtCount; i++) {
+                	if(emp($('#txtDatea__'+i).val())){
+                		$('#txtDatea__'+i).val($('#txtDatea').val());
+                	}
+                }
+                
                 if (q_cur == 1)
                     $('#txtWorker').val(r_name);
                 else
@@ -191,13 +204,22 @@
             }
 
             function bbsSave(as) {
-                if (!as['product']) {
+                if (!as['product'] && !as['productno']) {
                     as[bbsKey[1]] = '';
                     return;
                 }
                 q_nowf();
                 return true;
             }
+            
+            function bbtSave(as) {
+				if (!as['product'] && !as['productno']) {
+					as[bbtKey[1]] = '';
+					return;
+				}
+				q_nowf();
+				return true;
+			}
 
             function sum() {
                 var t_imount = 0, t_iweight = 0, t_omount = 0, t_oweight = 0;
