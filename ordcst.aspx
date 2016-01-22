@@ -509,11 +509,11 @@
 					Unlock(1);
 					return;
 				}
-				if ($('#txtOdate').val().substring(0, 3) != r_accy) {
+				/*if ($('#txtOdate').val().substring(0, 3) != r_accy) {
 					alert('年度異常錯誤，請切換到【' + $('#txtOdate').val().substring(0, 3) + '】年度再作業。');
 					Unlock(1);
 					return;
-				}
+				}*/
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
@@ -671,7 +671,7 @@
 				}
 				_bbsAssign();
 				size_change();
-				if(q_getPara('sys.comp').substring(0,2)=='傑期')
+				if(q_getPara('sys.project').toUpperCase()=='PK')
 					$('.pk').show();
 					
 				if(q_getPara('sys.project').toUpperCase()=='RK')
@@ -1293,7 +1293,7 @@
 					<td align="center" style="width:80px;"><a>序</a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td class="st" align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
-					<td class="st" align="center" style="width:100px;"><a>等級</a></td>
+					<td class="st" align="center" style="width:100px;"><a>等級</a><BR><a>鋼廠</a></td>
 					<td align="center" style="width:140px;display:none;" class="pk">規範<BR>國別</td>
 					<td class="st" align="center" style="width:340px;" id='Size'>
 						<a id='lblSize_help'> </a><BR>
@@ -1337,7 +1337,10 @@
 						<input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
-					<td class="st"><input id="txtClass.*" type="text" style='width: 95%;'/></td>
+					<td class="st">
+						<input id="txtClass.*" type="text" style='width: 95%;'/>
+						<input id="txtSource.*" type="text" style='width: 95%;'/>
+					</td>
 					<td style="display:none;" class="pk">
                         <input id="txtUcolor.*" type="text" style="width:95%;"/>
                         <input id="txtScolor.*" type="text" style="width:95%;"/>

@@ -484,8 +484,8 @@
                         q_bodyId($(this).attr('id'));
                         b_seq = t_IdSeq;
 
-                        q_tr('txtBkmoney_' + b_seq, q_mul(q_float('txtBkmount_' + b_seq), q_float('txtPrice_' + b_seq)));
-                        q_tr('txtSalemoney_' + b_seq, q_mul(q_float('txtSalemount_' + b_seq), q_float('txtPrice_' + b_seq)));
+                        q_tr('txtBkmoney_' + b_seq, round(q_mul(q_float('txtBkmount_' + b_seq), q_float('txtPrice_' + b_seq)),0));
+                        q_tr('txtSalemoney_' + b_seq, round(q_mul(q_float('txtSalemount_' + b_seq), q_float('txtPrice_' + b_seq)),0));
                     });
 
                     $('#txtBkmount_' + i).change(function() {
@@ -494,7 +494,7 @@
                         q_bodyId($(this).attr('id'));
                         b_seq = t_IdSeq;
 
-                        q_tr('txtBkmoney_' + b_seq, q_mul(q_float('txtBkmount_' + b_seq), q_float('txtPrice_' + b_seq)));
+                        q_tr('txtBkmoney_' + b_seq, round(q_mul(q_float('txtBkmount_' + b_seq), q_float('txtPrice_' + b_seq)),0));
                     });
 
                     $('#txtSalemount_' + i).change(function() {
@@ -503,7 +503,7 @@
                         q_bodyId($(this).attr('id'));
                         b_seq = t_IdSeq;
 
-                        q_tr('txtSalemoney_' + b_seq, q_mul(q_float('txtSalemount_' + b_seq), q_float('txtPrice_' + b_seq)));
+                        q_tr('txtSalemoney_' + b_seq, round(q_mul(q_float('txtSalemount_' + b_seq), q_float('txtPrice_' + b_seq)),0));
                     });
                 }
                 _bbsAssign();
