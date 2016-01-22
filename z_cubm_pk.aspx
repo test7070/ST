@@ -34,9 +34,14 @@
                     	
                     },{//[3]
                     	type : '6',
-                    	name : 'xuno'
-                    	
-                    }]
+                    	name : 'xuno'                    	
+                    },{//[4][5]
+						type : '2',
+						name : 'xmech',
+						dbf : 'mech',
+						index : 'noa,mech',
+						src : 'mech_b.aspx'
+					}]
                 });
                 q_popAssign();
 				q_getFormat();
