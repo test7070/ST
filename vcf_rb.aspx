@@ -115,7 +115,17 @@
                 }
                 
                 //1050121
+                for (var i = 0; i < q_bbsCount; i++) {
+                	if(emp($('#txtDatea_'+i).val())){
+                		$('#txtDatea_'+i).val($('#txtDatea').val());
+                	}
+                }
+                
                 for (var i = 0; i < q_bbtCount; i++) {
+                	if(emp($('#txtDatea__'+i).val())){
+                		$('#txtDatea__'+i).val($('#txtDatea').val());
+                	}
+                	
                 	if(!emp($('#txtStoreno__0').val())){
                 		if(i !=0 && emp($('#txtStoreno__'+i).val())){
                 			$('#txtStoreno__'+i).val($('#txtStoreno__0').val());
@@ -244,7 +254,7 @@
             }
             
             function bbtSave(as) {
-                if (!as['product']) {
+                if (!as['product'] && !as['productno']) {
                     as[bbtKey[1]] = '';
                     return;
                 }
