@@ -17,14 +17,14 @@
         }
         var q_name="cubm";
         var q_readonly = ['txt'];
-        var bbmNum = [['txtGweight',15,2,0], ['txtWeight',15,2,0], ['txtLength',15,2,0]]; 
+        var bbmNum = [['txtGmount',15,0,0], ['txtMount',15,0,0],['txtGweight',15,2,0], ['txtWeight',15,2,0], ['txtLength',15,2,0]]; 
         var bbmMask = []; 
         q_sqlCount = 6; 
         brwCount = 6; 
         brwList =[];
         brwNowPage = 0;
         brwKey = 'noa';
-        brwCount2 = 7;
+        brwCount2 = 10;
 
         aPop = new Array(['txtMechno', 'lblMech', 'mech', 'noa,mech', 'txtMechno,txtMech','mech_b.aspx'],
         				 ['txtUno', 'lblUno', 'view_uccc', 'uno', 'txtUno', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']);
@@ -53,6 +53,17 @@
 			q_mask(bbsMask);
 			
 			q_cmbParse("cmbTrantype",q_getPara('sys.tran'));
+			
+			$('#txtUno').blur(function(){
+				q_gt('view_uccb', "where=^^uno='"+$('#txtUno').val()+"'^^", 0, 0, 0, 'productSpec');
+			});
+			$('#txtOrderno').blur(function(){
+				q_gt('view_ordes', "where=^^noa='"+$('#txtOrderno').val()+"' and no2='"+$('#txtNo2').val()+"'^^", 0, 0, 0, 'ordeSpec',r_accy);
+			});
+			$('#txtNo2').blur(function(){
+				q_gt('view_ordes', "where=^^noa='"+$('#txtOrderno').val()+"' and no2='"+$('#txtNo2').val()+"'^^", 0, 0, 0, 'ordeSpec',r_accy);
+			});
+			
         }
 
         function q_boxClose( s2) { 
@@ -67,6 +78,34 @@
 
         function q_gtPost(t_name) {  
             switch (t_name) {
+            	case 'productSpec': 
+                	var as = _q_appendData("view_uccb", "", true);             	
+					if (as[0] != undefined) {
+						//存於資料庫以'/'分割資料
+						$('#txtProduct').val(as[0].productno+'/'+as[0].product+'/'+as[0].spec+'/'+as[0].size+'/'+as[0].weight+'/'+as[0].mount);
+						//畫面顯示
+						$('#textP1').val(as[0].productno);
+						$('#textP2').val(as[0].product);
+						$('#textP3').val(as[0].spec);
+						$('#textP4').val(as[0].size);
+						$('#textP5').val(as[0].weight+'kg');
+						$('#textP6').val(as[0].mount);
+					}         
+                    break;
+                case 'ordeSpec': 
+                	var as = _q_appendData("view_ordes", "", true);
+					if (as[0] != undefined) {
+						//存於資料庫以'/'分割資料				
+						$('#txtOrdespec').val(as[0].productno+'/'+as[0].product+'/'+as[0].spec+'/'+as[0].size+'/'+as[0].weight+'/'+as[0].mount);
+						//畫面顯示
+						$('#textO1').val(as[0].productno);
+						$('#textO2').val(as[0].product);
+						$('#textO3').val(as[0].spec);
+						$('#textO4').val(as[0].size);
+						$('#textO5').val(as[0].weight+'kg');
+						$('#textO6').val(as[0].mount);
+					}         
+                    break;    
                 case q_name: 
                 	if (q_cur == 4)   
                         q_Seek_gtPost();            
@@ -85,6 +124,7 @@
            _btnIns();
 			$('#txtNoa').val('AUTO');
 			$('#txtNoq').val('001');
+			$('#txtOrderno').val(q_getHref()[1]=='undefined'?'':q_getHref()[1]);
 			$('#txtDatea').val(q_date()); 
 			refreshBbm();
         }
@@ -130,6 +170,11 @@
         
         function refreshBbm() {
 			$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+			
+			for(var i=1; i<=6; i++){
+				$('#textP'+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');	
+				$('#textO'+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');	
+			}
 		}	
 
         function readonly(t_para, empty) {
@@ -229,7 +274,7 @@
 				width: 100%;
 			}
 			.tbbm tr {
-				height: 42px;
+				height: 43px;
 			}
 			/*.tbbm tr td {
 				width: 10%;
@@ -346,6 +391,30 @@
 						<td colspan="3"><input id="txtUno" type="text" class="txt c1" style="float: left;"/></a></td>
 						<td><span> </span><a id='lblTrantype' class="lbl"></a></td>
 						<td><select id="cmbTrantype" class="txt c1" ></select></a></td>					
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblProduct' class="lbl"></a></td>
+						<td colspan="5" style="display: none"><input id="txtProduct" type="text" class="txt c1" /></a></td>
+						<td colspan="5">
+							<input id="textP1" type="text" class="txt c1" style="width: 12%"/></a>
+							<input id="textP2" type="text" class="txt c1" style="width: 16%"/></a>
+							<input id="textP3" type="text" class="txt c1" style="width: 16%"/></a>
+							<input id="textP4" type="text" class="txt c1" style="width: 32%"/></a>
+							<input id="textP5" type="text" class="txt c1" style="text-align:right; width: 12%"/></a>
+							<input id="textP6" type="text" class="txt c1" style="text-align:right; width: 12%"/></a>
+						</td>					
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblOrdespec' class="lbl"></a></td>
+						<td colspan="5" style="display: none"><input id="txtOrdespec" type="text" class="txt c1" /></a></td>
+						<td colspan="5">
+							<input id="textO1" type="text" class="txt c1" style="width: 12%"/></a>
+							<input id="textO2" type="text" class="txt c1" style="width: 16%"/></a>
+							<input id="textO3" type="text" class="txt c1" style="width: 16%"/></a>
+							<input id="textO4" type="text" class="txt c1" style="width: 32%"/></a>
+							<input id="textO5" type="text" class="txt c1" style="text-align:right; width: 12%"/></a>
+							<input id="textO6" type="text" class="txt c1" style="text-align:right; width: 12%"/></a>
+						</td>						
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMech' class="lbl btn"></a></td>	
