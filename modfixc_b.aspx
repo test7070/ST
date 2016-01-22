@@ -44,14 +44,18 @@
 					<th align="center"> </th>
 					<th align="center" style='color:Blue;' ><a id='vewNoa'> </a></th>
 					<th align="center" style='color:Blue;' ><a id='vewModnoa'> </a></th>
+					<th align="center" style='color:Blue;' ><a id='vewFrame'> </a></th>
 				</tr>
 				<tr>
 					<td style="width:2%;"><input name="sel"  id="radSel.*" type="radio" /></td>
-					<td style="width:20%;">
+					<td style="width:40%;">
 						<input class="txt" id="txtNoa.*" type="text" style="width:98%;"  readonly="readonly" />
 					</td>
-					<td style="width:45%;">
+					<td style="width:30%;">
 						<input class="txt" id="txtModnoa.*" type="text" style="width:98%;"  readonly="readonly" />
+					</td>
+					<td style="width:30%;">
+						<input class="txt" id="txtFrame.*" type="text" style="width:98%;"  readonly="readonly" />
 					</td>
 				</tr>
 			</table>
