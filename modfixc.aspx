@@ -35,6 +35,7 @@
 					
 			aPop = new Array(		
 				['txtInnoa','lblInnoa','modfix','noa,modnoa,mechno,mech','txtInnoa,txtModnoa,txtMechno,txtMech','modfix_b.aspx'],
+				['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtInnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
 			
@@ -160,16 +161,18 @@
 			
 			//取前一次圖檔底徑、車修後底徑、磨耗作為本次圖檔底徑、車修前底徑、前次磨耗
 			function getLast(){
-				var btm,ebtm,loss,noa;
+				var btm,ebtm,erep,loss,noa;
 			  	for(var i=0; i<t_data1.length; i++){	
 			  		btm  = '';
 			  		ebtm = '';
+			  		erep = '';
 			  		loss = '';
 			  		noa  = '';		  		  		
 			  		for(var j=0; j<t_data2.length; j++){//從modfixcs找相同nob且noa最大者視為前一次
 			  			if(t_data1[i].nob==t_data2[j].nob && t_data2[j].noa>noa){		  				
 			  				btm  = t_data2[j].bottom;
 			  				ebtm = t_data2[j].enbottom;
+			  				erep = t_data2[j].erepair;
 			  				loss = t_data2[j].loss;
 			  				noa  = t_data2[j].noa;
 			  			}
@@ -183,6 +186,7 @@
 			  		}			  				  			
 			  		$('#txtBottom_'+i).val(btm);
 			  		$('#txtBebottom_'+i).val(ebtm);
+			  		$('#txtBrepair_'+i).val(erep);
 			  		$('#txtLastloss_'+i).val(loss);
 			  	}//i-loop
 			}
@@ -232,6 +236,16 @@
 					}	
 			}
 			
+			function cc()
+			{
+				var e = event.srcElement;
+				alert(e.innertext);
+				var r = e.createTextRange();
+				r.moveStart("character",3);
+				r.collapse(true);
+				r.select();
+			}
+    		
 			function bbsAssign() {
 				//結案若被勾選則不得再更動bbs資料
 				$('#chkEnda').click(function(){		
@@ -253,35 +267,13 @@
 					}	
 				});
 				
-				for (var j = 0; j < q_bbsCount; j++) {					
-					//完成訖時間=完成起時間+30min
-					$('#txtBdate_'+j).blur(function(){						
-						t_IdSeq = -1;
-						q_bodyId($(this).attr('id'));
-						b_seq = t_IdSeq;
-						var mm,hh,min,hrs;
-						mm=$('#txtBdate_'+b_seq).val().substr(13,2);
-						hh=$('#txtBdate_'+b_seq).val().substr(10,2);
-						min = parseInt(mm)+30 >= 60 ? parseInt(mm)+30-60 : parseInt(mm)+30;
-						hrs = parseInt(mm)+30 >= 60 ? parseInt(hh)+1 : parseInt(hh);
-						min = min < 10 ? "0"+min : min;
-						hrs = hrs < 10 ? "0"+hrs : hrs;
-						$('#txtEdate_'+b_seq).val($('#txtBdate_'+b_seq).val().substring(0,9)+'-'+hrs+':'+min);							
-					})
-					$('#txtBdate2_'+j).blur(function(){						
-						t_IdSeq = -1;
-						q_bodyId($(this).attr('id'));
-						b_seq = t_IdSeq;
-						var mm,hh,min,hrs;
-						mm=$('#txtBdate2_'+b_seq).val().substr(13,2);
-						hh=$('#txtBdate2_'+b_seq).val().substr(10,2);
-						min = parseInt(mm)+30 >= 60 ? parseInt(mm)+30-60 : parseInt(mm)+30;
-						hrs = parseInt(mm)+30 >= 60 ? parseInt(hh)+1 : parseInt(hh);
-						min = min < 10 ? "0"+min : min;
-						hrs = hrs < 10 ? "0"+hrs : hrs;
-						$('#txtEdate2_'+b_seq).val($('#txtBdate2_'+b_seq).val().substring(0,9)+'-'+hrs+':'+min);
+				for (var j = 0; j < q_bbsCount; j++) {
+					$('#txtBdate_'+j).blur(function(){	
+						$('#txtEdate_'+j).focus();
+					});	
+					$('#txtBdate2_'+j).blur(function(){	
+						$('#txtEdate2_'+j).focus();
 					});
-					
 					//依據研磨方式改變機台選項
 					changeWay("",j);
 					changeWay("2",j);
@@ -348,6 +340,20 @@
 							changeWay("2",i);
 						}
 					});
+					$('#txtBdate_0').blur(function(){	
+						$('#txtEdate_0').val($('#txtBdate_0').val().substr(0,10));			
+						for (var i=1; i<q_bbsCount; i++){
+							$('#txtBdate_'+i).val($('#txtBdate_0').val().substr(0,10));
+							$('#txtEdate_'+i).val($('#txtBdate_0').val().substr(0,10));
+						}
+					});
+					$('#txtBdate2_0').blur(function(){	
+						$('#txtEdate2_0').val($('#txtBdate2_0').val().substr(0,10));			
+						for (var i=1; i<q_bbsCount; i++){
+							$('#txtBdate2_'+i).val($('#txtBdate2_0').val().substr(0,10));
+							$('#txtEdate2_'+i).val($('#txtBdate2_0').val().substr(0,10));
+						}
+					});			
 					$('#txtWorker_0').change(function(){				
 						for (var i=1; i<q_bbsCount; i++){
 							$('#txtWorker_'+i).val($('#txtWorker_0').val());
@@ -399,7 +405,9 @@
 			function btnIns() {
 				_btnIns();
 				$('#txtNoa').val('AUTO');
-				$('#txtDatea').val(q_date());				
+				$('#txtDatea').val(q_date());
+				$('#txtDatea').focus();
+				cc();
 				refreshBbm();
 				refreshBbs();
 			}
@@ -532,7 +540,7 @@
 				_readonly(t_para, empty);
 				
 				if(q_cur==1 || q_cur==2){
-                	if(r_rank < 8 && $('#chkEnda').pror('checked')){
+                	if(r_rank < 9 && $('#chkEnda').prop('checked')){
                 		$('#chkEnda').attr('disabled', 'disabled');
                 	}
                 }
@@ -734,6 +742,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
@@ -741,6 +750,8 @@
 						<td><input id="txtInnoa" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblModnoa' class="lbl " ></a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
+						<td><span> </span><a id='lblFrame' class="lbl btn"></a></td>
+						<td><input id="txtFrame" type="text" class="txt c1"/></a></td>	
 						<td><span> </span><a id='lblNoa' class="lbl " ></a></td>
 						<td><input id="txtNoa" type="text" class="txt c1" /></td>						
 					</tr>
@@ -756,14 +767,17 @@
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
-						<td colspan="3" align="right">
-							<input id="btnIn" type="Button"/>
-							<span> </span><a id="">　</a>
-							<input id="chkEnda" type="checkbox" disabled="disabled">
-							<span> </span><a id="lblEnda">結案</a>
-							<span> </span><a id="">　</a>
+						<td></td>
+						<td>
+							<input id="btnIn" type="Button" style="width: 100%"/>
+						</td>
+						<td align="right">
 							<input id="chkFixed" type="checkbox" disabled="disabled">
 							<span> </span><a id="lblFixed">已維修</a>
+						</td>
+						<td align="right">
+							<input id="chkEnda" type="checkbox" disabled="disabled">
+							<span> </span><a id="lblEnda">結案</a>
 						</td>
 					</tr>
 						
@@ -841,11 +855,11 @@
 					</td>
 					<td>
 						<input id="txtBdate.*" type="text" class="txt c1" style="width:97%;"/>
-						<input id="txtBdate2.*" type="text" class="txt c1" style="display: none; width:96%;"/>
+						<input id="txtBdate2.*" type="text" class="txt c1" style="display: none; width:97%;"/>
 					</td>
 					<td>
 						<input id="txtEdate.*" type="text" class="txt c1" style="width:97%;"/>
-						<input id="txtEdate2.*" type="text" class="txt c1" style="display:none; width:96%;"/>
+						<input id="txtEdate2.*" type="text" class="txt c1" style="display:none; width:97%;"/>
 					</td>
 					<td>
 						<input id="txtWorker.*" type="text" class="txt c1" style="width:93%;"/>
