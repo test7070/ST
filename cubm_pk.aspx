@@ -16,7 +16,7 @@
             alert("An error occurred:\r\n" + error.Message);
         }
         var q_name="cubm";
-        var q_readonly = ['txt'];
+        var q_readonly = ['txtMech'];
         var bbmNum = [['txtGmount',15,0,0], ['txtMount',15,0,0],['txtGweight',15,2,0], ['txtWeight',15,2,0], ['txtLength',15,2,0]]; 
         var bbmMask = []; 
         q_sqlCount = 6; 

@@ -174,16 +174,6 @@
 				$('#txtLostdate').val(100);
 				//$('#Xuccgroupano select').css('width','150px');
 				
-				if(q_getPara('sys.project')=='vu'){	
-					var report='';	
-					for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
-						report = $('#q_report').data().info.reportData[i].report
-						if(report=='z_anavccfe4' || report=='z_anavccfe5'){
-							delete_report=i;
-							$('#q_report div div').eq(i).hide();
-						}
-					}
-				}
 				if(q_getPara('sys.project')!='yc'){	
 					$('#q_report div div').eq(6).hide();
 					$('#btnUcf').hide();

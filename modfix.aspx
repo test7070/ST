@@ -33,7 +33,8 @@
 			q_desc = 1;
 			
 			aPop = new Array(			
-				['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
+				['txtModnoa','lblModnoa','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
+				['txtFrame','lblFrame','model','frame,noa','txtFrame,txtModnoa','model_b2.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
 			$(document).ready(function() {
@@ -400,8 +401,8 @@
 					<tr>
 						<td><span> </span><a id='lblModnoa' class="lbl btn" ></a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
-						<td><input id="txtDatea" type="text" class="txt c1" style="float: left;"/></a></td>
+						<td><span> </span><a id='lblFrame' class="lbl btn"></a></td>
+						<td><input id="txtFrame" type="text" class="txt c1"/></a></td>						
 						<td><span> </span><a id='lblNoa' class="lbl "></a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>		
 					</tr>
@@ -410,7 +411,9 @@
 						<td colspan="3">
 							<input id="txtMechno"  type="text" style="width:34%;"/>
 							<input id="txtMech"  type="text" style="width:66%; color:green;"/>
-						</td>	
+						</td>
+						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
+						<td><input id="txtDatea" type="text" class="txt c1" style="float: left;"/></a></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
@@ -418,7 +421,7 @@
 						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
 						<td></td>
-						<td><span> </span><input id="btnIn" type="Button"/></td>
+						<td><span> </span><input id="btnIn" type="Button" style="width: 100%"/></td>
 
 					</tr>
 						
@@ -458,7 +461,7 @@
 					<td style="display: none;"><input id="txtWheel1.*" type="text"  style="width : 98% ;"/></td>
 					<td><input id="txtCode1.*" type="text"  style="width : 98% ;"/></td>
 					<td><input id="txtDetail1.*" type="text" class="txt c1" style="width:98%;"/></td>
-					<td><input id="txtFrame1.*" type="text" class="num c1" style="width:98%;"/></td>																
+					<td><input id="txtFrame1.*" type="text" class="txt c1" style="width:98%;"/></td>																
 					<td ><select id="cmbWay1.*" type="text" class="txt c1" style="width:99%;"/select></td>
 					<td><input id="txtMount1.*" type="text" class="num c1" style="width:98%;"/></td>
 					<td ><input id="txtWeight1.*" type="text" class="num c1" style="width:95%;"/></td>

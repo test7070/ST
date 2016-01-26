@@ -33,23 +33,29 @@
 						},{
 							type:'6',//[3]
 							name:'xdate'
+						},{
+							type:'6',//[4]
+							name:'xnoa'
 						}
 					]});
 
 				q_popAssign();
-				$('#txtMonth').mask('999/99');
-				$('#txtMonth').val(q_date().substr(0,6));
-				$('#txtXdate').mask('999/99/99');
+                q_langShow();
+                
+				$('#txtMonth').mask(r_picm);
+				$('#txtMonth').val(q_date().substr(0,r_lenm));
+				$('#txtXdate').mask(r_picd);
 				$('#txtXdate').val(q_date());
 				$('#txtXdate').datepicker();
 				
 				$('#btnPost').click(function() {
-					var t_typea=$('#Salary select').val();
-					var t_mon=$('#txtMonth').val();
-					var t_datea=$('#txtXdate').val();
+					var t_typea=emp($('#Salary select').val())?'#non':$('#Salary select').val();
+					var t_mon=emp($('#txtMonth').val())?'#non':$('#txtMonth').val();
+					var t_datea=emp($('#txtXdate').val())?'#non':$('#txtXdate').val();
+					var t_noa=emp($('#txtXnoa').val())?'#non':$('#txtXnoa').val();
 					
 					if(t_typea.length>0 && t_mon.length>0 && t_datea.length>0)
-	            		q_func('qtxt.query.postmedia', 'bankpost.txt,bankpost_media,' +encodeURI(t_typea)+';'+encodeURI(t_mon)+';'+encodeURI(t_datea));
+	            		q_func('qtxt.query.postmedia', 'bankpost.txt,bankpost_media,' +encodeURI(t_typea)+';'+encodeURI(t_mon)+';'+encodeURI(t_datea)+';'+encodeURI(t_noa));
 	            });
             }
 

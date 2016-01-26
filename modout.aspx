@@ -17,7 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "modout";
-			var q_readonly = ['txtNoa','txtModnoa','txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtNoa','txtModnoa','txtMech','txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail'];
 			var bbmNum = [];
 			var bbsNum = [['txtMount',15,0,0]];
@@ -34,6 +34,7 @@
 					
 			aPop = new Array(
 				['txtFixnoa','lblFixnoa','modfixc','noa,modnoa,mechno,mech','txtFixnoa,txtModnoa,txtMechno,txtMech','modfixc_b.aspx'],
+				['txtFrame','lblFrame','modfixc','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfixc_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
 			$(document).ready(function() {
@@ -385,6 +386,8 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
+						<td></td>
 						<td class="tdZ"></td>
 					</tr>
 					<tr>
@@ -392,14 +395,16 @@
 						<td><input id="txtFixnoa" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblModnoa' class="lbl " ></a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
+						<td><span> </span><a id='lblFrame' class="lbl btn" ></a></td>
+						<td><input id="txtFrame" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblNoa' class="lbl " ></a></td>
 						<td><input id="txtNoa" type="text" class="txt  c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMechno" class="lbl btn"> </a></td>
 						<td colspan="3">
-							<input id="txtMechno"  type="text" style="width:34%;"/>
-							<input id="txtMech"  type="text" style="width:66%; color:green;"/>
+							<input id="txtMechno" type="text" style="width:25%;"/>
+							<input id="txtMech" type="text" style="width:75%; color:green;"/>
 						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl " ></a></td>
 						<td><input id="txtDatea" type="text" class="txt  c1" /></td>
@@ -408,9 +413,9 @@
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
-						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
+						<td><input id="txtWorker2" type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='' class="lbl"></a></td>
-						<td><span> </span><input id="btnIn" type="Button" /></td>	
+						<td><span> </span><input id="btnIn" type="Button" style="width: 100%"/></td>	
 					</tr>		
 				</table>
 			</div>

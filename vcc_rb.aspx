@@ -67,6 +67,9 @@
 			}
 
 			function sum() {
+				if(!(q_cur==1 || q_cur==2)){
+					return;
+				}
 				var t1 = 0, t_unit, t_mount, t_weight = 0,t_money=0, t_tax = 0, t_total = 0;
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $('#txtUnit_' + j).val();

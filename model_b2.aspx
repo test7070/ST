@@ -43,12 +43,16 @@
 				<tr>
 					<th align="center"> </th>
 					<th align="center" style='color:Blue;' ><a id='vewNoa'> </a></th>
+					<th align="center" style='color:Blue;' ><a id='vewFrame'> </a></th>
 					<th align="center" style='color:Blue;' ><a id='vewTgg'> </a></th>
 				</tr>
 				<tr>
 					<td style="width:2%;"><input name="sel"  id="radSel.*" type="radio" /></td>
 					<td style="width:20%;">
 						<input class="txt" id="txtNoa.*" type="text" style="width:98%;"  readonly="readonly" />
+					</td>
+					<td style="width:20%;">
+						<input class="txt" id="txtFrame.*" type="text" style="width:98%;"  readonly="readonly" />
 					</td>
 					<td style="width:45%;">
 						<input class="txt" id="txtTgg.*" type="text" style="width:98%;"  readonly="readonly" />
