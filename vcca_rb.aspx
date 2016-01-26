@@ -1066,7 +1066,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1200px;
+                width: 1260px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -1284,17 +1284,17 @@
 		<div class='dbbs'>
 			<table id="tbbs" class='tbbs' style=' text-align:center'>
 				<tr style='color:white; background:#003366;' >
-					<td  align="center" style="width:30px;">
+					<td  align="center" style="width:40px;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:80px;"><a id='lblProductno'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblProduct'> </a></td>
-					<td align="center" style="width:20px;"><a id='lblUnit'> </a></td>
-					<td align="center" style="width:70px;"><a id='lblMount'> </a></td>
-					<td align="center" style="width:70px;"><a id='lblPrice'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblTotals'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblMemos'> </a></td>
+					<td align="center" style="width:30px;"> </td>
+					<td align="center" style="width:140px;"><a id='lblProductno'> </a></td>
+					<td align="center" style="width:350px;"><a id='lblProduct'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
+					<td align="center" style="width:110px;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:110px;"><a id='lblPrice'> </a></td>
+					<td align="center" style="width:130px;"><a id='lblTotals'> </a></td>
+					<td align="center" style="width:300px;"><a id='lblMemos'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">

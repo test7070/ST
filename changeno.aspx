@@ -94,25 +94,31 @@
                 } 
                 
                 if(chg_cust && db_cust && chg_ucc && db_ucc){
-                	$('#txtDatea').val(q_date());
-	            	var timeDate= new Date();
-					var tHours = timeDate.getHours();
-					var tMinutes = timeDate.getMinutes();
-					$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
-                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
-                	
-                	if(!emp($('#txtChgcustno').val())){
-                		var t_paras = $('#txtOrgcustno').val()+ ';'+$('#txtChgcustno').val();
-						q_func('qtxt.query.custno_change', 'changeno.txt,custno_change,' + t_paras);
-					}
-					if(!emp($('#txtChgproductno').val())){
-						var t_paras = $('#txtOrgproductno').val()+ ';'+$('#txtChgproductno').val();
-						q_func('qtxt.query.uccno_change', 'changeno.txt,uccno_change,' + t_paras);
-					}
-					chg_cust=false;  
-	            	chg_ucc=false;
-	            	db_cust=false;
-	            	db_ucc=false;
+                	if((!emp($('#txtOrgcustno').val()) && !emp($('#txtChgcustno').val())
+	            	&& emp($('#txtOrgproductno').val()) && emp($('#txtChgproductno').val()))
+	            	|| (!emp($('#txtOrgproductno').val()) && !emp($('#txtChgproductno').val())
+	            	&& emp($('#txtOrgcustno').val()) && emp($('#txtChgcustno').val()))
+	            	){
+	                	$('#txtDatea').val(q_date());
+		            	var timeDate= new Date();
+						var tHours = timeDate.getHours();
+						var tMinutes = timeDate.getMinutes();
+						$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+	                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
+	                	
+	                	if(!emp($('#txtChgcustno').val())){
+	                		var t_paras = $('#txtOrgcustno').val()+ ';'+$('#txtChgcustno').val();
+							q_func('qtxt.query.custno_change', 'changeno.txt,custno_change,' + t_paras);
+						}
+						if(!emp($('#txtChgproductno').val())){
+							var t_paras = $('#txtOrgproductno').val()+ ';'+$('#txtChgproductno').val();
+							q_func('qtxt.query.uccno_change', 'changeno.txt,uccno_change,' + t_paras);
+						}
+						chg_cust=false;  
+		            	chg_ucc=false;
+		            	db_cust=false;
+		            	db_ucc=false;
+	            	}
                 }
             }
 
@@ -161,8 +167,10 @@
             		alert('請輸入變更資料!!'); 
             		return;
             	}
-            	if((!emp($('#txtOrgcustno').val()) && !emp($('#txtChgcustno').val()))
-            	|| (!emp($('#txtOrgproductno').val()) && !emp($('#txtChgproductno').val()))
+            	if((!emp($('#txtOrgcustno').val()) && !emp($('#txtChgcustno').val())
+            	&& emp($('#txtOrgproductno').val()) && emp($('#txtChgproductno').val()))
+            	|| (!emp($('#txtOrgproductno').val()) && !emp($('#txtChgproductno').val())
+            	&& emp($('#txtOrgcustno').val()) && emp($('#txtChgcustno').val()))
             	){
             		if(!emp($('#txtChgcustno').val())){
             			t_where = "where=^^ noa='" + $('#txtChgcustno').val() + "'^^";
