@@ -72,7 +72,18 @@
                 			alert('客戶 '+as[0].noa+' '+as[0].comp+' 已存在!!');
                 			chg_cust=false;  
                 		}else{
-                			chg_cust=true;  
+                			chg_cust=true;
+                			var t_where = "where=^^ noa='" + $('#txtChgcustno').val() + "'^^";
+							q_gt('cust_2s', t_where, 0, 0, 0, "checkCust_2s_btnOk", r_accy);
+                		}
+                		break;
+                	case 'checkCust_2s_btnOk':
+                		var as = _q_appendData("cust_2s", "", true);
+                		if (as[0] != undefined){
+                			alert('客戶編號【'+as[0].noa+'】帳款資料存在禁止編號異動!!');
+                			cust2s_cust=false;
+                		}else{
+                			cust2s_cust=true;
                 		}
                 		break;
                 	case 'checkUcc_btnOk':
@@ -93,7 +104,7 @@
                         break;
                 } 
                 
-                if(chg_cust && db_cust && chg_ucc && db_ucc){
+                if(chg_cust && db_cust && cust2s_cust && chg_ucc && db_ucc){
                 	if((!emp($('#txtOrgcustno').val()) && !emp($('#txtChgcustno').val())
 	            	&& emp($('#txtOrgproductno').val()) && emp($('#txtChgproductno').val()))
 	            	|| (!emp($('#txtOrgproductno').val()) && !emp($('#txtChgproductno').val())
@@ -115,6 +126,7 @@
 							q_func('qtxt.query.uccno_change', 'changeno.txt,uccno_change,' + t_paras);
 						}
 						chg_cust=false;  
+						cust2s_cust=false;
 		            	chg_ucc=false;
 		            	db_cust=false;
 		            	db_ucc=false;
@@ -155,11 +167,13 @@
             var chg_ucc=false;
             //判斷是否已查詢資料是否已重複
             var db_cust=false;
+            var cust2s_cust=false;
             var db_ucc=false;
             function btnOk() {  
             	chg_cust=false;  
             	chg_ucc=false;
             	db_cust=false;
+            	cust2s_cust=false;
             	db_ucc=false;
             	//檢查資料
             	if(emp($('#txtOrgcustno').val()) && emp($('#txtChgcustno').val())
@@ -177,6 +191,7 @@
 						q_gt('cust', t_where, 0, 0, 0, "checkCustno_btnOk", r_accy);
             		}else{
             			chg_cust=true;
+            			cust2s_cust=true;
             			db_cust=true;
             		}
             		if(!emp($('#txtChgproductno').val())){
