@@ -461,7 +461,7 @@
 					<td style="display: none;"><input id="txtWheel1.*" type="text"  style="width : 98% ;"/></td>
 					<td><input id="txtCode1.*" type="text"  style="width : 98% ;"/></td>
 					<td><input id="txtDetail1.*" type="text" class="txt c1" style="width:98%;"/></td>
-					<td><input id="txtFrame1.*" type="text" class="num c1" style="width:98%;"/></td>																
+					<td><input id="txtFrame1.*" type="text" class="txt c1" style="width:98%;"/></td>																
 					<td ><select id="cmbWay1.*" type="text" class="txt c1" style="width:99%;"/select></td>
 					<td><input id="txtMount1.*" type="text" class="num c1" style="width:98%;"/></td>
 					<td ><input id="txtWeight1.*" type="text" class="num c1" style="width:95%;"/></td>

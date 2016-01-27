@@ -17,7 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "modfixc";
-			var q_readonly = ['txtNoa', 'txtModnoa', 'txtMech', 'txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtNoa', 'txtModnoa', /*'txtMech',*/ 'txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail'];
 			var bbmNum = [];
 			var bbsNum = [['txtWeight',15,1,0], ['txtMount',15,0,0], ['txtFixmount',15,0,0], ['txtBottom',15,2,0], ['txtBebottom',15,2,0], ['txtEnbottom',15,2,0], 
@@ -58,7 +58,8 @@
 				q_getFormat();
 				bbmMask = [['txtDatea',r_picd]];
 				q_mask(bbmMask);				
-				bbsMask = [['txtBdate',r_picd+'-99:99'],['txtEdate',r_picd+'-99:99'],['txtBdate2',r_picd+'-99:99'],['txtEdate2',r_picd+'-99:99']];
+				bbsMask = [['txtBdate',r_picd],['txtEdate',r_picd],['txtBtime','99:99'],['txtEtime','99:99'],
+						   ['txtBdate2',r_picd],['txtEdate2',r_picd],['txtBtime2','99:99'],['txtEtime2','99:99']];
 				
 				q_cmbParse("cmbWay",'傳統車床(研磨),CNC車修','s');
 				q_cmbParse("cmbWay2",'傳統車床(研磨),CNC車修','s');
@@ -235,16 +236,6 @@
 						break;
 					}	
 			}
-			
-			function cc()
-			{
-				var e = event.srcElement;
-				alert(e.innertext);
-				var r = e.createTextRange();
-				r.moveStart("character",3);
-				r.collapse(true);
-				r.select();
-			}
     		
 			function bbsAssign() {
 				//結案若被勾選則不得再更動bbs資料
@@ -268,12 +259,20 @@
 				});
 				
 				for (var j = 0; j < q_bbsCount; j++) {
-					$('#txtBdate_'+j).blur(function(){	
-						$('#txtEdate_'+j).focus();
-					});	
-					$('#txtBdate2_'+j).blur(function(){	
-						$('#txtEdate2_'+j).focus();
-					});
+					//控制游標跳動位置
+					// $('#txtBtime_'+j).blur(function(){	
+						// t_IdSeq = -1;
+						// q_bodyId($(this).attr('id'));
+						// b_seq = t_IdSeq;
+						// window.setTimeout (function(){ document.getElementById ('txtEtime_'+b_seq). select();},0 );   
+					// });
+					// $('#txtEtime_'+j).blur(function(){	
+						// t_IdSeq = -1;
+						// q_bodyId($(this).attr('id'));
+						// b_seq = t_IdSeq+1;
+						// window.setTimeout (function(){ document.getElementById ('txtBtime_'+b_seq). select();},0 );   
+					// })
+					
 					//依據研磨方式改變機台選項
 					changeWay("",j);
 					changeWay("2",j);
@@ -341,17 +340,17 @@
 						}
 					});
 					$('#txtBdate_0').blur(function(){	
-						$('#txtEdate_0').val($('#txtBdate_0').val().substr(0,10));			
+						$('#txtEdate_0').val($('#txtBdate_0').val());			
 						for (var i=1; i<q_bbsCount; i++){
-							$('#txtBdate_'+i).val($('#txtBdate_0').val().substr(0,10));
-							$('#txtEdate_'+i).val($('#txtBdate_0').val().substr(0,10));
+							$('#txtBdate_'+i).val($('#txtBdate_0').val());
+							$('#txtEdate_'+i).val($('#txtBdate_0').val());
 						}
 					});
 					$('#txtBdate2_0').blur(function(){	
-						$('#txtEdate2_0').val($('#txtBdate2_0').val().substr(0,10));			
+						$('#txtEdate2_0').val($('#txtBdate2_0').val());			
 						for (var i=1; i<q_bbsCount; i++){
-							$('#txtBdate2_'+i).val($('#txtBdate2_0').val().substr(0,10));
-							$('#txtEdate2_'+i).val($('#txtBdate2_0').val().substr(0,10));
+							$('#txtBdate2_'+i).val($('#txtBdate2_0').val());
+							$('#txtEdate2_'+i).val($('#txtBdate2_0').val());
 						}
 					});			
 					$('#txtWorker_0').change(function(){				
@@ -395,9 +394,18 @@
 						$("#cmbMech2_"+b_seq).css("display", "block");
 						$("#cmbWorktype2_"+b_seq).css("display", "block");
 						$("#txtBdate2_"+b_seq).css("display", "block");
+						$("#mark1_"+b_seq).css("display", "block").css('background', '#cad3ff');
+						$("#txtBtime2_"+b_seq).css("display", "block");
 						$("#txtEdate2_"+b_seq).css("display", "block");
+						$("#mark2_"+b_seq).css("display", "block").css('background', '#cad3ff');
+						$("#txtEtime2_"+b_seq).css("display", "block");
 						$("#txtWorker2_"+b_seq).css("display", "block");
-					});					
+					});	
+					$("#txtBdate_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					$("#txtBtime_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					$("#txtEdate_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					$("#txtEtime_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					$("#txtWorker_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');				
 				}				
 				_bbsAssign();
 			}			
@@ -406,8 +414,6 @@
 				_btnIns();
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date());
-				$('#txtDatea').focus();
-				cc();
 				refreshBbm();
 				refreshBbs();
 			}
@@ -463,7 +469,11 @@
 						$("#cmbMech2_"+i).css("display", "block");
 						$("#cmbWorktype2_"+i).css("display", "block");
 						$("#txtBdate2_"+i).css("display", "block");
+						$("#mark1_"+i).css("display", "block").css('background', '#cad3ff');
+						$("#txtBtime2_"+i).css("display", "block");
 						$("#txtEdate2_"+i).css("display", "block");
+						$("#mark2_"+i).css("display", "block").css('background', '#cad3ff');
+						$("#txtEtime2_"+i).css("display", "block");
 						$("#txtWorker2_"+i).css("display", "block");
             		}
             	}
@@ -498,9 +508,13 @@
 					$("#txtBrepair_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtErepair_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtBdate_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					$("#txtBtime_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtEdate_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					$("#txtEtime_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtBdate2_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					$("#txtBtime2_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtEdate2_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					$("#txtEtime2_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtWorker_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtWorker2_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtMemo_"+i).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');					
@@ -527,9 +541,13 @@
 					$("#txtBrepair_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					$("#txtErepair_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					$("#txtBdate_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
+					$("#txtBtime_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					$("#txtEdate_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
+					$("#txtEtime_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					$("#txtBdate2_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
+					$("#txtBtime2_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					$("#txtEdate2_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
+					$("#txtEtime2_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					$("#txtWorker_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					$("#txtWorker2_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					$("#txtMemo_"+i).css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');	
@@ -628,7 +646,7 @@
 				float: left;
 				width: 850px;
 				/*margin: -1px;
-				 border: 1px black solid;*/
+				/*border: 1px black solid;*/
 				border-radius: 5px;
 			}
 			.tbbm {
@@ -807,10 +825,10 @@
 					<td align="center" style="width:1.5%;"><a id='lblLoss_s'></a></td>
 					<td align="center" style="width:1.5%;"><a id='lblEnbottom_s'></a></td>
 					<td align="center" style="width:4.5%;"><a id='lblWay_s'></a></td>
-					<td align="center" style="width:1.5%;"><a id='lblMech_s'></a></td>
-					<td align="center" style="width:1.5%;"><a id='lblWorktype_s'></a></td>
-					<td align="center" style="width:3.5%;"><a id='lblBdate_s'></a></td>
-					<td align="center" style="width:3.5%;"><a id='lblEdate_s'></a></td>
+					<td align="center" style="width:1.4%;"><a id='lblMech_s'></a></td>
+					<td align="center" style="width:1.4%;"><a id='lblWorktype_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblBdate_s'></a></td>
+					<td align="center" style="width:4%;"><a id='lblEdate_s'></a></td>
 					<td align="center" style="width:1.5%;"><a id='lblWorker_s'></a></td>
 					<td align="center" style="width:8%;"><a id='lblMemo_s'></a></td>
 				</tr>
@@ -835,35 +853,41 @@
 					<td><input id="txtErepair.*" type="text" class="num c1" style="width:93%;"/></td>
 					<td><input id="txtLoss.*" type="text" class="num c1" style="width:93%;"/></td>
 					<td><input id="txtEnbottom.*" type="text" class="num c1" style="width:93%;"/></td>
-					<td>
-						<input id="btnSec.*" type="button" style="text-align:left; font-size:8pt; height:23px; width:23%;" value="第2次"/>
-						<input id="txtWay.*" type="text" class="txt c1" style="display:none;"/>
-						<select id="cmbWay.*" type="text" class="txt c1" style="float:right;width:77%;"/select>
-						<input id="txtWay2.*" type="text" class="txt c1" style="display:none;"/>	
-						<select id="cmbWay2.*" type="text" class="txt c1" style="display:none; float:right; width:77%;"/select>						
-					</td>
-					<td><input id="txtMech.*" type="text" class="txt c1" style="display: none;"/>
-						<select id="cmbMech.*" type="text" class="txt c1" style="width:100%;"/select>
-						<input id="txtMech2.*" type="text" class="txt c1" style="display:none;"/>	
-						<select id="cmbMech2.*" type="text" class="txt c1" style="display:none; width:100%;"/select>
-					</td>
-					<td>
+					<td colspan="6">
+						<span style="width:6%; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt ">第1次</span>
+						<input id="txtWay.*" type="text" class="txt c1" style="float:left; display:none;"/>
+						<select id="cmbWay.*" type="text" class="txt c1" style="float:left;width:20.5%;"/select>
+						
+						<input id="txtMech.*" type="text" class="txt c1" style="display: none;"/>
+						<select id="cmbMech.*" type="text" class="txt c1" style="width:8.5%;"/select>						
 						<input id="txtWorktype.*" type="text" class="txt c1" style="display:none;"/>
-						<select id="cmbWorktype.*" type="text" class="txt c1" style="width:100%;"/select>
-						<input id="txtWorktype2.*" type="text" class="txt c1" style="display:none;"/>	
-						<select id="cmbWorktype2.*" type="text" class="txt c1" style="display:none; width:100%;"/select>
-					</td>
-					<td>
-						<input id="txtBdate.*" type="text" class="txt c1" style="width:97%;"/>
-						<input id="txtBdate2.*" type="text" class="txt c1" style="display: none; width:97%;"/>
-					</td>
-					<td>
-						<input id="txtEdate.*" type="text" class="txt c1" style="width:97%;"/>
-						<input id="txtEdate2.*" type="text" class="txt c1" style="display:none; width:97%;"/>
-					</td>
-					<td>
-						<input id="txtWorker.*" type="text" class="txt c1" style="width:93%;"/>
-						<input id="txtWorker2.*" type="text" class="txt c1" style="display:none; width:93%;"/>
+						<select id="cmbWorktype.*" type="text" class="txt c1" style="width:8.5%;"/select>						
+						<input id="txtBdate.*" type="text" class="txt c1 a" style="width:12%;" />
+						<span style="width:13px; float:left; text-align:center">-</span>
+						<input id="txtBtime.*" type="text" class="txt c1 a" style="width:8.5%;" />
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>				
+						<input id="txtEdate.*" type="text" class="txt c1 a" style="width:12%;"/>
+						<span style="width:13px; float:left;text-align:center">-</span>
+						<input id="txtEtime.*" type="text" class="txt c1 a" style="width:8.5%;" />
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
+						<input id="txtWorker.*" type="text" class="txt c1" style="width:8%;"/>
+						
+						<span style="width:6%; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt ">第2次</span>
+						<input id="txtWay2.*" type="text" class="txt c1" style=" display:none;"/>
+						<select id="cmbWay2.*" type="text" class="txt c1" style="width:20.5%;"/select>		
+						<input id="txtMech2.*" type="text" class="txt c1" style="display: none;"/>
+						<select id="cmbMech2.*" type="text" class="txt c1" style="width:8.5%;"/select>						
+						<input id="txtWorktype2.*" type="text" class="txt c1" style="display:none;"/>
+						<select id="cmbWorktype2.*" type="text" class="txt c1" style="width:8.5%;"/select>						
+						<input id="txtBdate2.*" type="text" class="txt c1 a" style="width:12%;" />
+						<span style="width:13px; float:left; text-align:center">-</span>
+						<input id="txtBtime2.*" type="text" class="txt c1 a" style="width:8.5%;" />
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>					
+						<input id="txtEdate2.*" type="text" class="txt c1 a" style="width:12%;"/>
+						<span style="width:13px; float:left;text-align:center">-</span>
+						<input id="txtEtime2.*" type="text" class="txt c1 a" style="width:8.5%;" />
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
+						<input id="txtWorker2.*" type="text" class="txt c1" style="width:8%;"/>			
 					</td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c1" style="width:99%;"/>
