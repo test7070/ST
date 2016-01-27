@@ -78,7 +78,11 @@
 
 			function mainPost() {
 				q_mask(bbmMask);
-				q_cmbParse("cmbTypea", q_getPara('uccst.typea'));
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					q_cmbParse("cmbTypea", q_getPara('rc2st.kind'));
+				}else{
+					q_cmbParse("cmbTypea", q_getPara('uccst.typea'));
+				}
 				q_cmbParse("cmbGroupano", t_groupano);
 				if (abbm[q_recno] != undefined) {
 					$("#cmbGroupano").val(abbm[q_recno].groupano);
