@@ -383,29 +383,7 @@
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;		
 						$('#txtEnbottom_'+b_seq).val(q_add($('#txtBottom_'+b_seq).val(),$('#txtErepair_'+b_seq).val()));
-					});
-					
-					//控制第2次工序顯示
-					$('#btnSec_'+j).click(function(){		
-						t_IdSeq = -1;
-						q_bodyId($(this).attr('id'));
-						b_seq = t_IdSeq;
-						$("#cmbWay2_"+b_seq).css("display", "block");
-						$("#cmbMech2_"+b_seq).css("display", "block");
-						$("#cmbWorktype2_"+b_seq).css("display", "block");
-						$("#txtBdate2_"+b_seq).css("display", "block");
-						$("#mark1_"+b_seq).css("display", "block").css('background', '#cad3ff');
-						$("#txtBtime2_"+b_seq).css("display", "block");
-						$("#txtEdate2_"+b_seq).css("display", "block");
-						$("#mark2_"+b_seq).css("display", "block").css('background', '#cad3ff');
-						$("#txtEtime2_"+b_seq).css("display", "block");
-						$("#txtWorker2_"+b_seq).css("display", "block");
-					});	
-					$("#txtBdate_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-					$("#txtBtime_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-					$("#txtEdate_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-					$("#txtEtime_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-					$("#txtWorker_"+j).css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');				
+					})		
 				}				
 				_bbsAssign();
 			}			
