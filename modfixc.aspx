@@ -34,7 +34,7 @@
 			q_desc = 1;
 					
 			aPop = new Array(		
-				['txtInnoa','lblInnoa','modfix','noa,modnoa,mechno,mech','txtInnoa,txtModnoa,txtMechno,txtMech','modfix_b.aspx'],
+				['txtInnoa','lblInnoa','modfix','noa,modnoa,frame,mechno,mech','txtInnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtInnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
@@ -131,6 +131,7 @@
 								$('#txtWeight_'+(pos-1)).val(elm.weight1);
 							}
 						});
+						sum();
 						q_gt('modfixc', 0, 0, 0, 0, "modfixcs");
 						break;
 					case 'modfixcs':
@@ -236,6 +237,17 @@
 						break;
 					}	
 			}
+			
+			function sum() {		
+				var innsum = 0;
+				var fixsum = 0;
+				for (var i=0; i<q_bbsCount; i++){
+					innsum = innsum + dec($('#txtMount_'+i).val());
+					fixsum = fixsum + dec($('#txtFixmount_'+i).val());
+				}
+				$('#textInnsum').val(innsum+' ');
+				$('#textFixsum').val(fixsum+' ');			
+			}
     		
 			function bbsAssign() {
 				//結案若被勾選則不得再更動bbs資料
@@ -257,21 +269,24 @@
 						}									    									
 					}	
 				});
-				
+			
 				for (var j = 0; j < q_bbsCount; j++) {
-					//控制游標跳動位置
-					// $('#txtBtime_'+j).blur(function(){	
-						// t_IdSeq = -1;
-						// q_bodyId($(this).attr('id'));
-						// b_seq = t_IdSeq;
-						// window.setTimeout (function(){ document.getElementById ('txtEtime_'+b_seq). select();},0 );   
-					// });
-					// $('#txtEtime_'+j).blur(function(){	
-						// t_IdSeq = -1;
-						// q_bodyId($(this).attr('id'));
-						// b_seq = t_IdSeq+1;
-						// window.setTimeout (function(){ document.getElementById ('txtBtime_'+b_seq). select();},0 );   
-					// })
+					//計算數量
+					$('#txtMount_'+j).change(function(){
+						sum();
+					});
+					//計算維修數量
+					$('#txtFixmount_'+j).change(function(){
+						t_IdSeq = -1;
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						if($('#txtFixmount_'+b_seq).val() > $('#txtMount_'+b_seq).val()){
+							alert('維修數量大於入庫數量!');
+							lock();
+						}else{
+							sum();
+						}
+					});
 					
 					//依據研磨方式改變機台選項
 					changeWay("",j);
@@ -433,11 +448,14 @@
 				q_gt('modfix', "where=^^ noa='" + trim($('#txtInnoa').val()) + "' ^^", 0, 0, 0, "");
 				
 				refreshBbm();
-				refreshBbs();
+				refreshBbs();	
+				sum();			
 			}
 
 			function refreshBbm() {
-				$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');				
+				$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+				$('#textInnsum').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');	
+				$('#textFixsum').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 			}
 			
 			function refreshBbs(){
@@ -622,7 +640,7 @@
 			}
 			.dbbm {
 				float: left;
-				width: 850px;
+				width: 1000px;
 				/*margin: -1px;
 				/*border: 1px black solid;*/
 				border-radius: 5px;
@@ -758,6 +776,11 @@
 						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1" /></td>
+						<td><span> </span><a id='lblSum' class="lbl"></a></td>
+						<td>
+							<input id="textInnsum"  type="text"  class="num c1" style="width:50%"/>
+							<input id="textFixsum"  type="text"  class="num c1" style="width:50%"/>
+						</td>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
@@ -805,9 +828,9 @@
 					<td align="center" style="width:4.5%;"><a id='lblWay_s'></a></td>
 					<td align="center" style="width:1.4%;"><a id='lblMech_s'></a></td>
 					<td align="center" style="width:1.4%;"><a id='lblWorktype_s'></a></td>
-					<td align="center" style="width:4%;"><a id='lblBdate_s'></a></td>
-					<td align="center" style="width:4%;"><a id='lblEdate_s'></a></td>
-					<td align="center" style="width:1.5%;"><a id='lblWorker_s'></a></td>
+					<td align="center" style="width:3.7%;"><a id='lblBdate_s'></a></td>
+					<td align="center" style="width:3.7%;"><a id='lblEdate_s'></a></td>
+					<td align="center" style="width:2.1%;"><a id='lblWorker_s'></a></td>
 					<td align="center" style="width:8%;"><a id='lblMemo_s'></a></td>
 				</tr>
 				<tr  style='background:#cad3ff;' class="ishide.*">
@@ -820,7 +843,7 @@
 					<td style="display: none;"><input id="txtWheel.*" type="text"  style="width:95%;"/></td>
 					<td><input id="txtCode.*" type="text"  style="width:93%;"/></td>
 					<td><input id="txtDetail.*" type="text" class="txt c1" style="width:97%;"/></td>
-					<td><input id="txtFrame.*" type="text" class="num c1" style="width:88%;"/></td>					
+					<td><input id="txtFrame.*" type="text" class="txt c1" style="width:88%;"/></td>					
 					<td><input id="txtWeight.*" type="text" class="num c1" style="width:94%;"/></td>
 					<td><input id="txtMount.*" type="text" class="num c1" style="width:93%;"/></td>		
 					<td><input id="txtFixmount.*" type="text" class="num c1" style="width:93%;"/></td>
@@ -832,40 +855,40 @@
 					<td><input id="txtLoss.*" type="text" class="num c1" style="width:93%;"/></td>
 					<td><input id="txtEnbottom.*" type="text" class="num c1" style="width:93%;"/></td>
 					<td colspan="6">
-						<span style="width:6%; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt ">第1次</span>
+						<span style="width:6.4%; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt ">第1次</span>
 						<input id="txtWay.*" type="text" class="txt c1" style="float:left; display:none;"/>
-						<select id="cmbWay.*" type="text" class="txt c1" style="float:left;width:20.5%;"/select>
+						<select id="cmbWay.*" type="text" class="txt c1" style="float:left;width:20%;"/select>
 						
 						<input id="txtMech.*" type="text" class="txt c1" style="display: none;"/>
 						<select id="cmbMech.*" type="text" class="txt c1" style="width:8.5%;"/select>						
 						<input id="txtWorktype.*" type="text" class="txt c1" style="display:none;"/>
-						<select id="cmbWorktype.*" type="text" class="txt c1" style="width:8.5%;"/select>						
+						<select id="cmbWorktype.*" type="text" class="txt c1" style="width:8.45%;"/select>						
 						<input id="txtBdate.*" type="text" class="txt c1 a" style="width:12%;" />
 						<span style="width:13px; float:left; text-align:center">-</span>
-						<input id="txtBtime.*" type="text" class="txt c1 a" style="width:8.5%;" />
+						<input id="txtBtime.*" type="text" class="txt c1 a" style="width:7%;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>				
 						<input id="txtEdate.*" type="text" class="txt c1 a" style="width:12%;"/>
 						<span style="width:13px; float:left;text-align:center">-</span>
-						<input id="txtEtime.*" type="text" class="txt c1 a" style="width:8.5%;" />
+						<input id="txtEtime.*" type="text" class="txt c1 a" style="width:6.7%;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
-						<input id="txtWorker.*" type="text" class="txt c1" style="width:8%;"/>
+						<input id="txtWorker.*" type="text" class="txt c1" style="width:11.5%;"/>
 						
-						<span style="width:6%; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt ">第2次</span>
+						<span style="width:6.4%; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt ">第2次</span>
 						<input id="txtWay2.*" type="text" class="txt c1" style=" display:none;"/>
-						<select id="cmbWay2.*" type="text" class="txt c1" style="width:20.5%;"/select>		
+						<select id="cmbWay2.*" type="text" class="txt c1" style="width:20%;"/select>		
 						<input id="txtMech2.*" type="text" class="txt c1" style="display: none;"/>
 						<select id="cmbMech2.*" type="text" class="txt c1" style="width:8.5%;"/select>						
 						<input id="txtWorktype2.*" type="text" class="txt c1" style="display:none;"/>
-						<select id="cmbWorktype2.*" type="text" class="txt c1" style="width:8.5%;"/select>						
+						<select id="cmbWorktype2.*" type="text" class="txt c1" style="width:8.45%;"/select>						
 						<input id="txtBdate2.*" type="text" class="txt c1 a" style="width:12%;" />
 						<span style="width:13px; float:left; text-align:center">-</span>
-						<input id="txtBtime2.*" type="text" class="txt c1 a" style="width:8.5%;" />
+						<input id="txtBtime2.*" type="text" class="txt c1 a" style="width:7%;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>					
 						<input id="txtEdate2.*" type="text" class="txt c1 a" style="width:12%;"/>
 						<span style="width:13px; float:left;text-align:center">-</span>
-						<input id="txtEtime2.*" type="text" class="txt c1 a" style="width:8.5%;" />
+						<input id="txtEtime2.*" type="text" class="txt c1 a" style="width:6.7%;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
-						<input id="txtWorker2.*" type="text" class="txt c1" style="width:8%;"/>			
+						<input id="txtWorker2.*" type="text" class="txt c1" style="width:11.5%;"/>			
 					</td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c1" style="width:99%;"/>
