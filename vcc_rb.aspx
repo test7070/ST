@@ -269,7 +269,7 @@
 					}
 					if(PnoArray.length > 0){
 						var t_where = 'where=^^ 1=1 ';
-						t_where += "and ((select isnull(enda,0) from view_orde where noa=view_ordes.noa)!=1) ";//BBM未結案
+						t_where += "and ((select isnull(enda,0) from view_orde where noa=a.noa)!=1) ";//BBM未結案
 						t_where += "and (isnull(enda,0)!=1) ";//BBS未結案
 						t_where += "and (custno=N'"+t_custno+"')";
 						t_where += "and (productno in (" +PnoArray.toString()+ "))";
@@ -496,16 +496,6 @@
 						}
 						t_msg = t_msg + "最近出貨單價：" + vcc_price;
 						q_msg($('#txtPrice_' + b_seq), t_msg);
-						break;
-					case 'acomp_stk':
-						var as = _q_appendData("acomp", "", true);
-						var storeno = '';
-						for (var i = 0; i < as.length; i++) {
-							storeno = storeno + ',' + as[i].noa;
-						}
-						storeno = storeno.substr(1, storeno.length);
-						var t_where = "where=^^ ['" + q_date() + "','" + storeno + "','') where productno='" + $('#txtProductno_' + b_seq).val() + "' ^^";
-						q_gt('calstk', t_where, 0, 0, 0, "msg_stk", r_accy);
 						break;
 					case 'msg_stk':
 						var as = _q_appendData("stkucc", "", true);
@@ -752,16 +742,106 @@
 						$('#textStatus').val(z_msg);
 						break;
 				}
+				
+				if(t_name.substr(0,13)=='btnOkcheckstk'){
+					var n = t_name.split('_')[1];
+					var as = _q_appendData("stkucc", "", true);
+					if (as[0] != undefined) {
+						checkstktmp[n].stkmount=dec(as[0].mount);
+						checkstktmp[n].safemount=dec(as[0].safemount);
+					}
+					check_stk--;
+					if(check_stk==0){ //庫存資料接收完畢 判斷庫存是否低於安全存量
+						if(q_cur==2){//修改 將原出貨單的數量補回庫存量
+							for (var i = 0; i < abbsNow.length; i++) {
+								for(var j=0; j<checkstktmp.length; j++){
+									if(abbsNow[i].productno==checkstktmp[j].noa){
+										checkstktmp[j].stkmount=q_add(dec(checkstktmp[j].stkmount),dec(abbsNow[i].mount));
+										break;
+									}
+								}
+							}
+						}
+						
+						var x_err='';
+						for(var j=0; j<checkstktmp.length; j++){
+							if(q_sub(checkstktmp[j].stkmount,checkstktmp[j].mount)<0){
+								x_err+=checkstktmp[j].product+"庫存低於0\n";
+							}else if(q_sub(checkstktmp[j].stkmount,checkstktmp[j].mount)<checkstktmp[j].safemount){
+								x_err+=checkstktmp[j].product+"庫存低於安全存量\n";
+							}
+						}
+						if(x_err.length>0){
+							if (confirm(x_err+"是否要繼續出貨?")){
+								check_stkucc=true;
+								btnOk();	
+							}
+						}else{
+							check_stkucc=true;
+							btnOk();
+						}
+					}
+				}
 			}
 			
 			var check_startdate=false;
 			var check_vcca=false;
+			var check_stkucc=false;
+			var check_stk=0;
+			var checkstktmp=[];
 			function btnOk() {
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')],['txtStoreno', q_getMsg('lblStore')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
 				}
+				//105/01/28 增加庫存安全量判斷 只做總倉的控管 所以出貨只判斷總倉
+				if($('#cmbTypea').val() != '2' && $('#txtStoreno').val() == '001' &&!check_stkucc){
+					checkstktmp=[];
+					for (var i = 0; i < q_bbsCount; i++) {
+						if(!emp($('#txtProductno_'+i).val())){
+							if(checkstktmp.length==0){
+								checkstktmp.push({
+									noa:$('#txtProductno_'+i).val(),
+									product:$('#txtProduct_'+i).val(),
+									mount:dec($('#txtMount_'+i).val()),
+									stkmount:0,
+									safe:0
+								})
+							}else{
+								var intmp=false;
+								for(var j=0;j<checkstktmp.length;j++){
+									if($('#txtProductno_'+i).val()==checkstktmp[j].noa){
+										intmp=true;
+										checkstktmp[j].mount=q_add(dec(checkstktmp[j].mount),dec($('#txtMount_'+i).val()));
+									}
+									if(intmp)
+										break;
+								}
+								if(!intmp){
+									checkstktmp.push({
+										noa:$('#txtProductno_'+i).val(),
+										product:$('#txtProduct_'+i).val(),
+										mount:dec($('#txtMount_'+i).val()),
+										stkmount:0,
+										safe:0
+									});
+								}
+							}
+						}
+					}
+					if(checkstktmp.length>0){
+						check_stk=checkstktmp.length;
+						for(var j=0; j<checkstktmp.length; j++){
+							var t_where = "where=^^ ['" + q_date() + "','" + $('#txtStoreno').val() + "','" + checkstktmp[j].noa + "')  ^^";
+							q_gt('calstk', t_where, 0, 0, 0, "btnOkcheckstk_"+j, r_accy);
+						}
+						return;
+					}else{ // 表身無資料
+						check_stkucc=true;
+					}
+				}
+				
 				//判斷是否手動開過開票或再訂單已開發票
 				if(!check_vcca && $('#chkIsgenvcca').prop('checked') &&!emp($('#txtOrdeno').val())){
 					var t_where = "where=^^ trdno='"+$('#txtOrdeno').val()+"' and isnull([type],'') !='' ^^";
@@ -782,6 +862,7 @@
 				
 				check_startdate=false;
 				check_vcca=false;
+				check_stkucc=false;
 				
 				for (var i = 0; i < q_bbsCount; i++) {
 					if(!emp($('#txtProductno_'+i).val())){
@@ -871,7 +952,7 @@
 									document.getElementById("stk_productno").innerHTML = $('#txtProductno_' + b_seq).val();
 									document.getElementById("stk_product").innerHTML = $('#txtProduct_' + b_seq).val();
 									//庫存
-									var t_where = "where=^^ ['" + q_date() + "','','" + $('#txtProductno_' + b_seq).val() + "') ^^";
+									var t_where = "where=^^ ['" + q_date() + "','"+$('#txtStoreno').val()+"','" + $('#txtProductno_' + b_seq).val() + "') ^^";
 									q_gt('calstk', t_where, 0, 0, 0, "msg_stk_all", r_accy);
 								}
 							}
@@ -906,7 +987,7 @@
 								document.getElementById("stk_productno").innerHTML = $('#txtProductno_' + b_seq).val();
 								document.getElementById("stk_product").innerHTML = $('#txtProduct_' + b_seq).val();
 								//庫存
-								var t_where = "where=^^ ['" + q_date() + "','','" + $('#txtProductno_' + b_seq).val() + "') ^^";
+								var t_where = "where=^^ ['" + q_date() + "','"+$('#txtStoreno').val()+"','" + $('#txtProductno_' + b_seq).val() + "') ^^";
 								q_gt('calstk', t_where, 0, 0, 0, "msg_stk_all", r_accy);
 							}
 						});

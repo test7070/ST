@@ -535,7 +535,7 @@
 							stkmount = q_add(stkmount, dec(as[i].mount));
 						}
 						t_msg = "庫存量：" + stkmount;
-						q_msg($('#txtMount_' + b_seq), t_msg,30);
+						q_msg($('#txtMount_' + b_seq), t_msg,30,9999);
 						//平均成本
 						//var t_where = "where=^^ productno ='" + $('#txtProductno_' + b_seq).val() + "' order by datea desc ^^ stop=1";
 						//q_gt('wcost', t_where, 0, 0, 0, "msg_wcost", r_accy);
@@ -938,7 +938,7 @@
 								b_seq = t_IdSeq;
 								if (!emp($('#txtProductno_' + b_seq).val())) {
 									//庫存
-									var t_where = "where=^^ ['" + q_date() + "','','"+$('#txtProductno_' + b_seq).val()+"')  ^^";
+									var t_where = "where=^^ ['" + q_date() + "','"+$('#cmbPartstore').val()+"','"+$('#txtProductno_' + b_seq).val()+"')  ^^";
 									q_gt('calstk', t_where, 0, 0, 0, "msg_stk", r_accy);
 								}
 							}
