@@ -218,7 +218,7 @@
 					if(PnoArray.length > 0){
 						var t_where = 'where=^^ 1=1 ';
 						if($('#cmbTypea').val()=='1'){
-							t_where += "and ((select isnull(enda,0) from view_orde where noa=view_ordes.noa)!=1) ";//BBM未結案
+							t_where += "and ((select isnull(enda,0) from view_orde where noa=a.noa)!=1) ";//BBM未結案
 							t_where += "and (isnull(enda,0)!=1) ";//BBS未結案
 						}else{
 							t_where += " and odate>='"+q_cdn(q_date(),-60)+"' and isnull(c1,0) >0";
