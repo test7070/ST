@@ -86,6 +86,9 @@
 			
 			var x_ordevccstore=false;
 			var x_ordevccumm=false;
+			var check_stkucc=false;
+			var check_stk=0;
+			var checkstktmp=[];
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtOdate', r_picd],['txtGdate', r_picd],['txtDatea', r_picd],['txtMon', r_picm]];//,['txtGtime', '99:99']
@@ -131,6 +134,53 @@
 				});
 				
 				$('#btnOrdetoVcc').click(function() {
+					//105/01/28 增加庫存安全量判斷 只做總倉的控管 所以出貨只判斷總倉
+					if(emp($('#txtVccno').val()) && !check_stkucc && $('#txtPostname').val() == '001'){
+						checkstktmp=[];
+						for (var i = 0; i < q_bbsCount; i++) {
+							if(!emp($('#txtProductno_'+i).val())){
+								if(checkstktmp.length==0){
+									checkstktmp.push({
+										noa:$('#txtProductno_'+i).val(),
+										product:$('#txtProduct_'+i).val(),
+										mount:dec($('#txtMount_'+i).val()),
+										stkmount:0,
+										safe:0
+									})
+								}else{
+									var intmp=false;
+									for(var j=0;j<checkstktmp.length;j++){
+										if($('#txtProductno_'+i).val()==checkstktmp[j].noa){
+											intmp=true;
+											checkstktmp[j].mount=q_add(dec(checkstktmp[j].mount),dec($('#txtMount_'+i).val()));
+										}
+										if(intmp)
+											break;
+									}
+									if(!intmp){
+										checkstktmp.push({
+											noa:$('#txtProductno_'+i).val(),
+											product:$('#txtProduct_'+i).val(),
+											mount:dec($('#txtMount_'+i).val()),
+											stkmount:0,
+											safe:0
+										});
+									}
+								}
+							}
+						}
+						if(checkstktmp.length>0){
+							check_stk=checkstktmp.length;
+							for(var j=0; j<checkstktmp.length; j++){
+								var t_where = "where=^^ ['" + q_date() + "','" + $('#txtStoreno').val() + "','" + checkstktmp[j].noa + "')  ^^";
+								q_gt('calstk', t_where, 0, 0, 0, "btnOVcheckstk_"+j, r_accy);
+							}
+							return;
+						}else{ // 表身無資料
+							check_stkucc=true;
+						}
+					}
+					
 					//檢查是否已收款
 					if(!x_ordevccumm && !emp($('#txtVccno').val())){
 						var t_where = " where=^^ vccno='" + $('#txtVccno').val() + "'^^";
@@ -146,6 +196,7 @@
 					}
 					x_ordevccstore=false;
 					x_ordevccumm=false;
+					check_stkucc=false;
 					//檢查是否已轉出貨
 					if(!emp($('#txtVccno').val())){ //由訂單轉出貨單 直接更新出貨單
 						//檢查是否自動產生發票
@@ -735,6 +786,34 @@
 							q_Seek_gtPost();
 						break;
 				}
+				if(t_name.substr(0,13)=='btnOVcheckstk'){
+					var n = t_name.split('_')[1];
+					var as = _q_appendData("stkucc", "", true);
+					if (as[0] != undefined) {
+						checkstktmp[n].stkmount=dec(as[0].mount);
+						checkstktmp[n].safemount=dec(as[0].safemount);
+					}
+					check_stk--;
+					if(check_stk==0){ //庫存資料接收完畢 判斷庫存是否低於安全存量
+						var x_err='';
+						for(var j=0; j<checkstktmp.length; j++){
+							if(q_sub(checkstktmp[j].stkmount,checkstktmp[j].mount)<0){
+								x_err+=checkstktmp[j].product+"庫存低於0\n";
+							}else if(q_sub(checkstktmp[j].stkmount,checkstktmp[j].mount)<checkstktmp[j].safemount){
+								x_err+=checkstktmp[j].product+"庫存低於安全存量\n";
+							}
+						}
+						if(x_err.length>0){
+							if (confirm(x_err+"是否要繼續轉出貨單?")){
+								check_stkucc=true;
+								$('#btnOrdetoVcc').click();
+							}
+						}else{
+							check_stkucc=true;
+							$('#btnOrdetoVcc').click();
+						}
+					}
+				}
 			}
 			
 			function btnOk() {
@@ -1045,12 +1124,38 @@
 					alert("已轉出貨單禁止修改!!");
 					return;
 				}*/
-					
+				
 				Lock(1, {
 					opacity : 0
 				});
-				var t_where = " where=^^ vccno='" + $('#txtVccno').val() + "'^^";
-				q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
+				if(!emp($('#txtVccno').val())){
+					var t_where = " where=^^ vccno='" + $('#txtVccno').val() + "'^^";
+					q_gt('umms', t_where, 0, 0, 0, 'btnModi', r_accy);
+				}else{
+					_btnModi();
+						
+					if (!emp($('#txtNoa').val())) {
+						//重新抓取vcca的資料
+						var t_where = "where=^^ noa='" + $('#txtNoa').val() + "' ^^";
+						q_gt('view_orde', t_where, 0, 0, 0, "vcca_orde");
+					}
+						
+					//104/09/25 已產生出貨單仍可以修改 蔡's
+					if(!emp($('#txtVccno').val())){
+						//104/10/06 表身也要開放 
+						//$('.dbbs input').attr('disabled','disabled');
+					}
+						
+					if($('#cmbKind').val()=='作廢')
+						$('#cmbKind').attr('disabled','disabled');
+						
+					Unlock(1);
+					$('#txtOdate').focus();
+					if (!emp($('#txtCustno').val())) {
+						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'  ^^";
+						q_gt('custaddr', t_where, 0, 0, 0, "");
+					}
+				}
 			}
 
 			function btnPrint() {
