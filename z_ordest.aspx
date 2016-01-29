@@ -161,6 +161,9 @@
 				var t_key = q_getHref();
 				if (t_key[1] != undefined)
 					$('#txtXnoa').val(t_key[1]);
+					
+				if(q_getPara('sys.project')!='pk')
+					$('#q_report div div').eq(6).hide();
 			}
 			
 			function setDefaultValue() {
@@ -203,6 +206,26 @@
 					$(this).val(dec($(this).val()));
 					if ($(this).val() == 'NaN')
 						$(this).val(99999.9);
+				});
+				$('#txtYwidth1').val(0).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(0);
+				});
+				$('#txtYwidth2').val(9999.99).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(9999.99);
+				});
+				$('#txtYdime1').val(0).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(0);
+				});
+				$('#txtYdime2').val(9999.99).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(9999.99);
 				});
 			}
 
