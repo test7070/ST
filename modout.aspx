@@ -33,8 +33,8 @@
 			q_desc = 1;
 					
 			aPop = new Array(
-				['txtFixnoa','lblFixnoa','modfixc','noa,modnoa,mechno,mech','txtFixnoa,txtModnoa,txtMechno,txtMech','modfixc_b.aspx'],
-				['txtFrame','lblFrame','modfixc','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfixc_b.aspx'],
+				['txtFixnoa','lblFixnoa','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
+				['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
 			$(document).ready(function() {
@@ -55,9 +55,10 @@
 				bbmMask = [['txtDatea',r_picd]];
 				q_mask(bbmMask);				
 
-				$('#btnIn').click(function(){				
+				$('#btnIn').click(function(){		
+					//2016/01/28原匯入維修資料改匯入入庫資料							
 					if(!emp($('#txtFixnoa').val()) && (q_cur == 1 || q_cur == 2) ){
-						q_gt('modfixc', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixcs");
+						q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");	
 					}
 				});
 			}
@@ -74,16 +75,19 @@
 			
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					case 'ins_modfixcs':
-					var as = _q_appendData("modfixcs", "", true);
+					case 'ins_modfixs':
+					var as = _q_appendData("modfixs", "", true);
+					if (as[0] != undefined) {
+							t_data1 = as;
+					}
 						var str = '';
 						var isexist = 0;
 						var pos = 0;
-						for(var i=0; i<q_bbsCount; i++){
+						for(var i=0; i<q_bbsCount; i++){//bbs最後一列之行數
 							if($('#txtNob_'+i).val().length>0)
 								pos = i+1;
 						}
-						$.each(as, function(index, elm){//判斷modfixc.nob是否已存在於bbs內:isexist->y:1,n:0
+						$.each(as, function(index, elm){//判斷modfixs.nob是否已存在於bbs內:isexist->y:1,n:0
 							isexist = 0;
 							for(var i=0; i<q_bbsCount ;i++){							
 								if(elm.nob == $('#txtNob_'+i).val()){								
@@ -93,12 +97,14 @@
 							if(isexist == 0){//bbs插入該筆未存在資料列													
 								q_bbs_addrow('bbs',pos++,0);
 								$('#txtNob_'+(pos-1)).val(elm.nob);
-								$('#txtCode_'+(pos-1)).val(elm.code);
-								$('#txtDetail_'+(pos-1)).val(elm.detail);
-								$('#txtFrame_'+(pos-1)).val(elm.frame);
-								$('#txtMount_'+(pos-1)).val(elm.mount);
+								$('#txtCode_'+(pos-1)).val(elm.code1);
+								$('#txtDetail_'+(pos-1)).val(elm.detail1);
+								$('#txtFrame_'+(pos-1)).val(elm.frame1);
+								$('#txtMount_'+(pos-1)).val(elm.mount1);
+								$('#txtWeight_'+(pos-1)).val(elm.weight1);
 							}
 						});
+						sum();
 						break;
 					case q_name:
                         if (q_cur == 4)
@@ -134,10 +140,20 @@
 				q_box('modout_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
 			}
 
-			var flag =0;
+			function sum() {		
+				var sum = 0;
+				for (var i=0; i<q_bbsCount; i++){
+					sum = sum + dec($('#txtMount_'+i).val());
+				}
+				$('#textSum').val(sum);				
+			}
+			
 			function bbsAssign() {			
-				for (var j = 0; j < q_bbsCount; j++) {	
-					
+				for (var i=0; i<q_bbsCount; i++) {	
+					//計算領用數量
+					$('#txtMount_'+i).change(function(){
+						sum();
+					});
 				}
 				_bbsAssign();
 			}
@@ -178,11 +194,12 @@
 			function refresh(recno) {
 				_refresh(recno);		
 				refreshBbm();
+				sum();
 			}
 
 			function refreshBbm() {
 				$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-				
+				$('#textSum').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 			}
 
 			function readonly(t_para, empty) {
@@ -273,7 +290,7 @@
 			}
 			.dbbm {
 				float: left;
-				width: 850px;
+				width: 1000px;
 				/*margin: -1px;
 				 border: 1px black solid;*/
 				border-radius: 5px;
@@ -408,6 +425,8 @@
 						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl " ></a></td>
 						<td><input id="txtDatea" type="text" class="txt  c1" /></td>
+						<td><span> </span><a id='lblSum' class="lbl"></a></td>
+						<td><input id="textSum"  type="text"  class="num c1" style="width:100%"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
@@ -420,7 +439,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width:1075px">
+		<div class='dbbs' style="width:1225px">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:1%;">
@@ -445,7 +464,7 @@
 					<td style="display: none;"><input id="txtWheel.*" type="text"  style="width:98%;"/></td>				
 					<td><input id="txtCode.*" type="text"  style="width:98%;"/></td>
 					<td><input id="txtDetail.*" type="text" class="txt c1" style="width:98%;"/></td>
-					<td><input id="txtFrame.*" type="text" class="num c1" style="width:98%;"/></td>					
+					<td><input id="txtFrame.*" type="text" class="txt c1" style="width:98%;"/></td>					
 					<td><input id="txtMount.*" type="text" class="num c1" style="width:98%;"/></td>						
 					<td ><input id="txtMemo.*" type="text" class="txt c1"  style="width:98%;"/></td>
 				</tr>

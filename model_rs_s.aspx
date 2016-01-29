@@ -37,10 +37,12 @@
 
 			function q_seekStr() {
 				t_noa = $.trim($('#txtNoa').val());
+				t_frame = $.trim($('#txtFrame').val());
 				t_tggno = $('#txtTggno').val();
 				
 				var t_where = " 1=1 "
 					+q_sqlPara2("noa", t_noa)
+					+q_sqlPara2("frame", t_frame)
 					+q_sqlPara2("tggno", t_tggno);
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
@@ -61,6 +63,10 @@
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:30%;"><a id='lblNoa'></a></td>
 					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:30%;"><a id='lblFrame'></a></td>
+					<td><input class="txt" id="txtFrame" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:30%;"><a id='lblTggno'></a></td>
