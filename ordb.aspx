@@ -198,7 +198,7 @@
 					if (q_getPara('sys.project').toUpperCase()=='XY'){
 						var t_where =" isnull(enda,'0')='0' and ISNULL(cancel,'0')='0' ";
 						//排除已出過貨
-						t_where +=" and not exists(select * from view_vcc where ordeno=view_ordes"+r_accy+".noa and no2=view_ordes"+r_accy+".no2)";
+						t_where +=" and not exists(select * from view_vcc where ordeno=a.noa and no2=a.no2)";
 						q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+";"+r_accy, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 					}
 				});
