@@ -36,11 +36,14 @@
 
 			function q_seekStr() {
 				t_noa = $.trim($('#txtNoa').val());
+				t_frame = $.trim($('#txtFrame').val());
 				t_mechno = $('#txtMechno').val();
 				
 				var t_where = " 1=1 "
 					+q_sqlPara2("noa", t_noa)
 					+q_sqlPara2("mechno", t_mechno);
+					if(t_frame!=0 && !isNaN(t_frame))
+                 	   t_where += " and exists(select noa from modouts where modout.noa=modouts.noa and modouts.frame="+t_frame+")";
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
 			}
@@ -60,6 +63,10 @@
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
 					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblFrame'></a></td>
+					<td><input class="txt" id="txtFrame" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblMechno'></a></td>

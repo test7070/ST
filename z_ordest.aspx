@@ -16,13 +16,14 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			var t_ucc='';
+			var t_style='';
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
 				q_gf('', 'z_ordest');
 			});
 			function q_gfPost() {
-				q_gt('ucc', '', 0, 0, 0, "");
+				q_gt('ucc', '', 0, 0, 0, "");				
 			}
 			function q_gtPost(t_name) {
 				switch (t_name) {
@@ -32,8 +33,16 @@
 						for ( i = 0; i < as.length; i++) {
 							t_ucc += (t_ucc.length > 0 ? '&' : '') + as[i].noa + '@' + as[i].noa;
 						}
-						loadFinish();
+						q_gt('style', '', 0, 0, 0, "");
 						break;
+					case 'style':
+						t_style = ' @';
+						var as = _q_appendData("style", "", true);
+						for ( i = 0; i < as.length; i++) {
+							t_style += (t_style.length > 0 ? '&' : '') + as[i].noa + '@' + as[i].noa;
+						}
+						loadFinish();
+						break;	
 				}
 			}
 			function loadFinish() {
@@ -123,6 +132,10 @@
 						type : '5', //[35] 21
 						name : 'xeproduct3',
 						value : t_ucc.split('&')
+					}, {
+						type : '5', //[36] 22
+						name : 'xstyle',
+						value : t_style.split('&')
 					}]
 				});
 				q_popAssign();
@@ -148,6 +161,9 @@
 				var t_key = q_getHref();
 				if (t_key[1] != undefined)
 					$('#txtXnoa').val(t_key[1]);
+					
+				if(q_getPara('sys.project')!='pk')
+					$('#q_report div div').eq(6).hide();
 			}
 			
 			function setDefaultValue() {
@@ -190,6 +206,26 @@
 					$(this).val(dec($(this).val()));
 					if ($(this).val() == 'NaN')
 						$(this).val(99999.9);
+				});
+				$('#txtYwidth1').val(0).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(0);
+				});
+				$('#txtYwidth2').val(9999.99).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(9999.99);
+				});
+				$('#txtYdime1').val(0).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(0);
+				});
+				$('#txtYdime2').val(9999.99).addClass('num').focusout(function() {
+					$(this).val(dec($(this).val()));
+					if ($(this).val() == 'NaN')
+						$(this).val(9999.99);
 				});
 			}
 

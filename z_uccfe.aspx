@@ -80,6 +80,26 @@
 						type : '8',
 						name : 'xshowprice',//[14]
 						value : "1@顯示單價".split(',')
+					}, {
+						type : '2',
+						name : 'xcust', //[15][16]
+						dbf : 'cust',
+						index : 'noa,comp',
+						src : 'cust_b.aspx'
+					}, {
+						type : '2',
+						name : 'xsss', //[17][18]
+						dbf : 'sss',
+						index : 'noa,namea',
+						src : 'sss_b.aspx'
+					}, {
+						type : '5', //[19]
+						name : 'xtrantype',
+						value :[q_getPara('report.all')].concat(q_getPara('fe.trantype').split(','))
+					}, {
+						type : '8',
+						name : 'xsel',//[20]
+						value : "1@僅顯示退貨,2@客戶別統計,3@業務分析,4@業務排行榜,5@中類分析".split(',')
 					}]
 				});
 				q_popAssign();

@@ -274,13 +274,22 @@
 				}
 			}			
 			
-			
+			function sum() {		
+				var sum = 0;
+				for (var i=0; i<q_bbsCount; i++){
+					sum = sum + dec($('#txtMount_'+i).val());
+				}
+				$('#textSum').val(sum);				
+			}
 			
 			function bbsAssign() {
 							
 				for (var j = 0; j < q_bbsCount; j++) {
-							
-												
+					//計算庫存數
+					$('#txtMount_'+j).change(function(){
+						sum();
+					});	
+										
 					$('#combWheel_'+j).change(function(){
 						t_IdSeq = -1;  
 						q_bodyId($(this).attr('id'));
@@ -304,9 +313,7 @@
 						changeWheel(b_seq);
 						
 					});
-									
-						
-								
+											
 					$('#combNumber_'+j).change(function(){
 						t_IdSeq = -1;  
 						q_bodyId($(this).attr('id'));
@@ -411,10 +418,9 @@
 			}
 
 			function refresh(recno) {
-				
-					
 				_refresh(recno);		
 				refreshBbm();
+				sum();
 			}
 
 			function refreshBbm() {
@@ -423,6 +429,7 @@
 				} else {
 					$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				}
+				$('#textSum').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 			}
 
 			function readonly(t_para, empty) {
@@ -647,6 +654,8 @@
 						<td><input id="txtTube" type="text" class="txt c1 "/></td>
 						<td><span> </span><a id='lblHeart' class="lbl"> </a></td>
 						<td><input id="txtHeart" type="text" class="c1 num"/></td>
+						<td><span> </span><a id='lblSum' class="lbl"></a></td>
+						<td><input id="textSum"  type="text"  class="num c1" style="width:95%"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblUsetype' class="lbl"></a></td>						
