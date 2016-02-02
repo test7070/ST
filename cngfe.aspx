@@ -650,8 +650,8 @@
 					<td style="width:100px;" align="center"><a id='lblMounts'> </a></td>
 					<td style="width:100px;" align="center"><a id='lblWeights'> </a></td>
 					<td style="width:100px;" align="center" class="yc_hide"><a id='lblPrices'> </a></td>
-					<td style="width:100px;" align="center"><a id='lblTotals'> </a></td>
-					<td style="width:200px;" align="center"><a id='lblUno'> </a></td>
+					<td style="width:100px;" align="center" class="yc_hide"><a id='lblTotals'> </a></td>
+					<td style="width:200px;" align="center" class="yc_hide"><a id='lblUno'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td>
@@ -671,8 +671,8 @@
 					<td><input class="txt num c1" id="txtMount.*" type="text"/></td>
 					<td><input class="txt num c1" id="txtWeight.*" type="text"/></td>
 					<td class="yc_hide"><input class="txt num c1" id="txtPrice.*" type="text"/></td>
-					<td><input class="txt num c1" id="txtTotal.*" type="text"/></td>
-					<td><input class="txt c1" id="txtUno.*" type="text" /></td>
+					<td class="yc_hide"><input class="txt num c1" id="txtTotal.*" type="text"/></td>
+					<td class="yc_hide"><input class="txt c1" id="txtUno.*" type="text" /></td>
 				</tr>
 			</table>
 		</div>
