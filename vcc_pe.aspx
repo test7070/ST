@@ -386,6 +386,7 @@
 			var vcces_as = new Array;
 			var t_uccArray = new Array;
 			var AddRet = new Array;
+			var unostk = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
 					case 'vccat':
@@ -466,30 +467,66 @@
 							focus_addr = '';
 						}
 						break;
-					case 'unostk':
-						var unostkList = _q_appendData("unostktmp", "", true);
+					case 'btnOk_unostk1':
+						unostk = _q_appendData("uccy", "", true);
+						
+						var vcc_where = "where=^^ noa = '" + $.trim($('#txtNoa').val()) + "'^^";
+						q_gt('view_vccs', vcc_where, 0, 0, 0, "btnOk_unostk2", r_accy);
+						
+						break;
+					case 'btnOk_unostk2':
+						var as = _q_appendData("view_vccs", "", true);
+						
 						var unostkList_Tmp = new Array();
 						var ErrStr = '';
-						if (unostkList.length > 0 && unostkList[0] != undefined) {
-							for (var j = 0; j < unostkList.length; j++) {
+						if (unostk.length > 0 && unostk[0] != undefined) {
+							for (var j = 0; j < unostk.length; j++) {
 								unostkList_Tmp.push({
-									uno : unostkList[j].uno,
-									mount : unostkList[j].mount,
-									weight : unostkList[j].weight
+									uno : unostk[j].uno,
+									unit : 'KG', //預設公斤
+									mount : dec(unostk[j].emount),
+									weight : dec(unostk[j].eweight),
+									vmount:0,
+									vweight:0
 								});
 							}
-							for (var i = 0; i < q_bbsCount; i++) {
-								bbsUno = $.trim($('#txtUno_' + i).val());
-								bbsWeight = dec($('#txtWeight_' + i).val());
+							//加回目前的出貨單資料
+							for (var i = 0; i < as.length; i++) {
+								var t_uno = as[i].uno;
+								var t_weight = dec(as[i].gweight)!=0?dec(as[i].gweight):dec(as[i].weight);
+								var t_mount = dec(as[i].mount);
 								for (var k = 0; k < unostkList_Tmp.length; k++) {
-									if (bbsUno == $.trim(unostkList_Tmp[k].uno)) {
-										unostkList_Tmp[k].weight = dec(unostkList_Tmp[k].weight) - bbsWeight;
+									if (t_uno == $.trim(unostkList_Tmp[k].uno)) {
+										unostkList_Tmp[k].weight = dec(unostkList_Tmp[k].weight) + t_weight;
+										unostkList_Tmp[k].mount = dec(unostkList_Tmp[k].mount) + t_mount;
+									}
+								}
+							}
+							//扣除目前出貨單資料
+							for (var i = 0; i < q_bbsCount; i++) {
+								var t_uno = $.trim($('#txtUno_' + i).val());
+								var t_weight = dec($('#txtGweight_' + i).val())!=0?dec($('#txtGweight_' + i).val()):dec($('#txtWeight_' + i).val());
+								var t_mount = dec($('#txtMount_' + i).val());
+								var t_unit = $('#txtUnit_' + i).val().toUpperCase();
+								for (var k = 0; k < unostkList_Tmp.length; k++) {
+									if (t_uno == $.trim(unostkList_Tmp[k].uno)) {
+										unostkList_Tmp[k].unit = t_unit;
+										unostkList_Tmp[k].weight = dec(unostkList_Tmp[k].weight) - t_weight;
+										unostkList_Tmp[k].mount = dec(unostkList_Tmp[k].mount) - t_mount;
+										unostkList_Tmp[k].vweight = dec(unostkList_Tmp[k].vweight) + t_weight;
+										unostkList_Tmp[k].vmount = dec(unostkList_Tmp[k].vmount) + t_mount;
 									}
 								}
 							}
 							for (var k = 0; k < unostkList_Tmp.length; k++) {
-								if (dec(unostkList_Tmp[k].weight) < 0) {
-									ErrStr += '批號：' + unostkList_Tmp[k].uno + ' 庫存量：' + dec(unostkList[k].weight) + ' 本次出貨量：' + (dec(unostkList[k].weight) - dec(unostkList_Tmp[k].weight)) + '\n';
+								if(unostkList_Tmp[k].unit!='KG' && unostkList_Tmp[k].unit!=''){ //數量
+									if (dec(unostkList_Tmp[k].mount) < 0) {
+										ErrStr += '批號：' + unostkList_Tmp[k].uno + ' 庫存量：' +q_add(unostkList_Tmp[k].mount,dec(unostkList_Tmp[k].vmount))+ ' 本次出貨量：' + dec(unostkList_Tmp[k].vmount) + '\n';
+									}
+								}else{
+									if (dec(unostkList_Tmp[k].weight) < 0) {
+										ErrStr += '批號：' + unostkList_Tmp[k].uno + ' 庫存量：' + q_add(unostkList_Tmp[k].weight,dec(unostkList_Tmp[k].vweight)) + ' 本次出貨量：' + dec(unostkList_Tmp[k].vweight) + '\n';
+									}
 								}
 							}
 							if ($.trim(ErrStr).length > 0) {
@@ -660,7 +697,6 @@
 				else
 					$('#txtWorker2').val(r_name);
 				
-				var unostkWhere = "where[1]=^^ 1=1 ^^where[2]=^^ 1=1 ^^where[4]=^^ 1=1 ^^";
 				var UnoList = GetUnoList().split(',');
 				var ReturnStr = '';
 				for (var k = 0; k < UnoList.length; k++) {
@@ -668,9 +704,8 @@
 					if (k < ((UnoList.length) - 1))
 						ReturnStr += ',';
 				}
-				unostkWhere = unostkWhere + "where=^^ a.uno in (" + ReturnStr + ")^^";
-				unostkWhere = unostkWhere + "where[3]=^^ noa != '" + $.trim($('#txtNoa').val()) + "'^^";
-				q_gt('unostk', unostkWhere, 0, 0, 0, "", r_accy);
+				var unostkWhere ="where=^^ uno in (" + ReturnStr + ")^^";
+				q_gt('uccy', unostkWhere, 0, 0, 0, "btnOk_unostk1", r_accy);
 			}
 			
 			function q_stPost() {
