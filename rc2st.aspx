@@ -773,6 +773,8 @@
 				$('#txtAccno').val(s1[0]);
 				if ($.trim($('#txtInvono').val()).length > 0)
 					q_gt('rc2a', "where=^^noa='" + $.trim($('#txtInvono').val()) + "'^^", 0, 0, 0, 'getRc2atax', r_accy);
+				//批號產生  2016/02/04
+				q_func('qtxt.query.genUno', 'uno.txt,genUno,' + $('#txtNoa').val() + ';rc2');
 				Unlock(1);
 			}
 			
@@ -883,6 +885,9 @@
 
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
+					case 'qtxt.query.genUno':
+						q_reLoad();
+						break;
 					case 'qtxt.query.getuno':
 						var as = _q_appendData("tmp0", "", true, true);
 						if (as[0] != undefined) {
