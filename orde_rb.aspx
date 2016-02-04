@@ -741,6 +741,8 @@
 							t_part=t_part+','+as[i].noa+"@"+as[i].store;
 							if(r_partno==as[i].tggno && as[i].tggno!='') //預設
 								x_storeno=as[i].noa;
+							if(r_partno=="08") //0203 預設台北總倉
+								x_storeno="001";
 						}
 						q_cmbParse("cmbPartstore", t_part);
 						if(q_cur==1)
