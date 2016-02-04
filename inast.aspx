@@ -386,6 +386,8 @@
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
+                //批號產生  2016/02/04
+				q_func('qtxt.query.genUno', 'uno.txt,genUno,' + $('#txtNoa').val() + ';ina');
                 Unlock(1);
             }
 
@@ -509,6 +511,9 @@
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
+                	case 'qtxt.query.genUno':
+						q_reLoad();
+						break;
                     case 'qtxt.query.getuno':
                         var as = _q_appendData("tmp0", "", true, true);
                        	if(as[0]!=undefined){
