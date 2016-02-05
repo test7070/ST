@@ -495,6 +495,11 @@
 						var as = _q_appendData("tmp0", "", true, true);
 						var t_invono='';
 							if (as[0] != undefined) {
+								if(as[0].memo.length>0){
+									alert(as[0].memo);
+									return;
+								}
+								
 								abbm[q_recno]['rc2no'] = as[0].rc2no;
 								$('#txtRc2no').val(as[0].rc2no);
 								
