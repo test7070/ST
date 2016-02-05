@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
@@ -128,7 +127,11 @@
                         name : 'lostorder',
                         value : "0@交易日,1@業務".split(',')
 					},{
-						type : '5', //[23]
+                        type : '5', //[23]
+                        name : 'vcctypea',
+                        value : (' @全部,'+q_getPara('vcc.typea')).split(',')
+					},{
+						type : '5', //[24]
 						name : 'xcno',
 						value : t_acomp.split(',')
 					}]
