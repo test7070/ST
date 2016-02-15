@@ -234,6 +234,8 @@
                     } 
                 }
                 _bbsAssign();
+                if(q_getPara('sys.project').toUpperCase()=='PK')
+					$('.pk').show();
             }
 
             function btnIns() {
@@ -334,7 +336,8 @@
 
             function refresh(recno) {
                 _refresh(recno);
-
+				if(q_getPara('sys.project').toUpperCase()=='PK')
+					$('.pk').show();
             }
 
             function readonly(t_para, empty) {
@@ -641,9 +644,11 @@
 					<td align="center" style="width:1%;"> </td>
 					<td align="center" style="width: 7%;"><a id='lblBccno'> </a></td>
 					<td align="center" style="width: 13%;"><a id='lblBccname'> </a></td>
-					<td align="center" style="width: 5%;"><a id='lblUnit'> </a></td>
+					
 					<td align="center" style="width: 5%;"><a id='lblMount'> </a></td>
+					<td align="center" style="width: 5%;display:none;" class="pk"><a>數量<br>單位</a></td>
 					<td align="center" style="width: 5%;"><a id='lblWeight'> </a></td>
+					<td align="center" style="width: 5%;"><a>計價<br>單位</a></td>
 					<td align="center" style="width: 5%;"><a id='lblMount2'> </a></td>	
 					<td align="center" style="width: 5%;"><a id='lblPrice'> </a></td>
 					<td align="center" style="width: 5%;"><a id='lblTotals'> </a></td>
@@ -663,9 +668,10 @@
 						<input id="txtBccno.*" type="text" style="float:left;width: 75%;" />
 					</td>
 					<td><input id="txtBccname.*" type="text" style="width: 95%;" /></td>
-					<td><input id="txtUnit.*" type="text" style="width: 95%;"/></td>
 					<td><input id="txtMount.*" type="text" style="width: 95%; text-align: right;"/></td>
+					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" style="width: 95%; text-align: right;"/></td>
+					<td><input id="txtUnit.*" type="text" style="width: 95%;"/></td>
 					<td><input id="txtMount2.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtPrice.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtTotal.*" type="text" style="width: 95%; text-align: right;"/></td>
