@@ -586,6 +586,10 @@
 				}
 				_bbsAssign();
 				size_change();
+				if(q_getPara('sys.project')=='pk'){
+					$('.pk').show();
+					$('#lblUnit_st').html('計價<BR>單位');
+				}
 			}
 
 			function btnIns() {
@@ -637,6 +641,10 @@
 					thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 		           	$(this).attr('OldValue',$('#txtProductno_'+thisId).val());
 				});
+				if(q_getPara('sys.project')=='pk'){
+					$('.pk').show();
+					$('#lblUnit_st').html('計價<BR>單位');
+				}
 			}
 
 			function q_popPost(s1) {
@@ -1212,9 +1220,11 @@
 						<td align="center" style="width:80px;"><a>等級</a></td>
 						<td align="center" id='Size'><a id='lblSize_help'> </a></br><a id='lblSize_st'> </a></td>
 						<td align="center" style="width:10%;"><a id='lblSizea_st'></a><input id="btnShowInfo" type="button" value="代碼列表" onclick="showSizeInfo()"></td>
-						<td align="center" style="width:3%;"><a id='lblUnit_st'></a></td>
+						
 						<td align="center" style="width:5%;"><a id='lblMount_st'></a></td>
+						<td align="center" style="width:3%;display:none;" class="pk"><a>數量<BR>單位</a></td>
 						<td align="center" style="width:7%;"><a id='lblWeight_st'></a></td>
+						<td align="center" style="width:3%;"><a id='lblUnit_st'></a></td>
 						<td align="center" style="width:5%;"><a id='lblPrice_st'></a></td>
 						<td align="center" style="width:8%;"><a id='lblTotal_st'></a></td>
 						<td align="center"><a id='lblMemo_st'></a></td>
@@ -1263,18 +1273,11 @@
 						<input id="txtLengthb.*" type="hidden"/>
 						<input class="txt c1" id="txtSpec.*" type="text"/>
 						</td>
-						<td >
-						<input id="txtSize.*" type="text" class="txt c7"/>
-						</td>
-						<td >
-						<input id="txtUnit.*" type="text" class="txt c7"/>
-						</td>
-						<td >
-						<input id="txtMount.*" type="text"  class="txt num c7"/>
-						</td>
-						<td >
-						<input id="txtWeight.*" type="text"  class="txt num c7" />
-						</td>
+						<td><input id="txtSize.*" type="text" class="txt c7"/></td>				
+						<td><input id="txtMount.*" type="text"  class="txt num c7"/></td>
+						<td class="pk" style="display:none;"><input id="txtUnit2.*" type="text" class="txt c7"/></td>
+						<td><input id="txtWeight.*" type="text"  class="txt num c7" /></td>
+						<td><input id="txtUnit.*" type="text" class="txt c7"/></td>
 						<td >
 						<input id="txtPrice.*" type="text" class="txt num c7" />
 						</td>
