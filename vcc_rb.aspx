@@ -751,35 +751,46 @@
 						checkstktmp[n].safemount=dec(as[0].safemount);
 					}
 					check_stk--;
-					if(check_stk==0){ //庫存資料接收完畢 判斷庫存是否低於安全存量
-						if(q_cur==2){//修改 將原出貨單的數量補回庫存量
-							for (var i = 0; i < abbsNow.length; i++) {
-								for(var j=0; j<checkstktmp.length; j++){
-									if(abbsNow[i].productno==checkstktmp[j].noa){
-										checkstktmp[j].stkmount=q_add(dec(checkstktmp[j].stkmount),dec(abbsNow[i].mount));
-										break;
-									}
+				}
+				if(t_name.substr(0,14)=='btnOkchecknotv'){
+					var n = t_name.split('_')[1];
+					var as = _q_appendData("view_ordes", "", true);
+					var tnotv=0;
+					for (var i = 0; i < as.length; i++) {
+						tnotv=q_add(tnotv,dec(as[i].notv))
+					}
+					checkstktmp[n].unvcc=tnotv;
+					check_stk_notv--;
+				}
+				//庫存資料接收完畢 判斷庫存是否低於安全存量
+				if((t_name.substr(0,13)=='btnOkcheckstk' || t_name.substr(0,14)=='btnOkchecknotv') && check_stk==0 && check_stk_notv==0){
+					if(q_cur==2){//修改 將原出貨單的數量補回庫存量
+						for (var i = 0; i < abbsNow.length; i++) {
+							for(var j=0; j<checkstktmp.length; j++){
+								if(abbsNow[i].productno==checkstktmp[j].noa){
+									checkstktmp[j].stkmount=q_add(dec(checkstktmp[j].stkmount),dec(abbsNow[i].mount));
+									break;
 								}
 							}
 						}
+					}
 						
-						var x_err='';
-						for(var j=0; j<checkstktmp.length; j++){
-							if(q_sub(checkstktmp[j].stkmount,checkstktmp[j].mount)<0){
-								x_err+=checkstktmp[j].product+"庫存低於0\n";
-							}else if(q_sub(checkstktmp[j].stkmount,checkstktmp[j].mount)<checkstktmp[j].safemount){
-								x_err+=checkstktmp[j].product+"庫存低於安全存量\n";
-							}
+					var x_err='';
+					for(var j=0; j<checkstktmp.length; j++){
+						if(q_sub(q_sub(checkstktmp[j].stkmount,checkstktmp[j].unvcc),checkstktmp[j].mount)<0){
+							x_err+=checkstktmp[j].product+"庫存低於0"+(checkstktmp[j].unvcc>0?'(訂單未交量:'+checkstktmp[j].unvcc+')':'')+"\n";
+						}else if(q_sub(q_sub(checkstktmp[j].stkmount,checkstktmp[j].unvcc),checkstktmp[j].mount)<checkstktmp[j].safemount){
+							x_err+=checkstktmp[j].product+"庫存低於安全存量"+(checkstktmp[j].unvcc>0?'(訂單未交量:'+checkstktmp[j].unvcc+')':'')+"\n";
 						}
-						if(x_err.length>0){
-							if (confirm(x_err+"是否要繼續出貨?")){
-								check_stkucc=true;
-								btnOk();	
-							}
-						}else{
+					}
+					if(x_err.length>0){
+						if (confirm(x_err+"是否要繼續出貨?")){
 							check_stkucc=true;
-							btnOk();
+							btnOk();	
 						}
+					}else{
+						check_stkucc=true;
+						btnOk();
 					}
 				}
 			}
@@ -788,6 +799,7 @@
 			var check_vcca=false;
 			var check_stkucc=false;
 			var check_stk=0;
+			var check_stk_notv=0;
 			var checkstktmp=[];
 			function btnOk() {
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')],['txtStoreno', q_getMsg('lblStore')]]);
@@ -832,9 +844,13 @@
 					}
 					if(checkstktmp.length>0){
 						check_stk=checkstktmp.length;
+						check_stk_notv=checkstktmp.length;
 						for(var j=0; j<checkstktmp.length; j++){
 							var t_where = "where=^^ ['" + q_date() + "','" + $('#txtStoreno').val() + "','" + checkstktmp[j].noa + "')  ^^";
 							q_gt('calstk', t_where, 0, 0, 0, "btnOkcheckstk_"+j, r_accy);
+							
+							var t_where = "where=^^ isnull(enda,0)=0 and isnull(cancel,0)=0 and notv>0 and productno='" + checkstktmp[j].noa + "' ^^";
+							q_gt('view_ordes', t_where, 0, 0, 0, "btnOkchecknotv_"+j, r_accy);
 						}
 						return;
 					}else{ // 表身無資料
