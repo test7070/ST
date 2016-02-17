@@ -654,7 +654,10 @@
         function sum() {
             var t1 = 0, t_unit, t_mount=0, t_weight = 0;
             for (var j = 0; j < q_bbsCount; j++) {
-            	if(!emp($('#txtNamea_'+j).val()) && (q_date()<=$('#txtOutdate_'+j).val() || emp($('#txtOutdate_'+j).val())))
+            	if(!emp($('#txtNamea_'+j).val()) 
+            	&& (q_date()<=$('#txtOutdate_'+j).val() || emp($('#txtOutdate_'+j).val()))
+            	&& !emp($('#txtIndate_'+j).val())
+            	)
 					t_mount++;
             }  // j
             $('#txtMount').val(t_mount);
