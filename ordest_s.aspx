@@ -82,7 +82,11 @@
 		        
 		        if(q_getPara('sys.comp').substring(0,2)=="傑期")
 		        {
-		        	t_where += q_sqlPara2("custorde", t_custorde);
+		        	//2016/02/17 改模糊查詢
+		        	if (t_custorde.length>0)
+                    	t_where += " and charindex('" + t_custorde + "',custorde)>0";
+                    
+		        	//t_where += q_sqlPara2("custorde", t_custorde);
 		        }
 		        
 		        if(t_apv=='1')
