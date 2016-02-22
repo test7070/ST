@@ -50,7 +50,6 @@
 				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 			});
 
-			//////////////////   end Ready
 			function main() {
 				if (dataErr) {
 					dataErr = false;
@@ -887,7 +886,7 @@
 				color: #FF8F19;
 			}
 			.txt.c1 {
-				width: 98%;
+				width: 100%;
 				float: left;
 			}
 			.txt.c4 {
@@ -1154,6 +1153,10 @@
 						<td class="td8">
 						<input id="txtContract"  type="text"  class="txt c1"/>
 						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblConn' class="lbl"></a></td>
+						<td colspan="7" ><input id="txtConn"  type="text"  class="txt c1" maxlength="50"/></td>						
 					</tr>
 					<tr class="tr7">
 						<td class="td1"><span> </span><a id='lblMoney' class="lbl"></a></td>
