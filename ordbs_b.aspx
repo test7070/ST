@@ -2,7 +2,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta http-equiv="Content-Language" content="en-us" />
-        <title></title>
+        <title> </title>
         <script src="../script/jquery.min.js" type="text/javascript"></script>
         <script src="../script/qj2.js" type="text/javascript"></script>
         <script src='qset.js' type="text/javascript"></script>
@@ -10,7 +10,7 @@
         <script src="../script/qbox.js" type="text/javascript"></script>
         <link href="../qbox.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript">
-			var q_name = 'ordbs', t_bbsTag = 'tbbs', t_content = " field=productno,product,unit,mount,noa,no3,price,total,weight,memo,spec,custno,comp", afilter = [], bbsKey = ['noa', 'no3'], t_count = 0, as;
+			var q_name = 'ordbs', t_bbsTag = 'tbbs', t_content = " field=productno,product,unit,mount,noa,no3,price,total,weight,memo,spec,custno,comp,tggno_xy,tgg_xy", afilter = [], bbsKey = ['noa', 'no3'], t_count = 0, as;
 			var t_sqlname = 'ordbs';
 			t_postname = q_name;
 			//brwCount2 = 12;
@@ -29,10 +29,36 @@
 				}
 				mainBrow(6, t_content, t_sqlname, t_postname, r_accy);
 			}
+			
 			function bbsAssign() {
 				_bbsAssign();
 				if(q_getPara('sys.isspec')!='1')
 					$('.isSpec').hide();
+				if(q_getPara('sys.project').toUpperCase()!='XY'){
+					$('.isCust').hide();
+				}else{
+					$('.isXY').show();
+					
+					$('input[type=checkbox][id^=chkSel]').change(function() {
+						var tggno_xy='';
+						$('input[type=checkbox][id^=chkSel]:checked').each(function(index) {
+							var t_id = $(this).attr('id').split('_')[1];
+							var t_tggno=$('#txtTggno_xy_'+t_id).val();
+							if(t_tggno=='')
+								t_tggno='$non'
+							if(tggno_xy.length==0)
+								tggno_xy=t_tggno;
+							else{
+								if(tggno_xy.indexOf(t_tggno)==-1){
+									tggno_xy=tggno_xy+'##'+t_tggno;
+								}
+							}
+						});
+						if(tggno_xy.split('##').length>1){
+							alert('請購產品含有多個廠商!!');	
+						}
+					});
+				}
 			}
 			function q_gtPost() {
 			}
@@ -219,6 +245,8 @@
                     <!--<td align="center"><a id='lblWeight'></a></td>-->
                     <td align="center"><a id='lblPrice'> </a></td>
                     <!--<td align="center"><a id='lblNotv'></a></td>-->
+                    <td align="center" class="isCust"><a id='lblCust'> </a></td>
+                    <td align="center" class="isXY" style="display: none;"><a id='lblTgg_xy'>廠商</a></td>
                     <td align="center"><a id='lblNoa'> </a></td>
                     <td align="center"><a id='lblMemo'> </a></td>
                 </tr>
@@ -235,8 +263,16 @@
                     <td style="width:4%;"><input class="txt" id="txtUnit.*" type="text" style="width:94%;"/></td>
                     <td style="width:5%;"><input class="txt" id="txtMount.*" type="text" style="width:94%; text-align:right;"/></td>
                     <!--<td style="width:8%;"><input class="txt" id="txtWeight.*" type="text" style="width:96%; text-align:right;"/></td>-->
-                    <td style="width:8%;"><input class="txt" id="txtPrice.*" type="text" style="width:96%; text-align:right;"/></td>
+                    <td style="width:6%;"><input class="txt" id="txtPrice.*" type="text" style="width:96%; text-align:right;"/></td>
                     <!--<td style="width:8%;"><input class="txt" id="txtNotv.*" type="text" style="width:96%; text-align:right;"/></td>-->
+                    <td class="isCust" style="width:8%;">
+	                    <input class="txt" id="txtCustno.*" type="text" style="width:98%;"/>
+	                    <input class="txt" id="txtComp.*" type="text" style="width:98%;"/>
+                    </td>
+                    <td class="isXY" style="width:8%; display: none;">
+	                    <input class="txt" id="txtTggno_xy.*" type="text" style="width:98%;"/>
+	                    <input class="txt" id="txtTgg_xy.*" type="text" style="width:98%;"/>
+                    </td>
                     <td style="width:8%;">
 	                    <input class="txt" id="txtNoa.*" type="text" style="width:98%;"/>
 	                    <input class="txt" id="txtNo3.*" type="text" style="width:98%;"/>

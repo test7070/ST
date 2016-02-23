@@ -37,6 +37,14 @@
                     },{/*2 [5][6]*/
                         type : '1',
                         name : 'xnoa'
+                    },{/* [7]*/
+                        type : '0',
+                        name : 'xproject',
+                        value : q_getPara('sys.project').toUpperCase()
+                    },{/* [8]*/
+                        type : '0',
+                        name : 'isspec',
+                        value : q_getPara('sys.isspec')
                     }]
                 });
                 q_popAssign();
