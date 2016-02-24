@@ -595,7 +595,7 @@
 				if (q_getPara('sys.project').toUpperCase()=='XY'){
 					//1050223 預設送貨地址
 					$('#txtPost2').val('333');
-					$('#txtAddr2').val('桃園縣龜鄉湖山街189巷6號 廖秀雲小姐');
+					$('#txtAddr2').val('桃園縣龜山鄉湖山街189巷6號 廖秀雲小姐');
 				}
 				
 				$('#cmbKind').val('1').change();
