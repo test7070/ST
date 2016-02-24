@@ -77,7 +77,12 @@
 				
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2)){
-						q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");						
+						//q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");
+						
+						//1050224 用load 處理
+						var t_where="where=^^a.noa='"+$('#txtInnoa').val()+"' order by a.nob^^"
+						var t_where1="where[1]=^^nob=a.nob and noa!='"+$('#txtNoa').val()+"' and datea<'"+$('#txtDatea').val()+"'^^"
+						q_gt('modfixc_modfixs', t_where+t_where1, 0, 0, 0, "modfixc_modfixs");
 					}	
 				});
 				
@@ -111,7 +116,16 @@
 			var t_data3 = new Array();
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					case 'ins_modfixs':
+					case 'modfixc_modfixs':
+						var as = _q_appendData("modfixs", "", true);
+						//清除表身
+						for(var i=0; i<q_bbsCount; i++){
+							$('#btnMinus_'+i).click();
+						}
+						q_gridAddRow(bbsHtm, 'tbbs', 'txtNob,txtCode,txtDetail,txtFrame,txtMount,txtWeight,txtBottom,txtBebottom,txtBrepair,txtLastloss'
+						, as.length, as, 'nob,code1,detail1,frame1,mount1,weight1,bottom,enbottom,erepair,loss', 'txtNob');
+						break;
+					/*case 'ins_modfixs':
 					var as = _q_appendData("modfixs", "", true);
 					if (as[0] != undefined) {
 							t_data1 = as;
@@ -156,7 +170,7 @@
 							t_data3 = as;
 						}
 						getLast();
-						break;	
+						break;*/
 					case 'modfix':
 						var as = _q_appendData("modfix", "", true);
 						if (as[0] != undefined) {
@@ -171,7 +185,7 @@
 			}
 			
 			//取前一次圖檔底徑、車修後底徑、磨耗作為本次圖檔底徑、車修前底徑、前次磨耗
-			function getLast(){
+			/*function getLast(){
 				var btm,ebtm,erep,loss,noa;
 			  	for(var i=0; i<t_data1.length; i++){	
 			  		btm  = '';
@@ -200,7 +214,7 @@
 			  		$('#txtBrepair_'+i).val(erep);
 			  		$('#txtLastloss_'+i).val(loss);
 			  	}//i-loop
-			}
+			}*/
 			
 			function btnOk() {
 				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
@@ -458,6 +472,7 @@
 					return;
 				}
 				q_nowf();
+				as['datea'] = abbm2['datea'];
 				return true;
 			}
 
