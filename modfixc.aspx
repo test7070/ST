@@ -63,8 +63,8 @@
 						   ['txtBdate3',r_picd],['txtEdate3',r_picd],['txtBtime3','99:99'],['txtEtime3','99:99'],
 						   ['txtBdate4',r_picd],['txtEdate4',r_picd],['txtBtime4','99:99'],['txtEtime4','99:99'] ];
 				
-				var t_way='傳統車床(研磨),CNC車修';
-				var t_worktype='正工,加班';
+				var t_way=',傳統車床(研磨),CNC車修';
+				var t_worktype=',正工,加班';
 				
 				q_cmbParse("cmbWay",t_way,'s');
 				q_cmbParse("cmbWay2",t_way,'s');
@@ -76,13 +76,29 @@
 				q_cmbParse("cmbWorktype4",t_worktype,'s');							
 				
 				$('#btnIn').click(function(){				
-					if(!emp($('#txtNoa').val()) && (q_cur == 1 || q_cur == 2)){
+					if(!emp($('#txtInnoa').val()) && (q_cur == 1 || q_cur == 2)){
 						//q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");
 						
+						//1050225 判斷是否已領用 有可能會直接入庫後直接領料不會維修
+						q_gt('modout', "where=^^fixnoa='"+$('#txtInnoa').val()+"' ^^", 0, 0, 0, "check_modout",r_accy,1);
+						var as = _q_appendData("modout", "", true);
+						if (as[0] != undefined) {
+							alert('模具入庫單【'+$('#txtInnoa').val()+'】已領用【'+as[0].noa+'】!!');
+							return;
+						}
 						//1050224 用load 處理
 						var t_where="where=^^a.noa='"+$('#txtInnoa').val()+"' order by a.nob^^"
 						var t_where1="where[1]=^^nob=a.nob and noa!='"+$('#txtNoa').val()+"' and datea<'"+$('#txtDatea').val()+"'^^"
-						q_gt('modfixc_modfixs', t_where+t_where1, 0, 0, 0, "modfixc_modfixs");
+						q_gt('modfixc_modfixs', t_where+t_where1, 0, 0, 0, "modfixc_modfixs",r_accy,1);
+						
+						var as = _q_appendData("modfixs", "", true);
+						//清除表身
+						for(var i=0; i<q_bbsCount; i++){
+							$('#btnMinus_'+i).click();
+						}
+						q_gridAddRow(bbsHtm, 'tbbs', 'txtNob,txtCode,txtDetail,txtFrame,txtMount,txtWeight,txtBottom,txtBebottom,txtBrepair,txtLastloss'
+						, as.length, as, 'nob,code1,detail1,frame1,mount1,weight1,bottom,enbottom,erepair,loss', 'txtNob');
+						
 					}	
 				});
 				
@@ -116,15 +132,6 @@
 			var t_data3 = new Array();
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					case 'modfixc_modfixs':
-						var as = _q_appendData("modfixs", "", true);
-						//清除表身
-						for(var i=0; i<q_bbsCount; i++){
-							$('#btnMinus_'+i).click();
-						}
-						q_gridAddRow(bbsHtm, 'tbbs', 'txtNob,txtCode,txtDetail,txtFrame,txtMount,txtWeight,txtBottom,txtBebottom,txtBrepair,txtLastloss'
-						, as.length, as, 'nob,code1,detail1,frame1,mount1,weight1,bottom,enbottom,erepair,loss', 'txtNob');
-						break;
 					/*case 'ins_modfixs':
 					var as = _q_appendData("modfixs", "", true);
 					if (as[0] != undefined) {
