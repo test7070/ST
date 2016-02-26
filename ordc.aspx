@@ -596,6 +596,7 @@
 					//1050223 預設送貨地址
 					$('#txtPost2').val('333');
 					$('#txtAddr2').val('桃園縣龜山鄉湖山街189巷6號 廖秀雲小姐');
+					$('#txtTrandate').val(q_cdn(q_date(),1));
 				}
 				
 				$('#cmbKind').val('1').change();
