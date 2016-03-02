@@ -86,6 +86,10 @@
                         type : '0', //[22]
                         name : 'r_len',
                         value : r_len
+                    }, {
+						type : '0',//[23]
+                        name : 'xproject',
+                        value : q_getPara('sys.project').toUpperCase()
                     }]
                 });
                 $('#chkXoption').children('input').attr('checked', 'checked');
