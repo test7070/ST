@@ -134,7 +134,15 @@
 						type : '5',
 						name : 'xenda',
 						value : '#non@全部,1@Y,0@N'.split(',')
-					}]
+					},{/* [39]*/
+                        type : '0',
+                        name : 'xproject',
+                        value : q_getPara('sys.project').toUpperCase()
+                    },{/* [40]*/
+                        type : '0',
+                        name : 'isspec',
+                        value : q_getPara('sys.isspec')
+                    }]
 				});
 				q_popAssign();
 

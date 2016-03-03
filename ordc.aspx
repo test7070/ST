@@ -453,7 +453,7 @@
 					}
 				}
 				
-				if(emp($('#txtTrandate').val())){
+				if(emp($('#txtTrandate').val()) && q_getPara('sys.project').toUpperCase()!='XY'){
 					$('#txtTrandate').val(q_cdn(q_date(),10));
 				}
 				for (var j = 0; j < q_bbsCount; j++) {

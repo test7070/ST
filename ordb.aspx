@@ -207,7 +207,9 @@
 					//q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+";"+r_accy, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 					
 					if (q_getPara('sys.project').toUpperCase()=='XY'){
-						var t_where =" isnull(enda,'0')='0' and ISNULL(cancel,'0')='0' and charindex('-',productno)>0 ";
+						var t_where =" isnull(enda,'0')='0' and ISNULL(cancel,'0')='0' ";//105/03/02 便品也可以匯入 and charindex('-',productno)>0
+						//105/03/02 請購過的不能再出現 一次請完
+						t_where +=" and not exists(select * from view_ordcs where ordeno=a.noa and no2=a.no2 and noa!='"+$('#txtNoa').val()+"')";
 						//排除已出過貨
 						t_where +=" and not exists(select * from view_vcc where ordeno=a.noa and no2=a.no2)";
 						q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+";"+r_accy, 'ordes', "95%", "95%", q_getMsg('popOrde'));
