@@ -35,7 +35,8 @@
 			aPop = new Array(
 				['txtFixnoa','lblFixnoa','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
-				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
+				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx'],
+				['txtSssno','lblSssno','nhpe','noa,namea','txtSssno,txtNamea','']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -58,7 +59,24 @@
 				$('#btnIn').click(function(){		
 					//2016/01/28原匯入維修資料改匯入入庫資料							
 					if(!emp($('#txtFixnoa').val()) && (q_cur == 1 || q_cur == 2) ){
-						q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");	
+						//105/02/25 判斷是否有進行 維修 
+						q_gt('modfixc', "where=^^innoa='"+$('#txtFixnoa').val()+"' and isnull(fixed,0)=0 ^^", 0, 0, 0, "check_modfixs",r_accy,1);
+						var as = _q_appendData("modfixc", "", true);
+						if (as[0] != undefined) {
+							alert('模具入庫單【'+$('#txtFixnoa').val()+'】尚在維修中【'+as[0].noa+'】!!');
+						}else{
+							q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "getmodfixs",r_accy,1);
+							var ass = _q_appendData("modfixs", "", true);
+							//清除表身
+							for(var i=0; i<q_bbsCount; i++){
+								$('#btnMinus_'+i).click();
+							}
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtNob,txtCode,txtDetail,txtFrame,txtMount,txtWeight'
+							, ass.length, ass, 'nob,code1,detail1,frame1,mount1,weight1', 'txtNob');
+							;
+							sum();
+							//q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");	
+						}
 					}
 				});
 			}
@@ -75,11 +93,11 @@
 			
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					case 'ins_modfixs':
-					var as = _q_appendData("modfixs", "", true);
-					if (as[0] != undefined) {
+					/*case 'ins_modfixs':
+						var as = _q_appendData("modfixs", "", true);
+						if (as[0] != undefined) {
 							t_data1 = as;
-					}
+						}
 						var str = '';
 						var isexist = 0;
 						var pos = 0;
@@ -105,7 +123,7 @@
 							}
 						});
 						sum();
-						break;
+						break;*/
 					case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -114,7 +132,7 @@
 			}
 
 			function btnOk() {
-				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
+				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')],['txtMechno', q_getMsg('lblMechno')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
@@ -333,11 +351,15 @@
 				color: #FF8F19;
 			}
 			.txt.c1 {
-				width: 100%;
+				width: 99%;
 				float: left;
 			}
 			.txt.c2 {
 				width: 95%;
+				float: left;
+			}
+			.txt.c3 {
+				width: 49%;
 				float: left;
 			}
 			.txt.num {
@@ -397,24 +419,24 @@
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td class="tdZ"></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td class="tdZ"> </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblFixnoa' class="lbl btn" ></a></td>
+						<td><span> </span><a id='lblFixnoa' class="lbl btn" > </a></td>
 						<td><input id="txtFixnoa" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblModnoa' class="lbl " ></a></td>
+						<td><span> </span><a id='lblModnoa' class="lbl " > </a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblFrame' class="lbl btn" ></a></td>
+						<td><span> </span><a id='lblFrame' class="lbl btn" > </a></td>
 						<td><input id="txtFrame" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblNoa' class="lbl " ></a></td>
+						<td><span> </span><a id='lblNoa' class="lbl " > </a></td>
 						<td><input id="txtNoa" type="text" class="txt  c1" /></td>
 					</tr>
 					<tr>
@@ -423,18 +445,20 @@
 							<input id="txtMechno" type="text" style="width:25%;"/>
 							<input id="txtMech" type="text" style="width:75%; color:green;"/>
 						</td>	
-						<td><span> </span><a id='lblDatea' class="lbl " ></a></td>
+						<td><span> </span><a id='lblDatea' class="lbl " > </a></td>
 						<td><input id="txtDatea" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblSum' class="lbl"></a></td>
+						<td><span> </span><a id='lblSum' class="lbl"> </a></td>
 						<td><input id="textSum"  type="text"  class="num c1" style="width:100%"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
+						<td><span> </span><a id='lblSssno' class="lbl"> </a></td>
+						<td><input id="txtSssno"  type="text"  class="txt c1"/></td>
+						<td><input id="txtNamea"  type="text"  class="txt c1"/></td>
+						<td><span> </span><input id="btnIn" type="button" style="width: 100%"/></td>
+						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
-						<td><input id="txtWorker2" type="text"  class="txt c1"/></td>
-						<td><span> </span><a id='' class="lbl"></a></td>
-						<td><span> </span><input id="btnIn" type="Button" style="width: 100%"/></td>	
+						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
+						<td><input id="txtWorker2" type="text"  class="txt c1"/></td>	
 					</tr>		
 				</table>
 			</div>
@@ -445,14 +469,14 @@
 					<td  align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width:15%;"><a id='lblNob_s' ></a></td>
-					<td style="display: none;" align="center" style="width:5%;"><a id='lblModel_s'></a></td>
-					<td style="display: none;" align="center" style="width:5%;"><a id='lblWheel_s'></a></td>
-					<td align="center" style="width:10%;"><a id='lblCode_s'></a></td>
-					<td align="center" style="width:15%;"><a id='lblDetail_s'></a></td>
-					<td align="center" style="width:10%;"><a id='lblFrame_s'></a></td>	
-					<td align="center" style="width:10%;"><a id='lblMount_s'></a></td>				
-					<td align="center" style="width:15%;"><a id='lblMemo_s'></a></td>
+					<td align="center" style="width:15%;"><a id='lblNob_s' > </a></td>
+					<td style="display: none;" align="center" style="width:5%;"><a id='lblModel_s'> </a></td>
+					<td style="display: none;" align="center" style="width:5%;"><a id='lblWheel_s'> </a></td>
+					<td align="center" style="width:10%;"><a id='lblCode_s'> </a></td>
+					<td align="center" style="width:15%;"><a id='lblDetail_s'> </a></td>
+					<td align="center" style="width:10%;"><a id='lblFrame_s'> </a></td>	
+					<td align="center" style="width:10%;"><a id='lblMount_s'> </a></td>				
+					<td align="center" style="width:15%;"><a id='lblMemo_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">

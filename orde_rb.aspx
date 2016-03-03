@@ -1115,6 +1115,7 @@
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
 				$('#txtOrdbno').val('');
 				$('#txtVccno').val('');
+				$('#txtPaytype').val('劃撥'); //1050222
 				
 				if (!emp($('#txtCustno').val())) {
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";

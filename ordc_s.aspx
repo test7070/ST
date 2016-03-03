@@ -52,8 +52,13 @@
                     t_where += " and kind='"+t_kind+"'";
                 if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',tgg)>0";
-                if(t_ordbno.length>0)
-                    t_where += " and exists(select noa from ordct"+r_accy+" where ordct"+r_accy+".noa=ordc"+r_accy+".noa and ordct"+r_accy+".ordbno='"+t_ordbno+"')";
+                if(t_ordbno.length>0){
+                	if (q_getPara('sys.project').toUpperCase()=='XY' ) {
+                		t_where += " and exists(select noa from view_ordcs"+r_accy+" where noa=view_ordcs"+r_accy+".noa and ordbno='"+t_ordbno+"')";
+                	}else{
+                		t_where += " and exists(select noa from view_ordct"+r_accy+" where noa=view_ordc"+r_accy+".noa and ordbno='"+t_ordbno+"')";
+                	}	
+                }
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
             }

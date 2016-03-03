@@ -20,9 +20,9 @@
                 q_gf('', 'z_salvacause');
             });
             function q_gfPost() {
-               $('#q_report').q_report({
-                        fileName : 'z_salvacause',
-                        options : [{
+				$('#q_report').q_report({
+					fileName : 'z_salvacause',
+						options : [{
                         type : '6',
                         name : 'xnoa'
                     },{
@@ -48,6 +48,10 @@
 					},{
                         type : '6',
                         name : 'xyear'
+                    },{/* [11]*/
+                        type : '0',
+                        name : 'xproject',
+                        value : q_getPara('sys.project').toUpperCase()
                     }]
                 });
                 q_popAssign();

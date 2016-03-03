@@ -128,10 +128,10 @@
 					var t_where = '';
 					
 					if (q_getPara('sys.project').toUpperCase()=='XY' ) {
-						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and b.datea>='"+q_date()+"' and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
+						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and b.datea>='"+q_date()+"' and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordcs" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
 						t_where = t_where;
 					}else {
-						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordc" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
+						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordcs" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
 						t_where = t_where;
 					}
 					
@@ -216,6 +216,35 @@
 							q_gt('ordb', t_where, 0, 0, 0, "", r_accy);
 							$('#txtOrdbno').val(b_ret[0].noa);
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtOrdbno,txtNo3,txtPrice,txtMount,txtTotal,txtMemo,txtUnit,txtSpec,txtCustno,txtComp', b_ret.length, b_ret, 'productno,product,noa,no3,price,mount,total,memo,unit,spec,custno,comp', 'txtProductno,txtProduct');
+							
+							//取第一個廠商資料
+							if (q_getPara('sys.project').toUpperCase()=='XY' ){
+								var xy_tggno='';
+								for (var i=0; i<b_ret.length;i++){
+									if(b_ret[i].tggno_xy!=''){
+										xy_tggno=b_ret[i].tggno_xy;
+										break;
+									}
+								}
+								if(xy_tggno.length>0){
+									$('#txtTggno').val(xy_tggno);
+									var t_where =" noa='"+$('#txtTggno').val()+"'";
+									q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytgg",r_accy,1);
+									var as = _q_appendData("tgg", "", true);
+									if (as[0] != undefined) {
+										$('#txtTgg').val(as[0].comp);
+										$('#cmbTrantype').val(as[0].trantype);
+										$('#txtPaytype').val(as[0].paytype);
+										$('#txtSalesno').val(as[0].salesno);
+										$('#txtSales').val(as[0].sales);
+										$('#txtTel').val(as[0].tel);
+										$('#txtFax').val(as[0].fax);
+										$('#txtPost').val(as[0].zip_comp);
+										$('#txtAddr').val(as[0].addr_comp);
+										$('#cmbTaxtype').val(as[0].conn);
+									}
+								}
+							}
 							bbsAssign();
 						}
 						break;
@@ -424,7 +453,7 @@
 					}
 				}
 				
-				if(emp($('#txtTrandate').val())){
+				if(emp($('#txtTrandate').val()) && q_getPara('sys.project').toUpperCase()!='XY'){
 					$('#txtTrandate').val(q_cdn(q_date(),10));
 				}
 				for (var j = 0; j < q_bbsCount; j++) {
@@ -563,6 +592,13 @@
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
 				
+				if (q_getPara('sys.project').toUpperCase()=='XY'){
+					//1050223 預設送貨地址
+					$('#txtPost2').val('333');
+					$('#txtAddr2').val('桃園縣龜山鄉湖山街189巷6號 廖秀雲小姐');
+					$('#txtTrandate').val(q_cdn(q_date(),1));
+				}
+				
 				$('#cmbKind').val('1').change();
 			}
 
@@ -582,7 +618,7 @@
 				$('#txtProduct').focus();
 				product_change();
 				if (!emp($('#txtTggno').val())) {
-					var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^";
+					var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
 			
@@ -639,6 +675,11 @@
 					$('#btnOrdb').removeAttr('disabled');
 					$('#combAddr').removeAttr('disabled');
 				}
+				
+				if (q_getPara('sys.project').toUpperCase()=='XY' ){
+					$('#cmbKind').attr('disabled', 'disabled');
+				}
+				
 				product_change();
 			}
 
