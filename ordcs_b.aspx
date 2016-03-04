@@ -14,7 +14,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-            var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,unit,mount,weight,noa,no2,price,total,memo,notv,trandate,spec,dime,width,lengthb,lengthc,style,class", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
+            var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,unit,mount,weight,noa,no2,price,total,memo,notv,trandate,spec,dime,width,lengthb,lengthc,style,class,custno,comp,tggno,tgg", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
             var t_sqlname = 'ordcs_load2';
             t_postname = q_name;
             //brwCount2 = 12;
@@ -44,6 +44,10 @@
 				_bbsAssign();
 				if(q_getPara('sys.isspec')!='1')
 					$('.isSpec').hide();
+				if(q_getPara('sys.project').toUpperCase()!='XY'){
+					$('.isCust').hide();
+					$('.isTgg').hide();
+				}
 			}
 
             function q_gtPost() {
@@ -186,12 +190,14 @@
 					<td align="center" style="width:20px;">
 					<input type="checkbox" id="checkAllCheckbox"/>
 					</td>
-					<td align="center" style="width:20px;"></td>
+					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:100px;"><a id='lblProductno'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblProduct'> </a> <a id='lblSpec' class="isSpec"> </a></td>
 					<td align="center" style="width:80px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrice'> </a></td>
+					<td align="center" class="isCust"><a id='lblCust'>客戶</a></td>
+                    <td align="center" class="isTgg"><a id='lblTgg'>廠商</a></td>
 					<td align="center" style="width:200px;"><a id='lblNoa'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblMemo'> </a></td>
 				</tr>
@@ -206,6 +212,14 @@
 					<td><input class="txt" id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt" id="txtMount.*" type="text" style="width:95%; text-align:right;"/></td>
 					<td><input class="txt" id="txtPrice.*" type="text" style="width:95%; text-align:right;"/></td>
+					<td class="isCust" style="width:8%;">
+	                    <input class="txt" id="txtCustno.*" type="text" style="width:98%;"/>
+	                    <input class="txt" id="txtComp.*" type="text" style="width:98%;"/>
+                    </td>
+                    <td class="isTgg" style="width:8%;">
+	                    <input class="txt" id="txtTggno.*" type="text" style="width:98%;"/>
+	                    <input class="txt" id="txtTgg.*" type="text" style="width:98%;"/>
+                    </td>
 					<td>
 						<input class="txt" id="txtNoa.*" type="text" style="width:75%;float:left;"/>
 						<input class="txt" id="txtNo2.*" type="text" style="width:15%;float:left;"/>
@@ -214,7 +228,6 @@
 						<input class="txt" id="txtMemo.*" type="text" style="width:95%;"/>
 						<input id="recno.*" type="hidden" />
 						<input id="txtStyle.*" type="hidden" />
-						<input id="txtSpec.*" type="hidden" />
 						<input id="txtWidth.*" type="hidden" />
 						<input id="txtLengthb.*" type="hidden" />
 						<input id="txtLengthc.*" type="hidden" />

@@ -538,6 +538,16 @@
 						});
 						
 						$('#chkAprice_'+j).click(function(e){refreshBbs();});
+						
+						$('#txtOrdbno_'+i).bind('contextmenu',function(e) {
+	                    	/*滑鼠右鍵*/
+	                    	e.preventDefault();
+	                    	t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							
+	                    	q_box("ordb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + r_accy, 'ordb', "95%", "95%", '請購作業');
+	                   });
 					}
 				}
 				_bbsAssign();
