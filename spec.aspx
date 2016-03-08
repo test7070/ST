@@ -140,9 +140,9 @@
 				} else {
 					$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				}
-				if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
+				/*if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
 					$('#txtProduct').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-				}
+				}*/
 			}
 
 			function readonly(t_para, empty) {
