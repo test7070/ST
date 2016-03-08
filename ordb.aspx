@@ -833,6 +833,19 @@
 								q_box("ordbt_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordbt', "95%", "95%", '詢價紀錄');
 							}
 						});
+						
+						$('#txtOrdeno_'+i).bind('contextmenu',function(e) {
+	                    	/*滑鼠右鍵*/
+	                    	e.preventDefault();
+	                    	t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if (q_getPara('sys.project').toUpperCase()=='XY'){
+	                    		q_box("orde_xy.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + r_accy, 'orde', "95%", "95%", '訂單作業');
+	                    	}else{
+	                    		q_box("orde.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + r_accy, 'orde', "95%", "95%", '訂單作業');
+	                    	}
+	                   });
 					}
 				}
 				_bbsAssign();

@@ -177,7 +177,7 @@
 							check_stk=checkstktmp.length;
 							check_stk_notv=checkstktmp.length;
 							for(var j=0; j<checkstktmp.length; j++){
-								var t_where = "where=^^ ['" + q_date() + "','" + $('#txtStoreno').val() + "','" + checkstktmp[j].noa + "')  ^^";
+								var t_where = "where=^^ ['" + q_date() + "','" + $('#txtPostname').val() + "','" + checkstktmp[j].noa + "')  ^^";
 								q_gt('calstk', t_where, 0, 0, 0, "btnOVcheckstk_"+j, r_accy);
 								
 								var t_where = "where=^^ isnull(enda,0)=0 and isnull(cancel,0)=0 and notv>0 and productno='" + checkstktmp[j].noa + "' ^^";

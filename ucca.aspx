@@ -179,6 +179,7 @@
 				return;
 			}*/
 			
+			/* 105/03/07 不限制
 			var repeats=false;
 			if(q_getPara('sys.project') != 'sh'){
 				for (var i = 0; i < q_bbsCount; i++) {
@@ -200,7 +201,7 @@
 			if(repeats){
 				Unlock();
 				return;
-			}
+			}*/
 			
 			if(q_cur==1){
 				t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";

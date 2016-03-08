@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -51,9 +51,9 @@
 					}, {/*6 [11][12]*/
 						type : '2',
 						name : 'xproductno',
-						dbf : 'bcc',
-						index : 'noa,product',
-						src : 'bcc_b.aspx'
+						dbf : 'ucc',
+						index : 'noa,product,spec',
+						src : q_getPara('sys.project').toUpperCase()=='XY'?'ucaucc_b2.aspx':'ucc_b2.aspx'
 					}, {/*7 [13][14]*/
 						type : '1',
 						name : 'yodate'
@@ -61,8 +61,8 @@
 						type : '2',
 						name : 'yproductno',
 						dbf : 'ucc',
-						index : 'noa,product',
-						src : 'ucc_b.aspx'
+						index : 'noa,product,spec',
+						src : q_getPara('sys.project').toUpperCase()=='XY'?'ucaucc_b2.aspx':'ucc_b2.aspx'
 					}, {/*9 [17]*/
 						type : '6',
 						name : 'yordbno'
@@ -88,8 +88,8 @@
 						type : '2',
 						name : 'zproductno',
 						dbf : 'ucc',
-						index : 'noa,product',
-						src : 'ucc_b.aspx'
+						index : 'noa,product,spec',
+						src : q_getPara('sys.project').toUpperCase()=='XY'?'ucaucc_b2.aspx':'ucc_b2.aspx'
 					}, {/*15 [27]*/
 						type : '5',
 						name : 'zordc',
@@ -146,24 +146,24 @@
 				});
 				q_popAssign();
 
-				$('#txtXdate1').mask('999/99/99');
+				$('#txtXdate1').mask(r_picd);
 				$('#txtXdate1').datepicker();
-				$('#txtXdate2').mask('999/99/99');
+				$('#txtXdate2').mask(r_picd);
 				$('#txtXdate2').datepicker();
 
-				$('#txtYodate1').mask('999/99/99');
+				$('#txtYodate1').mask(r_picd);
 				$('#txtYodate1').datepicker();
-				$('#txtYodate2').mask('999/99/99');
+				$('#txtYodate2').mask(r_picd);
 				$('#txtYodate2').datepicker();
 
-				$('#txtZdatea1').mask('999/99/99');
+				$('#txtZdatea1').mask(r_picd);
 				$('#txtZdatea1').datepicker();
-				$('#txtZdatea2').mask('999/99/99');
+				$('#txtZdatea2').mask(r_picd);
 				$('#txtZdatea2').datepicker();
 
-				$('#txtZldate1').mask('999/99/99');
+				$('#txtZldate1').mask(r_picd);
 				$('#txtZldate1').datepicker();
-				$('#txtZldate2').mask('999/99/99');
+				$('#txtZldate2').mask(r_picd);
 				$('#txtZldate2').datepicker();
 
 				var t_date, t_year, t_month, t_day;
@@ -205,7 +205,7 @@
 				$('#Sort08 select').val('tp');
 				$('#Option08 select').val('ordb');
 				//-------------------------------------------------------------------------------
-				$('#textDatea').mask('999/99/99');
+				$('#textDatea').mask(r_picd);
 				$('#textDatea').datepicker();
 				$('#textDatea').val(q_date);
 				$('#q_report .report').find('.radio').click(function(e) {
