@@ -1112,6 +1112,9 @@
 				$('#txtMon').val(q_date().substr(0,6));
 				$('#txtOdate').focus();
 				$('#cmbKind').val('隨貨單張');
+				if(q_db.toUpperCase()=='ST3')
+					$('#cmbKind').val('批次未開');
+				
 				$('#cmbTaxtype').val(q_getPara('sys.d4taxtype'));
 				$('#txtOrdbno').val('');
 				$('#txtVccno').val('');
