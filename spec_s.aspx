@@ -49,7 +49,7 @@
                 color: white;
                 text-align: center;
                 font-weight: bold;
-                BACKGROUND-COLOR: #76a2fe
+                background-color: #76a2fe
             }
 		</style>
 	</head>
