@@ -176,6 +176,8 @@
 					}
 					if (q_getPara('sys.project').toUpperCase()=='DJ'){
 						q_box("saladjust_dj.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'saladjust', "95%", "95%", q_getMsg("popSaladjust"));
+					}else if (q_getPara('sys.project').toUpperCase()=='RK'){
+						q_box("saladjust_rk.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'saladjust', "95%", "95%", q_getMsg("popSaladjust"));
 					}else{
 						q_box("salAdjust.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'saladjust', "95%", "95%", q_getMsg("popSaladjust"));
 					}

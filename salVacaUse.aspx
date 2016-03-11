@@ -638,6 +638,7 @@
 					}
 
                     $('#txtHr_used').val(use_hr);
+                    $('#txtHr_used').change();
 				}
             }
             
