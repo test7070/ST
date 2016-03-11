@@ -64,11 +64,7 @@
 				,['textBmon','99'],['textEmon','99'],['textYear','999']];
 				q_mask(bbmMask);
 
-				/*if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1)
-					q_cmbParse("cmbTypea", q_getPara('sss.typea_it'));
-				else*/
-					q_cmbParse("cmbTypea", q_getPara('sss.typea'));
-
+				q_cmbParse("cmbTypea", q_getPara('sss.typea'));
 				q_cmbParse("cmbSex", q_getPara('sss.sex'));
 				q_cmbParse("cmbPerson", q_getPara('person.typea'));
 				q_cmbParse("cmbBlood", ('').concat(new Array('', 'A', 'B', 'AB', 'O')));
@@ -76,6 +72,7 @@
 				q_gt('acomp', '', 0, 0, 0, "");
 				q_gt('part', '', 0, 0, 0, "");
 				q_gt('salm', '', 0, 0, 0, "");
+				q_gt('class5', '', 0, 0, 0, "");
 
 				if (q_getPara('sys.comp').indexOf('祥興') > -1) {
 					$('#btnSsspart').show();
@@ -359,6 +356,18 @@
 			var t_typeb=[],t_typec=[];
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'class5':
+						var as = _q_appendData("class5", "", true);
+						if (as[0] != undefined) {
+							var t_item = "";
+							for ( i = 0; i < as.length; i++) {
+								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].namea;
+							}
+							q_cmbParse("cmbClass5", t_item);
+							if (abbm[q_recno] != undefined)
+								$("#cmbClass5").val(abbm[q_recno].class5);
+						}
+						break;
 					case 'acomp':
 		                var as = _q_appendData("acomp", "", true);
 		                if (as[0] != undefined) {
@@ -881,13 +890,29 @@
 						<td colspan="2"><input id="txtAccount" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblCno" class="lbl"> </a></td>
+						<td>
+							<select id="cmbCno" class="txt c1"> </select>
+							<input id="txtComp" type="text" style="display: none;"/>
+						</td>
 						<td><span> </span><a id='lblTypea' class="lbl"> </a></td>
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
+						<td><span> </span><a id="lblPart" class="lbl"> </a></td>
+						<td>
+							<select id="cmbPartno" class="txt c1"> </select>
+							<input id="txtPart" type="text" style="display: none;"/>
+						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblJob" class="lbl"> </a></td>
+						<td>
+							<select id="cmbJobno" class="txt c1"> </select>
+							<input id="txtJob" type="text" style="display: none;"/>
+						</td>
+						<td> </td>
 						<td>
 							<input id="chkIsclerk" type="checkbox" style="float: left;"/>
 							<a id='vewIsclerk' style="float: left;" > </a>
-						</td>
-						<td>
 							<input id="chkIssales" type="checkbox" style="float: left;"/>
 							<a id='vewIssales' style="float: left;"> </a>
 						</td>
@@ -899,25 +924,12 @@
 						<td><input id="txtIndate" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblOutdate' class="lbl"> </a></td>
 						<td><input id="txtOutdate" type="text" class="txt c1" /></td>
+					</tr>
+					<tr class="isBarCode">
+						<td class="isBarCode"><span> </span><a id='lblClass5' class="lbl"> </a></td>
+						<td class="isBarCode"><select id="cmbClass5" class="txt c1"> </select></td>
 						<td class="isBarCode"><span> </span><a id='lblBarcode' class="lbl"> </a></td>
 						<td class="isBarCode"><input id="txtBarcode" type="text" class="txt c1" /></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblPart" class="lbl"> </a></td>
-						<td>
-							<select id="cmbPartno" class="txt c1"> </select>
-							<input id="txtPart" type="text" style="display: none;"/>
-						</td>
-						<td><span> </span><a id="lblJob" class="lbl"> </a></td>
-						<td>
-							<select id="cmbJobno" class="txt c1"> </select>
-							<input id="txtJob" type="text" style="display: none;"/>
-						</td>
-						<td><span> </span><a id="lblCno" class="lbl"> </a></td>
-						<td>
-							<select id="cmbCno" class="txt c1"> </select>
-							<input id="txtComp" type="text" style="display: none;"/>
-						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblConn" class="lbl"> </a></td>

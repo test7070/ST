@@ -35,7 +35,7 @@
                     }, {/*1-1 [3][4]*/
                         type : '1',
                         name : 'date'
-                    }, {/*1-2 [6]*/
+                    }, {/*1-2 [5]*/
                         type : '6',
                         name : 'xbal'
                     }, {/*1-3 [6][7]*/
@@ -44,6 +44,10 @@
                         dbf : 'acc',
                         index : 'acc1,acc2',
                         src : "acc_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + "; ;" + r_accy + '_' + r_cno
+                    }, {
+						type : '0',//[8]
+                        name : 'xproject',
+                        value : q_getPara('sys.project').toUpperCase()
                     }]
                 });
                 q_popAssign();
