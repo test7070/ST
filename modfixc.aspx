@@ -20,8 +20,8 @@
 			var q_readonly = ['txtNoa', 'txtModnoa', /*'txtMech',*/ 'txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail'];
 			var bbmNum = [];
-			var bbsNum = [['txtWeight',15,1,0], ['txtMount',15,0,0], ['txtFixmount',15,0,0], ['txtBottom',15,2,0], ['txtBebottom',15,2,0], ['txtEnbottom',15,2,0], 
-						  ['txtLastloss',15,1,0], ['txtLoss',15,1,0], ['txtBrepair',15,1,0], ['txtErepair',15,1,0]];
+			var bbsNum = [['txtWeight',15,1,1], ['txtMount',15,0,1], ['txtFixmount',15,0,1], ['txtBottom',15,2,1], ['txtBebottom',15,2,1], ['txtEnbottom',15,2,1], 
+						  ['txtLastloss',15,1,1], ['txtLoss',15,1,1], ['txtBrepair',15,1,1], ['txtErepair',15,1,1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			var pNoq =1;

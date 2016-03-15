@@ -20,7 +20,7 @@
 			var q_readonly = ['txtWorker', 'txtWorker2'];
 			var q_readonlys = ['txtProductno','txtWheel'];
 			var bbmNum = [];
-			var bbsNum = [['txtMount',15,0,0], ['txtBottom',15,0,0]];
+			var bbsNum = [['txtMount',15,0,1], ['txtBottom',15,2,1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			var pNoq =0;

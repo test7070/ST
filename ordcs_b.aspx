@@ -195,11 +195,12 @@
 					<td align="center" style="width:250px;"><a id='lblProduct'> </a> <a id='lblSpec' class="isSpec"> </a></td>
 					<td align="center" style="width:80px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblNotv'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrice'> </a></td>
 					<td align="center" class="isCust"><a id='lblCust'>客戶</a></td>
                     <td align="center" class="isTgg"><a id='lblTgg'>廠商</a></td>
-					<td align="center" style="width:200px;"><a id='lblNoa'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblMemo'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblNoa'> </a></td>
+					<td align="center"><a id='lblMemo'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center"><input id="chkSel.*" type="checkbox"  /></td>
@@ -211,6 +212,7 @@
 					</td>
 					<td><input class="txt" id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt" id="txtMount.*" type="text" style="width:95%; text-align:right;"/></td>
+					<td><input class="txt" id="txtNotv.*" type="text" style="width:95%; text-align:right;"/></td>
 					<td><input class="txt" id="txtPrice.*" type="text" style="width:95%; text-align:right;"/></td>
 					<td class="isCust" style="width:8%;">
 	                    <input class="txt" id="txtCustno.*" type="text" style="width:98%;"/>
