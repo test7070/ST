@@ -22,7 +22,7 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "quat";
-			var q_readonly = ['txtComp', 'txtAcomp', 'txtSales', 'txtWorker', 'txtNoa','txtTotal','txtTax','txtMoney','txtOrdgweight','txtOrdeweight'];
+			var q_readonly = ['txtComp', 'txtAcomp', 'txtSales', 'txtWorker', 'txtWorker2', 'txtNoa','txtTotal','txtTax','txtMoney','txtOrdgweight','txtOrdeweight'];
 			var q_readonlys = ['txtNo3', 'txtNo2','txtTheory','txtC1','txtNotv'];
 			var bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 15, 0, 1], ['txtTotalus', 15, 2, 1], ['txtFloata', 15, 3, 1], ['txtWeight', 15, 3, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
 			var bbsNum = [['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1], ['txtMount', 10, 0, 1], ['txtWeight', 15, 3, 1], ['txtPrice', 15, 3, 1], ['txtTotal', 15, 0, 1], ['txtTheory', 15, 3, 1], ['txtOrdgweight', 15, 3, 1], ['txtOrdeweight', 15, 3, 1]];
@@ -613,7 +613,10 @@
 			}
 
 			function btnPrint() {
-				q_box('z_quatstp.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", m_print);
+				if(q_getPara('sys.project').toUpperCase()=='PK')
+					q_box("z_quat_pkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'quat', "95%", "95%", m_print);
+				else
+					q_box('z_quatstp.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", m_print);
 			}
 
 			function wrServer(key_value) {
@@ -1201,7 +1204,8 @@
 						</td>
 						<td class="trX"><span> </span><a id='lblWorker' class="lbl"></a></td>
 						<td class="trX">
-						<input id="txtWorker"  type="text" class="txt c1" />
+						<input id="txtWorker"  type="text" class="txt" style="float:left;width:50%;"/>
+						<input id="txtWorker2"  type="text" class="txt" style="float:left;width:50%;"/>
 						</td>
 						<td class="tdZ trX"></td>
 					</tr>
