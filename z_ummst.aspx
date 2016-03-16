@@ -102,10 +102,10 @@
                         type : '6', //[19]   10
                         name : 'xmemo'
                     }, {
-                        type : '6', //[20]
+                        type : '6', //[20] 11
                         name : 'paytype'
-                    }, {//[21]
-                        type : '8',
+                    }, {//[21]   12
+                        type : '8',  
                         name : 'xoption01',
                         value : q_getMsg('toption01').split('&')
                     }, {
@@ -124,7 +124,10 @@
 						type : '0', //[25]
 						name : 'proj',
 						value : q_getPara('sys.project')
-					}]
+					}, {
+                        type : '6', //[26]  13  本張單號    z_umm_rk01 用
+                        name : 'curnoa'
+                    }]
                 });
                 q_popAssign();
                 $('#txtDate1').mask('999/99/99');
@@ -139,7 +142,9 @@
                 $('#txtXmemo').css('width', '85%');
                 $('.q_report .report').css('width', '420px');
                 $('.q_report .report div').css('width', '200px');
-
+				$('#Curnoa').removeClass('a2').addClass('a1');
+                $('#txtCurnoa').css('width', '85%');
+                
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
                 t_date.setDate(1);
