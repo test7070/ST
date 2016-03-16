@@ -15,6 +15,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
+			aPop = new Array(['txtXy_custno', '', 'cust', 'noa,comp', 'txtXy_custno', 'cust_b.aspx']);
 			$(document).ready(function() {
 				q_getId();
 				q_gf('', 'z_ordbp');
@@ -142,7 +143,10 @@
                         type : '0',
                         name : 'isspec',
                         value : q_getPara('sys.isspec')
-                    }]
+                    }, {/*24 [41]*/
+						type : '6',
+						name : 'xy_custno'
+					}]
 				});
 				q_popAssign();
 
