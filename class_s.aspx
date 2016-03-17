@@ -47,6 +47,7 @@
                 	+ q_sqlPara2("noa", t_noa);
                 if (t_class.length > 0)
                     t_where += " and charindex('" + t_class + "',[class])>0";
+                t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
             }
 		</script>
