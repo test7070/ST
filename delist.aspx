@@ -55,13 +55,12 @@
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy)
+                q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
                 q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
             });
 
             var abbsModi = [];
 
-            //////////////////   end Ready
             function main() {
                 if (dataErr) {
                     dataErr = false;
@@ -197,6 +196,17 @@
                 /*if(q_getPara('sys.project').toUpperCase()=='RK'){
                 	$('#btnRc2').hide();
                 }*/
+               $('#lblRc2no').click(function(e){
+               		t_where = " noa='"+$('#txtRc2no').val()+"' ";
+               		switch(q_getPara('sys.project').toUpperCase()){
+               			case 'PK':
+               				q_box("rc2_pk.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";;;", 'rc2', "95%", "650px", q_getMsg('popRc2'));
+               				break;
+               			default:
+               				q_box("rc2st.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";;;", 'rc2', "95%", "650px", q_getMsg('popRc2'));
+               				break;
+               		}
+               });
                 
                 $('#btnOrdc').click(function() {
                 	if(q_cur==1||q_cur==2){
@@ -1252,7 +1262,7 @@
 						<td class="td5"><span> </span><a id="lblBlcost" class="lbl" > </a></td>
 						<td class="td6"><input id="txtBlcost"  type="text"  class="txt num c1"/></td>-->
 					<tr class="tr16">
-						<td class="td1"><span> </span><a id="lblRc2no" class="lbl" > </a></td>
+						<td class="td1"><span> </span><a id="lblRc2no" class="lbl btn" > </a></td>
 						<td class="td2"><input id="txtRc2no"  type="text"  class="txt c1"/></td>
 						<td class="td3"><span> </span><a id="lblPaybno" class="lbl" > </a></td>
 						<td class="td4"><input id="txtPaybno"  type="text"  class="txt c1"/></td>
