@@ -138,13 +138,14 @@
 	                                as[i]._year = 0;
 								}
 	                                
-								if (dec($('#txtNoa').val()) ==dec(as[i].indate.substr(0, 3)))
+								if (dec($('#txtNoa').val()) ==dec(as[i].indate.substr(0, r_len)))
 	                                as[i]._day = 0;
 								else if (as[i]._year < 1){
+									//正常
 									as[i]._day = round(as[i]._year*7*8,0);
 									//半天限制
 									as[i]._day=Math.floor(as[i]._day/4)*4;
-	                             }else if (as[i]._year < 3)
+	                            }else if (as[i]._year < 3)
 	                                as[i]._day = 7*8;
 	                            else if (as[i]._year < 5)
 	                                as[i]._day = 10*8;
