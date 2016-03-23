@@ -1968,6 +1968,7 @@
 	                <td class='hid_bo_traffic'><input class="txt num c1" id="txtBo_traffic.*" type="text" /></td>
 	                <td class='hid_bo_special'><input class="txt num c1" id="txtBo_special.*" type="text"/></td>
 	                <td class='hid_bo_oth'><input class="txt num c1" id="txtBo_oth.*" type="text" /></td>
+	                <td class='hid_money6'><input class="txt num c1" id="txtMoney6.*" type="text" /></td>
 	                <td class='hid_meals'><input class="txt num c1" id="txtMeals.*" type="text"/></td>
 	                <td class='hid_plus'><input class="txt num c1" id="txtPlus.*" type="text" /></td>
 	                <td class='hid_total1'><input class="txt num c1" id="txtTotal1.*" type="text" /></td>
