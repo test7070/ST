@@ -544,7 +544,10 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('ordb_s.aspx', q_name + '_s', "490px", "380px", q_getMsg("popSeek"));
+				if(q_getPara('sys.project').toUpperCase()=='XY')
+					q_box('ordb_s.aspx', q_name + '_s', "490px", "450px", q_getMsg("popSeek"));
+				else
+					q_box('ordb_s.aspx', q_name + '_s', "490px", "380px", q_getMsg("popSeek"));
 			}
 
 			function btnIns() {
