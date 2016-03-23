@@ -71,6 +71,27 @@
                 bbtNum = [['txtMount', 15, q_getPara('vcc.mountPrecision'), 1], ['txtWeight', 15, q_getPara('vcc.weightPrecision'), 1]];
                 
                 document.title='產品組合領料'
+                
+                $('#btnUcas').click(function() {
+                	//清除表身
+                	for (var i = 0; i < q_bbtCount; i++) {
+                		$('#btnMinut__'+i).click();
+                	}
+                	for (var i = 0; i < q_bbsCount; i++) {
+	                	if(!emp($('#txtProductno_'+i).val())){
+	                		var t_where = "where=^^ noa='"+$('#txtProductno_'+i).val()+"' ^^";
+							q_gt('ucas', t_where, 0, 0, 0, "getucas", r_accy,1);
+							
+							var as = _q_appendData("ucas", "", true);
+							for (var j = 0; j < as.length; j++) {
+								as[j].mount=q_mul(dec($('#txtMount_'+i).val()),dec(as[j].mount));
+								as[j].datea=$('#txtDatea_'+i).val();
+							}
+							q_gridAddRow(bbtHtm, 'tbbt', 'txtProductno,txtProduct,txtUnit,txtMount,txtDatea', as.length, as
+	                        , 'productno,product,unit,mount,datea','');
+	                	}
+	                }
+				});
             }
             function q_boxClose(s2) {
                 var ret;
@@ -583,6 +604,7 @@
                         <td><input id="txtWorker"  type="text" class="txt c1" /></td>
                         <td><span> </span><a id="lblWorker2" class="lbl" > </a></td>
                         <td><input id="txtWorker2"  type="text" class="txt c1" /></td>
+                        <td><input id="btnUcas"  type="button" value="產生領料明細" /></td>
                     </tr>
                 </table>
             </div>

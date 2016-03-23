@@ -488,12 +488,12 @@
 						if ($('#cmbPerson').find("option:selected").text().indexOf('日薪')>-1 || $('#cmbPerson').find("option:selected").text().indexOf('時薪')>-1){
 							q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea,txtPartno,txtPart,txtDaymoney,txtBo_admin,txtBo_traffic,txtBo_special,txtBo_oth,txtDay,txtMi_saliday,txtAddh2_1,txtAddh2_2,txtAddh100,txtAddh46_1,txtAddh46_2,txtChgcash,txtRaise_num,txtLate,txtHr_sick,txtHr_person,txtHr_nosalary,txtHr_leave,txtMemo,txtPlus,txtMinus,txtBorrow,txtBo_full,txtCh_health,txtCh_labor,txtCh_retire,txtHplus2,txtCh_health2,txtCh_labor2,txtCh_retire2,txtSa_health,txtSa_labor,txtSa_retire,txtMoney3'
 															, as.length, as
-                                                           , 'sssno,namea,partno,part,salary,bo_admin,bo_traffic,bo_special,bo_oth,day,mi_saliday,addh21,addh22,addh100,addh46_1,addh46_2,chgcash,mount,late,hr_sick,hr_person,hr_nosalary,hr_leave,memo,plus,minus,borrow,bo_full,he_person,la_person,re_person,hplus2,he_comp,la_comp,re_comp,sa_health,sa_labor,sa_retire,bo_money1'
+                                                           , 'sssno,namea,partno,part,salary,bo_admin,traffic,bo_special,bo_oth,day,mi_saliday,addh21,addh22,addh100,addh46_1,addh46_2,chgcash,mount,late,hr_sick,hr_person,hr_nosalary,hr_leave,memo,plus,minus,borrow,bo_full,he_person,la_person,re_person,hplus2,he_comp,la_comp,re_comp,sa_health,sa_labor,sa_retire,bo_money1'
                                                            , '');
 						}else{
                          	q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea,txtPartno,txtPart,txtMoney,txtBo_admin,txtBo_traffic,txtBo_special,txtBo_oth,txtCh_labor1,txtCh_labor2,txtCh_health_insure,txtDay,txtMi_saliday,txtAddh2_1,txtAddh2_2,txtAddh100,txtAddh46_1,txtAddh46_2,txtChgcash,txtRaise_num,txtLate,txtHr_sick,txtHr_person,txtHr_nosalary,txtHr_leave,txtMemo,txtPlus,txtMinus,txtBorrow,txtBo_full,txtMi_sick,txtMi_person,txtMi_nosalary,txtMi_leave,txtBo_born,txtBo_night,txtBo_duty,txtTax_other,txtMeals,txtCh_health,txtCh_labor,txtCh_retire,txtHplus2,txtCh_health2,txtCh_labor2,txtCh_retire2,txtSa_health,txtSa_labor,txtSa_retire,txtMoney3'
 															, as.length, as
-                                                           , 'sssno,namea,partno,part,salary,bo_admin,bo_traffic,bo_special,bo_oth,ch_labor1,ch_labor2,ch_health_insure,day,mi_saliday,addh21,addh22,addh100,addh46_1,addh46_2,chgcash,mount,late,hr_sick,hr_person,hr_nosalary,hr_leave,memo,plus,minus,borrow,bo_full,mi_sick,mi_person,mi_nosalary,mi_leave,bo_born,bo_night,bo_day,tax_other,meals,he_person,la_person,re_person,hplus2,he_comp,la_comp,re_comp,sa_health,sa_labor,sa_retire,bo_money1'
+                                                           , 'sssno,namea,partno,part,salary,bo_admin,traffic,bo_special,bo_oth,ch_labor1,ch_labor2,ch_health_insure,day,mi_saliday,addh21,addh22,addh100,addh46_1,addh46_2,chgcash,mount,late,hr_sick,hr_person,hr_nosalary,hr_leave,memo,plus,minus,borrow,bo_full,mi_sick,mi_person,mi_nosalary,mi_leave,bo_born,bo_night,bo_day,tax_other,meals,he_person,la_person,re_person,hplus2,he_comp,la_comp,re_comp,sa_health,sa_labor,sa_retire,bo_money1'
                                                            , '');
                         }
                         
@@ -681,7 +681,7 @@
         			inday=dec($('#txtMemo_'+j).val().substr($('#txtMemo_'+j).val().indexOf(':')+1,$('#txtMemo_'+j).val().indexOf(')')-$('#txtMemo_'+j).val().indexOf(':')-1));
         			q_tr('txtMoney_'+j,round((dec($('#txtMoney_'+j).val()))/30*inday,0));
         			q_tr('txtBo_admin_'+j,round((dec($('#txtBo_admin_'+j).val()))/30*inday,0));
-        			q_tr('txtBo_traffic_'+j,round((dec($('#txtBo_traffic_'+j).val()))/30*inday,0));
+        			//q_tr('txtBo_traffic_'+j,round((dec($('#txtBo_traffic_'+j).val()))/30*inday,0)); // 交通津貼 會根據當月申請的費用
         			q_tr('txtBo_special_'+j,round((dec($('#txtBo_special_'+j).val()))/30*inday,0));
         			q_tr('txtBo_oth_'+j,round((dec($('#txtBo_oth_'+j).val()))/30*inday,0));
         		}
