@@ -39,7 +39,7 @@
 						t_style = ' @';
 						var as = _q_appendData("style", "", true);
 						for ( i = 0; i < as.length; i++) {
-							t_style += (t_style.length > 0 ? '&' : '') + as[i].noa + '@' + as[i].noa;
+							t_style += (t_style.length > 0 ? '&' : '') + as[i].noa + '@' + as[i].noa+'.'+as[i].product;
 						}
 						loadFinish();
 						break;	
@@ -116,11 +116,11 @@
                         type : '1', //[26][27]  16
                         name : 'yradius'
                     }, {
-                        type : '1', //[28][29]  17
-                        name : 'ywidth'
-                    }, {
-                        type : '1', //[30][31]   18
+                        type : '1', //[28][29]   18
                         name : 'ydime'
+                    }, {
+                        type : '1', //[30][31]  17
+                        name : 'ywidth'
                     }, {
                         type : '1', //[32][33]   19
                         name : 'ylengthb'
