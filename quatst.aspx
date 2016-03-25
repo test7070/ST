@@ -231,7 +231,7 @@
 				q_mask(bbmMask);
 				//2016/03/25 傑期 lblOdate  顯示文字改為"交貨日"
 				if(q_getPara('sys.project').toUpperCase()=='PK'){
-					$('#lblOdate').text('交貨日期');
+					$('#lblDatea').text('交貨日期');
 					$('#combMemo').show();
 					$('#combMemo').append($('<option>', {value: 0,text: ''}));
 					$('#combMemo').append($('<option>', {value: 1,text: '現金價'}));
@@ -243,7 +243,7 @@
 							$(this).val(0);
 						}
 					});
-				}
+				} 
 				
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
