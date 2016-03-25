@@ -229,6 +229,22 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				q_mask(bbmMask);
+				//2016/03/25 傑期 lblOdate  顯示文字改為"交貨日"
+				if(q_getPara('sys.project').toUpperCase()=='RA'){
+					$('#lblOdate').text('交貨日期');
+					$('#combMemo').show();
+					$('#combMemo').append($('<option>', {value: 0,text: ''}));
+					$('#combMemo').append($('<option>', {value: 1,text: '現金價'}));
+					$('#combMemo').append($('<option>', {value: 2,text: '現金價/實磅計價'}));
+					$('#combMemo').append($('<option>', {value: 3,text: '現金價/實磅計價/煩請預付訂金 5成,不便之處,煩請見諒。'}));
+					$("#combMemo").click(function(e) {
+						if ($(this).find(":selected").text().length>0){
+							$('#txtMemo').val($(this).find(":selected").text());
+							$(this).val(0);
+						}
+					});
+				}
+				
 				q_cmbParse("cmbStype", q_getPara('vcc.stype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
@@ -690,6 +706,12 @@
 				else
 					$('#btnQuatst2Contst').css('display','none');
 				size_change();
+				
+				if(t_para){
+					$("#combMemo").attr('disabled','disabled');
+				}else{
+					$("#combMemo").removeAttr('disabled');
+				}
 			}
 
 			function btnMinus(id) {
@@ -1211,7 +1233,8 @@
 					</tr>
 					<tr class="tr9">
 						<td class="td1"><span> </span><a id='lblMemo' class="lbl"></a></td>
-						<td class="td2" colspan='7' >						<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"></textarea></td>
+						<td class="td2" colspan='7' ><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"></textarea></td>
+						<td class="tdZ"><select id="combMemo" style="display:none;width:100%;"></select></td>
 					</tr>
 				</table>
 			</div>
