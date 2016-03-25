@@ -506,7 +506,11 @@
 			}
 
 			function btnPrint() {
-				q_box("z_ordbstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy , 'ordb', "95%", "95%", m_print);
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
+					q_box("z_ordb_pkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy , 'ordb', "95%", "95%", m_print);
+				}else{
+					q_box("z_ordbstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy , 'ordb', "95%", "95%", m_print);
+				}
 			}
 
 			function wrServer(key_value) {
