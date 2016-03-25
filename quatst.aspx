@@ -230,7 +230,7 @@
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				q_mask(bbmMask);
 				//2016/03/25 傑期 lblOdate  顯示文字改為"交貨日"
-				if(q_getPara('sys.project').toUpperCase()=='RA'){
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
 					$('#lblOdate').text('交貨日期');
 					$('#combMemo').show();
 					$('#combMemo').append($('<option>', {value: 0,text: ''}));
