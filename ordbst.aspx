@@ -1010,9 +1010,11 @@
 					<td align="center" style="width:100px;"><a id='lblProduct_st'> </a></td>
 					<td class="st" align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR><a id='lblSize_st'> </a></td>
-					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
+					
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblUnit2'>數量<BR>單位</a></td>
 					<td class="st" align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a><br><a id='lblTheorys' class="st"> </a></td>
 					<td align="center" style="width:80px;"><a id='lblC1s'> </a><br><a id='lblNotvs'> </a></td>
@@ -1059,9 +1061,11 @@
 						<input id="txtLengthb.*" type="text" style="display:none;"/>
 						<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
-					<td><input id="txtUnit.*" type="text" style="width:90%;"/></td>
+					
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td class="st"><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:97%;"/>
