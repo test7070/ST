@@ -64,15 +64,15 @@
                 });
                 q_popAssign();
                 $('#txtXmon').mask(r_picm);
-                $('#txtDate1').mask(r_picd);
-                $('#txtDate1').datepicker();
-                $('#txtDate2').mask(r_picd);
-                $('#txtDate2').datepicker();
+                $('#txtXdate1').mask(r_picd);
+                $('#txtXdate1').datepicker();
+                $('#txtXdate2').mask(r_picd);
+                $('#txtXdate2').datepicker();
 
-               $('#txtDate1').val(q_date().substr(0,r_lenm)+'/01');
+               $('#txtXdate1').val(q_date().substr(0,r_lenm)+'/01');
                 $('#txtXmon').val(q_date().substr(0,r_lenm));
                 $('#txtXyear').val(q_date().substr(0,r_len));
-                $('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',45).substr(0,r_lenm)+'/01',-1));
+                $('#txtXdate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',45).substr(0,r_lenm)+'/01',-1));
             }
 
             function q_funcPost(t_func, result) {
