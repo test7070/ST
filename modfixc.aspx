@@ -381,8 +381,8 @@
 						$('.ishide_'+j).hide();
 					}
 					
-					//自動抓取第一筆資料
-					$('#cmbWay_0').change(function(){
+					//自動抓取第一筆資料 1050328 拿掉	
+					/*$('#cmbWay_0').change(function(){
 						$("#cmbMech_0").empty();
 						changeWay("",0);					
 						for (var i=1; i<q_bbsCount; i++){
@@ -423,7 +423,7 @@
 						for (var i=1; i<q_bbsCount; i++){
 							$('#txtWorker2_'+i).val($('#txtWorker2_0').val());
 						}
-					});			
+					});*/
 					
 					//磨耗=補正前-補正後,車修後底徑=圖檔底徑+補正後
 					$('#txtBrepair_'+j).change(function(){	
