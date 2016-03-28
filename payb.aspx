@@ -143,12 +143,16 @@
                 //.........................
                 $('#txtVedate').change(function() {
                     if (!emp($('#txtVedate').val()))
-                        $('#txtMon').val($('#txtVedate').val().substr(0, 6));
+                        $('#txtMon').val($('#txtVedate').val().substr(0, r_lenm));
                 });
 
                 //........................會計傳票
                 $('#lblAccno').click(function() {
-                    q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0,3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "97%", "1054px", q_getMsg('btnAccc'), true);
+                	var t_year=$('#txtDatea').val().substr(0,r_len);
+                	if(r_len==4){
+                		t_year=q_sub(t_year,1911);
+                	}
+                    q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + t_year + '_' + r_cno, 'accc', 'accc3', 'accc2', "97%", "1054px", q_getMsg('btnAccc'), true);
                 });
                 //.........................
                 $('#btnTgg').click(function() {
@@ -199,15 +203,22 @@
             function getPaydate(date){
             	//付款日(立帳日次月第4個星期5)
             	if(q_cur==1 && date.length>0 && q_cd(date)){
-		        	var t_year = parseInt(date.substring(0,3))+1911;
-		    		var t_mon = parseInt(date.substring(4,6)) - 1;
-		    		var t_date = parseInt(date.substring(7,9));
+		        	var t_year = parseInt(date.substring(0,r_len));
+		        	if(r_len==3)
+		        		t_year = parseInt(t_year)+1911;
+		    		var t_mon = parseInt(date.substring(r_len+1,r_lenm)) - 1;
+		    		var t_date = parseInt(date.substring(r_lenm+1,r_lend));
+		    		
 					var curdate = new Date(t_year,t_mon,t_date);           			
 					var nextMon = nextMon = getNextMonth(curdate);	
 		    		nextMon.setDate(27 - nextMon.getDay());
-		    		t_year = nextMon.getFullYear()-1911;
-		    		t_year = '000'+t_year;
-		    		t_year = t_year.substring(t_year.length-3,t_year.length);
+		    		
+		    		if(r_len==3){
+		    			t_year = nextMon.getFullYear()-1911;
+		    		}
+		    		t_year = '0000'+t_year;
+		    		t_year = t_year.substring(t_year.length-r_len,t_year.length);
+		    		
 		    		t_mon = nextMon.getMonth()+1;
 		    		t_mon = '00'+t_mon;
 		    		t_mon = t_mon.substring(t_mon.length-2,t_mon.length);
@@ -221,15 +232,22 @@
             function getIndate(date){
             	//到期日(立帳日期(月) + 3個月又25天)
             	if(q_cur==1 && $('#txtPayc').val().indexOf('支票')>=0 && date.length>0 && q_cd(date)){
-		        	var t_year = parseInt(date.substring(0,3))+1911;
-		    		var t_mon = parseInt(date.substring(4,6)) - 1;
-		    		var t_date = parseInt(date.substring(7,9));
+		        	var t_year = parseInt(date.substring(0,r_len));
+		        	if(r_len==3)
+		        		t_year = parseInt(t_year)+1911;
+		    		var t_mon = parseInt(date.substring(r_len+1,r_lenm)) - 1;
+		    		var t_date = parseInt(date.substring(r_lenm+1,r_lend));
+		    		
 					var curdate = new Date(t_year,t_mon,t_date); 
 	            	var nextMon = getNextMonth(getNextMonth(getNextMonth(getNextMonth(curdate))));
 	    			nextMon.setDate(25);
-	    			t_year = nextMon.getFullYear()-1911;
-	        		t_year = '000'+t_year;
-	        		t_year = t_year.substring(t_year.length-3,t_year.length);
+	    			
+	    			if(r_len==3){
+		    			t_year = nextMon.getFullYear()-1911;
+		    		}
+		    		t_year = '0000'+t_year;
+		    		t_year = t_year.substring(t_year.length-r_len,t_year.length);
+		    		
 	        		t_mon = nextMon.getMonth()+1;
 	        		t_mon = '00'+t_mon;
 	        		t_mon = t_mon.substring(t_mon.length-2,t_mon.length);
@@ -504,13 +522,20 @@
                 	Unlock(1); 
                 	return; 
                 }
-               	if ($('#txtMon').val().length > 0 && !(/^[0-9]{3}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())) {
+               	if ($('#txtMon').val().length > 0 && r_lenm==6 && !(/^[0-9]{3}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())) {
                     alert(q_getMsg('lblMon') + '錯誤。');
                     Unlock(1);
                     return;
                 }
+                
+                if ($('#txtMon').val().length > 0 && r_lenm==7 && !(/^[0-9]{4}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())) {
+                    alert(q_getMsg('lblMon') + '錯誤。');
+                    Unlock(1);
+                    return;
+                }
+                
                 if(emp($('#txtMon').val()))
-					$('#txtMon').val($('#txtDatea').val().substr(0,6));
+					$('#txtMon').val($('#txtDatea').val().substr(0,r_lenm));
                 
                 sum();
                 
@@ -606,7 +631,7 @@
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
                 getPaydate(q_date());
-                $('#txtMon').val(q_date().substr(0, 6));
+                $('#txtMon').val(q_date().substr(0, r_lenm));
                 $('#txtDatea').focus();
             }
 
