@@ -55,7 +55,7 @@
             /*if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
 				q_cmbParse("cmbTypea", q_getPara('ucc.typea_it'));	//IT
 			else*/
-				q_cmbParse("cmbTypea", q_getPara('ucc.typea'));
+				q_cmbParse("cmbTypea", ' @ ,'+q_getPara('ucc.typea'));
 				
 			q_gt('acomp', '', 0, 0, 0, "",r_accy);
 			
