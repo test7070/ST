@@ -74,7 +74,7 @@
                 t_month = t_month > 9 ? t_month + '' : '0' + t_month;
                 t_day = t_date.getUTCDate();
                 t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);           
+                $('#txtDate1').val(q_date().substr(0, r_len) + '/01/01');           
 
                 t_date = new Date();
                 t_date.setDate(35);
