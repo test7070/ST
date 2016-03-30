@@ -1044,13 +1044,15 @@
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
 						<td align="center" style="width:25%"><a id='vewDatea'> </a></td>
 						<td align="center" style="width:25%"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:40%"><a id='vewTgg'> </a></td>
+						<td align="center" style="width:20%"><a id='vewTgg'> </a></td>
+						<td align="center" style="width:20%"><a id='vewNick'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td align="center" id='odate'>~odate</td>
 						<td align="center" id='noa'>~noa</td>
-						<td align="center" id='tggno tgg,4'>~tggno ~tgg,4</td>
+						<td align="center" id='tggno'>~tggno</td>
+						<td align="center" id='nick'>~nick</td>
 					</tr>
 				</table>
 			</div>
