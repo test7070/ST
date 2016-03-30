@@ -1300,7 +1300,7 @@
 					<td align="center" style="width:60px;" class="dime2"><a>實際<BR>厚度</a></td>
 					<td align="center" style="width:60px;" class="lengthc"><a>實際<BR>寬度</a></td>
 					<td align="center" style="width:60px;" class="lengthd"><a>實際<BR>長度</a></td>	
-					<td align="center" style="width:40px;"><a id='lblSource_s'> </a></td>
+					<td align="center" style="width:60px;"><a id='lblSource_s'> </a></td>
 					
 					<td align="center" style="width:115px;"><a id='lblInmount_s' class="RK_hide"> </a><BR><a id='lblMount_s'> </a>(必填)</td>
 						<td align="center" style="width:50px;"><a>數量<BR>單位</a></td>
