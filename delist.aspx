@@ -778,6 +778,11 @@
                 	$('.lengthd').hide();
                 	$('.dbbs').css('width','3800px');
                 }
+                if(q_getPara('sys.project').toUpperCase()=='RK'){
+					$('.RK_hide').hide();
+					//$('#lblSource_s').text('重量/M');
+					$('#lblSource_s').text('製造商');
+				}
                 
             }
 
@@ -823,6 +828,9 @@
 
             function refresh(recno) {
                 _refresh(recno);
+                if(q_getPara('sys.project').toUpperCase()=='RK'){
+					$('.RK_hide').hide();
+				}
                 bbs_textsprice();
             }
 			function q_popPost(s1) {
@@ -1282,21 +1290,21 @@
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  /></td>
-					<td align="center" style="width:200px;"><a id='lblUno_s'> </a></td>
+					<td align="center" style="width:200px;" class="RK_hide"><a id='lblUno_s'> </a></td>
 					<td align="center" style="width:100px;"><a>品號<BR>品名</a></td>
-					<td align="center" style="width:30px;"><a id='lblStyle_st'>型</a></td>
-					<td align="center" style="width:60px;"><a>等級</a></td>
-					<td align="center" style="width:140px;">規範<BR>國別</td>
+					<td align="center" style="width:30px;" class="RK_hide"><a id='lblStyle_st'>型</a></td>
+					<td align="center" style="width:60px;" class="RK_hide"><a>等級</a></td>
+					<td align="center" style="width:140px;" class="RK_hide">規範<BR>國別</td>
 					<td align="center" style="width:220px;"><a id='lblSizea_s'> </a><BR><a id='lblSpec_s'> </a></td>
-					<td align="center" style="width:130px;"><a id='lblSize_s'> </a></td>
+					<td align="center" style="width:130px;" class="RK_hide"><a id='lblSize_s'> </a></td>
 					<td align="center" style="width:60px;" class="dime2"><a>實際<BR>厚度</a></td>
 					<td align="center" style="width:60px;" class="lengthc"><a>實際<BR>寬度</a></td>
 					<td align="center" style="width:60px;" class="lengthd"><a>實際<BR>長度</a></td>	
 					<td align="center" style="width:40px;"><a id='lblSource_s'> </a></td>
 					
-					<td align="center" style="width:115px;"><a id='lblInmount_s'> </a><BR><a id='lblMount_s'> </a>(必填)</td>
+					<td align="center" style="width:115px;"><a id='lblInmount_s' class="RK_hide"> </a><BR><a id='lblMount_s'> </a>(必填)</td>
 						<td align="center" style="width:50px;"><a>數量<BR>單位</a></td>
-					<td align="center" style="width:115px;"><a id='lblInweight_s'> </a><BR><a id='lblWeight_s'> </a></td>
+					<td align="center" style="width:115px;"><a id='lblInweight_s' class="RK_hide"> </a><BR><a id='lblWeight_s'> </a></td>
 						<td align="center" style="width:50px;"><a>計價<BR>單位</a></td>
 					<td align="center" style="width:115px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblMoney_s'> </a></td>
@@ -1320,17 +1328,17 @@
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
-					<td><input class="txt c1" id="txtUno.*" type="text"  /></td>
+					<td class="RK_hide"><input class="txt c1" id="txtUno.*" type="text"  /></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:95%;" />
 						<input type="text" id="txtProduct.*" style="width:95%;" />
 						<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
 					</td>
-					<td><input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
+					<td class="RK_hide"><input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
-					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
-					<td>
+					<td class="RK_hide"><input id="txtClass.*" type="text" style='width: 95%;'/></td>
+					<td class="RK_hide">
                         <input id="txtUcolor.*" type="text" style="width:95%;"/>
                         <input id="txtScolor.*" type="text" style="width:95%;"/>
                     </td>
@@ -1343,19 +1351,19 @@
 						<BR>
 						<input class="txt c1" id="txtSpec.*" type="text"/>
 					</td>
-					<td><input class="txt c1" id="txtSize.*" type="text"/>	</td>.
+					<td class="RK_hide"><input class="txt c1" id="txtSize.*" type="text"/>	</td>.
 					<td class='dime2'><input class="txt num c1 dime2" id="txtDime2.*" type="text"  /></td>
 					<td class='lengthc'><input class="txt num c1 lengthc" id="txtLengthc.*" type="text"  /></td>
 					<td class='lengthd'><input class="txt num c1 lengthd" id="txtLengthd.*" type="text"  /></td>
 					<td><input class="txt c1" id="txtSource.*" type="text"  /></td>
 					
 					<td>
-						<input class="txt num c1" id="txtInmount.*" type="text"  />
+						<input class="txt num c1 RK_hide" id="txtInmount.*" type="text"  />
 						<input class="txt num c1" id="txtMount.*" type="text"  />
 					</td>
 					<td><input class="txt c1" id="txtUnit2.*" type="text"/>	</td>
 					<td>
-						<input class="txt num c1" id="txtInweight.*" type="text"  />
+						<input class="txt num c1 RK_hide" id="txtInweight.*" type="text"   />
 						<input class="txt num c1" id="txtWeight.*" type="text"  />
 					</td>
 					<td><input class="txt c1" id="txtUnit.*" type="text"/>	</td>

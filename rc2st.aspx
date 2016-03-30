@@ -643,6 +643,7 @@
 						if (as[0] != undefined) {
 							$('#txtTggno').val(as[0].tggno);
 							$('#txtTgg').val(as[0].tgg);
+							$('#txtNick').val(as[0].nick);
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
 							$('#txtTel').val(as[0].tel);
@@ -1668,7 +1669,7 @@
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
-					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
+					<td align="center" style="width:30px;" class="RK_hide"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:80px;" class="RK_hide"><a>等級</a></td>
 					<td align="center" style="width:140px;display:none;" class="pk">規範<BR>國別</td>
 					<td align="center" style="width:340px;" id='Size'>
@@ -1713,7 +1714,7 @@
 						<input type="text" id="txtProduct.*" style="width:95%;" />
 						<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
 					</td>
-					<td>
+					<td class="RK_hide">
 						<input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
