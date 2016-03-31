@@ -79,7 +79,7 @@
 			function mainPost() {
 				q_mask(bbmMask);
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					q_cmbParse("cmbTypea", q_getPara('sys.stktype'));
+					q_cmbParse("cmbTypea", ' @ ,'+q_getPara('sys.stktype'));
 				}else{
 					q_cmbParse("cmbTypea", q_getPara('uccst.typea'));
 				}
