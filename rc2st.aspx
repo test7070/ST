@@ -1696,7 +1696,7 @@
 					<td align="center" style="width:100px;display:none;" class="rk">包裝方式</td>
 					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
-					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
+					<td align="center" style="width:60px;" class="RK_hide"><a id='lblPlace_st'> </a></td>
 					<td align="center" style="width:190px;"><a id='lblOrdcnos_st'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -1769,7 +1769,7 @@
 						<span style="display:block; width:20px;float:left;"> </span>
 						<input type="text" id="txtStore.*"  style="width:70px; float:left;"/>
 					</td>
-					<td><input id="txtPlace.*" type="text" style="width:90%;"/></td>
+					<td class="RK_hide"><input id="txtPlace.*" type="text" style="width:90%;"/></td>
 					<td>
 						<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
 						<input id="txtNo2.*" type="text"  style="width:40px;float:left;"/>
