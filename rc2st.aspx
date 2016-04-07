@@ -23,8 +23,8 @@
 			var q_name = "rc2";
 			var q_readonly = ['txtRc2atax', 'txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
 			var q_readonlys = ['txtMoney','txtSprice'];
-			var bbmNum = [['txtPrice', 15, 3, 1], ['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
-			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+			var bbmNum = [['txtPrice', 15, 3, 1], ['txtTranmoney', 10, 0, 1], ['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
+			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_desc = 1;
@@ -1154,8 +1154,6 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
-					
-				
 			}
 
 			function q_popPost(s1) {
@@ -1667,6 +1665,7 @@
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:20px;"> </td>
+					<td align="center" style="width:30px;"><a>群組</a></td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;" class="RK_hide"><a id='lblStyle_st'> </a></td>
@@ -1705,6 +1704,7 @@
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td><input id="txtGroupa.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="btnUno.*" type="button" value='.' style="float:left;width:20px;display:none;"/>
 						<input id="txtUno.*" type="text" style="float:left;width:95%;" />
