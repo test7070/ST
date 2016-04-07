@@ -112,9 +112,7 @@
 
 			function btnOk() {
 				Lock();
-				if(q_getPara('sys.comp').substring(0,2)=="聯琦"){
-					$('#txtProduct').val($('#txtNoa').val());
-				}
+				
 				if (q_cur == 1) {
 					t_where = "where=^^ noa='" + $('#txtNoa').val() + "'^^";
 					q_gt('spec', t_where, 0, 0, 0, "checkSpecno_btnOk", r_accy);
