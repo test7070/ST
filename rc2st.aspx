@@ -1663,9 +1663,9 @@
 		<div class='dbbs'>
 			<table id="tbbs" class='tbbs' style=' text-align:center'>
 				<tr style='color:white; background:#003366;' >
-					<td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+					<td align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:30px;"><a>群組</a></td>
+					<td align="center" style="width:30px;display:none;"><a>群組</a></td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;" class="RK_hide"><a id='lblStyle_st'> </a></td>
@@ -1704,7 +1704,7 @@
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td><input id="txtGroupa.*" type="text" style="width:95%;"/></td>
+					<td style="display:none;"><input id="txtGroupa.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="btnUno.*" type="button" value='.' style="float:left;width:20px;display:none;"/>
 						<input id="txtUno.*" type="text" style="float:left;width:95%;" />
