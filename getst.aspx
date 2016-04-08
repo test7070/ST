@@ -193,6 +193,10 @@
 			function q_stPost() {
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
+					var t_noa = $.trim($('#txtNoa').val());
+					q_func('qtxt.query.get_vcc', 'get.txt,get_vcc,'+t_noa);
+				}
 				/*if(q_getPara('sys.project')=='rk'){
 					var t_noa = $('#txtNoa').val();
 					if(t_noa.length>0){
@@ -206,6 +210,13 @@
 			}
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
+					case 'qtxt.query.get_vcc':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							if(as[0].msg.length>0)
+								alert(as[0].msg);
+						}
+						break;
 					case 'qtxt.query.postDelete':
 						//done;
 						break;
@@ -224,7 +235,6 @@
 								t_para = JSON.parse(t_func.substring(11,t_func.length));	
 								if(t_para.action=='post0'){
 									var item = {action:'post1',noa:t_para.noa,condition:'1',userno:t_para.userno};
-									alert('111')
 									q_func('qtxt.query.'+JSON.stringify(item), 'get_rk.txt,post,'+t_para.noa+';1;' + t_para.userno +';');
 								}else if(t_para.action=='post1'){
 									//done!!
@@ -528,6 +538,9 @@
 			function btnDele() {
 				var t_noa = $('#txtNoa').val();
 				_btnDele();
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
+					q_func('qtxt.query.get_vcc', 'get.txt,get_vcc,'+t_noa);
+				}
 				/*if(q_getPara('sys.project')=='rk'){
 					if(t_noa.length>0){
 						q_func('qtxt.query.postDelete', 'get_rk.txt,post,'+t_noa+';0;' + r_userno );

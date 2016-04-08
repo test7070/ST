@@ -20,7 +20,8 @@
             var q_name = "deli";
             var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtCoinretiremoney','txtCointotal','txtCointariff','txtRetiremoney'
             							,'txtTotal','txtTariff','txtTrade','txtCommoditytax','txtVatbase','txtVat','txtRc2no','txtPaybno','txtLctotal','txtOthfee'];
-            var q_readonlys = ['txtOrdcno','txtNo2','txtLcmoney','txtCost','textSprice'];
+            //傑期採購單號可以自己輸入
+            var q_readonlys = ['txtLcmoney','txtCost','textSprice'];
             var bbmNum = [['txtFloata', 15, 4, 1],['txtVatrate', 15, 2, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtTranmoney', 15, 3, 1]
             						,['txtInsurance', 15, 3, 1],['txtModification', 15, 3, 1],['txtCoinretiremoney', 15, 2, 1],['txtCointotal', 15, 2, 1]
             						,['txtCointariff', 15, 2, 1],['txtRetiremoney', 15, 0, 1],['txtTotal', 15, 0, 1],['txtTariff', 15, 0, 1]

@@ -23,8 +23,8 @@
 			var q_name = "rc2";
 			var q_readonly = ['txtRc2atax', 'txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
 			var q_readonlys = ['txtMoney','txtSprice'];
-			var bbmNum = [['txtPrice', 15, 3, 1], ['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
-			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+			var bbmNum = [['txtPrice', 15, 3, 1], ['txtTranmoney', 10, 0, 1], ['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
+			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_desc = 1;
@@ -1154,8 +1154,6 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
-					
-				
 			}
 
 			function q_popPost(s1) {
@@ -1367,7 +1365,7 @@
 			}
 			.dview {
 				float: left;
-				width: 300px;
+				width: 350px;
 				border-width: 0px;
 			}
 			.tview {
@@ -1387,7 +1385,7 @@
 			}
 			.dbbm {
 				float: left;
-				width: 800px;
+				width: 900px;
 				/*margin: -1px;
 				 border: 1px black solid;*/
 				border-radius: 5px;
@@ -1497,20 +1495,20 @@
 		<div style="overflow: auto;display:block;">
 			<!--#include file="../inc/toolbar.inc"-->
 		</div>
-		<div style="overflow: auto;display:block;width:1280px;">
+		<div style="overflow: auto;display:block;width:1350px;">
 			<div class="dview" id="dview"  >
 				<table class="tview" id="tview"	>
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id='vewDatea'> </a></td>
+						<td align="center" style="width:60px; color:black;"><a id='vewTypea'>單別</a></td>
 						<td align="center" style="width:100px; color:black;"><a id='vewNoa'> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id='vewNick'> </a></td>
 					</tr>
 					<tr>
-						<td>
-						<input id="chkBrow.*" type="checkbox" style=''/>
-						</td>
+						<td><input id="chkBrow.*" type="checkbox" style=''/> </td>
 						<td align="center" id='datea'>~datea</td>
+						<td id='typea=cmbTypea' style="text-align: center;">~typea=cmbTypea</td>
 						<td align="center" id='noa'>~noa</td>
 						<td align="center" id='nick'>~nick</td>
 					</tr>
@@ -1665,8 +1663,9 @@
 		<div class='dbbs'>
 			<table id="tbbs" class='tbbs' style=' text-align:center'>
 				<tr style='color:white; background:#003366;' >
-					<td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+					<td align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:20px;"> </td>
+					<td align="center" style="width:30px;display:none;"><a>群組</a></td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;" class="RK_hide"><a id='lblStyle_st'> </a></td>
@@ -1696,7 +1695,7 @@
 					<td align="center" style="width:100px;display:none;" class="rk">包裝方式</td>
 					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
-					<td align="center" style="width:60px;"><a id='lblPlace_st'> </a></td>
+					<td align="center" style="width:60px;" class="RK_hide"><a id='lblPlace_st'> </a></td>
 					<td align="center" style="width:190px;"><a id='lblOrdcnos_st'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -1705,6 +1704,7 @@
 						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td style="display:none;"><input id="txtGroupa.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="btnUno.*" type="button" value='.' style="float:left;width:20px;display:none;"/>
 						<input id="txtUno.*" type="text" style="float:left;width:95%;" />
@@ -1769,7 +1769,7 @@
 						<span style="display:block; width:20px;float:left;"> </span>
 						<input type="text" id="txtStore.*"  style="width:70px; float:left;"/>
 					</td>
-					<td><input id="txtPlace.*" type="text" style="width:90%;"/></td>
+					<td class="RK_hide"><input id="txtPlace.*" type="text" style="width:90%;"/></td>
 					<td>
 						<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
 						<input id="txtNo2.*" type="text"  style="width:40px;float:left;"/>
