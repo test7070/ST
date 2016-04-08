@@ -38,12 +38,20 @@
 				t_noa = $.trim($('#txtNoa').val());
 				t_frame = $.trim($('#txtFrame').val());
 				t_mechno = $('#txtMechno').val();
+				t_modnoa = $('#txtModnoa').val();
+				t_fixnoa = $('#txtFixnoa').val();
 				
 				var t_where = " 1=1 "
 					+q_sqlPara2("noa", t_noa)
-					+q_sqlPara2("mechno", t_mechno);
-					if(t_frame!=0 && !isNaN(t_frame))
-                 	   t_where += " and exists(select noa from modouts where modout.noa=modouts.noa and modouts.frame="+t_frame+")";
+					+q_sqlPara2("mechno", t_mechno)
+					+q_sqlPara2("frame", t_frame)
+					+q_sqlPara2("modnoa", t_modnoa)
+					+q_sqlPara2("fixnoa", t_fixnoa)
+					;
+					
+					/*if(t_frame!=0 && !isNaN(t_frame))
+                 	   t_where += " and exists(select noa from modouts where modout.noa=modouts.noa and modouts.frame="+t_frame+")";*/
+                 	   
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
 			}
@@ -61,20 +69,27 @@
 		<div style='width:400px; text-align:center;padding:15px;' >
 			<table id="seek"  border="1"   cellpadding='3' cellspacing='2' style='width:100%;' >
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
+					<td class='seek'  style="width:20%;"><a id='lblNoa'> </a></td>
 					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblFrame'></a></td>
+					<td class='seek'  style="width:20%;"><a id='lblFrame'> </a></td>
 					<td><input class="txt" id="txtFrame" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblMechno'></a></td>
-					<td><input class="txt" id="txtMechno" type="text" style="width:215px; font-size:medium;" /></td>
+					<td class='seek'  style="width:20%;"><a id='lblMechno'> </a></td>
+					<td>
+						<input class="txt" id="txtMechno" type="text" style="width:108px; font-size:medium;" />
+						<input class="txt" id="txtMech" type="text" style="width:100px; font-size:medium;" />
+					</td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblMech'></a></td>
-					<td><input class="txt" id="txtMech" type="text" style="width:215px; font-size:medium;" /></td>
+					<td class='seek'  style="width:20%;"><a id='lblModnoa'> </a></td>
+					<td><input class="txt" id="txtModnoa" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblFixnoa'> </a></td>
+					<td><input class="txt" id="txtFixnoa" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->

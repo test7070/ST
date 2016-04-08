@@ -65,17 +65,23 @@
 						if (as[0] != undefined) {
 							alert('模具入庫單【'+$('#txtFixnoa').val()+'】尚在維修中【'+as[0].noa+'】!!');
 						}else{
-							q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "getmodfixs",r_accy,1);
-							var ass = _q_appendData("modfixs", "", true);
-							//清除表身
-							for(var i=0; i<q_bbsCount; i++){
-								$('#btnMinus_'+i).click();
+							//105/04/08 判斷是否重覆領用 且只會領用一次
+							q_gt('modout', "where=^^fixnoa='"+$('#txtFixnoa').val()+"' and noa!='"+$('#txtNoa').val()+"' ^^", 0, 0, 0, "getmodout",r_accy,1);
+							var as = _q_appendData("modout", "", true);
+							if (as[0] != undefined) {
+								alert('模具入庫單【'+$('#txtFixnoa').val()+'】已被領用【'+as[0].noa+'】!!');
+							}else{
+								q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "getmodfixs",r_accy,1);
+								var ass = _q_appendData("modfixs", "", true);
+								//清除表身
+								for(var i=0; i<q_bbsCount; i++){
+									$('#btnMinus_'+i).click();
+								}
+								q_gridAddRow(bbsHtm, 'tbbs', 'txtNob,txtCode,txtDetail,txtFrame,txtMount,txtWeight'
+								, ass.length, ass, 'nob,code1,detail1,frame1,mount1,weight1', 'txtNob');
+								sum();
+								//q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");	
 							}
-							q_gridAddRow(bbsHtm, 'tbbs', 'txtNob,txtCode,txtDetail,txtFrame,txtMount,txtWeight'
-							, ass.length, ass, 'nob,code1,detail1,frame1,mount1,weight1', 'txtNob');
-							;
-							sum();
-							//q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");	
 						}
 					}
 				});
@@ -132,9 +138,17 @@
 			}
 
 			function btnOk() {
-				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')],['txtMechno', q_getMsg('lblMechno')]]);
+				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')],['txtMechno', q_getMsg('lblMechno')],['txtFixnoa', q_getMsg('lblFixnoa')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
+					return;
+				}
+				
+				//105/04/08 判斷是否重覆領用 且只會領用一次
+				q_gt('modout', "where=^^fixnoa='"+$('#txtFixnoa').val()+"' and noa!='"+$('#txtNoa').val()+"' ^^", 0, 0, 0, "getmodout",r_accy,1);
+				var as = _q_appendData("modout", "", true);
+				if (as[0] != undefined) {
+					alert('模具入庫單【'+$('#txtFixnoa').val()+'】已被領用【'+as[0].noa+'】!!');
 					return;
 				}
 				
@@ -155,7 +169,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('modout_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
+				q_box('modout_s.aspx', q_name + '_s', "500px", "400px", q_getMsg("popSeek"));
 			}
 
 			function sum() {		
@@ -448,13 +462,13 @@
 						<td><span> </span><a id='lblDatea' class="lbl " > </a></td>
 						<td><input id="txtDatea" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblSum' class="lbl"> </a></td>
-						<td><input id="textSum"  type="text"  class="num c1" style="width:100%"/></td>
+						<td><input id="textSum"  type="text"  class="txt num c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblSssno' class="lbl"> </a></td>
 						<td><input id="txtSssno"  type="text"  class="txt c1"/></td>
 						<td><input id="txtNamea"  type="text"  class="txt c1"/></td>
-						<td><span> </span><input id="btnIn" type="button" style="width: 100%"/></td>
+						<td align="center"><span> </span><input id="btnIn" type="button" style="width: 95%"/></td>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
