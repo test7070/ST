@@ -561,6 +561,11 @@
 							});
 						});
 						
+						if(n=='0')
+							$('.divway2').show();
+						else
+							$('.divway2').hide();
+						
 	            		$('#div_detail').show();
 	            		$('#btnInput').attr('disabled', 'disabled');
 					});
@@ -1001,9 +1006,8 @@
 				<table class="tview" id="tview">
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewNoa'></a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewMech'></a></td>
-						
+						<td align="center" style="width:80px; color:black;"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewMech'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
@@ -1297,7 +1301,7 @@
 					</td>
 					<td><input class="txt c1" id="textWorker4" type="text" /></td>
 				</tr>
-				<tr>
+				<tr class="divway2">
 					<td><a>第2次</a></td>
 					<td><select id="combWay2" class="txt c1"> </select></td>
 					<td><select id="combMech2" class="txt c1"> </select></td>
