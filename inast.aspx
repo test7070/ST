@@ -601,6 +601,29 @@
                             $('#btnProduct_'+n).click();
                         });
                         $('#txtUno_' + j).change(function() {
+                        	if($(this).val().substring(0,1)=='='){
+                        		$(this).val('');
+                        		var curN = $(this).attr('id').replace(/(.+)_([0-9]+)/,'$2');
+                        		//複製上一行
+                        		for(var i=0;i<$(this).parent().parent().prev().find('input,select').length;i++){
+                        			var obj = $(this).parent().parent().prev().find('input,select').eq(i);
+                        			var id = obj.attr('id').replace(/(.+)_([0-9]+)/,'$1');
+                        			var n = obj.attr('id').replace(/(.+)_([0-9]+)/,'$2');
+                        			//console.log(id+'_'+n);
+                        			switch(id){
+                        				case 'txtNoq':
+                        					//不能重覆
+                        					break;
+                        				case 'txtUno':
+                        					//不能重覆
+                        					break;
+                    					default:
+                    						$('#'+id+'_'+curN).val($('#'+id+'_'+n).val());
+                    						break;
+                        			}
+                        		}
+                        		return;
+                        	}
                         	var n = $(this).attr('id').replace('txtUno_', '');
                             var t_uno = replaceAll($.trim($(this).val()),"'","~#$");
                         	if(q_getPara('sys.project').toUpperCase()=='PE' && $.trim(t_uno).substr(0,1)=='-'){
