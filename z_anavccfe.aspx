@@ -134,6 +134,10 @@
 						type : '5', //[24]
 						name : 'xcno',
 						value : t_acomp.split(',')
+					},{
+						type : '5', //[25]
+						name : 'vcctax',
+						value : (' @全部,'+q_getPara('sys.taxtype')).split(',')
 					}]
 				});
 				q_popAssign();
