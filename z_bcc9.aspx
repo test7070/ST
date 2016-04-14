@@ -29,7 +29,7 @@
                     case 'store':
                         t_store = '';
                         var as = _q_appendData("store", "", true);
-                        t_store += ' @無倉庫';
+                        t_store += '';
                         for ( i = 0; i < as.length; i++) {
                             t_store += (t_store.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
                         }
@@ -54,14 +54,14 @@
             function loadFinish() {
                 $('#q_report').q_report({
                     fileName : 'z_bcc9', 
-                    options : [{/* [1]*/
-						type : '0',//數量的小數位數
-						name : 'mount_precision',
-						value : q_getPara('rc2.mountPrecision')
-					},{/* [2]*/
-						type : '0',//價格的小數位數
-						name : 'price_precision',
-						value : q_getPara('rc2.pricePrecision')
+                    options : [{
+						type : '0', //[1]
+						name : 'path',
+						value : location.protocol + '//' +location.hostname + location.pathname.toLowerCase().replace('z_bcc9.aspx','')
+					},{
+						type : '0', //[2]
+						name : 'db',
+						value : q_db
 					},{
                         type : '1', 
                         name : 'date'
@@ -88,8 +88,9 @@
                 $('#txtDate1').datepicker();
                 $('#txtDate2').mask('999/99/99');
                 $('#txtDate2').datepicker();
-                $('#chkXstore').children('input').attr('checked', 'checked');
-                $('#chkXtype').children('input').attr('checked', 'checked');
+                //全沒選 = 全選, 避免有些主檔已被刪除
+                //$('#chkXstore').children('input').attr('checked', 'checked');
+                //$('#chkXtype').children('input').attr('checked', 'checked');
                 
                 var t_date, t_year, t_month, t_day;
                 t_date = new Date();
