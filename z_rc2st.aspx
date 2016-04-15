@@ -15,15 +15,31 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-		 if (location.href.indexOf('?') < 0) {
-                location.href = location.href + "?;;;;"+((new Date()).getUTCFullYear()-1911);
-            }
+			/*function loadScript(url, callback)
+			{
+			    // Adding the script tag to the head as suggested before
+			    var head = document.getElementsByTagName('head')[0];
+			    var script = document.createElement('script');
+			    //script.type = 'text/javascript';
+			    script.src = url;
+			
+			    // Then bind the event to the callback function.
+			    // There are several events for cross browser compatibility.
+			    script.onreadystatechange = callback;
+			    script.onload = callback;
+			
+			    // Fire the loading
+			    head.appendChild(script);
+			}
+*/
             $(document).ready(function() {
+            	
             	q_getId();
                 q_gf('', 'z_rc2st');
             });
             function q_gfPost() {
             	q_gt('style', "", 0, 0, 0, "");    
+            	//loadScript("css/jquery/ui/jquery.ui.datepicker.js");
             }
 			function q_gtPost(t_name) {
 				switch (t_name) {

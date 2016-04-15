@@ -189,7 +189,12 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料');
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
+					q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料,3@委外');
+					//ordcst.aspx  z_ordcst.aspx
+				}else{
+					q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料');
+				}
 				q_cmbParse("cmbKind2", q_getPara('ordc.kind'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
@@ -386,7 +391,7 @@
 							for (var i = 0; i < q_bbsCount; i++) {
 								$('#btnMinus_' + i).click();
 							}
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdbno,txtNo3,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtTheory,txtStyle,txtClass,txtUno,txtSize,txtUnit', ordbsArray.length, ordbsArray, 'productno,product,spec,dime,width,lengthb,radius,noa,no3,price,mount,weight,total,memo,theory,style,class,uno,size,unit', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdbno,txtNo3,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtTheory,txtStyle,txtClass,txtUno,txtSize,txtUnit,txtUnit2', ordbsArray.length, ordbsArray, 'productno,product,spec,dime,width,lengthb,radius,noa,no3,price,mount,weight,total,memo,theory,style,class,uno,size,unit,unit2', 'txtProductno,txtProduct,txtSpec');
 							var oAMap = ordbsArray.map(function(el) {
 								return el['ordbno'];
 							});
