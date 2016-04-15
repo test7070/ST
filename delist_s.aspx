@@ -45,7 +45,7 @@
 				var t_where = " 1=1 " 
 					+ q_sqlPara2("datea", t_bdate,t_edate) 
 					+ q_sqlPara2("noa", t_noa)
-					+ q_sqlPara2("rc2no", t_noa);
+					+ q_sqlPara2("rc2no", t_rc2no);
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
 			}
