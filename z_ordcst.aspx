@@ -22,6 +22,13 @@
 
 			});
 			function q_gfPost() {
+				var t_kind = '';
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
+					t_kind = q_getPara('sys.stktype') + ',2@物料,3@委外';
+					//ordcst.aspx  z_ordcst.aspx
+				}else{
+					t_kind = q_getPara('sys.stktype') + ',2@物料';
+				}
 				$('#q_report').q_report({
 					fileName : 'z_ordcst',
 					options : [{
@@ -54,8 +61,8 @@
 						src : 'ucc_b.aspx'
 					}, {
 						type : '5', //[12] 2
-						name : 'stype',
-						value : [q_getPara('report.all')].concat(q_getPara('ordc.stype').split(','))
+						name : 'kind',
+						value : [q_getPara('report.all')].concat(t_kind.split(','))
 					}, {
 						type : '5', //[13] 3
 						name : 'tran',

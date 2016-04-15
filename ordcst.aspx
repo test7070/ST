@@ -189,7 +189,12 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd]];
 				q_mask(bbmMask);
-				q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料');
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
+					q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料,3@委外');
+					//ordcst.aspx  z_ordcst.aspx
+				}else{
+					q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料');
+				}
 				q_cmbParse("cmbKind2", q_getPara('ordc.kind'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
