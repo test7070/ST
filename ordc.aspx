@@ -535,6 +535,15 @@
 								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+n).val()+"' ^^";
 								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
 							}
+							
+							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtProductno1_'+b_seq).val())){
+								var t_where =" noa='"+$('#txtProductno1_'+b_seq).val()+"' ";
+								q_gt('ucc', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
+								var as = _q_appendData("ucc", "", true, true);
+								if (as[0] != undefined) {
+									$('#txtSpec_'+b_seq).val(as[0].spec+' '+as[0].engpro);
+								}
+							}
 						});
 						
 						$('#chkAprice_'+j).click(function(e){refreshBbs();});
@@ -829,6 +838,16 @@
 							if(q_getPara('sys.project').toUpperCase()=='XY'){
 								var t_where =" noa='"+$('#txtTggno').val()+"'";
 								q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytggdata");
+							}
+						}
+						break;
+					case 'txtProductno1_':
+						if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtProductno1_'+b_seq).val())){
+							var t_where =" noa='"+$('#txtProductno1_'+b_seq).val()+"' ";
+							q_gt('ucc', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
+							var as = _q_appendData("ucc", "", true, true);
+							if (as[0] != undefined) {
+								$('#txtSpec_'+b_seq).val(as[0].spec+' '+as[0].engpro);
 							}
 						}
 						break;
