@@ -1783,5 +1783,6 @@ select gno,RANK() OVER(ORDER BY case when ldate='' then '999/99/99' else ldate e
 ,dbo.getcomma(cmount,[36]) cmount
 ,dbo.getcomma(rmount,[36]) rmount
 ,dbo.getcomma(umount,[36]) umount
+,'ordb?noa=$noa' qhref
 from @tmp order by case when ldate='' then '999/99/99' else ldate end,noa,pno
 ;
