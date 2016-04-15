@@ -475,14 +475,14 @@
 								$('#txtProductno1_'+b_seq).val(b_ret[0].noa);
 								$('#txtProduct_'+b_seq).val(b_ret[0].product);
 								$('#txtUnit_'+b_seq).val(b_ret[0].unit);
-								$('#txtSpec_'+b_seq).val(b_ret[0].spec);
+								$('#txtSpec_'+b_seq).val(b_ret[0].spec+' '+b_ret[0].engpro);
 								$('#txtStdmount_'+b_seq).val(b_ret[0].stdmount);
 								$('#txtProduct_'+b_seq).focus().select();
 							}else{
 								$('#txtProductno3_'+b_seq).val(b_ret[0].noa);
 								$('#txtProduct_'+b_seq).val(b_ret[0].product);
 								$('#txtUnit_'+b_seq).val(b_ret[0].unit);
-								$('#txtSpec_'+b_seq).val(b_ret[0].spec);
+								$('#txtSpec_'+b_seq).val(b_ret[0].spec+' '+b_ret[0].engpro);
 								$('#txtStdmount_'+b_seq).val(b_ret[0].stdmount);
 								$('#txtProduct_'+b_seq).focus().select();
 							}
@@ -790,6 +790,15 @@
 							t_IdSeq = -1;
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
+							
+							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtProductno1_'+b_seq).val())){
+								var t_where =" noa='"+$('#txtProductno1_'+b_seq).val()+"' ";
+								q_gt('ucc', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
+								var as = _q_appendData("ucc", "", true, true);
+								if (as[0] != undefined) {
+									$('#txtSpec_'+b_seq).val(as[0].spec+' '+as[0].engpro);
+								}
+							}
 						});
 						$('#txtMount_' + j).change(function() {
 							t_IdSeq = -1;
@@ -927,6 +936,14 @@
 							if (as[0] != undefined) {
 								$('#txtCustno_'+b_seq).val(as[0].noa);
 								$('#txtComp_'+b_seq).val(as[0].nick.length!=0?as[0].nick:as[0].comp);
+							}
+						}
+						if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtProductno1_'+b_seq).val())){
+							var t_where =" noa='"+$('#txtProductno1_'+b_seq).val()+"' ";
+							q_gt('ucc', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
+							var as = _q_appendData("ucc", "", true, true);
+							if (as[0] != undefined) {
+								$('#txtSpec_'+b_seq).val(as[0].spec+' '+as[0].engpro);
 							}
 						}
 						break;
