@@ -81,6 +81,9 @@
 				q_popAssign();
 				q_langShow();
 				
+				if(q_getPara('sys.project').toUpperCase()=='PK')
+					$('#q_report').find('span.radio').eq(1).click();
+				
 				if(q_getPara('sys.project').toUpperCase()=='PE'){
 					$('#q_report div div').eq(0).hide();
 					$('#q_report div div').eq(2).hide();

@@ -161,9 +161,12 @@
 				var t_key = q_getHref();
 				if (t_key[1] != undefined)
 					$('#txtXnoa').val(t_key[1]);
-					
-				if(q_getPara('sys.project')!='pk')
+				
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
+					$('#q_report').find('span.radio').eq(6).click();
+				}else{
 					$('#q_report div div').eq(6).hide();
+				}
 			}
 			
 			function setDefaultValue() {
