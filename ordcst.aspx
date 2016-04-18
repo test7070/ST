@@ -94,8 +94,8 @@
 							t_unit = 'KG';
 						$('#txtUnit_' + j).val(t_unit);
 					}
-					//---------------------------------------
-					if (t_kind == 'A') {
+					//傑期全都只顯示厚寬長
+					if (t_kind == 'A' || q_getPara('sys.project').toUpperCase()=='PK') {
 						q_tr('txtDime_' + j, q_float('textSize1_' + j));
 						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
 						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
@@ -613,7 +613,7 @@
 							sum();
 						});
 						$('#txtSize_' + j).change(function(e) {
-							if(q_getPara('sys.comp').substring(0,2)=='傑期')
+							if(q_getPara('sys.project').toUpperCase()=='PK')
 								return;
 							if ($.trim($(this).val()).length == 0)
 								return;
@@ -919,7 +919,8 @@
 				$('#cmbKind').val((($('#cmbKind').val()) ? $('#cmbKind').val() : q_getPara('vcc.kind')));
 				var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
 				t_kind = t_kind.substr(0, 1);
-				if (t_kind == 'A') {
+				//傑期全都只顯示厚寬長
+				if (t_kind == 'A' || q_getPara('sys.project').toUpperCase()=='PK') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					$('.dbbs').css('width', '1700px');
 					$('.st').show();
