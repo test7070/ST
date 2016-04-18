@@ -156,11 +156,26 @@ update a
 set noq=right('000'+cast(rr as nvarchar(10)),3)
 from (select ROW_NUMBER()over (partition by noa order by noa,sssno,namea) rr,noq from #bbs)a
 
-update #bbs
-set whours=round((cast(datediff(MINUTE,noa+' '+bwork,noa+' '+ework)as float)/60),1)
-where isnull(bwork,'')!='' and isnull(ework,'')!=''
-
 update #bbs set tweek=DATEPART(WEEKDAY,noa)-1
+
+update a
+set whours=(cast(datediff(MINUTE,noa+' '+'17:00:00',noa+' '+ework)as float)/60)
+from #bbs a
+where isnull(ework,'')!='' and ework >='17:00:00'
+and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set whours=(cast(datediff(MINUTE,noa+' '+bwork,noa+' '+ework)as float)/60)
+from #bbs a
+where isnull(bwork,'')!='' and isnull(ework,'')!=''
+and not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update #bbs
+set whours=cast(whours/0.5 as int)*0.5
 
 update #bbs
 set noa=dbo.AD2ChineseEraName(noa)
