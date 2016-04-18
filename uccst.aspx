@@ -87,6 +87,10 @@
 				if (abbm[q_recno] != undefined) {
 					$("#cmbGroupano").val(abbm[q_recno].groupano);
 				}
+				$('#lblGroupano').click(function(e){
+					q_box("uccga.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + r_accy, 'uccga', "95%", "95%", '');
+				});
+				
 			}
 			function q_boxClose(s2) {
 				var ret;
@@ -291,6 +295,10 @@
 				color: black;
 				font-size: medium;
 			}
+			.tbbm tr td .lbl.btn {
+                color: #4297D7;
+                font-weight: bolder;
+            }
 			.txt.c1 {
 				width: 100%;
 				float: left;
@@ -390,8 +398,8 @@
 						<td><select id="cmbTypea" class="txt c1"></select></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblGroupano' class="lbl"> </a></td>
-						<td><select id="cmbGroupano" class="txt c1"></select></td>
+						<td><span> </span><a id='lblGroupano' class="lbl btn"> </a></td>
+						<td><select id="cmbGroupano" class="txt c1"> </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblRc2acc1' class="lbl btn"> </a></td>
