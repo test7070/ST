@@ -231,7 +231,8 @@ z_bcc9stb:--z_bcc9stb
 	and len(ISNULL(a.bccno,''))>0
 	
 	insert into @tmp(typea,datea,noa,noq,productno,product,storeno,mount,price,[money],memo)
-	select '3',b.datea,a.noa,a.noq,a.bccno,a.bccname,b.storeno,isnull(a.mount,0)-isnull(a.bkbcc,0),null,null,a.memo
+	select '3',b.datea,a.noa,a.noq,a.bccno,a.bccname,b.storeno,isnull(a.mount,0)-isnull(a.bkbcc,0),null,null
+		,ISNULL(b.sname,'') + case when len(ISNULL(b.sname,''))>0 and len(isnull(a.memo,''))>0 then ', ' else '' end + isnull(a.memo,'')
 	from bccouts a
 	left join bccout b on a.noa=b.noa
 	left join bcc c on a.bccno=c.noa
@@ -322,10 +323,15 @@ z_bcc9stb:--z_bcc9stb
 	
 	------小計
 	insert into @tmp(gno,productno,result)
-	select '4',a.productno,b.result
-	from(select productno,MAX(sel) sel from @tmp group by productno) a
-	left join @tmp b on a.sel=b.sel
-	where b.sel is not null
+	select '4',a.productno,isnull(b.result,0)
+	from (select productno from @tmp group by productno) a 
+	left join(select productno,SUM(ISNULL(result,0)) result
+		from (
+			select x.productno,x.storeno,y.result
+			from(select productno,storeno from @tmp group by productno,storeno) x
+			outer apply(select top 1 result from @tmp where productno = x.productno and storeno=x.storeno order by datea desc,typea desc) y) s
+			group by productno) b on a.productno=b.productno
+	
 	--為了美觀,刪除只有前期,沒有本期明細的
 	delete @tmp 
 	from @tmp a
