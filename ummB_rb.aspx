@@ -18,7 +18,7 @@
             q_tables = 't';
             var q_name = "ummb";
             var q_readonly = ['txtNoa','txtBkvccno', 'txtSaleno', 'txtWorker', 'txtWorker2'];
-            var q_readonlys = ['txtVccno', 'txtVccnoq', 'txtMount', 'txtTotal'];
+            var q_readonlys = ['txtVccno', 'txtVccnoq', 'txtMount', 'txtTotal','txtBkmoney'];
             var bbmNum = [];
             var bbsNum = [['txtMount', 15, 0, 1], ['txtPrice', 15, 2, 1], ['txtTotal', 15, 0, 1], ['txtBkmount', 15, 0, 1], ['txtBkmoney', 15, 0, 1], ['txtSalemount', 15, 0, 1], ['txtSalemoney', 15, 0, 1]];
             var bbtNum = [['txtMount', 15, 0, 1]];
@@ -582,9 +582,8 @@
             function sum() {
                 var t1 = 0, t_unit, t_mount, t_weight = 0;
                 for (var j = 0; j < q_bbsCount; j++) {
-
+					q_tr('txtBkmoney_' + j, round(q_mul(q_float('txtBkmount_' + j), q_float('txtPrice_' + j)),0));
                 } // j
-
             }
 
             ///////////////////////////////////////////////////  以下提供事件程式，有需要時修改
