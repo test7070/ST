@@ -3,12 +3,13 @@ z_uccstp01:--z_uccstp01
 	set @t_count = 43
 
 	declare @tmp table(
+		sel int identity(1,1),
 		gno nvarchar(10),
 		rr1 int,
-		noa1 nvarchar(20),
+		noa1 nvarchar(30),
 		product1 nvarchar(max),
 		rr2 int,
-		noa2 nvarchar(20),
+		noa2 nvarchar(30),
 		product2 nvarchar(max)
 	)
 	
@@ -22,4 +23,11 @@ z_uccstp01:--z_uccstp01
 	from @tmp a
 	left join (select ROW_NUMBER()over(order by noa) rr,noa,product from ucc) b on a.rr1+@t_count-1=b.rr
 	
-	select * from @tmp;
+	select gno
+		,"<a href="+CHAR(34)+"JavaScript:q_box('uccst.aspx',' "+CHAR(59)+"noa=\'"+noa1+"\'','95%','95%','')"+char(34)+">"+cast(rr1 as nvarchar)+"</a>" rr1
+		,noa1
+		,product1
+		,"<a href="+CHAR(34)+"JavaScript:q_box('uccst.aspx',' "+CHAR(59)+"noa=\'"+noa2+"\'','95%','95%','')"+char(34)+">"+cast(rr2 as nvarchar)+"</a>" rr2
+		,noa2
+		,product2 
+	from @tmp;
