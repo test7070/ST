@@ -15,36 +15,64 @@
             $(document).ready(function() {
                 main();
             });
-
+            var t_groupano = '';
             function main() {
                 mainSeek();
-                q_gf('', q_name);
+                q_gt('uccga', '', 0, 0, 0, "");
             }
-
+			function q_gtPost(t_name) {
+				switch (t_name) {
+					case 'uccga':
+						var as = _q_appendData("uccga", "", true);
+						t_groupano = "@全部";
+						if (as[0] != undefined) {
+							for ( i = 0; i < as.length; i++) {
+								t_groupano = t_groupano + (t_groupano.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
+							}
+						}
+						q_gf('', q_name);
+						break;
+				} 
+			}
             function q_gfPost() {
                 q_getFormat();
                 q_langShow();
-
+                //uccst.aspx
+                if(q_getPara('sys.project').toUpperCase()=='RK'){
+					q_cmbParse("cmbTypea", ' @ ,'+q_getPara('sys.stktype'));
+				}else{
+					q_cmbParse("cmbTypea", q_getPara('uccst.typea'));
+				}
+				q_cmbParse("cmbGroupano", t_groupano);
                 $('#txtNoa').focus();
             }
 
             function q_seekStr() {
                 t_noa = $.trim($('#txtNoa').val());
                 t_product = $.trim($('#txtProduct').val());
+                t_typea  = $.trim($('#cmbTypea').val());
+                t_groupano  = $.trim($('#cmbGroupano').val());
 
                 var t_where = " 1=1 " + q_sqlPara2("noa", t_noa);
 				if (t_product.length>0)
                     t_where += " and charindex('" + t_product + "',product)>0";
+                if(t_typea.length>0)
+                	t_where += " and charindex('" + t_typea + "',typea)>0";
+            	if(t_groupano.length>0)
+                	t_where += " and charindex('" + t_groupano + "',groupano)>0";
+                	
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
             }
+            
+            
 		</script>
 		<style type="text/css">
             .seek_tr {
                 color: white;
                 text-align: center;
                 font-weight: bold;
-                BACKGROUND-COLOR: #76a2fe
+                background-color: #76a2fe
             }
 		</style>
 	</head>
@@ -65,6 +93,14 @@
 					<td>
 					<input class="txt" id="txtProduct" type="text" style="width:215px; font-size:medium;" />
 					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblTypea_st'> </a></td>
+					<td><select id="cmbTypea" style="width:215px; font-size:medium;"> </select></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblGroupano'> </a></td>
+					<td><select id="cmbGroupano" style="width:215px; font-size:medium;"> </select></td>
 				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->

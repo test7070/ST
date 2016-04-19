@@ -78,6 +78,7 @@
 
 			function mainPost() {
 				q_mask(bbmMask);
+				//uccst_s.aspx
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					q_cmbParse("cmbTypea", ' @ ,'+q_getPara('sys.stktype'));
 				}else{
@@ -124,7 +125,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
-				q_box(q_name+'st_s.aspx', q_name + 'st_s', "500px", "330px", q_getMsg("popSeek"));
+				q_box('uccst_s.aspx', 'uccst_s', "500px", "330px", q_getMsg("popSeek"));
 			}
 			function btnIns() {
 				if($('#Copy').is(':checked')){
