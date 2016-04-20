@@ -83,6 +83,7 @@ z_vccpk2:--z_vccpk2
 			,aunit,bunit
 			,scolor,[class],custorde
 			,dbo.getComma(total,-1) total
+			,case when len(isnull(ordeno,''))>0 then ordeno+'-'+noq else '' end aa
 		from @tmp order by gno,idno;
 
 z_vccst1:--z_vccst1
