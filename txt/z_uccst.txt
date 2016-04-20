@@ -1,3 +1,124 @@
+z_uccst03:--z_uccst03
+	SET QUOTED_IDENTIFIER OFF 
+	declare @cmd nvarchar(max)
+	declare @t_path nvarchar(max) = '[1]'
+	declare @t_db nvarchar(max) = '[2]'
+	
+	declare @t_bdate nvarchar(10) = case when '#non'=[3] then '' else [3] end
+	declare @t_edate nvarchar(10) = case when '#non'=[4] then char(255) else [4] end
+	declare @t_stktype nvarchar(max) = case when '#non'=[5] then '' else [5] end
+	declare @t_itype nvarchar(max) = case when '#non'=[6] then '' else [6] end
+	
+	
+	declare @t_bproductno nvarchar(20) = case when '#non'=[7] then '' else [7] end
+	declare @t_eproductno nvarchar(20) = case when '#non'=[8] then char(255) else [8] end
+	if len(ltrim(@t_bproductno))=0
+	begin
+		set @t_bproductno = ''
+	end
+	if len(ltrim(@t_eproductno))=0
+	begin
+		set @t_eproductno = char(255)
+	end
+	
+	declare @t_bstoreno nvarchar(20) = case when '#non'=[9] then '' else [9] end
+	declare @t_estoreno nvarchar(20) = case when '#non'=[10] then char(255) else [10] end
+	
+	declare @t_bdime float = 0
+	declare @t_edime float = 99999
+	declare @t_bwidth float =0
+	declare @t_ewidth float= 99999
+	declare @t_blengthb float=0
+	declare @t_elengthb float= 99999
+	begin try set @t_bdime = cast([11] as float) end try begin catch set @t_bdime = 0 end catch
+	begin try set @t_edime = cast([12] as float) end try begin catch set @t_edime = 99999 end catch
+	begin try set @t_bwidth = cast([13] as float) end try begin catch set @t_bwidth = 0 end catch
+	begin try set @t_ewidth = cast([14] as float) end try begin catch set @t_ewidth = 99999 end catch
+	begin try set @t_blengthb = cast([15] as float) end try begin catch set @t_blengthb = 0 end catch
+	begin try set @t_elengthb = cast([16] as float) end try begin catch set @t_elengthb = 99999 end catch
+	
+	declare @t_uno nvarchar(max)= case when '#non'=[17] then '' else [17] end
+	declare @t_source nvarchar(max)=case when '#non'=[18] then '' else [18] end
+	declare @t_style nvarchar(max)= case when '#non'=[19] then '' else [19] end
+	declare @t_spec nvarchar(max)= case when '#non'=[20] then '' else [20] end
+	if len(ltrim(@t_spec))=0
+	begin
+		set @t_spec = ''
+	end
+	declare @t_sort nvarchar(max)=case when '#non'=[21] then '' else [21] end
+	-------------------------------------------------------------------------------------------- 
+	declare @tmp table(
+		sel int identity(1,1)
+		,gno nvarchar(10)
+		,recno int
+		,uno nvarchar(30)
+		,datea nvarchar(10)
+		,storeno nvarchar(20)
+		,store nvarchar(30)
+		,productno nvarchar(20)
+		,product nvarchar(30)
+		,spec nvarchar(30)
+		,size nvarchar(50)
+		,[source] nvarchar(30)
+		,dime float
+		,width float
+		,lengthb float
+		,eweight float
+		,emount float
+		,sprice float
+		,uno2 nvarchar(30)
+		,unit nvarchar(20)
+	)
+	insert into @tmp(gno,uno,datea,storeno,productno,product,spec,size,[source]
+		,dime,width,lengthb,eweight,emount,sprice,uno2,unit)
+	select '1',a.uno,b.datea,b.storeno,isnull(b.productno,''),isnull(b.product,''),b.spec
+		,case when len(b.size)>0 then b.size else [dbo].[csize](b.kind,b.dime,b.width,b.lengthb,b.radius) end
+		,b.source
+		,b.dime,b.width,b.lengthb,a.eweight,a.emount,b.sprice,b.uno2,b.unit
+	from uccy a
+	left join view_uccb b on a.uno=b.uno
+	where a.emount>0
+	and isnull(b.productno,'') between @t_bproductno and @t_eproductno
+	and ISNULL(b.storeno,'') between @t_bstoreno and @t_estoreno
+	and isnull(b.dime,0) between @t_bdime and @t_edime
+	and isnull(b.width,0) between @t_bwidth and @t_ewidth
+	and isnull(b.lengthb,0) between @t_blengthb and @t_elengthb
+	and (len(@t_uno)=0 or LEFT(a.uno,len(@t_uno))=@t_uno)
+	and (len(@t_source)=0 or @t_source=b.[source])
+	and (len(@t_style)=0 or b.style=@t_style)
+	and (len(@t_stktype)=0 or b.kind=@t_stktype)
+	
+	update @tmp set store=b.store
+	from @tmp a
+	left join store b on a.storeno=b.noa
+	
+	update @tmp set recno=b.recno
+	from @tmp a
+	left join (select sel,ROW_NUMBER()over(order by productno,size) recno from @tmp) b on a.sel=b.sel
+	
+	insert into @tmp(gno,productno,product,size,emount,eweight)
+	select '2',isnull(a.productno,''),isnull(b.product,''),isnull(a.size,''),SUM(ISNULL(a.emount,0)),SUM(ISNULL(a.eweight,0))
+	from @tmp a
+	left join ucc b on a.productno=b.noa
+	group by isnull(a.productno,''),isnull(b.product,''),isnull(a.size,'')
+	
+	select gno
+		,recno rr
+		,datea a01
+		,store a02
+		,[source] a03
+		,uno a04
+		,productno a05
+		,product a06
+		,spec a07
+		,size a08
+		,dbo.getComma(emount,-1) a09
+		,dbo.getComma(eweight,-1) a10
+		,dbo.getComma(sprice,-1) a11
+		,uno2 a12
+		,unit a13
+	from @tmp order by productno,size,gno,recno;
+
 z_uccst02:--z_uccst02
 	SET QUOTED_IDENTIFIER OFF 
 	declare @cmd nvarchar(max)
