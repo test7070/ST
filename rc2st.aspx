@@ -1197,6 +1197,10 @@
 				//金額小計自訂
 				for(var i=0;i<q_bbsCount;i++){
 					$('#combSpec_'+i).val($('#txtSpec_'+i).val());
+					if(q_cur==1 || q_cur==2)
+						$('#combSpec_'+i).removeAttr('disabled');
+					else
+						$('#combSpec_'+i).attr('disabled','disabled');
 					$('#txtTotal_'+i).attr('readonly','readonly');
 					if($('#chkAprice_'+i).prop('checked')){
 						$('#txtTotal_'+i).css('color','black').css('background-color','white');
