@@ -11,7 +11,7 @@
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
             var q_name = "uccst_s";
-            aPop = new Array(['txtNoa', '', 'ucc', 'noa,product', 'txtNoa,txtProduct', "ucc_b.aspx"]);
+            aPop = new Array(['txtNoa', '', 'ucc', 'noa,product', 'txtNoa', "ucc_b.aspx"]);
             $(document).ready(function() {
                 main();
             });
@@ -39,7 +39,7 @@
                 q_langShow();
                 //uccst.aspx
                 if(q_getPara('sys.project').toUpperCase()=='RK'){
-					q_cmbParse("cmbTypea", ' @ ,'+q_getPara('sys.stktype'));
+					q_cmbParse("cmbTypea", '@全部,'+q_getPara('sys.stktype'));
 				}else{
 					q_cmbParse("cmbTypea", q_getPara('uccst.typea'));
 				}
