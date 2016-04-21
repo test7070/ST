@@ -579,7 +579,7 @@
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
-				var c1CheckStr = '';
+				/*var c1CheckStr = '';
 				for(var k=0;k<q_bbsCount;k++){
 					var s_c1 = dec($('#txtC1_'+k).val());
 					if(s_c1 > 0){
@@ -589,7 +589,15 @@
 				if($.trim(c1CheckStr).length > 0){
 					alert(c1CheckStr + '禁止修改!!');
 					return;
+				}*/
+				var t_where = "where=^^ordbno='"+$('#txtNoa').val()+"' and isnull(mount,0)>0 ^^";
+				q_gt('view_ordcs', t_where, 0, 0, 0, "",r_accy,1);
+				var as = _q_appendData("view_ordcs", "", true);
+				if (as[0] != undefined) {
+					alert('【'+$('#txtNoa').val() + '】請購單已採購，禁止修改!!');
+					return;
 				}
+				
 				_btnModi();
 				$('#txtOdate').focus();
 				product_change();
@@ -624,6 +632,17 @@
 					t_where1="where[1]=^^left(c.mon,3)='"+t_year+"' ^^"
 					q_gt('accu_ordb', t_where+t_where1, 0, 0, 0, "check_accu",r_accy);
 					return;
+				}
+				
+				//105/04/20
+				if(q_cur==2){
+					var t_where = "where=^^ordbno='"+$('#txtNoa').val()+"' and isnull(mount,0)>0 ^^";
+					q_gt('view_ordcs', t_where, 0, 0, 0, "",r_accy,1);
+					var as = _q_appendData("view_ordcs", "", true);
+					if (as[0] != undefined) {
+						alert('【'+$('#txtNoa').val() + '】請購單已採購，禁止修改!!');
+						return;
+					}
 				}
 				
 				Lock(1, {
