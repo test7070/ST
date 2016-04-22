@@ -377,6 +377,10 @@
 						<td><span> </span><a id='lblProduct_st' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtProduct"  type="text" class="txt c1" /></td>
 					</tr>
+					<tr>
+						<td><span> </span><a id='lblEngpro' class="lbl"> </a></td>
+						<td colspan="2"><input id="txtEngpro"  type="text" class="txt c1" /></td>
+					</tr>
 					<!--<tr>
 						<td><span> </span><a id='lblSpec_st' class="lbl"> </a></td>
 						<td><input id="txtSpec" type="text" class="txt c1" /></td>
