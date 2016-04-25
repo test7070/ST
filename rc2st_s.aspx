@@ -30,7 +30,11 @@
                 bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbTypea", '@全部,'+q_getPara('rc2.typea'));
-                q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype'));
+                if(q_getPara('sys.project').toUpperCase()=='PK'){
+					q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype') + ',2@物料,3@委外');
+				}else{
+                	q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype'));
+                }
                 $('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
                 $('#txtNoa').focus();
