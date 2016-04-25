@@ -563,6 +563,7 @@
 
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
+                	$('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
                     	$('.lengthd.num,.dime2.num,.lengthc.num').change(function() {
                     		$(this).val(dec($(this).val()));
@@ -1291,6 +1292,7 @@
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='＋' style="font-weight: bold;"  /></td>
+					<td style="width:20px;"></td>
 					<td align="center" style="width:200px;" class="RK_hide"><a id='lblUno_s'> </a></td>
 					<td align="center" style="width:100px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;" class="RK_hide"><a id='lblStyle_st'>型</a></td>
@@ -1329,6 +1331,7 @@
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
+					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td class="RK_hide"><input class="txt c1" id="txtUno.*" type="text"  /></td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:95%;" />
