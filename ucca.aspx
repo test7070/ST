@@ -50,6 +50,12 @@
 
 
         function mainPost() {
+        	if(q_getPara('sys.project').toUpperCase()=='SB'){
+        		bbsNum = [['txtMount', 10, 0,1],['txtMoney', 10, 0,1],['txtRc2acc', 10, 3,1]];
+        		$('#lblRc2acc').text('含稅單價');
+        		$('#txtRc2acc').css('text-align','right');
+			}
+        	
         	bbsMask = [['txtMon', r_picm]];
             q_mask(bbmMask);
             /*if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
@@ -72,6 +78,7 @@
 					}*/
 				}
 			});
+			
 		} 
         function q_boxClose(s2) { 
             var ret;
