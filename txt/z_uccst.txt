@@ -102,22 +102,24 @@ z_uccst03:--z_uccst03
 	left join ucc b on a.productno=b.noa
 	group by isnull(a.productno,''),isnull(b.product,''),isnull(a.size,'')
 	
-	select gno
-		,recno rr
-		,datea a01
-		,store a02
-		,[source] a03
-		,uno a04
-		,productno a05
-		,product a06
-		,spec a07
-		,size a08
-		,dbo.getComma(emount,-1) a09
-		,dbo.getComma(eweight,-1) a10
-		,dbo.getComma(sprice,-1) a11
-		,uno2 a12
-		,unit a13
-	from @tmp order by productno,size,gno,recno;
+	select a.gno
+		,a.recno rr
+		,a.datea a01
+		,a.store a02
+		,a.[source] a03
+		,a.uno a04
+		,a.productno a05
+		,a.product a06
+		,isnull(b.product,a.spec) a07
+		,a.size a08
+		,dbo.getComma(a.emount,-1) a09
+		,dbo.getComma(a.eweight,-1) a10
+		,dbo.getComma(a.sprice,-1) a11
+		,a.uno2 a12
+		,a.unit a13
+	from @tmp a
+	left join spec b on a.spec=b.noa
+	order by a.productno,a.size,a.gno,a.recno;
 
 z_uccst02:--z_uccst02
 	SET QUOTED_IDENTIFIER OFF 
@@ -216,13 +218,14 @@ z_uccst02:--z_uccst02
 		,a.uno a04
 		,a.productno a05
 		,a.product a06
-		,a.spec a07
+		,isnull(c.product,a.spec) a07
 		,a.size a08
 		,dbo.getComma(a.[mount],-1) a09
 		,dbo.getComma(a.[weight],-1) a10
 		,a.sprice a11
 	from @tmp a
-	left join store b on a.storeno=b.noa 
+	left join store b on a.storeno=b.noa
+	left join spec c on a.spec=b.noa 
 	order by a.gno,a.sel;
 
 
@@ -333,7 +336,7 @@ z_uccst01:--z_uccst01
 		,a.uno a04
 		,a.productno a05
 		,a.product a06
-		,a.spec a07
+		,isnull(b.product,a.spec) a07
 		,a.size a08
 		,dbo.getComma(a.emount,-1) a09
 		,dbo.getComma(a.eweight,-1) a10
@@ -341,5 +344,6 @@ z_uccst01:--z_uccst01
 		,a.uno2 a12
 		,a.unit a13
 	from @tmp a
+	left join spec b on a.spec=b.noa
 	order by a.gno,a.sel;
 
