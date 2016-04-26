@@ -225,7 +225,7 @@ z_uccst02:--z_uccst02
 		,a.sprice a11
 	from @tmp a
 	left join store b on a.storeno=b.noa
-	left join spec c on a.spec=b.noa 
+	left join spec c on a.spec=c.noa 
 	order by a.gno,a.sel;
 
 
