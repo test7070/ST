@@ -2,7 +2,7 @@
 declare @t_bnoa nvarchar(max)
 declare @t_enoa nvarchar(max)
 set @t_bnoa = case when '#non'=[2] then '' else [2] end 
-set @t_enoa = case when '#non'=[3] then '' else [2] end 
+set @t_enoa = case when '#non'=[3] then '' else [3] end 
 ------------報表設定<<Start>>------------
 declare @maxcount int = 40 --產品名稱長度
 declare @pageline int = 7 --每頁幾行
