@@ -19,6 +19,11 @@
 			var q_readonlys = ['txtProductno', 'txtProduct', 'txtSpec','txtRadius','txtWidth','txtDime','txtLengthb','txtMount','txtWeight','txtPrice','txtNoa','txtNo2','txtMemo'];
 		    brwCount=-1;
 			brwCount2 = 0;
+			
+			function Spec() {};
+            Spec.prototype = {};
+			t_spec = new Spec();
+			
 		    $(document).ready(function () {
 		        main();
 		        setTimeout('parent.$.fn.colorbox.resize({innerHeight : "750px"})', 300);
@@ -40,7 +45,12 @@
 		            dataErr = false;
 		            return;
 		        }
+		        
+				q_gt('spec', '', 0, 0, 0,'');
+    			
 		        mainBrow(6, t_content, t_sqlname, t_postname,r_accy);
+		        
+		    			
 				var w = window.parent;
 				w.$('#cboxTitle').text('若沒有找到相關資料，請注意類別的選取。').css('color','red').css('font-size','initial');
 				parent.$.fn.colorbox.resize({
@@ -52,15 +62,29 @@
 				$('#btnNext').hide();
 				$('#btnBott').hide();
 				
-				if(q_getPara('sys.comp').substring(0,2)!="傑期"){
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
 					$('.pk').show();
 				}
 		    }
-		    function bbsAssign() {  /// checked 
-		        
+
+		    function bbsAssign() { 
+		    	/*for(var i=0;i<Object.keys(t_spec).length;i++){
+		    		console.log(Object.keys(t_spec)[i]+':'+t_spec[Object.keys(t_spec)[i]]);
+				}*/
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					$('.txtSpec').hide();
+		        	$('.combSpec').show();
+		        }
 				for (var j = 0; j < q_bbsCount; j++) {
+					//console.log(Object.keys(t_spec).length);
+					for(var i=0;i<Object.keys(t_spec).length;i++){
+						console.log('#combSpec_'+j);
+						console.log('<option value="'+Object.keys(t_spec)[i]+'">'+t_spec[Object.keys(t_spec)[i]]+'</option>');
+						$('#combSpec_'+j).append('<option value="'+Object.keys(t_spec)[i]+'">'+t_spec[Object.keys(t_spec)[i]]+'</option>');
+					}
+					$('#combSpec_'+j).val($('#txtSpec_'+j).val());
 					$('#txtCnt_'+j).change(function(){
-						var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
+						var n = $(this).attr('id').replace(/.*_([0-9]+)/,'$1');
 						var thisVal = dec($(this).val());
 						if(thisVal > 0){
 							$('#chkSel_'+n).attr('checked',true);
@@ -70,13 +94,19 @@
 					});
 				}
 				_bbsAssign();
-				if(q_getPara('sys.comp').substring(0,2)=="傑期"){
+				if(q_getPara('sys.project').toUpperCase()=='PK'){
 					$('.pk').show();
 				}
 		    }
 		
 		    function q_gtPost(t_name) { 
 		    	switch(t_name){
+		    		case 'spec':
+						var as = _q_appendData("spec", "", true);
+						for ( i = 0; i < as.length; i++) {
+							t_spec[as[i].noa]=as[i].product;
+						}
+		        		break;
 		    		case 'view_rc2s':
 		    			var as = _q_appendData("view_rc2s", "", true);
 		    			for(var k=0;k<as.length;k++){
@@ -88,7 +118,7 @@
 		    				}
 		    			}
 				        for(var i = 0;i<abbs.length;i++){
-				        	if(q_getPara('sys.comp').substring(0,2)=="聯琦" || q_getPara('sys.comp').substring(0,2)=="傑期"){
+				        	if(q_getPara('sys.project').toUpperCase()=='RK'  || q_getPara('sys.project').toUpperCase()=='PK' ){
 				        		if (abbs[i].mount <= 0 && abbs[i].weight <= 0) {
 									abbs.splice(i, 1);
 									i--;
@@ -241,7 +271,7 @@
 					<td align="center" class="pk" style="width:4%;display:none;"><a>數量單位</a></td>
 					<td align="center" style="width:7%;"><a id='lblWeight'></a></td>
 					<td align="center" style="width:4%;"><a>單位</a></td>
-					<td align="center" style="width:7%;" class="pk"><a id='lblPrice'></a></td>
+					<td align="center" style="width:7%;display:none;" class="pk"><a id='lblPrice'></a></td>
 					<td align="center" style="width:8%;"><a id='lblInmount_text'></a></td>
 					<td align="center" style="width:15%;"><a id='lblNoa'></a><br><a id='lblMemo'></a></td>
 				</tr>
@@ -253,7 +283,10 @@
                         <input id="txtUcolor.*" type="text" style="width:95%;"/>
                         <input id="txtScolor.*" type="text" style="width:95%;"/>
                     </td>
-					<td style="width:8%;"><input class="txt c1" id="txtSpec.*" type="text" /></td>
+					<td style="width:8%;">
+						<input class="txt c1 txtSpec" id="txtSpec.*" type="text" />
+						<select id="combSpec.*" class="txt c1 combSpec" style="display:none;"> </select>
+					</td>
 					<td id="FixedSize">
 						<input class="txt num c8" id="txtSize1.*" type="text"/><div id="x1" style="float: left"> x</div>
 						<input class="txt num c8" id="txtSize2.*" type="text"/><div id="x2" style="float: left"> x</div>
