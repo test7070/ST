@@ -28,6 +28,7 @@ declare @tmp table(
 	mount float,
 	price float,
 	total float,
+	ttotal float,
 	taxtype1 nvarchar(50),
 	taxtype2 nvarchar(50),
 	taxtype3 nvarchar(50),
@@ -49,7 +50,7 @@ insert into @tmp
 		case when isnull(a.buyerno,'') != '' then (case when isnull(d.invoicetitle,'') != '' then d.invoicetitle else d.comp end) else (case when isnull(a.buyer,'') != '' then a.buyer else a.comp end) end,
 		case when isnull(a.buyerno,'') != '' then (case when isnull(a.serial,'') != '' then a.serial else d.serial end) else (case when isnull(a.serial,'') != '' then a.serial else null end) end,
 		case when isnull(a.buyerno,'') != '' then (case when isnull(a.address,'') != '' then a.address else d.addr_invo end) else (case when isnull(a.address,'') != '' then a.address else null end) end,
-		a.chkno,a.vccno,c.zipcode,case when c.ordeno!='' then c.ordeno else REPLACE(a.memo,vccno,'') end,b.productno,b.product,b.mount,b.price,b.money,
+		a.chkno,a.vccno,c.zipcode,case when c.ordeno!='' then c.ordeno else REPLACE(a.memo,vccno,'') end,b.productno,b.product,b.mount,b.price,b.money,'',
 		case when a.taxtype='1' then '&#10004' else null end,
 		case when a.taxtype='2' then '&#10004' else null end,
 		case when a.taxtype='4' then '&#10004' else null end,
@@ -120,7 +121,7 @@ begin
 			begin
 				insert into @tmp
 					select 
-						'1',0,0,datea,noa,noq,buyer,serial,invoaddr,chkno,vccno,ordbno,ordeno,productno,@string,mount,price,total,
+						'1',0,0,datea,noa,noq,buyer,serial,invoaddr,chkno,vccno,ordbno,ordeno,productno,@string,mount,price,total,ttotal,
 						taxtype1,taxtype2,taxtype3,totpmoney,taxmoney,totmoney,
 						money1,money2,money3,money4,money5,money6,money7,money8
 					from @tmp where idno=@idno					
@@ -216,13 +217,13 @@ begin
 	if(@pageno=(select max(pageno) from @tmp where (noa=@noa) and (datea=@datea) group by noa,datea))
 	begin
 		---------銷售額合計
-		insert into @tmp(gno,noa,datea,pageno,pageorder,total)
+		insert into @tmp(gno,noa,datea,pageno,pageorder,ttotal)
 			select '3',@noa,@datea,@pageno,9001,totpmoney from @tmp where idno=@idno
 		---------營業稅合計
-		insert into @tmp(gno,noa,datea,pageno,pageorder,taxtype1,taxtype2,taxtype3,total)
+		insert into @tmp(gno,noa,datea,pageno,pageorder,taxtype1,taxtype2,taxtype3,ttotal)
 			select '4',@noa,@datea,@pageno,9002,taxtype1,taxtype2,taxtype3,taxmoney from @tmp where idno=@idno
 		---------總計
-		insert into @tmp(gno,noa,datea,pageno,pageorder,total)
+		insert into @tmp(gno,noa,datea,pageno,pageorder,ttotal)
 			select '5',@noa,@datea,@pageno,9003,totmoney from @tmp where idno=@idno
 		---------總計新台幣
 		insert into @tmp(gno,noa,datea,pageno,pageorder,money1,money2,money3,money4,money5,money6,money7,money8)
@@ -231,13 +232,13 @@ begin
 	else
 	begin
 		---------銷售額合計
-		insert into @tmp(gno,noa,datea,pageno,pageorder,total)
+		insert into @tmp(gno,noa,datea,pageno,pageorder,ttotal)
 			select '3',@noa,@datea,@pageno,9001,null from @tmp where idno=@idno
 		---------營業稅合計
-		insert into @tmp(gno,noa,datea,pageno,pageorder,taxtype1,taxtype2,taxtype3,total)
+		insert into @tmp(gno,noa,datea,pageno,pageorder,taxtype1,taxtype2,taxtype3,ttotal)
 			select '4',@noa,@datea,@pageno,9002,null,null,null,null from @tmp where idno=@idno
 		---------總計
-		insert into @tmp(gno,noa,datea,pageno,pageorder,total)
+		insert into @tmp(gno,noa,datea,pageno,pageorder,ttotal)
 			select '5',@noa,@datea,@pageno,9003,null from @tmp where idno=@idno
 		---------總計新台幣
 		insert into @tmp(gno,noa,datea,pageno,pageorder,money1,money2,money3,money4,money5,money6,money7,money8)
@@ -270,7 +271,8 @@ select
 	a.ordeno
 	,dbo.getComma(a.mount,0)mount
 	,dbo.getComma(a.price,-1)price
-	,dbo.getComma(a.total,0)total
+	,dbo.getComma(a.total,2)total
+	,dbo.getComma(a.ttotal,0)ttotal
 	,a.taxtype1,a.taxtype2,a.taxtype3,a.totmoney,a.taxmoney,a.totmoney,
 	a.money1 m1,
 	a.money2 m2,
