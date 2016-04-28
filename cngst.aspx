@@ -37,16 +37,16 @@
 			, ['txtStoreinno', 'lblStorein', 'store', 'noa,store', 'txtStoreinno,txtStorein', 'store_b.aspx']
 			, ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']
 			, ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-			, ['txtUno_', 'btnUno_', 'view_uccc', 'uno,uno,productno,class,product,unit,radius,width,dime,lengthb,spec,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtProduct_,txtUnit_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtSpec_,txtMount_,txtWeight_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
+			, ['txtUno_', 'btnUno_', 'view_uccc', 'uno,uno,productno,class,product,unit,radius,width,dime,lengthb,spec,spec,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtProduct_,txtUnit_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtSpec_,combSpec_,txtMount_,txtWeight_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
 			, ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
 			, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']);
-
+			
+			var t_spec='';
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-
+				q_gt('spec', '', 0, 0, 0, '');
 			});
 
 			function main() {
@@ -80,6 +80,8 @@
 				q_cmbParse("cmbTypea", q_getPara('cng.typea'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+				q_cmbParse("combSpec", t_spec,'s');
+				
 				$('#cmbKind').change(function() {
 					size_change();
 				});
@@ -102,6 +104,15 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'spec':
+						var as = _q_appendData("spec", "", true);
+						t_spec='';
+						for ( i = 0; i < as.length; i++) {
+							t_spec+=','+as[i].noa+'@'+as[i].product;
+						}
+						if(t_spec.length==0) t_spec=' ';
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -300,6 +311,17 @@
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				size_change();
+				refreshBbs();
+			}
+			function refreshBbs(){
+				//金額小計自訂
+				for(var i=0;i<q_bbsCount;i++){
+					$('#combSpec_'+i).val($('#txtSpec_'+i).val());
+					if(q_cur==1 || q_cur==2)
+						$('#combSpec_'+i).removeAttr('disabled');
+					else
+						$('#combSpec_'+i).attr('disabled','disabled');
+				}
 			}
 
 			function btnMinus(id) {
@@ -414,6 +436,12 @@
 						$('#textSize3_' + j).val($('#txtLengthb_' + j).val());
 						$('#textSize4_' + j).val(0);
 						$('#txtRadius_' + j).val(0);
+					}
+				}
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					for(var i=0;i<q_bbsCount;i++){
+						$('#combSpec_'+i).show();
+						$('#txtSpec_'+i).hide();	
 					}
 				}
 			}
@@ -685,6 +713,7 @@
 						<input id="txtDime.*" type="text" style="display:none;"/>
 						<input id="txtLengthb.*" type="text" style="display:none;"/>
 						<input id="txtSpec.*" type="text" style="float:left;"/>
+						<select id='combSpec.*' style="width:95%;display:none;"> </select>
 					</td>
 					<td><input class="txt num c1" id="txtMount.*" type="text"/></td>
 					<td><input class="txt num c1" id="txtWeight.*" type="text" /></td>

@@ -30,14 +30,15 @@
 						name : 'accy',
 						value : r_accy
 					}, {
-						type : '6',
+						type : '1',
 						name : 'xnoa'
 					}]
 				});
 				q_popAssign();
 				var t_noa = typeof (q_getId()[5]) == 'undefined' ? '' : q_getId()[5];
 				t_noa = t_noa.replace('noa=', '');
-				$('#txtXnoa').val(t_noa);
+				$('#txtXnoa1').val(t_noa);
+				$('#txtXnoa2').val(t_noa);
 				$('#btnOk').click(function(){
 					$('#cmbPcPrinter option').each(function(index){
 						if($(this).val().indexOf('電子發票') > 0){

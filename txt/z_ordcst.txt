@@ -194,19 +194,22 @@ declare @tmp table(
 	update @tmp set qhref = substring(qhref,0,len(qhref)-2)+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?'+substring(qhref,len(qhref)-2,len(qhref))
 	
 	select
-		gno,noa,no2,datea,odate,tggno,left(comp,4) comp,pno,replace(pname,'~#$',char(39)) pname,spec,csize,pmount,pweight
-		,isnull(coin+' ','')+dbo.getComma(price,-1) price
-		,ptotal,e,a,
-		row_number()over(partition by left(odate,6) order by left(odate,6),noa,no2,gno) idno,qhref
-		,rc2no rc2noa
-		,rc2noq
-		,rc2date
-		,dbo.getComma( rc2weight,1) rc2weight
-		,dbo.getComma( rc2mount,1) rc2mount
-		,rc2size
-		,dbo.getComma( c1,-1) c1
-		,dbo.getComma( notv,-1) notv
-	from @tmp order by left(odate,6),noa,no2,gno;
+		a.gno,a.noa,a.no2,a.datea,a.odate,a.tggno,left(a.comp,4) comp,a.pno
+		,replace(a.pname,'~#$',char(39)) pname,isnull(b.product,a.spec) spec,a.csize,a.pmount,a.pweight
+		,isnull(a.coin+' ','')+dbo.getComma(a.price,-1) price
+		,a.ptotal,e,a,
+		row_number()over(partition by left(a.odate,6) order by left(a.odate,6),a.noa,a.no2,a.gno) idno,a.qhref
+		,a.rc2no rc2noa
+		,a.rc2noq
+		,a.rc2date
+		,dbo.getComma( a.rc2weight,1) rc2weight
+		,dbo.getComma( a.rc2mount,1) rc2mount
+		,a.rc2size
+		,dbo.getComma( a.c1,-1) c1
+		,dbo.getComma( a.notv,-1) notv
+	from @tmp a
+	left join spec b on a.spec=b.noa
+	order by left(a.odate,6),a.noa,a.no2,a.gno;
 --****************************************************************************************************
 z_ordcst2a:--z_ordcst2a
 --鋼捲  重量差10%以內當結案
@@ -342,24 +345,28 @@ declare @detail nvarchar(max) = case when '#non'=[22] then '' else [22] end
 
 		update @tmp set qhref = substring(qhref,0,len(qhref)-2)+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?'+substring(qhref,len(qhref)-2,len(qhref))
 		select
-			gno,noa,no2,datea,odate,tggno,comp,pno,replace(pname,'~#$',char(39)) pname,spec,size,
-			dbo.getComma( pmount,0) pmount,
-			dbo.getComma( pweight,0) pweight,
-			isnull(coin+' ','')+dbo.getComma( price,-1) price,
-			dbo.getComma( ptotal,0) ptotal,e,a,
-			dbo.getComma( notva,0) notva,
-			dbo.getComma( notvb,0) notvb,
-			dbo.getComma( noptotal,0) noptotal,
-			row_number()over(partition by tggno,comp order by tggno,comp,noa,no2,odate,gno) idno,qhref
-			,rc2no rc2noa
-			,rc2noq
-			,rc2date
-			,dbo.getComma( rc2weight,0) rc2weight
-			,dbo.getComma( rc2mount,0) rc2mount
-			,case when ISNULL(gweight,0)=0 then '' else dbo.getComma( gweight,0) end gweight
-			,case when ISNULL(gmount,0)=0 then '' else dbo.getComma( gmount,0) end gmount
-			,rc2size
-		from @tmp order by tggno,comp,noa,no2,odate,gno;
+			a.gno,a.noa,a.no2,a.datea,a.odate,a.tggno,a.comp,a.pno,replace(a.pname,'~#$',char(39)) pname
+			,isnull(b.product,a.spec) spec
+			,a.size,
+			dbo.getComma( a.pmount,0) pmount,
+			dbo.getComma( a.pweight,0) pweight,
+			isnull(a.coin+' ','')+dbo.getComma( a.price,-1) price,
+			dbo.getComma( a.ptotal,0) ptotal,e,a,
+			dbo.getComma( a.notva,0) notva,
+			dbo.getComma( a.notvb,0) notvb,
+			dbo.getComma( a.noptotal,0) noptotal,
+			row_number()over(partition by a.tggno,a.comp order by a.tggno,a.comp,a.noa,a.no2,a.odate,a.gno) idno,a.qhref
+			,a.rc2no rc2noa
+			,a.rc2noq
+			,a.rc2date
+			,dbo.getComma( a.rc2weight,0) rc2weight
+			,dbo.getComma( a.rc2mount,0) rc2mount
+			,case when ISNULL(a.gweight,0)=0 then '' else dbo.getComma( a.gweight,0) end gweight
+			,case when ISNULL(a.gmount,0)=0 then '' else dbo.getComma( a.gmount,0) end gmount
+			,a.rc2size
+		from @tmp a
+		left join spec b on a.spec=b.noa
+		order by a.tggno,a.comp,a.noa,a.no2,a.odate,a.gno;
 --****************************************************************************************************
 z_ordcst2b:--z_ordcst2b
 --鋼捲  重量差10%以內當結案
@@ -492,22 +499,27 @@ declare @detail nvarchar(max) = case when '#non'=[22] then '' else [22] end
 	update @tmp set qhref = substring(qhref,0,len(qhref)-2)+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?'+substring(qhref,len(qhref)-2,len(qhref))
 
 	select
-		gno,noa,no2,datea,odate,tggno,comp,pno,replace(pname,'~#$',char(39)) pname,spec,csize,
-		dbo.getComma( pmount,0) pmount,
-		dbo.getComma( pweight,0) pweight,
-		isnull(coin+' ','')+dbo.getComma( price,-1) price,
-		dbo.getComma( ptotal,0) ptotal,e,a,
-		dbo.getComma( notva,0) notva,
-		dbo.getComma( notvb,0) notvb,
-		dbo.getComma( noptotal,0) noptotal,
-		row_number()over(partition by pno,pname order by pno,pname,odate,noa,no2,gno) idno,qhref
-		,rc2no rc2noa
-		,rc2noq
-		,rc2date
-		,dbo.getComma( rc2weight,0) rc2weight
-		,dbo.getComma( rc2mount,0) rc2mount
-		,rc2size
-	from @tmp order by pno,pname,odate,noa,no2,gno;
+		a.gno,a.noa,a.no2,a.datea,a.odate,a.tggno,a.comp,a.pno,replace(a.pname,'~#$',char(39)) pname
+		,isnull(b.product,a.spec) spec
+		,a.csize,
+		dbo.getComma( a.pmount,0) pmount,
+		dbo.getComma( a.pweight,0) pweight,
+		isnull(a.coin+' ','')+dbo.getComma( a.price,-1) price,
+		dbo.getComma( a.ptotal,0) ptotal,a.e e,a.a a,
+		dbo.getComma( a.notva,0) notva,
+		dbo.getComma( a.notvb,0) notvb,
+		dbo.getComma( a.noptotal,0) noptotal,
+		row_number()over(partition by a.pno,a.pname order by a.pno,a.pname,a.odate,a.noa,a.no2,a.gno) idno
+		,a.qhref
+		,a.rc2no rc2noa
+		,a.rc2noq
+		,a.rc2date
+		,dbo.getComma( a.rc2weight,0) rc2weight
+		,dbo.getComma( a.rc2mount,0) rc2mount
+		,a.rc2size
+	from @tmp a
+	left join spec b on a.spec=b.noa
+	order by a.pno,a.pname,a.odate,a.noa,a.no2,a.gno;
 --****************************************************************************************************
 z_ordcst2c:--z_ordcst2c
 --鋼捲  重量差10%以內當結案
@@ -637,19 +649,23 @@ declare @tmp table(
 		select '3',CHAR(255),null,CHAR(255),sum(pmount),sum(pweight),sum(notva),sum(notvb),sum(noptotal) from @tmp where gno='0'
 	update @tmp set qhref = substring(qhref,0,len(qhref)-2)+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?'+substring(qhref,len(qhref)-2,len(qhref))
 	select
-		gno,noa,no2,datea,odate,tggno,comp,pno,replace(pname,'~#$',char(39)) pname,spec,csize,
-		dbo.getComma( pmount,0) pmount,
-		dbo.getComma( pweight,0) pweight,
-		isnull(coin+' ','')+dbo.getComma( price,-1) price,
-		dbo.getComma( ptotal,0) ptotal,e,a,
-		dbo.getComma( notva,0) notva,
-		dbo.getComma( notvb,0) notvb,
-		dbo.getComma( noptotal,0) noptotal,
-		row_number()over(partition by noa order by noa desc,no2,datea,gno) idno,qhref
-		,rc2no rc2noa
-		,rc2noq
-		,rc2date
-		,dbo.getComma( rc2weight,0) rc2weight
-		,dbo.getComma( rc2mount,0) rc2mount
-		,rc2size
-	from @tmp order by noa desc,no2,datea,gno;
+		a.gno,a.noa,a.no2,a.datea,a.odate,a.tggno,a.comp,a.pno,replace(a.pname,'~#$',char(39)) pname
+		,isnull(b.product,a.spec) spec
+		,a.csize,
+		dbo.getComma( a.pmount,0) pmount,
+		dbo.getComma( a.pweight,0) pweight,
+		isnull(a.coin+' ','')+dbo.getComma( a.price,-1) price,
+		dbo.getComma( a.ptotal,0) ptotal,e,a,
+		dbo.getComma( a.notva,0) notva,
+		dbo.getComma( a.notvb,0) notvb,
+		dbo.getComma( a.noptotal,0) noptotal,
+		row_number()over(partition by a.noa order by a.noa desc,a.no2,a.datea,a.gno) idno,a.qhref
+		,a.rc2no rc2noa
+		,a.rc2noq
+		,a.rc2date
+		,dbo.getComma( a.rc2weight,0) rc2weight
+		,dbo.getComma( a.rc2mount,0) rc2mount
+		,a.rc2size
+	from @tmp a
+	left join spec b on a.spec=b.noa
+	order by a.noa desc,a.no2,a.datea,a.gno;

@@ -18,6 +18,11 @@
 			var isBott = false;
 			var txtfield = [], afield, t_data, t_htm;
 			var i, s1;
+			
+			function Spec() {};
+            Spec.prototype = {};
+			t_spec = new Spec();
+			
 			$(document).ready(function() {
 				if (!q_paraChk())
 					return;
@@ -29,6 +34,7 @@
 					dataErr = false;
 					return;
 				}
+				q_gt('spec', '', 0, 0, 0,'');
 				mainBrow(6, t_content, t_sqlname, t_postname, r_accy);
 				var w = window.parent;
 				w.$('#cboxTitle').text('若沒有找到相關資料，請注意類別的選取。').css('color','red').css('font-size','initial');
@@ -42,13 +48,30 @@
 			}
 
 			function bbsAssign() {
-				_bbsAssign();
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					$('.txtSpec').hide();
+		        	$('.combSpec').show();
+		        }
 				for (var j = 0; j < q_bbsCount; j++) {
+					for(var i=0;i<Object.keys(t_spec).length;i++){
+						console.log('#combSpec_'+j);
+						console.log('<option value="'+Object.keys(t_spec)[i]+'">'+t_spec[Object.keys(t_spec)[i]]+'</option>');
+						$('#combSpec_'+j).append('<option value="'+Object.keys(t_spec)[i]+'">'+t_spec[Object.keys(t_spec)[i]]+'</option>');
+					}
+					$('#combSpec_'+j).val($('#txtSpec_'+j).val());
 				}
+				_bbsAssign();
+				
 			}
 
 			function q_gtPost(t_name) {
 				switch(t_name){
+					case 'spec':
+						var as = _q_appendData("spec", "", true);
+						for ( i = 0; i < as.length; i++) {
+							t_spec[as[i].noa]=as[i].product;
+						}
+		        		break;
 					case 'ordes2cut':
 						var as = _q_appendData("ordes2cut", "", true);
 						DetailValue(as);
@@ -347,7 +370,8 @@
 						<input class="txt" id="txtSize.*" type="text"  style="width:98%;" />
 					</td>
 					<td style="width:6%;">
-						<input class="txt" id="txtSpec.*" type="text"  style="width:94%;text-align:center;" />
+						<input class="txt c1 txtSpec" id="txtSpec.*" type="text" />
+						<select id="combSpec.*" class="txt c1 combSpec" style="display:none;"> </select>
 					</td>
 					<td style="width:6%;">
 						<input class="txt" id="txtMount.*" type="text" style="width:94%; text-align:right;"/>
