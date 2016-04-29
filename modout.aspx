@@ -60,7 +60,7 @@
 					//2016/01/28原匯入維修資料改匯入入庫資料							
 					if(!emp($('#txtFixnoa').val()) && (q_cur == 1 || q_cur == 2) ){
 						//105/02/25 判斷是否有進行 維修 
-						q_gt('modfixc', "where=^^innoa='"+$('#txtFixnoa').val()+"' and isnull(fixed,0)=0 ^^", 0, 0, 0, "check_modfixs",r_accy,1);
+						q_gt('modfixc', "where=^^innoa='"+$('#txtFixnoa').val()+"' and isnull(enda,0)=0 ^^", 0, 0, 0, "check_modfixs",r_accy,1);
 						var as = _q_appendData("modfixc", "", true);
 						if (as[0] != undefined) {
 							alert('模具入庫單【'+$('#txtFixnoa').val()+'】尚在維修中【'+as[0].noa+'】!!');
