@@ -502,9 +502,33 @@
 							for (var j = 0; j < q_bbsCount; j++) {
 								$('#btnMinus_' + j).click();
 							}
-							var i, j = 0;
+							
+							var t_post='',t_addr='';
+							for (var i = 0; i < b_ret.length; i++) {
+								var t_where =" noa='"+b_ret[0].noa+"' ";
+								q_gt('view_orde', "where=^^ "+t_where+" ^^", 0, 0, 0, "getordeaddr",r_accy,1);
+								var as = _q_appendData("view_orde", "", true);
+								if (as[0] != undefined) {
+									if(as[0].trantype=='廠商代送'){
+										if(as[0].addr2.length>0){
+											if(t_addr.indexOf(as[0].addr2)==-1){
+												t_addr=t_addr+(t_addr.length>0?',':'')+as[0].addr2;
+												t_post=t_post+(t_post.length>0?',':'')+as[0].post2;
+											}
+										}else{
+											if(t_addr.indexOf(as[0].addr)==-1){
+												t_addr=t_addr+(t_addr.length>0?',':'')+as[0].addr;
+												t_post=t_post+(t_post.length>0?',':'')+as[0].post;
+											}
+										}
+									}
+								}
+							}
+							
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProductno1,txtProduct,txtUnit,txtSpec,txtMount,txtPrice,txtOrdeno,txtNo2,txtCustno,txtComp', b_ret.length, b_ret, 'productno,productno,product,unit,spec,mount,price,noa,no2,custno,comp', 'txtOrdeno,txtNo2');
 							sum();
+							$('#txtPost').val(t_post);
+							$('#txtAddr').val(t_addr);
 							
 							if(q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val())){
 								for (var j = 0; j < q_bbsCount; j++) {
