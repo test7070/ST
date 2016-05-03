@@ -592,7 +592,7 @@
 					$('#txtSales').val(r_name);
 					//1050223 預設送貨地址
 					$('#txtPost').val('333');
-					$('#txtAddr').val('桃園縣龜山鄉湖山街189巷6號 廖秀雲小姐');
+					$('#txtAddr').val('桃園市龜山區綠野街88號 廖秀雲小姐');
 				}
 				
 				if (q_getPara('sys.project').toUpperCase()=='XY' || q_getPara('sys.project').toUpperCase()=='RB'){
