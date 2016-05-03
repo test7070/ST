@@ -282,14 +282,6 @@
 							$('#cmbTaxtype').val(as[0].conn);
 						}
 						break;
-					case 'GetOrdct':
-						var as = _q_appendData("ordct", "", true);
-						if(as.length > 0){
-							alert('禁止修改');
-						}else{
-							ModiDo();
-						}
-						break;
 					case 'cno_acomp':
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
@@ -620,19 +612,24 @@
 				
 				$('#cmbKind').val('1').change();
 			}
-
+			
+			var xy_modimount=false;
 			function btnModi() {
 				var t_noa = $.trim($('#txtNoa').val());
 				if (emp(t_noa))
 					return;
-				/*
-				var t_where = "stop=1 where=^^ noa='" +t_noa+ "' ^^";
-				q_gt('ordct', t_where, 0, 0, 0, "GetOrdct", r_accy);
-				*/
-				ModiDo();
-			}
-			
-			function ModiDo(){
+					
+				q_gt('view_rc2s', "where=^^ ordeno='" + t_noa + "' ^^", 0, 0, 0, "istorc2",r_accy,1);
+				var as = _q_appendData("view_rc2s", "", true);
+				if(as[0]!=undefined){
+					if (q_getPara('sys.project').toUpperCase()=='XY' ){//105/05/03 開放只能修改數量
+						xy_modimount=true;
+					}else{
+						alert('採購單【'+t_noa+'】已轉進貨單，禁止修改!!');
+						return;
+					}
+				}
+				
 				_btnModi();
 				$('#txtProduct').focus();
 				product_change();
@@ -640,7 +637,29 @@
 					var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
-			
+				
+				if(xy_modimount){
+					$('#btnPlus').attr('disabled', 'disabled');
+					for(var i=0;i<q_bbsCount;i++){
+						$('#btnMinus_'+i).attr('disabled', 'disabled');
+						$('#txtProductno1_'+i).attr('disabled', 'disabled');
+						$('#btnProduct1_'+i).attr('disabled', 'disabled');
+						$('#txtProductno2_'+i).attr('disabled', 'disabled');
+						$('#btnProduct2_'+i).attr('disabled', 'disabled');
+						$('#txtProductno3_'+i).attr('disabled', 'disabled');
+						$('#btnProduct3_'+i).attr('disabled', 'disabled');
+						$('#txtProduct_'+i).attr('disabled', 'disabled');
+						$('#txtSpec_'+i).attr('disabled', 'disabled');
+						$('#txtUnit_'+i).attr('disabled', 'disabled');
+						$('#txtStyle_'+i).attr('disabled', 'disabled');
+						$('#txtPrice_'+i).attr('disabled', 'disabled');
+						$('#txtTrandate_'+i).attr('disabled', 'disabled');
+						$('#txtMemo_'+i).attr('disabled', 'disabled');
+						$('#txtOrdbno_'+i).attr('disabled', 'disabled');
+						$('#txtNo3_'+i).attr('disabled', 'disabled');
+					}
+				}
+				xy_modimount=false;
 			}
 
 			function btnPrint() {
@@ -753,6 +772,12 @@
 			}
 
 			function btnDele() {
+				q_gt('view_rc2s', "where=^^ ordeno='" + t_noa + "' ^^", 0, 0, 0, "istorc2",r_accy,1);
+				var as = _q_appendData("view_rc2s", "", true);
+				if(as[0]!=undefined){
+					alert('採購單【'+t_noa+'】已轉進貨單，禁止修改!!');
+					return;
+				}
 				_btnDele();
 			}
 

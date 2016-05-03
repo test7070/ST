@@ -954,6 +954,14 @@
 			}
 
 			function btnDele() {
+				var t_where = "where=^^ordbno='"+$('#txtNoa').val()+"' ^^";
+				q_gt('view_ordcs', t_where, 0, 0, 0, "",r_accy,1);
+				var as = _q_appendData("view_ordcs", "", true);
+				if (as[0] != undefined) {
+					alert('【'+$('#txtNoa').val() + '】請購單已採購，禁止修改!!');
+					return;
+				}
+				
 				_btnDele();
 			}
 
