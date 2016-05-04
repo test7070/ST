@@ -87,13 +87,18 @@
 				t_cno = $('#cmbCno').val();
 				t_jobno = $('#cmbJobno').val();
 				t_end=$('#cmbEnd').val();
+				t_id=$('#txtId').val();
 
 				var t_where = " 1=1 " 
 				+ q_sqlPara2("noa", t_noa) 
-				+ q_sqlPara2("namea", t_namea)
 				+ q_sqlPara2("partno", t_partno)
 				+ q_sqlPara2("cno", t_cno)
-				+ q_sqlPara2("jobno", t_jobno); 
+				+ q_sqlPara2("id", t_id)
+				+ q_sqlPara2("jobno", t_jobno);
+				
+				if(t_namea.length>0){
+					t_where +="and namea like '%"+t_namea+"%' ";
+				} 
 				
 				if (t_end=='Y')
 					t_where +="and isnull(outdate,'')='' ";
@@ -133,15 +138,15 @@
 				</tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:30%;"><a id='lblNoa'> </a></td>
-					<td>
-					<input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" />
-					</td>
+					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:30%;"><a id='lblNamea'> </a></td>
-					<td>
-					<input class="txt" id="txtNamea" type="text"  />
-					</td>
+					<td><input class="txt" id="txtNamea" type="text"  /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:30%;"><a id='lblId'> </a></td>
+					<td><input class="txt" id="txtId" type="text"  /></td>
 				</tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:30%;">在職/離職</td>
