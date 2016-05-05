@@ -63,26 +63,31 @@
 			
 			DECLARE @chk tinyint = 0
 			Begin Transaction [Trans_Name]
-			--寫入GETS
-			set @cmd = "insert into gets"+@accy+" (noa,noq,uno,productno,product,mount,[weight],eweight,mweight,gmount,gweight)
-			select noa,noq,uno,productno,product
-				,mount,[weight],mount,[weight],mount,[weight]
-			from #cub2get"
-			execute sp_executesql @cmd,N'@cubno nvarchar(max),@accy nvarchar(20)',@cubno=@cubno,@accy=@accy
-			IF @@Error <> 0 BEGIN SET @chk = 1 END
-			--寫入GET
-			set @cmd = "insert into get"+@accy+"(noa,typea,datea,memo)
-			select noa,'領料單',datea,'生產作業轉來'
-			from view_cub where accy=@accy and noa=@cubno"
-			execute sp_executesql @cmd,N'@cubno nvarchar(max),@accy nvarchar(20)',@cubno=@cubno,@accy=@accy
-			IF @@Error <> 0 BEGIN SET @chk = 1 END
-			
-			IF @chk <> 0 BEGIN -- 若是新增資料發生錯誤
+			begin try
+				--寫入GETS
+				set @cmd = "insert into gets"+@accy+" (noa,noq,uno,productno,product,mount,[weight],eweight,mweight,gmount,gweight)
+				select noa,noq,uno,productno,product
+					,mount,[weight],mount,[weight],mount,[weight]
+				from #cub2get"
+				execute sp_executesql @cmd,N'@cubno nvarchar(max),@accy nvarchar(20)',@cubno=@cubno,@accy=@accy
+				IF @@Error <> 0 BEGIN SET @chk = 1 END
+				--寫入GET
+				set @cmd = "insert into get"+@accy+"(noa,typea,datea,memo)
+				select noa,'領料單',datea,'生產作業轉來'
+				from view_cub where accy=@accy and noa=@cubno"
+				execute sp_executesql @cmd,N'@cubno nvarchar(max),@accy nvarchar(20)',@cubno=@cubno,@accy=@accy
+				IF @@Error <> 0 BEGIN SET @chk = 1 END
+				
+				IF @chk <> 0 BEGIN -- 若是新增資料發生錯誤
+					Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
+				END
+				ELSE BEGIN
+					Commit Transaction [Trans_Name] -- 提交所有操作所造成的變更
+				END
+			end try
+			begin catch
 				Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
-			END
-			ELSE BEGIN
-				Commit Transaction [Trans_Name] -- 提交所有操作所造成的變更
-			END
+			end catch
 		end
 	end;
 ----------------------------------------------------------------------------------------------------------------------------------------------------
