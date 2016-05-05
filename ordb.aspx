@@ -527,8 +527,10 @@
 							
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProductno1,txtProduct,txtUnit,txtSpec,txtMount,txtPrice,txtOrdeno,txtNo2,txtCustno,txtComp', b_ret.length, b_ret, 'productno,productno,product,unit,spec,mount,price,noa,no2,custno,comp', 'txtOrdeno,txtNo2');
 							sum();
-							$('#txtPost').val(t_post);
-							$('#txtAddr').val(t_addr);
+							if(t_addr.length>0){
+								$('#txtPost').val(t_post);
+								$('#txtAddr').val(t_addr);
+							}
 							
 							if(q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val())){
 								for (var j = 0; j < q_bbsCount; j++) {
