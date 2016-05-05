@@ -17,6 +17,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,ordeno nvarchar(20)
 		,quatno nvarchar(20)
 		,product nvarchar(50)
+		,style nvarchar(20)
 		,dime float
 		,radius float
 		,width float
@@ -47,11 +48,11 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,invono nvarchar(max)
 		,tmount nvarchar(max)
 	)
-	insert into @tmp(gno,custno,datea,accy,noa,ordeno,quatno,product,dime,radius,width,lengthb,unit,price
+	insert into @tmp(gno,custno,datea,accy,noa,ordeno,quatno,product,style,dime,radius,width,lengthb,unit,price
 		,size,memo
 		,[weight],mount,[money]
 		,ordememo,unit2)
-	select '1',b.custno,b.datea,b.accy,b.noa,b.ordeno,d.quatno,a.product,a.dime,a.radius,a.width,a.lengthb,a.unit,a.price
+	select '1',b.custno,b.datea,b.accy,b.noa,b.ordeno,d.quatno,a.product,a.style,a.dime,a.radius,a.width,a.lengthb,a.unit,a.price
 		,LTRIM(rtrim(isnull(a.size,''))),LTRIM(rtrim(isnull(a.memo,'')))
 		,sum(isnull(a.[weight],0)),sum(isnull(a.[mount],0)),sum(isnull(a.[total],0))
 		,LTRIM(rtrim(isnull(e.memo,''))),ISNULL(e.unit2,'')
@@ -63,9 +64,14 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	where ISNULL(b.custno,'') between @t_bcustno and @t_ecustno
 	and ISNULL(b.mon,'') between @t_bmon and @t_emon
 	and ISNULL(b.typea,'')='1'
-	group by b.custno,b.datea,b.accy,b.noa,b.ordeno,d.quatno,a.product,a.dime,a.radius,a.width,a.lengthb,a.unit,a.price,LTRIM(rtrim(isnull(a.size,''))),LTRIM(rtrim(isnull(a.memo,''))),LTRIM(rtrim(isnull(e.memo,''))),ISNULL(e.unit2,'')
-	order by b.custno,b.datea,b.accy,b.noa,b.ordeno,d.quatno,a.product,a.dime,a.radius,a.width,a.lengthb,a.unit,a.price,LTRIM(rtrim(isnull(a.size,''))),LTRIM(rtrim(isnull(a.memo,'')))
+	group by b.custno,b.datea,b.accy,b.noa,b.ordeno,d.quatno,a.product,a.style,a.dime,a.radius,a.width,a.lengthb,a.unit,a.price,LTRIM(rtrim(isnull(a.size,''))),LTRIM(rtrim(isnull(a.memo,''))),LTRIM(rtrim(isnull(e.memo,''))),ISNULL(e.unit2,'')
+	order by b.custno,b.datea,b.accy,b.noa,b.ordeno,d.quatno,a.product,a.style,a.dime,a.radius,a.width,a.lengthb,a.unit,a.price,LTRIM(rtrim(isnull(a.size,''))),LTRIM(rtrim(isnull(a.memo,'')))
 	
+	update @tmp set size=case when len(isnull(style,''))>0 then style+' ' else '' end
+			+dbo.getComma(dime,-1)
+			+case when ISNULL(radius,0)!=0 then '+'+cast(radius as nvarchar) else '' end
+			+case when ISNULL(width,0)!=0 then '*'+cast(width as nvarchar) else '' end
+			+case when ISNULL(lengthb,0)!=0 then '*'+cast(lengthb as nvarchar) else '*COIL' end 
 	-------------從ordememo 取得 PO,PN
 	declare @sel int
 	declare @memo nvarchar(max)
@@ -196,7 +202,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,cust a02
 		,tel a03
 		,fax a04
-		,post+addr a05
+		,isnull(zip,'')+isnull(addr,'') a05
 		,serial a06
 		,@t_curnoa a07
 		,dbo.AD2ChineseEraName(GETDATE()) a08
@@ -206,11 +212,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,ordeno b03
 		,po b04 --orde.po
 		,product b05
-		,case when len(size)>0 then size
-			else dbo.getComma(dime,-1)
-			+case when ISNULL(radius,0)!=0 then '+'+cast(radius as nvarchar) else '' end
-			+case when ISNULL(width,0)!=0 then '*'+cast(width as nvarchar) else '' end
-			+case when ISNULL(lengthb,0)!=0 then '*'+cast(lengthb as nvarchar) else '' end end  b06
+		,size  b06
 		,case when upper(isnull(unit,''))='KG' 
 			or upper(isnull(unit,''))='公斤' 
 			or upper(isnull(unit,''))='噸' 
