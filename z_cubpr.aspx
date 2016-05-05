@@ -72,7 +72,7 @@
           t_date.setDate(1);
           t_year = t_date.getUTCFullYear() - r_1911;
           t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-          t_month = t_date.getUTCMonth() + 1;
+          t_month = t_date.getUTCMonth()-1;
           t_month = t_month > 9 ? t_month + '' : '0' + t_month;
           t_day = t_date.getUTCDate();
           t_day = t_day > 9 ? t_day + '' : '0' + t_day;
@@ -83,7 +83,7 @@
           t_date.setDate(0);
           t_year = t_date.getUTCFullYear() - r_1911;
           t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-          t_month = t_date.getUTCMonth() + 1;
+          t_month = t_date.getUTCMonth();
           t_month = t_month > 9 ? t_month + '' : '0' + t_month;
           t_day = t_date.getUTCDate();
           t_day = t_day > 9 ? t_day + '' : '0' + t_day;
