@@ -29,6 +29,7 @@
             brwNowPage = 0;
             brwKey = 'noa';
             brwCount2 = 10;
+            q_copy=1;
             
             aPop = new Array(['txtSssno', 'lblSssno', 'sss', 'noa,namea', 'txtSssno,txtNamea', 'sss_b.aspx']);
           

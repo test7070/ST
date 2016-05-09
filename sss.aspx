@@ -949,7 +949,10 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="5"><input id="txtMemo" type="text" class="txt c1"/></td>
+						<td colspan="5">
+							<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 90px;"> </textarea>
+							<!--<input id="txtMemo" type="text" class="txt c1"/>-->
+						</td>
 					</tr>
 					<tr id='sbutton'>
 						<td> </td>

@@ -163,6 +163,7 @@
 				$('#lblBo_money2').text('技術津貼');
 				$('#lblBo_money3').text('特別加給');
 				$('#lblBo_money4').text('駐外津貼');
+				$('#lblBo_full').text('績效獎金');
 			}
 			
 			function btnOk() {

@@ -513,27 +513,18 @@
 				                    	as[i].day=0;
 				                    }
 				                    
-				                    //勞健保 上期不付
-				                    if($('#cmbMonkind').find("option:selected").text().indexOf('上期')>-1){
-				                    	as[i].ch_health=0;//健保
-				                    	as[i].ch_labor=0;//勞保
-				                    	as[i].ch_labor_comp=0;//勞退公司
-				                    	as[i].ch_labor_self=0;//勞退
-				                    	as[i].hplus2=0;//第二代健保
-				                    }
-				                    
-				                    //全勤獎金
-				                    if(($('#cmbMonkind').find("option:selected").text().indexOf('上期')>-1) || ($('#cmbMonkind').find("option:selected").text().indexOf('下期')>-1)){
+				                    //全勤獎金 //105/05/09 改為績效獎金 →依據當月請假狀況扣錢 自行調整 不會因為請假歸零
+				                    /*if(($('#cmbMonkind').find("option:selected").text().indexOf('上期')>-1) || ($('#cmbMonkind').find("option:selected").text().indexOf('下期')>-1)){
 					                    as[i].bo_full=as[i].bo_full/2;
-									}
-				                    
-				                    as[i].memo2='';
+									}*/
 				                    
 				                    //全勤獎金
 				                    //只要有請假與遲到一律都沒有全勤獎金
-									if((dec(as[i].hr_sick)+dec(as[i].hr_person)+dec(as[i].hr_leave)+dec(as[i].hr_nosalary)+dec(as[i].late))>0){
+									/*if((dec(as[i].hr_sick)+dec(as[i].hr_person)+dec(as[i].hr_leave)+dec(as[i].hr_nosalary)+dec(as[i].late))>0){
 					                   	as[i].bo_full=0;
-			                    	}
+			                    	}*/
+			                    	
+			                    	as[i].memo2='';
 			                    	
 			                    	//停職扣薪 寫在無薪(避免扣到全勤 放在處理全勤後面)
 				                    for (var j = 0; j < sssr.length; j++) {
@@ -604,6 +595,45 @@
 			                    			}	
 			                    		}
 			                    	}
+			                    	
+			                    	if($('#cmbTypea').find("option:selected").text().indexOf('津貼')>-1){
+				                    	as[i].salary=0;//本薪
+				                    	as[i].meals=0;//伙食費
+				                    	as[i].mi_saliday=0;//扣薪/時數
+				                    	as[i].late=0;//遲到
+				                    	as[i].hr_sick=0;//病假
+				                    	as[i].hr_person=0;//事假
+				                    	as[i].hr_nosalary=0;//無薪
+				                    	as[i].hr_leave=0;//曠工
+				                    	
+				                    	as[i].saddh133=0//加班 HR<2
+				                    	as[i].saddh166=0//加班 HR>2
+				                    	as[i].saddh100=0//假日加班HR
+				                    	as[i].addh46_1=0//超過46 HR<2
+				                    	as[i].addh46_2=0//超過46 HR>2
+				                    	
+				                    	as[i].hplus2=0;//第二代健保
+				                    	as[i].la_person=0;//勞保
+				                    	as[i].re_comp=0;//勞退公司
+				                    	as[i].re_person=0;//勞退
+				                    	as[i].he_person=0;//健保
+				                    	as[i].sa_labor=0;//勞保投保
+				                    	as[i].sa_retire=0;//勞退投保
+				                    	as[i].sa_health=0;//健保投保
+				                    }
+			                    	if($('#cmbTypea').find("option:selected").text().indexOf('薪資')>-1){
+				                    	as[i].bo_admin=0; //主管津貼
+				                    	as[i].bo_money1=0;//職務津貼
+				                    	as[i].bo_money2=0;//技術津貼
+				                    	as[i].bo_money3=0;//特別加給
+				                    	as[i].bo_money4=0;//駐外津貼
+				                    	as[i].bo_traffic=0;//交通津貼
+				                    	as[i].bo_special=0;//工作津貼
+				                    	as[i].bo_oth=0;//其他津貼
+				                    	as[i].bo_full=0;//全勤獎金
+				                    	as[i].borrow=0;//借支
+									}
+			                    	
 			                    }
 							}//end for
 							
@@ -881,6 +911,9 @@
 	            $('#lablMoney5s').text('誤餐費');
 	            $('#lblMoney6s').text('業績獎金');
 	            $('#lablMoney6s').text('業績獎金');
+	            $('#lblBo_full').text('業績獎金');
+	            $('#lblBo_fulls').text('業績獎金');
+	            $('#lablBo_fulls').text('業績獎金');
 	            
 	            $('#lblDatea').text('發薪日');
 	        }
@@ -958,7 +991,7 @@
 	        			
 	        			if($('#cmbPerson').find("option:selected").text().indexOf('日薪')>-1){
 	        				if(!$('#chkIsmanual_'+j).prop('checked')){
-				        		q_tr('txtMi_sick_'+j,round((q_float('txtDaymoney_'+j))/8*q_float('txtHr_sick_'+j),0));
+				        		q_tr('txtMi_sick_'+j,round((q_float('txtDaymoney_'+j))/8*q_float('txtHr_sick_'+j)/2,0));
 								q_tr('txtMi_person_'+j,round((q_float('txtDaymoney_'+j)+q_float('txtBo_admin_'+j)+q_float('txtMoney1_'+j)+q_float('txtMoney2_'+j)+q_float('txtMoney3_'+j)+q_float('txtMeals_'+j))/8*q_float('txtHr_person_'+j),0));
 								q_tr('txtMi_nosalary_'+j,round((q_float('txtDaymoney_'+j)+q_float('txtBo_admin_'+j)+q_float('txtMoney1_'+j))/8*q_float('txtHr_nosalary_'+j),0));
 								q_tr('txtMi_leave_'+j,round((q_float('txtDaymoney_'+j))/8*q_float('txtHr_leave_'+j),0));
@@ -1005,7 +1038,7 @@
 	        			
 	        			//當有核取時扣薪時數和扣薪金額可以直接修改
 	        			if(!$('#chkIsmanual_'+j).prop('checked')){
-			        		q_tr('txtMi_sick_'+j,round((q_float('txtMoney_'+j))/240*q_float('txtHr_sick_'+j),0));
+			        		q_tr('txtMi_sick_'+j,round((q_float('txtMoney_'+j))/240*q_float('txtHr_sick_'+j)/2,0));
 							q_tr('txtMi_person_'+j,round((q_float('txtMoney_'+j)+q_float('txtBo_admin_'+j)+q_float('txtMoney1_'+j)+q_float('txtMoney2_'+j)+q_float('txtMoney3_'+j)+q_float('txtMeals_'+j))/240*q_float('txtHr_person_'+j),0));
 							q_tr('txtMi_nosalary_'+j,round((q_float('txtMoney_'+j)+q_float('txtBo_admin_'+j)+q_float('txtMoney1_'+j))/240*q_float('txtHr_nosalary_'+j),0));
 							q_tr('txtMi_leave_'+j,round((q_float('txtMoney_'+j))/240*q_float('txtHr_leave_'+j),0));
@@ -1038,7 +1071,7 @@
 		        			
 	        			//當有核取時扣薪時數和扣薪金額可以直接修改
 	        			if(!$('#chkIsmanual_'+j).prop('checked')){
-	        				q_tr('txtMi_sick_'+j,round((q_float('txtMoney_'+j))/240*q_float('txtHr_sick_'+j),0));
+	        				q_tr('txtMi_sick_'+j,round((q_float('txtMoney_'+j))/240*q_float('txtHr_sick_'+j)/2,0));
 							q_tr('txtMi_person_'+j,round((q_float('txtMoney_'+j)+q_float('txtBo_admin_'+j)+q_float('txtMoney1_'+j)+q_float('txtMoney2_'+j)+q_float('txtMoney3_'+j)+q_float('txtMeals_'+j))/240*q_float('txtHr_person_'+j),0));
 							q_tr('txtMi_nosalary_'+j,round((q_float('txtMoney_'+j)+q_float('txtBo_admin_'+j)+q_float('txtMoney1_'+j))/240*q_float('txtHr_nosalary_'+j),0));
 							q_tr('txtMi_leave_'+j,round((q_float('txtMoney_'+j))/240*q_float('txtHr_leave_'+j),0));
@@ -1162,7 +1195,7 @@
 	        		
 	        		if($('#cmbPerson').find("option:selected").text().indexOf('日薪')>-1){
 	        			if(!$('#chkIsmanual_'+tn).prop('checked')){
-				       		q_tr('textMi_sick',round(q_float('textDaymoney')/8*q_float('textHr_sick'),0));
+				       		q_tr('textMi_sick',round(q_float('textDaymoney')/8*q_float('textHr_sick')/2,0));
 							q_tr('textMi_person',round((q_float('textDaymoney')+q_float('textBo_admin')+q_float('textMoney1')+q_float('textMoney2')+q_float('textMoney3')+q_float('textMeals'))/8*q_float('textHr_person'),0));
 							q_tr('textMi_nosalary',round((q_float('textDaymoney')+q_float('textBo_admin')+q_float('textMoney1'))/8*q_float('textHr_nosalary'),0));
 							q_tr('textMi_leave',round(q_float('textDaymoney')/8*q_float('textHr_leave'),0));
@@ -1211,7 +1244,7 @@
 	        		
 	        		//當有核取時扣薪時數和扣薪金額可以直接修改
 	        		if(!$('#chkIsmanual_'+tn).prop('checked')){
-			       		q_tr('textMi_sick',round(q_float('textMoney')/240*q_float('textHr_sick'),0));
+			       		q_tr('textMi_sick',round(q_float('textMoney')/240*q_float('textHr_sick')/2,0));
 						q_tr('textMi_person',round((q_float('textMoney')+q_float('textBo_admin')+q_float('textMoney1')+q_float('textMoney2')+q_float('textMoney3')+q_float('textMeals'))/240*q_float('textHr_person'),0));
 						q_tr('textMi_nosalary',round((q_float('textMoney')+q_float('textBo_admin')+q_float('textMoney1'))/240*q_float('textHr_nosalary'),0));
 						q_tr('textMi_leave',round(q_float('textMoney')/240*q_float('textHr_leave'),0));
@@ -1242,7 +1275,7 @@
 		        		
 	        		//當有核取時扣薪時數和扣薪金額可以直接修改
 	        		if(!$('#chkIsmanual_'+tn).prop('checked')){
-			       		q_tr('textMi_sick',round(q_float('textMoney')/240*q_float('textHr_sick'),0));
+			       		q_tr('textMi_sick',round(q_float('textMoney')/240*q_float('textHr_sick')/2,0));
 						q_tr('textMi_person',round((q_float('textMoney')+q_float('textBo_admin')+q_float('textMoney1')+q_float('textMoney2')+q_float('textMoney3')+q_float('textMeals'))/240*q_float('textHr_person'),0));
 						q_tr('textMi_nosalary',round((q_float('textMoney')+q_float('textBo_admin')+q_float('textMoney1'))/240*q_float('textHr_nosalary'),0));
 						q_tr('textMi_leave',round(q_float('textMoney')/240*q_float('textHr_leave'),0));
