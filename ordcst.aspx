@@ -849,6 +849,14 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if(t_para){
+					$('#txtDatea').datepicker('destroy');
+					$('#txtOdate').datepicker('destroy');
+				}else{
+					$('#txtDatea').datepicker();
+					$('#txtOdate').datepicker();
+				}
+				
 				size_change();
 				if(q_getPara('sys.comp').substring(0,2)=='傑期')
 					$('.pk').show();
