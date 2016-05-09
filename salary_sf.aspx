@@ -19,8 +19,8 @@
 	        var q_readonly = ['txtNoa','txtWorker'];
 	        var q_readonlys = [];
 	        var bbmNum = [['txtMoney', 15, 0, 1],['txtDaymoney', 15, 0, 1],['txtPubmoney', 15, 0, 1],['txtBo_admin', 15, 0, 1],['txtBo_traffic', 15, 0, 1],['txtBo_special', 15, 0, 1],['txtBo_oth', 15, 0, 1],['txtTax_other', 15, 0, 1],['txtMi_total', 15, 0, 1],['txtMtotal', 15, 0, 1],['txtBo_full', 15, 0, 1],['txtAddmoney', 15, 0, 1],['txtBorrow', 15, 0, 1],['txtCh_labor', 15, 0, 1],['txtCh_health', 15, 0, 1],['txtCh_labor_comp', 15, 0, 1],['txtCh_labor_self', 15, 0, 1],['txtWelfare', 15, 0, 1],['txtTotal3', 15, 0, 1],['txtTotal4', 15, 0, 1],['txtTotal5', 15, 0, 1],['txtPlus', 15, 0, 1],['txtMinus', 15, 0, 1]
-		        ,['textMoney', 15, 0, 1],['textDaymoney', 15, 0, 1],['textPubmoney', 15, 0, 1],['textBo_admin', 15, 0, 1],['textBo_traffic', 15, 0, 1],['textBo_special', 15, 0, 1],['textBo_oth', 15, 0, 1],['textTotal1', 15, 0, 1],['textCh_labor1', 15, 0, 1],['textCh_labor2', 15, 0, 1],['textCh_health_insure', 15, 0, 1],['textDay', 15, 1, 1],['textMtotal', 15, 0, 1],['textBo_born', 15, 0, 1],['textBo_night', 15, 0, 1],['textBo_full', 15, 0, 1],['textBo_duty', 15, 0, 1],['textTax_other', 15, 0, 1],['textTotal2', 15, 0, 1],['textOstand', 15, 2, 1],['textAddh2_1', 15, 1, 1],['textAddh2_2', 15, 1, 1],['textAddmoney', 15, 0, 1]
-		        ,['textAddh100', 15, 1, 1],['textAddh46_1', 15, 1, 1],['textAddh46_2', 15, 1, 1],['textTax_other2', 15, 0, 1],['textMeals', 15, 0, 1],['textTotal3', 15, 0, 1],['textBorrow', 15, 0, 1],['textCh_labor', 15, 0, 1],['textChgcash', 15, 0, 1],['textTax6', 15, 0, 1],['textStay_tax', 15, 0, 1],['textTax12', 15, 0, 1],['textTax18', 15, 0, 1],['textCh_labor_comp', 15, 0, 1],['textCh_labor_self', 15, 0, 1],['textLodging_power_fee', 15, 0, 1],['textTax', 15, 0, 1],['textTax5', 15, 0, 1],['textWelfare', 15, 0, 1],['textStay_money', 15, 0, 1],['textRaise_num', 15, 0, 1],['textCh_health', 15, 0, 1],['textHplus2', 15, 0, 1]
+		        ,['textMoney', 15, 0, 1],['textDaymoney', 15, 0, 1],['textBo_admin', 15, 0, 1],['textBo_traffic', 15, 0, 1],['textBo_special', 15, 0, 1],['textBo_oth', 15, 0, 1],['textTotal1', 15, 0, 1],['textCh_labor1', 15, 0, 1],['textCh_labor2', 15, 0, 1],['textCh_health_insure', 15, 0, 1],['textDay', 15, 1, 1],['textMtotal', 15, 0, 1],['textBo_full', 15, 0, 1],['textTax_other', 15, 0, 1],['textTotal2', 15, 0, 1],['textOstand', 15, 2, 1],['textAddh2_1', 15, 1, 1],['textAddmoney', 15, 0, 1]
+		        ,['textTax_other2', 15, 0, 1],['textMeals', 15, 0, 1],['textTotal3', 15, 0, 1],['textBorrow', 15, 0, 1],['textCh_labor', 15, 0, 1],['textChgcash', 15, 0, 1],['textTax6', 15, 0, 1],['textCh_labor_comp', 15, 0, 1],['textCh_labor_self', 15, 0, 1],['textTax', 15, 0, 1],['textWelfare', 15, 0, 1],['textCh_health', 15, 0, 1],['textHplus2', 15, 0, 1]
 		        ,['textTotal4', 15, 0, 1],['textTotal5', 15, 0, 1],['textLate', 15, 0, 1],['textHr_sick', 15, 1, 1],['textMi_sick', 15, 0, 1],['textHr_person', 15, 1, 1],['textMi_person', 15, 0, 1],['textHr_nosalary', 15, 1, 1],['textMi_nosalary', 15, 0, 1],['textHr_leave', 15, 1, 1],['textMi_leave', 15, 0, 1],['textPlus', 15, 0, 1],['textMinus', 15, 0, 1],['textMoney1', 15, 0, 1],['textMoney2', 15, 0, 1]
 	        ];  
 	        var bbsNum = [['txtMoney', 15, 0, 1],['txtDaymoney', 15, 0, 1],['txtPubmoney', 15, 0, 1],['txtBo_admin', 15, 0, 1],['txtBo_traffic', 15, 0, 1],['txtBo_special', 15, 0, 1],['txtBo_oth', 15, 0, 1],['txtTotal1', 15, 0, 1],['txtCh_labor1', 15, 0, 1],['txtCh_labor2', 15, 0, 1],['txtCh_health_insure', 15, 0, 1],['txtDay', 15, 1, 1],['txtMtotal', 15, 0, 1],['txtBo_born', 15, 0, 1],['txtBo_night', 15, 0, 1],['txtBo_full', 15, 0, 1],['txtBo_duty', 15, 0, 1],['txtTax_other', 15, 0, 1],['txtTotal2', 15, 0, 1],['txtOstand', 15, 2, 1],['txtAddh2_1', 15, 1, 1],['txtAddh2_2', 15, 1, 1],['txtAddmoney', 15, 0, 1]
@@ -682,12 +682,13 @@
 	            $('#lblBo_admins').text('銷貨獎金');
 	            $('#lblBo_traffics').text('裁剪噸數獎金');
 	            $('#lblBo_specials').text('績效獎金');
-	            ('#lblBo_oths').text('其他津貼');
+	            $('#lblBo_oths').text('其他津貼');
 	            $('#lblAddh2_1s').text('加班時數');
 	            $('#lblAddh100s').text('值班時數');
 	            $('#lblMoney1s').text('獎金基數');
 	            $('#lblMoney2s').text('獎金噸數');
-	            $('.isvu').show();
+	            $('#lblMoney3s').text('出貨獎金');
+	            $('#lblChgcashs').text('代扣仲介費');
 	            $('.bbsdetail').show();
 	            
 	            $("[name='sel']").each(function(index) {
@@ -1223,7 +1224,7 @@
 	        
 	        function table_change() {
 	        	getdtmp();
-	        	$('#tbbs').css("width","5400px");
+	        	$('#tbbs').css("width","5000px");
 	        		        	
 	             if ($('#cmbPerson').find("option:selected").text().indexOf('本國')>-1){
 	             	//bbm
@@ -1317,7 +1318,7 @@
 		            $('.hid_tax').show();
 		            $('.hid_tax5').show();
 	            }else{//外勞
-	            	$('#tbbs').css("width","6400px");
+	            	$('#tbbs').css("width","5300px");
 	            	//bbm
 	            	$('#lblHrmoney').hide();
 	            	$('#lblDaymoney').hide();
@@ -1406,14 +1407,6 @@
 				$(".hid_addh46_2").show();
 				$(".hid_tax_other2").show();
 				$(".hid_meals").show();
-				
-				if (q_getPara('sys.project').toUpperCase()=='VU'){
-					$(".hid_addh2_2").hide();
-					$(".hid_addh46_1").hide();
-					$(".hid_addh46_2").hide();
-					$('.hid_money1').show();
-					$('.hid_money2').show();
-				}
 				
 				$('#btnHidesalary').val("薪資隱藏");
 				$('#btnHideday').val("出勤隱藏");
