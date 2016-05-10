@@ -1467,8 +1467,8 @@ z_uccstk01:--z_uccstk01
 		from @err
 		return
 	end
-	--怕算太久,只重算45天內的
-	declare @datex nvarchar(20) = dbo.AD2ChineseEraName(dateadd(dd,-45,getdate()))
+	--怕算太久,只重算365天內的
+	declare @datex nvarchar(20) = dbo.AD2ChineseEraName(dateadd(dd,-365,getdate()))
 	update #z_uccstk set isprice=1 where isprice=0 and datea<@datex
 	-----------------------------------------------------------------------------------
 	set @n = 5 --製程步驟需小於此數
