@@ -173,7 +173,8 @@ begin
 		set w133=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
 		from #bbs a
 		
-		update #bbs set w166=case when w133>2 then w133-2 else 0 end
+		update #bbs set w200=case when w133>4 then then w133-4 else 0 end
+		update #bbs set w166=case when w133>4 then 2 when w133>2 then w133-2 else 0 end
 		update #bbs set w133=case when w133>2 then 2 else w133 end
 	end
 	else --假日
@@ -191,9 +192,9 @@ begin
 	
 	update salpresents set noq='z'+noq where noa=@datea
 	
-	insert salpresents (noa,noq,sssno,namea,clockin,clockout,cardno,w133,w166,w100,memo,hr_special)
+	insert salpresents (noa,noq,sssno,namea,clockin,clockout,cardno,w133,w166,w200,w100,memo,hr_special)
 	select noa,right('000'+cast(ROW_NUMBER()over (order by sssno) as nvarchar(10)),3)
-	,sssno,namea,clockin,clockout,barcode,w133,w166,w100,memo,0
+	,sssno,namea,clockin,clockout,barcode,w133,w166,w200,w100,memo,0
 	from #bbs where noa=@datea
 	
 	update a
@@ -202,13 +203,13 @@ begin
 	
 	if((select count(*) from salpresent where noa=@datea)=0)
 	begin
-		insert salpresent(noa,holiday,mount,w100,w133,w166,hr_special)
+		insert salpresent(noa,holiday,mount,w100,w133,w166,w200,hr_special)
 		select noa,
 		case when (((select count(*) from holiday where noa=@datea and isnull(iswork,0)!=1)=0 --不是假日
 		and @t_weekday!='0' and @t_weekday!='6')--不是周六日
 		or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
 		then 0 else 1 end
-		,count(*),SUM(w100),SUM(w133),SUM(w166),SUM(hr_special)
+		,count(*),SUM(w100),SUM(w133),SUM(w166),SUM(w200),SUM(hr_special)
 		from salpresents where noa=@datea group by noa
 	end
 	else
@@ -219,9 +220,9 @@ begin
 		and @t_weekday!='0' and @t_weekday!='6')--不是周六日
 		or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
 		then 0 else 1 end
-		,mount=b.mount,w100=b.w100,w133=b.w133,w166=b.w166,hr_special=b.hr_special
+		,mount=b.mount,w100=b.w100,w133=b.w133,w166=b.w166,w200=b.w200,hr_special=b.hr_special
 		from salpresent a outer apply (
-		select count(*)mount,SUM(w100)w100,SUM(w133)w133,SUM(w166)w166,SUM(hr_special)hr_special 
+		select count(*)mount,SUM(w100)w100,SUM(w133)w133,SUM(w166)w166,SUM(w200)w200,SUM(hr_special)hr_special 
 		from salpresents where noa=a.noa)b
 		where noa=@datea
 	end
