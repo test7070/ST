@@ -24,7 +24,7 @@
 			var q_readonly = ['txtRc2atax', 'txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
 			var q_readonlys = ['txtMoney','txtSprice'];
 			var bbmNum = [['txtPrice', 15, 3, 1], ['txtTranmoney', 10, 0, 1], ['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
-			var bbsNum = [['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+			var bbsNum = [['txtHard', 10, 2, 1], ['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
 			q_desc = 1;
@@ -1682,6 +1682,8 @@
 						<a id='lblMemos_st'> </a><br>
 						<a id='lblCert_st' style="display:none;"> </a>
 					</td>
+					<td align="center" style="width:100px;display:none;" class="rk">硬度</td>
+					<td align="center" style="width:100px;display:none;" class="rk">保存年限</td>
 					<td align="center" style="width:100px;display:none;" class="rk">包裝方式</td>
 					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
@@ -1751,6 +1753,8 @@
 						<input id="txtMemo.*" type="text" style="width:95%;"/>
 						<input id="btnCert.*" class="btnCert" type="button" style="width:95%;"/>
 					</td>
+					<td style="display:none;" class="rk"><input id="txtHard.*" type="text" style="width:95%;" class="txt num"/></td>
+					<td style="display:none;" class="rk"><input id="txtErrmemo.*" type="text" style="width:95%;" maxlength="20"/></td>
 					<td style="display:none;" class="rk"><input id="txtDescr.*" type="text" style="width:95%;" maxlength="20"/></td>
 					<td ><input id="txtUno2.*" type="text" style="width:90%;"/></td>
 					<td>
