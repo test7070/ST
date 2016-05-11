@@ -37,6 +37,7 @@ declare @tmp table(
 		total2 float,
 		addh1 float,
 		addh2 float,
+		addh4 float,
 		addm float,
 		addh461 float,
 		addh462 float,
@@ -71,7 +72,7 @@ insert into @tmp
 select '0' gno,c.partno,c.part,c.indate,b.sno,b.namea,b.money,b.pubmoney,b.bo_admin,
 b.money1,b.money2,b.money3,b.money4,
 b.bo_traffic,b.bo_special,b.bo_oth,b.money6,b.total1,
-b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.mi_saliday,b.mi_total,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,
+b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.mi_saliday,b.mi_total,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,b.addh4,
 b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*addh46_1*1.33 + b.ostand*addh46_2*1.66),0),
 b.addh100,ROUND((b.addh100*b.ostand),0),
 b.tax_other2,b.meals,b.total3,b.borrow,b.ch_labor,b.ch_labor_comp,b.ch_labor_self,b.lodging_power_fee,b.hplus2,b.tax,b.tax5,
@@ -86,7 +87,7 @@ insert into @tmp
 select '2' gno,partno,MAX(part),'','','',sum(sal),sum(pub),sum(boad)
 ,sum(money1),sum(money2),sum(money3),sum(money4)
 ,sum(botr),sum(bosp),sum(boot),sum(money6),sum(total1),
-sum(chla1),sum(chla2),SUM(chhei),sum(miday),sum(mitotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),
+sum(chla1),sum(chla2),SUM(chhei),sum(miday),sum(mitotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addh4),
 sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),sum(borrow),sum(labor),sum(laco),sum(lase),sum(lopofee),sum(hplus2),sum(taxs),sum(tax5),
 sum(wel),sum(heal),sum(total4),sum(total5),'','',sum(plus),sum(minus),'',ssstypea,'',''
 from @tmp
@@ -94,7 +95,7 @@ group by partno,ssstypea
 
 insert into @tmp
 select '3' gno,'ZZZ','','','','',sum(sal),sum(pub),sum(boad),sum(money1),sum(money2),sum(money3),sum(money4),sum(botr),sum(bosp),sum(boot),sum(money6),sum(total1),
-sum(chla1),sum(chla2),SUM(chhei),sum(miday),sum(mitotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),
+sum(chla1),sum(chla2),SUM(chhei),sum(miday),sum(mitotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addh4),
 sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),sum(borrow),sum(labor),sum(laco),sum(lase),sum(lopofee),sum(hplus2),sum(taxs),sum(tax5),
 sum(wel),sum(heal),sum(total4),sum(total5),'','',sum(plus),sum(minus),'','','',''
 from @tmp
@@ -126,6 +127,7 @@ insert into @tmp(gno) select '1'
 	dbo.getComma(total2,0) total2,
 	dbo.getComma(addh1,-1) addh1,
 	dbo.getComma(addh2,-1) addh2,
+	dbo.getComma(addh4,-1) addh4,
 	dbo.getComma(addm,0) addm,
 	dbo.getComma(addh461,0) addh461,
 	dbo.getComma(addh462,0) addh462,
@@ -193,6 +195,7 @@ declare @tmp table(
 		total2 float,
 		addh1 float,
 		addh2 float,
+		addh4 float,
 		addm float,
 		addh461 float,
 		addh462 float,
@@ -223,7 +226,7 @@ declare @tmp table(
 insert into @tmp
 select '0' gno,c.partno,c.part,c.indate,b.sno,b.namea,b.daymoney,b.pubmoney,b.bo_admin
 ,b.money1,b.money2,b.money3,b.money4,b.bo_traffic,b.bo_special,b.bo_oth,b.money6,b.plus,b.total1,
-b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.day,b.mtotal,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,
+b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.day,b.mtotal,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,b.addh4,
 b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*addh46_1*1.33 + b.ostand*addh46_2*1.66),0)
 ,b.addh100,ROUND((b.addh100*b.ostand),0),
 b.tax_other2,b.meals,b.total3,b.borrow,b.ch_labor,b.ch_labor_comp,b.ch_labor_self,b.lodging_power_fee,b.tax,b.tax5,
@@ -236,7 +239,7 @@ where a.person = '日薪' and @t_xmon = a.mon and @t_xkind = a.monkind and a.typ
 
 insert into @tmp
 select '2' gno,partno,MAX(part),'','','',sum(sal),sum(pub),sum(boad),sum(money1),sum(money2),sum(money3),sum(money4),sum(botr),sum(bosp),sum(boot),sum(money6),sum(plus),sum(total1),
-sum(chla1),sum(chla2),SUM(chhei),sum(day),sum(mtotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),
+sum(chla1),sum(chla2),SUM(chhei),sum(day),sum(mtotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addh4),
 sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),sum(borrow),sum(labor),sum(laco),sum(lase),sum(lopofee),sum(taxs),sum(tax5),
 sum(wel),sum(heal),sum(hplus2),sum(minus),sum(total4),sum(total5),'',ssstypea,'',''
 from @tmp
@@ -245,7 +248,7 @@ group by partno,ssstypea
 insert into @tmp
 select '3' gno,'ZZZ','','','','',sum(sal),sum(pub),sum(boad)
 ,sum(money1),sum(money2),sum(money3),sum(money4),sum(botr),sum(bosp),sum(boot),sum(money6),sum(plus),sum(total1),
-sum(chla1),sum(chla2),SUM(chhei),sum(day),sum(mtotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),
+sum(chla1),sum(chla2),SUM(chhei),sum(day),sum(mtotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addh4),
 sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),sum(borrow),sum(labor),sum(laco),sum(lase),sum(lopofee),sum(taxs),sum(tax5),
 sum(wel),sum(heal),sum(hplus2),sum(minus),sum(total4),sum(total5),'','','',''
 from @tmp
@@ -278,6 +281,7 @@ insert into @tmp(gno) select '1'
 	dbo.getComma(total2,0) total2,
 	dbo.getComma(addh1,0) addh1,
 	dbo.getComma(addh2,0) addh2,
+	dbo.getComma(addh4,0) addh4,
 	dbo.getComma(addm,0) addm,
 	dbo.getComma(addh461,0) addh461,
 	dbo.getComma(addh462,0) addh462,
@@ -345,6 +349,7 @@ declare @tmp table(
 		total2 float,
 		addh1 float,
 		addh2 float,
+		addh4 float,
 		addm float,
 		addh461 float,
 		addh462 float,
@@ -375,7 +380,7 @@ declare @tmp table(
 insert into @tmp
 select '0' gno,c.partno,c.part,c.indate,b.sno,b.namea,b.daymoney,b.pubmoney,b.bo_admin,
 b.money1,b.money2,b.money3,b.money4,b.bo_traffic,b.bo_special,b.bo_oth,b.money6,b.plus,b.total1,
-b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.day,b.mtotal,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,
+b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.day,b.mtotal,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,b.addh4,
 b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*addh46_1*1.33 + b.ostand*addh46_2*1.66),0),b.addh100,ROUND((b.addh100*b.ostand),0),
 b.tax_other2,b.meals,b.total3,b.borrow,b.ch_labor,b.ch_labor_comp,b.ch_labor_self,b.lodging_power_fee,b.tax,b.tax5,
 b.welfare,b.ch_health,b.hplus2,b.minus,b.total4,b.total5,b.memo,c.typea,d.level1,d.level2
@@ -388,7 +393,7 @@ where a.person = '時薪' and @t_xmon = a.mon and @t_xkind = a.monkind and a.typ
 insert into @tmp
 select '2' gno,partno,MAX(part),'','','',sum(sal),sum(pub),sum(boad)
 ,sum(money1),sum(money2),sum(money3),sum(money4),sum(botr),sum(bosp),sum(boot),sum(money6),sum(plus),sum(total1),
-sum(chla1),sum(chla2),SUM(chhei),sum(day),sum(mtotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),
+sum(chla1),sum(chla2),SUM(chhei),sum(day),sum(mtotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addh4),
 sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),sum(borrow),sum(labor),sum(laco),sum(lase),sum(lopofee),sum(taxs),sum(tax5),
 sum(wel),sum(heal),sum(hplus2),sum(minus),sum(total4),sum(total5),'',ssstypea,'',''
 from @tmp
@@ -397,7 +402,7 @@ group by partno,ssstypea
 insert into @tmp
 select '3' gno,'ZZZ','','','','',sum(sal),sum(pub),sum(boad)
 ,sum(money1),sum(money2),sum(money3),sum(money4),sum(botr),sum(bosp),sum(boot),sum(money6),sum(plus),sum(total1),
-sum(chla1),sum(chla2),SUM(chhei),sum(day),sum(mtotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),
+sum(chla1),sum(chla2),SUM(chhei),sum(day),sum(mtotal),sum(bofu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addh4),
 sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),sum(borrow),sum(labor),sum(laco),sum(lase),sum(lopofee),sum(taxs),sum(tax5),
 sum(wel),sum(heal),sum(hplus2),sum(minus),sum(total4),sum(total5),'','','',''
 from @tmp
@@ -430,6 +435,7 @@ insert into @tmp(gno) select '1'
 	dbo.getComma(total2,0) total2,
 	dbo.getComma(addh1,0) addh1,
 	dbo.getComma(addh2,0) addh2,
+	dbo.getComma(addh4,0) addh4,
 	dbo.getComma(addm,0) addm,
 	dbo.getComma(addh461,0) addh461,
 	dbo.getComma(addh462,0) addh462,
@@ -500,6 +506,7 @@ declare @tmp table(
 		total2 float,
 		addh1 float,
 		addh2 float,
+		addh4 float,
 		addm float,
 		addh461 float,
 		addh462 float,
@@ -536,7 +543,7 @@ insert into @tmp
 select '0' gno,c.partno,c.part,c.indate,b.sno,b.namea,b.money,b.pubmoney,b.bo_admin,
 b.money1,b.money2,b.money3,b.money4,b.bo_traffic,b.bo_special,b.bo_oth,b.money6,b.plus,b.total1,
 b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.mi_saliday,b.mi_total,b.bo_born,b.bo_night,b.bo_full,b.bo_duty,b.tax_other,b.total2,
-b.addh2_1,b.addh2_2,b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*addh46_1*1.33 + b.ostand*addh46_2*1.66),0),b.addh100,ROUND((b.addh100*b.ostand),0),b.tax_other2,b.meals,b.total3,
+b.addh2_1,b.addh2_2,b.addh4,b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*addh46_1*1.33 + b.ostand*addh46_2*1.66),0),b.addh100,ROUND((b.addh100*b.ostand),0),b.tax_other2,b.meals,b.total3,
 b.borrow,b.ch_labor,b.ch_labor_comp,b.ch_labor_self,b.chgcash,b.tax,b.tax5,b.tax6,b.stay_tax,b.tax12,b.tax18,b.welfare,b.stay_money,b.ch_health
 ,b.hplus2,b.minus,b.total4,b.total5,b.memo,c.typea,d.level1,d.level2
 from salary a
@@ -548,7 +555,7 @@ where a.person = '外勞' and @t_xmon = a.mon and @t_xkind = a.monkind and a.typ
 insert into @tmp
 select '2',partno,MAX(part),'','','',sum(sal),sum(pub),sum(boad)
 ,sum(money1),sum(money2),sum(money3),sum(money4),sum(botr),sum(bosp),sum(boot),sum(money6),sum(plus),sum(total1),
-sum(chla1),sum(chla2),sum(chhei),sum(miday),sum(mitotal),sum(bobo),sum(boni),sum(bofu),sum(bodu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),
+sum(chla1),sum(chla2),sum(chhei),sum(miday),sum(mitotal),sum(bobo),sum(boni),sum(bofu),sum(bodu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addh4),sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),
 sum(borrow),sum(labor),sum(laco),sum(lase),sum(chg),sum(taxs),sum(tax5),sum(tax6),sum(tax10),sum(tax12),sum(tax18),sum(wel),sum(staym),sum(heal),sum(hplus2)
 ,sum(minus),sum(total4),sum(total5),'',ssstypea,'',''
 from @tmp
@@ -557,7 +564,7 @@ group by partno,ssstypea
 insert into @tmp
 select '3','ZZZ','','','','',sum(sal),sum(pub),sum(boad)
 ,sum(money1),sum(money2),sum(money3),sum(money4),sum(botr),sum(bosp),sum(boot),sum(money6),sum(plus),sum(total1),
-sum(chla1),sum(chla2),sum(chhei),sum(miday),sum(mitotal),sum(bobo),sum(boni),sum(bofu),sum(bodu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),
+sum(chla1),sum(chla2),sum(chhei),sum(miday),sum(mitotal),sum(bobo),sum(boni),sum(bofu),sum(bodu),sum(taxot),sum(total2),sum(addh1),sum(addh2),sum(addh4),sum(addm),sum(addh461),sum(addh462),sum(add46m),sum(addh00),sum(add0m),sum(taxno),sum(meals),sum(total3),
 sum(borrow),sum(labor),sum(laco),sum(lase),sum(chg),sum(taxs),sum(tax5),sum(tax6),sum(tax10),sum(tax12),sum(tax18),sum(wel),sum(staym),sum(heal),sum(hplus2)
 ,sum(minus),sum(total4),sum(total5),'','','',''
 from @tmp
@@ -593,6 +600,7 @@ insert into @tmp(gno) select '1'
 	dbo.getComma(total2,0) total2,
 	dbo.getComma(addh1,0) addh1,
 	dbo.getComma(addh2,0) addh2,
+	dbo.getComma(addh4,0) addh41,
 	dbo.getComma(addm,0) addm,
 	dbo.getComma(addh461,0) addh461,
 	dbo.getComma(addh462,0) addh462,
@@ -667,6 +675,7 @@ declare @tmp table(
 	total2 int, 
 	addh2_1 float, 
 	addh2_2 float, 
+	addh4 float, 
 	addmoney int, 
 	addh461 float,
 	addh462 float,
@@ -702,7 +711,7 @@ declare @tmp table(
 insert into @tmp 
 select '0' gno, a.noa,b.noq,b.sno,b.namea,c.indate,c.ft_date,b.money,b.pubmoney,b.bo_admin,
 b.money1,b.money2,b.money3,b.money4,b.bo_traffic,b.bo_special,b.bo_oth,b.money6,b.total1
-,b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.mi_saliday,b.mi_total,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2, 
+,b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.mi_saliday,b.mi_total,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2, b.addh4, 
 b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*addh46_1*1.33 + b.ostand*addh46_2*1.66),0),b.addh100,ROUND((b.addh100*b.ostand),0),
 b.tax_other2,b.meals,b.total3,b.borrow,b.ch_labor,b.ch_labor_comp,b.ch_labor_self,isnull(b.hplus2,0),b.lodging_power_fee,b.tax,b.tax5, 
 b.welfare,b.ch_health,b.total4,b.total5,a.monkind,a.mon,isnull(b.minus,0),isnull(b.plus,0), 
@@ -741,7 +750,8 @@ dbo.getComma(bo_full,0) bofu,
 dbo.getComma(tax_other,0) taxo, 
 dbo.getComma(total2,0) total2, 
 dbo.getComma(addh2_1,0) ad21, 
-dbo.getComma(addh2_2,0) ad22, 
+dbo.getComma(addh2_2,0) ad22,
+dbo.getComma(addh4,0) ad4,  
 dbo.getComma(addmoney,0) addm, 
 dbo.getComma(addh461,0) addh461,
 dbo.getComma(addh462,0) addh462,
@@ -811,6 +821,7 @@ declare @tmp table(
 		total2 int,
 		addh2_1 float,
 		addh2_2 float,
+		addh4 float,
 		addmoney float,
 		addh461 float,
 		addh462 float,
@@ -845,7 +856,7 @@ declare @tmp table(
 insert into @tmp
 select '0' gno,b.sno,b.namea,c.indate,c.ft_date,b.daymoney,b.pubmoney,b.bo_admin,
 b.money1,b.money2,b.money3,b.money4,b.bo_traffic,b.bo_special,b.bo_oth,b.money6,b.total1
-,b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.day,b.mtotal,b.mi_saliday,b.mi_total,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,
+,b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.day,b.mtotal,b.mi_saliday,b.mi_total,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,b.addh4,
 b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*addh46_1*1.33 + b.ostand*addh46_2*1.66),0)
 ,b.addh100,ROUND((b.addh100*b.ostand),0),b.tax_other2,b.meals,b.total3,b.borrow,b.ch_labor,b.ch_labor_comp,b.ch_labor_self,isnull(b.hplus2,0),b.lodging_power_fee,b.tax,b.tax5,
 b.welfare,b.ch_health,b.total4,b.total5,a.monkind,a.mon,isnull(b.minus,0),isnull(b.plus,0), 
@@ -886,6 +897,7 @@ dbo.getComma(tax_other,0) tax_other,
 dbo.getComma(total2,0) total2,
 dbo.getComma(addh2_1,0) addh2_1,
 dbo.getComma(addh2_2,0) addh2_2,
+dbo.getComma(addh4,0) addh4,
 dbo.getComma(addmoney,0) addmoney,
 dbo.getComma(addh461,0) addh461,
 dbo.getComma(addh462,0) addh462,
@@ -955,6 +967,7 @@ declare @tmp table(
 		total2 int,
 		addh2_1 float,
 		addh2_2 float,
+		addh4 float,
 		addmoney int,
 		addh461 float,
 		addh462 float,
@@ -989,7 +1002,7 @@ declare @tmp table(
 insert into @tmp
 select '0' gno,b.sno,b.namea,c.indate,c.ft_date,b.daymoney,b.pubmoney,b.bo_admin,
 b.money1,b.money2,b.money3,b.money4,b.bo_traffic,b.bo_special,b.bo_oth,b.money6,b.total1
-,b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.day,b.mtotal,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,
+,b.ch_labor1,b.ch_labor2,b.ch_health_insure,b.day,b.mtotal,b.bo_full,b.tax_other,b.total2,b.addh2_1,b.addh2_2,b.addh4,
 b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*addh46_1*1.33 + b.ostand*addh46_2*1.66),0),b.addh100,ROUND((b.addh100*b.ostand),0),
 b.tax_other2,b.meals,b.total3,b.borrow,b.ch_labor,b.ch_labor_comp,b.ch_labor_self,isnull(b.hplus2,0),b.lodging_power_fee,b.tax,b.tax5,
 b.welfare,b.ch_health,b.total4,b.total5,
@@ -1029,6 +1042,7 @@ dbo.getComma(tax_other,0) tax_other,
 dbo.getComma(total2,0) total2,
 dbo.getComma(addh2_1,0) addh2_1,
 dbo.getComma(addh2_2,0) addh2_2,
+dbo.getComma(addh4,0) addh4,
 dbo.getComma(addmoney,0) addmoney,
 dbo.getComma(addh461,0) addh461,
 dbo.getComma(addh462,0) addh462,
@@ -1100,6 +1114,7 @@ declare @tmp table(
 		total2 int,
 		addh2_1 float,
 		addh2_2 float,
+		addh4 float,
 		addmoney int,
 		addh46_1 float,
 		addh46_2 float,
@@ -1139,7 +1154,7 @@ insert into @tmp
 select '0' gno, a.noa,b.noq,b.sno,b.namea,c.indate,b.money,b.bo_admin,
 b.money1,b.money2,b.money3,b.money4,b.bo_traffic,b.bo_special,b.bo_oth,b.money,b.total1
 ,b.ch_labor1,b.ch_health_insure,b.mi_saliday,b.mi_total,b.bo_born,b.bo_night,b.bo_full,b.bo_duty,
-b.tax_other,b.total2,b.addh2_1,b.addh2_2,b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*1.33*addh46_1 + b.ostand*1.66*addh46_2),0),
+b.tax_other,b.total2,b.addh2_1,b.addh2_2,b.addh4,b.addmoney,b.addh46_1,b.addh46_2,ROUND((b.ostand*1.33*addh46_1 + b.ostand*1.66*addh46_2),0),
 b.addh100,ROUND((b.ostand*b.addh100),0),
 b.tax_other2,b.meals,a.total3,b.borrow,b.ch_labor,b.chgcash,b.tax6,b.stay_tax,b.tax12,b.tax18,
 b.welfare,b.stay_money,b.ch_health,isnull(b.hplus2,0),b.total4,b.total5,b.ch_labor2,b.ch_labor_comp,b.ch_labor_self
@@ -1178,6 +1193,7 @@ dbo.getComma(tax_other,0) tax_other,
 dbo.getComma(total2,0) total2,
 dbo.getComma(addh2_1,0) addh2_1,
 dbo.getComma(addh2_2,0) addh2_2,
+dbo.getComma(addh4,0) addh4_1,
 dbo.getComma(addmoney,0) addmoney,
 dbo.getComma(addh46_1,0) addh46_1,
 dbo.getComma(addh46_2,0) addh46_2,
@@ -1220,6 +1236,12 @@ set @t_bsssno = case when '#non' = [4] then '' else [4] end
 set @t_esssno = case when '#non' = [5] then CHAR(255) else [5] end
 set @t_year = case when '#non' = [9] then '' else [9] end
 ---------------------------------------------------------------------------------------------------------------------
+--刪除暫存資料庫 
+IF OBJECT_ID('tempdb..#tmpa')is not null 
+BEGIN 
+	drop table #tmpa
+END
+
 create table #tmpa( 
 	gno nvarchar(1),  
 	recno int,
@@ -1533,12 +1555,14 @@ declare @t_edate nvarchar(20)
 declare @t_bsssno nvarchar(20)
 declare @t_esssno nvarchar(20)
 declare @t_service nvarchar(20)
+declare @t_memo nvarchar(MAX)
 
 set @t_bsssno = case when '#non' = [4] then '' else [4] end
 set @t_esssno = case when '#non' = [5] then CHAR(255) else [5] end
 set @t_bdate = case when '#non' = [6] then '' else [6] end
 set @t_edate = case when '#non' = [7] then CHAR(255) else [7] end
 set @t_service = case when '#non' = [10] then '' else [10] end
+set @t_memo = case when '#non' = [11] then '' else [11] end
 ---------------------------------------------------------------------------------
 declare @tmp table(
 		gno nvarchar(1),
@@ -1561,24 +1585,26 @@ declare @tmp table(
 		money4 float,
 		meals float,
 		salary float,
-		outdate nvarchar(50)
+		outdate nvarchar(50),
+		memo nvarchar(MAX)
 )
 
 insert into @tmp
 select '0' gno,a.noa,b.namea,a.datea,a.jobno,a.job,a.level1,a.level2,a.money,a.bo_admin,a.bo_traffic,a.bo_special,
-a.bo_oth,a.bo_full,a.bo_money1,a.bo_money2,a.bo_money3,a.bo_money4,a.meals,a.salary,isnull(b.outdate,'')
+a.bo_oth,a.bo_full,a.bo_money1,a.bo_money2,a.bo_money3,a.bo_money4,a.meals,a.salary,isnull(b.outdate,''),a.memo
 from saladjust a
 left join sss b on a.noa = b.noa
 where (a.noa between @t_bsssno and @t_esssno) and
-(a.datea between @t_bdate and @t_edate)
+(a.datea between @t_bdate and @t_edate) and (len(@t_memo)=0 or  a.memo like '%'+@t_memo+'%')
 
 insert into @tmp
 select '1' gno,a.noa,b.namea,a.datea,a.jobno,a.job,a.level1,a.level2,a.money,a.bo_admin,a.bo_traffic,a.bo_special,
-a.bo_oth,a.bo_full,a.bo_money1,a.bo_money2,a.bo_money3,a.bo_money4,a.meals,a.salary,isnull(b.outdate,'')
+a.bo_oth,a.bo_full,a.bo_money1,a.bo_money2,a.bo_money3,a.bo_money4,a.meals,a.salary,isnull(b.outdate,''),a.memo
 from saladjust a
 left join sss b on a.noa = b.noa
 where (a.noa between @t_bsssno and @t_esssno) 
 and a.datea=isnull((select MAX(datea) from saladjust where (datea < @t_bdate) and noa=a.noa ),'')
+and (len(@t_memo)=0 or  a.memo like '%'+@t_memo+'%')
 
 if(@t_service='1')
 	delete @tmp where outdate!=''
@@ -1607,10 +1633,164 @@ dbo.getComma(money2,0) money2,
 dbo.getComma(money3,0) money3,
 dbo.getComma(money4,0) money4,
 dbo.getComma(meals,0) meals,
-dbo.getComma(salary,0) salary
+dbo.getComma(salary,0) salary,memo
 from @tmp order by noa,case when gno='1' then '0' when gno='0' then 1 else gno end,datea;
 -------------------------------------------------------------------------------------------------------------------------------------------------------
 z_salary_rk12:--z_salary_rk12
+SET QUOTED_IDENTIFIER OFF
+declare @t_bsssno nvarchar(20) 
+declare @t_esssno nvarchar(20)
+declare @t_bdate nvarchar(20)
+declare @t_edate nvarchar(20) 
+
+set @t_bsssno = case when '#non' = [4] then '' else [4] end
+set @t_esssno = case when '#non' = [5] then CHAR(255) else [5] end
+set @t_bdate = case when '#non' = [6] then '' else [6] end
+set @t_edate = case when '#non' = [7] then CHAR(255) else [7] end
+---------------------------------------------------------------------------------------------------------------------------------------------------
+--刪除暫存資料庫 
+IF OBJECT_ID('tempdb..#tmpa')is not null 
+BEGIN 
+	drop table #tmpa
+END
+
+create table #tmpa( 
+	gno nvarchar(1),  
+	sssno nvarchar(20), 
+	namea nvarchar(50), 
+	pno nvarchar(20), 
+	part nvarchar(50),
+	d01 nvarchar(20), d02 nvarchar(20), d03 nvarchar(20), d04 nvarchar(20), d05 nvarchar(20), d06 nvarchar(20), d07 nvarchar(20), d08 nvarchar(20), d09 nvarchar(20), d10 nvarchar(20),
+	d11 nvarchar(20), d12 nvarchar(20), d13 nvarchar(20), d14 nvarchar(20), d15 nvarchar(20), d16 nvarchar(20), d17 nvarchar(20), d18 nvarchar(20), d19 nvarchar(20), d20 nvarchar(20),
+	d21 nvarchar(20), d22 nvarchar(20), d23 nvarchar(20), d24 nvarchar(20), d25 nvarchar(20), d26 nvarchar(20), d27 nvarchar(20), d28 nvarchar(20), d29 nvarchar(20), d30 nvarchar(20), d31 nvarchar(20),
+	
+	v01 nvarchar(20), v02 nvarchar(20), v03 nvarchar(20), v04 nvarchar(20), v05 nvarchar(20), v06 nvarchar(20), v07 nvarchar(20), v08 nvarchar(20), v09 nvarchar(20), v10 nvarchar(20),
+	v11 nvarchar(20), v12 nvarchar(20), v13 nvarchar(20), v14 nvarchar(20), v15 nvarchar(20), v16 nvarchar(20), v17 nvarchar(20), v18 nvarchar(20), v19 nvarchar(20), v20 nvarchar(20),
+	v21 nvarchar(20), v22 nvarchar(20), v23 nvarchar(20), v24 nvarchar(20), v25 nvarchar(20), v26 nvarchar(20), v27 nvarchar(20), v28 nvarchar(20), v29 nvarchar(20), v30 nvarchar(20), v31 nvarchar(20),
+	
+	m01 float, m02 float, m03 float, m04 float, m05 float, m06 float, m07 float, m08 float, m09 float, m10 float,
+	m11 float, m12 float, m13 float, m14 float, m15 float, m16 float, m17 float, m18 float, m19 float, m20 float,
+	m21 float, m22 float, m23 float, m24 float, m25 float, m26 float, m27 float, m28 float, m29 float, m30 float, m31 float,
+	
+	c01 float, c02 float, c03 float, c04 float, c05 float, c06 float, c07 float, c08 float, c09 float, c10 float,
+	c11 float, c12 float, c13 float, c14 float, c15 float, c16 float, c17 float, c18 float, c19 float, c20 float,
+	c21 float, c22 float, c23 float, c24 float, c25 float, c26 float, c27 float, c28 float, c29 float, c30 float, c31 float,
+	
+	mt float, ct float, meals float
+) 
+
+declare @now_date nvarchar(10)--現在日期 
+set @now_date=CONVERT (VARCHAR(7), GETDATE(),12 )+0890000 
+set @now_date=left(@now_date,3)+'/'+substring(@now_date,4,2)+'/'+right(@now_date,2)
+
+if(len(@t_bdate)=0)
+set @t_bdate=LEFT(@now_date,6)+'/01'
+
+declare @dcount int=1
+declare @tmp_date nvarchar(10)=@t_bdate
+declare @tmp_dcol nvarchar(50)
+declare @tmp_vcol nvarchar(50)
+declare @tmp_mcol nvarchar(50)
+declare @tmp_ccol nvarchar(50)
+declare @vaca nvarchar(50)
+while(@tmp_date<=@t_edate and @dcount<=31)
+begin
+	set @tmp_dcol='d'+right('00'+cast(@dcount as nvarchar(10)),2)
+	set @tmp_vcol='v'+right('00'+cast(@dcount as nvarchar(10)),2)
+	set @tmp_mcol='m'+right('00'+cast(@dcount as nvarchar(10)),2)
+	set @tmp_ccol='c'+right('00'+cast(@dcount as nvarchar(10)),2)
+	
+	if(select count(*) from holiday where noa=@tmp_date and isnull(iswork,0)=0)>0 --假日
+		set @vaca='V'
+	else if(select count(*) from holiday where noa=@tmp_date and isnull(iswork,0)=1)>0 --上班日
+		set @vaca=''
+	else 
+	begin
+		if(DATEPART(WEEKDAY,dbo.ChineseEraName2AD(@tmp_date))-1=0 or DATEPART(WEEKDAY,dbo.ChineseEraName2AD(@tmp_date))-1=6)
+		set @vaca='V'
+			else 
+		set @vaca=''
+	end
+	
+	EXEC("insert #tmpa(gno,sssno,namea,pno,part,"+@tmp_dcol+","+@tmp_vcol+","+@tmp_mcol+")
+	select '9',a.noa,a.namea,a.partno,b.part,'"+@tmp_date+"','"+@vaca+"',isnull((select sum(hours) from saladd where datea='"+@tmp_date+"' and sssno=a.noa and isnull(isapv,0)=1),0)
+	from sss a left join part b on a.partno=b.noa where a.noa between '"+@t_bsssno+"' and '"+@t_esssno+"' ")
+	
+	EXEC("update #tmpa
+	set "+@tmp_ccol+"=case when "+@tmp_vcol+"='V' then round("+@tmp_mcol+"*1,2) else 
+	case when "+@tmp_mcol+">4 then round(("+@tmp_mcol+"-4)*2,2)+round((2*1.66),2)+round((2*1.33),2) 
+	when "+@tmp_mcol+">2 then round(("+@tmp_mcol+"-2)*1.66,2)+round((2*1.33),2) 
+	else ROUND("+@tmp_mcol+"*1.33,2) end end
+	")
+	
+	set @tmp_date=dbo.q_cdn(@tmp_date,1)
+	set @dcount=@dcount+1
+end
+
+insert #tmpa
+select '0',sssno,namea,pno,part
+,MAX(d01),MAX(d02),MAX(d03),MAX(d04),MAX(d05),MAX(d06),MAX(d07),MAX(d08),MAX(d09),MAX(d10),MAX(d11),MAX(d12),MAX(d13),MAX(d14),MAX(d15),MAX(d16),MAX(d17),MAX(d18),MAX(d19),MAX(d20),MAX(d21),MAX(d22),MAX(d23),MAX(d24),MAX(d25),MAX(d26),MAX(d27),MAX(d28),MAX(d29),MAX(d30),MAX(d31)
+,MAX(v01),MAX(v02),MAX(v03),MAX(v04),MAX(v05),MAX(v06),MAX(v07),MAX(v08),MAX(v09),MAX(v10),MAX(v11),MAX(v12),MAX(v13),MAX(v14),MAX(v15),MAX(v16),MAX(v17),MAX(v18),MAX(v19),MAX(v20),MAX(v21),MAX(v22),MAX(v23),MAX(v24),MAX(v25),MAX(v26),MAX(v27),MAX(v28),MAX(v29),MAX(v30),MAX(v31)
+,SUM(m01),SUM(m02),SUM(m03),SUM(m04),SUM(m05),SUM(m06),SUM(m07),SUM(m08),SUM(m09),SUM(m10),SUM(m11),SUM(m12),SUM(m13),SUM(m14),SUM(m15),SUM(m16),SUM(m17),SUM(m18),SUM(m19),SUM(m20),SUM(m21),SUM(m22),SUM(m23),SUM(m24),SUM(m25),SUM(m26),SUM(m27),SUM(m28),SUM(m29),SUM(m30),SUM(m31)
+,SUM(c01),SUM(c02),SUM(c03),SUM(c04),SUM(c05),SUM(c06),SUM(c07),SUM(c08),SUM(c09),SUM(c10),SUM(c11),SUM(c12),SUM(c13),SUM(c14),SUM(c15),SUM(c16),SUM(c17),SUM(c18),SUM(c19),SUM(c20),SUM(c21),SUM(c22),SUM(c23),SUM(c24),SUM(c25),SUM(c26),SUM(c27),SUM(c28),SUM(c29),SUM(c30),SUM(c31)
+,0,0,0
+from #tmpa
+group by sssno,namea,pno,part
+
+delete #tmpa where gno='9'
+
+update #tmpa
+set mt=isnull(m01,0)+isnull(m02,0)+isnull(m03,0)+isnull(m04,0)+isnull(m05,0)+isnull(m06,0)+isnull(m07,0)+isnull(m08,0)+isnull(m09,0)+isnull(m10,0)
++isnull(m11,0)+isnull(m12,0)+isnull(m13,0)+isnull(m14,0)+isnull(m15,0)+isnull(m16,0)+isnull(m17,0)+isnull(m18,0)+isnull(m19,0)+isnull(m20,0)
++isnull(m21,0)+isnull(m22,0)+isnull(m23,0)+isnull(m24,0)+isnull(m25,0)+isnull(m26,0)+isnull(m27,0)+isnull(m28,0)+isnull(m29,0)+isnull(m30,0)+isnull(m31,0)
+,ct=isnull(c01,0)+isnull(c02,0)+isnull(c03,0)+isnull(c04,0)+isnull(c05,0)+isnull(c06,0)+isnull(c07,0)+isnull(c08,0)+isnull(c09,0)+isnull(c10,0)
++isnull(c11,0)+isnull(c12,0)+isnull(c13,0)+isnull(c14,0)+isnull(c15,0)+isnull(c16,0)+isnull(c17,0)+isnull(c18,0)+isnull(c19,0)+isnull(c20,0)
++isnull(c21,0)+isnull(c22,0)+isnull(c23,0)+isnull(c24,0)+isnull(c25,0)+isnull(c26,0)+isnull(c27,0)+isnull(c28,0)+isnull(c29,0)+isnull(c30,0)+isnull(c31,0)
+,meals=+case when isnull(m01,0)>=2.5 then 1 else 0 end+case when isnull(m02,0)>=2.5 then 1 else 0 end+case when isnull(m03,0)>=2.5 then 1 else 0 end+case when isnull(m04,0)>=2.5 then 1 else 0 end+case when isnull(m05,0)>=2.5 then 1 else 0 end
++case when isnull(m06,0)>=2.5 then 1 else 0 end+case when isnull(m07,0)>=2.5 then 1 else 0 end+case when isnull(m08,0)>=2.5 then 1 else 0 end+case when isnull(m09,0)>=2.5 then 1 else 0 end+case when isnull(m10,0)>=2.5 then 1 else 0 end
++case when isnull(m11,0)>=2.5 then 1 else 0 end+case when isnull(m12,0)>=2.5 then 1 else 0 end+case when isnull(m13,0)>=2.5 then 1 else 0 end+case when isnull(m14,0)>=2.5 then 1 else 0 end+case when isnull(m15,0)>=2.5 then 1 else 0 end
++case when isnull(m16,0)>=2.5 then 1 else 0 end+case when isnull(m17,0)>=2.5 then 1 else 0 end+case when isnull(m18,0)>=2.5 then 1 else 0 end+case when isnull(m19,0)>=2.5 then 1 else 0 end+case when isnull(m20,0)>=2.5 then 1 else 0 end
++case when isnull(m21,0)>=2.5 then 1 else 0 end+case when isnull(m22,0)>=2.5 then 1 else 0 end+case when isnull(m23,0)>=2.5 then 1 else 0 end+case when isnull(m24,0)>=2.5 then 1 else 0 end+case when isnull(m25,0)>=2.5 then 1 else 0 end
++case when isnull(m26,0)>=2.5 then 1 else 0 end+case when isnull(m27,0)>=2.5 then 1 else 0 end+case when isnull(m28,0)>=2.5 then 1 else 0 end+case when isnull(m29,0)>=2.5 then 1 else 0 end+case when isnull(m30,0)>=2.5 then 1 else 0 end
++case when isnull(m31,0)>=2.5 then 1 else 0 end
+
+insert #tmpa(gno,pno,part
+,d01,d02,d03,d04,d05,d06,d07,d08,d09,d10,d11,d12,d13,d14,d15,d16,d17,d18,d19,d20,d21,d22,d23,d24,d25,d26,d27,d28,d29,d30,d31
+,v01,v02,v03,v04,v05,v06,v07,v08,v09,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24,v25,v26,v27,v28,v29,v30,v31
+,m01,m02,m03,m04,m05,m06,m07,m08,m09,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31
+,mt,ct,meals)
+select '1',pno,part
+,MAX(d01),MAX(d02),MAX(d03),MAX(d04),MAX(d05),MAX(d06),MAX(d07),MAX(d08),MAX(d09),MAX(d10),MAX(d11),MAX(d12),MAX(d13),MAX(d14),MAX(d15),MAX(d16),MAX(d17),MAX(d18),MAX(d19),MAX(d20),MAX(d21),MAX(d22),MAX(d23),MAX(d24),MAX(d25),MAX(d26),MAX(d27),MAX(d28),MAX(d29),MAX(d30),MAX(d31)
+,MAX(v01),MAX(v02),MAX(v03),MAX(v04),MAX(v05),MAX(v06),MAX(v07),MAX(v08),MAX(v09),MAX(v10),MAX(v11),MAX(v12),MAX(v13),MAX(v14),MAX(v15),MAX(v16),MAX(v17),MAX(v18),MAX(v19),MAX(v20),MAX(v21),MAX(v22),MAX(v23),MAX(v24),MAX(v25),MAX(v26),MAX(v27),MAX(v28),MAX(v29),MAX(v30),MAX(v31)
+,SUM(m01),SUM(m02),SUM(m03),SUM(m04),SUM(m05),SUM(m06),SUM(m07),SUM(m08),SUM(m09),SUM(m10),SUM(m11),SUM(m12),SUM(m13),SUM(m14),SUM(m15),SUM(m16),SUM(m17),SUM(m18),SUM(m19),SUM(m20),SUM(m21),SUM(m22),SUM(m23),SUM(m24),SUM(m25),SUM(m26),SUM(m27),SUM(m28),SUM(m29),SUM(m30),SUM(m31)
+,SUM(mt),SUM(ct),SUM(meals)
+from #tmpa where gno='0'
+group by pno,part
+
+insert #tmpa(gno,pno,part
+,d01,d02,d03,d04,d05,d06,d07,d08,d09,d10,d11,d12,d13,d14,d15,d16,d17,d18,d19,d20,d21,d22,d23,d24,d25,d26,d27,d28,d29,d30,d31
+,v01,v02,v03,v04,v05,v06,v07,v08,v09,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24,v25,v26,v27,v28,v29,v30,v31
+,m01,m02,m03,m04,m05,m06,m07,m08,m09,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31
+,mt,ct,meals)
+select '2',CHAR(255),CHAR(255)
+,MAX(d01),MAX(d02),MAX(d03),MAX(d04),MAX(d05),MAX(d06),MAX(d07),MAX(d08),MAX(d09),MAX(d10),MAX(d11),MAX(d12),MAX(d13),MAX(d14),MAX(d15),MAX(d16),MAX(d17),MAX(d18),MAX(d19),MAX(d20),MAX(d21),MAX(d22),MAX(d23),MAX(d24),MAX(d25),MAX(d26),MAX(d27),MAX(d28),MAX(d29),MAX(d30),MAX(d31)
+,MAX(v01),MAX(v02),MAX(v03),MAX(v04),MAX(v05),MAX(v06),MAX(v07),MAX(v08),MAX(v09),MAX(v10),MAX(v11),MAX(v12),MAX(v13),MAX(v14),MAX(v15),MAX(v16),MAX(v17),MAX(v18),MAX(v19),MAX(v20),MAX(v21),MAX(v22),MAX(v23),MAX(v24),MAX(v25),MAX(v26),MAX(v27),MAX(v28),MAX(v29),MAX(v30),MAX(v31)
+,SUM(m01),SUM(m02),SUM(m03),SUM(m04),SUM(m05),SUM(m06),SUM(m07),SUM(m08),SUM(m09),SUM(m10),SUM(m11),SUM(m12),SUM(m13),SUM(m14),SUM(m15),SUM(m16),SUM(m17),SUM(m18),SUM(m19),SUM(m20),SUM(m21),SUM(m22),SUM(m23),SUM(m24),SUM(m25),SUM(m26),SUM(m27),SUM(m28),SUM(m29),SUM(m30),SUM(m31)
+,SUM(mt),SUM(ct),SUM(meals)
+from #tmpa where gno='0'
+
+update #tmpa
+set d01=right(d01,5),d02=right(d02,5),d03=right(d03,5),d04=right(d04,5),d05=right(d05,5),d06=right(d06,5),d07=right(d07,5),d08=right(d08,5),d09=right(d09,5),d10=right(d10,5),d11=right(d11,5),d12=right(d12,5),d13=right(d13,5),d14=right(d14,5),d15=right(d15,5),d16=right(d16,5),d17=right(d17,5),d18=right(d18,5),d19=right(d19,5),d20=right(d20,5),d21=right(d21,5),d22=right(d22,5),d23=right(d23,5),d24=right(d24,5),d25=right(d25,5),d26=right(d26,5),d27=right(d27,5),d28=right(d28,5),d29=right(d29,5),d30=right(d30,5),d31=right(d31,5) 
+
+select *,@now_date today from #tmpa order by pno,gno,sssno
+
+--刪除暫存資料庫 
+IF OBJECT_ID('tempdb..#tmpa')is not null 
+BEGIN 
+	drop table #tmpa
+END;
+-------------------------------------------------------------------------------------------------------------------
+z_salary_rk12_bk:--z_salary_rk12_bk
 declare @t_year nvarchar(20) 
 declare @t_bsssno nvarchar(20) 
 declare @t_esssno nvarchar(20) 
@@ -1619,6 +1799,12 @@ set @t_year = case when '#non' = [9] then '' else [9] end
 set @t_bsssno = case when '#non' = [4] then '' else [4] end
 set @t_esssno = case when '#non' = [5] then CHAR(255) else [5] end
 ---------------------------------------------------------------------------------------------------------------------------------------------------
+--刪除暫存資料庫 
+IF OBJECT_ID('tempdb..#tmpa')is not null 
+BEGIN 
+	drop table #tmpa
+END
+
 create table #tmpa( 
 	gno nvarchar(1),  
 	recno int,
@@ -1736,7 +1922,7 @@ from #tmpa order by sssno,gno,recno
 --刪除暫存資料庫 
 IF OBJECT_ID('tempdb..#tmpa')is not null 
 BEGIN 
-drop table #tmpa
+	drop table #tmpa
 END ;
 -------------------------------------------------------------------------------------------------------------------
 z_salary_rk13:--z_salary_rk13

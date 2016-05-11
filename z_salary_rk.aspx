@@ -60,6 +60,9 @@
                         type : '5',
                         name : 'xservice',
                         value : (('').concat(new Array("#non@全部", "1@在職", "0@離職"))).split(',')
+                    }, {
+                        type : '6',
+                        name : 'xmemo'
                     }]
                 });
                 q_popAssign();
