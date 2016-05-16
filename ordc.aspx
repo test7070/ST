@@ -128,8 +128,9 @@
 					var t_where = '';
 					
 					if (q_getPara('sys.project').toUpperCase()=='XY' ) {
-						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and b.datea>='"+q_date()+"' and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordcs" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
-						t_where = t_where;
+						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and b.datea>='"+q_date()+"' and not exists (select * from view_ordcs where ordbno=b.noa and no3=b.no3 and noa!='" + $('#txtNoa').val() + "')  ";
+						t_where = t_where+ q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) ;
+						t_where = t_where+" and a.kind='" + $('#cmbKind').val() + "' ";
 					}else {
 						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and ( b.noa+'_'+b.no3 not in (select isnull(ordbno,'')+'_'+isnull(no3,'') from view_ordcs" + r_accy + " where noa!='" + $('#txtNoa').val() + "' ) )  " + q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) + " and a.kind='" + $('#cmbKind').val() + "'";
 						t_where = t_where;
@@ -220,11 +221,17 @@
 							//取第一個廠商資料
 							if (q_getPara('sys.project').toUpperCase()=='XY' ){
 								var xy_tggno='';
+								var t_moretgg=false;
 								for (var i=0; i<b_ret.length;i++){
-									if(b_ret[i].tggno_xy!=''){
+									if(b_ret[i].tggno_xy.length>0 && xy_tggno.length==0){
 										xy_tggno=b_ret[i].tggno_xy;
-										break;
 									}
+									if(xy_tggno.length>0 && b_ret[i].tggno_xy.length>0 && xy_tggno!=b_ret[i].tggno_xy){
+										t_moretgg=true;
+									}
+								}
+								if(t_moretgg){
+									alert('匯入請購單，含多個不同採購廠商!!');
 								}
 								if(xy_tggno.length>0){
 									$('#txtTggno').val(xy_tggno);
