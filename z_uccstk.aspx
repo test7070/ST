@@ -121,7 +121,7 @@
             	$('#btnOk').hide();
             	$('#btnOk2').click(function(e){
             		switch($('#q_report').data('info').radioIndex) {
-                        case 0:
+                        case 2:
                         	Lock(1);
                         	q_func('qtxt.query.uccstk_1', 'uccstk.txt,uccstk_1,'+$('#txtXdate').val());
                             break;
