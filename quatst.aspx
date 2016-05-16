@@ -251,6 +251,8 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+				q_cmbParse("combUcolor", ',A240,SUS','s');
+				
 				q_gt('spec', '', 0, 0, 0, "", r_accy);
 				$('#cmbKind').change(function() {
 					size_change();
@@ -511,16 +513,23 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#combUcolor_' + j).click(function() {
+                    		if(q_cur==1 || q_cur==2){
+                    			var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+                    			if($(this).val().length>0)
+                        			$('#txtUcolor_'+n).val($(this).val());
+                    		}
+                        });
 						$('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                             $('#btnStyle_'+n).click();
                         });
                         $('#txtProductno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                             $('#btnProduct_'+n).click();
                         });
 						$('#textSize1_' + j).change(function() {sum();});
@@ -1248,6 +1257,7 @@
 						<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 						<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 						<td align="center" style="width:80px;"><a>等級</a></td>
+						<td align="center" style="width:140px;display:none;" class="pk">規範<BR>國別</td>
 						<td align="center" id='Size'><a id='lblSize_help'> </a></br><a id='lblSize_st'> </a></td>
 						<td align="center" style="width:10%;"><a id='lblSizea_st'></a><input id="btnShowInfo" type="button" value="代碼列表" onclick="showSizeInfo()"></td>
 						
@@ -1281,7 +1291,11 @@
 							<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 						</td>
 						<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
-						
+						<td class="pk" style="display:none;">
+	                        <input id="txtUcolor.*" type="text" style="width:75%;float: left;"/>
+	                        <select id="combUcolor.*" style="width:20%;float:left;"></select>
+	                        <input id="txtScolor.*" type="text" style="width:95%;"/>
+	                    </td>
 						<td>
 						<input class="txt num c8" id="textSize1.*" type="text" disabled="disabled"/>
 						<div id="x1.*" style="float: left">
