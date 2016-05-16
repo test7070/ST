@@ -169,11 +169,11 @@
 					Unlock(1);
 					return;
 				}
-				if ($('#txtDatea').val().substring(0, 3) != r_accy) {
+				/*if ($('#txtDatea').val().substring(0, 3) != r_accy) {
 					alert('年度異常錯誤，請切換到【' + $('#txtDatea').val().substring(0, 3) + '】年度再作業。');
 					Unlock(1);
 					return;
-				}
+				}*/
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
@@ -300,6 +300,8 @@
 				}
 				q_nowf();
 				as['date'] = abbm2['date'];
+				as['storeno'] = abbm2['storeno'];
+				as['storeinno'] = abbm2['storeinno'];
 				return true;
 			}
 
