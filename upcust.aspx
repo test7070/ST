@@ -70,7 +70,7 @@
                         if(txtfiles.length>0)
                         	$('#xdownload').attr('src','upcust_download.aspx?FileName='+$('#'+txtOrgName[0]+'name_'+txtOrgName[1]).val()+'&TempName='+$('#'+txtfiles).val());
                         else
-                        	alert('無資料...'+n);
+                        	alert('無資料...!!');
 					});
 				});
 			}
