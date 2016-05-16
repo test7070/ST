@@ -25,9 +25,14 @@
 			function q_gfPost() {
 				q_getFormat();
 				q_langShow();
-				bbmMask = [['txtBdate', '9999/99/99'], ['txtEdate', '9999/99/99']];
+				bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", '@全部'+q_getPara('upcust.typea'));
+				
+				if (q_getPara('sys.project').toUpperCase()=='XY'){
+					aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,invoicetitle', 'txtCustno', 'cust_b.aspx']);
+				}
+				
 			}
 			
 			function q_gtPost(t_name) {
