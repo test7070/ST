@@ -29,22 +29,22 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
-                    case 'style':
-                        t_style = '';
-                        var as = _q_appendData("style", "", true);
-                        for ( i = 0; i < as.length; i++) {
-                            t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' +as[i].noa+'.'+ as[i].product;
-                        }
-                        q_gt('ucc', '', 0, 0, 0, "");
-                        break;
-                    case 'ucc':
-                        t_ucc = '';
-                        var as = _q_appendData("ucc", "", true);
-                        for ( i = 0; i < as.length; i++) {
-                            t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+'.'+as[i].product;
-                        }
-                        loadFinish();
-                        break;
+                case 'style':
+                    t_style = '';
+                    var as = _q_appendData("style", "", true);
+                    for ( i = 0; i < as.length; i++) {
+                        t_style += (t_style.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + '.' + as[i].product;
+                    }
+                    q_gt('ucc', '', 0, 0, 0, "");
+                    break;
+                case 'ucc':
+                    t_ucc = '';
+                    var as = _q_appendData("ucc", "", true);
+                    for ( i = 0; i < as.length; i++) {
+                        t_ucc += (t_ucc.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + '.' + as[i].product;
+                    }
+                    loadFinish();
+                    break;
                 }
             }
 
@@ -79,9 +79,9 @@
                         type : '1',
                         name : 'radius'
                     }, {
-						type : '1', //[13][14] 9
-						name : 'ydate'
-					}, {
+                        type : '1', //[13][14] 9
+                        name : 'ydate'
+                    }, {
                         type : '8', //[15] 10
                         name : 'yitype',
                         value : q_getPara('uccc.itype').split(',')
@@ -93,32 +93,61 @@
                 });
                 q_popAssign();
                 q_langShow();
-				
-				$('#txtYdate1').mask('999/99/99');
-				$('#txtYdate1').datepicker();
-				$('#txtYdate2').mask('999/99/99');
-				$('#txtYdate2').datepicker();
-				
+
+                $('#txtYdate1').mask('999/99/99');
+                $('#txtYdate1').datepicker();
+                $('#txtYdate2').mask('999/99/99');
+                $('#txtYdate2').datepicker();
+
                 $('#txtXdate').mask('999/99/99');
                 $('#txtXdate').datepicker();
                 $('#txtXdate').val(q_date());
                 $('#chkXstyle').children('input').attr('checked', 'checked');
-                
-                $('#txtDime1').css('text-align','right');
-                $('#txtDime2').css('text-align','right').val(999999);
-                $('#txtWidth1').css('text-align','right');
-                $('#txtWidth2').css('text-align','right').val(999999);
-                $('#txtLength1').css('text-align','right');
-                $('#txtLength2').css('text-align','right').val(999999);
-                $('#txtRadius1').css('text-align','right');
-                $('#txtRadius2').css('text-align','right').val(999999);
-                
+
+                $('#txtDime1').css('text-align', 'right');
+                $('#txtDime2').css('text-align', 'right').val(999999);
+                $('#txtWidth1').css('text-align', 'right');
+                $('#txtWidth2').css('text-align', 'right').val(999999);
+                $('#txtLength1').css('text-align', 'right');
+                $('#txtLength2').css('text-align', 'right').val(999999);
+                $('#txtRadius1').css('text-align', 'right');
+                $('#txtRadius2').css('text-align', 'right').val(999999);
+
                 $('#chkYitype').children('input').eq(0).attr('checked', 'checked');
-				$('#chkYitype').children('input').eq(1).attr('checked', 'checked');
-				$('#chkYstyle').children('input').attr('checked', 'checked');
+                $('#chkYitype').children('input').eq(1).attr('checked', 'checked');
+                $('#chkYstyle').children('input').attr('checked', 'checked');
+                
+                $('<input id="btnOk2" type="button" value="查詢" style="font-size: 16px; font-weight: bold; color: blue; cursor: pointer;"/>').insertBefore('#btnOk');
+            	$('#btnOk').hide();
+            	$('#btnOk2').click(function(e){
+            		switch($('#q_report').data('info').radioIndex) {
+                        case 0:
+                        	Lock(1);
+                        	q_func('qtxt.query.uccstk_1', 'uccstk.txt,uccstk_1,'+$('#txtXdate').val());
+                            break;
+                        default:
+                           	$('#btnOk').click();
+                            break;
+                    }
+            	});
+            }
+            function q_boxClose(s2) {
             }
 
-            function q_boxClose(s2) {
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                case 'qtxt.query.uccstk_1':
+                    var as = _q_appendData("tmp0", "", true);
+                    if (as[0] != undefined) {
+                        alert(as[0].memo);
+                    } else {
+                        alert('error!');
+                    }
+                    Unlock(1);
+                    break;
+                default:
+                    break;
+                }
             }
 		</script>
 	</head>
@@ -130,7 +159,7 @@
 		<div id="q_menu"></div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
-			    <a style="color:darkred;">製管派令有輸入【代工】，單價一律為0。</a>
+				<a style="color:darkred;">製管派令有輸入【代工】，單價一律為0。</a>
 				<div id="q_report"></div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
