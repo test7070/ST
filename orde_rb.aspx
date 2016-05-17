@@ -838,6 +838,10 @@
 			}
 			
 			function btnOk() {
+				if (!confirm('確定要儲存?')){
+					return;
+				}
+				
 				t_err = '';
 				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')], ['cmbKind', '發票開立'], ['cmbPartstore', '倉庫']]);
 				if (t_err.length > 0) {

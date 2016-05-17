@@ -483,6 +483,13 @@ update #tmp set accc2 = case when RIGHT(@t_bdate,5)='01/01' and RIGHT(@t_edate,5
 where gno = '0'
 delete #tmp where money1=0 and money2=0 and total=0 and blance=0
 
+if((select count(*) from #tmp)>0)
+begin
+	--總計
+	insert into #tmp(gno,accc5,money1,money2,total)
+	select '2',char(255),SUM(money1),SUM(money2),SUM(total) from #tmp
+end
+
 select 
 	dbo.getComma(total ,0)ttl,
 	dbo.getComma(money1,0)mny1,
