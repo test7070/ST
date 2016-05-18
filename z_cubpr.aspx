@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -21,6 +21,11 @@
               q_getId();
               q_gf('','z_cubpr');
          });
+          $('#q_report').click(function(e) {
+					if(isinvosystem=='1'){//沒有發票系統
+	                	$('#Xshowenda').hide();
+	                }
+				});
          function q_gfPost() {
              $('#q_report').q_report({
                  fileName : 'z_cubpr',
@@ -49,8 +54,18 @@
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
+                    },{/*6[11]*/
+                        type : '8', //[24]//顯示發票號碼//4000
+                        name : 'xshowenda',
+                        value : "1@顯示完工".split(',')
                     }]
           });
+          
+                $('#Xshowenda').css('width', '300px').css('height', '30px');
+                $('#Xshowenda .label').css('width','0px');
+                $('#chkXshowenda').css('width', '220px').css('margin-top', '5px');
+                $('#chkXshowenda span').css('width','180px')
+
           q_popAssign();
           q_getFormat();
           q_langShow();
@@ -66,10 +81,11 @@
            $('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',30).substr(0,r_lenm)+'/01',-1));    
                 				
           }
+          
 
           function q_boxClose(s2) {
           }
-
+			
           function q_gtPost(s2) {
           }
 
