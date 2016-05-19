@@ -292,10 +292,12 @@ declare @detail nvarchar(max) = case when '#non'=[22] then '' else [22] end
 		coin nvarchar(50)
 		,gmount float
 		,gweight float
+		
+		,[contract] nvarchar(50)
 	)	
 	insert into @tmp(gno,kind,noa,no2,datea,odate,tggno,comp,pno,pname,spec,size,pmount,pweight
 		,price,ptotal,e,a,notva,notvb,noptotal,qhref,coin
-		,gmount,gweight)
+		,gmount,gweight,[contract])
 		select '0' gno,a.kind, a.noa, b.no2, a.datea, a.odate, a.tggno, a.tgg, b.productno pno,b.product pname, 
 				b.spec,
 				(case when ltrim(rtrim(isnull(b.size,'')))='' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else b.size end) size,
@@ -307,6 +309,7 @@ declare @detail nvarchar(max) = case when '#non'=[22] then '' else [22] end
 				'ordcst'+b.accy,a.coin
 				,ISNULL(c.mount,0)+ISNULL(d.mount,0)
 				,ISNULL(c.[weight],0)+ISNULL(d.[weight],0)
+				,a.[contract]
 		from view_ordcs b
 		left join view_ordc a on a.accy=b.accy and a.noa=b.noa
 		outer apply(select sum(rc2s.mount) mount,sum(rc2s.weight) weight from view_rc2s rc2s where (rc2s.ordeno=b.noa) and (b.no2=rc2s.no2)) c
@@ -364,6 +367,7 @@ declare @detail nvarchar(max) = case when '#non'=[22] then '' else [22] end
 			,case when ISNULL(a.gweight,0)=0 then '' else dbo.getComma( a.gweight,0) end gweight
 			,case when ISNULL(a.gmount,0)=0 then '' else dbo.getComma( a.gmount,0) end gmount
 			,a.rc2size
+			,a.[contract]
 		from @tmp a
 		left join spec b on a.spec=b.noa
 		order by a.tggno,a.comp,a.noa,a.no2,a.odate,a.gno;
