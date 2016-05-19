@@ -488,6 +488,7 @@ begin
 	--總計
 	insert into #tmp(gno,accc5,money1,money2,total)
 	select '2',char(255),SUM(money1),SUM(money2),SUM(total) from #tmp
+	where gno='1'
 end
 
 select 
