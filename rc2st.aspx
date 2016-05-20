@@ -949,7 +949,7 @@
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#chkAprice_'+j).click(function(e){refreshBbs();});
 						$('#btnCert_' + j).click(function() {
-							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 							btnCert_Seq = n;
 							t_where = '';
 							t_uno = $('#txtUno_' + n).val();
@@ -960,7 +960,7 @@
 						});
 						$('#txtUno_' + j).change(function(e) {
 							if ($('#cmbTypea').val() != '2') {
-								var n = $(this).attr('id').replace('txtUno_', '');
+								var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 								var t_uno = $.trim($(this).val());
 								var t_noa = $.trim($('#txtNoa').val());
 								q_gt('view_uccb', "where=^^uno='" + t_uno + "' and not(accy='" + r_accy + "' and tablea='rc2s' and noa='" + t_noa + "')^^", 0, 0, 0, 'checkUno_' + n);
@@ -978,16 +978,22 @@
 						$('#txtTotal_' + j).change(function() {
 							sum();
 						});
+						$('#txtStoreno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+                            $('#btnStoreno_'+n).click();
+                        });
 						$('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                             $('#btnStyle_'+n).click();
                         });
                         $('#txtProductno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                             $('#btnProduct_'+n).click();
                         });
 						//計算理論重
@@ -1006,7 +1012,7 @@
 						$('#txtSize_' + j).change(function(e) {
 							if ($.trim($(this).val).length == 0)
 								return;
-							var n = $(this).attr('id').replace('txtSize_', '');
+							var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 							var data = tranSize($.trim($(this).val()));
 							$(this).val(tranSize($.trim($(this).val()), 'getsize'));
 							$('#textSize1_' + n).val('');
@@ -1687,7 +1693,7 @@
 					<td align="center" style="width:100px;display:none;" class="rk">包裝方式</td>
 					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
-					<td align="center" style="width:60px;" class="RK_hide"><a id='lblPlace_st'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblPlace_st'> </a></td>
 					<td align="center" style="width:190px;"><a id='lblOrdcnos_st'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -1758,12 +1764,11 @@
 					<td style="display:none;" class="rk"><input id="txtDescr.*" type="text" style="width:95%;" maxlength="20"/></td>
 					<td ><input id="txtUno2.*" type="text" style="width:90%;"/></td>
 					<td>
-						<input class="btn"  id="btnStoreno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
-						<input type="text" id="txtStoreno.*"  style="width:70px; float:left;"/>
-						<span style="display:block; width:20px;float:left;"> </span>
-						<input type="text" id="txtStore.*"  style="width:70px; float:left;"/>
+						<input type="text" id="txtStoreno.*"  style="width:95%; float:left;"/>
+						<input type="text" id="txtStore.*"  style="width:95%; float:left;"/>
+						<input id="btnStoreno.*" type="button" style="display:none;" />
 					</td>
-					<td class="RK_hide"><input id="txtPlace.*" type="text" style="width:90%;"/></td>
+					<td><input id="txtPlace.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
 						<input id="txtNo2.*" type="text"  style="width:40px;float:left;"/>
