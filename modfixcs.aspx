@@ -73,7 +73,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('modfixcs_s.aspx', q_name + '_s', "500px", "250px", $('#btnSeek').val());
+                q_box('modfixcs_s.aspx', q_name + '_s', "500px", "300px", $('#btnSeek').val());
             }
 
             function btnIns() {
