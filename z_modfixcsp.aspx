@@ -25,12 +25,12 @@
                 $('#q_report').q_report({
                     fileName : 'z_modfixcsp',
                     options : [
-						{/*1 [1] */
+						{/*1 [1][2] */
                         type : '1',
                         name : 'xdate'
-                    },{
-                        type : '6',
-                        name : 'xnoa'
+                    },{/*1 [3][4] */
+                        type : '1',
+                        name : 'mouldno'
                     }]
           });
           q_popAssign();
