@@ -42,6 +42,7 @@
 	            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
             	, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
 	            , ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
+            	, ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
             );
             brwCount2 = 7;
             $(document).ready(function() {
@@ -588,16 +589,22 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                 	$('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+                    	$('#txtStoreno_' + j).bind('contextmenu', function(e) {
+                            /*滑鼠右鍵*/
+                            e.preventDefault();
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+                            $('#btnStore_'+n).click();
+                        });
                         $('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                             $('#btnStyle_'+n).click();
                         });
                         $('#txtProductno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                             $('#btnProduct_'+n).click();
                         });
                         $('#txtUno_' + j).change(function() {
@@ -1271,6 +1278,7 @@
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>長度</a></td>	
 					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
 					<td align="center" style="width:50px;"><a id='lblStores'>倉庫</a></td>
+					<td align="center" style="width:50px;"><a id='lblPlace'>儲位</a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:50px; display:none;" class="pk"><a id='lblUnit2'>數量<BR>單位</a></td>
 					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
@@ -1324,7 +1332,12 @@
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td ><input  id="txtSource.*" type="text" style="width:95%;"/></td>
-					<td ><input  id="txtStoreno.*" type="text" style="width:95%;"/></td>
+					<td >
+						<input id="txtStoreno.*" type="text" style="width:95%;"/>
+						<input id="txtStore.*" type="text" style="width:95%;"/>
+						<input id="btnStore.*" type="button" style="display:none;">
+					</td>
+					<td ><input  id="txtPlace.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
