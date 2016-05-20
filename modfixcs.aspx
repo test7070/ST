@@ -73,13 +73,13 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('modfixcs_s.aspx', q_name + '_s', "500px", "250px", $('#btnSeek').val());
+                q_box('modfixcs_s.aspx', q_name + '_s', "500px", "300px", $('#btnSeek').val());
             }
 
             function btnIns() {
                 _btnIns();
                 $('#txtNoa').val('AUTO');
-                $('#txtNoq').val('001');
+                /*$('#txtNoq').val('001');*/
                 $('#txtDatea').focus();
                 $('#txtDatea').val(q_date());
             }
@@ -345,19 +345,24 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl">模具單號</a></td>
-						<td>
-							<input id="txtNoa"  type="text" class="txt c1" />
-							<input id="txtNoq"  type="hidden" class="txt c1" />
-						</td>
+						<td><input id="txtNoa"  type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblMouldno' class="lbl">模具編號</a></td>
+						<td><input id="txtMouldno"  type="text" class="txt c1" /></td>
+
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblNoa' class="lbl">序號</a></td>
+						<td><input id="txtNoq"  type="text" class="txt c1" />	</td>
 						<td><span> </span><a id='lblDatea' class="lbl">開單日期</a></td>
 						<td><input id="txtDatea"  type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblCode' class="lbl">需求單位</a></td>
 						<td><input id="txtCode"  type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblDetail' class="lbl">商標</a></td>
 						<td><input id="txtDetail"  type="text" class="txt c1" /></td>
+
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblNob' class="lbl btn">模具編號</a></td>
+						<td><span> </span><a id='lblNob' class="lbl btn">模具生產編號</a></td>
 						<td><input id="txtNob" type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblModel' class="lbl">模具名稱</a></td>
 						<td><input id="txtModel" type="text" class="txt c1"/></td>
