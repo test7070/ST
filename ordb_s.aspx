@@ -31,6 +31,7 @@
                 bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbKind", '@全部,'+q_getPara('ordc.kind'));
+                q_cmbParse("cmbTrantype",  '@全部,'+q_getPara('sys.tran'));
                 $('#txtBdate').datepicker();
                 $('#txtEdate').datepicker(); 
                 $('#txtNoa').focus();
@@ -38,6 +39,7 @@
                 if(q_getPara('sys.project').toUpperCase()=='XY'){
                 	$('.ordeno').show();
                 	$('.cust').show();
+                	$('.trantype').show();
                 }
             }
 
@@ -51,10 +53,12 @@
                 t_ordeno = $('#txtOrdeno').val();
                 t_custno = $('#txtCustno').val();
                 t_cust = $('#txtCust').val();
+                t_trantype = $('#cmbTrantype').val();
                 
                 var t_where = " 1=1 " 
                 + q_sqlPara2("noa", t_noa) 
-                + q_sqlPara2("datea", t_bdate, t_edate)              
+                + q_sqlPara2("datea", t_bdate, t_edate)      
+                + q_sqlPara2("trantype", t_trantype)        
                 + q_sqlPara2("tggno", t_tggno);
                 if (t_kind.length>0)
                     t_where += " and kind='"+t_kind+"'";
@@ -120,6 +124,10 @@
                     <td class='seek'  style="width:20%;"><a id='lblCustno'> </a></td>
                     <td><input class="txt" id="txtCustno" type="text" style="width:215px; font-size:medium;" /></td>
                 </tr>
+                <tr class='seek_tr trantype' style="display: none;">
+					<td><a>交運方式 </a></td>
+					<td><select id="cmbTrantype" style="width:215px; font-size:medium;"> </select></td>
+				</tr>
             </table>
             <!--#include file="../inc/seek_ctrl.inc"-->
         </div>
