@@ -219,6 +219,12 @@
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					//聯琦 採購小數位沒有限制,進貨也一樣
+					bbsNum = [['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+				}else{
+					bbsNum = [['txtPrice', 15, 3, 1], ['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+				}
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('rc2.typea'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
@@ -873,6 +879,8 @@
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
 					case 'qtxt.query.genUno':
+						q_func('rc2_post.post.a1', r_accy + ',' + $('#txtNoa').val() + ',0');
+						q_func('rc2_post.post.a1', r_accy + ',' + $('#txtNoa').val() + ',1');
 						q_reLoad();
 						break;
 					case 'qtxt.query.getuno':

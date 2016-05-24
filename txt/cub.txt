@@ -46,12 +46,13 @@
 			where a.accy=@accy and a.noa=@cubno
 			and len(isnull(a.uno,''))>0
 			--皮膜
-			insert into #cub2get(uno,productno,product,mount,[weight])
+			--因為CUBT就會扣了,所以就不算了
+			/*insert into #cub2get(uno,productno,product,mount,[weight])
 			select a.uno,a.productno,a.product,a.mount,a.[weight]
 			from view_cubt a
 			left join ucc b on a.productno=b.noa
 			where a.accy=@accy and a.noa=@cubno
-			and len(isnull(a.uno,''))>0
+			and len(isnull(a.uno,''))>0*/
 			--物料  批號存在ucolor那欄
 			insert into #cub2get(uno,productno,product,mount,[weight])
 			select a.ucolor,a.productno,a.product,a.mount,a.[weight]
