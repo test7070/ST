@@ -475,14 +475,14 @@
 								$('#txtProductno1_'+b_seq).val(b_ret[0].noa);
 								$('#txtProduct_'+b_seq).val(b_ret[0].product);
 								$('#txtUnit_'+b_seq).val(b_ret[0].unit);
-								$('#txtSpec_'+b_seq).val(b_ret[0].spec+' '+b_ret[0].engpro);
+								$('#txtSpec_'+b_seq).val(b_ret[0].style+' '+b_ret[0].spec+' '+b_ret[0].engpro);
 								$('#txtStdmount_'+b_seq).val(b_ret[0].stdmount);
 								$('#txtProduct_'+b_seq).focus().select();
 							}else{
 								$('#txtProductno3_'+b_seq).val(b_ret[0].noa);
 								$('#txtProduct_'+b_seq).val(b_ret[0].product);
 								$('#txtUnit_'+b_seq).val(b_ret[0].unit);
-								$('#txtSpec_'+b_seq).val(b_ret[0].spec+' '+b_ret[0].engpro);
+								$('#txtSpec_'+b_seq).val(b_ret[0].style+' '+b_ret[0].spec+' '+b_ret[0].engpro);
 								$('#txtStdmount_'+b_seq).val(b_ret[0].stdmount);
 								$('#txtProduct_'+b_seq).focus().select();
 							}
@@ -494,21 +494,30 @@
 							q_gt('ordb', "where=^^ noa='" + t_noa + "' ^^", 0, 0, 0, "GetTggt",r_accy);
 						},800)
 						break;
-					case 'ordes':
+					case 'ordes': //XY 用
 						if (q_cur > 0 && q_cur < 4) {
 							b_ret = getb_ret();
 							if (!b_ret || b_ret.length == 0)
 								return;
+							//if (q_getPara('sys.project').toUpperCase()!='XY')
+							//	return;
+								
 							for (var j = 0; j < q_bbsCount; j++) {
 								$('#btnMinus_' + j).click();
 							}
 							
-							var t_post='',t_addr='';
+							var t_post='',t_addr='',t_memo='',t_err='';
 							for (var i = 0; i < b_ret.length; i++) {
-								var t_where =" noa='"+b_ret[0].noa+"' ";
+								var t_where =" noa='"+b_ret[i].noa+"' ";
 								q_gt('view_orde', "where=^^ "+t_where+" ^^", 0, 0, 0, "getordeaddr",r_accy,1);
 								var as = _q_appendData("view_orde", "", true);
 								if (as[0] != undefined) {
+									if(i==0){ //只取第一筆訂單
+										$('#cmbTrantype').val(as[0].trantype);
+									}
+									if(t_memo.indexOf(as[0].noa)==-1)
+										t_memo=t_memo+as[0].noa+":"+as[0].memo+" ";
+									
 									if(as[0].trantype=='廠商代送'){
 										if(as[0].addr2.length>0){
 											if(t_addr.indexOf(as[0].addr2)==-1){
@@ -523,6 +532,27 @@
 										}
 									}
 								}
+								
+								//合併
+								b_ret[i].spec=b_ret[i].classa+' '+b_ret[i].spec;
+								//產品主檔
+								if (!emp(b_ret[i].productno)){
+									var t_where =" noa='"+b_ret[i].productno+"' ";
+									q_gt('ucc', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
+									var as = _q_appendData("ucc", "", true, true);
+									if (as[0] != undefined) {
+										b_ret[i].spec=b_ret[i].spec+' '+as[0].engpro;
+										if(as[0].cdate!='採購'){
+											t_err=t_err+b_ret[i].product+' 採購製令方式 非【採購】\n';
+										}
+									}else{
+										t_err=t_err+b_ret[i].product+' 不在產品主檔內!!\n';
+									}
+								}
+							}
+							
+							if(t_err.length>0){
+								alert(t_err);
 							}
 							
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProductno1,txtProduct,txtUnit,txtSpec,txtMount,txtPrice,txtOrdeno,txtNo2,txtCustno,txtComp', b_ret.length, b_ret, 'productno,productno,product,unit,spec,mount,price,noa,no2,custno,comp', 'txtOrdeno,txtNo2');
@@ -531,7 +561,9 @@
 								$('#txtPost').val(t_post);
 								$('#txtAddr').val(t_addr);
 							}
-							
+							if(t_memo.length>0){
+								$('#txtMemo').val(t_memo);
+							}
 							if(q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val())){
 								for (var j = 0; j < q_bbsCount; j++) {
 									if (!emp($('#txtProductno1_'+j).val())){
@@ -841,7 +873,7 @@
 								q_gt('ucc', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
 								var as = _q_appendData("ucc", "", true, true);
 								if (as[0] != undefined) {
-									$('#txtSpec_'+b_seq).val(as[0].spec+' '+as[0].engpro);
+									$('#txtSpec_'+b_seq).val(as[0].style+' '+as[0].spec+' '+as[0].engpro);
 								}
 							}
 						});
@@ -996,7 +1028,7 @@
 							q_gt('ucc', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
 							var as = _q_appendData("ucc", "", true, true);
 							if (as[0] != undefined) {
-								$('#txtSpec_'+b_seq).val(as[0].spec+' '+as[0].engpro);
+								$('#txtSpec_'+b_seq).val(as[0].style+' '+as[0].spec+' '+as[0].engpro);
 							}
 						}
 						break;
