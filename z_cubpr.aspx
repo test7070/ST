@@ -55,9 +55,13 @@
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
                     },{/*6[11]*/
-                        type : '8', //[24]//顯示發票號碼//4000
+                        type : '8', //完工顯示//
                         name : 'xshowenda',
                         value : "1@顯示完工".split(',')
+                    }, {/*7 [12]*/
+                        type : '5',//篩選完工未完工//
+                        name : 'xtype',
+                        value : [' @全部','0@未完工','1@完工']
                     }]
           });
           
