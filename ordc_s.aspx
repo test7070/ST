@@ -30,9 +30,13 @@
                 bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbKind", '@全部,'+q_getPara('ordc.kind'));
+                q_cmbParse("cmbTrantype", '@全部,'+q_getPara('sys.tran'));
                 $('#txtBdate').datepicker();
                 $('#txtEdate').datepicker(); 
                 $('#txtNoa').focus();
+                if(q_getPara('sys.project').toUpperCase()=='XY'){
+                	$('.trantype').show();
+                }
             }
 
             function q_seekStr() {
@@ -43,10 +47,12 @@
                 t_ordbno = $.trim($('#txtOrdbno').val());
                 t_bdate = $('#txtBdate').val();
                 t_edate = $('#txtEdate').val();
+                t_trantype = $('#cmbTrantype').val();
                 
                 var t_where = " 1=1 " 
                 + q_sqlPara2("noa", t_noa) 
-                + q_sqlPara2("datea", t_bdate, t_edate)              
+                + q_sqlPara2("datea", t_bdate, t_edate)          
+                + q_sqlPara2("trantype", t_trantype)    
                 + q_sqlPara2("tggno", t_tggno);
                 if (t_kind.length>0)
                     t_where += " and kind='"+t_kind+"'";
@@ -84,37 +90,33 @@
                     <td><select id="cmbKind" style="width:215px; font-size:medium;" > </select></td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
-                    <td>
-                    <input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" />
-                    </td>
+                    <td class='seek'  style="width:20%;"><a id='lblNoa'> </a></td>
+                    <td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td   style="width:35%;" ><a id='lblDatea'></a></td>
+                    <td   style="width:35%;" ><a id='lblDatea'> </a></td>
                     <td style="width:65%;  ">
-                    <input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
-                    <span style="display:inline-block; vertical-align:middle">&sim;</span>
-                    <input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
+	                    <input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
+	                    <span style="display:inline-block; vertical-align:middle">&sim;</span>
+	                    <input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
                     </td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblTggno'></a></td>
-                    <td>
-                    <input class="txt" id="txtTggno" type="text" style="width:215px; font-size:medium;" />
-                    </td>
+                    <td class='seek'  style="width:20%;"><a id='lblTggno'> </a></td>
+                    <td><input class="txt" id="txtTggno" type="text" style="width:215px; font-size:medium;" /></td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblComp'></a></td>
-                    <td>
-                    <input class="txt" id="txtComp" type="text" style="width:215px; font-size:medium;" />
-                    </td>
+                    <td class='seek'  style="width:20%;"><a id='lblComp'> </a></td>
+                    <td><input class="txt" id="txtComp" type="text" style="width:215px; font-size:medium;" /></td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblOrdbno'></a></td>
-                    <td>
-                    <input class="txt" id="txtOrdbno" type="text" style="width:215px; font-size:medium;" />
-                    </td>
+                    <td class='seek'  style="width:20%;"><a id='lblOrdbno'> </a></td>
+                    <td><input class="txt" id="txtOrdbno" type="text" style="width:215px; font-size:medium;" /></td>
                 </tr>
+                <tr class='seek_tr trantype' style="display: none;">
+					<td><a>交運方式 </a></td>
+					<td><select id="cmbTrantype" style="width:215px; font-size:medium;"> </select></td>
+				</tr>
             </table>
             <!--#include file="../inc/seek_ctrl.inc"-->
         </div>

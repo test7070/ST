@@ -478,7 +478,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('ordc_s.aspx', q_name + '_s', "550px", "400px", q_getMsg("popSeek"));
+				q_box('ordc_s.aspx', q_name + '_s', "520px", "420px", q_getMsg("popSeek"));
 			}
 
 			function combPaytype_chg() {
@@ -540,7 +540,7 @@
 								q_gt('ucc', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
 								var as = _q_appendData("ucc", "", true, true);
 								if (as[0] != undefined) {
-									$('#txtSpec_'+b_seq).val(as[0].spec+' '+as[0].engpro);
+									$('#txtSpec_'+b_seq).val(as[0].style+' '+as[0].spec+' '+as[0].engpro);
 								}
 							}
 						});
@@ -879,7 +879,7 @@
 							q_gt('ucc', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
 							var as = _q_appendData("ucc", "", true, true);
 							if (as[0] != undefined) {
-								$('#txtSpec_'+b_seq).val(as[0].spec+' '+as[0].engpro);
+								$('#txtSpec_'+b_seq).val(as[0].style+' '+as[0].spec+' '+as[0].engpro);
 							}
 						}
 						break;

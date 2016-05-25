@@ -37,7 +37,7 @@ set timea=case when left(timea,2)!='12' then cast(cast(left(timea,2) as int)+12 
 where apm='下午' or apm='PM' 
 
 update a
-set sssno=isnull((select top 1 noa from sss where namea=a.namea and dbo.AD2ChineseEraName(datea) between indate and case when outdate='' then '999/99/99' else outdate end ),'')
+set sssno=isnull((select top 1 noa from sss where namea=a.namea and dbo.AD2ChineseEraName(a.datea) between indate and case when outdate='' then '999/99/99' else outdate end order by noa ),'')
 from #tmp a 
 
 update #tmp
@@ -86,6 +86,8 @@ declare @memo nvarchar(MAX)
 declare @clockin nvarchar(50)
 declare @clockout nvarchar(50)
 
+--105/05/24 備註只放 是否有請假
+
 declare cursor_table cursor for
 select sssno,namea,datea,timea,memo from #tmp order by datea,sssno,timea
 open cursor_table
@@ -98,23 +100,24 @@ begin
 		if(select count(*) from #bbs where noa=@datea and sssno=@sssno and namea=@namea)=0
 		begin
 			insert #bbs(noa,sssno,namea,clockin,memo)
-			select @datea,@sssno,@namea,@timea,case when @memo!='上班簽到' then @timea+' '+@memo else '' end
+			select @datea,@sssno,@namea,@timea,''
+			--,case when @memo!='上班簽到' then @timea+' '+@memo else '' end
 		end
 		else
 		begin
-			set @clockin=isnull((select clockin from #bbs where noa=@datea and sssno=@sssno and namea=@namea),'99:99:99')
+			set @clockin=isnull((select clockin from #bbs where noa=@datea and sssno=@sssno and namea=@namea ),'99:99:99')
 			if(@clockin>@timea)
 			begin
 				update #bbs
 				set clockin=@timea
 				where noa=@datea and sssno=@sssno and namea=@namea
 			end
-			if(@memo!='上班簽到')
-			begin
-				update #bbs
-				set memo=memo+case when len(memo)>0 then ' ' else '' end+@timea+' '+@memo
-				where noa=@datea and sssno=@sssno and namea=@namea
-			end
+			--if(@memo!='上班簽到')
+			--begin
+			--	update #bbs
+			--	set memo=memo+case when len(memo)>0 then ' ' else '' end+@timea+' '+@memo
+			--	where noa=@datea and sssno=@sssno and namea=@namea
+			--end
 		end
 		if(@memo='加班簽到')
 		begin
@@ -128,7 +131,8 @@ begin
 		if(select count(*) from #bbs where noa=@datea and sssno=@sssno and namea=@namea)=0
 		begin
 			insert #bbs(noa,sssno,namea,clockout,memo)
-			select @datea,@sssno,@namea,@timea,case when @memo!='下班簽退' then @timea+' '+@memo else '' end
+			select @datea,@sssno,@namea,@timea,''
+			--,case when @memo!='下班簽退' then @timea+' '+@memo else '' end
 		end
 		else
 		begin
@@ -139,12 +143,12 @@ begin
 				set clockout=@timea
 				where noa=@datea and sssno=@sssno and namea=@namea
 			end
-			if(@memo!='下班簽退')
-			begin
-				update #bbs
-				set memo=memo+case when len(memo)>0 then ' ' else '' end+@timea+' '+@memo
-				where noa=@datea and sssno=@sssno and namea=@namea
-			end
+			--if(@memo!='下班簽退')
+			--begin
+			--	update #bbs
+			--	set memo=memo+case when len(memo)>0 then ' ' else '' end+@timea+' '+@memo
+			--	where noa=@datea and sssno=@sssno and namea=@namea
+			--end
 		end
 		if(@memo='加班簽退')
 		begin
@@ -167,9 +171,10 @@ from (select ROW_NUMBER()over (partition by noa order by noa,sssno,namea) rr,noq
 update #bbs set tweek=DATEPART(WEEKDAY,noa)-1
 
 update a
-set whours=(cast(datediff(MINUTE,noa+' '+'17:00:00',noa+' '+ework)as float)/60)
+set whours=(cast(datediff(MINUTE,noa+' '+case when b.typea='廠務' then '16:00:00' else '17:00:00' end,noa+' '+ework)as float)/60)
 from #bbs a
-where isnull(ework,'')!='' and ework >='17:00:00'
+outer apply (select typea from sss where noa=a.sssno)b
+where isnull(ework,'')!='' and ework >=case when b.typea='廠務' then '16:00:00' else '17:00:00' end
 and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
