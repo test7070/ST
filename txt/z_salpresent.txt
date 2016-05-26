@@ -219,10 +219,13 @@ declare @r_len int=[14]
 declare @tmp table(
 		gno nvarchar(1),
 		noa nvarchar(50),
+		week nvarchar(50),
 		sssno nvarchar(50),
 		namea nvarchar(50),
 		clockin nvarchar(50),
 		clockout nvarchar(50),
+		restin nvarchar(50),
+		restout nvarchar(50),
 		w133 float,
 		w166 float,
 		w100 float,
@@ -268,7 +271,8 @@ begin
 end
 
 insert into @tmp 
-select '0' gno,a.noa,a.sssno,a.namea,a.clockin,a.clockout,a.w133,a.w166,a.w100,a.hr_special,a.memo,@day1,0 
+select '0' gno,a.noa,DATEPART(WEEKDAY,case when @r_len=3 then dbo.ChineseEraName2AD(a.noa) else a.noa end)-1
+,a.sssno,a.namea,a.clockin,a.clockout,a.restin,a.restout,a.w133,a.w166,a.w100,a.hr_special,a.memo,@day1,0 
 from salpresents a left join sss b on a.sssno = b.noa
 where (a.noa between @t_bdate and @t_edate)
 and (a.sssno between @t_bsssno and @t_esssno)
@@ -277,10 +281,15 @@ update a
 set day2=(select count(*) from @tmp where sssno=a.sssno and (isnull(clockin,'')!='' or isnull(clockout,'')!='' ))
 from @tmp a
 
+update @tmp
+set week=case when week='1' then '一' when week='2' then '二' 
+when week='3' then '三' when week='4' then '四' when week='5' then '五' 
+when week='6' then '六' else '日' end
+
 insert into @tmp (gno,noa,sssno,w133,w166,w100,spec) 
 select '1','999/99/99',sssno,sum(w133),sum(w166),sum(w100),sum(spec) from @tmp group by sssno 
 
-select gno,noa,sssno,namea,clockin,clockout,w133,w166,w100,spec,dbo.charbr(memo,22)memo,day1,day2
+select gno,noa,week,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,spec,dbo.charbr(memo,22)memo,day1,day2
 ,'salpresent?noa=$noa' qhref
 ,case when b.typea='廠務' then '7' else '8' end whour
 from @tmp a outer apply (select typea from sss where noa=a.sssno)b order by sssno,noa,gno 
@@ -295,14 +304,18 @@ set @t_bdate = case when '#non' = [1] then '' else [1] end
 set @t_edate = case when '#non' = [2] then CHAR(255) else [2] end
 set @t_bsssno = case when '#non' = [4] then '' else [4] end
 set @t_esssno = case when '#non' = [5] then CHAR(255) else [5] end
+declare @r_len int=[14]
 
 declare @tmp table(
 		gno nvarchar(1),
 		noa nvarchar(50),
+		week nvarchar(50),
 		sssno nvarchar(50),
 		namea nvarchar(50),
 		clockin nvarchar(50),
 		clockout nvarchar(50),
+		restin nvarchar(50),
+		restout nvarchar(50),
 		w133 float,
 		w166 float,
 		w100 float,
@@ -310,15 +323,21 @@ declare @tmp table(
 		memo nvarchar(MAX)
 )
 insert into @tmp 
-select '0' gno,a.noa,a.sssno,a.namea,a.clockin,a.clockout,a.w133,a.w166,a.w100,a.hr_special,a.memo 
+select '0' gno,a.noa,DATEPART(WEEKDAY,case when @r_len=3 then dbo.ChineseEraName2AD(a.noa) else a.noa end)-1
+,a.sssno,a.namea,a.clockin,a.clockout,a.restin,a.restout,a.w133,a.w166,a.w100,a.hr_special,a.memo 
 from salpresents a left join sss b on a.sssno = b.noa
 where (a.noa between @t_bdate and @t_edate)  
 and (a.sssno between @t_bsssno and @t_esssno)
 
+update @tmp
+set week=case when week='1' then '一' when week='2' then '二' 
+when week='3' then '三' when week='4' then '四' when week='5' then '五' 
+when week='6' then '六' else '日' end
+
 insert into @tmp (gno,noa,w133,w166,w100,spec) 
 select '1',noa,sum(w133),sum(w166),sum(w100),sum(spec) from @tmp group by noa
 
-select * ,case when b.typea='廠務' then '7' else '8' end whour
+select noa xnoa ,noa +'('+week+')' noa,* ,case when b.typea='廠務' then '7' else '8' end whour
 from @tmp a outer apply (select typea from sss where noa=a.sssno)b 
-order by noa,gno,sssno
+order by xnoa,gno,sssno
 ;

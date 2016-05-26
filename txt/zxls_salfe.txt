@@ -69,6 +69,8 @@ create table #bbs(
 		namea nvarchar(50),
 		clockin nvarchar(50),
 		clockout nvarchar(50),
+		restin nvarchar(50),
+		restout nvarchar(50),
 		w133 float,
 		w166 float,
 		w100 float,
@@ -125,6 +127,13 @@ begin
 			set bwork=@timea
 			where noa=@datea and sssno=@sssno and namea=@namea
 		end
+		
+		if(@timea between '12:00:00' and '14:00:00' and @memo='上班簽到')
+		begin
+			update #bbs
+			set restout=@timea
+			where noa=@datea and sssno=@sssno and namea=@namea
+		end
 	end
 	else if(@memo='下班簽退' or @memo='外出' or @memo='加班簽退')
 	begin
@@ -154,6 +163,12 @@ begin
 		begin
 			update #bbs
 			set ework=@timea
+			where noa=@datea and sssno=@sssno and namea=@namea
+		end
+		if(@timea between '12:00:00' and '14:00:00' and @memo='下班簽退')
+		begin
+			update #bbs
+			set restin=@timea
 			where noa=@datea and sssno=@sssno and namea=@namea
 		end
 	end
@@ -238,8 +253,8 @@ begin
 		insert salpresent (noa,w133,w166,w100,mount,holiday)
 		select noa,w133,w166,w100,mount,holiday from #bbm where noa=@datea
 		
-		insert salpresents (noa,noq,sssno,namea,clockin,clockout,w133,w166,w100,memo)
-		select noa,noq,sssno,namea,clockin,clockout,w133,w166,w100,memo from #bbs where noa=@datea
+		insert salpresents (noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo)
+		select noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo from #bbs where noa=@datea
 	
 	end
 	else
@@ -250,8 +265,8 @@ begin
 		delete a from salpresents a 
 		where noa=@datea and exists (select * from #bbm where noa=a.noa and sssno=a.sssno and namea=a.namea)
 		--插入上傳資料
-		insert salpresents (noa,noq,sssno,namea,clockin,clockout,w133,w166,w100,memo)
-		select noa,noq,sssno,namea,clockin,clockout,w133,w166,w100,memo from #bbs
+		insert salpresents (noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo)
+		select noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo from #bbs
 		where noa=@datea
 		--更新表頭資料
 		update a
