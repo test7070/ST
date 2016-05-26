@@ -222,6 +222,9 @@
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					//聯琦 採購小數位沒有限制,進貨也一樣
 					bbsNum = [['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+					
+					$('#lblAccno').hide();
+					$('#txtAccno').hide();
 				}else{
 					bbsNum = [['txtPrice', 15, 3, 1], ['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
 				}

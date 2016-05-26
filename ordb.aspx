@@ -555,7 +555,7 @@
 								alert(t_err);
 							}
 							
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProductno1,txtProduct,txtUnit,txtSpec,txtMount,txtPrice,txtOrdeno,txtNo2,txtCustno,txtComp', b_ret.length, b_ret, 'productno,productno,product,unit,spec,mount,price,noa,no2,custno,comp', 'txtOrdeno,txtNo2');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProductno1,txtProduct,txtUnit,txtSpec,txtMount,txtOrdeno,txtNo2,txtCustno,txtComp', b_ret.length, b_ret, 'productno,productno,product,unit,spec,mount,noa,no2,custno,comp', 'txtOrdeno,txtNo2');
 							sum();
 							if(t_addr.length>0){
 								$('#txtPost').val(t_post);
