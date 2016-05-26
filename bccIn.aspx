@@ -62,7 +62,11 @@
                 q_gt('part', '', 0, 0, 0, "");
                 q_gt('acomp', '', 0, 0, 0, "");
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-                q_cmbParse("cmbTypea", q_getPara('bccin.typea'));
+                if(q_getPara('sys.project').toUpperCase()=='RK'){
+                	q_cmbParse("cmbTypea", q_getPara('rc2.typea'));
+                }else{
+                	q_cmbParse("cmbTypea", q_getPara('bccin.typea'));
+                }
 
                 $('#txtInvono').change(function() {
                 	$(this).val($.trim($(this).val().toUpperCase()));
