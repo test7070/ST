@@ -34,17 +34,19 @@
 				bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
 				q_mask(bbmMask);
 				$('#txtNoa').focus();
+				$('#txtMouldno').focus();
 			}
 
 			function q_seekStr() {
 				t_bdate = $.trim($('#txtBdate').val());
 				t_edate = $.trim($('#txtEdate').val());
 				t_noa = $.trim($('#txtNoa').val());
+				t_mouldno = $.trim($('#txtMouldno').val());
 				t_code = $.trim($('#txtCode').val());
 				
 				var t_where = " 1=1 "
 					+q_sqlPara2("datea", t_bdate, t_edate)
-					+q_sqlPara2("noa", t_noa)+q_sqlPara2("code", t_code)
+					+q_sqlPara2("noa", t_noa)+q_sqlPara2("mouldno", t_mouldno)+q_sqlPara2("code", t_code)
 					;
                  	 
 				t_where = ' where=^^' + t_where + '^^ ';
@@ -74,6 +76,10 @@
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblNoa'>模具單號</a></td>
 					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblNoa'>模具編號</a></td>
+					<td><input class="txt" id="txtMouldno" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 				<tr class='seek_tr'>
 					<td class='seek'  style="width:20%;"><a id='lblCode'>需求單位</a></td>

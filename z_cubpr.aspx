@@ -62,6 +62,9 @@
                         type : '5',//篩選完工未完工//
                         name : 'xtype',
                         value : [' @全部','0@未完工','1@完工']
+                    }, {/*8 [13]*/
+                        type : '6',
+                        name : 'xnoa'
                     }]
           });
           
@@ -75,16 +78,23 @@
           q_langShow();
           $('#txtDate1').mask(r_picd);
           $('#txtDate2').mask(r_picd);
+
+           var t_key = q_getHref();
+           if(t_key[1] != undefined){
+           $('#txtXnoa').val(t_key[1]);}
             
           if(r_len==3){//西元年
 				$('#txtDate1').datepicker();
 				$('#txtDate2').datepicker();
           }
 
-           $('#txtDate1').val(q_cdn(q_date().substr(0,r_lenm)+'/01',-61));
-           $('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',30).substr(0,r_lenm)+'/01',-1));    
-                				
+		  $('#txtDate1').val(q_cdn(q_date().substr(0,r_lenm)+'/01',-61));
+          $('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',30).substr(0,r_lenm)+'/01',-1));
+           
+          $("input[type='checkbox'][value!='']").attr('checked', true);
+          
           }
+          
           
 
           function q_boxClose(s2) {
