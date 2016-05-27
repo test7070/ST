@@ -232,24 +232,31 @@ declare @tmp table(
 		spec float,
 		memo nvarchar(MAX),
 		day1 float,
-		day2 float
+		day2 float,
+		whour float,
+		twhour float
 )
 
 declare @day1 float=0
+declare @day6 float=0
 declare @datea nvarchar(MAX)=@t_bdate
 declare @t_weekday nvarchar(10)--星期
 if(@r_len!=4)
 begin
 	while (@datea<=@t_edate)
 	begin
-		set @datea=cast(cast(left(@datea,3) as int)+1911 as nvarchar(10))
-			+RIGHT(@datea,6)
+		set @datea=cast(cast(left(@datea,3) as int)+1911 as nvarchar(10))+RIGHT(@datea,6)
 		set @t_weekday=DATEPART(WEEKDAY, @datea)-1
 		
 		if((@t_weekday!=6 and @t_weekday!=0
 			and (right('000'+cast(cast(left(@datea,4) as int)-1911 as nvarchar(10)),3)+RIGHT(@datea,6)) not in (select noa from holiday where isnull(iswork,0)=0)
 			)or (right('000'+cast(cast(left(@datea,4) as int)-1911 as nvarchar(10)),3)+RIGHT(@datea,6)) in (select noa from holiday where isnull(iswork,0)=1) )
 			set @day1=@day1+1
+		
+		if((@t_weekday!=0
+			and (right('000'+cast(cast(left(@datea,4) as int)-1911 as nvarchar(10)),3)+RIGHT(@datea,6)) not in (select noa from holiday where isnull(iswork,0)=0)
+			)or (right('000'+cast(cast(left(@datea,4) as int)-1911 as nvarchar(10)),3)+RIGHT(@datea,6)) in (select noa from holiday where isnull(iswork,0)=1) )
+			set @day6=@day6+1
 			
 		set @datea= CONVERT (VARCHAR(7), DATEADD(d, DATEDIFF(d,0,@datea)+1,0),12 )+0890000
 		set @datea=left(@datea,3)+'/'+substring(@datea,4,2)+'/'+right(@datea,2)
@@ -265,6 +272,10 @@ begin
 			and @datea not in (select noa from holiday where isnull(iswork,0)=0)
 			)or @datea in (select noa from holiday where isnull(iswork,0)=1) )
 			set @day1=@day1+1
+		if((@t_weekday!=0
+			and @datea not in (select noa from holiday where isnull(iswork,0)=0)
+			)or @datea in (select noa from holiday where isnull(iswork,0)=1) )
+			set @day6=@day6+1
 			
 		set @datea= replace(CONVERT (VARCHAR(10), DATEADD(d, DATEDIFF(d,0,@datea)+1,0),20 ),'-','/')
 	end
@@ -272,7 +283,21 @@ end
 
 insert into @tmp 
 select '0' gno,a.noa,DATEPART(WEEKDAY,case when @r_len=3 then dbo.ChineseEraName2AD(a.noa) else a.noa end)-1
-,a.sssno,a.namea,a.clockin,a.clockout,a.restin,a.restout,a.w133,a.w166,a.w100,a.hr_special,a.memo,@day1,0 
+,a.sssno,a.namea,a.clockin,a.clockout,a.restin,a.restout,a.w133,a.w166,a.w100,a.hr_special,a.memo
+,case when b.typea='廠務' or b.typea='司機' then @day6 else @day1 end,0
+,case when b.typea='廠務' then 7 else 8 end-
+case when clockin<=case when b.typea='廠務' then '07:00' else '08:00' end and 
+clockout>=case when b.typea='廠務' then '16:00' else '17:00' end
+then isnull((select top 1 hour from salvacause where a.noa between bdate and edate and sssno=a.sssno),0) else 0 end
+,case when a.clockin='' or a.clockout='' then 0 else 
+(cast(datediff(MINUTE,cast(cast(left(a.noa,3)as int)+1911 as nvarchar(10))+right(a.noa,6)+' '+
+case when a.clockin<case when b.typea='廠務' then '07:00' else '08:00' end then case when b.typea='廠務' then '07:00' else '08:00' end else a.clockin end,
+cast(cast(left(a.noa,3)as int)+1911 as nvarchar(10))+right(a.noa,6)+' '+
+case when a.clockout>case when b.typea='廠務' then '16:00' else '17:00' end then case when b.typea='廠務' then '16:00' else '17:00' end else a.clockout end
+) as float)/60) -case when clockin<'12:00' and clockout>'13:00' then 1 else 0 end
+end-case when clockin<=case when b.typea='廠務' then '07:00' else '08:00' end and 
+clockout>=case when b.typea='廠務' then '16:00' else '17:00' end
+then isnull((select top 1 hour from salvacause where a.noa between bdate and edate and sssno=a.sssno),0) else 0 end
 from salpresents a left join sss b on a.sssno = b.noa
 where (a.noa between @t_bdate and @t_edate)
 and (a.sssno between @t_bsssno and @t_esssno)
@@ -291,7 +316,7 @@ select '1','999/99/99',sssno,sum(w133),sum(w166),sum(w100),sum(spec) from @tmp g
 
 select gno,noa,week,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,spec,dbo.charbr(memo,22)memo,day1,day2
 ,'salpresent?noa=$noa' qhref
-,case when b.typea='廠務' then '7' else '8' end whour
+,case when twhour>whour then whour else case when round(twhour,1)<=0 then null else round(twhour,1) end end whour
 from @tmp a outer apply (select typea from sss where noa=a.sssno)b order by sssno,noa,gno 
 ;
 --*****************************************************************
@@ -320,11 +345,26 @@ declare @tmp table(
 		w166 float,
 		w100 float,
 		spec float,
-		memo nvarchar(MAX)
+		memo nvarchar(MAX),
+		whour float,
+		twhour float
 )
 insert into @tmp 
 select '0' gno,a.noa,DATEPART(WEEKDAY,case when @r_len=3 then dbo.ChineseEraName2AD(a.noa) else a.noa end)-1
 ,a.sssno,a.namea,a.clockin,a.clockout,a.restin,a.restout,a.w133,a.w166,a.w100,a.hr_special,a.memo 
+,case when b.typea='廠務' then 7 else 8 end-
+case when clockin<=case when b.typea='廠務' then '07:00' else '08:00' end and 
+clockout>=case when b.typea='廠務' then '16:00' else '17:00' end
+then isnull((select top 1 hour from salvacause where a.noa between bdate and edate and sssno=a.sssno),0) else 0 end
+,case when a.clockin='' or a.clockout='' then 0 else 
+(cast(datediff(MINUTE,cast(cast(left(a.noa,3)as int)+1911 as nvarchar(10))+right(a.noa,6)+' '+
+case when a.clockin<case when b.typea='廠務' then '07:00' else '08:00' end then case when b.typea='廠務' then '07:00' else '08:00' end else a.clockin end,
+cast(cast(left(a.noa,3)as int)+1911 as nvarchar(10))+right(a.noa,6)+' '+
+case when a.clockout>case when b.typea='廠務' then '16:00' else '17:00' end then case when b.typea='廠務' then '16:00' else '17:00' end else a.clockout end
+) as float)/60) -case when clockin<'12:00' and clockout>'13:00' then 1 else 0 end
+end-case when clockin<=case when b.typea='廠務' then '07:00' else '08:00' end and 
+clockout>=case when b.typea='廠務' then '16:00' else '17:00' end
+then isnull((select top 1 hour from salvacause where a.noa between bdate and edate and sssno=a.sssno),0) else 0 end
 from salpresents a left join sss b on a.sssno = b.noa
 where (a.noa between @t_bdate and @t_edate)  
 and (a.sssno between @t_bsssno and @t_esssno)
@@ -337,7 +377,8 @@ when week='6' then '六' else '日' end
 insert into @tmp (gno,noa,w133,w166,w100,spec) 
 select '1',noa,sum(w133),sum(w166),sum(w100),sum(spec) from @tmp group by noa
 
-select noa xnoa ,noa +'('+week+')' noa,* ,case when b.typea='廠務' then '7' else '8' end whour
+select noa xnoa ,noa +'('+week+')' noa,* 
+,case when twhour>whour then whour else case when round(twhour,1)<=0 then null else round(twhour,1) end end whour
 from @tmp a outer apply (select typea from sss where noa=a.sssno)b 
 order by xnoa,gno,sssno
 ;

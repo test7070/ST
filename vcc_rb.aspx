@@ -784,6 +784,7 @@
 						}
 					}
 					if(x_err.length>0){
+						Unlock(1);
 						if (confirm(x_err+"是否要繼續出貨?")){
 							check_stkucc=true;
 							btnOk();	
@@ -807,6 +808,7 @@
 					alert(t_err);
 					return;
 				}
+				Lock(1);
 				//105/01/28 增加庫存安全量判斷 只做總倉的控管 所以出貨只判斷總倉
 				if($('#cmbTypea').val() != '2' && $('#txtStoreno').val() == '001' &&!check_stkucc){
 					checkstktmp=[];
@@ -857,7 +859,7 @@
 						check_stkucc=true;
 					}
 				}
-				
+				Unlock(1);
 				//判斷是否手動開過開票或再訂單已開發票
 				if(!check_vcca && $('#chkIsgenvcca').prop('checked') &&!emp($('#txtOrdeno').val())){
 					var t_where = "where=^^ trdno='"+$('#txtOrdeno').val()+"' and isnull([type],'') !='' ^^";
