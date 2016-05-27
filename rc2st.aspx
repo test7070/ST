@@ -261,7 +261,16 @@
 				$('#lblOrdc').click(function() {
 					if (!(q_cur == 1 || q_cur == 2))
 						return;
-					lblOrdc();
+					if(q_getPara('sys.project').toUpcase()=='RK'){
+                		var t_tggno = $.trim($('#txtTggno').val());
+                		var t_kind = $('#cmbKind').val();
+                		var t_noa = $('#txtNoa').val();
+                		var t_where ='';
+                		q_box("ordc_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({tggno:t_tggno,kind:t_kind,noa:t_noa,page:'rc2st'}), "ordc_import", "95%", "95%", '');
+                	}
+                	else{
+                		lblOrdc();
+                	}
 				});
 				
 				$('#cmbKind').change(function() {
@@ -345,6 +354,16 @@
 				var
 				ret;
 				switch (b_pop) {/// 重要：不可以直接 return ，最後需執行 originalClose();
+					case 'ordc_import':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit', newB_ret.length, newB_ret
+							, 'productno,product,spec,spec,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,unit', 'txtProductno');        	
+                        	sum();
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
 					case 'ordcs':
 						if (q_cur > 0 && q_cur < 4) {
 							ordcsArray = getb_ret();
@@ -671,7 +690,7 @@
 						var err_str = '';
 						if (as[0] != undefined) {
 							for (var i = 0; i < as.length; i++) {
-								if (dec(as[i].gweight) > 0) {
+								if (as[i].uno.length>0 &&  dec(as[i].gweight) > 0) {
 									err_str += as[i].uno + '已領料，不能刪除!!\n';
 								}
 							}

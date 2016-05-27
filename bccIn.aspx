@@ -63,7 +63,7 @@
                 q_gt('acomp', '', 0, 0, 0, "");
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
                 q_cmbParse("cmbTypea", q_getPara('bccin.typea'));
-
+                
                 $('#txtInvono').change(function() {
                 	$(this).val($.trim($(this).val().toUpperCase()));
                 	if ($(this).val().length > 0 && !(/^[A-Z]{2}[0-9]{8}$/g).test($(this).val()))
@@ -90,32 +90,49 @@
                 });
                 
                 $('#btnOrdc').click(function() {
-                	if(emp($('#txtOrdcno').val())&&emp($('#txtTggno').val())){
-                		alert('請先輸入'+q_getMsg('lblOrdcno')+'或'+q_getMsg('lblTgg')+'。');
-                		return;
-                	}
-                	
-                	var t_where="1=1";
-                	if(q_getPara('sys.comp').indexOf('大昌')>-1){
-                		 t_where+=" and apv='Y' and noa in (select noa from view_ordc where enda!='1')";
+                	if(q_getPara('sys.project').toUpcase()=='RK'){
+                		var t_tggno = $.trim($('#txtTggno').val());
+                		var t_kind = '';
+                		var t_noa = $('#txtNoa').val();
+                		var t_where ='';
+                		q_box("ordc_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({tggno:t_tggno,kind:t_kind,noa:t_noa,page:'bccin'}), "ordc_import", "95%", "95%", '');
                 	}else{
-                		t_where+=" and kind='1' and noa in (select noa from view_ordc where enda!='1')";
+                		if(emp($('#txtOrdcno').val())&&emp($('#txtTggno').val())){
+	                		alert('請先輸入'+q_getMsg('lblOrdcno')+'或'+q_getMsg('lblTgg')+'。');
+	                		return;
+	                	}
+	                	var t_where="1=1";
+	                	if(q_getPara('sys.comp').indexOf('大昌')>-1){
+	                		 t_where+=" and apv='Y' and noa in (select noa from view_ordc where enda!='1')";
+	                	}else{
+	                		t_where+=" and kind='1' and noa in (select noa from view_ordc where enda!='1')";
+	                	}
+	                	
+	                	if(!emp($('#txtOrdcno').val())){
+	                		t_where=t_where+" and noa='" + $('#txtOrdcno').val() + "'";
+	                	}
+	                	if(!emp($('#txtTggno').val())){
+	                		t_where=t_where+" and tggno='" + $('#txtTggno').val() + "'";
+	                	}
+	                	
+	                	q_box("ordcs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+" ;"+r_accy+";" + q_cur, 'ordc', "95%", "95%", q_getMsg('btnOrdc'));
                 	}
-                	
-                	if(!emp($('#txtOrdcno').val())){
-                		t_where=t_where+" and noa='" + $('#txtOrdcno').val() + "'";
-                	}
-                	if(!emp($('#txtTggno').val())){
-                		t_where=t_where+" and tggno='" + $('#txtTggno').val() + "'";
-                	}
-                	
-                	q_box("ordcs_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+" ;"+r_accy+";" + q_cur, 'ordc', "95%", "95%", q_getMsg('btnOrdc'));
                 });
             }
 
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'ordc_import':
+                        if (b_ret != null) {
+                        	as = b_ret;
+                    		q_gridAddRow(bbsHtm, 'tbbs', 'txtBccno,txtBccname,txtUnit,txtMount,txtMount2,txtPrice,txtTotal,txtMemo,txtOrdcno,txtNo2'
+                        	, as.length, as, 'productno,product,unit,weight,weight,price,total,memo,noa,no2', 'txtBccno','');             	
+                        	sum();
+                        }else{
+                        	Unlock(1);
+                        }
+                        break;
                 	case 'ordc':
                 		if (q_cur > 0 && q_cur < 4) {
                         b_ret = getb_ret();
