@@ -185,21 +185,44 @@ from (select ROW_NUMBER()over (partition by noa order by noa,sssno,namea) rr,noq
 
 update #bbs set tweek=DATEPART(WEEKDAY,noa)-1
 
+--廠務 司機
 update a
 set whours=(cast(datediff(MINUTE,noa+' '+case when b.typea='廠務' then '16:00:00' else '17:00:00' end,noa+' '+ework)as float)/60)
 from #bbs a
 outer apply (select typea from sss where noa=a.sssno)b
 where isnull(ework,'')!='' and ework >=case when b.typea='廠務' then '16:00:00' else '17:00:00' end
+and (b.typea='廠務' or b.typea='司機')
 and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+--辦公室
+update a
+set whours=(cast(datediff(MINUTE,noa+' '+'17:00:00',noa+' '+ework)as float)/60)
+from #bbs a
+outer apply (select typea from sss where noa=a.sssno)b
+where isnull(ework,'')!='' and ework >='17:00:00'
+and b.typea!='廠務' and b.typea!='司機'
+and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0' and tweek!='6' )--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set whours=(cast(datediff(MINUTE,noa+' '+bwork,noa+' '+ework)as float)/60)
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where isnull(bwork,'')!='' and isnull(ework,'')!=''
+and (b.typea='廠務' or b.typea='司機')
+and not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
 
 update a
 set whours=(cast(datediff(MINUTE,noa+' '+bwork,noa+' '+ework)as float)/60)
-from #bbs a
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
 where isnull(bwork,'')!='' and isnull(ework,'')!=''
+and b.typea!='廠務' and b.typea!='司機'
 and not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
-and tweek!='0')--不是周日
+and tweek!='0' and tweek!='6')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
 
 update #bbs
@@ -211,19 +234,37 @@ set noa=dbo.AD2ChineseEraName(noa)
 update a
 set w133=case when whours>2 then 2 else whours end
 ,w166=case when whours>2 then whours-2 else 0 end
-from #bbs a
-where whours>0 and
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where whours>0 and (b.typea='廠務' or b.typea='司機') and
 ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
 
 update a
+set w133=case when whours>2 then 2 else whours end
+,w166=case when whours>2 then whours-2 else 0 end
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where whours>0 and b.typea!='廠務' and b.typea!='司機' and
+((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0' and tweek!='6')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
 set w100=whours
-from #bbs a
-where whours>0 and
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where whours>0 and (b.typea='廠務' or b.typea='司機') and
 not ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set w100=whours
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where whours>0 and b.typea!='廠務' and b.typea!='司機' and
+not ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0'  and tweek!='6')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
 
 update #bbs
 set clockin=ISNULL(clockin,''),clockout=ISNULL(clockout,'')
@@ -234,7 +275,7 @@ select noa,SUM(w133),SUM(w166),SUM(w100),count(*),case when MAX(tweek)='0' then 
 
 update a
 set memo=a.memo
-+isnull((select top 1 (case when len(a.memo)>0 then ',' else '' end)+hname from salvacause where a.noa between bdate and edate and sssno=a.sssno),'')
++isnull((select top 1 (case when len(a.memo)>0 then ',' else '' end)+hname+' '+btime+'~'+etime+' '+memo from salvacause where a.noa between bdate and edate and sssno=a.sssno),'')
 from #bbs a
 
 --select * from #bbm
