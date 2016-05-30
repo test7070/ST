@@ -90,7 +90,7 @@
                 });
                 
                 $('#btnOrdc').click(function() {
-                	if(q_getPara('sys.project').toUpcase()=='RK'){
+                	if(q_getPara('sys.project').toUpperCase()=='RK'){
                 		var t_tggno = $.trim($('#txtTggno').val());
                 		var t_kind = '';
                 		var t_noa = $('#txtNoa').val();

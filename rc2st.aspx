@@ -261,7 +261,7 @@
 				$('#lblOrdc').click(function() {
 					if (!(q_cur == 1 || q_cur == 2))
 						return;
-					if(q_getPara('sys.project').toUpcase()=='RK'){
+					if(q_getPara('sys.project').toUpperCase()=='RK'){
                 		var t_tggno = $.trim($('#txtTggno').val());
                 		var t_kind = $('#cmbKind').val();
                 		var t_noa = $('#txtNoa').val();

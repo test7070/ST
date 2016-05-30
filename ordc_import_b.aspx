@@ -33,22 +33,23 @@
                 var t_para = new Array();
 	            try{
 	            	t_para = JSON.parse(decodeURIComponent(q_getId()[5]));
-	            	t_content = "where=^^['"+t_para.vccno+"','"+t_para.tggno+"','"+t_para.kind+"','"+t_para.noa+"','"+t_para.para+"')^^";
+	            	t_content = "where=^^['"+t_para.tggno+"','"+t_para.kind+"','"+t_para.noa+"','"+t_para.page+"')^^";
 	            }catch(e){
 	            } 
-	            q_gt('spec', '', 0, 0, 0, '');   
-                
+	            mainBrow(0, t_content);   
             }
             function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'spec':
 						var as = _q_appendData("spec", "", true);
-						t_spec='';
+						t_spec='<option value=""></option>';
 						for ( i = 0; i < as.length; i++) {
-							t_spec+=','+as[i].noa+'@'+as[i].product;
+							t_spec += '<option value="'+as[i].noa+'">'+as[i].product+'</option>';
 						}
-						if(t_spec.length==0) t_spec=' ';
-						mainBrow(0, t_content);
+						for(var i=0;i<q_bbsCount;i++){
+							$('#combSpec_'+i).append(t_spec);
+							$('#combSpec_'+i).val($('#txtSpec_'+i).val());
+						}
 						break;
 					case q_name:
 						abbs = _q_appendData(q_name, "", true);
@@ -61,7 +62,7 @@
 				$('#btnPrev').hide();
 				$('#btnNext').hide();
 				$('#btnBott').hide();
-				q_cmbParse("combSpec", t_spec,'s');
+				q_gt('spec', '', 0, 0, 0, '');
 				
 				$('#checkAllCheckbox').click(function(e){
 					$('.ccheck').prop('checked',$(this).prop('checked'));
@@ -80,7 +81,7 @@
 			<table id="tFixedTitle" class='tFixedTitle'  border="2"  cellpadding='2' cellspacing='1' style='width:100%;'  >
 				<tr style='color:white; background:#003366;' >
 					<th align="center" style="width:2%;"><input type="checkbox" id="checkAllCheckbox"/></th>
-					<td align="center" style="width:10%;">預計交期</td>
+					<td align="center" style="width:7%;">預計交期</td>
 					<td align="center" style="width:10%;">廠商</td>
 					<td align="center" style="width:15%;">單號</td>
 					<td align="center" style="width:15%;">品名</td>
@@ -96,7 +97,7 @@
 			<table id="tbbs" class='tbbs' border="2" cellpadding='2' cellspacing='1' style='width:100%;' >
 				<tr style="display:none;">
 					<th align="center" style="width:2%;"></th>
-					<td align="center" style="width:10%;">預計交期</td>
+					<td align="center" style="width:7%;">預計交期</td>
 					<td align="center" style="width:10%;">廠商</td>
 					<td align="center" style="width:15%;">單號</td>
 					<td align="center" style="width:15%;">品名</td>
@@ -108,23 +109,24 @@
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td style="width:2%;"><input type="checkbox" class="ccheck" id="chkSel.*"/></td>
-					<td style="width:10%;"><input type="text" readonly="readonly" id="txtRdate.*" style="float:left;width:95%;"/></td>
+					<td style="width:7%;"><input type="text" readonly="readonly" id="txtRdate.*" style="float:left;width:95%;"/></td>
 					<td style="width:10%;"><input type="text" readonly="readonly" id="txtTgg.*" style="float:left;width:95%;"/></td>
 					<td style="width:15%;">
 						<input type="text" readonly="readonly" id="txtNoa.*" style="float:left;width:70%;"/>
-						<input type="text" readonly="readonly" id="txtNo2.*" style="float:left;width:25%;"/>
+						<input type="text" readonly="readonly" id="txtNo2.*" style="float:left;width:20%;"/>
 					</td>
 					<td style="width:15%;">
-						<input type="text" readonly="readonly" id="txtProductno.*" style="float:left;width:40%;"/>
-						<input type="text" readonly="readonly" id="txtProduct.*" style="float:left;width:55%;"/>
+						<input type="text" readonly="readonly" id="txtProductno.*" style="float:left;width:95%;"/>
+						<input type="text" readonly="readonly" id="txtProduct.*" style="float:left;width:95%;"/>
 					</td>
 					<td style="width:20%;">
-						<input type="text" readonly="readonly" id="txtDime.*" style="float:left;width:28%;"/>
-						<a>X</a>
-						<input type="text" readonly="readonly" id="txtWidth.*" style="float:left;width:28%;"/>
-						<a>X</a>
-						<input type="text" readonly="readonly" id="txtLengthb.*" style="float:left;width:28%;"/>
-						<select readonly="readonly" id="cmbSpec.*" style="width:95%;"> </select>
+						<input type="text" readonly="readonly" id="txtDime.*" style="float:left;width:25%;"/>
+						<a style="float:left;width:6%;">X</a>
+						<input type="text" readonly="readonly" id="txtWidth.*" style="float:left;width:25%;"/>
+						<a style="float:left;width:6%;">X</a>
+						<input type="text" readonly="readonly" id="txtLengthb.*" style="float:left;width:25%;"/>
+						<select readonly="readonly" id="combSpec.*" style="width:95%;"> </select>
+						<input type="text" readonly="readonly" id="txtSpec.*" style="display:none;"/>
 					</td>
 					<td style="width:7%;"><input type="text" readonly="readonly" id="txtUnit.*" style="float:left;width:95%;"/></td>
 					<td style="width:7%;"><input type="text" readonly="readonly" id="txtMount.*" style="float:left;width:95%;"/></td>
