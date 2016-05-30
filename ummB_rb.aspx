@@ -214,6 +214,13 @@
                 		for (var i = 0; i < as.length; i++) {
                 			as[i].emount=dec(as[i].mount)-dec(as[i].bkmount);
                 			as[i].emoney=dec(as[i].total)-dec(as[i].bkmoney);
+                			for (var j = 0; j < abbsNow.length; j++) {
+                				if(as[i].noa==abbsNow[j].vccno && as[i].noq==abbsNow[j].vccnoq){
+                					as[i].emount=dec(as[i].emount)+dec(abbsNow[i].bkmount);
+                					as[i].emoney=dec(as[i].emoney)+dec(abbsNow[i].bkmoney);
+                					break;	
+                				}
+                			}
                 		}
                 		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtMount,txtPrice,txtTotal,txtBkmount,txtBkmoney,txtVccno,txtVccnoq', as.length, as, 'productno,product,mount,price,total,emount,emoney,noa,noq', 'txtVccno');
                         fieldsdisabled();

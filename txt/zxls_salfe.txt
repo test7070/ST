@@ -87,6 +87,7 @@ declare @timea nvarchar(50)
 declare @memo nvarchar(MAX)
 declare @clockin nvarchar(50)
 declare @clockout nvarchar(50)
+declare @restin nvarchar(50)
 
 --105/05/24 備註只放 是否有請假
 
@@ -128,11 +129,21 @@ begin
 			where noa=@datea and sssno=@sssno and namea=@namea
 		end
 		
-		if(@timea between '12:00:00' and '14:00:00' and @memo='上班簽到')
+		if(@timea between '12:00:00' and '14:00:00' and @memo='上班簽到') --中午只會打上班簽到
 		begin
-			update #bbs
-			set restout=@timea
-			where noa=@datea and sssno=@sssno and namea=@namea
+			set @restin=isnull((select restin from #bbs where noa=@datea and sssno=@sssno and namea=@namea ),'')
+			if(@restin!='')
+			begin
+				update #bbs
+				set restout=@timea
+				where noa=@datea and sssno=@sssno and namea=@namea
+			end
+			else
+			begin
+				update #bbs
+				set restin=@timea
+				where noa=@datea and sssno=@sssno and namea=@namea
+			end
 		end
 	end
 	else if(@memo='下班簽退' or @memo='外出' or @memo='加班簽退')
@@ -165,12 +176,12 @@ begin
 			set ework=@timea
 			where noa=@datea and sssno=@sssno and namea=@namea
 		end
-		if(@timea between '12:00:00' and '14:00:00' and @memo='下班簽退')
+		/*if(@timea between '12:00:00' and '14:00:00' and @memo='下班簽退')
 		begin
 			update #bbs
 			set restin=@timea
 			where noa=@datea and sssno=@sssno and namea=@namea
-		end
+		end*/
 	end
 	
 	fetch next from cursor_table
@@ -178,10 +189,6 @@ begin
 end
 close cursor_table
 deallocate cursor_table
-
-update a
-set noq=right('000'+cast(rr as nvarchar(10)),3)
-from (select ROW_NUMBER()over (partition by noa order by noa,sssno,namea) rr,noq from #bbs)a
 
 update #bbs set tweek=DATEPART(WEEKDAY,noa)-1
 
@@ -270,6 +277,29 @@ update #bbs
 set clockin=ISNULL(clockin,''),clockout=ISNULL(clockout,'')
 ,w133=ISNULL(w133,0),w166=ISNULL(w166,0),w100=ISNULL(w100,0)
 
+--補沒打卡資料的人工
+insert #bbs(noa,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo,tweek)
+select a.noa,b.noa,b.namea,'','','','',0,0,0,'',a.tweek
+from (select noa,tweek from #bbs group by noa,tweek) a
+,(select * from sss where isnull(outdate,'')='' and (typea='司機' or typea='廠務')) b
+where not exists (select * from #bbs where noa=a.noa and sssno=b.noa)
+and((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and a.tweek!='0')--不是周日
+or (select count(*) from holiday where noa=a.noa and isnull(iswork,0)=1)>0)--上班日
+
+insert #bbs(noa,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo,tweek)
+select a.noa,b.noa,b.namea,'','','','',0,0,0,'',a.tweek
+from (select noa,tweek from #bbs group by noa,tweek) a
+,(select * from sss where isnull(outdate,'')='' and (typea='辦公室')) b
+where not exists (select * from #bbs where noa=a.noa and sssno=b.noa)
+and((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and a.tweek!='0' and a.tweek!='6')--不是周日
+or (select count(*) from holiday where noa=a.noa and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set noq=right('000'+cast(rr as nvarchar(10)),3)
+from (select ROW_NUMBER()over (partition by noa order by noa,sssno,namea) rr,noq from #bbs)a
+
 insert #bbm
 select noa,SUM(w133),SUM(w166),SUM(w100),count(*),case when MAX(tweek)='0' then 1 else 0 end from #bbs group by noa
 
@@ -296,7 +326,6 @@ begin
 		
 		insert salpresents (noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo)
 		select noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo from #bbs where noa=@datea
-	
 	end
 	else
 	begin

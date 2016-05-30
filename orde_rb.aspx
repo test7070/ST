@@ -841,16 +841,19 @@
 				if (!confirm('確定要儲存?')){
 					return;
 				}
+				Lock();
 				
 				t_err = '';
 				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')], ['cmbKind', '發票開立'], ['cmbPartstore', '倉庫']]);
 				if (t_err.length > 0) {
 					alert(t_err);
+					Unlock();
 					return;
 				}
 				
 				if(q_cur==1 && $('#cmbKind').val()=='作廢'){
 					alert('發票開立禁止選擇【作廢】!!');
+					Unlock();
 					return;
 				}
 				
@@ -915,9 +918,14 @@
 					if (confirm("是否要更新出貨單?"))
 						$('#btnOrdetoVcc').click();
 				}
-				//更新發票 104/10/16 金額大於0 才產生發票
-				if($('#cmbKind').val()!='作廢' && dec($('#txtMoney').val())>0)
+				
+				if($('#cmbKind').val()!='作廢' && dec($('#txtMoney').val())>0){ //更新發票 104/10/16 金額大於0 才產生發票
 					q_func('qtxt.query.vcca0', 'orde.txt,orde_vcca,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));
+				}else{
+					Unlock();
+					//重刷網頁
+					location.href=location.href;
+				}
 			}
 			
 			function q_funcPost(t_func, result) {
@@ -934,6 +942,9 @@
 								alert(as[0].t_err);
 							}
 						}
+						Unlock();
+						//重刷網頁
+						location.href=location.href;
                 		break;
                 	case 'vcc_post.post.a1':
                 		q_func('qtxt.query.post0', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));

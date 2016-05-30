@@ -153,6 +153,23 @@
 					}
 				});
 				
+				//105/05/30 增加 只需匯入出貨資料不管其他已出貨判斷
+				$('#btnVcc_rb').click(function() {
+					if($('#txtMemo').val()){
+						var t_where="where=^^ noa='"+$('#txtMemo').val()+"'^^ ";
+						q_gt('view_vccs', t_where, 0, 0, 0, "getvccs",r_accy,1);
+						var as = _q_appendData("view_vccs", "", true);
+						if (as[0] != undefined) {
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtPrice,txtMoney'
+							, as.length, as, 'productno,product,unit,mount,price,total', 'txtProductno');
+						}else{
+							alert('無此出貨單號');
+						}
+					}else{
+						alert('無出貨單號，請於【備註】欄內輸入!!');	
+					}
+				});
+				
 				$('#btnBatchvcca').click(function() {
 					$("#table_batchvcca input[type='text']").val('');
 					$('.batchbuyer').remove();
@@ -1265,7 +1282,10 @@
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblVccno' class="lbl btn"> </a></td>
 						<td><input id="txtVccno"  type="text" class="txt c1"/></td>
-						<td><input id="btnOrdesMon"  type="button" value="月結匯入"/></td>
+						<td colspan="2">
+							<input id="btnOrdesMon"  type="button" value="月結匯入"/>
+							<input id="btnVcc_rb"  type="button" value="出貨匯入"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAccno' class="lbl btn"> </a></td>
