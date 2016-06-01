@@ -34,7 +34,7 @@
 					
 			aPop = new Array(
 				['txtFixnoa','lblFixnoa','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
-				['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
+				//['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx'],
 				['txtSssno','lblSssno','nhpe','noa,namea','txtSssno,txtNamea','']
 			);

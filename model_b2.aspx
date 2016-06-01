@@ -14,6 +14,7 @@
 			var isBott = false;
 			var txtfield = [], afield, t_data, t_htm, t_bbsTag = 'tbbs';
 			var i, s1;
+			q_desc=1;
 			$(document).ready(function() {
 				main();
 			});
