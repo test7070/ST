@@ -34,7 +34,7 @@
 			
 			aPop = new Array(			
 				['txtModnoa','lblModnoa','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
-				['txtFrame','lblFrame','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
+				//['txtFrame','lblFrame','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
 			$(document).ready(function() {
@@ -422,7 +422,7 @@
 					<tr>
 						<td><span> </span><a id='lblModnoa' class="lbl btn" ></a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblFrame' class="lbl btn"></a></td>
+						<td><span> </span><a id='lblFrame' class="lbl"></a></td>
 						<td><input id="txtFrame" type="text" class="txt c1"/></a></td>						
 						<td><span> </span><a id='lblNoa' class="lbl "></a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>		

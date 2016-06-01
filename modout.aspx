@@ -34,7 +34,7 @@
 					
 			aPop = new Array(
 				['txtFixnoa','lblFixnoa','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
-				['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
+				//['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx'],
 				['txtSssno','lblSssno','nhpe','noa,namea','txtSssno,txtNamea','']
 			);
@@ -448,7 +448,7 @@
 						<td><input id="txtFixnoa" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblModnoa' class="lbl " > </a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblFrame' class="lbl btn" > </a></td>
+						<td><span> </span><a id='lblFrame' class="lbl" > </a></td>
 						<td><input id="txtFrame" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblNoa' class="lbl " > </a></td>
 						<td><input id="txtNoa" type="text" class="txt  c1" /></td>
