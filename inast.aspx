@@ -712,7 +712,10 @@
                     uccb_readonly = true;
                     bbs_readonly(0);
                 }
-                if(q_getPara('sys.comp').substring(0,2)=='傑期'){
+                if(q_getPara('sys.project').toUpperCase()=='RK'){
+                	$('#lblWeights').text('重量/M');
+                }
+                if(q_getPara('sys.project').toUpperCase()=='PK'){
                 	$('.pk').show();
                 	$('#lblUnit').html('計價<BR>單位');
                 }
