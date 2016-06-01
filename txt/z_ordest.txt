@@ -705,7 +705,7 @@ z_ordest1:--z_ordest1
 	declare @t_edime float = case when '#non'=[23] then 999.990 else cast([23] as float) end
 	declare @t_blengthb float = case when '#non'=[24] then 0.0 else cast([24] as float) end
 	declare @t_elengthb float = case when '#non'=[25] then 99999.9 else cast([25] as float) end
-	------------------------------------------------------------------------------------------------------
+		------------------------------------------------------------------------------------------------------
 
 	set @t_stktype = upper(@t_stktype)
 	declare @swapTmp1 int = 0
@@ -732,6 +732,7 @@ z_ordest1:--z_ordest1
 		productno nvarchar(30),
 		products nvarchar(90),
 		spec nvarchar(max),
+		cspec nvarchar(max),
 		csize nvarchar(max),
 		dime float,
 		unit nvarchar(12),
@@ -746,7 +747,7 @@ z_ordest1:--z_ordest1
 	insert into @tmp
 		select
 			'0',a.odate,(case b.enda when '1' then 'Y' else 'N' end) e,a.noa,b.no2,
-			a.custno,c.nick,b.productno,b.product,b.spec
+			a.custno,c.nick,b.productno,b.product,b.spec,''
 			,(case when exists(select * from acomp where charindex('聯琦',acomp)>0) then cast(b.dime as nvarchar)+'+'+cast(b.radius as nvarchar)+'*'+cast(b.width as nvarchar)+'*'+case when isnull(b.lengthb,0)=0 then 'C' else cast(b.lengthb as nvarchar) end
 		 		when ltrim(rtrim(isnull(b.size,'')))='' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else b.size end)
 			,b.dime,b.unit,b.mount,b.weight,b.price,b.total,'ordest'+a.accy
@@ -777,9 +778,16 @@ z_ordest1:--z_ordest1
 		where gno='0'
 		group by productno,products,spec,csize
 	
+	update @tmp set cspec=b.product
+	from @tmp a
+	left join spec b on a.spec=b.noa
+	
 	select
-		gno,odate,e,noa,no2,custno,comp,productno,products,spec,csize,dime,unit,mount,weight,price,total,
-		row_number()over(partition by left(odate,6) order by left(odate,6),gno,noa,no2) idno,qhref
+		gno,odate,e,noa,no2,custno,comp,productno,products
+		,case when exists(select * from acomp where charindex('聯琦',acomp)>0) then cspec else spec end spec
+		
+		,csize,dime,unit,mount,weight,price,total
+		,row_number()over(partition by left(odate,6) order by left(odate,6),gno,noa,no2) idno,qhref
 		,coin a01
 		,case when ISNULL(floata,0)=0 then '' else dbo.getComma(floata,-1) end a02
 	from @tmp order by left(odate,6),gno,noa,no2,odate,productno,products,spec,csize;
