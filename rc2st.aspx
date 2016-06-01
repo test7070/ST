@@ -24,7 +24,7 @@
 			var q_readonly = ['txtRc2atax', 'txtTgg', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
 			var q_readonlys = ['txtMoney','txtSprice'];
 			var bbmNum = [['txtPrice', 15, 3, 1], ['txtTranmoney', 10, 0, 1], ['txtRc2atax', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]];
-			var bbsNum = [['txtHard', 10, 2, 1], ['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+			var bbsNum;
 			var bbmMask = [];
 			var bbsMask = [];
 			q_desc = 1;
@@ -357,6 +357,10 @@
 					case 'ordc_import':
                         if (b_ret != null) {
                         	as = b_ret;
+                        	/*for(var i=0;i<as.length;i++){
+                        		$('#btnMinus_'+i).click();
+                        	}*/
+                        	
                         	q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit'
                         	, as.length, as
 							, 'productno,product,spec,spec,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,unit', 'txtProductno');        	
@@ -1101,7 +1105,6 @@
 				if(q_getPara('sys.project').toUpperCase()=='PK')
 					$('.pk').show();
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('.sprice').show();
 					$('.rk').show();
 					$('.RK_hide').hide();
 					$('#lblWeights_st').text('重量/M');
