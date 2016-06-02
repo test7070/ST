@@ -69,21 +69,6 @@
 					$('.ccheck').prop('checked',$(this).prop('checked'));
 				});
 			}
-			
-			function bbsAssign() { 
-				for (var j = 0; j < q_bbsCount; j++) {
-					$('#txtCnt_'+j).change(function(){
-						var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
-						var thisVal = dec($(this).val());
-						if(thisVal > 0){
-							$('#chkSel_'+n).attr('checked',true);
-						}else{
-							$('#chkSel_'+n).attr('checked',false);
-						}
-					});
-				}
-				_bbsAssign();
-		    }
             
             function refresh() {
                 _refresh();
