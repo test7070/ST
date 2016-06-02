@@ -18,8 +18,8 @@
 			q_tables = 's';
 			var q_name = "modfixc";
 			var q_readonly = ['txtNoa', 'txtModnoa', /*'txtMech',*/ 'txtWorker', 'txtWorker2'
-			,'textNob','textCode','textDetail'];
-			var q_readonlys = ['txtNob','txtCode','txtDetail'];
+			,'textNob','textCode','textDetail','txtFrame'];
+			var q_readonlys = ['txtNob','txtCode','txtDetail','txtFrame'];
 			var bbmNum = [];
 			var bbsNum = [['txtWeight',15,1,1], ['txtMount',15,0,1], ['txtFixmount',15,0,1], ['txtBottom',15,2,1], ['txtBebottom',15,2,1], ['txtEnbottom',15,2,1], 
 						  ['txtLastloss',15,1,1], ['txtLoss',15,1,1], ['txtBrepair',15,1,1], ['txtErepair',15,1,1]];

@@ -17,8 +17,8 @@
 
 			q_tables = 's';
 			var q_name = "modout";
-			var q_readonly = ['txtNoa','txtModnoa','txtMech','txtWorker', 'txtWorker2'];
-			var q_readonlys = ['txtNob','txtCode','txtDetail'];
+			var q_readonly = ['txtNoa','txtModnoa','txtMech','txtWorker', 'txtWorker2','txtFrame'];
+			var q_readonlys = ['txtNob','txtCode','txtDetail','txtFrame'];
 			var bbmNum = [];
 			var bbsNum = [['txtMount',15,0,0]];
 			var bbmMask = [];
