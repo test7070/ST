@@ -369,10 +369,7 @@
                         				newArray.push(curItem);
                         			}
                         		}else{
-                        			if(newArray.length>0)
-                        				newArray.push(as[i]);
-                        			else 
-                        				newArray = as[i];
+                    				newArray.push(as[i]);
                         		}
                         	}
                         	q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit'
