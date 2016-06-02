@@ -15,7 +15,7 @@
                 alert("An error occurred:\r\n" + error.Message);
             }
 
-            q_desc = 1
+            q_desc = 1;
             q_tables = 's';
             var q_name = "bccin";
             var q_readonly = ['txtNoa', 'txtWorker','txtMoney','txtTax','txtTotal'];
@@ -126,8 +126,26 @@
                 	case 'ordc_import':
                         if (b_ret != null) {
                         	as = b_ret;
+                        	var curItem,newArray= new Array();
+                        	for(var i=0;i<as.length;i++){
+                        		if(as[i].cnt>1){
+                        			curItem = as[i];
+                        			curItem.mount=curItem.mount/curItem.cnt;
+                        			curItem.weight=curItem.weight/curItem.cnt;
+                        			curItem.total=round(curItem.total/curItem.cnt,0);
+
+                        			for(var j=0;j<curItem.cnt;j++){
+                        				newArray.push(curItem);
+                        			}
+                        		}else{
+                        			if(newArray.length>0)
+                        				newArray.push(as[i]);
+                        			else 
+                        				newArray = as[i];
+                        		}
+                        	}
                     		q_gridAddRow(bbsHtm, 'tbbs', 'txtBccno,txtBccname,txtUnit,txtMount,txtMount2,txtPrice,txtTotal,txtMemo,txtOrdcno,txtNo2'
-                        	, as.length, as, 'productno,product,unit,weight,weight,price,total,memo,noa,no2', 'txtBccno','');             	
+                        	, newArray.length, newArray, 'productno,product,unit,weight,weight,price,total,memo,noa,no2', 'txtBccno','');             	
                         	sum();
                         }else{
                         	Unlock(1);

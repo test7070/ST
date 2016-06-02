@@ -17,6 +17,7 @@
             var q_name = "ordc_import", t_content = "where=^^['','')^^", bbsKey = ['noa','no2'], as;
             var isBott = false;
             var txtfield = [], afield, t_data, t_htm, t_bbsTag = 'tbbs';
+            var bbsNum = [['txtCnt', 2, 0, 1]];
        		brwCount = -1;
 			brwCount2 = -1;
 			t_spec='';
@@ -89,6 +90,7 @@
 					<td align="center" style="width:7%;">單位</td>
 					<td align="center" style="width:7%;">未交數量</td>
 					<td align="center" style="width:7%;">未交重量</td>
+					<td align="center" style="width:5%;">/</td>
 					<td align="center" style="width:15%;">備註</td>
 				</tr>
 			</table>
@@ -105,6 +107,7 @@
 					<td align="center" style="width:7%;">單位</td>
 					<td align="center" style="width:7%;">未交數量</td>
 					<td align="center" style="width:7%;">未交重量</td>
+					<td align="center" style="width:5%;">/</td>
 					<td align="center" style="width:15%;">備註</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -131,6 +134,7 @@
 					<td style="width:7%;"><input type="text" readonly="readonly" id="txtUnit.*" style="float:left;width:95%;"/></td>
 					<td style="width:7%;"><input type="text" readonly="readonly" id="txtMount.*" style="float:left;width:95%;"/></td>
 					<td style="width:7%;"><input type="text" readonly="readonly" id="txtWeight.*" style="float:left;width:95%;"/></td>
+					<td style="width:5%;"><input type="text" id="txtCnt.*" class="txt num" style="float:left;width:95%;"/></td>
 					<td style="width:15%;"><input type="text" readonly="readonly" id="txtMemo.*" style="float:left;width:95%;"/></td>
 				</tr>
 			</table>
