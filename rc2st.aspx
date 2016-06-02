@@ -1729,7 +1729,6 @@
 					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
 					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
-					<td align="center" style="width:80px;display:none;" class="sprice"><a id='lblSprices_st'>成本單價</a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
 					<td align="center" style="width:20px;">自訂<br>金額</td>
 					<td align="center">
@@ -1796,8 +1795,8 @@
 					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>
+						<input id="txtSprice.*" type="text" style="display:none;"/>
 					</td>
-					<td style="display:none;" class="sprice"><input id="txtSprice.*" type="text"  class="txt num sprice" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
 						<input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/>
