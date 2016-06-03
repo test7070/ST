@@ -17,8 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "modfixc";
-			var q_readonly = ['txtNoa', 'txtModnoa', /*'txtMech',*/ 'txtWorker', 'txtWorker2'
-			,'textNob','textCode','textDetail','txtFrame'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','textNob','textCode','textDetail','txtFrame','textInnsum','textFixsum'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail','txtFrame'];
 			var bbmNum = [];
 			var bbsNum = [['txtWeight',15,1,1], ['txtMount',15,0,1], ['txtFixmount',15,0,1], ['txtBottom',15,2,1], ['txtBebottom',15,2,1], ['txtEnbottom',15,2,1], 
@@ -34,8 +33,9 @@
 			brwKey = 'Noa';
 			q_desc = 1;
 					
-			aPop = new Array(		
+			aPop = new Array(
 				['txtInnoa','lblInnoa','modfix','noa,modnoa,frame,mechno,mech','txtInnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
+				['txtModnoa','lblModnoa','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
 				//['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtInnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
 			);
@@ -122,12 +122,10 @@
 				$('#chkEnda').click(function(){				
 					if($('#chkEnda').prop("checked")){
 						$("#txtInnoa").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-						$("#txtMechno").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-						$("#txtDatea").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');					   
+						$("#txtMechno").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');		   
 					}else{
 						$("#txtInnoa").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 						$("#txtMechno").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
-						$("#txtDatea").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');						
 					}
 				});
 			}          	 
@@ -193,13 +191,13 @@
 							t_data3 = as;
 						}
 						getLast();
-						break;*/
+						break;
 					case 'modfix':
 						var as = _q_appendData("modfix", "", true);
 						if (as[0] != undefined) {
 							t_indate = as[0].datea;
 						}
-						break;					
+						break;*/					
 					case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -240,11 +238,20 @@
 			}*/
 			
 			function btnOk() {
-				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
+				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')],['txtModnoa', q_getMsg('lblModnoa')],['txtInnoa', q_getMsg('lblInnoa')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
-				}			
+				}
+				
+				q_gt('modfix', "where=^^ noa='" + trim($('#txtInnoa').val()) + "' ^^", 0, 0, 0, "",r_accy,1);
+				var as = _q_appendData("modfix", "", true);
+				if (as[0] != undefined) {
+					t_indate = as[0].datea;
+				}else{
+					alert('入庫單號不存在!!');
+					return;
+				}
 				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
@@ -254,7 +261,7 @@
 				//檢查維修日期(modfixc.datea)>入庫日期(modfix.datea)?
 				var t_date = trim($('#txtDatea').val());
 				if(t_date < t_indate){
-					alert('維修日期錯誤:\n　　維修日期('+t_date+')早於入庫日期('+t_indate+')');
+					alert('維修日期錯誤!!\n維修日期('+t_date+')早於入庫日期('+t_indate+')');
 					return;
 				}			
 				
@@ -626,13 +633,11 @@
 				_btnIns();
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date());
-				refreshBbm();
 				refreshBbs();
 			}
 
 			function btnModi() {			
 				_btnModi();
-				refreshBbm();
 				refreshBbs();
 			}
 
@@ -662,21 +667,11 @@
 				if($('#chkEnda').prop("checked")){
 					$("#txtInnoa").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtMechno").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-					$("#txtDatea").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				}
 				
-				q_gt('modfix', "where=^^ noa='" + trim($('#txtInnoa').val()) + "' ^^", 0, 0, 0, "");
-				
-				refreshBbm();
 				refreshBbs();	
 				sum();
 				$('#btndiv_detail_close').click();
-			}
-
-			function refreshBbm() {
-				$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-				$('#textInnsum').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');	
-				$('#textFixsum').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 			}
 			
 			function refreshBbs(){
@@ -814,6 +809,12 @@
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				
+				if(q_cur=='2'){
+					$('#txtDatea').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+				}else{
+					$('#txtDatea').css('color', '');
+				}
+				
 				 if (t_para) {
 					$("#bbs_detail [type='text'] ").attr('disabled', 'disabled');
 					$("#bbs_detail select ").attr('disabled', 'disabled');
@@ -879,6 +880,36 @@
 
 			function btnCancel() {
 				_btnCancel();
+			}
+			
+			function q_popPost(s1) {
+				switch (s1) {
+					case 'txtModnoa':
+						//排除已被維修或領用的入庫單
+						q_gt('modfix', "where=^^modnoa='"+$('#txtModnoa').val()+"' and not exists (select * from modfixc where noa=modfix.noa and noa!='"+$('txtNoa').val()+"') and not exists (select * from modout where noa=modfix.noa) ^^ stop=1 ", 0, 0, 0, "getinnoa",r_accy,1);
+						var as = _q_appendData("modfix", "", true);
+						if (as[0] != undefined) {
+							$('#txtInnoa').val(as[0].noa);
+							$('#txtFrame').val(as[0].frame);
+							$('#txtMechno').val(as[0].mechno);
+							$('#txtMech').val(as[0].mech);
+							t_indate = as[0].datea;
+						}else{
+							alert('模具編號無入庫單可進行維修!!');
+						}
+						
+						//清除表身
+						for(var i=0; i<q_bbsCount; i++){
+							$('#btnMinus_'+i).click();
+						}
+						break;
+					case 'txtInnoa':
+						//清除表身
+						for(var i=0; i<q_bbsCount; i++){
+							$('#btnMinus_'+i).click();
+						}
+						break;
+				}
 			}
 		</script>
 		<style type="text/css">

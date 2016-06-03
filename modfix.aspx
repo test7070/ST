@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -17,7 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "modfix";
-			var q_readonly = ['txtWorker', 'txtWorker2','txtNoa','txtMech','txtFrame'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','txtNoa','txtMech','txtFrame','textSum'];
 			var q_readonlys = ['txtDetail1','txtDetail2','txtModel','txtNob','txtWheel1','txtCode1','txtFrame1'];
 			var bbmNum = [];
 			var bbsNum = [['txtMount1',15,0,0], ['txtWeight1',15,1,0]];
@@ -178,12 +178,10 @@
 				_btnIns();
 				$('#txtNoa').val('AUTO');
                	$('#txtDatea').val(q_date()); 
-				refreshBbm();
 			}
 
 			function btnModi() {			
 				_btnModi();
-				refreshBbm();
 			}
 
 			function btnPrint() {
@@ -207,17 +205,16 @@
 
 			function refresh(recno) {
 				_refresh(recno);	
-				refreshBbm();
 				sum();
-			}
-
-			function refreshBbm() {
-				$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-				$('#textSum').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 			}
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				if(q_cur=='2'){
+					$('#txtDatea').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+				}else{
+					$('#txtDatea').css('color', '');
+				}
 			}
 
 			function btnMinus(id) {
@@ -394,9 +391,9 @@
 				<table class="tview" id="tview">
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewNoa'></a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewMech'></a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewDatea'></a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewMech'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewDatea'> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
@@ -409,22 +406,22 @@
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td style="width:6%;"></td>
-						<td style="width:15%;"></td>
-						<td style="width:6%;"></td>
-						<td style="width:15%;"></td>
-						<td style="width:6%;"></td>
-						<td style="width:15%;"></td>
-						<td style="width:6%;"></td>
-						<td style="width:8%;"></td>					
-						<td class="tdZ"></td>
+						<td style="width:6%;"> </td>
+						<td style="width:15%;"> </td>
+						<td style="width:6%;"> </td>
+						<td style="width:15%;"> </td>
+						<td style="width:6%;"> </td>
+						<td style="width:15%;"> </td>
+						<td style="width:6%;"> </td>
+						<td style="width:8%;"> </td>					
+						<td class="tdZ"> </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblModnoa' class="lbl btn" ></a></td>
+						<td><span> </span><a id='lblModnoa' class="lbl btn" > </a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblFrame' class="lbl"></a></td>
-						<td><input id="txtFrame" type="text" class="txt c1"/></a></td>						
-						<td><span> </span><a id='lblNoa' class="lbl "></a></td>
+						<td><span> </span><a id='lblFrame' class="lbl"> </a></td>
+						<td><input id="txtFrame" type="text" class="txt c1"/></td>						
+						<td><span> </span><a id='lblNoa' class="lbl "> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>		
 					</tr>
 					<tr>				
@@ -433,17 +430,17 @@
 							<input id="txtMechno"  type="text" style="width:34%;"/>
 							<input id="txtMech"  type="text" style="width:66%; color:green;"/>
 						</td>
-						<td><span> </span><a id='lblDatea' class="lbl"></a></td>
-						<td><input id="txtDatea" type="text" class="txt c1" style="float: left;"/></a></td>
+						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
+						<td><input id="txtDatea" type="text" class="txt c1" style="float: left;"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblWorker' class="lbl"></a></td>
+						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
-						<td><span> </span><a id='lblWorker2' class="lbl"></a></td>
+						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
 						<td> </td>
-						<td><span> </span><input id="btnIn" type="Button" style="width:100%"/></td>
-						<td><span> </span><a id='lblSum' class="lbl"></a></td>
+						<td><span> </span><input id="btnIn" type="button" style="width:100%"/></td>
+						<td><span> </span><a id='lblSum' class="lbl"> </a></td>
 						<td><input id="textSum"  type="text"  class="num c1" style="width:100%"/></td>
 					</tr>
 						
@@ -456,15 +453,15 @@
 					<td  align="center" style="width:1%;">
 						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width:10%;"><a id='lblNoa_s'></a></td>
-					<td style="display: none;" align="center" style="width:8%;"><a id='lblModel_s'></a></td>
-					<td style="display: none;" align="center" style="width:8%;"><a id='lblWheel1_s'></a></td>
-					<td align="center" style="width:8%;"><a id='lblCode1_s'></a></td>
-					<td align="center" style="width:10%;"><a id='lblDetail1_s'></a></td>
-					<td align="center" style="width:5%;"><a id='lblFrame1_s'></a></td>										
-					<td align="center" style="width:10%;"><a id='lblWay1_s'></a></td>
-					<td align="center" style="width:5%;"><a id='lblMount1_s'></a></td>
-					<td align="center" style="width:5%;"><a id='lblWeight1_s'></a></td>
+					<td align="center" style="width:10%;"><a id='lblNoa_s'> </a></td>
+					<td style="display: none;" align="center" style="width:8%;"><a id='lblModel_s'> </a></td>
+					<td style="display: none;" align="center" style="width:8%;"><a id='lblWheel1_s'> </a></td>
+					<td align="center" style="width:8%;"><a id='lblCode1_s'> </a></td>
+					<td align="center" style="width:10%;"><a id='lblDetail1_s'> </a></td>
+					<td align="center" style="width:5%;"><a id='lblFrame1_s'> </a></td>										
+					<td align="center" style="width:10%;"><a id='lblWay1_s'> </a></td>
+					<td align="center" style="width:5%;"><a id='lblMount1_s'> </a></td>
+					<td align="center" style="width:5%;"><a id='lblWeight1_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -477,7 +474,7 @@
 					<td><input id="txtCode1.*" type="text"  style="width : 98% ;"/></td>
 					<td><input id="txtDetail1.*" type="text" class="txt c1" style="width:98%;"/></td>
 					<td><input id="txtFrame1.*" type="text" class="txt c1" style="width:98%;"/></td>																
-					<td ><select id="cmbWay1.*" type="text" class="txt c1" style="width:99%;"/select></td>
+					<td ><select id="cmbWay1.*" class="txt c1" style="width:99%;"> </select></td>
 					<td><input id="txtMount1.*" type="text" class="num c1" style="width:98%;"/></td>
 					<td ><input id="txtWeight1.*" type="text" class="num c1" style="width:95%;"/></td>
 				</tr>
