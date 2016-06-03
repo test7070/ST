@@ -122,10 +122,12 @@
 				$('#chkEnda').click(function(){				
 					if($('#chkEnda').prop("checked")){
 						$("#txtInnoa").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-						$("#txtMechno").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');		   
+						$("#txtMechno").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+						$("#txtMech").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					}else{
 						$("#txtInnoa").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 						$("#txtMechno").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
+						$("#txtMech").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					}
 				});
 			}          	 
@@ -667,6 +669,7 @@
 				if($('#chkEnda').prop("checked")){
 					$("#txtInnoa").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					$("#txtMechno").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+					$("#txtMech").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				}
 				
 				refreshBbs();	
@@ -886,7 +889,7 @@
 				switch (s1) {
 					case 'txtModnoa':
 						//排除已被維修或領用的入庫單
-						q_gt('modfix', "where=^^modnoa='"+$('#txtModnoa').val()+"' and not exists (select * from modfixc where noa=modfix.noa and noa!='"+$('txtNoa').val()+"') and not exists (select * from modout where noa=modfix.noa) ^^ stop=1 ", 0, 0, 0, "getinnoa",r_accy,1);
+						q_gt('modfix', "where=^^modnoa='"+$('#txtModnoa').val()+"' and not exists (select * from modfixc where noa=modfix.noa and noa!='"+$('#txtNoa').val()+"') and not exists (select * from modout where noa=modfix.noa) ^^ stop=1 ", 0, 0, 0, "getinnoa",r_accy,1);
 						var as = _q_appendData("modfix", "", true);
 						if (as[0] != undefined) {
 							$('#txtInnoa').val(as[0].noa);
@@ -1074,7 +1077,7 @@
 						<td><span> </span><a id="lblMechno" class="lbl btn"> </a></td>
 						<td colspan="3">
 							<input id="txtMechno"  type="text" style="width:34%;"/>
-							<input id="txtMech"  type="text" style="width:66%; color:green;"/>						
+							<input id="txtMech"  type="text" style="width:66%;"/>						
 						</td>	
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1" /></td>

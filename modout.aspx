@@ -75,7 +75,7 @@
 								}else{
 									q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "getmodfixs",r_accy,1);
 									var ass = _q_appendData("modfixs", "", true);
-									if (as[0] != undefined) {
+									if (ass[0] != undefined) {
 										//清除表身
 										for(var i=0; i<q_bbsCount; i++){
 											$('#btnMinus_'+i).click();
