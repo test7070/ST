@@ -17,7 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "modout";
-			var q_readonly = ['txtNoa','txtModnoa','txtMech','txtWorker', 'txtWorker2','txtFrame'];
+			var q_readonly = ['txtNoa','txtMech','txtWorker', 'txtWorker2','txtFrame','textSum'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail','txtFrame'];
 			var bbmNum = [];
 			var bbsNum = [['txtMount',15,0,0]];
@@ -35,6 +35,7 @@
 			aPop = new Array(
 				['txtFixnoa','lblFixnoa','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				//['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
+				['txtModnoa','lblModnoa','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
 				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx'],
 				['txtSssno','lblSssno','nhpe','noa,namea','txtSssno,txtNamea','']
 			);
@@ -60,28 +61,36 @@
 					//2016/01/28原匯入維修資料改匯入入庫資料							
 					if(!emp($('#txtFixnoa').val()) && (q_cur == 1 || q_cur == 2) ){
 						//105/02/25 判斷是否有進行 維修 
-						q_gt('modfixc', "where=^^innoa='"+$('#txtFixnoa').val()+"' and isnull(enda,0)=0 ^^", 0, 0, 0, "check_modfixs",r_accy,1);
+						q_gt('modfixc', "where=^^innoa='"+$('#txtFixnoa').val()+"' ^^", 0, 0, 0, "check_modfixs",r_accy,1);
 						var as = _q_appendData("modfixc", "", true);
 						if (as[0] != undefined) {
-							alert('模具入庫單【'+$('#txtFixnoa').val()+'】尚在維修中【'+as[0].noa+'】!!');
-						}else{
-							//105/04/08 判斷是否重覆領用 且只會領用一次
-							q_gt('modout', "where=^^fixnoa='"+$('#txtFixnoa').val()+"' and noa!='"+$('#txtNoa').val()+"' ^^", 0, 0, 0, "getmodout",r_accy,1);
-							var as = _q_appendData("modout", "", true);
-							if (as[0] != undefined) {
-								alert('模具入庫單【'+$('#txtFixnoa').val()+'】已被領用【'+as[0].noa+'】!!');
+							if(as[0].enda=='false'){
+								alert('模具入庫單【'+$('#txtFixnoa').val()+'】尚在維修中【'+as[0].noa+'】!!');
 							}else{
-								q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "getmodfixs",r_accy,1);
-								var ass = _q_appendData("modfixs", "", true);
-								//清除表身
-								for(var i=0; i<q_bbsCount; i++){
-									$('#btnMinus_'+i).click();
+								//105/04/08 判斷是否重覆領用 且只會領用一次
+								q_gt('modout', "where=^^fixnoa='"+$('#txtFixnoa').val()+"' and noa!='"+$('#txtNoa').val()+"' ^^", 0, 0, 0, "getmodout",r_accy,1);
+								var as = _q_appendData("modout", "", true);
+								if (as[0] != undefined) {
+									alert('模具入庫單【'+$('#txtFixnoa').val()+'】已被領用【'+as[0].noa+'】!!');
+								}else{
+									q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "getmodfixs",r_accy,1);
+									var ass = _q_appendData("modfixs", "", true);
+									if (as[0] != undefined) {
+										//清除表身
+										for(var i=0; i<q_bbsCount; i++){
+											$('#btnMinus_'+i).click();
+										}
+										q_gridAddRow(bbsHtm, 'tbbs', 'txtNob,txtCode,txtDetail,txtFrame,txtMount,txtWeight'
+										, ass.length, ass, 'nob,code1,detail1,frame1,mount1,weight1', 'txtNob');
+										sum();
+									}else{
+										alert('模具入庫單不存在!!');
+									}
+									//q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");	
 								}
-								q_gridAddRow(bbsHtm, 'tbbs', 'txtNob,txtCode,txtDetail,txtFrame,txtMount,txtWeight'
-								, ass.length, ass, 'nob,code1,detail1,frame1,mount1,weight1', 'txtNob');
-								sum();
-								//q_gt('modfix', "where=^^noa='"+$('#txtFixnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");	
 							}
+						}else{
+							alert('維修單不存在!!');
 						}
 					}
 				});
@@ -138,7 +147,7 @@
 			}
 
 			function btnOk() {
-				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')],['txtMechno', q_getMsg('lblMechno')],['txtFixnoa', q_getMsg('lblFixnoa')]]);
+				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')],['txtMechno', q_getMsg('lblMechno')],['txtFixnoa', q_getMsg('lblFixnoa')],['txtModnoa', q_getMsg('lblModnoa')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
@@ -149,6 +158,34 @@
 				var as = _q_appendData("modout", "", true);
 				if (as[0] != undefined) {
 					alert('模具入庫單【'+$('#txtFixnoa').val()+'】已被領用【'+as[0].noa+'】!!');
+					return;
+				}
+				
+				var t_indate='';
+				q_gt('modfix', "where=^^ noa='" + trim($('#txtFixnoa').val()) + "' ^^", 0, 0, 0, "",r_accy,1);
+				var as = _q_appendData("modfix", "", true);
+				if (as[0] != undefined) {
+					q_gt('modfixc', "where=^^ innoa='" + trim($('#txtFixnoa').val()) + "' ^^", 0, 0, 0, "",r_accy,1);
+					var ass = _q_appendData("modfixc", "", true);
+					if (ass[0] != undefined) {
+						if(ass[0].enda=='false'){
+							alert('維修單號尚在維修中!!');
+							return;
+						}else{
+							t_indate=ass[0].datea
+						}
+					}else{
+						alert('維修單號不存在!!');
+						return;
+					}
+				}else{
+					alert('入庫單號不存在!!');
+					return;
+				}
+				
+				var t_date = trim($('#txtDatea').val());
+				if(t_date < t_indate){
+					alert('出庫日期錯誤!!\n出庫日期('+t_date+')早於維修日期('+t_indate+')');
 					return;
 				}
 				
@@ -194,13 +231,10 @@
 				_btnIns();
 				$('#txtNoa').val('AUTO');
 				$('#txtDatea').val(q_date()); 
-				refreshBbm();
-
 			}
 
 			function btnModi() {			
 				_btnModi();
-				refreshBbm();
 			}
 
 			function btnPrint() {
@@ -225,17 +259,17 @@
 
 			function refresh(recno) {
 				_refresh(recno);		
-				refreshBbm();
 				sum();
 			}
-
-			function refreshBbm() {
-				$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-				$('#textSum').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
-			}
-
+			
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				
+				if(q_cur=='2'){
+					$('#txtDatea').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
+				}else{
+					$('#txtDatea').css('color', '');
+				}
 			}
 
 			function btnMinus(id) {
@@ -288,6 +322,35 @@
 
 			function btnCancel() {
 				_btnCancel();
+			}
+			
+			function q_popPost(s1) {
+				switch (s1) {
+					case 'txtModnoa':
+						//排除已被維修或領用的入庫單
+						q_gt('modfix', "where=^^modnoa='"+$('#txtModnoa').val()+"' and not exists (select * from modfixc where noa=modfix.noa and isnull(enda,0)=0) and not exists (select * from modout where noa=modfix.noa and noa!='"+$('#txtNoa').val()+"') ^^ stop=1 ", 0, 0, 0, "getinnoa",r_accy,1);
+						var as = _q_appendData("modfix", "", true);
+						if (as[0] != undefined) {
+							$('#txtFixnoa').val(as[0].noa);
+							$('#txtFrame').val(as[0].frame);
+							$('#txtMechno').val(as[0].mechno);
+							$('#txtMech').val(as[0].mech);
+						}else{
+							alert('模具編號無入庫單可進行領用!!');
+						}
+						
+						//清除表身
+						for(var i=0; i<q_bbsCount; i++){
+							$('#btnMinus_'+i).click();
+						}
+						break;
+					case 'txtFixnoa':
+						//清除表身
+						for(var i=0; i<q_bbsCount; i++){
+							$('#btnMinus_'+i).click();
+						}
+						break;
+				}
 			}
 		</script>
 		<style type="text/css">
@@ -420,8 +483,8 @@
 				<table class="tview" id="tview">
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewNoa'></a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewMech'></a></td>				
+						<td align="center" style="width:80px; color:black;"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewMech'> </a></td>				
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
