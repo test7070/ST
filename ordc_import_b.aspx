@@ -19,7 +19,7 @@
             var txtfield = [], afield, t_data, t_htm, t_bbsTag = 'tbbs';
             var bbsNum = [['txtCnt', 2, 0, 1]];
        		brwCount = -1;
-			brwCount2 = 0;
+			brwCount2 = -1;
 			t_spec='';
 			
             $(document).ready(function() {
@@ -37,7 +37,8 @@
 	            	t_content = "where=^^['"+t_para.tggno+"','"+t_para.kind+"','"+t_para.noa+"','"+t_para.page+"')^^";
 	            }catch(e){
 	            } 
-	            mainBrow(6, t_content); 
+	            brwCount = -1;
+	            mainBrow(0, t_content); 
             }
             function q_gtPost(t_name) {
 				switch (t_name) {
@@ -72,11 +73,13 @@
             
             function refresh() {
                 _refresh();
-                
+                for(var i=0;i<q_bbsCount;i++){
+					$('#lblNo_'+i).text(i+1);
+				}
             }
             function bbsAssign() {
-				for(var i=0;i<q_bbsCount;i++)
-                	$('#lblNo_'+i).text(i+1);
+				
+                	
 				_bbsAssign();
 			}
 		</script>
