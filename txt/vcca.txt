@@ -1,3 +1,81 @@
+vcca_apv:--vcca_apv  檢查發票抬頭
+	declare @t_userno nvarchar(max) = [1]
+	declare @t_form nvarchar(max) = [2]
+	declare @t_guid nvarchar(max) = [3]
+	declare @t_noa nvarchar(max) = [4]
+	declare @t_custno nvarchar(max) = [5]
+	declare @t_cust nvarchar(max) = [6]
+
+	declare @t_rank int = 0
+	declare @t_user nvarchar(20) = ''
+	select @t_rank=[RANK],@t_user=namea from nhpe where noa=@t_userno
+	----RANK >=8 不用檢查
+	--if @t_rank>=8
+	--begin
+	--	select 1 val,@t_userno+'等級'+cast(@t_rank as nvarchar)+',不需檢查。' msg
+	--	return 
+	--end
+	declare @cust nvarchar(max) = ''
+	
+	select @cust=case when len(isnull(a.invoicetitle,''))>0 then a.invoicetitle else a.comp end
+	from cust a
+	where a.noa=@t_custno
+--------------------------------------------------------------------------------------------------	
+	declare @t_date nvarchar(20) = dbo.AD2ChineseEraName(getdate())
+	declare @t_time nvarchar(20) = left(CONVERT(nvarchar,getdate(),108),5)
+	declare @number nvarchar(max)
+	declare @sign nvarchar(max) = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	declare @nn int
+	declare @mm nvarchar(max)
+	declare @noa nvarchar(20) = ''
+	--
+	declare @t_checker nvarchar(max) = ''
+	--declare @t_memo nvarchar(max) = '出貨單號：'+@t_noa
+	--declare @productno nvarchar(max)
+	--declare @product nvarchar(max)
+	--declare @money1 float
+	--declare @money2 float
+	
+	select top 1 @noa = case when noa>isnull(@noa,'') then noa else @noa end from [sign] where noa like REPLACE(@t_date,'/','')+'[0-9,A-Z][0-9][0-9]' order by noa desc
+	if LEN(ISNULL(@noa,'')) = 0
+		set @noa = REPLACE(@t_date,'/','')+'000'
+	set @number  = right(@noa,3)				
+	set @nn = (charindex(left(@number,1),@sign)-1) * 100 + cast(right(@number,2) as int) + 1
+	set @mm = substring(@sign,floor(@nn/100)+1,1)
+	set @noa =  REPLACE(@t_date,'/','')+@mm+RIGHT('00'+cast(@nn as nvarchar),2)
+		
+	
+	if exists(select * from [sign] where zno=@t_guid and sender=@t_user and LTRIM(RTRIM(isnull(enda,'')))='Y')
+	begin
+		select 1 val,'已簽核' msg
+		return
+	end
+	else if exists(select * from [sign] where zno=@t_guid and sender=@t_user and LTRIM(RTRIM(isnull(enda,'')))!='Y')
+	begin
+		select 0 val,'簽核已送，尚未核准，請稍後！' msg
+		return
+	end
+	else if @cust!=@t_cust
+	begin
+		-- 發票抬頭異常
+		begin try
+			select @t_checker=checker from signform where noa='vcca'
+			insert into [sign](noa,datea,timea,form,sender,checker,zno,memo,enda,memochecker)
+			select @noa,@t_date,@t_time,@t_form,@t_user,@t_checker,@t_guid,@cust+'   '+@t_cust,'N',''
+			select 0 val,'發票抬頭異常，簽核已送，請稍後！' msg
+			return
+		end try
+		begin catch
+			select 0 val,'錯誤：簽核產生異常。' msg
+			return
+		end catch
+	end
+	else
+	begin
+		select 1 val,'沒問題。' msg
+		return
+	end;
+
 vcca_mount:--vcca_mount 產品庫存, 只查詢一個產品, 不分倉庫, 排除當前的銷貨發票, 有日期	
 	declare @t_vccano nvarchar(20)=[1]
 	declare @t_cno nvarchar(10) = [2]
