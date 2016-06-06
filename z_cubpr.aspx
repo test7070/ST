@@ -73,6 +73,9 @@
                 $('#chkXshowenda').css('width', '220px').css('margin-top', '5px');
                 $('#chkXshowenda span').css('width','180px')
 
+                $('.q_report .report').css('width', '420px');
+                $('.q_report .report div').css('width', '200px');
+
           q_popAssign();
           q_getFormat();
           q_langShow();
@@ -113,7 +116,7 @@
 		<div id="q_menu"></div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
-				<div id="q_report"></div>
+				<div id="q_report" ></div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
                 <!--#include file="../inc/print_ctrl.inc"-->
