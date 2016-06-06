@@ -16,6 +16,13 @@
 	--from ztmpxls a where a!='編號' and a!='' and i!='' 
 	--and exists (select * from sss where right('0000'+a.a,4)=noa)
 	
+	delete sa
+	from salvacause sa where exists (
+		select * from ztmpxls a where a.a!='編號' and a.a!='' and a.i!=''
+		and exists (select * from sss where right('0000'+a.a,4)=noa)
+		and dbo.AD2ChineseEraName(replace(j,' 0'+char(59)+'0'+char(59)+'0',''))=sa.datea
+	)
+	
 	insert salvacause(noa,sssno,namea,partno,part,jobno,job,htype,hname,memo,hr_used,bdate,btime,edate,etime,datea,agent)
 	select 
 	replace(dbo.AD2ChineseEraName(replace(j,' 0'+char(59)+'0'+char(59)+'0','')),'/','')
