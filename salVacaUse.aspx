@@ -222,7 +222,7 @@
 	                             else
 	                             	q_content = "where=^^sssno='" + r_userno + "'^^";
 							}else{
-								if (r_rank >= 8 || as[0]["pr_dele"] == "true")
+								if (r_rank >= 8 || as[0]["pr_dele"] == "true" || as[0]["price_show"] == "true")
 	                                q_content = "";
 	                            else
 	                                q_content = "where=^^sssno='" + r_userno + "'^^";

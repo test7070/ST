@@ -37,12 +37,11 @@
                 switch (t_name) {
                     case 'authority':
                         var as = _q_appendData('authority', '', true);
-                        if (r_rank >= 7)
-                            seekwhere = "";
-                        else if (as.length > 0 && as[0]["pr_modi"] == "true")
-                            seekwhere = "and partno='" + ssspartno + "' ";
-                        else
+                        if (r_rank >= 8 || as[0]["pr_dele"] == "true"  || as[0]["price_show"] == "true"){
+                        	seekwhere = "";
+                        }else{
                             seekwhere = "and sssno='" + r_userno + "' ";
+						}
                         break;
 
                     case 'sss':
