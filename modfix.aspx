@@ -62,10 +62,8 @@
 				
 				$('#btnIn').click(function(){				
 					if(!emp($('#txtModnoa').val()) && (q_cur == 1 || q_cur == 2)){
-						t_where = "where=^^noa='"+$('#txtModnoa').val()+"'^^"
-						q_gt('model', t_where, 0, 0, 0, "ins_model");
-						t_where = "where=^^noa='"+$('#txtModnoa').val()+"'^^"
-						q_gt('models', t_where, 0, 0, 0, "ins_models");
+						var t_where = "where=^^a.noa='"+$('#txtModnoa').val()+"'^^"
+						q_gt('model_rs', t_where, 0, 0, 0, "model_rs");
 					}
 				});
 			}
@@ -83,6 +81,42 @@
 			var z_frame='';
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'model_rs':
+						var as = _q_appendData("model", "", true);
+						if (as[0] != undefined) {
+							var isimport=false;
+							if(as[0].innoa==''){ //沒有被領用
+								isimport=true;
+							}else{
+								if(as[0].innoa!=$('#txtNoa').val()){
+									if(as[0].outnoa!=''){ //已領用完可在入庫
+										isimport=true;
+									}else{
+										if(as[0].fixnoa!=''){
+											alert('模具已維修禁止重複入庫!!');
+										}else{
+											alert('模具尚未維修禁止重複入庫!!');
+										}
+									}
+								}else{ 
+									if(as[0].outnoa!=''){
+										alert('模具已領用禁止重新匯入!!');
+									}else if (as[0].fixnoa!=''){
+										alert('模具已維修禁止重新匯入!!');
+									}else{
+										isimport=true;
+									}
+								}
+							}
+							
+							if(isimport){
+								var t_where = "where=^^noa='"+$('#txtModnoa').val()+"'^^"
+								q_gt('models', t_where, 0, 0, 0, "ins_models");
+							}
+						}else{
+							alert('模具編號不存在!!');
+						}
+						break;
 					case 'ins_models':
 						var as = _q_appendData("models", "", true);
 						var str = '';
@@ -110,19 +144,48 @@
 						}	
 						sum();
 						break;
-					case 'ins_model':
+					case 'model_ok':
 						var as = _q_appendData("model", "", true);
 						if (as[0] != undefined) {
-							z_frame = as[0].frame;
+							if(as[0].innoa==''){ //沒有被領用
+								ok_check=true;
+							}else{
+								if(as[0].innoa!=$('#txtNoa').val()){
+									if(as[0].outnoa!=''){ //已領用完可在入庫
+										ok_check=true;
+									}else{
+										if(as[0].fixnoa!=''){
+											alert('模具已維修禁止入庫!!');
+										}else{
+											alert('模具尚未維修禁止入庫!!');
+										}
+									}
+								}else{ 
+									if(as[0].outnoa!=''){
+										alert('模具已領用禁止修改!!');
+									}else if (as[0].fixnoa!=''){
+										alert('模具已維修禁止修改!!');
+									}else{
+										ok_check=true;
+									}
+								}
+							}
+							
+							if(ok_check){
+								btnOk();
+							}
+						}else{
+							alert('模具編號不存在!!');
 						}
-						break;	
+						break;
 					case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
                     break;	
 				}
 			}
-
+			
+			var ok_check=false;
 			function btnOk() {
 				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
 				if (t_err.length > 0) {
@@ -130,10 +193,17 @@
 					return;
 				}
 				
+				if(!ok_check){
+					var t_where = "where=^^a.noa='"+$('#txtModnoa').val()+"'^^"
+					q_gt('model_rs', t_where, 0, 0, 0, "model_ok");
+				}
+				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
                 else
                     $('#txtWorker2').val(r_name);
+                    
+                ok_check=false;
 				
 				var t_noa = trim($('#txtNoa').val());
 			    var t_date = trim($('#txtDatea').val());

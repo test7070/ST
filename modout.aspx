@@ -60,12 +60,19 @@
 				$('#btnIn').click(function(){		
 					//2016/01/28原匯入維修資料改匯入入庫資料							
 					if(!emp($('#txtFixnoa').val()) && (q_cur == 1 || q_cur == 2) ){
-						//105/02/25 判斷是否有進行 維修 
+						//105/02/25 判斷是否有進行 維修  //會多筆維修
 						q_gt('modfixc', "where=^^innoa='"+$('#txtFixnoa').val()+"' ^^", 0, 0, 0, "check_modfixs",r_accy,1);
 						var as = _q_appendData("modfixc", "", true);
 						if (as[0] != undefined) {
-							if(as[0].enda=='false'){
-								alert('模具入庫單【'+$('#txtFixnoa').val()+'】尚在維修中【'+as[0].noa+'】!!');
+							var t_enda=true,t_endanoa='';
+							for(var i=0; i<as.length; i++){
+								if(as[i].enda=='false'){
+									t_enda=false;
+									t_endanoa=as[i].noa;
+								}
+							}
+							if(!t_enda){
+								alert('模具入庫單【'+$('#txtFixnoa').val()+'】尚在維修中【'+t_endanoa+'】!!');
 							}else{
 								//105/04/08 判斷是否重覆領用 且只會領用一次
 								q_gt('modout', "where=^^fixnoa='"+$('#txtFixnoa').val()+"' and noa!='"+$('#txtNoa').val()+"' ^^", 0, 0, 0, "getmodout",r_accy,1);
@@ -168,7 +175,14 @@
 					q_gt('modfixc', "where=^^ innoa='" + trim($('#txtFixnoa').val()) + "' ^^", 0, 0, 0, "",r_accy,1);
 					var ass = _q_appendData("modfixc", "", true);
 					if (ass[0] != undefined) {
-						if(ass[0].enda=='false'){
+						var t_enda=true,t_endanoa='';
+						for(var i=0; i<ass.length; i++){
+							if(ass[i].enda=='false'){
+								t_enda=false;
+								t_endanoa=ass[i].noa;
+							}
+						}
+						if(!t_enda){
 							alert('維修單號尚在維修中!!');
 							return;
 						}else{

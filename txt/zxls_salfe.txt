@@ -91,104 +91,119 @@ declare @restin nvarchar(50)
 
 --105/05/24 備註只放 是否有請假
 
-declare cursor_table cursor for
-select sssno,namea,datea,timea,memo from #tmp order by datea,sssno,timea
-open cursor_table
-fetch next from cursor_table
-into @sssno,@namea,@datea,@timea,@memo
-while(@@FETCH_STATUS <> -1)
-begin
-	if(@memo='上班簽到' or @memo='外出返回' or @memo='加班簽到')
-	begin
-		if(select count(*) from #bbs where noa=@datea and sssno=@sssno and namea=@namea)=0
-		begin
-			insert #bbs(noa,sssno,namea,clockin,memo)
-			select @datea,@sssno,@namea,@timea,''
-			--,case when @memo!='上班簽到' then @timea+' '+@memo else '' end
-		end
-		else
-		begin
-			set @clockin=isnull((select clockin from #bbs where noa=@datea and sssno=@sssno and namea=@namea ),'99:99:99')
-			if(@clockin>@timea)
-			begin
-				update #bbs
-				set clockin=@timea
-				where noa=@datea and sssno=@sssno and namea=@namea
-			end
-			--if(@memo!='上班簽到')
-			--begin
-			--	update #bbs
-			--	set memo=memo+case when len(memo)>0 then ' ' else '' end+@timea+' '+@memo
-			--	where noa=@datea and sssno=@sssno and namea=@namea
-			--end
-		end
-		if(@memo='加班簽到')
-		begin
-			update #bbs
-			set bwork=@timea
-			where noa=@datea and sssno=@sssno and namea=@namea
-		end
+--105/06/06 只看時間不看備註
+insert #bbs(noa,sssno,namea,clockin,clockout,restout,restin,bwork,ework,memo)
+select datea,sssno,namea,MIN(timea),MAX(timea),MAX(b.restout),MAX(b.restin)
+,'','','' from #tmp a
+outer apply (select MIN(timea)restout,MAX(timea)restin from #tmp where datea=a.datea and sssno=a.sssno and namea=a.namea
+and timea between '12:00:00' and '14:00:00')b
+group by datea,sssno,namea
+
+update #bbs set clockout='' where clockin=clockout
+update #bbs set restin='' where restout=restin
+update a
+set ework=clockout,bwork=case when b.typea='廠務' then '16:00:00' else '17:00:00' end
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where clockout>case when b.typea='廠務' then '16:00:00' else '17:00:00' end
+
+--declare cursor_table cursor for
+--select sssno,namea,datea,timea,memo from #tmp order by datea,sssno,timea
+--open cursor_table
+--fetch next from cursor_table
+--into @sssno,@namea,@datea,@timea,@memo
+--while(@@FETCH_STATUS <> -1)
+--begin
+--	if(@memo='上班簽到' or @memo='外出返回' or @memo='加班簽到')
+--	begin
+--		if(select count(*) from #bbs where noa=@datea and sssno=@sssno and namea=@namea)=0
+--		begin
+--			insert #bbs(noa,sssno,namea,clockin,memo)
+--			select @datea,@sssno,@namea,@timea,''
+--			--,case when @memo!='上班簽到' then @timea+' '+@memo else '' end
+--		end
+--		else
+--		begin
+--			set @clockin=isnull((select clockin from #bbs where noa=@datea and sssno=@sssno and namea=@namea ),'99:99:99')
+--			if(@clockin>@timea)
+--			begin
+--				update #bbs
+--				set clockin=@timea
+--				where noa=@datea and sssno=@sssno and namea=@namea
+--			end
+--			--if(@memo!='上班簽到')
+--			--begin
+--			--	update #bbs
+--			--	set memo=memo+case when len(memo)>0 then ' ' else '' end+@timea+' '+@memo
+--			--	where noa=@datea and sssno=@sssno and namea=@namea
+--			--end
+--		end
+--		if(@memo='加班簽到')
+--		begin
+--			update #bbs
+--			set bwork=@timea
+--			where noa=@datea and sssno=@sssno and namea=@namea
+--		end
 		
-		if(@timea between '12:00:00' and '14:00:00' and @memo='上班簽到') --中午只會打上班簽到
-		begin
-			set @restin=isnull((select restin from #bbs where noa=@datea and sssno=@sssno and namea=@namea ),'')
-			if(@restin!='')
-			begin
-				update #bbs
-				set restout=@timea
-				where noa=@datea and sssno=@sssno and namea=@namea
-			end
-			else
-			begin
-				update #bbs
-				set restin=@timea
-				where noa=@datea and sssno=@sssno and namea=@namea
-			end
-		end
-	end
-	else if(@memo='下班簽退' or @memo='外出' or @memo='加班簽退')
-	begin
-		if(select count(*) from #bbs where noa=@datea and sssno=@sssno and namea=@namea)=0
-		begin
-			insert #bbs(noa,sssno,namea,clockout,memo)
-			select @datea,@sssno,@namea,@timea,''
-			--,case when @memo!='下班簽退' then @timea+' '+@memo else '' end
-		end
-		else
-		begin
-			set @clockout=isnull((select clockout from #bbs where noa=@datea and sssno=@sssno and namea=@namea),'00:00:00')
-			if(@clockout<@timea)
-			begin
-				update #bbs
-				set clockout=@timea
-				where noa=@datea and sssno=@sssno and namea=@namea
-			end
-			--if(@memo!='下班簽退')
-			--begin
-			--	update #bbs
-			--	set memo=memo+case when len(memo)>0 then ' ' else '' end+@timea+' '+@memo
-			--	where noa=@datea and sssno=@sssno and namea=@namea
-			--end
-		end
-		if(@memo='加班簽退')
-		begin
-			update #bbs
-			set ework=@timea
-			where noa=@datea and sssno=@sssno and namea=@namea
-		end
-		/*if(@timea between '12:00:00' and '14:00:00' and @memo='下班簽退')
-		begin
-			update #bbs
-			set restin=@timea
-			where noa=@datea and sssno=@sssno and namea=@namea
-		end*/
-	end
+--		if(@timea between '12:00:00' and '14:00:00' and @memo='上班簽到') --中午只會打上班簽到
+--		begin
+--			set @restin=isnull((select restin from #bbs where noa=@datea and sssno=@sssno and namea=@namea ),'')
+--			if(@restin!='')
+--			begin
+--				update #bbs
+--				set restout=@timea
+--				where noa=@datea and sssno=@sssno and namea=@namea
+--			end
+--			else
+--			begin
+--				update #bbs
+--				set restin=@timea
+--				where noa=@datea and sssno=@sssno and namea=@namea
+--			end
+--		end
+--	end
+--	else if(@memo='下班簽退' or @memo='外出' or @memo='加班簽退')
+--	begin
+--		if(select count(*) from #bbs where noa=@datea and sssno=@sssno and namea=@namea)=0
+--		begin
+--			insert #bbs(noa,sssno,namea,clockout,memo)
+--			select @datea,@sssno,@namea,@timea,''
+--			--,case when @memo!='下班簽退' then @timea+' '+@memo else '' end
+--		end
+--		else
+--		begin
+--			set @clockout=isnull((select clockout from #bbs where noa=@datea and sssno=@sssno and namea=@namea),'00:00:00')
+--			if(@clockout<@timea)
+--			begin
+--				update #bbs
+--				set clockout=@timea
+--				where noa=@datea and sssno=@sssno and namea=@namea
+--			end
+--			--if(@memo!='下班簽退')
+--			--begin
+--			--	update #bbs
+--			--	set memo=memo+case when len(memo)>0 then ' ' else '' end+@timea+' '+@memo
+--			--	where noa=@datea and sssno=@sssno and namea=@namea
+--			--end
+--		end
+--		if(@memo='加班簽退')
+--		begin
+--			update #bbs
+--			set ework=@timea
+--			where noa=@datea and sssno=@sssno and namea=@namea
+--		end
+--		/*if(@timea between '12:00:00' and '14:00:00' and @memo='下班簽退')
+--		begin
+--			update #bbs
+--			set restin=@timea
+--			where noa=@datea and sssno=@sssno and namea=@namea
+--		end*/
+--	end
 	
-	fetch next from cursor_table
-	into @sssno,@namea,@datea,@timea,@memo
-end
-close cursor_table
-deallocate cursor_table
+--	fetch next from cursor_table
+--	into @sssno,@namea,@datea,@timea,@memo
+--end
+--close cursor_table
+--deallocate cursor_table
 
 update #bbs set tweek=DATEPART(WEEKDAY,noa)-1
 
@@ -271,7 +286,6 @@ where whours>0 and b.typea!='廠務' and b.typea!='司機' and
 not ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0'  and tweek!='6')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
-
 
 update #bbs
 set clockin=ISNULL(clockin,''),clockout=ISNULL(clockout,'')
