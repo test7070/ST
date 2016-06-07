@@ -1,4 +1,4 @@
-create function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max), @t_noa nvarchar(max),@para nvarchar(max))
+ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max), @t_noa nvarchar(max),@para nvarchar(max))
 	returns @tmp table(
 		sel int identity(1,1)
 		,rdate nvarchar(20)
@@ -46,7 +46,8 @@ create function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max
 		insert into @tmp(rdate,tggno,tgg,kind,accy,noa,no2
 			,productno,product,spec,dime,width,lengthb,radius,mount,[weight],unit,price,memo
 			,cnt,class,[source],ucolor,scolor,size,unit2)
-		select a.rdate,b.tggno,c.nick,b.kind,a.accy,a.noa,a.no2
+		select case when len(isnull(a.rdate,''))>0 then a.rdate else b.datea end
+			,b.tggno,c.nick,b.kind,a.accy,a.noa,a.no2
 			,a.productno,a.product,a.spec,a.dime,a.width,a.lengthb,a.radius,a.mount,a.[weight],a.unit,a.price,a.memo
 			,1,a.class,a.[source],a.ucolor,a.scolor,a.size,a.unit2
 		from view_ordcs a
@@ -56,7 +57,7 @@ create function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max
 		and ISNULL(a.enda,0) = 0
 		and (len(@t_tggno)=0 or b.tggno=@t_tggno)
 		and (len(@t_kind)=0 or b.kind=@t_kind)
-		order by a.rdate desc,a.accy,a.noa,a.no2
+		order by case when len(isnull(a.rdate,''))>0 then a.rdate else b.datea end desc,a.accy,a.noa,a.no2
 		
 		update @tmp set mount2=b.mount,weight2=b.[weight]
 		from @tmp a
