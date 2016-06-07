@@ -123,7 +123,7 @@
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td style="width:25px;"><input type="checkbox" class="ccheck" id="chkSel.*"/></td>
-					<td style="width:30px;"><a id="lblNo.*" style="font-weight: bold;text-align: center;" readonly="readonly"> </a></td>
+					<td style="width:30px;text-align: center;"><a id="lblNo.*" style="font-weight: bold;" readonly="readonly"> </a></td>
 					<td style="width:80px;"><input type="text" readonly="readonly" id="txtRdate.*" style="float:left;width:95%;"/></td>
 					<td style="width:100px;"><input type="text" readonly="readonly" id="txtTgg.*" style="float:left;width:95%;"/></td>
 					<td style="width:110px;">
