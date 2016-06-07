@@ -100,7 +100,7 @@
 					<td align="center" style="width:50px;">單位</td>
 					<td align="center" style="width:80px;">未交數量</td>
 					<td align="center" style="width:80px;">未交重量</td>
-					<td align="center" style="width:50px;">/</td>
+					<td align="center" style="width:50px;">本次<BR>進貨數</td>
 					<td align="center" style="width:200px;">備註</td>
 				</tr>
 			</table>
@@ -118,7 +118,7 @@
 					<td align="center" style="width:50px;">單位</td>
 					<td align="center" style="width:80px;">未交數量</td>
 					<td align="center" style="width:80px;">未交重量</td>
-					<td align="center" style="width:50px;">/</td>
+					<td align="center" style="width:50px;">本次<BR>進貨數</td>
 					<td align="center" style="width:200px;">備註</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
