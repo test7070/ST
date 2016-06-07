@@ -95,12 +95,12 @@ declare @restin nvarchar(50)
 insert #bbs(noa,sssno,namea,clockin,clockout,restout,restin,bwork,ework,memo)
 select datea,sssno,namea,MIN(timea),MAX(timea),MAX(b.restout),MAX(b.restin)
 ,'','','' from #tmp a
-outer apply (select MIN(timea)restout,MAX(timea)restin from #tmp where datea=a.datea and sssno=a.sssno and namea=a.namea
+outer apply (select MAX(timea)restout,MIN(timea)restin from #tmp where datea=a.datea and sssno=a.sssno and namea=a.namea
 and timea between '12:00:00' and '14:00:00')b
 group by datea,sssno,namea
 
 update #bbs set clockout='' where clockin=clockout
-update #bbs set restin='' where restout=restin
+update #bbs set restout='' where restout=restin
 update a
 set ework=clockout,bwork=case when b.typea='廠務' then '16:00:00' else '17:00:00' end
 from #bbs a outer apply (select typea from sss where noa=a.sssno)b
