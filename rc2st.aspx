@@ -266,7 +266,7 @@
                 		var t_kind = $('#cmbKind').val();
                 		var t_noa = $('#txtNoa').val();
                 		var t_where ='';
-                		q_box("ordc_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({tggno:t_tggno,kind:t_kind,noa:t_noa,page:'rc2st'}), "ordc_import", "95%", "95%", '');
+                		q_box("ordc_import_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({tggno:t_tggno,kind:t_kind,noa:t_noa,page:'rc2st'}), "ordc_import", "95%", "95%", '');
                 	}
                 	else{
                 		lblOrdc();
