@@ -79,50 +79,30 @@
 
 
 z_ordcst1:--z_ordcst1
-declare @t_bdate nvarchar(10)
-declare @t_edate nvarchar(10)
-declare @t_bodate nvarchar(10)
-declare @t_eodate nvarchar(10)
-declare @t_btggno nvarchar(20)
-declare @t_etggno nvarchar(20)
-declare @t_bsalesno nvarchar(20)
-declare @t_esalesno nvarchar(20)
-declare @t_bproductno nvarchar(30)
-declare @t_eproductno nvarchar(30)
-declare @t_kind nvarchar(20)
-declare @t_trantype nvarchar(20)
-declare @t_isproj nvarchar(2)
-declare @t_enda nvarchar(2)
-declare @t_bwidth float
-declare @t_ewidth float
-declare @t_bdime float
-declare @t_edime float
-declare @t_blengthb float
-declare @t_elengthb float
-set @t_bdime = case when '#non'=[16] then 0.000 else cast([16] as float) end
-set @t_edime = case when '#non'=[17] then 999.990 else cast([17] as float) end
-set @t_bwidth = case when '#non'=[18] then 0.00 else cast([18] as float)end
-set @t_ewidth = case when '#non'=[19] then 9999.99 else cast([19] as float) end
-set @t_blengthb = case when '#non'=[20] then 0.0 else cast([20] as float) end
-set @t_elengthb = case when '#non'=[21] then 99999.9 else cast([21] as float) end
+	declare @t_bdate nvarchar(10)= case when '#non'=[2] then '' else [2] end
+	declare @t_edate nvarchar(10)= case when '#non'=[3] then char(255) else [3] end
+	declare @t_bodate nvarchar(10)= case when '#non'=[4] then '' else [4] end
+	declare @t_eodate nvarchar(10)= case when '#non'=[5] then char(255) else [5] end
+	declare @t_btggno nvarchar(20)= case when '#non'=[6] then '' else [6] end
+	declare @t_etggno nvarchar(20)= case when '#non'=[7] then char(255) else [7] end
+	declare @t_bsalesno nvarchar(20)= case when '#non'=[8] then '' else [8] end
+	declare @t_esalesno nvarchar(20)= case when '#non'=[9] then char(255) else [9] end
+	declare @t_bproductno nvarchar(30)= case when '#non'=[10] then '' else [10] end
+	declare @t_eproductno nvarchar(30)= case when '#non'=[11] then char(255) else [11] end
+	declare @t_kind nvarchar(20)= case when '#non'=[12] then '' when '全部'=[12] then '' else [12] end
+	declare @t_trantype nvarchar(20)= case when '#non'=[13] then '' when '全部'=[13] then '' else [13] end
+	declare @t_isproj nvarchar(2)= case when '#non'=[14] then '' when 'Y'=[14] then '1' when 'N'=[14] then '0' end
+	declare @t_enda nvarchar(2)= case when '#non'=[15] then '' when '全部'=[15] then '' else [15] end
+	declare @t_bwidth float= case when '#non'=[18] then 0.00 else cast([18] as float)end
+	declare @t_ewidth float= case when '#non'=[19] then 9999.99 else cast([19] as float) end
+	declare @t_bdime float= case when '#non'=[16] then 0.000 else cast([16] as float) end
+	declare @t_edime float= case when '#non'=[17] then 999.990 else cast([17] as float) end
+	declare @t_blengthb float = case when '#non'=[20] then 0.0 else cast([20] as float) end
+	declare @t_elengthb float= case when '#non'=[21] then 99999.9 else cast([21] as float) end
+	
+	declare @detail nvarchar(max) = case when '#non'=[22] then '' else [22] end
 
-set @t_bdate = case when '#non'=[2] then '' else [2] end
-set @t_edate = case when '#non'=[3] then char(255) else [3] end
-set @t_bodate = case when '#non'=[4] then '' else [4] end
-set @t_eodate = case when '#non'=[5] then char(255) else [5] end
-set @t_btggno = case when '#non'=[6] then '' else [6] end
-set @t_etggno = case when '#non'=[7] then char(255) else [7] end
-set @t_bsalesno = case when '#non'=[8] then '' else [8] end
-set @t_esalesno = case when '#non'=[9] then char(255) else [9] end
-set @t_bproductno = case when '#non'=[10] then '' else [10] end
-set @t_eproductno = case when '#non'=[11] then char(255) else [11] end
-set @t_kind = case when '#non'=[12] then '' when '全部'=[12] then '' else [12] end
-set @t_trantype = case when '#non'=[13] then '' when '全部'=[13] then '' else [13] end
-set @t_isproj = case when '#non'=[14] then '' when 'Y'=[14] then '1' when 'N'=[14] then '0' end
-set @t_enda = case when '#non'=[15] then '' when '全部'=[15] then '' else [15] end
-declare @detail nvarchar(max) = case when '#non'=[22] then '' else [22] end
-
-declare @tmp table(
+	declare @tmp table(
 		gno nvarchar(1),
 		noa nvarchar(30),
 		no2 nvarchar(15),
@@ -155,14 +135,15 @@ declare @tmp table(
 		coin nvarchar(50)
 		,c1 float
 		,notv float
+		,[contract] nvarchar(30)
 	)
 	insert into @tmp(gno,noa,no2,datea,odate,tggno,comp,pno,pname,spec,csize,pmount,pweight
-		,price,ptotal,e,a,qhref,coin,c1,notv)
+		,price,ptotal,e,a,qhref,coin,c1,notv,[contract])
 	select '0' gno, a.noa, b.no2, a.datea, a.odate, a.tggno, a.tgg,
 		   b.productno pno,b.product pname,b.spec,
 		   (case when ltrim(rtrim(isnull(b.size,'')))='' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else b.size end) size,
 		   b.mount pmount, b.weight pweight, b.price, b.total ptotal, a.enda e, (case when a.isproj='1' then 'Y' else 'N' end) a,
-		   'ordcst'+b.accy,a.coin,isnull(b.c1,0),isnull(b.notv,0)
+		   'ordcst'+b.accy,a.coin,isnull(b.c1,0),isnull(b.notv,0),a.[contract]
 	from view_ordcs b
 	left join view_ordc a on a.accy=b.accy and a.noa=b.noa
 	where 
@@ -207,6 +188,7 @@ declare @tmp table(
 		,a.rc2size
 		,dbo.getComma( a.c1,-1) c1
 		,dbo.getComma( a.notv,-1) notv
+		,a.[contract]
 	from @tmp a
 	left join spec b on a.spec=b.noa
 	order by left(a.odate,6),a.noa,a.no2,a.gno;
