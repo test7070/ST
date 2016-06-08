@@ -448,10 +448,15 @@
 					alert(t_err);
 					return;
 				}
-				$('#txtWorker').val(r_name);
+				if (q_cur == 1)
+					$('#txtWorker').val(r_name);
+				else
+					$('#txtWorker2').val(r_name);
+				sum();	
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_quat') + $('#txtDatea').val(), '/', ''));
+					// odate  報價日期
+					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_quat') + $('#txtOdate').val(), '/', ''));
 				else
 					wrServer(s1);
 			}
