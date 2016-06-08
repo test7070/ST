@@ -36,7 +36,7 @@
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+				['txtSalesno', 'lblSales', 'sss', 'noa,namea,partno,part', 'txtSalesno,txtSales,txtPartno,txtPart', 'sss_b.aspx'],
 				['txtSalesno2', 'lblSales2', 'sss', 'noa,namea', 'txtSalesno2,txtSales2', 'sss_b.aspx'],
 				['txtCustno2', 'lblCust2', 'cust', 'noa,comp', 'txtCustno2,txtComp2', 'cust_b.aspx'],
 				['txtPost', 'lblAddr', 'addr2', 'noa,post', 'txtPost', 'addr2_b.aspx'],
@@ -587,6 +587,9 @@
 							
 							$('#txtSalesno').val(as[0].salesno);
 							$('#txtSales').val(as[0].sales);
+							var t_where = "where=^^ noa='"+as[0].salesno+"' ^^";
+							q_gt('sss', t_where, 0, 0, 0, "sss");
+							
 							$('#txtPaytype').val(as[0].paytype);
 							$('#cmbTrantype').val(as[0].trantype);
 							$('#txtStoreno').val(as[0].postname);
@@ -692,7 +695,11 @@
 							q_Seek_gtPost();
 						break;
 					case 'sss':
-						as = _q_appendData('sss', '', true);
+						var as = _q_appendData("sss", "", true);
+						if (as[0] != undefined) {
+							$('#txtPartno').val(as[0].partno);
+							$('#txtPart').val(as[0].part);
+						}
 						break;
 					case 'startdate':
 						var as = _q_appendData('cust', '', true);
@@ -1035,6 +1042,8 @@
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
 				$('#txtMount').val(1);
+				
+				//105/06/07 原抓製單人部門 改成抓業務部門
 				$('#txtPartno').val(r_partno);
 				var t_where = "where=^^ noa='"+r_partno+"' ^^";
 				q_gt('part', t_where, 0, 0, 0, "getpart");
