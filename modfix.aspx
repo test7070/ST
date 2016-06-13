@@ -138,7 +138,7 @@
 								$('#txtNob_'+(pos-1)).val(as[i].productno);
 								$('#txtCode1_'+(pos-1)).val(as[i].number);
 								$('#txtDetail1_'+(pos-1)).val((as[i].model=='1'?'成型段':'定徑段')+as[i].wheel+as[i].number);
-								$('#txtFrame1_'+(pos-1)).val(z_frame);
+								$('#txtFrame1_'+(pos-1)).val($('#txtFrame').val());
 								$('#txtMount1_'+(pos-1)).val(as[i].mount);
 							}
 						}	
