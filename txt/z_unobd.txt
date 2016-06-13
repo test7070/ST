@@ -82,6 +82,7 @@ z_unobd05:--z_unobd05 批號履歷
 				select 0,@rank-1,uno,'cut',accy,noa,'',datea 
 				,null,null,gmount,gweight,null,null,productno,product,null,memo
 				from view_cut where accy=@accy and noa=@noa
+				and len(ISNULL(uno,''))>0
 			end
 			--製管入庫
 			else if @tablea='cubu_in'
@@ -149,8 +150,6 @@ z_unobd05:--z_unobd05 批號履歷
 		close cursor_table
 		deallocate cursor_table
 	end
-	
-	
 	
 	--往下找	
 	update @history set ischk=0 where [rank]=0
@@ -332,7 +331,6 @@ z_unobd05:--z_unobd05 批號履歷
 			 when tablea='cubu_in' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '包裝入庫'
 			 when tablea='cut' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '製管入庫'
 			 else tablea end
-		
 	update @history set 		 
 		ghref=case when tablea='rc2s' then "rc2_pk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='inas' then "inast?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
@@ -347,6 +345,40 @@ z_unobd05:--z_unobd05 批號履歷
 		,memo=REPLACE(memo,'~#$',"'")
 		,product=REPLACE(product,'~#$',"'")
 		,size=REPLACE(size,'~#$',"'")
+		
+	if exists(select * from acomp where CHARINDEX('聯琦',acomp)>0)
+	begin
+		update @history set 
+		[action]=case when tablea='rc2s' then '進貨'
+			 when tablea='inas' then '入庫'
+			 when tablea='cut' then '裁剪領料'
+			 when tablea='cuts' then '成品進倉'
+			 when tablea='vccs' then '出貨'
+			 when tablea='vccbk' then '出退'
+			 when tablea='gets' then '領料'
+			 when tablea='cubt_get' then '派令領料'
+			 when tablea='cubt_in' then '派令入庫'
+			 when tablea='cubu_in' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '包裝入庫'
+			 when tablea='cut' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '製管入庫'
+			 else tablea end
+			 
+		update @history set 		 
+		ghref=case when tablea='rc2s' then "rc2_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='inas' then "inast?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='cut' then "cut_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='cuts' then "cut_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='vccs' or tablea='vccbk' then "vcc_pk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='gets' then "get_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='cubt_get' then "cub_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='cubt_in' then "cub_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='cubu_in' then "cubpi?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 else tablea end
+		,memo=REPLACE(memo,'~#$',"'")
+		,product=REPLACE(product,'~#$',"'")
+		,size=REPLACE(size,'~#$',"'")
+	end
+	
+	
 
 	select a.* 
 		,'1' gno
