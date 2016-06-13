@@ -123,10 +123,10 @@
                             ///  q_box() 執行後，選取的資料
                             if (!b_ret || b_ret.length == 0)
                                 return;
-                            //清空bbs
-                            for (var i = 0; i < q_bbsCount; i++) {
+                            //清空bbs 1050613 要可以重覆匯入
+                            /*for (var i = 0; i < q_bbsCount; i++) {
                                 $('#btnMinus_' + i).click();
-                            }
+                            }*/
                             for (var i = 0; i < b_ret.length; i++) {
                                 var t_where = " where=^^ a.noa='"+b_ret[i].noa+"' and mount-isnull((select SUM(bkmount)-SUM(salemount) from ummbs where vccno=a.noa and vccnoq=a.noq),0)!=0 ^^";
 								q_gt('vccs_ummb', t_where, 0, 0, 0, 'vccs_1', r_accy);
