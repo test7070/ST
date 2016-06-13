@@ -391,7 +391,13 @@
 							for (var i = 0; i < q_bbsCount; i++) {
 								$('#btnMinus_' + i).click();
 							}
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdbno,txtNo3,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtTheory,txtStyle,txtClass,txtUno,txtSize,txtUnit,txtUnit2', ordbsArray.length, ordbsArray, 'productno,product,spec,dime,width,lengthb,radius,noa,no3,price,mount,weight,total,memo,theory,style,class,uno,size,unit,unit2', 'txtProductno,txtProduct,txtSpec');
+							
+							if(q_getPara('sys.project').toUpperCase()=='PK')
+								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdbno,txtNo3,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtTheory,txtStyle,txtClass,txtUno,txtSize,txtUnit,txtUnit2,txtUcolor,txtScolor', ordbsArray.length, ordbsArray, 'productno,product,spec,dime,width,lengthb,radius,noa,no3,price,mount,weight,total,memo,theory,style,class,uno,size,unit,unit2,ucolor,scolor', 'txtProductno,txtProduct,txtSpec');
+							else
+								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdbno,txtNo3,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtTheory,txtStyle,txtClass,txtUno,txtSize,txtUnit,txtUnit2', ordbsArray.length, ordbsArray, 'productno,product,spec,dime,width,lengthb,radius,noa,no3,price,mount,weight,total,memo,theory,style,class,uno,size,unit,unit2', 'txtProductno,txtProduct,txtSpec');
+							
+							
 							var oAMap = ordbsArray.map(function(el) {
 								return el['ordbno'];
 							});
@@ -584,19 +590,19 @@
 						$('#txtStyle_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtStyle_', '');
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                             $('#btnStyle_'+n).click();
                         });
                         $('#txtProductno_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtProductno_', '');
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                             $('#btnProduct_'+n).click();
                         });
                         $('#txtProductno1_' + j).bind('contextmenu', function(e) {
                             /*滑鼠右鍵*/
                             e.preventDefault();
-                            var n = $(this).attr('id').replace('txtProductno1_', '');
+                            var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                             $('#btnProduct1_'+n).click();
                         });
 						//計算理論重
