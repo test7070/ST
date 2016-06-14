@@ -92,11 +92,7 @@
 									if(as[0].outnoa!=''){ //已領用完可在入庫
 										isimport=true;
 									}else{
-										if(as[0].fixnoa!=''){
-											alert('模具已維修禁止重複入庫!!');
-										}else{
-											alert('模具尚未維修禁止重複入庫!!');
-										}
+										alert('模具尚未領用禁止重複入庫!!');
 									}
 								}else{ 
 									if(as[0].outnoa!=''){

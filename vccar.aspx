@@ -124,9 +124,9 @@
                     }
                 });
                 
-                $('.rb').hide();
-                if (q_getPara('sys.project').toUpperCase()=='RB'){
-                	$('.rb').show();
+                $('.electric').hide();
+                if (q_getPara('sys.project').toUpperCase()=='RB' || q_getPara('sys.project').toUpperCase()=='XY'){
+                	$('.electric').show();
                 }
             }
 
@@ -586,7 +586,7 @@
 							<input id="txtSeq" type="text" style="display:none;"/>
 						</td>
 					</tr>
-					<tr class='rb'>
+					<tr class='electric'>
 						<td><span> </span><a id="lblIselectric" class="lbl"> </a></td>
 						<td><input id="chkIselectric"  type="checkbox" style="float:left;" /></td>
 					</tr>
