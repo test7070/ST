@@ -138,10 +138,7 @@
                         				newArray.push(curItem);
                         			}
                         		}else{
-                        			if(newArray.length>0)
-                        				newArray.push(as[i]);
-                        			else 
-                        				newArray = as[i];
+                    				newArray.push(as[i]);
                         		}
                         	}
                     		q_gridAddRow(bbsHtm, 'tbbs', 'txtBccno,txtBccname,txtUnit,txtMount,txtMount2,txtPrice,txtTotal,txtMemo,txtOrdcno,txtNo2'
