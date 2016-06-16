@@ -611,21 +611,15 @@ order by custno,cno,gno;
 
 ------------------------------------------------------------------------------------------------------------------
 z_umm2:--z_umm2
-declare @t_cno nvarchar(20)
-declare @t_part nvarchar(20)
-declare @t_bdate nvarchar(20)
-declare @t_edate nvarchar(20)
-declare @t_bcustno nvarchar(50)
-declare @t_ecustno nvarchar(50)
-declare @t_acckey nvarchar(MAX)
+SET QUOTED_IDENTIFIER OFF
+declare @t_cno nvarchar(20) = case when '#non' = [1] then '' else [1] end
+declare @t_part nvarchar(20) = case when '#non' = [2] then '' else [2] end
+declare @t_bdate nvarchar(20) = case when '#non' = [3] then '' else [3] end
+declare @t_edate nvarchar(20) = case when '#non' = [4] then CHAR(255) else [4] end
+declare @t_bcustno nvarchar(50) = case when '#non' = [5] then '' else [5] end
+declare @t_ecustno nvarchar(50) = case when '#non' = [6] then CHAR(255) else [6] end
+declare @t_acckey nvarchar(MAX) = case when '#non' = [30] then '' else [30] end
 
-set @t_cno = case when '#non' = [1] then '' else [1] end
-set @t_part = case when '#non' = [2] then '' else [2] end
-set @t_bdate = case when '#non' = [3] then '' else [3] end
-set @t_edate = case when '#non' = [4] then CHAR(255) else [4] end
-set @t_bcustno = case when '#non' = [5] then '' else [5] end
-set @t_ecustno = case when '#non' = [6] then CHAR(255) else [6] end
-set @t_acckey = case when '#non' = [30] then '' else [30] end
 
 declare @tmpa table( 
 	acc2 nvarchar(100)
