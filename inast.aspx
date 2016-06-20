@@ -207,14 +207,14 @@
                 q_cmbParse("combSpec", t_spec,'s');
                 
                 /* 若非本會計年度則無法存檔 */
-                $('#txtDatea').focusout(function() {
+                /*$('#txtDatea').focusout(function() {
                     if ($(this).val().substr(0, 3) != r_accy) {
                         $('#btnOk').attr('disabled', 'disabled');
                         alert(q_getMsg('lblDatea') + '非本會計年度。');
                     } else {
                         $('#btnOk').removeAttr('disabled');
                     }
-                });
+                });*/
 
                 //變動尺寸欄位
                 $('#cmbKind').change(function() {
@@ -402,11 +402,11 @@
                     Unlock(1);
                     return;
                 }
-                if ($('#txtDatea').val().substring(0, 3) != r_accy) {
+                /*if ($('#txtDatea').val().substring(0, 3) != r_accy) {
                     alert('年度異常錯誤，請切換到【' + $('#txtDatea').val().substring(0, 3) + '】年度再作業。');
                     Unlock(1);
                     return;
-                }
+                }*/
  				for(var i=0;i<q_bbsCount;i++){
 					if($('#combSpec_'+i).is(":visible")){
 						$('#txtSpec_'+i).val($('#combSpec_'+i).val());						
@@ -1038,7 +1038,7 @@
             }
             .dview {
                 float: left;
-                width: 220px;
+                width: 400px;
                 border-width: 0px;
             }
             .tview {
@@ -1174,12 +1174,16 @@
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id="vewChk"> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id="vewDatea"> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id="vewItype"> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id="vewStoreno"> </a></td>
+						<td align="center" style="width:100px; color:black;"><a id="vewCust"> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
 						<td id="datea" style="text-align: center;">~datea</td>
-						<td id="storeno store,4" style="text-align: center;">~storeno ~store,4</td>
+						<td id="itype=uccc.itype" style="text-align: center;">~itype=uccc.itype</td>
+						<td id="store" style="text-align: center;">~store</td>
+						<td id="cust,4" style="text-align: center;">~cust,4</td>
 					</tr>
 				</table>
 			</div>
