@@ -41,7 +41,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,fax nvarchar(50)
 		,post nvarchar(20)
 		,zip nvarchar(20)
-		,addr nvarchar(50)
+		,addr nvarchar(max)
 		,tmoney float
 		,ttax float
 		,ttotal float
