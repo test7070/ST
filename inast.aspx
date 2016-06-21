@@ -207,14 +207,14 @@
                 q_cmbParse("combSpec", t_spec,'s');
                 
                 /* 若非本會計年度則無法存檔 */
-                $('#txtDatea').focusout(function() {
+                /*$('#txtDatea').focusout(function() {
                     if ($(this).val().substr(0, 3) != r_accy) {
                         $('#btnOk').attr('disabled', 'disabled');
                         alert(q_getMsg('lblDatea') + '非本會計年度。');
                     } else {
                         $('#btnOk').removeAttr('disabled');
                     }
-                });
+                });*/
 
                 //變動尺寸欄位
                 $('#cmbKind').change(function() {
@@ -402,11 +402,11 @@
                     Unlock(1);
                     return;
                 }
-                if ($('#txtDatea').val().substring(0, 3) != r_accy) {
+                /*if ($('#txtDatea').val().substring(0, 3) != r_accy) {
                     alert('年度異常錯誤，請切換到【' + $('#txtDatea').val().substring(0, 3) + '】年度再作業。');
                     Unlock(1);
                     return;
-                }
+                }*/
  				for(var i=0;i<q_bbsCount;i++){
 					if($('#combSpec_'+i).is(":visible")){
 						$('#txtSpec_'+i).val($('#combSpec_'+i).val());						
@@ -751,7 +751,11 @@
             }
 
             function btnPrint() {
-                q_box('z_inastp.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
+            	t_where = "noa=" + $('#txtNoa').val();
+				if(q_getPara('sys.project').toUpperCase()=='RK')
+					q_box("z_ina_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_rk', "95%", "95%", m_print);
+				else
+                	q_box('z_inastp.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
             }
 
             function wrServer(key_value) {
@@ -1038,7 +1042,7 @@
             }
             .dview {
                 float: left;
-                width: 220px;
+                width: 400px;
                 border-width: 0px;
             }
             .tview {
@@ -1174,12 +1178,16 @@
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id="vewChk"> </a></td>
 						<td align="center" style="width:80px; color:black;"><a id="vewDatea"> </a></td>
+						<td align="center" style="width:80px; color:black;"><a id="vewItype"> </a></td>
 						<td align="center" style="width:100px; color:black;"><a id="vewStoreno"> </a></td>
+						<td align="center" style="width:100px; color:black;"><a id="vewCust"> </a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" /></td>
 						<td id="datea" style="text-align: center;">~datea</td>
-						<td id="storeno store,4" style="text-align: center;">~storeno ~store,4</td>
+						<td id="itype=uccc.itype" style="text-align: center;">~itype=uccc.itype</td>
+						<td id="store" style="text-align: center;">~store</td>
+						<td id="cust,4" style="text-align: center;">~cust,4</td>
 					</tr>
 				</table>
 			</div>
@@ -1289,6 +1297,8 @@
 					<td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'  class="pe_hide"> </a></td>
 					<td class="pe_hide" align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
+					<td align="center" style="width:60px;"><a>硬度</a></td>
+					<td align="center" style="width:100px;"><a>保存年限</a></td>
 					<td align="center" style="width:200px;"><a id='lblMemo_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1344,13 +1354,15 @@
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td ><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
+					<td><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
 						<input id="txtTheory.*" type="text" class="txt num pe_hide" style="width:95%;"/>
 					</td>
 					<td class="pe_hide"><input class="txt c1" id="txtUno2.*" type="text" /></td>
+					<td><input id="txtHard.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input  id="txtDescr.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt c1" id="txtMemo.*" type="text" style="width:95%;" /></td>
 				</tr>
 			</table>
