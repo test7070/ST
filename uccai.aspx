@@ -30,20 +30,20 @@
 				});
 				
 				aPop = new Array(
-					['textCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,invoicetitle', 'textCustno,textComp', 'cust_b.aspx'],
-					['textSalesno', 'lblSales', 'sss', 'noa,namea', 'textSalesno,textSales', 'sss_b.aspx']
+					['txtCustno', 'lblCust', 'cust', 'noa,comp,startdate', 'txtCustno,txtComp,txtStartdate', 'cust_b.aspx'],
+					['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 				);
 				
                 q_popAssign();
                 q_langShow();
 					
-				$('#textBdate').mask(r_picd);
-				$('#textEdate').mask(r_picd);
-				$('#textMon').mask(r_picm);
-				$('#textStartdate').mask('99');
+				$('#txtBdate').mask(r_picd);
+				$('#txtEdate').mask(r_picd);
+				$('#txtMon').mask(r_picm);
+				$('#txtStartdate').mask('99');
                     
-				$('#textBdate').val(q_date().substr(0,r_lenm)+'/01');
-				$('#textEdate').val(q_date());
+				$('#txtBdate').val(q_date().substr(0,r_lenm)+'/01');
+				$('#txtEdate').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',45).substr(0,r_lenm)+'/01',-1));
                 
                 $('#checkCustorde').change(function(e) {
 					if($('#checkCustorde').prop('checked')){
@@ -51,7 +51,7 @@
 						, 'ordes_xy', "95%", "650px", q_getMsg('popOrde'));
 							
 					}else{
-						$('#textCustorde').val('');
+						$('#txtCustorde').val('');
 					}
 				});
                 
@@ -59,8 +59,34 @@
 					
 				});
 				
+				$('#txtStartdate').focusout(function() {
+					if($(this).val()=='01' || $(this).val()=='00' || $(this).val().length==0 || $(this).val().length==1){
+						$('#txtBdate').val(q_date().substr(0,r_lenm)+'/01');
+						$('#txtEdate').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',45).substr(0,r_lenm)+'/01',-1));
+					}else{
+						$('#txtBdate').val(q_cdn(q_date().substr(0,r_lenm)+'/01',-1).substr(0,r_lenm)+'/'+$('#txtStartdate').val());
+						$('#txtEdate').val(q_cdn(q_date().substr(0,r_lenm)+'/'+$('#txtStartdate').val(),-1));
+					}
+				});
+				
 				$('#btnXauthority').click(function(e) {
 					$('#btnAuthority').click();
+				});
+				
+				var SeekF= new Array();
+				$('#uccai td').children("input:text").each(function() {
+					SeekF.push($(this).attr('id'));
+				});
+								
+				$('#uccai td').children("input:text").each(function() {
+					$(this).mousedown(function(e) {
+						$(this).focus();
+						$(this).select();
+						});
+										
+					$(this).bind('keydown', function(event) {
+						keypress_bbm(event, $(this), SeekF, SeekF[$.inArray($(this).attr('id'),SeekF)+1]);	
+					});
 				});
             }
             
@@ -94,43 +120,37 @@
 			</div>
 			<input id="btnXauthority" type="button" style="float:left; width:80px;font-size: medium;"/>
 			<div id="uccai">
-				<table  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;width:400px">
-					<tr>
-						<td style="width:30%" align="center"><a id="lblDatea" class="lbl" style="font-size: medium;"> </a></td>
-						<td style="width:70%" colspan="3">
-							<input id="textBdate"  type="text" class="txt" style="width: 40%; font-size: medium;"/>~
-							<input id="textEdate"  type="text" class="txt" style="width: 40%; font-size: medium;"/>
-						</td>
-					</tr>
-					<tr>
-						<td style="width:30%" align="center"><a id="lblMon" class="lbl" style="font-size: medium;"> </a></td>
-						<td style="width:30%"><input id="textMon"  type="text"  class="txt" style="width: 95%; font-size: medium;"/></td>
-						<td style="width:20%" align="center"><a id="lblStartdate" class="lbl" style="font-size: medium;"> </a></td>
-						<td style="width:20%"><input id="textStartdate"  type="text"  class="txt" style="width: 95%; font-size: medium;"/></td>
-					</tr>
+				<table  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;width:500px">
 					<tr>
 						<td align="center"><a id="lblCust" class="lbl" style="font-size: medium;"> </a></td>
-						<td colspan="3">
-							<input id="textCustno"  type="text"  class="txt" style="width: 30%; font-size: medium;"/>
-							<input id="textComp"  type="text"  class="txt" style="width: 65%; font-size: medium;"/>
+						<td colspan="4">
+							<input id="txtCustno"  type="text"  class="txt" style="width: 30%; font-size: medium;"/>
+							<input id="txtComp"  type="text"  class="txt" style="width: 65%; font-size: medium;" disabled="disabled"/>
 						</td>
 					</tr>
 					<tr>
 						<td align="center"><a id="lblSales" class="lbl" style="font-size: medium;"> </a></td>
-						<td colspan="3">
-							<input id="textSalesno"  type="text"  class="txt" style="width: 30%; font-size: medium;"/>
-							<input id="textSales"  type="text"  class="txt" style="width: 65%; font-size: medium;"/>
+						<td colspan="4">
+							<input id="txtSalesno"  type="text"  class="txt" style="width: 30%; font-size: medium;"/>
+							<input id="txtSales"  type="text"  class="txt" style="width: 65%; font-size: medium;" disabled="disabled"/>
 						</td>
 					</tr>
 					<tr>
-						<td align="center">
+						<td style="width:75px;" align="center"><a id="lblStartdate" class="lbl" style="font-size: medium;"> </a></td>
+						<td style="width:40px;"><input id="txtStartdate"  type="text"  class="txt" style="width: 33px; font-size: medium;"/></td>
+						<td style="width:80px;" align="center"><a id="lblDatea" class="lbl" style="font-size: medium;"> </a></td>
+						<td style="width:200px">
+							<input id="txtBdate"  type="text" class="txt" style="width: 85px; font-size: medium;"/>~
+							<input id="txtEdate"  type="text" class="txt" style="width: 85px; font-size: medium;"/>
+						</td>
+						<td align="center" style="width:75px;">
 							<input id='checkCustorde' type="checkbox">
 							<a id="lblCustorde" class="lbl" style="font-size: medium;"> </a>　
 						</td>
-						<td colspan="3"><input id="textCustorde"  type="text"  class="txt" style="width: 98%; font-size: medium;" disabled="disabled"/></td>
 					</tr>
+					
 					<tr>
-						<td align="center" colspan="4">
+						<td align="center" colspan="5">
 							<input id="btnGenvcca" type="button" style="font-size: medium;"/>
 						</td>
 					</tr>

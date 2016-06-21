@@ -314,7 +314,7 @@ when week='6' then '六' else '日' end
 insert into @tmp (gno,noa,sssno,w133,w166,w100,spec) 
 select '1','999/99/99',sssno,sum(w133),sum(w166),sum(w100),sum(spec) from @tmp group by sssno 
 
-select gno,noa,week,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,spec,dbo.charbr(memo,19)memo,day1,day2
+select gno,noa,week,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,spec,dbo.charbr(memo,21)memo,day1,day2
 ,'salpresent?noa=$noa' qhref
 ,case when twhour>whour then whour else case when round(twhour,1)<=0 then null else round(twhour,1) end end whour
 from @tmp a outer apply (select typea from sss where noa=a.sssno)b order by sssno,noa,gno 
