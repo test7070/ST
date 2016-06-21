@@ -717,7 +717,7 @@
 					return;
 				}
 				if (emp($('#txtMon').val()))
-					$('#txtMon').val($('#txtDatea').val().substr(0, 6));
+					$('#txtMon').val($('#txtDatea').val().substr(0, r_lenm));
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
