@@ -751,7 +751,11 @@
             }
 
             function btnPrint() {
-                q_box('z_inastp.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
+            	t_where = "noa=" + $('#txtNoa').val();
+				if(q_getPara('sys.project').toUpperCase()=='RK')
+					q_box("z_ina_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_rk', "95%", "95%", m_print);
+				else
+                	q_box('z_inastp.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
             }
 
             function wrServer(key_value) {
@@ -1293,6 +1297,8 @@
 					<td align="center" style="width:120px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblTotals'> </a><br><a id='lblTheorys'  class="pe_hide"> </a></td>
 					<td class="pe_hide" align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
+					<td align="center" style="width:60px;"><a>硬度</a></td>
+					<td align="center" style="width:100px;"><a>保存年限</a></td>
 					<td align="center" style="width:200px;"><a id='lblMemo_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -1348,13 +1354,15 @@
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td ><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
+					<td><input  id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/></td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
 						<input id="txtTheory.*" type="text" class="txt num pe_hide" style="width:95%;"/>
 					</td>
 					<td class="pe_hide"><input class="txt c1" id="txtUno2.*" type="text" /></td>
+					<td><input id="txtHard.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input  id="txtDescr.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt c1" id="txtMemo.*" type="text" style="width:95%;" /></td>
 				</tr>
 			</table>
