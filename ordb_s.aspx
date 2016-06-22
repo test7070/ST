@@ -14,8 +14,10 @@
         <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
         <script type="text/javascript">
             var q_name = "ordb_s";
-            aPop = new Array(['txtTggno', 'lblTggno', 'tgg', 'noa,nick', 'txtTggno', 'tgg_b.aspx']
-            ,['txtCustno', 'lblCustno', 'cust', 'noa,comp', 'txtCustno', 'cust_b.aspx']);
+            aPop = new Array(
+            	['txtTggno', 'lblTggno', 'tgg', 'noa,nick', 'txtTggno', 'tgg_b.aspx']
+            	,['txtCustno', 'lblCustno', 'cust', 'noa,comp,nick,invoicetitle,serial', 'txtCustno', 'cust_b.aspx']
+            );
             $(document).ready(function() {
                 main();
             });
