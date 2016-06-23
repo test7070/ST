@@ -419,6 +419,13 @@
 						$('#txtStoreno_'+i).val($.trim($('#txtStoreno').val()));
 					}
 				}
+				//儲位
+				if($.trim($('#txtPlace').val()).length>0)
+				{
+					for(var i=0;i<=q_bbsCount;i++){
+						$('#txtPlace_'+i).val($.trim($('#txtPlace').val()));
+					}
+				}
 				
  				if(q_getPara('sys.comp').substring(0,2)=='傑期'){
  					getUno_bydate(0);
@@ -1127,7 +1134,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 2100px;
+                width: 2200px;
             }
             .tbbs a {
                 font-size: medium;
@@ -1241,9 +1248,11 @@
 					<tr>
 						<td><span> </span><a id="lblStore" class="lbl btn" > </a></td>
 						<td colspan="3">
-							<input type="text" id="txtStoreno" style="float:left;width:30%;"/>
-							<input type="text" id="txtStore" style="float:left;width:70%;"/>
+							<input type="text" id="txtStoreno" style="float:left;width:40%;"/>
+							<input type="text" id="txtStore" style="float:left;width:60%;"/>
 						</td>
+						<td><span> </span><a id="lblPlace" class="lbl btn" >儲位</a></td>
+						<td><input type="text" id="txtPlace" class="txt c1"/></td>
 						<td class="pe_hide"><span> </span><a id="lblTranmoney" class="lbl"> </a></td>
 						<td class="pe_hide"><input id="txtTranmoney" type="text" class="txt c1 num" /></td>
 					</tr>
@@ -1289,7 +1298,7 @@
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>長度</a></td>	
 					<td align="center" style="width:50px;"><a id='lblSource'>鋼廠</a></td>
 					<td align="center" style="width:50px;"><a id='lblStores'>倉庫</a></td>
-					<td align="center" style="width:50px;"><a id='lblPlace'>儲位</a></td>
+					<td align="center" style="width:50px;"><a id='lblPlaces'>儲位</a></td>
 					<td align="center" style="width:120px;"><a id='lblMount'> </a></td>
 					<td align="center" style="width:50px; display:none;" class="pk"><a id='lblUnit2'>數量<BR>單位</a></td>
 					<td align="center" style="width:120px;"><a id='lblWeights'> </a></td>
