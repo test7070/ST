@@ -926,7 +926,7 @@
                 t_kind = t_kind.substr(0, 1);				
 				if (t_kind == 'A') {
 					$('*[id="lblSize_help"]').text(q_getPara('sys.lblSizea'));
-					$('#Size').css('width', '220px');
+					$('#Size').css('width', '300px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
 						$('#textSize2_' + j).show();
