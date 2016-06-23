@@ -926,7 +926,7 @@
                 t_kind = t_kind.substr(0, 1);				
 				if (t_kind == 'A') {
 					$('*[id="lblSize_help"]').text(q_getPara('sys.lblSizea'));
-					$('#Size').css('width', '300px');
+					$('#Size').css('width', '250px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
 						$('#textSize2_' + j).show();
@@ -1247,11 +1247,11 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblStore" class="lbl btn" > </a></td>
-						<td colspan="3">
+						<td colspan="1">
 							<input type="text" id="txtStoreno" style="float:left;width:40%;"/>
 							<input type="text" id="txtStore" style="float:left;width:60%;"/>
 						</td>
-						<td><span> </span><a id="lblPlace" class="lbl btn" >儲位</a></td>
+						<td><span> </span><a id="lblPlace" class="lbl" >儲位</a></td>
 						<td><input type="text" id="txtPlace" class="txt c1"/></td>
 						<td class="pe_hide"><span> </span><a id="lblTranmoney" class="lbl"> </a></td>
 						<td class="pe_hide"><input id="txtTranmoney" type="text" class="txt c1 num" /></td>
