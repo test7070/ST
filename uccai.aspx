@@ -44,6 +44,11 @@
                     
 				$('#txtBdate').val(q_date().substr(0,r_lenm)+'/01');
 				$('#txtEdate').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',45).substr(0,r_lenm)+'/01',-1));
+				$('#txtMon').val(q_date().substr(0,r_lenm));
+				$('[name=xradio]').first().prop('checked',true)
+				$('#txtBdate').removeAttr('disabled');
+				$('#txtEdate').removeAttr('disabled');
+				$('#txtStartdate').attr('disabled', 'disabled');
                 
                 $('#checkCustorde').change(function(e) {
 					if($('#checkCustorde').prop('checked')){
@@ -56,16 +61,61 @@
 				});
                 
                 $('#btnGenvcca').click(function(e) {
+                	var t_salesno='#non';
+					var t_custno='#non';
+					var t_mon='#non';
+					var t_bdate='#non';
+					var t_edate='#non';
+					var t_startdate='#non';
+					var t_radio=$('[name=xradio]:checked').val();
+                	
+                	if($.trim($('#txtMon').val()).length==0 && t_radio=='2'){
+                		alert('【月結】方式帳款月份禁止空白!!')
+                		return;
+                	}
+                						
+					if($.trim($('#txtSalesno').val()).length>0){t_salesno=$.trim($('#txtSalesno').val());}
+					if($.trim($('#txtCustno').val()).length>0){t_custno=$.trim($('#txtCustno').val());}
+					if($.trim($('#txtMon').val()).length>0){t_mon=$.trim($('#txtMon').val());}
 					
+					if(t_radio=='1'){
+						if($.trim($('#txtBdate').val()).length>0){t_bdate=$.trim($('#txtBdate').val());}
+						if($.trim($('#txtEdate').val()).length>0){t_edate=$.trim($('#txtEdate').val());}
+					}
+					if(t_radio=='2'){
+						if($.trim($('#txtStartdate').val()).length>0){t_startdate=$.trim($('#txtStartdate').val());}
+					}
+					
+					q_func('qtxt.query.vccamon', 'cust_ucc_xy.txt,vccamon,' 
+					+ encodeURI(t_salesno) + ';' + encodeURI(t_custno) + ';' + encodeURI(t_mon) + ';' + encodeURI(t_bdate)+ ';' + encodeURI(t_edate) 
+					+ ';' + encodeURI(t_startdate) + ';' + encodeURI(t_radio) + ';' + encodeURI(r_userno) + ';' + encodeURI(r_name));
+					
+					$('#btnGenvcca').attr('disabled', 'disabled');
 				});
 				
-				$('#txtStartdate').focusout(function() {
+				/*$('#txtStartdate').focusout(function() {
 					if($(this).val()=='01' || $(this).val()=='00' || $(this).val().length==0 || $(this).val().length==1){
 						$('#txtBdate').val(q_date().substr(0,r_lenm)+'/01');
 						$('#txtEdate').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',45).substr(0,r_lenm)+'/01',-1));
 					}else{
 						$('#txtBdate').val(q_cdn(q_date().substr(0,r_lenm)+'/01',-1).substr(0,r_lenm)+'/'+$('#txtStartdate').val());
 						$('#txtEdate').val(q_cdn(q_date().substr(0,r_lenm)+'/'+$('#txtStartdate').val(),-1));
+					}
+				});*/
+				
+				$('[name=xradio]').change(function() {
+					if($('[name=xradio]:checked').val()=='1'){
+						$('#txtBdate').removeAttr('disabled');
+						$('#txtEdate').removeAttr('disabled');
+						$('#txtStartdate').attr('disabled', 'disabled');
+					}else if($('[name=xradio]:checked').val()=='2'){
+						$('#txtStartdate').removeAttr('disabled');
+						$('#txtBdate').attr('disabled', 'disabled');
+						$('#txtEdate').attr('disabled', 'disabled');
+					}else{
+						$('#txtStartdate').attr('disabled', 'disabled');
+						$('#txtBdate').attr('disabled', 'disabled');
+						$('#txtEdate').attr('disabled', 'disabled');
 					}
 				});
 				
@@ -97,7 +147,29 @@
             }
             
             function q_funcPost(t_func, result) {
-            	
+            	switch (t_name) {  
+                	case 'qtxt.query.vccamon':
+                		var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							if(as[0].t_err){
+								alert(as[0].t_err);
+							}else{
+								var t_where="1=1 and (noa between '"+as[0].binvono+"' and '"+as[0].einvono+"') ";
+								if(as[0].radio=='1')
+									t_where=t_where+" and [type]='W' "
+								if(as[0].radio=='2')
+									t_where=t_where+" and [type]='M' "
+								else
+									t_where=t_where+" and [type]='P' "
+								
+								q_box("vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcca', "95%", "95%", $('#btnGenvcca').val());
+							}
+							$('#btnGenvcca').removeAttr('disabled');
+						}else{
+							alert('開立發票失敗，請聯絡工程師!!');
+						}
+                		break;
+                }
             }
             
                         
@@ -120,37 +192,44 @@
 			</div>
 			<input id="btnXauthority" type="button" style="float:left; width:80px;font-size: medium;"/>
 			<div id="uccai">
-				<table  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;width:500px">
+				<table  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;width:500px;">
 					<tr>
-						<td align="center"><a id="lblCust" class="lbl" style="font-size: medium;"> </a></td>
-						<td colspan="4">
-							<input id="txtCustno"  type="text"  class="txt" style="width: 30%; font-size: medium;"/>
-							<input id="txtComp"  type="text"  class="txt" style="width: 65%; font-size: medium;" disabled="disabled"/>
-						</td>
-					</tr>
-					<tr>
-						<td align="center"><a id="lblSales" class="lbl" style="font-size: medium;"> </a></td>
-						<td colspan="4">
+						<td align="center" style="width:85px;"><a id="lblSales" class="lbl" style="font-size: medium;"> </a></td>
+						<td colspan="3">
 							<input id="txtSalesno"  type="text"  class="txt" style="width: 30%; font-size: medium;"/>
 							<input id="txtSales"  type="text"  class="txt" style="width: 65%; font-size: medium;" disabled="disabled"/>
 						</td>
 					</tr>
 					<tr>
-						<td style="width:75px;" align="center"><a id="lblStartdate" class="lbl" style="font-size: medium;"> </a></td>
-						<td style="width:40px;"><input id="txtStartdate"  type="text"  class="txt" style="width: 33px; font-size: medium;"/></td>
-						<td style="width:80px;" align="center"><a id="lblDatea" class="lbl" style="font-size: medium;"> </a></td>
-						<td style="width:200px">
-							<input id="txtBdate"  type="text" class="txt" style="width: 85px; font-size: medium;"/>~
-							<input id="txtEdate"  type="text" class="txt" style="width: 85px; font-size: medium;"/>
-						</td>
-						<td align="center" style="width:75px;">
-							<input id='checkCustorde' type="checkbox">
-							<a id="lblCustorde" class="lbl" style="font-size: medium;"> </a>　
+						<td align="center"><a id="lblCust" class="lbl" style="font-size: medium;"> </a></td>
+						<td colspan="3">
+							<input id="txtCustno"  type="text"  class="txt" style="width: 30%; font-size: medium;"/>
+							<input id="txtComp"  type="text"  class="txt" style="width: 65%; font-size: medium;" disabled="disabled"/>
 						</td>
 					</tr>
-					
 					<tr>
-						<td align="center" colspan="5">
+						<td align="center"><a id="lblMon" class="lbl" style="font-size: medium;"> </a></td>
+						<td colspan="3"><input id="txtMon"  type="text"  class="txt" style="width: 90px; font-size: medium;"/></td>
+					</tr>
+					<tr>
+						<td align="center"><input name="xradio" type="radio" value="1">週結</td>
+						<td align="center"><a id="lblDatea" class="lbl" style="font-size: medium;"> </a></td>
+						<td colspan="2">
+							<input id="txtBdate"  type="text" class="txt" style="width: 90px; font-size: medium;"/>~
+							<input id="txtEdate"  type="text" class="txt" style="width: 90px; font-size: medium;"/>
+						</td>
+					</tr>
+					<tr>
+						<td align="center"><input name="xradio" type="radio" value="2">月結</td>
+						<td style="width:85px;" align="center"><a id="lblStartdate" class="lbl" style="font-size: medium;"> </a></td>
+						<td style="width:200px;"><input id="txtStartdate"  type="text"  class="txt" style="width: 33px; font-size: medium;"/></td>
+					</tr>
+					<tr>
+						<td align="center"><input name="xradio" type="radio" value="3">PO&nbsp;&nbsp;&nbsp;</td>
+						<td colspan="3"> </td>
+					</tr>
+					<tr>
+						<td align="center" colspan="4">
 							<input id="btnGenvcca" type="button" style="font-size: medium;"/>
 						</td>
 					</tr>
