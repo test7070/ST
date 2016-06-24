@@ -61,14 +61,19 @@
 				});
                 
                 $('#btnGenvcca').click(function(e) {
-					var t_salesno='#non';
+                	var t_salesno='#non';
 					var t_custno='#non';
 					var t_mon='#non';
 					var t_bdate='#non';
 					var t_edate='#non';
 					var t_startdate='#non';
 					var t_radio=$('[name=xradio]:checked').val();
-					
+                	
+                	if($.trim($('#txtMon').val()).length==0 && t_radio=='2'){
+                		alert('【月結】方式帳款月份禁止空白!!')
+                		return;
+                	}
+                						
 					if($.trim($('#txtSalesno').val()).length>0){t_salesno=$.trim($('#txtSalesno').val());}
 					if($.trim($('#txtCustno').val()).length>0){t_custno=$.trim($('#txtCustno').val());}
 					if($.trim($('#txtMon').val()).length>0){t_mon=$.trim($('#txtMon').val());}
@@ -81,6 +86,11 @@
 						if($.trim($('#txtStartdate').val()).length>0){t_startdate=$.trim($('#txtStartdate').val());}
 					}
 					
+					q_func('qtxt.query.vccamon', 'cust_ucc_xy.txt,vccamon,' 
+					+ encodeURI(t_salesno) + ';' + encodeURI(t_custno) + ';' + encodeURI(t_mon) + ';' + encodeURI(t_bdate)+ ';' + encodeURI(t_edate) 
+					+ ';' + encodeURI(t_startdate) + ';' + encodeURI(t_radio) + ';' + encodeURI(r_userno) + ';' + encodeURI(r_name));
+					
+					$('#btnGenvcca').attr('disabled', 'disabled');
 				});
 				
 				/*$('#txtStartdate').focusout(function() {
@@ -137,7 +147,29 @@
             }
             
             function q_funcPost(t_func, result) {
-            	
+            	switch (t_name) {  
+                	case 'qtxt.query.vccamon':
+                		var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							if(as[0].t_err){
+								alert(as[0].t_err);
+							}else{
+								var t_where="1=1 and (noa between '"+as[0].binvono+"' and '"+as[0].einvono+"') ";
+								if(as[0].radio=='1')
+									t_where=t_where+" and [type]='W' "
+								if(as[0].radio=='2')
+									t_where=t_where+" and [type]='M' "
+								else
+									t_where=t_where+" and [type]='P' "
+								
+								q_box("vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcca', "95%", "95%", $('#btnGenvcca').val());
+							}
+							$('#btnGenvcca').removeAttr('disabled');
+						}else{
+							alert('開立發票失敗，請聯絡工程師!!');
+						}
+                		break;
+                }
             }
             
                         
