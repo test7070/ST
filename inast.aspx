@@ -206,6 +206,7 @@
                 q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
                 q_cmbParse("combSpec", t_spec,'s');
                 
+                
                 /* 若非本會計年度則無法存檔 */
                 /*$('#txtDatea').focusout(function() {
                     if ($(this).val().substr(0, 3) != r_accy) {
@@ -721,6 +722,7 @@
                 }
                 if(q_getPara('sys.project').toUpperCase()=='RK'){
                 	$('#lblWeights').text('重量/M');
+                	$('#lblSource').text('製造商');
                 }
                 if(q_getPara('sys.project').toUpperCase()=='PK'){
                 	$('.pk').show();
