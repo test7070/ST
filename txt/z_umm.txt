@@ -1,3 +1,110 @@
+z_ummx01:--z_ummx01 ref.z_ummfe01
+SET QUOTED_IDENTIFIER OFF
+
+declare @t_bcustno nvarchar(20) = case when '#non' = [5] then '' else [5] end
+declare @t_ecustno nvarchar(20) =case when '#non' = [6] then CHAR(255) else [6] end
+declare @t_bdate nvarchar(20) = case when '#non' = [3] then '' else [3] end
+declare @t_edate nvarchar(20) = case when '#non' = [4] then CHAR(255) else [4] end
+---------------------------------------------------------------------------------
+declare @tmp table(
+	gno nvarchar(1),
+	rec int,
+	custno nvarchar(25),
+	comp nvarchar(90),
+	noa nvarchar(35),
+	noq nvarchar(10),
+	datea nvarchar(10),
+	acc2 nvarchar(50),
+	money float,
+	checkno nvarchar(40),
+	bank nvarchar(60),
+	indate nvarchar(10),
+	memo nvarchar(max),
+	opay float, --預收
+	mopay float --預收餘額
+)
+insert into @tmp
+select
+	'2',ROW_NUMBER()over(partition by a.noa order by a.noa,b.noq),a.custno,c.comp,a.noa,b.noq,a.datea,b.acc2,b.money,b.checkno,b.bank,b.indate
+	,a.memo
+	,case when opay =0 then -1 * ISNULL(unopay,0) else ISNULL(opay,0) end,0
+from umm a
+left join umms b on a.noa = b.noa
+left join cust c on a.custno = c.noa
+where (LEN(b.acc1)>0) and (a.datea between @t_bdate and @t_edate) and (a.custno between @t_bcustno and @t_ecustno) 
+
+update @tmp set memo='' where rec!=1
+
+--前期累積預收
+insert into @tmp(gno,custno,comp,mopay)
+select '1',a.custno,c.comp,0
+from umm a
+left join cust c on a.custno = c.noa
+where EXISTS(select * from @tmp b where a.custno = b.custno)
+group by a.custno,c.comp
+
+update @tmp set opay = ISNULL(B.opay,0),mopay = ISNULL(B.opay,0)
+from @tmp A
+left join (
+	select custno,SUM(opay - unopay) opay
+	from umm a
+	where EXISTS(select * from @tmp b where a.custno = b.custno)and(a.datea < @t_bdate)
+	group by a.custno
+)B on A.custno = B.custno
+where gno = '1'
+
+--計算預收餘額
+declare @custno nvarchar(25)
+declare @xcustno nvarchar(25) = 'xxxxxx'
+declare	@noa nvarchar(35)
+declare @opay float
+declare @b4pay float
+
+declare cursor_table cursor for 
+select custno,noa,opay from @tmp where rec = '1' order by custno,noa
+open cursor_table 
+fetch next from cursor_table 
+into @custno,@noa,@opay
+while(@@FETCH_STATUS <> -1) 
+begin
+	if(@custno != @xcustno)
+	begin
+		set @b4pay = (select opay from @tmp where gno = '1' and custno = @custno)
+	end
+	
+	update @tmp set mopay = @b4pay + @opay where noa = @noa
+	set @b4pay = @b4pay + @opay
+	
+	set @xcustno = @custno
+
+	fetch next from cursor_table 
+	into @custno,@noa,@opay
+end 
+close cursor_table 
+deallocate cursor_table 
+
+insert into @tmp(gno,custno,noa,money)
+select '4',custno,'zzzzzzzzzzz',SUM(money) from @tmp where gno = '2' group by custno
+
+--排版
+delete @tmp where gno = '1' and opay = 0
+
+update @tmp set datea = '' where rec > 1
+
+update @tmp set gno = '3' 
+from @tmp a 
+left join(
+	select noa,MAX(rec)rec from @tmp where gno = '2' group by noa
+)b on a.noa = b.noa and a.rec = b.rec 
+where a.noa = b.noa and a.rec = b.rec 
+
+select 
+	*,
+	dbo.getComma(money,0)mny1,
+	dbo.getComma(opay ,0)mny2,
+	dbo.getComma(mopay,0)mny3 
+from @tmp order by custno,noa;
+
 z_umm15:--z_umm15
 	declare @t_bcustno nvarchar(50) = case when '#non'=[5] then '' else [5] end
 	declare @t_ecustno nvarchar(50) = case when '#non'=[6] then char(255) else [6] end
