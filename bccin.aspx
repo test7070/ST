@@ -268,6 +268,8 @@
                 _bbsAssign();
                 if(q_getPara('sys.project').toUpperCase()=='PK')
 					$('.pk').show();
+				if(q_getPara('sys.project').toUpperCase()=='RK')
+					$('.rk_hide').hide();
             }
 
             function btnIns() {
@@ -370,6 +372,8 @@
                 _refresh(recno);
 				if(q_getPara('sys.project').toUpperCase()=='PK')
 					$('.pk').show();
+				if(q_getPara('sys.project').toUpperCase()=='RK')
+					$('.rk_hide').hide();
             }
 
             function readonly(t_para, empty) {
@@ -679,7 +683,7 @@
 					
 					<td align="center" style="width: 5%;"><a id='lblMount'> </a></td>
 					<td align="center" style="width: 5%;display:none;" class="pk"><a>數量<br>單位</a></td>
-					<td align="center" style="width: 5%;"><a id='lblWeight'> </a></td>
+					<td align="center" style="width: 5%;" class="rk_hide"><a id='lblWeight'> </a></td>
 					<td align="center" style="width: 5%;"><a>計價<br>單位</a></td>
 					<td align="center" style="width: 5%;"><a id='lblMount2'> </a></td>	
 					<td align="center" style="width: 5%;"><a id='lblPrice'> </a></td>
@@ -702,7 +706,7 @@
 					<td><input id="txtBccname.*" type="text" style="width: 95%;" /></td>
 					<td><input id="txtMount.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
-					<td><input id="txtWeight.*" type="text" style="width: 95%; text-align: right;"/></td>
+					<td class="rk_hide"><input id="txtWeight.*"  type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtUnit.*" type="text" style="width: 95%;"/></td>
 					<td><input id="txtMount2.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtPrice.*" type="text" style="width: 95%; text-align: right;"/></td>
