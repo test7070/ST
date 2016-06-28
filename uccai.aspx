@@ -30,8 +30,8 @@
 				});
 				
 				aPop = new Array(
-					['txtCustno', 'lblCust', 'cust', 'noa,comp,startdate', 'txtCustno,txtComp,txtStartdate', 'cust_b.aspx'],
-					['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
+					['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx']
+					//,['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 				);
 				
                 q_popAssign();
@@ -49,6 +49,8 @@
 				$('#txtBdate').removeAttr('disabled');
 				$('#txtEdate').removeAttr('disabled');
 				$('#txtStartdate').attr('disabled', 'disabled');
+				
+				q_gt('sss', "where=^^isnull(issales,0)=1 ^^", 0, 0, 0, "getsalse",r_accy);
                 
                 $('#checkCustorde').change(function(e) {
 					if($('#checkCustorde').prop('checked')){
@@ -61,6 +63,10 @@
 				});
                 
                 $('#btnGenvcca').click(function(e) {
+                	if (!confirm('確定要開立發票?')){
+						return;
+					}
+                	
                 	var t_salesno='#non';
 					var t_custno='#non';
 					var t_mon='#non';
@@ -142,9 +148,58 @@
             
             function q_gtPost(t_name) {
                 switch (t_name) {  
-                	
+                	case 'getsalse':
+                		var as = _q_appendData("sss", "", true);
+                		var t_item = "#non@ ";
+						for ( i = 0; i < as.length; i++) {
+							t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].namea;
+						}
+						$('#cmbSalesno').text('');
+						q_cmbParse("cmbSalesno", t_item);
+                		break;
+                	case 'getcust':
+                		var as = _q_appendData("cust", "", true);
+                		if (as[0] != undefined) {
+                			$('#txtStartdate').val(as[0].startdate);
+                			$('#cmbSalesno').val(as[0].salesno);
+                		}else{
+                			alert('找不到客戶資料!!');
+                			$('#txtStartdate').val('');
+                			$('#cmbSalesno').val('#non');
+                		}
+                		break;
+                	case 'getcustm':
+                		var as = _q_appendData("custm", "", true);
+                		if (as[0] != undefined) {
+                			if(as[0].invomemo=='週結'){
+                				$('[name=xradio][value=1]').attr('checked',true);
+                			}else if(as[0].invomemo=='月結'){
+                				$('[name=xradio][value=2]').attr('checked',true);
+                			}else if(as[0].invomemo=='PO'){
+                				$('[name=xradio][value=3]').attr('checked',true);
+                			}else{
+                				alert('客戶發票開立為【'+as[0].invomemo+'】');
+                			}
+                		}
+                		$('[name=xradio]').change();
+                		break;
                 }
             }
+            
+            function q_popPost(s1) {
+				switch (s1) {
+					case 'txtCustno':
+						if (!emp($('#txtCustno').val())) {
+							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^";
+							$('#txtStartdate').val('');
+                			$('#cmbSalesno').val('#non');
+                			
+							q_gt('cust', t_where, 0, 0, 0, "getcust");
+							q_gt('custm', t_where, 0, 0, 0, "getcustm");
+						}
+						break;
+				}
+			}
             
             function q_funcPost(t_func, result) {
             	switch (t_name) {  
@@ -196,8 +251,7 @@
 					<tr>
 						<td align="center" style="width:85px;"><a id="lblSales" class="lbl" style="font-size: medium;"> </a></td>
 						<td colspan="3">
-							<input id="txtSalesno"  type="text"  class="txt" style="width: 30%; font-size: medium;"/>
-							<input id="txtSales"  type="text"  class="txt" style="width: 65%; font-size: medium;" disabled="disabled"/>
+							<select id="cmbSalesno" style="font-size: medium;"> </select>
 						</td>
 					</tr>
 					<tr>
