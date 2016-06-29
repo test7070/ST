@@ -268,8 +268,12 @@
                 _bbsAssign();
                 if(q_getPara('sys.project').toUpperCase()=='PK')
 					$('.pk').show();
-				if(q_getPara('sys.project').toUpperCase()=='RK')
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					$('.rk_hide').hide();
+					$('#lblErrmount').html('不良品數量<BR>備註');
+					$('#lblMemos').text('摘要');
+				}
+					
             }
 
             function btnIns() {
