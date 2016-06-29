@@ -227,6 +227,13 @@
                     $('#div_salbs').toggle();
                 });
                 
+				$('#btnSsschg').click(function(e) {
+					if (q_cur == 1) {
+						return;
+					}
+					q_box("ssschg.aspx?;;;noa='" + $('#txtNoa').val() + "'", 'ssschg', "95%", "95%", q_getMsg("popSsschg"));
+				});
+                
                 $('#btnClose_div_salbs').click(function(e) {
                     $('#div_salbs').hide();
                 });
@@ -968,6 +975,8 @@
 							<input id='btnTax' type="button" />
 							<span> </span>
 							<input id='btnSalbs' type="button"/>
+							<span> </span>
+							<input id='btnSsschg' type="button"/>
 						</td>
 					</tr>
 				</table>
