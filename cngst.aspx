@@ -14,6 +14,8 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
+			//RK  store: bbm move to bbs
+		
 			this.errorHandler = null;
 			function onPageError(error) {
 				alert("An error occurred:\r\n" + error.Message);
@@ -35,6 +37,8 @@
 			brwKey = 'Noa';
 			aPop = new Array(['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx']
 			, ['txtStoreinno', 'lblStorein', 'store', 'noa,store', 'txtStoreinno,txtStorein', 'store_b.aspx']
+			,['txtStoreno_', '', 'store', 'noa,store', 'txtStoreno_', 'store_b.aspx']
+			,['txtStoreinno_', '', 'store', 'noa,store', 'txtStoreinno_', 'store_b.aspx']
 			, ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']
 			, ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			, ['txtUno_', 'btnUno_', 'view_uccc', 'uno,uno,productno,class,product,unit,radius,width,dime,lengthb,spec,spec,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtProduct_,txtUnit_,txtRadius_,txtWidth_,txtDime_,txtLengthb_,txtSpec_,combSpec_,txtMount_,txtWeight_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
@@ -168,6 +172,14 @@
 					alert(q_getMsg('lblDatea') + '錯誤。');
 					Unlock(1);
 					return;
+				}
+				var t_storeno = $.trim($('#txtStoreno').val());
+				var t_storeinno = $.trim($('#txtStoreinno').val());
+				for(var i=0;i<q_bbsCount;i++){
+					if($('#txtStoreno_'+i).val().length==0)
+						$('#txtStoreno_'+i).val(t_storeno);
+					if($('#txtStoreinno_'+i).val().length==0)
+						$('#txtStoreinno_'+i).val(t_storeinno);
 				}
 				/*if ($('#txtDatea').val().substring(0, 3) != r_accy) {
 					alert('年度異常錯誤，請切換到【' + $('#txtDatea').val().substring(0, 3) + '】年度再作業。');
@@ -307,8 +319,6 @@
 				}
 				q_nowf();
 				as['date'] = abbm2['date'];
-				as['storeno'] = abbm2['storeno'];
-				as['storeinno'] = abbm2['storeinno'];
 				return true;
 			}
 
@@ -657,9 +667,9 @@
 						<td><span> </span><a id="lblNoa" class="lbl" > </a></td>
 						<td><input id="txtNoa"   type="text" class="txt c1"/></td>
 					</tr>
-					<tr>
-						<td class="pe_hide rk_hide"><span> </span><a id="lblKind" class="lbl" > </a></td>
-						<td class="pe_hide rk_hide"><select id="cmbKind" class="txt c1"> </select></td>
+					<tr class="rk_hide">
+						<td class="pe_hide"><span> </span><a id="lblKind" class="lbl" > </a></td>
+						<td class="pe_hide"><select id="cmbKind" class="txt c1"> </select></td>
 						<td><span> </span><a id="lblStore" class="lbl btn"> </a></td>
 						<td>
 							<input id="txtStoreno" type="text"  class="txt" style="width:50%;"/>
@@ -726,7 +736,9 @@
 					<td align="center" style="width: 45px;"><a id='lblUnit_st'> </a></td>
 					<td align="center" style="width: 100px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width: 100px;"><a id='lblWeight_st'> </a></td>
-					<td align="center" style="width: 100px;"><a>儲位</a></td>
+					<td align="center" style="width: 80px;"><a>調出倉</a></td>
+					<td align="center" style="width: 80px;"><a>調入倉</a></td>
+					<td align="center" style="width: 80px;"><a>儲位</a></td>
 					<td align="center" ><a id='lblMemo_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
@@ -771,6 +783,8 @@
 					<td><input class="txt c1" id="txtUnit.*" type="text" /></td>
 					<td><input class="txt num c1" id="txtMount.*" type="text"/></td>
 					<td><input class="txt num c1" id="txtWeight.*" type="text" /></td>
+					<td><input class="txt c1" id="txtStoreno.*" type="text" /></td>
+					<td><input class="txt c1" id="txtStoreinno.*" type="text" /></td>
 					<td><input class="txt c1" id="txtPlace.*" type="text" /></td>
 					<td>
 						<input class="txt c1" id="txtMemo.*" type="text"/>
