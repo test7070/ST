@@ -34,6 +34,8 @@ z_unobd05:--z_unobd05 批號履歷
 		productno nvarchar(max),
 		product nvarchar(max),
 		size nvarchar(max),
+		storeno nvarchar(20),
+		place nvarchar(20),
 		
 		memo nvarchar(max),
 		ghref nvarchar(max)
@@ -44,6 +46,35 @@ z_unobd05:--z_unobd05 批號履歷
 		,accy,noa,noq,datea 
 		,mount,[weight],null,null,sprice,sprice2,productno,product,size,memo
 		from view_uccb where uno=@t_uno
+		
+	update @history set storeno= 
+		case when b.noa is not null then b.storeno
+			 when c.noa is not null then c.storeno
+			 when d.noa is not null then d.storeno
+			 when e.noa is not null then e.storeno
+			 when f.noa is not null then f.storeno
+		else '' end
+		,place = 
+		case when b.noa is not null then b.place
+			 when c.noa is not null then c.place
+			 when d.noa is not null then d.place
+			 when e.noa is not null then e.place
+			 when f.noa is not null then f.place
+		else '' end
+	from @history a
+	left join view_rc2s b on a.tablea='rc2s' and b.typea='1' and a.uno=b.uno	 
+	left join view_inas c on a.tablea='inas' and a.uno=c.uno
+	left join view_cuts d on a.tablea='cuts' and a.uno=d.bno
+	left join view_cubt e on a.tablea='cubt_in' and a.uno=e.bno	
+	left join view_cuts f on a.tablea='cubu' and a.uno=f.bno
+	
+		
+	--		insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+	--	,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
+	--select 0,[rank],uno,tablea,accy,noa,noq,datea
+	--from view_cngs a
+	--left join view_cng b on a.accy=b.accy and a.noa=b.noa
+	--where a.uno=@t_uno
 		
 	declare @sel int
 	declare @rank int
@@ -166,8 +197,22 @@ z_unobd05:--z_unobd05 批號履歷
 		while(@@FETCH_STATUS <> -1)
 		begin
 			update @history set ischk=1 where sel=@sel
+			--調撥
+			if exists(select * from view_cngs where uno=@uno)
+			begin
+				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+					,storeno,place,memo)
+				select 1,@rank+1,a.uno
+					,'cngs'
+					,a.accy,a.noa,a.noq,b.datea 
+					,a.storeinno,a.place,a.memo
+				from view_cngs a
+				left join view_cng b on a.accy=b.accy and a.noa=b.noa
+				where a.uno=@uno
+				and len(ISNULL(a.uno,''))>0
+			end
 			--出貨
-			if exists(select * from view_vccs where uno=@uno)
+			else if exists(select * from view_vccs where uno=@uno)
 			begin
 				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,sprice3,productno,product,size,memo
@@ -317,19 +362,20 @@ z_unobd05:--z_unobd05 批號履歷
 	update @history set rr=b.rr
 	from @history a
 	left join (select sel,ROW_NUMBER()over(order by [rank],datea) rr from @history) b on a.sel=b.sel
-	
+
 	update @history set 
 		[action]=case when tablea='rc2s' then '進貨'
 			 when tablea='inas' then '入庫'
+			 when tablea='cut' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '製管入庫'
 			 when tablea='cut' then '裁剪領料'
 			 when tablea='cuts' then '裁剪入庫'
 			 when tablea='vccs' then '出貨'
 			 when tablea='vccbk' then '出退'
 			 when tablea='gets' then '領料'
 			 when tablea='cubt_get' then '派令領料'
-			 when tablea='cubt_in' then '派令入庫'
 			 when tablea='cubu_in' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '包裝入庫'
-			 when tablea='cut' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '製管入庫'
+			 when tablea='cubt_in' then '派令入庫'			 
+			 when tablea='cngs' then '調撥'
 			 else tablea end
 	update @history set 		 
 		ghref=case when tablea='rc2s' then "rc2_pk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
@@ -341,6 +387,7 @@ z_unobd05:--z_unobd05 批號履歷
 			 when tablea='cubt_get' then "cub_pk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='cubt_in' then "cub_pk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='cubu_in' then "cubpi?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='cngs' then "cngst?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 else tablea end
 		,memo=REPLACE(memo,'~#$',"'")
 		,product=REPLACE(product,'~#$',"'")
@@ -360,6 +407,7 @@ z_unobd05:--z_unobd05 批號履歷
 			 when tablea='cubt_in' then '派令入庫'
 			 when tablea='cubu_in' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '包裝入庫'
 			 when tablea='cut' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '製管入庫'
+			 when tablea='cngs' then '調撥'
 			 else tablea end
 			 
 		update @history set 		 
@@ -372,6 +420,7 @@ z_unobd05:--z_unobd05 批號履歷
 			 when tablea='cubt_get' then "cub_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='cubt_in' then "cub_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='cubu_in' then "cubpi?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='cngs' then "cngst?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 else tablea end
 		,memo=REPLACE(memo,'~#$',"'")
 		,product=REPLACE(product,'~#$',"'")
@@ -396,6 +445,7 @@ z_unobd05:--z_unobd05 批號履歷
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+dbo.getComma(c.[weight],-1)+'</a>' b12--期初重量
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+dbo.getComma(d.emount,-1)+'</a>' b13--餘料數
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+dbo.getComma(d.eweight,-1)+'</a>' b14--餘料重
+		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.place+'</a>' b15--儲位
 		
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.[action]+'</a>' a01--類別
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.noa+'</a>' a02--單據編號
@@ -416,7 +466,7 @@ z_unobd05:--z_unobd05 批號履歷
 	left join view_uccb b on a.uno=b.uno
 	left join view_uccb c on c.uno=@t_uno
 	left join view_uccc d on d.uno=@t_uno
-	left join store e on c.storeno=e.noa
+	left join store e on a.storeno=e.noa
 	order by a.[rank],a.datea;
 
 
