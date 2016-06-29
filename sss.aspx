@@ -975,6 +975,8 @@
 							<input id='btnTax' type="button" />
 							<span> </span>
 							<input id='btnSalbs' type="button"/>
+							<span> </span>
+							<input id='btnSsschg' type="button"/>
 						</td>
 					</tr>
 				</table>
