@@ -658,8 +658,8 @@
 						<td><input id="txtNoa"   type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td class="pe_hide"><span> </span><a id="lblKind" class="lbl" > </a></td>
-						<td class="pe_hide"><select id="cmbKind" class="txt c1"> </select></td>
+						<td class="pe_hide rk_hide"><span> </span><a id="lblKind" class="lbl" > </a></td>
+						<td class="pe_hide rk_hide"><select id="cmbKind" class="txt c1"> </select></td>
 						<td><span> </span><a id="lblStore" class="lbl btn"> </a></td>
 						<td>
 							<input id="txtStoreno" type="text"  class="txt" style="width:50%;"/>
