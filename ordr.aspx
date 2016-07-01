@@ -752,22 +752,18 @@
 		<input id="q_sys" type="hidden" />
 		<div id="dbbt" style="position: absolute;top:280px; left:800px; display:none;width:300px;">
 			<table id="tbbt">
-				<tbody>
-					<tr class="head" style="color:white; background:#003366;">
-						<td style="display:none;">
-							<input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/>
-						</td>
-						<td style="width:20px;"> </td>
-					</tr>
-					<tr>
-						<td style="display:none;">
-							<input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
-							<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
-							<input class="txt" id="txtNo2..*" type="text" style="display: none;"/>
-						</td>
-						<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					</tr>
-				</tbody>
+				<tr class="head" style="color:white; background:#003366;">
+					<td style="display:none;"><input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
+					<td style="width:20px;"> </td>
+				</tr>
+				<tr>
+					<td style="display:none;">
+						<input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
+						<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
+						<input class="txt" id="txtNo2..*" type="text" style="display: none;"/>
+					</td>
+					<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+				</tr>
 			</table>
 		</div>
 	</body>
