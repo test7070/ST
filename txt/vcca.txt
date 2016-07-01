@@ -301,7 +301,7 @@ checkdata:-- vcca.txt  checkdata
 
 	declare @ybdate nvarchar(20) = case when @bdate>@xbdate then @bdate else @xbdate end 
 	declare @yedate nvarchar(20) = case when @edate<@xedate then @edate else @xedate end 
-	if not @t_datea between @ybdate and @yedate
+	if  (@t_datea not between @ybdate and @yedate) and (select count(*) from acomp where acomp like '%三順旺%')=0
 	begin
 		--***************--
 		select 0 val,'發票日期需在 '+@ybdate+' ~ '+@yedate+' 之間。' msg
