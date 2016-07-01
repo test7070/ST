@@ -790,7 +790,6 @@
 				as['kind'] = abbm2['kind'];
 				as['tggno'] = abbm2['tggno'];
 				as['odate'] = abbm2['odate'];
-				as['enda'] = abbm2['enda'];
 
 				return true;
 			}
