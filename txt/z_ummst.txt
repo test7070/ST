@@ -35,7 +35,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,unit2 nvarchar(20)
 		
 		,custno nvarchar(20)
-		,cust nvarchar(50)
+		,cust nvarchar(100)
 		,serial nvarchar(20)
 		,tel nvarchar(50)
 		,fax nvarchar(50)
