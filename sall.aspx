@@ -103,6 +103,7 @@
 			}
 			
 			function btnPrint() {
+				q_box('z_sall.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			
 			}
 			
