@@ -90,6 +90,8 @@ z_rc2st1:--z_rc2st1
 		select '1',datea,sum(mount),sum(total) from @tmp where gno='0' group by datea
 	insert into @tmp(gno,datea,mount,total)
 		select '2',left(datea,6),sum(mount),sum(total) from @tmp where gno='0' group by left(datea,6)
+	insert into @tmp(gno,datea,mount,total)
+		select '3','',sum(mount),sum(total) from @tmp where gno='0' 
 	update @tmp set qhref = substring(qhref,0,len(qhref)-2)+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?'+substring(qhref,len(qhref)-2,len(qhref))
 	---------~~~~~~~~
 	--轉來的要回去抓匯率
