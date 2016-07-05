@@ -83,7 +83,7 @@ begin
 	,isnull((select top 1 timea from #tmp where sssno=a.noa and wtype='1A' and datea=@datea order by timea),'')
 	,isnull((select top 1 timea from #tmp where sssno=a.noa and wtype='2A' and datea=@datea order by timea desc),'')
 	,0,0,0,''
-	from sss a order by noa
+	from sss a where isnull(outdate,'')='' order by noa
 	
 	set @t_weekday=DATEPART(WEEKDAY, dbo.ChineseEraName2AD(@datea))-1
 	
