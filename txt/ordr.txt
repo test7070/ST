@@ -4,11 +4,12 @@ ordr_ordb:--ordr_ordb
 	declare @t_key nvarchar(10) = [1]
 	declare @t_ordrno nvarchar(20) = [2]
 	
-	if exists(select * from ordrs where noa=@t_ordrno and ISNULL(apv,0)=0)
-	begin
-		select '尚未核准完畢，不產生請購單。' msg,'' ordbno
-		return
-	end
+	--105/07/05 不判斷
+	--if exists(select * from ordrs where noa=@t_ordrno and ISNULL(apv,0)=0)
+	--begin
+	--	select '尚未核准完畢，不產生請購單。' msg,'' ordbno
+	--	return
+	--end
 	
 	declare @t_odate nvarchar(20) = ''
 	declare @t_bday int =0
