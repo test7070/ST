@@ -779,7 +779,7 @@
 			}
 
 			function btnDele() {
-				q_gt('view_rc2s', "where=^^ ordeno='" + t_noa + "' ^^", 0, 0, 0, "istorc2",r_accy,1);
+				q_gt('view_rc2s', "where=^^ ordeno='" + $('#txtNoa').val() + "' ^^", 0, 0, 0, "istorc2",r_accy,1);
 				var as = _q_appendData("view_rc2s", "", true);
 				if(as[0]!=undefined){
 					alert('採購單【'+t_noa+'】已轉進貨單，禁止修改!!');
