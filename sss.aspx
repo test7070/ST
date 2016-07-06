@@ -342,6 +342,10 @@
 				});
                 //-----------------------------------------------------
                 $('#lblBarcode').text('卡號');
+                
+                if (q_getPara('sys.project').toUpperCase()=='PY' || q_getPara('sys.project').toUpperCase()=='DC'){
+                	$('#btnSsschg').show();	
+                }
 			}
 			
 			function sum() {
@@ -976,7 +980,7 @@
 							<span> </span>
 							<input id='btnSalbs' type="button"/>
 							<span> </span>
-							<input id='btnSsschg' type="button"/>
+							<input id='btnSsschg' type="button" style="display: none;"/>
 						</td>
 					</tr>
 				</table>
