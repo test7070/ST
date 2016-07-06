@@ -163,7 +163,7 @@
 							oReq.open("POST", 'upcust_upload.aspx', true);
 							oReq.setRequestHeader("Content-type", "text/plain");
 							oReq.setRequestHeader("FileName", escape(fr.fileName));
-							oReq.send(fr.result);
+							oReq.send(fr.result);//oReq.send(e.target.result);
 						};
 					}
 					ShowDownlbl();
