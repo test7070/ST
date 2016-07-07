@@ -19,8 +19,8 @@
 			var q_name = "modout";
 			var q_readonly = ['txtNoa','txtMech','txtWorker', 'txtWorker2','txtFrame','textSum'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail','txtFrame'];
-			var bbmNum = [];
-			var bbsNum = [['txtMount',15,0,0]];
+			var bbmNum = [['txtFrame',10,0,0]];
+			var bbsNum = [['txtMount',15,0,0],['txtFrame',10,0,0]];
 			var bbmMask = [];
 			var bbsMask = [['txtDatea',r_picd]];
 			var pNoq =1;

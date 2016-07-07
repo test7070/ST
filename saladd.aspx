@@ -132,15 +132,17 @@
             }
             
 			function q_stPost() {
-                x_datea=x_datea.length==0?'#non':x_datea;
-				x_sssno=x_sssno.length==0?'#non':x_sssno;
-				
-				q_func('qtxt.query.updatesalpresent', 'saladd.txt,updatesalpresent,' + encodeURI(x_datea) + ';' + encodeURI(x_sssno));
-				
-				if(q_cur==1 || q_cur==2)
-					q_func('qtxt.query.updatesalpresent', 'saladd.txt,updatesalpresent,' + encodeURI($('#txtDatea').val()) + ';' + encodeURI($('#txtSssno').val()));
-				
-				x_datea='#non',x_sssno='#non';
+				if (q_getPara('sys.project').toUpperCase()!='DJ'){//07/07 不更新到salpresents
+	                x_datea=x_datea.length==0?'#non':x_datea;
+					x_sssno=x_sssno.length==0?'#non':x_sssno;
+					
+					q_func('qtxt.query.updatesalpresent', 'saladd.txt,updatesalpresent,' + encodeURI(x_datea) + ';' + encodeURI(x_sssno));
+					
+					if(q_cur==1 || q_cur==2)
+						q_func('qtxt.query.updatesalpresent', 'saladd.txt,updatesalpresent,' + encodeURI($('#txtDatea').val()) + ';' + encodeURI($('#txtSssno').val()));
+					
+					x_datea='#non',x_sssno='#non';
+				}
             }
             
             function btnOk() {

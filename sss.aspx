@@ -87,6 +87,9 @@
 					$('#btnLabases').hide();
 					$('#btnSaladjust').hide();
 				}
+				if (q_getPara('sys.project').toUpperCase()=='DJ'){
+					$('#btnLabases').hide();
+				}
 				
 				$('#txtNoa').change(function(e) {
 					$(this).val($.trim($(this).val()).toUpperCase());

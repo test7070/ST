@@ -19,8 +19,8 @@
 			var q_name = "modfix";
 			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','txtNoa','txtMech','txtFrame','textSum'];
 			var q_readonlys = ['txtDetail1','txtDetail2','txtModel','txtNob','txtWheel1','txtCode1','txtFrame1'];
-			var bbmNum = [];
-			var bbsNum = [['txtMount1',15,0,0], ['txtWeight1',15,1,0]];
+			var bbmNum = [['txtFrame',10,0,0]];
+			var bbsNum = [['txtMount1',15,0,0], ['txtWeight1',15,1,0],['txtFrame1',10,0,0]];
 			var bbmMask = [];
 			var bbsMask = [];
 			var pNoq =1;
