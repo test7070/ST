@@ -202,7 +202,7 @@
 			}
             
             function q_funcPost(t_func, result) {
-            	switch (t_name) {  
+            	switch (t_func) {  
                 	case 'qtxt.query.vccamon':
                 		var as = _q_appendData("tmp0", "", true, true);
 						if (as[0] != undefined) {
