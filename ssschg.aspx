@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ï»¿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title> </title>
@@ -13,7 +13,7 @@
 		
 			var q_name = 'ssschg', t_bbsTag = 'tbbs', t_content = " ", afilter = [], bbsKey = [], t_count = 0, as, brwCount2 = 10;
 			var t_sqlname = 'ssschg_load'; t_postname = q_name;
-			var isBott = false;  /// ¬O§_¤w«ö¹L ³Ì«á¤@­¶
+			var isBott = false;  /// æ˜¯å¦å·²æŒ‰é æœ€å¾Œä¸€é 
 			var afield, t_htm;
 			var i, s1;
 			var decbbs = ['money', 'bo_admin', 'bo_traffic', 'bo_full', 'bo_special', 'bo_oth', 'salary','meals'];
@@ -43,7 +43,7 @@
 			});            /// end ready
 
 			function main() {
-				if (dataErr)  /// ¸ü¤J¸ê®Æ¿ù»~
+				if (dataErr)  /// è¼‰å…¥è³‡æ–™éŒ¯èª¤
 				{
 					dataErr = false;
 					return;
@@ -74,11 +74,11 @@
 					$('#btnModi').hide();
 			}
 
-			function bbsAssign() {  /// ªí¨­¹Bºâ¦¡
+			function bbsAssign() {  /// è¡¨èº«é‹ç®—å¼
 				for(var j = 0; j < q_bbsCount; j++) {
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#txtDatea_'+j).blur(function () {
-							t_IdSeq = -1;  /// ­n¥ıµ¹  ¤~¯à¨Ï¥Î q_bodyId()
+							t_IdSeq = -1;  /// è¦å…ˆçµ¦  æ‰èƒ½ä½¿ç”¨ q_bodyId()
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							if(b_seq>=0&&!emp($('#txtDatea_'+b_seq).val())){
@@ -195,7 +195,7 @@
 			function btnPlus(org_htm, dest_tag, afield) {
 				_btnPlus(org_htm, dest_tag, afield);
 				if (q_tables == 's')
-					bbsAssign();  /// ªí¨­¹Bºâ¦¡
+					bbsAssign();  /// è¡¨èº«é‹ç®—å¼
 			}
 
 		</script>
