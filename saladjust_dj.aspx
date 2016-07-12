@@ -116,6 +116,12 @@
 									if(emp($('#txtSalary_'+b_seq).val())){
 										$('#txtSalary_'+b_seq).val($('#txtSalary_'+(b_seq-1)).val());
 									}
+									if(emp($('#txtBo_money1_'+b_seq).val())){
+										$('#txtBo_money1_'+b_seq).val($('#txtBo_money1_'+(b_seq-1)).val());
+									}
+									if(emp($('#txtMeals_'+b_seq).val())){
+										$('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+									}
 								}
 							}
 						});
@@ -213,6 +219,13 @@
 				$('#lblBo_oth').text('特別責任加給');
 				$('#lblBo_money1').text('敬業獎金');
 				$('#lblMeals').text('伙食費/餐');
+				
+				if(r_rank>7){
+					$('.sal').show();
+				}else{
+					$('#tbbs').css('width','1350px');
+				}
+				
 			}
 			
 			function btnOk() {
@@ -341,19 +354,19 @@
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center"><a id='lblDatea'> </a></td>
-					<td align="center"><a id='lblJobno'> </a></td>
-					<td align="center"><a id='lblJob'> </a></td>
-					<td align="center"><a id='lblLevel1'> </a></td>
-					<td align="center"><a id='lblLevel2'> </a></td>
-					<td align="center"><a id='lblMoney'> </a></td>
-					<td align="center"><a id='lblBo_admin'> </a></td>
-					<td align="center"><a id='lblBo_traffic'> </a></td>
-					<td align="center"><a id='lblBo_special'> </a></td>
-					<td align="center"><a id='lblBo_oth'> </a></td>
-					<td align="center"><a id='lblBo_money1'> </a></td>
-					<td align="center"><a id='lblBo_full'> </a></td>
-					<td align="center"><a id='lblSalary'> </a></td>
-					<td align="center"><a id='lblMeals'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblJobno'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblJob'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblLevel1'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblLevel2'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblMoney'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_admin'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_traffic'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_special'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_oth'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_money1'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_full'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblSalary'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblMeals'> </a></td>
 					
 					<td align="center"><a id='lblSa_labor'>勞保投保薪資</a></td>
 					<td align="center"><a id='lblLa_comp'>勞保公司負擔</a></td>
@@ -379,19 +392,19 @@
 						<input class="txt c1"  id="txtNoa.*" type="hidden"  />
 						<input id="txtNoq.*" type="hidden" />
 					</td>
-					<td ><input class="txt c1" id="txtJobno.*" type="text"  /></td>
-					<td ><input class="txt c1" id="txtJob.*" type="text"  /></td>
-					<td ><input class="txt c1" id="txtLevel1.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtLevel2.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtMoney.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_admin.*" type="text"/></td>
-					<td ><input class="txt num c1" id="txtBo_traffic.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_special.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_oth.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_money1.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_full.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtSalary.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtMeals.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt c1" id="txtJobno.*" type="text"  /></td>
+					<td  class="sal" style="display: none;"><input class="txt c1" id="txtJob.*" type="text"  /></td>
+					<td  class="sal" style="display: none;"><input class="txt c1" id="txtLevel1.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt c1" id="txtLevel2.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtMoney.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_admin.*" type="text"/></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_traffic.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_special.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_oth.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_money1.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_full.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtSalary.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtMeals.*" type="text" /></td>
 					
 					<td ><input class="txt num c1" id="txtSa_labor.*" type="text" /></td>
 					<td ><input class="txt num c1" id="txtLa_comp.*" type="text" /></td>
