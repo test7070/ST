@@ -11,7 +11,7 @@
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 		
-			var q_name = 'saladjust', t_bbsTag = 'tbbs', t_content = " ", afilter = [], bbsKey = [], t_count = 0, as, brwCount2 = 10;
+			var q_name = 'saladjust', t_bbsTag = 'tbbs', t_content = " ", afilter = [], bbsKey = [], t_count = 0, as, brwCount2 = 22;
 			var t_sqlname = 'saladjust_load'; t_postname = q_name;
 			var isBott = false;  /// 是否已按過 最後一頁
 			var afield, t_htm;
@@ -76,7 +76,7 @@
 				$('#btnPrint').click(function() {
 					var t_key = q_getHref();
 					t_where = "noa='" +t_key[1]+ "'";
-					q_box("z_saladjustp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+					q_box("z_saladjustp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "100%", "100%", q_getMsg('popPrint'));
 				});
 			}
 
