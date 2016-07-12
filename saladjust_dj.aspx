@@ -72,6 +72,12 @@
 				
 				if(r_rank<8 && no_auth)
 					$('#btnModi').hide();
+					
+				$('#btnPrint').click(function() {
+					var t_key = q_getHref();
+					t_where = "noa='" +t_key[1]+ "'";
+					q_box("z_saladjustp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				});
 			}
 
 			function bbsAssign() {  /// 表身運算式
@@ -350,6 +356,7 @@
 	</head>
 	<body>
 		<div  id="dbbs"  >
+			<input id="btnPrint" type="button" value="列印">
 			<table id="tbbs" class='tbbs'  border="2"  cellpadding='2' cellspacing='1' style="width: 2300px;" >
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
