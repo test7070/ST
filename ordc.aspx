@@ -22,7 +22,7 @@
 			q_tables = 't';
 			var q_name = "ordc";
 			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2'];
-			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount','txtTotal'];
+			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount','txtTotal','txtOrdbno','txtNo3'];
 			var q_readonlyt = [];
 
 			var bbmNum = [
@@ -547,7 +547,7 @@
 						
 						$('#chkAprice_'+j).click(function(e){refreshBbs();});
 						
-						$('#txtOrdbno_'+i).bind('contextmenu',function(e) {
+						$('#txtOrdbno_'+j).bind('contextmenu',function(e) {
 	                    	/*滑鼠右鍵*/
 	                    	e.preventDefault();
 	                    	t_IdSeq = -1;
