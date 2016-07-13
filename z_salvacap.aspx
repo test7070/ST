@@ -41,11 +41,15 @@
                         dbf : 'part',
                         index : 'noa,part',
                         src : 'part_b.aspx'
-                    }]
+                    },{
+						type : '8',
+						name : 'xout',//[7]
+						value :('1@含已離職').split(',')
+					}]
 				});
 				q_popAssign();
-				$('#txtXyear').mask('999');
-				$('#txtXyear').val(q_date().substr(0,3));
+				$('#txtXyear').mask(r_pic);
+				$('#txtXyear').val(q_date().substr(0,r_len));
 			}
 
 			function q_boxClose(s2) {
@@ -60,10 +64,10 @@
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
-		<div id="q_menu"></div>
+		<div id="q_menu"> </div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:2000px;">
 			<div id="container">
-				<div id="q_report"></div>
+				<div id="q_report"> </div>
 			</div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->

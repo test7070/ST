@@ -16,7 +16,7 @@
         }
         q_tables = 's';
         var q_name = "salary";
-        var q_readonly = ['txtNoa','txtWorker','txtMoney','txtBo_admin','txtBo_traffic','txtBo_special','txtBo_oth','txtTax_other','txtMi_total','txtMtotal','txtBo_full','txtAddmoney','txtPlus','txtMinus','txtCh_health','txtCh_labor','txtCh_labor_self','txtWelfare','txtTotal3','txtTotal4','txtTotal5','txtBorrow'];
+        var q_readonly = ['txtNoa','txtWorker','txtMoney','txtBo_admin','txtBo_traffic','txtBo_special','txtBo_oth','txtTax_other','txtMi_total','txtMtotal','txtBo_full','txtAddmoney','txtPlus','txtMinus','txtCh_health','txtCh_labor','txtCh_labor_self','txtWelfare','txtTotal3','txtTotal4','txtTotal5','txtBorrow','txtDate2','txtChangedata'];
         var q_readonlys = [];
         var bbmNum = [['txtMoney', 15, 0, 1],['txtDaymoney', 15, 0, 1],['txtBo_admin', 15, 0, 1],['txtBo_traffic', 15, 0, 1],['txtBo_special', 15, 0, 1],['txtBo_oth', 15, 0, 1],['txtTax_other', 15, 0, 1],['txtMi_total', 15, 0, 1],['txtMtotal', 15, 0, 1],['txtBo_full', 15, 0, 1],['txtAddmoney', 15, 0, 1],['txtBorrow', 15, 0, 1],['txtCh_labor', 15, 0, 1],['txtCh_health', 15, 0, 1],['txtCh_labor_comp', 15, 0, 1],['txtCh_labor_self', 15, 0, 1],['txtWelfare', 15, 0, 1],['txtTotal3', 15, 0, 1],['txtTotal4', 15, 0, 1],['txtTotal5', 15, 0, 1],['txtPlus', 15, 0, 1],['txtMinus', 15, 0, 1]];  
         var bbsNum = [
@@ -343,7 +343,7 @@
 					var t_where7 = "where[7]=^^ sssno=a.noa and datea between '"+date_1+"' and '"+date_2+"' and isnull(isapv,0)=1 ^^";
 					
 			        q_gt('salary_dj_import', t_where+t_where1+t_where2+t_where3+t_where4+t_where5+t_where6+t_where7 , 0, 0, 0, "", r_accy);
-			        
+			        $('#txtChangedata').val('');
             		break;
                 case 'salary_dj_import':  
 						var as = _q_appendData("sss", "", true);
@@ -551,6 +551,7 @@
             }
 
             $('#txtWorker').val(r_name);
+            $('#txtDate2').val(q_date());
             sum();
 
             var s1 = $('#txt' + bbmKey[0].substr( 0,1).toUpperCase() + bbmKey[0].substr(1)).val();
@@ -1269,6 +1270,8 @@
             <td><input id="txtPlus"  type="text" class="txt num c1"/></td>
             <td><span> </span><a id="lblMinus" class="lbl"> </a></td>
             <td><input id="txtMinus"  type="text" class="txt num c1"/></td>
+            <td><span> </span><a id="lblDate2" class="lbl"> </a></td>
+            <td><input id="txtDate2" type="text" class="txt c1"/></td>
         </tr>
         <tr>
            	<td><span> </span><a id="lblCh_health" class="lbl"> </a></td>
@@ -1279,6 +1282,8 @@
             <td><input id="txtCh_labor_self"  type="text" class="txt num c1"/></td>
             <td><span> </span><a id="lblWelfare" class="lbl"> </a></td>
             <td><input id="txtWelfare"  type="text" class="txt num c1"/><input id="txtCh_labor_comp"  type="hidden" class="txt num c1"/></td>
+            <td><span> </span><a id="lblChangedata" class="lbl" style="color: red;"> </a></td>
+            <td><input id="txtChangedata" type="text" class="txt c1"/></td>
         </tr>
         <tr>
         	<td><span> </span><a id="lblTotal3" class="lbl"> </a></td>

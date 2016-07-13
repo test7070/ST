@@ -4,11 +4,13 @@ declare @t_bsssno nvarchar(50)
 declare @t_esssno nvarchar(50)
 declare @t_bpartno nvarchar(50)
 declare @t_epartno nvarchar(50)
+declare @t_out nvarchar(50)
 set @t_xyear = case when '#non' = [2] then '' else [2] end
 set @t_bsssno = case when '#non' = [3] then '' else [3] end
 set @t_esssno = case when '#non' = [4] then CHAR(255) else [4] end
 set @t_bpartno = case when '#non' = [5] then '' else [5] end
 set @t_epartno = case when '#non' = [6] then CHAR(255) else [6] end
+set @t_out = case when '#non' = [7] then '' else [7] end
 
 declare @year nvarchar(20) =cast (@t_xyear as int)
 --------------------------------------------------------------------------------------------------
@@ -41,6 +43,7 @@ from salvaca a left join salvacas b on a.noa=b.noa left join sss c on b.sssno=c.
 where a.noa=@t_xyear 
 and isnull(b.sssno,'') between @t_bsssno and @t_esssno 
 and isnull(c.partno,'') between @t_bpartno and @t_epartno
+and (len(c.outdate)=0 or @t_out='1' or left(c.outdate,@t_xyear)>@t_xyear)
 
 update @tmp set  ptotl=prevyeartime-usedtime
 

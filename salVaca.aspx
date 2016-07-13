@@ -102,11 +102,11 @@
                             //as._day特休天數
                             if(q_getPara('sys.comp').indexOf('祥興')>-1){
                             	if (as[i].indate.length > 0)//判斷到職日是否有輸入，若沒輸入則無特休
-	                                as[i]._year = dec($('#txtNoa').val()) - dec(as[i].indate.substr(0, 3));
+	                                as[i]._year = dec($('#txtNoa').val()) - dec(as[i].indate.substr(0, r_len));
 	                            else
 	                                as[i]._year = 0;
 	                                
-	                            if (as[i]._year == 0 && as[i].indate.substr(4) == '01/01') {
+	                            if (as[i]._year == 0 && as[i].indate.substr((r_len+1)) == '01/01') {
 	                                as[i]._year = 1;
 	                            }
 	                            if (as[i]._year < 1)
@@ -126,12 +126,12 @@
 	                            as[i]._day = as[i]._day * 8;
                             }else{
                             	if (as[i].indate.length > 0){//判斷到職日是否有輸入，若沒輸入則無特休
-	                                as[i]._year = dec($('#txtNoa').val())-dec(as[i].indate.substr(0, 3))-1+(
-	                                +((12-dec(as[i].indate.substr(4, 2))) /12)
+	                                as[i]._year = dec($('#txtNoa').val())-dec(as[i].indate.substr(0, r_len))-1+(
+	                                +((12-dec(as[i].indate.substr(r_len+1, 2))) /12)
 	                                //+(((30-(dec(as[i].indate.substr(7, 2))==31?30:dec(as[i].indate.substr(7, 2)))) /30)/12)
 	                                );
 	                                
-	                                if (as[i]._year == 0 && as[i].indate.substr(4) == '01/01') {
+	                                if (as[i]._year == 0 && as[i].indate.substr(r_len+1) == '01/01') {
 	                                	as[i]._year=dec(as[i]._year)+1
 	                                }
 	                            }else{
@@ -226,7 +226,7 @@
 
             function btnIns() {
                 _btnIns();
-                $('#txtNoa').val(q_date().substr(0, 3));
+                $('#txtNoa').val(q_date().substr(0, r_len));
                 $('#txtSssno_0').focus();
             }
 
