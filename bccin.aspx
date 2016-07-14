@@ -103,9 +103,20 @@
 	                	}
 	                	var t_where="1=1";
 	                	if(q_getPara('sys.comp').indexOf('大昌')>-1){
-	                		 t_where+=" and apv='Y' and noa in (select noa from view_ordc where enda!='1')";
+	                		t_err = q_chkEmpField([['txtBuyerno', q_getMsg('lblBuyer')]]);
+			                if(t_err.length > 0) {
+			                    alert(t_err);
+			                    return;
+			                }
+	                		t_where+=" and ((apv='Y' and noa in (select noa from view_ordc where isnull(enda,0)!='1')) or (noa+'_'+no2 in (select ordcno+'_'+no2 from bccins where noa='"+$('#txtNoa').val()+"'))) ";
 	                	}else{
-	                		t_where+=" and kind='1' and noa in (select noa from view_ordc where enda!='1')";
+	                		if(emp($('#txtOrdcno').val())&&emp($('#txtTggno').val())){
+		                		alert('請先輸入'+q_getMsg('lblOrdcno')+'或'+q_getMsg('lblTgg')+'。');
+		                		return;
+		                	}
+	                		
+	                		t_where+=" and noa in (select noa from view_ordc where isnull(enda,0)!='1')";
+	                		
 	                	}
 	                	
 	                	if(!emp($('#txtOrdcno').val())){
