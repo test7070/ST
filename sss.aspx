@@ -73,19 +73,18 @@
 				q_gt('part', '', 0, 0, 0, "");
 				q_gt('salm', '', 0, 0, 0, "");
 				q_gt('class5', '', 0, 0, 0, "");
-
-				if (q_getPara('sys.comp').indexOf('祥興') > -1) {
-					$('#btnSsspart').show();
-				} else {
-					$('#btnSsspart').hide();
-				}
-				if (q_getPara('sys.comp').indexOf('永勝') > -1 || q_getPara('sys.comp').indexOf('楊家') > -1 || q_getPara('sys.comp').indexOf('德芳') > -1) {
-					$('#sbutton').hide();
-					$('#btnLabases').hide();
-					$('#btnSaladjust').hide();
+				
+				if (q_getPara('sys.project').toUpperCase()=='UU' || q_getPara('sys.project').toUpperCase()=='TN') {
+					$('.sbutton').hide();
+				}if (q_getPara('sys.project').toUpperCase()=='DJ') {
+					$('#btnSaladjust').show();
 				}else if(r_rank<8){
 					$('#btnLabases').hide();
 					$('#btnSaladjust').hide();
+				}
+				
+				if (q_getPara('sys.project').toUpperCase()=='DJ'){
+					$('#btnLabases').hide();
 				}
 				
 				$('#txtNoa').change(function(e) {
@@ -342,6 +341,11 @@
 				});
                 //-----------------------------------------------------
                 $('#lblBarcode').text('卡號');
+                
+                if (q_getPara('sys.project').toUpperCase()=='JO' || q_getPara('sys.project').toUpperCase()=='YP' || q_getPara('sys.project').toUpperCase()=='RS'){
+                	$('#btnSsspart').show();
+                	$('#btnSsschg').show();
+                }
 			}
 			
 			function sum() {
@@ -591,7 +595,7 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
-				var WantDisabledArray = ['btnSsspart', 'btnSaladjust', 'btnLabases','btnSssr','btnSalbs','btnTax'];
+				var WantDisabledArray = ['btnSsspart', 'btnSaladjust', 'btnLabases','btnSssr','btnSalbs','btnTax','btnSsschg'];
 				for (var k = 0; k < WantDisabledArray.length; k++) {
 					if (q_cur == 1 || q_cur == 2) {
 						$("#" + WantDisabledArray[k]).attr('disabled', 'disabled');
@@ -961,10 +965,10 @@
 							<!--<input id="txtMemo" type="text" class="txt c1"/>-->
 						</td>
 					</tr>
-					<tr id='sbutton'>
+					<tr class='sbutton'>
 						<td> </td>
 						<td colspan="5">
-							<input id='btnSsspart' type="button"/>
+							<input id='btnSsspart' type="button" style="display: none;"/>
 							<span> </span>
 							<input id='btnSaladjust' type="button"/>
 							<span> </span>
@@ -972,11 +976,16 @@
 							<span> </span>
 							<input id='btnSssr' type="button" />
 							<span> </span>
+							<input id='btnSsschg' type="button" style="display: none;"/>
+						</td>
+					</tr>
+					<tr class='sbutton'>
+						<td> </td>
+						<td colspan="5">
 							<input id='btnTax' type="button" />
 							<span> </span>
 							<input id='btnSalbs' type="button"/>
 							<span> </span>
-							<input id='btnSsschg' type="button"/>
 						</td>
 					</tr>
 				</table>

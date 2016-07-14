@@ -11,7 +11,7 @@
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 		
-			var q_name = 'saladjust', t_bbsTag = 'tbbs', t_content = " ", afilter = [], bbsKey = [], t_count = 0, as, brwCount2 = 10;
+			var q_name = 'saladjust', t_bbsTag = 'tbbs', t_content = " ", afilter = [], bbsKey = [], t_count = 0, as, brwCount2 = 22;
 			var t_sqlname = 'saladjust_load'; t_postname = q_name;
 			var isBott = false;  /// 是否已按過 最後一頁
 			var afield, t_htm;
@@ -21,7 +21,13 @@
 			var q_readonly = [];
 			var q_readonlys = [];
 			var bbmNum = [];
-			var bbsNum = [['txtMoney',10,0,1],['txtBo_admin',10,0,1],['txtBo_traffic',10,0,1],['txtBo_special',10,0,1],['txtBo_oth',10,0,1],['txtBo_full',10,0,1],['txtSalary',10,0,1],['txtMeals',10,0,1],['txtBo_money1',10,0,1]];
+			var bbsNum = [['txtMoney',10,0,1],['txtBo_admin',10,0,1],['txtBo_traffic',10,0,1],['txtBo_special',10,0,1],['txtBo_oth',10,0,1],['txtBo_full',10,0,1],['txtSalary',10,0,1],['txtMeals',10,0,1],['txtBo_money1',10,0,1]
+						,['txtSa_labor',10,0,1],['txtLa_comp',10,0,1],['txtLa_person',10,0,1],['txtAs_labor',10,0,1]
+						,['txtSa_health',10,0,1],['txtHe_comp',10,0,1],['txtHe_person',10,0,1],['txtAs_health',10,0,1]
+						,['txtSa_retire',10,0,1],['txtRe_rate',10,2,1],['txtRe_comp',10,0,1],['txtRe_person',10,0,1]
+						,['txtTax',10,0,1],['txtMount',10,0,1]
+			
+			];
 			var bbmMask = [];
 			var bbsMask = [];
 			aPop = new Array(['txtJobno_', 'txtJobno_', 'salm', 'noa,job,level1', 'txtJobno_,txtJob_,txtLevel1_','salm_b.aspx']);
@@ -66,6 +72,12 @@
 				
 				if(r_rank<8 && no_auth)
 					$('#btnModi').hide();
+					
+				$('#btnPrint').click(function() {
+					var t_key = q_getHref();
+					t_where = "noa='" +t_key[1]+ "'";
+					q_box("z_saladjustp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "100%", "100%", q_getMsg('popPrint'));
+				});
 			}
 
 			function bbsAssign() {  /// 表身運算式
@@ -109,6 +121,12 @@
 									}
 									if(emp($('#txtSalary_'+b_seq).val())){
 										$('#txtSalary_'+b_seq).val($('#txtSalary_'+(b_seq-1)).val());
+									}
+									if(emp($('#txtBo_money1_'+b_seq).val())){
+										$('#txtBo_money1_'+b_seq).val($('#txtBo_money1_'+(b_seq-1)).val());
+									}
+									if(emp($('#txtMeals_'+b_seq).val())){
+										$('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
 									}
 								}
 							}
@@ -182,6 +200,21 @@
 							b_seq = t_IdSeq;
 							q_tr('txtSalary_'+b_seq,q_float('txtMoney_'+b_seq)+q_float('txtBo_admin_'+b_seq)+q_float('txtBo_traffic_'+b_seq)+q_float('txtBo_special_'+b_seq)+q_float('txtBo_oth_'+b_seq)+q_float('txtBo_full_'+b_seq)+q_float('txtBo_money1_'+b_seq));
 						});
+						
+						$('#txtSa_retire_'+j).change(function () {
+							t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							q_tr('txtRe_comp_'+b_seq,round(q_mul(q_float('txtSa_retire_'+b_seq),q_div(q_float('txtRe_rate_'+b_seq),100)),0));
+						});
+						
+						$('#txtRe_rate_'+j).change(function () {
+							t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							q_tr('txtRe_comp_'+b_seq,round(q_mul(q_float('txtSa_retire_'+b_seq),q_div(q_float('txtRe_rate_'+b_seq),100)),0));
+						});
+						
 					}
 				}
 				_bbsAssign();
@@ -192,6 +225,13 @@
 				$('#lblBo_oth').text('特別責任加給');
 				$('#lblBo_money1').text('敬業獎金');
 				$('#lblMeals').text('伙食費/餐');
+				
+				if(r_rank>7){
+					$('.sal').show();
+				}else{
+					$('#tbbs').css('width','1350px');
+				}
+				
 			}
 			
 			function btnOk() {
@@ -316,38 +356,41 @@
 	</head>
 	<body>
 		<div  id="dbbs"  >
-			<table id="tbbs" class='tbbs'  border="2"  cellpadding='2' cellspacing='1'   >
+			<input id="btnPrint" type="button" value="列印">
+			<table id="tbbs" class='tbbs'  border="2"  cellpadding='2' cellspacing='1' style="width: 2300px;" >
 				<tr style='color:White; background:#003366;' >
-					<td align="center" style="width:1%;">
-					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
-					</td>
-					<!--<td align="center" class="td1"><a id='lblNoa'></a></td>-->
-					<td align="center" class="td3"><a id='lblDatea'> </a></td>
-					<td align="center" class="td2"><a id='lblJobno'> </a></td>
-					<td align="center" class="td4"><a id='lblJob'> </a></td>
-					<td align="center" class="td1"><a id='lblLevel1'> </a></td>
-					<td align="center" class="td1"><a id='lblLevel2'> </a></td>
-					<!--<td align="center" class="td1"><a id='lblLevel3'></a></td>-->
-					<td align="center" class="td3"><a id='lblMoney'> </a></td>
-					<td align="center" class="td3"><a id='lblBo_admin'> </a></td>
-					<td align="center" class="td3"><a id='lblBo_traffic'> </a></td>
-					<td align="center" class="td3"><a id='lblBo_special'> </a></td>
-					<td align="center" class="td3"><a id='lblBo_oth'> </a></td>
-					<td align="center" class="td3"><a id='lblBo_money1'> </a></td>
-					<td align="center" class="td3"><a id='lblBo_full'> </a></td>
-					<td align="center" class="td3"><a id='lblSalary'> </a></td>
-					<td align="center" class="td3"><a id='lblMeals'> </a></td>
-					<td align="center" class="td3"><a id='lblMemo'> </a></td>
-					<!--<td align="center" class="td1"><a id='lblUnfix'></a></td>
-					<td align="center" class="td3"><a id='lblSa_retire'></a></td>
-					<td align="center" class="td3"><a id='lblRate'></a></td>
-					<td align="center" class="td3"><a id='lblRetire'></a></td>
-					<td align="center" class="td3"><a id='lblSa_labor'></a></td>
-					<td align="center" class="td3"><a id='lblSa_health'></a></td>
-					<td align="center" class="td3"><a id='lblSal_retire'></a></td>
-					<td align="center" class="td3"><a id='lblCh_labor'></a></td>
-					<td align="center" class="td3"><a id='lblCh_health'></a></td>
-					<td align="center" class="td3"><a id='lblMount'></a></td>-->
+					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+					<td align="center"><a id='lblDatea'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblJobno'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblJob'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblLevel1'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblLevel2'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblMoney'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_admin'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_traffic'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_special'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_oth'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_money1'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblBo_full'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblSalary'> </a></td>
+					<td align="center" class="sal" style="display: none;"><a id='lblMeals'> </a></td>
+					
+					<td align="center"><a id='lblSa_labor'>勞保投保薪資</a></td>
+					<td align="center"><a id='lblLa_comp'>勞保公司負擔</a></td>
+					<td align="center"><a id='lblLa_person'>勞保自付額</a></td>
+					<td align="center"><a id='lblAs_labor'>勞保輔助</a></td>
+					<td align="center"><a id='lblSa_health'>健保投保薪資</a></td>
+					<td align="center"><a id='lblHe_comp'>健保公司負擔</a></td>
+					<td align="center"><a id='lblHe_person'>健保自付額</a></td>
+					<td align="center"><a id='lblAs_health'>健保輔助</a></td>
+					<td align="center"><a id='lblSa_retire'>勞退提繳薪資</a></td>
+					<td align="center"><a id='lblRe_rate'>勞退提繳率(%)</a></td>
+					<td align="center"><a id='lblRe_comp'>勞退公司提繳</a></td>
+					<td align="center"><a id='lblRe_person'>勞退個人提繳</a></td>
+					<td align="center"><a id='lblTax'>所得稅</a></td>
+					<td align="center"><a id='lblMount'>扶養人數</a></td>
+					
+					<td align="center"><a id='lblMemo'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td ><input class="btn"  id="btnMinus.*" type="button" value='-' style="font-weight: bold; "  /></td>
@@ -356,31 +399,36 @@
 						<input class="txt c1"  id="txtNoa.*" type="hidden"  />
 						<input id="txtNoq.*" type="hidden" />
 					</td>
-					<td ><input class="txt c1" id="txtJobno.*" type="text"  /></td>
-					<td ><input class="txt c1" id="txtJob.*" type="text"  /></td>
-					<td ><input class="txt c1" id="txtLevel1.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtLevel2.*" type="text" /></td>
-					<!--<td ><input class="txt c1" id="txtLevel3.*" type="text" /></td>-->
-					<td ><input class="txt num c1" id="txtMoney.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_admin.*" type="text"/></td>
-					<td ><input class="txt num c1" id="txtBo_traffic.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_special.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_oth.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_money1.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtBo_full.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtSalary.*" type="text" /></td>
-					<td ><input class="txt num c1" id="txtMeals.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt c1" id="txtJobno.*" type="text"  /></td>
+					<td  class="sal" style="display: none;"><input class="txt c1" id="txtJob.*" type="text"  /></td>
+					<td  class="sal" style="display: none;"><input class="txt c1" id="txtLevel1.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt c1" id="txtLevel2.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtMoney.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_admin.*" type="text"/></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_traffic.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_special.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_oth.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_money1.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtBo_full.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtSalary.*" type="text" /></td>
+					<td  class="sal" style="display: none;"><input class="txt num c1" id="txtMeals.*" type="text" /></td>
+					
+					<td ><input class="txt num c1" id="txtSa_labor.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtLa_comp.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtLa_person.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtAs_labor.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtSa_health.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtHe_comp.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtHe_person.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtAs_health.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtSa_retire.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtRe_rate.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtRe_comp.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtRe_person.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtTax.*" type="text" /></td>
+					<td ><input class="txt num c1" id="txtMount.*" type="text" /></td>
+					
 					<td ><input class="txt c1" id="txtMemo.*" type="text" /></td>
-					<!--<td ><input class="txt c1" id="txtUnfix.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtSa_retire.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtRate.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtRetire.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtSa_labor.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtSa_health.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtSal_retire.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtCh_labor.*" type="text"  /></td>
-					<td ><input class="txt c1" id="txtCh_health.*" type="text" /></td>
-					<td ><input class="txt c1" id="txtMount.*" type="text" /></td>-->
 				</tr>
 			</table>
 			<!--#include file="../inc/pop_modi.inc"-->

@@ -25,6 +25,7 @@
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
+            q_copy=1;
             //ajaxPath = ""; //  execute in Root
             aPop = new Array(['txtSssno', 'lblSss', 'sss', 'noa,namea,partno,part,job,jobno', 'txtSssno,txtNamea,txtPartno,txtPart,txtJob,txtJobno,txtNamea', 'sss_b.aspx']
 	            ,['txtHtype', 'lblHtype', 'salhtype', 'noa,namea', 'txtHtype,txtHname', 'salhtype_b.aspx']

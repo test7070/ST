@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -19,11 +19,11 @@
          $(document).ready(function() {
 				_q_boxClose();
                 q_getId();
-               	q_gf('','z_ssschg');
+               	q_gf('','z_saladjustp');
          });
          function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_ssschg',
+                    fileName : 'z_saladjustp',
                     options : [
 					{/*3 [6][7]*/
 						type : '2',

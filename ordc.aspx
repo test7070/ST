@@ -22,7 +22,7 @@
 			q_tables = 't';
 			var q_name = "ordc";
 			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2'];
-			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount','txtTotal'];
+			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount','txtTotal','txtOrdbno','txtNo3'];
 			var q_readonlyt = [];
 
 			var bbmNum = [
@@ -547,7 +547,7 @@
 						
 						$('#chkAprice_'+j).click(function(e){refreshBbs();});
 						
-						$('#txtOrdbno_'+i).bind('contextmenu',function(e) {
+						$('#txtOrdbno_'+j).bind('contextmenu',function(e) {
 	                    	/*滑鼠右鍵*/
 	                    	e.preventDefault();
 	                    	t_IdSeq = -1;
@@ -779,7 +779,7 @@
 			}
 
 			function btnDele() {
-				q_gt('view_rc2s', "where=^^ ordeno='" + t_noa + "' ^^", 0, 0, 0, "istorc2",r_accy,1);
+				q_gt('view_rc2s', "where=^^ ordeno='" + $('#txtNoa').val() + "' ^^", 0, 0, 0, "istorc2",r_accy,1);
 				var as = _q_appendData("view_rc2s", "", true);
 				if(as[0]!=undefined){
 					alert('採購單【'+t_noa+'】已轉進貨單，禁止修改!!');

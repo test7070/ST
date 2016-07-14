@@ -32,7 +32,7 @@
 		    brwList = [];
 		    brwNowPage = 0;
 		    brwKey = 'noa';
-		    brwCount2 = 5;
+		    brwCount2 = 7;
 		    
 		    aPop = new Array(	['txtTggno', 'lblTggno', 'tgg', 'noa,nick', 'txtTggno,txtTgg', 'tgg_b.aspx'],
 								['txtTggno_', 'btnTggno_', 'tgg', 'noa,nick', 'txtTggno_,txtTgg_', 'tgg_b.aspx']);
@@ -398,16 +398,20 @@
 						<td><span> </span><a id="lblGen" class="lbl"> </a></td>
 						<td><input id="txtGen" type="text" class="txt num c1"/></td>	
 						<td><span> </span><a id="lblGenmon" class="lbl"> </a></td>
-						<td><input id="txtGenmon" type="text" class="txt num c1"/></td>											
-						<td><span> </span><a id='lblMaterial' class="lbl"> </a></td>
-						<td><input id="txtMaterial" type="text" class="txt c1"/></td>
-					</tr>					
-					<tr>
-						<td><span> </span><a id="lblProduct" class="lbl"> </a></td>
-						<td><input id="txtProduct" type="text" class="txt c1"/></td>	
-						<td><span> </span><a id="lblForm" class="lbl"> </a></td>
-						<td><input id="txtForm" type="text" class="txt c1"/></td>																	
+						<td><input id="txtGenmon" type="text" class="txt num c1"/></td>
 					</tr>
+					<tr>
+						<td><span> </span><a id='lblMaterial' class="lbl"> </a></td>
+						<td colspan="5"><input id="txtMaterial" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblProduct' class="lbl"> </a></td>
+						<td colspan="5"><input id="txtProduct" type="text" class="txt c1"/></td>
+					</tr>	
+					<tr>
+						<td><span> </span><a id="lblForm" class="lbl"> </a></td>
+						<td colspan="5"><input id="txtForm" type="text" class="txt c1"/></td>
+					</tr>	
 				</table>
 			</div>
 		</div>
@@ -417,30 +421,25 @@
 					<td align="center" style="width:1%;">
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width:5%;"><a id='lblNamea_s'> </a></td>
+					<td align="center" style="width:15%;"><a id='lblNamea_s'> </a></td>
 					<td align="center" style="width:15%;"><a id='lblTggno_s'> </a></td>
-					<td align="center" style="width:5%;"><a id='lblSpec_s'> </a></td>
-					<td align="center" style="width:5%;"><a id='lblHpower_s'> </a></td>
-					<td align="center" style="width:5%;"><a id='lblMount_s'> </a></td>					
-					<td align="center" style="width:5%;"><a id='lblDatea_s'> </a></td>
-					<td align="center" style="width:5%;"><a id='lblMemo_s'> </a></td>
+					<td align="center" style="width:20%;"><a id='lblSpec_s'> </a></td>
+					<td align="center" style="width:15%;"><a id='lblHpower_s'> </a></td>
+					<td align="center" style="width:8%;"><a id='lblMount_s'> </a></td>					
+					<td align="center" style="width:10%;"><a id='lblDatea_s'> </a></td>
+					<td align="center" style="width:15%;"><a id='lblMemo_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
-					<td align="center">
-					<input id="btnMinus.*" type="button" class="btn" value='-' style=" font-weight: bold;" />			
-					</td>								
-					
+					<td align="center"><input id="btnMinus.*" type="button" class="btn" value='-' style=" font-weight: bold;" /></td>								
 					<td>
-					<input id="txtNoq.*" type="hidden" />			
-					<input id="txtNamea.*" type="text" class="txt" style="width:98%;"/>
+						<input id="txtNoq.*" type="hidden" />			
+						<input id="txtNamea.*" type="text" class="txt" style="width:98%;"/>
 					</td>
-					
 					<td>
-					<input id="txtTggno.*" type="text" class="txt" style="width:25%;"/>
-					<input id="txtTgg.*"type="text" class="txt" style="width:55%;"/>
-					<input id="btnTggno.*" type="button" value="..." style="width: 10%;" />
+						<input id="txtTggno.*" type="text" class="txt" style="width:25%;"/>
+						<input id="btnTggno.*" type="button" value="." style="width: 5%;" />
+						<input id="txtTgg.*"type="text" class="txt" style="width:50%;"/>
 					</td>
-					
 					<td><input id="txtSpec.*" type="text" class="txt" /></td>
 					<td><input id="txtHpower.*" type="text" class="txt c1" /></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>

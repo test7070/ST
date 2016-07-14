@@ -405,7 +405,7 @@ declare @tmp table(
 )
 insert into @tmp
 select 
-	'0',ROW_NUMBER()over (order by a.noa),a.frame,a.noa,a.spec,SUM(b.mount),
+	'0',ROW_NUMBER()over (order by cast(a.frame as int),a.noa),a.frame,a.noa,a.spec,SUM(b.mount),
 	case when a.usetype = '1' then '設備課' else '製造課' end,
 	a.datea
 from model a

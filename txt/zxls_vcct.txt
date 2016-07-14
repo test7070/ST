@@ -208,7 +208,7 @@ begin
 	--刪除已存在noa
 	if(@isexist = 1)
 	begin
-		set @t_sono=isnull((select sono from vcct where noa = @noa),'')
+		set @t_sono=isnull((select top 1 sono from vcct where noa = @noa and isnull(sono,'')!='' order by datea,kind),'')
 		if(@t_sono!='')
 		begin
 			set @vccno=isnull((select noa from view_vcc where noa=@t_sono),'')

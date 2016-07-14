@@ -83,7 +83,7 @@ begin
 	,isnull((select top 1 timea from #tmp where sssno=a.noa and wtype='1A' and datea=@datea order by timea),'')
 	,isnull((select top 1 timea from #tmp where sssno=a.noa and wtype='2A' and datea=@datea order by timea desc),'')
 	,0,0,0,''
-	from sss a order by noa
+	from sss a where isnull(outdate,'')='' order by noa
 	
 	set @t_weekday=DATEPART(WEEKDAY, dbo.ChineseEraName2AD(@datea))-1
 	
@@ -93,10 +93,18 @@ begin
 		or @datea in (select noa from holiday where isnull(iswork,0)=1)--上班日
 	)
 	begin
-		update a
-		set w133=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
-		from #bbs a
+		--105/07/07 出勤加班時數 直接計算出 比對加班單核准 加班時數
+		update #bbs
+		set w133=	case when clockout>=@t_offwork and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+		then round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+@t_offwork
+		, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+clockout) as float)/60),1) else 0 end
+		where isnull(clockin,'')!='' and isnull(clockout,'')!='' and clockout>=@t_offwork 
 		
+		--update a
+		--set w133=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
+		--from #bbs a
+		--105/07/07 加班時數小時0.5 不列入加班時數
+		update #bbs set w133=case when w133<0.5 then 0 else w133 end
 		update #bbs set w166=case when w133>2 then w133-2 else 0 end
 		update #bbs set w133=case when w133>2 then 2 else w133 end
 		
@@ -121,9 +129,15 @@ begin
 	end
 	else
 	begin
-		update a
-		set w100=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
-		from #bbs a
+		update #bbs
+		set w100=	case when isnull(clockin,'')!='' and isnull(clockout,'')!='' then
+		round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockin>@t_gowork then clockin else @t_gowork end 
+		, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockout<@t_offwork then clockout else @t_offwork end) as float)/60),1) else 0 end
+		where isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+	
+		--update a
+		--set w100=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
+		--from #bbs a
 	end
 	
 	insert #bbm
@@ -171,10 +185,18 @@ begin
 			or @datea in (select noa from holiday where isnull(iswork,0)=1)--上班日
 		)
 		begin
-			update a
-			set w133=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
-			from salpresents a where noa=@datea
+			--105/07/07 出勤加班時數 直接計算出 比對加班單核准 加班時數
+			update salpresents
+			set w133=case when clockout>=@t_offwork and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+			then round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+@t_offwork
+			, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+clockout) as float)/60),1) else 0 end
+			where noa=@datea 
+		
+			--update a
+			--set w133=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
+			--from salpresents a where noa=@datea
 			
+			update salpresents set w133=case when w133<0.5 then 0 else w133 end where noa=@datea
 			update salpresents set w166=case when w133>2 then w133-2 else 0 end where noa=@datea
 			update salpresents set w133=case when w133>2 then 2 else w133 end where noa=@datea
 			
@@ -188,7 +210,7 @@ begin
 			
 			update a
 			set memo=memo+
-			case when clockout<@t_offwork and isnull((select count(*) from salvacause where (@datea between bdate and edate) and sssno=a.sssno and a.clockout between (case when btime=@t_gowork then @t_offwork else btime end) and etime ),0)=0 then (case when len(memo)>0 then ',' else '' end) +'早退' else '' end
+			case when clockout<@t_offwork and isnull((select count(*) from salvacause where (@datea between bdate and edate) and sssno=a.sssno and a.clockout between (case when btime=@t_gowork2 then @t_offwork2 else btime end) and etime ),0)=0 then (case when len(memo)>0 then ',' else '' end) +'早退' else '' end
 			from salpresents a
 			where isnull(a.clockout,'')!='' and noa=@datea
 			
@@ -201,9 +223,15 @@ begin
 		end
 		else
 		begin
-			update a
-			set w100=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
-			from salpresents a where noa=@datea
+			update salpresents
+			set w100=case when isnull(clockin,'')!='' and isnull(clockout,'')!='' then
+			round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockin>@t_gowork then clockin else @t_gowork end 
+			, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockout<@t_offwork then clockout else @t_offwork end) as float)/60),1) else 0 end
+			where noa=@datea 
+		
+			--update a
+			--set w100=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
+			--from salpresents a where noa=@datea
 		end
 		
 		update a
