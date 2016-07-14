@@ -103,7 +103,7 @@
 							return;
 						}
 						//1050224 用load 處理
-						var t_where="where=^^a.noa='"+$('#txtInnoa').val()+"' order by a.nob^^"
+						var t_where="where=^^a.noa='"+$('#txtInnoa').val()+"' order by a.noa,a.noq^^"
 						var t_where1="where[1]=^^nob=a.nob and noa!='"+$('#txtNoa').val()+"' and datea<'"+$('#txtDatea').val()+"'^^"
 						q_gt('modfixc_modfixs', t_where+t_where1, 0, 0, 0, "modfixc_modfixs",r_accy,1);
 						
