@@ -152,6 +152,12 @@
                     				newArray.push(as[i]);
                         		}
                         	}
+                        	for(var i=0;i<as.length;i++){
+                        		if(as[i].noa.length>0){
+                        			$('#txtOrdcno').val(as[i].noa);
+                        			break;
+                        		}
+                        	}
                     		q_gridAddRow(bbsHtm, 'tbbs', 'txtBccno,txtBccname,txtUnit,txtMount,txtMount2,txtPrice,txtTotal,txtMemo,txtOrdcno,txtNo2'
                         	, newArray.length, newArray, 'productno,product,unit,weight,weight,price,total,memo,noa,no2', 'txtBccno','');             	
                         	sum();

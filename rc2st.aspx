@@ -370,6 +370,12 @@
                     				newArray.push(as[i]);
                         		}
                         	}
+                        	for(var i=0;i<as.length;i++){
+                        		if(as[i].noa.length>0){
+                        			$('#txtOrdcno').val(as[i].noa);
+                        			break;
+                        		}
+                        	}
                         	q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit'
                         	, newArray.length, newArray
 							, 'productno,product,spec,spec,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,unit', 'txtProductno');        	
