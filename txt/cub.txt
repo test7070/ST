@@ -58,7 +58,7 @@
 			select a.ucolor,a.productno,a.product,0,a.[weight]
 			from view_cubu a
 			where a.accy=@accy and a.noa=@cubno
-			and	 len(isnull(a.ucolor,''))>0
+			and	 len(isnull(a.ucolor,''))>0 
 			--------------------------------------------------------------------
 			update #cub2get set noa=@cubno, noq =  right('00'+CAST(sel as nvarchar),3)
 			
