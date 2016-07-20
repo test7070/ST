@@ -16,19 +16,32 @@
 		<script type="text/javascript">
             var q_name = "img";
             var q_readonly = [];
+            var q_readonlys = [];
+            var q_readonlyt = [];
             var bbmNum = [];
+            var bbsNum = [];
+            var bbtNum = [];
             var bbmMask = [];
-     
+            var bbsMask = [];
+            var bbtMask = [];
+     		
+     		q_tables = 't';
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
 			brwCount2 =8;
-			aPop = new Array();
+			aPop = new Array(
+				['txtMechno_', 'btnMechno_', 'mech', 'noa,mech', 'txtMechno_,txtMech_', "mech_b.aspx?" ]
+            	, ['txtCustno__', 'btnCustno__', 'cust', 'noa,comp', 'txtCustno__,txtComp__', "cust_b.aspx?" ]
+				
+			);
             				
             $(document).ready(function() {
                 bbmKey = ['noa'];
+                bbsKey = ['noa', 'noq'];
+                bbtKey = ['noa', 'noq'];
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1);
             });
@@ -43,6 +56,9 @@
 
             function mainPost() {
                 q_mask(bbmMask);
+                bbsNum = [['txtLbottom',10,0,1],['txtSbottom',10,0,1],['txtLfoot',10,0,1],['txtSfoot',10,0,1]];
+            	bbtNum = [['txtBtol',10,0,1],['txtRtol',10,0,1],['txtBottom',10,0,1],['txtFoot',10,0,1]];
+                
                 $('#txtNoa').change(function(e) {			
 					t_where = "where=^^ noa='" + $(this).val() + "'^^";
 					q_gt('img', t_where, 0, 0, 0, "checkNoa_change", r_accy);				
@@ -72,6 +88,7 @@
 					}
 				});
             }
+            
             function refreshPara(){
             	var string = $.trim($('#textPara').val());
 				var t_para = new Array();
@@ -90,6 +107,7 @@
 				$('#txtPara').val(JSON.stringify(t_para));
 				refreshImg(false);
             }
+            
 			function refreshImg(isOrg){
 				if(!isOrg){
 					$('#imgPic').attr('src',$('#txtOrg').val());
@@ -128,6 +146,7 @@
 					$('#txtData').val(c.toDataURL());
 				
 			}
+			
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
@@ -136,6 +155,7 @@
                         break;
                 } 
             }
+            
             function q_gtPost(t_name) {
                 switch (t_name) {
                 	case 'checkNoa_change':
@@ -214,13 +234,14 @@
                     xmlSql = q_preXml();
 
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
-                _btnOk(key_value, bbmKey[0], '', '', 2);
+                _btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
             }
 
             function refresh(recno) {
                 _refresh(recno);     
                 refreshBbm();
             }
+            
 			function refreshBbm(){
             	if(q_cur==1){
             		$('#txtNoa').css('color','black').css('background','white').removeAttr('readonly');
@@ -251,6 +272,36 @@
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
             }
+            
+            function bbsAssign() {
+            	for (var i = 0; i < q_bbsCount; i++) {
+            	}
+                _bbsAssign();
+            }
+            
+            function bbsSave(as) {
+                if (!as['mechno'] && !as['mech']) {
+                    as[bbsKey[1]] = '';
+                    return;
+                }
+                q_nowf();
+                return true;
+            }
+            
+            function bbtAssign() {
+                for (var i = 0; i < q_bbtCount; i++) {
+                }
+                _bbtAssign();
+            }
+            
+            function bbtSave(as) {/// 表身 寫入資料庫前，寫入需要欄位
+				if (!as['custno'] && !as['comp']) {//不存檔條件
+					as[bbsKey[1]] = '';
+					return;
+				}
+				q_nowf();
+				return true;
+			}
 
             function btnMinus(id) {
                 _btnMinus(id);
@@ -395,23 +446,63 @@
                 padding: 0px;
                 margin: -1px;
             }
-            .tbbs input[type="text"] {
-                width: 98%;
-            }
-            .tbbs a {
-                font-size: medium;
-            }
             .num {
                 text-align: right;
-            }
-            .bbs {
-                float: left;
             }
             input[type="text"], input[type="button"] {
                 font-size: medium;
             }
             select {
                 font-size: medium;
+            }
+            .dbbs {
+                width: 700px;
+            }
+            .dbbs .tbbs {
+                margin: 0;
+                padding: 2px;
+                border: 2px lightgrey double;
+                border-spacing: 1;
+                border-collapse: collapse;
+                font-size: medium;
+                color: blue;
+                /*background: #cad3ff;*/
+                background: lightgrey;
+                width: 100%;
+            }
+            .dbbs .tbbs tr {
+                height: 35px;
+            }
+            .dbbs .tbbs tr td {
+                text-align: center;
+                border: 2px lightgrey double;
+            }
+            .dbbs .tbbs select {
+                border-width: 1px;
+                padding: 0px;
+                margin: -1px;
+                font-size: medium;
+            }
+            #dbbt {
+                width: 700px;
+            }
+            #tbbt {
+                margin: 0;
+                padding: 2px;
+                border: 2px pink double;
+                border-spacing: 1;
+                border-collapse: collapse;
+                font-size: medium;
+                color: blue;
+                background: pink;
+                width: 100%;
+            }
+            #tbbt tr {
+                height: 35px;
+            }
+            #tbbt tr td {
+                text-align: center;
+                border: 2px pink double;
             }
 		</style>
 	</head>
@@ -465,7 +556,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td></td>
+							<td> </td>
 							<td colspan="2"><a style="color:#8A4B08;">代號,TOP,LEFT,字形大小</a></td>
 						</tr>
 						<tr> 
@@ -488,7 +579,7 @@
 						<tr> </tr>
 						<tr> </tr>
 						<tr>
-							<td></td>
+							<td> </td>
 							<td colspan="3">
 								<input type="file" id="btnFile" value="上傳"/>
 							</td>
@@ -497,7 +588,69 @@
 				</table>
 			</div>
 		</div>
-
+		<div class='dbbs'>
+			<table id="tbbs" class='tbbs' style=' text-align:center'>
+				<tr style='color:white; background:#003366;' >
+					<td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+					<td align="center" style="width:200px;"><a id='lblMech_s'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblBottom_s'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblFoot_s'> </a></td>
+				</tr>
+				<tr style='background:#cad3ff;'>
+					<td align="center">
+						<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+						<input id="txtNoq.*" type="text" style="display: none;" />
+					</td>
+					<td>
+						<input id="txtMechno.*" type="text" style="float:left;width: 25%;"/>
+						<input id="btnMechno.*" type="button" value="." style="float:left;width: 1%;"/>
+						<input id="txtMech.*" type="text" style="float:left;width: 60%;"/>
+					</td>
+					<td>
+						<input id="txtLbottom.*" type="text" class="txt num c1" style="width: 45%;"/>
+						<a style="float: left;">~</a>
+						<input id="txtSbottom.*" type="text" class="txt num c1" style="width: 45%;"/>
+					</td>
+					<td>
+						<input id="txtLfoot.*" type="text" class="txt num c1" style="width: 45%;"/>
+						<a style="float: left;">~</a>
+						<input id="txtSfoot.*" type="text" class="txt num c1" style="width: 45%;"/>
+					</td>
+				</tr>
+			</table>
+		</div>
 		<input id="q_sys" type="hidden" />
+		<div id="dbbt">
+			<table id="tbbt">
+				<tr style="color:white; background:#003366;">
+					<td style="width:20px;"><input id="btnPlut" type="button" style="font-weight: bold;" value="+"/></td>
+					<td align="center" style="width:130px;"><a id='lblCust_t'> </a></td>
+					<td align="center" style="width:180px;"><a id='lblComp_t'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblTol_t'> </a></td>
+					<td align="center" style="width:70px;"><a id='lblBottom_t'> </a></td>
+					<td align="center" style="width:70px;"><a id='lblFoot_t'> </a></td>
+				</tr>
+				<tr>
+					<td>
+						<input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="-"/>
+						<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
+					</td>
+					<td>
+						<input class="txt c1" id="txtCustno..*" type="text" style="width:80%;float:left;"/>
+						<input id="btnCustno..*" type="button" value="." style="float:left;width: 1%;"/>
+					</td>
+					<td>
+						<input class="txt c1" id="txtComp..*" type="text" style="width:95%;float:left;"/>
+					</td>
+					<td>
+						<input class="txt  num c1" id="txtBtol..*" type="text" style="width: 40%;"/>
+						<a style="float: left;">~</a>
+						<input class="txt  num c1" id="txtRtol..*" type="text" style="width: 40%;"/>
+					</td>
+					<td><input class="txt num c1" id="txtBottom..*" type="text"  style="width: 90%;"/></td>
+					<td><input class="txt num c1" id="txtFoot..*" type="text"  style="width: 90%;"/></td>
+				</tr>
+			</table>
+		</div>
 	</body>
 </html>

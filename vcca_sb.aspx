@@ -25,7 +25,7 @@
 			var q_readonlys = [];
 			var q_readonlyt = ['txtVccaccy','txtVccno','txtVccnoq'];
 			var bbmNum = [['txtMoney', 15, 0,1], ['txtTax', 15, 0,1], ['txtTotal', 15, 0,1]];
-			var bbsNum = [['txtMount', 15, 3,1], ['txtGmount', 15, 4,1], ['txtEmount', 15, 4,1], ['txtPrice', 15, 3,1], ['txtTotal', 15, 0,1], ['txtTax', 15, 0,1]];
+			var bbsNum = [];
 			var bbtNum = [['txtMount', 15, 0, 1],['txtWeight', 15, 2, 1],['txtPrice', 15, 2, 1],['txtMoney', 15, 0, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -104,7 +104,7 @@
 				, ['txtSerial', 'lblSerial', 'vccabuyer', 'serial,noa,buyer', '0txtSerial,txtBuyerno,txtBuyer', 'vccabuyer_b.aspx']
 				, ['txtProductno_', 'btnProductno_', 'ucca', 'noa,product,unit,rc2acc', 'txtProductno_,txtProduct_,txtUnit_,txtOrdeno_', 'ucca_b.aspx']);
 				bbmNum = [['txtMoney', 15, 0,1], ['txtTax', 15, 0,1], ['txtTotal', 15, 0,1]];
-				bbsNum = [['txtMount', 15, 3,1], ['txtGmount', 15, 4,1], ['txtEmount', 15, 4,1], ['txtPrice', 15, 3,1], ['txtMoney', 15, 2,1],['txtOrdeno', 15, 3,1]];
+				bbsNum = [['txtMount', 15, 3,1], ['txtGmount', 15, 4,1], ['txtEmount', 15, 4,1], ['txtPrice', 15, 2,1], ['txtMoney', 15, 0,1],['txtOrdeno', 15, 3,1]];
 				q_readonly = ['txtMoney', 'txtTotal', 'txtChkno', 'txtTax', 'txtAccno', 'txtWorker', 'txtTrdno', 'txtVccno','cmbTaxtype'];
 				q_readonlys = ['txtMoney','txtOrdeno'];
 				
@@ -209,7 +209,7 @@
                 		var n = b_seq;
                 		t_productno = $('#txtProductno_'+n).val();
                 		t_date = $('#txtDatea').val();
-                		
+                		$('#txtMount_' + n).change();
                 		break;
                     default:
                         break;
@@ -357,6 +357,12 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#txtProductno_'+j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
+						
 						$('#txtMount_' + j).change(function() {
 							var n = $(this).attr('id').replace('txtMount_','');
 							t_productno = $('#txtProductno_'+n).val();
@@ -366,7 +372,7 @@
 	                		var t_mount=dec($('#txtMount_'+n).val());
 	                		var t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
 	                		if(t_mount!=0){
-	                			$('#txtPrice_'+n).val(round(q_div(t_taxprice,(1+t_taxrate)),3));
+	                			$('#txtPrice_'+n).val(round(q_div(t_taxprice,(1+t_taxrate)),2));
 	                			$('#txtMoney_'+n).val(round(q_mul(q_float('txtMount_'+n),q_float('txtPrice_'+n)),0));
 	                			$('#txtTax_'+n).val(round(q_mul(q_float('txtMoney_'+n),t_taxrate),0));
 	                		}else{
@@ -499,7 +505,6 @@
 									
 				$('#txtTax').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				var t_mounts, t_prices, t_moneys=0, t_mount = 0, t_money = 0, t_taxrate,t_taxs=0, t_tax=0, t_total=0;
-				
 				
 				for (var k = 0; k < q_bbsCount; k++) {
 					t_moneys = q_float('txtMoney_' + k);
