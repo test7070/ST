@@ -278,6 +278,7 @@ while(@@FETCH_STATUS <> -1)
 begin
 	set @counts=1
 	set @tmemo=@memo
+	update @tmp set ordeno='' where noa=@noa
 	while(LEN(@tmemo)>0 and @counts<6)
 	begin
 		set @string=dbo.split(dbo.charbr(@tmemo,20),'<BR>',0)

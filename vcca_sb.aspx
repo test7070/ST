@@ -209,7 +209,7 @@
                 		var n = b_seq;
                 		t_productno = $('#txtProductno_'+n).val();
                 		t_date = $('#txtDatea').val();
-                		
+                		$('#txtMount_' + n).change();
                 		break;
                     default:
                         break;
@@ -305,12 +305,6 @@
 				Lock(1, {
 					opacity : 0
 				});
-				
-				if($('#txtDatea').val()<='105/07/19'){ //105/07/19 以前的發票重新修改確定就要重新算
-					for (var j = 0; j < q_bbsCount; j++) {
-						$('#txtMount_' + j).change();
-					}
-				}
 
 				var t_err = '';
 				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtDatea', q_getMsg('lblDatea')], ['txtCno', q_getMsg('lblAcomp')]]);
@@ -363,6 +357,12 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
+						$('#txtProductno_'+j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
+						
 						$('#txtMount_' + j).change(function() {
 							var n = $(this).attr('id').replace('txtMount_','');
 							t_productno = $('#txtProductno_'+n).val();
