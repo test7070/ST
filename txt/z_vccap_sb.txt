@@ -271,7 +271,7 @@ select
 	a.ordeno
 	,dbo.getComma(a.mount,0)mount
 	,dbo.getComma(a.price,-1)price
-	,dbo.getComma(a.total,2)total
+	,dbo.getComma(a.total,0)total
 	,dbo.getComma(a.ttotal,0)ttotal
 	,a.taxtype1,a.taxtype2,a.taxtype3,a.totmoney,a.taxmoney,a.totmoney,
 	a.money1 m1,

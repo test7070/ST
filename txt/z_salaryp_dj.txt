@@ -7,7 +7,6 @@ set @t_xmon = case when '#non' = [1] then '' else [1] end
 set @t_bsssno = case when '#non' = [2] then '' else [2] end
 set @t_esssno = case when '#non' = [3] then CHAR(255) else [3] end
 ---------------------------------------------------------------------------------------------------------------------------------
-
 declare @tmp table(
 	gno nvarchar(1),
 	recno int,
@@ -67,9 +66,13 @@ select '9','',b.sno,b.namea,c.jobno,isnull(c.level1+'職等','')+c.job,c.level2,
 		,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6
 		,b.money+b.bo_admin+b.bo_oth+b.bo_special+b.bo_full+b.meals+b.bo_traffic+b.addmoney+b.money1+b.money2+b.money3+b.money4+b.money5+b.money6
 		,b.ch_labor,b.ch_health,b.hplus2,case when d.inday!=0 then d.inday/8 else '' end
-		,'',case when d.inday!=0 then isnull(((d.inday-e.tot_special)/8),0) else 0 end
+		,case when f.hname='特休假' then sum(f.hr_used)/8 else '' end
+		,case when d.inday!=0 then isnull(((d.inday-e.tot_special)/8),0) else 0 end
 		,case when e.tot_special!=0 then e.tot_special/8 else '' end
-		,b.hr_sick,b.hr_person,'','',b.mi_sick+b.mi_person,b.mi_nosalary+b.mi_leave
+		,b.hr_sick,b.hr_person
+		,case when f.hname='天災假' then sum(f.hr_used) else '' end
+		,case when f.hname!='天災假' and f.hname!='特休假' and f.hname!='病假' and f.hname!='事假' then sum(f.hr_used)/8 else '' end
+		,b.mi_sick+b.mi_person,b.mi_nosalary+b.mi_leave
 		,b.tax6,b.lodging_power_fee,b.borrow
 		,b.ch_labor+b.ch_health+b.hplus2+b.mi_sick+b.mi_person+b.mi_nosalary+b.mi_leave
 		,'',b.sa_health,b.money7	
@@ -77,16 +80,12 @@ from salary a left join salarys b on a.noa=b.noa
 	outer apply(select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc)c
 	left join salvacas d on b.sno=d.sssno and b.noq=d.noq and LEFT(b.mon,3)=d.noa
 	outer apply (select top 1 * from salvacause where sssno=b.sno and Left(bdate,6)=@t_xmon order by bdate desc)e
+	outer apply (select * from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon)f
 where b.mon=@t_xmon
-
-insert @tmp(gno,sssno,name,dayused,naday,othday)
-select '9',sssno,namea
-		,case when hname='特休假' then sum(hr_used)/8 else '' end
-		,case when hname='天災假' then sum(hr_used) else '' end
-		,case when hname!='天災假' and hname!='特休假' and hname!='病假' and hname!='事假' then sum(hr_used)/8 else '' end
-from salvacause
-where left(bdate,6)=@t_xmon
-group by sssno,namea,hname
+group by b.sno,b.namea,c.jobno,c.level1,c.job,c.level2,b.partno,b.part,a.person
+		,b.money,b.bo_admin,b.bo_oth,b.bo_special,b.bo_full,b.meals,b.bo_traffic,b.addmoney,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6
+		,b.ch_labor,b.ch_health,b.hplus2,d.inday,f.hname,b.hr_sick,b.hr_person,e.tot_special,b.tax6,b.lodging_power_fee,b.borrow,b.sa_health,b.money7
+		,b.mi_sick,b.mi_person,b.mi_nosalary,b.mi_leave
 
 insert @tmp
 select '1','',sssno,name,max(jobno),max(job),max(levels),max(partno),max(part),max(person),max([money]),
@@ -193,7 +192,7 @@ update a
 set gno=b.gno,sssno2=b.sssno,name2=b.name,jobno2=b.jobno,job2=b.job,levels2=b.levels,partno2=b.partno,part2=b.part,person2=b.person,
 	money2=b.[money],admin12=b.admin1,oth12=b.oth1,special12=b.special1,full12=b.full1,meals12=b.meals1,traffic12=b.traffic1,addmoney2=b.addmoney,
 	money12=b.money1,money22=b.money2,money32=b.money3,money42=b.money4,money52=b.money5,money62=b.money6,total12=b.total1,labor2=b.labor,health2=b.health,
-	hplus22=b.hplus2,inday2=b.inday,dayused2=b.dayused,alluseday2=b.addmoney,speday2=b.speday,eventday2=b.eventday,sickday2=b.sickday,naday2=b.naday,othday2=b.othday,
+	hplus22=b.hplus2,inday2=b.inday,dayused2=b.dayused,alluseday2=b.alluseday,speday2=b.speday,eventday2=b.eventday,sickday2=b.sickday,naday2=b.naday,othday2=b.othday,
 	ps12=b.ps1,nl12=b.nl1,tax62=b.tax6,lodpower2=b.lodpower,borrow2=b.borrow,total22=b.total2,total32=b.total3,salhealth2=b.salhealth,money72=b.money7
 from  @tmp b left join @tmpa a on ((a.recno-1)*3)+2=b.recno and a.gno=b.gno
 
@@ -202,7 +201,7 @@ update a
 set gno=b.gno,sssno3=b.sssno,name3=b.name,jobno3=b.jobno,job3=b.job,levels3=b.levels,partno3=b.partno,part3=b.part,person3=b.person,
 	money3=b.[money],admin13=b.admin1,oth13=b.oth1,special13=b.special1,full13=b.full1,meals13=b.meals1,traffic13=b.traffic1,addmoney3=b.addmoney,
 	money13=b.money1,money23=b.money2,money33=b.money3,money43=b.money4,money53=b.money5,money63=b.money6,total13=b.total1,labor3=b.labor,health3=b.health,
-	hplus23=b.hplus2,inday3=b.inday,dayused3=b.dayused,alluseday3=b.addmoney,speday3=b.speday,eventday3=b.eventday,sickday3=b.sickday,naday3=b.naday,othday3=b.othday,
+	hplus23=b.hplus2,inday3=b.inday,dayused3=b.dayused,alluseday3=b.alluseday,speday3=b.speday,eventday3=b.eventday,sickday3=b.sickday,naday3=b.naday,othday3=b.othday,
 	ps13=b.ps1,nl13=b.nl1,tax63=b.tax6,lodpower3=b.lodpower,borrow3=b.borrow,total23=b.total2,total33=b.total3,salhealth3=b.salhealth,money73=b.money7
 from  @tmp b left join @tmpa a on ((a.recno-1)*3)+3=b.recno and a.gno=b.gno 
 
@@ -241,6 +240,7 @@ dbo.getComma(money71,0)money71,dbo.getComma(money72,0)money72,dbo.getComma(money
 LEFT(@t_xmon,3)years,RIGHT(@t_xmon,2)mon
 from @tmpa
 ;
+
 ---------------------------------------------------------------------------------------------------------------------------------
 
 z_salaryp_dj02:--z_salaryp_dj02(薪資表單張顯示)
