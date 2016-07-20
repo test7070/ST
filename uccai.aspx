@@ -80,7 +80,7 @@
                 		return;
                 	}
                 						
-					if($.trim($('#txtSalesno').val()).length>0){t_salesno=$.trim($('#txtSalesno').val());}
+					if($.trim($('#cmbSalesno').val()).length>0){t_salesno=$.trim($('#cmbSalesno').val());}
 					if($.trim($('#txtCustno').val()).length>0){t_custno=$.trim($('#txtCustno').val());}
 					if($.trim($('#txtMon').val()).length>0){t_mon=$.trim($('#txtMon').val());}
 					
