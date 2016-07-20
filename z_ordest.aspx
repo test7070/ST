@@ -141,6 +141,12 @@
 				q_popAssign();
 				q_getFormat();
 				q_langShow();
+				
+				if (q_getPara('sys.project').toUpperCase()=='RK'){
+					$('#lblXdate').text('訂貨日期');
+					$('#lblXodate').text('交貨日期');
+				}
+				
 				$('#txtXdate1').mask('999/99/99');
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask('999/99/99');

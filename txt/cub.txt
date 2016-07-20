@@ -38,9 +38,9 @@
 				mount float,
 				[weight] float
 			)
-			--鋼捲  數量都當做 1
+			--鋼捲  數量都當做 0
 			insert into #cub2get(uno,productno,product,mount,[weight])
-			select a.uno,b.productno,b.product,1,a.[weight]
+			select a.uno,b.productno,b.product,0,a.[weight]
 			from view_cubs a 
 			left join view_uccb b on a.uno=b.uno
 			where a.accy=@accy and a.noa=@cubno
@@ -53,12 +53,12 @@
 			left join ucc b on a.productno=b.noa
 			where a.accy=@accy and a.noa=@cubno
 			and len(isnull(a.uno,''))>0*/
-			--物料  批號存在ucolor那欄
+			--物料  批號存在ucolor那欄   數量都當做 0
 			insert into #cub2get(uno,productno,product,mount,[weight])
-			select a.ucolor,a.productno,a.product,a.mount,a.[weight]
+			select a.ucolor,a.productno,a.product,0,a.[weight]
 			from view_cubu a
 			where a.accy=@accy and a.noa=@cubno
-			and	 len(isnull(a.ucolor,''))>0
+			and	 len(isnull(a.ucolor,''))>0 
 			--------------------------------------------------------------------
 			update #cub2get set noa=@cubno, noq =  right('00'+CAST(sel as nvarchar),3)
 			

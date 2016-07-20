@@ -750,7 +750,8 @@ z_ordest1:--z_ordest1
 			a.custno,c.nick,b.productno,b.product,b.spec,''
 			,(case when exists(select * from acomp where charindex('聯琦',acomp)>0) then cast(b.dime as nvarchar)+'+'+cast(b.radius as nvarchar)+'*'+cast(b.width as nvarchar)+'*'+case when isnull(b.lengthb,0)=0 then 'C' else cast(b.lengthb as nvarchar) end
 		 		when ltrim(rtrim(isnull(b.size,'')))='' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else b.size end)
-			,b.dime,b.unit,b.mount,b.weight,b.price,b.total,'ordest'+a.accy
+			,b.dime,b.unit,b.mount,b.weight,b.price,b.total
+			,case when exists(select * from acomp where charindex('聯琦',acomp)>0) then 'orde_rk'+a.accy else 'ordest'+a.accy end
 			,a.coin,a.floata
 		from view_orde a
 		left join view_ordes b on a.noa = b.noa
@@ -771,6 +772,7 @@ z_ordest1:--z_ordest1
 	insert into @tmp(gno,odate,mount,weight,total)
 		select '2',char(255),sum(mount),sum(weight),sum(total) from @tmp where gno='0'
 	update @tmp set qhref = substring(qhref,0,len(qhref)-2)+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?'+substring(qhref,len(qhref)-2,len(qhref))
+	
 	insert into @tmp(gno,odate,productno,products,spec,csize,mount,weight,total)
 		select
 			'3',char(255),productno,products,spec,csize,sum(mount),sum(weight),sum(total)
