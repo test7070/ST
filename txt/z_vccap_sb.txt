@@ -50,7 +50,10 @@ insert into @tmp
 		case when isnull(a.buyerno,'') != '' then (case when isnull(d.invoicetitle,'') != '' then d.invoicetitle else d.comp end) else (case when isnull(a.buyer,'') != '' then a.buyer else a.comp end) end,
 		case when isnull(a.buyerno,'') != '' then (case when isnull(a.serial,'') != '' then a.serial else d.serial end) else (case when isnull(a.serial,'') != '' then a.serial else null end) end,
 		case when isnull(a.buyerno,'') != '' then (case when isnull(a.address,'') != '' then a.address else d.addr_invo end) else (case when isnull(a.address,'') != '' then a.address else null end) end,
-		a.chkno,a.vccno,c.zipcode,case when c.ordeno!='' then c.ordeno else REPLACE(Replace(a.memo,'chr(10)',' '),vccno,'') end,b.productno,b.product,b.mount,b.price,b.money,'',
+		a.chkno,a.vccno,c.zipcode
+		--,case when c.ordeno!='' then c.ordeno else REPLACE(Replace(a.memo,'chr(10)',' '),vccno,'') end
+		,Replace(a.memo,'chr(10)',' ')
+		,b.productno,b.product,b.mount,b.price,b.money,'',
 		case when a.taxtype='1' then '&#10004' else null end,
 		case when a.taxtype='2' then '&#10004' else null end,
 		case when a.taxtype='4' then '&#10004' else null end,
@@ -261,6 +264,39 @@ insert into @tmp(gno,noa,datea,pageno,pageorder,buyer,serial,invoaddr,chkno,vccn
 insert into @tmp(gno,noa,datea,pageno,pageorder)
 	select '8',noa,datea,pageno,0 from @tmp where pageno >= 2 group by noa,datea,pageno
 ------------插入頁首<<End>>-------------
+
+--處理備註換行 105/07/20
+declare @memo nvarchar(max)
+declare @tmemo nvarchar(max)
+declare @counts int
+declare cursor_table cursor for
+select noa,MAX(ordeno) from @tmp group by noa
+open cursor_table
+fetch next from cursor_table
+into @noa,@memo
+while(@@FETCH_STATUS <> -1)
+begin
+	set @counts=1
+	set @tmemo=@memo
+	while(LEN(@tmemo)>0 and @counts<6)
+	begin
+		set @string=dbo.split(dbo.charbr(@tmemo,20),'<BR>',0)
+		
+		update @tmp
+		set ordeno=@string
+		where pageorder=@counts and (gno='0' or gno='1' or gno='2')
+		
+		set @counts=@counts+1
+		
+		set @tmemo=SUBSTRING(@tmemo,LEN(@string)+1,len(@tmemo))
+	end
+	
+	fetch next from cursor_table
+	into @noa,@memo
+end
+close cursor_table
+deallocate cursor_table
+
 select
 	a.gno,a.pageno,a.pageorder,a.datea,
 	left(a.datea,3) da1,
@@ -271,7 +307,7 @@ select
 	a.ordeno
 	,dbo.getComma(a.mount,0)mount
 	,dbo.getComma(a.price,-1)price
-	,dbo.getComma(a.total,2)total
+	,dbo.getComma(a.total,0)total
 	,dbo.getComma(a.ttotal,0)ttotal
 	,a.taxtype1,a.taxtype2,a.taxtype3,a.totmoney,a.taxmoney,a.totmoney,
 	a.money1 m1,
