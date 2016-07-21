@@ -588,7 +588,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs'>
+		<div class='dbbs'  style="display: none;">
 			<table id="tbbs" class='tbbs' style=' text-align:center'>
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
@@ -620,7 +620,7 @@
 			</table>
 		</div>
 		<input id="q_sys" type="hidden" />
-		<div id="dbbt">
+		<div id="dbbt" style="display: none;">
 			<table id="tbbt">
 				<tr style="color:white; background:#003366;">
 					<td style="width:20px;"><input id="btnPlut" type="button" style="font-weight: bold;" value="+"/></td>
