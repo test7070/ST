@@ -196,6 +196,7 @@ z_ordest7:--z_ordest7	    pk
 		addr3 nvarchar(max),
 		style nvarchar(20),
 		cstyle nvarchar(20)
+		,vccweight float
 	)
 	
 		--訂單編號	開單日	客戶	規範	國別	材質	尺寸 			
@@ -222,9 +223,14 @@ z_ordest7:--z_ordest7	    pk
 	and isnull(a.width,0) between @t_bwidth and @t_ewidth
 	and isnull(a.dime,0) between @t_bdime and @t_edime
 	and (LEN(@t_style)=0 or a.style=@t_style)
+	--已出貨重量
+	update @tmp set vccweight=b.[weight]
+	from @tmp a
+	outer apply(select SUM(case when gweight>0 then gweight else ISNULL([weight],0) end) [weight] from view_vccs where ordeno=a.noa and no2=a.no2) b
+	
+	insert into @tmp(gno,mount,[weight],vccweight)
+	select '2',sum(ISNULL(mount,0)),sum(ISNULL([weight],0)),sum(ISNULL([vccweight],0)) from @tmp where gno='1'
 
-	insert into @tmp(gno,mount,[weight])
-	select '2',sum(ISNULL(mount,0)),sum(ISNULL([weight],0)) from @tmp where gno='1'
 
 	select a.gno
 		,ROW_NUMBER()over(order by a.odate desc,a.noa,a.no2) rr
@@ -258,6 +264,7 @@ z_ordest7:--z_ordest7	    pk
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.addr1 +'</a>' c03
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.addr2 +'</a>' c04
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.addr3 +'</a>' c05
+		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+dbo.getComma(a.[vccweight],-1) +'</a>' d01
 	from @tmp a
 	order by a.gno,a.odate desc,a.noa,a.no2;
 
