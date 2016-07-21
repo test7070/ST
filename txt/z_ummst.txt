@@ -1,3 +1,273 @@
+z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)	
+	SET QUOTED_IDENTIFIER OFF
+	declare @t_path nvarchar(max) = '[23]'
+	declare @t_db nvarchar(max) = '[24]'
+	declare @t_bcustno nvarchar(20) = case when '#non'=[5] then '' else [5] end 
+	declare @t_ecustno nvarchar(20) = case when '#non'=[6] then char(255) else [6] end
+	declare @t_bmon nvarchar(20) = case when '#non'=[13] then '' else [13] end 
+	declare @t_emon nvarchar(20) = case when '#non'=[14] then char(255) else [14] end
+	declare @t_memo nvarchar(max) = case when '#non'=[19] then '' else [19] end
+	declare @t_curnoa nvarchar(max) = case when '#non'=[26] then '' else [26] end
+	------------------------------------------------------------------------
+	declare @tmp table(
+		sel int identity(1,1)
+		,vccaccy nvarchar(10)
+		,vccno nvarchar(20)
+		,datea nvarchar(20)
+		,mon nvarchar(20)
+		,custno nvarchar(20)
+		,cust nvarchar(50)
+		,conn nvarchar(max)
+		,coin nvarchar(20)
+		,floata float
+		,[money] float
+		,tax float
+		,total float
+		,memo nvarchar(max)
+	)
+	insert into @tmp(vccaccy,vccno,datea,mon,custno,cust,coin,floata,[money],tax,total,memo)
+	select a.accy,a.noa,a.datea,a.mon,a.custno,a.comp,a.coin,a.floata,a.[money],a.tax,a.total,a.memo
+	from view_vcc a
+	where a.custno between @t_bcustno and @t_ecustno
+	and a.mon between @t_bmon and @t_emon
+	
+	update @tmp set conn=b.namea
+	from @tmp a
+	outer apply(select top 1 * from conn where noa=a.custno and typea='1' order by noq) b
+
+	declare @tmps table(
+		sel int identity(1,1)
+		,custno nvarchar(20)
+		,vccaccy nvarchar(10)
+		,vccno nvarchar(20)
+		,vccnoq nvarchar(10)
+		,ordeno nvarchar(20)
+		,ordeno2 nvarchar(10)
+		,datea nvarchar(10)
+		,uno nvarchar(30)
+		,style nvarchar(20)
+		,productno nvarchar(30)
+		,product nvarchar(50)
+		,pvcno nvarchar(20)
+		,pvc nvarchar(20)
+		,spec nvarchar(50)
+		,dime float
+		,width float
+		,lengthb float
+		,radius float
+		,unit nvarchar(20)
+		,mount float
+		,[weight] float
+		,price float
+		,[money] float
+		,memo nvarchar(max)
+	)
+	insert into @tmps(custno,vccaccy,vccno,vccnoq,ordeno,ordeno2,datea,uno,style,productno,product,pvcno,pvc
+		,spec,dime,width,lengthb,radius,unit,mount,[weight],price,[money])
+	select b.custno,a.accy,a.noa,a.noq,a.ordeno,a.no2,b.datea,a.uno,a.style,a.productno,a.product,'',''
+		,a.spec,a.dime,a.width,a.lengthb,a.radius,upper(isnull(a.unit,'')),a.mount,a.[weight],a.price,a.total
+	from view_vccs a
+	left join @tmp b on a.accy=b.vccaccy and a.noa=b.vccno
+	where b.sel is not null
+	
+	--皮膜去CUTS抓
+	update @tmps set pvcno=b.spec,pvc=b.[class]
+	from @tmps a
+	left join view_cuts b on a.uno=b.bno
+	where b.noa is not null
+	---------------------------------------------------------------------------------------------------
+	declare @tmpa table(
+		sel int identity(1,1)
+		,gno nvarchar(10)
+		,pno nvarchar(20)
+		,custno nvarchar(20)
+		,cust nvarchar(50)
+		,tel nvarchar(max)
+		,fax nvarchar(max)
+		,zip nvarchar(20)
+		,addr nvarchar(max)
+		,serial nvarchar(max)
+		,conn nvarchar(max)
+		,coin nvarchar(20)
+		,floata float
+		
+		,vccaccy nvarchar(10)
+		,vccno nvarchar(20)
+		,ordeno nvarchar(20)
+		,datea nvarchar(10)
+		,product nvarchar(30)
+		,pvcno nvarchar(20)
+		,pvc nvarchar(20)
+		,dime float
+		,width float
+		,lengthb float
+		,radius float
+		,price float
+		,[money] float
+		,cmount nvarchar(max)
+		,cmount2 nvarchar(max)
+
+		,tmoney float
+		,tfloata float
+		,ttax float
+		,ttotal float
+		,tmemo nvarchar(max)
+	)	
+	declare @custno nvarchar(max)
+	declare @money float
+	declare @tax float
+	declare @total float
+	
+	declare @accy nvarchar(10)
+	declare @noa nvarchar(20)
+	declare @ordeno nvarchar(20)
+	declare @datea nvarchar(10)
+	declare @product nvarchar(max)
+	declare @pvcno nvarchar(20)
+	declare @pvc nvarchar(50)
+	declare @unit nvarchar(20)
+	declare @dime float
+	declare @width float
+	declare @lengthb float
+	declare @radius float
+	declare @mount float
+	declare @weight float
+	declare @price float
+	declare @moneys float
+	
+	declare @cmount nvarchar(max)
+	declare @cmount2 nvarchar(max)
+	declare @recno int
+	declare @floata float
+	declare @money_usd float
+	declare @tmoney_usd float
+	declare @tweight float
+	
+	declare cursor_table cursor for
+	select custno,sum(isnull([money],0)),sum(isnull([tax],0)),sum(isnull([total],0)) from @tmp group by custno
+	open cursor_table
+	fetch next from cursor_table
+	into @custno,@money,@tax,@total
+	while(@@FETCH_STATUS <> -1)
+	begin
+		set @tmoney_usd = 0
+		set @tweight = 0
+		--出貨明細
+		declare cursor_table2 cursor for
+		select vccaccy,vccno,ordeno,datea,product,pvcno,pvc
+			,dime,width,lengthb,radius
+			,unit,price,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0))
+		from @tmps 
+		where custno=@custno 
+		group by vccaccy,vccno,ordeno,datea,product,pvcno,pvc,dime,width,lengthb,radius,unit,price
+		open cursor_table2
+		fetch next from cursor_table2
+		into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@dime,@width,@lengthb,@radius,@unit,@price,@mount,@weight,@moneys
+		while(@@FETCH_STATUS <> -1)
+		begin
+			set @tweight = @tweight + isnull(@weight,0)
+			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
+			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
+			begin
+				set @cmount = dbo.getComma(@weight,-1) +' '+ @unit
+				set @cmount2 = dbo.getComma(@mount,-1) +' PCS'
+				set @money_usd = round(@weight*@price,2)
+			end
+			else
+			begin
+				set @cmount = dbo.getComma(@mount,-1) +' '+ @unit
+				set @cmount2 = ''
+				set @money_usd = round(@mount*@price,2)
+			end
+			set @tmoney_usd = @tmoney_usd + @money_usd
+			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,datea,product,pvcno,pvc
+				,dime,width,lengthb,radius,price,[money],cmount,cmount2)
+			select @custno,'1',1,@accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc
+				,@dime,@width,@lengthb,@radius,@price,@money_usd,dbo.getComma(@weight,-1),dbo.getComma(@mount,-1)+'C'
+			
+			fetch next from cursor_table2
+			into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@dime,@width,@lengthb,@radius,@unit,@price,@mount,@weight,@moneys
+		end
+		close cursor_table2
+		deallocate cursor_table2
+		--小計
+		insert into @tmpa(custno,gno,pno,cmount,tmoney,tmemo)
+		select @custno,'2',2,@tweight,@tmoney_usd,@t_memo
+		
+		--匯率
+		declare cursor_table2 cursor for
+		select floata
+		from @tmp
+		where custno=@custno and isnull(floata,0)!=0 
+		group by floata
+		open cursor_table2
+		fetch next from cursor_table2
+		into @floata
+		while(@@FETCH_STATUS <> -1)
+		begin
+			insert into @tmpa(custno,gno,pno,tfloata)
+			select @custno,'3',3,@floata
+			
+			fetch next from cursor_table2
+			into @floata
+		end
+		close cursor_table2
+		deallocate cursor_table2
+		
+		insert into @tmpa(custno,gno,pno,ttotal)
+		select @custno,'4',4,@total
+		--頁尾
+		insert into @tmpa(custno,gno,pno)
+		select @custno,'5',5
+		
+		fetch next from cursor_table
+		into @custno,@money,@tax,@total
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+	update @tmpa set cust=ISNULL(b.comp,''),serial=ISNULL(b.serial,'')
+		,tel=ISNULL(b.tel,''),fax=ISNULL(b.fax,''),zip=ISNULL(b.zip_comp,''),addr=ISNULL(b.addr_comp,'')
+	from @tmp a
+	left join cust b on a.custno=b.noa
+	
+	update @tmpa set conn=b.namea
+	from @tmpa a
+	outer apply(select top 1 * from conn where noa=a.custno and typea='1') b
+	
+	select gno
+		,'<img src="'+@t_path+'getlogo.aspx?noa=LC02'+CHAR(38)+'db='+@t_db+'"/>' logo
+		,custno a01
+		,cust a02
+		,tel a03
+		,fax a04
+		,zip+addr a05
+		,serial a06
+		,@t_curnoa a07
+		,dbo.AD2ChineseEraName(GETDATE()) a08
+		,conn a09
+		
+		,datea b01
+		,vccno b02
+		,ordeno b03
+		,'' b04
+		,product b05
+		,pvcno b06
+		,dime b07
+		,radius b08
+		,width b09
+		,case when lengthb=0 then 'COIL' else CAST(lengthb as nvarchar) end b10
+		,cmount b11
+		,dbo.getComma(price,-1) b12
+		,dbo.getComma([money],-1) b13
+		,cmount2 b14
+		,dbo.getComma(tmoney,-1) c01
+		,dbo.getComma(tfloata,-1) c02
+		,dbo.getComma(ttotal,-1) c03
+		,tmemo c04
+	from @tmpa 
+	order by custno,pno;
+
 z_umm_rk01:--z_umm_rk01 應收帳款明細表 	
 	SET QUOTED_IDENTIFIER OFF
 	declare @t_path nvarchar(max) = '[23]'
