@@ -351,7 +351,7 @@
 						b_seq = t_IdSeq;
 						if($('#txtFixmount_'+b_seq).val() > $('#txtMount_'+b_seq).val()){
 							alert('維修數量大於入庫數量!');
-							lock();
+							lockbbs();
 						}else{
 							sum();
 						}
@@ -466,6 +466,11 @@
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;		
 						$('#txtLoss_'+b_seq).val(q_sub($('#txtBrepair_'+b_seq).val(),$('#txtErepair_'+b_seq).val()));
+						if(dec($('#txtErepair_'+b_seq).val())!=0){
+							$('#cmbWay_'+b_seq).val('CNC車修').change();
+						}else if(dec($('#txtBrepair_'+b_seq).val())!=0){
+							$('#cmbWay_'+b_seq).val('傳統車床(研磨)').change();
+						}
 					});
 					$('#txtErepair_'+j).change(function(){	
 						t_IdSeq = -1;
@@ -473,13 +478,119 @@
 						b_seq = t_IdSeq;		
 						$('#txtLoss_'+b_seq).val(q_sub($('#txtBrepair_'+b_seq).val(),$('#txtErepair_'+b_seq).val()));
 						$('#txtEnbottom_'+b_seq).val(q_add($('#txtBottom_'+b_seq).val(),$('#txtErepair_'+b_seq).val()));
+						if(dec($('#txtErepair_'+b_seq).val())!=0){
+							$('#cmbWay_'+b_seq).val('CNC車修').change();
+						}else if(dec($('#txtBrepair_'+b_seq).val())!=0){
+							$('#cmbWay_'+b_seq).val('傳統車床(研磨)').change();
+						}
 					});
+					
 					$('#txtBottom_'+j).change(function(){	
 						t_IdSeq = -1;
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;		
 						$('#txtEnbottom_'+b_seq).val(q_add($('#txtBottom_'+b_seq).val(),$('#txtErepair_'+b_seq).val()));
-					})		
+					});
+					
+					$('#cmbWorktype_'+j).change(function() {
+						t_IdSeq = -1;
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						if(dec($('#textTimea').val())>0 
+						&& emp($('#txtBdate_'+b_seq).val()) && emp($('#txtBtime_'+b_seq).val())
+						&& !emp($('#txtEdate_'+(b_seq-1)).val()) && !emp($('#txtEtime_'+(b_seq-1)).val())
+						&& b_seq>0){
+							var t_year=dec($('#txtEdate_'+(b_seq-1)).val().substr(0,r_len));
+							var t_mon=dec($('#txtEdate_'+(b_seq-1)).val().substr(r_len+1,2))-1;
+							var t_days=dec($('#txtEdate_'+(b_seq-1)).val().substr(r_lenm+1,2));
+							var t_hour=dec($('#txtEtime_'+(b_seq-1)).val().substr(0,2));
+							var t_minu=dec($('#txtEtime_'+(b_seq-1)).val().substr(3,2));
+							var t_times=dec($('#textTimea').val());
+							if(r_len==3){
+								t_year=t_year+1911
+							}
+							var t_date=new Date(t_year, t_mon, t_days,t_hour,t_minu);
+							t_date.setMinutes(t_date.getMinutes() + t_times);
+							
+							t_year=('0000'+(t_date.getFullYear()-(r_len==3?1911:0)).toString()).slice(r_len==3?-3:-4);
+							t_mon=('00'+(t_date.getMonth()+1).toString()).slice(-2);
+							t_days=('00'+t_date.getDate().toString()).slice(-2);
+							t_hour=('00'+t_date.getHours().toString()).slice(-2);
+							t_minu=('00'+t_date.getMinutes().toString()).slice(-2);
+							
+							$('#txtBdate_'+b_seq).val($('#txtEdate_'+(b_seq-1)).val());
+							$('#txtBtime_'+b_seq).val($('#txtEtime_'+(b_seq-1)).val());
+							$('#txtEdate_'+b_seq).val(t_year+'/'+t_mon+'/'+t_days);
+							$('#txtEtime_'+b_seq).val(t_hour+':'+t_minu);
+						}
+					});
+					
+					$('#cmbWorktype3_'+j).change(function() {
+						t_IdSeq = -1;
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						if(dec($('#textTimea').val())>0 
+						&& emp($('#txtBdate3_'+b_seq).val()) && emp($('#txtBtime3_'+b_seq).val())
+						&& !emp($('#txtEdate3_'+(b_seq-1)).val()) && !emp($('#txtEtime3_'+(b_seq-1)).val())
+						&& b_seq>0){
+							var t_year=dec($('#txtEdate3_'+(b_seq-1)).val().substr(0,r_len));
+							var t_mon=dec($('#txtEdate3_'+(b_seq-1)).val().substr(r_len+1,2))-1;
+							var t_days=dec($('#txtEdate3_'+(b_seq-1)).val().substr(r_lenm+1,2));
+							var t_hour=dec($('#txtEtime3_'+(b_seq-1)).val().substr(0,2));
+							var t_minu=dec($('#txtEtime3_'+(b_seq-1)).val().substr(3,2));
+							var t_times=dec($('#textTimea').val());
+							if(r_len==3){
+								t_year=t_year+1911
+							}
+							var t_date=new Date(t_year, t_mon, t_days,t_hour,t_minu);
+							t_date.setMinutes(t_date.getMinutes() + t_times);
+							
+							t_year=('0000'+(t_date.getFullYear()-(r_len==3?1911:0)).toString()).slice(r_len==3?-3:-4);
+							t_mon=('00'+(t_date.getMonth()+1).toString()).slice(-2);
+							t_days=('00'+t_date.getDate().toString()).slice(-2);
+							t_hour=('00'+t_date.getHours().toString()).slice(-2);
+							t_minu=('00'+t_date.getMinutes().toString()).slice(-2);
+							
+							$('#txtBdate3_'+b_seq).val($('#txtEdate3_'+(b_seq-1)).val());
+							$('#txtBtime3_'+b_seq).val($('#txtEtime3_'+(b_seq-1)).val());
+							$('#txtEdate3_'+b_seq).val(t_year+'/'+t_mon+'/'+t_days);
+							$('#txtEtime3_'+b_seq).val(t_hour+':'+t_minu);
+						}
+					});
+					
+					$('#cmbWorktype4_'+j).change(function() {
+						t_IdSeq = -1;
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						if(dec($('#textTimea').val())>0 
+						&& emp($('#txtBdate4_'+b_seq).val()) && emp($('#txtBtime4_'+b_seq).val())
+						&& !emp($('#txtEdate4_'+(b_seq-1)).val()) && !emp($('#txtEtime4_'+(b_seq-1)).val())
+						&& b_seq>0){
+							var t_year=dec($('#txtEdate4_'+(b_seq-1)).val().substr(0,r_len));
+							var t_mon=dec($('#txtEdate4_'+(b_seq-1)).val().substr(r_len+1,2))-1;
+							var t_days=dec($('#txtEdate4_'+(b_seq-1)).val().substr(r_lenm+1,2));
+							var t_hour=dec($('#txtEtime4_'+(b_seq-1)).val().substr(0,2));
+							var t_minu=dec($('#txtEtime4_'+(b_seq-1)).val().substr(3,2));
+							var t_times=dec($('#textTimea').val());
+							if(r_len==3){
+								t_year=t_year+1911
+							}
+							var t_date=new Date(t_year, t_mon, t_days,t_hour,t_minu);
+							t_date.setMinutes(t_date.getMinutes() + t_times);
+							
+							t_year=('0000'+(t_date.getFullYear()-(r_len==3?1911:0)).toString()).slice(r_len==3?-3:-4);
+							t_mon=('00'+(t_date.getMonth()+1).toString()).slice(-2);
+							t_days=('00'+t_date.getDate().toString()).slice(-2);
+							t_hour=('00'+t_date.getHours().toString()).slice(-2);
+							t_minu=('00'+t_date.getMinutes().toString()).slice(-2);
+							
+							$('#txtBdate4_'+b_seq).val($('#txtEdate4_'+(b_seq-1)).val());
+							$('#txtBtime4_'+b_seq).val($('#txtEtime4_'+(b_seq-1)).val());
+							$('#txtEdate4_'+b_seq).val(t_year+'/'+t_mon+'/'+t_days);
+							$('#txtEtime4_'+b_seq).val(t_hour+':'+t_minu);
+						}
+					});
+					
 				}				
 				_bbsAssign();
 				
@@ -1091,18 +1202,16 @@
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
-						<td> </td>
-						<td>
-							<input id="btnIn" type="button" style="width: 100%"/>
-						</td>
+						<td align="center"><input id="btnIn" type="button" style="width: 80px"/></td>
 						<td align="right">
 							<input id="chkFixed" type="checkbox" disabled="disabled">
 							<span> </span><a id="lblFixed">已維修</a>
 						</td>
-						<td align="right">
+						<td align="left">
 							<input id="chkEnda" type="checkbox" disabled="disabled">
 							<span> </span><a id="lblEnda">結案</a>
 						</td>
+						<td><input id="textTimea" style="width: 50px;text-align: right;">/分</td>
 					</tr>
 				</table>
 			</div>
@@ -1128,9 +1237,9 @@
 					<td align="center" style="width:60px;"><a id='lblErepair_s'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblLoss_s'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblEnbottom_s'> </a></td>
-					<td align="center" style="width:188px;"><a id='lblWay_s'> </a></td>
-					<td align="center" style="width:58px;"><a id='lblMech_s'> </a></td>
-					<td align="center" style="width:58px;"><a id='lblWorktype_s'> </a></td>
+					<td align="center" style="width:185px;"><a id='lblWay_s'> </a></td>
+					<td align="center" style="width:61px;"><a id='lblMech_s'> </a></td>
+					<td align="center" style="width:61px;"><a id='lblWorktype_s'> </a></td>
 					<td align="center" style="width:155px;"><a id='lblBdate_s'> </a></td>
 					<td align="center" style="width:156px;"><a id='lblEdate_s'> </a></td>
 					<td align="center" style="width:87px;"><a id='lblWorker_s'> </a></td>
@@ -1160,10 +1269,13 @@
 					<td><input id="txtEnbottom.*" type="text" class="num c1" style="width:93%;"/></td>
 					<td colspan="6">
 						<span style="width:45px; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt ">第1次</span>
-						<select id="cmbWay.*" class="txt c1" style="float:left;width:142px;"> </select>
+						<select id="cmbWay.*" class="txt c1" style="float:left;width:140px;"> </select>
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
 						<select id="cmbMech.*" class="txt c1" style="width:62.5px;"> </select>
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
 						<select id="cmbWorktype.*" class="txt c1" style="width:62.5px;"> </select>
-						<input id="txtBdate.*" type="text" class="txt c1 a" style="width:83px;" />
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
+						<input id="txtBdate.*" type="text" class="txt c1 a" style="width:82px;" />
 						<span style="width:13px; float:left; text-align:center">-</span>
 						<input id="txtBtime.*" type="text" class="txt c1 a" style="width:53px;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>				
@@ -1171,13 +1283,16 @@
 						<span style="width:13px; float:left;text-align:center">-</span>
 						<input id="txtEtime.*" type="text" class="txt c1 a" style="width:53px;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
-						<input id="txtWorker.*" type="text" class="txt c1" style="width:84px;"/>
+						<input id="txtWorker.*" type="text" class="txt c1" style="width:82px;"/>
 						
 						<span style="width:45px; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt "> </span>
-						<select id="cmbWay3.*" class="txt c1" style="float:left;width:142px;"> </select>
+						<select id="cmbWay3.*" class="txt c1" style="float:left;width:140px;"> </select>
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
 						<select id="cmbMech3.*" class="txt c1" style="width:62.5px;"> </select>
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
 						<select id="cmbWorktype3.*" class="txt c1" style="width:62.5px;"> </select>
-						<input id="txtBdate3.*" type="text" class="txt c1 a" style="width:83px;" />
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
+						<input id="txtBdate3.*" type="text" class="txt c1 a" style="width:82px;" />
 						<span style="width:13px; float:left; text-align:center">-</span>
 						<input id="txtBtime3.*" type="text" class="txt c1 a" style="width:53px;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>				
@@ -1185,13 +1300,16 @@
 						<span style="width:13px; float:left;text-align:center">-</span>
 						<input id="txtEtime3.*" type="text" class="txt c1 a" style="width:53px;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
-						<input id="txtWorker3.*" type="text" class="txt c1" style="width:84px;"/>
+						<input id="txtWorker3.*" type="text" class="txt c1" style="width:82px;"/>
 						
 						<span style="width:45px; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt "> </span>
-						<select id="cmbWay4.*" class="txt c1" style="float:left;width:142px;"> </select>
+						<select id="cmbWay4.*" class="txt c1" style="float:left;width:140px;"> </select>
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
 						<select id="cmbMech4.*" class="txt c1" style="width:62.5px;"> </select>
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
 						<select id="cmbWorktype4.*" class="txt c1" style="width:62.5px;"> </select>
-						<input id="txtBdate4.*" type="text" class="txt c1 a" style="width:83px;" />
+						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
+						<input id="txtBdate4.*" type="text" class="txt c1 a" style="width:82px;" />
 						<span style="width:13px; float:left; text-align:center">-</span>
 						<input id="txtBtime4.*" type="text" class="txt c1 a" style="width:53px;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>				
@@ -1199,13 +1317,16 @@
 						<span style="width:13px; float:left;text-align:center">-</span>
 						<input id="txtEtime4.*" type="text" class="txt c1 a" style="width:53px;" />
 						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
-						<input id="txtWorker4.*" type="text" class="txt c1" style="width:84px;"/>
+						<input id="txtWorker4.*" type="text" class="txt c1" style="width:82px;"/>
 						
 						<span id="spanseq.*" style="width:45px; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt;" class="way2">第2次</span>
-						<select id="cmbWay2.*" class="txt c1 way2" style="width:142px;"> </select>
+						<select id="cmbWay2.*" class="txt c1 way2" style="width:140px;"> </select>
+						<span id="spanspec3.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>	
 						<select id="cmbMech2.*" class="txt c1 way2" style="width:62.5px;"> </select>
+						<span id="spanspec4.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>	
 						<select id="cmbWorktype2.*" class="txt c1 way2" style="width:62.5px;"> </select>
-						<input id="txtBdate2.*" type="text" class="txt c1 a way2" style="width:83px;" />
+						<span id="spanspec5.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>	
+						<input id="txtBdate2.*" type="text" class="txt c1 a way2" style="width:82px;" />
 						<span id="spandash1.*" style="width:13px; float:left; text-align:center" class="way2">-</span>
 						<input id="txtBtime2.*" type="text" class="txt c1 a way2" style="width:53px;" />
 						<span id="spanspec1.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>					
@@ -1213,7 +1334,7 @@
 						<span id="spandash2.*" style="width:13px; float:left;text-align:center" class="way2">-</span>
 						<input id="txtEtime2.*" type="text" class="txt c1 a way2" style="width:53px;" />
 						<span id="spanspec2.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>						
-						<input id="txtWorker2.*" type="text" class="txt c1 way2" style="width:84px;"/>			
+						<input id="txtWorker2.*" type="text" class="txt c1 way2" style="width:82px;"/>			
 					</td>
 					<td><input id="txtMemo.*" type="text" class="txt c1" style="width:99%;"/></td>	
 				</tr>
