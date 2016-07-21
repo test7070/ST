@@ -418,21 +418,24 @@ declare @tmp table(
 	class nvarchar(50),
 	mech nvarchar(40),
 	weight nvarchar(40),
+	bebottom float,
+	enbottom float,
 	way nvarchar(30),
 	indate nvarchar(30),
-	mount float
-	
+	mount float,
+	worker nvarchar(50)
 )
 insert into @tmp
 select 
 	'1',ROW_NUMBER()over(partition by a.modnoa order by b.nob),a.modnoa,b.frame,b.nob,
-	b.detail,'維修',a.mech,sum(b.weight),b.way,isnull((select datea from modfix where noa=a.innoa),'') indate,SUM(b.mount)
+	b.detail,'維修',a.mech,b.weight,b.bebottom,b.enbottom,b.way
+	,isnull((select datea from modfix where noa=a.innoa),'') indate,b.mount,b.worker
 from modfixc a
 left join modfixcs b on a.noa = b.noa
 where(a.modnoa between @t_bmodnoa and @t_emodnoa) and (LEN(@t_frame)=0 or b.frame=@t_frame) and
 	 (ISNULL(b.fixmount,0)=0 and ISNULL(b.bebottom,0)=0 and ISNULL(b.enbottom,0)=0 and LEN(ISNULL(b.bdate,''))=0 and LEN(ISNULL(b.edate,''))=0)
 	 and isnull(a.enda,0)=0
-group by a.modnoa,b.frame,b.nob,b.detail,a.mech,b.way,a.innoa
+--group by a.modnoa,b.frame,b.nob,b.detail,a.mech,b.way,a.innoa
 
 --補空白行(25行)
 declare @modnoa  nvarchar(50)
