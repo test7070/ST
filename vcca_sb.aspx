@@ -374,13 +374,14 @@
 	                		if(t_mount!=0){
 	                			$('#txtPrice_'+n).val(round(q_div(t_taxprice,(1+t_taxrate)),2));
 	                			$('#txtMoney_'+n).val(round(q_mul(q_float('txtMount_'+n),q_float('txtPrice_'+n)),0));
-	                			$('#txtTax_'+n).val(round(q_mul(q_float('txtMoney_'+n),t_taxrate),0));
+	                			//$('#txtTax_'+n).val(round(q_mul(q_float('txtMoney_'+n),t_taxrate),0));
+	                			//105/07/20 稅額改成 含稅金額-未稅金額
+	                			$('#txtTax_'+n).val(q_sub(q_mul(dec($('#txtOrdeno_'+n).val()),dec($('#txtMount_'+n).val())),dec($('#txtMoney_'+n).val())))
 	                		}else{
 	                			$('#txtPrice_'+n).val(0);
 	                			$('#txtMoney_'+n).val(0);
 	                			$('#txtTax_'+n).val(0);
 	                		}
-							
 							sum();
 						});
 						$('#txtPrice_' + j).change(function() {
@@ -389,7 +390,9 @@
 							b_seq = t_IdSeq;
 							var t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
                         	$('#txtMoney_'+b_seq).val(round(q_mul(q_float('txtMount_'+b_seq),q_float('txtPrice_'+b_seq)),0));
-                        	$('#txtTax_'+b_seq).val(round(q_mul(q_float('txtMoney_'+b_seq),t_taxrate),0));
+                        	//$('#txtTax_'+b_seq).val(round(q_mul(q_float('txtMoney_'+b_seq),t_taxrate),0));
+                        	//105/07/20 稅額改成 含稅金額-未稅金額
+	                		$('#txtTax_'+b_seq).val(q_sub(q_mul(dec($('#txtOrdeno_'+b_seq).val()),dec($('#txtMount_'+b_seq).val())),dec($('#txtMoney_'+b_seq).val())))
 							sum();
 						});
 						
