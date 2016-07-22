@@ -50,7 +50,7 @@ z_unork01:--z_unork01 批號履歷
 
 	declare cursor_table cursor for
 	select [status],datea,tablea,accy,noa,noq,bno,uno,mount,[weight],price,sprice,storeno,place
-	from dbo.unohistory_rk(0,@t_uno,'') order by [rank] desc,datea
+	from dbo.unohistory_rk(case when len(@t_traceback)>0 then 0 else -1 end,@t_uno,'') order by [rank] desc,datea
 	open cursor_table
 	fetch next from cursor_table
 	into @status,@datea,@tablea,@accy,@noa,@noq,@bno,@uno,@mount,@weight,@price,@sprice,@storeno,@place
