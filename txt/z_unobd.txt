@@ -8,6 +8,7 @@ z_unork01:--z_unork01 批號履歷
 	declare @tmp table(
 		sel int identity(1,1)
 		,gno nvarchar(10)
+		,ghref nvarchar(max)
 		,[status] int -- 1入庫,2出庫
 		,datea nvarchar(10)
 		,tablea nvarchar(20)
@@ -92,7 +93,40 @@ z_unork01:--z_unork01 批號履歷
 		when tablea='get' then '領料'
 		when tablea='cng' then '調撥'
 		end
-
+		
+	update @tmp set comp=c.nick
+	from @tmp a
+	left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
+	left join tgg c on b.tggno=c.noa
+	where a.tablea='rc2'	
+	update @tmp set comp=c.nick
+	from @tmp a
+	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
+	left join cust c on b.custno=c.noa
+	where a.tablea='vcc'
+	update @tmp set comp=c.nick
+	from @tmp a
+	left join view_ina b on a.accy=b.accy and a.noa=b.noa
+	left join cust c on b.custno=c.noa
+	where a.tablea='ina'	
+	update @tmp set comp=c.nick
+	from @tmp a
+	left join view_get b on a.accy=b.accy and a.noa=b.noa
+	left join cust c on b.custno=c.noa
+	where a.tablea='get'	
+	
+	update @tmp set comp=c.nick
+	from @tmp a
+	left join view_cuts b on a.accy=b.accy and a.noa=b.noa and a.noq=b.noq
+	left join cust c on b.custno=c.noa
+	where a.tablea='cuts'	
+	
+	update @tmp set comp=c.nick
+	from @tmp a
+	left join view_cubs b on a.accy=b.accy and a.noa=b.noa and a.noq=b.noq
+	left join cust c on b.custno=c.noa
+	where a.tablea='cub'
+			 
 	select gno
 		,@t_uno b01
 		,b.product b02
@@ -103,7 +137,14 @@ z_unork01:--z_unork01 批號履歷
 		,dbo.getComma(isnull(c.emount,0),-1) b04
 		,dbo.getComma(isnull(c.eweight,0),-1) b05
 		,a.ctable a01
-		,a.noa a02
+		,case when a.tablea='rc2' then "<a href="+CHAR(34)+"JavaScript:q_box('rc2st.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='vcc'then "<a href="+CHAR(34)+"JavaScript:q_box('vcc_rk.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='ina' then "<a href="+CHAR(34)+"JavaScript:q_box('inast.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='cuts' then "<a href="+CHAR(34)+"JavaScript:q_box('cut_rk.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='cub' or a.tablea='cubt' or a.tablea='cubu' then "<a href="+CHAR(34)+"JavaScript:q_box('cub_rk.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='get' then "<a href="+CHAR(34)+"JavaScript:q_box('get_rk.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='cng' then "<a href="+CHAR(34)+"JavaScript:q_box('cngst.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			end a02
 		,a.datea a03
 		,a.comp a04
 		,dbo.getComma(a.mount,-1) a05
@@ -119,7 +160,7 @@ z_unork01:--z_unork01 批號履歷
 	from @tmp a
 	left join view_uccb b on b.uno=@t_uno
 	left join uccy c on c.uno=@t_uno;
-
+	
 z_unobd05:--z_unobd05 批號履歷
 	SET QUOTED_IDENTIFIER OFF 
 	declare @t_uno nvarchar(50)= case when '#non' = [2] then '#non' else [2] end
