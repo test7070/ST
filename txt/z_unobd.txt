@@ -86,8 +86,8 @@ z_unork01:--z_unork01 批號履歷
 	
 	update @tmp set ctable= case when tablea='rc2' and [status]=1 then '進貨'
 		when tablea='rc2' and [status]=2 then '進退'
-		when tablea='vcc' and [status]=1 then '出貨'
-		when tablea='vcc' and [status]=2 then '出退'
+		when tablea='vcc' and [status]=2 then '出貨'
+		when tablea='vcc' and [status]=1 then '出退'
 		when tablea='ina' then '入庫'
 		when tablea='cuts' then '進倉'
 		when tablea='cub' then '生產'
