@@ -33,15 +33,15 @@
             aPop = new Array(['txtSno', 'lblSname', 'sssall', 'noa,namea,partno,part', 'txtSno,txtSname,cmbPartno', 'sss_b.aspx']
             ,['txtMechno', 'lblMech', 'mech', 'noa,mech', 'txtMechno,txtMech', 'mech_b.aspx']
             ,['txtBccno_', 'btnBccno_', 'bcc', 'noa,product', 'txtBccno_,txtBccname_', 'bcc_b.aspx']);
-
+			
+			var ischecker=false;//簽核權限
+			var t_part='',t_store='';
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1);
                 //判斷是否為權限(簽核)
                 q_gt('authority', "where=^^a.noa='bccout' and a.sssno='" + r_userno + "'^^", 0, 0, 0, "");
-
             });
 
             function main() {
@@ -61,8 +61,9 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
-                q_gt('store', '', 0, 0, 0, "");
-                q_gt('part', '', 0, 0, 0, "");
+                
+                q_cmbParse("cmbPartno", t_part);
+                q_cmbParse("cmbStoreno", t_store);
                 
                 if(q_getPara('sys.comp').indexOf('大昌')>-1){
                 	$('.mech').hide();
@@ -80,7 +81,7 @@
                 b_pop = '';
             }
 			
-			var ischecker=false;//簽核權限
+			
             function q_gtPost(t_name) {
                 switch (t_name) {
                     case 'authority':
@@ -90,29 +91,27 @@
                         else
                             ischecker = false;
                         break;
+                		q_gt('part', '', 0, 0, 0, "");
                     case 'part':
 		                var as = _q_appendData("part", "", true);
 		                if (as[0] != undefined) {
-		                    var t_item = "";
+		                    var t_part = "";
 		                    for (i = 0; i < as.length; i++) {
-		                        t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
+		                        t_part += (t_part.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
 		                    }
-							q_cmbParse("cmbPartno", t_item);
-							if(abbm[q_recno]!=undefined)
-		                    	$("#cmbPartno").val(abbm[q_recno].partno);
+							
 		                }
+		                q_gt('store', '', 0, 0, 0, "");
 		                break;
                     case 'store':
 		                var as = _q_appendData("store", "", true);
 		                if (as[0] != undefined) {
-		                    var t_item = "";
+		                    var t_store = "";
 		                    for (i = 0; i < as.length; i++) {
-		                        t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
+		                        t_store += (t_store.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
 		                    }
-		                    q_cmbParse("cmbStoreno", t_item);
-		                    if(abbm[q_recno]!=undefined)
-		                    	$("#cmbStoreno").val(abbm[q_recno].storeno);
 		                }
+		                q_gt(q_name, q_content, q_sqlCount, 1);
 		                break;
                     case q_name:
                         if (q_cur == 4)
