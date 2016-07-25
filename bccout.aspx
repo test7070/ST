@@ -90,12 +90,12 @@
                             ischecker = true;
                         else
                             ischecker = false;
+                        q_gt('part', '', 0, 0, 0, "");
                         break;
-                		q_gt('part', '', 0, 0, 0, "");
                     case 'part':
 		                var as = _q_appendData("part", "", true);
 		                if (as[0] != undefined) {
-		                    var t_part = "";
+		                    t_part = "";
 		                    for (i = 0; i < as.length; i++) {
 		                        t_part += (t_part.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
 		                    }
@@ -106,7 +106,7 @@
                     case 'store':
 		                var as = _q_appendData("store", "", true);
 		                if (as[0] != undefined) {
-		                    var t_store = "";
+		                    t_store = "";
 		                    for (i = 0; i < as.length; i++) {
 		                        t_store += (t_store.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
 		                    }
