@@ -130,6 +130,41 @@
 						$("#txtMech").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 					}
 				});
+				
+				$('#textMount').change(function() {
+					sum();
+				});
+				
+				$('#textFixmount').change(function() {
+					if($('#textFixmount').val() > $('#textMount').val()){
+						alert('維修數量大於入庫數量!');
+					}else{
+						sum();
+					}
+				});
+				
+				$('#textBrepair').change(function(){	
+					$('#textLoss').val(q_sub($('#textBrepair').val(),$('#textErepair').val()));
+					if(dec($('#textErepair').val())!=0 && dec($('#textFixmount').val())>0){
+						$('#combWay').val('CNC車修').change();
+					}else if(dec($('#textBrepair').val())!=0 && dec($('#textFixmount').val())>0){
+						$('#combWay').val('傳統車床(研磨)').change();
+					}
+				});
+				$('#textErepair').change(function(){	
+					$('#textLoss').val(q_sub($('#textBrepair').val(),$('#textErepair').val()));
+					$('#textEnbottom').val(q_add($('#textBottom').val(),$('#textErepair').val()));
+					if(dec($('#textErepair').val())!=0 && dec($('#textFixmount').val())>0){
+						$('#combWay').val('CNC車修').change();
+					}else if(dec($('#textBrepair').val())!=0 && dec($('#textFixmount').val())>0){
+						$('#combWay').val('傳統車床(研磨)').change();
+					}
+				});
+				
+				$('#textBebottom'+j).change(function(){	
+					$('#textEnbottom').val(q_add($('#textBottom').val(),$('#textErepair').val()));
+				});
+				
 			}          	 
 
 			function q_boxClose(s2) {
@@ -466,9 +501,9 @@
 						q_bodyId($(this).attr('id'));
 						b_seq = t_IdSeq;		
 						$('#txtLoss_'+b_seq).val(q_sub($('#txtBrepair_'+b_seq).val(),$('#txtErepair_'+b_seq).val()));
-						if(dec($('#txtErepair_'+b_seq).val())!=0){
+						if(dec($('#txtErepair_'+b_seq).val())!=0 && dec($('#txtFixmount_'+b_seq).val())>0){
 							$('#cmbWay_'+b_seq).val('CNC車修').change();
-						}else if(dec($('#txtBrepair_'+b_seq).val())!=0){
+						}else if(dec($('#txtBrepair_'+b_seq).val())!=0 && dec($('#txtFixmount_'+b_seq).val())>0){
 							$('#cmbWay_'+b_seq).val('傳統車床(研磨)').change();
 						}
 					});
@@ -478,9 +513,9 @@
 						b_seq = t_IdSeq;		
 						$('#txtLoss_'+b_seq).val(q_sub($('#txtBrepair_'+b_seq).val(),$('#txtErepair_'+b_seq).val()));
 						$('#txtEnbottom_'+b_seq).val(q_add($('#txtBottom_'+b_seq).val(),$('#txtErepair_'+b_seq).val()));
-						if(dec($('#txtErepair_'+b_seq).val())!=0){
+						if(dec($('#txtErepair_'+b_seq).val())!=0 && dec($('#txtFixmount_'+b_seq).val())>0){
 							$('#cmbWay_'+b_seq).val('CNC車修').change();
-						}else if(dec($('#txtBrepair_'+b_seq).val())!=0){
+						}else if(dec($('#txtBrepair_'+b_seq).val())!=0 && dec($('#txtFixmount_'+b_seq).val())>0){
 							$('#cmbWay_'+b_seq).val('傳統車床(研磨)').change();
 						}
 					});
