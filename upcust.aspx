@@ -25,14 +25,20 @@
             brwNowPage = 0;
             brwKey = 'noa';
             //ajaxPath = ""; //  execute in Root
-            q_desc = 1
+            q_desc = 1;
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']);
 			
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1)
+                
+                var custno = q_getId(0)[3].replace(/custno='(.*)'/g,'$1');
+                if(custno.length>0)
+                	q_content = "where=^^ custno='"+custno+"'^^";
+                else
+                	q_content = '';
+                q_gt(q_name, q_content, q_sqlCount, 1);
                 $('#txtNoa').focus();
             });
 
@@ -86,6 +92,14 @@
 			
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'cust':
+                		var as = _q_appendData("cust", "", true);
+                		if (as[0] != undefined) {
+	                        $('#txtComp').val(as[0].comp);
+	                        $('#txtNick').val(as[0].nick);
+	                    }
+                		ShowDownlbl();
+                		break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -173,9 +187,15 @@
 
             function btnIns() {
                 _btnIns();
-                $('#txtCustno').focus();
                 $('#txtDatea').val(q_date());
-                ShowDownlbl();
+                var custno = q_getId(0)[3].replace(/custno='(.*)'/g,'$1');
+                if(custno.length>0){
+                	$('#txtCustno').val(custno);
+                	q_gt('cust', "where=^^noa='"+custno+"' ^^", 0, 0, 0, "cust");
+                }else{
+                	$('#txtCustno').focus();
+                	ShowDownlbl();
+                }
             }
 
             function btnModi() {
