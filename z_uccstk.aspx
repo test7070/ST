@@ -123,7 +123,38 @@
             		switch($('#q_report').data('info').radioIndex) {
                         case 2:
                         	Lock(1);
-                        	q_func('qtxt.query.uccstk_1', 'uccstk.txt,uccstk_1,'+$('#txtXdate').val());
+                        	//q_func('qtxt.query.uccstk_1', 'uccstk.txt,uccstk_1,'+$('#txtXdate').val());
+                            
+                            $.ajax({
+			                    url: 'uccstk.aspx?date='+$('#txtXdate').val()+'&db='+q_db,
+			                    type: 'POST',
+			                    dataType: 'text',
+			                    timeout: 600000,
+			                    success: function(data){
+			                       alert(data);
+			                    },
+			                    complete: function(){ 
+			                    	Unlock(1);                
+			                    },
+			                    error: function(jqXHR, exception) {
+			                        var errmsg = this.url+'資料讀取異常。\n';
+			                        if (jqXHR.status === 0) {
+			                            alert(errmsg+'Not connect.\n Verify Network.');
+			                        } else if (jqXHR.status == 404) {
+			                            alert(errmsg+'Requested page not found. [404]');
+			                        } else if (jqXHR.status == 500) {
+			                            alert(errmsg+'Internal Server Error [500].');
+			                        } else if (exception === 'parsererror') {
+			                            alert(errmsg+'Requested JSON parse failed.');
+			                        } else if (exception === 'timeout') {
+			                            alert(errmsg+'Time out error.');
+			                        } else if (exception === 'abort') {
+			                            alert(errmsg+'Ajax request aborted.');
+			                        } else {
+			                            alert(errmsg+'Uncaught Error.\n' + jqXHR.responseText);
+			                        }
+			                    }
+			                });	
                             break;
                         default:
                            	$('#btnOk').click();

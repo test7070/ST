@@ -35,6 +35,9 @@
                         dbf : 'ucc',
                         index : 'noa,product',
                         src : 'ucc_b.aspx'
+                    },{/*3 [5]*/
+                        type : '6',
+                        name : 'xdate'
                     }]
                 });
                 q_popAssign();
@@ -44,6 +47,8 @@
                 $('#txtDate1').datepicker();
                 $('#txtDate2').mask('999/99/99');
                 $('#txtDate2').datepicker();
+                $('#txtXdate').mask('999/99/99');
+                $('#txtXdate').datepicker();
             }
 
             function q_boxClose(t_name) {
