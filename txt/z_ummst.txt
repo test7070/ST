@@ -228,7 +228,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	
 	update @tmpa set cust=ISNULL(b.comp,''),serial=ISNULL(b.serial,'')
 		,tel=ISNULL(b.tel,''),fax=ISNULL(b.fax,''),zip=ISNULL(b.zip_comp,''),addr=ISNULL(b.addr_comp,'')
-	from @tmp a
+	from @tmpa a
 	left join cust b on a.custno=b.noa
 	
 	update @tmpa set conn=b.namea
@@ -499,7 +499,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	
 	update @tmpa set cust=ISNULL(b.comp,''),serial=ISNULL(b.serial,'')
 		,tel=ISNULL(b.tel,''),fax=ISNULL(b.fax,''),zip=ISNULL(b.zip_comp,''),addr=ISNULL(b.addr_comp,'')
-	from @tmp a
+	from @tmpa a
 	left join cust b on a.custno=b.noa
 	
 	update @tmpa set conn=b.namea
