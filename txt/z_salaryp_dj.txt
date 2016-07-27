@@ -413,7 +413,13 @@ group by b.sno having SUM(b.total5)>0
 
 if(LEN(@t_xmon)>0)
 	set @t_xmon=left(dbo.ChineseEraName2AD(@t_xmon+'/01'),7)
+	
+if((select count(*) from @tmp)>0)
+begin
+	insert @tmp (gno,total)
+	select '1',sum(total) from @tmp
+end
 
 select dbo.getComma(total,0)total,* ,replace(@t_xmon,'-','年')+'月' mon
-from @tmp order by idno
+from @tmp order by gno,idno
 ;
