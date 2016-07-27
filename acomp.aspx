@@ -31,8 +31,9 @@
 			brwCount2 = 20;
 			t_stamp = new Array();//q_getPara('stamp.typea')
 			aPop = new Array(['txtAddr', '', 'view_road', 'memo', '0txtAddr', 'road_b.aspx']
-			,['txtCustno', 'lblCustno', 'cust', 'noa,comp', 'txtCustno', 'cust_b.aspx']
-			,['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno', 'tgg_b.aspx']);
+			//,['txtCustno', 'lblCustno', 'cust', 'noa,comp', 'txtCustno', 'cust_b.aspx']
+			//,['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno', 'tgg_b.aspx']
+			);
             				
 			function acomp(noa,stamp) {
 				try{

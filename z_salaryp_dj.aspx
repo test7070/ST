@@ -45,8 +45,8 @@
 						}]
                     });
                 q_popAssign();
-				$('#txtXmon').mask('999/99');
-				$('#txtXmon').val(q_date().substr(0,6));
+				$('#txtXmon').mask(r_picm);
+				$('#txtXmon').val(q_date().substr(0,r_lenm));
 			}
 
             function q_boxClose(s2) {

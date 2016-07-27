@@ -242,8 +242,7 @@ from @tmpa
 ;
 
 ---------------------------------------------------------------------------------------------------------------------------------
-
-z_salaryp_dj02:--z_salaryp_dj02(薪資表單張顯示)
+z_salaryp_djx01:--z_salaryp_dj01(薪資表單張顯示)
 SET QUOTED_IDENTIFIER OFF
 declare @t_xmon nvarchar(20)
 declare @t_bsssno nvarchar(20)
@@ -387,4 +386,40 @@ dbo.getComma(lodpower,0)lodpower,dbo.getComma(borrow,0)borrow,
 dbo.getComma(total2,0)total2,dbo.getComma(total3,0)total3,dbo.getComma(sa1health,0)sa1health,dbo.getComma(money7,0)money7
  from @tmp 
 order by sssno
+;
+-------------------------------------------------------------------------------------------
+z_salaryp_dj02:--z_salaryp_dj02
+SET QUOTED_IDENTIFIER OFF
+declare @t_xmon nvarchar(20)
+set @t_xmon = case when '#non' = [1] then '' else [1] end
+
+declare @tmp table(
+	gno nvarchar(1),
+	idno int,
+	sssno nvarchar(100),
+	namea nvarchar(100),
+	acomp nvarchar(100),
+	total float
+)
+insert @tmp
+select '0',ROW_NUMBER() over (order by b.sno)
+,b.sno
+,isnull((select namea from sss where noa=b.sno),'')
+,isnull((select nick from acomp where noa=isnull((select cno from sss where noa=b.sno),'')),'')
+,SUM(b.total5)
+from salary a left join salarys b on a.noa=b.noa
+where a.mon=@t_xmon
+group by b.sno having SUM(b.total5)>0
+
+if(LEN(@t_xmon)>0)
+	set @t_xmon=left(dbo.ChineseEraName2AD(@t_xmon+'/01'),7)
+	
+if((select count(*) from @tmp)>0)
+begin
+	insert @tmp (gno,total)
+	select '1',sum(total) from @tmp
+end
+
+select dbo.getComma(total,0)total,* ,replace(@t_xmon,'-','年')+'月' mon
+from @tmp order by gno,idno
 ;
