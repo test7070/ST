@@ -229,7 +229,8 @@ insert into @tmp
 	left join vccas b on a.noa=b.noa
 	left join view_vcc c on a.vccno = c.noa
 	left join cust d on a.buyerno=d.noa
-	where (a.taxtype != '6') and (a.noa between @t_binvo and @t_einvo)
+	where --(a.taxtype != '6') and --105/07/27 作廢也要可以印
+	(a.noa between @t_binvo and @t_einvo)
 	and isnull(c.noa,'') between @t_bxnoa and @t_exnoa
 ------------單筆處理<<Start>>-----------
 insert into @tmp(
@@ -550,7 +551,8 @@ insert into @tmp
 	left join vccas b on a.noa=b.noa
 	left join view_vcc c on a.vccno = c.noa
 	left join cust d on a.buyerno=d.noa
-	where (a.taxtype != '6') and (a.noa between @t_binvo and @t_einvo)
+	where --(a.taxtype != '6') and --105/07/27 作廢也要可以印
+	(a.noa between @t_binvo and @t_einvo)
 	and isnull(c.noa,'') between @t_bxnoa and @t_exnoa
 ------------單筆處理<<Start>>-----------
 insert into @tmp(
