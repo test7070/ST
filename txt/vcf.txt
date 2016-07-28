@@ -1,0 +1,458 @@
+vcf2cub:--vcf2cub    rk
+	SET QUOTED_IDENTIFIER OFF
+	declare @cmd nvarchar(max)
+	declare @t_vcfno nvarchar(20) = [1]
+	-------------------------------------------------------------------------
+	/*
+		1. 回寫 CUBT、CUBU
+		2. 產生 GET、GETS
+		3. CUBT UCCY、GETS  UCCY
+	*/
+	-------------------------------------------------------------------------
+	declare @tmpa table(
+		sel int identity(1,1)
+		,cubaccy nvarchar(10)
+		,cubno nvarchar(20)
+		,cubnoq nvarchar(10)
+		,coilweight float
+		
+		,vcfsno nvarchar(20)
+		,vcfsnoq nvarchar(10)
+		,kind nvarchar(20) -- 1皮膜,2保護膜,3物料
+		,uno nvarchar(30)
+		,productno nvarchar(30)
+		,product nvarchar(50)
+		,mount float
+		,[weight] float
+	)
+	
+	insert into @tmpa(cubaccy,cubno,cubnoq,coilweight,vcfsno,vcfsnoq,kind,uno,productno,product)
+	select a.accy,a.noa,a.noq,ISNULL(a.[weight],0),d.noa,d.noq,d.custno,d.uno,d.productno,d.product
+	from view_cubs a
+	left join view_cub b on a.accy=b.accy and a.noa=b.noa
+	left join vcft c on c.noa=@t_vcfno
+	left join vcfs d on d.noa=@t_vcfno
+	where b.vcceno=c.uno
+	and d.custno!='3'
+	
+	insert into @tmpa(cubaccy,cubno,cubnoq,coilweight,vcfsno,vcfsnoq,kind,uno,productno,product)
+	select a.accy,a.noa,'',ISNULL(b.[weight],0),d.noa,d.noq,d.custno,d.uno,d.productno,d.product
+	from view_cub a
+	left join (select accy, noa,SUM(ISNULL([weight],0)) [weight] from view_cubs group by accy,noa) b on a.accy=b.accy and a.noa=b.noa
+	left join vcft c on c.noa=@t_vcfno
+	left join vcfs d on d.noa=@t_vcfno
+	where a.vcceno=c.uno
+	and d.custno='3'
+	-----------------------------------------------------------------------------------------
+	declare @weight float = 0
+	
+	select @weight=SUM(ISNULL(a.[weight],0))
+	from view_cubs a
+	left join view_cub b on a.accy=b.accy and a.noa=b.noa
+	left join (select uno from vcft where noa=@t_vcfno group by uno) c on b.vcceno=c.uno
+	where c.uno is not null 
+	
+	update @tmpa set mount = case when a.coilweight=0 then 0 else  round(b.mount*a.coilweight/@weight,0) end
+		,[weight] = case when a.coilweight=0 then 0 else  round(b.[weight]*a.coilweight/@weight,0) end 
+	from @tmpa a
+	left join vcfs b on a.vcfsno=b.noa and a.vcfsnoq=b.noq
+	------------------------------------------------------------------------------------------
+	--修正誤差,統一補在第一筆
+	declare @vcfsno nvarchar(20)
+	declare @vcfsnoq nvarchar(10)
+	declare @mount float
+	declare @diffmount float
+	declare @diffweight float
+
+	declare cursor_table cursor for 
+	select vcfsno,vcfsnoq,SUM(ISNULL(mount,0)),SUM(ISNULL([weight],0))
+	from @tmpa group by vcfsno,vcfsnoq
+	open cursor_table 
+	fetch next from cursor_table 
+	into @vcfsno,@vcfsnoq,@mount,@weight
+	while(@@FETCH_STATUS <> -1) 
+	begin
+		select @diffmount=mount,@diffweight=[weight] from vcfs where noa=@vcfsno and noq=@vcfsnoq
+		select @diffmount = ISNULL(@diffmount,0)-@mount,@diffweight = ISNULL(@diffweight,0)-@weight
+		
+		update @tmpa set mount = ISNULL(mount,0)+@diffmount,[weight] = ISNULL([weight],0)+@diffweight
+		from @tmpa a
+		outer apply(select top 1 sel from @tmpa where vcfsno=@vcfsno and vcfsnoq=@vcfsnoq order by sel) b
+		where a.sel=b.sel
+		
+		fetch next from cursor_table 
+		into @vcfsno,@vcfsnoq,@mount,@weight
+	end 
+	close cursor_table 
+	deallocate cursor_table 
+--1	--------------------------------------------------------------------------------------------------
+	declare @accy nvarchar(10)
+	declare @uno nvarchar(30)
+	declare @tmp table(
+		[status] nvarchar(20)
+		,noa nvarchar(max)
+		,uno nvarchar(max)
+	)
+	
+	--回寫資料
+	DECLARE @chk tinyint = 0
+	Begin Transaction [Trans_Name]
+	
+	begin try
+		--刪除以前匯入的
+		declare cursor_table cursor for 
+		select accy from view_cubs where ordcno=@t_vcfno group by accy
+		open cursor_table 
+		fetch next from cursor_table 
+		into @accy
+		while(@@FETCH_STATUS <> -1) 
+		begin
+			set @cmd="delete cubs"+@accy+" where ordcno=@t_vcfno"
+			execute sp_executesql @cmd,N'@t_vcfno nvarchar(20)',@t_vcfno=@t_vcfno
+			IF @@Error <> 0 BEGIN SET @chk = 1 END
+			
+			fetch next from cursor_table 
+			into @accy
+		end 
+		close cursor_table 
+		deallocate cursor_table 
+		
+		declare cursor_table cursor for 
+		select accy from view_cubu where ordeno=@t_vcfno group by accy
+		open cursor_table 
+		fetch next from cursor_table 
+		into @accy
+		while(@@FETCH_STATUS <> -1) 
+		begin
+			set @cmd="delete cubu"+@accy+" where ordeno=@t_vcfno"
+			execute sp_executesql @cmd,N'@t_vcfno nvarchar(20)',@t_vcfno=@t_vcfno
+			IF @@Error <> 0 BEGIN SET @chk = 1 END
+			
+			fetch next from cursor_table 
+			into @accy
+		end 
+		close cursor_table 
+		deallocate cursor_table
+		
+		declare cursor_table cursor for 
+		select accy from view_gets where ordeno=@t_vcfno group by accy
+		open cursor_table 
+		fetch next from cursor_table 
+		into @accy
+		while(@@FETCH_STATUS <> -1) 
+		begin
+			set @cmd="delete gets"+@accy+" where ordeno=@t_vcfno"
+			execute sp_executesql @cmd,N'@t_vcfno nvarchar(20)',@t_vcfno=@t_vcfno
+			IF @@Error <> 0 BEGIN SET @chk = 1 END
+			
+			fetch next from cursor_table 
+			into @accy
+		end 
+		close cursor_table 
+		deallocate cursor_table
+		------------------------------------------------------------------------------------
+		--皮膜、保護膜
+		IF OBJECT_ID('tempdb..#vcf2cubt')is not null
+		BEGIN
+			drop table #vcf2cubt
+		END
+		create table #vcf2cubt(
+			sel int identity(1,1)
+			,vcfsno nvarchar(20)
+			,vcfsnoq nvarchar(10)
+			,accy nvarchar(10)
+			,noa nvarchar(20)
+			,noq nvarchar(10)
+			,nor nvarchar(10)
+			,kind nvarchar(20)
+			,uno nvarchar(30)
+			,productno nvarchar(30)
+			,product nvarchar(50)
+			,mount float
+			,[weight] float
+		)
+		insert into #vcf2cubt(vcfsno,vcfsnoq,accy,noa,noq,nor,kind,uno,productno,product,mount,[weight])
+		select vcfsno,vcfsnoq,cubaccy,cubno,'' noq,cubnoq,kind,uno,productno,product,mount,[weight] 
+		from @tmpa
+		where kind='1' or kind='2'
+		--物料
+		IF OBJECT_ID('tempdb..#vcf2cubu')is not null
+		BEGIN
+			drop table #vcf2cubu
+		END
+		create table #vcf2cubu(
+			sel int identity(1,1)
+			,vcfsno nvarchar(20)
+			,vcfsnoq nvarchar(10)
+			,accy nvarchar(10)
+			,noa nvarchar(20)
+			,noq nvarchar(10)
+			,nor nvarchar(10)
+			,kind nvarchar(20)
+			,uno nvarchar(30)
+			,productno nvarchar(30)
+			,product nvarchar(50)
+			,mount float
+			,[weight] float
+		)
+		insert into #vcf2cubu(vcfsno,vcfsnoq,accy,noa,noq,nor,kind,uno,productno,product,mount,[weight])
+		select vcfsno,vcfsnoq,cubaccy,cubno,'' noq,cubnoq,kind,uno,productno,product,mount,[weight] 
+		from @tmpa
+		where kind='3' 
+		-----------------------------------------------------------------------------------
+		declare @string nvarchar(max) = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+		declare @maxnoq nvarchar(10)
+		declare @noa nvarchar(20)
+		declare @noq nvarchar(10)
+		declare @n int
+		declare @sel int
+		--寫入CUBT.noq  皮膜、保護膜
+		declare cursor_table cursor for 
+		select sel,accy,noa from #vcf2cubt
+		open cursor_table 
+		fetch next from cursor_table 
+		into @sel,@accy,@noa
+		while(@@FETCH_STATUS <> -1) 
+		begin
+			set @noq = '001'
+			while exists(select * from view_cubt where accy=@accy and noa=@noa and noq=@noq)
+				or exists(select * from #vcf2cubt where noa=@noa and noq=@noq)
+			begin
+				set @n = (charindex(LEFT(@noq,1),@string)-1)*100 + (cast(RIGHT(@noq,2) as int)%100) + 1
+				set @noq = substring(@string,FLOOR(@n/100)+1,1) + right('00'+cast(@n%100 as nvarchar),2)
+			end
+			
+			update #vcf2cubt set noq=@noq where sel=@sel
+
+			fetch next from cursor_table 
+			into @sel,@accy,@noa
+		end 
+		close cursor_table 
+		deallocate cursor_table
+		--寫入CUBU.noq 物料
+		declare cursor_table cursor for 
+		select sel,accy,noa from #vcf2cubu
+		open cursor_table 
+		fetch next from cursor_table 
+		into @sel,@accy,@noa
+		while(@@FETCH_STATUS <> -1) 
+		begin
+			set @noq = '001'
+			while exists(select * from view_cubu where accy=@accy and noa=@noa and noq=@noq)
+				or exists(select * from #vcf2cubu where noa=@noa and noq=@noq)
+			begin
+				set @n = (charindex(LEFT(@noq,1),@string)-1)*100 + (cast(RIGHT(@noq,2) as int)%100) + 1
+				set @noq = substring(@string,FLOOR(@n/100)+1,1) + right('00'+cast(@n%100 as nvarchar),2)
+			end
+			
+			update #vcf2cubu set noq=@noq where sel=@sel
+
+			fetch next from cursor_table 
+			into @sel,@accy,@noa
+		end 
+		close cursor_table 
+		deallocate cursor_table
+		---------------------------------------------------------------
+		declare cursor_table cursor for 
+		select accy from #vcf2cubt group by accy  
+		open cursor_table 
+		fetch next from cursor_table 
+		into @accy
+		while(@@FETCH_STATUS <> -1) 
+		begin
+			set @cmd =
+			"insert into cubt"+@accy+"(noa,noq,nor,kind,uno,productno,product
+				,mount,[weight],wweight,ordcno,ordcno2)
+			select noa,noq,nor,kind,uno,productno,product
+				,0,mount,[weight],vcfsno,vcfsnoq
+			from #vcf2cubt
+			where accy=@accy"
+			execute sp_executesql @cmd,N'@accy nvarchar(10)',@accy=@accy
+			
+			fetch next from cursor_table 
+			into @accy
+		end 
+		close cursor_table 
+		deallocate cursor_table
+		
+		declare cursor_table cursor for 
+		select accy from #vcf2cubu group by accy  
+		open cursor_table 
+		fetch next from cursor_table 
+		into @accy
+		while(@@FETCH_STATUS <> -1) 
+		begin
+			set @cmd =
+			"insert into cubu"+@accy+"(noa,noq,ucolor,productno,product
+				,mount,[weight],ordeno,no2)
+			select noa,noq,uno,productno,product
+				,0,mount,vcfsno,vcfsnoq
+			from #vcf2cubu
+			where accy=@accy"
+			execute sp_executesql @cmd,N'@accy nvarchar(10)',@accy=@accy
+			
+			fetch next from cursor_table 
+			into @accy
+		end 
+		close cursor_table 
+		deallocate cursor_table
+--2  	----------------------------------------------------------------------------
+		--產生 get
+		IF OBJECT_ID('tempdb..#cub2get')is not null
+		BEGIN
+			drop table #cub2get
+		END
+		create table #cub2get(
+			sel int identity(1,1),
+			typea nvarchar(20),
+			noa nvarchar(20),
+			noq nvarchar(10),
+			uno nvarchar(30),
+			productno nvarchar(50),
+			product nvarchar(50),
+			mount float,
+			[weight] float,
+			vcfno nvarchar(20)
+		)
+			
+		declare cursor_table cursor for 
+		select accy,noa from #vcf2cubu
+		group by accy,noa
+		open cursor_table 
+		fetch next from cursor_table 
+		into @accy,@noa
+		while(@@FETCH_STATUS <> -1) 
+		begin
+			--刪除 GET
+			--CUB  GET  的單號一致
+			begin try
+				if LEN(@accy)>0
+				begin
+					set @cmd=N'delete get'+@accy+N' where noa=@cubno delete gets'+@accy+N' where noa=@cubno'
+					execute sp_executesql @cmd,N'@cubno nvarchar(max)',@cubno=@noa
+					IF @@Error <> 0 BEGIN SET @chk = 1 END
+				end
+			end try
+			begin catch
+				select ERROR_MESSAGE() 
+			end catch
+		
+			delete #cub2get
+			--鋼捲  數量都當做 0
+			insert into #cub2get(uno,productno,product,mount,[weight])
+			select a.uno,b.productno,b.product,0,a.[weight]
+			from view_cubs a 
+			left join view_uccb b on a.uno=b.uno
+			where a.accy=@accy and a.noa=@noa
+			and len(isnull(a.uno,''))>0
+			--皮膜
+			--因為CUBT就會扣了,所以就不算了
+			--物料  批號存在ucolor那欄   數量都當做 0
+			insert into #cub2get(uno,productno,product,mount,[weight],vcfno)
+			select a.ucolor,a.productno,a.product,0,a.[weight],a.ordeno
+			from view_cubu a
+			where a.accy=@accy and a.noa=@noa
+			and	 len(isnull(a.ucolor,''))>0 
+			--------------------------------------------------------------------
+			update #cub2get set noa=@noa, noq =  right('00'+CAST(sel as nvarchar),3)
+			begin try
+				--寫入GETS
+				set @cmd = 'insert into gets'+@accy+' (noa,noq,uno,productno,product,mount,[weight],eweight,mweight,gmount,gweight,ordeno)
+				select noa,noq,uno,productno,product
+					,mount,[weight],mount,[weight],mount,[weight],vcfno
+				from #cub2get'
+				execute sp_executesql @cmd,N'@cubno nvarchar(max),@accy nvarchar(20)',@cubno=@noa,@accy=@accy
+				IF @@Error <> 0 BEGIN SET @chk = 1 END
+				--寫入GET
+				set @cmd = 'insert into get'+@accy+'(noa,typea,datea,memo)
+				select noa,@a,datea,@b
+				from view_cub where accy=@accy and noa=@cubno'
+				execute sp_executesql @cmd,N'@cubno nvarchar(max),@accy nvarchar(20),@a nvarchar(max),@b nvarchar(max)'
+					,@cubno=@noa,@accy=@accy,@a='領料單',@b='生產作業轉來'
+				IF @@Error <> 0 BEGIN SET @chk = 1 END
+			end try
+			begin catch
+				select ERROR_MESSAGE() 
+			end catch
+			fetch next from cursor_table 
+			into @accy,@noa
+		end 
+		close cursor_table 
+		deallocate cursor_table
+		
+		
+---------------------------------------------------
+--3. CUBT UCCY、GETS  UCCY
+		declare cursor_table cursor for 
+		select uno from @tmpa group by uno
+		open cursor_table 
+		fetch next from cursor_table 
+		into @uno
+		while(@@FETCH_STATUS <> -1) 
+		begin
+			select @mount=0,@weight =0
+			select @mount=@mount +SUM(case when typea='1' then 1 else -1 end*[mount])  
+				,@weight=@weight +SUM(case when typea='1' then 1 else -1 end*[weight]) 
+				from view_rc2s where uno=@uno
+			select @mount=@mount -SUM(case when typea='1' then 1 else -1 end*case when isnull(gmount,0)!=0 then gmount else [mount] end) 
+				,@weight=@weight -SUM(case when typea='1' then 1 else -1 end*case when isnull(gweight,0)!=0 then gweight else [weight] end) 
+				from view_vccs where uno=@uno
+			select @mount=@mount +SUM([mount]) 
+				,@weight=@weight +SUM([weight]) 
+				from view_inas where uno=@uno
+			select @mount=@mount -SUM(case when isnull(gmount,0)!=0 then gmount else [mount] end) 
+				,@weight=@weight -SUM(case when isnull(gweight,0)!=0 then gweight else [weight] end) 
+				from view_gets where uno=@uno
+			select @mount=@mount +SUM([mount])
+				,@weight=@weight +SUM([weight]) 
+				from view_cuts where bno=@uno
+			select @mount=@mount -SUM(case when isnull(gmount,0)!=0 then gmount else [mount] end)  
+				,@weight=@weight -SUM(case when isnull(gweight,0)!=0 then gweight else [weight] end) 
+				from view_cubt where uno=@uno
+			
+			if ISNULL(@weight,0)<=0
+			begin
+				delete uccy where uno=@uno
+			end
+			else if not exists(select * from uccy where uno=@uno)
+			begin
+				insert into uccy(uno,emount,eweight)values(@uno,@mount,@weight)
+			end
+			else
+			begin
+				update uccy set emount=@mount,eweight=@weight where uno=@uno
+			end
+			
+			fetch next from cursor_table 
+			into @uno
+		end 
+		close cursor_table 
+		deallocate cursor_table
+		
+		
+		IF @chk <> 0 BEGIN -- 若是新增資料發生錯誤
+			Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
+			insert into @tmp([status],noa,uno)values('error1',@t_vcfno,null)
+			select * from @tmp
+		END
+		ELSE BEGIN
+			Commit Transaction [Trans_Name] -- 提交所有操作所造成的變更
+			select * from @tmp
+		END
+	end try
+	begin catch
+		Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
+		--有錯誤就都不執行
+		insert into drun(datea,timea,usera,[action],noa,tablea,title,memo)
+		select dbo.AD2ChineseEraName( CONVERT(nvarchar,getdate(),111))
+			,LEFT(CONVERT(nvarchar,getdate(),108),5)
+			,''
+			,'vcf2cub錯誤'
+			,@t_vcfno
+			,'vcf'
+			,''
+			,ERROR_MESSAGE()
+		select ERROR_MESSAGE()
+		insert into @tmp([status],noa,uno)values('error2',@t_vcfno,null)
+		select * from @tmp
+	end catch;
