@@ -35,11 +35,13 @@
             ,['txtBuyer', 'lblBuyer', 'sss', 'namea,noa', 'txtBuyer', 'sss_b.aspx']
             ,['txtOrdcno', '', 'ordc', 'noa', 'txtOrdcno', '']);
             
+            var t_store='',t_part='',t_acomp='';
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1);
+                q_gt('acomp', '', 0, 0, 0, "");
+                
             });
             
             function main() {
@@ -58,9 +60,10 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
                 q_mask(bbmMask);
-                q_gt('store', '', 0, 0, 0, "");
-                q_gt('part', '', 0, 0, 0, "");
-                q_gt('acomp', '', 0, 0, 0, "");
+                
+                q_cmbParse("cmbCno", t_acomp);
+				q_cmbParse("cmbPartno", t_part);
+				q_cmbParse("cmbStoreno", t_store);
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
                 q_cmbParse("cmbTypea", q_getPara('bccin.typea'));
                 
@@ -192,38 +195,32 @@
                 	case 'acomp':
 		                var as = _q_appendData("acomp", "", true);
 		                if (as[0] != undefined) {
-		                    var t_item = "";
+		                    t_acomp = "";
 		                    for (i = 0; i < as.length; i++) {
-		                        t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
+		                        t_acomp += (t_acomp.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
 		                    }
-							q_cmbParse("cmbCno", t_item);
-							if(abbm[q_recno])
-		                    $("#cmbCno").val(abbm[q_recno].cno);
 		                }
+                		q_gt('part', '', 0, 0, 0, "");
 		                break;
                     case 'part':
 		                var as = _q_appendData("part", "", true);
 		                if (as[0] != undefined) {
-		                    var t_item = "";
+		                    t_part = "";
 		                    for (i = 0; i < as.length; i++) {
-		                        t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
+		                        t_part += (t_part.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
 		                    }
-							q_cmbParse("cmbPartno", t_item);
-							if(abbm[q_recno])
-		                    $("#cmbPartno").val(abbm[q_recno].partno);
 		                }
+               			q_gt('store', '', 0, 0, 0, "");
 		                break;
                     case 'store':
 		                var as = _q_appendData("store", "", true);
 		                if (as[0] != undefined) {
-		                    var t_item = "";
+		                    t_store = "";
 		                    for (i = 0; i < as.length; i++) {
-		                        t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
+		                        t_store += (t_store.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
 		                    }
-		                    q_cmbParse("cmbStoreno", t_item);
-		                    if(abbm[q_recno])
-		                    $("#cmbStoreno").val(abbm[q_recno].storeno);
 		                }
+		                q_gt(q_name, q_content, q_sqlCount, 1);
 		                break;
                     case q_name:
                         if (q_cur == 4)
