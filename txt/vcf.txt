@@ -452,7 +452,6 @@ vcf2cub:--vcf2cub    rk
 			,'vcf'
 			,''
 			,ERROR_MESSAGE()
-		select ERROR_MESSAGE()
 		insert into @tmp([status],noa,uno)values('error2',@t_vcfno,null)
 		select * from @tmp
 	end catch;
