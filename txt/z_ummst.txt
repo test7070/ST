@@ -124,6 +124,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		,ttax float
 		,ttotal float
 		,tmemo nvarchar(max)
+		,po nvarchar(max)
 	)	
 	declare @custno nvarchar(max)
 	declare @money float
@@ -146,7 +147,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	declare @weight float
 	declare @price float
 	declare @moneys float
-	
+	declare @po nvarchar(max)
 	declare @cmount nvarchar(max)
 	declare @cmount2 nvarchar(max)
 	declare @recno int
@@ -169,12 +170,13 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		select vccaccy,vccno,ordeno,datea,product,pvcno,pvc
 			,dime,width,lengthb,radius
 			,unit,price,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0))
+			,po
 		from @tmps 
 		where custno=@custno 
-		group by vccaccy,vccno,ordeno,datea,product,pvcno,pvc,dime,width,lengthb,radius,unit,price
+		group by vccaccy,vccno,ordeno,datea,product,pvcno,pvc,dime,width,lengthb,radius,unit,price,po
 		open cursor_table2
 		fetch next from cursor_table2
-		into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@dime,@width,@lengthb,@radius,@unit,@price,@mount,@weight,@moneys
+		into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@dime,@width,@lengthb,@radius,@unit,@price,@mount,@weight,@moneys,@po
 		while(@@FETCH_STATUS <> -1)
 		begin
 			set @tweight = @tweight + isnull(@weight,0)
@@ -193,12 +195,12 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 			end
 			set @tmoney_usd = @tmoney_usd + @money_usd
 			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,datea,product,pvcno,pvc
-				,dime,width,lengthb,radius,price,[money],cmount,cmount2)
+				,dime,width,lengthb,radius,price,[money],cmount,cmount2,po)
 			select @custno,'1',1,@accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc
 				,@dime,@width,@lengthb,@radius,@price,@money_usd,dbo.getComma(@weight,-1),dbo.getComma(@mount,-1)+'C'
-			
+				,@po
 			fetch next from cursor_table2
-			into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@dime,@width,@lengthb,@radius,@unit,@price,@mount,@weight,@moneys
+			into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@dime,@width,@lengthb,@radius,@unit,@price,@mount,@weight,@moneys,@po
 		end
 		close cursor_table2
 		deallocate cursor_table2
@@ -262,7 +264,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		,datea b01
 		,vccno b02
 		,ordeno b03
-		,'' b04
+		,po b04
 		,product b05
 		,pvcno b06
 		,dime b07
