@@ -61,6 +61,8 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		,price float
 		,[money] float
 		,memo nvarchar(max)
+		,ordememo nvarchar(max)
+		,po nvarchar(max)
 	)
 	insert into @tmps(custno,vccaccy,vccno,vccnoq,ordeno,ordeno2,datea,uno,style,productno,product,pvcno,pvc
 		,spec,dime,width,lengthb,radius,unit,mount,[weight],price,[money])
@@ -70,6 +72,16 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	left join @tmp b on a.accy=b.vccaccy and a.noa=b.vccno
 	where b.sel is not null
 	
+	update @tmps set ordememo=b.memo
+	from @tmps a
+	left join view_ordes b on a.ordeno=b.noa and a.ordeno2=b.no2
+	
+	update @tmps set po=LEFT(ordememo,CHARINDEX('chr(10)',ordememo)-1)
+	where CHARINDEX('chr(10)',ordememo)>0
+	
+	update @tmps set po=ordememo
+	where CHARINDEX('chr(10)',ordememo)=0 and len(ISNULL(ordememo,''))>0
+
 	--皮膜去CUTS抓
 	update @tmps set pvcno=b.spec,pvc=b.[class]
 	from @tmps a
