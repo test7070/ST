@@ -285,7 +285,7 @@ begin
 		
 		update @tmp
 		set ordeno=@string
-		where pageorder=@counts and (gno='0' or gno='1' or gno='2')
+		where pageorder=@counts and (gno='0' or gno='1' or gno='2') and noa=@noa
 		
 		set @counts=@counts+1
 		
