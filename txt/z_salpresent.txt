@@ -599,7 +599,7 @@ declare @tmp table(
 insert @tmp(gno,sssno,namea,partno,part,days,sdays,svaca)
 select '0',noa,namea,partno,part,@day1 
 ,isnull((select count(*) from salpresents where noa between @t_bdate and @t_edate and sssno=a.noa and (len(clockin)>0 or len(clockout)>0)),'')
-,(select SUM(hr_used) from salvacause where sssno=a.noa and bdate between @t_bdate and @t_edate and hname like '%特休%')
+,(select SUM(hr_used) from salvacause where sssno=a.noa and bdate between @t_bdate and @t_edate and (hname like '%特休%' or hname like '%公假%' or hname like '%有薪%' or hname like '%無薪%'))
 from sss a where noa between @t_bsssno and @t_esssno
 and isnull(partno,'') between @t_bpartno and @t_epartno
 and (typea=@t_typea or len(@t_typea)=0)
@@ -638,7 +638,8 @@ where sa.sssno=a.sssno and (sa.noa between @t_bdate and @t_edate)
 and (((isnull(sa.clockin,'')='' or isnull(sa.clockin,'')='') and sb.holiday=0) 
 or (sb.holiday=1 and charindex('打卡資料錯誤',memo)>0))
 and not exists (select * from salvacause where sssno=a.sssno and hr_used>=8 and sa.noa between bdate and edate ) ) 
-,vaca=(select COUNT(*) from salvacause where sssno=a.sssno and hr_used>=8 and (bdate between @t_bdate and @t_edate) and (hname='事假' or hname='病假' or hname='生理假'))
+,vaca=(select COUNT(*) from salvacause where sssno=a.sssno and hr_used>=8 and (bdate between @t_bdate and @t_edate) 
+and not(hname like '%特休%' or hname like '%公假%' or hname like '%有薪%' or hname like '%無薪%'))
 ,apvh=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea between @t_bdate and @t_edate ),0)
 from @tmpa a 
 --outer apply (select bdate,edate from salvacause where sssno=a.sssno and hr_used>=8 and (bdate between @t_bdate and @t_edate))b
