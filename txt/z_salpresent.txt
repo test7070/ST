@@ -639,7 +639,7 @@ where sa.sssno=a.sssno and (sa.noa between @t_bdate and @t_edate)
 and (((isnull(sa.clockin,'')='' or isnull(sa.clockin,'')='') and sb.holiday=0) 
 or (sb.holiday=1 and charindex('打卡資料錯誤',memo)>0))
 and not exists (select * from salvacause where sssno=a.sssno and hr_used>=8 and sa.noa between bdate and edate ) ) 
-,vaca=(select COUNT(*) from salvacause where sssno=a.sssno and hr_used>=8 and (bdate between @t_bdate and @t_edate) 
+,vaca=(select COUNT(*) from salvacause where sssno=a.sssno and (bdate between @t_bdate and @t_edate) 
 and (hname like '%事假%' or hname like '%普通傷%' or hname like '%病假%' or hname like '%曠職%'))
 ,apvh=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea between @t_bdate and @t_edate ),0)
 from @tmpa a 
