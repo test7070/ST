@@ -102,7 +102,7 @@ delete @tmp where gno='9'
 
 ---薪資表分別
 update sa
-set gno=case when person='本國' then 1 else 2 end
+set gno=case when person='本國' or  person='日薪'  then 1 else 2 end
 from @tmp sa
 
 ---外籍應領金額

@@ -233,7 +233,10 @@
             	$('#txtAcomp').val($('#cmbCno').find(":selected").text());
             	$('#txtPart').val($('#cmbPartno').find(":selected").text());
                 $('#txtMon').val($.trim($('#txtMon').val()));
-                if ($('#txtMon').val().length > 0 && !(/^[0-9]{3}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())) {
+                if (r_len==3 && $('#txtMon').val().length > 0 && !(/^[0-9]{3}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())) {
+                    alert(q_getMsg('lblMon') + '錯誤。');
+                    return;
+                }else if (r_len==4 && $('#txtMon').val().length > 0 && !(/^[0-9]{4}\/(?:0?[1-9]|1[0-2])$/g).test($('#txtMon').val())) {
                     alert(q_getMsg('lblMon') + '錯誤。');
                     return;
                 }
@@ -295,7 +298,7 @@
                 $('#cmbTaxtype').val(1);
                 $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
                 $('#txtDatea').val(q_date());
-                $('#txtMon').val(q_date().substr(0, 6));
+                $('#txtMon').val(q_date().substr(0, r_lenm));
                 $('#txtDatea').focus();
             }
 

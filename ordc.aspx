@@ -103,6 +103,19 @@
 					);
 					$('.rbhide').hide();
 				}
+				if (q_getPara('sys.project').toUpperCase()=='XY' ){
+					aPop = new Array(
+						['txtProductno1_', 'btnProduct1_', 'ucc', 'noa,product,style,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txt_,txtUnit_,txtSpec_,txtStdmount_,txtMount_', 'ucaucc_b.aspx'],
+						['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_,txtMount_', 'bcc_b.aspx'],
+						['txtProductno3_', 'btnProduct3_', 'ucc', 'noa,namea,style,unit,spec,stdmount', 'txtProductno3_,txtProduct_,txt_,txtUnit_,txtSpec_,txtStdmount_,txtMount_', 'ucaucc_b.aspx'],
+						['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+						['txtCno', 'lblAcomp', 'acomp', 'noa,acomp,addr', 'txtCno,txtAcomp,txtAddr2', 'acomp_b.aspx'],
+						['txtTggno', 'lblTgg', 'tgg', 'noa,comp,trantype,paytype,salesno,sales,tel,fax,zip_comp,addr_comp'
+						, 'txtTggno,txtTgg,cmbTrantype,txtPaytype,txtSalesno,txtSales,txtTel,txtFax,txtPost,txtAddr,txtPost2', 'tgg_b.aspx'],
+						['txtCustno_', 'btnCustno_', 'cust', 'noa,comp', 'txtCustno_,txtComp_', 'cust_b.aspx']
+					);
+					$('.isXY').show();
+				}
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd], ['txtTrandate', r_picd], ['txtEtd', r_picd], ['txtEta', r_picd], ['txtOnboarddate', r_picd]];
 				bbsMask = [['txtTrandate', r_picd]];
@@ -1228,6 +1241,10 @@
 						<td colspan='5'><textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea></td>
 						<td class="rbhide"><span> </span><a id='lblOverrate' class="lbl"> </a></td>
 						<td class="rbhide"><input id="txtOverrate" type="text" class="txt num c1"  style="width: 80%;"/>%</td>
+					</tr>
+					<tr class="isXY" style="display: none;">
+							<td> </td>
+							<td colspan="5" style="color: red;">注意事項：廠商送貨時，請註明本購單單號或隨貨附本採購單，以利請款。</td>
 					</tr>
 				</table>
 			</div>

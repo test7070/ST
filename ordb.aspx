@@ -150,9 +150,9 @@
 				}
 				if (q_getPara('sys.project').toUpperCase()=='XY'){
 					aPop = new Array(
-						['txtProductno1_', '', 'ucc', 'noa,product,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', ''],
+						['txtProductno1_', '', 'ucc', 'noa,product,style,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txt_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', ''],
 						['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_,txtProduct_', 'bcc_b.aspx'],
-						['txtProductno3_', '', 'ucc', 'noa,product,unit,spec,stdmount', 'txtProductno3_,txtProduct_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', ''],
+						['txtProductno3_', '', 'ucc', 'noa,product,style,unit,spec,stdmount', 'txtProductno3_,txtProduct_,txt_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', ''],
 						['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 						['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 						['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype', 'txtTggno,txtTgg,txtNick,txtPaytype', 'tgg_b.aspx'],

@@ -132,6 +132,9 @@
 					for(var i=0;i<t_para.length;i++){
 						ctx.font = t_para[i].fontsize+"px times new roman";
 						ctx.fillStyle = 'red';
+						if(q_getPara('sys.project').toUpperCase()=='SF' || q_getPara('sys.project').toUpperCase()=='VU'){
+							ctx.textAlign="center";
+						}
 						ctx.fillText(t_para[i].key,t_para[i].left,t_para[i].top);
 						if($('#textPara').val().length>0)
 							$('#textPara').val($('#textPara').val()+'\n');
