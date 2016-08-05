@@ -82,6 +82,7 @@ from salary a left join salarys b on a.noa=b.noa
 	outer apply (select top 1 * from salvacause where sssno=b.sno and Left(bdate,6)=@t_xmon order by bdate desc)e
 	outer apply (select * from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon)f
 where b.mon=@t_xmon
+and ( b.sno between @t_bsssno and @t_esssno )
 group by b.sno,b.namea,c.jobno,c.level1,c.job,c.level2,b.partno,b.part,a.person
 		,b.money,b.bo_admin,b.bo_oth,b.bo_special,b.bo_full,b.meals,b.bo_traffic,b.addmoney,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6
 		,b.ch_labor,b.ch_health,b.hplus2,d.inday,f.hname,b.hr_sick,b.hr_person,e.tot_special,b.tax6,b.lodging_power_fee,b.borrow,b.sa_health,b.money7
