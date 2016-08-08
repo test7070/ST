@@ -165,6 +165,10 @@
 				$('#txtXresthours1').val('12:00');
 				$('#txtXresthours2').val('13:00');
 				q_gt('holiday', "where=^^ isnull(iswork,0)=0 ^^", 0, 0, 0);
+				
+				if (q_getPara('sys.project').toUpperCase()=='DJ'){
+					$('#txtXlate').val(2);
+				}
             }
             
 			function workhours() {
