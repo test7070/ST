@@ -52,16 +52,6 @@
 				
 				q_gt('sss', "where=^^isnull(issales,0)=1 ^^", 0, 0, 0, "getsalse",r_accy);
                 
-                $('#checkCustorde').change(function(e) {
-					if($('#checkCustorde').prop('checked')){
-						q_box("ordes_b2_xy.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where
-						, 'ordes_xy', "95%", "650px", q_getMsg('popOrde'));
-							
-					}else{
-						$('#txtCustorde').val('');
-					}
-				});
-                
                 $('#btnGenvcca').click(function(e) {
                 	if (!confirm('確定要開立發票?')){
 						return;
