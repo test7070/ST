@@ -93,6 +93,10 @@
 					$('.dbbs').show();
 					$('.dbbt').show();
 				}
+				
+				if(q_getPara('sys.project').toUpperCase()=='VU' || q_getPara('sys.project').toUpperCase()=='SF'){
+					$('.sf').show();
+				}
             }
             
             function refreshPara(){
@@ -577,8 +581,9 @@
 						</tr>
 						<tr> 
 							<td><span> </span><a id='lblPara' class="lbl"> </a></td>
-							<td colspan="2"rowspan="3">
+							<td colspan="2" rowspan="4" style="vertical-align: top;">
 								<textarea id="textPara" class="txt c1" rows="6"> </textarea>
+								<a class="sf" style="display: none;color: red;">※參數A-E為長度，參數F-G為續接器</a>
 							</td>
 						</tr>
 						<tr> </tr>
