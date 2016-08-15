@@ -215,6 +215,11 @@
 						}
 					}
 				});
+				
+				//105/08/12 表頭為訂單預交日,表身仍維持廠商預交日
+				if(q_getPara('sys.project').toUpperCase()=='XY'){
+					$('#lblTrandate').text('訂單預交日');
+				}
 			}
 
 			function q_boxClose(s2) {
@@ -234,6 +239,7 @@
 							//取第一個廠商資料
 							if (q_getPara('sys.project').toUpperCase()=='XY' ){
 								var xy_tggno='';
+								var t_ordeno='',t_no2='';
 								var t_moretgg=false;
 								for (var i=0; i<b_ret.length;i++){
 									if(b_ret[i].tggno_xy.length>0 && xy_tggno.length==0){
@@ -241,6 +247,10 @@
 									}
 									if(xy_tggno.length>0 && b_ret[i].tggno_xy.length>0 && xy_tggno!=b_ret[i].tggno_xy){
 										t_moretgg=true;
+									}
+									if(t_ordeno.length==0){
+										t_ordeno=	b_ret[i].ordeno;
+										t_no2=b_ret[i].no2;
 									}
 								}
 								if(t_moretgg){
@@ -262,6 +272,17 @@
 										$('#txtPost').val(as[0].zip_comp);
 										$('#txtAddr').val(as[0].addr_comp);
 										$('#cmbTaxtype').val(as[0].conn);
+									}
+								}
+								//105/08/12 取得訂單預交日
+								if(t_ordeno.length>0){
+									var t_where =" noa='"+t_ordeno+"' and no2='"+t_no2+"'";
+									q_gt('view_ordes', "where=^^ "+t_where+" ^^", 0, 0, 0, "xyordesdatea",r_accy,1);
+									var as = _q_appendData("view_ordes", "", true);
+									if (as[0] != undefined) {
+										$('#txtTrandate').val(as[0].datea);
+									}else{
+										alert('【'+t_ordeno+'-'+t_no2+'】訂單不存在!!');
 									}
 								}
 							}
@@ -469,7 +490,7 @@
 					$('#txtTrandate').val(q_cdn(q_date(),10));
 				}
 				for (var j = 0; j < q_bbsCount; j++) {
-					if(!emp($('#txtProductno_' + j).val())&&emp($('#txtTrandate_'+j).val()))
+					if(!emp($('#txtProductno_' + j).val()) && emp($('#txtTrandate_'+j).val()) && q_getPara('sys.project').toUpperCase()!='XY')
 						$('#txtTrandate_'+j).val($('#txtTrandate').val());
 						
 					if(q_cur==1)
@@ -627,7 +648,8 @@
 					//1050223 預設送貨地址
 					$('#txtPost2').val('333');
 					$('#txtAddr2').val('桃園市龜山區綠野街88號 廖秀雲小姐');
-					$('#txtTrandate').val(q_cdn(q_date(),1));
+					//105/08/12 表頭改為訂單預交日，不自動帶入
+					//$('#txtTrandate').val(q_cdn(q_date(),1));
 				}
 				
 				$('#cmbKind').val('1').change();

@@ -74,7 +74,7 @@
 					if($.trim($('#txtCustno').val()).length>0){t_custno=$.trim($('#txtCustno').val());}
 					if($.trim($('#txtMon').val()).length>0){t_mon=$.trim($('#txtMon').val());}
 					
-					if(t_radio=='1'){
+					if(t_radio=='1' || t_radio=='3'){
 						if($.trim($('#txtBdate').val()).length>0){t_bdate=$.trim($('#txtBdate').val());}
 						if($.trim($('#txtEdate').val()).length>0){t_edate=$.trim($('#txtEdate').val());}
 					}
@@ -110,8 +110,11 @@
 						$('#txtEdate').attr('disabled', 'disabled');
 					}else{
 						$('#txtStartdate').attr('disabled', 'disabled');
-						$('#txtBdate').attr('disabled', 'disabled');
-						$('#txtEdate').attr('disabled', 'disabled');
+						//$('#txtBdate').attr('disabled', 'disabled');
+						//$('#txtEdate').attr('disabled', 'disabled');
+						//105/08/15 開啟篩選
+						$('#txtBdate').removeAttr('disabled');
+						$('#txtEdate').removeAttr('disabled');
 					}
 				});
 				
