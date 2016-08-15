@@ -21,7 +21,7 @@
 			q_desc = 1;
 			q_tables = 't';
 			var q_name = "ordc";
-			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtTgg', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2','textXyodatea'];
 			var q_readonlys = ['txtNo2', 'txtC1', 'txtNotv','txtOmount','chkEnda','txtStdmount','txtTotal','txtOrdbno','txtNo3'];
 			var q_readonlyt = [];
 
@@ -216,7 +216,7 @@
 					}
 				});
 				
-				//105/08/12 表頭為訂單預交日,表身仍維持廠商預交日
+				//105/08/15 顯示第一個品項的訂單預交日
 				if(q_getPara('sys.project').toUpperCase()=='XY'){
 					$('#lblTrandate').text('訂單預交日');
 				}
@@ -249,7 +249,7 @@
 										t_moretgg=true;
 									}
 									if(t_ordeno.length==0){
-										t_ordeno=	b_ret[i].ordeno;
+ 										t_ordeno=b_ret[i].ordeno;
 										t_no2=b_ret[i].no2;
 									}
 								}
@@ -274,15 +274,15 @@
 										$('#cmbTaxtype').val(as[0].conn);
 									}
 								}
-								//105/08/12 取得訂單預交日
+								//105/08/15 取得訂單預交日
 								if(t_ordeno.length>0){
 									var t_where =" noa='"+t_ordeno+"' and no2='"+t_no2+"'";
 									q_gt('view_ordes', "where=^^ "+t_where+" ^^", 0, 0, 0, "xyordesdatea",r_accy,1);
 									var as = _q_appendData("view_ordes", "", true);
 									if (as[0] != undefined) {
-										$('#txtTrandate').val(as[0].datea);
+										$('#textXyodatea').val(as[0].datea);
 									}else{
-										alert('【'+t_ordeno+'-'+t_no2+'】訂單不存在!!');
+										$('#textXyodatea').val('');
 									}
 								}
 							}
@@ -490,7 +490,7 @@
 					$('#txtTrandate').val(q_cdn(q_date(),10));
 				}
 				for (var j = 0; j < q_bbsCount; j++) {
-					if(!emp($('#txtProductno_' + j).val()) && emp($('#txtTrandate_'+j).val()) && q_getPara('sys.project').toUpperCase()!='XY')
+					if(!emp($('#txtProductno_' + j).val()) && emp($('#txtTrandate_'+j).val()))
 						$('#txtTrandate_'+j).val($('#txtTrandate').val());
 						
 					if(q_cur==1)
@@ -648,8 +648,7 @@
 					//1050223 預設送貨地址
 					$('#txtPost2').val('333');
 					$('#txtAddr2').val('桃園市龜山區綠野街88號 廖秀雲小姐');
-					//105/08/12 表頭改為訂單預交日，不自動帶入
-					//$('#txtTrandate').val(q_cdn(q_date(),1));
+					$('#txtTrandate').val(q_cdn(q_date(),1));
 				}
 				
 				$('#cmbKind').val('1').change();
@@ -743,6 +742,27 @@
 					$('#lblOrdb').hide();
 					$('#txtOrdbno').hide();
 					$('.floata').hide();
+				}
+				
+				if (q_getPara('sys.project').toUpperCase()=='XY' ){
+					var t_ordbno='',t_no3='';
+					for (var i = 0; i < q_bbtCount; i++) {
+						t_ordbno=$('#txtOrdbno_'+i).val();
+						t_no3=$('#txtNo3_'+i).val();
+						if(t_ordbno.length>0)
+							break;
+					}
+					if(t_ordbno.length>0){
+						var t_where =" noa='"+t_ordbno+"' and no3='"+t_no3+"'";
+						var t_where ="exists (select * from view_ordbs where noa='"+t_ordbno+"' and no3='"+t_no3+"' and a.noa=ordeno and a.no2=no2)"
+						q_gt('view_ordes', "where=^^ "+t_where+" ^^", 0, 0, 0, "xyordesdatea",r_accy,1);
+						var as = _q_appendData("view_ordes", "", true);
+						if (as[0] != undefined) {
+ 							$('#textXyodatea').val(as[0].datea);
+						}else{
+							$('#textXyodatea').val('');
+						}
+					}
 				}
 			}
 
@@ -1187,6 +1207,8 @@
 						<td colspan='2'><input id="txtTel" type="text" class="txt c1 lef"/></td>
 						<td><span> </span><a id='lblFax' class="lbl"> </a></td>
 						<td colspan='2'><input id="txtFax" type="text" class="txt c1 lef"/></td>
+						<td style="display: none;" class="isXY"><span> </span><a id='lblXyodatea' class="lbl"> </a></td>
+						<td style="display: none;" class="isXY"><input id="textXyodatea" type="text" class="txt c1 lef"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
