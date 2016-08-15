@@ -203,12 +203,13 @@
 								alert(as[0].t_err);
 							}else{
 								var t_where="1=1 and (noa between '"+as[0].binvono+"' and '"+as[0].einvono+"') ";
-								if(as[0].radio=='1')
+								if(as[0].radio=='1'){
 									t_where=t_where+" and [type]='W' "
-								if(as[0].radio=='2')
+								}else if(as[0].radio=='2'){
 									t_where=t_where+" and [type]='M' "
-								else
+								}else{
 									t_where=t_where+" and [type]='P' "
+								}
 								
 								q_box("vcca.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'vcca', "95%", "95%", $('#btnGenvcca').val());
 							}
