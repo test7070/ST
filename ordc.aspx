@@ -218,7 +218,7 @@
 				
 				//105/08/15 顯示第一個品項的訂單預交日
 				if(q_getPara('sys.project').toUpperCase()=='XY'){
-					$('#lblTrandate').text('訂單預交日');
+					$('#lblXyodatea').text('訂單預交日');
 				}
 			}
 
