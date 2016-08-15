@@ -179,6 +179,7 @@ declare @tmp table(
 	a_money float,
 	a_tax float,
 	a_total float,
+	b_no2 nvarchar(30),
 	b_productno nvarchar(30),
 	b_products nvarchar(100),
 	b_spec nvarchar(100),
@@ -193,7 +194,8 @@ insert into @tmp
 select
 	'0',ROW_NUMBER()over(partition by a.noa order by a.noa),1,0
 	,a.noa,a.odate,a.kind,a.tggno,c.comp,a.tel,a.fax,a.addr,a.addr2,a.trantype,a.trandate,a.paytype,replace(a.memo,'chr(10)','<BR>'),a.money,a.tax,a.total
-	,b.productno,b.product,b.spec,b.unit,b.mount,b.price,b.total,replace(b.memo,'chr(10)','<BR>'),b.comp
+	,b.no2,b.productno,dbo.charbr(b.product+' '+b.spec,42),b.spec,b.unit,b.mount,b.price,b.total
+	,dbo.charbr(b.memo+case when charindex('-',b.productno)>0 then b.comp else '' end,13),b.comp ----1050321 XY印刷品才顯示客戶
 from view_ordc a
 left join view_ordcs b on a.noa = b.noa
 left join tgg c on a.tggno = c.noa
@@ -204,8 +206,71 @@ order by a.noa,b.no2
 
 update @tmp set a_kind = (
 		case a_kind when '1' then '原料' when '2' then '物料' when '3' then '費用' when '4' then '費用(製)' 
-			when '5' then '維修' when '6' then '加工' end
+		when '5' then '維修' when '6' then '加工' end
 )
+
+--換行------
+declare @noa nvarchar(50)
+declare @no2 nvarchar(50)
+declare @prodspec nvarchar(MAX)
+declare @memocomp nvarchar(MAX)
+
+declare cursor_table cursor for
+select a_noa,b_no2,b_products,b_memo from @tmp
+open cursor_table
+fetch next from cursor_table
+into @noa,@no2,@prodspec,@memocomp
+while(@@FETCH_STATUS <> -1)
+begin
+	
+	if (CHARINDEX('<BR>',@prodspec)>0 or CHARINDEX('<BR>',@memocomp)>0)
+	begin
+		if(CHARINDEX('<BR>',@prodspec)>0)
+		begin
+			update @tmp
+			set b_products=SUBSTRING(@prodspec,0,CHARINDEX('<BR>',@prodspec))
+			where a_noa=@noa and b_no2=@no2
+			set @prodspec=SUBSTRING(@prodspec,CHARINDEX('<BR>',@prodspec)+4,LEN(@prodspec))
+		end
+		else
+		begin
+			set @prodspec=''
+		end
+		
+		if(CHARINDEX('<BR>',@memocomp)>0)
+		begin
+			update @tmp
+			set b_memo=SUBSTRING(@memocomp,0,CHARINDEX('<BR>',@memocomp))
+			where a_noa=@noa and b_no2=@no2
+			
+			set @memocomp=SUBSTRING(@memocomp,CHARINDEX('<BR>',@memocomp)+4,LEN(@memocomp))
+		end
+		else
+		begin
+			set @memocomp=''
+		end
+		
+		insert @tmp(
+			gno,orderno,pageno,w_totpage,a_noa,a_odate,a_kind,a_tggno,a_tggs,
+			a_tel,a_fax,a_addr_a,a_addr_b,a_trantype,a_trandate,a_paytype,a_memo,a_money,a_tax,a_total,
+			b_no2,b_productno,b_products,b_spec,b_unit,b_mount,b_price,b_total,b_memo,b_comp)
+			
+		select gno,orderno,pageno,w_totpage,a_noa,a_odate,a_kind,a_tggno,a_tggs,
+			a_tel,a_fax,a_addr_a,a_addr_b,a_trantype,a_trandate,a_paytype,a_memo,a_money,a_tax,a_total,
+			b_no2+'-1',null,@prodspec,b_spec,null,null,null,null,@memocomp,b_comp
+		from @tmp where a_noa=@noa and b_no2=@no2
+	end
+
+	fetch next from cursor_table
+	into @noa,@no2,@prodspec,@memocomp
+end
+close cursor_table
+deallocate cursor_table
+-------------
+update a
+set orderno=rr
+from (select orderno,ROW_NUMBER()over(partition by a_noa order by a_noa,b_no2) rr from @tmp)a
+
 declare @a_noa nvarchar(30)
 declare @a_count int
 declare @idno int
@@ -235,9 +300,11 @@ begin
 end
 close cursor_table
 deallocate cursor_table
+
 update @tmp set orderno = orderno-((pageno-1)*@t_pageline)
+
 declare cursor_table cursor for
-	select distinct a_noa,max(orderno),pageno,min(idno),count(*) from @tmp group by a_noa,pageno
+select distinct a_noa,max(orderno),pageno,min(idno),count(*) from @tmp group by a_noa,pageno
 open cursor_table
 fetch next from cursor_table
 into @a_noa,@orderno,@pageno,@idno,@a_count
@@ -285,10 +352,10 @@ close cursor_table
 deallocate cursor_table
 
 select
-	gno,pageno,w_totpage,a_noa,a_odate,case when @t_project='XY' then '' else a_kind end a_kind,a_tggno,a_tggs,a_tel,a_fax
+	gno,pageno,orderno,w_totpage,a_noa,a_odate,case when @t_project='XY' then '' else a_kind end a_kind,a_tggno,a_tggs,a_tel,a_fax
 	,case when len(a_addr_b)>0 then a_addr_b else a_addr_a end a_addr
 	,a_trantype,a_trandate,a_paytype,a_memo
-	,b_productno,b_products,b_spec
+	,b_no2,b_productno,b_products,b_spec
 	,b_unit
 	,dbo.getComma(case when @t_project='XY' then null else a_money end,-1) a_money
 	,dbo.getComma(case when @t_project='XY' then null else a_tax end,-1) a_tax
@@ -296,7 +363,7 @@ select
 	,dbo.getComma(b_mount,-1) b_mount
 	,dbo.getComma(case when @t_project='XY' then null else b_price end,-1) b_price --1050223 XY 暫時不顯示
 	,dbo.getComma(case when @t_project='XY' then null else b_total end,-1) b_total --1050223 XY 暫時不顯示
-	,b_memo+(case when @t_project='XY' and charindex('-',b_productno)>0 then b_comp else '' end) b_memo --1050321 XY印刷品才顯示客戶
+	,b_memo
 	,case when @t_project='XY' then '' else '類別：' end lblkind
 	,'<img width="60px" src="http://59.125.143.171/images/logo1_xy.png">' logo1
 from @tmp order by a_tggno,a_noa desc,pageno,gno,orderno;
