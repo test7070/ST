@@ -1199,6 +1199,8 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
+				
+				refreshBbs();
 			}
 
 			function q_popPost(s1) {
