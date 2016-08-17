@@ -19,7 +19,7 @@
             q_tables = 's';
             var q_name = "bccin";
             var q_readonly = ['txtNoa', 'txtWorker','txtMoney','txtTax','txtTotal'];
-            var q_readonlys = ['txtTotal'];
+            var q_readonlys = [];
             var bbmNum = [['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtDiscount', 10, 0, 1]];
             var bbsNum = [];
             var bbmMask = [];
@@ -51,7 +51,67 @@
                 }
                 mainForm(1);
             }
- 
+ 			
+ 			function sum() {
+            	if(!(q_cur==1 || q_cur==2))
+					return;		
+				$('#txtMoney').attr('readonly',true);			
+				$('#txtTax').attr('readonly',true);	
+				$('#txtTotal').attr('readonly', true);
+				$('#txtMoney').css('background-color','rgb(237,237,238)').css('color','green');
+				$('#txtTax').css('background-color','rgb(237,237,238)').css('color','green');
+				$('#txtTotal').css('background-color','rgb(237,237,238)').css('color','green');
+				
+                var t_mount, t_price = 0,t_money=0,t_total=0,t_tax,t_discount,t_taxrate;
+                if($('#chkAprice_'+j).prop('checked')){
+					t_total += q_float('txtTotal_' + j);
+				}
+				else{
+	                for (var j = 0; j < q_bbsCount; j++) {
+	                	t_mount = q_float('txtMount2_'+j);
+	                	t_price = q_float('txtPrice_'+j);
+	                	t_money = round(t_mount*t_price,0);
+	                	$('#txtTotal_'+j).val(t_money);
+	                	t_total+=t_money;
+	                }
+                }
+                t_money = t_total;
+                t_discount = q_float('txtDiscount');
+                t_taxrate = parseFloat(q_getPara('sys.taxrate'))/100;
+                switch ($('#cmbTaxtype').val()) {
+			        case '1':  // 應稅
+			            t_tax = round(t_money * t_taxrate, 0);
+			            t_total = t_money + t_tax - t_discount;
+			            break;
+			        case '2': //零稅率
+			        	t_tax = 0;
+			        	t_total = t_money + t_tax - t_discount;
+			        	break;
+			        case '3':  // 內含
+			            t_tax = round(t_money / (1 + t_taxrate) * t_taxrate, 0);
+			            t_total = t_money - t_discount;
+			            t_money = t_total - t_tax;
+			            break;
+			        case '4':  // 免稅
+			            t_tax = 0;
+			        	t_total = t_money + t_tax - t_discount;
+			            break;
+			        case '5':  // 自定
+			        	$('#txtTax').attr('readonly',false);	
+						$('#txtTax').css('background-color','white').css('color','black');
+						t_tax = round(q_float('txtTax'),0);
+			        	t_total = t_money + t_tax - t_discount;
+			            break;
+			        case '6':  // 作廢-清空資料
+			        	t_money = 0,t_tax = 0, t_total = - t_discount;  
+			            break;		
+			        default:		
+			    }
+                $('#txtMoney').val(t_money);
+                $('#txtTax').val(t_tax);
+                $('#txtTotal').val(t_total);
+            }
+            
             function mainPost() {
             	bbsNum = [['txtMount', 10, q_getPara('rc2.mountPrecision'), 1], ['txtMount2', 10, q_getPara('rc2.mountPrecision'), 1]
            						,['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1], ['txtMoney', 15, 0, 1], ['txtTotal', 15, 0, 1]
@@ -269,8 +329,9 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')){
+                    	$('#chkAprice_'+j).click(function(e){refreshBbs();});
                     	$('#txtMount_' + j).change(function() {
-                    		var n = $.trim($(this).attr('id').replace("txtMount_",''));
+                    		var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                     		$('#txtMount2_'+n).val($(this).val());
 	                        sum();
 	                    });
@@ -334,60 +395,7 @@
                 return true;
             }
 
-            function sum() {
-            	if(!(q_cur==1 || q_cur==2))
-					return;		
-				$('#txtMoney').attr('readonly',true);			
-				$('#txtTax').attr('readonly',true);	
-				$('#txtTotal').attr('readonly', true);
-				$('#txtMoney').css('background-color','rgb(237,237,238)').css('color','green');
-				$('#txtTax').css('background-color','rgb(237,237,238)').css('color','green');
-				$('#txtTotal').css('background-color','rgb(237,237,238)').css('color','green');
-				
-                var t_mount, t_price = 0,t_money=0,t_total=0,t_tax,t_discount,t_taxrate;
-                for (var j = 0; j < q_bbsCount; j++) {
-                	t_mount = q_float('txtMount2_'+j);
-                	t_price = q_float('txtPrice_'+j);
-                	t_money = round(t_mount*t_price,0);
-                	$('#txtTotal_'+j).val(t_money);
-                	t_total+=t_money;
-                }
-                t_money = t_total;
-                t_discount = q_float('txtDiscount');
-                t_taxrate = parseFloat(q_getPara('sys.taxrate'))/100;
-                switch ($('#cmbTaxtype').val()) {
-			        case '1':  // 應稅
-			            t_tax = round(t_money * t_taxrate, 0);
-			            t_total = t_money + t_tax - t_discount;
-			            break;
-			        case '2': //零稅率
-			        	t_tax = 0;
-			        	t_total = t_money + t_tax - t_discount;
-			        	break;
-			        case '3':  // 內含
-			            t_tax = round(t_money / (1 + t_taxrate) * t_taxrate, 0);
-			            t_total = t_money - t_discount;
-			            t_money = t_total - t_tax;
-			            break;
-			        case '4':  // 免稅
-			            t_tax = 0;
-			        	t_total = t_money + t_tax - t_discount;
-			            break;
-			        case '5':  // 自定
-			        	$('#txtTax').attr('readonly',false);	
-						$('#txtTax').css('background-color','white').css('color','black');
-						t_tax = round(q_float('txtTax'),0);
-			        	t_total = t_money + t_tax - t_discount;
-			            break;
-			        case '6':  // 作廢-清空資料
-			        	t_money = 0,t_tax = 0, t_total = - t_discount;  
-			            break;		
-			        default:		
-			    }
-                $('#txtMoney').val(t_money);
-                $('#txtTax').val(t_tax);
-                $('#txtTotal').val(t_total);
-            }
+            
 
             function refresh(recno) {
                 _refresh(recno);
@@ -399,7 +407,27 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                if (t_para){
+                	$('#txtDatea').datepicker('destroy');
+                }
+                else{
+                	$('#txtDatea').datepicker();
+                }
+                refreshBbs();
             }
+            function refreshBbs(){
+				//金額小計自訂
+				for(var i=0;i<q_bbsCount;i++){
+					$('#txtTotal_'+i).attr('readonly','readonly');
+					if($('#chkAprice_'+i).prop('checked')){
+						$('#txtTotal_'+i).css('color','black').css('background-color','white');
+						if(q_cur==1 || q_cur==2)
+							$('#txtTotal_'+i).removeAttr('readonly');
+					}else{
+						$('#txtTotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+					}
+				}
+			}
 
             function btnMinus(id) {
                 _btnMinus(id);
@@ -709,6 +737,7 @@
 					<td align="center" style="width: 5%;"><a id='lblMount2'> </a></td>	
 					<td align="center" style="width: 5%;"><a id='lblPrice'> </a></td>
 					<td align="center" style="width: 5%;"><a id='lblTotals'> </a></td>
+					<td align="center" style="width: 3%;">自訂<br>金額</td>
 					<td align="center" style="width: 6%;"><a id='lblErrmount'> </a></td>
 					<td align="center" style="width: 8%;"><a id='lblUno'> </a></td>
 					<td align="center" style="width: 10%;"><a id='lblMemos'> </a>/<a id='lblOrdcnos'> </a></td>
@@ -732,6 +761,7 @@
 					<td><input id="txtMount2.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtPrice.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtTotal.*" type="text" style="width: 95%; text-align: right;"/></td>
+					<td align="center"><input id="chkAprice.*" type="checkbox"/></td>
 					<td>
 						<input id="txtErrmount.*" type="text" style="width: 95%; text-align: right;"/>
 						<input id="txtErrmemo.*" type="text" style="width: 95%;"/>
