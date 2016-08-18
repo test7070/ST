@@ -62,31 +62,26 @@ declare @tmp table(
 
 insert @tmp
 select '9','',b.sno,b.namea,c.jobno,isnull(c.level1+'職等','')+c.job,c.level2,b.partno,b.part,a.person
-		,b.money,b.bo_admin,b.bo_oth,b.bo_special,b.bo_full,b.meals,b.bo_traffic,b.addmoney
+		,case when a.person='日薪' then b.mtotal else b.money end
+		,b.bo_admin,b.bo_oth,b.bo_special,b.bo_full,b.meals,b.bo_traffic,b.addmoney
 		,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6
-		,b.money+b.bo_admin+b.bo_oth+b.bo_special+b.bo_full+b.meals+b.bo_traffic+b.addmoney+b.money1+b.money2+b.money3+b.money4+b.money5+b.money6
-		,b.ch_labor,b.ch_health,b.hplus2,case when d.inday!=0 then d.inday/8 else '' end
-		,case when f.hname='特休假' then sum(f.hr_used)/8 else '' end
-		,case when d.inday!=0 then isnull(((d.inday-e.tot_special)/8),0) else 0 end
-		,case when e.tot_special!=0 then e.tot_special/8 else '' end
+		,case when a.person='日薪' then b.mtotal else b.money end+b.bo_admin+b.bo_oth+b.bo_special+b.bo_full+b.meals+b.bo_traffic+b.addmoney+b.money1+b.money2+b.money3+b.money4+b.money5+b.money6
+		,b.ch_labor,b.ch_health,b.hplus2
+		,case when d.inday!=0 then d.inday/8 else 0 end
+		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname='特休假'),0)/8,1)
+		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)<=@t_xmon and hname='特休假'),0)/8,1)
+		,round((isnull(d.inday,0)-isnull(d.boutday,0)-isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)<=@t_xmon and hname='特休假'),0))/8,1)
 		,b.hr_sick,b.hr_person
-		,case when f.hname='天災假' then sum(f.hr_used) else '' end
-		,case when f.hname!='天災假' and f.hname!='特休假' and f.hname!='病假' and f.hname!='事假' then sum(f.hr_used)/8 else '' end
+		,isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname='天災假'),0)
+		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname!='天災假' and hname!='特休假' and hname!='病假' and hname!='事假'),0)/8,1)
 		,b.mi_sick+b.mi_person,b.mi_nosalary+b.mi_leave
-		,b.tax6,b.lodging_power_fee,b.borrow
+		,isnull(b.tax5,0)+isnull(b.tax6,0)+isnull(b.tax12,0)+isnull(b.tax18,0),b.lodging_power_fee,b.borrow
 		,b.ch_labor+b.ch_health+b.hplus2+b.mi_sick+b.mi_person+b.mi_nosalary+b.mi_leave
 		,'',b.sa_health,b.money7	
 from salary a left join salarys b on a.noa=b.noa
 	outer apply(select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc)c
-	left join salvacas d on b.sno=d.sssno and b.noq=d.noq and LEFT(b.mon,3)=d.noa
-	outer apply (select top 1 * from salvacause where sssno=b.sno and Left(bdate,6)=@t_xmon order by bdate desc)e
-	outer apply (select * from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon)f
-where b.mon=@t_xmon
-and ( b.sno between @t_bsssno and @t_esssno )
-group by b.sno,b.namea,c.jobno,c.level1,c.job,c.level2,b.partno,b.part,a.person
-		,b.money,b.bo_admin,b.bo_oth,b.bo_special,b.bo_full,b.meals,b.bo_traffic,b.addmoney,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6
-		,b.ch_labor,b.ch_health,b.hplus2,d.inday,f.hname,b.hr_sick,b.hr_person,e.tot_special,b.tax6,b.lodging_power_fee,b.borrow,b.sa_health,b.money7
-		,b.mi_sick,b.mi_person,b.mi_nosalary,b.mi_leave
+	left join salvacas d on b.sno=d.sssno and LEFT(b.mon,3)=d.noa
+where b.mon=@t_xmon and b.sno between @t_bsssno and @t_esssno
 
 insert @tmp
 select '1','',sssno,name,max(jobno),max(job),max(levels),max(partno),max(part),max(person),max([money]),
@@ -224,16 +219,17 @@ dbo.getComma(money41,0)money41,dbo.getComma(money42,0)money42,dbo.getComma(money
 dbo.getComma(money51,0)money51,dbo.getComma(money52,0)money52,dbo.getComma(money53,0)money53,
 dbo.getComma(money61,0)money61,dbo.getComma(money62,0)money62,dbo.getComma(money63,0)money63,
 dbo.getComma(total11,0)total11,dbo.getComma(total12,0)total12,dbo.getComma(total13,0)total13,
-dbo.getComma(labor1,0)labor1,dbo.getComma(labor2,0)labor2,dbo.getComma(labor3,0)labor3,
-dbo.getComma(health1,0)health1,dbo.getComma(health2,0)health2,dbo.getComma(health3,0)health3,
-dbo.getComma(hplus21,0)hplus21,dbo.getComma(hplus22,0)hplus22,dbo.getComma(hplus23,0)hplus23,
+--105/8/18 扣項負數顯示 
+dbo.getComma(-1*labor1,0)labor1,dbo.getComma(-1*labor2,0)labor2,dbo.getComma(-1*labor3,0)labor3,
+dbo.getComma(-1*health1,0)health1,dbo.getComma(-1*health2,0)health2,dbo.getComma(-1*health3,0)health3,
+dbo.getComma(-1*hplus21,0)hplus21,dbo.getComma(-1*hplus22,0)hplus22,dbo.getComma(-1*hplus23,0)hplus23,
 inday1,inday2,inday3,dayused1,dayused2,dayused3,alluseday1,alluseday2,alluseday3,speday1,speday2,speday3,
 eventday1,eventday2,eventday3,sickday1,sickday2,sickday3,naday1,naday2,naday3,othday1,othday2,othday3,
-dbo.getComma(ps11,0)ps11,dbo.getComma(ps12,0)ps12,dbo.getComma(ps13,0)ps13,
-dbo.getComma(nl11,0)nl11,dbo.getComma(nl12,0)nl12,dbo.getComma(nl13,0)nl13,
-dbo.getComma(tax61,0)tax61,dbo.getComma(tax62,0)tax62,dbo.getComma(tax63,0)tax63,
-dbo.getComma(lodpower1,0)lodpower1,dbo.getComma(lodpower2,0)lodpower2,dbo.getComma(lodpower3,0)lodpower3,
-dbo.getComma(borrow1,0)borrow1,dbo.getComma(borrow2,0)borrow2,dbo.getComma(borrow3,0)borrow3,
+dbo.getComma(-1*ps11,0)ps11,dbo.getComma(-1*ps12,0)ps12,dbo.getComma(-1*ps13,0)ps13,
+dbo.getComma(-1*nl11,0)nl11,dbo.getComma(-1*nl12,0)nl12,dbo.getComma(-1*nl13,0)nl13,
+dbo.getComma(-1*tax61,0)tax61,dbo.getComma(-1*tax62,0)tax62,dbo.getComma(-1*tax63,0)tax63,
+dbo.getComma(-1*lodpower1,0)lodpower1,dbo.getComma(-1*lodpower2,0)lodpower2,dbo.getComma(-1*lodpower3,0)lodpower3,
+dbo.getComma(-1*borrow1,0)borrow1,dbo.getComma(-1*borrow2,0)borrow2,dbo.getComma(-1*borrow3,0)borrow3,
 dbo.getComma(total21,0)total21,dbo.getComma(total22,0)total22,dbo.getComma(total23,0)total23,
 dbo.getComma(total31,0)total31,dbo.getComma(total32,0)total32,dbo.getComma(total33,0)total33,
 dbo.getComma(salhealth1,0)salhealth1,dbo.getComma(salhealth2,0)salhealth2,dbo.getComma(salhealth3,0)salhealth3,
