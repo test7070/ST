@@ -471,13 +471,13 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		select @custno,'4',4,@total
 		--同品項,數量合計
 		declare cursor_table2 cursor for
-		select row_number()over(order by product,pvcno,pvc,size,unit),product,pvcno,pvc,size,unit,sum(isnull(mount,0)),sum(isnull([weight],0))
+		select row_number()over(order by product,pvcno,pvc,unit),product,pvcno,pvc,unit,sum(isnull(mount,0)),sum(isnull([weight],0))
 		from @tmps 
 		where custno=@custno 
-		group by product,pvcno,pvc,size,unit
+		group by product,pvcno,pvc,unit
 		open cursor_table2
 		fetch next from cursor_table2
-		into @recno,@product,@pvcno,@pvc,@size,@unit,@mount,@weight
+		into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight
 		while(@@FETCH_STATUS <> -1)
 		begin	
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
@@ -492,12 +492,12 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 				set @cmount2 = ''
 			end
 			--第一筆上要有分隔線,gno有不一樣
-			insert into @tmpa(custno,gno,pno,product,pvcno,pvc,size,cmount,cmount2)
+			insert into @tmpa(custno,gno,pno,product,pvcno,pvc,cmount,cmount2)
 			select @custno,case when @recno=1 then '5' else '6' end,5
-				,@product,@pvcno,@pvc,@size,@cmount,@cmount2
+				,@product,@pvcno,@pvc,@cmount,@cmount2
 			
 			fetch next from cursor_table2
-			into @recno,@product,@pvcno,@pvc,@size,@unit,@mount,@weight
+			into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight
 		end
 		close cursor_table2
 		deallocate cursor_table2
