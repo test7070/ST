@@ -723,8 +723,12 @@
 				
 				if(t_para){
 					$("#combMemo").attr('disabled','disabled');
+					$('#txtDatea').datepicker('destroy');
+                	$('#txtOdate').datepicker('destroy');
 				}else{
 					$("#combMemo").removeAttr('disabled');
+					$('#txtDatea').datepicker();
+                	$('#txtOdate').datepicker();
 				}
 			}
 

@@ -847,11 +847,11 @@
 					Unlock(1);
 					return;
 				}
-				if ($('#txtDatea').val().substring(0, 3) != r_accy) {
+				/*if ($('#txtDatea').val().substring(0, 3) != r_accy) {
 					alert('年度異常錯誤，請切換到【' + $('#txtDatea').val().substring(0, 3) + '】年度再作業。');
 					Unlock(1);
 					return;
-				}
+				}*/
 				
 				//判斷起算日,寫入帳款月份
 				//104/09/30 如果備註沒有*字就重算帳款月份
@@ -1199,6 +1199,8 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
+				
+				refreshBbs();
 			}
 
 			function q_popPost(s1) {
