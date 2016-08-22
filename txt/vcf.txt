@@ -286,7 +286,7 @@ vcf2cub:--vcf2cub    rk
 			"insert into cubu"+@accy+"(noa,noq,ucolor,productno,product
 				,mount,[weight],ordeno,no2)
 			select noa,noq,uno,productno,product
-				,0,mount,vcfsno,vcfsnoq
+				,0,[weight],vcfsno,vcfsnoq
 			from #vcf2cubu
 			where accy=@accy"
 			execute sp_executesql @cmd,N'@accy nvarchar(10)',@accy=@accy
@@ -443,15 +443,15 @@ vcf2cub:--vcf2cub    rk
 	begin catch
 		Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
 		--有錯誤就都不執行
-		insert into drun(datea,timea,usera,[action],noa,tablea,title,memo)
-		select dbo.AD2ChineseEraName( CONVERT(nvarchar,getdate(),111))
-			,LEFT(CONVERT(nvarchar,getdate(),108),5)
-			,''
-			,'vcf2cub錯誤'
-			,@t_vcfno
-			,'vcf'
-			,''
-			,ERROR_MESSAGE()
+		--insert into drun(datea,timea,usera,[action],noa,tablea,title,memo)
+		--select dbo.AD2ChineseEraName( CONVERT(nvarchar,getdate(),111))
+		--	,LEFT(CONVERT(nvarchar,getdate(),108),5)
+		--	,''
+		--	,'vcf2cub錯誤'
+		--	,@t_vcfno
+		--	,'vcf'
+		--	,''
+		--	,ERROR_MESSAGE()
 		insert into @tmp([status],noa,uno)values('error2',@t_vcfno,null)
 		select * from @tmp
 	end catch;
