@@ -33,12 +33,12 @@ declare @tmp table(
 	money4 float,--久任獎金
 	money5 float,--考績獎金
 	money6 float,--業績達成獎金
-
+	salchg1 float,--回收鐵架獎金
 	total1 float,--應領金額
+	
 	labor float,--勞保費
 	health float,--健保費
 	hplus2 float,--2代補充健保
-	
 	inday float,--本年度特休假總日數
 	dayused float,--本月特休日數
 	alluseday float,--累計已休日數
@@ -53,6 +53,9 @@ declare @tmp table(
 	tax6 float,--所得稅
 	lodpower float,--食宿費
 	borrow float,--借支
+	salchg2 float,--扣服務費
+	salchg3 float,--代扣法院強制執行費用
+	salchg4 float,--入郵局
 	
 	total2 float,--應扣金額
 	total3 float,--實領金額
@@ -61,11 +64,12 @@ declare @tmp table(
 )
 
 insert @tmp
-select '9','',b.sno,b.namea,c.jobno,isnull(c.level1+'職等','')+c.job,c.level2,b.partno,b.part,a.person
+select '1','',b.sno,b.namea,c.jobno,isnull(c.level1+'職等','')+c.job,c.level2,b.partno,b.part,a.person
 		,case when a.person='日薪' then b.mtotal else b.money end
 		,b.bo_admin,b.bo_oth,b.bo_special,b.bo_full,b.meals,b.bo_traffic,b.addmoney
 		,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6
-		,case when a.person='日薪' then b.mtotal else b.money end+b.bo_admin+b.bo_oth+b.bo_special+b.bo_full+b.meals+b.bo_traffic+b.addmoney+b.money1+b.money2+b.money3+b.money4+b.money5+b.money6
+		,isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00003'),0)-isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00003'),0)
+		,0
 		,b.ch_labor,b.ch_health,b.hplus2
 		,case when d.inday!=0 then d.inday/8 else 0 end
 		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname='特休假'),0)/8,1)
@@ -76,45 +80,25 @@ select '9','',b.sno,b.namea,c.jobno,isnull(c.level1+'職等','')+c.job,c.level2,
 		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname!='天災假' and hname!='特休假' and hname!='病假' and hname!='事假'),0)/8,1)
 		,b.mi_sick+b.mi_person,b.mi_nosalary+b.mi_leave
 		,isnull(b.tax5,0)+isnull(b.tax6,0)+isnull(b.tax12,0)+isnull(b.tax18,0),b.lodging_power_fee,b.borrow
-		,b.ch_labor+b.ch_health+b.hplus2+b.mi_sick+b.mi_person+b.mi_nosalary+b.mi_leave
-		,'',b.sa_health,b.money7	
+		,b.chgcash
+		,isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00008'),0)-isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00008'),0)
+		,isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00002'),0)-isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00002'),0)
+		,0,b.total5,b.sa_health,b.money7	
 from salary a left join salarys b on a.noa=b.noa
 	outer apply(select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc)c
 	left join salvacas d on b.sno=d.sssno and LEFT(b.mon,3)=d.noa
 where b.mon=@t_xmon and b.sno between @t_bsssno and @t_esssno
 
-insert @tmp
-select '1','',sssno,name,max(jobno),max(job),max(levels),max(partno),max(part),max(person),max([money]),
-	max(admin1),max(oth1),max(special1),max(full1),max(meals1),max(traffic1),max(addmoney),max(money1),
-	max(money2),max(money3),max(money4),max(money5),max(money6),max(total1),max(labor),max(health),max(hplus2),
-	max(inday),sum(dayused),max(alluseday),max(speday),max(eventday),max(sickday),sum(naday),sum(othday),max(ps1),max(nl1),
-	MAX(tax6),MAX(lodpower),MAX(Borrow),
-	max(total2),max(total3),max(salhealth),max(money7)
-from @tmp
-where gno='9'
-group by sssno,name
+update @tmp
+set total1=isnull(money,0)+isnull(admin1,0)+isnull(oth1,0)+isnull(special1,0)+isnull(full1,0)+isnull(meals1,0)+isnull(traffic1,0)+	isnull(addmoney,0)
++isnull(money1,0)+isnull(money2,0)+isnull(money3,0)+isnull(money4,0)+isnull(money5,0)+isnull(money6,0)+	isnull(salchg1,0)
+,total2=isnull(labor,0)+isnull(health,0)+isnull(hplus2,0)+isnull(ps1,0)+isnull(nl1,0)
++isnull(tax6,0)+isnull(lodpower,0)+isnull(borrow,0)
++isnull(salchg2,0)+isnull(salchg3,0)+isnull(salchg4,0)
 
-delete @tmp where gno='9'
-
----薪資表分別
-update sa
+update @tmp
 set gno=case when person='本國' or  person='日薪'  then 1 else 2 end
-from @tmp sa
-
----外籍應領金額
-update aa
-set total1=[money]+admin1+oth1+special1+addmoney+money1+money2 
-from @tmp aa where gno='2'
-
----外籍應扣金額
-update aa
-set total2=labor+health+hplus2+ps1+nl1+tax6+lodpower+Borrow
-from @tmp aa where gno='2'
-
----實領金額
-update aa
-set total3=total1-total2
-from @tmp aa 
+--,total3=total1-total2
 
 update sa
 set recno=recnoa
@@ -132,7 +116,7 @@ declare @tmpa table(
 	part1 nvarchar(50),	part2 nvarchar(50),	part3 nvarchar(50),
 	person1 nvarchar(50),person2 nvarchar(50),person3 nvarchar(50),
 	
-	money1 float,money2 float,money3 float,
+	money01 float,money02 float,money03 float,
 	admin11 float,admin12 float,admin13 float,
 	oth11 float,oth12 float,oth13 float,
 	special11 float,special12 float,special13 float,
@@ -146,6 +130,7 @@ declare @tmpa table(
 	money41 float,money42 float,money43 float,
 	money51 float,money52 float,money53 float,
 	money61 float,money62 float,money63 float,
+	salchg11 float,salchg12 float,salchg13 float,
 	total11 float,total12 float,total13 float,
 	
 	labor1 float,labor2 float,labor3 float,
@@ -166,45 +151,54 @@ declare @tmpa table(
 	tax61 float,tax62 float,tax63 float,
 	lodpower1 float,lodpower2 float,lodpower3 float,
 	borrow1 float,borrow2 float,borrow3 float,
+	salchg21 float,salchg22 float,salchg23 float,
+	salchg31 float,salchg32 float,salchg33 float,
+	salchg41 float,salchg42 float,salchg43 float,
 	total21 float,total22 float,total23 float,
 	total31 float,total32 float,total33 float,
 	salhealth1 float,salhealth2 float,salhealth3 float,
 	money71 float,money72 float,money73 float
 )
 
-
-insert @tmpa(recno,gno,sssno1,name1,jobno1,job1,levels1,partno1,part1,person1,money1,admin11,oth11,special11,full11,meals11,traffic11,
-			addmoney1,money11,money21,money31,money41,money51,money61,total11,labor1,health1,hplus21,inday1,dayused1,alluseday1,speday1,
-			eventday1,sickday1,naday1,othday1,ps11,nl11,tax61,lodpower1,borrow1,total21,total31,salhealth1,money71
+insert @tmpa(recno,gno,sssno1,name1,jobno1,job1,levels1,partno1,part1,person1,money01,admin11,oth11,special11,full11,meals11,traffic11,
+			addmoney1,money11,money21,money31,money41,money51,money61,salchg11,total11,labor1,health1,hplus21,inday1,dayused1,alluseday1,speday1,
+			eventday1,sickday1,naday1,othday1,ps11,nl11,tax61,lodpower1,borrow1,salchg21,salchg31,salchg41,total21,total31,salhealth1,money71
 			)
 select ROW_NUMBER()over(partition by gno order by sssno),gno,sssno,name,jobno,job,levels,partno,part,person,[money],admin1,oth1,special1,full1,meals1,traffic1
-		,addmoney,money1,money2,money3,money4,money5,money6,total1,labor,health,hplus2,inday,dayused,alluseday,speday
-		,eventday,sickday,naday,othday,ps1,nl1,tax6,lodpower,borrow,total2,total3,salhealth,money7
+		,addmoney,money1,money2,money3,money4,money5,money6,salchg1,total1,labor,health,hplus2,inday,dayused,alluseday,speday
+		,eventday,sickday,naday,othday,ps1,nl1,tax6,lodpower,borrow,salchg2,salchg3,salchg4,total2,total3,salhealth,money7
 from @tmp
 where recno%3=1
 order by sssno
 
 update a
-set gno=b.gno,sssno2=b.sssno,name2=b.name,jobno2=b.jobno,job2=b.job,levels2=b.levels,partno2=b.partno,part2=b.part,person2=b.person,
-	money2=b.[money],admin12=b.admin1,oth12=b.oth1,special12=b.special1,full12=b.full1,meals12=b.meals1,traffic12=b.traffic1,addmoney2=b.addmoney,
-	money12=b.money1,money22=b.money2,money32=b.money3,money42=b.money4,money52=b.money5,money62=b.money6,total12=b.total1,labor2=b.labor,health2=b.health,
-	hplus22=b.hplus2,inday2=b.inday,dayused2=b.dayused,alluseday2=b.alluseday,speday2=b.speday,eventday2=b.eventday,sickday2=b.sickday,naday2=b.naday,othday2=b.othday,
-	ps12=b.ps1,nl12=b.nl1,tax62=b.tax6,lodpower2=b.lodpower,borrow2=b.borrow,total22=b.total2,total32=b.total3,salhealth2=b.salhealth,money72=b.money7
+set gno=b.gno,sssno2=b.sssno,name2=b.name,jobno2=b.jobno,job2=b.job,levels2=b.levels,partno2=b.partno,part2=b.part,person2=b.person
+	,money02=b.[money],admin12=b.admin1,oth12=b.oth1,special12=b.special1,full12=b.full1,meals12=b.meals1,traffic12=b.traffic1
+	,addmoney2=b.addmoney,money12=b.money1,money22=b.money2,money32=b.money3,money42=b.money4,money52=b.money5,money62=b.money6
+	,salchg12=b.salchg1,total12=b.total1
+	,labor2=b.labor,health2=b.health,hplus22=b.hplus2
+	,inday2=b.inday,dayused2=b.dayused,alluseday2=b.alluseday,speday2=b.speday,eventday2=b.eventday,sickday2=b.sickday,naday2=b.naday,othday2=b.othday
+	,ps12=b.ps1,nl12=b.nl1,tax62=b.tax6,lodpower2=b.lodpower,borrow2=b.borrow
+	,salchg22=b.salchg2,salchg32=b.salchg3,salchg42=b.salchg4
+	,total22=b.total2,total32=b.total3,salhealth2=b.salhealth,money72=b.money7
 from  @tmp b left join @tmpa a on ((a.recno-1)*3)+2=b.recno and a.gno=b.gno
 
-
 update a
-set gno=b.gno,sssno3=b.sssno,name3=b.name,jobno3=b.jobno,job3=b.job,levels3=b.levels,partno3=b.partno,part3=b.part,person3=b.person,
-	money3=b.[money],admin13=b.admin1,oth13=b.oth1,special13=b.special1,full13=b.full1,meals13=b.meals1,traffic13=b.traffic1,addmoney3=b.addmoney,
-	money13=b.money1,money23=b.money2,money33=b.money3,money43=b.money4,money53=b.money5,money63=b.money6,total13=b.total1,labor3=b.labor,health3=b.health,
-	hplus23=b.hplus2,inday3=b.inday,dayused3=b.dayused,alluseday3=b.alluseday,speday3=b.speday,eventday3=b.eventday,sickday3=b.sickday,naday3=b.naday,othday3=b.othday,
-	ps13=b.ps1,nl13=b.nl1,tax63=b.tax6,lodpower3=b.lodpower,borrow3=b.borrow,total23=b.total2,total33=b.total3,salhealth3=b.salhealth,money73=b.money7
+set gno=b.gno,sssno3=b.sssno,name3=b.name,jobno3=b.jobno,job3=b.job,levels3=b.levels,partno3=b.partno,part3=b.part,person3=b.person
+	,money03=b.[money],admin13=b.admin1,oth13=b.oth1,special13=b.special1,full13=b.full1,meals13=b.meals1,traffic13=b.traffic1
+	,addmoney3=b.addmoney,money13=b.money1,money23=b.money2,money33=b.money3,money43=b.money4,money53=b.money5,money63=b.money6
+	,salchg13=b.salchg1,total13=b.total1
+	,labor3=b.labor,health3=b.health,hplus23=b.hplus2
+	,inday3=b.inday,dayused3=b.dayused,alluseday3=b.alluseday,speday3=b.speday,eventday3=b.eventday,sickday3=b.sickday,naday3=b.naday,othday3=b.othday
+	,ps13=b.ps1,nl13=b.nl1,tax63=b.tax6,lodpower3=b.lodpower,borrow3=b.borrow
+	,salchg23=b.salchg2,salchg33=b.salchg3,salchg43=b.salchg4
+	,total23=b.total2,total33=b.total3,salhealth3=b.salhealth,money73=b.money7
 from  @tmp b left join @tmpa a on ((a.recno-1)*3)+3=b.recno and a.gno=b.gno 
 
 select
 recno,gno,sssno1,sssno2,sssno3,name1,name2,name3,jobno1,jobno2,jobno3,job1,job2,job3,
 levels1,levels2,levels3,partno1,partno2,partno3,part1,part2,part3,person1,person2,person3,
-dbo.getComma(money1,0)money1,dbo.getComma(money2,0)money2,dbo.getComma(money3,0)money3,
+dbo.getComma(money01,0)money01,dbo.getComma(money02,0)money02,dbo.getComma(money03,0)money03,
 dbo.getComma(admin11,0)admin11,dbo.getComma(admin12,0)admin12,dbo.getComma(admin13,0)admin13,
 dbo.getComma(oth11,0)oth11,dbo.getComma(oth12,0)oth12,dbo.getComma(oth13,0)oth13,
 dbo.getComma(special11,0)special11,dbo.getComma(special12,0)special12,dbo.getComma(special13,0)special13,
@@ -218,6 +212,7 @@ dbo.getComma(money31,0)money31,dbo.getComma(money32,0)money32,dbo.getComma(money
 dbo.getComma(money41,0)money41,dbo.getComma(money42,0)money42,dbo.getComma(money43,0)money43,
 dbo.getComma(money51,0)money51,dbo.getComma(money52,0)money52,dbo.getComma(money53,0)money53,
 dbo.getComma(money61,0)money61,dbo.getComma(money62,0)money62,dbo.getComma(money63,0)money63,
+dbo.getComma(salchg11,0)salchg11,dbo.getComma(salchg12,0)salchg12,dbo.getComma(salchg13,0)salchg13,
 dbo.getComma(total11,0)total11,dbo.getComma(total12,0)total12,dbo.getComma(total13,0)total13,
 --105/8/18 扣項負數顯示 
 dbo.getComma(-1*labor1,0)labor1,dbo.getComma(-1*labor2,0)labor2,dbo.getComma(-1*labor3,0)labor3,
@@ -230,6 +225,9 @@ dbo.getComma(-1*nl11,0)nl11,dbo.getComma(-1*nl12,0)nl12,dbo.getComma(-1*nl13,0)n
 dbo.getComma(-1*tax61,0)tax61,dbo.getComma(-1*tax62,0)tax62,dbo.getComma(-1*tax63,0)tax63,
 dbo.getComma(-1*lodpower1,0)lodpower1,dbo.getComma(-1*lodpower2,0)lodpower2,dbo.getComma(-1*lodpower3,0)lodpower3,
 dbo.getComma(-1*borrow1,0)borrow1,dbo.getComma(-1*borrow2,0)borrow2,dbo.getComma(-1*borrow3,0)borrow3,
+dbo.getComma(-1*salchg21,0)salchg21,dbo.getComma(-1*salchg22,0)salchg22,dbo.getComma(-1*salchg23,0)salchg23,
+dbo.getComma(-1*salchg31,0)salchg31,dbo.getComma(-1*salchg32,0)salchg32,dbo.getComma(-1*salchg33,0)salchg33,
+dbo.getComma(-1*salchg41,0)salchg41,dbo.getComma(-1*salchg42,0)salchg42,dbo.getComma(-1*salchg43,0)salchg43,
 dbo.getComma(total21,0)total21,dbo.getComma(total22,0)total22,dbo.getComma(total23,0)total23,
 dbo.getComma(total31,0)total31,dbo.getComma(total32,0)total32,dbo.getComma(total33,0)total33,
 dbo.getComma(salhealth1,0)salhealth1,dbo.getComma(salhealth2,0)salhealth2,dbo.getComma(salhealth3,0)salhealth3,
@@ -237,7 +235,6 @@ dbo.getComma(money71,0)money71,dbo.getComma(money72,0)money72,dbo.getComma(money
 LEFT(@t_xmon,3)years,RIGHT(@t_xmon,2)mon
 from @tmpa
 ;
-
 ---------------------------------------------------------------------------------------------------------------------------------
 z_salaryp_djx01:--z_salaryp_dj01(薪資表單張顯示)
 SET QUOTED_IDENTIFIER OFF
