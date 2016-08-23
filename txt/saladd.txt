@@ -37,3 +37,123 @@ set w100=isnull((select sum(w100) from salpresents where noa=a.noa),0)
 from salpresent a
 where a.noa=@t_datea
 ;
+--************************************************************************************
+bofull_dj:--bofull_dj
+declare @mon nvarchar(10)=[1]
+declare @datea nvarchar(10)=@mon+'/01'
+
+declare @tmpa table(
+	sssno nvarchar(50),
+	datea nvarchar(10),
+	clockin nvarchar(20),
+	clockout nvarchar(20),
+	a float,--曠職
+	b float,--事病假時數
+	cb float,--遲到轉事假
+	c float,--遲到
+	d float --其他假
+)
+declare @tdatea nvarchar(10)
+declare @weekday nvarchar(10)--星期
+
+while(LEFT(@datea,6)=@mon)
+begin
+	set @tdatea=cast(cast(left(@datea,3) as int)+1911 as nvarchar(10))+RIGHT(@datea,6)
+	set @weekday=DATEPART(WEEKDAY, @tdatea)-1
+	
+	if(exists (select * from holiday where iswork=1 and noa=@datea)
+	or (not exists (select * from holiday where iswork=0 and noa=@datea )and @weekday!=6 and @weekday!=0))	
+	begin
+		insert @tmpa(sssno,datea,cb)
+		select noa,@datea,0 from sss where person!='日薪' and isnull(barcode,'')!=''
+		
+		update a
+		set clockin=isnull((select clockin from salpresents where noa=@datea and sssno=a.sssno),'')
+		,clockout=isnull((select clockout from salpresents where noa=@datea and sssno=a.sssno),'')
+		,b=isnull((select SUM(hr_used) from salvacause where sssno=a.sssno and (@datea between bdate and edate) and (hname like'%事假%' or hname like'%病假%') ),0)
+		,d=isnull((select SUM(hr_used) from salvacause where sssno=a.sssno and (@datea between bdate and edate) and (hname not like'%事假%' and hname not like '%病假%')),0)
+		from @tmpa a where datea=@datea
+		
+		update a
+		set a=case when clockin='' and clockout='' then 8 else 0 end-(b+d)
+		,c=case when clockin between '08:01' and '12:00' then cast(datediff(MINUTE,@tdatea+' 08:00',@tdatea+' '+clockin) as float)
+		when clockin between '12:01' and '13:00' then 4 
+		when clockin between '13:00' and '23:59' then 4+cast(datediff(MINUTE,@tdatea+' 13:00',@tdatea+' '+clockin) as float)
+		else 0 end
+		-isnull((select SUM(hr_used) from salvacause where sssno=a.sssno and a.datea between bdate and edate and a.clockin between btime and etime),'')
+		from @tmpa a where datea=@datea 
+		
+		update @tmpa
+		set a=case when a>0 then a else 0 end
+		,c=case when c>0 then c else 0 end
+		where datea=@datea
+		
+	end
+	
+	set @datea=dbo.q_cdn(@datea,1)
+end
+
+--曠職一律沒有全勤
+--事病假 當日請假2小時內 不扣 (上下期只能各1次否則扣全部) ,半天扣1/2,1天 扣全部
+--遲到 15分內 上下期各3次以上 扣1/2
+--16~30分 扣時薪半小時 上下期各1 第2次以上扣1/2
+--0~30 超過3次 第4次 扣全部
+
+update @tmpa set cb=case when c>30 then ROUND(c/60,1) else 0 end
+,c=case when c>30 then 0 else c end
+
+--a 曠職
+--b 事病假時數
+--c 遲到
+--d 其他假
+
+declare @tmp table(
+	sssno nvarchar(50),
+	bofull float,
+	leave float,
+	cb float
+)
+
+insert @tmp
+select sssno,1,SUM(a),SUM(cb)
+from @tmpa where a!=0 or b+cb!=0 or c!=0 or d!=0
+group by sssno
+
+--曠職
+update a
+set bofull=0
+from @tmp a 
+where leave>0
+
+--事病假
+update a
+set bofull=case when ba.bc>1 or bb.bc>1 or bc.bc>1 or bd.bc>0 then 0
+when bc.bc=1 and ba.bc=0 and bb.bc=0 then 0.5 else bofull end
+from @tmp a 
+outer apply (select count(*)bc from @tmpa where sssno=a.sssno and datea <= @mon+'/15' and b+cb<=2 and b+cb>0)ba
+outer apply (select count(*)bc from @tmpa where sssno=a.sssno and datea >= @mon+'/16' and b+cb<=2 and b+cb>0)bb
+outer apply (select count(*)bc from @tmpa where sssno=a.sssno and b+cb between 2 and 4 )bc
+outer apply (select count(*)bc from @tmpa where sssno=a.sssno and b+cb >4 )bd
+where bofull>0
+
+--遲到
+update a
+set bofull=bofull
+-case when (ca.cc+cb.cc+cc.cc+cd.cc>=4) or(cc.cc>=2 and cd.cc>=2) or (ca.cc>=3 and cb.cc>=3) then 1
+when cc.cc>=2 or cd.cc>=2 then 0.5
+when ca.cc>=3 or cb.cc>=3 then 0.5
+else 0 end
+
+from @tmp a 
+outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea <= @mon+'/15' and c<=15 and c>0)ca
+outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea >= @mon+'/16' and c<=15 and c>0)cb
+outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea <= @mon+'/15' and c<=30 and c>15)cc
+outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea >= @mon+'/16' and c<=30 and c>15)cd
+outer apply (select count(*)cc from @tmpa where sssno=a.sssno and c>30)ce
+where bofull>0
+
+select * from @tmp
+
+--明細
+--select * from @tmpa where a>0 or b+cb!=0 or c!=0 or d!=0 order by sssno
+;
