@@ -32,8 +32,8 @@ vcf2cub:--vcf2cub    rk
 	left join view_cub b on a.accy=b.accy and a.noa=b.noa
 	left join vcft c on c.noa=@t_vcfno
 	left join vcfs d on d.noa=@t_vcfno
-	where a.makeno=c.uno --依表身的製造批號
-	--and d.custno!='3'
+	where (a.makeno=c.uno or b.vcceno=c.uno )--依表身or表頭的製造批號
+	and d.custno!='3'
 	
 	insert into @tmpa(cubaccy,cubno,cubnoq,coilweight,vcfsno,vcfsnoq,kind,uno,productno,product)
 	select a.accy,a.noa,'',ISNULL(b.[weight],0),d.noa,d.noq,d.custno,d.uno,d.productno,d.product
@@ -42,7 +42,7 @@ vcf2cub:--vcf2cub    rk
 	left join vcft c on c.noa=@t_vcfno
 	left join vcfs d on d.noa=@t_vcfno
 	where a.vcceno=c.uno --依表頭的製造批號
-	--and d.custno='3'
+	and d.custno='3'
 	-----------------------------------------------------------------------------------------
 	declare @weight float = 0
 	
@@ -101,13 +101,13 @@ vcf2cub:--vcf2cub    rk
 	begin try
 		--刪除以前匯入的
 		declare cursor_table cursor for 
-		select accy from view_cubs where ordcno=@t_vcfno group by accy
+		select accy from view_cubt where ordcno=@t_vcfno group by accy
 		open cursor_table 
 		fetch next from cursor_table 
 		into @accy
 		while(@@FETCH_STATUS <> -1) 
 		begin
-			set @cmd="delete cubs"+@accy+" where ordcno=@t_vcfno"
+			set @cmd="delete cubt"+@accy+" where ordcno=@t_vcfno"
 			execute sp_executesql @cmd,N'@t_vcfno nvarchar(20)',@t_vcfno=@t_vcfno
 			IF @@Error <> 0 BEGIN SET @chk = 1 END
 			
