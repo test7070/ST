@@ -56,7 +56,8 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                bbsNum = [['txtLbottom',10,0,1],['txtSbottom',10,0,1],['txtLfoot',10,0,1],['txtSfoot',10,0,1],['txtOfflength',10,1,1]];
+                bbmNum = [['txtOfflength',10,1,1],['txtFold',10,0,1]];
+                bbsNum = [['txtLbottom',10,0,1],['txtSbottom',10,0,1],['txtLfoot',10,0,1],['txtSfoot',10,0,1]];
             	bbtNum = [['txtBtol',10,0,1],['txtRtol',10,0,1],['txtBottom',10,0,1],['txtFoot',10,0,1]];
                 
                 $('#txtNoa').change(function(e) {			
@@ -91,7 +92,7 @@
 				if(q_getPara('sys.project').toUpperCase()=='FE'){
 					$('.fe').show();
 					$('.dbbs').show();
-					$('.dbbt').show();
+					$('#dbbt').show();
 				}
 				
 				if(q_getPara('sys.project').toUpperCase()=='VU' || q_getPara('sys.project').toUpperCase()=='SF'){
@@ -568,12 +569,16 @@
 								<input id="txtPara"  type="text" style="display:none;" />	
 							</td>
 						</tr>
-						<tr class="fe" style="display: none;">
+						<!--<tr class="fe" style="display: none;"> --fe因由裁剪單轉訂單所以不需此功能
 							<td><span> </span><a id='lblOfflength' class="lbl"> </a></td>
 							<td>
 								<input id="txtOfflength"  type="text"  class="txt num c1" style="width: 50px;"/>
 								<a class="lbl" style="float: left;">倍*直徑</a>
 							</td>
+						</tr>-->
+						<tr class="fe" style="display: none;">
+							<td><span> </span><a id='lblFold' class="lbl"> </a></td>
+							<td><input id="txtFold"  type="text"  class="txt num c1" style="width: 50px;"/></td>
 						</tr>
 						<tr>
 							<td> </td>
