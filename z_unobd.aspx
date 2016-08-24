@@ -62,12 +62,12 @@
 				});
 				q_langShow();
 				q_popAssign();
+				
 				var t_noa = q_getId()[3];
 				if (t_noa.length > 0) {//used by z_uccstk
 					$('#txtXnoa').val(t_noa);
 					$('#btnOk').click();
 				}
-				
 				$('#txtXenddate').val(q_date());
 				$('#txtXenddate').mask('999/99/99');
 				$('#txtXenddate').datepicker();
