@@ -765,7 +765,7 @@
 				}
 				Lock(1);
 				//105/01/28 增加庫存安全量判斷 只做總倉的控管 所以出貨只判斷總倉
-				var t_pwhere='';
+				var t_pwhere='1=0';
 				if($('#cmbTypea').val() != '2' && $('#txtStoreno').val() == '001' &&!check_stkucc){
 					checkstktmp=[];
 					for (var i = 0; i < q_bbsCount; i++) {
@@ -804,7 +804,7 @@
 				}
 				
 				//105/08/24 調整庫存抓取方式 加速處理速度
-				if(checkstktmp.length>0){
+				if(checkstktmp.length>0 &&!check_stkucc){
 					var t_where = "where=^^ ['" + q_date() + "','" + $('#txtStoreno').val() + "','')  where "+t_pwhere+" ^^";
 					q_gt('calstk', t_where, 0, 0, 0, "btnOkcheckstk", r_accy,1);
 					var sas = _q_appendData("stkucc", "", true);
