@@ -671,7 +671,7 @@
 					<td>
 						<input class="txt  num c1" id="txtBtol..*" type="text" style="width: 40%;"/>
 						<a style="float: left;">~</a>
-						<input class="txt  num c1" id="txtRtol..*" type="text" style="width: 40%;"/>
+						<input class="txt  num c1" id="txtEtol..*" type="text" style="width: 40%;"/>
 					</td>
 					<td><input class="txt num c1" id="txtBottom..*" type="text"  style="width: 90%;"/></td>
 					<td><input class="txt num c1" id="txtFoot..*" type="text"  style="width: 90%;"/></td>
