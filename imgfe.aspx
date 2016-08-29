@@ -56,7 +56,7 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                bbmNum = [['txtOfflength',10,1,1],['txtFold',10,0,1]];
+                bbmNum = [['txtFold',10,0,1]];//['txtOfflength',10,1,1]
                 bbsNum = [['txtLbottom',10,0,1],['txtSbottom',10,0,1],['txtLfoot',10,0,1],['txtSfoot',10,0,1]];
             	bbtNum = [['txtBtol',10,0,1],['txtRtol',10,0,1],['txtBottom',10,0,1],['txtFoot',10,0,1]];
                 
@@ -671,7 +671,7 @@
 					<td>
 						<input class="txt  num c1" id="txtBtol..*" type="text" style="width: 40%;"/>
 						<a style="float: left;">~</a>
-						<input class="txt  num c1" id="txtRtol..*" type="text" style="width: 40%;"/>
+						<input class="txt  num c1" id="txtEtol..*" type="text" style="width: 40%;"/>
 					</td>
 					<td><input class="txt num c1" id="txtBottom..*" type="text"  style="width: 90%;"/></td>
 					<td><input class="txt num c1" id="txtFoot..*" type="text"  style="width: 90%;"/></td>
