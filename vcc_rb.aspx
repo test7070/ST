@@ -824,7 +824,7 @@
 						var tnotv=0;
 						for(var j=0; j<oas.length; j++){
 							if(checkstktmp[i].noa==oas[j].productno){
-								tnotv=q_add(tnotv,dec(oas[i].notv))
+								tnotv=q_add(tnotv,dec(oas[j].notv))
 							}
 						}
 						checkstktmp[i].unvcc=tnotv;
