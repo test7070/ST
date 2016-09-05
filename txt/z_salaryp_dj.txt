@@ -79,7 +79,10 @@ select '1','',b.sno,b.namea,c.jobno,isnull(c.level1+'職等','')+c.job,c.level2,
 		,isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname='天災假'),0)
 		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname!='天災假' and hname!='特休假' and hname!='病假' and hname!='事假'),0)/8,1)
 		,b.mi_sick+b.mi_person,b.mi_nosalary+b.mi_leave
-		,isnull(b.tax5,0)+isnull(b.tax6,0)+isnull(b.tax12,0)+isnull(b.tax18,0),b.lodging_power_fee,b.borrow
+		--105/09/05 所得稅欄位加上加減項部分
+		,isnull(b.tax5,0)+isnull(b.tax6,0)+isnull(b.tax12,0)+isnull(b.tax18,0)
+		+isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00007'),0)-isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00007'),0)
+		,b.lodging_power_fee,b.borrow
 		,b.chgcash
 		,isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00008'),0)-isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00008'),0)
 		,isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00002'),0)-isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00002'),0)
