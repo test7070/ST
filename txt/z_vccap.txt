@@ -286,7 +286,7 @@ set @t_bnoa = case when '#non'=[2] then '' else [2] end
 set @t_enoa = case when '#non'=[3] then '' else [3] end
 ------------報表設定<<Start>>------------
 declare @maxcount int = 40 --產品名稱長度
-declare @pageline int = 8 --每頁幾行
+declare @pageline int = 7 --每頁幾行
 ------------報表設定<<End>>------------
 declare @strNum nvarchar(max) = N'零壹貳叁肆伍陸柒捌玖'
 declare @tmp table(
@@ -330,18 +330,20 @@ declare @tmp table(
 	product4 nvarchar(90),price4 float,mount4 float,total4 float,
 	product5 nvarchar(90),price5 float,mount5 float,total5 float,
 	product6 nvarchar(90),price6 float,mount6 float,total6 float,
-	product7 nvarchar(90),price7 float,mount7 float,total7 float,
-	product8 nvarchar(90),price8 float,mount8 float,total8 float
+	product7 nvarchar(90),price7 float,mount7 float,total7 float
 )
 insert into @tmp(gno,pageno,pageorder,datea,noa,noq,buyer,serial,invoaddr,chkno,
 	vccno,ordbno,ordeno,productno,products,mount,price,total,taxtype1,taxtype2,taxtype3,totpmoney,taxmoney,totmoney,
 	money1,money2,money3,money4,money5,money6,money7,money8,money9)
 	select
 		'0',0,0,a.datea,a.noa,b.noq,
-		case when isnull(a.buyer,'') != '' then a.buyer else a.comp end,
+		case when LEN(a.buyer)!=0 then a.buyer else a.comp end,
 		case when isnull(a.serial,'') != '' then a.serial else d.serial end,
-		a.address,
-		a.chkno,a.vccno,c.zipcode,case when c.ordeno!='' then c.ordeno else REPLACE(a.memo,vccno,'') end,b.productno,b.product,b.mount,b.price,b.money,
+		case when LEN(a.buyerno)=0  then (case when isnull(a.address,'') != '' then a.address else d.addr_invo end) else null end,
+		a.chkno,a.vccno,c.zipcode,case when c.ordeno!='' then c.ordeno else REPLACE(a.memo,vccno,'') end,b.productno,b.product
+		,case when  b.mount=0 then null else b.mount end
+		,case when b.price=0 then null else b.price end
+		,b.money,
 		case when a.taxtype='1' then '&#10004' else null end,
 		case when a.taxtype='2' then '&#10004' else null end,
 		case when a.taxtype='4' then '&#10004' else null end,
@@ -564,9 +566,6 @@ from @tmp a where pageorder=6
 update @tmp
 set product7 =a.products,price7=a.price,mount7=a.mount,total7=a.total
 from @tmp a where pageorder=7
-update @tmp
-set product8 =a.products,price8=a.price,mount8=a.mount,total8=a.total
-from @tmp a where pageorder=8
 
 ------------插入跳頁<<Start>>------------
 insert into @tmp(gno,noa,datea,pageno,pageorder)
@@ -619,38 +618,41 @@ declare @tmpa table(
 	product4 nvarchar(90),price4 float,mount4 float,total4 float,
 	product5 nvarchar(90),price5 float,mount5 float,total5 float,
 	product6 nvarchar(90),price6 float,mount6 float,total6 float,
-	product7 nvarchar(90),price7 float,mount7 float,total7 float,
-	product8 nvarchar(90),price8 float,mount8 float,total8 float
+	product7 nvarchar(90),price7 float,mount7 float,total7 float
 
 )
 
 insert into @tmpa(gno,pageno,pageorder,datea,noa,buyer,serial,invoaddr,chkno,vccno,ordbno,taxtype1,taxtype2,taxtype3,totpmoney,totmoney,taxmoney,money1,money2,money3,money4,money5,money6,money7,money8,money9,
 	product1 ,price1 ,mount1 ,total1 ,product2 ,price2 ,mount2 ,total2 ,product3 ,price3 ,mount3 ,total3 ,
 	product4 ,price4 ,mount4 ,total4 ,product5 ,price5 ,mount5 ,total5 ,product6 ,price6 ,mount6 ,total6 ,
-	product7 ,price7 ,mount7 ,total7 ,product8 ,price8 ,mount8 ,total8)
+	product7 ,price7 ,mount7 ,total7 )
 select '0',pageno,'9000',datea,noa,buyer,serial,invoaddr,chkno,vccno,ordbno,taxtype1,taxtype2,taxtype3,totpmoney,totmoney,taxmoney,money1,money2,money3,money4,money5,money6,money7,money8,money9,
 	max(product1),max(price1),max(mount1),max(total1),max(product2),max(price2),max(mount2),max(total2),max(product3),max(price3),max(mount3),max(total3),
 	max(product4) ,max(price4) ,max(mount4) ,max(total4) ,max(product5) ,max(price5) ,max(mount5) ,max(total5) ,max(product6) ,max(price6) ,max(mount6) ,max(total6) ,
-	max(product7) ,max(price7) ,max(mount7) ,max(total7) ,max(product8) ,max(price8) ,max(mount8) ,max(total8)
+	max(product7) ,max(price7) ,max(mount7) ,max(total7)
 from @tmp
 where gno=0 or gno=1
 group by pageno,datea,noa,buyer,serial,invoaddr,chkno,vccno,ordbno,taxtype1,taxtype2,taxtype3,totpmoney,totmoney,taxmoney,money1,money2,money3,money4,money5,money6,money7,money8,money9
 
 update @tmpa
 set totpmoney=null,totmoney=null,taxmoney=null,money1='',money2='',money3='',money4='',money5='',money6='',money7='',money8='',money9=''
-from @tmpa where product8!=''
-
+from @tmpa where product7!=''
 
 select
 	a.gno,a.pageno,a.pageorder,a.datea,
 	left(a.datea,4)-1911 da1,
 	substring(a.datea,6,2) da2,
 	right(a.datea,2) da3,
-	a.noa,a.buyer,a.serial,a.invoaddr,a.chkno,a.vccno,a.ordbno,
+	a.noa,a.buyer,
+	case when len(a.serial)=0 then char(255) else  a.serial end serial,
+	case when len(a.invoaddr)=0 then char(255) else a.invoaddr end invoaddr,
+	a.chkno,a.vccno,a.ordbno,
 	--case when pageorder=9001 then '&nbsp&nbsp&nbsp&nbsp<img src="http://59.125.143.170/x.png " style=" position: absolute'+char(59)+' width: 115px'+char(59)+'">'  else a.ordeno end ordeno,
 	a.ordeno,
 	a.taxtype1,a.taxtype2,a.taxtype3,
-	dbo.getComma(a.totpmoney,0)totpmoney,dbo.getComma(a.taxmoney,0)taxmoney,dbo.getComma(a.totmoney,0)totmoney,
+	dbo.getComma(a.totpmoney,0) totpmoney,
+	dbo.getComma(a.taxmoney,0) taxmoney,
+	dbo.getComma(a.totmoney,0) totmoney,
 	a.money1 m1,
 	a.money2 m2,
 	a.money3 m3,
@@ -666,7 +668,6 @@ select
 	product4 ,price4 ,dbo.getComma(mount4,0)mount4 ,dbo.getComma(total4,0)total4 ,
 	product5 ,price5 ,dbo.getComma(mount5,0)mount5 ,dbo.getComma(total5,0)total5 ,
 	product6 ,price6 ,dbo.getComma(mount6,0)mount6 ,dbo.getComma(total6,0)total6 ,
-	product7 ,price7 ,dbo.getComma(mount7,0)mount7 ,dbo.getComma(total7,0)total7 ,
-	product8 ,price8 ,dbo.getComma(mount8,0)mount8 ,dbo.getComma(total8,0)total8 
+	product7 ,price7 ,dbo.getComma(mount7,0)mount7 ,dbo.getComma(total7,0)total7
 from @tmpa a
 order by a.noa,a.pageno,a.pageorder,a.productno,a.noq,a.gno;

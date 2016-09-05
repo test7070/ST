@@ -924,7 +924,8 @@
 				}else{
 					Unlock();
 					//重刷網頁
-					location.href=location.href;
+					//105/09/01 不重刷畫面 許
+					//location.href=location.href;
 				}
 			}
 			
@@ -944,7 +945,8 @@
 						}
 						Unlock();
 						//重刷網頁
-						location.href=location.href;
+						//105/09/01 不重刷畫面 許
+						//location.href=location.href;
                 		break;
                 	case 'vcc_post.post.a1':
                 		q_func('qtxt.query.post0', 'orde.txt,post,' + encodeURI(r_accy) + ';' + encodeURI($('#txtNoa').val())+ ';0;' + encodeURI('RB'));

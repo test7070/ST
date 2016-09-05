@@ -14,6 +14,8 @@
     <link href="../qbox.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
             var q_name = 'uploadimg';
+            var tname=window.parent.q_name;
+			var tnoa=q_getHref()[1];
             $(document).ready(function () {
                 _q_boxClose();
                 q_getId();
@@ -22,11 +24,76 @@
                 $('#btnAuthority').click(function () {
                     btnAuthority(q_name);
                 });
+                
+                $('#btnDele1').click(function() {
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                		if(confirm('確認刪除圖片1?')){
+                			q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';01');
+                		}
+                	}
+				});
+				$('#btnDele2').click(function() {
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                		if(confirm('確認刪除圖片2?')){
+                			q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';02');
+                		}
+                	}
+				});
+				$('#btnDele3').click(function() {
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                		if(confirm('確認刪除圖片3?')){
+	                		q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';03');
+	                	}
+                	}
+				});
+				$('#btnDele4').click(function() {
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                		if(confirm('確認刪除圖片4?')){
+                			q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';04');
+                		}
+                	}
+				});
+				$('#btnDele5').click(function() {
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                		if(confirm('確認刪除圖片5?')){
+                			q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';05');
+                		}
+                	}
+				});
+				$('#btnDele6').click(function() {
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                		if(confirm('確認刪除圖片6?')){
+	                		q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';06');
+	                	}
+                	}
+				});
+				
+				$('#btnDeleall').click(function() {
+					if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+	                	if(confirm('確認刪除全部圖片?')){
+	                		q_func('qtxt.query.deleimgall', 'uploadimg.txt,deleimgall,'+ encodeURI(tnoa)+ ';'+encodeURI(tname));
+	                	}
+	                }
+				});
+                
             });
 
             function q_gfPost() {
                 q_langShow();
             }
+            
+            function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'qtxt.query.deleimg':
+						alert('圖片已刪除完畢!!');
+						break
+					case 'qtxt.query.deleimgall':
+						alert('圖片全部已刪除完畢!!');
+						break;
+					default:
+						break;
+				}
+			}
 	</script>
     <script language="c#" runat="server">
         public void Page_Load()
@@ -44,14 +111,14 @@
 			Response.Write("<input type='button' id='btnAuthority' name='btnAuthority' style='font-size:16px;' value='權限'/>");
 			Response.Write("<p>&nbsp;</p>");
             Response.Write("<div>");
-            Response.Write("<form name=\"form1\" method=\"post\" enctype=\"multipart/form-data\" style=\"width:200px;\">");
-            Response.Write("<input type=\"file\" name=\"btnFile1\"/>");
-            Response.Write("<input type=\"file\" name=\"btnFile2\"/>");
-            Response.Write("<input type=\"file\" name=\"btnFile3\"/>");
-            Response.Write("<input type=\"file\" name=\"btnFile4\"/>");
-            Response.Write("<input type=\"file\" name=\"btnFile5\"/>");
-            Response.Write("<input type=\"file\" name=\"btnFile6\"/>");
-            Response.Write("<input type=\"submit\" name=\"btnUpload\" value=\"upload\"/>");
+            Response.Write("<form name=\"form1\" method=\"post\" enctype=\"multipart/form-data\" style=\"width:500px;\">");
+            Response.Write("<a style='margin-right: 10px;'>圖片1</a><span></span><input type=\"file\" name=\"btnFile1\" style='font-size: medium;'/><input type=\"button\" id=\"btnDele1\" value='刪除' style='font-size: medium;'/><P>");
+            Response.Write("<a style='margin-right: 10px;'>圖片2</a><span></span><input type=\"file\" name=\"btnFile2\" style='font-size: medium;'/><input type=\"button\" id=\"btnDele2\" value='刪除' style='font-size: medium;'/><P>");
+            Response.Write("<a style='margin-right: 10px;'>圖片3</a><span></span><input type=\"file\" name=\"btnFile3\" style='font-size: medium;'/><input type=\"button\" id=\"btnDele3\" value='刪除' style='font-size: medium;'/><P>");
+            Response.Write("<a style='margin-right: 10px;'>圖片4</a><span></span><input type=\"file\" name=\"btnFile4\" style='font-size: medium;'/><input type=\"button\" id=\"btnDele4\" value='刪除' style='font-size: medium;'/><P>");
+            Response.Write("<a style='margin-right: 10px;'>圖片5</a><span></span><input type=\"file\" name=\"btnFile5\" style='font-size: medium;'/><input type=\"button\" id=\"btnDele5\" value='刪除' style='font-size: medium;'/><P>");
+            Response.Write("<a style='margin-right: 10px;'>圖片6</a><span></span><input type=\"file\" name=\"btnFile6\" style='font-size: medium;'/><input type=\"button\" id=\"btnDele6\" value='刪除' style='font-size: medium;'/><P><BR>");
+            Response.Write("<input type=\"submit\" name=\"btnUpload\" value=\"upload\"  style='font-size: medium;'/>");
             Response.Write("</form>");
             Response.Write("</div>");
         	string uri = Request.Url.ToString();
