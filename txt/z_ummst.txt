@@ -366,7 +366,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			+case when ISNULL(radius,0)!=0 then '+'+cast(radius as nvarchar) else '' end
 			+case when ISNULL(width,0)!=0 then '*'+cast(width as nvarchar) else '' end
 			+case when ISNULL(lengthb,0)!=0 then '*'+cast(lengthb as nvarchar) else '*COIL' end 
-	
+	where not(ISNULL(dime,0)=0 and ISNULL(radius,0)=0 and ISNULL(width,0)=0 and ISNULL(lengthb,0)=0)
 	---------------------------------------------------------------------------------------------------
 	declare @tmpa table(
 		sel int identity(1,1)
