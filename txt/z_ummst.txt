@@ -346,6 +346,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,price float
 		,[money] float
 		,memo nvarchar(max)
+		,stype nvarchar(max)
 	)
 	insert into @tmps(custno,vccaccy,vccno,vccnoq,ordeno,ordeno2,datea,uno,style,productno,product,pvcno,pvc
 		,spec,size,dime,width,lengthb,radius,unit,mount,[weight],price,[money])
@@ -355,6 +356,12 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	left join @tmp b on a.accy=b.vccaccy and a.noa=b.vccno
 	where b.sel is not null
 	
+	update @tmps set stype=case c.stype when '1' then '內銷' when '3' then '外銷' else c.stype end
+	from @tmps a
+	left join view_ordes b on a.ordeno=b.noa and a.ordeno2=b.no2
+	left join view_orde c on b.accy=c.accy and b.noa=c.noa
+	where c.noa is not null
+
 	--皮膜去CUTS抓
 	update @tmps set pvcno=b.spec,pvc=b.[class]
 	from @tmps a
@@ -400,6 +407,8 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,ttax float
 		,ttotal float
 		,tmemo nvarchar(max)
+		,paytype nvarchar(max)
+		,stype nvarchar(max)
 	)	
 	declare @custno nvarchar(max)
 	declare @money float
@@ -419,11 +428,14 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @weight float
 	declare @price float
 	declare @moneys float
+	declare @paytype nvarchar(max)
+	declare @stype nvarchar(max)
 	
 	declare @cmount nvarchar(max)
 	declare @cmount2 nvarchar(max)
 	declare @recno int
 	
+
 	declare cursor_table cursor for
 	select custno,sum(isnull([money],0)),sum(isnull([tax],0)),sum(isnull([total],0)) from @tmp group by custno
 	open cursor_table
@@ -454,8 +466,11 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 				set @cmount = dbo.getComma(@mount,-1) +' '+ @unit
 				set @cmount2 = ''
 			end
-			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,price,[money],cmount,cmount2)
-			select @custno,'1',1,@accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@price,@moneys,@cmount,@cmount2
+			select @stype=''
+			select top 1  @stype=stype from @tmps where custno=@custno and len(stype)>0 
+			
+			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,price,stype,[money],cmount,cmount2)
+			select @custno,'1',1,@accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@price,@stype,@moneys,@cmount,@cmount2
 			
 			fetch next from cursor_table2
 			into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys
@@ -502,8 +517,14 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		close cursor_table2
 		deallocate cursor_table2
 		--頁尾
-		insert into @tmpa(custno,gno,pno)
-		select @custno,'7',7
+		select @paytype = ''
+		select @paytype = isnull(a.paytype,'')
+		from view_orde a
+		left join(select top 1 ordeno from @tmps where custno=@custno and len(ordeno)>0 order by ordeno) b on a.noa=b.ordeno
+		where b.ordeno is not null 
+		
+		insert into @tmpa(custno,gno,pno,paytype)
+		select @custno,'7',7,@paytype
 		
 		fetch next from cursor_table
 		into @custno,@money,@tax,@total
@@ -531,6 +552,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,@t_curnoa a07
 		,dbo.AD2ChineseEraName(GETDATE()) a08
 		,conn a09
+		,stype a10
 		
 		,datea b01
 		,vccno b02
@@ -547,6 +569,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,dbo.getComma(ttax,-1) c02
 		,dbo.getComma(ttotal,-1) c03
 		,tmemo c04
+		,paytype c05
 	from @tmpa 
 	order by custno,pno;
 
