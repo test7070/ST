@@ -17,19 +17,50 @@
 		<script type="text/javascript">
             var q_name = "crmchart";
             aPop = new Array();
+            //預設圖型抬頭
+			var DC1Chart='';
+			var DC2Chart='';
+			var DC3Chart='';
+			var DC4Chart='';
+			var DC5Chart='';
+			var DC6Chart='';
+			var DC1Title1='';
+			var DC2Title1='';
+			var DC3Title1='';
+			var DC4Title1='';
+			var DC5Title1='';
+			var DC6Title1='';
+			var DC1Title2='';
+			var DC2Title2='';
+			var DC3Title2='';
+			var DC4Title2='';
+			var DC5Title2='';
+			var DC6Title2='';
+			var DC1Where='';
+			var DC2Where='';
+			var DC3Where='';
+			var DC4Where='';
+			var DC5Where='';
+			var DC6Where='';
 			//目前Chart路徑和圖
-			var C1title='向下切入';
-			var C1Chart='traChart';
-			var C2title='向下切入';
-			var C2Chart='barChart2';
-			var C3title='向下切入';
-			var C3Chart='barChart';
-			var C4title='向下切入';
-			var C4Chart='pieChart';
-			var C5title='向下切入';
-			var C5Chart='barChart';
-			var C6title='向下切入';
-			var C6Chart='barChart2';
+			var C1title='';
+			var C1Chart='';
+			var C2title='';
+			var C2Chart='';
+			var C3title='';
+			var C3Chart='';
+			var C4title='';
+			var C4Chart='';
+			var C5title='';
+			var C5Chart='';
+			var C6title='';
+			var C6Chart='';
+			var C1Where=[];
+			var C2Where=[];
+			var C3Where=[];
+			var C4Where=[];
+			var C5Where=[];
+			var C6Where=[];
 			
             $(document).ready(function() {
                 _q_boxClose();
@@ -47,143 +78,113 @@
 							$('#Chart6').hide();
                    			break;
                    		case 'sale'://銷售活動儀表板
-                   			C1title='向下切入';
-							C1Chart='traChart';
-							C2title='向下切入';
-							C2Chart='barChart2';
-							C3title='向下切入';
-							C3Chart='barChart';
+                   			//預設-----------------------------------------------
+                   			DC1Chart='traChart';
+							DC2Chart='barChart2';
+							DC3Chart='barChart';
+							DC1Title1='依銷售階段的商機準銷售案源';
+							DC2Title1='目標進度(金額)';
+							DC3Title1='銷售排行榜';
+							DC1Title2='開啟的商機';
+							DC2Title2='有效目標';
+							DC3Title2='成交商機';
+							DC1Where="select stage text@#~sum(money)total from crmbusiness where datea between '"+$('#txtBdate').val()+"' and '"+$('#txtEdate').val()+"' and money>0 group by stage ";
+							DC1Where=DC1Where+" order by case when stage='潛在機會' then 1 when stage='初步接洽' then 2 when stage='需求確認' then 3 when stage='建議/報價' then 4 when stage='談判協商' then 5 when stage='成交' then 6 when stage='失敗' then 7 else 9 end"
+							DC2Where="select stage text@#~sum(money)total from crmbusiness where datea between '"+$('#txtBdate').val()+"' and '"+$('#txtEdate').val()+"' and money>0 group by stage ";
+							
 							//data-------------------------------------------------
-							//漏斗測試資料
-			                traData=[];
-			                traData.push({
-			                	text:'授與資格',
-			                	total:300000
-			                });
-			                traData.push({
-			                	text:'開發',
-			                	total:200000
-			                });
-			                traData.push({
-			                	text:'提案',
-			                	total:100000
-			                });
-			                traData.push({
-			                	text:'關閉',
-			                	total:50000
-			                });
-			                $('#Chart1').traChart({
-			                	title:'依銷售階段的商機準銷售案源',
-			                	title2:'開啟的商機',
-								data : traData,
-							});
-							
-							//長條(直)測試資料
-			                barData2=[];
-			                barData2.push({
-			                	text:'中秋銷售',
-			                	total1:5000000,
-			                	total2:5216500
-			                });
-			                barData2.push({
-			                	text:'秋季促銷',
-			                	total1:3000000,
-			                	total2:3513100,
-			                });
-			                barData2.push({
-			                	text:'換季銷售',
-			                	total1:5500000,
-			                	total2:4612000
-			                }); 
-			                $('#Chart2').barChart2({
-			                	title:'目標進度(金額)',
-			                	title2:'有效目標',
-			                	btitle:'名稱',
-			                	btitle1:'估計(金額)',
-			                	btitle2:'實際(金額)',
-								data : barData2,
-							});
-							
-							 //長條(橫)測試資料
-			                barData=[];
-			                barData.push({
-			                	sssno:'A001',
-			                	text:'胡小瓜',
-			                	total:5216500
-			                });
-			                barData.push({
-			                	sssno:'A002',
-			                	text:'林俊傑',
-			                	total:3513100
-			                });
-			                barData.push({
-			                	sssno:'A003',
-			                	text:'吳竑驛',
-			                	total:4612000
-			                });
-			                barData.push({
-			                	sssno:'A004',
-			                	text:'黃瑞仁',
-			                	total:3902300
-			                });
-			                barData.push({
-			                	sssno:'A004',
-			                	text:'陳忠堅',
-			                	total:3223300
-			                });
-			                barData.push({
-			                	sssno:'A004',
-			                	text:'吳秋東',
-			                	total:2213600
-			                });
-			                barData.push({
-			                	sssno:'A004',
-			                	text:'陳金昌',
-			                	total:3542600
-			                });
-			                barData.push({
-			                	sssno:'A004',
-			                	text:'許世豐',
-			                	total:2926300
-			                });
-			                barData.push({
-			                	sssno:'A004',
-			                	text:'林益成',
-			                	total:1202300
-			                });
-			                $('#Chart3').barChart({
-			                	title:'銷售排行榜',
-			                	title2:'成交商機',
-			                	ltitle:'負責人',
-			                	btitle:'加總 (實際營收)',
-								data : barData,
-							});
-							
+							Charthome('Chart1');
+							Charthome('Chart2');
+							Charthome('Chart3');
 							//---------------------------------------
                    			$('#Chart1').show();
 							$('#Chart2').show();
 							$('#Chart3').show();
+							$('#Chart4').hide();
+							$('#Chart5').hide();
+							$('#Chart6').hide();
                    			break;
                    		case 'service'://客戶服務績效儀表板
-                   			$('#Chart1').hide();
-							$('#Chart2').hide();
-							$('#Chart3').hide();
-							$('#Chart4').hide();
-							$('#Chart5').hide();
-							$('#Chart6').hide();
+                   			//預設-----------------------------------------------
+                   			DC1Chart='barChart2';
+							DC2Chart='barChart2';
+							DC3Chart='barChart2';
+							DC4Chart='pieChart';
+							DC5Chart='barChart2';
+							DC6Chart='barChart2';
+							DC1Title1='趨勢產品問題 (過去 7 天前 5 項)';
+							DC2Title1='案例組合 (依優先順序)';
+							DC3Title1='依專員排列的使用中案例';
+							DC4Title1='案例組合 (依來源)';
+							DC5Title1='依優先順序排列案例 (每個負責人)';
+							DC6Title1='依事件類型組合的案例';
+							DC1Title2='使用中的案例';
+							DC2Title2='使用中的案例';
+							DC3Title2='使用中的案例';
+							DC4Title2='所有案例';
+							DC5Title2='所有案例';
+							DC6Title2='使用中的案例';
+							//data-------------------------------------------------
+			                Charthome('Chart1');
+							Charthome('Chart2');
+							Charthome('Chart3');
+							Charthome('Chart4');
+							Charthome('Chart5');
+							Charthome('Chart6');
+							//---------------------------------------
+                   			$('#Chart1').show();
+							$('#Chart2').show();
+							$('#Chart3').show();
+							$('#Chart4').show();
+							$('#Chart5').show();
+							$('#Chart6').show();
                    			break;
                    		case 'marketing'://行銷儀表板
-                   			$('#Chart1').hide();
-							$('#Chart2').hide();
-							$('#Chart3').hide();
-							$('#Chart4').hide();
+                   			//預設-----------------------------------------------
+                   			DC1Chart='pieChart';
+							DC2Chart='barChart2';
+							DC3Chart='barChart';
+							DC4Chart='barChart';
+							DC1Title1='行銷活動類型組合';
+							DC2Title1='行銷活動預算與實際成本的比較 (按月份)';
+							DC3Title1='依來源行銷活動排列潛在客戶';
+							DC4Title1='行銷活動產生的營收';
+							DC1Title2='所有行銷活動與行銷活動範本';
+							DC2Title2='所有行銷活動與行銷活動範本';
+							DC3Title2='所有潛在客戶';
+							DC4Title2='關閉的商機';
+							//data-------------------------------------------------
+							Charthome('Chart1');
+							Charthome('Chart2');
+							Charthome('Chart3');
+							Charthome('Chart4');
+							//---------------------------------------
+                   			$('#Chart1').show();
+							$('#Chart2').show();
+							$('#Chart3').show();
+							$('#Chart4').show();
 							$('#Chart5').hide();
 							$('#Chart6').hide();
                    			break;
-                   		case ''://客戶服務經理儀表板
-                   			$('#Chart1').hide();
-							$('#Chart2').hide();
-							$('#Chart3').hide();
+                   		case 'manager'://客戶服務經理儀表板
+                   			//預設-----------------------------------------------
+                   			DC1Chart='barChart2';
+							DC2Chart='barChart';
+							DC3Chart='barChart2';
+							DC1Title1='依專員排列的使用中案例';
+							DC2Title1='已解決的案例 CSAT (依負責人)';
+							DC3Title1='案例組合 (依優先順序)';
+							DC1Title2='使用中的案例';
+							DC2Title2='使用中的案例';
+							DC3Title2='使用中的案例';
+							//data-------------------------------------------------
+							Charthome('Chart1');
+							Charthome('Chart2');
+							Charthome('Chart3');
+							//---------------------------------------
+                   			$('#Chart1').show();
+							$('#Chart2').show();
+							$('#Chart3').show();
 							$('#Chart4').hide();
 							$('#Chart5').hide();
 							$('#Chart6').hide();
@@ -197,6 +198,18 @@
 							$('#Chart6').hide();
                    			break;
                 	}
+                	C1title='向下切入';
+					C1Chart=DC1Chart;
+					C2title='向下切入';
+					C2Chart=DC2Chart;
+					C3title='向下切入';
+					C3Chart=DC3Chart;
+					C4title='向下切入';
+					C4Chart=DC4Chart;
+					C5title='向下切入';
+					C5Chart=DC5Chart;
+					C6title='向下切入';
+					C6Chart=DC6Chart;
 					
 					//帶入參數
 					//var cust2a='#non',part2a='#non',sss2a='#non';
@@ -209,6 +222,7 @@
 					//q_func('qtxt.query','z_anadc.txt,'+txtreport+','+encodeURI(r_accy) + ';' + encodeURI($('#txtDate1').val()) + ';' + encodeURI($('#txtDate2').val()) + ';' + encodeURI($('#txtXmon').val()) + ';' + encodeURI($('#txtCust1a').val())+ ';' + encodeURI(cust2a)+ ';' + encodeURI($('#txtPart1a').val())+ ';' + encodeURI(part2a)+ ';' + encodeURI($('#txtSss1a').val())+ ';' + encodeURI(sss2a)+ ';' + encodeURI($('#txtXyear1').val())+ ';' + encodeURI($('#txtXyear2').val()));
 					//$('#Loading').Loading();
 				});
+				
 				$('#ChartChange').click(function() {
 					var Charid=$('#Chartid').val();
 					var Chartxt=$('#Charttext').val();
@@ -230,6 +244,14 @@
 						C4title=C4title+">>"+Chartxt;
 						C4Chart=C4Chart+">>"+ChartSelect;
 						showtitle2=C4title;
+					}else if(Charid=='Chart5'){
+						C5title=C5title+">>"+Chartxt;
+						C5Chart=C5Chart+">>"+ChartSelect;
+						showtitle2=C5title;
+					}else if(Charid=='Chart6'){
+						C6title=C6title+">>"+Chartxt;
+						C6Chart=C6Chart+">>"+ChartSelect;
+						showtitle2=C6title;
 					}
 					
 					if($('#ChartSelect').val()=='traChart'){
@@ -252,9 +274,10 @@
 						$('#'+Charid).barChart2({
 		                	title:'',
 		                	title2:showtitle2,
-		                	btitle:'名稱',
-		                	btitle1:'估計(金額)',
-		                	btitle2:'實際(金額)',
+		                	ltitle:'金額',
+							btitle:'名稱',
+							btitle1:'估計',
+							btitle2:'實際',
 							data : barData2,
 							previous:true
 						});
@@ -287,6 +310,93 @@
 			var pieData=[];
             function q_gfPost() {
                 q_popAssign();
+                
+                //$('#txtBdate').val(q_date().substr(0,r_lenm)+'/01');
+                $('#txtBdate').val(q_date().substr(0,r_len)+'/01/01');
+                $('#txtEdate').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',35).substr(0,r_lenm)+'/01',-1));
+                
+                //漏斗測試資料
+				traData=[];
+				traData.push({
+					text:'授與資格',
+					total:300000
+				});
+				traData.push({
+					text:'開發',
+					total:200000
+				});
+				traData.push({
+					text:'提案',
+					total:100000
+				});
+				traData.push({
+					text:'關閉',
+					total:50000
+				});
+                //長條(直)測試資料
+				barData2=[];
+				barData2.push({
+					text:'中秋銷售',
+					total1:5000000,
+					total2:5216500
+				});
+				barData2.push({
+					text:'秋季促銷',
+					total1:3000000,
+					total2:3513100,
+				});
+				barData2.push({
+					text:'換季銷售',
+					total1:5500000,
+					total2:4612000
+				}); 
+				//長條(橫)測試資料
+				barData=[];
+				barData.push({
+					sssno:'A001',
+					text:'胡小瓜',
+					total:5216500
+				});
+				barData.push({
+					sssno:'A002',
+					text:'林俊傑',
+					total:3513100
+				});
+				barData.push({
+					sssno:'A003',
+					text:'吳竑驛',
+					total:4612000
+				});
+				barData.push({
+					sssno:'A004',
+					text:'黃瑞仁',
+					total:3902300
+				});
+				barData.push({
+					sssno:'A004',
+					text:'陳忠堅',
+					total:3223300
+				});
+				barData.push({
+					sssno:'A004',
+					text:'吳秋東',
+					total:2213600
+				});
+				barData.push({
+					sssno:'A004',
+					text:'陳金昌',
+					total:3542600
+				});
+				barData.push({
+					sssno:'A004',
+					text:'許世豐',
+					total:2926300
+				});
+				barData.push({
+					sssno:'A004',
+					text:'林益成',
+					total:1202300
+				});
 				//圓餅圖
 				pieData=[];
                 pieData.push({
@@ -334,21 +444,6 @@
                 	total:1202300,
                 	value:'$'+FormatNumber(1202300)
                 });
-                /*var color=new Array();
-                for (var i=0;i<pieData.length;i++){
-                	color.push(getRndColor());
-                }
-                
-				$('#Chart4').pieChart({
-					title:'',
-                	title2:'',
-					data : pieData,
-					x : 200,
-					y : 200,
-					radius : 150,
-					color:color,
-				});*/
-				
             }
 
             function q_boxClose(s2) {
@@ -359,7 +454,7 @@
 
             function q_funcPost(t_func, result) {
                 switch(t_func) {
-                   
+					
                 }
             }
 
@@ -392,6 +487,12 @@
 				}else if(chartid=='Chart4'){
 					t_title=C4title.split('>>');
 					t_chart=C4Chart.split('>>');
+				}else if(chartid=='Chart5'){
+					t_title=C5title.split('>>');
+					t_chart=C5Chart.split('>>');
+				}else if(chartid=='Chart6'){
+					t_title=C6title.split('>>');
+					t_chart=C6Chart.split('>>');
 				}
 				var new_title='';
 				var new_title2='';
@@ -414,6 +515,12 @@
 				}else if(chartid=='Chart4'){
 					C4title=new_title2;
 					C4Chart=new_chart;
+				}else if(chartid=='Chart5'){
+					C5title=new_title2;
+					C5Chart=new_chart;
+				}else if(chartid=='Chart6'){
+					C6title=new_title2;
+					C6Chart=new_chart;
 				}
 									
 				if(new_title2=='向下切入'){
@@ -441,9 +548,10 @@
 					$('#'+chartid).barChart2({
 						title:new_title,
 						title2:new_title2,
+						ltitle:'金額',
 						btitle:'名稱',
-						btitle1:'估計(金額)',
-						btitle2:'實際(金額)',
+						btitle1:'估計',
+						btitle2:'實際',
 						data : barData2,
 						previous:true
 					});
@@ -466,38 +574,71 @@
             }
             
             function Charthome(chartid) {
-            	var new_title='';
-				var new_title2='';
+            	var change_chart='',new_title='',new_title2='';
             	if(chartid=='Chart1'){
-					new_title='依銷售階段的商機準銷售案源';
-					new_title2='開啟的商機';
 					C1title='向下切入';
-					C1Chart='traChart';
+					C1Chart=DC1Chart;
+					change_chart=DC1Chart;
+					new_title=DC1Title1;
+					new_title2=DC1Title2;
+					C1Where=[];
+					C1Where.push(DC1Where);
+					if(DC1Where!=''){
+						q_func('qtxt.query.crmquery_'+C1Chart, 'crm.txt,query,' + encodeURI(DC1Where),r_accy,1);
+						var as = _q_appendData("tmp0", "", true, true);
+	                	if (as[0] != undefined) {
+	                		if (as[0].terr != undefined){
+	                			return;
+	                		}
+	                		traData=[];
+							for(var i=0;i<as.length;i++){
+								traData.push({
+									text:as[i].text,
+									total:dec(as[i].total)
+								});
+							}
+	                	}
+					}
+				}else if(chartid=='Chart2'){
+					C2title='向下切入';
+					C2Chart=DC2Chart;
+					change_chart=DC2Chart;
+					new_title=DC2Title1;
+					new_title2=DC2Title2;
+				}else if(chartid=='Chart3'){
+					C3title='向下切入';
+					C3Chart=DC3Chart;
+					change_chart=DC3Chart;
+					new_title=DC3Title1;
+					new_title2=DC3Title2;
+				}else if(chartid=='Chart4'){
+					C4title='向下切入';
+					C4Chart=DC4Chart;
+					change_chart=DC4Chart;
+					new_title=DC4Title1;
+					new_title2=DC4Title2;
+				}else if(chartid=='Chart5'){
+					C5title='向下切入';
+					C5Chart=DC5Chart;
+					change_chart=DC5Chart;
+					new_title=DC5Title1;
+					new_title2=DC5Title2;
+				}else if(chartid=='Chart6'){
+					C6title='向下切入';
+					C6Chart=DC6Chart;
+					change_chart=DC6Chart;
+					new_title=DC6Title1;
+					new_title2=DC6Title2;
+				}
+				
+				if(change_chart=='traChart'){
 					$('#'+chartid).traChart({
-						title:new_title,
+				       	title:new_title,
 						title2:new_title2,
 						data : traData,
 						previous:false
 					});
-				}else if(chartid=='Chart2'){
-					new_title='銷售排行榜';
-					new_title2='成交商機';
-					C2title='向下切入';
-					C2Chart='barChart2';
-					$('#'+chartid).barChart2({
-						title:new_title,
-						title2:new_title2,
-						btitle:'名稱',
-						btitle1:'估計(金額)',
-						btitle2:'實際(金額)',
-						data : barData2,
-						previous:false
-					});
-				}else if(chartid=='Chart3'){
-					new_title='目標進度(金額)';
-					new_title2='有效目標';
-					C3title='向下切入';
-					C3Chart='barChart';
+				}else if(change_chart=='barChart'){
 					$('#'+chartid).barChart({
 						title:new_title,
 						title2:new_title2,
@@ -506,11 +647,22 @@
 						data : barData,
 						previous:false
 					});
-				}else if(chartid=='Chart4'){
-					new_title='';
-					new_title2='';
-					C4title='向下切入';
-					C4Chart='pieChart';
+				}else if(change_chart=='barChart2'){
+					$('#'+chartid).barChart2({
+						title:new_title,
+						title2:new_title2,
+						ltitle:'金額',
+						btitle:'名稱',
+						btitle1:'估計',
+						btitle2:'實際',
+						data : barData2,
+						previous:false
+					});
+				}else if(change_chart=='pieChart'){
+					var color=new Array();
+					for (var i=0;i<pieData.length;i++){
+						color.push(getRndColor());
+					}
 					$('#'+chartid).pieChart({
 						title:new_title,
 						title2:new_title2,
@@ -796,6 +948,7 @@
                             var t_detail = obj.data('info').value.data;
                             var t_title = obj.data('info').value.title;
                             var t_title2 = obj.data('info').value.title2;
+                            var t_ltitle = obj.data('info').value.ltitle;
                             var t_btitle = obj.data('info').value.btitle;
                             var t_btitle1 = obj.data('info').value.btitle1;
                             var t_btitle2 = obj.data('info').value.btitle2;
@@ -807,6 +960,8 @@
 							var o_w=50; //左右邊界
                             var o_h=20;//上下邊界
 							var t_h=50;//抬頭留空
+							var lt_w=30; //左抬頭 留空
+                            var ln_w=60; //左標題 留空
                             var bt_w=55; //下抬頭 留空
                             var bn_w=35; //下標題 留空
                             
@@ -815,16 +970,35 @@
                             tmpPath += '<text id="text_title2" x="' + (o_h + 45) + '" y="' + (o_h +35) + '" fill="#000000" style="font-size:18px;" >' + t_title2 + '</text>';
                             
                             var t_maxMoney=obj.data('info').maxMoney;
-                            var strX=o_w;
+                            var t_ny=0; //分段
+                            var strX=o_w+lt_w+ln_w;
                             var strY=objHeight-o_h-bt_w-bn_w;
-                            var t_width=objWidth-(o_w*2);
+                            var t_width=objWidth-(o_w*2)-lt_w-ln_w;
                             var t_height=objHeight-(o_h*2)-bt_w-bn_w-t_h;
                             
                             //X軸
                             tmpPath += '<line x1="' + strX + '" y1="' + strY + '" x2="' + (strX + t_width) + '" y2="' + strY + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
                             //Y軸
                             tmpPath += '<line x1="' + strX + '" y1="' + strY + '" x2="' + strX + '" y2="' + (strY-t_height) + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
+                            
+                            tmpPath += '<text id="textltitle" text-anchor="middle"  x="' + (strX-ln_w-lt_w) + '" y="' + (strY-(t_height/2)) + '" fill="#000000" style="writing-mode: tb;" >' + t_ltitle + '</text>';
                             tmpPath += '<text id="textbtitle" text-anchor="middle"  x="' + (strX+(t_width/2)) + '" y="' + (strY+bn_w+10) + '" fill="#000000" >' + t_btitle + '</text>';
+                            
+                            tmpPath += '<text text-anchor="end"  x="'+(strX-5)+'" y="'+(strY)+'" fill="#000000" >0</text>';
+                            
+                            var x_f=5,x_t=10;
+                            while(t_maxMoney/x_f>10 && t_maxMoney/x_t>10){
+                            	x_f=x_f*10;
+                            	x_t=x_t*10;
+                            }
+                            t_ny=t_maxMoney/(x_f<=10?x_f:x_t);
+                            
+                            var t_tmpmoney=round(t_maxMoney/t_ny,0);
+                            var t_theight=round(t_height/t_ny,0);
+                            for (var i=1; i<=t_ny; i++){
+                            	tmpPath += '<line x1="' + (strX+5) + '" y1="' + (strY-(t_theight*i))  + '" x2="' + (strX-5) + '" y2="' + (strY-(t_theight*i)) + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
+								tmpPath += '<text text-anchor="end"  x="'+(strX-10)+'" y="'+(strY-(t_theight*i)+5)+'" fill="#000000" >'+FormatNumber(t_tmpmoney*i)+'</text>';
+                            }
                             
                             //符號說明
                             var t_color1=getRndColor();
@@ -1051,12 +1225,17 @@
 				<div id="q_report"> </div>
 			</div>
 			<div style="float: left;width: 100%;">
-				<select id="DashboardSelect" style="width: 150px;font-size: large;">
-					<option value="">選取儀表板</option>
+				<a>日期區間：</a>
+				<input id="txtBdate" type="text" style="font-size: medium;width: 85px;">
+				<a>~</a>
+				<input id="txtEdate" type="text" style="font-size: medium;width: 85px;">
+				<a>儀表板：</a>
+				<select id="DashboardSelect" style="font-size: large;">
+					<option value="">請選取儀表板</option>
 					<option value="sale">銷售活動儀表板</option>
 					<option value="service">客戶服務績效儀表板</option>
-					<!--<option value="namea">客戶服務經理儀表板</option>
-					<option value="namea">客戶服務代表社交儀表板</option>-->
+					<option value="manager">客戶服務經理儀表板</option>
+					<!--<option value="namea">客戶服務代表社交儀表板</option>-->
 					<option value="marketing">行銷儀表板</option>
 					<!--<option value="namea">行銷社交儀表板</option>-->
 				</select>
