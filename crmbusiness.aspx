@@ -15,30 +15,26 @@
             function onPageError(error) {
                 alert("An error occurred:\r\n" + error.Message);
             }
-            
+
             var q_name = "crmbusiness";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2'];
-            var bbmNum = [['txtMoney',10,0,1],['txtPossibility',10,0,1]];
+            var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
+            var bbmNum = [['txtMoney', 10, 0, 1], ['txtPossibility', 10, 0, 1]];
             var bbmMask = [];
+            q_desc = 1;
             q_sqlCount = 6;
             brwCount = 6;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
-            //brwCount2 = 15;
-            
-            aPop = new Array(
-            	['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
-            	,['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx']
-            	,['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtNamea', 'sss_b.aspx']
-            );
-       
+            brwCount2 = 15;
+
+            aPop = new Array(['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'], ['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'], ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtNamea', 'sss_b.aspx']);
+
             $(document).ready(function() {
-				q_desc = 1;
                 bbmKey = ['noa'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1);
-                $('#txtNoa').focus
+                q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+                $('#txtNoa').focus();
             });
 
             function main() {
@@ -46,19 +42,20 @@
                     dataErr = false;
                     return;
                 }
-                mainForm(0);
+                mainForm(1);
             }
-			
-			var z_cno='';
-			var z_acomp='';
+
+            var z_cno = '';
+            var z_acomp = '';
             function mainPost() {
-                bbmMask = [['txtDatea', r_picd],['txtEdatea', r_picd]];
+                q_getFormat();
+                bbmMask = [['txtDatea', r_picd], ['txtEdatea', r_picd]];
                 q_mask(bbmMask);
-				q_cmbParse("cmbStage", ",潛在機會,初步接洽,需求確認,建議/報價,談判協商,成交,失敗");
-				
-				q_gt('acomp', '', 0, 0, 0, "");
+                q_cmbParse("cmbStage", ",潛在機會,初步接洽,需求確認,建議/報價,談判協商,成交,失敗");
+
+                q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
             }
-            
+
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
@@ -71,13 +68,13 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
-                	case 'acomp':
-                		var as = _q_appendData("acomp", "", true);
-                		if(as[0]!=undefined){
-                			z_cno=as[0].noa;
-							z_acomp=as[0].acomp;
-                		}
-                		break;
+                    case 'cno_acomp':
+                        var as = _q_appendData("acomp", "", true);
+                        if (as[0] != undefined) {
+                            z_cno = as[0].noa;
+                            z_acomp = as[0].acomp;
+                        }
+                        break;
                 }  /// end switch
             }
 
@@ -90,14 +87,13 @@
             function btnIns() {
                 _btnIns();
                 $('#txtNoa').val('AUTO');
-	            $('#txtDatea').val(q_date());
-	            $('#txtCno').val(z_cno);
-	            $('#txtAcomp').val(z_acomp);
-	            $('#txtEdatea').val(q_date());
-	            
-	            var timeDate= new Date();
-	            $('#txtSssno').val(r_userno);
-	            $('#txtNamea').val(r_name);
+                $('#txtDatea').val(q_date());
+                $('#txtCno').val(z_cno);
+                $('#txtAcomp').val(z_acomp);
+                $('#txtEdatea').val(q_date());
+
+                $('#txtSssno').val(r_userno);
+                $('#txtNamea').val(r_name);
                 $('#txtDatea').focus();
                 $('#txtEdatea').focus();
             }
@@ -110,35 +106,36 @@
             }
 
             function btnPrint() {
-				//q_box('', '', "95%", "95%", q_getMsg("popPrint"));
+                //q_box('', '', "95%", "95%", q_getMsg("popPrint"));
             }
-            
-			function q_stPost() {
+
+            function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
                     return false;
             }
+
             function btnOk() {
-               $('#txtDatea').val($.trim($('#txtDatea').val()));
-               var t_err = '';
-            	t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtDatea', q_getMsg('lblDatea')] ]);
-            	
-	            if( t_err.length > 0) {
-	                alert(t_err);
-	                return;
-	            }
-	            
-	            if(q_cur==1)
-					$('#txtWorker').val(r_name);
-				else
-					$('#txtWorker2').val(r_name);
-				
-				var t_noa = trim($('#txtNoa').val());
-				var t_date = trim($('#txtDatea').val());
-				
-				if (t_noa.length == 0 || t_noa == "AUTO")
-					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_crmbusiness') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
-				else
-					wrServer(t_noa);	
+                $('#txtDatea').val($.trim($('#txtDatea').val()));
+                var t_err = '';
+                t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtDatea', q_getMsg('lblDatea')]]);
+
+                if (t_err.length > 0) {
+                    alert(t_err);
+                    return;
+                }
+
+                if (q_cur == 1)
+                    $('#txtWorker').val(r_name);
+                else
+                    $('#txtWorker2').val(r_name);
+
+                var t_noa = trim($('#txtNoa').val());
+                var t_date = trim($('#txtDatea').val());
+
+                if (t_noa.length == 0 || t_noa == "AUTO")
+                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_crmbusiness') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                else
+                    wrServer(t_noa);
             }
 
             function wrServer(key_value) {
@@ -155,7 +152,7 @@
             function refresh(recno) {
                 _refresh(recno);
             }
-			
+
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
             }
@@ -211,7 +208,7 @@
             function btnCancel() {
                 _btnCancel();
             }
-            
+
 		</script>
 		<style type="text/css">
             #dmain {
@@ -219,8 +216,8 @@
             }
             .dview {
                 float: left;
-                width: 400px; 
-                border-width: 0px; 
+                width: 400px;
+                border-width: 0px;
             }
             .tview {
                 border: 5px solid gray;
@@ -240,8 +237,8 @@
             .dbbm {
                 float: left;
                 width: 620px;
-                /*margin: -1px;        
-                border: 1px black solid;*/
+                /*margin: -1px;
+                 border: 1px black solid;*/
                 border-radius: 5px;
             }
             .tbbm {
@@ -403,8 +400,8 @@
 					<tr>
 						<td><span> </span><a id='lblEdatea' class="lbl"> </a></td>
 						<td><input id="txtEdatea"  type="text" class="txt c1" /></td>
-						<td class="reparation"><span> </span><a id='lblMoney' class="lbl"> </a></td>
-						<td class="reparation"><input id="txtMoney" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
+						<td><input id="txtMoney" type="text" class="txt num c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
