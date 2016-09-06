@@ -17,7 +17,7 @@
 		<script type="text/javascript">
             var q_name = "crmchart";
             aPop = new Array();
-			
+			//目前Chart路徑和圖
 			var C1title='向下切入';
 			var C1Chart='traChart';
 			var C2title='向下切入';
@@ -26,13 +26,178 @@
 			var C3Chart='barChart';
 			var C4title='向下切入';
 			var C4Chart='pieChart';
+			var C5title='向下切入';
+			var C5Chart='barChart';
+			var C6title='向下切入';
+			var C6Chart='barChart2';
 			
             $(document).ready(function() {
                 _q_boxClose();
                 q_getId();
                 q_gf('', q_name);
 
-				$('#btnSvg').click(function(e) {
+				$('#DashboardSelect').change(function(e) {
+					switch($(this).val()) {
+						case ''://無選取
+							$('#Chart1').hide();
+							$('#Chart2').hide();
+							$('#Chart3').hide();
+							$('#Chart4').hide();
+							$('#Chart5').hide();
+							$('#Chart6').hide();
+                   			break;
+                   		case 'sale'://銷售活動儀表板
+                   			C1title='向下切入';
+							C1Chart='traChart';
+							C2title='向下切入';
+							C2Chart='barChart2';
+							C3title='向下切入';
+							C3Chart='barChart';
+							//data-------------------------------------------------
+							//漏斗測試資料
+			                traData=[];
+			                traData.push({
+			                	text:'授與資格',
+			                	total:300000
+			                });
+			                traData.push({
+			                	text:'開發',
+			                	total:200000
+			                });
+			                traData.push({
+			                	text:'提案',
+			                	total:100000
+			                });
+			                traData.push({
+			                	text:'關閉',
+			                	total:50000
+			                });
+			                $('#Chart1').traChart({
+			                	title:'依銷售階段的商機準銷售案源',
+			                	title2:'開啟的商機',
+								data : traData,
+							});
+							
+							//長條(直)測試資料
+			                barData2=[];
+			                barData2.push({
+			                	text:'中秋銷售',
+			                	total1:5000000,
+			                	total2:5216500
+			                });
+			                barData2.push({
+			                	text:'秋季促銷',
+			                	total1:3000000,
+			                	total2:3513100,
+			                });
+			                barData2.push({
+			                	text:'換季銷售',
+			                	total1:5500000,
+			                	total2:4612000
+			                }); 
+			                $('#Chart2').barChart2({
+			                	title:'目標進度(金額)',
+			                	title2:'有效目標',
+			                	btitle:'名稱',
+			                	btitle1:'估計(金額)',
+			                	btitle2:'實際(金額)',
+								data : barData2,
+							});
+							
+							 //長條(橫)測試資料
+			                barData=[];
+			                barData.push({
+			                	sssno:'A001',
+			                	text:'胡小瓜',
+			                	total:5216500
+			                });
+			                barData.push({
+			                	sssno:'A002',
+			                	text:'林俊傑',
+			                	total:3513100
+			                });
+			                barData.push({
+			                	sssno:'A003',
+			                	text:'吳竑驛',
+			                	total:4612000
+			                });
+			                barData.push({
+			                	sssno:'A004',
+			                	text:'黃瑞仁',
+			                	total:3902300
+			                });
+			                barData.push({
+			                	sssno:'A004',
+			                	text:'陳忠堅',
+			                	total:3223300
+			                });
+			                barData.push({
+			                	sssno:'A004',
+			                	text:'吳秋東',
+			                	total:2213600
+			                });
+			                barData.push({
+			                	sssno:'A004',
+			                	text:'陳金昌',
+			                	total:3542600
+			                });
+			                barData.push({
+			                	sssno:'A004',
+			                	text:'許世豐',
+			                	total:2926300
+			                });
+			                barData.push({
+			                	sssno:'A004',
+			                	text:'林益成',
+			                	total:1202300
+			                });
+			                $('#Chart3').barChart({
+			                	title:'銷售排行榜',
+			                	title2:'成交商機',
+			                	ltitle:'負責人',
+			                	btitle:'加總 (實際營收)',
+								data : barData,
+							});
+							
+							//---------------------------------------
+                   			$('#Chart1').show();
+							$('#Chart2').show();
+							$('#Chart3').show();
+                   			break;
+                   		case 'service'://客戶服務績效儀表板
+                   			$('#Chart1').hide();
+							$('#Chart2').hide();
+							$('#Chart3').hide();
+							$('#Chart4').hide();
+							$('#Chart5').hide();
+							$('#Chart6').hide();
+                   			break;
+                   		case 'marketing'://行銷儀表板
+                   			$('#Chart1').hide();
+							$('#Chart2').hide();
+							$('#Chart3').hide();
+							$('#Chart4').hide();
+							$('#Chart5').hide();
+							$('#Chart6').hide();
+                   			break;
+                   		case ''://客戶服務經理儀表板
+                   			$('#Chart1').hide();
+							$('#Chart2').hide();
+							$('#Chart3').hide();
+							$('#Chart4').hide();
+							$('#Chart5').hide();
+							$('#Chart6').hide();
+                   			break;
+                   		case ''://客戶服務代表社交儀表板
+                   			$('#Chart1').hide();
+							$('#Chart2').hide();
+							$('#Chart3').hide();
+							$('#Chart4').hide();
+							$('#Chart5').hide();
+							$('#Chart6').hide();
+                   			break;
+                	}
+					
 					//帶入參數
 					//var cust2a='#non',part2a='#non',sss2a='#non';
 					//if(!emp($('#txtCust2a').val()))
@@ -44,13 +209,6 @@
 					//q_func('qtxt.query','z_anadc.txt,'+txtreport+','+encodeURI(r_accy) + ';' + encodeURI($('#txtDate1').val()) + ';' + encodeURI($('#txtDate2').val()) + ';' + encodeURI($('#txtXmon').val()) + ';' + encodeURI($('#txtCust1a').val())+ ';' + encodeURI(cust2a)+ ';' + encodeURI($('#txtPart1a').val())+ ';' + encodeURI(part2a)+ ';' + encodeURI($('#txtSss1a').val())+ ';' + encodeURI(sss2a)+ ';' + encodeURI($('#txtXyear1').val())+ ';' + encodeURI($('#txtXyear2').val()));
 					//$('#Loading').Loading();
 				});
-				$("#btnNext").click(function(e) {
-					$('#barChart').data('info').next($('#barChart'));
-				});
-				$("#btnPrevious").click(function(e) {
-					$('#barChart').data('info').previous($('#barChart'));
-				});
-                
 				$('#ChartChange').click(function() {
 					var Charid=$('#Chartid').val();
 					var Chartxt=$('#Charttext').val();
@@ -129,115 +287,6 @@
 			var pieData=[];
             function q_gfPost() {
                 q_popAssign();
-                
-                //漏斗測試資料
-                traData=[];
-                traData.push({
-                	text:'授與資格',
-                	total:300000
-                });
-                traData.push({
-                	text:'開發',
-                	total:200000
-                });
-                traData.push({
-                	text:'提案',
-                	total:100000
-                });
-                traData.push({
-                	text:'關閉',
-                	total:50000
-                });
-                
-                $('#Chart1').traChart({
-                	title:'依銷售階段的商機準銷售案源',
-                	title2:'開啟的商機',
-					data : traData,
-				});
-                
-                //長條(橫)測試資料
-                barData=[];
-                barData.push({
-                	sssno:'A001',
-                	text:'胡小瓜',
-                	total:5216500
-                });
-                barData.push({
-                	sssno:'A002',
-                	text:'林俊傑',
-                	total:3513100
-                });
-                barData.push({
-                	sssno:'A003',
-                	text:'吳竑驛',
-                	total:4612000
-                });
-                barData.push({
-                	sssno:'A004',
-                	text:'黃瑞仁',
-                	total:3902300
-                });
-                barData.push({
-                	sssno:'A004',
-                	text:'陳忠堅',
-                	total:3223300
-                });
-                barData.push({
-                	sssno:'A004',
-                	text:'吳秋東',
-                	total:2213600
-                });
-                barData.push({
-                	sssno:'A004',
-                	text:'陳金昌',
-                	total:3542600
-                });
-                barData.push({
-                	sssno:'A004',
-                	text:'許世豐',
-                	total:2926300
-                });
-                barData.push({
-                	sssno:'A004',
-                	text:'林益成',
-                	total:1202300
-                });
-                
-                $('#Chart3').barChart({
-                	title:'銷售排行榜',
-                	title2:'成交商機',
-                	ltitle:'負責人',
-                	btitle:'加總 (實際營收)',
-					data : barData,
-				});
-				
-				//長條(直)測試資料
-                barData2=[];
-                barData2.push({
-                	text:'中秋銷售',
-                	total1:5000000,
-                	total2:5216500
-                });
-                barData2.push({
-                	text:'秋季促銷',
-                	total1:3000000,
-                	total2:3513100,
-                });
-                barData2.push({
-                	text:'換季銷售',
-                	total1:5500000,
-                	total2:4612000
-                });
-                
-                $('#Chart2').barChart2({
-                	title:'目標進度(金額)',
-                	title2:'有效目標',
-                	btitle:'名稱',
-                	btitle1:'估計(金額)',
-                	btitle2:'實際(金額)',
-					data : barData2,
-				});
-				
 				//圓餅圖
 				pieData=[];
                 pieData.push({
@@ -285,7 +334,7 @@
                 	total:1202300,
                 	value:'$'+FormatNumber(1202300)
                 });
-                var color=new Array();
+                /*var color=new Array();
                 for (var i=0;i<pieData.length;i++){
                 	color.push(getRndColor());
                 }
@@ -298,7 +347,7 @@
 					y : 200,
 					radius : 150,
 					color:color,
-				});
+				});*/
 				
             }
 
@@ -327,7 +376,154 @@
                 var color = (s == undefined) ? '#' : '';
                 return (color + getColor() + getColor() + getColor());
             }
-
+            
+            function Chartprev(chartid) {
+				var t_title='';
+				var t_chart='';
+				if(chartid=='Chart1'){
+					t_title=C1title.split('>>');
+					t_chart=C1Chart.split('>>');
+				}else if(chartid=='Chart2'){
+					t_title=C2title.split('>>');
+					t_chart=C2Chart.split('>>');
+				}else if(chartid=='Chart3'){
+					t_title=C3title.split('>>');
+					t_chart=C3Chart.split('>>');
+				}else if(chartid=='Chart4'){
+					t_title=C4title.split('>>');
+					t_chart=C4Chart.split('>>');
+				}
+				var new_title='';
+				var new_title2='';
+				var new_chart='';
+				var change_chart='';
+				for (var i=0;i<t_title.length-1;i++){
+						new_title2=new_title2+(new_title2.length>0?'>>':'')+t_title[i];
+						new_chart=new_chart+(new_chart.length>0?'>>':'')+t_chart[i];
+						change_chart=t_chart[i];
+				}
+				if(chartid=='Chart1'){
+					C1title=new_title2;
+					C1Chart=new_chart;
+				}else if(chartid=='Chart2'){
+					C2title=new_title2;
+					C2Chart=new_chart;
+				}else if(chartid=='Chart3'){
+					C3title=new_title2;
+					C3Chart=new_chart;
+				}else if(chartid=='Chart4'){
+					C4title=new_title2;
+					C4Chart=new_chart;
+				}
+									
+				if(new_title2=='向下切入'){
+					Charthome(chartid);
+					return;
+				}
+																		
+				if(change_chart=='traChart'){
+					$('#'+chartid).traChart({
+				       	title:new_title,
+						title2:new_title2,
+						data : traData,
+						previous:true
+					});
+				}else if(change_chart=='barChart'){
+					$('#'+chartid).barChart({
+						title:new_title,
+						title2:new_title2,
+						ltitle:'負責人',
+						btitle:'加總 (實際營收)',
+						data : barData,
+						previous:true
+					});
+				}else if(change_chart=='barChart2'){
+					$('#'+chartid).barChart2({
+						title:new_title,
+						title2:new_title2,
+						btitle:'名稱',
+						btitle1:'估計(金額)',
+						btitle2:'實際(金額)',
+						data : barData2,
+						previous:true
+					});
+				}else if(change_chart=='pieChart'){
+					var color=new Array();
+					for (var i=0;i<pieData.length;i++){
+						color.push(getRndColor());
+					}
+					$('#'+chartid).pieChart({
+						title:new_title,
+						title2:new_title2,
+						data : pieData,
+						x : 200,
+						y : 200,
+						radius : 150,
+						color:color,
+						previous:true
+					});
+				}
+            }
+            
+            function Charthome(chartid) {
+            	var new_title='';
+				var new_title2='';
+            	if(chartid=='Chart1'){
+					new_title='依銷售階段的商機準銷售案源';
+					new_title2='開啟的商機';
+					C1title='向下切入';
+					C1Chart='traChart';
+					$('#'+chartid).traChart({
+						title:new_title,
+						title2:new_title2,
+						data : traData,
+						previous:false
+					});
+				}else if(chartid=='Chart2'){
+					new_title='銷售排行榜';
+					new_title2='成交商機';
+					C2title='向下切入';
+					C2Chart='barChart2';
+					$('#'+chartid).barChart2({
+						title:new_title,
+						title2:new_title2,
+						btitle:'名稱',
+						btitle1:'估計(金額)',
+						btitle2:'實際(金額)',
+						data : barData2,
+						previous:false
+					});
+				}else if(chartid=='Chart3'){
+					new_title='目標進度(金額)';
+					new_title2='有效目標';
+					C3title='向下切入';
+					C3Chart='barChart';
+					$('#'+chartid).barChart({
+						title:new_title,
+						title2:new_title2,
+						ltitle:'負責人',
+						btitle:'加總 (實際營收)',
+						data : barData,
+						previous:false
+					});
+				}else if(chartid=='Chart4'){
+					new_title='';
+					new_title2='';
+					C4title='向下切入';
+					C4Chart='pieChart';
+					$('#'+chartid).pieChart({
+						title:new_title,
+						title2:new_title2,
+						data : pieData,
+						x : 200,
+						y : 200,
+						radius : 150,
+						color:color,
+						previous:false
+					});
+				}
+			}
+			
             ;(function($, undefined) {
                 $.fn.Loading = function() {
                     $(this).data('info', {
@@ -450,161 +646,10 @@
                             });
                             obj.children('svg').find('.href').click(function(e) {
 								if($(this).attr('id')=='prev'){
-									var t_title='';
-									var t_chart='';
-									if(obj.attr('id')=='Chart1'){
-										t_title=C1title.split('>>');
-										t_chart=C1Chart.split('>>');
-									}else if(obj.attr('id')=='Chart2'){
-										t_title=C2title.split('>>');
-										t_chart=C2Chart.split('>>');
-									}else if(obj.attr('id')=='Chart3'){
-										t_title=C3title.split('>>');
-										t_chart=C3Chart.split('>>');
-									}else if(obj.attr('id')=='Chart4'){
-										t_title=C4title.split('>>');
-										t_chart=C4Chart.split('>>');
-									}
-									var new_title='';
-									var new_title2='';
-									var new_chart='';
-									var change_chart='';
-									var canprevious=true;
-									for (var i=0;i<t_title.length-1;i++){
-										new_title2=new_title2+(new_title2.length>0?'>>':'')+t_title[i];
-										new_chart=new_chart+(new_chart.length>0?'>>':'')+t_chart[i];
-										change_chart=t_chart[i];
-									}
-									
-									if(obj.attr('id')=='Chart1'){
-										C1title=new_title2;
-										C1Chart=new_chart;
-									}else if(obj.attr('id')=='Chart2'){
-										C2title=new_title2;
-										C2Chart=new_chart;
-									}else if(obj.attr('id')=='Chart3'){
-										C3title=new_title2;
-										C3Chart=new_chart;
-									}else if(obj.attr('id')=='Chart4'){
-										C4title=new_title2;
-										C4Chart=new_chart;
-									}
-									
-									if(new_title2=='向下切入'){
-										if(change_chart=='traChart'){
-											new_title='依銷售階段的商機準銷售案源';
-											new_title2='開啟的商機';
-										}else if(change_chart=='barChart'){
-											new_title='銷售排行榜';
-											new_title2='成交商機';
-										}else if(change_chart=='barChart2'){
-											new_title='目標進度(金額)';
-											new_title2='有效目標';
-										}else if(change_chart=='pieChart'){
-											new_title='';
-											new_title2='';
-										}
-										canprevious=false;
-									}
-																		
-									if(change_chart=='traChart'){
-										$('#'+obj.attr('id')).traChart({
-						                	title:new_title,
-						                	title2:new_title2,
-											data : traData,
-											previous:canprevious
-										});
-									}else if(change_chart=='barChart'){
-										$('#'+obj.attr('id')).barChart({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	ltitle:'負責人',
-						                	btitle:'加總 (實際營收)',
-											data : barData,
-											previous:canprevious
-										});
-									}else if(change_chart=='barChart2'){
-										$('#'+obj.attr('id')).barChart2({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	btitle:'名稱',
-						                	btitle1:'估計(金額)',
-						                	btitle2:'實際(金額)',
-											data : barData2,
-											previous:canprevious
-										});
-									}else if(change_chart=='pieChart'){
-										var color=new Array();
-						                for (var i=0;i<pieData.length;i++){
-						                	color.push(getRndColor());
-						                }
-										$('#'+obj.attr('id')).pieChart({
-											title:new_title,
-						                	title2:new_title2,
-											data : pieData,
-											x : 200,
-											y : 200,
-											radius : 150,
-											color:color,
-											previous:canprevious
-										});
-									}
+									Chartprev(obj.attr('id'));
 								}
 								if($(this).attr('id')=='home'){
-									if(obj.attr('id')=='Chart1'){
-										new_title='依銷售階段的商機準銷售案源';
-										new_title2='開啟的商機';
-										C1title='向下切入';
-										C1Chart='traChart';
-										$('#'+obj.attr('id')).traChart({
-						                	title:new_title,
-						                	title2:new_title2,
-											data : traData,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart2'){
-										new_title='銷售排行榜';
-										new_title2='成交商機';
-										C2title='向下切入';
-										C2Chart='barChart2';
-										$('#'+obj.attr('id')).barChart2({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	btitle:'名稱',
-						                	btitle1:'估計(金額)',
-						                	btitle2:'實際(金額)',
-											data : barData2,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart3'){
-										new_title='目標進度(金額)';
-										new_title2='有效目標';
-										C3title='向下切入';
-										C3Chart='barChart';
-										$('#'+obj.attr('id')).barChart({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	ltitle:'負責人',
-						                	btitle:'加總 (實際營收)',
-											data : barData,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart4'){
-										new_title='';
-										new_title2='';
-										C4title='向下切入';
-										C4Chart='pieChart';
-										$('#'+obj.attr('id')).pieChart({
-											title:new_title,
-						                	title2:new_title2,
-											data : pieData,
-											x : 200,
-											y : 200,
-											radius : 150,
-											color:color,
-											previous:canprevious
-										});
-									}
+									Charthome(obj.attr('id'));
 								}
                             });
                         }
@@ -710,161 +755,10 @@
                             
                             obj.children('svg').find('.href').click(function(e) {
 								if($(this).attr('id')=='prev'){
-									var t_title='';
-									var t_chart='';
-									if(obj.attr('id')=='Chart1'){
-										t_title=C1title.split('>>');
-										t_chart=C1Chart.split('>>');
-									}else if(obj.attr('id')=='Chart2'){
-										t_title=C2title.split('>>');
-										t_chart=C2Chart.split('>>');
-									}else if(obj.attr('id')=='Chart3'){
-										t_title=C3title.split('>>');
-										t_chart=C3Chart.split('>>');
-									}else if(obj.attr('id')=='Chart4'){
-										t_title=C4title.split('>>');
-										t_chart=C4Chart.split('>>');
-									}
-									var new_title='';
-									var new_title2='';
-									var new_chart='';
-									var change_chart='';
-									var canprevious=true;
-									for (var i=0;i<t_title.length-1;i++){
-										new_title2=new_title2+(new_title2.length>0?'>>':'')+t_title[i];
-										new_chart=new_chart+(new_chart.length>0?'>>':'')+t_chart[i];
-										change_chart=t_chart[i];
-									}
-									
-									if(obj.attr('id')=='Chart1'){
-										C1title=new_title2;
-										C1Chart=new_chart;
-									}else if(obj.attr('id')=='Chart2'){
-										C2title=new_title2;
-										C2Chart=new_chart;
-									}else if(obj.attr('id')=='Chart3'){
-										C3title=new_title2;
-										C3Chart=new_chart;
-									}else if(obj.attr('id')=='Chart4'){
-										C4title=new_title2;
-										C4Chart=new_chart;
-									}
-									
-									if(new_title2=='向下切入'){
-										if(change_chart=='traChart'){
-											new_title='依銷售階段的商機準銷售案源';
-											new_title2='開啟的商機';
-										}else if(change_chart=='barChart'){
-											new_title='銷售排行榜';
-											new_title2='成交商機';
-										}else if(change_chart=='barChart2'){
-											new_title='目標進度(金額)';
-											new_title2='有效目標';
-										}else if(change_chart=='pieChart'){
-											new_title='';
-											new_title2='';
-										}
-										canprevious=false;
-									}
-																		
-									if(change_chart=='traChart'){
-										$('#'+obj.attr('id')).traChart({
-						                	title:new_title,
-						                	title2:new_title2,
-											data : traData,
-											previous:canprevious
-										});
-									}else if(change_chart=='barChart'){
-										$('#'+obj.attr('id')).barChart({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	ltitle:'負責人',
-						                	btitle:'加總 (實際營收)',
-											data : barData,
-											previous:canprevious
-										});
-									}else if(change_chart=='barChart2'){
-										$('#'+obj.attr('id')).barChart2({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	btitle:'名稱',
-						                	btitle1:'估計(金額)',
-						                	btitle2:'實際(金額)',
-											data : barData2,
-											previous:canprevious
-										});
-									}else if(change_chart=='pieChart'){
-										var color=new Array();
-						                for (var i=0;i<pieData.length;i++){
-						                	color.push(getRndColor());
-						                }
-										$('#'+obj.attr('id')).pieChart({
-											title:new_title,
-						                	title2:new_title2,
-											data : pieData,
-											x : 200,
-											y : 200,
-											radius : 150,
-											color:color,
-											previous:canprevious
-										});
-									}
+									Chartprev(obj.attr('id'));
 								}
 								if($(this).attr('id')=='home'){
-									if(obj.attr('id')=='Chart1'){
-										new_title='依銷售階段的商機準銷售案源';
-										new_title2='開啟的商機';
-										C1title='向下切入';
-										C1Chart='traChart';
-										$('#'+obj.attr('id')).traChart({
-						                	title:new_title,
-						                	title2:new_title2,
-											data : traData,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart2'){
-										new_title='銷售排行榜';
-										new_title2='成交商機';
-										C2title='向下切入';
-										C2Chart='barChart2';
-										$('#'+obj.attr('id')).barChart2({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	btitle:'名稱',
-						                	btitle1:'估計(金額)',
-						                	btitle2:'實際(金額)',
-											data : barData2,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart3'){
-										new_title='目標進度(金額)';
-										new_title2='有效目標';
-										C3title='向下切入';
-										C3Chart='barChart';
-										$('#'+obj.attr('id')).barChart({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	ltitle:'負責人',
-						                	btitle:'加總 (實際營收)',
-											data : barData,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart4'){
-										new_title='';
-										new_title2='';
-										C4title='向下切入';
-										C4Chart='pieChart';
-										$('#'+obj.attr('id')).pieChart({
-											title:new_title,
-						                	title2:new_title2,
-											data : pieData,
-											x : 200,
-											y : 200,
-											radius : 150,
-											color:color,
-											previous:canprevious
-										});
-									}
+									Charthome(obj.attr('id'));
 								}
                             });
                         }
@@ -981,161 +875,10 @@
                             
                             obj.children('svg').find('.href').click(function(e) {
 								if($(this).attr('id')=='prev'){
-									var t_title='';
-									var t_chart='';
-									if(obj.attr('id')=='Chart1'){
-										t_title=C1title.split('>>');
-										t_chart=C1Chart.split('>>');
-									}else if(obj.attr('id')=='Chart2'){
-										t_title=C2title.split('>>');
-										t_chart=C2Chart.split('>>');
-									}else if(obj.attr('id')=='Chart3'){
-										t_title=C3title.split('>>');
-										t_chart=C3Chart.split('>>');
-									}else if(obj.attr('id')=='Chart4'){
-										t_title=C4title.split('>>');
-										t_chart=C4Chart.split('>>');
-									}
-									var new_title='';
-									var new_title2='';
-									var new_chart='';
-									var change_chart='';
-									var canprevious=true;
-									for (var i=0;i<t_title.length-1;i++){
-										new_title2=new_title2+(new_title2.length>0?'>>':'')+t_title[i];
-										new_chart=new_chart+(new_chart.length>0?'>>':'')+t_chart[i];
-										change_chart=t_chart[i];
-									}
-									
-									if(obj.attr('id')=='Chart1'){
-										C1title=new_title2;
-										C1Chart=new_chart;
-									}else if(obj.attr('id')=='Chart2'){
-										C2title=new_title2;
-										C2Chart=new_chart;
-									}else if(obj.attr('id')=='Chart3'){
-										C3title=new_title2;
-										C3Chart=new_chart;
-									}else if(obj.attr('id')=='Chart4'){
-										C4title=new_title2;
-										C4Chart=new_chart;
-									}
-									
-									if(new_title2=='向下切入'){
-										if(change_chart=='traChart'){
-											new_title='依銷售階段的商機準銷售案源';
-											new_title2='開啟的商機';
-										}else if(change_chart=='barChart'){
-											new_title='銷售排行榜';
-											new_title2='成交商機';
-										}else if(change_chart=='barChart2'){
-											new_title='目標進度(金額)';
-											new_title2='有效目標';
-										}else if(change_chart=='pieChart'){
-											new_title='';
-											new_title2='';
-										}
-										canprevious=false;
-									}
-																		
-									if(change_chart=='traChart'){
-										$('#'+obj.attr('id')).traChart({
-						                	title:new_title,
-						                	title2:new_title2,
-											data : traData,
-											previous:canprevious
-										});
-									}else if(change_chart=='barChart'){
-										$('#'+obj.attr('id')).barChart({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	ltitle:'負責人',
-						                	btitle:'加總 (實際營收)',
-											data : barData,
-											previous:canprevious
-										});
-									}else if(change_chart=='barChart2'){
-										$('#'+obj.attr('id')).barChart2({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	btitle:'名稱',
-						                	btitle1:'估計(金額)',
-						                	btitle2:'實際(金額)',
-											data : barData2,
-											previous:canprevious
-										});
-									}else if(change_chart=='pieChart'){
-										var color=new Array();
-						                for (var i=0;i<pieData.length;i++){
-						                	color.push(getRndColor());
-						                }
-										$('#'+obj.attr('id')).pieChart({
-											title:new_title,
-						                	title2:new_title2,
-											data : pieData,
-											x : 200,
-											y : 200,
-											radius : 150,
-											color:color,
-											previous:canprevious
-										});
-									}
+									Chartprev(obj.attr('id'));
 								}
 								if($(this).attr('id')=='home'){
-									if(obj.attr('id')=='Chart1'){
-										new_title='依銷售階段的商機準銷售案源';
-										new_title2='開啟的商機';
-										C1title='向下切入';
-										C1Chart='traChart';
-										$('#'+obj.attr('id')).traChart({
-						                	title:new_title,
-						                	title2:new_title2,
-											data : traData,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart2'){
-										new_title='銷售排行榜';
-										new_title2='成交商機';
-										C2title='向下切入';
-										C2Chart='barChart2';
-										$('#'+obj.attr('id')).barChart2({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	btitle:'名稱',
-						                	btitle1:'估計(金額)',
-						                	btitle2:'實際(金額)',
-											data : barData2,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart3'){
-										new_title='目標進度(金額)';
-										new_title2='有效目標';
-										C3title='向下切入';
-										C3Chart='barChart';
-										$('#'+obj.attr('id')).barChart({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	ltitle:'負責人',
-						                	btitle:'加總 (實際營收)',
-											data : barData,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart4'){
-										new_title='';
-										new_title2='';
-										C4title='向下切入';
-										C4Chart='pieChart';
-										$('#'+obj.attr('id')).pieChart({
-											title:new_title,
-						                	title2:new_title2,
-											data : pieData,
-											x : 200,
-											y : 200,
-											radius : 150,
-											color:color,
-											previous:canprevious
-										});
-									}
+									Charthome(obj.attr('id'));
 								}
                             });
                         }
@@ -1276,161 +1019,10 @@
                             
                             obj.children('svg').find('.href').click(function(e) {
 								if($(this).attr('id')=='prev'){
-									var t_title='';
-									var t_chart='';
-									if(obj.attr('id')=='Chart1'){
-										t_title=C1title.split('>>');
-										t_chart=C1Chart.split('>>');
-									}else if(obj.attr('id')=='Chart2'){
-										t_title=C2title.split('>>');
-										t_chart=C2Chart.split('>>');
-									}else if(obj.attr('id')=='Chart3'){
-										t_title=C3title.split('>>');
-										t_chart=C3Chart.split('>>');
-									}else if(obj.attr('id')=='Chart4'){
-										t_title=C4title.split('>>');
-										t_chart=C4Chart.split('>>');
-									}
-									var new_title='';
-									var new_title2='';
-									var new_chart='';
-									var change_chart='';
-									var canprevious=true;
-									for (var i=0;i<t_title.length-1;i++){
-										new_title2=new_title2+(new_title2.length>0?'>>':'')+t_title[i];
-										new_chart=new_chart+(new_chart.length>0?'>>':'')+t_chart[i];
-										change_chart=t_chart[i];
-									}
-									
-									if(obj.attr('id')=='Chart1'){
-										C1title=new_title2;
-										C1Chart=new_chart;
-									}else if(obj.attr('id')=='Chart2'){
-										C2title=new_title2;
-										C2Chart=new_chart;
-									}else if(obj.attr('id')=='Chart3'){
-										C3title=new_title2;
-										C3Chart=new_chart;
-									}else if(obj.attr('id')=='Chart4'){
-										C4title=new_title2;
-										C4Chart=new_chart;
-									}
-									
-									if(new_title2=='向下切入'){
-										if(change_chart=='traChart'){
-											new_title='依銷售階段的商機準銷售案源';
-											new_title2='開啟的商機';
-										}else if(change_chart=='barChart'){
-											new_title='銷售排行榜';
-											new_title2='成交商機';
-										}else if(change_chart=='barChart2'){
-											new_title='目標進度(金額)';
-											new_title2='有效目標';
-										}else if(change_chart=='pieChart'){
-											new_title='';
-											new_title2='';
-										}
-										canprevious=false;
-									}
-																		
-									if(change_chart=='traChart'){
-										$('#'+obj.attr('id')).traChart({
-						                	title:new_title,
-						                	title2:new_title2,
-											data : traData,
-											previous:canprevious
-										});
-									}else if(change_chart=='barChart'){
-										$('#'+obj.attr('id')).barChart({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	ltitle:'負責人',
-						                	btitle:'加總 (實際營收)',
-											data : barData,
-											previous:canprevious
-										});
-									}else if(change_chart=='barChart2'){
-										$('#'+obj.attr('id')).barChart2({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	btitle:'名稱',
-						                	btitle1:'估計(金額)',
-						                	btitle2:'實際(金額)',
-											data : barData2,
-											previous:canprevious
-										});
-									}else if(change_chart=='pieChart'){
-										var color=new Array();
-						                for (var i=0;i<pieData.length;i++){
-						                	color.push(getRndColor());
-						                }
-										$('#'+obj.attr('id')).pieChart({
-											title:new_title,
-						                	title2:new_title2,
-											data : pieData,
-											x : 200,
-											y : 200,
-											radius : 150,
-											color:color,
-											previous:canprevious
-										});
-									}
+									Chartprev(obj.attr('id'));
 								}
 								if($(this).attr('id')=='home'){
-									if(obj.attr('id')=='Chart1'){
-										new_title='依銷售階段的商機準銷售案源';
-										new_title2='開啟的商機';
-										C1title='向下切入';
-										C1Chart='traChart';
-										$('#'+obj.attr('id')).traChart({
-						                	title:new_title,
-						                	title2:new_title2,
-											data : traData,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart2'){
-										new_title='銷售排行榜';
-										new_title2='成交商機';
-										C2title='向下切入';
-										C2Chart='barChart2';
-										$('#'+obj.attr('id')).barChart2({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	btitle:'名稱',
-						                	btitle1:'估計(金額)',
-						                	btitle2:'實際(金額)',
-											data : barData2,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart3'){
-										new_title='目標進度(金額)';
-										new_title2='有效目標';
-										C3title='向下切入';
-										C3Chart='barChart';
-										$('#'+obj.attr('id')).barChart({
-						                	title:new_title,
-						                	title2:new_title2,
-						                	ltitle:'負責人',
-						                	btitle:'加總 (實際營收)',
-											data : barData,
-											previous:canprevious
-										});
-									}else if(obj.attr('id')=='Chart4'){
-										new_title='';
-										new_title2='';
-										C4title='向下切入';
-										C4Chart='pieChart';
-										$('#'+obj.attr('id')).pieChart({
-											title:new_title,
-						                	title2:new_title2,
-											data : pieData,
-											x : 200,
-											y : 200,
-											radius : 150,
-											color:color,
-											previous:canprevious
-										});
-									}
+									Charthome(obj.attr('id'));
 								}
                             });
                         }
@@ -1458,14 +1050,24 @@
 			<div id="container">
 				<div id="q_report"> </div>
 			</div>
-			<div id="svgbet" style="display:inline-block;width:2000px;">
-				<!--<input id="btnSvg" type="button" style="font-size: medium;"/>-->
+			<div style="float: left;width: 100%;">
+				<select id="DashboardSelect" style="width: 150px;font-size: large;">
+					<option value="">選取儀表板</option>
+					<option value="sale">銷售活動儀表板</option>
+					<option value="service">客戶服務績效儀表板</option>
+					<!--<option value="namea">客戶服務經理儀表板</option>
+					<option value="namea">客戶服務代表社交儀表板</option>-->
+					<option value="marketing">行銷儀表板</option>
+					<!--<option value="namea">行銷社交儀表板</option>-->
+				</select>
 			</div>
 			<div id='Loading'> </div>
-			<div id='Chart1' style="float: left;"> </div>
-			<div id='Chart2' style="float: left;"> </div>
-			<div id='Chart3' style="float: left;"> </div>
+			<div id='Chart1'  style="float: left;display: none;"> </div>
+			<div id='Chart2' style="float: left;display: none;"> </div>
+			<div id='Chart3' style="float: left;display: none;"> </div>
 			<div id='Chart4' style="float: left;display: none;"> </div>
+			<div id='Chart5' style="float: left;display: none;"> </div>
+			<div id='Chart6' style="float: left;display: none;"> </div>
 			<div id="downChart" style="display: none;position:absolute;width: 200;border: 1px solid gray;background-color: #FFFFFF;">
 				<table>
 					<tr>
