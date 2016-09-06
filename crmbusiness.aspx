@@ -75,6 +75,10 @@
                             z_acomp = as[0].acomp;
                         }
                         break;
+					case q_name:
+                        if (q_cur == 4)
+                            q_Seek_gtPost();
+                        break;
                 }  /// end switch
             }
 
