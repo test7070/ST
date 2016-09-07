@@ -292,7 +292,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @t_emon nvarchar(20) = case when '#non'=[14] then char(255) else [14] end
 	declare @t_memo nvarchar(max) = case when '#non'=[19] then '' else [19] end
 	declare @t_curnoa nvarchar(max) = case when '#non'=[26] then '' else [26] end
-	------------------------------------------------------------------------
+		------------------------------------------------------------------------
 	declare @tmp table(
 		sel int identity(1,1)
 		,vccaccy nvarchar(10)
@@ -346,6 +346,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,price float
 		,[money] float
 		,memo nvarchar(max)
+		,stype nvarchar(max)
 	)
 	insert into @tmps(custno,vccaccy,vccno,vccnoq,ordeno,ordeno2,datea,uno,style,productno,product,pvcno,pvc
 		,spec,size,dime,width,lengthb,radius,unit,mount,[weight],price,[money])
@@ -355,6 +356,12 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	left join @tmp b on a.accy=b.vccaccy and a.noa=b.vccno
 	where b.sel is not null
 	
+	update @tmps set stype=case c.stype when '1' then '內銷' when '3' then '外銷' else c.stype end
+	from @tmps a
+	left join view_ordes b on a.ordeno=b.noa and a.ordeno2=b.no2
+	left join view_orde c on b.accy=c.accy and b.noa=c.noa
+	where c.noa is not null
+
 	--皮膜去CUTS抓
 	update @tmps set pvcno=b.spec,pvc=b.[class]
 	from @tmps a
@@ -400,6 +407,8 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,ttax float
 		,ttotal float
 		,tmemo nvarchar(max)
+		,paytype nvarchar(max)
+		,stype nvarchar(max)
 	)	
 	declare @custno nvarchar(max)
 	declare @money float
@@ -419,11 +428,15 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @weight float
 	declare @price float
 	declare @moneys float
+	declare @paytype nvarchar(max)
+	declare @stype nvarchar(max)
+	declare @lengthb float
 	
 	declare @cmount nvarchar(max)
 	declare @cmount2 nvarchar(max)
 	declare @recno int
 	
+
 	declare cursor_table cursor for
 	select custno,sum(isnull([money],0)),sum(isnull([tax],0)),sum(isnull([total],0)) from @tmp group by custno
 	open cursor_table
@@ -433,13 +446,13 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	begin
 		--出貨明細
 		declare cursor_table2 cursor for
-		select vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,unit,price,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0))
+		select vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,unit,price,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0)),lengthb
 		from @tmps 
 		where custno=@custno 
-		group by vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,unit,price
+		group by vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,unit,price,lengthb
 		open cursor_table2
 		fetch next from cursor_table2
-		into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys
+		into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys,@lengthb
 		while(@@FETCH_STATUS <> -1)
 		begin
 		
@@ -447,18 +460,21 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
 				set @cmount = dbo.getComma(@weight,-1) +' '+ @unit
-				set @cmount2 = dbo.getComma(@mount,-1) +' PCS'
+				set @cmount2 = dbo.getComma(@mount,-1) + case when @lengthb=0 then ' C' else ' PCS' end
 			end
 			else
 			begin
 				set @cmount = dbo.getComma(@mount,-1) +' '+ @unit
 				set @cmount2 = ''
 			end
-			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,price,[money],cmount,cmount2)
-			select @custno,'1',1,@accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@price,@moneys,@cmount,@cmount2
+			select @stype=''
+			select top 1  @stype=stype from @tmps where custno=@custno and len(stype)>0 
+			
+			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,price,stype,[money],cmount,cmount2)
+			select @custno,'1',1,@accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@price,@stype,@moneys,@cmount,@cmount2
 			
 			fetch next from cursor_table2
-			into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys
+			into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys,@lengthb
 		end
 		close cursor_table2
 		deallocate cursor_table2
@@ -471,20 +487,20 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		select @custno,'4',4,@total
 		--同品項,數量合計
 		declare cursor_table2 cursor for
-		select row_number()over(order by product,pvcno,pvc,unit),product,pvcno,pvc,unit,sum(isnull(mount,0)),sum(isnull([weight],0))
+		select row_number()over(order by product,pvcno,pvc,unit),product,pvcno,pvc,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),lengthb
 		from @tmps 
 		where custno=@custno 
-		group by product,pvcno,pvc,unit
+		group by product,pvcno,pvc,unit,lengthb
 		open cursor_table2
 		fetch next from cursor_table2
-		into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight
+		into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight,@lengthb
 		while(@@FETCH_STATUS <> -1)
 		begin	
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
 				set @cmount = dbo.getComma(@weight,-1) +' '+ @unit
-				set @cmount2 = dbo.getComma(@mount,-1) +' PCS'
+				set @cmount2 = dbo.getComma(@mount,-1) + case when @lengthb=0 then ' C' else ' PCS' end
 			end
 			else
 			begin
@@ -497,13 +513,19 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 				,@product,@pvcno,@pvc,@cmount,@cmount2
 			
 			fetch next from cursor_table2
-			into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight
+			into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight,@lengthb
 		end
 		close cursor_table2
 		deallocate cursor_table2
 		--頁尾
-		insert into @tmpa(custno,gno,pno)
-		select @custno,'7',7
+		select @paytype = ''
+		select @paytype = isnull(a.paytype,'')
+		from view_orde a
+		left join(select top 1 ordeno from @tmps where custno=@custno and len(ordeno)>0 order by ordeno) b on a.noa=b.ordeno
+		where b.ordeno is not null 
+		
+		insert into @tmpa(custno,gno,pno,paytype)
+		select @custno,'7',7,@paytype
 		
 		fetch next from cursor_table
 		into @custno,@money,@tax,@total
@@ -531,6 +553,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,@t_curnoa a07
 		,dbo.AD2ChineseEraName(GETDATE()) a08
 		,conn a09
+		,stype a10
 		
 		,datea b01
 		,vccno b02
@@ -547,6 +570,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,dbo.getComma(ttax,-1) c02
 		,dbo.getComma(ttotal,-1) c03
 		,tmemo c04
+		,paytype c05
 	from @tmpa 
 	order by custno,pno;
 
