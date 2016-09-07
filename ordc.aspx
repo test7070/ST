@@ -679,7 +679,7 @@
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
 				
-				if(xy_modimount){
+				if(xy_modimount){ //105/09/07 不限制單位和單價 要補資料
 					$('#btnPlus').attr('disabled', 'disabled');
 					for(var i=0;i<q_bbsCount;i++){
 						$('#btnMinus_'+i).attr('disabled', 'disabled');
@@ -691,9 +691,9 @@
 						$('#btnProduct3_'+i).attr('disabled', 'disabled');
 						$('#txtProduct_'+i).attr('disabled', 'disabled');
 						$('#txtSpec_'+i).attr('disabled', 'disabled');
-						$('#txtUnit_'+i).attr('disabled', 'disabled');
+						//$('#txtUnit_'+i).attr('disabled', 'disabled');
 						$('#txtStyle_'+i).attr('disabled', 'disabled');
-						$('#txtPrice_'+i).attr('disabled', 'disabled');
+						//$('#txtPrice_'+i).attr('disabled', 'disabled');
 						$('#txtTrandate_'+i).attr('disabled', 'disabled');
 						$('#txtMemo_'+i).attr('disabled', 'disabled');
 						$('#txtOrdbno_'+i).attr('disabled', 'disabled');
