@@ -60,6 +60,9 @@
 							type : '0', //[13] 
 							name : 'xproject',
 							value : q_getPara('sys.project').toUpperCase()
+						}, {//3-1 [14]
+							type : '6', 
+							name : 'xinvosix'
 						}]
                     });
                 q_popAssign();
@@ -73,7 +76,11 @@
                 
                  $('#txtXmon1').mask('999/99');
                  $('#txtXmon2').mask('999/99');
+                 $('#lblXinvosix').css('font-size','12px');
                  
+				$('#txtXinvosix').keyup(function() {
+					$(this).val($(this).val().substr(0,8));
+				});
                 
                 var t_date,t_year,t_month,t_day;
 				t_date = new Date();
