@@ -292,7 +292,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @t_emon nvarchar(20) = case when '#non'=[14] then char(255) else [14] end
 	declare @t_memo nvarchar(max) = case when '#non'=[19] then '' else [19] end
 	declare @t_curnoa nvarchar(max) = case when '#non'=[26] then '' else [26] end
-	------------------------------------------------------------------------
+		------------------------------------------------------------------------
 	declare @tmp table(
 		sel int identity(1,1)
 		,vccaccy nvarchar(10)
@@ -430,6 +430,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @moneys float
 	declare @paytype nvarchar(max)
 	declare @stype nvarchar(max)
+	declare @lengthb float
 	
 	declare @cmount nvarchar(max)
 	declare @cmount2 nvarchar(max)
@@ -445,13 +446,13 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	begin
 		--出貨明細
 		declare cursor_table2 cursor for
-		select vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,unit,price,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0))
+		select vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,unit,price,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0)),lengthb
 		from @tmps 
 		where custno=@custno 
-		group by vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,unit,price
+		group by vccaccy,vccno,ordeno,datea,product,pvcno,pvc,size,unit,price,lengthb
 		open cursor_table2
 		fetch next from cursor_table2
-		into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys
+		into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys,@lengthb
 		while(@@FETCH_STATUS <> -1)
 		begin
 		
@@ -459,7 +460,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
 				set @cmount = dbo.getComma(@weight,-1) +' '+ @unit
-				set @cmount2 = dbo.getComma(@mount,-1) +' PCS'
+				set @cmount2 = dbo.getComma(@mount,-1) + case when @lengthb=0 then ' C' else ' PCS' end
 			end
 			else
 			begin
@@ -473,7 +474,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			select @custno,'1',1,@accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@price,@stype,@moneys,@cmount,@cmount2
 			
 			fetch next from cursor_table2
-			into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys
+			into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys,@lengthb
 		end
 		close cursor_table2
 		deallocate cursor_table2
@@ -486,20 +487,20 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		select @custno,'4',4,@total
 		--同品項,數量合計
 		declare cursor_table2 cursor for
-		select row_number()over(order by product,pvcno,pvc,unit),product,pvcno,pvc,unit,sum(isnull(mount,0)),sum(isnull([weight],0))
+		select row_number()over(order by product,pvcno,pvc,unit),product,pvcno,pvc,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),lengthb
 		from @tmps 
 		where custno=@custno 
-		group by product,pvcno,pvc,unit
+		group by product,pvcno,pvc,unit,lengthb
 		open cursor_table2
 		fetch next from cursor_table2
-		into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight
+		into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight,@lengthb
 		while(@@FETCH_STATUS <> -1)
 		begin	
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
 				set @cmount = dbo.getComma(@weight,-1) +' '+ @unit
-				set @cmount2 = dbo.getComma(@mount,-1) +' PCS'
+				set @cmount2 = dbo.getComma(@mount,-1) + case when @lengthb=0 then ' C' else ' PCS' end
 			end
 			else
 			begin
@@ -512,7 +513,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 				,@product,@pvcno,@pvc,@cmount,@cmount2
 			
 			fetch next from cursor_table2
-			into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight
+			into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight,@lengthb
 		end
 		close cursor_table2
 		deallocate cursor_table2
