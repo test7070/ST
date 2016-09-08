@@ -17,7 +17,7 @@
 		<script type="text/javascript">
             var q_name = "crmchart";
             aPop = new Array();
-            //預設圖型抬頭
+            //預設圖型資料
 			var DC1Chart='';
 			var DC2Chart='';
 			var DC3Chart='';
@@ -48,7 +48,6 @@
 			var DC4Dselect='';
 			var DC5Dselect='';
 			var DC6Dselect='';
-			
 			var DC1Where='';
 			var DC2Where='';
 			var DC3Where='';
@@ -67,7 +66,7 @@
 			var DC4Swhere='';
 			var DC5Swhere='';
 			var DC6Swhere='';
-			//目前Chart路徑和圖
+			//目前Chart的設定
 			var C1title='';
 			var C1Chart='';
 			var C2title='';
@@ -98,6 +97,13 @@
 			var C4Swhere='';
 			var C5Swhere='';
 			var C6Swhere='';
+			//紀錄bar3的total選項 只會使用一次
+			var C1Bar3select='';
+			var C2Bar3select='';
+			var C3Bar3select='';
+			var C4Bar3select='';
+			var C5Bar3select='';
+			var C6Bar3select='';
 			
             $(document).ready(function() {
                 _q_boxClose();
@@ -129,12 +135,28 @@
 							DC2Stitle='月份';
 							DC3Stitle='加總 (實際營收)';
 							DC1Dselect=",possibility@可能性,theme@主題,comp@客戶,sales@業務";
-							DC2Dselect=",comp@客戶,sales@業務,productno@產品";
+							DC2Dselect=",comp@客戶,sales@業務,product@產品";
 							DC3Dselect=",comp@客戶,style@類別,mon@月份,productno@產品";
 							DC1Where="select stage@#~possibility@#~theme@#~comp@#~sales@#~money total from crmbusiness where datea between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' and money>0 ";
 							DC1Where=DC1Where+" order by case when stage='潛在機會' then 1 when stage='初步接洽' then 2 when stage='需求確認' then 3 when stage='建議/報價' then 4 when stage='談判協商' then 5 when stage='成交' then 6 when stage='失敗' then 7 else 9 end"
-							DC2Where="select a.mon@#~SUM(b.mount*b.price) total1@#~ isnull((select money from view_orde where mon=a.mon)@#~0)total2 from saleforecast a left join saleforecasts b on a.noa=b.noa group by a.mon order by a.mon";
-							DC3Where="select salesno@#~sales@#~sum(total)total from view_orde where mon between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' and total>0 group by salesno@#~sales order by salesno@#~sales";
+							//DC2Where="select a.mon@#~a.comp@#~a.sales@#~b.product@#~b.mount*b.price total1@#~";
+							//DC2Where=DC2Where+"isnull((select sum(ob.total) from view_orde oa left join view_ordes ob on oa.noa=ob.noa ";
+							//DC2Where=DC2Where+"where case when isnull(oa.mon@#~'')='' then left(oa.odate@#~len(a.mon)) else oa.mon end=a.mon and oa.custno=a.custno and oa.salesno=a.salesno and ob.productno=b.productno)@#~0)total2 ";
+							//DC2Where=DC2Where+"from saleforecast a left join saleforecasts b on a.noa=b.noa where a.mon between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' order by a.mon ";
+							
+							DC2Where="select a.mon@#~a.comp@#~a.sales@#~b.product@#~b.mount*b.price total1@#~0 total2 ";
+							DC2Where=DC2Where+"from saleforecast a left join saleforecasts b on a.noa=b.noa ";
+							DC2Where=DC2Where+"where a.mon between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' union all ";
+							DC2Where=DC2Where+"select case when isnull(a.mon@#~'')='' then left(a.odate@#~"+r_lenm+") else a.mon end mon ";
+							DC2Where=DC2Where+"@#~a.comp@#~a.sales@#~b.product@#~0 total1@#~b.total total2 ";
+							DC2Where=DC2Where+"from view_orde a left join view_ordes b on a.noa=b.noa ";
+							DC2Where=DC2Where+"where case when isnull(a.mon@#~'')='' then left(a.odate@#~"+r_lenm+") else a.mon end between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC2Where=DC2Where+"order by a.mon";
+							
+							DC3Where="select salesno@#~sales@#~sum(total)total from view_orde "
+							DC3Where=DC3Where+"where case when isnull(mon@#~'')='' then left(odate@#~"+r_lenm+") else mon end between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC3Where=DC3Where+"and total>0 group by salesno@#~sales order by salesno@#~sales";
+							
 							DC1Swhere="stage"
 							DC2Swhere="mon"
 							DC3Swhere="sales"
@@ -275,12 +297,15 @@
 					var ChartSelect=$('#ChartSelect').val();
 					var DataSelect=$("#DataSelect option:selected").text();
 					var DataSelectval=$("#DataSelect").val();
+					var Chartrectid=$('#Chartrectid').val();
 					var showtitle2='',twhere='',as=[];
 					if(Charid=='' || ChartSelect=='' || DataSelect=='' || DataSelectval==''){
 						return;
 					}
-					
+					var thischart='';//目前圖型
+					var totalselect='';//bar3 total選擇
 					if(Charid=='Chart1'){
+						thischart=C1Chart.split('>>')[C1Chart.split('>>').length-1];
 						C1title=C1title+">>"+Chartxt;
 						C1Chart=C1Chart+">>"+ChartSelect;
 						C1Stitle=C1Stitle+">>"+DataSelect;
@@ -288,8 +313,10 @@
 						twhere=C1Swhere+"=='"+Chartxt+"'";
 						C1Swhere=C1Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C1title;
+						totalselect=C1Bar3select;
 						as=$.extend(true,[], C1datea);
 					}else if(Charid=='Chart2'){
+						thischart=C2Chart.split('>>')[C2Chart.split('>>').length-1];
 						C2title=C2title+">>"+Chartxt;
 						C2Chart=C2Chart+">>"+ChartSelect;
 						C2Stitle=C2Stitle+">>"+DataSelect;
@@ -297,8 +324,10 @@
 						twhere=C2Swhere+"=='"+Chartxt+"'";
 						C2Swhere=C2Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C2title;
+						totalselect=C2Bar3select;
 						as=$.extend(true,[], C2datea);
 					}else if(Charid=='Chart3'){
+						thischart=C3Chart.split('>>')[C3Chart.split('>>').length-1];
 						C3title=C3title+">>"+Chartxt;
 						C3Chart=C3Chart+">>"+ChartSelect;
 						C3Stitle=C3Stitle+">>"+DataSelect;
@@ -306,26 +335,32 @@
 						twhere=C3Swhere+"=='"+Chartxt+"'";
 						C3Swhere=C3Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C3title;
+						totalselect=C3Bar3select;
 						as=$.extend(true,[], C3datea);
 					}else if(Charid=='Chart4'){
+						thischart=C4Chart.split('>>')[C4Chart.split('>>').length-1];
 						C4title=C4title+">>"+Chartxt;
 						C4Chart=C4Chart+">>"+ChartSelect;
 						C4Stitle=C4Stitle+">>"+DataSelect;
 						C4Dselect=C4Dselect+","+DataSelectval+'@'+DataSelect;
 						twhere=C4Swhere+"=='"+Chartxt+"'";
 						C4Swhere=C4Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
+						totalselect=C1Bar4select;
 						showtitle2=C4title;
 						as=$.extend(true,[], C4datea);
 					}else if(Charid=='Chart5'){
+						thischart=C5Chart.split('>>')[C5Chart.split('>>').length-1];
 						C5title=C5title+">>"+Chartxt;
 						C5Chart=C5Chart+">>"+ChartSelect;
 						C5Stitle=C5Stitle+">>"+DataSelect;
 						C5Dselect=C5Dselect+","+DataSelectval+'@'+DataSelect;
 						twhere=C5Swhere+"=='"+Chartxt+"'";
 						C5Swhere=C5Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
+						totalselect=C1Bar5select;
 						showtitle2=C5title;
 						as=$.extend(true,[], C5datea);
 					}else if(Charid=='Chart6'){
+						thischart=C6Chart.split('>>')[C6Chart.split('>>').length-1];
 						C6title=C6title+">>"+Chartxt;
 						C6Chart=C6Chart+">>"+ChartSelect;
 						C6Stitle=C6Stitle+">>"+DataSelect;
@@ -333,7 +368,21 @@
 						twhere=C6Swhere+"=='"+Chartxt+"'";
 						C6Swhere=C6Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C6title;
+						totalselect=C1Bar6select;
 						as=$.extend(true,[], C6datea);
+					}
+					
+					if(thischart=='barChart3'){
+						totalselect=Chartrectid.split('_')[1];
+						if(Charid=='Chart1'){C1Bar3select=totalselect;}
+						else if(Charid=='Chart2'){C2Bar3select=totalselect;}
+						else if(Charid=='Chart3'){C3Bar3select=totalselect;}
+						else if(Charid=='Chart4'){C4Bar3select=totalselect;}
+						else if(Charid=='Chart5'){C5Bar3select=totalselect;}
+						else if(Charid=='Chart6'){C6Bar3select=totalselect;}
+					}
+					if(totalselect==''){
+						totalselect='total';
 					}
 					
 					twhere=replaceAll(twhere,'>>',' && as[i].');
@@ -357,10 +406,10 @@
 						if(t_n==-1){
 							t_as.push({
 								text:t_tmp,
-								total:dec(as[i].total)
+								total:dec(eval("as[i]."+totalselect))
 							});
 						}else{
-							t_as[t_n].total=q_add(dec(t_as[t_n].total),dec(as[i].total));
+							t_as[t_n].total=q_add(dec(t_as[t_n].total),dec(eval("as[i]."+totalselect)));
 						}
 					}
 					
@@ -424,6 +473,8 @@
             function q_gfPost() {
                 q_popAssign();
                 
+                $('#txtBmon').mask(r_picm);
+                $('#txtEmon').mask(r_picm);
                 $('#txtBmon').val(q_date().substr(0,r_len)+'/01');
                 $('#txtEmon').val(q_date().substr(0,r_lenm));
                 
@@ -596,6 +647,7 @@
 				var t_stitle='';
 				var t_select='';
 				var t_swhere='';
+				var totalselect='';//bar3 total選擇
 				var as=[];
 				if(chartid=='Chart1'){
 					t_title=C1title.split('>>');
@@ -604,6 +656,7 @@
 					t_select=C1Dselect.split(',');
 					t_swhere=C1Swhere.split('>>');
 					as=$.extend(true,[], C1datea);
+					totalselect=C1Bar3select;
 				}else if(chartid=='Chart2'){
 					t_title=C2title.split('>>');
 					t_chart=C2Chart.split('>>');
@@ -611,6 +664,7 @@
 					t_select=C2Dselect.split(',');
 					t_swhere=C2Swhere.split('>>');
 					as=$.extend(true,[], C2datea);
+					totalselect=C2Bar3select;
 				}else if(chartid=='Chart3'){
 					t_title=C3title.split('>>');
 					t_chart=C3Chart.split('>>');
@@ -618,6 +672,7 @@
 					t_select=C3Dselect.split(',');
 					t_swhere=C3Swhere.split('>>');
 					as=$.extend(true,[], C3datea);
+					totalselect=C3Bar3select;
 				}else if(chartid=='Chart4'){
 					t_title=C4title.split('>>');
 					t_chart=C4Chart.split('>>');
@@ -625,6 +680,7 @@
 					t_select=C4Dselect.split(',');
 					t_swhere=C4Swhere.split('>>');
 					as=$.extend(true,[], C4datea);
+					totalselect=C4Bar3select;
 				}else if(chartid=='Chart5'){
 					t_title=C5title.split('>>');
 					t_chart=C5Chart.split('>>');
@@ -632,6 +688,7 @@
 					t_select=C5Dselect.split(',');
 					t_swhere=C5Swhere.split('>>');
 					as=$.extend(true,[], C5datea);
+					totalselect=C5Bar3select;
 				}else if(chartid=='Chart6'){
 					t_title=C6title.split('>>');
 					t_chart=C6Chart.split('>>');
@@ -639,7 +696,12 @@
 					t_select=C6Dselect.split(',');
 					t_swhere=C6Swhere.split('>>');
 					as=$.extend(true,[], C6datea);
+					totalselect=C6Bar3select;
 				}
+				if(totalselect==''){
+					totalselect='total';
+				}
+				
 				var new_title='';
 				var new_title2='';
 				var new_chart='';
@@ -724,10 +786,10 @@
 					if(t_n==-1){
 						t_as.push({
 							text:t_tmp,
-							total:dec(as[i].total)
+							total:dec(eval("as[i]."+totalselect))
 						});
 					}else{
-						t_as[t_n].total=q_add(dec(t_as[t_n].total),dec(as[i].total));
+						t_as[t_n].total=q_add(dec(t_as[t_n].total),dec(eval("as[i]."+totalselect)));
 					}
 				}
 				//--------------------------------------------			
@@ -1165,6 +1227,7 @@
                             	$('#Chartid').val(obj.attr('id'));
 								var n = $(this).attr('id').replace('Trachart_', '');
 								$('#Charttext').val(t_detail[n].text);
+								$('#Chartrectid').val($(this).attr('id'));
 								//select 重新帶入--------------------------
 									$('#DataSelect').text('');
 									var t_dselect='';
@@ -1310,6 +1373,7 @@
                             	if($(this).attr('id').indexOf('Barchart2_')>-1){
 									var n = $(this).attr('id').replace('Barchart2_', '');
 									$('#Charttext').val(t_detail[n].text);
+									$('#Chartrectid').val($(this).attr('id'));
 									//select 重新帶入--------------------------
 									$('#DataSelect').text('');
 									var t_dselect='';
@@ -1434,7 +1498,7 @@
                             	x_f=x_f*10;
                             	x_t=x_t*10;
                             }
-                            t_ny=t_maxMoney/(x_f<=10?x_f:x_t);
+                            t_ny=t_maxMoney/(t_maxMoney/x_f<=10?x_f:x_t);
                             
                             var t_tmpmoney=round(t_maxMoney/t_ny,0);
                             var t_theight=round(t_height/t_ny,0);
@@ -1452,7 +1516,7 @@
                             	tmpPath += '<text text-anchor="middle" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY+15)+'" fill="#000000" >'+t_detail[i].text+'</text>';
                             	
                             	//長條圖
-                            	tmpPath += '<rect id="Barchart_t1_'+i+'" x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-1-(t_height*t_detail[i].total/t_maxMoney))+'" width="'+((b_weight)-5)+'" height="'+(t_height*t_detail[i].total/t_maxMoney)+'" fill="'+t_color+'"/>';
+                            	tmpPath += '<rect id="Barchart_total1_'+i+'" x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-1-(t_height*t_detail[i].total/t_maxMoney))+'" width="'+((b_weight)-5)+'" height="'+(t_height*t_detail[i].total/t_maxMoney)+'" fill="'+t_color+'"/>';
                             }
                             //分開寫避免被圖型覆蓋
                             for (var i = 0; i < t_detail.length; i++) {
@@ -1473,9 +1537,10 @@
                             
                             obj.children('svg').find('rect').click(function(e) {
                             	$('#Chartid').val(obj.attr('id'));
-                            	if($(this).attr('id').indexOf('Barchart_t1')>-1 || $(this).attr('id').indexOf('Barchart_t2')>-1){
-									var n = $(this).attr('id').replace('Barchart_t1_', '').replace('Barchart_t2_', '');
+                            	if($(this).attr('id').indexOf('Barchart_total1')>-1 || $(this).attr('id').indexOf('Barchart_total2')>-1){
+									var n = $(this).attr('id').replace('Barchart_total1_', '').replace('Barchart_total2_', '');
 									$('#Charttext').val(t_detail[n].text);
+									$('#Chartrectid').val($(this).attr('id'));
 									//select 重新帶入--------------------------
 									$('#DataSelect').text('');
 									var t_dselect='';
@@ -1576,7 +1641,7 @@
 							var lt_w=30; //左抬頭 留空
                             var ln_w=60; //左標題 留空
                             var bt_w=55; //下抬頭 留空
-                            var bn_w=35; //下標題 留空
+                            var bn_w=40; //下標題 留空
                             
                             //抬頭
                             tmpPath += '<text id="text_title" x="' + (o_h + 25) + '" y="' + (o_h +10) + '" fill="#000000" style="font-size:24px;font-weight: bold;" >' + t_title + '</text>';
@@ -1594,7 +1659,7 @@
                             //Y軸
                             tmpPath += '<line x1="' + strX + '" y1="' + strY + '" x2="' + strX + '" y2="' + (strY-t_height) + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
                             
-                            tmpPath += '<text id="textltitle" text-anchor="middle"  x="' + (strX-ln_w-lt_w) + '" y="' + (strY-(t_height/2)) + '" fill="#000000" style="writing-mode: tb;" >' + t_ltitle + '</text>';
+                            tmpPath += '<text id="textltitle" text-anchor="middle"  x="' + (strX-ln_w-lt_w-10) + '" y="' + (strY-(t_height/2)) + '" fill="#000000" style="writing-mode: tb;" >' + t_ltitle + '</text>';
                             tmpPath += '<text id="textbtitle" text-anchor="middle"  x="' + (strX+(t_width/2)) + '" y="' + (strY+bn_w+10) + '" fill="#000000" >' + t_btitle + '</text>';
                             
                             tmpPath += '<text text-anchor="end"  x="'+(strX-5)+'" y="'+(strY)+'" fill="#000000" >0</text>';
@@ -1604,7 +1669,7 @@
                             	x_f=x_f*10;
                             	x_t=x_t*10;
                             }
-                            t_ny=t_maxMoney/(x_f<=10?x_f:x_t);
+                            t_ny=t_maxMoney/(t_maxMoney/x_f<=10?x_f:x_t);
                             
                             var t_tmpmoney=round(t_maxMoney/t_ny,0);
                             var t_theight=round(t_height/t_ny,0);
@@ -1626,11 +1691,11 @@
                             
                             for (var i = 0; i < t_detail.length; i++) {
                             	//下標題
-                            	tmpPath += '<text text-anchor="middle" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY+15)+'" fill="#000000" >'+t_detail[i].text+'</text>';
+                            	tmpPath += '<text text-anchor="middle" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY+15+(i%2*15))+'" fill="#000000" >'+t_detail[i].text+'</text>';
                             	
                             	//長條圖
-                            	tmpPath += '<rect id="Barchart_t1_'+i+'" x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-1-(t_height*t_detail[i].total1/t_maxMoney))+'" width="'+((b_weight/2)-5)+'" height="'+(t_height*t_detail[i].total1/t_maxMoney)+'" fill="'+t_color1+'"/>';
-                            	tmpPath += '<rect id="Barchart_t2_'+i+'" x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY-1-(t_height*t_detail[i].total2/t_maxMoney))+'" width="'+((b_weight/2)-5)+'" height="'+(t_height*t_detail[i].total2/t_maxMoney)+'" fill="'+t_color2+'"/>';
+                            	tmpPath += '<rect id="Barchart_total1_'+i+'" x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-1-(t_height*t_detail[i].total1/t_maxMoney))+'" width="'+((b_weight/2)-5)+'" height="'+(t_height*t_detail[i].total1/t_maxMoney)+'" fill="'+t_color1+'"/>';
+                            	tmpPath += '<rect id="Barchart_total2_'+i+'" x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY-1-(t_height*t_detail[i].total2/t_maxMoney))+'" width="'+((b_weight/2)-5)+'" height="'+(t_height*t_detail[i].total2/t_maxMoney)+'" fill="'+t_color2+'"/>';
                             }
                             //分開寫避免被圖型覆蓋
                             for (var i = 0; i < t_detail.length; i++) {
@@ -1654,9 +1719,10 @@
                             
                             obj.children('svg').find('rect').click(function(e) {
                             	$('#Chartid').val(obj.attr('id'));
-                            	if($(this).attr('id').indexOf('Barchart_t1')>-1 || $(this).attr('id').indexOf('Barchart_t2')>-1){
-									var n = $(this).attr('id').replace('Barchart_t1_', '').replace('Barchart_t2_', '');
+                            	if($(this).attr('id').indexOf('Barchart_total1')>-1 || $(this).attr('id').indexOf('Barchart_total2')>-1){
+									var n = $(this).attr('id').replace('Barchart_total1_', '').replace('Barchart_total2_', '');
 									$('#Charttext').val(t_detail[n].text);
+									$('#Chartrectid').val($(this).attr('id'));
 									//select 重新帶入--------------------------
 									$('#DataSelect').text('');
 									var t_dselect='';
@@ -1837,6 +1903,7 @@
                             	$('#Chartid').val(obj.attr('id'));
 								var n = $(this).attr('id').replace('block_', '');
 								$('#Charttext').val(t_detail[n].text);
+								$('#Chartrectid').val($(this).attr('id'));
 								//select 重新帶入--------------------------
 									$('#DataSelect').text('');
 									var t_dselect='';
@@ -1947,6 +2014,7 @@
 							</select>
 							<input id="Chartid" type="hidden">
 							<input id="Charttext" type="hidden">
+							<input id="Chartrectid" type="hidden">
 						</td>
 					</tr>
 					<tr>
