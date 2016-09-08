@@ -36,12 +36,6 @@
 			var DC4Title2='';
 			var DC5Title2='';
 			var DC6Title2='';
-			var DC1Where='';
-			var DC2Where='';
-			var DC3Where='';
-			var DC4Where='';
-			var DC5Where='';
-			var DC6Where='';
 			var DC1Stitle='';
 			var DC2Stitle='';
 			var DC3Stitle='';
@@ -54,6 +48,25 @@
 			var DC4Dselect='';
 			var DC5Dselect='';
 			var DC6Dselect='';
+			
+			var DC1Where='';
+			var DC2Where='';
+			var DC3Where='';
+			var DC4Where='';
+			var DC5Where='';
+			var DC6Where='';
+			var C1datea='';
+			var C2datea='';
+			var C3datea='';
+			var C4datea='';
+			var C5datea='';
+			var C6datea='';
+			var DC1Swhere='';
+			var DC2Swhere='';
+			var DC3Swhere='';
+			var DC4Swhere='';
+			var DC5Swhere='';
+			var DC6Swhere='';
 			//目前Chart路徑和圖
 			var C1title='';
 			var C1Chart='';
@@ -67,12 +80,6 @@
 			var C5Chart='';
 			var C6title='';
 			var C6Chart='';
-			var C1Where=[];
-			var C2Where=[];
-			var C3Where=[];
-			var C4Where=[];
-			var C5Where=[];
-			var C6Where=[];
 			var C1Stitle='';
 			var C2Stitle='';
 			var C3Stitle='';
@@ -85,6 +92,12 @@
 			var C4Dselect='';
 			var C5Dselect='';
 			var C6Dselect='';
+			var C1Swhere='';
+			var C2Swhere='';
+			var C3Swhere='';
+			var C4Swhere='';
+			var C5Swhere='';
+			var C6Swhere='';
 			
             $(document).ready(function() {
                 _q_boxClose();
@@ -104,7 +117,7 @@
                    		case 'sale'://銷售活動儀表板
                    			//預設-----------------------------------------------
                    			DC1Chart='traChart';
-							DC2Chart='barChart2';
+							DC2Chart='barChart3';
 							DC3Chart='barChart';
 							DC1Title1='依銷售階段的商機準銷售案源';
 							DC2Title1='目標進度(金額)';
@@ -115,13 +128,16 @@
 							DC1Stitle='空白';
 							DC2Stitle='月份';
 							DC3Stitle='加總 (實際營收)';
-							DC1Where="select stage text@#~sum(money)total from crmbusiness where datea between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' and money>0 group by stage ";
+							DC1Dselect=",possibility@可能性,theme@主題,comp@客戶,sales@業務";
+							DC2Dselect=",comp@客戶,sales@業務,productno@產品";
+							DC3Dselect=",comp@客戶,style@類別,mon@月份,productno@產品";
+							DC1Where="select stage@#~possibility@#~theme@#~comp@#~sales@#~money total from crmbusiness where datea between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' and money>0 ";
 							DC1Where=DC1Where+" order by case when stage='潛在機會' then 1 when stage='初步接洽' then 2 when stage='需求確認' then 3 when stage='建議/報價' then 4 when stage='談判協商' then 5 when stage='成交' then 6 when stage='失敗' then 7 else 9 end"
-							DC2Where="select a.mon text@#~SUM(b.mount*b.price) total1@#~ isnull((select money from view_orde where mon=a.mon)@#~0)total2 from saleforecast a left join saleforecasts b on a.noa=b.noa group by a.mon order by a.mon";
-							DC3Where="select salesno@#~sales text@#~sum(total)total from view_orde where mon between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' and total>0 group by salesno@#~sales order by salesno@#~sales";
-							DC1Dselect=",possibility@可能性,theme@主題,custno@客戶,sales@業務";
-							DC2Dselect=",custno@客戶,sales@業務,productno@產品";
-							DC3Dselect=",custno@客戶,style@類別,mon@月份,productno@產品";
+							DC2Where="select a.mon@#~SUM(b.mount*b.price) total1@#~ isnull((select money from view_orde where mon=a.mon)@#~0)total2 from saleforecast a left join saleforecasts b on a.noa=b.noa group by a.mon order by a.mon";
+							DC3Where="select salesno@#~sales@#~sum(total)total from view_orde where mon between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' and total>0 group by salesno@#~sales order by salesno@#~sales";
+							DC1Swhere="stage"
+							DC2Swhere="mon"
+							DC3Swhere="sales"
 							//data-------------------------------------------------
 							Charthome('Chart1');
 							Charthome('Chart2');
@@ -259,7 +275,7 @@
 					var ChartSelect=$('#ChartSelect').val();
 					var DataSelect=$("#DataSelect option:selected").text();
 					var DataSelectval=$("#DataSelect").val();
-					var showtitle2='';
+					var showtitle2='',twhere='',as=[];
 					if(Charid=='' || ChartSelect=='' || DataSelect=='' || DataSelectval==''){
 						return;
 					}
@@ -269,40 +285,87 @@
 						C1Chart=C1Chart+">>"+ChartSelect;
 						C1Stitle=C1Stitle+">>"+DataSelect;
 						C1Dselect=C1Dselect+","+DataSelectval+'@'+DataSelect;
+						twhere=C1Swhere+"=='"+Chartxt+"'";
+						C1Swhere=C1Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C1title;
+						as=$.extend(true,[], C1datea);
 					}else if(Charid=='Chart2'){
 						C2title=C2title+">>"+Chartxt;
 						C2Chart=C2Chart+">>"+ChartSelect;
 						C2Stitle=C2Stitle+">>"+DataSelect;
 						C2Dselect=C2Dselect+","+DataSelectval+'@'+DataSelect;
+						twhere=C2Swhere+"=='"+Chartxt+"'";
+						C2Swhere=C2Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C2title;
+						as=$.extend(true,[], C2datea);
 					}else if(Charid=='Chart3'){
 						C3title=C3title+">>"+Chartxt;
 						C3Chart=C3Chart+">>"+ChartSelect;
 						C3Stitle=C3Stitle+">>"+DataSelect;
 						C3Dselect=C3Dselect+","+DataSelectval+'@'+DataSelect;
+						twhere=C3Swhere+"=='"+Chartxt+"'";
+						C3Swhere=C3Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C3title;
+						as=$.extend(true,[], C3datea);
 					}else if(Charid=='Chart4'){
 						C4title=C4title+">>"+Chartxt;
 						C4Chart=C4Chart+">>"+ChartSelect;
 						C4Stitle=C4Stitle+">>"+DataSelect;
 						C4Dselect=C4Dselect+","+DataSelectval+'@'+DataSelect;
+						twhere=C4Swhere+"=='"+Chartxt+"'";
+						C4Swhere=C4Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C4title;
+						as=$.extend(true,[], C4datea);
 					}else if(Charid=='Chart5'){
 						C5title=C5title+">>"+Chartxt;
 						C5Chart=C5Chart+">>"+ChartSelect;
 						C5Stitle=C5Stitle+">>"+DataSelect;
 						C5Dselect=C5Dselect+","+DataSelectval+'@'+DataSelect;
+						twhere=C5Swhere+"=='"+Chartxt+"'";
+						C5Swhere=C5Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C5title;
+						as=$.extend(true,[], C5datea);
 					}else if(Charid=='Chart6'){
 						C6title=C6title+">>"+Chartxt;
 						C6Chart=C6Chart+">>"+ChartSelect;
 						C6Stitle=C6Stitle+">>"+DataSelect;
 						C6Dselect=C6Dselect+","+DataSelectval+'@'+DataSelect;
+						twhere=C6Swhere+"=='"+Chartxt+"'";
+						C6Swhere=C6Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C6title;
+						as=$.extend(true,[], C6datea);
+					}
+					
+					twhere=replaceAll(twhere,'>>',' && as[i].');
+					var t_as=[];
+					for(var i=0;i<as.length;i++){
+						if(!eval("as[i]."+twhere)){
+							as.splice(i, 1);
+							i--;
+						}
+					}
+					
+					for(var i=0;i<as.length;i++){
+						var t_tmp='',t_n=-1;
+						t_tmp=eval("as[i]."+DataSelectval)
+						for(var j=0;j<t_as.length;j++){
+							if(t_tmp==t_as[j].text){
+								t_n=j;
+								break;
+							}
+						}
+						if(t_n==-1){
+							t_as.push({
+								text:t_tmp,
+								total:dec(as[i].total)
+							});
+						}else{
+							t_as[t_n].total=q_add(dec(t_as[t_n].total),dec(as[i].total));
+						}
 					}
 					
 					if($('#ChartSelect').val()=='traChart'){
+						traData=t_as;
 						$('#'+Charid).traChart({
 		                	title:'',
 		                	title2:showtitle2,
@@ -310,6 +373,7 @@
 							previous:true
 						});
 					}else if($('#ChartSelect').val()=='barChart'){
+						barData=t_as;
 						$('#'+Charid).barChart({
 		                	title:'',
 		                	title2:showtitle2,
@@ -319,17 +383,17 @@
 							previous:true
 						});
 					}else if($('#ChartSelect').val()=='barChart2'){
+						barData2=t_as;
 						$('#'+Charid).barChart2({
 		                	title:'',
 		                	title2:showtitle2,
 		                	ltitle:'金額',
 							btitle:DataSelect,
-							btitle1:'估計',
-							btitle2:'實際',
 							data : barData2,
 							previous:true
 						});
 					}else if($('#ChartSelect').val()=='pieChart'){
+						pieData=t_as;
 						var color=new Array();
 		                for (var i=0;i<pieData.length;i++){
 		                	color.push(getRndColor());
@@ -355,6 +419,7 @@
 			var traData=[];
 			var barData=[];
 			var barData2=[];
+			var barData3=[];
 			var pieData=[];
             function q_gfPost() {
                 q_popAssign();
@@ -380,23 +445,6 @@
 					text:'關閉',
 					total:50000
 				});
-                //長條(直)測試資料
-				barData2=[];
-				barData2.push({
-					text:'中秋銷售',
-					total1:5000000,
-					total2:5216500
-				});
-				barData2.push({
-					text:'秋季促銷',
-					total1:3000000,
-					total2:3513100,
-				});
-				barData2.push({
-					text:'換季銷售',
-					total1:5500000,
-					total2:4612000
-				}); 
 				//長條(橫)測試資料
 				barData=[];
 				barData.push({
@@ -444,53 +492,76 @@
 					text:'林益成',
 					total:1202300
 				});
+				//長條(直)測試資料
+				barData2=[];
+				barData2.push({
+					text:'中秋銷售',
+					total:5000000,
+				});
+				barData2.push({
+					text:'秋季促銷',
+					total:3000000,
+				});
+				barData2.push({
+					text:'換季銷售',
+					total:5500000,
+				}); 
 				//圓餅圖
 				pieData=[];
                 pieData.push({
                 	text:'胡小瓜', //說明
-                	total:5216500,
-                	value:'$'+FormatNumber(5216500) //圖說名
+                	total:5216500
                 });
                 pieData.push({
                 	text:'林俊傑',
-                	total:3513100,
-                	value:'$'+FormatNumber(3513100)
+                	total:3513100
                 });
                 pieData.push({
                 	text:'吳竑驛',
-                	total:4612000,
-                	value:'$'+FormatNumber(4612000)
+                	total:4612000
                 });
                 pieData.push({
                 	text:'黃瑞仁',
-                	total:3902300,
-                	value:'$'+FormatNumber(3902300)
+                	total:3902300
                 });
                 pieData.push({
                 	text:'陳忠堅',
-                	total:3223300,
-                	value:'$'+FormatNumber(3223300)
+                	total:3223300
                 });
                 pieData.push({
                 	text:'吳秋東',
-                	total:2213600,
-                	value:'$'+FormatNumber(2213600)
+                	total:2213600
                 });
                 pieData.push({
                 	text:'陳金昌',
-                	total:3542600,
-                	value:'$'+FormatNumber(3542600)
+                	total:3542600
                 });
                 pieData.push({
                 	text:'許世豐',
-                	total:2926300,
-                	value:'$'+FormatNumber(2926300)
+                	total:2926300
                 });
                 pieData.push({
                 	text:'林益成',
-                	total:1202300,
-                	value:'$'+FormatNumber(1202300)
+                	total:1202300
                 });
+                
+                //長條(直)測試資料
+				barData3=[];
+				barData3.push({
+					text:'中秋銷售',
+					total1:5000000,
+					total2:5216500
+				});
+				barData3.push({
+					text:'秋季促銷',
+					total1:3000000,
+					total2:3513100,
+				});
+				barData3.push({
+					text:'換季銷售',
+					total1:5500000,
+					total2:4612000
+				}); 
             }
 
             function q_boxClose(s2) {
@@ -524,36 +595,50 @@
 				var t_chart='';
 				var t_stitle='';
 				var t_select='';
+				var t_swhere='';
+				var as=[];
 				if(chartid=='Chart1'){
 					t_title=C1title.split('>>');
 					t_chart=C1Chart.split('>>');
 					t_stitle=C1Stitle.split('>>');
 					t_select=C1Dselect.split(',');
+					t_swhere=C1Swhere.split('>>');
+					as=$.extend(true,[], C1datea);
 				}else if(chartid=='Chart2'){
 					t_title=C2title.split('>>');
 					t_chart=C2Chart.split('>>');
 					t_stitle=C2Stitle.split('>>');
 					t_select=C2Dselect.split(',');
+					t_swhere=C2Swhere.split('>>');
+					as=$.extend(true,[], C2datea);
 				}else if(chartid=='Chart3'){
 					t_title=C3title.split('>>');
 					t_chart=C3Chart.split('>>');
 					t_stitle=C3Stitle.split('>>');
 					t_select=C3Dselect.split(',');
+					t_swhere=C3Swhere.split('>>');
+					as=$.extend(true,[], C3datea);
 				}else if(chartid=='Chart4'){
 					t_title=C4title.split('>>');
 					t_chart=C4Chart.split('>>');
 					t_stitle=C4Stitle.split('>>');
 					t_select=C4Dselect.split(',');
+					t_swhere=C4Swhere.split('>>');
+					as=$.extend(true,[], C4datea);
 				}else if(chartid=='Chart5'){
 					t_title=C5title.split('>>');
 					t_chart=C5Chart.split('>>');
 					t_stitle=C5Stitle.split('>>');
 					t_select=C5Dselect.split(',');
+					t_swhere=C5Swhere.split('>>');
+					as=$.extend(true,[], C5datea);
 				}else if(chartid=='Chart6'){
 					t_title=C6title.split('>>');
 					t_chart=C6Chart.split('>>');
 					t_stitle=C6Stitle.split('>>');
 					t_select=C6Dselect.split(',');
+					t_swhere=C6Swhere.split('>>');
+					as=$.extend(true,[], C6datea);
 				}
 				var new_title='';
 				var new_title2='';
@@ -562,52 +647,92 @@
 				var new_select='';
 				var change_chart='';
 				var change_stitle='';
+				var new_where='';
+				var t_where='',t_dataselectval='';
 				for (var i=0;i<t_title.length-1;i++){
 						new_title2=new_title2+(new_title2.length>0?'>>':'')+t_title[i];
 						new_chart=new_chart+(new_chart.length>0?'>>':'')+t_chart[i];
 						new_stitle=new_stitle+(new_stitle.length>0?'>>':'')+t_stitle[i];
 						new_select=new_select+(i>0?',':'')+t_select[i];
+						new_where=new_where+(new_where.length>0?'>>':'')+(i==t_title.length-2? t_swhere[i].substr(0,t_swhere[i].indexOf('==')) :t_swhere[i]);
 						change_chart=t_chart[i];
 						change_stitle=t_stitle[i];
+						if(i<t_title.length-2)
+							t_where=t_where+(t_where.length>0?' && as[i].':'')+t_swhere[i]
+						t_dataselectval=t_swhere[i];
 				}
 				if(chartid=='Chart1'){
 					C1title=new_title2;
 					C1Chart=new_chart;
 					C1Stitle=new_stitle;
 					C1Dselect=new_select;
+					C1Swhere=new_where;
 				}else if(chartid=='Chart2'){
 					C2title=new_title2;
 					C2Chart=new_chart;
 					C2Stitle=new_stitle;
 					C2Dselect=new_select;
+					C2Swhere=new_where;
 				}else if(chartid=='Chart3'){
 					C3title=new_title2;
 					C3Chart=new_chart;
 					C3Stitle=new_stitle;
 					C3Dselect=new_select;
+					C3Swhere=new_where;
 				}else if(chartid=='Chart4'){
 					C4title=new_title2;
 					C4Chart=new_chart;
 					C4Stitle=new_stitle;
 					C4Dselect=new_select;
+					C4Swhere=new_where;
 				}else if(chartid=='Chart5'){
 					C5title=new_title2;
 					C5Chart=new_chart;
 					C5Stitle=new_stitle;
 					C5Dselect=new_select;
+					C5Swhere=new_where;
 				}else if(chartid=='Chart6'){
 					C6title=new_title2;
 					C6Chart=new_chart;
 					C6Stitle=new_stitle;
 					C6Dselect=new_select;
+					C6Swhere=new_where;
 				}
 									
 				if(new_title2=='向下切入'){
 					Charthome(chartid);
 					return;
 				}
-																		
+				//------------------------------------
+				var t_as=[];
+				for(var i=0;i<as.length;i++){
+					if(!eval("as[i]."+t_where)){
+						as.splice(i, 1);
+						i--;
+					}
+				}
+				
+				for(var i=0;i<as.length;i++){
+					var t_tmp='',t_n=-1;
+					t_tmp=eval("as[i]."+t_dataselectval.substr(0,t_dataselectval.indexOf('==')))
+					for(var j=0;j<t_as.length;j++){
+						if(t_tmp==t_as[j].text){
+							t_n=j;
+							break;
+						}
+					}
+					if(t_n==-1){
+						t_as.push({
+							text:t_tmp,
+							total:dec(as[i].total)
+						});
+					}else{
+						t_as[t_n].total=q_add(dec(t_as[t_n].total),dec(as[i].total));
+					}
+				}
+				//--------------------------------------------			
 				if(change_chart=='traChart'){
+					traData=t_as;
 					$('#'+chartid).traChart({
 				       	title:new_title,
 						title2:new_title2,
@@ -615,6 +740,7 @@
 						previous:true
 					});
 				}else if(change_chart=='barChart'){
+					barData=t_as;
 					$('#'+chartid).barChart({
 						title:new_title,
 						title2:new_title2,
@@ -624,13 +750,12 @@
 						previous:true
 					});
 				}else if(change_chart=='barChart2'){
+					barData2=t_as;
 					$('#'+chartid).barChart2({
 						title:new_title,
 						title2:new_title2,
 						ltitle:'金額',
 						btitle:change_stitle,
-						btitle1:'估計',
-						btitle2:'實際',
 						data : barData2,
 						previous:true
 					});
@@ -639,6 +764,7 @@
 					for (var i=0;i<pieData.length;i++){
 						color.push(getRndColor());
 					}
+					pieData=t_as;
 					$('#'+chartid).pieChart({
 						title:new_title,
 						title2:new_title2,
@@ -654,96 +780,109 @@
             
             function Charthome(chartid) {
             	var change_chart='',new_title='',new_title2='',new_btitle='';
+            	var chart_field='';
             	var as=undefined;
             	if(chartid=='Chart1'){
 					C1title='向下切入';
 					C1Chart=DC1Chart;
 					C1Stitle=DC1Stitle;
 					C1Dselect='';
+					C1Swhere=DC1Swhere;
+					chart_field=DC1Swhere;
 					change_chart=DC1Chart;
 					new_title=DC1Title1;
 					new_title2=DC1Title2;
 					new_btitle=DC1Stitle;
-					C1Where=[];
-					C1Where.push(DC1Where);
 					if(DC1Where!=''){
 						q_func('qtxt.query.crmquery', 'crm.txt,query,' + encodeURI(DC1Where),r_accy,1);
 						as = _q_appendData("tmp0", "", true, true);
+						C1datea=$.extend(true,[], as);
 					}
 				}else if(chartid=='Chart2'){
 					C2title='向下切入';
 					C2Chart=DC2Chart;
 					C2Stitle=DC2Stitle;
 					C2Dselect='';
+					C2Swhere=DC2Swhere;
+					chart_field=DC2Swhere;
 					change_chart=DC2Chart;
 					new_title=DC2Title1;
 					new_title2=DC2Title2;
 					new_btitle=DC2Stitle;
-					C2Where=[];
-					C2Where.push(DC2Where);
 					if(DC2Where!=''){
 						q_func('qtxt.query.crmquery', 'crm.txt,query,' + encodeURI(DC2Where),r_accy,1);
 						as = _q_appendData("tmp0", "", true, true);
+						C2datea=$.extend(true,[], as);
 					}
 				}else if(chartid=='Chart3'){
 					C3title='向下切入';
 					C3Chart=DC3Chart;
 					C3Stitle=DC3Stitle;
 					C3Dselect='';
+					C3Swhere=DC3Swhere;
+					chart_field=DC3Swhere;
 					change_chart=DC3Chart;
 					new_title=DC3Title1;
 					new_title2=DC3Title2;
 					new_btitle=DC3Stitle;
-					C3Where=[];
-					C3Where.push(DC3Where);
 					if(DC3Where!=''){
 						q_func('qtxt.query.crmquery', 'crm.txt,query,' + encodeURI(DC3Where),r_accy,1);
 						as = _q_appendData("tmp0", "", true, true);
+						C3datea=$.extend(true,[], as);
 					}
 				}else if(chartid=='Chart4'){
 					C4title='向下切入';
 					C4Chart=DC4Chart;
 					C4Stitle=DC4Stitle;
 					C4Dselect='';
+					C4Swhere=DC4Swhere;
+					chart_field=DC4Swhere;
 					change_chart=DC4Chart;
 					new_title=DC4Title1;
 					new_title2=DC4Title2;
-					new_btitle=DC2Stitle;
+					new_btitle=DC4Stitle;
 					C4Where=[];
 					C4Where.push(DC4Where);
 					if(DC4Where!=''){
 						q_func('qtxt.query.crmquery', 'crm.txt,query,' + encodeURI(DC4Where),r_accy,1);
 						as = _q_appendData("tmp0", "", true, true);
+						C4datea=$.extend(true,[], as);
 					}
 				}else if(chartid=='Chart5'){
 					C5title='向下切入';
 					C5Chart=DC5Chart;
 					C5Stitle=DC5Stitle;
 					C5Dselect='';
+					C5Swhere=DC5Swhere;
+					chart_field=DC5Swhere;
 					change_chart=DC5Chart;
 					new_title=DC5Title1;
 					new_title2=DC5Title2;
-					new_btitle=DC2Stitle;
+					new_btitle=DC5Stitle;
 					C5Where=[];
 					C5Where.push(DC5Where);
 					if(DC5Where!=''){
 						q_func('qtxt.query.crmquery', 'crm.txt,query,' + encodeURI(DC5Where),r_accy,1);
 						as = _q_appendData("tmp0", "", true, true);
+						C5datea=$.extend(true,[], as);
 					}
 				}else if(chartid=='Chart6'){
 					C6title='向下切入';
 					C6Chart=DC6Chart;
 					C6Stitle=DC6Stitle;
 					C6Dselect='';
+					C6Swhere=DC6Swhere;
+					chart_field=DC6Swhere;
 					change_chart=DC6Chart;
 					new_title=DC6Title1;
 					new_title2=DC6Title2;
-					new_btitle=DC2Stitle;
+					new_btitle=DC6Stitle;
 					C6Where=[];
 					C6Where.push(DC6Where);
 					if(DC2Where!=''){
 						q_func('qtxt.query.crmquery', 'crm.txt,query,' + encodeURI(DC6Where),r_accy,1);
 						as = _q_appendData("tmp0", "", true, true);
+						C6datea=$.extend(true,[], as);
 					}
 				}
 				
@@ -756,29 +895,105 @@
 					if(change_chart=='traChart'){
 						traData=[];
 						for(var i=0;i<as.length;i++){
-							traData.push({
-								text:as[i].text,
-								total:dec(as[i].total)
-							});
+							var t_tmp='',t_n=-1;
+							t_tmp=eval("as["+i+"]."+chart_field)
+							for(var j=0;j<traData.length;j++){
+								if(t_tmp==traData[j].text){
+									t_n=j;
+									break;
+								}
+							}
+							if(t_n==-1){
+								traData.push({
+									text:t_tmp,
+									total:dec(as[i].total)
+								});
+							}else{
+								traData[t_n].total=q_add(dec(traData[t_n].total),dec(as[i].total));
+							}
 						}
 					}else if(change_chart=='barChart'){
 						barData=[];
 						for(var i=0;i<as.length;i++){
-							barData.push({
-								text:as[i].text,
-								total:dec(as[i].total)
-							});
+							var t_tmp='',t_n=-1;
+							t_tmp=eval("as["+i+"]."+chart_field)
+							for(var j=0;j<barData.length;j++){
+								if(t_tmp==barData[j].text){
+									t_n=j;
+									break;
+								}
+							}
+							if(t_n==-1){
+								barData.push({
+									text:t_tmp,
+									total:dec(as[i].total)
+								});
+							}else{
+								barData[t_n].total=q_add(dec(barData[t_n].total),dec(as[i].total));
+							}
 						}
 					}else if(change_chart=='barChart2'){
 						barData2=[];
 						for(var i=0;i<as.length;i++){
-							barData2.push({
-								text:as[i].text,
-								total1:dec(as[i].total1),
-								total2:dec(as[i].total2)
-							});
+							var t_tmp='',t_n=-1;
+							t_tmp=eval("as["+i+"]."+chart_field)
+							for(var j=0;j<barData2.length;j++){
+								if(t_tmp==barData2[j].text){
+									t_n=j;
+									break;
+								}
+							}
+							if(t_n==-1){
+								barData2.push({
+									text:t_tmp,
+									total:dec(as[i].total),
+								});
+							}else{
+								barData2[t_n].total=q_add(dec(barData2[t_n].total),dec(as[i].total));
+							}
+						}
+					}else if(change_chart=='barChart3'){
+						barData3=[];
+						for(var i=0;i<as.length;i++){
+							var t_tmp='',t_n=-1;
+							t_tmp=eval("as["+i+"]."+chart_field)
+							for(var j=0;j<barData3.length;j++){
+								if(t_tmp==barData3[j].text){
+									t_n=j;
+									break;
+								}
+							}
+							if(t_n==-1){
+								barData3.push({
+									text:t_tmp,
+									total1:dec(as[i].total1),
+									total2:dec(as[i].total2)
+								});
+							}else{
+								barData3[t_n].total1=q_add(dec(barData3[t_n].total1),dec(as[i].total1));
+								barData3[t_n].total2=q_add(dec(barData3[t_n].total2),dec(as[i].total2));
+							}
 						}
 					}else if(change_chart=='pieChart'){
+						pieData=[];
+						for(var i=0;i<as.length;i++){
+							var t_tmp='',t_n=-1;
+							t_tmp=eval("as["+i+"]."+chart_field)
+							for(var j=0;j<pieData.length;j++){
+								if(t_tmp==pieData[j].text){
+									t_n=j;
+									break;
+								}
+							}
+							if(t_n==-1){
+								pieData.push({
+									text:t_tmp,
+									total:dec(as[i].total),
+								});
+							}else{
+								pieData[t_n].total=q_add(dec(pieData[t_n].total),dec(as[i].total));
+							}
+						}
 					}
 				}
 				
@@ -804,9 +1019,18 @@
 						title2:new_title2,
 						ltitle:'金額',
 						btitle:new_btitle,
+						data : barData2,
+						previous:false
+					});
+				}else if(change_chart=='barChart3'){
+					$('#'+chartid).barChart3({
+						title:new_title,
+						title2:new_title2,
+						ltitle:'金額',
+						btitle:new_btitle,
 						btitle1:'估計',
 						btitle2:'實際',
-						data : barData2,
+						data : barData3,
 						previous:false
 					});
 				}else if(change_chart=='pieChart'){
@@ -897,27 +1121,27 @@
                             for (var i = 0; i < t_detail.length; i++) {
 								var tt_h=round((objHeight-b_h-ib_h-t_h-(o_h*2))*t_detail[i].total/t_total,0)-5;
 								if(i==0){
-									var t_w=round((objWidth-b_w-(o_w*2))*((t_detail.length-i)/t_detail.length),0);
+									var t_w=round((objWidth-b_w-(o_w*2)),0);
 									t_x2=t_x2+t_w;
 								}
 								
-								var tt_w=0;
-								if(i+1<t_detail.length){
+								var tt_w=round((objWidth-b_w-(o_w*2))/2*tt_h/(objHeight-b_h-ib_h-t_h-(o_h*2)),0);
+								/*if(i+1<t_detail.length){
 									tt_w=round((objWidth-b_w-(o_w*2))*((t_detail.length-i-1)/t_detail.length),0);
-								}
+								}*/
 								
 								var t_color=getRndColor();
                                //圖型
 								tmpPath += '<polygon class="chart_tra" id="Trachart_' + i + '" points="'+t_x+','+t_y+' '+(t_x2)+','+t_y+' '
-								+(t_x2-(tt_w/t_detail.length))+','+(t_y+tt_h)+' '+(t_x+(tt_w/t_detail.length))+','+(t_y+tt_h)+'" fill="'+t_color+'"/>';
+								+(t_x2-(tt_w))+','+(t_y+tt_h)+' '+(t_x+(tt_w))+','+(t_y+tt_h)+'" fill="'+t_color+'"/>';
 								//金額
 								tmpPath += '<text id="text_' + i + '" x="' + (t_x2 + 5) + '" y="' + (t_y + ((tt_h+5)/2)) + '" fill="#000000" >' + '$'+FormatNumber(t_detail[i].total) + '</text>';
 								//符號說明
 								tmpPath += '<rect x="'+(t_sx)+'" y="'+(t_sy)+'" width="20" height="20" fill="'+t_color+'"/>';
 								tmpPath += '<text x="'+(t_sx+25)+'" y="'+(t_sy+15)+'" fill="black">'+t_detail[i].text+'</text>';
                                 
-                                t_x2=t_x2-(tt_w/t_detail.length);
-								t_x=t_x+(tt_w/t_detail.length);
+                                t_x2=t_x2-(tt_w);
+								t_x=t_x+(tt_w);
 								t_y=t_y+tt_h+5;
 								
 								t_sx=t_sx+25+((objWidth-(o_w*2)-((20+20)*b_split))/(b_split));
@@ -1156,6 +1380,171 @@
                             }
                             var maxtotal = 0;
                             for ( i = 0; i < obj.data('info').value.data.length; i++) {
+                            	if(maxtotal<=obj.data('info').value.data[i].total){
+                            		maxtotal=obj.data('info').value.data[i].total;
+                            	}
+                            }
+                            obj.data('info').maxMoney=Math.ceil(maxtotal/Math.pow(10,((maxtotal).toString().length-2)))*Math.pow(10,((maxtotal).toString().length-2));
+                            obj.data('info').refresh(obj);
+                        },
+                        refresh : function(obj) {
+                        	obj.html('');
+                            var tmpPath = '';
+                            var t_detail = obj.data('info').value.data;
+                            var t_title = obj.data('info').value.title;
+                            var t_title2 = obj.data('info').value.title2;
+                            var t_ltitle = obj.data('info').value.ltitle;
+                            var t_btitle = obj.data('info').value.btitle;
+                            
+                             //背景
+                            var objWidth = 500;
+                            var objHeight = 400;
+                            var tmpPath = '<rect id="back" x="0" y="0" width="' + objWidth + '" height="' + objHeight + '" style="fill:#FFFFFF;stroke-width:1;stroke:rgb(0,0,0)"/>';
+							var o_w=50; //左右邊界
+                            var o_h=20;//上下邊界
+							var t_h=50;//抬頭留空
+							var lt_w=30; //左抬頭 留空
+                            var ln_w=60; //左標題 留空
+                            var bt_w=55; //下抬頭 留空
+                            var bn_w=30; //下標題 留空
+                            
+                            //抬頭
+                            tmpPath += '<text id="text_title" x="' + (o_h + 25) + '" y="' + (o_h +10) + '" fill="#000000" style="font-size:24px;font-weight: bold;" >' + t_title + '</text>';
+                            tmpPath += '<text id="text_title2" x="' + (o_h + 45) + '" y="' + (o_h +35) + '" fill="#000000" style="font-size:18px;" >' + t_title2 + '</text>';
+                            
+                            var t_maxMoney=obj.data('info').maxMoney;
+                            var t_ny=0; //分段
+                            var strX=o_w+lt_w+ln_w;
+                            var strY=objHeight-o_h-bt_w-bn_w;
+                            var t_width=objWidth-(o_w*2)-lt_w-ln_w;
+                            var t_height=objHeight-(o_h*2)-bt_w-bn_w-t_h;
+                            
+                            //X軸
+                            tmpPath += '<line x1="' + strX + '" y1="' + strY + '" x2="' + (strX + t_width) + '" y2="' + strY + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
+                            //Y軸
+                            tmpPath += '<line x1="' + strX + '" y1="' + strY + '" x2="' + strX + '" y2="' + (strY-t_height) + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
+                            
+                            tmpPath += '<text id="textltitle" text-anchor="middle"  x="' + (strX-ln_w-lt_w) + '" y="' + (strY-(t_height/2)) + '" fill="#000000" style="writing-mode: tb;" >' + t_ltitle + '</text>';
+                            tmpPath += '<text id="textbtitle" text-anchor="middle"  x="' + (strX+(t_width/2)) + '" y="' + (strY+bn_w+10) + '" fill="#000000" >' + t_btitle + '</text>';
+                            
+                            tmpPath += '<text text-anchor="end"  x="'+(strX-5)+'" y="'+(strY)+'" fill="#000000" >0</text>';
+                            
+                            var x_f=5,x_t=10;
+                            while(t_maxMoney/x_f>10 && t_maxMoney/x_t>10){
+                            	x_f=x_f*10;
+                            	x_t=x_t*10;
+                            }
+                            t_ny=t_maxMoney/(x_f<=10?x_f:x_t);
+                            
+                            var t_tmpmoney=round(t_maxMoney/t_ny,0);
+                            var t_theight=round(t_height/t_ny,0);
+                            for (var i=1; i<=t_ny; i++){
+                            	tmpPath += '<line x1="' + (strX+5) + '" y1="' + (strY-(t_theight*i))  + '" x2="' + (strX-5) + '" y2="' + (strY-(t_theight*i)) + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
+								tmpPath += '<text text-anchor="end"  x="'+(strX-10)+'" y="'+(strY-(t_theight*i)+5)+'" fill="#000000" >'+FormatNumber(t_tmpmoney*i)+'</text>';
+                            }
+                            
+                            //符號說明
+                            var t_color=getRndColor();
+                            var b_weight=round(t_width/t_detail.length,0);//長條寬度
+                            
+                            for (var i = 0; i < t_detail.length; i++) {
+                            	//下標題
+                            	tmpPath += '<text text-anchor="middle" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY+15)+'" fill="#000000" >'+t_detail[i].text+'</text>';
+                            	
+                            	//長條圖
+                            	tmpPath += '<rect id="Barchart_t1_'+i+'" x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-1-(t_height*t_detail[i].total/t_maxMoney))+'" width="'+((b_weight)-5)+'" height="'+(t_height*t_detail[i].total/t_maxMoney)+'" fill="'+t_color+'"/>';
+                            }
+                            //分開寫避免被圖型覆蓋
+                            for (var i = 0; i < t_detail.length; i++) {
+                            	//金額
+                            	if(t_detail[i].total>0){
+                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-10-(t_height*t_detail[i].total/t_maxMoney))+'" fill="#000000" >'+'$'+FormatNumber(t_detail[i].total)+'</text>';
+                            	}
+                            }
+                            
+                            if(obj.data('info').value.previous==true){
+								tmpPath += '<text class="href" id="prev" text-anchor="end" x="' + (objWidth-o_w) + '" y="' + (objHeight-o_h+10) + '" fill="#0000FF" style="font-size:12px;font-weight: bold;text-decoration:underline;">回上一層</text>';
+								tmpPath += '<text class="href" id="home" x="' + (o_w) + '" y="' + (objHeight-o_h+10) + '" fill="#0000FF"  style="font-size:12px;font-weight: bold;text-decoration:underline;">回最上層</text>';
+							}
+                            
+                            obj.width(objWidth).height(objHeight).html('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="graph3">' + tmpPath + '</svg> ');
+							$('.graph3').css('width',objWidth+'px');
+                            $('.graph3').css('height',objHeight+'px');
+                            
+                            obj.children('svg').find('rect').click(function(e) {
+                            	$('#Chartid').val(obj.attr('id'));
+                            	if($(this).attr('id').indexOf('Barchart_t1')>-1 || $(this).attr('id').indexOf('Barchart_t2')>-1){
+									var n = $(this).attr('id').replace('Barchart_t1_', '').replace('Barchart_t2_', '');
+									$('#Charttext').val(t_detail[n].text);
+									//select 重新帶入--------------------------
+									$('#DataSelect').text('');
+									var t_dselect='';
+									var t_select='';
+									if(obj.attr('id')=='Chart1'){
+										t_dselect=DC1Dselect.split(',');
+										t_select=C1Dselect.split(',');
+									}else if(obj.attr('id')=='Chart2'){
+										t_dselect=DC2Dselect.split(',');
+										t_select=C2Dselect.split(',');
+									}else if(obj.attr('id')=='Chart3'){
+										t_dselect=DC3Dselect.split(',');
+										t_select=C3Dselect.split(',');
+									}else if(obj.attr('id')=='Chart4'){
+										t_dselect=DC4Dselect.split(',');
+										t_select=C4Dselect.split(',');
+									}else if(obj.attr('id')=='Chart5'){
+										t_dselect=DC5Dselect.split(',');
+										t_select=C5Dselect.split(',');
+									}else if(obj.attr('id')=='Chart6'){
+										t_dselect=DC6Dselect.split(',');
+										t_select=C6Dselect.split(',');
+									}
+									var t_stmp='@選取欄位',t_tmp='';
+									for(var i=0;i<t_dselect.length;i++){
+										t_tmp=t_dselect[i];
+										for(var j=0;j<t_select.length;j++){
+											if(t_tmp==t_select[j]){
+												t_tmp='';
+												break;
+											}
+										}
+										if(t_tmp.length>0)
+											t_stmp=t_stmp+','+t_tmp;
+									}
+									q_cmbParse("DataSelect",t_stmp);
+									//select--------------------------------
+									$('#downChart').css('top',e.pageY).css('left',e.pageX).show();
+								}else{
+									$('#downChart').hide();
+								}
+                            });
+                            
+                            obj.children('svg').find('.href').click(function(e) {
+								if($(this).attr('id')=='prev'){
+									Chartprev(obj.attr('id'));
+								}
+								if($(this).attr('id')=='home'){
+									Charthome(obj.attr('id'));
+								}
+                            });
+                        }
+                    });
+                    $(this).data('info').init($(this));
+                }
+                //----------------------------------------------------------------------------------------------
+                //----------------------------------------------------------------------------------------------
+                //長條(直)
+                $.fn.barChart3 = function(value) {
+                    $(this).data('info', {
+                        value : value,
+                        maxMoney : 0,
+                        init : function(obj) {
+                            if (value.length == 0) {
+                                alert('無資料。');
+                                return;
+                            }
+                            var maxtotal = 0;
+                            for ( i = 0; i < obj.data('info').value.data.length; i++) {
                             	if(maxtotal<=obj.data('info').value.data[i].total1){
                             		maxtotal=obj.data('info').value.data[i].total1;
                             	}
@@ -1259,9 +1648,9 @@
 								tmpPath += '<text class="href" id="home" x="' + (o_w) + '" y="' + (objHeight-o_h+10) + '" fill="#0000FF"  style="font-size:12px;font-weight: bold;text-decoration:underline;">回最上層</text>';
 							}
                             
-                            obj.width(objWidth).height(objHeight).html('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="graph3">' + tmpPath + '</svg> ');
-							$('.graph3').css('width',objWidth+'px');
-                            $('.graph3').css('height',objHeight+'px');
+                            obj.width(objWidth).height(objHeight).html('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="graph5">' + tmpPath + '</svg> ');
+							$('.graph5').css('width',objWidth+'px');
+                            $('.graph5').css('height',objHeight+'px');
                             
                             obj.children('svg').find('rect').click(function(e) {
                             	$('#Chartid').val(obj.attr('id'));
@@ -1407,18 +1796,18 @@
                                 if (degree != 360){
                                     tmpPath += '<path class="block" id="block_' + i + '" d="M' + t_detail[i].point1[0] + ' ' + t_detail[i].point1[1] + ' L' + t_detail[i].point2[0] + ' ' + t_detail[i].point2[1] + ' A' + radius + ' ' + radius + ' ' + degree + (degree > 180 ? ' 1 1 ' : ' 0 1 ') + t_detail[i].point3[0] + ' ' + t_detail[i].point3[1] + ' Z" fill=' + t_detail[i].currentFillColor + ' stroke=' + t_detail[i].currentStrokeColor + '/>';
                                 }else{
-                                    tmpPath += '<circle class="block" id="block_' + i + '" cx="' + x + '" cy="' + y + '" r="' + radius + '" fill=' + t_detail[i].currentFillColor + ' stroke=' + t_detail[i].currentStrokeColor + '/>';
+                                    tmpPath += '<circle class="block" id="block_' + i + '" cx="' + (x+20) + '" cy="' + (y+20) + '" r="' + radius + '" fill=' + t_detail[i].currentFillColor + ' stroke=' + t_detail[i].currentStrokeColor + '/>';
                                    }
                             }
                             
                             //圖標題
 							for ( i = 0; i < t_detail.length; i++) {
 								var degree = Math.round(t_detail[i].degree * 360 / (2 * Math.PI), 0);
-								if (degree != 360 && degree > 10){
-									tmpPath += '<text class="blockText" id="imgText_' + i 
-									+ '" x="' + (t_detail[i].point1[0] -((t_detail[i].point1[0]-t_detail[i].point3[0])/2)+(Math.round(degree/180*radius * Math.cos(t_detail[i].bDegree), 0) ))
-									+ '" y="' + (t_detail[i].point1[1] -(((t_detail[i].point1[1]-t_detail[i].point3[1])/2))+(Math.round(degree/180*radius * Math.sin(t_detail[i].bDegree), 0)))
-									+ '" fill="#000000">'+ t_detail[i].value + '</text>';
+								if (degree > 10){
+									tmpPath += '<text text-anchor="middle" class="blockText" id="imgText_' + i 
+									+ '" x="' + (t_detail[i].point2[0] -((t_detail[i].point2[0]-t_detail[i].point3[0])/2))
+									+ '" y="' + (t_detail[i].point2[1] -((t_detail[i].point2[1]-t_detail[i].point3[1])/2))
+									+ '" fill="#000000">'+ '$'+FormatNumber(t_detail[i].total) + '</text>';
 								}
 							}
                             
