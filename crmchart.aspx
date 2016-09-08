@@ -1797,7 +1797,7 @@
                                     tmpPath += '<path class="block" id="block_' + i + '" d="M' + t_detail[i].point1[0] + ' ' + t_detail[i].point1[1] + ' L' + t_detail[i].point2[0] + ' ' + t_detail[i].point2[1] + ' A' + radius + ' ' + radius + ' ' + degree + (degree > 180 ? ' 1 1 ' : ' 0 1 ') + t_detail[i].point3[0] + ' ' + t_detail[i].point3[1] + ' Z" fill=' + t_detail[i].currentFillColor + ' stroke=' + t_detail[i].currentStrokeColor + '/>';
                                 }else{
                                     tmpPath += '<circle class="block" id="block_' + i + '" cx="' + (x+20) + '" cy="' + (y+20) + '" r="' + radius + '" fill=' + t_detail[i].currentFillColor + ' stroke=' + t_detail[i].currentStrokeColor + '/>';
-                                   }
+								}
                             }
                             
                             //圖標題
@@ -1805,9 +1805,9 @@
 								var degree = Math.round(t_detail[i].degree * 360 / (2 * Math.PI), 0);
 								if (degree > 10){
 									tmpPath += '<text text-anchor="middle" class="blockText" id="imgText_' + i 
-									+ '" x="' + (t_detail[i].point2[0] -((t_detail[i].point2[0]-t_detail[i].point3[0])/2))
-									+ '" y="' + (t_detail[i].point2[1] -((t_detail[i].point2[1]-t_detail[i].point3[1])/2))
-									+ '" fill="#000000">'+ '$'+FormatNumber(t_detail[i].total) + '</text>';
+									+ '" x="' + (t_detail[i].point1[0] +Math.round(((radius-10) *Math.cos((t_detail[i].bDegree+t_detail[i].eDegree)/2)),0))
+									+ '" y="' + (t_detail[i].point1[1] +Math.round(((radius-10) *Math.sin((t_detail[i].bDegree+t_detail[i].eDegree)/2)),0))
+									+ '" fill="#000000">'+'$'+FormatNumber(t_detail[i].total) + '</text>';
 								}
 							}
                             
