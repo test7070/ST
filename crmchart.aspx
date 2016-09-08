@@ -136,7 +136,7 @@
 							DC3Stitle='加總 (實際營收)';
 							DC1Dselect=",possibility@可能性,theme@主題,comp@客戶,sales@業務";
 							DC2Dselect=",comp@客戶,sales@業務,product@產品";
-							DC3Dselect=",comp@客戶,style@類別,mon@月份,productno@產品";
+							DC3Dselect=",comp@客戶,stype@類別,mon@月份,product@產品";
 							DC1Where="select stage@#~possibility@#~theme@#~comp@#~sales@#~money total from crmbusiness where datea between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' and money>0 ";
 							DC1Where=DC1Where+" order by case when stage='潛在機會' then 1 when stage='初步接洽' then 2 when stage='需求確認' then 3 when stage='建議/報價' then 4 when stage='談判協商' then 5 when stage='成交' then 6 when stage='失敗' then 7 else 9 end"
 							//DC2Where="select a.mon@#~a.comp@#~a.sales@#~b.product@#~b.mount*b.price total1@#~";
@@ -153,9 +153,10 @@
 							DC2Where=DC2Where+"where case when isnull(a.mon@#~'')='' then left(a.odate@#~"+r_lenm+") else a.mon end between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
 							DC2Where=DC2Where+"order by a.mon";
 							
-							DC3Where="select salesno@#~sales@#~sum(total)total from view_orde "
-							DC3Where=DC3Where+"where case when isnull(mon@#~'')='' then left(odate@#~"+r_lenm+") else mon end between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
-							DC3Where=DC3Where+"and total>0 group by salesno@#~sales order by salesno@#~sales";
+							DC3Where="select a.sales@#~a.comp@#~case when a.stype='2' then '代工' when a.stype='3' then '外銷' when a.stype='4' then '樣品' when a.stype='5' then '計畫生產' else '內銷' end stype@#~b.product@#~b.total "
+							DC3Where=DC3Where+"@#~case when isnull(a.mon@#~'')='' then left(a.odate@#~"+r_lenm+") else a.mon end mon from view_orde a left join view_ordes b on a.noa=b.noa "
+							DC3Where=DC3Where+"where case when isnull(a.mon@#~'')='' then left(a.odate@#~"+r_lenm+") else a.mon end between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC3Where=DC3Where+"and b.total>0 order by a.sales";
 							
 							DC1Swhere="stage"
 							DC2Swhere="mon"
