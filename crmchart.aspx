@@ -42,6 +42,12 @@
 			var DC4Stitle='';
 			var DC5Stitle='';
 			var DC6Stitle='';
+			var DC1Dtitle='';
+			var DC2Dtitle='';
+			var DC3Dtitle='';
+			var DC4Dtitle='';
+			var DC5Dtitle='';
+			var DC6Dtitle='';
 			var DC1Dselect='';
 			var DC2Dselect='';
 			var DC3Dselect='';
@@ -66,6 +72,24 @@
 			var DC4Swhere='';
 			var DC5Swhere='';
 			var DC6Swhere='';
+			var DC1Unit='';
+			var DC2Unit='';
+			var DC3Unit='';
+			var DC4Unit='';
+			var DC5Unit='';
+			var DC6Unit='';
+			var DC1Bar3btitle1='';
+			var DC2Bar3btitle1='';
+			var DC3Bar3btitle1='';
+			var DC4Bar3btitle1='';
+			var DC5Bar3btitle1='';
+			var DC6Bar3btitle1='';
+			var DC1Bar3btitle2='';
+			var DC2Bar3btitle2='';
+			var DC3Bar3btitle2='';
+			var DC4Bar3btitle2='';
+			var DC5Bar3btitle2='';
+			var DC6Bar3btitle2='';
 			//目前Chart的設定
 			var C1title='';
 			var C1Chart='';
@@ -126,17 +150,26 @@
 							DC2Chart='barChart3';
 							DC3Chart='barChart';
 							DC1Title1='依銷售階段的商機準銷售案源';
-							DC2Title1='目標進度(金額)';
+							DC2Title1='目標進度';
 							DC3Title1='銷售排行榜';
 							DC1Title2='開啟的商機';
 							DC2Title2='有效目標';
 							DC3Title2='成交商機';
+							DC2Bar3btitle1='估計金額';
+							DC2Bar3btitle2='實際金額';
 							DC1Stitle='空白';
 							DC2Stitle='月份';
-							DC3Stitle='加總 (實際營收)';
+							DC3Stitle='負責人';
+							DC1Dtitle='金額';
+							DC2Dtitle='金額';
+							DC3Dtitle='加總 (實際營收)';
+							DC1Unit='$';
+							DC2Unit='$';
+							DC3Unit='$';
 							DC1Dselect=",possibility@可能性,theme@主題,comp@客戶,sales@業務";
 							DC2Dselect=",comp@客戶,sales@業務,product@產品";
 							DC3Dselect=",comp@客戶,stype@類別,mon@月份,product@產品";
+							
 							DC1Where="select stage@#~possibility@#~theme@#~comp@#~sales@#~money total from crmbusiness where datea between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' and money>0 ";
 							DC1Where=DC1Where+" order by case when stage='潛在機會' then 1 when stage='初步接洽' then 2 when stage='需求確認' then 3 when stage='建議/報價' then 4 when stage='談判協商' then 5 when stage='成交' then 6 when stage='失敗' then 7 else 9 end"
 							//DC2Where="select a.mon@#~a.comp@#~a.sales@#~b.product@#~b.mount*b.price total1@#~";
@@ -211,17 +244,50 @@
                    		case 'marketing'://行銷儀表板
                    			//預設-----------------------------------------------
                    			DC1Chart='pieChart';
-							DC2Chart='barChart2';
+							DC2Chart='barChart3';
 							DC3Chart='barChart';
 							DC4Chart='barChart';
 							DC1Title1='行銷活動類型組合';
-							DC2Title1='行銷活動預算與實際成本的比較 (按月份)';
-							DC3Title1='依來源行銷活動排列潛在客戶';
+							DC2Title1='行銷活動預算與實際成本的比較';
+							DC3Title1='依行銷活動排列行銷客戶';
 							DC4Title1='行銷活動產生的營收';
 							DC1Title2='所有行銷活動與行銷活動範本';
 							DC2Title2='所有行銷活動與行銷活動範本';
 							DC3Title2='所有潛在客戶';
 							DC4Title2='關閉的商機';
+							DC2Bar3btitle1='活動預算';
+							DC2Bar3btitle2='實際成本';
+							DC1Unit='';
+							DC2Unit='$';
+							DC3Unit='';
+							DC4Unit='$';
+							
+							DC1Stitle='空白';
+							DC2Stitle='月份/實際結束日期';
+							DC3Stitle='活動名稱';
+							DC4Stitle='活動名稱';
+							DC1Dtitle='計數';
+							DC2Dtitle='金額';
+							DC3Dtitle='計數';
+							DC4Dtitle='金額';
+							
+							DC1Dselect=",namea@名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,emon@實際結束日期,money@預估營收";
+							DC2Dselect=",namea@名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,typea@類別";
+							
+							DC1Where="select typea@#~namea@#~status@#~left(bdate@#~"+r_lenm+") bmon@#~left(edate@#~"+r_lenm+") emon@#~left(adbdate@#~"+r_lenm+") adbmon@#~left(adedate@#~"+r_lenm+") ademon@#~'$'*~*dbo.getComma(total@#~0) money@#~count(*) total from crmcampaign ";
+							//DC1Where=DC1Where+"where left(bdate@#~"+r_lenm+") between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC1Where=DC1Where+"group by typea@#~namea@#~status@#~left(bdate@#~7)@#~left(edate@#~7)@#~left(adbdate@#~7)@#~left(adedate@#~7)@#~'$'*~*dbo.getComma(total@#~0)  order  by namea"
+							
+							DC2Where="select typea@#~namea@#~status@#~left(bdate@#~7) bmon@#~left(edate@#~7) emon@#~left(adbdate@#~7) adbmon@#~left(adedate@#~7) ademon@#~sum(total) total1@#~0 total2 ";
+							DC2Where=DC2Where+"from crmcampaign where total>0 group by typea@#~namea@#~status@#~left(bdate@#~7)@#~left(edate@#~7)@#~left(adbdate@#~7)@#~left(adedate@#~7) union all ";
+							DC2Where=DC2Where+"select a.typea@#~a.namea@#~a.status@#~left(a.bdate@#~7) bmon@#~left(a.edate@#~7) emon@#~left(a.adbdate@#~7) adbmon@#~left(a.adedate@#~7) ademon@#~0 total1@#~sum(isnull(c.money@#~0)) total2 ";
+							DC2Where=DC2Where+"from crmcampaign a left join crmcampaigns b on a.noa=b.noa left join crmlist c on b.listnoa=c.noa where c.money>0 ";
+							DC2Where=DC2Where+"group by a.typea@#~a.namea@#~a.status@#~left(a.bdate@#~7)@#~left(a.edate@#~7)@#~left(a.adbdate@#~7)@#~left(a.adedate@#~7) order by emon";
+							
+							DC1Swhere="typea"
+							DC2Swhere="emon"
+							
+							
 							//data-------------------------------------------------
 							Charthome('Chart1');
 							Charthome('Chart2');
@@ -299,7 +365,8 @@
 					var DataSelect=$("#DataSelect option:selected").text();
 					var DataSelectval=$("#DataSelect").val();
 					var Chartrectid=$('#Chartrectid').val();
-					var showtitle2='',twhere='',as=[];
+					var showtitle2='',twhere='',as=[],dtitle='';
+					var unit='';
 					if(Charid=='' || ChartSelect=='' || DataSelect=='' || DataSelectval==''){
 						return;
 					}
@@ -316,6 +383,8 @@
 						showtitle2=C1title;
 						totalselect=C1Bar3select;
 						as=$.extend(true,[], C1datea);
+						unit=DC1Unit;
+						dtitle=DC1Dtitle;
 					}else if(Charid=='Chart2'){
 						thischart=C2Chart.split('>>')[C2Chart.split('>>').length-1];
 						C2title=C2title+">>"+Chartxt;
@@ -327,6 +396,8 @@
 						showtitle2=C2title;
 						totalselect=C2Bar3select;
 						as=$.extend(true,[], C2datea);
+						unit=DC2Unit;
+						dtitle=DC2Dtitle;
 					}else if(Charid=='Chart3'){
 						thischart=C3Chart.split('>>')[C3Chart.split('>>').length-1];
 						C3title=C3title+">>"+Chartxt;
@@ -338,6 +409,8 @@
 						showtitle2=C3title;
 						totalselect=C3Bar3select;
 						as=$.extend(true,[], C3datea);
+						unit=DC3Unit;
+						dtitle=DC3Dtitle;
 					}else if(Charid=='Chart4'){
 						thischart=C4Chart.split('>>')[C4Chart.split('>>').length-1];
 						C4title=C4title+">>"+Chartxt;
@@ -349,6 +422,8 @@
 						totalselect=C1Bar4select;
 						showtitle2=C4title;
 						as=$.extend(true,[], C4datea);
+						unit=DC4Unit;
+						dtitle=DC4Dtitle;
 					}else if(Charid=='Chart5'){
 						thischart=C5Chart.split('>>')[C5Chart.split('>>').length-1];
 						C5title=C5title+">>"+Chartxt;
@@ -360,6 +435,8 @@
 						totalselect=C1Bar5select;
 						showtitle2=C5title;
 						as=$.extend(true,[], C5datea);
+						unit=DC5Unit;
+						dtitle=DC5Dtitle;
 					}else if(Charid=='Chart6'){
 						thischart=C6Chart.split('>>')[C6Chart.split('>>').length-1];
 						C6title=C6title+">>"+Chartxt;
@@ -371,6 +448,8 @@
 						showtitle2=C6title;
 						totalselect=C1Bar6select;
 						as=$.extend(true,[], C6datea);
+						unit=DC6Unit;
+						dtitle=DC6Dtitle;
 					}
 					
 					if(thischart=='barChart3'){
@@ -420,6 +499,7 @@
 		                	title:'',
 		                	title2:showtitle2,
 							data : traData,
+							unit:unit,
 							previous:true
 						});
 					}else if($('#ChartSelect').val()=='barChart'){
@@ -428,8 +508,9 @@
 		                	title:'',
 		                	title2:showtitle2,
 		                	ltitle:DataSelect,
-		                	btitle:'加總 (實際營收)',
+		                	btitle:dtitle,
 							data : barData,
+							unit:unit,
 							previous:true
 						});
 					}else if($('#ChartSelect').val()=='barChart2'){
@@ -437,9 +518,10 @@
 						$('#'+Charid).barChart2({
 		                	title:'',
 		                	title2:showtitle2,
-		                	ltitle:'金額',
+		                	ltitle:dtitle,
 							btitle:DataSelect,
 							data : barData2,
+							unit:unit,
 							previous:true
 						});
 					}else if($('#ChartSelect').val()=='pieChart'){
@@ -452,6 +534,7 @@
 							title:'',
 		                	title2:showtitle2,
 							data : pieData,
+							unit:unit,
 							x : 200,
 							y : 200,
 							radius : 150,
@@ -650,6 +733,7 @@
 				var t_swhere='';
 				var totalselect='';//bar3 total選擇
 				var as=[];
+				var unit='',dtitle='';
 				if(chartid=='Chart1'){
 					t_title=C1title.split('>>');
 					t_chart=C1Chart.split('>>');
@@ -658,6 +742,8 @@
 					t_swhere=C1Swhere.split('>>');
 					as=$.extend(true,[], C1datea);
 					totalselect=C1Bar3select;
+					unit=DC1Unit;
+					dtitle=DC1Dtitle;
 				}else if(chartid=='Chart2'){
 					t_title=C2title.split('>>');
 					t_chart=C2Chart.split('>>');
@@ -666,6 +752,8 @@
 					t_swhere=C2Swhere.split('>>');
 					as=$.extend(true,[], C2datea);
 					totalselect=C2Bar3select;
+					unit=DC2Unit;
+					dtitle=DC2Dtitle;
 				}else if(chartid=='Chart3'){
 					t_title=C3title.split('>>');
 					t_chart=C3Chart.split('>>');
@@ -674,6 +762,8 @@
 					t_swhere=C3Swhere.split('>>');
 					as=$.extend(true,[], C3datea);
 					totalselect=C3Bar3select;
+					unit=DC3Unit;
+					dtitle=DC3Dtitle;
 				}else if(chartid=='Chart4'){
 					t_title=C4title.split('>>');
 					t_chart=C4Chart.split('>>');
@@ -682,6 +772,8 @@
 					t_swhere=C4Swhere.split('>>');
 					as=$.extend(true,[], C4datea);
 					totalselect=C4Bar3select;
+					unit=DC4Unit;
+					dtitle=DC4Dtitle;
 				}else if(chartid=='Chart5'){
 					t_title=C5title.split('>>');
 					t_chart=C5Chart.split('>>');
@@ -690,6 +782,8 @@
 					t_swhere=C5Swhere.split('>>');
 					as=$.extend(true,[], C5datea);
 					totalselect=C5Bar3select;
+					unit=DC5Unit;
+					dtitle=DC5Dtitle;
 				}else if(chartid=='Chart6'){
 					t_title=C6title.split('>>');
 					t_chart=C6Chart.split('>>');
@@ -698,6 +792,8 @@
 					t_swhere=C6Swhere.split('>>');
 					as=$.extend(true,[], C6datea);
 					totalselect=C6Bar3select;
+					unit=DC6Unit;
+					dtitle=DC6Dtitle;
 				}
 				if(totalselect==''){
 					totalselect='total';
@@ -800,6 +896,7 @@
 				       	title:new_title,
 						title2:new_title2,
 						data : traData,
+						unit:unit,
 						previous:true
 					});
 				}else if(change_chart=='barChart'){
@@ -808,8 +905,9 @@
 						title:new_title,
 						title2:new_title2,
 						ltitle:change_stitle,
-						btitle:'加總 (實際營收)',
+						btitle:dtitle,
 						data : barData,
+						unit:unit,
 						previous:true
 					});
 				}else if(change_chart=='barChart2'){
@@ -817,9 +915,10 @@
 					$('#'+chartid).barChart2({
 						title:new_title,
 						title2:new_title2,
-						ltitle:'金額',
+						ltitle:dtitle,
 						btitle:change_stitle,
 						data : barData2,
+						unit:unit,
 						previous:true
 					});
 				}else if(change_chart=='pieChart'){
@@ -832,6 +931,7 @@
 						title:new_title,
 						title2:new_title2,
 						data : pieData,
+						unit:unit,
 						x : 200,
 						y : 200,
 						radius : 150,
@@ -842,9 +942,10 @@
             }
             
             function Charthome(chartid) {
-            	var change_chart='',new_title='',new_title2='',new_btitle='';
+            	var change_chart='',new_title='',new_title2='',new_btitle='',btitle1='',btitle2='';
             	var chart_field='';
             	var as=undefined;
+            	var unit='',dtitle='';
             	if(chartid=='Chart1'){
 					C1title='向下切入';
 					C1Chart=DC1Chart;
@@ -853,9 +954,13 @@
 					C1Swhere=DC1Swhere;
 					chart_field=DC1Swhere;
 					change_chart=DC1Chart;
+					btitle1=DC1Bar3btitle1;
+					btitle2=DC1Bar3btitle2;
 					new_title=DC1Title1;
 					new_title2=DC1Title2;
 					new_btitle=DC1Stitle;
+					unit=DC1Unit;
+					dtitle=DC1Dtitle;
 					if(DC1Where!=''){
 						q_func('qtxt.query.crmquery', 'crm.txt,query,' + encodeURI(DC1Where),r_accy,1);
 						as = _q_appendData("tmp0", "", true, true);
@@ -869,9 +974,13 @@
 					C2Swhere=DC2Swhere;
 					chart_field=DC2Swhere;
 					change_chart=DC2Chart;
+					btitle1=DC2Bar3btitle1;
+					btitle2=DC2Bar3btitle2;
 					new_title=DC2Title1;
 					new_title2=DC2Title2;
 					new_btitle=DC2Stitle;
+					unit=DC2Unit;
+					dtitle=DC2Dtitle;
 					if(DC2Where!=''){
 						q_func('qtxt.query.crmquery', 'crm.txt,query,' + encodeURI(DC2Where),r_accy,1);
 						as = _q_appendData("tmp0", "", true, true);
@@ -885,9 +994,13 @@
 					C3Swhere=DC3Swhere;
 					chart_field=DC3Swhere;
 					change_chart=DC3Chart;
+					btitle1=DC3Bar3btitle1;
+					btitle2=DC3Bar3btitle2;
 					new_title=DC3Title1;
 					new_title2=DC3Title2;
 					new_btitle=DC3Stitle;
+					unit=DC3Unit;
+					dtitle=DC3Dtitle;
 					if(DC3Where!=''){
 						q_func('qtxt.query.crmquery', 'crm.txt,query,' + encodeURI(DC3Where),r_accy,1);
 						as = _q_appendData("tmp0", "", true, true);
@@ -901,9 +1014,13 @@
 					C4Swhere=DC4Swhere;
 					chart_field=DC4Swhere;
 					change_chart=DC4Chart;
+					btitle1=DC4Bar3btitle1;
+					btitle2=DC4Bar3btitle2;
 					new_title=DC4Title1;
 					new_title2=DC4Title2;
 					new_btitle=DC4Stitle;
+					unit=DC4Unit;
+					dtitle=DC4Dtitle;
 					C4Where=[];
 					C4Where.push(DC4Where);
 					if(DC4Where!=''){
@@ -919,9 +1036,13 @@
 					C5Swhere=DC5Swhere;
 					chart_field=DC5Swhere;
 					change_chart=DC5Chart;
+					btitle1=DC5Bar3btitle1;
+					btitle2=DC5Bar3btitle2;
 					new_title=DC5Title1;
 					new_title2=DC5Title2;
 					new_btitle=DC5Stitle;
+					unit=DC5Unit;
+					dtitle=DC5Dtitle;
 					C5Where=[];
 					C5Where.push(DC5Where);
 					if(DC5Where!=''){
@@ -937,9 +1058,13 @@
 					C6Swhere=DC6Swhere;
 					chart_field=DC6Swhere;
 					change_chart=DC6Chart;
+					btitle1=DC6Bar3btitle1;
+					btitle2=DC6Bar3btitle2;
 					new_title=DC6Title1;
 					new_title2=DC6Title2;
 					new_btitle=DC6Stitle;
+					unit=DC6Unit;
+					dtitle=DC6Dtitle;
 					C6Where=[];
 					C6Where.push(DC6Where);
 					if(DC2Where!=''){
@@ -1065,35 +1190,39 @@
 				       	title:new_title,
 						title2:new_title2,
 						data : traData,
+						unit:unit,
 						previous:false
 					});
 				}else if(change_chart=='barChart'){
 					$('#'+chartid).barChart({
 						title:new_title,
 						title2:new_title2,
-						ltitle:'負責人',
-						btitle:new_btitle,
+						ltitle:new_btitle,
+						btitle:dtitle,
 						data : barData,
+						unit:unit,
 						previous:false
 					});
 				}else if(change_chart=='barChart2'){
 					$('#'+chartid).barChart2({
 						title:new_title,
 						title2:new_title2,
-						ltitle:'金額',
+						ltitle:dtitle,
 						btitle:new_btitle,
 						data : barData2,
+						unit:unit,
 						previous:false
 					});
 				}else if(change_chart=='barChart3'){
 					$('#'+chartid).barChart3({
 						title:new_title,
 						title2:new_title2,
-						ltitle:'金額',
+						ltitle:dtitle,
 						btitle:new_btitle,
-						btitle1:'估計',
-						btitle2:'實際',
+						btitle1:btitle1,
+						btitle2:btitle2,
 						data : barData3,
+						unit:unit,
 						previous:false
 					});
 				}else if(change_chart=='pieChart'){
@@ -1105,6 +1234,7 @@
 						title:new_title,
 						title2:new_title2,
 						data : pieData,
+						unit:unit,
 						x : 200,
 						y : 200,
 						radius : 150,
@@ -1154,6 +1284,7 @@
                             var t_detail = obj.data('info').value.data;
                             var t_title = obj.data('info').value.title;
                             var t_title2 = obj.data('info').value.title2;
+                            var t_unit = obj.data('info').value.unit;
                             //背景
                             var objWidth = 500;
                             var objHeight = 800;
@@ -1198,7 +1329,7 @@
 								tmpPath += '<polygon class="chart_tra" id="Trachart_' + i + '" points="'+t_x+','+t_y+' '+(t_x2)+','+t_y+' '
 								+(t_x2-(tt_w))+','+(t_y+tt_h)+' '+(t_x+(tt_w))+','+(t_y+tt_h)+'" fill="'+t_color+'"/>';
 								//金額
-								tmpPath += '<text id="text_' + i + '" x="' + (t_x2 + 5) + '" y="' + (t_y + ((tt_h+5)/2)) + '" fill="#000000" >' + '$'+FormatNumber(t_detail[i].total) + '</text>';
+								tmpPath += '<text id="text_' + i + '" x="' + (t_x2 + 5) + '" y="' + (t_y + ((tt_h+5)/2)) + '" fill="#000000" >' + t_unit+FormatNumber(t_detail[i].total) + '</text>';
 								//符號說明
 								tmpPath += '<rect x="'+(t_sx)+'" y="'+(t_sy)+'" width="20" height="20" fill="'+t_color+'"/>';
 								tmpPath += '<text x="'+(t_sx+25)+'" y="'+(t_sy+15)+'" fill="black">'+t_detail[i].text+'</text>';
@@ -1311,6 +1442,7 @@
                             var t_title2 = obj.data('info').value.title2;
                             var t_ltitle = obj.data('info').value.ltitle;
                             var t_btitle = obj.data('info').value.btitle;
+                            var t_unit = obj.data('info').value.unit;
                              //背景
                             var objWidth = 500;
                             var objHeight = 400;
@@ -1354,9 +1486,9 @@
                             	tmpPath += '<rect id="Barchart2_'+i+'" x="'+(strX+1)+'" y="'+(strY-(b_height*(t_detail.length-i))+5)+'" width="'+(t_width*t_detail[i].total/t_maxMoney)+'" height="'+(b_height-10)+'" fill="'+t_color+'"/>';
                             	//金額	
                             	if(t_detail[i].total/t_maxMoney>0.9){
-                            		tmpPath += '<text text-anchor="end" style="dominant-baseline: middle;"  x="'+(strX+(t_width*t_detail[i].total/t_maxMoney))+'" y="'+(strY-(b_height*(t_detail.length-i))+(b_height/2))+'" fill="#000000" >'+'$'+FormatNumber(t_detail[i].total)+'</text>';
+                            		tmpPath += '<text text-anchor="end" style="dominant-baseline: middle;"  x="'+(strX+(t_width*t_detail[i].total/t_maxMoney))+'" y="'+(strY-(b_height*(t_detail.length-i))+(b_height/2))+'" fill="#000000" >'+t_unit+FormatNumber(t_detail[i].total)+'</text>';
                             	}else{
-                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+3+(t_width*t_detail[i].total/t_maxMoney))+'" y="'+(strY-(b_height*(t_detail.length-i))+(b_height/2))+'" fill="#000000" >'+'$'+FormatNumber(t_detail[i].total)+'</text>';
+                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+3+(t_width*t_detail[i].total/t_maxMoney))+'" y="'+(strY-(b_height*(t_detail.length-i))+(b_height/2))+'" fill="#000000" >'+t_unit+FormatNumber(t_detail[i].total)+'</text>';
                             	}
                             }
                             
@@ -1460,7 +1592,7 @@
                             var t_title2 = obj.data('info').value.title2;
                             var t_ltitle = obj.data('info').value.ltitle;
                             var t_btitle = obj.data('info').value.btitle;
-                            
+                            var t_unit = obj.data('info').value.unit;
                              //背景
                             var objWidth = 500;
                             var objHeight = 400;
@@ -1471,7 +1603,7 @@
 							var lt_w=30; //左抬頭 留空
                             var ln_w=60; //左標題 留空
                             var bt_w=55; //下抬頭 留空
-                            var bn_w=30; //下標題 留空
+                            var bn_w=40; //下標題 留空
                             
                             //抬頭
                             tmpPath += '<text id="text_title" x="' + (o_h + 25) + '" y="' + (o_h +10) + '" fill="#000000" style="font-size:24px;font-weight: bold;" >' + t_title + '</text>';
@@ -1514,7 +1646,7 @@
                             
                             for (var i = 0; i < t_detail.length; i++) {
                             	//下標題
-                            	tmpPath += '<text text-anchor="middle" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY+15)+'" fill="#000000" >'+t_detail[i].text+'</text>';
+                            	tmpPath += '<text text-anchor="middle" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY+15+(i%2*15))+'" fill="#000000" >'+t_detail[i].text+'</text>';
                             	
                             	//長條圖
                             	tmpPath += '<rect id="Barchart_total1_'+i+'" x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-1-(t_height*t_detail[i].total/t_maxMoney))+'" width="'+((b_weight)-5)+'" height="'+(t_height*t_detail[i].total/t_maxMoney)+'" fill="'+t_color+'"/>';
@@ -1523,7 +1655,7 @@
                             for (var i = 0; i < t_detail.length; i++) {
                             	//金額
                             	if(t_detail[i].total>0){
-                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-10-(t_height*t_detail[i].total/t_maxMoney))+'" fill="#000000" >'+'$'+FormatNumber(t_detail[i].total)+'</text>';
+                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-(t_detail[i].total1/t_maxMoney>0.95?-5:10)-(t_height*t_detail[i].total/t_maxMoney))+'" fill="#000000" >'+t_unit+FormatNumber(t_detail[i].total)+'</text>';
                             	}
                             }
                             
@@ -1631,7 +1763,7 @@
                             var t_btitle = obj.data('info').value.btitle;
                             var t_btitle1 = obj.data('info').value.btitle1;
                             var t_btitle2 = obj.data('info').value.btitle2;
-                            
+                            var t_unit = obj.data('info').value.unit;
                              //背景
                             var objWidth = 500;
                             var objHeight = 400;
@@ -1702,10 +1834,10 @@
                             for (var i = 0; i < t_detail.length; i++) {
                             	//金額
                             	if(t_detail[i].total1>0){
-                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-10-(t_height*t_detail[i].total1/t_maxMoney))+'" fill="#000000" >'+'$'+FormatNumber(t_detail[i].total1)+'</text>';
+                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-(t_detail[i].total1/t_maxMoney>0.95?-5:10)-(t_height*t_detail[i].total1/t_maxMoney))+'" fill="#000000" >'+t_unit+FormatNumber(t_detail[i].total1)+'</text>';
                             	}
                             	if(t_detail[i].total2>0){
-                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY-10-(t_height*t_detail[i].total2/t_maxMoney))+'" fill="#000000" >'+'$'+FormatNumber(t_detail[i].total2)+'</text>';
+                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY-10-(t_height*t_detail[i].total2/t_maxMoney))+'" fill="#000000" >'+t_unit+FormatNumber(t_detail[i].total2)+'</text>';
                             	}
                             }
                             
@@ -1818,6 +1950,7 @@
                             var t_title = obj.data('info').value.title;
                             var t_title2 = obj.data('info').value.title2;
                             var t_detail = obj.data('info').value.data;
+                            var t_unit = obj.data('info').value.unit;
                             
                             var o_w=25; //左右邊界
                             var o_h=20;//上下邊界
@@ -1874,7 +2007,7 @@
 									tmpPath += '<text text-anchor="middle" class="blockText" id="imgText_' + i 
 									+ '" x="' + (t_detail[i].point1[0] +Math.round(((radius-10) *Math.cos((t_detail[i].bDegree+t_detail[i].eDegree)/2)),0))
 									+ '" y="' + (t_detail[i].point1[1] +Math.round(((radius-10) *Math.sin((t_detail[i].bDegree+t_detail[i].eDegree)/2)),0))
-									+ '" fill="#000000">'+'$'+FormatNumber(t_detail[i].total) + '</text>';
+									+ '" fill="#000000">'+t_unit+FormatNumber(t_detail[i].total) + '</text>';
 								}
 							}
                             

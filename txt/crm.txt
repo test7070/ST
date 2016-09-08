@@ -4,6 +4,7 @@ declare @sql nvarchar(MAX) = "[1]"
 
 set @sql=SUBSTRING(@sql,2,LEN(@sql)-2)
 set @sql=replace(@sql,"~#^","'")
+set @sql=replace(@sql,"*~*","+")
 set @sql=replace(@sql,"@#~",",")
 
 if(len(@sql)>0)
