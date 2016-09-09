@@ -373,11 +373,6 @@
 						
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblCcp' class="lbl  btn"> </a></td>
-						<td><input id="txtCcpnoa"  type="text" class="txt c1" /></td>
-						<td colspan="2"><input id="txtCcpname"  type="text" class="txt c1" /></td>
-					</tr>
-					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
 						<td ><input id="txtMoney" type="text" class="txt num c1" /></td>
 					</tr>
