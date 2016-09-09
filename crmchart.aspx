@@ -135,6 +135,7 @@
                 q_gf('', q_name);
 
 				$('#DashboardSelect').change(function(e) {
+					$('#downChart').hide();
 					switch($(this).val()) {
 						case ''://無選取
 							$('#Chart1').hide();
@@ -159,14 +160,14 @@
 							DC2Bar3btitle2='實際金額';
 							DC1Stitle='空白';
 							DC2Stitle='月份';
-							DC3Stitle='負責人';
+							DC3Stitle='業務';
 							DC1Dtitle='金額';
 							DC2Dtitle='金額';
 							DC3Dtitle='加總 (實際營收)';
 							DC1Unit='$';
 							DC2Unit='$';
 							DC3Unit='$';
-							DC1Dselect=",possibility@可能性,theme@主題,comp@客戶,sales@業務";
+							DC1Dselect=",possibility@可能性,theme@商機,comp@客戶,sales@業務";
 							DC2Dselect=",comp@客戶,sales@業務,product@產品";
 							DC3Dselect=",comp@客戶,stype@類別,mon@月份,product@產品";
 							
@@ -212,20 +213,83 @@
 							DC2Chart='barChart2';
 							DC3Chart='barChart2';
 							DC4Chart='pieChart';
-							DC5Chart='barChart2';
+							DC5Chart='barChart4';
 							DC6Chart='barChart2';
-							DC1Title1='趨勢產品問題 (過去 7 天前 5 項)';
+							DC1Title1='產品問題 ';
 							DC2Title1='案例組合 (依優先順序)';
 							DC3Title1='依專員排列的使用中案例';
 							DC4Title1='案例組合 (依來源)';
-							DC5Title1='依優先順序排列案例 (每個負責人)';
-							DC6Title1='依事件類型組合的案例';
+							DC5Title1='依優先順序排列案例 (服務人員)';
+							DC6Title1='依原因類型組合的案例';
 							DC1Title2='使用中的案例';
 							DC2Title2='使用中的案例';
 							DC3Title2='使用中的案例';
 							DC4Title2='所有案例';
 							DC5Title2='所有案例';
 							DC6Title2='使用中的案例';
+							
+							DC1Stitle='相關產品';
+							DC2Stitle='優先順序';
+							DC3Stitle='服務人員';
+							DC4Stitle='來源';
+							DC5Stitle='服務人員';
+							DC6Stitle='原因';
+							DC1Dtitle='計數';
+							DC2Dtitle='計數';
+							DC3Dtitle='計數';
+							DC4Dtitle='計數';
+							DC5Dtitle='計數';
+							DC6Dtitle='計數';
+							DC1Unit='';
+							DC2Unit='';
+							DC3Unit='';
+							DC4Unit='';
+							DC5Unit='';
+							DC6Unit='';
+							
+							DC1Dselect=",reason@原因,source@來源,effort@費力程度,priority@優先順序,comp@客戶,namea@服務人員,question@問題";
+							DC2Dselect=",product@產品,reason@原因,source@來源,effort@費力程度,comp@客戶,namea@服務人員,question@問題";
+							DC3Dselect=",product@產品,reason@原因,source@來源,effort@費力程度,priority@優先順序,comp@客戶,question@問題";
+							DC4Dselect=",product@產品,reason@原因,effort@費力程度,priority@優先順序,comp@客戶,namea@服務人員,question@問題";
+							DC5Dselect=",product@產品,reason@原因,source@來源,effort@費力程度,comp@客戶,question@問題";
+							DC6Dselect=",product@產品,source@來源,effort@費力程度,priority@優先順序,comp@客戶,namea@服務人員,question@問題";
+							
+							DC1Where="select product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question@#~count(*)total ";
+							DC1Where=DC1Where+"from crmservice where isnull(enda@#~0)=0 and left(datea@#~"+r_lenm+") between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC1Where=DC1Where+"group by product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question ";
+							DC1Where=DC1Where+"order by product ";
+							
+							DC2Where="select product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question@#~count(*)total ";
+							DC2Where=DC2Where+"from crmservice where isnull(enda@#~0)=0 and left(datea@#~"+r_lenm+") between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC2Where=DC2Where+"group by product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question ";
+							DC2Where=DC2Where+"order by priority ";
+							
+							DC3Where="select product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question@#~count(*)total ";
+							DC3Where=DC3Where+"from crmservice where isnull(enda@#~0)=0 and left(datea@#~"+r_lenm+") between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC3Where=DC3Where+"group by product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question ";
+							DC3Where=DC3Where+"order by namea ";
+							
+							DC4Where="select product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question@#~count(*)total ";
+							DC4Where=DC4Where+"from crmservice where left(datea@#~"+r_lenm+") between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC4Where=DC4Where+"group by product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question ";
+							DC4Where=DC4Where+"order by source ";
+							
+							DC5Where="select product@#~reason@#~source@#~effort@#~priority title@#~namea@#~comp@#~question@#~count(*)total ";
+							DC5Where=DC5Where+"from crmservice where left(datea@#~"+r_lenm+") between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC5Where=DC5Where+"group by product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question ";
+							DC5Where=DC5Where+"order by case when priority='低' then 1 when priority='一般' then 2 when priority='高' then 3 else 9 end @#~namea ";
+							
+							DC6Where="select product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question@#~count(*)total ";
+							DC6Where=DC6Where+"from crmservice where isnull(enda@#~0)=0 and left(datea@#~"+r_lenm+") between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
+							DC6Where=DC6Where+"group by product@#~reason@#~source@#~effort@#~priority@#~namea@#~comp@#~question ";
+							DC6Where=DC6Where+"order by reason ";
+							
+							DC1Swhere="product"
+							DC2Swhere="priority"
+							DC3Swhere="namea"
+							DC4Swhere="source"
+							DC5Swhere="namea"
+							DC6Swhere="reason"
 							//data-------------------------------------------------
 			                Charthome('Chart1');
 							Charthome('Chart2');
@@ -249,30 +313,31 @@
 							DC4Chart='barChart';
 							DC1Title1='行銷活動類型組合';
 							DC2Title1='行銷活動預算與實際成本的比較';
-							DC3Title1='依行銷活動排列行銷客戶';
+							DC3Title1='依行銷活動排列行銷客戶名單';
 							DC4Title1='行銷活動產生的營收';
-							DC1Title2='所有行銷活動與行銷活動範本';
-							DC2Title2='所有行銷活動與行銷活動範本';
-							DC3Title2='所有潛在客戶';
-							DC4Title2='關閉的商機';
+							DC1Title2='所有行銷活動';
+							DC2Title2='所有行銷活動';
+							DC3Title2='所有行銷客戶名單';
+							DC4Title2='商機';
 							DC2Bar3btitle1='活動預算';
 							DC2Bar3btitle2='實際成本';
 							DC1Unit='';
 							DC2Unit='$';
 							DC3Unit='';
 							DC4Unit='$';
-							
 							DC1Stitle='空白';
-							DC2Stitle='月份/實際結束日期';
+							DC2Stitle='月份(實際結束日期)';
 							DC3Stitle='活動名稱';
 							DC4Stitle='活動名稱';
 							DC1Dtitle='計數';
 							DC2Dtitle='金額';
 							DC3Dtitle='計數';
-							DC4Dtitle='金額';
+							DC4Dtitle='加總(實際營收)';
 							
-							DC1Dselect=",namea@名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,emon@實際結束日期,money@預估營收";
-							DC2Dselect=",namea@名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,typea@類別";
+							DC1Dselect=",namea@活動名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,emon@實際結束日期,money@預估營收";
+							DC2Dselect=",namea@活動名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,typea@類別";
+							DC3Dselect=",list@行銷名單,nick@客戶,head@職稱,typea@類別,status@狀態,grpname@集團,sales@業務";
+							DC4Dselect=",comp@客戶,sales@業務,theme@商機,possibility@可能性,stage@階段,money@預估營收";
 							
 							DC1Where="select typea@#~namea@#~status@#~left(bdate@#~"+r_lenm+") bmon@#~left(edate@#~"+r_lenm+") emon@#~left(adbdate@#~"+r_lenm+") adbmon@#~left(adedate@#~"+r_lenm+") ademon@#~'$'*~*dbo.getComma(total@#~0) money@#~count(*) total from crmcampaign ";
 							//DC1Where=DC1Where+"where left(bdate@#~"+r_lenm+") between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' ";
@@ -284,9 +349,21 @@
 							DC2Where=DC2Where+"from crmcampaign a left join crmcampaigns b on a.noa=b.noa left join crmlist c on b.listnoa=c.noa where c.money>0 ";
 							DC2Where=DC2Where+"group by a.typea@#~a.namea@#~a.status@#~left(a.bdate@#~7)@#~left(a.edate@#~7)@#~left(a.adbdate@#~7)@#~left(a.adedate@#~7) order by emon";
 							
-							DC1Swhere="typea"
-							DC2Swhere="emon"
+							DC3Where="select a.namea@#~c.namea list@#~e.nick@#~e.head@#~f.namea typea ";
+							DC3Where=DC3Where+"@#~case when e.status='9' then '呆帳' when e.status='4' then '停止營業'when e.status='3' then '禁出貨' when e.status='2' then '待開發' else '正常' end status ";
+							DC3Where=DC3Where+"@#~e.grpname@#~e.sales@#~count(*) total from crmcampaign a left join crmcampaigns b on a.noa=b.noa ";
+							DC3Where=DC3Where+"left join crmlist c on b.listnoa=c.noa left join crmlists d on c.noa=d.noa ";
+							DC3Where=DC3Where+"left join cust e on d.custno=e.noa left join custtype f on e.typea=f.noa ";
+							DC3Where=DC3Where+"group by a.namea@#~c.namea@#~e.nick@#~e.head@#~f.namea@#~e.status@#~e.grpname@#~e.sales ";
 							
+							DC4Where="select a.namea@#~b.theme@#~b.comp@#~b.possibility@#~b.stage@#~b.sales@#~b.money@#~c.total ";
+							DC4Where=DC4Where+"from crmcampaign a left join crmbusiness b on a.noa=b.crmcno ";
+							DC4Where=DC4Where+"outer apply (select sum(total)total from view_orde where crmbno=b.noa)c where c.total>0 order by a.namea";
+							
+							DC1Swhere="typea";
+							DC2Swhere="emon";
+							DC3Swhere="namea";
+							DC4Swhere="namea";
 							
 							//data-------------------------------------------------
 							Charthome('Chart1');
@@ -298,37 +375,6 @@
 							$('#Chart2').show();
 							$('#Chart3').show();
 							$('#Chart4').show();
-							$('#Chart5').hide();
-							$('#Chart6').hide();
-                   			break;
-                   		case 'manager'://客戶服務經理儀表板
-                   			//預設-----------------------------------------------
-                   			DC1Chart='barChart2';
-							DC2Chart='barChart';
-							DC3Chart='barChart2';
-							DC1Title1='依專員排列的使用中案例';
-							DC2Title1='已解決的案例 CSAT (依負責人)';
-							DC3Title1='案例組合 (依優先順序)';
-							DC1Title2='使用中的案例';
-							DC2Title2='使用中的案例';
-							DC3Title2='使用中的案例';
-							//data-------------------------------------------------
-							Charthome('Chart1');
-							Charthome('Chart2');
-							Charthome('Chart3');
-							//---------------------------------------
-                   			$('#Chart1').show();
-							$('#Chart2').show();
-							$('#Chart3').show();
-							$('#Chart4').hide();
-							$('#Chart5').hide();
-							$('#Chart6').hide();
-                   			break;
-                   		case ''://客戶服務代表社交儀表板
-                   			$('#Chart1').hide();
-							$('#Chart2').hide();
-							$('#Chart3').hide();
-							$('#Chart4').hide();
 							$('#Chart5').hide();
 							$('#Chart6').hide();
                    			break;
@@ -372,6 +418,7 @@
 					}
 					var thischart='';//目前圖型
 					var totalselect='';//bar3 total選擇
+					
 					if(Charid=='Chart1'){
 						thischart=C1Chart.split('>>')[C1Chart.split('>>').length-1];
 						C1title=C1title+">>"+Chartxt;
@@ -419,7 +466,7 @@
 						C4Dselect=C4Dselect+","+DataSelectval+'@'+DataSelect;
 						twhere=C4Swhere+"=='"+Chartxt+"'";
 						C4Swhere=C4Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
-						totalselect=C1Bar4select;
+						totalselect=C4Bar3select;
 						showtitle2=C4title;
 						as=$.extend(true,[], C4datea);
 						unit=DC4Unit;
@@ -432,7 +479,7 @@
 						C5Dselect=C5Dselect+","+DataSelectval+'@'+DataSelect;
 						twhere=C5Swhere+"=='"+Chartxt+"'";
 						C5Swhere=C5Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
-						totalselect=C1Bar5select;
+						totalselect=C5Bar3select;
 						showtitle2=C5title;
 						as=$.extend(true,[], C5datea);
 						unit=DC5Unit;
@@ -446,10 +493,33 @@
 						twhere=C6Swhere+"=='"+Chartxt+"'";
 						C6Swhere=C6Swhere+"=='"+Chartxt+"' >>"+DataSelectval;
 						showtitle2=C6title;
-						totalselect=C1Bar6select;
+						totalselect=C6Bar3select;
 						as=$.extend(true,[], C6datea);
 						unit=DC6Unit;
 						dtitle=DC6Dtitle;
+					}
+					
+					if(thischart=='barChart4'){
+						var bar4addwhere="title=='"+Chartrectid.split('_')[2]+"' >>";
+						twhere=bar4addwhere+twhere;
+						if(Charid=='Chart1'){
+							C1Swhere=replaceAll(bar4addwhere,'&&','>>')+C1Swhere;
+						}
+						else if(Charid=='Chart2'){
+							C2Swhere=replaceAll(bar4addwhere,'&&','>>')+C2Swhere;
+						}
+						else if(Charid=='Chart3'){
+							C3Swhere=replaceAll(bar4addwhere,'&&','>>')+C3Swhere;
+						}
+						else if(Charid=='Chart4'){
+							C4Swhere=replaceAll(bar4addwhere,'&&','>>')+C4Swhere;
+						}
+						else if(Charid=='Chart5'){
+							C5Swhere=replaceAll(bar4addwhere,'&&','>>')+C5Swhere;
+						}
+						else if(Charid=='Chart6'){
+							C6Swhere=replaceAll(bar4addwhere,'&&','>>')+C6Swhere;
+						}
 					}
 					
 					if(thischart=='barChart3'){
@@ -461,6 +531,7 @@
 						else if(Charid=='Chart5'){C5Bar3select=totalselect;}
 						else if(Charid=='Chart6'){C6Bar3select=totalselect;}
 					}
+					
 					if(totalselect==''){
 						totalselect='total';
 					}
@@ -535,9 +606,9 @@
 		                	title2:showtitle2,
 							data : pieData,
 							unit:unit,
-							x : 200,
-							y : 200,
-							radius : 150,
+							x : 165,
+							y : 165,
+							radius : 115,
 							color:color,
 							previous:true
 						});
@@ -553,6 +624,7 @@
 			var barData=[];
 			var barData2=[];
 			var barData3=[];
+			var barData4=[];
 			var pieData=[];
             function q_gfPost() {
                 q_popAssign();
@@ -697,6 +769,48 @@
 					total1:5500000,
 					total2:4612000
 				}); 
+				//長條(直多色)測試資料
+				barData4=[];
+				barData4.push({
+					text:'吳秋東',
+					title:'低',
+					total:2,
+				});
+				barData4.push({
+					text:'吳秋東',
+					title:'一般',
+					total:1,
+				});
+				barData4.push({
+					text:'許世豐',
+					title:'高',
+					total:4,
+				});
+				barData4.push({
+					text:'許世豐',
+					title:'低',
+					total:3,
+				});
+				barData4.push({
+					text:'林益成',
+					title:'一般',
+					total:2,
+				});
+				barData4.push({
+					text:'林益成',
+					title:'低',
+					total:1,
+				});
+				barData4.push({
+					text:'吳竑驛',
+					title:'重大',
+					total:1,
+				});
+				barData4.push({
+					text:'吳竑驛',
+					title:'低',
+					total:4,
+				});
             }
 
             function q_boxClose(s2) {
@@ -932,9 +1046,9 @@
 						title2:new_title2,
 						data : pieData,
 						unit:unit,
-						x : 200,
-						y : 200,
-						radius : 150,
+						x : 165,
+						y : 165,
+						radius : 115,
 						color:color,
 						previous:true
 					});
@@ -1162,6 +1276,27 @@
 								barData3[t_n].total2=q_add(dec(barData3[t_n].total2),dec(as[i].total2));
 							}
 						}
+					}else if(change_chart=='barChart4'){
+						barData4=[];
+						for(var i=0;i<as.length;i++){
+							var t_tmp='',t_n=-1;
+							t_tmp=eval("as["+i+"]."+chart_field)
+							for(var j=0;j<barData4.length;j++){
+								if(t_tmp==barData4[j].text && as[i].title==barData4[j].title){
+									t_n=j;
+									break;
+								}
+							}
+							if(t_n==-1){
+								barData4.push({
+									text:t_tmp,
+									title:as[i].title,
+									total:dec(as[i].total),
+								});
+							}else{
+								barData4[t_n].total=q_add(dec(barData4[t_n].total),dec(as[i].total));
+							}
+						}
 					}else if(change_chart=='pieChart'){
 						pieData=[];
 						for(var i=0;i<as.length;i++){
@@ -1225,6 +1360,16 @@
 						unit:unit,
 						previous:false
 					});
+				}else if(change_chart=='barChart4'){
+					$('#'+chartid).barChart4({
+						title:new_title,
+						title2:new_title2,
+						ltitle:dtitle,
+						btitle:new_btitle,
+						data : barData4,
+						unit:unit,
+						previous:false
+					});
 				}else if(change_chart=='pieChart'){
 					var color=new Array();
 					for (var i=0;i<pieData.length;i++){
@@ -1235,9 +1380,9 @@
 						title2:new_title2,
 						data : pieData,
 						unit:unit,
-						x : 200,
-						y : 200,
-						radius : 150,
+						x : 165,
+						y : 165,
+						radius : 115,
 						color:color,
 						previous:false
 					});
@@ -1655,7 +1800,7 @@
                             for (var i = 0; i < t_detail.length; i++) {
                             	//金額
                             	if(t_detail[i].total>0){
-                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+5)+'" y="'+(strY-(t_detail[i].total1/t_maxMoney>0.95?-5:10)-(t_height*t_detail[i].total/t_maxMoney))+'" fill="#000000" >'+t_unit+FormatNumber(t_detail[i].total)+'</text>';
+                            		tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY-(t_detail[i].total1/t_maxMoney>0.95?-5:10)-(t_height*t_detail[i].total/t_maxMoney))+'" fill="#000000" >'+t_unit+FormatNumber(t_detail[i].total)+'</text>';
                             	}
                             }
                             
@@ -1814,9 +1959,9 @@
                             //符號說明
                             var t_color1=getRndColor();
 							tmpPath += '<rect id="blockLogo1" x="'+(strX+10)+'" y="'+(strY+bn_w+20)+'" width="20" height="20" fill="'+t_color1+'"/>';
-							tmpPath += '<text id="blockLogo2" x="'+(strX+40)+'" y="'+(strY+bn_w+30)+'" style="dominant-baseline: middle;" fill="black">'+t_btitle1+'</text>';
+							tmpPath += '<text x="'+(strX+40)+'" y="'+(strY+bn_w+30)+'" style="dominant-baseline: middle;" fill="black">'+t_btitle1+'</text>';
 							var t_color2=getRndColor();
-							tmpPath += '<rect x="'+(strX+10+(t_width/2))+'" y="'+(strY+bn_w+20)+'" width="20" height="20" fill="'+t_color2+'"/>';
+							tmpPath += '<rect id="blockLogo2" x="'+(strX+10+(t_width/2))+'" y="'+(strY+bn_w+20)+'" width="20" height="20" fill="'+t_color2+'"/>';
 							tmpPath += '<text x="'+(strX+40+(t_width/2))+'" y="'+(strY+bn_w+30)+'" style="dominant-baseline: middle;" fill="black">'+t_btitle2+'</text>';
                             
                             
@@ -1854,6 +1999,223 @@
                             	$('#Chartid').val(obj.attr('id'));
                             	if($(this).attr('id').indexOf('Barchart_total1')>-1 || $(this).attr('id').indexOf('Barchart_total2')>-1){
 									var n = $(this).attr('id').replace('Barchart_total1_', '').replace('Barchart_total2_', '');
+									$('#Charttext').val(t_detail[n].text);
+									$('#Chartrectid').val($(this).attr('id'));
+									//select 重新帶入--------------------------
+									$('#DataSelect').text('');
+									var t_dselect='';
+									var t_select='';
+									if(obj.attr('id')=='Chart1'){
+										t_dselect=DC1Dselect.split(',');
+										t_select=C1Dselect.split(',');
+									}else if(obj.attr('id')=='Chart2'){
+										t_dselect=DC2Dselect.split(',');
+										t_select=C2Dselect.split(',');
+									}else if(obj.attr('id')=='Chart3'){
+										t_dselect=DC3Dselect.split(',');
+										t_select=C3Dselect.split(',');
+									}else if(obj.attr('id')=='Chart4'){
+										t_dselect=DC4Dselect.split(',');
+										t_select=C4Dselect.split(',');
+									}else if(obj.attr('id')=='Chart5'){
+										t_dselect=DC5Dselect.split(',');
+										t_select=C5Dselect.split(',');
+									}else if(obj.attr('id')=='Chart6'){
+										t_dselect=DC6Dselect.split(',');
+										t_select=C6Dselect.split(',');
+									}
+									var t_stmp='@選取欄位',t_tmp='';
+									for(var i=0;i<t_dselect.length;i++){
+										t_tmp=t_dselect[i];
+										for(var j=0;j<t_select.length;j++){
+											if(t_tmp==t_select[j]){
+												t_tmp='';
+												break;
+											}
+										}
+										if(t_tmp.length>0)
+											t_stmp=t_stmp+','+t_tmp;
+									}
+									q_cmbParse("DataSelect",t_stmp);
+									//select--------------------------------
+									$('#downChart').css('top',e.pageY).css('left',e.pageX).show();
+								}else{
+									$('#downChart').hide();
+								}
+                            });
+                            
+                            obj.children('svg').find('.href').click(function(e) {
+								if($(this).attr('id')=='prev'){
+									Chartprev(obj.attr('id'));
+								}
+								if($(this).attr('id')=='home'){
+									Charthome(obj.attr('id'));
+								}
+                            });
+                        }
+                    });
+                    $(this).data('info').init($(this));
+                }
+                //----------------------------------------------------------------------------------------------
+                //----------------------------------------------------------------------------------------------
+                //長條(直多色)
+                $.fn.barChart4 = function(value) {
+                    $(this).data('info', {
+                        value : value,
+                        maxMoney : 0,
+                        init : function(obj) {
+                            if (value.length == 0) {
+                                alert('無資料。');
+                                return;
+                            }
+                            var maxtotal = 0,tmptotal=0;
+                            for (var i = 0; i < obj.data('info').value.data.length; i++) {
+                            	tmptotal=0;
+                            	for (var j = 0; j < obj.data('info').value.data.length; j++) {
+                            		if(obj.data('info').value.data[i].text==obj.data('info').value.data[j].text){
+                            			tmptotal=tmptotal+obj.data('info').value.data[i].total;
+                            		}
+                            	}
+                            	if(maxtotal<=tmptotal){
+                            		maxtotal=tmptotal;
+                            	}
+                            }
+                            obj.data('info').maxMoney=Math.ceil(maxtotal/Math.pow(10,((maxtotal).toString().length-2)))*Math.pow(10,((maxtotal).toString().length-2));
+                            obj.data('info').refresh(obj);
+                        },
+                        refresh : function(obj) {
+                        	obj.html('');
+                            var tmpPath = '';
+                            var t_detail = obj.data('info').value.data;
+                            var t_title = obj.data('info').value.title;
+                            var t_title2 = obj.data('info').value.title2;
+                            var t_ltitle = obj.data('info').value.ltitle;
+                            var t_btitle = obj.data('info').value.btitle;
+                            var t_unit = obj.data('info').value.unit;
+                             //背景
+                            var objWidth = 500;
+                            var objHeight = 400;
+                            var tmpPath = '<rect id="back" x="0" y="0" width="' + objWidth + '" height="' + objHeight + '" style="fill:#FFFFFF;stroke-width:1;stroke:rgb(0,0,0)"/>';
+							var o_w=50; //左右邊界
+                            var o_h=20;//上下邊界
+							var t_h=50;//抬頭留空
+							var lt_w=30; //左抬頭 留空
+                            var ln_w=60; //左標題 留空
+                            var bt_w=55; //下抬頭 留空
+                            var bn_w=40; //下標題 留空
+                            
+                            //抬頭
+                            tmpPath += '<text id="text_title" x="' + (o_h + 25) + '" y="' + (o_h +10) + '" fill="#000000" style="font-size:24px;font-weight: bold;" >' + t_title + '</text>';
+                            tmpPath += '<text id="text_title2" x="' + (o_h + 45) + '" y="' + (o_h +35) + '" fill="#000000" style="font-size:18px;" >' + t_title2 + '</text>';
+                            
+                            var t_maxMoney=obj.data('info').maxMoney;
+                            var t_ny=0; //分段
+                            var strX=o_w+lt_w+ln_w;
+                            var strY=objHeight-o_h-bt_w-bn_w;
+                            var t_width=objWidth-(o_w*2)-lt_w-ln_w;
+                            var t_height=objHeight-(o_h*2)-bt_w-bn_w-t_h;
+                            
+                            //X軸
+                            tmpPath += '<line x1="' + strX + '" y1="' + strY + '" x2="' + (strX + t_width) + '" y2="' + strY + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
+                            //Y軸
+                            tmpPath += '<line x1="' + strX + '" y1="' + strY + '" x2="' + strX + '" y2="' + (strY-t_height) + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
+                            
+                            tmpPath += '<text id="textltitle" text-anchor="middle"  x="' + (strX-ln_w-lt_w-10) + '" y="' + (strY-(t_height/2)) + '" fill="#000000" style="writing-mode: tb;" >' + t_ltitle + '</text>';
+                            tmpPath += '<text id="textbtitle" text-anchor="middle"  x="' + (strX+(t_width/2)) + '" y="' + (strY+bn_w+10) + '" fill="#000000" >' + t_btitle + '</text>';
+                            
+                            tmpPath += '<text text-anchor="end"  x="'+(strX-5)+'" y="'+(strY)+'" fill="#000000" >0</text>';
+                            
+                            var x_f=2,x_t=5;
+                            while(t_maxMoney/x_f>10 && t_maxMoney/x_t>10){
+                            	x_f=x_f*2;
+                            	x_t=x_t*2;
+                            }
+                            t_ny=t_maxMoney/(t_maxMoney/x_f<=10?x_f:x_t);
+                            
+                            var t_tmpmoney=round(t_maxMoney/t_ny,0);
+                            var t_theight=round(t_height/t_ny,0);
+                            for (var i=1; i<=t_ny; i++){
+                            	tmpPath += '<line x1="' + (strX+5) + '" y1="' + (strY-(t_theight*i))  + '" x2="' + (strX-5) + '" y2="' + (strY-(t_theight*i)) + '" style="stroke:rgb(0,0,0);stroke-width:2"/>';
+								tmpPath += '<text text-anchor="end"  x="'+(strX-10)+'" y="'+(strY-(t_theight*i)+5)+'" fill="#000000" >'+FormatNumber(t_tmpmoney*i)+'</text>';
+                            }
+                            
+                            var titlecolor=[],ttext=[];
+                            for (var i = 0; i < t_detail.length; i++) {
+                            	var isexists=false;
+                            	for (var j = 0; j < titlecolor.length; j++) {
+                            		if(t_detail[i].title==titlecolor[j].title){
+                            			isexists=true;
+                            			break;
+                            		}
+                            	}
+                            	if(!isexists){
+                            		titlecolor.push({
+                            			title:t_detail[i].title,
+                            			color:getRndColor()
+                            		});
+                            	}
+                            	isexists=false;
+                            	for (var j = 0; j < ttext.length; j++) {
+                            		if(t_detail[i].text==ttext[j].text){
+                            			isexists=true;
+                            			break;
+                            		}
+                            	}
+                            	if(!isexists){
+                            		ttext.push({
+                            			text:t_detail[i].text,
+                            		});
+                            	}
+                            }
+                            
+                            
+                            //符號說明
+                            var t_tn=4;//分段
+                            for (var j = 0; j < titlecolor.length; j++) {
+								tmpPath += '<rect id="blockLogo'+j+'" x="'+(strX+(t_width/t_tn*(j%t_tn)))+'" y="'+(strY+bt_w+(Math.floor(j/t_tn)*25))+'" width="20" height="20" fill="'+titlecolor[j].color+'"/>';
+								tmpPath += '<text id="blockLogo'+j+'" x="'+(strX+25+(t_width/t_tn*(j%t_tn)))+'" y="'+(strY+bt_w+(Math.floor(j/t_tn)*25)+10)+'" style="dominant-baseline: middle;" fill="black">'+titlecolor[j].title+'</text>';
+                            }
+                            
+                            var b_weight=round(t_width/ttext.length,0);//長條寬度
+                            
+                            for (var j = 0; j < ttext.length; j++) {
+                            	//下標題
+                            	tmpPath += '<text text-anchor="middle" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*j)+(b_weight/2))+'" y="'+(strY+15+(j%2*15))+'" fill="#000000" >'+ttext[j].text+'</text>';
+                            	var t_y=strY-1;
+                            	var t_total=0;
+                            	for (var i = 0; i < t_detail.length; i++) {
+                            		if(ttext[j].text==t_detail[i].text){
+                            			var t_color='';
+                            			for (var k = 0; k < titlecolor.length; k++) {
+                            				if(titlecolor[k].title==t_detail[i].title){
+                            					t_color=titlecolor[k].color;
+                            					break;
+                            				}
+                            			}
+                            			
+                            			t_y=t_y-(t_height*t_detail[i].total/t_maxMoney);
+                            			//長條圖
+		                            	tmpPath += '<rect id="Barchart_'+[i]+'_'+t_detail[i].title+'" x="'+(strX+(b_weight*j)+5)+'" y="'+(t_y)+'" width="'+((b_weight)-5)+'" height="'+(t_height*t_detail[i].total/t_maxMoney)+'" fill="'+t_color+'"/>';
+		                            	t_total=t_total+dec(t_detail[i].total);
+                            		}
+                            	}
+                            	//總數
+                            	tmpPath += '<text text-anchor="start" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*j)+(b_weight/2))+'" y="'+(t_y-5)+'" fill="#000000" >'+t_unit+FormatNumber(t_total)+'</text>';
+                            }
+                            
+                            if(obj.data('info').value.previous==true){
+								tmpPath += '<text class="href" id="prev" text-anchor="end" x="' + (objWidth-o_w) + '" y="' + (objHeight-o_h+10) + '" fill="#0000FF" style="font-size:12px;font-weight: bold;text-decoration:underline;">回上一層</text>';
+								tmpPath += '<text class="href" id="home" x="' + (o_w) + '" y="' + (objHeight-o_h+10) + '" fill="#0000FF"  style="font-size:12px;font-weight: bold;text-decoration:underline;">回最上層</text>';
+							}
+                            
+                            obj.width(objWidth).height(objHeight).html('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="graph6">' + tmpPath + '</svg> ');
+							$('.graph6').css('width',objWidth+'px');
+                            $('.graph6').css('height',objHeight+'px');
+                            
+                            obj.children('svg').find('rect').click(function(e) {
+                            	$('#Chartid').val(obj.attr('id'));
+                            	if($(this).attr('id').indexOf('Barchart_')>-1){
+									var n = $(this).attr('id').replace('Barchart_', '').split('_')[0];
 									$('#Charttext').val(t_detail[n].text);
 									$('#Chartrectid').val($(this).attr('id'));
 									//select 重新帶入--------------------------
@@ -1954,11 +2316,19 @@
                             
                             var o_w=25; //左右邊界
                             var o_h=20;//上下邊界
-							var t_h=50;//抬頭留空
-							var bi_h=20;//圖與說明中間留空
-                            var bt_h=Math.ceil((obj.data('info').value.data.length/2))*25; //下說明 留空
+							var t_h=20;//抬頭留空
+							var bi_h=5;//圖與說明中間留空
+							var bn=4; //圖說明 分行
+                            var bt_h=Math.ceil((obj.data('info').value.data.length/bn))*25; //下說明 留空
                             
                             var objWidth = (x*2)+(o_w*2)+t_h;
+                            var x_s=0;
+                            if(objWidth<500){
+                            	x_s=(500-objWidth)/2;
+                            	objWidth=500;
+                            }else{
+                            	bn=bn+Math.floor((objWidth-500)/100);
+                            }
                             var objHeight = (y*2)+(o_h*2)+bt_h+bi_h;
                             
                             //背景
@@ -1976,7 +2346,7 @@
                                     fillColor = '"' + obj.data('info').focusfillColor + '"';
                                     strokeColor = '"' + t_detail[i].strokeColor + '"';
                                 } else {
-                                    shiftX = o_w;
+                                    shiftX = o_w+x_s;
                                     shiftY = o_h+t_h;
                                     fillColor = '"' + t_detail[i].fillColor + '"';
                                     strokeColor = '"' + t_detail[i].strokeColor + '"';
@@ -1988,8 +2358,8 @@
                                 t_detail[i].point2 = [x + shiftX + Math.round(radius * Math.cos(t_detail[i].bDegree), 0), y + shiftY + Math.round(radius * Math.sin(t_detail[i].bDegree), 0)];
                                 t_detail[i].point3 = [x + shiftX + Math.round(radius * Math.cos(t_detail[i].eDegree), 0), y + shiftY + Math.round(radius * Math.sin(t_detail[i].eDegree), 0)];
 
-                                var pointLogo = [o_w + 20+((i%2)*(objWidth/2)), (objHeight-bt_h-o_h)+(Math.floor((i/2))*25)];
-                                var pointText = [o_w + 20+((i%2)*(objWidth/2))+30, (objHeight-bt_h-o_h)+(Math.floor((i/2))*25)+10];
+                                var pointLogo = [o_w + 20+((i%bn)*(objWidth/bn)), (objHeight-bt_h-bi_h-o_h)+(Math.floor((i/bn))*25)];
+                                var pointText = [o_w + 20+((i%bn)*(objWidth/bn))+20, (objHeight-bt_h-bi_h-o_h)+(Math.floor((i/bn))*25)+10];
                                 tmpPath += '<rect class="blockLogo" id="blockLogo_' + i + '" width="10" height="10" x="' + pointLogo[0] + '" y="' + pointLogo[1] + '" fill=' + fillColor + ' stroke=' + strokeColor + '/>';
                                 tmpPath += '<text class="blockText" id="blockText_' + i + '" x="' + pointText[0] + '" y="' + pointText[1] + '" fill="#000000">' + t_detail[i].text + '</text>';
                                 
@@ -2006,7 +2376,7 @@
 								if (degree > 10){
 									tmpPath += '<text text-anchor="middle" class="blockText" id="imgText_' + i 
 									+ '" x="' + (t_detail[i].point1[0] +Math.round(((radius-10) *Math.cos((t_detail[i].bDegree+t_detail[i].eDegree)/2)),0))
-									+ '" y="' + (t_detail[i].point1[1] +Math.round(((radius-10) *Math.sin((t_detail[i].bDegree+t_detail[i].eDegree)/2)),0))
+									+ '" y="' + (t_detail[i].point1[1] +Math.round(((radius-15) *Math.sin((t_detail[i].bDegree+t_detail[i].eDegree)/2)),0))
 									+ '" fill="#000000">'+t_unit+FormatNumber(t_detail[i].total) + '</text>';
 								}
 							}
@@ -2124,8 +2494,8 @@
 					<option value="">請選取儀表板</option>
 					<option value="sale">銷售活動儀表板</option>
 					<option value="service">客戶服務績效儀表板</option>
-					<option value="manager">客戶服務經理儀表板</option>
-					<!--<option value="namea">客戶服務代表社交儀表板</option>-->
+					<!--<option value="manager">客戶服務經理儀表板</option>
+					<option value="namea">客戶服務代表社交儀表板</option>-->
 					<option value="marketing">行銷儀表板</option>
 					<!--<option value="namea">行銷社交儀表板</option>-->
 				</select>

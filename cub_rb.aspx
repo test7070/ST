@@ -583,8 +583,10 @@
                         //	t_IdSeq = -1;
                         //	q_bodyId($(this).attr('id'));
                         //	b_seq = t_IdSeq;
-                        t_where = "where=^^ rc2no='" + trim($('#txtOrdeno_' + i).val()) + "'^^";
-                        q_gt('pays', t_where, 0, 0, 0, "pays", r_accy);
+                        if(!emp(trim($('#txtOrdeno_' + i).val()))){
+	                        t_where = "where=^^ rc2no='" + trim($('#txtOrdeno_' + i).val()) + "'^^";
+	                        q_gt('pays', t_where, 0, 0, 0, "pays", r_accy);
+                        }
 
                         //});
 
