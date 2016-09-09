@@ -339,7 +339,7 @@ insert into @tmp(gno,pageno,pageorder,datea,noa,noq,buyer,serial,invoaddr,chkno,
 		'0',0,0,a.datea,a.noa,b.noq,
 		case when LEN(a.buyer)!=0 then a.buyer else a.comp end,
 		case when isnull(a.serial,'') != '' then a.serial else d.serial end,
-		case when LEN(a.buyerno)=0  then (case when isnull(a.address,'') != '' then a.address else d.addr_invo end) else '' end,
+		case when LEN(a.buyerno)=0  then isnull(a.address,'') else '' end,
 		a.chkno,a.vccno,c.zipcode,case when c.ordeno!='' then c.ordeno else REPLACE(a.memo,vccno,'') end,b.productno,b.product
 		,case when  b.mount=0 then null else b.mount end
 		,case when b.price=0 then null else b.price end

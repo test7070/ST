@@ -46,7 +46,8 @@
                     });
                 q_popAssign();
 				$('#txtXmon').mask(r_picm);
-				$('#txtXmon').val(q_date().substr(0,r_lenm));
+				if(window.parent.q_name=="salary")
+					$('#txtXmon').val(window.parent.$('#txtMon').val());
 			}
 
             function q_boxClose(s2) {
