@@ -49,6 +49,7 @@
 				$('#txtBdate').removeAttr('disabled');
 				$('#txtEdate').removeAttr('disabled');
 				$('#txtStartdate').attr('disabled', 'disabled');
+				$('#txtPo').attr('disabled', 'disabled');
 				
 				q_gt('sss', "where=^^isnull(issales,0)=1 ^^", 0, 0, 0, "getsalse",r_accy);
                 
@@ -64,6 +65,7 @@
 					var t_edate='#non';
 					var t_startdate='#non';
 					var t_radio=$('[name=xradio]:checked').val();
+					var t_po='#non';
                 	
                 	if($.trim($('#txtMon').val()).length==0 && t_radio=='2'){
                 		alert('【月結】方式帳款月份禁止空白!!')
@@ -81,10 +83,13 @@
 					if(t_radio=='2'){
 						if($.trim($('#txtStartdate').val()).length>0){t_startdate=$.trim($('#txtStartdate').val());}
 					}
+					if(t_radio=='3'){
+						if($.trim($('#txtPo').val()).length>0){t_po=$.trim($('#txtPo').val());}
+					}
 					
 					q_func('qtxt.query.vccamon', 'cust_ucc_xy.txt,vccamon,' 
 					+ encodeURI(t_salesno) + ';' + encodeURI(t_custno) + ';' + encodeURI(t_mon) + ';' + encodeURI(t_bdate)+ ';' + encodeURI(t_edate) 
-					+ ';' + encodeURI(t_startdate) + ';' + encodeURI(t_radio) + ';' + encodeURI(r_userno) + ';' + encodeURI(r_name));
+					+ ';' + encodeURI(t_startdate) + ';' + encodeURI(t_po) + ';' + encodeURI(t_radio) + ';' + encodeURI(r_userno) + ';' + encodeURI(r_name));
 					
 					$('#btnGenvcca').attr('disabled', 'disabled');
 				});
@@ -104,10 +109,12 @@
 						$('#txtBdate').removeAttr('disabled');
 						$('#txtEdate').removeAttr('disabled');
 						$('#txtStartdate').attr('disabled', 'disabled');
+						$('#txtPo').attr('disabled', 'disabled');
 					}else if($('[name=xradio]:checked').val()=='2'){
 						$('#txtStartdate').removeAttr('disabled');
 						$('#txtBdate').attr('disabled', 'disabled');
 						$('#txtEdate').attr('disabled', 'disabled');
+						$('#txtPo').attr('disabled', 'disabled');
 					}else{
 						$('#txtStartdate').attr('disabled', 'disabled');
 						//$('#txtBdate').attr('disabled', 'disabled');
@@ -115,6 +122,7 @@
 						//105/08/15 開啟篩選
 						$('#txtBdate').removeAttr('disabled');
 						$('#txtEdate').removeAttr('disabled');
+						$('#txtPo').removeAttr('disabled');
 					}
 				});
 				
@@ -274,7 +282,7 @@
 					</tr>
 					<tr>
 						<td align="center"><input name="xradio" type="radio" value="3">PO&nbsp;&nbsp;&nbsp;</td>
-						<td colspan="3"> </td>
+						<td colspan="3"><input id="txtPo"  type="text" class="txt" style="width: 120px; font-size: medium;"/></td>
 					</tr>
 					<tr>
 						<td align="center" colspan="4">
