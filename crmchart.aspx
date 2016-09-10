@@ -17,6 +17,8 @@
 		<script type="text/javascript">
             var q_name = "crmchart";
             aPop = new Array();
+            var colorall=['#f6c8ed','#d3afea','#bfead7','#d0e5b6','#f3e2bb','#d0d2d9','#bdd4c4','#fee0e9','#d8edc7','#d7ecee'
+            ,'#b0f7ba','#b0f7ba','#fecdae','#b3d0fc','#f9f5c9','#daadf3','#caecf7','#dfefde','#b7bab2','#d5fac1','#e9fdc0'];
             //預設圖型資料
 			var DC1Chart='';
 			var DC2Chart='';
@@ -170,6 +172,9 @@
 							DC1Dselect=",possibility@可能性,theme@商機,comp@客戶,sales@業務";
 							DC2Dselect=",comp@客戶,sales@業務,product@產品";
 							DC3Dselect=",comp@客戶,stype@類別,mon@月份,product@產品";
+							C1Bar3select='';
+							C2Bar3select='';
+							C3Bar3select='';
 							
 							DC1Where="select stage@#~possibility@#~theme@#~comp@#~sales@#~money total from crmbusiness where datea between '"+$('#txtBmon').val()+"' and '"+$('#txtEmon').val()+"' and money>0 ";
 							DC1Where=DC1Where+" order by case when stage='潛在機會' then 1 when stage='初步接洽' then 2 when stage='需求確認' then 3 when stage='建議/報價' then 4 when stage='談判協商' then 5 when stage='成交' then 6 when stage='失敗' then 7 else 9 end"
@@ -246,6 +251,12 @@
 							DC4Unit='';
 							DC5Unit='';
 							DC6Unit='';
+							C1Bar3select='';
+							C2Bar3select='';
+							C3Bar3select='';
+							C4Bar3select='';
+							C5Bar3select='';
+							C6Bar3select='';
 							
 							DC1Dselect=",reason@原因,source@來源,effort@費力程度,priority@優先順序,comp@客戶,namea@服務人員,question@問題";
 							DC2Dselect=",product@產品,reason@原因,source@來源,effort@費力程度,comp@客戶,namea@服務人員,question@問題";
@@ -333,6 +344,10 @@
 							DC2Dtitle='金額';
 							DC3Dtitle='計數';
 							DC4Dtitle='加總(實際營收)';
+							C1Bar3select='';
+							C2Bar3select='';
+							C3Bar3select='';
+							C4Bar3select='';
 							
 							DC1Dselect=",namea@活動名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,emon@實際結束日期,money@預估營收";
 							DC2Dselect=",namea@活動名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,typea@類別";
@@ -599,7 +614,7 @@
 						pieData=t_as;
 						var color=new Array();
 		                for (var i=0;i<pieData.length;i++){
-		                	color.push(getRndColor());
+		                	color.push(colorall[i]);
 		                }
 						$('#'+Charid).pieChart({
 							title:'',
@@ -1038,7 +1053,7 @@
 				}else if(change_chart=='pieChart'){
 					var color=new Array();
 					for (var i=0;i<pieData.length;i++){
-						color.push(getRndColor());
+						color.push(colorall[i]);
 					}
 					pieData=t_as;
 					$('#'+chartid).pieChart({
@@ -1373,7 +1388,7 @@
 				}else if(change_chart=='pieChart'){
 					var color=new Array();
 					for (var i=0;i<pieData.length;i++){
-						color.push(getRndColor());
+						color.push(colorall[i]);
 					}
 					$('#'+chartid).pieChart({
 						title:new_title,
@@ -1469,7 +1484,7 @@
 									tt_w=round((objWidth-b_w-(o_w*2))*((t_detail.length-i-1)/t_detail.length),0);
 								}*/
 								
-								var t_color=getRndColor();
+								var t_color=colorall[i];
                                //圖型
 								tmpPath += '<polygon class="chart_tra" id="Trachart_' + i + '" points="'+t_x+','+t_y+' '+(t_x2)+','+t_y+' '
 								+(t_x2-(tt_w))+','+(t_y+tt_h)+' '+(t_x+(tt_w))+','+(t_y+tt_h)+'" fill="'+t_color+'"/>';
@@ -1632,7 +1647,7 @@
                             		tmpPath += '<text text-anchor="end" style="dominant-baseline: middle;"  x="'+(strX-3)+'" y="'+(strY-(b_height*(t_detail.length-i))+(b_height/2))+'" fill="#000000" >'+t_detail[i].text+'</text>';	
                             	}
                             	//長條圖
-                            	var t_color=getRndColor();
+                            	var t_color=colorall[i];
                             	tmpPath += '<rect id="Barchart2_'+i+'" x="'+(strX+1)+'" y="'+(strY-(b_height*(t_detail.length-i))+5)+'" width="'+(t_width*t_detail[i].total/t_maxMoney)+'" height="'+(b_height-10)+'" fill="'+t_color+'"/>';
                             	//金額	
                             	if(t_detail[i].total/t_maxMoney>0.9){
@@ -1791,10 +1806,10 @@
                             }
                             
                             //符號說明
-                            var t_color=getRndColor();
                             var b_weight=round(t_width/t_detail.length,0);//長條寬度
                             
                             for (var i = 0; i < t_detail.length; i++) {
+                            	var t_color=colorall[i];
                             	//下標題
                             	tmpPath += '<text text-anchor="middle" style="dominant-baseline: middle;"  x="'+(strX+(b_weight*i)+(b_weight/2))+'" y="'+(strY+15+(i%2*15))+'" fill="#000000" >'+t_detail[i].text+'</text>';
                             	
@@ -1962,10 +1977,10 @@
                             }
                             
                             //符號說明
-                            var t_color1=getRndColor();
+                            var t_color1=colorall[3];
 							tmpPath += '<rect id="blockLogo1" x="'+(strX+10)+'" y="'+(strY+bn_w+20)+'" width="20" height="20" fill="'+t_color1+'"/>';
 							tmpPath += '<text x="'+(strX+40)+'" y="'+(strY+bn_w+30)+'" style="dominant-baseline: middle;" fill="black">'+t_btitle1+'</text>';
-							var t_color2=getRndColor();
+							var t_color2=colorall[1];
 							tmpPath += '<rect id="blockLogo2" x="'+(strX+10+(t_width/2))+'" y="'+(strY+bn_w+20)+'" width="20" height="20" fill="'+t_color2+'"/>';
 							tmpPath += '<text x="'+(strX+40+(t_width/2))+'" y="'+(strY+bn_w+30)+'" style="dominant-baseline: middle;" fill="black">'+t_btitle2+'</text>';
                             
@@ -2156,7 +2171,7 @@
                             	if(!isexists){
                             		titlecolor.push({
                             			title:t_detail[i].title,
-                            			color:getRndColor()
+                            			color:colorall[i]
                             		});
                             	}
                             	isexists=false;
