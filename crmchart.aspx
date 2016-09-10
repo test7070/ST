@@ -134,7 +134,7 @@
                 q_getId();
                 q_gf('', q_name);
 
-				$('#DashboardSelect').change(function(e) {
+				$('.btnshow').click(function(e) {
 					$('#downChart').hide();
 					switch($(this).val()) {
 						case ''://無選取
@@ -145,7 +145,7 @@
 							$('#Chart5').hide();
 							$('#Chart6').hide();
                    			break;
-                   		case 'sale'://銷售活動儀表板
+                   		case '銷售活動儀表板'://銷售活動儀表板
                    			//預設-----------------------------------------------
                    			DC1Chart='traChart';
 							DC2Chart='barChart3';
@@ -207,7 +207,7 @@
 							$('#Chart5').hide();
 							$('#Chart6').hide();
                    			break;
-                   		case 'service'://客戶服務績效儀表板
+                   		case '客戶服務績效儀表板'://客戶服務績效儀表板
                    			//預設-----------------------------------------------
                    			DC1Chart='barChart2';
 							DC2Chart='barChart2';
@@ -305,7 +305,7 @@
 							$('#Chart5').show();
 							$('#Chart6').show();
                    			break;
-                   		case 'marketing'://行銷儀表板
+                   		case '行銷儀表板'://行銷儀表板
                    			//預設-----------------------------------------------
                    			DC1Chart='pieChart';
 							DC2Chart='barChart3';
@@ -1623,9 +1623,14 @@
                             
                             var b_height=round(t_height/t_detail.length,0);//長條寬度
                             
+                            var t_sn=8;//字分段
                             for (var i = 0; i < t_detail.length; i++) {
                             	//左標題
-                            	tmpPath += '<text text-anchor="end" style="dominant-baseline: middle;"  x="'+(strX-3)+'" y="'+(strY-(b_height*(t_detail.length-i))+(b_height/2))+'" fill="#000000" >'+t_detail[i].text+'</text>';
+                            	if(t_detail[i].text.Blength()>t_sn){
+                            		tmpPath += '<text text-anchor="end" style="dominant-baseline: middle;"  x="'+(strX-3)+'" y="'+(strY-(b_height*(t_detail.length-i))+(b_height/2-(10*Math.ceil(t_detail[i].text.Blength()/t_sn))))+'" fill="#000000" >'+Svgtspan(t_detail[i].text,t_sn,(strX-3))+'</text>';
+                            	}else{
+                            		tmpPath += '<text text-anchor="end" style="dominant-baseline: middle;"  x="'+(strX-3)+'" y="'+(strY-(b_height*(t_detail.length-i))+(b_height/2))+'" fill="#000000" >'+t_detail[i].text+'</text>';	
+                            	}
                             	//長條圖
                             	var t_color=getRndColor();
                             	tmpPath += '<rect id="Barchart2_'+i+'" x="'+(strX+1)+'" y="'+(strY-(b_height*(t_detail.length-i))+5)+'" width="'+(t_width*t_detail[i].total/t_maxMoney)+'" height="'+(b_height-10)+'" fill="'+t_color+'"/>';
@@ -2466,13 +2471,38 @@
                 
                 //----------------------------------------------------------------------------------------------
             })($);
-
+			
+			function Svgtspan(text,n,x) {
+				//字元換行
+                if(text.Blength()>n){
+                	var t_text='';
+                	var i=0;
+                	while(i<text.length){
+                		var t_tmp='';
+                		while(t_tmp.Blength()<n && i<text.length){
+                			i++;
+                			t_tmp=t_tmp+text.substr(i,1);
+                		}
+						t_text=t_text+'<tspan x="'+x+'" dy="1em">'+t_tmp+'</tspan>';
+                	}
+                	return t_text;	
+                }else{
+                	return text;	
+                }
+            }
+			
             function FormatNumber(n) {
                 n += "";
                 var arr = n.split(".");
                 var re = /(\d{1,3})(?=(\d{3})+$)/g;
                 return arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
             }
+            
+            String.prototype.Blength = function() 
+			{ 
+				var arr = this.match(/[^\x00-\xff]/ig); 
+				return  arr == null ? this.length : this.length + arr.length; 
+			}
 		</script>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -2489,16 +2519,19 @@
 				<input id="txtBmon" type="text" style="font-size: medium;width: 85px;">
 				<a>~</a>
 				<input id="txtEmon" type="text" style="font-size: medium;width: 85px;">
-				<a>儀表板：</a>
+				<!--<a>儀表板：</a>
 				<select id="DashboardSelect" style="font-size: large;">
 					<option value="">請選取儀表板</option>
 					<option value="sale">銷售活動儀表板</option>
 					<option value="service">客戶服務績效儀表板</option>
-					<!--<option value="manager">客戶服務經理儀表板</option>
-					<option value="namea">客戶服務代表社交儀表板</option>-->
 					<option value="marketing">行銷儀表板</option>
-					<!--<option value="namea">行銷社交儀表板</option>-->
-				</select>
+				</select>-->
+				<!--<option value="manager">客戶服務經理儀表板</option>
+					<option value="namea">客戶服務代表社交儀表板</option>
+					<option value="namea">行銷社交儀表板</option>-->
+				<input id="btnChart1" class="btnshow" type="button" value="銷售活動儀表板" style="font-size: medium;">
+				<input id="btnChart2" class="btnshow" type="button" value="客戶服務績效儀表板" style="font-size: medium;">
+				<input id="btnChart3" class="btnshow" type="button" value="行銷儀表板" style="font-size: medium;">
 			</div>
 			<div id='Loading'> </div>
 			<div id='Chart1'  style="float: left;display: none;"> </div>
