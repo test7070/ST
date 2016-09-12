@@ -34,6 +34,7 @@ z_rc2st1:--z_rc2st1
 	end catch
 	declare @t_style nvarchar(max) = case when '#non'=[20] then '' else [20] end
 	----------------------------------------------------------------------------------------------
+	----------------------------------------------------------------------------------------------
 	declare @tmp table(
 		gno nvarchar(1),
 		noa nvarchar(20),
@@ -86,12 +87,12 @@ z_rc2st1:--z_rc2st1
 	order by datea desc,gno,noa,noq
 	update @tmp set csize = replace(csize,'~#$','''')
 	update @tmp set spec = replace(spec,'~#$','''')
-	insert into @tmp(gno,datea,mount,total)
-		select '1',datea,sum(mount),sum(total) from @tmp where gno='0' group by datea
-	insert into @tmp(gno,datea,mount,total)
-		select '2',left(datea,6),sum(mount),sum(total) from @tmp where gno='0' group by left(datea,6)
-	insert into @tmp(gno,datea,mount,total)
-		select '3','',sum(mount),sum(total) from @tmp where gno='0' 
+	insert into @tmp(gno,datea,mount,[weight],total)
+		select '1',datea,sum(mount),sum([weight]),sum(total) from @tmp where gno='0' group by datea
+	insert into @tmp(gno,datea,mount,[weight],total)
+		select '2',left(datea,6),sum(mount),sum([weight]),sum(total) from @tmp where gno='0' group by left(datea,6)
+	insert into @tmp(gno,datea,mount,[weight],total)
+		select '3','',sum(mount),sum([weight]),sum(total) from @tmp where gno='0' 
 	update @tmp set qhref = substring(qhref,0,len(qhref)-2)+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?'+substring(qhref,len(qhref)-2,len(qhref))
 	---------~~~~~~~~
 	--轉來的要回去抓匯率
