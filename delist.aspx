@@ -137,7 +137,7 @@
                 		,t_cointotaldiv),2)));
                 		
                 		//本幣單價
-                		//本幣完稅價格 為了與進銷存表金額一致,  改為 round((數量OR重量)*台幣單價,0)
+                		//本幣完稅價格 為了與進銷存表金額一致,  改為 round((數量OR重量)*台幣單價,0)  2016/09/12
 						var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
 						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
 						|| q_getPara('sys.project').toUpperCase()=='RK' ) {
