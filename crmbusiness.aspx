@@ -28,7 +28,8 @@
             brwKey = 'noa';
             brwCount2 = 15;
 
-            aPop = new Array(['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'], ['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'], ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtNamea', 'sss_b.aspx']);
+            aPop = new Array(['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'], ['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'], ['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+            ['txtCrmcno', 'lblCrmcno', 'crmcampaign', 'noa,namea', 'txtCrmcno,txtCrmcname', 'crmcampaign_b.aspx']);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -49,7 +50,7 @@
             var z_acomp = '';
             function mainPost() {
                 q_getFormat();
-                bbmMask = [['txtDatea', r_picd], ['txtEdatea', r_picd]];
+                bbmMask = [['txtDatea', r_picd], ['txtEdate', r_picd], ['txtEnddatea', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbStage", ",潛在機會,初步接洽,需求確認,建議/報價,談判協商,成交,失敗");
 
@@ -94,12 +95,13 @@
                 $('#txtDatea').val(q_date());
                 $('#txtCno').val(z_cno);
                 $('#txtAcomp').val(z_acomp);
-                $('#txtEdatea').val(q_date());
+                $('#txtEdate').val(q_date());
 
                 $('#txtSssno').val(r_userno);
                 $('#txtNamea').val(r_name);
                 $('#txtDatea').focus();
-                $('#txtEdatea').focus();
+                $('#txtEdate').focus();
+                $('#txtEnddate').focus();
             }
 
             function btnModi() {
@@ -383,7 +385,12 @@
 					<tr>
 						<td><span> </span><a id='lblSales' class="lbl btn"> </a></td>
 						<td ><input id="txtSalesno" type="text" class="txt c1" /></td>
-						<td><input id="txtNamea" type="text" class="txt c1" /></td>
+						<td><input id="txtSales" type="text" class="txt c1" /></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblCrmcno' class="lbl btn"> </a></td>
+						<td ><input id="txtCrmcno" type="text" class="txt c1" /></td>
+						<td colspan="2"><input id="txtCrmcname" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblDescribe" class="lbl"> </a></td>
@@ -402,10 +409,15 @@
 						<td colspan="3"><textarea id="txtSuggest" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblEdatea' class="lbl"> </a></td>
-						<td><input id="txtEdatea"  type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblEdate' class="lbl"> </a></td>
+						<td><input id="txtEdate"  type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
 						<td><input id="txtMoney" type="text" class="txt num c1" /></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblEnddate' class="lbl"> </a></td>
+						<td><input id="txtEnddatea"  type="text" class="txt c1" /></td>
+
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
