@@ -660,7 +660,7 @@ select
 	a.money7 m7,
 	a.money8 m8,
 	a.money9 m9,
-	a.memo,
+	REPLACE (a.memo, 'chr(10)', '<br>') memo,
 	product1 ,price1 ,dbo.getComma(mount1,0)mount1 ,dbo.getComma(total1,0)total1 ,
 	product2 ,price2 ,dbo.getComma(mount2,0)mount2 ,dbo.getComma(total2,0)total2 ,
 	product3 ,price3 ,dbo.getComma(mount3,0)mount3 ,dbo.getComma(total3,0)total3 ,
