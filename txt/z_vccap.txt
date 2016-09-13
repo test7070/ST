@@ -324,6 +324,7 @@ declare @tmp table(
 	money7 nvarchar(10),
 	money8 nvarchar(10),
 	money9 nvarchar(10),
+	memo nvarchar(max),
 	product1 nvarchar(90),price1 float,mount1 float,total1 float,
 	product2 nvarchar(90),price2 float,mount2 float,total2 float,
 	product3 nvarchar(90),price3 float,mount3 float,total3 float,
@@ -334,7 +335,7 @@ declare @tmp table(
 )
 insert into @tmp(gno,pageno,pageorder,datea,noa,noq,buyer,serial,invoaddr,chkno,
 	vccno,ordbno,ordeno,productno,products,mount,price,total,taxtype1,taxtype2,taxtype3,totpmoney,taxmoney,totmoney,
-	money1,money2,money3,money4,money5,money6,money7,money8,money9)
+	money1,money2,money3,money4,money5,money6,money7,money8,money9,memo)
 	select
 		'0',0,0,a.datea,a.noa,b.noq,
 		case when LEN(a.buyer)!=0 then a.buyer else a.comp end,
@@ -347,7 +348,7 @@ insert into @tmp(gno,pageno,pageorder,datea,noa,noq,buyer,serial,invoaddr,chkno,
 		case when a.taxtype='1' then '&#10004' else null end,
 		case when a.taxtype='2' then '&#10004' else null end,
 		case when a.taxtype='4' then '&#10004' else null end,
-		a.money,a.tax,a.total,'','','','','','','','',''
+		a.money,a.tax,a.total,'','','','','','','','','',a.memo
 	from vcca a
 	left join vccas b on a.noa=b.noa
 	left join view_vcc c on a.vccno = c.noa
@@ -612,6 +613,7 @@ declare @tmpa table(
 	money7 nvarchar(10),
 	money8 nvarchar(10),
 	money9 nvarchar(10),
+	memo nvarchar(MAX),
 	product1 nvarchar(90),price1 float,mount1 float,total1 float,
 	product2 nvarchar(90),price2 float,mount2 float,total2 float,
 	product3 nvarchar(90),price3 float,mount3 float,total3 float,
@@ -622,21 +624,17 @@ declare @tmpa table(
 
 )
 
-insert into @tmpa(gno,pageno,pageorder,datea,noa,buyer,serial,invoaddr,chkno,vccno,ordbno,taxtype1,taxtype2,taxtype3,totpmoney,totmoney,taxmoney,money1,money2,money3,money4,money5,money6,money7,money8,money9,
+insert into @tmpa(gno,pageno,pageorder,datea,noa,buyer,serial,invoaddr,chkno,vccno,ordbno,taxtype1,taxtype2,taxtype3,totpmoney,totmoney,taxmoney,money1,money2,money3,money4,money5,money6,money7,money8,money9,memo,
 	product1 ,price1 ,mount1 ,total1 ,product2 ,price2 ,mount2 ,total2 ,product3 ,price3 ,mount3 ,total3 ,
 	product4 ,price4 ,mount4 ,total4 ,product5 ,price5 ,mount5 ,total5 ,product6 ,price6 ,mount6 ,total6 ,
 	product7 ,price7 ,mount7 ,total7 )
-select '0',pageno,'9000',datea,noa,buyer,serial,invoaddr,chkno,vccno,ordbno,taxtype1,taxtype2,taxtype3,totpmoney,totmoney,taxmoney,money1,money2,money3,money4,money5,money6,money7,money8,money9,
+select '0',pageno,'9000',datea,noa,buyer,serial,invoaddr,chkno,vccno,ordbno,taxtype1,taxtype2,taxtype3,totpmoney,totmoney,taxmoney,money1,money2,money3,money4,money5,money6,money7,money8,money9,max(memo),
 	max(product1),max(price1),max(mount1),max(total1),max(product2),max(price2),max(mount2),max(total2),max(product3),max(price3),max(mount3),max(total3),
 	max(product4) ,max(price4) ,max(mount4) ,max(total4) ,max(product5) ,max(price5) ,max(mount5) ,max(total5) ,max(product6) ,max(price6) ,max(mount6) ,max(total6) ,
 	max(product7) ,max(price7) ,max(mount7) ,max(total7)
 from @tmp
 where gno=0 or gno=1
 group by pageno,datea,noa,buyer,serial,invoaddr,chkno,vccno,ordbno,taxtype1,taxtype2,taxtype3,totpmoney,totmoney,taxmoney,money1,money2,money3,money4,money5,money6,money7,money8,money9
-
-update @tmpa
-set totpmoney=null,totmoney=null,taxmoney=null,money1='',money2='',money3='',money4='',money5='',money6='',money7='',money8='',money9=''
-from @tmpa where product7!=''
 
 select
 	a.gno,a.pageno,a.pageorder,a.datea,
@@ -662,6 +660,7 @@ select
 	a.money7 m7,
 	a.money8 m8,
 	a.money9 m9,
+	a.memo,
 	product1 ,price1 ,dbo.getComma(mount1,0)mount1 ,dbo.getComma(total1,0)total1 ,
 	product2 ,price2 ,dbo.getComma(mount2,0)mount2 ,dbo.getComma(total2,0)total2 ,
 	product3 ,price3 ,dbo.getComma(mount3,0)mount3 ,dbo.getComma(total3,0)total3 ,
