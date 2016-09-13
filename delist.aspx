@@ -135,16 +135,19 @@
 						//原幣完稅價格(原幣進貨額 + ( (原幣運費+原幣保險費+原幣加減費用) * (該筆原幣進貨額/原幣進貨額合計) ))
                 		q_tr('txtCointotal_'+j,q_add(q_float('txtMoney_'+j),round(q_mul(q_add(q_add(q_float('txtTranmoney'),q_float('txtInsurance')),q_float('txtModification'))
                 		,t_cointotaldiv),2)));
-                		//本幣完稅價格(原幣完稅價格*匯率)
-                		q_tr('txtTotal_'+j,round(q_mul(q_float('txtCointotal_'+j),q_float('txtFloata')),0));
+                		
                 		//本幣單價
+                		//本幣完稅價格 為了與進銷存表金額一致,  改為 round((數量OR重量)*台幣單價,0)  2016/09/12
 						var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
 						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
 						|| q_getPara('sys.project').toUpperCase()=='RK' ) {
 							q_tr('txtPrice2_'+j,round(q_div(q_float('txtTotal_'+j),q_float('txtInweight_'+j)),3));
+							q_tr('txtTotal_'+j,round(q_mul(q_float('txtPrice2_'+j),q_float('txtInweight_'+j)),0));
                         }else{
                         	q_tr('txtPrice2_'+j,round(q_div(q_float('txtTotal_'+j),q_float('txtInmount_'+j)),3));
+                        	q_tr('txtTotal_'+j,round(q_mul(q_float('txtPrice2_'+j),q_float('txtInmount_'+j)),0));
                         }
+                        
                 		//原幣關稅(原幣完稅價格*關稅率)
                 		q_tr('txtCointariff_'+j,round(q_mul(q_float('txtCointotal_'+j),q_div(q_float('txtTariffrate_'+j),100)),2));
                 		//本幣關稅(本幣完稅價格*關稅率)
