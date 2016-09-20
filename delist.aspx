@@ -193,9 +193,9 @@
                 q_cmbParse("cmbCredittype", ",1@可扣抵進貨及費用,2@可扣抵固定資產,3@不可扣抵進貨及費用,4@不可扣抵固定資產");
                 q_cmbParse("cmbFeetype", ",1@依進貨金額,2@依進貨數量,5@依進貨重量,3@依毛重,4@依材積");
                 
-                if(q_getPara('sys.project').toUpperCase()=='PK'){
+                /*if(q_getPara('sys.project').toUpperCase()=='PK'){
                 	bbsNum=[];
-                }
+                }*/
                 
                 /*if(q_getPara('sys.project').toUpperCase()=='RK'){
                 	$('#btnRc2').hide();
