@@ -351,7 +351,7 @@
 							
 							DC1Dselect=",namea@活動名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,emon@實際結束日期,money@預估營收";
 							DC2Dselect=",namea@活動名稱,status@狀態,adbmon@預計開始日期,ademon@預計結束日期,bmon@實際開始日期,typea@類別";
-							DC3Dselect=",list@行銷名單,nick@客戶,head@職稱,typea@類別,status@狀態,grpname@集團,sales@業務";
+							DC3Dselect=",list@行銷名單,nick@客戶,head@職稱,typea@類別,status@狀態,grpname@集團,sales@業務,email@email";
 							DC4Dselect=",comp@客戶,sales@業務,theme@商機,possibility@可能性,stage@階段,money@預估營收";
 							
 							DC1Where="select typea@#~namea@#~status@#~left(bdate@#~"+r_lenm+") bmon@#~left(edate@#~"+r_lenm+") emon@#~left(adbdate@#~"+r_lenm+") adbmon@#~left(adedate@#~"+r_lenm+") ademon@#~'$'*~*dbo.getComma(total@#~0) money@#~count(*) total from crmcampaign ";
@@ -366,10 +366,10 @@
 							
 							DC3Where="select a.namea@#~c.namea list@#~e.nick@#~e.head@#~f.namea typea ";
 							DC3Where=DC3Where+"@#~case when e.status='9' then '呆帳' when e.status='4' then '停止營業'when e.status='3' then '禁出貨' when e.status='2' then '待開發' else '正常' end status ";
-							DC3Where=DC3Where+"@#~e.grpname@#~e.sales@#~count(*) total from crmcampaign a left join crmcampaigns b on a.noa=b.noa ";
+							DC3Where=DC3Where+"@#~e.grpname@#~e.sales@#~e.email@#~count(*) total from crmcampaign a left join crmcampaigns b on a.noa=b.noa ";
 							DC3Where=DC3Where+"left join crmlist c on b.listnoa=c.noa left join crmlists d on c.noa=d.noa ";
 							DC3Where=DC3Where+"left join cust e on d.custno=e.noa left join custtype f on e.typea=f.noa ";
-							DC3Where=DC3Where+"group by a.namea@#~c.namea@#~e.nick@#~e.head@#~f.namea@#~e.status@#~e.grpname@#~e.sales ";
+							DC3Where=DC3Where+"group by a.namea@#~c.namea@#~e.nick@#~e.head@#~f.namea@#~e.status@#~e.grpname@#~e.sales@#~e.email ";
 							
 							DC4Where="select a.namea@#~b.theme@#~b.comp@#~b.possibility@#~b.stage@#~b.sales@#~b.money@#~c.total ";
 							DC4Where=DC4Where+"from crmcampaign a left join crmbusiness b on a.noa=b.crmcno ";
