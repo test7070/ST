@@ -72,36 +72,158 @@
             }
             
             function sum() {
-                var t_coinretiremoney=0,t_cointotal=0,t_total=0,t_cointariff=0,t_tariff=0,t_trade=0,t_commoditytax=0,t_lctotal=0,t_vatbase=0,t_vat=0,t_othfee=0;
-                for (var j = 0; j < q_bbsCount; j++) {
-                	t_coinretiremoney=q_add(t_coinretiremoney,q_float('txtMoney_'+j));
-                	t_cointotal=q_add(t_cointotal,q_float('txtCointotal_'+j));
-                	t_total=q_add(t_total,q_float('txtTotal_'+j));
-                	t_cointariff=q_add(t_cointariff,q_float('txtCointariff_'+j));
-                	t_tariff=q_add(t_tariff,q_float('txtTariff_'+j));
-                	t_trade=q_add(t_trade,q_float('txtTrade_'+j));
-                	t_commoditytax=q_add(t_commoditytax,q_float('txtCommoditytax_'+j));
-                	t_lctotal=q_add(t_lctotal,q_float('txtLcmoney_'+j));
-                	t_othfee=q_add(t_othfee,q_float('txtOthfee_'+j));
-                	t_vatbase=q_add(t_vatbase,q_float('txtVatbase_'+j));
-                	t_vat=q_add(t_vat,q_float('txtVat_'+j));
-                } // j
-                
-                q_tr('txtCoinretiremoney',t_coinretiremoney);
-                q_tr('txtRetiremoney',round(q_mul(t_coinretiremoney,q_float('txtFloata')),0));
-                q_tr('txtCointotal',t_coinretiremoney);
-                q_tr('txtTotal',t_total);
-                q_tr('txtCointariff',t_cointariff);
-                q_tr('txtTariff',t_tariff);
-                q_tr('txtTrade',t_trade);
-                q_tr('txtCommoditytax',t_commoditytax);
-                q_tr('txtLctotal',t_lctotal);
-                q_tr('txtOthfee',t_othfee);
-                q_tr('txtVatbase',t_vatbase);
-                q_tr('txtVat',t_vat);
+            	var t_tranmoney = q_float('txtTranmoney');//原幣運費
+            	var t_insurance = q_float('txtInsurance');//原幣保險費
+            	var t_modification = q_float('txtModification');//原幣加減費用
+            	var t_money = 0;//原幣進貨總額
+            	for(var i=0;i<q_bbsCount;i++){
+            		$('#txtPrice2_'+i).val(round(q_mul(q_float('txtPrice_'+i),q_float('txtFloata')),4));
+            		
+            		t_unit = $.trim($('#txtUnit_' + i).val()).toUpperCase();
+					if(!$('#chkAprice_'+i).prop('checked')){
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'){
+							$('#txtMoney_'+i).val(round(q_mul(q_float('txtInweight_'+i),q_float('txtPrice_'+i)),3));
+							$('#txtMoney2_'+i).val(round(q_mul(q_float('txtInweight_'+i),q_float('txtPrice2_'+i)),0));
+						}else{
+							$('#txtMoney_'+i).val(round(q_mul(q_float('txtInmount_'+i),q_float('txtPrice_'+i)),3));
+							$('#txtMoney2_'+i).val(round(q_mul(q_float('txtInmount_'+i),q_float('txtPrice2_'+i)),0));
+						}
+					}
+					t_money = q_add(q_float('txtMoney_'+i),t_money);
+            	}
+            	//原幣完稅價格(原幣進貨額 + ( (原幣運費+原幣保險費+原幣加減費用) * (該筆原幣進貨額/原幣進貨額合計) ))  尾差須注意
+            	for(var i=0;i<q_bbsCount;i++){
+            		$('#txtTranmoney_'+i).val(round(q_div(q_mul(t_tranmoney,q_float('txtMoney_'+i)),t_money),0));
+            		$('#txtInsurance_'+i).val(round(q_div(q_mul(t_insurance,q_float('txtMoney_'+i)),t_money),0));
+            		$('#txtModification_'+i).val(round(q_div(q_mul(t_modification,q_float('txtMoney_'+i)),t_money),0));
+            	}
+            	var t_tranmoney2=0,t_insurance2=0,t_modification2=0;
+            	for(var i=0;i<q_bbsCount;i++){
+            		t_tranmoney2 += q_float('txtTranmoney_'+i);
+            		t_insurance2 += q_float('txtInsurance_'+i);
+            		t_modification2 += q_float('txtModification_'+i);
+            	}
+            	var t_diff = t_tranmoney-t_tranmoney2;
+            	if(t_diff>0){
+            		for(var i=0;true;i++){
+            			n = i%q_bbsCount;
+            			if(q_float('txtTranmoney_'+n)>0){
+            				$('#txtTranmoney_'+n).val(q_float('txtTranmoney_'+n) - 1);
+            				t_diff--;
+            			}
+            			if(t_diff==0)
+            				break;
+	            	}
+            	}else if(t_diff<0){
+            		for(var i=0;true;i++){
+            			n = i%q_bbsCount;
+            			if(q_float('txtTranmoney_'+n)>0){
+            				$('#txtTranmoney_'+n).val(q_float('txtTranmoney_'+n) + 1);
+            				t_diff++;
+            			}
+            			if(t_diff==0)
+            				break;
+	            	}
+            	}
+            	t_diff = t_insurance-t_insurance2;
+            	if(t_diff>0){
+            		for(var i=0;true;i++){
+            			n = i%q_bbsCount;
+            			if(q_float('txtInsurance_'+n)>0){
+            				$('#txtInsurance_'+n).val(q_float('txtInsurance_'+n) - 1);
+            				t_diff--;
+            			}
+            			if(t_diff==0)
+            				break;
+	            	}
+            	}else if(t_diff<0){
+            		for(var i=0;true;i++){
+            			n = i%q_bbsCount;
+            			if(q_float('txtInsurance_'+n)>0){
+            				$('#txtInsurance_'+n).val(q_float('txtInsurance_'+n) + 1);
+            				t_diff++;
+            			}
+            			if(t_diff==0)
+            				break;
+	            	}
+            	}
+            	t_diff = t_modification-t_modification2;
+            	if(t_diff>0){
+            		for(var i=0;true;i++){
+            			n = i%q_bbsCount;
+            			if(q_float('txtModification_'+n)>0){
+            				$('#txtModification_'+n).val(q_float('txtModification_'+n) - 1);
+            				t_diff--;
+            			}
+            			if(t_diff==0)
+            				break;
+	            	}
+            	}else if(t_diff<0){
+            		for(var i=0;true;i++){
+            			n = i%q_bbsCount;
+            			if(q_float('txtModification_'+n)>0){
+            				$('#txtModification_'+n).val(q_float('txtModification_'+n) + 1);
+            				t_diff++;
+            			}
+            			if(t_diff==0)
+            				break;
+	            	}
+            	}
+            	for(var i=0;i<q_bbsCount;i++){
+            		$('#txtCointotal_'+i).val(q_add(q_add(q_add(q_float('txtMoney_'+i),q_float('txtTranmoney_'+i)),q_float('txtInsurance_'+i)),q_float('txtModification_'+i)));
+            		$('#txtTotal_'+i).val(round(q_mul(q_float('txtCointotal_'+i),q_float('txtFloata')),0));
+            		//原幣關稅
+            		$('#txtCointariff_'+i).val(round(q_div(q_mul(q_float('txtCointotal_'+i),q_float('txtTariffrate_'+i)),100),2));
+            		//本幣關稅
+            		$('#txtTariff_'+i).val(round(q_mul(q_float('txtCointariff_'+i),q_float('txtFloata')),0));
+            		//推廣貿易費(本幣完稅價格*推廣貿易費率)
+            		$('#txtTrade_'+i).val(round(q_div(q_mul(q_float('txtTotal_'+i),q_float('txtTraderate_'+i)),100),0));
+            		//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
+            		$('#txtCommoditytax_'+i).val(round(q_div(q_mul(q_float('txtTotal_'+i)+q_float('txtTariff_'+i),q_float('txtCommodityrate_'+i)),100),0));
+            		//本幣營業稅基(本幣完稅價格+本幣關稅+貨物稅)
+            		$('#txtVatbase_'+i).val(q_float('txtTotal_'+i)+q_float('txtTariff_'+i)+q_float('txtCommoditytax_'+i));
+            		//進貨總成本(本幣營業稅基+推廣貿易費+L/C費用分攤+其他費用)
+            		$('#txtCost_'+i).val(q_float('txtVatbase_'+i)+q_float('txtTrade_'+i)+q_float('txtLcmoney_'+i)+q_float('txtOthfee_'+i));
+            		//本幣營業稅額(本幣營業稅基 * 營業稅率)
+                	$('#txtVat_'+i).val(round(q_div(q_mul(q_float('txtVatbase_'+i),q_float('txtVatrate')),100),0));	
+            	}
+            	//表頭合計
+            	var t_money=0,t_money2=0,t_total=0,t_total2=0,t_tax=0,t_tax2=0;
+            	var t_trade=0,t_commoditytax=0,t_lctotal=0,t_othfee=0;
+            	var t_vatbase=0,t_vat=0;
+            	for(var i=0;i<q_bbsCount;i++){
+            		t_money = q_add(t_money,q_float('txtMoney_'+i));
+            		t_money2 = q_add(t_money2,q_float('txtMoney2_'+i));
+            		t_total = q_add(t_total,q_float('txtCointotal_'+i));
+            		t_total2 = q_add(t_total2,q_float('txtTotal_'+i));
+            		t_tax = q_add(t_tax,q_float('txtCointariff_'+i));
+            		t_tax2 = q_add(t_tax2,q_float('txtTariff_'+i));
+            		
+            		t_trade = q_add(t_trade,q_float('txtTrade_'+i));
+            		t_commoditytax = q_add(t_commoditytax,q_float('txtCommoditytax_'+i));
+            		t_lctotal = q_add(t_lctotal,q_float('txtLcmoney_'+i));
+            		t_othfee = q_add(t_othfee,q_float('txtOthfee_'+i));
+            		
+            		t_vatbase = q_add(t_vatbase,q_float('txtVatbase_'+i));
+            		t_vat = q_add(t_vat,q_float('txtVat_'+i));
+            	}
+            	$('#txtCoinretiremoney').val(t_money);
+            	$('#txtRetiremoney').val(t_money2);
+            	$('#txtCointotal').val(t_total);
+            	$('#txtTotal').val(t_total2);
+            	$('#txtCointariff').val(t_tax);
+            	$('#txtTariff').val(t_tax2);
+            	
+            	$('#txtTrade').val(t_trade);
+            	$('#txtCommoditytax').val(t_commoditytax);
+            	$('#txtLctotal').val(t_lctotal);
+            	$('#txtOthfee').val(t_othfee);
+            	
+            	$('#txtVatbase').val(t_vatbase);
+            	$('#txtVat').val(t_vat);
             }
             
-            function bbs_sum() {
+           /* function bbs_sum() {
             	for (var j = 0; j < q_bbsCount; j++) {
             			var t_cointotaldiv=0,t_mount=0;
             			t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
@@ -136,15 +258,17 @@
                 		q_tr('txtCointotal_'+j,q_add(q_float('txtMoney_'+j),round(q_mul(q_add(q_add(q_float('txtTranmoney'),q_float('txtInsurance')),q_float('txtModification'))
                 		,t_cointotaldiv),2)));
                 		
-                		$('#txtTotal_'+j).val(round(q_mul(q_float('txtCointotal_'+i),q_float('txtFloata')),0));
                 		//本幣單價
+                		q_tr('txtPrice2_'+j,round(q_mul(q_float('txtPrice_'+j),q_float('txtFloata')),0));
                 		//本幣完稅價格 為了與進銷存表金額一致,  改為 round((數量OR重量)*台幣單價,0)  2016/09/12
 						var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
 						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
 						|| q_getPara('sys.project').toUpperCase()=='RK' ) {
+							q_tr('txtTotal_'+j,round(q_mul(q_float('txtPrice2_'+j),q_float('txtInweight_'+j)),0));
 							q_tr('txtPrice2_'+j,round(q_div(q_float('txtTotal_'+j),q_float('txtInweight_'+j)),3));
 							q_tr('txtTotal_'+j,round(q_mul(q_float('txtPrice2_'+j),q_float('txtInweight_'+j)),0));
                         }else{
+                        	q_tr('txtTotal_'+j,round(q_mul(q_float('txtPrice2_'+j),q_float('txtInmount_'+j)),0));
                         	q_tr('txtPrice2_'+j,round(q_div(q_float('txtTotal_'+j),q_float('txtInmount_'+j)),3));
                         	q_tr('txtTotal_'+j,round(q_mul(q_float('txtPrice2_'+j),q_float('txtInmount_'+j)),0));
                         }
@@ -166,9 +290,9 @@
                 	} // j
                 	bbs_textsprice();
                 	sum();
-            }
+            }*/
             
-            function bbs_textsprice() {
+           /* function bbs_textsprice() {
             	for (var j = 0; j < q_bbsCount; j++) {
             		var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
 					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
@@ -184,23 +308,16 @@
                     		$('#textSprice_'+j).val(round(q_div(q_float('txtCost_'+j),q_float('txtMount_'+j)),3));
                     }
             	}
-            }
+            }*/
 
             function mainPost() {
-                q_getFormat();
-                bbmMask = [['txtDatea', r_picd],['txtDeliverydate', r_picd],['txtArrivedate', r_picd],['txtEtd', r_picd],['txtEta', r_picd]
-                					,['txtWarehousedate', r_picd],['txtNegotiatingdate', r_picd],['txtPaydate', r_picd],['txtDeclaredate', r_picd]];
-                q_mask(bbmMask);
-                q_cmbParse("cmbCredittype", ",1@可扣抵進貨及費用,2@可扣抵固定資產,3@不可扣抵進貨及費用,4@不可扣抵固定資產");
-                q_cmbParse("cmbFeetype", ",1@依進貨金額,2@依進貨數量,5@依進貨重量,3@依毛重,4@依材積");
+				q_getFormat();
+				bbmMask = [['txtDatea', r_picd],['txtDeliverydate', r_picd],['txtArrivedate', r_picd],['txtEtd', r_picd],['txtEta', r_picd]
+									,['txtWarehousedate', r_picd],['txtNegotiatingdate', r_picd],['txtPaydate', r_picd],['txtDeclaredate', r_picd]];
+				q_mask(bbmMask);
+				q_cmbParse("cmbCredittype", ",1@可扣抵進貨及費用,2@可扣抵固定資產,3@不可扣抵進貨及費用,4@不可扣抵固定資產");
+				q_cmbParse("cmbFeetype", ",1@依進貨金額,2@依進貨數量,5@依進貨重量,3@依毛重,4@依材積");
                 
-                /*if(q_getPara('sys.project').toUpperCase()=='PK'){
-                	bbsNum=[];
-                }*/
-                
-                /*if(q_getPara('sys.project').toUpperCase()=='RK'){
-                	$('#btnRc2').hide();
-                }*/
                $('#lblRc2no').click(function(e){
                		t_where = " noa='"+$('#txtRc2no').val()+"' ";
                		switch(q_getPara('sys.project').toUpperCase()){
@@ -236,12 +353,12 @@
 						q_box("shipinstruct.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+r_accy, 'shipinstruct', "95%", "95%", q_getMsg('popShipinstruct'));
 					}
 				});
-				$('#cmbFeetype').change(function() {bbs_sum();});
-				$('#txtTranmoney').change(function() {bbs_sum();});
-				$('#txtInsurance').change(function() {bbs_sum();});
-				$('#txtModification').change(function() {bbs_sum();});
-				$('#txtFloata').change(function() {bbs_sum();});
-				$('#txtVatrate').change(function() {bbs_sum();});
+				$('#cmbFeetype').change(function() {sum();});
+				$('#txtTranmoney').change(function() {sum();});
+				$('#txtInsurance').change(function() {sum();});
+				$('#txtModification').change(function() {sum();});
+				$('#txtFloata').change(function() {sum();});
+				$('#txtVatrate').change(function() {sum();});
 				
 				$('#btnHelp').click(function() {
 					$('#div_help').show();
@@ -435,7 +552,6 @@
                 			}
                 		}
                 		sum();
-						bbs_sum();
                 		break;
                     case q_name:
                         if (q_cur == 4)
@@ -469,7 +585,7 @@
 				if (t_where.length > 0)
 					q_gt('view_uccb', "where=^^" + t_where + "^^", 0, 0, 0, 'btnOk_checkuno');
 				else
-					getUno(0)
+					getUno(0);
             }
             function getUno(n) {
 				if(n<q_bbsCount){
@@ -562,243 +678,112 @@
                 q_box('delist_s.aspx', q_name + '_s', "500px", "330px", q_getMsg("popSeek"));
             }
 
-            function combPay_chg() {
-            }
-
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
                 	$('#lblNo_' + j).text(j + 1);
-                    if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                    	$('.lengthd.num,.dime2.num,.lengthc.num').change(function() {
-                    		$(this).val(dec($(this).val()));
-						});
-                        $('#txtStyle_' + j).bind('contextmenu', function(e) {
-                            /*滑鼠右鍵*/
-                            e.preventDefault();
-                            var n = $(this).attr('id').replace('txtStyle_', '');
-                            $('#btnStyle_'+n).click();
-                        });
-                        $('#txtProductno_' + j).bind('contextmenu', function(e) {
-                            /*滑鼠右鍵*/
-                            e.preventDefault();
-                            var n = $(this).attr('id').replace('txtProductno_', '');
-                            $('#btnProduct_'+n).click();
-                        });
-                        $('#txtSize_'+j).change(function(e){
-							if ($.trim($(this).val()).length == 0)
-								return;
-							var n = $(this).attr('id').replace('txtSize_','');			
-							var data = tranSize($.trim($(this).val()));
-							$(this).val(tranSize($.trim($(this).val()),'getsize'));
-							$('#txtDime_'+n).val('');
-							$('#txtWidth_'+n).val('');
-							$('#txtLengthb_'+n).val('');
-							$('#txtDime_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
-							$('#txtWidth_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
-							$('#txtLengthb_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
-							sum();
-						});
-                        $('#txtInmount_' + j).change(function () {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							//進貨金額
-							var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
-							if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
-							|| q_getPara('sys.project').toUpperCase()=='RK' ) { //1229 RK 一律用重量
-                        		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInweight_'+b_seq),q_float('txtPrice_'+b_seq)));
-                        	}else{
-                        		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInmount_'+b_seq),q_float('txtPrice_'+b_seq)));
-                        	}
-                        	bbs_sum();
-                        });
-                        $('#txtInweight_' + j).change(function () {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							//進貨金額
-							var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
-							if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
-							|| q_getPara('sys.project').toUpperCase()=='RK' ) {
-                        		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInweight_'+b_seq),q_float('txtPrice_'+b_seq)));
-                        	}else{
-                        		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInmount_'+b_seq),q_float('txtPrice_'+b_seq)));
-                        	}
-                        	bbs_sum();
-                        });
-                        $('#txtPrice_' + j).change(function () {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							//進貨金額
-							var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
-                        	if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'
-                        	|| q_getPara('sys.project').toUpperCase()=='RK' ) {
-                        		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInweight_'+b_seq),q_float('txtPrice_'+b_seq)));
-                        	}else{
-                        		q_tr('txtMoney_'+b_seq,q_mul(q_float('txtInmount_'+b_seq),q_float('txtPrice_'+b_seq)));
-                        	}
-                        	bbs_sum();
-                        });
-                        $('#txtMoney_' + j).change(function () {
-                        	bbs_sum();
-                        });
-                        $('#txtCointotal_' + j).change(function () {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-                        	//原幣關稅(原幣完稅價格*關稅率)
-                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),2));
-                			//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-                			sum();
-                        });
-                        $('#txtTotal_' + j).change(function () {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-                        	//本幣關稅(本幣完稅價格*關稅率)
-                			q_tr('txtTariff_'+b_seq,round(q_mul(q_float('txtTotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),0));
-                			//推廣貿易費(本幣完稅價格*推廣貿易費率)
-                			q_tr('txtTrade_'+b_seq,round(q_mul(q_float('txtTotal_'+b_seq),q_div(q_float('txtTraderate_'+b_seq),100)),0));
-                			//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
-                			q_tr('txtCommoditytax_'+b_seq,round(q_mul(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_div(q_float('txtCommodityrate_'+b_seq),100)),0));
-                			//本幣營業稅基(本幣完稅價格+本幣關稅+貨物稅)
-                			q_tr('txtVatbase_'+b_seq,q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtCommoditytax_'+b_seq)));
-                			//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-                			sum();
-                        });
-                        $('#txtTariffrate_' + j).change(function () {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-                        	//原幣關稅(原幣完稅價格*關稅率)
-                			q_tr('txtCointariff_'+b_seq,round(q_mul(q_float('txtCointotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),2));
-                			//本幣關稅(本幣完稅價格*關稅率)
-                			q_tr('txtTariff_'+b_seq,round(q_mul(q_float('txtTotal_'+b_seq),q_div(q_float('txtTariffrate_'+b_seq),100)),0));
-                			//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
-                			q_tr('txtCommoditytax_'+b_seq,round(q_mul(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_div(q_float('txtCommodityrate_'+b_seq),100)),0));
-                			//本幣營業稅基(本幣完稅價格+本幣關稅+貨物稅)
-                			q_tr('txtVatbase_'+b_seq,q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtCommoditytax_'+b_seq)));
-                			//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-                			sum();
-                        });
-                        $('#txtTraderate_' + j).change(function () {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-                        	//推廣貿易費(本幣完稅價格*推廣貿易費率)
-                			q_tr('txtTrade_'+b_seq,round(q_mul(q_float('txtTotal_'+b_seq),q_div(q_float('txtTraderate_'+b_seq),100)),0));
-                			//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-                			sum();
-                        });
-                        $('#txtCommodityrate_' + j).change(function () {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-                        	//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
-                			q_tr('txtCommoditytax_'+b_seq,round(q_mul(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_div(q_float('txtCommodityrate_'+b_seq),100)),0));
-                			//本幣營業稅基(本幣完稅價格+本幣關稅+貨物稅)
-                			q_tr('txtVatbase_'+b_seq,q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtCommoditytax_'+b_seq)));
-                			//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-                			sum();
-                        });
-                        $('#txtVatbase_' + j).change(function () {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-                			//本幣營業稅額(本幣營業稅基 * 營業稅率)
-                			q_tr('txtVat_'+b_seq,q_mul(q_float('txtVatbase_'+b_seq),q_div(q_float('txtVatrate'),100)));
-                			sum();
-                        });
-                        //回推計算///////////////////////////////////////////
-                        //原幣關稅(原幣完稅價格*關稅率)
-                        $('#txtCointariff_'+j).change(function() {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							q_tr('txtTariffrate_'+b_seq,round(q_mul(q_div(q_float('txtCointariff_'+b_seq),q_float('txtCointotal_'+b_seq)),100),4));
-							//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-							sum();
-						});
-                		//本幣關稅(本幣完稅價格*關稅率)
-                		$('#txtTariff_'+j).change(function() {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							q_tr('txtTariffrate_'+b_seq,round(q_mul(q_div(q_float('txtTariff_'+b_seq),q_float('txtTotal_'+b_seq)),100),4));
-							//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-							sum();
-						});
-                		//推廣貿易費(本幣完稅價格*推廣貿易費率)
-                		$('#txtTrade_'+j).change(function() {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							q_tr('txtTraderate_'+b_seq,round(q_mul(q_div(q_float('txtTrade_'+b_seq),q_float('txtTotal_'+b_seq)),100),4));
-							//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-							sum();
-						});
-                		//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
-                		$('#txtCommoditytax_'+j).change(function() {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							q_tr('txtCommodityrate_'+b_seq,round(q_mul(q_div(q_float('txtCommoditytax_'+b_seq),q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq))),100),4));
-							//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-							sum();
-						});
-						//其他費用
-                		$('#txtOthfee_'+j).change(function() {
-                        	t_IdSeq = -1;  /// 要先給  才能使用 q_bodyId()
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							//進貨總成本
-	                		q_tr('txtCost_'+b_seq,q_add(q_add(q_add(q_add(q_add(q_float('txtTotal_'+b_seq),q_float('txtTariff_'+b_seq)),q_float('txtTrade_'+b_seq)),q_float('txtCommoditytax_'+b_seq)),q_float('txtLcmoney_'+b_seq)),q_float('txtOthfee_'+b_seq)));
-	                		bbs_textsprice();
-							sum();
-						});
-                    }
+                	if ($('#btnMinus_' + j).hasClass('isAssign'))
+                		continue;
+                		
+                	$('.lengthd.num,.dime2.num,.lengthc.num').change(function() {
+                		$(this).val(dec($(this).val()));
+					});
+					$('#chkAprice_'+j).click(function(e){
+						refreshBbs();
+						sum();
+					});
+					
+                    $('#txtStyle_' + j).bind('contextmenu', function(e) {
+                        /*滑鼠右鍵*/
+                        e.preventDefault();
+                        var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+                        $('#btnStyle_'+n).click();
+                        sum();
+                    });
+                    $('#txtProductno_' + j).bind('contextmenu', function(e) {
+                        /*滑鼠右鍵*/
+                        e.preventDefault();
+                        var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+                        $('#btnProduct_'+n).click();
+                        sum();
+                    });
+                    $('#txtSize_'+j).change(function(e){
+						if ($.trim($(this).val()).length == 0)
+							return;
+						var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');	
+						var data = tranSize($.trim($(this).val()));
+						$(this).val(tranSize($.trim($(this).val()),'getsize'));
+						$('#txtDime_'+n).val('');
+						$('#txtWidth_'+n).val('');
+						$('#txtLengthb_'+n).val('');
+						$('#txtDime_'+n).val((data[0]!=undefined?(data[0].toString().length>0?(isNaN(parseFloat(data[0]))?0:parseFloat(data[0])):0):0));
+						$('#txtWidth_'+n).val((data[1]!=undefined?(data[1].toString().length>0?(isNaN(parseFloat(data[1]))?0:parseFloat(data[1])):0):0));
+						$('#txtLengthb_'+n).val((data[2]!=undefined?(data[2].toString().length>0?(isNaN(parseFloat(data[2]))?0:parseFloat(data[2])):0):0));
+						sum();
+					});
+                    $('#txtInmount_' + j).change(function () {
+                    	sum();
+                    });
+                    $('#txtInweight_' + j).change(function () {
+                    	sum();
+                    });
+                    $('#txtPrice_' + j).change(function () {
+                    	sum();
+                    });
+                    $('#txtMoney_' + j).change(function () {
+                    	sum();
+                    });
+                    $('#txtCointotal_' + j).change(function () {
+            			sum();
+                    });
+                    $('#txtTotal_' + j).change(function () {
+            			sum();
+                    });
+                    $('#txtTariffrate_' + j).change(function () {
+            			sum();
+                    });
+                    $('#txtTraderate_' + j).change(function () {
+            			sum();
+                    });
+                    $('#txtCommodityrate_' + j).change(function () {
+            			sum();
+                    });
+                    $('#txtVatbase_' + j).change(function () {
+            			sum();
+                    });
+                    //回推計算///////////////////////////////////////////
+                    //原幣關稅(原幣完稅價格*關稅率)
+                    $('#txtCointariff_'+j).change(function() {
+						sum();
+					});
+            		//本幣關稅(本幣完稅價格*關稅率)
+            		$('#txtTariff_'+j).change(function() {
+						sum();
+					});
+            		//推廣貿易費(本幣完稅價格*推廣貿易費率)
+            		$('#txtTrade_'+j).change(function() {
+						sum();
+					});
+            		//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
+            		$('#txtCommoditytax_'+j).change(function() {
+						sum();
+					});
+					//其他費用
+            		$('#txtOthfee_'+j).change(function() {
+						sum();
+					});
                 }
                 _bbsAssign();
-                if(q_getPara('sys.project').toUpperCase()!='PK'){
-                	$('.dime2').hide();
-                	$('.lengthc').hide();
-                	$('.lengthd').hide();
-                	$('.dbbs').css('width','3800px');
-                }
-                if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('.RK_hide').hide();
-					//$('#lblSource_s').text('重量/M');
-					$('#lblSource_s').text('製造商');
-				}
-                
+                refreshBbs();
             }
 
             function btnIns() {
                 _btnIns();
                 $('#txtCno').val(z_cno);
             	$('#txtAcomp').val(z_acomp);
-                $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');
+                $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
                 $('#txtDatea').focus();
+                refreshBbs();
             }
 
             function btnModi() {
@@ -806,7 +791,7 @@
                     return;
                 _btnModi();
                 $('#txtProduct').focus();
-
+				refreshBbs();
             }
 
             function btnPrint() {
@@ -834,11 +819,25 @@
 
             function refresh(recno) {
                 _refresh(recno);
-                if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('.RK_hide').hide();
-				}
-                bbs_textsprice();
             }
+            function refreshBbs(){
+				//金額小計自訂
+				for(var i=0;i<q_bbsCount;i++){
+					$('#txtMoney_'+i).attr('readonly','readonly');
+					$('#txtMoney2_'+i).attr('readonly','readonly');
+					if($('#chkAprice_'+i).prop('checked')){
+						$('#txtMoney_'+i).css('color','black').css('background-color','white');
+						$('#txtMoney2_'+i).css('color','black').css('background-color','white');
+						if(q_cur==1 || q_cur==2){
+							$('#txtMoney_'+i).removeAttr('readonly');
+							$('#txtMoney2_'+i).removeAttr('readonly');
+						}
+					}else{
+						$('#txtMoney_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+						$('#txtMoney2_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+					}
+				}
+			}
 			function q_popPost(s1) {
                 switch (s1) {
                     case 'txtProductno_':
@@ -1315,6 +1314,7 @@
 						<td align="center" style="width:50px;"><a>計價<BR>單位</a></td>
 					<td align="center" style="width:115px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblMoney_s'> </a></td>
+					<td style="width:50px;">自訂<BR>金額</td>
 					<td align="center" style="width:150px;"><a id='lblStore_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblCointotal_s'> </a><BR><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblTariffrate_s'> </a></td>
@@ -1379,7 +1379,11 @@
 						<input class="txt num c1" id="txtPrice.*" type="text"  />
 						<input class="txt num c1" id="txtPrice2.*" type="text"  />
 					</td>
-					<td><input class="txt num c1" id="txtMoney.*" type="text"  /></td>
+					<td>
+						<input class="txt num c1" id="txtMoney.*" type="text"  />
+						<input class="txt num c1" id="txtMoney2.*" type="text"  />
+					</td>
+					<td><input type="checkbox" id="chkAprice.*"></td>
 					<td style="text-align: left;">
 						<input  id="txtStoreno.*" type="text" style="width:80%;" />
 						<input class="btn"  id="btnStoreno.*" type="button" value='.' style="width:1%;"  />
@@ -1388,6 +1392,9 @@
 					<td>
 						<input class="txt num c1" id="txtCointotal.*" type="text"  />
 						<input class="txt num c1" id="txtTotal.*" type="text"  />
+						<input class="txt num c1" id="txtTranmoney.*" type="text" style="display:none;"/>
+						<input class="txt num c1" id="txtInsurance.*" type="text" style="display:none;"/>
+						<input class="txt num c1" id="txtModification.*" type="text" style="display:none;"/>
 					</td>
 					<td><input class="txt num c1" id="txtTariffrate.*" type="text"  /></td>
 					<td>
