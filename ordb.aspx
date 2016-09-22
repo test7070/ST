@@ -150,15 +150,15 @@
 				}
 				if (q_getPara('sys.project').toUpperCase()=='XY'){
 					aPop = new Array(
-						['txtProductno1_', '', 'ucc_xy', 'noa,product,style,uunit,spec,stdmount', 'txtProductno1_,txtProduct_,txt_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', ''],
+						['txtProductno1_', '', 'ucc_xy', 'noa,product,style,unit,spec,stdmount', 'txtProductno1_,txtProduct_,txt_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', ''],
 						['txtProductno2_', 'btnProduct2_', 'bcc', 'noa,product,unit', 'txtProductno2_,txtProduct_,txtUnit_,txtProduct_', 'bcc_b.aspx'],
-						['txtProductno3_', '', 'ucc_xy', 'noa,product,style,uunit,spec,stdmount', 'txtProductno3_,txtProduct_,txt_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', ''],
+						['txtProductno3_', '', 'ucc_xy', 'noa,product,style,unit,spec,stdmount', 'txtProductno3_,txtProduct_,txt_,txtUnit_,txtSpec_,txtStdmount_,txtProduct_', ''],
 						['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 						['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 						['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype', 'txtTggno,txtTgg,txtNick,txtPaytype', 'tgg_b.aspx'],
 						['txtCustno_', 'btnCustno_', 'cust', 'noa,comp', 'txtCustno_,txtComp_', 'cust_b.aspx']
 					);
-					q_readonlys.push('txtUnit');
+					//q_readonlys.push('txtUnit');
 				}
 				
 				q_getFormat();
@@ -480,7 +480,7 @@
 							}
 							$('#txtProduct_'+b_seq).val(b_ret[0].product);
 							
-							if (!emp(b_ret[0].noa)){
+							/*if (!emp(b_ret[0].noa)){
 								var t_where =" noa='"+b_ret[0].noa+"' ";
 								q_gt('ucc_xy', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
 								var as = _q_appendData("ucc", "", true, true);
@@ -489,7 +489,7 @@
 								}else{
 									$('#txtUnit_'+b_seq).val(b_ret[0].unit);
 								}
-							}
+							}*/
 							
 							$('#txtSpec_'+b_seq).val(b_ret[0].style+' '+b_ret[0].spec+' '+b_ret[0].engpro);
 							$('#txtStdmount_'+b_seq).val(b_ret[0].stdmount);
@@ -1043,7 +1043,7 @@
 							q_gt('ucc_xy', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
 							var as = _q_appendData("ucc", "", true, true);
 							if (as[0] != undefined) {
-								$('#txtUnit_'+b_seq).val(as[0].uunit);
+								//$('#txtUnit_'+b_seq).val(as[0].uunit);
 								$('#txtSpec_'+b_seq).val(as[0].style+' '+as[0].spec+' '+as[0].engpro);
 							}
 						}
