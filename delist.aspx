@@ -27,7 +27,7 @@
             						,['txtCointariff', 15, 2, 1],['txtRetiremoney', 15, 0, 1],['txtTotal', 15, 0, 1],['txtTariff', 15, 0, 1]
             						,['txtTrade', 15, 0, 1],['txtCommoditytax', 15, 0, 1],['txtLctotal', 15, 0, 1],['txtOthfee', 15, 0, 1]
             						];
-            var bbsNum = [['txtMount', 15, 0, 1],['txtInmount', 15, 0, 1],['txtPrice', 10, 2, 1],['txtPrice2', 10, 2, 1],['txtMoney', 15, 2, 1],['txtCointotal', 15, 2, 1],['txtTotal', 15, 0, 1]
+            var bbsNum = [['txtMount', 15, 0, 1],['txtInmount', 15, 0, 1],['txtPrice', 10, 4, 1],['txtPrice2', 10, 4, 1],['txtMoney', 15, 2, 1],['txtCointotal', 15, 2, 1],['txtTotal', 15, 0, 1]
 									,['txtTariffrate', 5, 4, 1],['txtCointariff', 15, 2, 1],['txtTariff', 15, 0, 1],['txtTraderate', 10, 4, 1],['txtTrade', 15, 0, 1]
 									,['txtCommodityrate', 5, 4, 1],['txtCommoditytax', 15, 0, 1],['txtVatbase', 15, 0, 1],['txtVat', 15, 0, 1],['txtCasemount', 15, 0, 1]
 									,['txtMweight', 15, 2, 1],['txtCuft', 15, 2, 1],['txtWeight', 15, 2, 1],['txtInweight', 15, 2, 1]
@@ -136,6 +136,7 @@
                 		q_tr('txtCointotal_'+j,q_add(q_float('txtMoney_'+j),round(q_mul(q_add(q_add(q_float('txtTranmoney'),q_float('txtInsurance')),q_float('txtModification'))
                 		,t_cointotaldiv),2)));
                 		
+                		$('#txtTotal_'+j).val(round(q_mul(q_float('txtCointotal_'+i),q_float('txtFloata')),0));
                 		//本幣單價
                 		//本幣完稅價格 為了與進銷存表金額一致,  改為 round((數量OR重量)*台幣單價,0)  2016/09/12
 						var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
@@ -193,9 +194,9 @@
                 q_cmbParse("cmbCredittype", ",1@可扣抵進貨及費用,2@可扣抵固定資產,3@不可扣抵進貨及費用,4@不可扣抵固定資產");
                 q_cmbParse("cmbFeetype", ",1@依進貨金額,2@依進貨數量,5@依進貨重量,3@依毛重,4@依材積");
                 
-                if(q_getPara('sys.project').toUpperCase()=='PK'){
+                /*if(q_getPara('sys.project').toUpperCase()=='PK'){
                 	bbsNum=[];
-                }
+                }*/
                 
                 /*if(q_getPara('sys.project').toUpperCase()=='RK'){
                 	$('#btnRc2').hide();
