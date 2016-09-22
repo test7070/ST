@@ -136,6 +136,7 @@
                 		q_tr('txtCointotal_'+j,q_add(q_float('txtMoney_'+j),round(q_mul(q_add(q_add(q_float('txtTranmoney'),q_float('txtInsurance')),q_float('txtModification'))
                 		,t_cointotaldiv),2)));
                 		
+                		$('#txtTotal_'+j).val(round(q_mul(q_float('txtCointotal_'+i),q_float('txtFloata')),0));
                 		//本幣單價
                 		//本幣完稅價格 為了與進銷存表金額一致,  改為 round((數量OR重量)*台幣單價,0)  2016/09/12
 						var t_unit = $.trim($('#txtUnit_' + b_seq).val()).toUpperCase();
