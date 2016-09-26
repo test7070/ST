@@ -1267,7 +1267,7 @@
 						<td><input id="txtMoney"  type="text"  class="txt num c1"/></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
-							<input id="txtTax"  type="text"  class="txt num c1" style="width: 90%;"/>
+							<input id="txtTax"  type="text"  class="txt num c1" style="width: 70%;"/>
 							<input id="chkAtax" type="checkbox" onchange='sum()' />
 						</td>
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
