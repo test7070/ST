@@ -185,7 +185,8 @@
             		//進貨總成本(本幣營業稅基+推廣貿易費+L/C費用分攤+其他費用)
             		$('#txtCost_'+i).val(q_float('txtVatbase_'+i)+q_float('txtTrade_'+i)+q_float('txtLcmoney_'+i)+q_float('txtOthfee_'+i));
             		//本幣營業稅額(本幣營業稅基 * 營業稅率)
-                	$('#txtVat_'+i).val(round(q_div(q_mul(q_float('txtVatbase_'+i),q_float('txtVatrate')),100),0));	
+            		if(!$('#chkAprice2_'+i).prop('checked'))
+                		$('#txtVat_'+i).val(round(q_div(q_mul(q_float('txtVatbase_'+i),q_float('txtVatrate')),100),0));	
             	}
             	//表頭合計
             	var t_money=0,t_money2=0,t_total=0,t_total2=0,t_tax=0,t_tax2=0;
@@ -691,6 +692,10 @@
 						refreshBbs();
 						sum();
 					});
+					$('#chkAprice2_'+j).click(function(e){
+						refreshBbs();
+						sum();
+					});
 					
                     $('#txtStyle_' + j).bind('contextmenu', function(e) {
                         /*滑鼠右鍵*/
@@ -821,7 +826,7 @@
                 _refresh(recno);
             }
             function refreshBbs(){
-				//金額小計自訂
+				//金額、稅額 小計自訂
 				for(var i=0;i<q_bbsCount;i++){
 					$('#txtMoney_'+i).attr('readonly','readonly');
 					$('#txtMoney2_'+i).attr('readonly','readonly');
@@ -835,6 +840,16 @@
 					}else{
 						$('#txtMoney_'+i).css('color','green').css('background-color','rgb(237,237,237)');
 						$('#txtMoney2_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+					}
+					
+					$('#txtVat_'+i).attr('readonly','readonly');
+					if($('#chkAprice2_'+i).prop('checked')){
+						$('#txtVat_'+i).css('color','black').css('background-color','white');
+						if(q_cur==1 || q_cur==2){
+							$('#txtVat_'+i).removeAttr('readonly');
+						}
+					}else{
+						$('#txtVat_'+i).css('color','green').css('background-color','rgb(237,237,237)');
 					}
 				}
 			}
@@ -1322,6 +1337,7 @@
 					<td align="center" style="width:115px;"><a id='lblTraderate_s'> </a><BR><a id='lblTrade_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblCommodityrate_s'> </a><BR><a id='lblCommoditytax_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblVatbase_s'> </a><BR><a id='lblVat_s'> </a></td>
+					<td style="width:50px;">自訂<BR>稅額</td>
 					<td align="center" style="width:115px;"><!--<a id='lblBlmoney_s'> </a><BR>--><a id='lblLcmoney_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblOthfee_s'> </a></td>
 					<td align="center" style="width:100px;">成本單價</td>
@@ -1413,6 +1429,7 @@
 						<input class="txt num c1" id="txtVatbase.*" type="text"  />
 						<input class="txt num c1" id="txtVat.*" type="text"  />
 					</td>
+					<td><input type="checkbox" id="chkAprice2.*"></td>
 					<td>
 						<!--<input class="txt num c1" id="txtBlmoney.*" type="text"  />-->
 						<input class="txt num c1" id="txtLcmoney.*" type="text"  />
