@@ -722,10 +722,10 @@
 					case 'checkisgenvcca':
 						var as = _q_appendData('vcca', '', true);
 						if (as[0] != undefined) {
-							check_startdate=false;
+							check_vcca=false;
 							alert("該訂單已開立過發票，請勿自動產生發票!!");
 						}else{
-							check_startdate=true;
+							check_vcca=true;
 							btnOk();
 						}
 						break;
