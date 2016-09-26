@@ -1346,7 +1346,7 @@
 					<td align="center" style="width:115px;"><a id='lblCasemount_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblMweight_s'> </a><BR><a id='lblCuft_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblInvoiceno_s'> </a></td>
-					<td align="center"><a id='lblMemo_s'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:130px;"><a id='lblUno2_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
