@@ -93,7 +93,7 @@
                 });
                 
                 $('#txtDatea').change(function() {
-                    $('#txtMon').val($('#txtDatea').val().substr(0,6));
+                    $('#txtMon').val($('#txtDatea').val().substr(0,r_picm));
                 });
                 
             }
@@ -169,7 +169,7 @@
                 }
                 
                 if(emp($('#txtMon').val()))
-                	$('#txtMon').val($('#txtDatea').val().substr(0,6));
+                	$('#txtMon').val($('#txtDatea').val().substr(0,r_picm));
 
                 $('#txtWorker').val(r_name);
                 sum();
@@ -226,7 +226,7 @@
                 _btnIns();
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
-                $('#txtMon').val(q_date().substr(0,6));
+                $('#txtMon').val(q_date().substr(0,r_picm));
                 $('#txtDatea').focus();
                 $("#cmbCno").val(z_cno);
                 typea_chg();

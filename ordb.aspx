@@ -490,7 +490,7 @@
 									$('#txtUnit_'+b_seq).val(b_ret[0].unit);
 								}
 							}*/
-							
+							$('#txtUnit_'+b_seq).val(b_ret[0].unit);
 							$('#txtSpec_'+b_seq).val(b_ret[0].style+' '+b_ret[0].spec+' '+b_ret[0].engpro);
 							$('#txtStdmount_'+b_seq).val(b_ret[0].stdmount);
 							$('#txtProduct_'+b_seq).focus().select();
@@ -550,7 +550,7 @@
 									var as = _q_appendData("ucc", "", true, true);
 									if (as[0] != undefined) {
 										b_ret[i].spec=b_ret[i].spec+' '+as[0].engpro;
-										b_ret[i].unit=as[0].uuint;
+										b_ret[i].unit=as[0].unit;
 										if(as[0].cdate!='採購'){
 											t_err=t_err+b_ret[i].product+' 採購製令方式 非【採購】\n';
 										}
@@ -883,7 +883,7 @@
 								q_gt('ucc_xy', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
 								var as = _q_appendData("ucc", "", true, true);
 								if (as[0] != undefined) {
-									$('#txtUnit_'+b_seq).val(as[0].uuint);
+									$('#txtUnit_'+b_seq).val(as[0].unit);
 									$('#txtSpec_'+b_seq).val(as[0].style+' '+as[0].spec+' '+as[0].engpro);
 								}
 							}
@@ -934,7 +934,7 @@
 							}
 						});
 						
-						$('#txtOrdeno_'+i).bind('contextmenu',function(e) {
+						$('#txtOrdeno_'+j).bind('contextmenu',function(e) {
 	                    	/*滑鼠右鍵*/
 	                    	e.preventDefault();
 	                    	t_IdSeq = -1;
@@ -1043,7 +1043,7 @@
 							q_gt('ucc_xy', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
 							var as = _q_appendData("ucc", "", true, true);
 							if (as[0] != undefined) {
-								//$('#txtUnit_'+b_seq).val(as[0].uunit);
+								$('#txtUnit_'+b_seq).val(as[0].unit);
 								$('#txtSpec_'+b_seq).val(as[0].style+' '+as[0].spec+' '+as[0].engpro);
 							}
 						}
