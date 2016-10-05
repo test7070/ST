@@ -170,8 +170,10 @@
 	            	}
             	}
             	for(var i=0;i<q_bbsCount;i++){
-            		$('#txtCointotal_'+i).val(q_add(q_add(q_add(q_float('txtMoney_'+i),q_float('txtTranmoney_'+i)),q_float('txtInsurance_'+i)),q_float('txtModification_'+i)));
-            		$('#txtTotal_'+i).val(round(q_mul(q_float('txtCointotal_'+i),q_float('txtFloata')),0));
+            		if(!$('#chkAprice_'+i).prop('checked')){
+	            		$('#txtCointotal_'+i).val(q_add(q_add(q_add(q_float('txtMoney_'+i),q_float('txtTranmoney_'+i)),q_float('txtInsurance_'+i)),q_float('txtModification_'+i)));
+	            		$('#txtTotal_'+i).val(round(q_mul(q_float('txtCointotal_'+i),q_float('txtFloata')),0));
+            		}
             		//原幣關稅
             		$('#txtCointariff_'+i).val(round(q_div(q_mul(q_float('txtCointotal_'+i),q_float('txtTariffrate_'+i)),100),2));
             		//本幣關稅
@@ -737,6 +739,9 @@
                     $('#txtMoney_' + j).change(function () {
                     	sum();
                     });
+                    $('#txtMoney2_' + j).change(function () {
+                    	sum();
+                    });
                     $('#txtCointotal_' + j).change(function () {
             			sum();
                     });
@@ -830,16 +835,24 @@
 				for(var i=0;i<q_bbsCount;i++){
 					$('#txtMoney_'+i).attr('readonly','readonly');
 					$('#txtMoney2_'+i).attr('readonly','readonly');
+					$('#txtCointotal_'+i).attr('readonly','readonly');
+					$('#txtTotal_'+i).attr('readonly','readonly');
 					if($('#chkAprice_'+i).prop('checked')){
 						$('#txtMoney_'+i).css('color','black').css('background-color','white');
 						$('#txtMoney2_'+i).css('color','black').css('background-color','white');
+						$('#txtCointotal_'+i).css('color','black').css('background-color','white');
+						$('#txtTotal_'+i).css('color','black').css('background-color','white');
 						if(q_cur==1 || q_cur==2){
 							$('#txtMoney_'+i).removeAttr('readonly');
 							$('#txtMoney2_'+i).removeAttr('readonly');
+							$('#txtCointotal_'+i).removeAttr('readonly');
+							$('#txtTotal_'+i).removeAttr('readonly');
 						}
 					}else{
 						$('#txtMoney_'+i).css('color','green').css('background-color','rgb(237,237,237)');
 						$('#txtMoney2_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+						$('#txtCointotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+						$('#txtTotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
 					}
 					
 					$('#txtVat_'+i).attr('readonly','readonly');
