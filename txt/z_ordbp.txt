@@ -15,6 +15,9 @@
 	declare @t_sort nvarchar(max) = [32]
 	declare @t_ttype nvarchar(max) =[33]
 	declare @t_isdetails nvarchar(10) = case when '#non' = [34] then '0' else [34] end
+	declare @t_uccga nvarchar(max) = case when '#non' = [42] then '' else [42] end
+	declare @t_uccgb nvarchar(max) = case when '#non' = [43] then '' else [43] end
+	declare @t_uccgc nvarchar(max) = case when '#non' = [44] then '' else [44] end
 	---------------------------------------------------------------------------------------------
 	declare @tmpa table(
 		accy nvarchar(10),
@@ -155,6 +158,45 @@
 		and isnull(a.cancel,0)=0
 		and isnull(b.cancel,0)=0
 	end
+	--------------------------------------------------------------------------
+	if LEN(@t_uccga)>0
+	begin
+		delete @tmpa 
+		from @tmpa a
+		left join ucc b on a.productno=b.noa
+		where b.groupano != @t_uccga
+		
+		delete @tmpb 
+		from @tmpb a
+		left join ucc b on a.productno=b.noa
+		where b.groupano != @t_uccga
+	end
+	if LEN(@t_uccgb)>0
+	begin
+		delete @tmpa 
+		from @tmpa a
+		left join ucc b on a.productno=b.noa
+		where b.groupbno != @t_uccgb
+		
+		delete @tmpb 
+		from @tmpb a
+		left join ucc b on a.productno=b.noa
+		where b.groupbno != @t_uccgb
+	end
+	if LEN(@t_uccgc)>0
+	begin
+		delete @tmpa 
+		from @tmpa a
+		left join ucc b on a.productno=b.noa
+		where b.groupcno != @t_uccgc
+		
+		delete @tmpb 
+		from @tmpb a
+		left join ucc b on a.productno=b.noa
+		where b.groupcno != @t_uccgc
+	end
+	--------------------------------------------------------------------------
+	
 	update @tmpa set noapv = isnull(noapv,'')+'未核准' where len(isnull(noapv,''))>0
 	update @tmpb set noapv = isnull(noapv,'')+'未核准' where len(isnull(noapv,''))>0
 	---------------------------------------------------------------------------
@@ -247,7 +289,7 @@
 		,recno rr
 		,workgno 
 		,'' ee,'' ff
-		,dbo.getcomma(omount,[36]) mm1
+		,dbo.getcomma(omount,-1) mm1
 		,ordbaccy 
 		,dbo.getcomma(total,0)tot1
 		,'ordb?left(noa,'+cast(len(ordbno)as nvarchar)+')=$ordbno?'+ordbaccy ghref 
@@ -894,7 +936,7 @@
 			select * 
 			,recno rr
 			,case when len(mon)=0 then '' else mon+'/'+dd end ee
-			,dbo.getcomma(case @t_ttype when 'ordb' then mount when 'ordc' then ordcmount else isnull(mount,0)+isnull(ordcmount,0) end,[36]) mm1
+			,dbo.getcomma(case @t_ttype when 'ordb' then mount when 'ordc' then ordcmount else isnull(mount,0)+isnull(ordcmount,0) end,-1) mm1
 			,dbo.getcomma(total,0)tot1
 			,case @t_ttype when 'ordb' then '未採購量' when 'ordc' then '已採購量' else '數量小計' end ff,'' spec ,'' ordcno ,noapv,lastdate
 			from @tmp order by srecno,pno,cast(gno as int)
@@ -904,7 +946,7 @@
 			select * 
 			,recno rr
 			,case when len(mon)=0 then '' else mon+'/'+dd end ee
-			,dbo.getcomma(case @t_ttype when 'ordb' then mount when 'ordc' then ordcmount else isnull(mount,0)+isnull(ordcmount,0) end,[36]) mm1
+			,dbo.getcomma(case @t_ttype when 'ordb' then mount when 'ordc' then ordcmount else isnull(mount,0)+isnull(ordcmount,0) end,-1) mm1
 			,dbo.getcomma(total,0)tot1
 			,case @t_ttype when 'ordb' then '未採購量' when 'ordc' then '已採購量' else '數量小計' end ff,'' spec ,'' ordcno ,noapv,lastdate
 			from @tmp order by recno,pno
