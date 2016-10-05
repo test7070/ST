@@ -94,7 +94,10 @@
 	begin
 		insert into @tmpa(accy,noa,no3,kind,tggno,productno,unit,mon,dd,mount,price,total,ordbno,ordcno,workgno,noapv,lastdate)
 		select a.accy,a.noa,a.no3,b.kind,b.tggno,a.productno,ISNULL(a.unit,''),LEFT(a.ldate,6)
-			,case when RIGHT(a.ldate,2)<='10' then '01～10' when RIGHT(a.ldate,2)<='20' then '11～20' else '21～'+RIGHT('00'+day(dateadd(dd,-1,dateadd(mm,1, cast(cast(cast(left(LEFT(a.ldate,6),3) as int)+1911 as nvarchar)+right(LEFT(a.ldate,6),3)+'/01' as date)))),2) end
+			--,case when RIGHT(a.ldate,2)<='10' then '01～10' when RIGHT(a.ldate,2)<='20' then '11～20' else '21～'+RIGHT('00'+day(dateadd(dd,-1,dateadd(mm,1, cast(cast(cast(left(LEFT(a.ldate,6),3) as int)+1911 as nvarchar)+right(LEFT(a.ldate,6),3)+'/01' as date)))),2) end
+			,case when RIGHT(a.ldate,2)<='10' then '01～10' 
+				when RIGHT(a.ldate,2)<='20' then '11～20' 
+				else '21～'+RIGHT('00'+CAST(day(dateAdd(dd,-DAY(dateAdd(MM,1,dbo.ChineseEraName2AD(a.ldate))),dateAdd(MM,1,dbo.ChineseEraName2AD(a.ldate)))) as nvarchar),2) end
 			,a.mount,a.price,a.total,a.noa,b.ordcno,b.workgno,
 			case when d.enda='Y' then '' when d.enda is null then '無簽核，' else 
 				case when len(isnull(d.checker,'')) > 0 and ((isnull(d.memochecker,'')='') or (left(isnull(d.memochecker,''),2)='退回') or (lower(left(isnull(d.memochecker,''),7))='chr(10)') or (Lower(left(isnull(d.memochecker,''),6))='Reject')) then '[' + isnull(d.checker,'') + ']' else '' end +
