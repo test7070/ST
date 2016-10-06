@@ -781,6 +781,10 @@
             		$('#txtOthfee_'+j).change(function() {
 						sum();
 					});
+					
+					$('#txtVat_'+j).change(function(e){
+						sum();
+					});
                 }
                 _bbsAssign();
                 refreshBbs();
@@ -1329,7 +1333,7 @@
 					<td align="center" style="width:30px;" class="RK_hide"><a id='lblStyle_st'>型</a></td>
 					<td align="center" style="width:60px;" class="RK_hide"><a>等級</a></td>
 					<td align="center" style="width:140px;" class="RK_hide">規範<BR>國別</td>
-					<td align="center" style="width:220px;"><a id='lblSizea_s'> </a><BR><a id='lblSpec_s'> </a></td>
+					<td align="center" style="width:250px;"><a id='lblSizea_s'> </a><BR><a id='lblSpec_s'> </a></td>
 					<td align="center" style="width:130px;" class="RK_hide"><a id='lblSize_s'> </a></td>
 					<td align="center" style="width:60px;" class="dime2"><a>實際<BR>厚度</a></td>
 					<td align="center" style="width:60px;" class="lengthc"><a>實際<BR>寬度</a></td>
@@ -1351,6 +1355,8 @@
 					<td align="center" style="width:115px;"><a id='lblCommodityrate_s'> </a><BR><a id='lblCommoditytax_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblVatbase_s'> </a><BR><a id='lblVat_s'> </a></td>
 					<td style="width:50px;">自訂<BR>稅額</td>
+					<td align="center" style="width:200px;"><a id='lblMemo_s'> </a></td>
+					<td align="center" style="width:130px;"><a id='lblUno2_s'> </a></td>
 					<td align="center" style="width:115px;"><!--<a id='lblBlmoney_s'> </a><BR>--><a id='lblLcmoney_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblOthfee_s'> </a></td>
 					<td align="center" style="width:100px;">成本單價</td>
@@ -1359,8 +1365,7 @@
 					<td align="center" style="width:115px;"><a id='lblCasemount_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblMweight_s'> </a><BR><a id='lblCuft_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblInvoiceno_s'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblMemo_s'> </a></td>
-					<td align="center" style="width:130px;"><a id='lblUno2_s'> </a></td>
+					
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td><input class="btn"  id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
@@ -1444,6 +1449,13 @@
 					</td>
 					<td><input type="checkbox" id="chkAprice2.*"></td>
 					<td>
+						<input class="txt c1" id="txtMemo.*" type="text" />
+						<input class="txt c5" id="txtOrdcno.*" type="text" />
+						<input class="txt c4" id="txtNo2.*" type="text" />
+						<input id="txtNoq.*" type="hidden" /><input id="recno.*" type="hidden" />
+					</td>
+					<td><input class="txt c1" id="txtUno2.*" type="text"  /></td>
+					<td>
 						<!--<input class="txt num c1" id="txtBlmoney.*" type="text"  />-->
 						<input class="txt num c1" id="txtLcmoney.*" type="text"  />
 					</td>
@@ -1460,13 +1472,7 @@
 						<input class="txt num c1" id="txtCuft.*" type="text"  />
 					</td>
 					<td><input class="txt c1" id="txtInvoiceno.*" type="text"  />	</td>
-					<td>
-						<input class="txt c1" id="txtMemo.*" type="text" />
-						<input class="txt c5" id="txtOrdcno.*" type="text" />
-						<input class="txt c4" id="txtNo2.*" type="text" />
-						<input id="txtNoq.*" type="hidden" /><input id="recno.*" type="hidden" />
-					</td>
-					<td><input class="txt c1" id="txtUno2.*" type="text"  /></td>
+					
 				</tr>
 			</table>
 		</div>
