@@ -32,7 +32,7 @@ declare @tmp table(
 )
 
 insert into @tmp
-select '0',1,a.device,a.saver,a.noa,a.tgg,a.years,a.heart,a.style,a.worker,a.gen,a.genmon,a.material,a.product,a.form,b.namea,b.tgg,b.spec,b.hpower,b.mount,b.datea,b.memo
+select '0',1,a.device,a.saver,a.noa,a.tgg,a.years,a.heart,a.style,replace(a.worker,',','<br>'),a.gen,a.genmon,a.material,a.product,a.form,b.namea,b.tgg,b.spec,b.hpower,b.mount,b.datea,b.memo
 from modeq a
 left join modeqs b on a.noa = b.noa
 where(a.noa between @t_bnoa and @t_enoa)

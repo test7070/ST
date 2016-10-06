@@ -25,11 +25,15 @@ declare @tmp table(
 
 insert into @tmp
 select '0',ROW_NUMBER()over(partition by a.modnoa order by b.code),a.noa,a.modnoa,a.mech,a.datea,b.code,b.detail,b.frame,SUM(b.mount) 
-,a.namea,SUM(b.mount)
+,a.namea,0
 from modout a
 left join modouts b on a.noa = b.noa
 where(a.noa between @t_bnoa and @t_enoa)
 group by a.noa,a.modnoa,a.mech,a.datea,b.code,b.detail,b.frame,a.namea
+
+update a
+set tmount=(select sum(mount) from @tmp where a.noa=a.noa)
+from @tmp a
 
 declare @noa nvarchar(50)
 declare @cnt  int
@@ -320,9 +324,11 @@ deallocate cursor_table
 select 
 	a.*,
 	b.tgg,b.datea,b.frame,case when b.usetype='1' then '製造課' else '設備課' end usetype
+	,c.mount tmount
 from @tmp a
 left join model b on a.modnoa=b.noa
-order by nob,rec,gno;
+left join models c on a.modnoa=c.noa and c.productno=a.nob
+order by a.nob,rec,gno;
 --**************************************************************************
 z_modout_rs04:--z_modout_rs04
 

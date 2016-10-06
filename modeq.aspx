@@ -61,12 +61,9 @@
             	q_getFormat();
             	bbmMask = [['txtYears', r_picm]];
 				q_mask(bbmMask);
-				
 				bbsMask = [['txtDatea', r_picd]];
 				
-				
-				q_cmbParse("cmbWorker", '機台組員,CNC車床組員');
-								
+				//q_cmbParse("cmbWorker", '機台組員,CNC車床組員');
             }
 
 		    function q_gtPost(t_name) {
@@ -129,6 +126,7 @@
 		    function btnModi() {
 		        _btnModi();
 		        refreshBbm();
+		        Workerrefresh();
 		    }
 
 		    function btnPrint() {
@@ -141,6 +139,13 @@
 					alert(t_err);
 					return;
 				}
+				
+				$('#txtWorker').val(
+					$('#lblWorker1-1').text()+$('#txtWorker1').val()+$('#lblWorker1-2').text()+','+
+					$('#lblWorker2-1').text()+$('#txtWorker2').val()+$('#lblWorker2-2').text()+','+
+					$('#lblWorker3-1').text()+$('#txtWorker3').val()+$('#lblWorker3-2').text()
+				);
+				
               	var t_noa = trim($('#txtNoa').val());	        
 		        wrServer(t_noa);
             }
@@ -159,6 +164,7 @@
 		    function refresh(recno) {
 		        _refresh(recno);
 		        refreshBbm();
+		        Workerrefresh();
 		    }
 		    
 		    function refreshBbm() {
@@ -225,7 +231,17 @@
 		    function btnCancel() {
 		        _btnCancel();
 		    }
-			
+			function Workerrefresh() {
+				var tworker=$('#txtWorker').val();
+				if(tworker.length>0){
+					var t_w1=replaceAll(replaceAll(tworker.split(',')[0],$('#lblWorker1-1').text(),''),$('#lblWorker1-2').text(),'');
+					var t_w2=replaceAll(replaceAll(tworker.split(',')[1],$('#lblWorker2-1').text(),''),$('#lblWorker2-2').text(),'');
+					var t_w3=replaceAll(replaceAll(tworker.split(',')[2],$('#lblWorker3-1').text(),''),$('#lblWorker3-2').text(),'');
+					$('#txtWorker1').val(t_w1);
+					$('#txtWorker2').val(t_w2);
+					$('#txtWorker3').val(t_w3);	
+				}
+			}
 		</script>
 		<style type="text/css">
             #dmain {
@@ -391,8 +407,21 @@
 						<td><input id="txtHeart" type="text" class="txt c1"/></td>	
 						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
 						<td><input id="txtStyle" type="text" class="txt c1"/></td>											
-						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
-						<td><select id="cmbWorker"  class="txt c1"> </select></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
+						<td colspan="5">
+							<a id="lblWorker1-1" class="lbl" style="float: none;color: black;">車長</a>
+							<input id="txtWorker1" type="text" class="txt c1" style="width: 40px;float: none;"/>
+							<a id="lblWorker1-2" class="lbl" style="float: none;color: black;">員</a>
+							<a id="lblWorker2-1" class="lbl" style="float: none;color: black;">接頭</a>
+							<input id="txtWorker2" type="text" class="txt c1" style="width: 40px;float: none;"/>
+							<a id="lblWorker2-2" class="lbl" style="float: none;color: black;">員</a>
+							<a id="lblWorker3-1" class="lbl" style="float: none;color: black;">組員</a>
+							<input id="txtWorker3" type="text" class="txt c1" style="width: 40px;float: none;"/>
+							<a id="lblWorker3-2" class="lbl" style="float: none;color: black;">員</a>
+							<input id="txtWorker" type="hidden" class="txt c1"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblGen" class="lbl"> </a></td>

@@ -27,6 +27,7 @@ select a.datea,b.device,b.memo
 from modcuc a
 left join modcucs b on a.noa = b.noa
 where(a.datea between @t_bdate and @t_edate)
+group by a.datea,b.device,b.memo
 
 create table #result(
 	gno  nvarchar(1),
@@ -89,7 +90,7 @@ begin
 			set @rno = @rno + 1
 			set @icmd = @icmd+",device"+CAST(@rno as nvarchar(5))
 			set @hcmd = @hcmd+",'"+@device+"'"
-			set @scmd = @scmd+",(select memo from #tmp a where a.datea=b.datea and a.device='"+@device+"')"
+			set @scmd = @scmd+",stuff((select ','+memo from #tmp a where a.datea=b.datea and a.device='"+@device+"' FOR XML path('')),1,1,'')"
 			set @pcmd = @pcmd+",''"
 
 			fetch next from cursor_table 
