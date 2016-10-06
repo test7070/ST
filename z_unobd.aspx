@@ -39,26 +39,29 @@
 						name : 'accy',
 						value : r_accy
 					}, {/*1*/
-						type : '6', //[2]
+						type : '6', //[2]      1
 						name : 'xnoa'
 					}, {
 						type : '0', //[3]
 						name : 'xcubtype',
 						value : q_getPara('cubpi.typea')
 					}, {/*2*/
-						type : '6', //[4]
+						type : '6', //[4]       2   
 						name : 'xenddate'
 					}, {/*3*/
                         type : '2',
-                        name : 'product',//[5][6]
+                        name : 'product',//[5][6]        3
                         dbf : 'ucaucc',
                         index : 'noa,product',
                         src : 'ucaucc_b.aspx'
                     }, {/*4*/
-                        type : '8', //[7] 
+                        type : '8', //[7]           4
                         name : 'traceback',
                         value : ('Y@回溯').split(',')
-                    }]
+                    }, {/*5*/
+						type : '6', //[8]    5
+						name : 'xuno2'
+					}]
 				});
 				q_langShow();
 				q_popAssign();
@@ -73,6 +76,9 @@
 				$('#txtXenddate').datepicker();
 				$('#Xnoa').css('width','98%');
                 $('#txtXnoa').css('width','85%');
+                $('#Xuno2').css('width','98%');
+                $('#txtXuno2').css('width','85%');
+                $('#lblXuno2').text('原批號');
 			}
 
 			function q_boxClose(s2) {

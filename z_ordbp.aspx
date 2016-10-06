@@ -15,11 +15,43 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
+			var t_uccga = '', t_uccgb = '', t_uccgc='';
 			aPop = new Array(['txtXy_custno', '', 'cust', 'noa,comp', 'txtXy_custno', 'cust_b.aspx']);
 			$(document).ready(function() {
 				q_getId();
-				q_gf('', 'z_ordbp');
+				q_gt('uccga', "", 0, 0, 0, "");
 			});
+			function q_gtPost(t_name) {
+            	switch (t_name) {
+                	case 'uccga':
+                		var as = _q_appendData("uccga", "", true);
+                        if(as[0]!=undefined){
+                        	for(var i=0;i<as.length;i++)
+                        		t_uccga += (t_uccga.length>0?',':'')+as[i].noa+'@'+as[i].namea; 
+                        }
+                		q_gt('uccgb', "", 0, 0, 0, "");
+                		break;
+            		case 'uccgb':
+                		var as = _q_appendData("uccgb", "", true);
+                        if(as[0]!=undefined){
+                        	for(var i=0;i<as.length;i++)
+                        		t_uccgb += (t_uccgb.length>0?',':'')+as[i].noa+'@'+as[i].namea; 
+                        }
+                		q_gt('uccgc', "", 0, 0, 0, "");
+                		break;
+            		case 'uccgc':
+                		var as = _q_appendData("uccgc", "", true);
+                        if(as[0]!=undefined){
+                        	for(var i=0;i<as.length;i++)
+                        		t_uccgc += (t_uccgc.length>0?',':'')+as[i].noa+'@'+as[i].namea; 
+                        }
+                		q_gf('', 'z_ordbp');
+                		break;
+                    default:
+						break;
+                }
+            }
+			
 			function q_gfPost() {
 				$('#q_report').q_report({
 					fileName : 'z_ordbp',
@@ -146,10 +178,24 @@
                     }, {/*24 [41]*/
 						type : '6',
 						name : 'xy_custno'
-					}]
+					},{
+                        type : '5', //[42]    //25 
+                        name : 'xuccga',
+                        value : [q_getPara('report.all')].concat(t_uccga.split(','))
+                    },{
+                        type : '5', //[43]    //26  
+                        name : 'xuccgb',
+                        value : [q_getPara('report.all')].concat(t_uccgb.split(','))
+                    },{
+                        type : '5', //[44]     //27 
+                        name : 'xuccgc',
+                        value : [q_getPara('report.all')].concat(t_uccgc.split(','))
+                    }]
 				});
 				q_popAssign();
-
+				q_langShow();
+				
+				
 				$('#txtXdate1').mask(r_picd);
 				$('#txtXdate1').datepicker();
 				$('#txtXdate2').mask(r_picd);
@@ -307,13 +353,19 @@
 				$('#btnClose_a').click(function(e) {
 					$('#exportordc').toggle();
 				});
+				
+				$('#Xuccga').width(195);
+                $('#Xuccgb').width(195);
+                $('#Xuccgc').width(195);
+				$('#Xuccga select').width(90);
+				$('#Xuccgb select').width(90);
+				$('#Xuccgc select').width(90);
 			}
 
 			function q_boxClose(s2) {
 			}
 
-			function q_gtPost(s2) {
-			}
+			
 
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
