@@ -23,8 +23,10 @@
 			});  
 			
 			aPop = new Array(
-				['txtXnoa1', '', 'model', 'noa', 'txtXnoa1', 'model_b.aspx'],
-				['txtXnoa2', '', 'model', 'noa', 'txtXnoa2', 'model_b.aspx']
+				['txtXnoa1', '', 'modout', 'noa', 'txtXnoa1', ''],
+				['txtXnoa2', '', 'modout', 'noa', 'txtXnoa2', ''],
+				['txtXmodnoa1', '', 'model', 'noa', 'txtXnoa1', 'model_b.aspx'],
+				['txtXmodnoa2', '', 'model', 'noa', 'txtXnoa2', 'model_b.aspx']
 			);
 			
             function q_gfPost() {
