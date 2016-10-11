@@ -758,7 +758,7 @@
 			var check_stk_notv=0;
 			var checkstktmp=[];
 			function btnOk() {
-				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')],['txtStoreno', q_getMsg('lblStore')]]);
+				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtDatea', q_getMsg('lblDatea')], ['txtCustno', q_getMsg('lblCust')], ['txtCno', q_getMsg('lblAcomp')],['txtStoreno', q_getMsg('lblStore')], ['txtSalesno', q_getMsg('lblSales')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;

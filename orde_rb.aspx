@@ -39,7 +39,7 @@
 				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,spec,unit', 'txtProductno_,txtProduct_,txtSpec_,txtUnit_', 'ucaucc_b2.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtNick,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,serial,paytype,trantype,tel,fax,zip_comp,addr_fact,salesno,sales', 'txtCustno,txtComp,txtNick,txtCoin,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtSalesno,txtSales', 'cust_b.aspx'],
 				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', '']
 				//['txtPostname', 'lblStore', 'store', 'noa,store', 'txtPostname,txtConform', 'store_b.aspx']
 			);
@@ -844,7 +844,8 @@
 				Lock();
 				
 				t_err = '';
-				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')], ['cmbKind', '發票開立'], ['cmbPartstore', '倉庫']]);
+				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')], ['cmbKind', '發票開立']
+				, ['cmbPartstore', '倉庫'], ['txtSalesno', q_getMsg('lblSales')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					Unlock();
@@ -1148,8 +1149,9 @@
 					q_gt('store', "where=^^tggno='"+r_partno+"' or noa='001'^^", 0, 0, 0, 'storepart', r_accy);
 				}
 				
-				$('#txtSalesno').val(r_userno);
-				$('#txtSales').val(r_name);
+				//105/10/07 改為抓取客戶的業務
+				//$('#txtSalesno').val(r_userno);
+				//$('#txtSales').val(r_name);
 				
 				if($('#chekQcopy').prop('checked')){
 					for (var j = 0; j < (q_bbsCount == 0 ? 1 : q_bbsCount); j++) {
