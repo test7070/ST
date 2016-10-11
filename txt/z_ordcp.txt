@@ -193,7 +193,7 @@ declare @tmp table(
 insert into @tmp
 select
 	'0',ROW_NUMBER()over(partition by a.noa order by a.noa),1,0
-	,a.noa,a.odate,a.kind,a.tggno,c.comp,a.tel,a.fax,a.addr,a.addr2,a.trantype,a.trandate,a.paytype,replace(a.memo,'chr(10)','<BR>'),a.money,a.tax,a.total
+	,a.noa,a.odate,a.kind,a.tggno,c.nick,a.tel,a.fax,a.addr,a.addr2,a.trantype,a.trandate,a.paytype,replace(a.memo,'chr(10)','<BR>'),a.money,a.tax,a.total
 	,b.no2,b.productno,dbo.charbr(b.product+' '+b.spec,42),b.spec,b.unit,b.mount,b.price,b.total
 	,dbo.charbr(b.memo+case when charindex('-',b.productno)>0 then b.comp else '' end,13),b.comp ----1050321 XY印刷品才顯示客戶
 from view_ordc a
