@@ -1344,12 +1344,13 @@
 			function btnDele() {
 				if (q_chkClose())
 					return;
-				if(!emp($('#txtVccno').val())){
+					
+				if(!emp($('#txtVccno').val()) && r_rank<9){
 					alert("已轉出貨單禁止刪除!!");
 					return;
 				}
 				
-				if(!emp($('#txtOrdbno').val())){
+				if(!emp($('#txtOrdbno').val()) && r_rank<9){
 					alert("已開立發票禁止刪除!!");
 					return;
 				}
