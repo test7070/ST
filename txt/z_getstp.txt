@@ -6,7 +6,6 @@
 	
 	declare @t_pageline int = 11 -- 一頁幾行
 	-----------------------------------------------------------------------------
-	-----------------------------------------------------------------------------
 	declare @noa nvarchar(20)
 	declare @datea nvarchar(10)
 	declare @typea nvarchar(20)
@@ -132,17 +131,19 @@
 		if(CHARINDEX('chr(10)',@memo)>0)
 		begin
 			set @memo1 = LEFT(@memo,CHARINDEX('chr(10)',@memo)-1)
-			set @memo = right(@memo,LEN(@memo)-LEN(@memo1)-7+1)
+			set @memo =  SUBSTRING(@memo,LEN(@memo1)+8,len(@memo))   -- right(@memo,LEN(@memo)-LEN(@memo1)-7+1)
 			if(CHARINDEX('chr(10)',@memo)>0)
 			begin
 				set @memo2 = LEFT(@memo,CHARINDEX('chr(10)',@memo)-1)
-				set @memo3 = right(@memo,LEN(@memo)-LEN(@memo2)-7+1)
+				set @memo3 =  SUBSTRING(@memo,LEN(@memo2)+8,len(@memo))
+				set @memo3 = REPLACE(@memo3,'chr(10)','')
+				--set @memo3 = right(@memo,LEN(@memo)-LEN(@memo2)-7+1)
 			end
 			else
 				set @memo2 = @memo
 		end
 		else
-			set @memo1=@memo
+			set @memo1=@memo	
 		insert into @tmp(gno,pno,noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo1)
 		select '3','4',@noa,@datea,@typea,@kind,@ckind,@trantype,@custno,@comp,@tel,@fax,@addr,@memo1
 		
