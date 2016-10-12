@@ -1197,8 +1197,32 @@ z_ordbp03:--z_ordbp03
 	
 	declare @t_show nvarchar(20) = case when '#non' = [28] then '0' else [28] end
 	--------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#tmpa')is not null
+	BEGIN
+		drop table #tmpa
+	END
+	
+	IF OBJECT_ID('tempdb..#tmpc')is not null
+	BEGIN
+		drop table #tmpc
+	END
+	
+	IF OBJECT_ID('tempdb..#tmpd')is not null
+	BEGIN
+		drop table #tmpd
+	END
+	
+	IF OBJECT_ID('tempdb..#tmpe')is not null
+	BEGIN
+		drop table #tmpe
+	END
+	
+	IF OBJECT_ID('tempdb..#tmp')is not null
+	BEGIN
+		drop table #tmp
+	END
 	--Ordb
-	declare @tmpa table(
+	create table #tmpa(
 		accy nvarchar(10),
 		noa nvarchar(20),
 		no3 nvarchar(10),
@@ -1213,7 +1237,7 @@ z_ordbp03:--z_ordbp03
 		price float
 	)
 
-	declare @tmpc table(
+	create table #tmpc(
 		recno int,
 		productno nvarchar(20),
 		product nvarchar(50),
@@ -1233,8 +1257,8 @@ z_ordbp03:--z_ordbp03
 		fdate nvarchar(10),
 		fprice float
 	)
-		--Ordc
-	declare @tmpd table(
+	--Ordc
+	create table #tmpd(
 		recno int,
 		productno nvarchar(20),
 		product nvarchar(50),
@@ -1248,8 +1272,8 @@ z_ordbp03:--z_ordbp03
 		ordcnoa nvarchar(20),
 		ordcno2 nvarchar(20)
 	)
-		--Rc2
-	declare @tmpe table(
+	--Rc2
+	create table #tmpe(
 		recno int,
 		productno nvarchar(20),
 		product nvarchar(50),
@@ -1264,7 +1288,7 @@ z_ordbp03:--z_ordbp03
 		rc2noq nvarchar(10)
 	)
 	---------------------------------------------------------------------------------------
-	insert into @tmpa(productno,product,accy,noa,no3,mount,price,odate,ordeno,workgno)
+	insert into #tmpa(productno,product,accy,noa,no3,mount,price,odate,ordeno,workgno)
 	select a.productno,a.product,a.accy,a.noa,a.no3,a.mount,a.price,b.odate,d.ordeno,c.noa 
 	from view_ordbs a
 	right join view_ordb b on a.accy=b.accy and a.noa=b.noa
@@ -1278,34 +1302,34 @@ z_ordbp03:--z_ordbp03
 	and isnull(a.cancel,0)=0
 	and isnull(b.cancel,0)=0
 	
-	insert into @tmpc(productno,product,accy,noa,no3,no4
+	insert into #tmpc(productno,product,accy,noa,no3,no4
 		,tggno,tgg,edate,pack,price
 		,rdate,rprice,iprice,fdate,fprice)
 	select a.productno,a.product,a.accy,a.noa,a.no3,b.no4
 		,b.tggno,b.tgg,b.edate,b.pack,b.price
 		,b.rdate,b.rprice,b.iprice,b.fdate,b.fprice
-	from @tmpa a
+	from #tmpa a
 	left join view_ordbt b on a.accy=b.accy and a.noa=b.noa and a.no3=b.no3 
 	where ISNULL(b.price,0)!=0 or ISNULL(b.iprice,0)!=0 or ISNULL(b.rprice,0)!=0 or ISNULL(b.fprice,0)!=0
 	-------------------------------------------------------------------------------------------
-	insert into @tmpd(productno,product,accy,noa,no3,mount,price,ordcaccy,ordcnoa,ordcno2)
+	insert into #tmpd(productno,product,accy,noa,no3,mount,price,ordcaccy,ordcnoa,ordcno2)
 	select b.productno,b.product,'',b.ordbno,b.no3,b.mount,b.price,b.accy,b.noa,b.no2
 	from view_ordc a
 	left join view_ordcs b on a.accy=b.accy and a.noa=b.noa
-	left join @tmpa c on b.ordbno=c.noa and b.no3=c.no3
+	left join #tmpa c on b.ordbno=c.noa and b.no3=c.no3
 	where b.noa is not null and c.noa is not null
 	and isnull(a.cancel,0)=0
 	and isnull(b.cancel,0)=0
 	-------------------------------------------------------------------------------------------
-	insert into @tmpe(productno,product,accy,noa,no3,mount,price,rc2accy,rc2noa,rc2noq)
+	insert into #tmpe(productno,product,accy,noa,no3,mount,price,rc2accy,rc2noa,rc2noq)
 	select b.productno,b.product,c.accy,c.noa,c.no3,b.mount,b.price,b.accy,b.noa,b.no2
 	from view_rc2 a
 	left join view_rc2s b on a.accy=b.accy and a.noa=b.noa
-	left join @tmpd c on b.ordeno=c.ordcnoa and b.no2=c.ordcno2
+	left join #tmpd c on b.ordeno=c.ordcnoa and b.no2=c.ordcno2
 	where b.noa is not null and c.noa is not null
 	------------------------------------------------------------------------------------------
 	------------------------------------------------------------------------------------------
-	declare @tmp table(
+	create table #tmp(
 		gno nvarchar(10),
 		pno nvarchar(10),
 		odate nvarchar(10),
@@ -1338,42 +1362,42 @@ z_ordbp03:--z_ordbp03
 		fdate nvarchar(10),
 		fprice float
 	)
-	insert into @tmp(gno,pno,odate,ordbaccy,ordbno,ordbno3,workgno,ordeno,productno,product,price,mount,ghref)
+	insert into #tmp(gno,pno,odate,ordbaccy,ordbno,ordbno3,workgno,ordeno,productno,product,price,mount,ghref)
 	select '1','1',odate,accy,noa,no3,workgno,ordeno,productno,product,price,mount
 		,'ordb?left(noa,'+cast(len(noa) as nvarchar)+')=$ordbno?'+accy
-	from @tmpa order by accy,noa,no3
+	from #tmpa order by accy,noa,no3
 	
 
-	insert into @tmp(gno,pno,ordbaccy,ordbno,ordbno3
+	insert into #tmp(gno,pno,ordbaccy,ordbno,ordbno3
 		,tggno,tgg,edate,pack,price
 		,rdate,rprice,iprice,fdate,fprice)
 	select '3','3',accy,noa,no3
 		,tggno,tgg,edate,pack,price
 		,rdate,rprice,iprice,fdate,fprice
-	from @tmpc order by accy,noa,no3
+	from #tmpc order by accy,noa,no3
 	
-	insert into @tmp(gno,pno,ordbaccy,ordbno,ordbno3,ordcaccy,ordcno,price,mount,ghref)
+	insert into #tmp(gno,pno,ordbaccy,ordbno,ordbno3,ordcaccy,ordcno,price,mount,ghref)
 	select '4','4',accy,noa,no3,ordcaccy,ordcnoa,price,mount
 		,'ordc?left(noa,'+cast(len(noa) as nvarchar)+')=$ordcno?'+ordcaccy
-	from @tmpd order by accy,noa,no3
+	from #tmpd order by accy,noa,no3
 	
-	insert into @tmp(gno,pno,ordbaccy,ordbno,ordbno3,rc2accy,rc2no,price,mount,ghref)
+	insert into #tmp(gno,pno,ordbaccy,ordbno,ordbno3,rc2accy,rc2no,price,mount,ghref)
 	select '5','5',accy,noa,no3,rc2accy,rc2noa,price,mount
 		,'rc2?left(noa,'+cast(len(noa) as nvarchar)+')=$rc2no?'+accy
-	from @tmpe order by accy,noa,no3
+	from #tmpe order by accy,noa,no3
 	------------------------------------------------------------------------------------------
 	if(@t_show='0')
-		delete @tmp where ordbno+'_'+ordbno3 in (select ordbno+'_'+ordbno3 from @tmp where gno='3' and isnull(rprice,0)!=0 and isnull(iprice,0)!=0)
+		delete a from #tmp a where exists (select * from #tmp where gno='3' and ordbno=a.ordbno and ordbno3=a.ordbno3 and isnull(rprice,0)!=0 and isnull(iprice,0)!=0)
 	if(@t_show='1')
-		delete @tmp where ordbno+'_'+ordbno3 in (select ordbno+'_'+ordbno3 from @tmp where gno='3' and isnull(rprice,0)!=0)
+		delete a from #tmp a where exists (select * from #tmp where gno='3' and ordbno=a.ordbno and ordbno3=a.ordbno3 and isnull(rprice,0)!=0)
 	if(@t_show='2')
-		delete @tmp where ordbno+'_'+ordbno3 in (select ordbno+'_'+ordbno3 from @tmp where gno='3' and isnull(iprice,0)!=0)
+		delete a from #tmp a where exists (select * from #tmp where gno='3' and ordbno=a.ordbno and ordbno3=a.ordbno3 and isnull(iprice,0)!=0)
 
 	--1030419 刪除沒有議價的資料
-	delete @tmp where ordbno+'_'+ordbno3 not in (select ordbno+'_'+ordbno3 from @tmp where pno='3') 
+	delete a from #tmp a where not exists (select * from #tmp where pno='3' and ordbno=a.ordbno and ordbno3=a.ordbno3) 
 	
 	--1030419 刪除有成交日的資料 
-	delete @tmp where ordbno in (select ordbno from @tmp where isnull(fdate,'')!='')
+	delete a from #tmp a where exists (select * from #tmp where ordbno=a.ordbno and isnull(fdate,'')!='')
 	
 	--1030419 加項次規格單位
 	select gno,pno,odate,ordbaccy,ordbno,ordbno3,workgno,ordeno,productno,product,
@@ -1388,7 +1412,33 @@ z_ordbp03:--z_ordbp03
 	,(select top 1 spec from view_ucaucc where a.productno=noa) spec
 	,(select top 1 unit from view_ucaucc where a.productno=noa) unit
 	,ROW_NUMBER() over(order by ordbno,ordbno3,pno) recno
-	from @tmp a order by ordbno,ordbno3,pno;
+	from #tmp a order by ordbno,ordbno3,pno
+	
+	IF OBJECT_ID('tempdb..#tmpa')is not null
+	BEGIN
+		drop table #tmpa
+	END
+	
+	IF OBJECT_ID('tempdb..#tmpc')is not null
+	BEGIN
+		drop table #tmpc
+	END
+	
+	IF OBJECT_ID('tempdb..#tmpd')is not null
+	BEGIN
+		drop table #tmpd
+	END
+	
+	IF OBJECT_ID('tempdb..#tmpe')is not null
+	BEGIN
+		drop table #tmpe
+	END
+	
+	IF OBJECT_ID('tempdb..#tmp')is not null
+	BEGIN
+		drop table #tmp
+	END
+	;
 
 z_ordbp1:--z_ordbp1
 	declare @t_kind nvarchar(max) = case when '#non' = '[20]' then '' else '[20]' end
