@@ -138,10 +138,10 @@ insert into @tmp
 	select
 		'0' gno,a.noa,b.noq,a.datea,a.typea,a.itype,left(a.comp,4),c.source,b.uno,b.spec,c.class,b.productno,b.product,
 		(case when ltrim(rtrim(isnull(b.size,'')))='' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else b.size end),
-		b.mount,b.weight,c.price,b.weight*c.price,
+		b.mount,b.weight,b.price,b.total,
 		case when len(@t_typea)=0 then '全部' else a.typea end,'inast'+a.accy
-	from view_ina[1] a
-	left join view_inas[1] b on a.noa = b.noa
+	from view_ina a
+	left join view_inas b on a.noa = b.noa
 	left join uccb c on b.uno = c.noa
 	where (LEN(@t_typea) = 0 or @t_typea = a.typea) and
 	(LEN(@t_itype) = 0 or @t_itype = a.itype) and
