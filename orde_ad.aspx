@@ -157,6 +157,39 @@
 						q_box("z_credit.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";custno='" + $('#txtCustno').val() + "';" + r_accy + ";" + q_cur, 'ordei', "95%", "95%", q_getMsg('btnCredit'));
 					}
 				});
+				
+				$('#cmbPayterms').change(function() {
+					if($(this).val().slice(-2)=='＆C'){
+						for (var j = 0; j < q_bbsCount; j++) {
+							if(!emp($('#txtProductno_'+j).val())){
+								$('#txtPayterms_'+j).val($(this).val());
+								bbspaytermschange(j);
+								$('#txtSize_'+j).val($(this).val().substr(0,$(this).val().length-2));
+								uncommission(j);
+							}else{
+								$('#txtPayterms_'+j).val('');
+								$('#txtSize_'+j).val('');
+								$('#txtRadius_'+j).val('');
+								$('#txtProfit2_'+j).val('');
+								$('#txtDime_'+j).val('');
+								$('#txtLengthb_'+j).val('');
+							}
+						}
+					}else{
+						for (var j = 0; j < q_bbsCount; j++) {
+							if(!emp($('#txtProductno_'+j).val())){
+								$('#txtPayterms_'+j).val($(this).val());
+							}else{
+								$('#txtPayterms_'+j).val('');
+							}
+							$('#txtSize_'+j).val('');
+							$('#txtRadius_'+j).val('');
+							$('#txtProfit2_'+j).val('');
+							$('#txtDime_'+j).val('');
+							$('#txtLengthb_'+j).val('');
+						}
+					}
+				});
 				////-----------------以下為addr2控制事件---------------
 				$('#btnAddr2').mousedown(function(e) {
 					var t_post2 = $('#txtPost2').val().split(';');
@@ -259,7 +292,6 @@
 								var t_emount=q_sub(t_mount,q_mul(t_pfmount,q_mul(t_inmount,t_outmount))); //散裝數量
 								$('#txtCuft_'+b_seq).val(q_mul(t_cuft,t_pcmount));
 		                	}
-		                	cufttotal();
 	                	}
 					}
 					$('#div_getprice').hide();
@@ -1452,7 +1484,143 @@
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 						}
 						break;
+					case 'txtProductno_':
+						if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_'+b_seq).val())){
+							$('#txtPayterms_'+b_seq).val($('#cmbPayterms').val());
+							if($('#cmbPayterms').val().slice(-2)=='＆C'){
+								$('#txtPayterms2_'+b_seq).val($('#cmbPayterms').val().substr(0,$('#cmbPayterms').val().length-2));
+							}
+							
+							var t_where = "where=^^ a.custno='"+$('#txtCustno').val()+"' and a.productno='"+$('#txtProductno_'+b_seq).val()+"' and a.payterms='"+$('#cmbPayterms').val()+"' and '"+$('#txtOdate').val()+"'>=a.bdate order by bdate desc,noa desc ^^";
+							q_gt('custprices', t_where, 0, 0, 0, "getcustprices", r_accy, 1);
+							var as = _q_appendData("custprices", "", true);
+							if (as[0] != undefined) {
+								$('#txtCommission_'+b_seq).val(as[0].commission);
+								$('#txtInsurance_'+b_seq).val(as[0].insurance);
+								$('#txtProfit_'+b_seq).val(as[0].profit);
+								$('#txtSprice_'+b_seq).val(as[0].cost);
+								$('#txtPrice_'+b_seq).val(as[0].price2);
+								
+								if($('#cmbPayterms').val().slice(-2)=='＆C'){
+									if(!emp($('#txtProductno_'+b_seq).val())){
+										$('#txtPayterms_'+b_seq).val($('#cmbPayterms').val());
+										$('#txtSize_'+b_seq).val($('#cmbPayterms').val().substr(0,$('#cmbPayterms').val().length-2));
+										uncommission(b_seq);
+									}
+								}
+							}
+							/*if (as[1] != undefined) {
+								$('#txtCommission2_'+b_seq).val(as[1].commission);
+								$('#txtInsurance2_'+b_seq).val(as[1].insurance);
+								$('#txtProfit2_'+b_seq).val(as[1].profit);
+								$('#txtPayterms2_'+b_seq).val(as[1].payterms);
+								$('#txtCost2_'+b_seq).val(as[1].cost);
+								$('#txtPrice2_'+b_seq).val(as[1].price2);
+							}*/
+							$('#txtMount_'+b_seq).val(1);
+							//105/04/15 取第一種包裝
+							//105/06/17 依據客戶料號抓取包裝資料
+							var t_where = "where=^^ noa='"+$('#txtProductno_'+b_seq).val()+"' and custno='"+$('#txtCustno').val()+"' ^^";
+							q_gt('ucccust', t_where, 0, 0, 0, "getucccust", r_accy, 1);
+							var isucccust=false;
+							var as = _q_appendData("ucccust", "", true);
+							if (as[0] != undefined) {
+								$('#txtPackwayno_'+b_seq).val(as[0].packwayno);
+								$('#txtPackway_'+b_seq).val(as[0].packway);
+								isucccust=true;
+							}
+							if(isucccust)
+								var t_where = "where=^^ noa='"+$('#txtProductno_'+b_seq).val()+"' and packway='"+$('#txtPackwayno_'+b_seq).val()+"' ^^";
+							else
+								var t_where = "where=^^ noa='"+$('#txtProductno_'+b_seq).val()+"'  ^^";
+							q_gt('pack2s', t_where, 0, 0, 0, "gettop1pack2s", r_accy, 1);
+							var as = _q_appendData("pack2s", "", true);
+							if (as[0] != undefined) {
+								$('#txtPackwayno_'+b_seq).val(as[0].packway);
+								$('#txtPackway_'+b_seq).val(as[0].pack);
+								//計算重量
+								var t_weight=0;
+								var t_mount=dec($('#txtMount_'+b_seq).val());
+								var t_uweight=dec(as[0].uweight);
+								var t_inmount=dec(as[0].inmount)==0?1:dec(as[0].inmount);
+								var t_outmount=dec(as[0].outmount)==0?1:dec(as[0].outmount);
+								var t_inweight=dec(as[0].inweight);
+								var t_outweight=dec(as[0].outweight);
+								var t_cuft=dec(as[0].cuft);
+								var t_pfmount=q_mul(t_inmount,t_outmount)==0?0:Math.floor(q_div(t_mount,q_mul(t_inmount,t_outmount))); //一整箱
+								var t_pcmount=q_mul(t_inmount,t_outmount)==0?0:Math.ceil(q_div(t_mount,q_mul(t_inmount,t_outmount))); //總箱數
+								var t_emount=q_sub(t_mount,q_mul(t_pfmount,q_mul(t_inmount,t_outmount))); //散裝數量
+								
+								$('#txtCuft_'+b_seq).val(q_mul(t_cuft,t_pcmount));
+							}
+							sum();
+						}
+						break;
 				}
+			}
+			
+			function bbspaytermschange(n){
+				if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_'+n).val()) && !emp($('#txtPayterms_'+n).val())){
+					var t_where = "where=^^ a.custno='"+$('#txtCustno').val()+"' and (a.productno='"+$('#txtProductno_'+n).val()+"') and a.payterms='"+$('#txtPayterms_'+n).val()+"' and '"+$('#txtOdate').val()+"'>=a.bdate order by bdate desc,noa desc ^^";
+					q_gt('custprices', t_where, 0, 0, 0, "getcustprices", r_accy, 1);
+					var as = _q_appendData("custprices", "", true);
+					if (as[0] != undefined) {
+						$('#txtCommission_'+n).val(as[0].commission);
+						$('#txtInsurance_'+n).val(as[0].insurance);
+						$('#txtProfit_'+n).val(as[0].profit);
+						$('#txtSprice_'+n).val(as[0].cost);
+						$('#textTranprice').val(as[0].tranprice);
+						$('#txtPrice_'+n).val(as[0].price2);
+					}else{
+						var cost=dec($('#txtSprice_'+n).val());				
+						var tranprice=dec($('#textTranprice').val()); //抓暫存的資料
+						var fee=dec($('#textFee').val()); //抓暫存的資料
+						var profit=$('#txtProfit_'+n).val();
+						var insurance=$('#txtInsurance_'+n).val();
+						var commission=$('#txtCommission_'+n).val();
+						var payterms= $('#txtPayterms_'+n).val();
+						var cost3=0
+						var precision=dec(q_getPara('vcc.pricePrecision'));
+						switch (payterms) {//P利潤 I保險 C佣金 F運費
+							case 'C＆F'://(成本/(1-P)+F) //=CFR   
+								cost3=round(q_add(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),tranprice),precision);
+								break;
+							case 'C＆F＆C'://(成本/(1-P)+F)/(1-C)
+								cost3=round(q_div(q_add(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),tranprice),q_sub(1,q_div(commission,100))),precision);
+								break;
+							case 'C＆I': //成本/(1-P)/(1-I)
+								cost3=round(q_div(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),q_sub(1,q_div(insurance,100))),precision);
+								break;
+							case 'C＆I＆C'://成本/(1-P)/(1-I)/(1-C)
+								cost3=round(q_div(q_div(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),q_sub(1,q_div(insurance,100))),q_sub(1,q_div(commission,100))),precision);
+								break;
+							case 'CIF'://(成本/(1-P)+F)/(1-I)   
+								cost3=round(q_div(q_add(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),tranprice),q_sub(1,q_div(insurance,100))),precision);
+								break;
+							case 'CIF＆C'://(成本/(1-P)+F)/(1-I)/(1-C)
+								cost3=round(q_div(q_div(q_add(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),tranprice),q_sub(1,q_div(insurance,100))),q_sub(1,q_div(commission,100))),precision);
+								break;
+							case 'EXW'://成本/(1-P)
+								cost3=round(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),precision);
+								break;
+							case 'FOB'://成本/(1-P)
+								cost3=round(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),precision);
+								break;
+							case 'FOB＆C': //成本/(1-P)/(1-C)
+								cost3=round(q_div(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),q_sub(1,q_div(commission,100))),precision);
+								break;
+						}
+						$('#txtPrice_'+n).val(cost3);
+					}
+				}
+			}
+			
+			function uncommission(n) {
+				var t_commission=q_sub(1,q_div(dec($('#txtCommission_'+n).val()),100));
+				$('#txtRadius_'+n).val(round(q_mul(dec($('#txtPrice_'+n).val()),t_commission),3));
+				$('#txtDime_'+n).val($('#txtProfit_'+n).val());
+				$('#txtWidth_'+n).val($('#txtCommission_'+n).val());
+				$('#txtLengthb_'+n).val($('#txtInsurance_'+n).val());
 			}
 			
 			var ucagroupdivmove = false;
