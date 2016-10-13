@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -255,32 +255,61 @@
 					$('#Showordetotal').css('width','300px');
 					$('#chkShowordetotal').css('width','220px');
 					$('#chkShowordetotal span').css('width','180px');
-	
-					var t_date, t_year, t_month, t_day;
-					t_date = new Date();
-					t_date.setDate(1);
-					t_year = t_date.getUTCFullYear() - 1911;
-					t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-					t_month = t_date.getUTCMonth() + 1;
-					t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-					t_day = t_date.getUTCDate();
-					t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-					$('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);
-					$('#txtSmon1').val(t_year + '/' + t_month);
-					$('#txtSmon2').val(t_year + '/' + t_month);
-					$('#txtXdate1').val(t_month + '/' + t_day);
-	
-					t_date = new Date();
-					t_date.setDate(35);
-					t_date.setDate(0);
-					t_year = t_date.getUTCFullYear() - 1911;
-					t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-					t_month = t_date.getUTCMonth() + 1;
-					t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-					t_day = t_date.getUTCDate();
-					t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-					$('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
-					$('#txtXdate2').val(t_month + '/' + t_day);
+					
+					if(q_getPara('sys.dateformat')=='YYYY/MM/DD'){
+						var t_date, t_year, t_month, t_day;
+						t_date = new Date();
+						t_date.setDate(1);
+						t_year = t_date.getUTCFullYear();
+						t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+						t_month = t_date.getUTCMonth() + 1;
+						t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+						t_day = t_date.getUTCDate();
+						t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+						$('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);
+						$('#txtSmon1').val(t_year + '/' + t_month);
+						$('#txtSmon2').val(t_year + '/' + t_month);
+						$('#txtXdate1').val(t_month + '/' + t_day);
+		
+						t_date = new Date();
+						t_date.setDate(35);
+						t_date.setDate(0);
+						t_year = t_date.getUTCFullYear();
+						t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+						t_month = t_date.getUTCMonth() + 1;
+						t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+						t_day = t_date.getUTCDate();
+						t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+						$('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
+						$('#txtXdate2').val(t_month + '/' + t_day);
+					}
+					else{
+						var t_date, t_year, t_month, t_day;
+						t_date = new Date();
+						t_date.setDate(1);
+						t_year = t_date.getUTCFullYear() - 1911;
+						t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+						t_month = t_date.getUTCMonth() + 1;
+						t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+						t_day = t_date.getUTCDate();
+						t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+						$('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);
+						$('#txtSmon1').val(t_year + '/' + t_month);
+						$('#txtSmon2').val(t_year + '/' + t_month);
+						$('#txtXdate1').val(t_month + '/' + t_day);
+		
+						t_date = new Date();
+						t_date.setDate(35);
+						t_date.setDate(0);
+						t_year = t_date.getUTCFullYear() - 1911;
+						t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+						t_month = t_date.getUTCMonth() + 1;
+						t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+						t_day = t_date.getUTCDate();
+						t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+						$('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
+						$('#txtXdate2').val(t_month + '/' + t_day);
+					}
 	
 					var tmp = document.getElementById("txtPaytype");
 					var selectbox = document.createElement("select");
