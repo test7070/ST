@@ -924,10 +924,12 @@
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
 					case 'qtxt.query.genUno':
-						q_func('rc2_post.post.a1', r_accy + ',' + $('#txtNoa').val() + ',0');
+						q_func('rc2_post.post.a0', r_accy + ',' + $('#txtNoa').val() + ',0');
+						break;
+					case 'rc2_post.post.a0':
 						q_func('rc2_post.post.a1', r_accy + ',' + $('#txtNoa').val() + ',1');
 						q_reLoad();
-						break;
+						break;	
 					case 'qtxt.query.getuno':
 						var as = _q_appendData("tmp0", "", true, true);
 						if (as[0] != undefined) {
