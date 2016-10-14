@@ -179,7 +179,8 @@
             		//本幣關稅
             		$('#txtTariff_'+i).val(round(q_mul(q_float('txtCointariff_'+i),q_float('txtFloata')),0));
             		//推廣貿易費(本幣完稅價格*推廣貿易費率)
-            		$('#txtTrade_'+i).val(round(q_div(q_mul(q_float('txtTotal_'+i),q_float('txtTraderate_'+i)),100),0));
+            		if(!$('#chkAprice2_'+i).prop('checked'))
+            			$('#txtTrade_'+i).val(round(q_div(q_mul(q_float('txtTotal_'+i),q_float('txtTraderate_'+i)),100),0));
             		//貨物稅額((本幣完稅價格+本幣關稅) * 貨物稅率)
             		$('#txtCommoditytax_'+i).val(round(q_div(q_mul(q_float('txtTotal_'+i)+q_float('txtTariff_'+i),q_float('txtCommodityrate_'+i)),100),0));
             		//本幣營業稅基(本幣完稅價格+本幣關稅+貨物稅)
@@ -861,13 +862,17 @@
 					}
 					
 					$('#txtVat_'+i).attr('readonly','readonly');
+					$('#txtTrade_'+i).attr('readonly','readonly');
 					if($('#chkAprice2_'+i).prop('checked')){
 						$('#txtVat_'+i).css('color','black').css('background-color','white');
+						$('#txtTrade_'+i).css('color','black').css('background-color','white');
 						if(q_cur==1 || q_cur==2){
 							$('#txtVat_'+i).removeAttr('readonly');
+							$('#txtTrade_'+i).removeAttr('readonly');
 						}
 					}else{
 						$('#txtVat_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+						$('#txtTrade_'+i).css('color','green').css('background-color','rgb(237,237,237)');
 					}
 				}
 			}
