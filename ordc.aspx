@@ -748,7 +748,7 @@
 				
 				if (q_getPara('sys.project').toUpperCase()=='XY' ){
 					var t_ordbno='',t_no3='';
-					for (var i = 0; i < q_bbtCount; i++) {
+					for (var i = 0; i < q_bbsCount; i++) {
 						t_ordbno=$('#txtOrdbno_'+i).val();
 						t_no3=$('#txtNo3_'+i).val();
 						if(t_ordbno.length>0)
