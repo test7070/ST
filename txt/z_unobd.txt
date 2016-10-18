@@ -611,7 +611,7 @@ z_unobd05:--z_unobd05 批號履歷
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+dbo.getComma(c.lengthb,-1)+'</a>' b06--長度
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+c.class+'</a>' b07--等級
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+c.datea+'</a>' b08--入庫日
-		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+e.store+'</a>' b09--存放廠
+		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+f.store+'</a>' b09--存放廠
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+dbo.getComma(c.hard,-1)+'</a>' b10--硬度
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+dbo.getComma(c.mount,-1)+'</a>' b11--期初數量
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+dbo.getComma(c.[weight],-1)+'</a>' b12--期初重量
@@ -639,6 +639,7 @@ z_unobd05:--z_unobd05 批號履歷
 	left join view_uccb c on c.uno=@t_uno
 	left join view_uccc d on d.uno=@t_uno
 	left join store e on a.storeno=e.noa
+	left join store f on b.storeno=f.noa
 	order by a.[rank],a.datea;
 
 
