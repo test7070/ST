@@ -34,9 +34,9 @@ z_rc2st1:--z_rc2st1
 	end catch
 	declare @t_style nvarchar(max) = case when '#non'=[20] then '' else [20] end
 	----------------------------------------------------------------------------------------------
-	----------------------------------------------------------------------------------------------
 	declare @tmp table(
 		gno nvarchar(1),
+		typea nvarchar(10),
 		noa nvarchar(20),
 		noq nvarchar(20),
 		type nvarchar(20),
@@ -61,10 +61,10 @@ z_rc2st1:--z_rc2st1
 		,coin nvarchar(50) --幣別
 		,floata float      --匯率
 	)
-	insert into @tmp(gno,noa,noq,type,datea,mon,tggno,comp,productno,xproduct,unit,mount,weight,total,csize,qhref
+	insert into @tmp(gno,typea,noa,noq,type,datea,mon,tggno,comp,productno,xproduct,unit,mount,weight,total,csize,qhref
 		,spec,source,uno
 		,price,aprice,coin,floata)
-	select '0' gno, a.noa noa, b.noq noq, (case when a.typea='2' then '退' else '進' end) type, a.datea datea, (case when a.mon='' then left(a.datea,6) else a.mon end), a.tggno, a.tgg, b.productno, b.product, b.unit, 
+	select '0' gno,a.typea, a.noa noa, b.noq noq, (case when a.typea='2' then '退' else '進' end) type, a.datea datea, (case when a.mon='' then left(a.datea,6) else a.mon end), a.tggno, a.tgg, b.productno, b.product, b.unit, 
 		   b.mount, b.weight, b.total,
 		   (case when ltrim(rtrim(isnull(b.size,'')))='' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else b.size end),'rc2st'+b.accy
 		   ,b.spec,b.source,b.uno
@@ -87,6 +87,9 @@ z_rc2st1:--z_rc2st1
 	order by datea desc,gno,noa,noq
 	update @tmp set csize = replace(csize,'~#$','''')
 	update @tmp set spec = replace(spec,'~#$','''')
+	
+	update @tmp set mount=-mount,[weight]=-[weight],total=-total where typea!='1'
+	
 	insert into @tmp(gno,datea,mount,[weight],total)
 		select '1',datea,sum(mount),sum([weight]),sum(total) from @tmp where gno='0' group by datea
 	insert into @tmp(gno,datea,mount,[weight],total)
