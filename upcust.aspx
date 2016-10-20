@@ -33,11 +33,6 @@
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
                 
-                var custno = q_getId(0)[3].replace(/custno='(.*)'/g,'$1');
-                if(custno.length>0)
-                	q_content = "where=^^ custno='"+custno+"'^^";
-                else
-                	q_content = '';
                 q_gt(q_name, q_content, q_sqlCount, 1);
                 $('#txtNoa').focus();
             });
@@ -121,6 +116,9 @@
 		            }
 		        }
 		        _bbsAssign();
+		        if (q_getPara('sys.project').toUpperCase()=='XY'){
+		        	$('#lblNamea_s').text('單據編號');
+		        }
 		        if(q_cur==1 || q_cur==2){
 					$('.btnFiles').removeAttr('disabled', 'disabled');
 				}else{
