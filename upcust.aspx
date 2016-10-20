@@ -33,11 +33,6 @@
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
                 
-                var custno = q_getId(0)[3].replace(/custno='(.*)'/g,'$1');
-                if(custno.length>0)
-                	q_content = "where=^^ custno='"+custno+"'^^";
-                else
-                	q_content = '';
                 q_gt(q_name, q_content, q_sqlCount, 1);
                 $('#txtNoa').focus();
             });
