@@ -121,6 +121,9 @@
 		            }
 		        }
 		        _bbsAssign();
+		        if (q_getPara('sys.project').toUpperCase()=='XY'){
+		        	$('#lblNamea_s').text('單據編號');
+		        }
 		        if(q_cur==1 || q_cur==2){
 					$('.btnFiles').removeAttr('disabled', 'disabled');
 				}else{
