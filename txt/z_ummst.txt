@@ -30,6 +30,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	from view_vcc a
 	where a.custno between @t_bcustno and @t_ecustno
 	and a.mon between @t_bmon and @t_emon
+	and ISNULL(a.floata,0) !=0
 	
 	update @tmp set conn=b.namea
 	from @tmp a
@@ -363,10 +364,10 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	where c.noa is not null
 
 	--皮膜去CUTS抓
-	update @tmps set pvcno=b.spec,pvc=b.[class]
+	update @tmps set pvcno=isnull(b.spec,''),pvc=isnull(b.[class],'')
 	from @tmps a
 	left join view_cuts b on a.uno=b.bno
-	where b.noa is not null
+
 	------------------------------------------------------------------------------
 	update @tmps set size=case when len(isnull(style,''))>0 then style+' ' else '' end
 			+dbo.getComma(dime,-1)
@@ -436,7 +437,8 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @cmount2 nvarchar(max)
 	declare @recno int
 	
-
+	declare @string nvarchar(max)
+	
 	declare cursor_table cursor for
 	select custno,sum(isnull([money],0)),sum(isnull([tax],0)),sum(isnull([total],0)) from @tmp group by custno
 	open cursor_table
@@ -487,20 +489,20 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		select @custno,'4',4,@total
 		--同品項,數量合計
 		declare cursor_table2 cursor for
-		select row_number()over(order by product,pvcno,pvc,unit),product,pvcno,pvc,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),lengthb
+		select row_number()over(order by product,unit),product,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),case when lengthb=0 then ' C' else ' PCS' end
 		from @tmps 
 		where custno=@custno 
-		group by product,pvcno,pvc,unit,lengthb
+		group by product,unit,case when lengthb=0 then ' C' else ' PCS' end
 		open cursor_table2
 		fetch next from cursor_table2
-		into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight,@lengthb
+		into @recno,@product,@unit,@mount,@weight,@string
 		while(@@FETCH_STATUS <> -1)
 		begin	
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
 				set @cmount = dbo.getComma(@weight,-1) +' '+ @unit
-				set @cmount2 = dbo.getComma(@mount,-1) + case when @lengthb=0 then ' C' else ' PCS' end
+				set @cmount2 = dbo.getComma(@mount,-1) + @string
 			end
 			else
 			begin
@@ -508,12 +510,12 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 				set @cmount2 = ''
 			end
 			--第一筆上要有分隔線,gno有不一樣
-			insert into @tmpa(custno,gno,pno,product,pvcno,pvc,cmount,cmount2)
+			insert into @tmpa(custno,gno,pno,product,cmount,cmount2)
 			select @custno,case when @recno=1 then '5' else '6' end,5
-				,@product,@pvcno,@pvc,@cmount,@cmount2
+				,@product,@cmount,@cmount2
 			
 			fetch next from cursor_table2
-			into @recno,@product,@pvcno,@pvc,@unit,@mount,@weight,@lengthb
+			into @recno,@product,@unit,@mount,@weight,@string
 		end
 		close cursor_table2
 		deallocate cursor_table2
