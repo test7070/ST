@@ -250,6 +250,10 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	from @tmpa a
 	outer apply(select top 1 * from conn where noa=a.custno and typea='1') b
 	
+	update @tmpa set coin=b.coin
+	from @tmpa a
+	outer apply(select top 1 coin from @tmp where custno=a.custno) b
+
 	select gno
 		,'<img src="'+@t_path+'getlogo.aspx?noa=LC02'+CHAR(38)+'db='+@t_db+'"/>' logo
 		,custno a01
@@ -280,6 +284,8 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		,dbo.getComma(tfloata,-1) c02
 		,dbo.getComma(ttotal,-1) c03
 		,tmemo c04
+		
+		,'('+coin+')' d01
 	from @tmpa 
 	order by custno,pno;
 
