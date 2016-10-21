@@ -46,6 +46,7 @@
                 $('#txtNoa').change(function(e) {
                     $(this).val($.trim($(this).val()).toUpperCase());
                     if ($(this).val().length > 0) {
+                    	t_where = "where=^^noa='"+$(this).val()+"'^^";
                         q_gt('crmsource', t_where, 0, 0, 0, "checkNoa_change", r_accy);
                     }
                 });
@@ -385,7 +386,7 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl">備註</a></td>
-						<td colspan="3"><textarea id="txtMemo" rows="5" class="txt c1"></textarea></td>
+						<td colspan="3"><textarea id="txtMemo" rows="5" class="txt c1"> </textarea></td>
 					</tr>
 				</table>
 			</div>
