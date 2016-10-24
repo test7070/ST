@@ -1137,6 +1137,8 @@ z_uccstk01:--z_uccstk01
 	declare @t_elength nvarchar(max) = case when '#non' = [10] then CHAR(255) else [10] end
 	declare @t_bradius nvarchar(max) = case when '#non' = [11] then '' else [11] end
 	declare @t_eradius nvarchar(max) = case when '#non' = [12] then CHAR(255) else [12] end
+	
+	declare @t_itype nvarchar(max) = case when '#non' = [15] then CHAR(255) else [15] end
 	----------------------------------------------------------------------------------------------
 	IF OBJECT_ID('tempdb..#z_uccstk01')is not null
 	BEGIN
@@ -1322,6 +1324,14 @@ z_uccstk01:--z_uccstk01
 	and a.curweight>0
 	order by isnull(kind,char(255)),isnull(style,char(255)),isnull(productno,char(255)),radius,dime,width,lengthb,uno
 	drop table #z_uccstk01
+	
+	if len(@t_itype)>0
+	begin
+		delete @result
+		from @result a
+		left join view_uccb b on a.uno=b.uno
+		where not(@t_itype=b.itype)
+	end
 	
 	insert into @result(gno,kind,style,cstyle,mount,[weight],[money])
 	select '2',CHAR(255),style,cstyle,SUM(ISNULL(mount,0)),SUM(ISNULL([weight],0)),SUM(ISNULL([money],0))
