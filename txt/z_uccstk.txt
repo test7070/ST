@@ -1082,38 +1082,38 @@ z_acx01:--z_acx01
 	, a.gno
 	, a.pno
 	, a.productno
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a01),1)),4,17)) a01
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a02),1)),4,17))+'.'+RIGHT(CAST(a.a02 as nvarchar),3) a02
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a03),1)),4,17)) a03
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a04),1)),4,17)) a04
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a05),1)),4,17))+'.'+RIGHT(CAST(a.a05 as nvarchar),3) a05
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a06),1)),4,17)) a06
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a07),1)),4,17)) a07
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a08),1)),4,17))+'.'+RIGHT(CAST(a.a08 as nvarchar),3) a08
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a09),1)),4,17)) a09
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a10),1)),4,17)) a10
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a11),1)),4,17))+'.'+RIGHT(CAST(a.a11 as nvarchar),3) a11
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a12),1)),4,17)) a12
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a13),1)),4,17))+'.'+RIGHT(CAST(a.a13 as nvarchar),3) a13
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a14),1)),4,17)) a14
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a15),1)),4,17))+'.'+RIGHT(CAST(a.a15 as nvarchar),3) a15
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a16),1)),4,17)) a16
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a17),1)),4,17))+'.'+RIGHT(CAST(a.a17 as nvarchar),3) a17
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a18),1)),4,17)) a18
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a19),1)),4,17)) a19
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a20),1)),4,17)) a20	
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a21),1)),4,17)) a21
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a22),1)),4,17))+'.'+RIGHT(CAST(a.a22 as nvarchar),3) a22
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a23),1)),4,17)) a23
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a24),1)),4,17))+'.'+RIGHT(CAST(a.a24 as nvarchar),3) a24
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a25),1)),4,17)) a25
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a26),1)),4,17))+'.'+RIGHT(CAST(a.a26 as nvarchar),3) a26
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a27),1)),4,17)) a27
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a28),1)),4,17))+'.'+RIGHT(CAST(a.a28 as nvarchar),3) a28
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a29),1)),4,17)) a29
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a30),1)),4,17))+'.'+RIGHT(CAST(a.a30 as nvarchar),3) a30
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a31),1)),4,17))+'.'+RIGHT(CAST(a.a31 as nvarchar),3) a31
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a32),1)),4,17)) a32
+	,dbo.getComma(a.a01,-1) a01
+	,dbo.getComma(a.a02,-1) a02
+	,dbo.getComma(a.a03,-1) a03
+	,dbo.getComma(a.a04,-1) a04
+	,dbo.getComma(a.a05,-1) a05
+	,dbo.getComma(a.a06,-1) a06
+	,dbo.getComma(a.a07,-1) a07
+	,dbo.getComma(a.a08,-1) a08
+	,dbo.getComma(a.a09,-1) a09 
+	,dbo.getComma(a.a10,-1) a10
+	,dbo.getComma(a.a11,-1) a11
+	,dbo.getComma(a.a12,-1) a12
+	,dbo.getComma(a.a13,-1) a13
+	,dbo.getComma(a.a14,-1) a14
+	,dbo.getComma(a.a15,-1) a15
+	,dbo.getComma(a.a16,-1) a16
+	,dbo.getComma(a.a17,-1) a17
+	,dbo.getComma(a.a18,-1) a18
+	,dbo.getComma(a.a19,-1) a19 
+	,dbo.getComma(a.a20,-1) a20
+	,dbo.getComma(a.a21,-1) a21
+	,dbo.getComma(a.a22,-1) a22
+	,dbo.getComma(a.a23,-1) a23
+	,dbo.getComma(a.a24,-1) a24
+	,dbo.getComma(a.a25,-1) a25
+	,dbo.getComma(a.a26,-1) a26
+	,dbo.getComma(a.a27,-1) a27
+	,dbo.getComma(a.a28,-1) a28
+	,dbo.getComma(a.a29,-1) a29 
+	,dbo.getComma(a.a30,-1) a20
+	,dbo.getComma(a.a31,-1) a31
+	,dbo.getComma(a.a32,-1) a32
 	from @tmp a 
 	left join style b on a.style=b.noa
 	order by a.pno,a.style,a.productno
@@ -1171,14 +1171,14 @@ z_uccstk01:--z_uccstk01
 	)
 	--rc2
 	insert into @tmp(uno,mount,[weight])
-	select a.uno,sum(isnull(a.mount,0)),sum(isnull(a.weight,0)) 
+	select a.uno
+		,sum(isnull(a.mount,0)*case isnull(b.typea,'1') when '1' then 1 else -1 end)
+		,sum(isnull(a.weight,0)*case isnull(b.typea,'1') when '1' then 1 else -1 end) 
 	from view_rc2s a
 	left join view_rc2 b on a.noa=b.noa
 	where b.noa is not null 
-	and isnull(b.typea,'1')='1'
 	and len(isnull(a.uno,''))>0
 	and isnull(b.datea,'')<=@t_date
-	and not exists(select * from #z_uccstk01 where uno=a.uno)
 	group by a.uno
 
 	--ina
@@ -1188,7 +1188,6 @@ z_uccstk01:--z_uccstk01
 	where b.noa is not null
 	and len(isnull(a.uno,''))>0
 	and isnull(b.datea,'')<=@t_date
-	and not exists(select * from #z_uccstk01 where uno=a.uno)
 	group by a.uno
 		
 	--cut
@@ -1198,14 +1197,12 @@ z_uccstk01:--z_uccstk01
 	where b.noa is not null 
 	and len(isnull(a.bno,''))>0
 	and isnull(b.datea,'')<=@t_date
-	and not exists(select * from #z_uccstk01 where uno=a.bno)
 	group by a.bno
 	
 	insert into @tmp(uno,mount,[weight])
 	select a.uno,sum(isnull(a.gmount,0)*-1),sum(isnull(a.gweight,0)*-1) from view_cut a
 	where len(isnull(a.uno,''))>0
 	and isnull(a.datea,'')<=@t_date
-	and not exists(select * from #z_uccstk01 where uno=a.uno)
 	group by a.uno
 	
 	--cub
@@ -1216,7 +1213,6 @@ z_uccstk01:--z_uccstk01
 	where b.noa is not null 
 	and len(isnull(a.uno,''))>0
 	and isnull(a.datea,'')<=@t_date
-	and not exists(select * from #z_uccstk01 where uno=a.uno)
 	group by a.uno
 	--cubt領料
 	insert into @tmp(uno,mount,[weight])
@@ -1226,21 +1222,20 @@ z_uccstk01:--z_uccstk01
 	where b.noa is not null 
 	and len(isnull(a.uno,''))>0
 	and isnull(b.datea,'')<=@t_date
-	and not exists(select * from #z_uccstk01 where uno=a.uno)
 	group by a.uno
 		
 	--vcc
 	insert into @tmp(uno,mount,[weight])
-	select a.uno,sum(isnull(a.mount,0)*-1),sum(isnull(a.weight,0)*-1)
+	select a.uno
+		,sum(isnull(a.mount,0)*case isnull(b.typea,'1') when '1' then -1 else 1 end)
+		,sum(isnull(a.weight,0)*case isnull(b.typea,'1') when '1' then -1 else 1 end)
 	from view_vccs a
 	left join view_vcc b on a.noa=b.noa
 	where b.noa is not null
-	and isnull(b.typea,'1')='1'
 	and len(isnull(a.uno,''))>0
 	and isnull(b.datea,'')<=@t_date
-	and not exists(select * from #z_uccstk01 where uno=a.uno)
 	group by a.uno
-		
+	
 	--get
 	insert into @tmp(uno,mount,[weight])
 	select a.uno,sum(isnull(a.gmount,0)*-1),sum(isnull(a.gweight,0)*-1)
@@ -1249,7 +1244,6 @@ z_uccstk01:--z_uccstk01
 	where b.noa is not null 
 	and len(isnull(a.uno,''))>0
 	and isnull(b.datea,'')<=@t_date
-	and not exists(select * from #z_uccstk01 where uno=a.uno)
 	group by a.uno
 	
 	insert into #z_uccstk01(uno,curmount,curweight)	
@@ -1278,12 +1272,6 @@ z_uccstk01:--z_uccstk01
 	update #z_uccstk01 set csize=dbo.csize(kind,dime,width,lengthb,radius),cstyle=b.product
 	from #z_uccstk01 a
 	left join style b on a.style=b.noa 
-	
-	
-	
-
-
-	--select * from #z_uccstk01
 	------------------------------------------
 	declare @result table(
 		gno nvarchar(10),
@@ -1330,7 +1318,7 @@ z_uccstk01:--z_uccstk01
 		delete @result
 		from @result a
 		left join view_uccb b on a.uno=b.uno
-		where not(@t_itype=b.itype)
+		where charindex(b.itype,@t_itype)=0
 	end
 	
 	insert into @result(gno,kind,style,cstyle,mount,[weight],[money])
@@ -1341,8 +1329,8 @@ z_uccstk01:--z_uccstk01
 	from @result where gno='1'
 	
 	select ROW_NUMBER()over(order by isnull(kind,char(255)),isnull(style,char(255)),isnull(productno,char(255)),radius,dime,width,lengthb,uno) rr
-	,dbo.getComma([mount],0) a01
-	,dbo.getComma([weight],2) a02
+	,dbo.getComma([mount],-1) a01
+	,dbo.getComma([weight],-1) a02
 	,dbo.getComma([money],0) a03
 	,* 
 	,style s1
@@ -1351,7 +1339,6 @@ z_uccstk01:--z_uccstk01
 	,ghref = 'z_unobd?$uno?'
 	from @result 
 	order by isnull(kind,char(255)),isnull(style,char(255)),isnull(productno,char(255)),radius,dime,width,lengthb,uno;
-
 
 ---old	
 	SET QUOTED_IDENTIFIER OFF
