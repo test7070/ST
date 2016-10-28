@@ -217,14 +217,18 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		--同品項,數量合計
 		declare cursor_table2 cursor for
 		select row_number()over(order by datea,floata,product,unit)
-			,datea,floata,product,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0))
+			,datea,floata,product,unit
+			,sum(isnull(mount,0)),sum(isnull([weight],0))
+			,sum(isnull([money],0))
+			,sum(case when (LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批') 
+				then round([weight]*price,2) else round(mount*price,2) end)
 			,case when lengthb=0 then 'C' else 'PCS' end
 		from @tmps 
 		where custno=@custno 
 		group by datea,floata,product,unit,case when lengthb=0 then 'C' else 'PCS' end
 		open cursor_table2
 		fetch next from cursor_table2
-		into @recno,@datea,@floata,@product,@unit,@mount,@weight,@money,@string
+		into @recno,@datea,@floata,@product,@unit,@mount,@weight,@money,@money_usd,@string
 		while(@@FETCH_STATUS <> -1)
 		begin	
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
@@ -232,21 +236,19 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 			begin
 				set @cmount = dbo.getComma(@weight,-1) + @unit
 				set @cmount2 = dbo.getComma(@mount,-1) + @string
-				set @money_usd = round(@weight*@price,2)
 			end
 			else
 			begin
 				set @cmount = dbo.getComma(@mount,-1) +' '+ @unit
 				set @cmount2 = ''
-				set @money_usd = round(@mount*@price,2)
 			end
 			
 			insert into @tmpa(custno,gno,pno,datea,floata,product,cmount,cmount2,[money],money_usd)
-			select @custno,'2',2
+			select @custno,'6',6
 				,@datea,@floata,@product,@cmount,@cmount2,@money,@money_usd
 			
 			fetch next from cursor_table2
-			into @recno,@datea,@floata,@product,@unit,@mount,@weight,@money,@string
+			into @recno,@datea,@floata,@product,@unit,@mount,@weight,@money,@money_usd,@string
 		end
 		close cursor_table2
 		deallocate cursor_table2
@@ -264,7 +266,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		while(@@FETCH_STATUS <> -1)
 		begin	
 			select @money_usd = 0
-			select @money_usd = SUM(money_usd) from @tmpa where custno=@custno and datea=@datea and gno='2' 
+			select @money_usd = SUM(money_usd) from @tmpa where custno=@custno and datea=@datea and gno='1' 
 			insert into @tmpa(custno,gno,pno,datea,floata,cmount,cmount2,[money],money_usd)
 			select @custno,'3',3,@datea,@floata,@mount,@weight,@money,@money_usd
 			insert into @tmpa(custno,gno,pno,datea,floata,cmount,cmount2,[money],money_usd)
@@ -588,7 +590,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			insert into @tmpa(custno,gno,pno,product,cmount,cmount2,[money])
 			--select @custno,case when @recno=1 then '5' else '6' end,5
 			--	,@product,@cmount,@cmount2
-			select @custno,'2',2,@product,@cmount,@cmount2,@moneys
+			select @custno,'6',6,@product,@cmount,@cmount2,@moneys
 			
 			fetch next from cursor_table2
 			into @recno,@product,@unit,@mount,@weight,@moneys,@string
@@ -662,7 +664,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,paytype c05
 		,case when len(isnull(tmemo,''))=0 then '' else '五、'+isnull(tmemo,'') end c06
 	from @tmpa 
-	order by custno,product,pno;
+	order by custno,pno,product;
 
 z_ummst9:--z_ummst9
 	SET QUOTED_IDENTIFIER OFF
