@@ -344,7 +344,8 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		,dbo.getComma([money],-1) c03
 		,tmemo c04
 		,paytype c05
-		,case when len(isnull(tmemo,''))=0 then '' else '4.'+isnull(tmemo,'') end c06
+		,case when len(isnull(tmemo,''))=0 then '' else '4.'end c06
+		,case when len(isnull(tmemo,''))=0 then '' else isnull(tmemo,'') end c07
 		,coin d01
 	from @tmpa 
 	order by custno,datea,pno,vccno,sel;
