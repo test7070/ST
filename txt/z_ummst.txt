@@ -564,7 +564,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		deallocate cursor_table2
 		--同品項,數量小計
 		declare cursor_table2 cursor for
-		select row_number()over(order by product,unit),product,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0)),case when lengthb=0 then ' C' else ' PCS' end
+		select row_number()over(order by product,unit),product,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0)),case when lengthb=0 then 'C' else 'PCS' end
 		from @tmps 
 		where custno=@custno 
 		group by product,unit,case when lengthb=0 then 'C' else 'PCS' end
