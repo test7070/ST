@@ -591,19 +591,17 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		left join(select top 1 ordeno from @tmps where custno=@custno and len(ordeno)>0 order by ordeno) b on a.noa=b.ordeno
 		where b.ordeno is not null 
 		
-		insert into @tmpa(custno,product,gno,pno,paytype)
-		select @custno,CHAR(255),'7',7,@paytype
+		set @string = ''
+		select top 1 @string = memo from @tmp where custno=@custno and len(isnull(memo,''))>0 order by vccno
+	
+		insert into @tmpa(custno,product,gno,pno,paytype,tmemo)
+		select @custno,CHAR(255),'7',7,@paytype,@string
 		
 		fetch next from cursor_table
 		into @custno,@money,@tax,@total
 	end
 	close cursor_table
 	deallocate cursor_table
-	
-select * from @tmpa order by custno,pno
-return	
-	
-	
 	
 	update @tmpa set cust=ISNULL(b.comp,''),serial=ISNULL(b.serial,'')
 		,tel=ISNULL(b.tel,''),fax=ISNULL(b.fax,''),zip=ISNULL(b.zip_comp,''),addr=ISNULL(b.addr_comp,'')
@@ -643,6 +641,7 @@ return
 		,dbo.getComma(ttotal,-1) c03
 		,tmemo c04
 		,paytype c05
+		,case when len(isnull(tmemo,''))=0 then '' else '五、'+isnull(tmemo,'') end c06
 	from @tmpa 
 	order by custno,product,pno;
 
