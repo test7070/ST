@@ -543,14 +543,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		end
 		close cursor_table2
 		deallocate cursor_table2
-		--小計
-		insert into @tmpa(custno,gno,pno,tmoney)
-		select @custno,'2',2,@money
-		insert into @tmpa(custno,gno,pno,ttax,tmemo)
-		select @custno,'3',3,@tax,@t_memo
-		insert into @tmpa(custno,gno,pno,ttotal)
-		select @custno,'4',4,@total
-		--同品項,數量合計
+		--同品項,數量小計
 		declare cursor_table2 cursor for
 		select row_number()over(order by product,unit),product,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),case when lengthb=0 then ' C' else ' PCS' end
 		from @tmps 
@@ -574,14 +567,23 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			end
 			--第一筆上要有分隔線,gno有不一樣
 			insert into @tmpa(custno,gno,pno,product,cmount,cmount2)
-			select @custno,case when @recno=1 then '5' else '6' end,5
-				,@product,@cmount,@cmount2
+			--select @custno,case when @recno=1 then '5' else '6' end,5
+			--	,@product,@cmount,@cmount2
+			select @custno,'2',2,@product,@cmount,@cmount2
 			
 			fetch next from cursor_table2
 			into @recno,@product,@unit,@mount,@weight,@string
 		end
 		close cursor_table2
 		deallocate cursor_table2
+		--合計
+		insert into @tmpa(custno,product,gno,pno,tmoney)
+		select @custno,CHAR(255),'3',3,@money
+		insert into @tmpa(custno,product,gno,pno,ttax,tmemo)
+		select @custno,CHAR(255),'4',4,@tax,@t_memo
+		insert into @tmpa(custno,product,gno,pno,ttotal)
+		select @custno,CHAR(255),'5',5,@total
+		
 		--頁尾
 		select @paytype = ''
 		select @paytype = isnull(a.paytype,'')
@@ -589,14 +591,19 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		left join(select top 1 ordeno from @tmps where custno=@custno and len(ordeno)>0 order by ordeno) b on a.noa=b.ordeno
 		where b.ordeno is not null 
 		
-		insert into @tmpa(custno,gno,pno,paytype)
-		select @custno,'7',7,@paytype
+		insert into @tmpa(custno,product,gno,pno,paytype)
+		select @custno,CHAR(255),'7',7,@paytype
 		
 		fetch next from cursor_table
 		into @custno,@money,@tax,@total
 	end
 	close cursor_table
 	deallocate cursor_table
+	
+select * from @tmpa order by custno,pno
+return	
+	
+	
 	
 	update @tmpa set cust=ISNULL(b.comp,''),serial=ISNULL(b.serial,'')
 		,tel=ISNULL(b.tel,''),fax=ISNULL(b.fax,''),zip=ISNULL(b.zip_comp,''),addr=ISNULL(b.addr_comp,'')
@@ -637,7 +644,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,tmemo c04
 		,paytype c05
 	from @tmpa 
-	order by custno,pno;
+	order by custno,product,pno;
 
 z_ummst9:--z_ummst9
 	SET QUOTED_IDENTIFIER OFF
