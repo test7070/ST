@@ -655,6 +655,8 @@
 						$('#textSize3_' + j).change(function() {sum();});
 						$('#textSize4_' + j).change(function() {sum();});
 						$('#txtSize_'+j).change(function(e){
+							if(q_getPara('sys.project').toUpperCase()=='RK')
+								return;
 							if ($.trim($(this).val()).length == 0)
 								return;
 							var n = $(this).attr('id').replace('txtSize_','');			
