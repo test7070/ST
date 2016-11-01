@@ -522,6 +522,25 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @recno int
 	
 	declare @string nvarchar(max)
+	declare @n int
+	
+	declare @tmpx table(
+		product nvarchar(50)
+		,unit nvarchar(20)
+		,mount float
+		,[weight] float
+		,[money] float
+		,unit2 nvarchar(20)
+	)
+	declare @tmpy table(
+		recno int
+		,product nvarchar(50)
+		,unit nvarchar(20)
+		,mount float
+		,[weight] float
+		,[money] float
+		,unit2 nvarchar(20)
+	)	
 	
 	declare cursor_table cursor for
 	select custno,sum(isnull([money],0)),sum(isnull([tax],0)),sum(isnull([total],0)) from @tmp group by custno
@@ -565,11 +584,59 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		close cursor_table2
 		deallocate cursor_table2
 		--同品項,數量小計
-		declare cursor_table2 cursor for
-		select row_number()over(order by product,unit),product,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0)),case when lengthb=0 then 'C' else 'PCS' end
+		--當品名只有一項,卻同時有 C & PCS 時,可以不必顯示 C&PCS   2016/10
+		delete @tmpx 
+		delete @tmpy
+		
+		insert into @tmpx(product,unit,mount,[weight],[money],unit2)
+		select product,unit
+			,sum(isnull(mount,0))
+			,sum(isnull([weight],0))
+			,sum(isnull([money],0))
+			,case when lengthb=0 then 'C' else 'PCS' end
 		from @tmps 
 		where custno=@custno 
 		group by product,unit,case when lengthb=0 then 'C' else 'PCS' end
+		
+		declare cursor_table2 cursor for
+		select product,unit,count(1)
+		from @tmpx 
+		group by product,unit
+		open cursor_table2
+		fetch next from cursor_table2
+		into @product,@unit,@n
+		while(@@FETCH_STATUS <> -1)
+		begin	
+			if @n>1
+			begin
+				insert into @tmpy(recno,product,unit,mount,[weight],[money],unit2)
+				select ROW_NUMBER()over(order by product,unit)
+					,product,unit,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull([money],0)),''
+				from @tmpx
+				where product=@product and unit=@unit
+				group by product,unit
+			end
+			else
+			begin
+				select @string=''
+				select @string = case when lengthb=0 then 'C' else 'PCS' end
+				from @tmps 
+				where custno=@custno and product=@product and unit=@unit
+			
+				insert into @tmpy(recno,product,unit,mount,[weight],[money],unit2)
+				select ROW_NUMBER()over(order by product,unit)
+					,product,unit,isnull(mount,0),isnull([weight],0),isnull([money],0),@string
+				from @tmpx
+				where product=@product and unit=@unit
+			end
+			fetch next from cursor_table2
+			into @product,@unit,@n
+		end
+		close cursor_table2
+		deallocate cursor_table2
+		----------------------------------------------------
+		declare cursor_table2 cursor for
+		select recno,product,unit,mount,[weight],[money],unit2 from @tmpy
 		open cursor_table2
 		fetch next from cursor_table2
 		into @recno,@product,@unit,@mount,@weight,@moneys,@string
@@ -583,7 +650,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			end
 			else
 			begin
-				set @cmount = dbo.getComma(@mount,-1) +' '+ @unit
+				set @cmount = case when len(@unit)=0 then '' else dbo.getComma(@mount,-1) +' '+ @unit end
 				set @cmount2 = ''
 			end
 			--第一筆上要有分隔線,gno有不一樣
