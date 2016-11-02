@@ -132,6 +132,9 @@
             }
             
 			function q_stPost() {
+				if (!(q_cur == 1 || q_cur == 2))
+                    return false;
+                    
 				if (q_getPara('sys.project').toUpperCase()!='DJ'){//07/07 不更新到salpresents
 	                x_datea=x_datea.length==0?'#non':x_datea;
 					x_sssno=x_sssno.length==0?'#non':x_sssno;
