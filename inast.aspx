@@ -655,6 +655,8 @@
 						$('#textSize3_' + j).change(function() {sum();});
 						$('#textSize4_' + j).change(function() {sum();});
 						$('#txtSize_'+j).change(function(e){
+							if(q_getPara('sys.project').toUpperCase()=='RK')
+								return;
 							if ($.trim($(this).val()).length == 0)
 								return;
 							var n = $(this).attr('id').replace('txtSize_','');			
@@ -723,6 +725,8 @@
                 if(q_getPara('sys.project').toUpperCase()=='RK'){
                 	$('#lblWeights').text('重量/M');
                 	$('#lblSource').text('製造商');
+                	$('.rk_hide').hide();
+					$('.rk_show').show();
                 }
                 if(q_getPara('sys.project').toUpperCase()=='PK'){
                 	$('.pk').show();
@@ -1380,7 +1384,9 @@
 						<input id="txtTheory.*" type="text" class="txt num pe_hide" style="width:95%;"/>
 					</td>
 					<td class="pe_hide"><input class="txt c1" id="txtUno2.*" type="text" /></td>
-					<td><input id="txtHard.*" type="text" class="txt num" style="width:95%;"/></td>
+					<!-- RK因為硬度會有字串,改用brand來存 -->
+					<td class="rk_show"><input class="txt c1" id="txtBrand.*" type="text" /></td>
+					<td class="rk_hide"><input id="txtHard.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input  id="txtDescr.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt c1" id="txtMemo.*" type="text" style="width:95%;" /></td>
 				</tr>

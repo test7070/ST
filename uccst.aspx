@@ -24,7 +24,8 @@
 			brwNowPage = 0;
 			brwKey = 'noa';
 			brwCount2 = 20;
-			aPop = new Array(['txtRc2acc1', 'lblRc2acc1', 'acc', 'acc1,acc2', 'txtRc2acc1,txtRc2acc2', 'acc_b.aspx']);
+			aPop = new Array(['txtRc2acc1', 'lblRc2acc1', 'acc', 'acc1,acc2', 'txtRc2acc1,txtRc2acc2', 'acc_b.aspx']
+				,['txtVccacc1', 'lblVccacc1', 'acc', 'acc1,acc2', 'txtVccacc1,txtVccacc2', 'acc_b.aspx']);
 			
 			t_groupano = "";
 			$(document).ready(function() {
@@ -408,6 +409,13 @@
 					<tr>
 						<td><span> </span><a id='lblGroupano' class="lbl btn"> </a></td>
 						<td><select id="cmbGroupano" class="txt c1"> </select></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblVccacc1' class="lbl btn">會計科目</a></td>
+						<td colspan="2">
+							<input id="txtVccacc1"  type="text" class="txt" style="width:50%;" />
+							<input id="txtVccacc2"  type="text" class="txt" style="width:50%;" />
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblRc2acc1' class="lbl btn"> </a></td>

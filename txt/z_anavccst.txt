@@ -519,7 +519,7 @@ z_anavccst01:--z_anavccst01
 	left join view_uccb c on a.uno=c.uno
 	outer apply (select sum(isnull([weight],0)) [weight] from view_vccs where accy=a.accy and noa=a.noa and (len(isnull(uno,''))>0 or dime!=0)) d
 	where b.noa is not null
-	and (len(isnull(a.uno,''))>0 or a.dime!=0) 
+	and (len(isnull(a.uno,''))>0 or a.dime!=0)  
 	and ISNULL(a.total,0)!=0
 	and isnull(b.datea,'') between @t_bdate and @t_edate
 	and isnull(b.custno,'') between @t_bcustno and @t_ecustno
