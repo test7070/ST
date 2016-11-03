@@ -47,7 +47,8 @@
 		        t_edate = $('#txtEdate').val();
 		        t_bodate = $('#txtBodate').val();
 		        t_eodate = $('#txtEodate').val();
-
+				t_contract = $('#txtContract').val();
+				
 		        var t_where = " 1=1 " 
 		        + q_sqlPara2("kind", t_kind)
 		        + q_sqlPara2("noa", t_noa) 
@@ -56,6 +57,8 @@
 		        + q_sqlPara2("tggno", t_tggno);
 		        if (t_tgg.length>0)
                     t_where += " and charindex('" + t_tgg + "',tgg)>0";
+                if (t_contract.length>0)
+                    t_where += " and charindex('" + t_contract + "',contract)>0";
 		       	if(t_enda=='0'){
 		       		t_where += " and (enda=0 and exists(select noa from view_ordcs"+r_accy+" where view_ordcs"+r_accy+".noa=view_ordc"+r_accy+".noa and view_ordcs"+r_accy+".enda=0))";
 		       	}
@@ -123,6 +126,12 @@
 					<td class='seek'  style="width:20%;"><a id='lblTgg'></a></td>
 					<td>
 					<input class="txt" id="txtTgg" type="text" style="width:215px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblContract'>合約號碼</a></td>
+					<td>
+					<input class="txt" id="txtContract" type="text" style="width:215px; font-size:medium;" />
 					</td>
 				</tr>
 			</table>
