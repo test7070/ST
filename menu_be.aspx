@@ -45,7 +45,7 @@
 					//處理開放網頁
 					if(child!='download'){
 						if (r_rank < 8 && !t_permit){ //沒有執行權限
-							$(this).parent().remove();
+							//$(this).parent().remove();
 						}else{//有權限
 							$(this).click(function() {
 								window.open($(this).attr('class')+".aspx?"+q_getId()[0]+";"+q_getId()[1]+";"+q_getId()[2]+";;"+q_getId()[4]);
@@ -138,11 +138,11 @@
 					</li>
 					<li>2.　其他工具程式
 						<ol>
-							<li>2.2　<a id="z_drun" class="z_drun">使用紀錄查詢</a></li>
+							<li>2.1　<a id="z_drun" class="z_drun">使用紀錄查詢</a></li>
 							<li>2.2　<a id="dmess" class="dmess">訊息發送作業</a></li>
-							<li>2.1　<a id="nhpe" class="nhpe">員工密碼設定</a></li>
-							<li>2.2　<a id="quser" class="quser">ip帳號登入控管</a></li>
-							<li>2.3　<a id="download" href="http://59.125.143.170/g.exe">連線程式下載</a></li>
+							<li>2.3　<a id="nhpe" class="nhpe">員工密碼設定</a></li>
+							<li>2.4　<a id="quser" class="quser">ip帳號登入控管</a></li>
+							<li>2.5　<a id="download" href="http://59.125.143.170/g.exe">連線程式下載</a></li>
 						</ol>
 					</li>
 				</ol>
