@@ -78,10 +78,10 @@
 					$('.sbutton').hide();
 				}if (q_getPara('sys.project').toUpperCase()=='DJ') {
 					$('#btnSaladjust').show();
-				}else if(r_rank<8){
+				}/*else if(r_rank<8){
 					$('#btnLabases').hide();
 					$('#btnSaladjust').hide();
-				}
+				}*/
 				
 				if (q_getPara('sys.project').toUpperCase()=='DJ'){
 					$('#btnLabases').hide();
