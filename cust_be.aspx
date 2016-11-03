@@ -17,7 +17,7 @@
 			//update date:  2015/11/24
 			var q_name = "cust";
 			var q_readonly = "";
-			var bbmNum = [['txtCredit', 10, 0, 1]];
+			var bbmNum = [];
 			var bbmMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
@@ -86,23 +86,24 @@
 					return;
 				}
 				mainForm(0);
+				$('#vewComp').text("客戶簡稱");
+				$('#lblComp').text("客戶");
+				$('#lblTeam').text("帳號");
+				$('#lblGrp').text("介紹人");
+				$('#lblUnit').text("第");
+        		document.title='客戶資料'
 			}
 
 			function mainPost() {
-				$('#lblTeam').text("帳號");
-				$('#lblAddr_fact').text("介紹人");
-				$('#lblUnit').text("第");
-        		document.title='會員資料'
-        	var t_where='';
-        	if (r_rank > 6) {
-                $('.isrank').show();
-            }
+				
+        		var t_where='';
+        		if (r_rank > 6) {
+					 $('.isrank').show();
+				}
 				
 				bbmMask = [['txtChkdate', r_picd], ['txtDueday', '999'], ['txtStartdate', '99'],['txtGetdate', '99']];
 				q_mask(bbmMask);
 				q_gt('custtype', '', 0, 0, 0, "custtype");
-				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
-				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbStatus", q_getPara('cust.status'));
 
 				//後面有需要的公司在顯示
@@ -201,7 +202,6 @@
 							t_para = JSON.parse(b_pop);
 							//資料由 usecrd.aspx更新
 							if(t_para.action=='usecrd'){
-								//$('#txtCredit').val(_usecrd_credit);
 								//abbm[q_recno].credit = _usecrd_credit;
 								/*console.log('boxclose usecrd');
 								setTimeout(function(){
@@ -361,17 +361,9 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
-				q_box('cust_s.aspx', q_name + '_s', "500px", "600px", q_getMsg("popSeek"));
+				q_box('cust_be_s.aspx', q_name + '_s', "500px", "600px", q_getMsg("popSeek"));
 			}
 
-			function combPaytype_chg() {
-				var cmb = document.getElementById("combPaytype");
-				if (!q_cur)
-					cmb.value = '';
-				else
-					$('#txtPaytype').val(cmb.value);
-				cmb.value = '';
-			}
 
 			function btnIns() {
 				if ($('#Copy').is(':checked')) {
@@ -425,8 +417,6 @@
 					return;
 				}
 
-				if (dec($('#txtCredit').val()) > 9999999999)
-					t_err = t_err + q_getMsg('msgCreditErr ') + '\r';
 
 				if (dec($('#txtGetdate').val()) > 31)
 					t_err = t_err + q_getMsg("lblGetdate") + q_getMsg("msgErr") + '\r';
@@ -786,39 +776,21 @@
 						<td><input id="txtNick" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblBoss' class="lbl"> </a></td>
-						<td><input id="txtBoss" type="text" class="txt c1"/></td>
-						<td><span> </span><a id='lblHead' class="lbl"> </a></td>
-						<td><input id="txtHead" type="text" class="txt c1"/></td>
-						<td colspan="2">
-							<input id="btnConn" type="button" />
-							<input id="btnCustm" type="button" />
-							<input id="btnUcam" type="button" style="display: none;"/>
-						</td>						
-					</tr>
-					<tr>
 						<td><span> </span><a id='lblType' class="lbl"> </a></td>
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblStatus' class="lbl"> </a></td>
 						<td><select id="cmbStatus" class="txt c1"> </select></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblGrp" class="lbl btn"> </a></td>
-						<td>
+						<td  class="isrank" style="display:none;"><span> </span><a id="lblGrp" class="lbl btn"> </a></td>
+						<td  class="isrank" style="display:none;">
 							<input id="txtGrpno" type="text" style="float:left; width:40%;"/>
 							<input id="txtGrpname" type="text" style="float:left; width:60%;"/>
 						</td>
+						<td  class="isrank" style="display:none;"><span> </span><a id='lblUnit' class="lbl "></a></td>
+						<td  class="isrank" style="display:none;"><input id="txtUnit" type="text" class="txt c4" />條線</td>
 						<td  class="isrank" style="display:none;"><span> </span><a id='lblTeam' class="lbl" > </a></td>
 						<td  class="isrank" style="display:none;"><input id="txtTeam" type="text" class="txt c1"  /></td>
-
-
-					</tr>
-					<tr  class="isrank" style="display:none;">
-						<td><span> </span><a id='lblAddr_fact' class="lbl"> </a></td>
-						<td colspan='2'><input id="txtZip_fact" type="text" class="txt c6">
-						<input id="txtAddr_fact" type="text" class="txt c2"/></td>
-						<td><span> </span><a id='lblUnit' class="lbl " style="float:left;"></a>
-						           <input id="txtUnit" type="text" class="txt c4" />條線</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblTel' class="lbl"> </a></td>
@@ -851,52 +823,6 @@
 					<tr>
 						<td><span> </span><a id='lblEmail' class="lbl"> </a></td>
 						<td colspan='5'><input id="txtEmail" type="text" class="txt c7"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id='lblWeb' class="lbl"> </a></td>
-						<td colspan='5'><input id="txtWeb" type="text" class="txt c7"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id="lblCredit" class="lbl" > </a></td>
-						<td><input id="txtCredit" type="text" class="txt c1 num"/></td>
-						<td><span> </span><a id="lblSales" class="lbl btn"> </a></td>
-						<td>
-							<input id="txtSalesno" type="text" class="txt c6"/>
-							<input id="txtSales" type="text" class="txt c6"/>
-						</td>
-					</tr>
-					<tr>
-						<td><span> </span><a id='lblChkstatus' class="lbl"> </a></td>
-						<td colspan='3'><input id="txtChkstatus" type="text" class="txt c7" /></td>
-						<td><span> </span><a id='lblUacc4' class="lbl"> </a></td>
-						<td><input id="txtUacc4" type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id='lblChkdate' class="lbl"> </a></td>
-						<td><input id="txtChkdate" type="text" class="txt c1" /></td>
-						<td><span> </span><a id='lblStartdate' class="lbl"> </a></td>
-						<td><input id="txtStartdate" type="text" class="txt c1" /></td>
-						<td><span> </span><a id='lblUacc1' class="lbl"> </a></td>
-						<td><input id="txtUacc1" type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id='lblDueday' class="lbl"> </a></td>
-						<td><input id="txtDueday" type="text" class="txt num c1"/></td>
-						<td><span> </span><a id='lblGetdate' class="lbl"> </a></td>
-						<td><input id="txtGetdate" type="text" class="txt c1"/></td>
-						<td><span> </span><a id='lblUacc2' class="lbl"> </a></td>
-						<td><input id="txtUacc2" type="text" class="txt c1"/></td>
-					</tr>
-					<tr>
-						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-						<td><select id="cmbTrantype" class="txt c1"> </select></td>
-						<td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
-						<td>
-							<input id="txtPaytype" type="text" class="txt c6"/>
-							<select id="combPaytype" class="txt c6" onchange='combPaytype_chg()'> </select>
-						</td>
-						<td><span> </span><a id='lblUacc3' class="lbl"> </a></td>
-						<td><input id="txtUacc3" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
