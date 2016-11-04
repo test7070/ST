@@ -1717,10 +1717,10 @@ begin
 	from sss a left join part b on a.partno=b.noa where a.noa between '"+@t_bsssno+"' and '"+@t_esssno+"' ")
 	
 	EXEC("update #tmpa
-	set "+@tmp_ccol+"=case when "+@tmp_vcol+"='V' then round("+@tmp_mcol+"*1,2) else 
-	case when "+@tmp_mcol+">4 then round(("+@tmp_mcol+"-4)*2,2)+round((2*1.66),2)+round((2*1.33),2) 
-	when "+@tmp_mcol+">2 then round(("+@tmp_mcol+"-2)*1.66,2)+round((2*1.33),2) 
-	else ROUND("+@tmp_mcol+"*1.33,2) end end
+	set "+@tmp_ccol+"=case when "+@tmp_vcol+"='V' then round("+@tmp_mcol+"*1,4) else 
+	case when "+@tmp_mcol+">4 then round(("+@tmp_mcol+"-4)*2,4)+round((2*1.66),4)+round((2*1.33),4) 
+	when "+@tmp_mcol+">2 then round(("+@tmp_mcol+"-2)*1.66,4)+round((2*1.33),4) 
+	else ROUND("+@tmp_mcol+"*1.33,4) end end
 	")
 	
 	set @tmp_date=dbo.q_cdn(@tmp_date,1)
@@ -1743,9 +1743,9 @@ update #tmpa
 set mt=isnull(m01,0)+isnull(m02,0)+isnull(m03,0)+isnull(m04,0)+isnull(m05,0)+isnull(m06,0)+isnull(m07,0)+isnull(m08,0)+isnull(m09,0)+isnull(m10,0)
 +isnull(m11,0)+isnull(m12,0)+isnull(m13,0)+isnull(m14,0)+isnull(m15,0)+isnull(m16,0)+isnull(m17,0)+isnull(m18,0)+isnull(m19,0)+isnull(m20,0)
 +isnull(m21,0)+isnull(m22,0)+isnull(m23,0)+isnull(m24,0)+isnull(m25,0)+isnull(m26,0)+isnull(m27,0)+isnull(m28,0)+isnull(m29,0)+isnull(m30,0)+isnull(m31,0)
-,ct=isnull(c01,0)+isnull(c02,0)+isnull(c03,0)+isnull(c04,0)+isnull(c05,0)+isnull(c06,0)+isnull(c07,0)+isnull(c08,0)+isnull(c09,0)+isnull(c10,0)
+,ct=round(isnull(c01,0)+isnull(c02,0)+isnull(c03,0)+isnull(c04,0)+isnull(c05,0)+isnull(c06,0)+isnull(c07,0)+isnull(c08,0)+isnull(c09,0)+isnull(c10,0)
 +isnull(c11,0)+isnull(c12,0)+isnull(c13,0)+isnull(c14,0)+isnull(c15,0)+isnull(c16,0)+isnull(c17,0)+isnull(c18,0)+isnull(c19,0)+isnull(c20,0)
-+isnull(c21,0)+isnull(c22,0)+isnull(c23,0)+isnull(c24,0)+isnull(c25,0)+isnull(c26,0)+isnull(c27,0)+isnull(c28,0)+isnull(c29,0)+isnull(c30,0)+isnull(c31,0)
++isnull(c21,0)+isnull(c22,0)+isnull(c23,0)+isnull(c24,0)+isnull(c25,0)+isnull(c26,0)+isnull(c27,0)+isnull(c28,0)+isnull(c29,0)+isnull(c30,0)+isnull(c31,0),2)
 ,meals=+case when isnull(m01,0)>=2.5 then 1 else 0 end+case when isnull(m02,0)>=2.5 then 1 else 0 end+case when isnull(m03,0)>=2.5 then 1 else 0 end+case when isnull(m04,0)>=2.5 then 1 else 0 end+case when isnull(m05,0)>=2.5 then 1 else 0 end
 +case when isnull(m06,0)>=2.5 then 1 else 0 end+case when isnull(m07,0)>=2.5 then 1 else 0 end+case when isnull(m08,0)>=2.5 then 1 else 0 end+case when isnull(m09,0)>=2.5 then 1 else 0 end+case when isnull(m10,0)>=2.5 then 1 else 0 end
 +case when isnull(m11,0)>=2.5 then 1 else 0 end+case when isnull(m12,0)>=2.5 then 1 else 0 end+case when isnull(m13,0)>=2.5 then 1 else 0 end+case when isnull(m14,0)>=2.5 then 1 else 0 end+case when isnull(m15,0)>=2.5 then 1 else 0 end
