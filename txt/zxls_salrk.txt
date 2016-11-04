@@ -45,6 +45,7 @@ create table #bbs(
 		w133 float,
 		w166 float,
 		w100 float,
+		w200 float,
 		memo nvarchar(50),
 		barcode nvarchar(50),
 		stype nvarchar(100),
@@ -111,24 +112,27 @@ begin
 			set @clockout=isnull((select top 1 timea from #tmp where sssno=@sssno and datea=@tomorrow order by timea),'')
 		end
 		
-		if(@clockout<'06:00')
+		if(@clockout<'06:00' and @clockout!='')
 		begin
 			set @clockout=cast(cast(left(@clockout,2) as int)+24 as nvarchar(10))+RIGHT(@clockout,3)
 		end
 		
-		set @whileend=0 --避免無窮迴圈
-		while(datediff(HOUR,@eradate+' '+@clockin,case when @clockout>'24:00' 
-			then cast(dbo.ChineseEraName2AD(@tomorrow) as nvarchar(10))+' '+right('00'+cast(cast(left(@clockout,2) as int)-24 as nvarchar(10)),2)+RIGHT(@clockout,3)
-			else @eradate+' '+@clockout end)>15 and @whileend< 10)
-		begin			
-			set @clockin=isnull((select top 1 timea from #tmp where sssno=@sssno 
-			and datea=@datea and timea!=@clockin order by timea),'')
-			
-			set @whileend=@whileend+1
+		if(@clockin!='' and @clockout!='')
+		begin
+			set @whileend=0 --避免無窮迴圈
+			while(datediff(HOUR,@eradate+' '+@clockin,case when @clockout>'24:00' 
+				then cast(dbo.ChineseEraName2AD(@tomorrow) as nvarchar(10))+' '+right('00'+cast(cast(left(@clockout,2) as int)-24 as nvarchar(10)),2)+RIGHT(@clockout,3)
+				else @eradate+' '+@clockout end)>15 and @whileend< 10)
+			begin			
+				set @clockin=isnull((select top 1 timea from #tmp where sssno=@sssno 
+				and datea=@datea and timea!=@clockin order by timea),'')
+				
+				set @whileend=@whileend+1
+			end
 		end
 	
 		insert #bbs	
-		select @datea,'',@sssno,@namea,@clockin,@clockout,0,0,0,'',@barcode,@typea
+		select @datea,'',@sssno,@namea,@clockin,@clockout,0,0,0,0,'',@barcode,@typea
 	
 		fetch next from cursor_table2
 		into @sssno,@namea,@barcode,@typea
@@ -173,7 +177,7 @@ begin
 		set w133=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
 		from #bbs a
 		
-		update #bbs set w200=case when w133>4 then then w133-4 else 0 end
+		update #bbs set w200=case when w133>4 then w133-4 else 0 end
 		update #bbs set w166=case when w133>4 then 2 when w133>2 then w133-2 else 0 end
 		update #bbs set w133=case when w133>2 then 2 else w133 end
 	end

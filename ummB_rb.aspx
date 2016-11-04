@@ -442,7 +442,12 @@
                 }
                 
                 if(bbss.length>0){
-                	alert("表身(藍色區塊)與表尾(紅色區塊)產品數量不符!!");
+                	var t_tmpproduct="";
+                	for(var n=0;n<bbss.length;n++){
+                		t_tmpproduct=t_tmpproduct+(t_tmpproduct.length>0?',':'')+bbss[0].productno;
+                	}
+                	
+                	alert("產品編號 "+t_tmpproduct+" 表身(藍色區塊)與表尾(紅色區塊)產品數量不符!!");
                 	return;
                 }
                 
