@@ -60,15 +60,10 @@ declare @tmp1 table(
 	datea5 nvarchar(10)	
 )
 
-insert @tmp1(gno,grpno2,grpname2,line2,noa2,comp2,datea2)
-select '1',grpno,grpname,line,noa,comp,datea
+insert @tmp1(gno,grpno2,grpname2,line1,noa1,comp1,line2,noa2,comp2,datea2)
+select '1',grpno,grpname,ROW_NUMBER()over(partition by grpno order by line),grpno,grpname,line,noa,comp,datea
 from @tmp
 where gno='2'
-
-update @tmp1
-set line1=a.line,noa1=a.noa,comp1=a.comp,datea1=a.datea
-from @tmp a left join @tmp1 b on a.noa=b.grpno2
-where a.gno='1'
 
 update @tmp1
 set line3=b.line,noa3=b.noa,comp3=b.comp,datea3=b.datea
@@ -94,11 +89,10 @@ select '2',noa1
 from @tmp1
 group by noa1
 
-
 select 
 gno,noa1
-,case when line2!='01' then '' else (case when line2!='' then comp1+'    ──' else comp1 end)end comp1
-,case when line2='01' and idno='01' then '── '+comp2 else (case when line2='01' and idno!='01' then '┬── '+comp2 else (case when line2=idno then '  └── '+comp2 else '  ├── '+comp2 end)end) end comp2
+,case when line1='1' then comp1+' ────' else '' end comp1
+,case when line1='1' then '──── '+comp2 else (case when line1!='1' and idno!=line2 then '├─── '+comp2 else '└─── '+comp2 end ) end comp2
 ,'────  '+comp3 comp3,'────  '+comp4 comp4,'────  '+comp5 comp5
 from @tmp1
 order by noa1,gno
