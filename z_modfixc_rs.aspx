@@ -52,16 +52,15 @@
                 $('#txtXnoa1').val(t_noa);    
 				$('#txtXnoa2').val(t_noa);
                         
-				var r_1911=1911;
-				if(r_len==4){//西元年
-					r_1911=0;
-				}else{
-					$('#txtXdate1').datepicker();
-					$('#txtXdate2').datepicker();
-				}
+				if(r_len==4){                	
+                	$.datepicker.r_len=4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+                }
+				$('#txtXdate1').datepicker();
+				$('#txtXdate2').datepicker();
                  
-                 $('#txtXdate1').mask(r_picd);
-	             $('#txtXdate2').mask(r_picd);                       
+                $('#txtXdate1').mask(r_picd);
+	            $('#txtXdate2').mask(r_picd);                       
                 				
 			}
 

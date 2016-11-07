@@ -41,9 +41,9 @@
 				q_getFormat();
 				q_langShow();
 			
-				$('#txtDate1').mask('999/99/99');
+				$('#txtDate1').mask(r_picd);
                 $('#txtDate1').datepicker();
-                $('#txtDate2').mask('999/99/99');
+                $('#txtDate2').mask(r_picd);
                 $('#txtDate2').datepicker();     
                 
                  var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];

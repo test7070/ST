@@ -52,9 +52,9 @@
 				$('#txtXdno1').css('width','130px');
 				$('#txtXdno2').css('width','130px');
 			
-				$('#txtDate1').mask('999/99/99');
+				$('#txtDate1').mask(r_picd);
                 $('#txtDate1').datepicker();
-                $('#txtDate2').mask('999/99/99');
+                $('#txtDate2').mask(r_picd);
                 $('#txtDate2').datepicker();     
                 
                 var t_noa=q_getHref()[1]=='undefined'?'':q_getHref()[1];
@@ -64,8 +64,10 @@
                 if(window.parent.q_name != 'modfixb'){  
                 	$('#q_report div div').eq('0').hide();   
                 	$('#Xnoa').hide();  
-                	$('#Xdno').show();  
-				}					
+                	$('#Xdno').show();
+                	$('#q_report div div').eq('1').children().removeClass('select').addClass('select');
+                	$('#q_report div div .radio.select').click();
+				}
 			}
 
 			function q_boxClose(s2) {

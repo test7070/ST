@@ -51,29 +51,13 @@
                     }
 				});
 			
-				$('#txtDate1').mask('999/99/99');
+				$('#txtDate1').mask(r_picd);
                 $('#txtDate1').datepicker();
-                $('#txtDate2').mask('999/99/99');
+                $('#txtDate2').mask(r_picd);
                 $('#txtDate2').datepicker();     
                 
-                var t_date, t_year, t_month, t_day, t_weekday;
-				t_date = new Date();
-				t_weekday = t_date.getDay() - 1
-				t_date.setDate(t_date.getDate() - t_weekday);
-				t_year = t_date.getUTCFullYear() - 1911;
-				t_month = t_date.getUTCMonth() + 1;
-				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-				t_day = t_date.getUTCDate();
-				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-				$('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);				
-								
-				t_date.setDate(t_date.getDate() + 6);
-				t_year = t_date.getUTCFullYear() - 1911;
-				t_month = t_date.getUTCMonth() + 1;
-				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-				t_day = t_date.getUTCDate();
-				t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-				$('#txtDate2').val(t_year + '/' + t_month + '/' + t_day );              
+				$('#txtDate1').val(q_date());
+				$('#txtDate2').val(q_cdn(q_date(),6));              
 									
 			}
 
