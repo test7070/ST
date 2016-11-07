@@ -42,7 +42,7 @@ select
 	b.mech2,b.mech,b.spec,ISNULL(b.mount,0),''
 from modcucb a
 left join modcucbs b on a.noa = b.noa
-where a.datea between @t_bdate and @t_edate
+where b.datea between @t_bdate and @t_edate
 
 --memo=規格+數量+機台
 update #tmp set memo = '　'+mech+'<br>'+'　'+spec+'<br>'+'　'+CAST(mount as nvarchar(20))
