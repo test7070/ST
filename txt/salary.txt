@@ -1,0 +1,19 @@
+﻿changedata_dj:--更新大博異動資料
+declare @t_mon nvarchar(50) = [1]
+declare @t_terr nvarchar(MAX) = [2]
+declare @t_typea nvarchar(MAX) = [3]
+
+if(@t_typea='1')
+begin
+	update salary
+	set changedata=isnull(changedata,'')+(case when isnull(changedata,'')!='' then ',' else '' end)+@t_terr
+	where mon=@t_mon
+end
+
+if(@t_typea='2')
+begin
+	update salary
+	set changedata=isnull(changedata,'')+(case when isnull(changedata,'')!='' then ',' else '' end)+@t_terr
+	where mon>=@t_mon
+end
+;
