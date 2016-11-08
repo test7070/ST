@@ -39,8 +39,8 @@
                 $('#textProduct').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
                 $('#textTgg').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
 
-                $('#textBdate').mask('999/99/99');
-                $('#textEdate').mask('999/99/99');
+                $('#textBdate').mask(r_picd);
+                $('#textEdate').mask(r_picd);
 
                 $('#textBdate').val(q_date().substr(0, 3) + '/01/01');
                 $('#textEdate').val(q_date());

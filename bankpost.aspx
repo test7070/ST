@@ -42,9 +42,9 @@
 					}]
 				});
 				q_popAssign();
-				$('#txtMonth').mask('999/99');
+				$('#txtMonth').mask(r_picm);
 				$('#txtMonth').datepicker();
-	           $('#txtXdate').mask('999/99/99');
+	           $('#txtXdate').mask(r_picd);
 				$('#txtXdate').datepicker();
             }
 

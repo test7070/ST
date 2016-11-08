@@ -22,7 +22,7 @@
             var bbmNum = [];
             var bbsNum = [['txtQday', 10, 0, 1]];
             var bbmMask = [];
-            var bbsMask = [['txtQdate', '999/99/99'],['txtQtime', '99:99']];
+            var bbsMask = [];
 
             $(document).ready(function() {
                 bbmKey = [];
@@ -45,6 +45,8 @@
                     return;
                 }
                 mainBrow(6, t_content, t_sqlname, t_postname);
+                
+                bbsMask = [['txtQdate', r_picd],['txtQtime', '99:99']];
                 q_mask(bbmMask);
                 
                 $('#btnTop').hide();
