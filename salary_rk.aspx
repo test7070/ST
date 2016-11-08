@@ -470,7 +470,7 @@
 			                    	//新進員工薪資
 			                    	if(as[i].indate>=date_1){//計算工作天數
 			                    		var t_date=as[i].indate,inday=0;
-			                    		if(!emp(as[i].outdate))//當月離職
+			                    		if(!emp(as[i].outdate) && as[i].outdate <= date_2)//當月離職
 			                    			inday=dec(as[i].outdate.substr((r_lenm+1),2))-dec(t_date.substr((r_lenm+1),2))+1
 			                    		else
 			                    			inday=dec(date_2.substr((r_lenm+1),2))-dec(t_date.substr((r_lenm+1),2))+1
@@ -488,7 +488,7 @@
 			                    		as[i].meals=round(q_mul(dec(as[i].meals),t_per),0);
 			                    	}
 			                    	//離職員工
-			                    	if(as[i].indate<date_1&&!emp(as[i].outdate)){
+			                    	if(as[i].indate<date_1&&!emp(as[i].outdate) && as[i].outdate <= date_2){
 			                    		var t_date=as[i].outdate,inday=0;
 			                    		inday=dec(t_date.substr((r_lenm+1),2))-dec(date_1.substr((r_lenm+1),2))+1
 			                    		
