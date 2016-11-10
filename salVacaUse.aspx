@@ -586,7 +586,7 @@
 						$('#txtEtime').val(time);
 					}
                     var use_hr = 0;
-                    if (q_getPara('sys.comp').indexOf('大昌') > -1) {
+                    if(q_getPara('sys.project').toUpperCase()=='DC'){
                     	if ($('#txtEtime').val() >= '13:30' && $('#txtBtime').val() <= '12:00') {
                         	use_hr = round(((dec($('#txtEtime').val().substr(0, 2)) - dec($('#txtBtime').val().substr(0, 2))) * 60 + dec($('#txtEtime').val().substr(3, 2)) - dec($('#txtBtime').val().substr(3, 2))) / 60, 1);
                             use_hr = use_hr - 1.5;
