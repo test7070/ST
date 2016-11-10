@@ -29,7 +29,7 @@
 			aPop = new Array(
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtInvestdate', 'lblInvest', 'invest', 'datea,investmemo', 'txtInvestdate,txtInvestmemo', 'invest_b.aspx'],
-				['txtGrpno', 'lblGrp', 'cust', 'noa,comp', 'txtGrpno,txtGrpname', 'cust_b.aspx'],
+				['txtGrpno', 'lblGrp', 'cust', 'noa,comp,startdate', 'txtGrpno,txtGrpname,txtStartdate', 'cust_b.aspx'],
 				['txtCustno2', 'lblCustno2', 'cust', 'noa,comp', 'txtCustno2,txtCust2', 'cust_b.aspx'],
 				['txtZip_fact', 'lblAddr_fact', 'cust', 'team,boss', 'txtZip_fact,txtAddr_fact', '']
 			);
@@ -393,6 +393,7 @@
 
 			function q_stPost() {
 				if (!(q_cur == 1 || q_cur == 2))
+					q_func('qtxt.query.custbestartdate', 'custbe.txt,startdate,'+ encodeURI($('#txtNoa').val())); 
 					return false;
 				Unlock();
 			}
@@ -592,16 +593,14 @@
 			
 			function q_funcPost(t_func, result) {
                 switch(t_func) {
-                	/*case 'qtxt.query.change_tmpcustno':
-                		$('#btnTmpcustno_xy').removeAttr('disabled');
-						alert('已轉正式客戶!!。');
-						var s2=[];
-						s2[0]=q_name + '_s';
-						s2[1]="where=^^ noa='"+xy_newnoa+"' ^^"
-						q_boxClose2(s2);
-						xy_newnoa='';
-						break;*/
-				}
+                	case 'qtxt.query.custbestartdate':
+                		var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							abbm[q_recno]['startdate'] = as[0].startdate;
+							$('#txtStartdate').val(FormatNumber(as[0].startdate));
+						}
+                		break;
+                }
 			}
 		</script>
 		<style type="text/css">
@@ -780,6 +779,8 @@
 						<td><select id="cmbTypea" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblStatus' class="lbl"> </a></td>
 						<td><select id="cmbStatus" class="txt c1"> </select></td>
+						<td><span> </span><a id='lblStartdate' class="lbl"> </a></td>
+						<td><input id="txtStartdate" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td  class="isrank" style="display:none;"><span> </span><a id="lblGrp" class="lbl btn"> </a></td>

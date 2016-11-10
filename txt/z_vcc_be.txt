@@ -140,17 +140,31 @@ begin
 	delete @tmp where noa!=@t_userno
 end
 
-declare @rr int='1'
+insert @tmp(gno,grpno,grpname,line,noa,comp,datea)
+select '2',b.noa,b.comp,a.unit,a.noa,a.comp,a.kdate
+from cust a left join @tmp b on a.grpno=b.noa
+where isnull(a.grpno,'')!='' and isnull(b.noa,'')!=''
+
+declare @rr int='2'
 
 while(@rr<5)
 begin
-	insert @tmp(gno,grpno,grpname,line,noa,comp,datea)
-	select @rr+1,a.noa,a.comp,b.unit,b.noa,b.comp,b.kdate
+	insert @tmp(gno,grpno,grpname,line,noa,datea)
+	select @rr+1,a.noa,a.comp,b.unit,min(b.noa),min(b.kdate)
 	from @tmp a left join cust b on a.noa=b.grpno
 	where a.gno=@rr and isnull(b.grpno,'')!=''
+	group by a.noa,a.comp,b.unit,b.kdate,a.datea
 	order by a.noa,a.datea,b.unit
 	set @rr+=1
 end
+
+update @tmp
+set comp=b.comp
+from @tmp a left join  cust b on a.noa=b.noa
+
+update @tmp
+set grpname=b.comp
+from @tmp a left join  cust b on a.grpno=b.noa
 
 declare @tmp1 table(
 	gno nvarchar(2),
@@ -184,7 +198,8 @@ declare @tmp1 table(
 	total2 float,
 	total3 float,
 	total4 float,
-	total5 float
+	total5 float,
+	mon nvarchar(10)
 )
 
 insert @tmp1(gno,idno,noa1,comp1,levela,ocustno,ocust,onoa,odate,otypea,total,score)
@@ -236,23 +251,24 @@ and (c.datea between @t_bdatea and @t_edatea)
 and (c.custno between @t_bcustno and @t_ecustno)
 
 update @tmp1
-set gno=case when idno=1 then 1 else 2 end
+set mon=case when right(a.odate,2)>=b.startdate and ISNULL(startdate,'')!='' then(case when len(RIGHT(left(a.odate,6),2)+1)<2  then left(a.odate,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(a.odate,6),2)+1) else left(a.odate,4)+CONVERT(VARCHAR(12),RIGHT(left(a.odate,6),2)+1) end) else left(a.odate,6) end
+from @tmp1 a join cust b on a.ocustno=b.noa
 
 update @tmp1
 set total1=isnull(b.total,0)
-from @tmp1 a left join (select noa1,levela,sum(total)total from @tmp1 where levela='1' group by noa1,levela)b on a.noa1=b.noa1
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='1' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
 update @tmp1
 set total2=isnull(b.total,0)
-from @tmp1 a left join (select noa1,levela,sum(total)total from @tmp1 where levela='2' group by noa1,levela)b on a.noa1=b.noa1
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='2' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
 update @tmp1
 set total3=isnull(b.total,0)
-from @tmp1 a left join (select noa1,levela,sum(total)total from @tmp1 where levela='3' group by noa1,levela)b on a.noa1=b.noa1
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='3' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
 update @tmp1
 set total4=isnull(b.total,0)
-from @tmp1 a left join (select noa1,levela,sum(total)total from @tmp1 where levela='4' group by noa1,levela)b on a.noa1=b.noa1
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='4' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
 update @tmp1
 set total5=isnull(b.total,0)
-from @tmp1 a left join (select noa1,levela,sum(total)total from @tmp1 where levela='5' group by noa1,levela)b on a.noa1=b.noa1
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='5' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
 
 update @tmp1
 set score=case when total1='' then 0 else score end
@@ -264,25 +280,25 @@ update @tmp1
 set score=case when total1=0 or total2=0 or total3=0 then 0 else score end
 where levela='4'
 update @tmp1
-set score=case when total1=0 or total2=0 or total3=0 or total5=0 then 0 else score end
+set score=case when total1=0 or total2=0 or total3=0 or total4=0 then 0 else score end
 where levela='5'
 
-insert @tmp1(gno,idno,noa1,line2,line3,line4,line5,levela,ocust,total,score)
-select '3','9997',noa1,line2,line3,line4,line5,'第'+levela+'代',ocust,SUM(isnull(total,0)),SUM(score)
+insert @tmp1(gno,idno,noa1,line2,noa2,line3,line4,line5,levela,ocust,total,score,mon)
+select '3','9997',noa1,line2,noa2,line3,line4,line5,'第'+levela+'代',ocust,SUM(isnull(total,0)),SUM(score),mon
 from @tmp1
 where levela!=1
-group by noa1,line2,line3,line4,line5,levela,ocust
+group by noa1,line2,noa2,line3,line4,line5,levela,ocust,mon
 
-insert @tmp1(gno,idno,noa1,comp1,levela,line2,line3,line4,line5,total,score)
-select '4','9998',noa1,comp1,'第1代',CHAR(255),CHAR(255),CHAR(255),CHAR(255),sum(total),SUM(score)
+insert @tmp1(gno,idno,noa1,comp1,levela,line2,line3,line4,line5,total,score,mon)
+select '4','9998',noa1,comp1,'第1代',CHAR(255),CHAR(255),CHAR(255),CHAR(255),sum(total),SUM(score),mon
 from @tmp1
 where gno!='3'
-group by noa1,comp1
+group by noa1,comp1,mon
 
-insert @tmp1(gno,idno,noa1,line2,line3,line4,line5)
-select '5','9999',noa1,CHAR(255),CHAR(255),CHAR(255),CHAR(255)
+insert @tmp1(gno,idno,noa1,line2,line3,line4,line5,mon)
+select '5','9999',noa1,CHAR(255),CHAR(255),CHAR(255),CHAR(255),mon
 from @tmp1
-group by noa1
+group by noa1,mon
 
 select 
 dbo.getcomma(total,0)total
@@ -293,7 +309,7 @@ dbo.getcomma(total,0)total
 ,@t_edatea edatea
 ,*
 from @tmp1
-order by noa1,line2,line3,line4,line5,gno
+order by noa1,mon,line2,noa2,line3,line4,line5,gno
 ;
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 z_vcc_be03:--z_vcc_be03
@@ -337,14 +353,20 @@ begin
 	delete @tmp where noa!=@t_userno
 end
 
-declare @rr int='1'
+insert @tmp(gno,grpno,grpname,line,noa,comp,datea)
+select '2',b.noa,b.comp,a.unit,a.noa,a.comp,a.kdate
+from cust a left join @tmp b on a.grpno=b.noa
+where isnull(a.grpno,'')!=''
+
+declare @rr int='2'
 
 while(@rr<5)
 begin
-	insert @tmp(gno,grpno,grpname,line,noa,comp,datea)
-	select @rr+1,a.noa,a.comp,b.unit,b.noa,b.comp,b.kdate
+	insert @tmp(gno,grpno,grpname,line,noa,datea)
+	select @rr+1,a.noa,a.comp,b.unit,min(b.noa),min(b.kdate)
 	from @tmp a left join cust b on a.noa=b.grpno
 	where a.gno=@rr and isnull(b.grpno,'')!=''
+	group by a.noa,a.comp,b.unit,b.kdate,a.datea
 	order by a.noa,a.datea,b.unit
 	set @rr+=1
 end
@@ -377,73 +399,92 @@ declare @tmp1 table(
 	total3 float,
 	total4 float,
 	total5 float,
-	score1 float
+	score1 float,
+	mon nvarchar(10)
 )
 
-insert @tmp1(gno,noa1,comp1,levela,total1,score)
-select '1',a.noa,a.comp,'1',case when b.typea='1' then 1 else -1 end*sum(b.benifit),case when b.typea='1' then 1 else -1 end*sum(b.benifit)/800
+insert @tmp1(gno,noa1,comp1,levela,total1,score,mon)
+select '1',a.noa,a.comp,'1',case when b.typea='1' then 1 else -1 end*sum(b.benifit),case when b.typea='1' then 1 else -1 end*sum(b.benifit)/800,
+		case when right(b.datea,2)>=c.startdate and ISNULL(c.startdate,'')!='' then(case when len(RIGHT(left(b.datea,6),2)+1)<2  then left(b.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(b.datea,6),2)+1) else left(b.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(b.datea,6),2)+1) end) else left(b.datea,6) end
 from @tmp a left join view_vcc b on a.noa=b.custno
+	left join cust c on a.noa=c.noa
 where gno='1'
 and  (b.noa between @t_bnoa and @t_enoa)
 and (b.datea between @t_bdatea and @t_edatea)
 and (b.custno between @t_bcustno and @t_ecustno)
-group by a.noa,a.comp,b.typea
+group by a.noa,a.comp,b.typea,b.datea,c.startdate 
 
-insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,levela,total2,score)
+insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,levela,total2,score,mon)
 select '1',a.grpno,a.grpname,a.line,a.noa,a.comp,'2',case when b.typea='1' then 1 else -1 end*sum(b.benifit),case when b.typea='1' then 1 else -1 end*sum(b.benifit)/800
+		,case when right(b.datea,2)>=c.startdate and ISNULL(c.startdate,'')!='' then(case when len(RIGHT(left(b.datea,6),2)+1)<2  then left(b.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(b.datea,6),2)+1) else left(b.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(b.datea,6),2)+1) end) else left(b.datea,6) end
 from @tmp a left join view_vcc b on a.noa=b.custno
+	left join cust c on a.noa=c.noa
 where gno='2'
 and (b.noa between @t_bnoa and @t_enoa)
 and (b.datea between @t_bdatea and @t_edatea)
 and (b.custno between @t_bcustno and @t_ecustno)
-group by a.grpno,a.grpname,a.line,a.noa,a.comp,b.typea
+group by a.grpno,a.grpname,a.line,a.noa,a.comp,b.typea,b.datea,c.startdate 
 
-insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,levela,total3,score)
+insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,levela,total3,score,mon)
 select '1',a.noa1,a.comp1,a.line2,a.noa2,a.comp2,b.line,b.noa,b.comp,'3',case when c.typea='1' then 1 else -1 end*sum(c.benifit),case when c.typea='1' then 1 else -1 end*sum(c.benifit)/800
+		,case when right(c.datea,2)>=d.startdate and ISNULL(d.startdate,'')!='' then(case when len(RIGHT(left(c.datea,6),2)+1)<2  then left(c.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(c.datea,6),2)+1) else left(c.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(c.datea,6),2)+1) end) else left(c.datea,6) end
 from @tmp1 a left join @tmp b on a.noa2=b.grpno
 left join view_vcc c on b.noa=c.custno
+left join cust d on b.noa=d.noa
 where b.gno='3'
 and  (c.noa between @t_bnoa and @t_enoa)
 and (c.datea between @t_bdatea and @t_edatea)
 and (c.custno between @t_bcustno and @t_ecustno)
-group by a.noa1,a.comp1,a.line2,a.noa2,a.comp2,b.line,b.noa,b.comp,c.typea
+group by a.noa1,a.comp1,a.line2,a.noa2,a.comp2,b.line,b.noa,b.comp,c.typea,c.datea,d.startdate 
 
-insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,line4,noa4,comp4,levela,total4,score)
+insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,line4,noa4,comp4,levela,total4,score,mon)
 select '1',a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,b.line,b.noa,b.comp,'4',case when c.typea='1' then 1 else -1 end*sum(c.benifit),case when c.typea='1' then 1 else -1 end*sum(c.benifit)/800
+		,case when right(c.datea,2)>=d.startdate and ISNULL(d.startdate,'')!='' then(case when len(RIGHT(left(c.datea,6),2)+1)<2  then left(c.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(c.datea,6),2)+1) else left(c.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(c.datea,6),2)+1) end) else left(c.datea,6) end
 from @tmp1 a left join @tmp b on a.noa3=b.grpno
 left join view_vcc c on b.noa=c.custno
+left join cust d on b.noa=d.noa
 where b.gno='4'
 and  (c.noa between @t_bnoa and @t_enoa)
 and (c.datea between @t_bdatea and @t_edatea)
 and (c.custno between @t_bcustno and @t_ecustno)
-group by a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,b.line,b.noa,b.comp,c.typea
+group by a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,b.line,b.noa,b.comp,c.typea,c.datea,d.startdate 
 
-insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,line4,noa4,comp4,line5,noa5,comp5,levela,total5,score)
+insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,line4,noa4,comp4,line5,noa5,comp5,levela,total5,score,mon)
 select '1',a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,a.line4,a.noa4,a.comp4,b.line,b.noa,b.comp,'5',case when c.typea='1' then 1 else -1 end*sum(c.benifit),case when c.typea='1' then 1 else -1 end*sum(c.benifit)/800
+				,case when right(c.datea,2)>=d.startdate and ISNULL(d.startdate,'')!='' then(case when len(RIGHT(left(c.datea,6),2)+1)<2  then left(c.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(c.datea,6),2)+1) else left(c.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(c.datea,6),2)+1) end) else left(c.datea,6) end
 from @tmp1 a left join @tmp b on a.noa4=b.grpno
 left join view_vcc c on b.noa=c.custno
+left join cust d on b.noa=d.noa
 where b.gno='5'
 and  (c.noa between @t_bnoa and @t_enoa)
 and (c.datea between @t_bdatea and @t_edatea)
 and (c.custno between @t_bcustno and @t_ecustno)
-group by a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,a.line4,a.noa4,a.comp4,b.line,b.noa,b.comp,c.typea
+group by a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,a.line4,a.noa4,a.comp4,b.line,b.noa,b.comp,c.typea,c.datea,d.startdate
 
-insert @tmp1(gno,noa1,comp1,total1,total2,total3,total4,total5,score)
-select '0',noa1,comp1,SUM(total1),SUM(total2),SUM(total3),SUM(total4),SUM(total5),SUM(score)
+insert @tmp1(gno,noa1,comp1,total1,total2,total3,total4,total5,score,mon)
+select '0',noa1,comp1,SUM(total1),SUM(total2),SUM(total3),SUM(total4),SUM(total5),SUM(score),mon
 from @tmp1
-group by noa1,comp1
+group by noa1,comp1,mon
 
 delete @tmp1 where gno=1
 
 update @tmp1
 set total=total1+isnull(total2,0)+isnull(total3,0)+isnull(total4,0)+isnull(total5,0),
-	score=floor(isnull(total1,0)/800*15)+case when isnull(total1,0)=0 then 0 else floor(isnull(total2,0)/800*4) end +case when isnull(total1,0)=0 or isnull(total2,0)=0 then 0 else floor(isnull(total3,0)/800*8) end+case when isnull(total1,0)=0 or isnull(total2,0)=0 or isnull(total3,0)=0 then 0 else floor(isnull(total4,0)/800*16) end
-	+case when isnull(total1,0)=0 or isnull(total2,0)=0 or isnull(total3,0)=0 or isnull(total4,0)=0 then 0 else floor(isnull(total4,0)/800*30) end
+	score=floor(isnull(total1,0)/800*15)
+	+case when isnull(total1,0)=0 then 0 else floor(isnull(total2,0)/800*4) end 
+	+case when isnull(total1,0)=0 or isnull(total2,0)=0 then 0 else floor(isnull(total3,0)/800*8) end
+	+case when isnull(total1,0)=0 or isnull(total2,0)=0 or isnull(total3,0)=0 then 0 else floor(isnull(total4,0)/800*16) end
+	+case when isnull(total1,0)=0 or isnull(total2,0)=0 or isnull(total3,0)=0 or isnull(total4,0)=0 then 0 else floor(isnull(total5,0)/800*30) end
+
+insert @tmp1(gno,idno,noa1,mon)
+select '1','9999',CHAR(255),mon
+from @tmp1
+group by mon
 
 select 
 dbo.getcomma(total,0)total
 ,dbo.getcomma(score,0)score
 ,* 
 from @tmp1
-order by noa1
+order by noa1,gno
 ;
