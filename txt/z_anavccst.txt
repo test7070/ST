@@ -566,18 +566,21 @@ z_anavccst01:--z_anavccst01
 
 	--   有運費時,重量不可為0, -99999錯誤提示用 
 	--   進貨的單價一律為台幣
-	update #z_anavccst01 set stotal = round(isnull(a.[weight],0) * isnull(a.sprice,0),0)--* case when isnull(a.floata,0)=0 then 1 else a.floata end
-		,tranmoney =case when a.[vccweight]=0 then -99999 else round(a.vcctranmoney*a.[weight]/a.[vccweight],0) end
+	update #z_anavccst01 set stotal = round(isnull(a.[weight],0) * isnull(a.sprice,0),0)
 	from #z_anavccst01 a
+	
+	update #z_anavccst01 set tranmoney =case when a.[vccweight]=0 then -99999 else round(a.vcctranmoney*a.[weight]/a.[vccweight],0) end
+	from #z_anavccst01 a
+	where ISNULL(a.vcctranmoney,0)!=0
 	
 	update #z_anavccst01 set [weight] = case when typea='1' then 1 else -1 end * [weight] 
 		,mount = case when typea='1' then 1 else -1 end * [mount] 
 		,total = case when typea='1' then 1 else -1 end * [total] 
 		,stotal = case when typea='1' then 1 else -1 end * [stotal] 
 	
-	update #z_anavccst01 set profit = total-stotal-tranmoney,rate = case when total=0 then 0 else round((total-stotal-tranmoney)/total*100,0) end
+	update #z_anavccst01 set profit = isnull(total,0)-isnull(stotal,0)-isnull(tranmoney,0)
+		,rate = case when isnull(total,0)=0 then 0 else round((isnull(total,0)-isnull(stotal,0)-isnull(tranmoney,0))/total*100,0) end
 	
-
 	insert into #z_anavccst01(gno,custno,noa,noq,[weight],mount,total,stotal,tranmoney,profit)
 	select '1',custno,'','',SUM([weight]),SUM(mount),SUM(total),SUM(stotal),SUM(tranmoney),SUM(profit) from #z_anavccst01 group by custno
 	
