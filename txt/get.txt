@@ -9,13 +9,52 @@ get_vcc:--get_vcc
 	select @accy = accy from view_vcc where noa=@t_noa
 	
 	declare @tmp table(msg nvarchar(max))
+	
+	-- 記錄何時寫入
+	DECLARE @chk tinyint = 0
+	Begin Transaction [Trans_Name]
+
 	begin try
 		set @cmd ="update vcc"+@accy+" set cartrips=isnull(@getWeight,0) where noa=@t_noa"
 		execute sp_executesql @cmd,N'@getWeight float,@t_noa nvarchar(20)',@getWeight=@getWeight,@t_noa=@t_noa
+		IF @@Error <> 0 BEGIN SET @chk = 1 END
+		
 		insert into @tmp(msg)values('')
+		
+		insert into drun(datea,timea,usera,[action],noa,tablea,title,memo)
+		select dbo.AD2ChineseEraName( CONVERT(nvarchar,getdate(),111))
+			,LEFT(CONVERT(nvarchar,getdate(),108),5)
+			,'AUTO'
+			,'Update'
+			,@t_noa
+			,'get'
+			,'get2vcc'
+			,'PK_領料重回寫到出貨單_'+CAST(ISNULL(@getWeight,0) as nvarchar)
+		IF @@Error <> 0 BEGIN SET @chk = 1 END
+		
 	end try
 	begin catch
+		Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
+		--有錯誤就都不執行
+		insert into drun(datea,timea,usera,[action],noa,tablea,title,memo)
+		select dbo.AD2ChineseEraName( CONVERT(nvarchar,getdate(),111))
+			,LEFT(CONVERT(nvarchar,getdate(),108),5)
+			,'AUTO'
+			,'Update'
+			,@t_noa
+			,'get'
+			,'get2vcc_error'
+			,ERROR_MESSAGE()
+			
 		insert into @tmp(msg)values('資料更新異常：'+@t_noa)
 	end catch
-	select * from @tmp;
+	
+	IF @chk <> 0 BEGIN -- 若是新增資料發生錯誤
+		Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
+		insert into @tmp(msg)values('資料更新異常：'+@t_noa)
+	END
+	ELSE BEGIN
+		Commit Transaction [Trans_Name] -- 提交所有操作所造成的變更
+	END
+	select  * from @tmp;
 	
