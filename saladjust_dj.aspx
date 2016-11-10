@@ -241,6 +241,24 @@
 				
 				_btnOk(t_key[1], bbsKey[0], bbsKey[1], '', 2);  // (key_value, bbmKey[0], bbsKey[1], '', 2);
 			}
+			
+			function q_stPost() {
+				var t_mon='';
+				for(var j = 0; j < q_bbsCount; j++) {
+					if(t_mon<$('#txtDatea_'+j).val()){
+						t_mon=$('#txtDatea_'+j).val();
+					}
+				}
+				if(t_mon.length>0){
+					t_mon=t_mon.substr(0,r_lenm);
+				}else{
+					t_mon=q_date().substr(0,r_lenm);
+				}
+				
+				if ((q_cur == 1 || q_cur == 2) && q_getPara('sys.project').toUpperCase()=='DJ' && t_mon.length>0) {
+					q_func('qtxt.query.changedata', 'salary.txt,changedata_dj,' + encodeURI(t_mon) + ';' + encodeURI(q_date()+'變動'+q_getHref()[1]+'薪資調整紀錄')+ ';2');
+				}
+			}
 
 			function bbsSave(as) {
 				if (!as['datea'] ) {  // Dont Save Condition

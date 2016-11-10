@@ -34,8 +34,7 @@
 		    brwKey = 'noa';
 		    brwCount2 = 3;
 		    
-		    aPop = new Array(['txtDeviceno_', 'btnDeviceno_', 'modeq', 'noa,device', 'txtDeviceno_,txtDevice_', 'modeq_b.aspx'],
-		    				 ['txtDeviceno_', 'btnDeviceno_', 'model', 'noa,model' , 'txtDeviceno_,txtDevice_', 'model_b.aspx']);
+		    aPop = new Array(['txtDeviceno_', 'btnDeviceno_', 'modeq', 'noa,device', 'txtDeviceno_,txtDevice_', 'modeq_b.aspx']);
 			
 		    $(document).ready(function () {
 		        bbmKey = ['noa'];

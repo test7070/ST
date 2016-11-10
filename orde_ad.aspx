@@ -23,7 +23,8 @@
 			var q_name = "orde";
 			var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtComp', 'txtAcomp', 'txtMoney', 'txtTax', 'txtTotal', 'txtTotalus', 'txtSales', 'txtOrdbno', 'txtOrdcno','txtApv'];
 			var q_readonlys = ['txtTotal', 'txtQuatno', 'txtNo2', 'txtNo3', 'txtC1', 'txtNotv'
-								,'txtPackway','txtSprice','txtBenifit','txtPayterms','txtSize','txtProfit','txtDime'];
+							,'txtPackway','txtSprice','txtBenifit','txtPayterms','txtSize','txtProfit','txtDime'
+							,'txtProduct'];
 			var bbmNum = [['txtTotal', 10, 0, 1], ['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1],['txtFloata', 10, 5, 1], ['txtTotalus', 15, 2, 1]];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -41,7 +42,7 @@
 				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
 				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', ''],
 				
-				['txtProductno_', 'btnProduct_', 'ucaucc2', 'noa,product,unit,spec', 'txtProductno_,txtProduct_,txtUnit_,txtSpec_', 'ucaucc2_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucaucc2', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc2_b.aspx'],
 				['txtUcolor_','','adspec','noa,mon,memo,memo1,memo2','0txtUcolor_','adspec_b.aspx'],
 				['txtScolor_','','adly','noa,mon,memo,memo1,memo2','0txtScolor_','adly_b.aspx'],
 				['txtClass_','','adly','noa,mon,memo,memo1,memo2','0txtClass_','adly_b.aspx'],
@@ -79,7 +80,7 @@
 					// 計價量
 					//t_weight = t_weight + dec( $('#txtWeight_' + j).val()) ; // 重量合計
 					$('#txtTotal_' + j).val(round(q_mul(dec($('#txtPrice_' + j).val()), dec(t_mount)), 0));
-
+					
 					q_tr('txtNotv_' + j, q_sub(q_float('txtMount_' + j), q_float('txtC1' + j)));
 					t1 = q_add(t1, dec($('#txtTotal_' + j).val()));
 				}
@@ -882,9 +883,152 @@
 					return;
 				}
 				
+				var t_ucawhere='1=0'; //產品
+				var t_adspecwhere='1=0';//車縫線顏色
+				var t_adlywhere='1=0';//皮料
+				var t_adothwhere='1=0';//網烙印
+				var t_adprowhere='1=0'; //轉印
+				var t_addimewhere='1=0'; //電鍍
+				
 				for(var k=0;k<q_bbsCount;k++){
 					if(emp($('#txtDatea_'+k).val()))
 						$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),15))
+					
+					if(!emp($('#txtProductno_'+k).val())){
+						t_ucawhere=t_ucawhere+" or noa='"+$('#txtProductno_'+k).val()+"'";
+					}
+					if(!emp($('#txtUcolor_'+k).val())){
+						t_adspecwhere=t_adspecwhere+" or noa='"+$('#txtUcolor_'+k).val()+"'";
+					}
+					if(!emp($('#txtScolor_'+k).val())){
+						t_adlywhere=t_adlywhere+" or noa='"+$('#txtScolor_'+k).val()+"'";
+					}
+					if(!emp($('#txtClass_'+k).val())){
+						t_adlywhere=t_adlywhere+" or noa='"+$('#txtClass_'+k).val()+"'";
+					}
+					if(!emp($('#txtClassa_'+k).val())){
+						t_adlywhere=t_adlywhere+" or noa='"+$('#txtClassa_'+k).val()+"'";
+					}
+					if(!emp($('#txtZinc_'+k).val())){
+						t_adlywhere=t_adlywhere+" or noa='"+$('#txtZinc_'+k).val()+"'";
+					}
+					if(!emp($('#txtSizea_'+k).val())){
+						t_adothwhere=t_adothwhere+" or noa='"+$('#txtSizea_'+k).val()+"'";
+					}
+					if(!emp($('#txtSource_'+k).val())){
+						t_adprowhere=t_adprowhere+" or noa='"+$('#txtSource_'+k).val()+"'";
+					}
+					if(!emp($('#txtHard_'+k).val())){
+						t_addimewhere=t_addimewhere+" or noa='"+$('#txtHard_'+k).val()+"'";
+					}
+				}
+				if(t_ucawhere!='1=0'){
+					t_ucawhere='where=^^'+t_ucawhere+'^^';
+					t_adspecwhere='where=^^'+t_adspecwhere+'^^';
+					t_adlywhere='where=^^'+t_adlywhere+'^^';
+					t_adothwhere='where=^^'+t_adothwhere+'^^';
+					t_adprowhere='where=^^'+t_adprowhere+'^^';
+					t_addimewhere='where=^^'+t_addimewhere+'^^';
+					
+					q_gt('view_ucaucc',t_ucawhere, 0, 0, 0, "getucaucc", r_accy,1);
+					var ucaas = _q_appendData("view_ucaucc", "", true);
+					q_gt('adspec',t_adspecwhere, 0, 0, 0, "getadspec", r_accy,1);
+					var adspecas = _q_appendData("adspec", "", true);
+					q_gt('adly',t_adlywhere, 0, 0, 0, "getadly", r_accy,1);
+					var adlyas = _q_appendData("adly", "", true);
+					q_gt('adoth',t_adothwhere, 0, 0, 0, "getadoth", r_accy,1);
+					var adothas = _q_appendData("adoth", "", true);
+					q_gt('adpro',t_adprowhere, 0, 0, 0, "getadpro", r_accy,1);
+					var adproas = _q_appendData("adpro", "", true);
+					q_gt('addime',t_addimewhere, 0, 0, 0, "getaddime", r_accy,1);
+					var addimeas = _q_appendData("addime", "", true);
+					
+					for(var i=0;i<q_bbsCount;i++){
+						//產品
+						if(!emp($('#txtProductno_'+i).val())){
+							var t_product='';
+							for(var j=0;j<ucaas.length;j++){
+								if($('#txtProductno_'+i).val()==ucaas[j].noa){
+									t_product=ucaas[j].product;
+									break;
+								}
+							}
+							//車縫線顏色
+							if(!emp($('#txtUcolor_'+i).val())){
+								for(var j=0;j<adspecas.length;j++){
+									if($('#txtUcolor_'+i).val()==adspecas[j].noa){
+										t_product=t_product+(t_product.length>0?',':'')+'車縫線顏色:'+adspecas[j].mon;
+										break;
+									}
+								}
+							}
+							//皮料1
+							if(!emp($('#txtScolor_'+i).val())){
+								for(var j=0;j<adlyas.length;j++){
+									if($('#txtScolor_'+i).val()==adlyas[j].noa){
+										t_product=t_product+(t_product.length>0?',':'')+'皮料1:'+adlyas[j].mon;
+										break;
+									}
+								}
+							}
+							//皮料2
+							if(!emp($('#txtClass_'+i).val())){
+								for(var j=0;j<adlyas.length;j++){
+									if($('#txtClass_'+i).val()==adlyas[j].noa){
+										t_product=t_product+(t_product.length>0?',':'')+'皮料2:'+adlyas[j].mon;
+										break;
+									}
+								}
+							}
+							//皮料3
+							if(!emp($('#txtClassa_'+i).val())){
+								for(var j=0;j<adlyas.length;j++){
+									if($('#txtClassa_'+i).val()==adlyas[j].noa){
+										t_product=t_product+(t_product.length>0?',':'')+'皮料3:'+adlyas[j].mon;
+										break;
+									}
+								}
+							}
+							//皮料4
+							if(!emp($('#txtZinc_'+i).val())){
+								for(var j=0;j<adlyas.length;j++){
+									if($('#txtZinc_'+i).val()==adlyas[j].noa){
+										t_product=t_product+(t_product.length>0?',':'')+'皮料4:'+adlyas[j].mon;
+										break;
+									}
+								}
+							}
+							//網烙印
+							if(!emp($('#txtSizea_'+i).val())){
+								for(var j=0;j<adothas.length;j++){
+									if($('#txtSizea_'+i).val()==adothas[j].noa){
+										t_product=t_product+(t_product.length>0?',':'')+'網烙印:'+adothas[j].mon;
+										break;
+									}
+								}
+							}
+							//轉印
+							if(!emp($('#txtSource_'+i).val())){
+								for(var j=0;j<adproas.length;j++){
+									if($('#txtSource_'+i).val()==adproas[j].noa){
+										t_product=t_product+(t_product.length>0?',':'')+'轉印:'+adproas[j].mon;
+										break;
+									}
+								}
+							}
+							//電鍍
+							if(!emp($('#txtHard_'+i).val())){
+								for(var j=0;j<addimeas.length;j++){
+									if($('#txtHard_'+i).val()==addimeas[j].noa){
+										t_product=t_product+(t_product.length>0?',':'')+'電鍍:'+addimeas[j].mon;
+										break;
+									}
+								}
+							}
+							
+							$('#txtProduct_'+i).val(t_product);
+						}
+					}
 				}
 				
 				//1030419 當專案沒有勾 BBM的取消和結案被打勾BBS也要寫入
@@ -1350,7 +1494,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno'] && !as['product'] && !as['spec'] && !dec(as['total'])) {
+				if (!as['productno'] && !dec(as['total'])) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -2224,8 +2368,8 @@
 						<input class="txt c6" id="txtNo2.*" type="text" />
 						<input class="btn" id="btnUcagroup.*" type="button" value='要件明細' style="font-size: 10px;" />
 					</td>
-					<td>
-						<input class="txt c7" id="txtProduct.*" type="text" />
+					<td><input id="txtProduct.*" type="text" class="txt c1"/></td>
+					<td style="display: none;">
 						<input id="txtSpec.*" type="text" class="txt c1 isSpec"/>
 					</td>
 					<td><input id="txtUcolor.*" type="text" class="txt c1"/></td>

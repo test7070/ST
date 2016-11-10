@@ -146,6 +146,10 @@
 					
 					x_datea='#non',x_sssno='#non';
 				}
+				
+				if (q_getPara('sys.project').toUpperCase()=='DJ' && $('#txtDatea').val().length>0 && $('#chkIsapv').prop('checked')) {
+					q_func('qtxt.query.changedata', 'salary.txt,changedata_dj,' + encodeURI($('#txtDatea').val().substr(0,r_lenm)) + ';' + encodeURI(q_date()+'變動'+$('#txtNoa').val()+'加班單作業')+ ';1');
+				}
             }
             
             function btnOk() {

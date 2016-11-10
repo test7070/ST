@@ -142,7 +142,7 @@
 		    }
 		    
 			function btnOk() {
-				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')]]);
+				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')],['txtDeviceno', q_getMsg('lblDeviceno')]]);
 				if (t_err.length > 0) {
 					alert(t_err);
 					return;
