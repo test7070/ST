@@ -1390,10 +1390,11 @@
 	        }
 	
 	        function btnDele() {
-	        	 if (checkenda){
+	        	//105/11/10 暫時開放刪除
+	        	/*if (checkenda){
 	                alert('超過'+q_getPara('sys.modiday')+'天'+'已關帳!!');
 	                return;
-		    	}
+		    	}*/
 	            _btnDele();
 	        }
 	
