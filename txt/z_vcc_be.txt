@@ -5,6 +5,9 @@ declare @t_ecustno  nvarchar(100)
 set @t_bcustno = case when '#non'=[5] then '' else [5] end
 set @t_ecustno = case when '#non'=[6] then char(255) else [6] end
 
+declare @t_userno nvarchar(100)='[7]'
+declare @t_rank nvarchar(100)='[8]'
+
 declare @tmp table(
 	gno nvarchar(2),
 	grpno nvarchar(100),
@@ -19,6 +22,11 @@ insert @tmp(gno,noa,comp,datea)
 select '1',noa,comp,kdate
 from cust
 where (noa between @t_bcustno and @t_ecustno)
+
+if(@t_rank<'8')
+begin
+	delete @tmp where noa!=@t_userno
+end
 
 declare @rr int='1'
 
@@ -486,5 +494,6 @@ dbo.getcomma(total,0)total
 ,dbo.getcomma(score,0)score
 ,* 
 from @tmp1
+where noa1!=''
 order by noa1,gno
 ;

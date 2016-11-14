@@ -390,10 +390,29 @@
 			function btnPrint() {
 				q_box("z_label.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";cust=" + $('#txtNoa').val() + ";" + r_accy, 'z_label', "95%", "95%", q_getMsg('popZ_label'));
 			}
+			
+			function q_funcPost(t_func, result) {
+                switch(t_func) {
+                    case 'qtxt.query.cust':
+                        break;
+                        
+                    case 'qtxt.query.startdate':
+                		var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							abbm[q_recno]['startdate'] = as[0].startdate;
+							$('#txtStartdate').val(as[0].startdate);
+						}
+                		break;
+                    
+                    default:
+                    	break;
+                }
+            }
 
 			function q_stPost() {
 				if (!(q_cur == 1 || q_cur == 2)) 
 					return false;
+					q_func('qtxt.query.cust', 'cust.txt,cust_nhpe_be,' + encodeURI($('#txtNoa').val())+';'+ encodeURI($('#txtComp').val())  ); 
 				Unlock();
 			}
 			
@@ -465,6 +484,7 @@
 
 			function refresh(recno) {
 				_refresh(recno);
+				q_func('qtxt.query.startdate', 'cust.txt,startdate_be,'+ encodeURI($('#txtNoa').val()));
 				refreshBbm();
 			}
 
