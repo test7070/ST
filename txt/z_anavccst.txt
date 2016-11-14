@@ -578,9 +578,9 @@ z_anavccst01:--z_anavccst01
 		,total = case when typea='1' then 1 else -1 end * [total] 
 		,stotal = case when typea='1' then 1 else -1 end * [stotal] 
 	
-	update #z_anavccst01 set profit = total-stotal-tranmoney,rate = case when total=0 then 0 else round((total-stotal-tranmoney)/total*100,0) end
+	update #z_anavccst01 set profit = isnull(total,0)-isnull(stotal,0)-isnull(tranmoney,0)
+		,rate = case when isnull(total,0)=0 then 0 else round((isnull(total,0)-isnull(stotal,0)-isnull(tranmoney,0))/total*100,0) end
 	
-
 	insert into #z_anavccst01(gno,custno,noa,noq,[weight],mount,total,stotal,tranmoney,profit)
 	select '1',custno,'','',SUM([weight]),SUM(mount),SUM(total),SUM(stotal),SUM(tranmoney),SUM(profit) from #z_anavccst01 group by custno
 	

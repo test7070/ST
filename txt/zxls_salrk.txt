@@ -107,7 +107,7 @@ begin
 		set @clockin=isnull((select top 1 timea from #tmp where sssno=@sssno and datea=@datea order by timea),'')
 		set @clockout=isnull((select top 1 timea from #tmp where sssno=@sssno and datea=@datea order by timea desc),'')
 		
-		if(@clockin=@clockout) --可能是中班或晚班抓取隔天的時間
+		if(@clockin=@clockout and @clockin!='' and @clockout!='') --可能是中班或晚班抓取隔天的時間
 		begin
 			set @clockout=isnull((select top 1 timea from #tmp where sssno=@sssno and datea=@tomorrow order by timea),'')
 		end

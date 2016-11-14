@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -62,18 +62,21 @@
                 bbmMask = [['txtDatea', r_picd], ['txtBdate', r_picd], ['txtEdate', r_picd], ['txtBtime', '99:99'], ['txtEtime', '99:99']];
                 q_mask(bbmMask);
                 
+                //讀取假日主檔
+				q_gt('holiday', "where=^^ noa>='"+q_date().substr(0,r_len)+"' ^^", 0, 0, 0,"", r_accy);
+                
                 $('#txtSssno').change(function() {
                     if (!emp($('#txtSssno').val())) {
                     	var t_year=r_accy;
                     	if(!emp($('#txtBdate').val()))
-                    		t_year=$('#txtBdate').val().substr(0, 3);
+                    		t_year=$('#txtBdate').val().substr(0, r_len);
                     	
                         //找員工的特休假可用天數和特休假剩餘天數
                         var t_where = "where=^^ noa ='" + t_year + "' ^^";
                         q_gt('salvaca', t_where, 0, 0, 0, "", r_accy);
                         
                         //找員工已請的補特休
-                        var t_where = "where=^^ left(bdate,3) ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
+                        var t_where = "where=^^ left(bdate,"+r_len+") ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
                         q_gt('salvacause', t_where, 0, 0, 0, "salvacause_prev_special", r_accy);
                         
                         //找員工假別可用天數
@@ -87,7 +90,7 @@
                 $('#txtBdate').focus(function() {
                     q_msg($(this), '請假日期跨月份，請申請兩張!!');
                 }).blur(function() {
-                    if ($('#txtBdate').val().substr(0, 6) != $('#txtEdate').val().substr(0, 6) || $('#txtBdate').val() > $('#txtEdate').val()) {
+                    if ($('#txtBdate').val().substr(0, r_lenm) != $('#txtEdate').val().substr(0, r_lenm) || $('#txtBdate').val() > $('#txtEdate').val()) {
                         //alert('請假日期不正確!!');
                         $('#txtEdate').val($('#txtBdate').val());
                     }
@@ -96,14 +99,14 @@
                     if (!emp($('#txtSssno').val())) {
                     	var t_year=r_accy;
                     	if(!emp($('#txtBdate').val()))
-                    		t_year=$('#txtBdate').val().substr(0, 3);
+                    		t_year=$('#txtBdate').val().substr(0, r_len);
                     		
                         //找員工的特休假可用天數和特休假剩餘天數
                         var t_where = "where=^^ noa ='" + t_year + "' ^^";
                         q_gt('salvaca', t_where, 0, 0, 0, "", r_accy);
                         
                         //找員工已請的補特休
-                        var t_where = "where=^^ left(bdate,3) ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
+                        var t_where = "where=^^ left(bdate,"+r_len+") ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
                         q_gt('salvacause', t_where, 0, 0, 0, "salvacause_prev_special", r_accy);
                     }
                     change_hr_used();
@@ -112,7 +115,7 @@
                 $('#txtEdate').focus(function() {
                     q_msg($(this), '請假日期跨月份，請申請兩張!!');
                 }).blur(function() {
-                    if ($('#txtBdate').val().substr(0, 6) != $('#txtEdate').val().substr(0, 6) || $('#txtBdate').val() > $('#txtEdate').val()) {
+                    if ($('#txtBdate').val().substr(0, r_lenm) != $('#txtEdate').val().substr(0, r_lenm) || $('#txtBdate').val() > $('#txtEdate').val()) {
                         alert('請假日期不正確!!');
                         $('#txtEdate').val($('#txtBdate').val());
                     }
@@ -210,6 +213,7 @@
             }
 
             var ssspartno = '',sssgroup='',sssjob='';
+            var holidayas;
             function q_gtPost(t_name) {
                 switch (t_name) {
                     case 'authority':
@@ -231,6 +235,9 @@
                         }
                         q_gt(q_name, q_content, q_sqlCount, 1)
                         break;
+					case 'holiday':
+						holidayas = _q_appendData('holiday', '', true);
+						break;
                     case 'sss':
                         var as = _q_appendData('sss', '', true);
                         if (as[0] != undefined) {
@@ -339,14 +346,14 @@
                         if (!emp($('#txtSssno').val())) {
                         	var t_year=r_accy;
 	                    	if(!emp($('#txtBdate').val()))
-	                    		t_year=$('#txtBdate').val().substr(0, 3);
+	                    		t_year=$('#txtBdate').val().substr(0, r_len);
 	                    		
 	                        //找員工的特休假可用天數和特休假剩餘天數
 	                        var t_where = "where=^^ noa ='" + t_year + "' ^^";
 	                        q_gt('salvaca', t_where, 0, 0, 0, "", r_accy);
 	                        
 	                        //找員工已請的補特休
-	                        var t_where = "where=^^ left(bdate,3) ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0 ^^";
+	                        var t_where = "where=^^ left(bdate,"+r_len+") ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0 ^^";
 	                        q_gt('salvacause', t_where, 0, 0, 0, "salvacause_prev_special", r_accy);
 	                        
 	                        //找員工假別可用天數
@@ -402,10 +409,10 @@
                 if (!emp($('#txtSssno').val())) {
                 	var t_year=r_accy;
 	                    if(!emp($('#txtBdate').val()))
-	                    	t_year=$('#txtBdate').val().substr(0, 3);
+	                    	t_year=$('#txtBdate').val().substr(0, r_len);
 	                    		
 					//找員工已請的補特休
-					var t_where = "where=^^ left(bdate,3) ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
+					var t_where = "where=^^ left(bdate,"+r_len+") ='" + t_year + "' and noa!='"+$('#txtNoa').val()+"' and charindex('補特休',hname)>0^^";
 					q_gt('salvacause', t_where, 0, 0, 0, "salvacause_prev_special", r_accy);
 					
 					//找員工假別可用天數
@@ -437,8 +444,8 @@
                     	return;
                 	}
                 	//判斷補特休時間是否到期 //如果期限>0表示有限訂天數
-                	if(limitday>0 && prevyeartime>0 && q_cdn($('#txtEdate').val().substr(0,3)+'/01/01',limitday-1)<$('#txtEdate').val()){
-                		alert("補特休期限("+q_cdn($('#txtEdate').val().substr(0,3)+'/01/01',limitday-1)+")超過請假日期!!");
+                	if(limitday>0 && prevyeartime>0 && q_cdn($('#txtEdate').val().substr(0,r_len)+'/01/01',limitday-1)<$('#txtEdate').val()){
+                		alert("補特休期限("+q_cdn($('#txtEdate').val().substr(0,r_len)+'/01/01',limitday-1)+")超過請假日期!!");
                 		return;
                 	}
                 	
@@ -579,7 +586,7 @@
 						$('#txtEtime').val(time);
 					}
                     var use_hr = 0;
-                    if (q_getPara('sys.comp').indexOf('大昌') > -1) {
+                    if(q_getPara('sys.project').toUpperCase()=='DC'){
                     	if ($('#txtEtime').val() >= '13:30' && $('#txtBtime').val() <= '12:00') {
                         	use_hr = round(((dec($('#txtEtime').val().substr(0, 2)) - dec($('#txtBtime').val().substr(0, 2))) * 60 + dec($('#txtEtime').val().substr(3, 2)) - dec($('#txtBtime').val().substr(3, 2))) / 60, 1);
                             use_hr = use_hr - 1.5;
@@ -617,28 +624,41 @@
 
                     if ($('#txtBdate').val() != $('#txtEdate').val()) {
                     	var t_date = $('#txtBdate').val();
+                    	t_date=q_cdn(t_date,1);
                         var count = 0;
-                        while (t_date < $('#txtEdate').val()) {
-                        	if (new Date(dec(t_date.substr(0, 3)) + 1911, dec(t_date.substr(4, 2)) - 1, dec(t_date.substr(7, 2))).getDay() == 0 || new Date(dec(t_date.substr(0, 3)) + 1911, dec(t_date.substr(4, 2)) - 1, dec(t_date.substr(7, 2))).getDay() == 6) {
-                            	//六日不算
-							} else {
+                        while (t_date <= $('#txtEdate').val()) {
+                        	var iswork=true,ishwork=false;//判斷是否要上班,假日主檔上班日
+                        	for(var i=0;i<holidayas.length;i++){
+                        		if(holidayas[i].noa==t_date){
+                        			if(holidayas[i].iswork.toUpperCase()=='TRUE'){//上班日
+                        				ishwork=true;
+                        				iswork=true;
+                        			}else{
+                        				iswork=false;
+                        			}
+                        		}
+                        	}
+                        	
+                        	if(!ishwork){//假日主檔非上班日 判斷是否為六日
+                        		if(r_len==3){
+                        			if(new Date(dec(t_date.substr(0, r_len)) + 1911, dec(t_date.substr(r_len+1, 2)) - 1, dec(t_date.substr(r_lenm+1, 2))).getDay() == 0|| new Date(dec(t_date.substr(0, r_len)) + 1911, dec(t_date.substr(r_len+1, 2)) - 1, dec(t_date.substr(r_lenm+1, 2))).getDay() == 6){
+                        				iswork=false;
+                        			}
+                        		}
+                        		if(r_len==4){
+                        			if(new Date(dec(t_date.substr(0, r_len)), dec(t_date.substr(r_len+1, 2)) - 1, dec(t_date.substr(r_lenm+1, 2))).getDay() == 0|| new Date(dec(t_date.substr(0, r_len)), dec(t_date.substr(r_len+1, 2)) - 1, dec(t_date.substr(r_lenm+1, 2))).getDay() == 6){
+                        				iswork=false;
+                        			}
+                        		}
+                        	}
+                        	
+                        	
+                        	if (iswork) {
 								count++;
 							}
                             	
                             //日期加一天
-                            var nextdate = new Date(dec(t_date.substr(0, 3)) + 1911, dec(t_date.substr(4, 2)) - 1, dec(t_date.substr(7, 2)));
-                            nextdate.setDate(nextdate.getDate() + 1)
-                            t_date = '' + (nextdate.getFullYear() - 1911) + '/';
-                            //月份
-                            if (nextdate.getMonth() + 1 < 10)
-                            	t_date = t_date + '0' + (nextdate.getMonth() + 1) + '/';
-							else
-								t_date = t_date + (nextdate.getMonth() + 1) + '/';
-							//日期
-                            if (nextdate.getDate() < 10)
-                            	t_date = t_date + '0' + (nextdate.getDate());
-							else
-                            	t_date = t_date + (nextdate.getDate());
+                            t_date=q_cdn(t_date,1);
 						}
 
                         use_hr = use_hr +(8* count);

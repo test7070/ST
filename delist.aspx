@@ -632,6 +632,9 @@
 							if (as[0] != undefined) {
 								if(as[0].memo.length>0){
 									alert(as[0].memo);
+									if(!emp($('#txtRc2no').val())){
+										q_func('rc2_post.post', r_accy + ',' + $('#txtRc2no').val() + ',1');
+									}
 									return;
 								}
 								

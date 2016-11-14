@@ -21,7 +21,7 @@
 
 		    q_tables = 's';
 		    var q_name = "modfixb";
-		    var q_readonly = ['txtNoa','txtDevice'];
+		    var q_readonly = ['txtNoa','txtDevice','txtPart'];
 		    var q_readonlys = ['txtProduct','txtTgg'];
 		    var bbmNum = [];
 		    var bbsNum = [['txtPrice', 10, 1], ['txtMount', 10, 1], ['txtMoney', 10, 0]];
@@ -32,9 +32,10 @@
 		    brwList = [];
 		    brwNowPage = 0;
 		    brwKey = 'noa';
-		    brwCount2 = 6;
+		    brwCount2 = 7;
 		    
 		    aPop = new Array(	['txtDeviceno', 'lblDeviceno', 'modeq', 'noa,device', 'txtDeviceno,txtDevice', 'modeq_b.aspx'],
+		    					['txtPartno', 'lblPart', 'part', 'noa,part', 'txtPartno,txtPart', 'part_b.aspx'],
 		    					['txtProductno_', 'btnProductno_', 'bcc', 'noa,product,price', 'txtProductno_,txtProduct_,txtPrice_', 'bcc_b.aspx'],
 		    					['txtTggno_', 'btnTggno_', 'tgg', 'noa,nick', 'txtTggno_,txtTgg_', 'tgg_b.aspx']);
 			
@@ -189,7 +190,7 @@
 			function _btnSeek() {
             	if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('modfixb_s.aspx', q_name + '_s', "500px", "40%", q_getMsg("popSeek"));
+				q_box('modfixb_s.aspx', q_name + '_s', "500px", "320px", q_getMsg("popSeek"));
             }
 		    function btnTop() {
 		        _btnTop();
@@ -372,22 +373,29 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
-						<td><input id="txtDatea" type="text" class="txt c1"/></td>	
-						<td> </td>
-						<td> </td>											
+						<td><input id="txtDatea" type="text" class="txt c1"/></td>											
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblPart" class="lbl btn"> </a></td>
+						<td>
+							<input id="txtPartno"  type="text" style="width:40%;"/>
+							<input id="txtPart"  type="text" style="width:60%;"/>
+						</td>											
+						<td><span> </span><a id='lblPaperno' class="lbl"> </a></td>
+						<td><input id="txtPaperno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblDeviceno" class="lbl btn"> </a></td>
 						<td colspan="3">
 							<input id="txtDeviceno"  type="text" style="width:25%;"/>
-							<input id="txtDevice"  type="text" style="width:75%; color:green;"/>
+							<input id="txtDevice"  type="text" style="width:75%;"/>
 						</td>											
-						<td><span> </span><a id='lblOrdeno' class="lbl"> </a></td>
-						<td><input id="txtOrdeno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id='lblOrdeno' class="lbl"> </a></td>
+						<td><input id="txtOrdeno" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblDescription' class="lbl"> </a></td>
 						<td colspan="3"><input id="txtDescription" type="text" class="txt c1" /></td>		
 					</tr>
