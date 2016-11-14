@@ -59,14 +59,14 @@
                 $('#txtXdate1').val(q_cdn(q_date().substr(0, r_lenm) + '/01', 0));
                 $('#txtXdate2').val(q_cdn(q_cdn(q_date().substr(0, r_lenm) + '/01', 60).substr(0, r_lenm) + '/01', -1));
                 
-                if(r_rank<8){
+               /* if(r_rank<8){
                 	$('#txtXcustno1a').val(r_userno).attr('disabled', 'disabled');;
                 	$('#txtXcustno1b').val(r_name).attr('disabled', 'disabled');;
                 	$('#txtXcustno2a').val(r_userno).attr('disabled', 'disabled');;
                 	$('#txtXcustno2b').val(r_name).attr('disabled', 'disabled');;
                 	$('#btnXcustno1').hide();
                 	$('#btnXcustno2').hide();
-                }
+                }*/
             }
 
             function q_boxClose(s2) {
