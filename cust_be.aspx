@@ -392,8 +392,7 @@
 			}
 
 			function q_stPost() {
-				if (!(q_cur == 1 || q_cur == 2))
-					q_func('qtxt.query.custbestartdate', 'custbe.txt,startdate,'+ encodeURI($('#txtNoa').val())); 
+				if (!(q_cur == 1 || q_cur == 2)) 
 					return false;
 				Unlock();
 			}
@@ -591,17 +590,6 @@
 				}
 			}
 			
-			function q_funcPost(t_func, result) {
-                switch(t_func) {
-                	case 'qtxt.query.custbestartdate':
-                		var as = _q_appendData("tmp0", "", true, true);
-						if (as[0] != undefined) {
-							abbm[q_recno]['startdate'] = as[0].startdate;
-							$('#txtStartdate').val(FormatNumber(as[0].startdate));
-						}
-                		break;
-                }
-			}
 		</script>
 		<style type="text/css">
 			#dmain {
