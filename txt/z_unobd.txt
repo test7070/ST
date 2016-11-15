@@ -384,7 +384,7 @@ z_unobd05:--z_unobd05 批號履歷
 				and len(ISNULL(a.uno,''))>0
 			end
 			--出貨
-			else if exists(select * from view_vccs where uno=@uno)
+			if exists(select * from view_vccs where uno=@uno)
 			begin
 				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,sprice3,productno,product,size,memo
