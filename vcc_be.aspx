@@ -34,7 +34,7 @@
 			brwKey = 'datea';
 
 			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel,fax,zip_comp,addr_comp,paytype,trantype', 'txtCustno,txtComp,txtTel,txtFax,txtPost,txtAddr,txtPaytype,cmbTrantype', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,nick,tel,fax,zip_comp,addr_comp', 'txtCustno,txtComp,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
 				['txtStoreno_', 'btnStoreno_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx'],
 				['txtRackno_', 'btnRackno_', 'rack', 'noa,rack,storeno,store', 'txtRackno_', 'rack_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
@@ -600,14 +600,6 @@
 				q_box('vcc_be_s.aspx', q_name + '_s', "500px", "630px", q_getMsg("popSeek"));
 			}
 
-			function combPay_chg() {
-				var cmb = document.getElementById("combPay");
-				if (!q_cur)
-					cmb.value = '';
-				else
-					$('#txtPaytype').val(cmb.value);
-				cmb.value = '';
-			}
 			
 
 			

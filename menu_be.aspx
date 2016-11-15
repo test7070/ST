@@ -63,6 +63,11 @@
 						$(this).remove();
 					}
 				});
+				
+				//登出
+				$('#logout').click(function() {
+					q_logout(q_idr);
+				});
 
 			}
 
@@ -123,7 +128,9 @@
 	<body>
 		<div id="q_menu"> </div>
 		<div style="width:1250px;height: 800px;">
-			<div style="width:1250px;height: 30px;"> </div>
+			<div style="width:1250px;height: 30px;">
+				<a id='logout' class="lbl" style="color: coral;cursor: pointer;font-weight: bolder;float: right;margin-right: 10px;">登出</a>
+			</div>
 			<div style="width:1250px;height: 30px;">
 				<a style="font-size: 20px;">ERP系統選單</a>
 			</div>
