@@ -48,6 +48,7 @@
 		        t_tgg = $.trim($('#txtTgg').val());
 		        t_uno = $.trim($('#txtUno').val());
 		        t_uno2 = $.trim($('#txtUno2').val());
+		        t_ordcno = $.trim($('#txtOrdcno').val());
 
 		        t_bdate = $('#txtBdate').val();
 		        t_edate = $('#txtEdate').val();
@@ -64,6 +65,9 @@
 		       		t_where += " and exists(select noa from view_rc2s"+r_accy+" where view_rc2s"+r_accy+".noa=view_rc2"+r_accy+".noa and view_rc2s"+r_accy+".uno='"+t_uno+"')";
 		       	if(t_uno2.length>0)
 		       		t_where += " and exists(select noa from view_rc2s"+r_accy+" where view_rc2s"+r_accy+".noa=view_rc2"+r_accy+".noa and view_rc2s"+r_accy+".uno2='"+t_uno2+"')";
+		        if(t_ordcno.length>0)
+		       		t_where += " and exists(select noa from view_rc2s"+r_accy+" where view_rc2s"+r_accy+".noa=view_rc2"+r_accy+".noa and view_rc2s"+r_accy+".ordeno='"+t_ordcno+"')";
+		        
 		        t_where = ' where=^^' + t_where + '^^ ';
 		        return t_where;
             }
@@ -128,6 +132,12 @@
 					<td class='seek'  style="width:20%;"><a id='lblUno2'></a></td>
 					<td>
 					<input class="txt" id="txtUno2" type="text" style="width:215px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a>採購單號</a></td>
+					<td>
+					<input class="txt" id="txtOrdcno" type="text" style="width:215px; font-size:medium;" />
 					</td>
 				</tr>
 			</table>
