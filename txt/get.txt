@@ -61,7 +61,7 @@ get_vcc:--get_vcc
 get2vcc_sf:get2vcc_sf
 SET QUOTED_IDENTIFIER OFF
 declare @t_accy nvarchar(50) = [1]
-declare @t_noa nvarchar(50) = [2]
+declare @t_noa nvarchar(50) = case when '#non'=[2] then '' else [2] end
 declare @t_vcckey nvarchar(50) = [3]
 declare @t_date nvarchar(50) = [4]
 declare @t_time nvarchar(50) = [5]
@@ -73,92 +73,101 @@ set @accy=isnull((select accy from view_get where noa=@t_noa),@t_accy)
 set @vccno=isnull((select transtartno from view_get where noa=@t_noa),'')
 set @tovcc=isnull((select count(*) from view_gets where noa=@t_noa and isnull(mweight,0)!=0),'')
 
-if(@tovcc>0) --有單價
+if(@t_noa!='')
 begin
-	if(@vccno='') --產生vcc
+	if(@tovcc>0) --有單價
 	begin
-		set @vccno=@t_vcckey+replace(@t_date,'/','')
-		+right('000'+cast(cast(right(isnull((select top 1 noa from view_vcc where noa like @t_vcckey+replace(@t_date,'/','')+'%' order by noa desc),'00000'),3) as int)+1 as nvarchar(10)),3)
+		if(@vccno='') --產生vcc
+		begin
+			set @vccno=@t_vcckey+replace(@t_date,'/','')
+			+right('000'+cast(cast(right(isnull((select top 1 noa from view_vcc where noa like @t_vcckey+replace(@t_date,'/','')+'%' order by noa desc),'00000'),3) as int)+1 as nvarchar(10)),3)
+			
+			EXEC("
+			insert vcc"+@accy+" (noa,typea,stype,datea,cno,acomp,mon,paydate,custno,comp,nick,paytype
+			,tel,fax,trantype,post,addr,addr2,salesno,sales,invono,tranadd,benifit,weight
+			,cardealno,cardeal,carno,price,tranmoney,money,tax,atax,total,memo,apvmemo,worker,worker2,part2)
+			select '"+@vccno+"','1','1','"+@t_date+"'
+			,(select top 1 noa from acomp order by noa)
+			,(select top 1 acomp from acomp order by noa)
+			,case when len(isnull(b.startdate,''))=0 or right('00'+isnull(b.startdate,''),2)='00'
+			or right('"+@t_date+"',2)<right('00'+isnull(b.startdate,''),2) then left('"+@t_date+"',len('"+@t_date+"')-3) 
+			else left(dbo.q_cdn(left('"+@t_date+"',len('"+@t_date+"')-3)+'/01',35),len('"+@t_date+"')-3) end,'"+@t_time+"'
+			,a.custno,b.comp,b.nick,b.paytype,b.tel,b.fax,b.trantype,b.zip_home,b.addr_home,a.addr
+			,b.salesno,b.sales,'',0,0,0,'','','',0,0,0,0,0,0,'由互換領料"+@t_noa+"轉來','',a.worker,a.worker2,'"+@t_noa+"'
+			from view_get a left join cust b on a.custno=b.noa
+			where a.noa='"+@t_noa+"'")
+			
+			EXEC("
+			insert vccs"+@accy+"(noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
+			select '"+@vccno+"',right('000'+cast(ROW_NUMBER() over (order by a.noa,b.noq) as nvarchar(10)),3)
+			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
+			,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'','"+@t_date+"',a.custno,'1'
+			from view_get a left join view_gets b on a.noa=b.noa 
+			where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0 ")
+			
+			EXEC("
+			update a
+			set money=b.total,total=b.total
+			from vcc"+@accy+" a outer apply (select SUM(total)total from vccs"+@accy+" where noa=a.noa)b
+			where a.noa='"+@vccno+"'")
 		
-		EXEC("
-		insert vcc"+@accy+" (noa,typea,stype,datea,cno,acomp,mon,paydate,custno,comp,nick,paytype
-		,tel,fax,trantype,post,addr,addr2,salesno,sales,invono,tranadd,benifit,weight
-		,cardealno,cardeal,carno,price,tranmoney,money,tax,atax,total,memo,apvmemo,worker,worker2,part2)
-		select '"+@vccno+"','1','1','"+@t_date+"'
-		,(select top 1 noa from acomp order by noa)
-		,(select top 1 acomp from acomp order by noa)
-		,case when len(isnull(b.startdate,''))=0 or right('00'+isnull(b.startdate,''),2)='00'
-		or right('"+@t_date+"',2)<right('00'+isnull(b.startdate,''),2) then left('"+@t_date+"',len('"+@t_date+"')-3) 
-		else left(dbo.q_cdn(left('"+@t_date+"',len('"+@t_date+"')-3)+'/01',35),len('"+@t_date+"')-3) end,'"+@t_time+"'
-		,a.custno,b.comp,b.nick,b.paytype,b.tel,b.fax,b.trantype,b.zip_home,b.addr_home,a.addr
-		,b.salesno,b.sales,'',0,0,0,'','','',0,0,0,0,0,0,'由互換領料"+@t_noa+"轉來','',a.worker,a.worker2,'"+@t_noa+"'
-		from view_get a left join cust b on a.custno=b.noa
-		where a.noa='"+@t_noa+"'")
+		end
+		else --更新vcc表身和表頭總計
+		begin
 		
-		EXEC("
-		insert vccs"+@accy+"(noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2)
-		select @vccno,right('000'+cast(ROW_NUMBER() over (order by a.noa,b.noq) as nvarchar(10)),3)
-		,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
-		,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq
-		from view_get a left join view_gets b on a.noa=b.noa 
-		where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0 ")
-		
-		EXEC("
-		update a
-		set money=b.total,total=b.total
-		from vcc"+@accy+" a outer apply (select SUM(total)total from vccs"+@accy+" where noa=a.noa)b
-		where a.noa='"+@t_noa+"'")
-	
+			set @accy=isnull((select accy from view_vcc where noa=@vccno),@t_accy)
+			
+			EXEC("delete vccs"+@accy+" where noa='"+@vccno+"' and ordeno='"+@t_noa+"'")
+			
+			EXEC("insert vccs"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
+			select '"+@vccno+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_vccs where noa=@vccno),'000') as int))as nvarchar(10)),3)
+			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
+			,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'',c.datea,c.custno,c.typea
+			from view_get a left join view_gets b on a.noa=b.noa 
+			outer apply (select * from view_vcc where noa='"+@vccno+"')c
+			where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0")
+			
+			EXEC("update a
+			set money=b.total,total=b.total+case when atax=1 then round(b.total*0.05,0) else 0 end
+			,tax=case when atax=1 then round(b.total*0.05,0) else 0 end
+			from vcc"+@accy+" a outer apply (select SUM(total)total from vccs"+@accy+" where noa=a.noa)b
+			where a.noa='"+@vccno+"'")
+		end
 	end
-	else --更新vcc表身和表頭總計
+	else --無單價
 	begin
-	
-		set @accy=isnull((select accy from view_vcc where noa=@vccno),@t_accy)
-		
-		EXEC("delete vccs"+@accy+" where ordeno='"+@t_noa+"'")
-		
-		EXEC("insert vccs"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2)
-		select @vccno,right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_vccs where noa=@vccno),'000') as int))as nvarchar(10)),3)
-		,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
-		,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq
-		from view_get a left join view_gets b on a.noa=b.noa 
-		where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0")
-		
-		
-		insert vccs105 (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2)
-		select @vccno,right('000'+cast(
-		ROW_NUMBER() over (order by a.noa,b.noq) 
-		+cast(isnull((select MAX(noq) from view_vccs where noa=@vccno),'000') as int)
-		as nvarchar(10)),3)
-		,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
-		,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq
-		from view_get a left join view_gets b on a.noa=b.noa 
-		where a.noa='' and isnull(b.mweight,0)!=0
-		
-		
-		EXEC("update a
-		set money=b.total,total=b.total+case when atax=1 then round(b.total*0.05,0) else 0 end
-		,tax=case when atax=1 then round(b.total*0.05,0) else 0 end
-		from vcc"+@accy+" a outer apply (select SUM(total)total from vccs"+@accy+" where noa=a.noa)b
-		where a.noa='"+@t_noa+"'")
-	end
-end
-else --無單價
-begin
-	if(@vccno!='')
-	begin
-		--表頭不刪除
-		--刪除表身產生的資料
-		set @accy=isnull((select accy from view_vcc where noa=@vccno),@t_accy)
-		
-		EXEC("delete vccs"+@accy+" where ordeno='"+@t_noa+"'")
-		
-		EXEC("update a
-		set money=b.total,total=b.total+case when atax=1 then round(b.total*0.05,0) else 0 end
-		,tax=case when atax=1 then round(b.total*0.05,0) else 0 end
-		from vcc"+@accy+" a outer apply (select SUM(total)total from vccs"+@accy+" where noa=a.noa)b
-		where a.noa='"+@t_noa+"'")
+		if(@vccno!='')
+		begin
+			--表頭不刪除
+			--刪除表身產生的資料
+			set @accy=isnull((select accy from view_vcc where noa=@vccno),@t_accy)
+			
+			EXEC("delete vccs"+@accy+" where noa='"+@vccno+"' and ordeno='"+@t_noa+"'")
+			
+			EXEC("update a
+			set money=b.total,total=b.total+case when atax=1 then round(b.total*0.05,0) else 0 end
+			,tax=case when atax=1 then round(b.total*0.05,0) else 0 end
+			from vcc"+@accy+" a outer apply (select SUM(total)total from vccs"+@accy+" where noa=a.noa)b
+			where a.noa='"+@vccno+"'")
+		end
+		else --資料被刪除
+		begin
+			set @accy=isnull((select accy from view_vcc where part2=@t_noa),@t_accy)
+			set @vccno=isnull((select noa from view_vcc where part2=@t_noa),'')
+			
+			if(@vccno!='')
+			begin
+				EXEC("delete vccs"+@accy+" where noa='"+@vccno+"' and ordeno='"+@t_noa+"'")
+				
+				EXEC("update a
+				set money=b.total,total=b.total+case when atax=1 then round(b.total*0.05,0) else 0 end
+				,tax=case when atax=1 then round(b.total*0.05,0) else 0 end
+				from vcc"+@accy+" a outer apply (select SUM(total)total from vccs"+@accy+" where noa=a.noa)b
+				where a.noa='"+@vccno+"'")
+			end
+		end
 	end
 end
 
+select @vccno vccno
 ;
