@@ -20,7 +20,6 @@
             }
             $(document).ready(function() {
                 q_getId();
-                q_gf('', 'z_salaryp_sf');
                 q_gt('part', '', 0, 0, 0, "");
                 
                 $.datepicker.regional['zh-TW']={
@@ -55,6 +54,10 @@
                         name : 'xpartno',
                         value :partItem.split(',')
                     }, {
+                        type : '5',
+                        name : 'xcno',
+                        value :cnoItem.split(',')
+                    }, {
                         type : '2',
                         name : 'xsssno',
                         dbf : 'sss',
@@ -73,7 +76,7 @@
             function q_boxClose(s2) {
             }
 			
-			var partItem = '';
+			var partItem = '',cnoItem = '';
             function q_gtPost(t_name) {
                 switch (t_name) {
                     case 'part':
@@ -82,6 +85,15 @@
                         for ( i = 0; i < as.length; i++) {
                             partItem = partItem + (partItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + as[i].part;
                         }
+                        q_gt('acomp', '', 0, 0, 0, "");
+                        break;
+					case 'acomp':
+                        var as = _q_appendData("acomp", "", true);
+                        cnoItem = " @全部";
+                        for ( i = 0; i < as.length; i++) {
+                            cnoItem = cnoItem + (cnoItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa + ' . ' + replaceAll(as[i].acomp,',','，');
+                        }
+                        q_gf('', 'z_salaryp_sf');
                         break;
                 }
             }
