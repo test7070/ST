@@ -58,7 +58,7 @@ get_vcc:--get_vcc
 	END
 	select  * from @tmp;
 --*********************************************************************************************************
-get2vcc_sf:get2vcc_sf
+get2vcc_sf:--get2vcc_sf
 SET QUOTED_IDENTIFIER OFF
 declare @t_accy nvarchar(50) = [1]
 declare @t_noa nvarchar(50) = case when '#non'=[2] then '' else [2] end
@@ -93,7 +93,7 @@ begin
 			or right('"+@t_date+"',2)<right('00'+isnull(b.startdate,''),2) then left('"+@t_date+"',len('"+@t_date+"')-3) 
 			else left(dbo.q_cdn(left('"+@t_date+"',len('"+@t_date+"')-3)+'/01',35),len('"+@t_date+"')-3) end,'"+@t_time+"'
 			,a.custno,b.comp,b.nick,b.paytype,b.tel,b.fax,b.trantype,b.zip_home,b.addr_home,a.addr
-			,b.salesno,b.sales,'',0,0,0,'','','',0,0,0,0,0,0,'由互換領料"+@t_noa+"轉來','',a.worker,a.worker2,'"+@t_noa+"'
+			,b.salesno,b.sales,'',0,0,0,'','','',0,0,0,0,0,0,'由互換出貨"+@t_noa+"轉來','',a.worker,a.worker2,'"+@t_noa+"'
 			from view_get a left join cust b on a.custno=b.noa
 			where a.noa='"+@t_noa+"'")
 			
@@ -110,6 +110,8 @@ begin
 			set money=b.total,total=b.total
 			from vcc"+@accy+" a outer apply (select SUM(total)total from vccs"+@accy+" where noa=a.noa)b
 			where a.noa='"+@vccno+"'")
+			
+			EXEC("update a set transtartno='"+@vccno+"' from get"+@accy+" a where a.noa='"+@t_noa+"'")
 		
 		end
 		else --更新vcc表身和表頭總計
@@ -120,7 +122,7 @@ begin
 			EXEC("delete vccs"+@accy+" where noa='"+@vccno+"' and ordeno='"+@t_noa+"'")
 			
 			EXEC("insert vccs"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
-			select '"+@vccno+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_vccs where noa=@vccno),'000') as int))as nvarchar(10)),3)
+			select '"+@vccno+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_vccs where noa='"+@vccno+"'),'000') as int))as nvarchar(10)),3)
 			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
 			,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'',c.datea,c.custno,c.typea
 			from view_get a left join view_gets b on a.noa=b.noa 

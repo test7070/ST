@@ -1,4 +1,4 @@
-﻿ina2rc2_sf:ina2rc2_sf
+﻿ina2rc2_sf:--ina2rc2_sf
 SET QUOTED_IDENTIFIER OFF
 declare @t_accy nvarchar(50) = [1]
 declare @t_noa nvarchar(50) = case when '#non'=[2] then '' else [2] end
@@ -33,7 +33,7 @@ begin
 			or right('"+@t_date+"',2)<right('00'+isnull(b.startdate,''),2) then left('"+@t_date+"',len('"+@t_date+"')-3) 
 			else left(dbo.q_cdn(left('"+@t_date+"',len('"+@t_date+"')-3)+'/01',35),len('"+@t_date+"')-3) end
 			,a.tggno,b.comp,b.nick,b.paytype,b.tel,b.trantype,b.zip_home,b.addr_home
-			,'',0,0,0,'','','',0,0,0,0,0,'由互換入庫"+@t_noa+"轉來','',a.worker,a.worker2,'"+@t_noa+"'
+			,'',0,0,0,'','','',0,0,0,0,0,'由互換進貨"+@t_noa+"轉來','',a.worker,a.worker2,'"+@t_noa+"'
 			from view_ina a left join tgg b on a.tggno=b.noa
 			where a.noa='"+@t_noa+"'")
 					
@@ -50,6 +50,8 @@ begin
 			set money=b.total,total=b.total
 			from rc2"+@accy+" a outer apply (select SUM(total)total from rc2s"+@accy+" where noa=a.noa)b
 			where a.noa='"+@rc2no+"'")
+			
+			EXEC("update a set transtartno='"+@rc2no+"' from ina"+@accy+" a where a.noa='"+@t_noa+"'")
 		
 		end
 		else --更新rc2表身和表頭總計
@@ -60,7 +62,7 @@ begin
 			EXEC("delete rc2s"+@accy+" where noa='"+@rc2no+"' and ordeno='"+@t_noa+"'")
 			
 			EXEC("insert rc2s"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
-			select '"+@rc2no+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_rc2s where noa=@rc2no),'000') as int))as nvarchar(10)),3)
+			select '"+@rc2no+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_rc2s where noa='"+@rc2no+"'),'000') as int))as nvarchar(10)),3)
 			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
 			,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'',c.datea,c.tggno,c.typea
 			from view_ina a left join view_inas b on a.noa=b.noa 
