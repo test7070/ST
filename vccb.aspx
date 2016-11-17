@@ -1,14 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title> </title>
+		<title></title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
 		<script src='../script/qj_mess.js' type="text/javascript"></script>
-		<script src="../script/qbox.js" type="text/javascript"></script>
 		<script src='../script/mask.js' type="text/javascript"></script>
+		<script src="../script/qbox.js" type="text/javascript"></script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
+		<link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+		<script src="css/jquery/ui/jquery.ui.core.js"></script>
+		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
+		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
             this.errorHandler = null;
             function onPageError(error) {
@@ -25,7 +29,7 @@
             var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 5;
+            brwCount2 = 6;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Datea';
@@ -35,13 +39,14 @@
             , ['txtInvono_', '', 'vcca', 'noa,datea,serial,custno,comp,cno,acomp,productno,product,price,mount,money,tax,taxtype', '0txtInvono_,txtIdate_,txtSerial_,txtCustno_,txtComp_,txtCno_,txtAcomp_,txtProductno_,txtProduct_,txtPrice_,txtMount_,txtTotal_,txtTax_,cmbTaxtype_', 'vcca_b.aspx']
        		, ['txtTggno', 'lblTgg', 'tgg', 'noa,comp,serial,addr_invo', 'txtTggno,txtTgg,txtSerial,txtAddr', 'tgg_b.aspx']
             , ['txtProductno_', 'btnProductno_', 'ucca', 'noa,product', 'txtProductno_,txtProduct_', 'ucca_b.aspx']);
-
+			
+			var t_acomp = '';
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
-                q_gt(q_name, q_content, q_sqlCount, 1);
+                q_gt('acomp', '', 0, 0, 0, "");
+                
             });
 
             function main() {
@@ -55,15 +60,19 @@
 
             function mainPost() {
                 q_getFormat();
-                bbmMask = [['txtMon', r_picm],['txtDatea', r_picd],['txtVkdate', r_picd]];
+                bbmMask = [['txtMon', r_picm],['txtDatea', r_picd],['txtVkdate', r_picd],['txtWdate', r_picd],['txtWtime', '99:99:99']];
                 q_mask(bbmMask);
                 bbsMask = [['txtIdate', r_picd]];
                 q_mask(bbsMask);
+                q_cmbParse("cmbCno", t_acomp);
                 q_cmbParse("cmbTypea", q_getPara('vccb.typea'));
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'),'s');
-                q_gt('acomp', '', 0, 0, 0, "");
+                
                 typea_chg();
                 
+                $('#chkCancel').click(function(e){
+                	typea_chg();
+                });
 	            $('#lblAccno').click(function () {
 			        q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0,3) + '_1', 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('popAccc'), true);
 			    });
@@ -108,30 +117,18 @@
                 b_pop = '';
             }
 			
-			var z_cno=r_cno,z_acomp=r_comp,z_nick=r_comp.substr(0,2);
             function q_gtPost(t_name) {
                 switch (t_name) {
                 	case 'acomp':
                         var as = _q_appendData("acomp", "", true);
                         if (as[0] != undefined) {
-                            var t_item = " @ ";
+                            t_acomp = " @ ";
                             for ( i = 0; i < as.length; i++) {
-                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
-                            }
-                            q_cmbParse("cmbCno", t_item);
-                            if (abbm[q_recno] != undefined) {
-                                $("#cmbCno").val(abbm[q_recno].cno);
+                                t_acomp += (t_acomp.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].acomp;
                             }
                         }
+                        q_gt(q_name, q_content, q_sqlCount, 1);
                         break;
-                    case 'cno_acomp':
-                		var as = _q_appendData("acomp", "", true);
-                		if (as[0] != undefined) {
-	                		z_cno=as[0].noa;
-	                		z_acomp=as[0].acomp;
-	                		z_nick=as[0].nick;
-	                	}
-                		break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -184,41 +181,38 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('vccb_s.aspx', q_name + '_s', "500px", "380px", q_getMsg("popSeek"));
+                q_box('vccb_s.aspx', q_name + '_s', "500px", "450px", q_getMsg("popSeek"));
             }
 
             function bbsAssign() {
             	for (var j = 0; j < q_bbsCount; j++) {
                 	$('#lblNo_'+j).text(j+1);	
-                	if (!$('#btnMinus_' + j).hasClass('isAssign')) {
-                		$('#txtMount_' + j).change(function(e){
-                			t_IdSeq = -1;
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							var t_mount = q_float('txtMount_'+b_seq);
-							var t_price = q_float('txtPrice_'+b_seq);
-							var t_money = round(t_mount * t_price,0);
-							$('#txtTotal_'+b_seq).val(t_money);
-                			sum();
-                		});
-                		$('#txtPrice_' + j).change(function(e){
-                			t_IdSeq = -1;
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-                			var t_mount = q_float('txtMount_'+b_seq);
-							var t_price = q_float('txtPrice_'+b_seq);
-							var t_money = round(t_mount * t_price,0);
-							$('#txtTotal_'+b_seq).val(t_money);
-                			sum();
-                		});
-                		$('#txtTotal_' + j).change(function(e){
-                			sum();
-                		});
-                		$('#txtTax_' + j).change(function(e){
-                			sum();
-                		});
-                	}
-                }
+                	if ($('#btnMinus_' + j).hasClass('isAssign'))
+                		continue;
+                		
+            		$('#txtMount_' + j).change(function(e){
+            			var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+						var t_mount = q_float('txtMount_'+n);
+						var t_price = q_float('txtPrice_'+n);
+						var t_money = round(t_mount * t_price,0);
+						$('#txtTotal_'+n).val(t_money);
+            			sum();
+            		});
+            		$('#txtPrice_' + j).change(function(e){
+            			var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+            			var t_mount = q_float('txtMount_'+n);
+						var t_price = q_float('txtPrice_'+n);
+						var t_money = round(t_mount * t_price,0);
+						$('#txtTotal_'+n).val(t_money);
+            			sum();
+            		});
+            		$('#txtTotal_' + j).change(function(e){
+            			sum();
+            		});
+            		$('#txtTax_' + j).change(function(e){
+            			sum();
+            		});
+            	}
                 _bbsAssign();
             }
 
@@ -228,7 +222,7 @@
                 $('#txtDatea').val(q_date());
                 $('#txtMon').val(q_date().substr(0,r_picm));
                 $('#txtDatea').focus();
-                $("#cmbCno").val(z_cno);
+                $('#cmbCno')[0].selectedIndex=1;//第一個是空白,所以跳第2個
                 typea_chg();
                 if(q_getPara('sys.project').toUpperCase()=='IT') {
                 	if($('#cmbTypea').val()=='1' || $('#cmbTypea').val()=='3'){
@@ -254,9 +248,18 @@
             }
 
             function btnPrint() {
-				q_box('z_vccb.aspx'+ "?;;" + ";noa='"+ $('#txtNoa').val()+"'", '', "95%", "95%", q_getMsg("popPrint"));
+            	if (q_getPara('sys.project') == 'pk') {
+					q_box('z_vccb_pk.aspx' + "?;;;noa=" + trim($('#txtNoa').val())+";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				}else{
+					q_box('z_vccb.aspx' + "?;;;noa=" + trim($('#txtNoa').val())+";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+				}
             }
 			function typea_chg(){
+				if($('#chkCancel').prop('checked'))
+					$('.Cancel').show();
+				else
+					$('.Cancel').hide();
+				
 				if($('#cmbTypea').val() == 1 || $('#cmbTypea').val() == 2){
 					$('#Cust').show();
 					$('#Tgg').hide();
@@ -571,6 +574,17 @@
 					<tr>
 						<td><span> </span><a id='lblAddr' class="lbl"> </a></td>
 						<td colspan="3"><input id="txtAddr"  type="text" class="txt c1"/></td>
+						<td><span> </span><a class="lbl">作廢</a></td>
+						<td><input id="chkCancel"  type="checkbox"/></td>
+					</tr>
+					<tr class="Cancel" style="display:none;">
+						<td><span> </span><a id='lblWdate' class="lbl">作廢日期</a></td>
+						<td><input id="txtWdate"  type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblWtime' class="lbl">作廢時間</a></td>
+						<td><input id="txtWtime"  type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblWmemo' class="lbl">作廢原因</a></td>
+						<td><input id="txtWmemo"  type="text" class="txt c1"  maxlength=20/></td>
+						<!--只能20個字元-->
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>

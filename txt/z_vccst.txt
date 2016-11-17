@@ -13,8 +13,10 @@ z_vccpk2:--z_vccpk2
 	declare @t_blengthb float= case when '#non'=[19] then 0.0 else cast([19] as float) end
 	declare @t_elengthb float= case when '#non'=[20] then 99999.9 else cast([20] as float) end
 	---------------------------------------------------------------------------------------------- 
+	---------------------------------------------------------------------------------------------- 
 	declare @tmp table(
 		gno nvarchar(1),
+		pp int,
 		noa nvarchar(35),
 		datea nvarchar(10),
 		ordeno nvarchar(50),
@@ -41,33 +43,39 @@ z_vccpk2:--z_vccpk2
 		,[class] nvarchar(20)--等級
 		,custorde nvarchar(50)--客單編號
 		,total float
+		,typea nvarchar(10)
 	)
 	--傑期出貨單批號改在領料中
-	insert into @tmp(gno,noa,datea,ordeno,noq,uno,product,pno,akind,csize,spec,style
+	insert into @tmp(pp,gno,noa,datea,ordeno,noq,uno,product,pno,akind,csize,spec,style
 		,aweight,amount,aprice,atotal,comp,carno2,qhref,coin,bmount,aunit,bunit
-		,scolor,[class],custorde,total)
+		,scolor,[class],custorde,total,typea)
 		select
-			'1',b.noa,b.datea,a.ordeno,a.no2,a.uno,a.product,a.productno,b.kind,
+			1,'1',b.noa,b.datea,a.ordeno,a.no2,a.uno,a.product,a.productno,b.kind,
 			case when ltrim(rtrim(a.size)) = '' then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end,
 			a.spec,a.style,a.weight,a.mount,a.price,(a.price * a.theory),e.nick,b.carno,'vcc_pk'+a.accy,b.coin
 			,a.tranmoney,a.item,a.unit
-			,a.scolor,a.[class],g.custorde,a.total
+			,a.scolor,a.[class],g.custorde,a.total,b.typea
 		from view_vccs a
 		left join view_vcc b on a.accy=b.accy and a.noa = b.noa
 		left join cust c on b.custno = c.noa
 		left join cust e on b.custno = e.noa
 		left join cardeal f on b.carno = f.noa
 		left join view_orde g on a.ordeno=g.noa
-		where b.typea = '1' 
-			and (b.datea between @t_bdate and @t_edate) 
+		where (b.datea between @t_bdate and @t_edate) 
 			and (a.productno between @t_bpno and @t_epno) 
 			and (b.custno between @t_bcust and @t_ecust) 
 			and ((len(@t_stype) = 0) or (b.stype=@t_stype)) 
 			and (a.width between @t_bwidth and @t_ewidth) 
 			and (a.dime between @t_bdime and @t_edime) 
 			and (a.lengthb between @t_blengthb and @t_elengthb)
-		insert into @tmp(gno,amount,aweight,bmount,total)
-			select '2',sum(isnull(amount,0)),sum(isnull(aweight,0)),sum(isnull(bmount,0)),sum(isnull(total,0)) from @tmp
+		
+		update @tmp set amount = case when typea='1' then amount else -amount end
+			,aweight = case when typea='1' then aweight else -aweight end
+			,bmount = case when typea='1' then bmount else -bmount end
+			,total = case when typea='1' then total else -total end
+			,gno = case when typea='1' then '3' else gno end
+		insert into @tmp(pp,gno,amount,aweight,bmount,total)
+			select 2,'2',sum(isnull(amount,0)),sum(isnull(aweight,0)),sum(isnull(bmount,0)),sum(isnull(total,0)) from @tmp
 		update @tmp set qhref = substring(qhref,0,len(qhref)-2)+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?'+substring(qhref,len(qhref)-2,len(qhref))
 		update @tmp set csize = replace(csize,'~#$','''')
 		update @tmp set spec = replace(spec,'~#$','''')
@@ -84,7 +92,7 @@ z_vccpk2:--z_vccpk2
 			,scolor,[class],custorde
 			,dbo.getComma(total,-1) total
 			,case when len(isnull(ordeno,''))>0 then ordeno+'-'+noq else '' end aa
-		from @tmp order by gno,idno;
+		from @tmp order by pp,idno;
 
 z_vccst1:--z_vccst1
 declare @t_bdate nvarchar(10)
