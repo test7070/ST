@@ -583,7 +583,8 @@
 						<td><span> </span><a id='lblWtime' class="lbl">作廢時間</a></td>
 						<td><input id="txtWtime"  type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblWmemo' class="lbl">作廢原因</a></td>
-						<td><input id="txtWmemo"  type="text" class="txt c1" /></td>
+						<td><input id="txtWmemo"  type="text" class="txt c1"  maxlength=20/></td>
+						<!--只能20個字元-->
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoney' class="lbl"> </a></td>
