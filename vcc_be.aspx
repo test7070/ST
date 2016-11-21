@@ -21,7 +21,7 @@
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtNoq'];
 			var bbmNum = [
 				['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1], ['txtBenifit', 10, 0, 1],
-				['txtTotal', 15, 0, 1]
+				['txtTotal', 15, 0, 1],['txtMount', 10, 0, 1]
 			];
 			var bbsNum = [];
 			var bbmMask = [];
@@ -65,6 +65,7 @@
 				mainForm(1);
 				$('#vewComp').text("客戶");
 				$('#lblBenifit').text("銷售額");
+				$('#lblOrdeno').text("交寄單號");
 				$('#lblAddr').text("地址");
 				document.title='銷售作業'
 				if (r_rank > 6) {
@@ -99,7 +100,7 @@
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
-				bbmNum = [['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1], ['txtBenifit', 10, 0, 1]];
+				bbmNum = [['txtTranmoney', 11, 0, 1], ['txtMoney', 15, 0, 1], ['txtTax', 15, 0, 1],['txtTotal', 15, 0, 1], ['txtBenifit', 10, 0, 1],['txtMount', 10, 0, 1]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 15, 0, 1]];
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
 				//q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
@@ -147,7 +148,7 @@
 				});
 
 				$('#lblOrdeno').click(function() {
-					q_pop('txtOrdeno', "orde.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'" + $('#txtOrdeno').val() + "')>0;" + r_accy + '_' + r_cno, 'orde', 'noa', '', "92%", "1024px", q_getMsg('lblOrdeno'), true);
+					q_pop('txtOrdeno', "posta_be.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";charindex(noa,'" + $('#txtOrdeno').val() + "')>0;" + r_accy + '_' + r_cno, 'posta', 'noa', '', "92%", "1024px", q_getMsg('lblOrdeno'), true);
 				});
 
 				$('#lblAccc').click(function() {
@@ -1052,16 +1053,18 @@
 						<td class="td1" style="width: 108px;"><span> </span><a id='lblType' class="lbl"> </a></td>
 						<td class="td2" style="width: 108px;"><select id="cmbTypea"> </select></td>
 						<td class="td6" style="width: 108px;"> </td>
+						<td class="td7" style="width: 108px;"><span> </span><a id='lblNoa' class="lbl"> </a></td>
+						<td class="td8" colspan='2' style="width: 108px;"><input id="txtNoa" type="text" class="txt c1" /></td>
 						<td class="td4" style="width: 108px;"><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td class="td5" style="width: 108px;"><input id="txtDatea" type="text"  class="txt c1"/></td>
-						<td class="td6" style="width: 108px;"> </td>
-						<td class="td7" style="width: 108px;"><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td class="td8" style="width: 108px;"><input id="txtNoa" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td class="td1" ><span> </span><a id="lblCust" class="lbl btn"> </a></td>
 						<td class="td2" ><input id="txtCustno" type="text" class="txt c1"/></td>
 						<td class="td2" ><input id="txtComp" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblOrdeno' class="lbl btn"> </a></td>
+						<td><input id="txtOrdeno" type="text" class="txt c1"/></td>
+						<td class="td6" style="width: 108px;"> </td>
 						<td class="td7">
 							<span> </span>
 							<a id='lblInvono' class="lbl btn vcca"> </a>
@@ -1071,17 +1074,21 @@
 							<input id="txtInvono" type="text" class="txt c1 vcca"/>
 							<input id="txtInvo" type="text" class="txt c1 invo"/>
 						</td>
+
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblTel" class="lbl"> </a></td>
 						<td class="td2" colspan='2'><input id="txtTel" type="text" class="txt c1"/></td>
 						<td class="td3"><span> </span><a id="lblFax" class="lbl"> </a></td>
 						<td class="td4" colspan='2'><input id="txtFax" type="text" class="txt c1"/></td>
+
 					</tr>
 					<tr>
 						<td class="td1"><span> </span><a id="lblAddr" class="lbl btn"> </a></td>
 						<td class="td2"><input id="txtPost" type="text" class="txt c1"/></td>
 						<td class="td3" colspan='4'><input id="txtAddr" type="text" class="txt c1"/></td>
+						<td class="td5"><span> </span><a id='lblTrantype' class="lbl"> </a></td>
+						<td class="td6"><select id="cmbTrantype" style="width: 100%;"> </select></td>	
 					</tr>
 					<tr>
 						<td class="td7 isrank" style="display:none;"><span> </span><a id='lblBenifit' class="lbl"> </a></td>
@@ -1090,8 +1097,8 @@
 						<td class="td7"><span> </span><a id='lblTranmoney' class="lbl"> </a></td>
 						<td class="td8"><input id="txtTranmoney" type="text" class="txt num c1"/></td>
 						<td class="td6" style="width: 108px;"> </td>
-						<td class="td5"><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-						<td class="td6"><select id="cmbTrantype" style="width: 100%;"> </select></td>	
+						<td class="td5"><span> </span><a id='' class="lbl">送貨數量</a></td>
+						<td class="td6"><input id="txtMount" type="text" class="txt num c1"/></td>
 					</tr>
 
 					<tr   style="display:none;">
