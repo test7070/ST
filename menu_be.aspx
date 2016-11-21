@@ -141,6 +141,7 @@
 							<li>1.1　<a id="cust" class="cust_be">客戶主檔</a></li>
 							<li>1.2　<a id="vcc" class="vcc_be">銷售作業</a></li>
 							<li>1.3　<a id="z_vcc_be" class="z_vcc_be">銷售報表</a></li>
+							<li>1.4　<a id="posta" class="posta_be">交寄作業</a></li>
 						</ol>
 					</li>
 					<li>2.　其他工具程式
