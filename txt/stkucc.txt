@@ -61,7 +61,7 @@ set mount=isnull(b.mount,0),weight=isnull(b.weight,0)
 from #tmp a left join stkucc(@datea,'','') b on a.productno=b.productno and a.storeno=b.storeno
 
 update a
-set price=isnull(b.price,0),total=isnull(a.mount,0)*isnull(b.price,0)
+set price=isnull(b.price,0),total=round(isnull(a.mount,0)*isnull(b.price,0),0)
 from #tmp a 
 outer apply (select top 1 mon,price from view_costs where productno=a.productno and mon<=@mon order by mon desc) b
 
@@ -77,7 +77,7 @@ from (select noq,right(REPLICATE('0',@noqlen)+cast(ROW_NUMBER()over (order by st
 
 if((select count(*) from #tmp)>0)
 begin
-	exec("insert ucce"+@accy+" (noa,datea,kind)	 select '"+@ucceno+"' ,'"+@datea+"','1' ")
+	exec("insert ucce"+@accy+" (noa,datea,kind,store2)	 select '"+@ucceno+"' ,'"+@datea+"','1','Y' ")
 
 	EXEC(" insert ucces"+@accy+"(noa,noq,datea,storeno,store,productno,product,spec,unit,mount,weight,emount2,eweight2,price,total)
 		select '"+@ucceno+"',noq,'"+@datea+"',storeno,store,productno,product,spec,unit,mount,weight,mount,weight,price,total from #tmp
