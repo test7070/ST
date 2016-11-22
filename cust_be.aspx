@@ -181,7 +181,6 @@
 						alert('已超出數值');
 
 				});
-				
 				$('#btnUsecrd').click(function(){
 					_usecrd_credit = 0;//由usecrd.aspx  覆寫資料
 					var t_custno = $('#txtNoa').val();
@@ -410,8 +409,7 @@
             }
 
 			function q_stPost() {
-				if (!(q_cur == 1 || q_cur == 2)) 
-					return false;
+				if (q_cur == 1 )
 					q_func('qtxt.query.cust', 'cust.txt,cust_nhpe_be,' + encodeURI($('#txtNoa').val())+';'+ encodeURI($('#txtComp').val())  ); 
 				Unlock();
 			}
@@ -813,6 +811,10 @@
 					<tr>
 						<td><span> </span><a id='lblInvoicetitle' class="lbl"> </a></td>
 						<td colspan='3'><input id="txtInvoicetitle" type="text" class="txt c7"/></td>
+						<td >
+							<input id="chkIsvccmon" type="checkbox"/>
+							<span> </span><a id=''>凍結</a>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblAddr_comp' class="lbl"> </a></td>

@@ -56,7 +56,8 @@
                 q_mask(bbmMask);
                	
                	$('#btnInput').click(function() {
-					q_box('cust_b2.aspx','cust_be_b2', "600px", "90%", q_getMsg("popSeek"));
+               		var t_where = "isvccmon=0";
+					q_box("cust_b2.aspx?" + r_userno + ";" + "cust_be_b2" + ";" + q_time + ";" + t_where, '',"600px", "90%", q_getMsg("popSeek"));
                 });
                 q_popAssign();
             }
