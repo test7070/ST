@@ -1642,11 +1642,13 @@ declare @t_bsssno nvarchar(20)
 declare @t_esssno nvarchar(20)
 declare @t_bdate nvarchar(20)
 declare @t_edate nvarchar(20) 
+declare @t_service nvarchar(20)
 
 set @t_bsssno = case when '#non' = [4] then '' else [4] end
 set @t_esssno = case when '#non' = [5] then CHAR(255) else [5] end
 set @t_bdate = case when '#non' = [6] then '' else [6] end
 set @t_edate = case when '#non' = [7] then CHAR(255) else [7] end
+set @t_service = case when '#non' = [10] then '' else [10] end
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 --刪除暫存資料庫 
 IF OBJECT_ID('tempdb..#tmpa')is not null 
@@ -1712,9 +1714,24 @@ begin
 		set @vaca=''
 	end
 	
-	EXEC("insert #tmpa(gno,sssno,namea,pno,part,"+@tmp_dcol+","+@tmp_vcol+","+@tmp_mcol+")
-	select '9',a.noa,a.namea,a.partno,b.part,'"+@tmp_date+"','"+@vaca+"',isnull((select sum(hours) from saladd where datea='"+@tmp_date+"' and sssno=a.noa and isnull(isapv,0)=1),0)
-	from sss a left join part b on a.partno=b.noa where a.noa between '"+@t_bsssno+"' and '"+@t_esssno+"' ")
+	if(@t_service='1')--在職
+	begin
+		EXEC("insert #tmpa(gno,sssno,namea,pno,part,"+@tmp_dcol+","+@tmp_vcol+","+@tmp_mcol+")
+		select '9',a.noa,a.namea,a.partno,b.part,'"+@tmp_date+"','"+@vaca+"',isnull((select sum(hours) from saladd where datea='"+@tmp_date+"' and sssno=a.noa and isnull(isapv,0)=1),0)
+		from sss a left join part b on a.partno=b.noa where a.noa between '"+@t_bsssno+"' and '"+@t_esssno+"' and isnull(a.outdate,'')='' ")
+	end
+	else if(@t_service='0')--離職
+	begin
+		EXEC("insert #tmpa(gno,sssno,namea,pno,part,"+@tmp_dcol+","+@tmp_vcol+","+@tmp_mcol+")
+		select '9',a.noa,a.namea,a.partno,b.part,'"+@tmp_date+"','"+@vaca+"',isnull((select sum(hours) from saladd where datea='"+@tmp_date+"' and sssno=a.noa and isnull(isapv,0)=1),0)
+		from sss a left join part b on a.partno=b.noa where a.noa between '"+@t_bsssno+"' and '"+@t_esssno+"' and isnull(a.outdate,'')!='' ")
+	end
+	else
+	begin
+		EXEC("insert #tmpa(gno,sssno,namea,pno,part,"+@tmp_dcol+","+@tmp_vcol+","+@tmp_mcol+")
+		select '9',a.noa,a.namea,a.partno,b.part,'"+@tmp_date+"','"+@vaca+"',isnull((select sum(hours) from saladd where datea='"+@tmp_date+"' and sssno=a.noa and isnull(isapv,0)=1),0)
+		from sss a left join part b on a.partno=b.noa where a.noa between '"+@t_bsssno+"' and '"+@t_esssno+"' ")
+	end
 	
 	EXEC("update #tmpa
 	set "+@tmp_ccol+"=case when "+@tmp_vcol+"='V' then round("+@tmp_mcol+"*1,4) else 
@@ -1943,12 +1960,19 @@ declare @tmp table(
 		money5 float
 )
 
+--insert into @tmp 
+--select '0' gno,b.partno,b.part,b.sno,b.namea,b.money5
+--from salary a left join salarys b on a.noa=b.noa
+--where a.mon =@t_xmon 
+--and (b.sno between @t_bsssno and @t_esssno)
+--and isnull(b.money5,0)>0
+--105/11/22 改抓salchg
 insert into @tmp 
-select '0' gno,b.partno,b.part,b.sno,b.namea,b.money5
-from salary a left join salarys b on a.noa=b.noa
+select '0' gno,a.partno,b.part,a.sssno,a.namea,a.plus
+from salchg a left join part b on a.partno=b.noa
 where a.mon =@t_xmon 
-and (b.sno between @t_bsssno and @t_esssno)
-and isnull(b.money5,0)>0 
+and (a.sssno between @t_bsssno and @t_esssno)
+and isnull(a.plus,0)!=0  
 
 if((select count(*) from @tmp)>0)
 begin
