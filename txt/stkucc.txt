@@ -30,7 +30,9 @@ begin
 	set @accy=left(@datea,3)
 	set @mon=left(@datea,6)
 end
-	
+
+declare @pdatea nvarchar(10)=dbo.q_cdn(@datea,-1)
+
 --該日期中最大的noa
 select @ucceno=MAX(noa) from view_ucce where noa like @uccekey+REPLACE(@datea,'/','')+'%' 
 --該日期中最大的noa+1
@@ -58,7 +60,7 @@ and (case when a.tablea='uca' then '2' else '1' end=@typea or @typea='0')
 
 update a
 set mount=isnull(b.mount,0),weight=isnull(b.weight,0)
-from #tmp a left join stkucc(@datea,'','') b on a.productno=b.productno and a.storeno=b.storeno
+from #tmp a left join stkucc(@pdatea,'','') b on a.productno=b.productno and a.storeno=b.storeno
 
 update a
 set price=isnull(b.price,0),total=round(isnull(a.mount,0)*isnull(b.price,0),0)
