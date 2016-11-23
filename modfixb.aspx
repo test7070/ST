@@ -34,7 +34,7 @@
 		    brwKey = 'noa';
 		    brwCount2 = 7;
 		    
-		    aPop = new Array(	['txtDeviceno', 'lblDeviceno', 'modeq', 'noa,device', 'txtDeviceno,txtDevice', 'modeq_b.aspx'],
+		    aPop = new Array(	['txtDeviceno', 'lblDeviceno', 'mech', 'noa,mech', 'txtDeviceno,txtDevice', 'mech_b.aspx'],
 		    					['txtPartno', 'lblPart', 'part', 'noa,part', 'txtPartno,txtPart', 'part_b.aspx'],
 		    					['txtProductno_', 'btnProductno_', 'bcc', 'noa,product,price', 'txtProductno_,txtProduct_,txtPrice_', 'bcc_b.aspx'],
 		    					['txtTggno_', 'btnTggno_', 'tgg', 'noa,nick', 'txtTggno_,txtTgg_', 'tgg_b.aspx']);
