@@ -1,0 +1,47 @@
+﻿bom:--BOM----------------------------------------------------------------------------------
+declare @productno nvarchar(20) --BBS 要新增的原料
+declare @parent nvarchar(20) --BBM 要產出的成品
+
+set @productno=[1]
+set @parent=[2]
+
+declare @tmp table(
+	productno nvarchar(50),
+	parent nvarchar(50)
+)
+
+insert into @tmp
+select productno,noa from ucas
+
+if(PATINDEX('%.%',@productno)>0)
+begin
+	while(PATINDEX('%.%',@productno)>0)
+	begin
+		insert into @tmp
+		select left(@productno,PATINDEX('%.%',@productno)-1),@parent
+		set @productno=RIGHT(@productno,LEN(@productno)-PATINDEX('%.%',@productno))
+	end
+end
+insert into @tmp 
+select @productno,@parent 
+
+
+BEGIN TRY
+--遞迴
+WITH OrdersTable (productno,noa,Level,sortCol) as
+(
+ Select productno,parent,0, CONVERT(nvarchar(128),productno)
+ from @tmp
+ where parent=@parent
+ UNION ALL
+ SELECT a.productno,a.parent,OrdersTable.Level+1,CONVERT(nvarchar(128),OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno))
+ FROM @tmp a, OrdersTable 
+ WHERE a.parent=OrdersTable.productno 
+)
+Select REPLICATE('       ',Level) + productno productno, Level, SortCol
+From OrdersTable order by sortCol
+END TRY
+BEGIN CATCH
+ select @@ERROR productno
+END CATCH
+------------------------------------------------------------------------------------------------------------;
