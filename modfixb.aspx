@@ -32,7 +32,7 @@
 		    brwList = [];
 		    brwNowPage = 0;
 		    brwKey = 'noa';
-		    brwCount2 = 7;
+		    brwCount2 = 8;
 		    
 		    aPop = new Array(	['txtDeviceno', 'lblDeviceno', 'mech', 'noa,mech', 'txtDeviceno,txtDevice', 'mech_b.aspx'],
 		    					['txtPartno', 'lblPart', 'part', 'noa,part', 'txtPartno,txtPart', 'part_b.aspx'],
@@ -432,7 +432,15 @@
 						</td>	
 						<td><span> </span><a id='lblAddworker' class="lbl"> </a></td>
 						<td><input id="txtAddworker" type="text" class="txt c1"/></td>
-					</tr>					
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblQworker1" class="lbl"> </a></td>
+						<td><input id="txtQworker1" type="text" class="txt c1"/></td>											
+						<td><span> </span><a id="lblQworker2" class="lbl"> </a></td>
+						<td><input id="txtQworker2" type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblQworker3" class="lbl"> </a></td>
+						<td><input id="txtQworker3" type="text" class="txt c1"/></td>
+					</tr>
 				</table>
 			</div>
 		</div>
