@@ -118,8 +118,10 @@
             function btnIns() {
                 _btnIns();
                 $('#txtNoa').val('AUTO');
-               	$('#txtDatea').val(q_date());
-               		                     
+                if (q_getPara('sys.project').toUpperCase()!='RK'){
+               		$('#txtDatea').val(q_date());
+               	}
+               	$('#chkIsapv').prop('checked',false);
 			}
             function btnModi() {
             	x_datea=$('#txtDatea').val();
