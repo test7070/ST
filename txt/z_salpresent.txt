@@ -74,9 +74,21 @@ from @tmp a
 insert into @tmp (gno,noa,sssno,w133,w166,w100,spec) 
 select '1','999/99/99',sssno,sum(w133),sum(w166),sum(w100),sum(spec) from @tmp group by sssno 
 
-select gno,noa,sssno,namea,clockin,clockout,w133,w166,w100,spec,dbo.charbr(memo,22)memo,day1,day2
-,'salpresent?noa=$noa' qhref
-from @tmp order by sssno,noa,gno 
+if((select count(*) from acomp where acomp like '%智勝%')>0)
+begin
+	select a.gno,a.noa,a.sssno,a.namea,a.clockin,a.clockout,a.w133,a.w166,a.w100,a.spec
+	,dbo.charbr(a.memo,22)memo,a.day1,a.day2
+	,'salpresent?noa=$noa' qhref
+	from @tmp a left join sss b on a.sssno=b.noa 
+	order by case when b.typea='雇主' then 0 when b.typea='員工-辦公室' then 1 when b.typea='員工-現場早班' then 2 when b.typea='員工-現場晚班' then 3	else 4 end 
+	,a.sssno,a.noa,a.gno
+end
+else
+begin
+	select gno,noa,sssno,namea,clockin,clockout,w133,w166,w100,spec,dbo.charbr(memo,22)memo,day1,day2
+	,'salpresent?noa=$noa' qhref
+	from @tmp order by sssno,noa,gno
+end
 ;
 --*****************************************************************
 z_salpresentst2:--z_salpresentst2
@@ -221,7 +233,16 @@ update @tmp
 set fulls=(case when cast(@t_workhour as float)<=hours+isnull(svaca,0) and cast(@t_late as float)>=late and cast(@t_early as float)>=early and isnull(vaca,0)=0 then 'V' else '' end)
 where hours is not null
 
-select * from @tmp order by sssno
+if((select count(*) from acomp where acomp like '%智勝%')>0)
+begin
+	select a.* from @tmp a left join sss b on a.sssno=b.noa 
+	order by case when b.typea='雇主' then 0 when b.typea='員工-辦公室' then 1 when b.typea='員工-現場早班' then 2 when b.typea='員工-現場晚班' then 3	else 4 end 
+	,sssno
+end
+else
+begin
+	select * from @tmp order by sssno
+end
 ;
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 z_salpresentfe1:--z_salpresentfe1
