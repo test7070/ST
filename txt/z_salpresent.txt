@@ -111,7 +111,18 @@ and (len(b.outdate)=0 or b.outdate>=@t_bdate)
 
 insert into @tmp (gno,noa,w133,w166,w100,spec) 
 select '1',noa,sum(w133),sum(w166),sum(w100),sum(spec) from @tmp group by noa
-select * from @tmp order by noa,gno,sssno
+
+if((select count(*) from acomp where acomp like '%智勝%')>0)
+begin
+	select a.* from @tmp a left join sss b on a.sssno=b.noa 
+	order by a.noa,gno
+	,case when b.typea='雇主' then 0 when b.typea='員工-辦公室' then 1 when b.typea='員工-現場早班' then 2 when b.typea='員工-現場晚班' then 3	else 4 end 
+	,sssno
+end
+else
+begin
+	select * from @tmp order by noa,gno,sssno
+end
 ;
 ---------------------------------------------------------------------------------------------------------------------------------------------
 z_salpresentst3:--z_salpresentst3
@@ -160,7 +171,7 @@ declare @tmp table(
 insert @tmp(gno,sssno,namea,partno,part,svaca)
 select '0',noa,namea,partno,part 
 ,(select SUM(hr_used) from salvacause where sssno=a.noa and bdate between @t_bdate and @t_edate and hname like '%特休%')
-from sss where noa between @t_bsssno and @t_esssno
+from sss a where noa between @t_bsssno and @t_esssno
 and isnull(partno,'') between @t_bpartno and @t_epartno
 and (typea=@t_typea or len(@t_typea)=0)
 and (len(outdate)=0 or outdate>=@t_bdate)
@@ -196,7 +207,7 @@ and (((isnull(sa.clockin,'')='' or isnull(sa.clockin,'')='') and sb.holiday=0)
 or (sb.holiday=1 and charindex('打卡資料錯誤',memo)>0))
 and not exists (select * from salvacause where sssno=a.sssno and hr_used>=8 and sa.noa between bdate and edate ) ) 
 ,vaca=(select COUNT(*) from salvacause where sssno=a.sssno and hr_used>=8 and (bdate between @t_bdate and @t_edate) and (hname='事假' or hname='病假' or hname='生理假'))
-,apvh=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea between @t_bdate and @t_edate ),0)
+--,apvh=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea between @t_bdate and @t_edate ),0)
 from @tmpa a 
 --outer apply (select bdate,edate from salvacause where sssno=a.sssno and hr_used>=8 and (bdate between @t_bdate and @t_edate))b
 
