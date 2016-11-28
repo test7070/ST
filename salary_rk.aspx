@@ -633,7 +633,7 @@
 				                    	as[i].bo_money1=0;//職務津貼
 				                    	as[i].bo_money2=0;//技術津貼
 				                    	as[i].bo_money3=0;//特別加給
-				                    	as[i].bo_money4=0;//駐外津貼
+				                    	as[i].bo_money4=0;//生產津貼
 				                    	as[i].bo_traffic=0;//交通津貼
 				                    	as[i].bo_special=0;//工作津貼
 				                    	as[i].bo_oth=0;//其他津貼
@@ -912,9 +912,9 @@
 	            $('#lblMoney3').text('特別加給');
 	            $('#lblMoney3s').text('特別加給');
 	            $('#lablMoney3s').text('特別加給');
-	            $('#lblMoney4').text('駐外津貼');
-	            $('#lblMoney4s').text('駐外津貼');
-	            $('#lablMoney4s').text('駐外津貼');
+	            $('#lblMoney4').text('生產津貼'); //105/11/28 將駐外津貼改為生產津貼
+	            $('#lblMoney4s').text('生產津貼');
+	            $('#lablMoney4s').text('生產津貼');
 	            $('#lblMoney5s').text('誤餐費');
 	            $('#lablMoney5s').text('誤餐費');
 	            $('#lblMoney6s').text('業績獎金');
@@ -1153,7 +1153,7 @@
 					t_money1+=dec($('#txtMoney1_'+j).val())*monkind;//職務津貼
 					t_money2+=dec($('#txtMoney2_'+j).val())*monkind;//技術津貼	
 					t_money3+=dec($('#txtMoney3_'+j).val())*monkind;//特別加給
-					t_money4+=dec($('#txtMoney4_'+j).val())*monkind;//駐外津貼
+					t_money4+=dec($('#txtMoney4_'+j).val())*monkind;//生產津貼
 	            } 
 	            
 	            q_tr('txtMoney',t_money);//本俸
@@ -1182,7 +1182,7 @@
 				q_tr('txtMoney1',Math.round(t_money1));//職務津貼
 				q_tr('txtMoney2',Math.round(t_money2));//技術津貼
 				q_tr('txtMoney3',Math.round(t_money3));//特別加給
-				q_tr('txtMoney4',Math.round(t_money4));//駐外津貼
+				q_tr('txtMoney4',Math.round(t_money4));//生產津貼
 				
 	        }
 	        
@@ -1689,7 +1689,7 @@
 					$(".hid_money1").hide();//職務津貼
 					$(".hid_money2").hide();//技術津貼
 					$(".hid_money3").hide();//特別加給
-					$(".hid_money4").hide();//駐外津貼
+					$(".hid_money4").hide();//生產津貼
 					$(".hid_bo_traffic").hide();//交通津貼
 					$(".hid_bo_special").hide();//工作津貼
 					$(".hid_bo_oth").hide();//其他津貼
