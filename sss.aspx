@@ -579,6 +579,10 @@
 				}else{
 					$('.isBarCode').hide();
 				}
+				if(q_getPara('sys.project').toUpperCase()=='VU'){
+					$('.vuhide').hide();
+				}
+				
 				
 				if($("#cmbPerson").val()=='外勞'){
 					$('#txtPassportno').show();
@@ -941,8 +945,8 @@
 						<td><input id="txtOutdate" type="text" class="txt c1" /></td>
 					</tr>
 					<tr class="isBarCode">
-						<td class="isBarCode"><span> </span><a id='lblClass5' class="lbl"> </a></td>
-						<td class="isBarCode"><select id="cmbClass5" class="txt c1"> </select></td>
+						<td class="isBarCode vuhide"><span> </span><a id='lblClass5' class="lbl"> </a></td>
+						<td class="isBarCode vuhide"><select id="cmbClass5" class="txt c1"> </select></td>
 						<td class="isBarCode"><span> </span><a id='lblBarcode' class="lbl"> </a></td>
 						<td class="isBarCode"><input id="txtBarcode" type="text" class="txt c1" /></td>
 					</tr>
