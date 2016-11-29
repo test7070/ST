@@ -1296,7 +1296,7 @@ begin
 		insert into @list (recno,namea,list) values(3,'職務津貼','b.money1') 
 		insert into @list (recno,namea,list) values(4,'技術津貼','b.money2') 
 		insert into @list (recno,namea,list) values(5,'特別加給','b.money3') 
-		insert into @list (recno,namea,list) values(6,'駐外津貼','b.money4') 
+		insert into @list (recno,namea,list) values(6,'生產津貼','b.money4') --105/11/28 將駐外津貼改為生產津貼
 		insert into @list (recno,namea,list) values(7,'交通津貼','b.bo_traffic') 
 		insert into @list (recno,namea,list) values(8,'工作津貼','b.bo_special') 
 		insert into @list (recno,namea,list) values(9,'其他津貼','b.bo_oth')
@@ -1334,7 +1334,7 @@ begin
 		insert into @list (recno,namea,list) values(5,'職務津貼','b.money1') 
 		insert into @list (recno,namea,list) values(6,'技術津貼','b.money2') 
 		insert into @list (recno,namea,list) values(7,'特別加給','b.money3') 
-		insert into @list (recno,namea,list) values(8,'駐外津貼','b.money4') 
+		insert into @list (recno,namea,list) values(8,'生產津貼','b.money4') --105/11/28 將駐外津貼改為生產津貼
 		insert into @list (recno,namea,list) values(9,'交通津貼','b.bo_traffic') 
 		insert into @list (recno,namea,list) values(10,'工作津貼','b.bo_special') 
 		insert into @list (recno,namea,list) values(11,'其他津貼','b.bo_oth')
@@ -1372,7 +1372,7 @@ begin
 		insert into @list (recno,namea,list) values(5,'職務津貼','b.money1') 
 		insert into @list (recno,namea,list) values(6,'技術津貼','b.money2') 
 		insert into @list (recno,namea,list) values(7,'特別加給','b.money3') 
-		insert into @list (recno,namea,list) values(8,'駐外津貼','b.money4') 
+		insert into @list (recno,namea,list) values(8,'生產津貼','b.money4') --105/11/28 將駐外津貼改為生產津貼
 		insert into @list (recno,namea,list) values(9,'交通津貼','b.bo_traffic') 
 		insert into @list (recno,namea,list) values(10,'工作津貼','b.bo_special') 
 		insert into @list (recno,namea,list) values(11,'其他津貼','b.bo_oth')
@@ -1406,7 +1406,7 @@ begin
 		insert into @list (recno,namea,list) values(3,'職務津貼','b.money1') 
 		insert into @list (recno,namea,list) values(4,'技術津貼','b.money2') 
 		insert into @list (recno,namea,list) values(5,'特別加給','b.money3') 
-		insert into @list (recno,namea,list) values(6,'駐外津貼','b.money4') 
+		insert into @list (recno,namea,list) values(6,'生產津貼','b.money4') --105/11/28 將駐外津貼改為生產津貼
 		insert into @list (recno,namea,list) values(7,'交通津貼','b.bo_traffic') 
 		insert into @list (recno,namea,list) values(8,'工作津貼','b.bo_special') 
 		insert into @list (recno,namea,list) values(9,'其他津貼','b.bo_oth')
