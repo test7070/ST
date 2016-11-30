@@ -124,6 +124,10 @@ begin
 		update ucccust set noa=@new_noa where noa=@old_noa
 		--替代品
 		update ucctd set noa=@new_noa where noa=@old_noa
+		--產品包裝
+		update pack2 set noa=@new_noa where noa=@old_noa
+		--產品包裝
+		update pack2s set noa=@new_noa where noa=@old_noa
 		
 		select 'success' mess
 		
