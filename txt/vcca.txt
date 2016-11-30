@@ -5,6 +5,7 @@ vcca_apv:--vcca_apv  檢查發票抬頭
 	declare @t_noa nvarchar(max) = [4]
 	declare @t_custno nvarchar(max) = [5]
 	declare @t_cust nvarchar(max) = [6]
+	declare @t_buyer nvarchar(max) = [7]
 
 	declare @t_rank int = 0
 	declare @t_user nvarchar(20) = ''
@@ -55,13 +56,15 @@ vcca_apv:--vcca_apv  檢查發票抬頭
 		select 0 val,'簽核已送，尚未核准，請稍後！' msg
 		return
 	end
-	else if @cust!=@t_cust
+	else if @cust!=@t_cust or @cust!=@t_buyer
 	begin
 		-- 發票抬頭異常
 		begin try
 			select @t_checker=checker from signform where noa='vcca'
 			insert into [sign](noa,datea,timea,form,sender,checker,zno,memo,enda,memochecker)
-			select @noa,@t_date,@t_time,@t_form,@t_user,@t_checker,@t_guid,@cust+'   '+@t_cust,'N',''
+			select @noa,@t_date,@t_time,@t_form,@t_user,@t_checker,@t_guid
+				,'發票抬頭異常'+@t_noa+','+@cust+'  '+case when @cust!=@t_cust then @t_cust else @t_buyer end
+				,'N',''
 			select 0 val,'發票抬頭異常，簽核已送，請稍後！' msg
 			return
 		end try
@@ -74,7 +77,7 @@ vcca_apv:--vcca_apv  檢查發票抬頭
 	begin
 		select 1 val,'沒問題。' msg
 		return
-	end;
+	end; 
 
 vcca_mount:--vcca_mount 產品庫存, 只查詢一個產品, 不分倉庫, 排除當前的銷貨發票, 有日期	
 	declare @t_vccano nvarchar(20)=[1]
