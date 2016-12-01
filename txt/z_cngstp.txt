@@ -41,8 +41,8 @@ insert into @tmp
 	dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius),
 	b.mount,b.weight,b.memo,case when len(d.nick)>0 then d.nick else LEFT(a.cardeal,3) end,
 	a.carno,a.trantype,a.memo
-	from cng[1] a
-	left join cngs[1] b on a.noa = b.noa
+	from view_cng a
+	left join view_cngs b on a.accy=b.accy and a.noa = b.noa
 	left join view_uccc c on b.uno = a.noa
 	left join cardeal d on a.cardealno = d.noa
 	where (a.noa between @t_bnoa and @t_enoa)
