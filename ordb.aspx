@@ -158,7 +158,7 @@
 						['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype', 'txtTggno,txtTgg,txtNick,txtPaytype', 'tgg_b.aspx'],
 						['txtCustno_', 'btnCustno_', 'cust', 'noa,comp', 'txtCustno_,txtComp_', 'cust_b.aspx']
 					);
-					//q_readonlys.push('txtUnit');
+					q_readonlys.push('txtUnit');
 				}
 				
 				q_getFormat();
@@ -798,6 +798,7 @@
 				}
 				q_nowf();
 				as['datea'] = abbm2['datea'];
+				as['odate'] = abbm2['odate'];
 				as['noa'] = abbm2['noa'];
 				as['apv'] = abbm2['apv'];
 				return true;
