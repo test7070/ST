@@ -286,6 +286,7 @@
 										$('#textXyodatea').val('');
 									}
 								}
+								$('#txtTggno').change();
 							}
 							bbsAssign();
 						}
