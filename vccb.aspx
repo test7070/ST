@@ -616,7 +616,7 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:15px;"><a id='lblCobtype'> </a></td>
+					<td align="center" style="width:15px;"><a id='lblCobtype'>聯式</a></td>
 					<td align="center" style="width:100px;"><a id='lblInvono'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblIdate'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblProductno'> </a></td>
