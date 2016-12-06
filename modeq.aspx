@@ -63,7 +63,7 @@
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				
-				q_cmbParse("cmbTypea", ',製管,切管,修端,鋸片,品質,剪板,品質,包裝,矯直,重工,切浸,浸油,抽內,分捲,分條,矯直,頭尾');
+				q_cmbParse("cmbTypea", ',製管,模具,切管,剪板,鋸片,品質,分捲,分條,切浸,包裝,抽內,重工,修端,浸油,除銹,頭尾,矯直');
             }
 
 		    function q_gtPost(t_name) {
