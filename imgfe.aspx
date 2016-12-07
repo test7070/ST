@@ -583,7 +583,7 @@
 								<span style="float: left;width: 50px;"> </span>
 								<a id='lblIscoupler' class="lbl" style="float: left;"> </a>
 								<span style="float: left;"> </span>
-								<input id="txtIscoupler" type="checkbox"/>
+								<input id="chkIscoupler" type="checkbox"/>
 							</td>
 						</tr>
 						<tr>
