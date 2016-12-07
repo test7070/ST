@@ -34,7 +34,7 @@
 		    brwKey = 'noa';
 		    brwCount2 = 8;
 		    
-		    aPop = new Array(	['txtDeviceno', 'lblDeviceno', 'mech', 'noa,mech', 'txtDeviceno,txtDevice', 'mech_b.aspx'],
+		    aPop = new Array(	['txtDeviceno', 'lblDeviceno', 'modeq', 'noa,device', 'txtDeviceno,txtDevice', 'modeq_b.aspx'],
 		    					['txtPartno', 'lblPart', 'part', 'noa,part', 'txtPartno,txtPart', 'part_b.aspx'],
 		    					['txtProductno_', 'btnProductno_', 'bcc', 'noa,product,price', 'txtProductno_,txtProduct_,txtPrice_', 'bcc_b.aspx'],
 		    					['txtTggno_', 'btnTggno_', 'tgg', 'noa,nick', 'txtTggno_,txtTgg_', 'tgg_b.aspx']);
@@ -444,40 +444,35 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1105px;">
+		<div class='dbbs' style="width: 1200px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:white; background:#003366;' >
-					<td align="center" style="width:1%;">
-					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
-					</td>
-					<td align="center" style="width:1.5%;"> </td>
-					<td align="center" style="width:15%;"><a id='lblProductno_s'> </a></td>
-					<td align="center" style="width:15%;"><a id='lblTggno_s'> </a></td>
-					<td align="center" style="width:5%;"><a id='lblPrice_s'> </a></td>
-					<td align="center" style="width:5%;"><a id='lblMount_s'> </a></td>					
-					<td align="center" style="width:5%;"><a id='lblMoney_s'> </a></td>
-					<td align="center" style="width:2%;"><a id='lblRetired_s'> </a></td>
+					<td align="center" style="width:40px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+					<td align="center" style="width:30px;"> </td>
+					<td align="center" style="width:150px;"><a id='lblMechset_s'> </a></td>
+					<td align="center" style="width:325px;"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:325px;"><a id='lblTggno_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblPrice_s'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>					
+					<td align="center" style="width:110px;"><a id='lblMoney_s'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblRetired_s'> </a></td>
 				</tr>
-				<tr  style='background:#cad3ff;'>
-					<td align="center">
-					<input id="btnMinus.*" type="button" class="btn" value='-' style=" font-weight: bold;" />			
+				<tr style='background:#cad3ff;'>
+					<td align="center"><input id="btnMinus.*" type="button" class="btn" value='-' style=" font-weight: bold;" />			
 					</td>
-				
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					
+					<td><input id="txtMechset.*" type="text" class="txt" style="width:98%;"/></td>
 					<td>
-					<input id="txtNoq.*" type="hidden" />			
-					<input id="txtProductno.*" type="text" class="txt" style="width:25%;"/>
-					<input id="txtProduct.*" type="text"  class="txt" style="width:55%;"/>
-					<input id="btnProductno.*" type="button" value="..." style="width: 10%;" />
+						<input id="txtNoq.*" type="hidden" />			
+						<input id="txtProductno.*" type="text" class="txt" style="width:25%;"/>
+						<input id="txtProduct.*" type="text"  class="txt" style="width:55%;"/>
+						<input id="btnProductno.*" type="button" value="..." style="width: 10%;" />
 					</td>
-					
 					<td>
-					<input id="txtTggno.*" type="text" class="txt" style="width:25%;"/>
-					<input id="txtTgg.*"type="text" class="txt" style="width:55%;"/>
-					<input id="btnTggno.*" type="button" value="..." style="width: 10%;" />
+						<input id="txtTggno.*" type="text" class="txt" style="width:25%;"/>
+						<input id="txtTgg.*"type="text" class="txt" style="width:55%;"/>
+						<input id="btnTggno.*" type="button" value="..." style="width: 10%;" />
 					</td>
-					
 					<td><input id="txtPrice.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtMoney.*" type="text" class="txt num c1" /></td>	

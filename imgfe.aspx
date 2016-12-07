@@ -578,7 +578,13 @@
 						</tr>-->
 						<tr class="fe" style="display: none;">
 							<td><span> </span><a id='lblFold' class="lbl"> </a></td>
-							<td><input id="txtFold"  type="text"  class="txt num c1" style="width: 50px;"/></td>
+							<td>
+								<input id="txtFold"  type="text" class="txt num c1" style="width: 50px;"/>
+								<span style="float: left;width: 50px;"> </span>
+								<a id='lblIscoupler' class="lbl" style="float: left;"> </a>
+								<span style="float: left;"> </span>
+								<input id="chkIscoupler" type="checkbox"/>
+							</td>
 						</tr>
 						<tr>
 							<td> </td>

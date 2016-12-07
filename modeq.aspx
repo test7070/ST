@@ -32,7 +32,7 @@
 		    brwList = [];
 		    brwNowPage = 0;
 		    brwKey = 'noa';
-		    brwCount2 = 7;
+		    brwCount2 = 8;
 		    
 		    aPop = new Array(	['txtTggno', 'lblTggno', 'tgg', 'noa,nick', 'txtTggno,txtTgg', 'tgg_b.aspx'],
 								['txtTggno_', 'btnTggno_', 'tgg', 'noa,nick', 'txtTggno_,txtTgg_', 'tgg_b.aspx']);
@@ -63,7 +63,7 @@
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				
-				//q_cmbParse("cmbWorker", '機台組員,CNC車床組員');
+				q_cmbParse("cmbTypea", ',製管,模具,切管,剪板,鋸片,品質,分捲,分條,切浸,包裝,抽內,重工,修端,浸油,除銹,頭尾,矯直');
             }
 
 		    function q_gtPost(t_name) {
@@ -406,7 +406,9 @@
 						<td><span> </span><a id="lblHeart" class="lbl"> </a></td>
 						<td><input id="txtHeart" type="text" class="txt c1"/></td>	
 						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
-						<td><input id="txtStyle" type="text" class="txt c1"/></td>											
+						<td><input id="txtStyle" type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblTypea" class="lbl"> </a></td>
+						<td><select id="cmbTypea" class="txt c1" style="font-size: medium;"> </select></td>											
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
@@ -444,19 +446,17 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 1165px;">
+		<div class='dbbs' style="width: 1190px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:white; background:#003366;' >
-					<td align="center" style="width:1%;">
-					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
-					</td>
-					<td align="center" style="width:15%;"><a id='lblNamea_s'> </a></td>
-					<td align="center" style="width:15%;"><a id='lblTggno_s'> </a></td>
-					<td align="center" style="width:20%;"><a id='lblSpec_s'> </a></td>
-					<td align="center" style="width:15%;"><a id='lblHpower_s'> </a></td>
-					<td align="center" style="width:8%;"><a id='lblMount_s'> </a></td>					
-					<td align="center" style="width:10%;"><a id='lblDatea_s'> </a></td>
-					<td align="center" style="width:15%;"><a id='lblMemo_s'> </a></td>
+					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+					<td align="center" style="width:170px;"><a id='lblNamea_s'> </a></td>
+					<td align="center" style="width:170px;"><a id='lblTggno_s'> </a></td>
+					<td align="center" style="width:225px;"><a id='lblSpec_s'> </a></td>
+					<td align="center" style="width:170px;"><a id='lblHpower_s'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>					
+					<td align="center" style="width:85px;"><a id='lblDatea_s'> </a></td>
+					<td align="center"><a id='lblMemo_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center"><input id="btnMinus.*" type="button" class="btn" value='-' style=" font-weight: bold;" /></td>								
