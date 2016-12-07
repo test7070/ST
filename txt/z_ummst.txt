@@ -362,7 +362,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @t_emon nvarchar(20) = case when '#non'=[14] then char(255) else [14] end
 	declare @t_memo nvarchar(max) = case when '#non'=[19] then '' else [19] end
 	declare @t_curnoa nvarchar(max) = case when '#non'=[26] then '' else [26] end
-		------------------------------------------------------------------------
+	------------------------------------------------------------------------
 	declare @tmp table(
 		sel int identity(1,1)
 		,vccaccy nvarchar(10)
@@ -470,6 +470,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,addr nvarchar(max)
 		,serial nvarchar(max)
 		,conn nvarchar(max)
+		,job nvarchar(max)
 		,coin nvarchar(20)
 		,floata float
 		
@@ -570,7 +571,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			else
 			begin
 				set @cmount = dbo.getComma(@mount,-1) + @unit
-				set @cmount2 = ''
+				set @cmount2 = dbo.getComma(@weight,-1)
 			end
 			select @stype=''
 			select top 1  @stype=stype from @tmps where custno=@custno and len(stype)>0 
@@ -651,7 +652,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			else
 			begin
 				set @cmount = case when len(@unit)=0 then '' else dbo.getComma(@mount,-1) +' '+ @unit end
-				set @cmount2 = ''
+				set @cmount2 = dbo.getComma(@weight,-1)
 			end
 			--第一筆上要有分隔線,gno有不一樣
 			insert into @tmpa(custno,gno,pno,product,cmount,cmount2,[money])
@@ -696,7 +697,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	from @tmpa a
 	left join cust b on a.custno=b.noa
 	
-	update @tmpa set conn=b.namea
+	update @tmpa set conn=b.namea,job=ISNULL(b.job,'')
 	from @tmpa a
 	outer apply(select top 1 * from conn where noa=a.custno and typea='1') b
 	
@@ -710,7 +711,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,serial a06
 		,@t_curnoa a07
 		,dbo.AD2ChineseEraName(GETDATE()) a08
-		,conn a09
+		,conn+ltrim(rtrim(ISNULL(job,''))) a09
 		,stype a10
 		
 		,datea b01
