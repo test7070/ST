@@ -491,12 +491,22 @@
 				if(emp($('#txtTrandate').val()) && q_getPara('sys.project').toUpperCase()!='XY'){
 					$('#txtTrandate').val(q_cdn(q_date(),10));
 				}
+				
+				var t_xy_pricezero=false;
 				for (var j = 0; j < q_bbsCount; j++) {
 					if(!emp($('#txtProductno_' + j).val()) && emp($('#txtTrandate_'+j).val()))
 						$('#txtTrandate_'+j).val($('#txtTrandate').val());
 						
 					if(q_cur==1)
 						$('#txtOmount_'+j).val($('#txtMount_'+j).val());
+						
+					if(dec($('#txtMount_'+j).val())>0 && dec($('#txtPrice_'+j).val())==0){
+						t_xy_pricezero=true;
+					}
+				}
+				
+				if (q_getPara('sys.project').toUpperCase()=='XY' && t_xy_pricezero) {
+					alert('進貨品項單價等於0!!');
 				}
 				
 				if (q_cur == 1)
