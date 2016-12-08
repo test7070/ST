@@ -958,7 +958,7 @@
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				
-				if(q_cur=='2'){
+				if(q_cur=='2' && r_rank<'8'){
 					$('#txtDatea').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				}else{
 					$('#txtDatea').css('color', '');
