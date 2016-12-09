@@ -326,7 +326,8 @@
 					case "CNC車修":
 						q_cmbParse("cmbMech"+n+"_"+pos,'G01,G02');	
 						break;
-					}	
+				}
+				$('#cmbMech'+n+"_"+pos).val(eval('abbs[dec(pos)].mech'+n));
 			}
 			
 			function changecombWay(n){
