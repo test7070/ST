@@ -260,33 +260,14 @@
 								if(xy_tggno.length>0){
 									$('#txtTggno').val(xy_tggno);
 									var t_where =" noa='"+$('#txtTggno').val()+"'";
-									q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytgg",r_accy,1);
-									var as = _q_appendData("tgg", "", true);
-									if (as[0] != undefined) {
-										$('#txtTgg').val(as[0].comp);
-										$('#cmbTrantype').val(as[0].trantype);
-										$('#txtPaytype').val(as[0].paytype);
-										$('#txtSalesno').val(as[0].salesno);
-										$('#txtSales').val(as[0].sales);
-										$('#txtTel').val(as[0].tel);
-										$('#txtFax').val(as[0].fax);
-										$('#txtPost').val(as[0].zip_comp);
-										$('#txtAddr').val(as[0].addr_comp);
-										$('#cmbTaxtype').val(as[0].conn);
-									}
+									q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "ordbxytgg",r_accy);
+									$('#txtTggno').change();
 								}
 								//105/08/15 取得訂單預交日
 								if(t_ordeno.length>0){
 									var t_where =" noa='"+t_ordeno+"' and no2='"+t_no2+"'";
-									q_gt('view_ordes', "where=^^ "+t_where+" ^^", 0, 0, 0, "xyordesdatea",r_accy,1);
-									var as = _q_appendData("view_ordes", "", true);
-									if (as[0] != undefined) {
-										$('#textXyodatea').val(as[0].datea);
-									}else{
-										$('#textXyodatea').val('');
-									}
+									q_gt('view_ordes', "where=^^ "+t_where+" ^^", 0, 0, 0, "xyordesdatea",r_accy);
 								}
-								$('#txtTggno').change();
 							}
 							bbsAssign();
 						}
@@ -319,6 +300,29 @@
 			var z_cno = r_cno, z_acomp = r_comp, z_nick = r_comp.substr(0, 2);
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'ordbxytgg':
+						var as = _q_appendData("tgg", "", true);
+						if (as[0] != undefined) {
+							$('#txtTgg').val(as[0].comp);
+							$('#cmbTrantype').val(as[0].trantype);
+							$('#txtPaytype').val(as[0].paytype);
+							$('#txtSalesno').val(as[0].salesno);
+							$('#txtSales').val(as[0].sales);
+							$('#txtTel').val(as[0].tel);
+							$('#txtFax').val(as[0].fax);
+							$('#txtPost').val(as[0].zip_comp);
+							$('#txtAddr').val(as[0].addr_comp);
+							$('#cmbTaxtype').val(as[0].conn);
+						}
+						break;
+					case 'xyordesdatea':
+						var as = _q_appendData("view_ordes", "", true);
+						if (as[0] != undefined) {
+							$('#textXyodatea').val(as[0].datea);
+						}else{
+							$('#textXyodatea').val('');
+						}
+						break;
 					case 'xytggdata':
 						var as = _q_appendData("tgg", "", true);
 						if (as[0] != undefined) {
@@ -799,13 +803,13 @@
 					if(t_ordbno.length>0){
 						var t_where =" noa='"+t_ordbno+"' and no3='"+t_no3+"'";
 						var t_where ="exists (select * from view_ordbs where noa='"+t_ordbno+"' and no3='"+t_no3+"' and a.noa=ordeno and a.no2=no2)"
-						q_gt('view_ordes', "where=^^ "+t_where+" ^^", 0, 0, 0, "xyordesdatea",r_accy,1);
-						var as = _q_appendData("view_ordes", "", true);
+						q_gt('view_ordes', "where=^^ "+t_where+" ^^", 0, 0, 0, "xyordesdatea",r_accy);
+						/*var as = _q_appendData("view_ordes", "", true);
 						if (as[0] != undefined) {
  							$('#textXyodatea').val(as[0].datea);
 						}else{
 							$('#textXyodatea').val('');
-						}
+						}*/
 					}
 				}
 			}
@@ -960,8 +964,8 @@
 				//錯誤
 			}
 
-			function q_popPost(s1) {
-				switch (s1) {
+			function q_popPost(id) {
+				switch (id) {
 					case 'txtTggno':
 						if (!emp($('#txtTggno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
@@ -984,6 +988,7 @@
 						}
 						break;
 				}
+				id='';
 			}
 			
 			function q_stPost() {

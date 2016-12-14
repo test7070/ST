@@ -1090,6 +1090,7 @@
 					default:
 						break;
 				}
+				id='';
 			}
 
 			function product_change() {
