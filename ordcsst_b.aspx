@@ -10,7 +10,7 @@
 		<script src="../script/qbox.js" type="text/javascript"> </script>
     	<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-		    var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = " field=productno,product,spec,size,dime,width,lengthb,radius,mount,weight,noa,no2,price,total,theory,memo,notv,uno,class,style,unit,unit2,scolor,ucolor  order=odate ", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
+		    var q_name = 'view_ordcs', t_bbsTag = 'tbbs', t_content = "", afilter = [], bbsKey = ['noa', 'no2'], t_count = 0, as;
 		    var t_sqlname = 'ordcs_load2'; t_postname = q_name;
 		    var isBott = false;  /// 是否已按過 最後一頁
 		    var txtfield = [], afield, t_data, t_htm;
@@ -48,7 +48,8 @@
 		        
 				q_gt('spec', '', 0, 0, 0,'');
     			
-		        mainBrow(6, t_content, t_sqlname, t_postname,r_accy);
+		        t_content = 'order=^^ noa desc,no2^^';
+				mainBrow(6, t_content, t_sqlname, t_postname,r_accy);
 		        
 		    			
 				var w = window.parent;
@@ -106,6 +107,7 @@
 						for ( i = 0; i < as.length; i++) {
 							t_spec[as[i].noa]=as[i].product;
 						}
+						
 		        		break;
 		    		case 'view_rc2s':
 		    			var as = _q_appendData("view_rc2s", "", true);
