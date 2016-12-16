@@ -19,23 +19,47 @@
                 q_func('etc.watch', "a")
 		    });
 		    function q_funcPost( func,result) {
-		        $('#txtMessage').text("已轉入資料庫");
-		        if(result.length>0 && result.indexOf('^@')>-1 && result.indexOf('錯誤訊息')>-1){
-		        	var t_tr=result.split('^^$');
-		        	var divtable="<table id='ra_table'>";
-		        	for (var i=0;i<t_tr.length;i++){
-		        		if(t_tr[i]!=''){
-			        		divtable+="<tr>";
-			        		var t_td=t_tr[i].split('^@');
-			        		for (var j=0;j<t_td.length;j++){
-			        			divtable+="<td>"+t_td[j]+"</td>";
-			        		}
-			        		divtable+="</tr>";
-		        		}	
-		        	}
-		        	divtable+="</table>";
-		        	$('#divMemo').html(divtable);
-		        }
+		    	if(q_getPara('sys.project').toUpperCase()=='XY'){
+		    		if(result.length>0 && result.indexOf('^@')>-1 && result.indexOf('錯誤訊息')>-1){
+		    			if(result.indexOf('zxls_ordexyw.txt')>-1)
+		    				result=result.substr(result.indexOf('客戶編號'));
+		    				
+		    			var t_tr=result.split('^^$');
+			        	var divtable="<table id='ra_table'>";
+			        	for (var i=0;i<t_tr.length;i++){
+			        		if(t_tr[i]!=''){
+				        		divtable+="<tr>";
+				        		var t_td=t_tr[i].split('^@');
+				        		for (var j=0;j<t_td.length;j++){
+				        			divtable+="<td>"+t_td[j]+"</td>";
+				        		}
+				        		divtable+="</tr>";
+			        		}	
+			        	}
+			        	divtable+="</table>";
+			        	$('#divMemo').html(divtable);
+		    		}else{
+		    			$('#txtMessage').text("已轉入資料庫");
+		    		}
+		    	}else{
+			        $('#txtMessage').text("已轉入資料庫");
+			        if(result.length>0 && result.indexOf('^@')>-1 && result.indexOf('錯誤訊息')>-1){
+			        	var t_tr=result.split('^^$');
+			        	var divtable="<table id='ra_table'>";
+			        	for (var i=0;i<t_tr.length;i++){
+			        		if(t_tr[i]!=''){
+				        		divtable+="<tr>";
+				        		var t_td=t_tr[i].split('^@');
+				        		for (var j=0;j<t_td.length;j++){
+				        			divtable+="<td>"+t_td[j]+"</td>";
+				        		}
+				        		divtable+="</tr>";
+			        		}	
+			        	}
+			        	divtable+="</table>";
+			        	$('#divMemo').html(divtable);
+			        }
+				}
 		    }
 		    function q_gfPost() {
 		        q_langShow();
