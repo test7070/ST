@@ -88,6 +88,18 @@
                         type : '5', //[17]
                         name : 'xcno',
                         value : acompItem.split(',')
+                    }, {
+                        type : '0', //[18]
+                        name : 'project',
+                        value : q_getPara('sys.project').toUpperCase()
+                    }, {
+                        type : '0', //[19]
+                        name : 'userno',
+                        value : r_userno.toUpperCase()
+                    }, {
+                        type : '0', //[20]
+                        name : 'rank',
+                        value : r_rank
                     }]
                 });
                 q_popAssign();

@@ -199,6 +199,14 @@
                         type : '5', //[36]//40000
                         name : 'taxtype',
                         value : [q_getPara('report.all')].concat(q_getPara('sys.taxtype').split(','))
+                    },{
+                        type : '0', //[37]
+                        name : 'userno',
+                        value : r_userno.toUpperCase()
+                    },{
+                        type : '0', //[38]
+                        name : 'rank',
+                        value : r_rank
                     }]
                 });
                 q_popAssign();

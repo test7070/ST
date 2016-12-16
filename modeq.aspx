@@ -452,7 +452,7 @@
 					<td align="center" style="width:1%;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:170px;"><a id='lblNamea_s'> </a></td>
 					<td align="center" style="width:170px;"><a id='lblTggno_s'> </a></td>
-					<td align="center" style="width:225px;"><a id='lblSpec_s'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblSpec_s'> </a></td>
 					<td align="center" style="width:170px;"><a id='lblHpower_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>					
 					<td align="center" style="width:85px;"><a id='lblDatea_s'> </a></td>
@@ -469,7 +469,7 @@
 						<input id="btnTggno.*" type="button" value="." style="width: 5%;" />
 						<input id="txtTgg.*"type="text" class="txt" style="width:50%;"/>
 					</td>
-					<td><input id="txtSpec.*" type="text" class="txt" /></td>
+					<td><input id="txtSpec.*" type="text" class="txt" maxlength="11" /></td>
 					<td><input id="txtHpower.*" type="text" class="txt c1" /></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtDatea.*" type="text" class="txt" /></td>	
