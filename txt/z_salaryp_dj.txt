@@ -73,8 +73,8 @@ select '1','',b.sno,b.namea,c.jobno,isnull(c.level1+'職等','')+c.job,c.level2,
 		,b.ch_labor,b.ch_health,b.hplus2
 		,case when d.inday!=0 then d.inday/8 else 0 end
 		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname='特休假'),0)/8,1)
-		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)<=@t_xmon and hname='特休假'),0)/8,1)
-		,round((isnull(d.inday,0)-isnull(d.boutday,0)-isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)<=@t_xmon and hname='特休假'),0))/8,1)
+		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,3)=left(@t_xmon,3) and hname='特休假'),0)/8,1)
+		,round((isnull(d.inday,0)-isnull(d.boutday,0)-isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,3)=left(@t_xmon,3) and hname='特休假'),0))/8,1)
 		,b.hr_sick,b.hr_person
 		,isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname='天災假'),0)
 		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname!='天災假' and hname!='特休假' and hname!='病假' and hname!='事假'),0)/8,1)
