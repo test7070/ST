@@ -15,6 +15,9 @@
 	declare @t_enda nvarchar(1)
 	declare @isspec nvarchar(10)='[16]'
 	declare @t_cno nvarchar(max)= case when '#non'=[17] then '' else [17] end
+	declare @t_project nvarchar(MAX)='[18]'
+	declare @t_userno nvarchar(100)='[19]'
+	declare @t_rank nvarchar(100)='[20]' 
 	
 	set @t_bdate = case when '#non'=[2] then '' else [2] end
 	set @t_edate = case when '#non'=[3] then char(255) else [3] end
@@ -39,6 +42,8 @@
 		odate nvarchar(10),
 		custno nvarchar(50),
 		comp nvarchar(100),
+		sssno nvarchar(50),
+		sss nvarchar(50),
 		pno nvarchar(30),
 		pname nvarchar(MAX),
 		unit nvarchar(8),
@@ -52,7 +57,7 @@
 		primary key (odate,gno,noa,no2) 
 	)
 	insert into @result
-	select '0' gno, a.noa, b.no2, b.datea, a.odate, a.custno,case when isnull(a.nick,'')!='' then a.nick else a.comp end,
+	select '0' gno, a.noa, b.no2, b.datea, a.odate, a.custno,case when isnull(a.nick,'')!='' then a.nick else a.comp end,a.salesno,a.sales,
 		   b.productno pno,REPLACE(b.product,'~#$',char(39))+(case when @isspec='1' then '<BR>'+isnull(b.spec,'') else '' end) pname,
 		   b.unit, b.mount pmount, b.weight pweight, b.price,
 		   b.total ptotal, b.enda e, b.cancel c, 0 pcount	
@@ -65,6 +70,11 @@
 	      (len(@t_enda)=0 or @t_enda=b.enda)
 	      and (len(@t_cno)=0 or a.cno=@t_cno)
 	order by a.odate,gno,a.noa,b.no2
+	
+	if(@t_rank<'8' and left(@t_userno,1)='B' and @t_project='FE')
+	begin
+		delete @result where sssno!=@t_userno
+	end
 
 	--*****************************************************************************************	
 	declare @odate nvarchar(10)
@@ -99,7 +109,7 @@
 		if @t_odate!=@odate and @t_odate != '#@SDER#$#@'
 		begin
 			insert into @result
-			select '1' gno, '小計' noa, '' no2, '' datea, @t_odate, '' custno, '' comp,
+			select '1' gno, '小計' noa, '' no2, '' datea, @t_odate, '' custno, '' comp,'' sssno, '' sss,
 				   '' pno,'' pname, '' unit, @t_pmount pmount, @t_pweight pweight, 0 price,
 				   @t_ptotal ptotal, '' e, '' c, @t_pcount pcount	
 		end
@@ -129,11 +139,11 @@
 	if @t_odate != '#@SDER#$#@'
 	begin
 		insert into @result
-		select '1' gno, '小計' noa, '' no2, '' datea, @t_odate odate, '' custno, '' comp,
+		select '1' gno, '小計' noa, '' no2, '' datea, @t_odate odate, '' custno, '' comp,'' sssno, '' sss,
 			   '' pno,'' pname, '' unit, @t_pmount pmount, @t_pweight pweight, 0 price,
 			   @t_ptotal ptotal, '' e, '' c, @t_pcount pcount	
 		insert into @result
-		select '2' gno, '總計' noa, '' no2, '' datea, @t_odate odate, '' custno, '' comp,
+		select '2' gno, '總計' noa, '' no2, '' datea, @t_odate odate, '' custno, '' comp,'' sssno, '' sss,
 			   '' pno,'' pname, '' unit, @tot_pmount pmount, @tot_pweight pweight, 0 price,
 			   @tot_ptotal ptotal, '' e, '' c, @t_pcount pcount
 	end
@@ -163,6 +173,9 @@ z_ordefe02:--z_ordefe02
 	declare @t_enda nvarchar(1)
 	declare @isspec nvarchar(10)='[16]'
 	declare @t_cno nvarchar(max)= case when '#non'=[17] then '' else [17] end
+	declare @t_project nvarchar(MAX)='[18]'
+	declare @t_userno nvarchar(100)='[19]'
+	declare @t_rank nvarchar(100)='[20]' 
 	
 	set @t_bdate = case when '#non'=[2] then '' else [2] end
 	set @t_edate = case when '#non'=[3] then char(255) else [3] end
@@ -187,6 +200,8 @@ z_ordefe02:--z_ordefe02
 		odate nvarchar(10),
 		custno nvarchar(30),
 		comp nvarchar(50),
+		sssno nvarchar(50),
+		sss nvarchar(50),
 		pno nvarchar(30),
 		pname nvarchar(MAX),
 		unit nvarchar(8),
@@ -202,7 +217,7 @@ z_ordefe02:--z_ordefe02
 		primary key (custno,gno,noa,no2) 
 	)	
 	insert into @result
-	select '0' gno, a.noa, b.no2, b.datea, a.odate, a.custno, case when isnull(a.nick,'')!='' then a.nick else a.comp end,
+	select '0' gno, a.noa, b.no2, b.datea, a.odate, a.custno, case when isnull(a.nick,'')!='' then a.nick else a.comp end,a.salesno,a.sales,
 		   b.productno pno,REPLACE(b.product,'~#$',char(39))+(case when @isspec='1' then '<BR>'+isnull(b.spec,'') else '' end) pname, 
 		   b.unit, b.mount pmount, b.weight pweight, b.price,
 		   b.total ptotal, case b.enda when '1' then 'Y' else 'N' end e, b.cancel c, b.notv, b.notv*b.price noptotal, 0 pcount	
@@ -215,6 +230,12 @@ z_ordefe02:--z_ordefe02
 	      (len(@t_enda)=0 or @t_enda=b.enda)
 	      and (len(@t_cno)=0 or a.cno=@t_cno)
 	order by a.custno,gno,a.noa,b.no2
+	
+	if(@t_rank<'8' and left(@t_userno,1)='B' and @t_project='FE')
+	begin
+		delete @result where sssno!=@t_userno
+	end
+	
 	--****************************************************************************************************
 	declare @custno nvarchar(20)
 	declare @pmount float
@@ -248,7 +269,7 @@ z_ordefe02:--z_ordefe02
 		if @t_custno!=@custno and @t_custno != '#@SDER#$#@'
 		begin
 			insert into @result
-			select '1' gno, '小計' noa, '' no2, '' datea, '' odate, @t_custno custno, '' comp,
+			select '1' gno, '小計' noa, '' no2, '' datea, '' odate, @t_custno custno, '' comp, '' sssno, '' sss,
 				   '' pno,'' pname, '' unit, @t_pmount pmount, @t_pweight pweight, 0 price,	@t_ptotal ptotal, 
 				   @t_enda e, @t_cancel c, @t_notv notv, @t_noptotal noptotal, @t_pcount pcount	
 		end
@@ -279,7 +300,7 @@ z_ordefe02:--z_ordefe02
 	if @t_custno != '#@SDER#$#@'
 	begin
 		insert into @result
-		select '1' gno, '小計' noa, '' no2, '' datea, '' odate, @t_custno custno, '' comp,
+		select '1' gno, '小計' noa, '' no2, '' datea, '' odate, @t_custno custno, '' comp, '' sssno, '' sss,
 			   '' pno,'' pname, '' unit, @t_pmount pmount, @t_pweight pweight, 0 price,	@t_ptotal ptotal, 
 			   @t_enda e, @t_cancel c, @t_notv notv, @t_noptotal noptotal, @t_pcount pcount	
 	end
@@ -311,6 +332,9 @@ z_ordefe03:--z_ordefe03
 	declare @t_enda nvarchar(1)
 	declare @isspec nvarchar(10)='[16]'
 	declare @t_cno nvarchar(max)= case when '#non'=[17] then '' else [17] end
+	declare @t_project nvarchar(MAX)='[18]'
+	declare @t_userno nvarchar(100)='[19]'
+	declare @t_rank nvarchar(100)='[20]'
 	
 	set @t_bdate = case when '#non'=[2] then '' else [2] end
 	set @t_edate = case when '#non'=[3] then char(255) else [3] end
@@ -335,6 +359,8 @@ z_ordefe03:--z_ordefe03
 		odate nvarchar(10),
 		custno nvarchar(30),
 		comp nvarchar(50),
+		sssno nvarchar(50), 
+		sss nvarchar(50),
 		pno nvarchar(30),
 		pname nvarchar(MAX),
 		unit nvarchar(8),
@@ -350,7 +376,7 @@ z_ordefe03:--z_ordefe03
 		primary key (pno,gno,custno,noa,no2) 
 	)	
 	insert into @result
-	select '0' gno, a.noa, b.no2, b.datea, a.odate, a.custno, case when isnull(a.nick,'')!='' then a.nick else a.comp end,
+	select '0' gno, a.noa, b.no2, b.datea, a.odate, a.custno, case when isnull(a.nick,'')!='' then a.nick else a.comp end, a.salesno, a.sales,
 		   b.productno pno,REPLACE(b.product,'~#$',char(39))+(case when @isspec='1' then '<BR>　　　'+isnull(b.spec,'') else '' end) pname, 
 		   b.unit, b.mount pmount, b.weight pweight, b.price,
 		   b.total ptotal, case b.enda when '1' then 'Y' else 'N' end e, b.cancel c, b.notv, b.notv*b.price noptotal, 0 pcount	
@@ -363,6 +389,12 @@ z_ordefe03:--z_ordefe03
 	      (len(@t_enda)=0 or @t_enda=b.enda)
 	      and (len(@t_cno)=0 or a.cno=@t_cno)
 	order by pno,gno,a.custno,a.noa,b.no2
+	
+	if(@t_rank<'8' and left(@t_userno,1)='B' and @t_project='FE')
+	begin
+		delete @result where sssno!=@t_userno
+	end
+	
 	--****************************************************************************************************
 	declare @pno nvarchar(30)
 	declare @pmount float
@@ -396,7 +428,7 @@ z_ordefe03:--z_ordefe03
 		if @t_pno!=@pno and @t_pno != '#@SDER#$#@'
 		begin
 			insert into @result
-			select '1' gno, '小計' noa, '' no2, '' datea, '' odate, '' custno, '' comp,
+			select '1' gno, '小計' noa, '' no2, '' datea, '' odate, '' custno, '' comp, '' sssno, '' sss, 
 				   @t_pno pno,'' pname, '' unit, @t_pmount pmount, @t_pweight pweight, 0 price,	@t_ptotal ptotal, 
 				   @t_enda e, @t_cancel c, @t_notv notv, @t_noptotal noptotal, @t_pcount pcount	
 		end
@@ -427,7 +459,7 @@ z_ordefe03:--z_ordefe03
 	if @t_pno != '#@SDER#$#@'
 	begin
 		insert into @result
-		select '1' gno, '小計' noa, '' no2, '' datea, '' odate, '' custno, '' comp,
+		select '1' gno, '小計' noa, '' no2, '' datea, '' odate, '' custno, '' comp, '' sssno, '' sss, 
 			   @t_pno pno,'' pname, '' unit, @t_pmount pmount, @t_pweight pweight, 0 price,	@t_ptotal ptotal, 
 			   @t_enda e, @t_cancel c, @t_notv notv, @t_noptotal noptotal, @t_pcount pcount	
 	end
@@ -458,6 +490,9 @@ z_ordefe04:--z_ordefe04
 	declare @t_enda nvarchar(1)
 	declare @isspec nvarchar(10)='[16]'
 	declare @t_cno nvarchar(max)= case when '#non'=[17] then '' else [17] end
+	declare @t_project nvarchar(MAX)='[18]'
+	declare @t_userno nvarchar(100)='[19]'
+	declare @t_rank nvarchar(100)='[20]'
 	
 	set @t_bdate = case when '#non'=[2] then '' else [2] end
 	set @t_edate = case when '#non'=[3] then char(255) else [3] end
@@ -482,6 +517,8 @@ z_ordefe04:--z_ordefe04
 		odate nvarchar(10),
 		custno nvarchar(30),
 		comp nvarchar(50),
+		sssno nvarchar(50),
+		sss nvarchar(50),
 		pno nvarchar(30),
 		pname nvarchar(MAX),
 		unit nvarchar(8),
@@ -497,7 +534,7 @@ z_ordefe04:--z_ordefe04
 		primary key (noa,gno,no2) 
 	)	
 	insert into @result
-	select '0' gno, a.noa, b.no2, b.datea, a.odate, a.custno, case when isnull(a.nick,'')!='' then a.nick else a.comp end,
+	select '0' gno, a.noa, b.no2, b.datea, a.odate, a.custno, case when isnull(a.nick,'')!='' then a.nick else a.comp end, a.salesno, a.sales,
 		   b.productno pno,REPLACE(b.product,'~#$',char(39))+(case when @isspec='1' then '<BR>'+isnull(b.spec,'') else '' end) pname, 
 		   b.unit, b.mount pmount, b.weight pweight, b.price,
 		   b.total ptotal, case b.enda when '1' then 'Y' else 'N' end e, b.cancel c, b.notv, b.notv*b.price noptotal, 0 pcount	
@@ -510,6 +547,12 @@ z_ordefe04:--z_ordefe04
 	      (len(@t_enda)=0 or @t_enda=b.enda)
 	      and (len(@t_cno)=0 or a.cno=@t_cno)
 	order by a.noa,gno,b.no2
+	
+	if(@t_rank<'8' and left(@t_userno,1)='B' and @t_project='FE')
+	begin
+		delete @result where sssno!=@t_userno
+	end
+	
 	--****************************************************************************************************
 	declare @noa nvarchar(50)
 	declare @pmount float
@@ -543,7 +586,7 @@ z_ordefe04:--z_ordefe04
 		if @t_noa!=@noa and @t_noa != '#@SDER#$#@'
 		begin
 			insert into @result
-			select '1' gno, @t_noa noa, '' no2, '' datea, '' odate, '' custno, '' comp,
+			select '1' gno, @t_noa noa, '' no2, '' datea, '' odate, '' custno, '' comp, '' sssno, '' sss,
 				   '' pno,'' pname, '' unit, @t_pmount pmount, @t_pweight pweight, 0 price,	@t_ptotal ptotal, 
 				   @t_enda e, @t_cancel c, @t_notv notv,@t_noptotal noptotal, @t_pcount pcount	
 		end
@@ -574,7 +617,7 @@ z_ordefe04:--z_ordefe04
 	if @t_noa != '#@SDER#$#@'
 	begin
 		insert into @result
-		select '1' gno, @t_noa noa, '' no2, '' datea, '' odate, '' custno, '' comp,
+		select '1' gno, @t_noa noa, '' no2, '' datea, '' odate, '' custno, '' comp, '' sssno, '' sss,
 			   '' pno,'' pname, '' unit, @t_pmount pmount, @t_pweight pweight, 0 price,	@t_ptotal ptotal, 
 			   @t_enda e, @t_cancel c, @t_notv notv, @t_noptotal noptotal, @t_pcount pcount	
 	end
@@ -597,6 +640,10 @@ declare @t_bproductno nvarchar(30)
 declare @t_eproductno nvarchar(30)
 declare @isspec nvarchar(10)='[16]'
 declare @t_cno nvarchar(max)= case when '#non'=[17] then '' else [17] end
+declare @t_project nvarchar(MAX)='[18]'
+declare @t_userno nvarchar(100)='[19]'
+declare @t_rank nvarchar(100)='[20]' 
+
 set @t_bodate = case when '#non'=[4] then '' else [4] end
 set @t_eodate = case when '#non'=[5] then char(255) else [5] end
 set @t_bcustno = case when '#non'=[6] then '' else [6] end
@@ -604,10 +651,13 @@ set @t_ecustno = case when '#non'=[7] then char(255) else [7] end
 set @t_bproductno = case when '#non'=[10] then '' else [10] end
 set @t_eproductno = case when '#non'=[11] then char(255) else [11] end
 
+
 declare @tmp table(
 	gno nvarchar(1),
 	custno nvarchar(50),
 	custnick nvarchar(100),
+	sssno nvarchar(50), 
+	sss nvarchar(50),
 	products nvarchar(MAX),
 	ordeno nvarchar(50),
 	odate nvarchar(20),
@@ -622,7 +672,7 @@ declare @tmp table(
 )
 insert into @tmp
 	select 
-		'0',b.custno,case when isnull(b.nick,'')!='' then b.nick else a.comp end,
+		'0',b.custno,case when isnull(b.nick,'')!='' then b.nick else a.comp end, b.salesno,b.sales,
 		REPLACE(a.product,'~#$',char(39))+(case when @isspec='1' then '<BR>'+isnull(a.spec,'') else '' end),b.noa,b.odate,a.datea,a.mount,a.weight,a.unit,a.notv,0,
 		case a.enda when '1' then 'Y' else 'N' end e,a.memo
 	from view_ordes a
@@ -633,6 +683,11 @@ insert into @tmp
 		(a.productno between @t_bproductno and @t_eproductno) and a.enda!='1' and b.enda!='1' and a.cancel !='1' and b.cancel !='1'
 		and(len(@t_cno)=0 or b.cno=@t_cno)
 	order by b.custno,a.product,b.noa,b.odate,b.datea
+	
+if(@t_rank<'8' and left(@t_userno,1)='B' and @t_project='FE')
+begin
+	delete @tmp where sssno!=@t_userno
+end 
 	
 update @tmp set notpercent = round((notv/mount)*100,2)
 

@@ -268,8 +268,8 @@
 					$('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',35).substr(0,r_lenm)+'/01',-1))
 					$('#txtSmon1').val(q_date().substr(0,r_lenm))
 					$('#txtSmon2').val(q_date().substr(0,r_lenm))
-					$('#txtXdate1').val($('#txtDate1').slice(-4));
-					$('#txtXdate2').val($('#txtDate2').slice(-4));
+					$('#txtXdate1').val($('#txtDate1').val().slice(-5));
+					$('#txtXdate2').val($('#txtDate2').val().slice(-5));
 					
 					var tmp = document.getElementById("txtPaytype");
 					var selectbox = document.createElement("select");
