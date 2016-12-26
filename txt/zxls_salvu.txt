@@ -46,7 +46,7 @@ insert into #tmp
 select SUBSTRING(a.a,3,8)datea,SUBSTRING(a.a,11,4) timea,b.noa,b.namea
 ,SUBSTRING(a.a,15,2) work--,SUBSTRING(a.a,17,10) barcode
 from ztmpxls a left join sss b on SUBSTRING(a.a,17,10)=b.barcode
-and a.a!=''
+where a.a!=''
 
 update #tmp
 set datea=left(datea,4)+'/'+left(RIGHT(datea,4),2)+'/'+RIGHT(datea,2)
