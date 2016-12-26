@@ -333,7 +333,10 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')){
-                    	$('#chkAprice_'+j).click(function(e){refreshBbs();});
+                    	$('#chkAprice_'+j).click(function(e){
+                    		sum();
+                    		refreshBbs();
+                		});
                     	$('#txtMount_' + j).change(function() {
                     		var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                     		$('#txtMount2_'+n).val($(this).val());
@@ -343,6 +346,9 @@
 	                        sum();
 	                    });
 	                    $('#txtPrice_' + j).change(function() {
+	                        sum();
+	                    });
+	                    $('#txtTotal_' + j).change(function() {
 	                        sum();
 	                    });
                     } 
