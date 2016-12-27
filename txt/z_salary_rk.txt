@@ -80,7 +80,7 @@ b.welfare,b.ch_health,b.total4,b.total5,c.jobno,c.job,b.plus,b.minus,b.memo,c.ty
 from salary a
 left join salarys b on a.noa = b.noa
 left join sss c on c.noa = b.sno
-outer apply (select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea) d
+outer apply (select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc) d
 where a.person = '本國' and @t_xmon = a.mon and @t_xkind = a.monkind and a.typea=@t_xtypea
 
 insert into @tmp
@@ -234,7 +234,7 @@ b.welfare,b.ch_health,b.hplus2,b.minus,b.total4,b.total5,b.memo,c.typea,d.level1
 from salary a
 left join salarys b on a.noa = b.noa
 left join sss c on c.noa = b.sno
-outer apply (select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea) d
+outer apply (select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc) d
 where a.person = '日薪' and @t_xmon = a.mon and @t_xkind = a.monkind and a.typea=@t_xtypea
 
 insert into @tmp
@@ -387,7 +387,7 @@ b.welfare,b.ch_health,b.hplus2,b.minus,b.total4,b.total5,b.memo,c.typea,d.level1
 from salary a
 left join salarys b on a.noa = b.noa
 left join sss c on c.noa = b.sno
-outer apply (select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea) d
+outer apply (select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc) d
 where a.person = '時薪' and @t_xmon = a.mon and @t_xkind = a.monkind and a.typea=@t_xtypea
 
 insert into @tmp
@@ -549,7 +549,7 @@ b.borrow,b.ch_labor,b.ch_labor_comp,b.ch_labor_self,b.chgcash,b.tax,b.tax5,b.tax
 from salary a
 left join salarys b on a.noa = b.noa
 left join sss c on c.noa = b.sno
-outer apply (select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea) d
+outer apply (select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc) d
 where a.person = '外勞' and @t_xmon = a.mon and @t_xkind = a.monkind and a.typea=@t_xtypea
 
 insert into @tmp
