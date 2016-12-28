@@ -109,7 +109,7 @@
 		    }
 		    
 			function bbsSave(as) {
-				if (!as['namea']) {
+				if (!as['namea'] && !as['spec']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
