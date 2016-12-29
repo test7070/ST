@@ -255,10 +255,10 @@
 				}
             }
 			function typea_chg(){
-				if($('#chkCancel').prop('checked'))
+				/*if($('#chkCancel').prop('checked'))
 					$('.Cancel').show();
 				else
-					$('.Cancel').hide();
+					$('.Cancel').hide();*/
 				
 				if($('#cmbTypea').val() == 1 || $('#cmbTypea').val() == 2){
 					$('#Cust').show();
@@ -577,12 +577,12 @@
 						<td><span> </span><a class="lbl">作廢</a></td>
 						<td><input id="chkCancel"  type="checkbox"/></td>
 					</tr>
-					<tr class="Cancel" style="display:none;">
-						<td><span> </span><a id='lblWdate' class="lbl">作廢日期</a></td>
+					<tr class="Cancel">
+						<td><span> </span><a id='lblWdate' class="lbl">退回/作廢日期</a></td>
 						<td><input id="txtWdate"  type="text" class="txt c1"/></td>
-						<td><span> </span><a id='lblWtime' class="lbl">作廢時間</a></td>
+						<td><span> </span><a id='lblWtime' class="lbl">退回/作廢時間</a></td>
 						<td><input id="txtWtime"  type="text" class="txt c1" /></td>
-						<td><span> </span><a id='lblWmemo' class="lbl">作廢原因</a></td>
+						<td><span> </span><a id='lblWmemo' class="lbl">退回/作廢原因</a></td>
 						<td><input id="txtWmemo"  type="text" class="txt c1"  maxlength=20/></td>
 						<!--只能20個字元-->
 					</tr>
