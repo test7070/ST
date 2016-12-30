@@ -55,6 +55,7 @@
 				mainForm(0);
 			}
 			
+			var t_focusout='',t_focusout2='',t_fc=0,t_fbeq='';
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtDatea',r_picd],
@@ -91,7 +92,7 @@
 				q_cmbParse("combWorktype3",t_worktype);
 				q_cmbParse("combWorktype4",t_worktype);	
 				
-				$('#btnIn').click(function(){				
+				$('#btnIn').click(function(){
 					if(!emp($('#txtInnoa').val()) && (q_cur == 1 || q_cur == 2)){
 						//q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");
 						
@@ -119,7 +120,7 @@
 				});
 				
 				//結案若被勾選則不得再更動bbm資料
-				$('#chkEnda').click(function(){				
+				$('#chkEnda').click(function(){
 					if($('#chkEnda').prop("checked")){
 						$("#txtInnoa").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 						$("#txtMechno").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
@@ -165,6 +166,33 @@
 					$('#textEnbottom').val(q_add($('#textBottom').val(),$('#textErepair').val()));
 				});
 				
+				$('#textBdate').focusout(function() {t_focusout='textBtime';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textBtime').focusout(function() {t_focusout='textEdate';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textEdate').focusout(function() {t_focusout='textEtime';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textEtime').focusout(function() {t_focusout='textWorker';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textWorker').focusout(function() {t_focusout='textBdate3';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textWorker').keydown(function(e) {if(e.which==13){t_focusout='';t_focusout2='';t_fc=0;t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1];}});
+				
+				$('#textBdate3').focusout(function() {t_focusout='textBtime3';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textBtime3').focusout(function() {t_focusout='textEdate3';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textEdate3').focusout(function() {t_focusout='textEtime3';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textEtime3').focusout(function() {t_focusout='textWorker3';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textWorker3').focusout(function() {t_focusout='textBdate4',t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textWorker3').keydown(function(e) {if(e.which==13){t_focusout='';t_focusout2='';t_fc=0;t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1];}});
+				
+				$('#textBdate4').focusout(function() {t_focusout='textBtime4';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textBtime4').focusout(function() {t_focusout='textEdate4';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textEdate4').focusout(function() {t_focusout='textEtime4';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textEtime4').focusout(function() {t_focusout='textWorker4';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textWorker4').focusout(function() {t_focusout='textWorker4',t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textWorker4').keydown(function(e) {if(e.which==13){t_focusout='';t_focusout2='';t_fc=0;t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1];}});
+				
+				$('#textBdate2').focusout(function() {t_focusout='textBtime2';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textBtime2').focusout(function() {t_focusout='textEdate2';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textEdate2').focusout(function() {t_focusout='textEtime2';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textEtime2').focusout(function() {t_focusout='textWorker2';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textWorker2').focusout(function() {t_focusout='textMemo';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
+				$('#textWorker2').keydown(function(e) {if(e.which==13){t_focusout='';t_focusout2='';t_fc=0;t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1];}});
 			}          	 
 
 			function q_boxClose(s2) {
@@ -354,6 +382,9 @@
 				$('#textInnsum').val(innsum+' ');
 				$('#textFixsum').val(fixsum+' ');			
 			}
+			
+			function test() {
+			}
     		
 			function bbsAssign() {
 				//結案若被勾選則不得再更動bbs資料
@@ -377,6 +408,37 @@
 				});
 			
 				for (var j = 0; j < q_bbsCount; j++) {
+					if ($('#btnMinus_' + j).hasClass('isAssign'))
+		                continue;
+					$('#radSel_'+j).bind('focus', function(event) {
+						t_IdSeq = -1;
+						q_bodyId($(this).attr('id'));
+						b_seq = t_IdSeq;
+						if(b_seq=='0' && t_focusout!=''){
+							
+							if(t_fc==0){
+								t_focusout2=t_focusout;
+								//$('#'+t_focusout).focus();
+								$('#'+t_focusout).select();
+								t_fc++;
+							}else{
+								//$('#'+t_focusout2).focus();
+								$('#'+t_focusout2).select();
+								t_fc=0;
+								t_focusout2='';
+							}
+							console.log(t_focusout)
+							console.log(t_focusout2)
+							console.log(t_fc)
+							t_focusout='';
+							
+						}
+						if(t_fbeq!='' && t_fbeq!=b_seq){
+							$('#radSel_'+t_fbeq).focus();
+							t_fbeq='';
+						}
+					});
+					
 					//計算數量
 					$('#txtMount_'+j).change(function(){
 						sum();
@@ -632,7 +694,7 @@
 				_bbsAssign();
 				
 				$("[name='sel']").each(function(index) {
-	            	$(this).click(function() {
+	            	$(this).click(function(e) {
 	            		var n=$(this).attr('id').split('_')[($(this).attr('id').split('_').length-1)];
 	            		$('#textB_seq').val(n);
 	            		//讀取lbl
@@ -722,6 +784,9 @@
 							$('.divway2').show();
 						else
 							$('.divway2').hide();
+						
+						$('#div_detail').css('top', e.pageY);
+						$('#div_detail').css('left', e.pageX);
 						
 	            		$('#div_detail').show();
 	            		$('#btnInput').attr('disabled', 'disabled');
