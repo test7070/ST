@@ -42,7 +42,7 @@
 				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
 				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', ''],
 				
-				['txtProductno_', 'btnProduct_', 'ucaucc2', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc2_b.aspx'],
+				['txtProductno_', 'btnProduct_', 'ucaucc2', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'uca_ad_b.aspx'],
 				['txtUcolor_','','adspec','noa,mon,memo,memo1,memo2','0txtUcolor_','adspec_b.aspx'],
 				['txtScolor_','','adly','noa,mon,memo,memo1,memo2','0txtScolor_','adly_b.aspx'],
 				['txtClass_','','adly','noa,mon,memo,memo1,memo2','0txtClass_','adly_b.aspx'],
