@@ -63,7 +63,9 @@ declare @str nvarchar(max)=
 		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
 		  (acc1 between '"+@t_bacc+"' and '"+@t_eacc+"')"
 
-set @cmd = case when RIGHT(@t_bdate,5)='01/01' and RIGHT(@t_edate,5)='01/01' then @cmd+@str+')tmp' else @cmd+')tmp' end
+--106/01/03 調整避免期初看不到
+--set @cmd = case when RIGHT(@t_bdate,5)='01/01' and RIGHT(@t_edate,5)='01/01' then @cmd+@str+')tmp' else @cmd+')tmp' end
+set @cmd = case when RIGHT(@t_bdate,5)='01/01' then @cmd+@str+')tmp' else @cmd+')tmp' end
 
 execute sp_executesql @cmd
 
@@ -221,8 +223,10 @@ declare @str nvarchar(max)=
 	where (LEN(bal)>0) and
 		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
 		  (acc1 between '"+@t_bacc+"' and '"+@t_eacc+"')"	
-		  
-set @cmd = case when RIGHT(@t_bdate,5)='01/01' and RIGHT(@t_edate,5)='01/01' then @cmd+@str+')tmp' else @cmd+')tmp' end
+
+--106/01/03 調整避免期初看不到
+--set @cmd = case when RIGHT(@t_bdate,5)='01/01' and RIGHT(@t_edate,5)='01/01' then @cmd+@str+')tmp' else @cmd+')tmp' end
+set @cmd = case when RIGHT(@t_bdate,5)='01/01' then @cmd+@str+')tmp' else @cmd+')tmp' end
 
 execute sp_executesql @cmd
 
@@ -382,13 +386,15 @@ set @cmd =
 	"
 declare @str nvarchar(max)=
 	"union
-	select '0' gno,'' rec,acc1,'',''type1,''type2,'','',bal,zno,accc7,null money1,null money2,money total,0 blance
+	select '0' gno,'' rec,acc1,'',''type1,''type2,'','',bal,'' zno,accc7,null money1,null money2,money total,0 blance
 	from acbab"+@accy+"_1
 	where (LEN(bal)>0) and
 		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
 		  (acc1 between '"+@t_bacc+"' and '"+@t_eacc+"')"
-
-set @cmd = case when RIGHT(@t_bdate,5)='01/01' and RIGHT(@t_edate,5)='01/01' then @cmd+@str+")tmp" else @cmd+")tmp" end	  
+		  
+--106/01/03 調整避免期初看不到
+--set @cmd = case when RIGHT(@t_bdate,5)='01/01' and RIGHT(@t_edate,5)='01/01' then @cmd+@str+")tmp" else @cmd+")tmp" end	  
+set @cmd = case when RIGHT(@t_bdate,5)='01/01' then @cmd+@str+")tmp" else @cmd+")tmp" end
 
 execute sp_executesql @cmd
 
