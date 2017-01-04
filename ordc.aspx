@@ -731,12 +731,14 @@
 					$('#btnPlus').attr('disabled', 'disabled');
 					for(var i=0;i<q_bbsCount;i++){
 						$('#btnMinus_'+i).attr('disabled', 'disabled');
-						$('#txtProductno1_'+i).attr('disabled', 'disabled');
-						$('#btnProduct1_'+i).attr('disabled', 'disabled');
-						$('#txtProductno2_'+i).attr('disabled', 'disabled');
-						$('#btnProduct2_'+i).attr('disabled', 'disabled');
-						$('#txtProductno3_'+i).attr('disabled', 'disabled');
-						$('#btnProduct3_'+i).attr('disabled', 'disabled');
+						if(r_rank<8){
+							$('#txtProductno1_'+i).attr('disabled', 'disabled');
+							$('#btnProduct1_'+i).attr('disabled', 'disabled');
+							$('#txtProductno2_'+i).attr('disabled', 'disabled');
+							$('#btnProduct2_'+i).attr('disabled', 'disabled');
+							$('#txtProductno3_'+i).attr('disabled', 'disabled');
+							$('#btnProduct3_'+i).attr('disabled', 'disabled');
+						}
 						$('#txtProduct_'+i).attr('disabled', 'disabled');
 						$('#txtSpec_'+i).attr('disabled', 'disabled');
 						//$('#txtUnit_'+i).attr('disabled', 'disabled');

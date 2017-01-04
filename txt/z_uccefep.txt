@@ -122,9 +122,13 @@ select productno,sprice from uccps where productno+'_'+datea+'_'+noq in (select 
  
 update a
 set dmount=mount-emount,dweight=weight-eweight
-,sprice1=isnull((select sprice from @spricetmp1 where a.productno=productno),0)--盤點
-,sprice2=isnull((select sprice from @spricetmp2 where a.productno=productno),0)--庫存
 from @tmp a 
+
+update a
+set sprice1=isnull(b.sprice,0)--盤點
+,sprice2=isnull(c.sprice,0)--庫存
+from @tmp a left join @spricetmp1 b on a.productno=b.productno
+left join @spricetmp2 c on a.productno=c.productno
 
 update @tmp
 set umoney=(case when UPPER(unit)='KG' then weight else mount end)*sprice1

@@ -48,45 +48,33 @@
 						type : '0',//[8]
                         name : 'xproject',
                         value : q_getPara('sys.project').toUpperCase()
+                    }, {
+						type : '0',//[9]
+                        name : 'xr_len',
+                        value : r_len
                     }]
                 });
                 q_popAssign();
 				q_getFormat();
 				q_langShow();
-			
-				var r_1911=1911;
-				if(r_len==4){//西元年
-					r_1911=0;
-				}else{
-					$('#txtDate1').datepicker();
-					$('#txtDate2').datepicker();
-				}
+				
+				if(r_len==4){                	
+                	$.datepicker.r_len=4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+                }
+                
+				$('#txtDate1').datepicker();
+				$('#txtDate2').datepicker();
 				
                 $('#txtDate1').mask(r_picd);
 				$('#txtDate2').mask(r_picd);
-
-                var t_date, t_year, t_month, t_day;
-                t_date = new Date();
-                t_date.setDate(1);
-                t_year = t_date.getUTCFullYear() - r_1911;
-                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-                t_month = t_date.getUTCMonth() + 1;
-                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-                t_day = t_date.getUTCDate();
-                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
                 $('#txtDate1').val(q_date().substr(0, r_len) + '/01/01');           
-
-                t_date = new Date();
-                t_date.setDate(35);
-                t_date.setDate(0);
-                t_year = t_date.getUTCFullYear() - r_1911;
-                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-                t_month = t_date.getUTCMonth() + 1;
-                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-                t_day = t_date.getUTCDate();
-                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
-                $('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
-                				
+                $('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0, r_lenm)+'/01',35).substr(0,r_lenm)+'/01',-1));
+				
+				if(q_getPara('sys.project').toUpperCase()=='VU' || q_getPara('sys.project').toUpperCase()=='SF'){
+					if( r_accy > '105' && q_date().substr( r_len+1,2)=='01')
+	  					q_func( 'accend.genNextYear', ''+parseFloat( r_accy)-1+',1');
+				}
 			}
 
 			function q_boxClose(s2) {

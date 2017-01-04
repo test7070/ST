@@ -7,6 +7,7 @@ declare @t_bacc nvarchar(20)
 declare @t_eacc nvarchar(20)
 declare @accy nvarchar(5)
 declare @t_proj nvarchar(20)='[8]'
+declare @t_rlen nvarchar(20)='[9]' 
 declare @t_href nvarchar(20)=''
 
 set @t_bdate = case when '#non' = [3] then '' else [3] end
@@ -14,7 +15,7 @@ set @t_edate = case when '#non' = [4] then char(255) else [4] end
 set @t_bal = case when '#non' = [5] then '' else [5] end
 set @t_bacc = case when '#non' = [6] then '' else [6] end
 set @t_eacc = case when '#non' = [7] then char(255) else [7] end
-set @accy = case when LEN(dbo.split(@t_bdate,'/',0))>3 then CAST(CAST(dbo.split(@t_bdate,'/',0)as int)-1911 as nvarchar(5)) else dbo.split(@t_bdate,'/',0) end
+set @accy = case when @t_rlen='4' then CAST(CAST(dbo.split(@t_bdate,'/',0)as int)-1911 as nvarchar(5)) else dbo.split(@t_bdate,'/',0) end 
 if(@t_proj='VU')
 	set @t_href='_vu'
 
@@ -26,9 +27,27 @@ END
 ---------------------------------------------------------------------------------
 declare @cmd nvarchar(max)
 
+declare @listaccc table(
+	tablea nvarchar(20),
+	accy nvarchar(20),
+	yy nvarchar(10)
+)
+insert into @listaccc(tablea,accy,yy)
+SELECT TABLE_NAME 
+,replace(TABLE_NAME,'accc','')
+,substring(replace(TABLE_NAME,'accc',''),1,CHARINDEX('_',replace(TABLE_NAME,'accc',''))-1)
+FROM INFORMATION_SCHEMA.TABLES 
+where TABLE_NAME like 'accc[0-9][0-9][0-9]%' 
+
+if(@t_rlen='4')
+	delete @listaccc where not(cast(cast(yy as int)+1911 as nvarchar(10)) between LEFT(@t_bdate,@t_rlen) and LEFT(@t_edate,@t_rlen))
+else
+	delete @listaccc where not(yy between LEFT(@t_bdate,@t_rlen) and LEFT(@t_edate,@t_rlen))
+
 create table #tmp(
 	gno nvarchar(1),
 	rec float,
+	accy nvarchar(10),
 	accc5 nvarchar(20),
 	accc6 nvarchar(max),
 	accc2 nvarchar(20),
@@ -44,20 +63,45 @@ create table #tmp(
 --accc5 1.5.6.8.9開頭:dmoney-cmoney/2.3.4.7開頭:cmoney-dmoney
 set @cmd = 
 	"insert into #tmp
-	select gno,row_number()over(partition by accc5 order by accc3,bal),accc5,accc6,accc2,bal,accc3,accc7,money0,money1,money2,total,zno from (
-	select '0' gno,'' rec,accc5,accc6,accc2,bal,accc3,accc7,null money0,
-		   case when LEFT(accc5,1)='1' or LEFT(accc5,1)='5' or LEFT(accc5,1)='6' or LEFT(accc5,1)='8' or LEFT(accc5,1)='9' then dmoney else cmoney end money1,
-		   case when LEFT(accc5,1)='1' or LEFT(accc5,1)='5' or LEFT(accc5,1)='6' or LEFT(accc5,1)='8' or LEFT(accc5,1)='9' then cmoney else dmoney end money2,
-		   0 total,zno
-	from acccs"+@accy+"_1
-	where (LEN(bal)>0) and
-		  (accc2 between '"+RIGHT(@t_bdate,5)+"' and '"+RIGHT(@t_edate,5)+"') and
-		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
-		  (accc5 between '"+@t_bacc+"' and '"+@t_eacc+"')
+	select gno,row_number()over(partition by accc5 order by accy,accc3,bal),accy,accc5,accc6,accc2,bal,accc3,accc7,money0,money1,money2,total,zno from (
 	"
+
+declare @tableas nvarchar(20)
+declare @taccy nvarchar(10)
+declare @yy nvarchar(10)
+declare @idno int
+
+declare cursor_table cursor for
+select replace(tablea,'accc','acccs'),accy,case when @t_rlen='4' then cast(cast(yy as int)+1911 as nvarchar(10)) else yy end,ROW_NUMBER()over (order by accy) from @listaccc
+open cursor_table
+fetch next from cursor_table
+into @tableas,@taccy,@yy,@idno
+while(@@FETCH_STATUS <> -1)
+begin
+	if(@idno!=1)
+	set @cmd=@cmd+" union all 
+	"
+	set @cmd=@cmd+"
+		select '0' gno,'' rec,'"+LEFT(@taccy,3)+"'accy,accc5,accc6,accc2,bal,accc3,accc7,null money0,
+			   case when LEFT(accc5,1)='1' or LEFT(accc5,1)='5' or LEFT(accc5,1)='6' or LEFT(accc5,1)='8' or LEFT(accc5,1)='9' then dmoney else cmoney end money1,
+			   case when LEFT(accc5,1)='1' or LEFT(accc5,1)='5' or LEFT(accc5,1)='6' or LEFT(accc5,1)='8' or LEFT(accc5,1)='9' then cmoney else dmoney end money2,
+			   0 total,zno
+		from acccs"+@taccy+"
+		where (LEN(bal)>0) and
+		  ('"+@yy+"/'+accc2 between '"+@t_bdate+"' and '"+@t_edate+"') and
+		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
+		  (accc5 between '"+@t_bacc+"' and '"+@t_eacc+"')"
+		  
+
+	fetch next from cursor_table
+	into @tableas,@taccy,@yy,@idno
+end
+close cursor_table
+deallocate cursor_table
+
 declare @str nvarchar(max)=
 	"union
-	select '0' gno,'' rec,acc1,'' accc6,'' accc2,'' bal,bal accc3,accc7,null money0,money money1,0 money2,0 total,'' zno
+	select '0' gno,'' rec,'"+@accy+"',acc1,'' accc6,'' accc2,'' bal,bal accc3,accc7,null money0,money money1,0 money2,0 total,'' zno
 	from acbab"+@accy+"_1
 	where (LEN(bal)>0) and
 		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
@@ -118,8 +162,8 @@ close cursor_table
 deallocate cursor_table 
 
 
-insert into #tmp(gno,accc5,accc6,money0,money1,money2)
-select '2',accc5,accc6,SUM(ISNULL(money0,0)),SUM(money1),SUM(money2) from #tmp group by accc5,accc6
+insert into #tmp(gno,accy,accc5,accc6,money0,money1,money2)
+select '2',CHAR(255),accc5,accc6,SUM(ISNULL(money0,0)),SUM(money1),SUM(money2) from #tmp group by accc5,accc6
 
 update #tmp set total = money0+money1-money2 where gno = '2'
 
@@ -132,8 +176,8 @@ update #tmp set accc7=dbo.charbr(accc7,44)
 declare @t_rec float =0.01
 while((select count(*) from #tmp where CHARINDEX('<BR>',accc7)>0 and gno='0')>0)
 begin
-	insert #tmp (gno,rec,accc5,accc6,accc2,bal,accc3,accc7,zno)
-	select gno,rec+@t_rec,accc5,accc6,accc2,bal,accc3
+	insert #tmp (gno,rec,accy,accc5,accc6,accc2,bal,accc3,accc7,zno)
+	select gno,rec+@t_rec,accy,accc5,accc6,accc2,bal,accc3
 	,substring(accc7,charindex('<BR>',accc7)+4,len(accc7)),zno
 	from #tmp where CHARINDEX('<BR>',accc7)>0 and gno='0'
 	
@@ -157,20 +201,19 @@ select
 	dbo.getComma(money2,0)mny2, 
 	case when len(isnull(accc3,''))=0 then '' else 'accc?accc3=$xaccc3' end qhrefa,
 	case when len(isnull(bal,''))=0 or len(zno)=0 then '' else zno+@t_href+'?noa=$ybal' end qhrefb
-from #tmp order by accc5,accc6,gno,accc2,rec
+from #tmp order by accc5,accy,accc6,gno,accc2,rec
 
 drop table #tmp;
 --*******************************************************************************
 z_acbal02:--z_acbal02
-
 SET QUOTED_IDENTIFIER OFF
-
 declare @t_bdate nvarchar(10)
 declare @t_edate nvarchar(10)
 declare @t_bal nvarchar(50)
 declare @t_bacc nvarchar(20)
 declare @t_eacc nvarchar(20)
 declare @accy nvarchar(5)
+declare @t_rlen nvarchar(20)='[9]'
 
 set @t_bdate = case when '#non' = [3] then '' else [3] end
 set @t_edate = case when '#non' = [4] then char(255) else [4] end
@@ -179,12 +222,34 @@ set @t_bacc = case when '#non' = [6] then '' else [6] end
 set @t_eacc = case when '#non' = [7] then char(255) else [7] end
 set @accy = case when LEN(dbo.split(@t_bdate,'/',0))>3 then CAST(CAST(dbo.split(@t_bdate,'/',0)as int)-1911 as nvarchar(5)) else dbo.split(@t_bdate,'/',0) end
 ---------------------------------------------------------------------------------
+declare @cmd nvarchar(max)
+
 IF OBJECT_ID('tempdb..#tmp')is not null
 BEGIN
 	drop table #tmp
 END
 ---------------------------------------------------------------------------------
-declare @cmd nvarchar(max)
+declare @listaccc table(
+	tablea nvarchar(20),
+	accy nvarchar(20),
+	yy nvarchar(10)
+)
+insert into @listaccc(tablea,accy,yy)
+SELECT TABLE_NAME 
+,replace(TABLE_NAME,'accc','')
+,substring(replace(TABLE_NAME,'accc',''),1,CHARINDEX('_',replace(TABLE_NAME,'accc',''))-1)
+FROM INFORMATION_SCHEMA.TABLES 
+where TABLE_NAME like 'accc[0-9][0-9][0-9]%' 
+
+if(@t_rlen='4')
+	delete @listaccc where not(cast(cast(yy as int)+1911 as nvarchar(10)) between LEFT(@t_bdate,@t_rlen) and LEFT(@t_edate,@t_rlen))
+else
+	delete @listaccc where not(yy between LEFT(@t_bdate,@t_rlen) and LEFT(@t_edate,@t_rlen))
+
+declare @tableas nvarchar(20)
+declare @taccy nvarchar(10)
+declare @yy nvarchar(10)
+declare @idno int
 
 create table #tmp(
 	gno nvarchar(1),
@@ -198,22 +263,45 @@ create table #tmp(
 	total float
 )
 --accc5 1.5.6.8.9開頭:dmoney-cmoney/2.3.4.7開頭:cmoney-dmoney
-set @cmd = 
+	set @cmd = 
 	"insert into #tmp 
-	select gno,row_number()over(partition by accc5 order by bal),accc5,accc6,bal,bmoney,dmoney,cmoney,total from(
-	select '0' gno,'' rec,accc5,accc6,bal,0 bmoney,SUM(dmoney) dmoney,SUM(cmoney) cmoney,0 total 
-	from acccs"+@accy+"_1
-	where (LEN(bal)>0) and
-		  (accc2 between '"+RIGHT(@t_bdate,5)+"' and '"+RIGHT(@t_edate,5)+"') and
-		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
-		  (accc5 between '"+@t_bacc+"' and '"+@t_eacc+"')
-	group by accc5,accc6,bal
+	select '0' gno,row_number()over(partition by accc5 order by bal),accc5,accc6,bal,bmoney,dmoney,cmoney,total from(
+	select '0' gno,'' rec,accc5,accc6,bal,0 bmoney,SUM(dmoney) dmoney,SUM(cmoney) cmoney,0 total
+	from(
 	"
 	
+	declare cursor_table cursor for
+	select replace(tablea,'accc','acccs'),accy,case when @t_rlen='4' then cast(cast(yy as int)+1911 as nvarchar(10)) else yy end,ROW_NUMBER()over (order by accy) from @listaccc
+	open cursor_table
+	fetch next from cursor_table
+	into @tableas,@taccy,@yy,@idno
+	while(@@FETCH_STATUS <> -1)
+	begin
+	
+		if(@idno!=1)
+		set @cmd=@cmd+" union all
+			"
+		set @cmd=@cmd+"
+			select '0' gno,'' rec,accc5,accc6,bal,0 bmoney,dmoney,cmoney,0 total 
+			from acccs"+@taccy+"
+			where (LEN(bal)>0) and
+				  ('"+@yy+"/'+accc2 between '"+@t_bdate+"' and '"+@t_edate+"') and
+				  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
+				  (accc5 between '"+@t_bacc+"' and '"+@t_eacc+"')
+			"
+	
+		fetch next from cursor_table
+		into @tableas,@taccy,@yy,@idno
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+	set @cmd=@cmd+")tmp2 group by accc5,accc6,bal "
+		
 declare @str nvarchar(max)=
 	"union
 	select 
-		'0' gno,'' rec,acc1,'' accc6,bal,0 bmoney,
+		'0' gno,'' rec,'' accc6,bal,0 bmoney,
 		case when LEFT(acc1,1)='1' or LEFT(acc1,1)='5' or LEFT(acc1,1)='6' or LEFT(acc1,1)='8' or LEFT(acc1,1)='9' then money else 0 end dmoney,
 		case when LEFT(acc1,1)='2' or LEFT(acc1,1)='3' or LEFT(acc1,1)='4' or LEFT(acc1,1)='7' then money else 0 end cmoney,
 		0 total
@@ -221,10 +309,11 @@ declare @str nvarchar(max)=
 	where (LEN(bal)>0) and
 		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
 		  (acc1 between '"+@t_bacc+"' and '"+@t_eacc+"')"	
-		  
+
 set @cmd = case when RIGHT(@t_bdate,5)='01/01' and RIGHT(@t_edate,5)='01/01' then @cmd+@str+')tmp' else @cmd+')tmp' end
 
 execute sp_executesql @cmd
+
 
 --期初
 set @cmd = 
@@ -299,6 +388,7 @@ declare @t_bacc nvarchar(20)
 declare @t_eacc nvarchar(20)
 declare @accy nvarchar(5)
 declare @t_proj nvarchar(20)='[8]'
+declare @t_rlen nvarchar(20)='[9]'
 declare @t_href nvarchar(20)=''
 
 set @t_bdate = case when '#non' = [3] then '' else [3] end
@@ -316,6 +406,23 @@ BEGIN
 END
 ---------------------------------------------------------------------------------
 declare @cmd nvarchar(max)
+
+declare @listaccc table(
+	tablea nvarchar(20),
+	accy nvarchar(20),
+	yy nvarchar(10)
+)
+insert into @listaccc(tablea,accy,yy)
+SELECT TABLE_NAME 
+,replace(TABLE_NAME,'accc','')
+,substring(replace(TABLE_NAME,'accc',''),1,CHARINDEX('_',replace(TABLE_NAME,'accc',''))-1)
+FROM INFORMATION_SCHEMA.TABLES 
+where TABLE_NAME like 'accc[0-9][0-9][0-9]%' 
+
+if(@t_rlen='4')
+	delete @listaccc where not(cast(cast(yy as int)+1911 as nvarchar(10)) between LEFT(@t_bdate,@t_rlen) and LEFT(@t_edate,@t_rlen))
+else
+	delete @listaccc where not(yy between LEFT(@t_bdate,@t_rlen) and LEFT(@t_edate,@t_rlen))
 
 create table #tmp(
 	gno nvarchar(1),
@@ -358,36 +465,63 @@ set @cmd =
 	)tmp group by acc1,acc2,bal,zno"
 execute sp_executesql @cmd
 
+declare @tableas nvarchar(20)
+declare @taccy nvarchar(10)
+declare @yy nvarchar(10)
+declare @idno int
+
 --原始金額(accc5 1.5.6.8.9開頭:dmoney-cmoney/2.3.4.7開頭:cmoney-dmoney)
 set @cmd = 
 	"insert into #tmp
-	select gno,row_number()over(partition by accc5 order by accc3),accc5,accc6,type1,type2,accc2,accc3,bal,zno,accc7,money1,money2,total,blance from(
-	select '0' gno,'' rec,accc5,accc6,accc4 type1,accc4 type2,accc2,accc3,bal,zno,accc7,dmoney money1,0 money2,0 total,0 blance
-	from acccs"+@accy+"_1
-	where (LEFT(accc5,1)='1' or LEFT(accc5,1)='5' or LEFT(accc5,1)='6' or LEFT(accc5,1)='8' or LEFT(accc5,1)='9') and
-		  (LEN(bal)>0) and
-		  (dmoney > 0) and
-		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
-		  (accc2 between '"+RIGHT(@t_bdate,5)+"' and '"+RIGHT(@t_edate,5)+"') and
-		  (accc5 between '"+@t_bacc+"' and '"+@t_eacc+"')
-	union
-	select '0' gno,'' rec,accc5,accc6,accc4 type1,accc4 type2,accc2,accc3,bal,zno,accc7,cmoney money1,0 money2,0 total,0 blance
-	from acccs"+@accy+"_1
-	where (LEFT(accc5,1)='2' or LEFT(accc5,1)='3' or LEFT(accc5,1)='4' or LEFT(accc5,1)='7') and
-		  (LEN(bal)>0) and
-		  (cmoney > 0) and
-		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
-		  (accc2 between '"+RIGHT(@t_bdate,5)+"' and '"+RIGHT(@t_edate,5)+"') and
-		  (accc5 between '"+@t_bacc+"' and '"+@t_eacc+"')
+	select gno,row_number()over(partition by accc5 order by accc2,accc3),accc5,accc6,type1,type2,accc2,accc3,bal,zno,accc7,money1,money2,total,blance from(
 	"
+
+declare cursor_table cursor for
+select replace(tablea,'accc','acccs'),accy,case when @t_rlen='4' then cast(cast(yy as int)+1911 as nvarchar(10)) else yy end,ROW_NUMBER()over (order by accy) from @listaccc
+open cursor_table
+fetch next from cursor_table
+into @tableas,@taccy,@yy,@idno
+while(@@FETCH_STATUS <> -1)
+begin
+
+	if(@idno!=1)
+	set @cmd=@cmd+" union all 
+	"
+	
+	set @cmd=@cmd+"
+		select '0' gno,'' rec,accc5,accc6,accc4 type1,accc4 type2,'"+@yy+"/'+accc2 accc2,accc3,bal,zno,accc7,dmoney money1,0 money2,0 total,0 blance
+		from acccs"+@taccy+"
+		where (LEFT(accc5,1)='1' or LEFT(accc5,1)='5' or LEFT(accc5,1)='6' or LEFT(accc5,1)='8' or LEFT(accc5,1)='9') and
+			  (LEN(bal)>0) and
+			  (dmoney > 0) and
+			  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
+			  ('"+@yy+"/'+accc2 between '"+@t_bdate+"' and '"+@t_edate+"') and
+			  (accc5 between '"+@t_bacc+"' and '"+@t_eacc+"')
+		union all
+		select '0' gno,'' rec,accc5,accc6,accc4 type1,accc4 type2,'"+@yy+"/'+accc2 accc2,accc3,bal,zno,accc7,cmoney money1,0 money2,0 total,0 blance
+		from acccs"+@taccy+"
+		where (LEFT(accc5,1)='2' or LEFT(accc5,1)='3' or LEFT(accc5,1)='4' or LEFT(accc5,1)='7') and
+			  (LEN(bal)>0) and
+			  (cmoney > 0) and
+			  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
+			  ('"+@yy+"/'+accc2 between '"+@t_bdate+"' and '"+@t_edate+"') and
+			  (accc5 between '"+@t_bacc+"' and '"+@t_eacc+"')
+		"
+	
+	fetch next from cursor_table
+	into @tableas,@taccy,@yy,@idno
+end
+close cursor_table
+deallocate cursor_table
+
 declare @str nvarchar(max)=
 	"union
-	select '0' gno,'' rec,acc1,'',''type1,''type2,'','',bal,zno,accc7,null money1,null money2,money total,0 blance
+	select '0' gno,'' rec,acc1,'',''type1,''type2,'','',bal,'' zno,accc7,null money1,null money2,money total,0 blance
 	from acbab"+@accy+"_1
 	where (LEN(bal)>0) and
 		  (LEN('"+@t_bal+"')=0 or (bal like '%"+@t_bal+"%')) and
 		  (acc1 between '"+@t_bacc+"' and '"+@t_eacc+"')"
-
+		  
 set @cmd = case when RIGHT(@t_bdate,5)='01/01' and RIGHT(@t_edate,5)='01/01' then @cmd+@str+")tmp" else @cmd+")tmp" end	  
 
 execute sp_executesql @cmd
@@ -426,10 +560,37 @@ fetch next from cursor_table
 into @rec,@accc5,@bal
 while(@@FETCH_STATUS <> -1) 
 begin
+
 	set @cmd = 
 	"update #tmp 
-		set money2 = (select SUM(case when LEFT(accc5,1)='1' or LEFT(accc5,1)='5' or LEFT(accc5,1)='6' or LEFT(accc5,1)='8' or LEFT(accc5,1)='9' then cmoney else dmoney end)from acccs"+@accy+"_1 where accc2 between '"+RIGHT(@t_bdate,5)+"' and '"+RIGHT(@t_edate,5)+"' and accc5 = '"+@accc5+"' and ISNULL(bal,'') = '"+@bal+"')
-	where rec="+CAST(@rec as nvarchar(10))+" and accc5 = '"+@accc5+"' and ISNULL(bal,'') = '"+@bal+"'"
+		set money2 = (
+		select SUM(case when LEFT(accc5,1)='1' or LEFT(accc5,1)='5' or LEFT(accc5,1)='6' or LEFT(accc5,1)='8' or LEFT(accc5,1)='9' then cmoney else dmoney end)
+		from ("
+
+	declare cursor_table2 cursor for
+	select replace(tablea,'accc','acccs'),accy,case when @t_rlen='4' then cast(cast(yy as int)+1911 as nvarchar(10)) else yy end,ROW_NUMBER()over (order by accy) from @listaccc
+	open cursor_table2
+	fetch next from cursor_table2
+	into @tableas,@taccy,@yy,@idno
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if(@idno!=1)
+		set @cmd=@cmd+" union all 
+		"
+		set @cmd=@cmd+ 
+		"select * from acccs"+@taccy+"
+			where ('"+@yy+"/'+accc2 between '"+@t_bdate+"' and '"+@t_edate+"')
+			and accc5 = '"+@accc5+"' and ISNULL(bal,'') = '"+@bal+"'
+		"
+		
+		fetch next from cursor_table2
+		into @tableas,@taccy,@yy,@idno
+	end
+	close cursor_table2
+	deallocate cursor_table2
+	
+	set @cmd=@cmd+")tmpx ) where rec="+CAST(@rec as nvarchar(10))+" and accc5 = '"+@accc5+"' and ISNULL(bal,'') = '"+@bal+"' "
+
 	execute sp_executesql @cmd
 	
 	fetch next from cursor_table 
@@ -464,7 +625,7 @@ if(@t_proj='VU')
 	delete #tmp where accc5!='' and total=0
 
 --排版
-update #tmp set accc2 = case when LEN(accc2)>0 then dbo.split(@t_bdate,'/',0)+'/'+accc2 else '' end
+--update #tmp set accc2 = case when LEN(accc2)>0 then dbo.split(@t_bdate,'/',0)+'/'+accc2 else '' end
 --update #tmp set accc3 = case when LEN(accc3)>0 then accc3+'<br>'+ISNULL(bal,'') else '' end
 update #tmp set accc7 = REPLACE(REPLACE(accc7,'NO','<br>NO'),'到期日','<br>到期日')
 
