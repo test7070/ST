@@ -70,7 +70,11 @@
 				$('#txtDate2').mask(r_picd);
                 $('#txtDate1').val(q_date().substr(0, r_len) + '/01/01');           
                 $('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0, r_lenm)+'/01',35).substr(0,r_lenm)+'/01',-1));
-                				
+				
+				if(q_getPara('sys.project').toUpperCase()=='VU' || q_getPara('sys.project').toUpperCase()=='SF'){
+					if( r_accy > '105' && q_date().substr( r_len+1,2)=='01')
+	  					q_func( 'accend.genNextYear', ''+parseFloat( r_accy)-1+',1');
+				}
 			}
 
 			function q_boxClose(s2) {
