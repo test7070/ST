@@ -890,7 +890,7 @@
 				var t_where = '';
 				for (var i = 0; i < q_bbsCount; i++) {
 					if ($.trim($('#txtUno_' + i).val()).length > 0)
-						t_where += (t_where.length > 0 ? ' or ' : '') + "(uno='" + $.trim($('#txtUno_' + i).val()) + "' and not(accy='" + r_accy + "' and tablea='rc2s' and noa='" + $.trim($('#txtNoa').val()) + "'))";
+						t_where += (t_where.length > 0 ? ' or ' : '') + "(uno='" + $.trim($('#txtUno_' + i).val()) + "' and not(tablea='rc2s' and noa='" + $.trim($('#txtNoa').val()) + "'))";
 				}
 				if (t_where.length > 0)
 					q_gt('view_uccb', "where=^^" + t_where + "^^", 0, 0, 0, 'btnOk_checkuno');
@@ -1018,7 +1018,7 @@
 								var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
 								var t_uno = $.trim($(this).val());
 								var t_noa = $.trim($('#txtNoa').val());
-								q_gt('view_uccb', "where=^^uno='" + t_uno + "' and not(accy='" + r_accy + "' and tablea='rc2s' and noa='" + t_noa + "')^^", 0, 0, 0, 'checkUno_' + n);
+								q_gt('view_uccb', "where=^^uno='" + t_uno + "' and not(tablea='rc2s' and noa='" + t_noa + "')^^", 0, 0, 0, 'checkUno_' + n);
 							}
 						});
 						$('#txtMount_' + j).change(function() {
