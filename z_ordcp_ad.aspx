@@ -22,7 +22,7 @@
             });
             function q_gfPost() {
                 $('#q_report').q_report({
-                    fileName : 'z_ordcp',
+                    fileName : 'z_ordcp_ad',
                     options : [{/* [1]*/
 						type : '0',
 						name : 'accy',
