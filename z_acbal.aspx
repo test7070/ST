@@ -68,7 +68,7 @@
 				
                 $('#txtDate1').mask(r_picd);
 				$('#txtDate2').mask(r_picd);
-                $('#txtDate1').val(q_date().substr(0, r_len) + '/01/01');           
+                $('#txtDate1').val((dec(q_date().substr(0, r_len))-1).toString() + '/01/01');           
                 $('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0, r_lenm)+'/01',35).substr(0,r_lenm)+'/01',-1));
 				
 				if(q_getPara('sys.project').toUpperCase()=='VU' || q_getPara('sys.project').toUpperCase()=='SF'){
