@@ -85,11 +85,11 @@
                 q_popAssign();
                 q_getFormat();
                 q_langShow();
-                $('#txtXdate1').mask('999/99/99');
+                $('#txtXdate1').mask(r_picd);
                 $('#txtXdate1').datepicker();
-                $('#txtXdate2').mask('999/99/99');
+                $('#txtXdate2').mask(r_picd);
                 $('#txtXdate2').datepicker();
-                var t_para = (typeof (q_getId()[4]) == 'undefined' ? '' : q_getId()[4]).split('&');
+                var t_para = (typeof (q_getId()[3]) == 'undefined' ? '' : q_getId()[3]).split('&');
                 for(var i=0;i<t_para.length;i++){
                     if(t_para[i].indexOf('noa=') >= 0){
                         t_no = t_para[i].replace('noa=', '');

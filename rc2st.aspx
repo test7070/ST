@@ -708,7 +708,7 @@
 					case 'deleUccy':
 						var as = _q_appendData("uccy", "", true);
 						var err_str = '';
-						if (as[0] != undefined) {
+						if (as[0] != undefined && $('#cmbTypea').val()=='1') {
 							for (var i = 0; i < as.length; i++) {
 								if (as[i].uno.length>0 &&  dec(as[i].gweight) > 0) {
 									err_str += as[i].uno + '已領料，不能刪除!!\n';
