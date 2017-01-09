@@ -19,7 +19,42 @@
                 _q_boxClose();
                 q_getId();
                 q_gf('', 'z_ordcp');
+                
+				$('#q_report').click(function(e) {
+					if(q_getPara('sys.project').toUpperCase()=='JO'){
+						var delete_report=999;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_ordcp1')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('採購單列印')>-1){
+							$('#q_report div div').eq(delete_report).hide();
+						}
+						delete_report=999;										
+					}else{
+						var delete_report=999;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_ordcp01')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('採購單列印')>-1){
+							$('#q_report div div').eq(delete_report).hide();
+						}
+						delete_report=999;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+						if($('#q_report').data().info.reportData[i].report=='z_ordcp02')
+							delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('採購單列印_DDK')>-1){
+							$('#q_report div div').eq(delete_report).hide();
+						}
+						delete_report=999;
+						
+					}
+				});
+				
             });
+            
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_ordcp',

@@ -149,6 +149,10 @@ select
 	,case when @t_project='XY' then '' else '類別：' end lblkind
 from @tmp order by a_tggno,a_noa desc,pageno,gno,orderno;
 ----------------------------------------------------------------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------------------------------------------------------------
 z_ordc_xyp1:--z_ordc_xyp1
 declare @t_xkind nvarchar(max) = case when '#non' = '[2]' then '' else '[2]' end
 declare @t_bnoa nvarchar(30) = case when '#non' = [5] then '' else [5] end

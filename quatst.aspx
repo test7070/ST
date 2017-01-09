@@ -374,7 +374,10 @@
 						}
 						Unlock(1);
 						$('#chkIsproj').attr('checked',true);
-						$('#cmbKind').val(q_getPara('vcc.kind'));
+						if(!$('#checkCopy').prop('checked')){
+							$('#cmbKind').val(q_getPara('vcc.kind'));
+						}
+						
 						size_change();
 						$('#txtNoa').val('AUTO');
 						$('#txtOdate').val(q_date());
@@ -624,9 +627,11 @@
 			function btnIns() {
 				if($('#checkCopy').is(':checked'))
 					curData.copy();
+				var t_kind=$('#cmbKind').val();
 				_btnIns();
 				if($('#checkCopy').is(':checked'))
 					curData.paste();
+					$('#cmbKind').val(t_kind);
 				$('#cmbTaxtype').val(1);
 				Lock(1, {
 					opacity : 0
