@@ -151,7 +151,8 @@
 								t_moneys = round(q_mul(t_moneys, t_float), 0);
 							}	
 						}else{
-							t_moneys = round(t_moneys, 0);
+							//RK  DELI 是小數2位
+							t_moneys = round(t_moneys, 2);
 						}
 						$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 					}
