@@ -40,7 +40,8 @@
               ['txtDeivery_addr', '', 'view_road', 'memo', '0txtDeivery_addr', 'road_b.aspx'], 
               ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,radius,dime,width,lengthb,spec,class', 'txtUno_,txtProductno_,txtProduct_,txtRadius_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtClass_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
                ,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
-               , ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']);
+               , ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
+               ,['txtCardeal', 'lblCardeal', 'cardeal', 'comp', 'txtCardeal', 'cardeal_b.aspx']);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -127,8 +128,8 @@
                     if (t_ordeno.length > 0) {
                         t_where += q_sqlPara2('noa', t_ordeno);
                     }
-                    t_where += q_sqlPara2('custno', t_custno);
-                    q_box("ordet_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordet', "95%", "95%", q_getMsg('popOrde'));
+                    t_where += q_sqlPara2('custno', t_custno)+ "and kind='" + $('#cmbKind').val() + "'";
+                    q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordet', "95%", "95%", q_getMsg('popOrde'));
                 });
                 $('#btnVcceImport').click(function() {
                     var t_ordeno = $('#txtOrdeno').val();
@@ -154,6 +155,9 @@
                         q_gt('cust', t_where, 0, 0, 0, "");
                     }
                 });
+                if (q_getPara('sys.project').toUpperCase()=='RS'){
+					$('.isRS').show();
+				}
             }
 
             function q_boxClose(s2) {///   q_boxClose 2/4
@@ -216,7 +220,7 @@
                         }
                         break;
 					case 'view_orde':
-						var as = _q_appendData("orde", "", true);
+						var as = _q_appendData("view_orde", "", true);
 						if (as[0] != undefined) {
 							(trim($('#txtTel').val())==''?$('#txtTel').val(as[0].tel):'');
 							(trim($('#txtAddr_post').val())==''?$('#txtAddr_post').val(as[0].addr):'');
@@ -899,7 +903,7 @@
 						</td>
 						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
 						<td><select id="cmbTrantype" class="txt c1" name="D1" > </select></td>
-						<td><span> </span><a id="lblCardeal" class="lbl"> </a></td>
+						<td><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
 						<td><input id="txtCardeal"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblCarno" class="lbl"> </a></td>
 						<td><input id="txtCarno"  type="text" class="txt c1"/></td>
@@ -922,14 +926,12 @@
 						<td><span> </span><a id="lblDeivery_addr" class="lbl"> </a></td>
 						<td colspan="3">
 						<input id="txtDeivery_addr"  type="text" class="txt c1"/>
-						</td>
-						<!--*
-						<td><span> </span><a id="lblOrdeno" class="lbl"> </a></td>
-						<td><input id="txtOrdeno"  type="text" class="txt c1"/></td>
-						<td><input id="btnOrdeimport" type="button" title="only ordet"/></td>
-						-->
 						<td></td>
 						<td><input id="btnVcceImport" type="button" title="cut cubu"/></td>
+						</td>
+						<td><span> </span><a id="lblOrdeno" class="lbl isRS" style="display: none;"> </a></td>
+						<td><input id="txtOrdeno"  type="text" class="txt c1 isRS" style="display: none;"/></td>
+						<td><input id="btnOrdeimport" type="button" title="only ordet" class="isRS" style="display: none;" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWeight" class="lbl"> </a></td>

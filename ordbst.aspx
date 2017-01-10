@@ -258,7 +258,7 @@
 								inStr += "'"+distinctArray[i]+"',";
 							}
 							inStr = inStr.substring(0,inStr.length-1);
-							var t_where = "where=^^ ordeno in("+inStr+") and (isnull(ordeno,'') != '') ^^";
+							var t_where = "where=^^ a.ordeno in("+inStr+") and (isnull(a.ordeno,'') != '') ^^";
 							q_gt('ordbs', t_where , 0, 0, 0, "", r_accy);
 						}
 						break;
@@ -286,9 +286,11 @@
 							}
 						}
 						for(var i=0;i<ordesArray.length;i++){
-							if (ordesArray[i].mount <=0 || ordesArray[i].weight <=0 || ordesArray[i].noa == '') {
+							if(q_getPara('sys.project').toUpperCase()!="RS"){
+								if (ordesArray[i].mount <=0 || ordesArray[i].weight <=0 || ordesArray[i].noa == '') {
 									ordesArray.splice(i, 1);
 									i--;
+								}
 							}
 						}
 						if (ordesArray[0] != undefined){

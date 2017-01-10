@@ -556,7 +556,11 @@
                         inStr += "'"+distinctArray[i]+"',";
                 }
                 inStr = inStr.substring(0,inStr.length-1);
-                t_where += " and kind='" +$('#cmbKind').val()+ "' and (((enda='0') and (notv > 0))"+(trim(inStr).length>0?" or noa+no3 in("+inStr+") ":'')+")";
+                if (q_getPara('sys.project').toUpperCase()=="RS"){//祥興報價重量數量會為0
+                	t_where += " and kind='" +$('#cmbKind').val()+ "' and (((enda='0') and (notv > 0 or notv = 0))"+(trim(inStr).length>0?" or noa+no3 in("+inStr+") ":'')+")";
+                }else{
+                	t_where += " and kind='" +$('#cmbKind').val()+ "' and (((enda='0') and (notv > 0))"+(trim(inStr).length>0?" or noa+no3 in("+inStr+") ":'')+")";
+                }
                 q_box("quatst_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'quats', "95%", "95%", q_getMsg('popQuats'));
             }
             
