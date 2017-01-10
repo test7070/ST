@@ -126,10 +126,13 @@
 									i--;
 								}	
 				        	}else{
-				        		if (abbs[i].mount <= 0 || abbs[i].weight <= 0) {
-									abbs.splice(i, 1);
-									i--;
-								}
+				        		if(q_getPara('sys.project').toUpperCase()!="RS"){
+				        			if (abbs[i].mount <= 0 || abbs[i].weight <= 0) {
+										abbs.splice(i, 1);
+										i--;
+									}
+				        		}
+
 				        	}
 				        }
 				        _refresh();

@@ -565,9 +565,11 @@
 									i--;
 								}
 							}else{
-								if (ordcsArray[i].mount <= 0 || ordcsArray[i].weight <= 0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
-									ordcsArray.splice(i, 1);
-									i--;
+								if(q_getPara('sys.project').toUpperCase()!="RS"){
+									if (ordcsArray[i].mount <= 0 || ordcsArray[i].weight <= 0 || ordcsArray[i].noa == '' || dec(ordcsArray[i].cnt) == 0) {
+										ordcsArray.splice(i, 1);
+										i--;
+									}
 								}
 							}
 						}
