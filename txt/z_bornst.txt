@@ -4,6 +4,10 @@
 	declare @checkNoq int= case when (len(@t_noq) > 0) then '1' else '0' end
 	declare @t_ordeno nvarchar(50)=case when (@checkNoq = '1') then @t_noa + '-' + @t_noq else @t_noa end
 	--************************************************************************************************
+	declare @aspx_vcc nvarchar(max) = 'vccst'
+	if exists(select * from acomp where charindex('傑期',acomp)>0)
+		set @aspx_vcc = 'vcc_pk'
+	
 	declare @tmp table(
 		gno nvarchar(1),
 		ordeno nvarchar(50),
@@ -23,14 +27,16 @@
 
 	insert into @tmp
 		select '0',b.noa + '-' + a.no2 ordeno,'訂單',b.noa,b.odate,a.productno,a.product,
-		(case when ltrim(rtrim(isnull(a.size,'')))='' then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end) size,a.mount,a.weight,a.uno,a.memo,0,'ordest'+a.accy
+		(case when ltrim(rtrim(isnull(a.size,'')))='' then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end) size,a.mount,a.weight,a.uno,a.memo,0
+		,'ordest'+a.accy
 		from view_ordes a
 		left join view_orde b on a.noa = b.noa
 		where (len(@t_ordeno) = 0 or ((@checkNoq = 1 and b.noa + '-' + a.no2 =@t_ordeno) or  (@checkNoq = 0 and b.noa = @t_ordeno)))
 				 and isnull(b.noa,'') != '' 
 		union all
 		select '0', isnull(a.ordeno,'') + '-' + isnull(a.no2,'') ordeno,'派車單',b.noa,b.datea,a.productno,a.product,
-		(case when ltrim(rtrim(isnull(a.size,'')))='' then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end) size,a.mount,a.weight,a.uno,a.memo,1,'vccest'+a.accy
+		(case when ltrim(rtrim(isnull(a.size,'')))='' then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end) size,a.mount,a.weight,a.uno,a.memo,1
+		,'vccest'+a.accy
 		from view_vcces a 
 		left join view_vcce b on a.noa = b.noa
 		where (len(@t_ordeno) = 0 or ((@checkNoq = 1 and b.ordeno + '-' + a.noq = @t_ordeno) or (@checkNoq = 0 and b.ordeno = @t_ordeno)))
@@ -38,7 +44,8 @@
 		union all
 		select '0', isnull(a.ordeno,'') + '-' + isnull(a.no2,'')  ordeno,'出貨單'+case when a.typea='2' then '(退)' else '' end
 			,b.noa,b.datea,a.productno,a.product,
-		(case when ltrim(rtrim(isnull(a.size,'')))='' then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end) size,a.mount,a.weight,a.uno,a.memo,2,'vccst'+a.accy
+		(case when ltrim(rtrim(isnull(a.size,'')))='' then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end) size,a.mount,a.weight,a.uno,a.memo,2
+		,@aspx_vcc+a.accy
 		from view_vccs a
 		left join view_vcc b on a.noa = b.noa
 		where (len(@t_ordeno) = 0 or ((@checkNoq = 1 and a.ordeno + '-' + a.no2 = @t_ordeno) or  (@checkNoq = 0 and a.ordeno = @t_ordeno)))
