@@ -510,7 +510,8 @@
                 }
 
                 q_nowf();
-                as['date'] = abbm2['date'];
+                as['datea'] = abbm2['datea'];
+                as['custno'] = abbm2['custno'];
                 return true;
             }
 
