@@ -615,6 +615,8 @@
 						$('#txtRadius_' + j).val(0);
 					}
 				}
+				if(q_getPara('sys.project').toUpperCase()=='RS')
+					$('.rs_hide').hide();
 			}
 		</script>
 		<style type="text/css">
@@ -868,7 +870,7 @@
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:80px;" class="pe_hide"><a>等級</a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
-					<td align="center" style="width:250px;"><a>尺寸</a></td>
+					<td align="center" style="width:250px;" class="rs_hide"><a>尺寸</a></td>
 					<td align="center" style="width:80px;"><a id='lblGmount_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:50px;display:none;"><a id='lblWeight_st'> </a></td>
@@ -917,7 +919,7 @@
 						<input id="txtLengthb.*" type="text" style="display:none;"/>
 						<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
-					<td><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
+					<td class="rs_hide"><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num" id="txtGmount.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt num" id="txtGweight.*" type="text" style="width:95%;"/></td>
 					<td style="display:none;"><input class="txt num" id="txtWeight.*" type="text" style="width:95%;"/></td>

@@ -681,6 +681,8 @@
                         $('#txtRadius_' + j).val(0);
                     }
                 }
+                if(q_getPara('sys.project').toUpperCase()=='RS')
+					$('.rs_hide').hide();
             }
             function tipShow(){
 				Lock(1);
@@ -965,7 +967,7 @@
 					<td align="center" id='Size'><a id='lblSize_help'> </a>
 					<BR>
 					<a id='lblSize_st'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblSizea_st'> </a></td>
+					<td align="center" style="width:180px;" class="rs_hide"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblWeight_s'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblEnds_s'> </a></td>
@@ -1015,7 +1017,7 @@
 					<input id="txtLengthb.*" type="text" style="display:none;"/>
 					<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
-					<td>
+					<td class="rs_hide">
 					<input id="txtSize.*" type="text" style="width:95%;" />
 					</td>
 					<td >
