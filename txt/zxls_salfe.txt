@@ -1,4 +1,6 @@
 ﻿zxls_salfe:--zxls_salfe 打卡資料上傳
+--106/01/11 廠務及現場加工人員上班時間更改為07：00～17：10之後為加班時間(原07：00～16：00)
+
 IF OBJECT_ID('tempdb..#tmp')is not null
 BEGIN
    drop table #tmp
@@ -102,9 +104,9 @@ group by datea,sssno,namea
 update #bbs set clockout='' where clockin=clockout
 update #bbs set restout='' where restout=restin
 update a
-set ework=clockout,bwork=case when b.typea='廠務' then '16:00:00' else '17:00:00' end
+set ework=clockout,bwork=case when b.typea='廠務' then '17:10:00' else '17:00:00' end
 from #bbs a outer apply (select typea from sss where noa=a.sssno)b
-where clockout>case when b.typea='廠務' then '16:00:00' else '17:00:00' end
+where clockout>case when b.typea='廠務' then '17:10:00' else '17:00:00' end
 
 --declare cursor_table cursor for
 --select sssno,namea,datea,timea,memo from #tmp order by datea,sssno,timea
@@ -209,10 +211,10 @@ update #bbs set tweek=DATEPART(WEEKDAY,noa)-1
 
 --廠務 司機
 update a
-set whours=(cast(datediff(MINUTE,noa+' '+case when b.typea='廠務' then '16:00:00' else '17:00:00' end,noa+' '+ework)as float)/60)
+set whours=(cast(datediff(MINUTE,noa+' '+case when b.typea='廠務' then '17:10:00' else '17:00:00' end,noa+' '+ework)as float)/60)
 from #bbs a
 outer apply (select typea from sss where noa=a.sssno)b
-where isnull(ework,'')!='' and ework >=case when b.typea='廠務' then '16:00:00' else '17:00:00' end
+where isnull(ework,'')!='' and ework >=case when b.typea='廠務' then '17:10:00' else '17:00:00' end
 and (b.typea='廠務' or b.typea='司機')
 and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0')--不是周日
