@@ -1,3 +1,56 @@
+z_rc2st5:--z_rc2st5
+	SET QUOTED_IDENTIFIER OFF
+	declare @cmd nvarchar(max)
+	
+	declare @t_bdate nvarchar(10)
+	declare @t_edate nvarchar(10)
+	
+	set @t_bdate = case when '#non'=[2] then '' else [2] end
+	set @t_edate = case when '#non'=[3] then char(255) else [3] end	
+	-----------------------------------------------------------------------------
+	declare @tmp table(
+		gno nvarchar(10),
+		tggno nvarchar(20),
+		[weight] float,
+		[money] float,
+		tax float,
+		total float,
+		rate decimal(10,2)
+	)
+	
+	insert into @tmp(gno,tggno,[weight],[money],tax)
+	select '1',tggno
+		,SUM(ISNULL([weight],0)*case when typea='1' then 1 else -1 end)
+		,SUM(ISNULL([money],0)*case when typea='1' then 1 else -1 end)
+		,SUM(ISNULL([tax],0)*case when typea='1' then 1 else -1 end)
+	from view_rc2
+	where datea between @t_bdate and @t_edate 
+	group by tggno
+	
+	update @tmp set tax = ISNULL(a.tax,0)+ISNULL(b.tax,0)
+	from @tmp a
+	left join rc2a b on a.tggno=b.tggno and b.datea between @t_bdate and @t_edate 
+	update @tmp set total = ISNULL([money],0)+ISNULL([tax],0)
+	-------------------------------------------------------------------------------------------------
+	declare @total float
+	select @total = SUM(ISNULL(total,0)) from @tmp 
+	update @tmp set rate = case when @total =0 then 0 else round(total/@total*100,2) end
+	
+	select a.*, b.nick nick
+	,dbo.getComma(a.[weight],0) a1
+	,dbo.getComma(a.[money],0) a2
+	,dbo.getComma(a.[tax],0) a3
+	,dbo.getComma(a.[total],0) a4
+	from(
+		select ROW_NUMBER()over(order by total desc) rr,* 
+		from @tmp
+		union all
+		select 0,'2','',SUM(ISNULL([weight],0)),SUM(ISNULL([money],0)),SUM(ISNULL([tax],0)),SUM(ISNULL([total],0)),0 from @tmp
+		) a
+	left join tgg b on a.tggno=b.noa
+	order by case when gno='2' then 'z' else '1' end,total desc;
+
+
 z_rc2st1:--z_rc2st1
 	declare @t_accy nvarchar(10) = '[1]'
 	declare @t_bdate nvarchar(10) = case when '#non'=[2] then '' else [2] end
