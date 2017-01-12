@@ -156,7 +156,6 @@ insert @tmp(gno,mount,weight,emount,eweight,dmount,dweight,money,umoney,smoney1,
 select '1',sum(mount),sum(weight),sum(emount),sum(eweight),sum(dmount),sum(dweight),sum(money),sum(umoney),sum(smoney1),sum(smoney2) 
 from @tmp
 
-
 select
 dbo.getComma(mount,[2])  mount,
 dbo.getComma(weight,[3])  weight,
@@ -169,4 +168,4 @@ dbo.getComma(umoney,0)  umoney,
 dbo.getComma(smoney1,0)  smoney1,
 dbo.getComma(smoney2,0)  smoney2,
 *
-from @tmp order by gno,productno;
+from @tmp where emount!=0 or eweight!=0 or dweight!=0 or dmount!=0 order by gno,productno;

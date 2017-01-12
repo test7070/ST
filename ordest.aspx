@@ -1075,14 +1075,19 @@
             }
             
             function OrdenoAndNo2On_Change(){
+            	var thissyle = trim($('#cmbKind').val());
                 for(var idno=0;idno<q_bbsCount;idno++){
                     var thisQuatno = trim($('#txtQuatno_'+idno).val());
                     var thisNo3 = trim($('#txtNo3_'+idno).val());
                     if(thisQuatno.length > 0 && thisNo3.length > 0){
                         $('#textSize1_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
                         $('#textSize2_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
-                        $('#textSize3_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
-                        $('#textSize4_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+                        if (q_getPara('sys.project').toUpperCase()!="RS" || thissyle=='B2'){
+                       		$('#textSize3_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+                       	}
+                       	if (q_getPara('sys.project').toUpperCase()!="RS"){
+                       		$('#textSize4_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
+                       	}
                         $('#txtRadius_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
                         $('#textWidth_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
                         $('#textDime_'+idno).attr('readonly', true).css('background-color', 'rgb(237,237,238)').css('color', 'green');
