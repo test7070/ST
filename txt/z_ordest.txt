@@ -836,7 +836,7 @@ z_ordest2a:--z_ordest2a
 		e nvarchar(10),
 		qhref nvarchar(max),
 		coin nvarchar(20),
-		floata nvarchar(30)
+		floata float
 	)
 	insert into @tmp
 		select
