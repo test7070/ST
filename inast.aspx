@@ -1044,6 +1044,8 @@
 						$('#txtSpec_'+i).hide();	
 					}
 				}
+				if(q_getPara('sys.project').toUpperCase()=='RS')
+					$('.rs_hide').hide();
 			}
 			function FormatNumber(n) {
 				var xx = "";
@@ -1306,7 +1308,7 @@
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td class="pe_hide" align="center" style="width:80px;"><a>等級</a></td>
 					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
-					<td align="center" style="width:250px;"><a id='lblSizea_st'> </a></td>
+					<td align="center" style="width:250px;" class="rs_hide"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>寬度</a></td>
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>長度</a></td>	
@@ -1363,7 +1365,7 @@
 						<input id="txtSpec.*" type="text" style="float:left;"/>
 						<select id='combSpec.*' style="width:95%;display:none;"> </select>
 					</td>
-					<td><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
+					<td class="rs_hide"><input class="txt " id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>

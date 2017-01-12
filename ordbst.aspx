@@ -706,6 +706,12 @@
 					$('.st').hide();
 					$('.bcc').show();
 				}
+				
+				//類別=物料時， 隱藏：型	等級  短徑x長徑x厚度x長度  尺寸  重量
+				if($("#cmbKind option:selected").text()=='物料')
+					$('.hide01').hide();
+				if(q_getPara('sys.project').toUpperCase()=='RS')
+					$('.rs_hide').hide();
 			}
 
 			function FormatNumber(n) {
@@ -1007,15 +1013,15 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:20px;"> </td>
-					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
-					<td class="st" align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblProduct_st'> </a></td>
-					<td class="st" align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
+					<td align="center" style="width:140px;"><a>品名</a></td>
+					<td class="st hide01" align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
+					<td class="st hide01" align="center" style="width:80px;"><a>等級</a></td>
+					<td class="st hide01" align="center" style="width:340px;" id='Size'><a id='lblSize_help'> </a>
 					<BR><a id='lblSize_st'> </a></td>
 					
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit2'>數量<BR>單位</a></td>
-					<td class="st" align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
+					<td class="st hide01" align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
 					<td align="center" style="width:50px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a><br><a id='lblTheorys' class="st"> </a></td>
@@ -1023,7 +1029,7 @@
 					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a><br><a id='lblOrdenos_st'> </a></td>
 					<td align="center" style="width:80px;display: none;" class="source"><a id='lblSource_st'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
-					<td class="st" align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
+					<td class="st rs_hide hide01" align="center" style="width:150px;"><a id='lblSizea_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -1035,14 +1041,14 @@
 						<input class="btn st"  id="btnProductno.*" type="button" value='.' style=" font-weight: bold;width:20px;float:left;" />
 						<input class="st" type="text" id="txtProductno.*"  style="width:70%; float:left;"/>
 						<span class="st" style="display:block; width:20px;float:left;"> </span>
-						<input class="st" type="text" id="txtClass.*"  style="width:90%; float:left;"/>
 						<!--下面為物料使用-->
 						<input class="btn bcc"  id="btnProductno1.*" type="button" value='.' style=" font-weight: bold;width:1%;float:left;" />
 						<input class="bcc" type="text" id="txtProductno1.*"  style="width:75%; float:left;"/>
+						<input id="txtProduct.*" type="text" style="width:97%;" />
 					</td>
-					<td class="st"><input id="txtStyle.*" type="text" style="width:90%;" /></td>
-					<td><input id="txtProduct.*" type="text" style="width:97%;" /></td>
-					<td class="st">
+					<td class="st hide01"><input id="txtStyle.*" type="text" style="width:90%;" /></td>
+					<td class="st hide01"><input class="st" type="text" id="txtClass.*"  style="width:90%; float:left;"/></td>
+					<td class="st hide01">
 						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
 							x
@@ -1066,7 +1072,7 @@
 					
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
-					<td class="st"><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td class="st hide01"><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/></td>
 					<td>
@@ -1084,7 +1090,7 @@
 					</td>
 					<td class="source" style="display: none;"><input id="txtSource.*" type="text"  class="txt" style="width:95%;"/></td>
 					<td><input id="txtUno.*" type="text" style="float:left;width:97%;" /></td>
-					<td class="st"><input id="txtSize.*" type="text" style="width:97%;"/></td>
+					<td class="st rs_hide hide01"><input id="txtSize.*" type="text" style="width:97%;"/></td>
 				</tr>
 			</table>
 		</div>

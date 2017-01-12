@@ -265,6 +265,7 @@
 					}
 					q_box('ordbsst_b.aspx', 'ordbs;' + t_where, "95%", "650px", q_getMsg('popOrdbs'));
 				});
+				
 			}
 
 			function distinct(arr1) {
@@ -682,13 +683,7 @@
 				}
 				_bbsAssign();
 				size_change();
-				if(q_getPara('sys.project').toUpperCase()=='PK')
-					$('.pk').show();
-					
-				if(q_getPara('sys.project').toUpperCase()=='RK')
-					$('.source').show();
-					
-				genNo2();	
+				genNo2();
 			}
 			function bbtAssign() {
                 for (var i = 0; i < q_bbtCount; i++) {
@@ -826,8 +821,7 @@
                 }
 				size_change();
 				//q_popPost('txtProductno_');
-				if(q_getPara('sys.comp').substring(0,2)=='傑期')
-					$('.pk').show();
+				
 			}
 
 			function q_popPost(s1) {
@@ -863,8 +857,6 @@
 				}
 				
 				size_change();
-				if(q_getPara('sys.comp').substring(0,2)=='傑期')
-					$('.pk').show();
 			}
 
 			function btnMinus(id) {
@@ -1006,6 +998,15 @@
 					$('.st').hide();
 					$('.bcc').show();
 				}
+				//類別=物料時， 隱藏：型	等級  短徑x長徑x厚度x長度  尺寸  重量
+				if($("#cmbKind option:selected").text()=='物料')
+					$('.hide01').hide();
+				if(q_getPara('sys.project').toUpperCase()=='PK')
+					$('.pk').show();
+				if(q_getPara('sys.project').toUpperCase()=='RS')
+					$('.rs_hide').hide();
+				if(q_getPara('sys.project').toUpperCase()=='RK')
+					$('.source').show();
 			}
 
 			function FormatNumber(n) {
@@ -1311,17 +1312,17 @@
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:80px;"><a>序</a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
-					<td class="st" align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
-					<td class="st" align="center" style="width:100px;"><a>等級</a><BR><a>鋼廠</a></td>
+					<td class="st hide01" align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
+					<td class="st hide01" align="center" style="width:100px;"><a>等級</a><BR><a>鋼廠</a></td>
 					<td align="center" style="width:140px;display:none;" class="pk">規範<BR>國別</td>
-					<td class="st" align="center" style="width:340px;" id='Size'>
+					<td class="st hide01" align="center" style="width:340px;" id='Size'>
 						<a id='lblSize_help'> </a><BR>
 						<a id='lblSize_st'> </a>
 					</td>
-					<td class="st" align="center" style="width:250px;"><a id='lblSizea_st'> </a></td>
+					<td class="st rs_hide hide01" align="center" style="width:250px;"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:50px;display:none;" class="pk"><a>數量<br>單位</a></td>
-					<td class="st" align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
+					<td class="st hide01" align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
 					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:100px;">
@@ -1352,11 +1353,11 @@
 						<input class="btn"  id="btnProductno1.*" type="button" style="display:none;"/>
 						<input type="text" id="txtProduct.*" style="width:95%;" />
 					</td>
-					<td class="st">
+					<td class="st hide01">
 						<input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
-					<td class="st">
+					<td class="st hide01">
 						<input id="txtClass.*" type="text" style='width: 95%;'/>
 						<input id="txtSource.*" type="text" style='width: 95%;'/>
 					</td>
@@ -1364,7 +1365,7 @@
                         <input id="txtUcolor.*" type="text" style="width:95%;"/>
                         <input id="txtScolor.*" type="text" style="width:95%;"/>
                     </td>
-					<td class="st">
+					<td class="st hide01">
 						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
 							x
@@ -1385,10 +1386,10 @@
 						<input id="txtLengthb.*" type="text" style="display:none;"/>
 						<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
-					<td class="st"><input id="txtSize.*" type="text" style="width:95%;"/></td>
+					<td class="st rs_hide hide01"><input id="txtSize.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
-					<td class="st"><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td class="st hide01"><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/></td>
 					<td>

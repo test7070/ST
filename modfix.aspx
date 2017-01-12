@@ -35,7 +35,7 @@
 			aPop = new Array(			
 				['txtModnoa','lblModnoa','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
 				//['txtFrame','lblFrame','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
-				['txtMechno','lblMechno','mech','noa,mech','txtMechno,txtMech','mech_b.aspx']
+				['txtMechno','lblMechno','modeq','noa,device','txtMechno,txtMech','modeq_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];

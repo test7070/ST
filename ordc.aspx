@@ -563,7 +563,7 @@
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) &&!emp($('#txtProductno1_'+n).val())) {
 								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+n).val()+"' ^^";
-								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
+								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+n);
 							}
 							sum();
 							if(q_getPara('sys.project').toUpperCase()=='XY'){
@@ -613,7 +613,7 @@
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) &&!emp($('#txtProductno1_'+n).val())) {
 								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+n).val()+"' ^^";
-								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
+								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+n);
 							}
 							
 							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtProductno1_'+b_seq).val())){

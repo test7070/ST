@@ -34,12 +34,13 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'odate';
-			brwCount2 = 11;
+			brwCount2 = 12;
 			
 			aPop = new Array(
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_fact', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,nick,paytype,trantype,tel,fax,zip_comp,addr_fact,custno2,cust2', 'txtCustno,txtComp,txtPaytype,cmbTrantype,txtTel,txtFax,txtPost,txtAddr,txtCustno2,txtCust2', 'cust_b.aspx'],
+				['txtCustno2', 'lblCust2', 'cust', 'noa,nick', 'txtCustno2,txtCust2', 'cust_b.aspx'],
 				['ordb_txtTggno_', '', 'tgg', 'noa,comp', 'ordb_txtTggno_,ordb_txtTgg_', ''],
 				
 				['txtProductno_', 'btnProduct_', 'ucaucc2', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'uca_ad_b.aspx'],
@@ -2299,6 +2300,9 @@
 						<td class="td8"><input id="txtApv" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td class="td1"><span> </span><a id="lblCust2" class="lbl btn"> </a></td>
+						<td class="td2"><input id="txtCustno2" type="text" class="txt c1"/></td>
+						<td class="td3"><input id="txtCust2" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblPayterms_r' class="lbl">Price Term</a></td>
 						<td colspan="2"><select id="cmbPayterms" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblCasetype_r' class="lbl">Cabinet Type</a></td>

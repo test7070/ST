@@ -34,7 +34,7 @@
 			q_desc = 1;
 			
 			aPop = new Array(
-				['txtMechno_','btnMech_','mech','noa,mech','txtMechno_,txtMech_','mech_b.aspx']
+				['txtMechno_','btnMech_','modeq','noa,device','txtMechno_,txtMech_','modeq_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
