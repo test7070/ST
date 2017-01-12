@@ -19,7 +19,7 @@
 				alert("An error occurred:\r\n" + error.Message);
 			}
 			var q_name = "custprices";
-			var q_readonly = ['txtNoa', 'txtDatea','txtWorker','txtNotaxprice','txtPrice'];
+			var q_readonly = ['txtNoa', 'txtDatea','txtWorker','txtPrice2'];
 			//var bbmNum = [['txtPrice', 10],['txtOprice', 10],['txtDiscount', 10],['txtNotaxprice', 10],['txtTaxrate', 10]];    
 			var bbmNum = [];
 			var bbmMask = [];
@@ -30,9 +30,9 @@
 			brwKey = 'noa';
 			q_xchg = 1;
             brwCount2 = 20;
-			aPop = new Array(['txtCustno', 'lblCustno', 'cust', 'noa,nick', 'txtCustno,txtComp', 'cust_b.aspx'],
-            ['txtAgentno', 'lblAgentno', 'agent', 'noa,agent', 'txtAgentno,txtAgent', 'agent_b.aspx'],
-            ['txtProductno', 'lblProduct', 'view_ucaucc', 'noa,product,unit,saleprice', 'txtProductno,txtProduct,txtUnit,txtOprice', 'ucaucc_b.aspx']);
+			aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,nick', 'txtCustno,txtComp', 'cust_b.aspx'],
+            ['txtAgentno', 'lblAgent', 'agent', 'noa,agent', 'txtAgentno,txtAgent', 'agent_b.aspx'],
+            ['txtProductno', 'lblProduct', 'view_ucaucc', 'noa,product,unit,saleprice', 'txtProductno,txtProduct,txtUnit,txtCost', 'ucaucc_b.aspx']);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				q_brwCount();
@@ -42,11 +42,46 @@
 			function sum(){
 				if(!(q_cur==1 || q_cur==2))
 					return;	
-				$('#txtOprice').val(q_float('txtOprice'));
-				$('#txtDiscount').val(q_float('txtDiscount')==0?100:q_float('txtDiscount'));
-				$('#txtTaxrate').val(q_float('txtTaxrate')==0?0:q_float('txtTaxrate'));
-				$('#txtNotaxprice').val(q_mul(q_float('txtOprice'),q_float('txtDiscount'))/100);	
-				$('#txtPrice').val(q_mul(q_float('txtNotaxprice'),(100-q_float('txtTaxrate'))/100));
+				var cost=q_float('txtCost');
+				var tranprice=q_float('txtTranprice');
+				var fee=0;
+				var commission=q_float('txtCommission');
+				var profit=q_float('txtProfit');
+				var insurance=q_float('txtInsurance');
+				var price=0;
+				var precision=dec(q_getPara('vcc.pricePrecision'));	
+				switch ($('#cmbPayterms').val()) {//P利潤 I保險 C佣金 F運費
+					case 'C＆F'://(成本/(1-P)+F) //=CFR   
+						price=round(q_add(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),tranprice),precision);
+						break;
+					case 'C＆F＆C'://(成本/(1-P)+F)/(1-C)
+						price=round(q_div(q_add(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),tranprice),q_sub(1,q_div(commission,100))),precision);
+						break;
+					case 'C＆I': //成本/(1-P)/(1-I)
+						price=round(q_div(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),q_sub(1,q_div(insurance,100))),precision);
+						break;
+					case 'C＆I＆C'://成本/(1-P)/(1-I)/(1-C)
+						price=round(q_div(q_div(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),q_sub(1,q_div(insurance,100))),q_sub(1,q_div(commission,100))),precision);
+						break;
+					case 'CIF'://(成本/(1-P)+F)/(1-I)   
+						price=round(q_div(q_add(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),tranprice),q_sub(1,q_div(insurance,100))),precision);
+						break;
+					case 'CIF＆C'://(成本/(1-P)+F)/(1-I)/(1-C)
+						price=round(q_div(q_div(q_add(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),tranprice),q_sub(1,q_div(insurance,100))),q_sub(1,q_div(commission,100))),precision);
+						break;
+					case 'EXW'://成本/(1-P)
+						price=round(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),precision);
+						break;
+					case 'FOB'://成本/(1-P)
+						price=round(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),precision);
+						break;
+					case 'FOB＆C': //成本/(1-P)/(1-C)
+						price=round(q_div(q_div(q_add(cost,fee),q_sub(1,q_div(profit,100))),q_sub(1,q_div(commission,100))),precision);
+						break;
+					default:
+						break;
+				}
+				$('#txtPrice2').val(price);
 			}
 			
 			function main() {
@@ -60,16 +95,14 @@
 			function mainPost() {
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
+				q_cmbParse("cmbPayterms", q_getPara('sys.payterms'));
 				
-				$('#txtOprice').change(function(e){
-					sum();
-				});
-				$('#txtDiscount').change(function(e){
-					sum();
-				});
-				$('#txtTaxrate').change(function(e){
-					sum();
-				});
+				$('#txtCost').change(function(e){sum();});
+				$('#txtTranprice').change(function(e){sum();});
+				$('#txtCommission').change(function(e){sum();});
+				$('#txtProfit').change(function(e){sum();});
+				$('#txtInsurance').change(function(e){sum();});
+				$('#cmbPayterms').change(function(e){sum();});
 			}
 
 			function q_boxClose(s2) {
@@ -87,6 +120,15 @@
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
+						break;
+				}
+			}
+			function q_popPost(s1) {
+				switch (s1) {
+					case 'txtProductno':
+                        sum();
+                        break;
+					default:
 						break;
 				}
 			}
@@ -219,7 +261,7 @@
 			}
 			.dview {
 				float: left;
-				width: 1200px;
+				width: 1500px;
 				border-width: 0px;
 			}
 			.tview {
@@ -239,7 +281,7 @@
 			}
 			.dbbm {
 				float: left;
-				width: 700px;
+				width: 850px;
 				/*margin: -1px;
 				 border: 1px black solid;*/
 				border-radius: 5px;
@@ -335,27 +377,37 @@
 				<table class="tview" id="tview">
 					<tr>
 						<td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
-						<td align="center" style="width:80px; color:black;"><a id='vewNoa'>編號</a></td>
+						<td align="center" style="display:none; color:black;"><a id='vewNoa'>編號</a></td>
+						<td align="center" style="width:80px; color:black;"><a id='vewBdate'>生效日期</a></td>
 						<td align="center" style="width:120px; color:black;"><a id='vewComp'>客戶</a></td>
-						<td align="center" style="width:150px; color:black;"><a id='vewProduct'>產品</a></td>
+						<td align="center" style="width:120px; color:black;"><a id='vewAgent'>經銷商</a></td>
+						<td align="center" style="width:150px; color:black;"><a id='vewProductno'>產品編號</a></td>
+						<td align="center" style="width:150px; color:black;"><a id='vewProduct'>產品名稱</a></td>
 						<td align="center" style="width:40px; color:black;"><a id='vewUnit'>單位</a></td>
-						<td align="center" style="width:100px; color:black;"><a id='vewOprice'>銷售單價</a></td>
-						<td align="center" style="width:50px; color:black;"><a id='vewDiscount'>折扣%</a></td>
-						<td align="center" style="width:100px; color:black;"><a id='vewNotaxprice'>未稅價</a></td>
-						<td align="center" style="width:50px; color:black;"><a id='vewTaxrate'>稅率%</a></td>
-						<td align="center" style="width:100px; color:black;"><a id='vewPrice'>經銷價</a></td>
+						<td align="center" style="width:100px; color:black;"><a id='vewCost'>銷售單價</a></td>
+						<td align="center" style="width:100px; color:black;"><a id='vewTranprice'>運費單價</a></td>
+						<td align="center" style="width:100px; color:black;"><a id='vewPayterms'>交易條件</a></td>
+						<td align="center" style="width:50px; color:black;"><a id='vewCommission'>佣金%</a></td>
+						<td align="center" style="width:50px; color:black;"><a id='vewProfit'>毛利%</a></td>
+						<td align="center" style="width:50px; color:black;"><a id='vewInsurance'>保險%</a></td>
+						<td align="center" style="width:100px; color:black;"><a id='vewPrice2'>試算單價</a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=' '/></td>
-						<td id='noa' style="text-align: center;">~noa</td>
+						<td id='noa' style="display:none;text-align: center;">~noa</td>
+						<td id='bdate' style="text-align: center;">~bdate</td>
 						<td id='comp' style="text-align: center;">~comp</td>
+						<td id='agent' style="text-align: center;">~agent</td>
+						<td id='productno' style="text-align: center;">~productno</td>
 						<td id='product' style="text-align: center;">~product</td>
 						<td id='unit' style="text-align: center;">~unit</td>
-						<td id='oprice' style="text-align: center;">~oprice</td>
-						<td id='discount' style="text-align: center;">~discount</td>
-						<td id='notaxprice' style="text-align: center;">~notaxprice</td>
-						<td id='taxrate' style="text-align: center;">~taxrate</td>
-						<td id='price' style="text-align: center;">~price</td>
+						<td id='cost,3' style="text-align: right;">~cost,3</td>
+						<td id='tranprice,3' style="text-align: right;">~tranprice,3</td>
+						<td id='payterms' style="text-align: center;">~payterms</td>
+						<td id='commission' style="text-align: right;">~commission</td>
+						<td id='profit' style="text-align: right;">~profit</td>
+						<td id='insurance' style="text-align: right;">~insurance</td>
+						<td id='price2,3' style="text-align: right;">~price2,3</td>
 					</tr>
 				</table>
 			</div>
@@ -405,19 +457,24 @@
 						<td><input id="txtUnit" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblOprice' class="lbl">銷售單價</a></td>
-						<td><input id="txtOprice" type="text" class="txt c1 num"/></td>
-						<td><span> </span><a id='lblDiscount' class="lbl">折扣%</a></td>
-						<td><input id="txtDiscount" type="text" class="txt c1 num"/></td>
-						<td><span> </span><a id='lblNotaxprice' class="lbl">未稅價</a></td>
-						<td><input id="txtNotaxprice" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblCost' class="lbl">成本單價</a></td>
+						<td><input id="txtCost" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblTranprice' class="lbl">運費單價</a></td>
+						<td><input id="txtTranprice" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblNotaxprice' class="lbl">交易條件</a></td>
+						<td><select id="cmbPayterms" class="txt c1"> </select></td>
 					</tr>
 					<tr>
-						<td colspan="2"> </td>
-						<td><span> </span><a id='lblTaxrate' class="lbl">稅率%</a></td>
-						<td><input id="txtTaxrate" type="text" class="txt c1 num"/></td>
-						<td><span> </span><a id='lblPrice' class="lbl">經銷價</a></td>
-						<td><input id="txtPrice" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblCommission' class="lbl">佣金%</a></td>
+						<td><input id="txtCommission" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblProfit' class="lbl">毛利%</a></td>
+						<td><input id="txtProfit" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblInsurance' class="lbl">保險%</a></td>
+						<td><input id="txtInsurance" type="text" class="txt c1 num"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblPrice2' class="lbl">試算單價</a></td>
+						<td><input id="txtPrice2" type="text" class="txt c1 num"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl">備註</a></td>
