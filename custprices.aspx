@@ -136,7 +136,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('custprice_s.aspx', q_name + '_s', "500px", "350px", q_getMsg("popSeek"));
+				q_box('custprices_s.aspx', q_name + '_s', "500px", "500px", q_getMsg("popSeek"));
 			}
 
 			function btnIns() {
@@ -195,9 +195,9 @@
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				if(t_para){
-					$('#txtBdate').datepicker('destroy');
+					//$('#txtBdate').datepicker('destroy');
 				}else{
-					$('#txtBdate').datepicker();
+					//$('#txtBdate').datepicker();
 				}
 			}
 
