@@ -49,6 +49,23 @@
 							$('#q_report div div').eq(delete_report).hide();
 						}
 						delete_report=999;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+						if($('#q_report').data().info.reportData[i].report=='z_ordcp03')
+							delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('制式採購單')>-1){
+							$('#q_report div div').eq(delete_report).hide();
+						}
+						delete_report=999;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+						if($('#q_report').data().info.reportData[i].report=='z_ordcp04')
+							delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('制式紙箱採購單')>-1){
+							$('#q_report div div').eq(delete_report).hide();
+						}
+						delete_report=999;
+						
 						
 					}
 				});
