@@ -1436,6 +1436,8 @@
 						$('#txtRadius_' + j).val(0);
 					}
 				}
+				if(q_getPara('sys.project').toUpperCase()=='RS')
+					$('.rs_hide').hide();
 			}
 			function FormatNumber(n) {
 				var xx = "";
@@ -1816,7 +1818,7 @@
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProduct_st'> </a></td>
 					<td align="center" id="Size"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblSizea_st'></a></td>
+					<td align="center" style="width:180px;" class="rs_hide"><a id='lblSizea_st'></a></td>
 					<td align="center" style="width:30px;"><a id='lblUnit'></a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'></a></td>
 					<td align="center" style="width:100px;"><a id='lblWeight_st'></a></td>
@@ -1861,7 +1863,7 @@
 						<input id="txtLengthb.*" type="text" style="display:none;"/>
 						<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
-					<td><input id="txtSize.*" type="text" style="width:95%;" /></td>
+					<td class="rs_hide"><input id="txtSize.*" type="text" style="width:95%;" /></td>
 					<td><input id="txtUnit.*" type="text" class="txt num" style="width:95%;text-align: center;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
