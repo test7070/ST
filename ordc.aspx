@@ -128,6 +128,12 @@
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
+				
+				if(r_len==4){                	
+                	$.datepicker.r_len=4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+                }
+				
 				var t_where = "where=^^ 1=0 ^^";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				$('#cmbKind').change(function() {
@@ -327,6 +333,10 @@
 						var as = _q_appendData("tgg", "", true);
 						if (as[0] != undefined) {
 							$('#cmbTaxtype').val(as[0].conn);
+							
+							if(as[0].typea.indexOf('合約')==-1){
+								$('#txtOverrate').val(10);
+							}
 						}
 						break;
 					case 'cno_acomp':
@@ -821,9 +831,11 @@
 				if (t_para) {
 					$('#btnOrdb').attr('disabled', 'disabled');
 					$('#combAddr').attr('disabled', 'disabled');
+					$('#txtTrandate').datepicker( 'destroy' );
 				} else {
 					$('#btnOrdb').removeAttr('disabled');
 					$('#combAddr').removeAttr('disabled');
+					$('#txtTrandate').datepicker();
 				}
 				
 				if (q_getPara('sys.project').toUpperCase()=='XY' ){
