@@ -1852,9 +1852,9 @@ declare @tmp table(
 	insert @tmp
 	select '0',a.noa,b.no3,b.productno,b.product+(case when @isspec='1' then ' '+b.spec else '' end)
 	,b.unit,b.style,a.tgg,b.comp,a.odate,b.ldate,b.mount,b.omount
-	,isnull((select sum(mount) from view_ordcs where productno=b.productno and ordbno=b.noa and no3=b.no3),0)
-	,isnull((select sum(c1) from view_ordcs where productno=b.productno and ordbno=b.noa and no3=b.no3),0)
-	,isnull((select sum(notv) from view_ordcs where productno=b.productno and ordbno=b.noa and no3=b.no3),0)
+	,isnull((select sum(mount) from view_ordcs where ordbno=b.noa and no3=b.no3),0)
+	,isnull((select sum(c1) from view_ordcs where ordbno=b.noa and no3=b.no3),0)
+	,isnull((select sum(notv) from view_ordcs where ordbno=b.noa and no3=b.no3),0)
 	from view_ordb a left join view_ordbs b on a.noa=b.noa
 	where (a.noa between @t_bnoa and @t_enoa) 
 	and a.odate between @t_bodate and @t_eodate
