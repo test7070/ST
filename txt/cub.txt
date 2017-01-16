@@ -546,6 +546,16 @@ declare @vcckey nvarchar(50)=[5]--VCCKEY
 -----------------------------------------------------------------------
 declare @cmd nvarchar(max)
 declare @accy nvarchar(20)
+declare @productno nvarchar(50)=''
+declare @pordeno nvarchar(50)=''
+set @productno=isnull((select top 1 productno from view_cub where noa=@noa),'')
+set @pordeno=isnull((select top 1 ordeno from ucx where noa=@productno),'')
+if(LEN(@pordeno)=0 and LEN(@productno)>0)
+begin
+	update ucx
+	set ordeno=@noa
+	where noa=@productno
+end
 ------------------------------------------------------------------------
 --進貨單號
 declare @datea nvarchar(50),@tggno nvarchar(20),@ordeno nvarchar(50),@noq nvarchar(50)
