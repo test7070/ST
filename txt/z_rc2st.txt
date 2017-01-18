@@ -27,9 +27,9 @@ z_rc2st5:--z_rc2st5
 	where datea between @t_bdate and @t_edate 
 	group by tggno
 	
-	update @tmp set tax = ISNULL(a.tax,0)+ISNULL(b.tax,0)
-	from @tmp a
-	left join rc2a b on a.tggno=b.tggno and b.datea between @t_bdate and @t_edate 
+	--update @tmp set tax = ISNULL(a.tax,0)+ISNULL(b.tax,0)
+	--from @tmp a
+	--left join rc2a b on a.tggno=b.tggno and b.datea between @t_bdate and @t_edate 
 	update @tmp set total = ISNULL([money],0)+ISNULL([tax],0)
 	-------------------------------------------------------------------------------------------------
 	declare @total float

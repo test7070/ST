@@ -446,9 +446,9 @@ z_vccst5:--z_vccst5
 	where datea between @t_bdate and @t_edate 
 	group by custno
 	
-	update @tmp set tax = ISNULL(a.tax,0)+ISNULL(b.tax,0)
-	from @tmp a
-	left join vcca b on a.custno=b.custno and b.datea between @t_bdate and @t_edate 
+	--update @tmp set tax = ISNULL(a.tax,0)+ISNULL(b.tax,0)
+	--from @tmp a
+	--left join vcca b on a.custno=b.custno and b.datea between @t_bdate and @t_edate 
 	update @tmp set total = ISNULL([money],0)+ISNULL([tax],0)
 	-------------------------------------------------------------------------------------------------
 	declare @total float
