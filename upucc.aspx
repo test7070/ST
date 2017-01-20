@@ -458,8 +458,8 @@
 					<tr>
 						<td align="center" style="width:3%"><a id='vewChk'> </a></td>
 						<td align="center" style="width:10%"><a id='vewDatea'> </a></td>
-						<td align="center" style="width:15%"><a id='vewProduct'> </a></td>
-						<td align="center" style="width:55%"><a id='vewMemo'> </a></td>
+						<td align="center" style="width:25%"><a id='vewProduct'> </a></td>
+						<td align="center" style="width:45%"><a id='vewMemo'> </a></td>
 						<td align="center" style="width:10%"><a id='vewWorker'> </a></td>
 					</tr>
 					<tr>

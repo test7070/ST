@@ -11,7 +11,7 @@
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 			var q_name = "upmeet_s";
-			aPop = new Array(['txtCno', 'lblCno', 'cust', 'noa,acomp', 'txtCno', 'acomp_b.aspx']);
+			aPop = new Array(['txtCno', 'lblCno', 'acomp', 'noa,acomp', 'txtCno', 'acomp_b.aspx']);
 			$(document).ready(function() {
 				main();
 			});
@@ -80,7 +80,7 @@
 					<td><select id="cmbTypea" class="txt c1" style="width:215px; font-size:medium;"> </select></td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek' style="width:30%;"><a id='lblCustno'> </a></td>
+					<td class='seek' style="width:30%;"><a id='lblCno'> </a></td>
 					<td><input class="txt" id="txtCno" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 				<tr class='seek_tr'>
