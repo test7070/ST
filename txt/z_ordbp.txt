@@ -1863,6 +1863,7 @@ declare @tmp table(
 	and b.productno between @t_bpno and @t_epno
 	and a.tggno between @t_btggno and @t_etggno
 	and (len(@t_custno)=0 or b.custno=@t_custno) 
+	and isnull(a.cancel,0)!=1 and isnull(b.cancel,0)!=1
 
 if(@t_ordc='1')
 begin

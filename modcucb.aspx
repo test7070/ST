@@ -353,50 +353,47 @@
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblDatea" class="lbl"></a></td>
+						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea" type="text" class="txt c1"/></td>						
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblNoa" class="lbl"></a></td>
+						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>						
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblWorker" class="lbl"></a></td>
+						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>	
-						<td><span> </span><a id="lblWorker2" class="lbl"></a></td>
+						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>						
 					</tr>			
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 755px;">
+		<div class='dbbs' style="width: 855px;">
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'>
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:1%;">
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"/>
 					</td>				
-					<td align="center" style="width:50px;"><a id='lblMech_s'></a>維修日期</td>	
-					<td align="center" style="width:300px;"><a id='lblMech_s'></a>機台</td>
-					<td align="center" style="width:50px"><a id='lblSpec_s'></a>規格</td>								
-					<td align="center" style="width:30px"><a id='lblMount_s'></a>數量</td>
+					<td align="center" style="width:50px;"><a id='lblDatea_s'> </a>維修日期</td>	
+					<td align="center" style="width:300px;"><a id='lblMech_s'> </a>機台</td>
+					<td align="center" style="width:50px"><a id='lblSpec_s'> </a>規格</td>								
+					<td align="center" style="width:30px"><a id='lblMount_s'> </a>數量</td>
+					<td align="center" style="width:100px"><a id='lblWorker_s'> </a>維修人員</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
-					<td align="center">
-					<input id="btnMinus.*" type="button" class="btn" value='-' style=" font-weight: bold;"/>			
-					</td>			
-										
+					<td align="center"><input id="btnMinus.*" type="button" class="btn" value='-' style=" font-weight: bold;"/></td>			
 					<td><input id="txtDatea.*" type="text" class="txt" style="width :96%;"/></td>	
-						
 					<td>
-					<input id="txtNoq.*" type="hidden"/>
-					<select id="cmbMech2.*" type="text" class="txt c1" style="width :42%;"/select>
-					<input id="txtMechno.*" type="text" class="txt" style="width:15%;"/>
-					<input id="txtMech.*"type="text" class="txt" style="width:33%;"/>
-					<input id="btnMech.*" type="button" value="." style="width:5%;"/>
+						<input id="txtNoq.*" type="hidden"/>
+						<select id="cmbMech2.*" class="txt c1" style="width :42%;"> </select>
+						<input id="txtMechno.*" type="text" class="txt" style="width:15%;"/>
+						<input id="txtMech.*"type="text" class="txt" style="width:33%;"/>
+						<input id="btnMech.*" type="button" value="." style="width:5%;"/>
 					</td>
-					
 					<td><input id="txtSpec.*" type="text" class="txt" style="width :96%;"/></td>					
 					<td><input id="txtMount.*" type="text" class="txt num c1" style="width :95%;"/></td>
+					<td><input id="txtWorker.*" type="text" class="txt" style="width :96%;"/></td>
 				</tr>
 				
 			</table>
