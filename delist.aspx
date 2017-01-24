@@ -81,7 +81,7 @@
             		
             		t_unit = $.trim($('#txtUnit_' + i).val()).toUpperCase();
 					if(!$('#chkAprice_'+i).prop('checked')){
-						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'){
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'){
 							$('#txtMoney_'+i).val(round(q_mul(q_float('txtInweight_'+i),q_float('txtPrice_'+i)),3));
 							$('#txtMoney2_'+i).val(round(q_mul(q_float('txtInweight_'+i),q_float('txtPrice2_'+i)),0));
 						}else{
