@@ -1483,6 +1483,7 @@ z_ummst02:--z_ummst02
 	set @t_bcustno = case when '#non' = [5] then '' else [5] end
 	set @t_ecustno = case when '#non' = [6] then CHAR(255) else [6] end
 	---------------------------------------------------------------------------------
+	---------------------------------------------------------------------------------
 	IF OBJECT_ID('tempdb..#tmp1')is not null
 	BEGIN
 		set @cmd = 'drop table #tmp1'
@@ -1699,13 +1700,16 @@ z_ummst02:--z_ummst02
 	close cursor_table
 	deallocate cursor_table
 	
+	-- dele no data
+	delete #tmp5 where ISNULL([money],0)=0 and ISNULL([pay],0)=0 and ISNULL([unpay],0)=0 and len(ISNULL(memo,''))=0  
+	
 	insert into #tmp5(gno,[money],pay,unpay)
 	select '2',SUM(ISNULL([money],0)),SUM(ISNULL(pay,0)),SUM(ISNULL(unpay,0)) from #tmp5
 	
 	select a.*,b.nick
-	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,[money]),1)),4,12)) aa1
-	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,[pay]),1)),4,12)) aa2
-	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,[unpay]),1)),4,12)) aa3
+	,dbo.getComma(a.[money],-1) aa1
+	,dbo.getComma(a.[pay],-1) aa2
+	,dbo.getComma(a.[unpay],-1) aa3
 	from #tmp5 a
 	left join cust b on a.custno=b.noa
 	order by gno,custno
