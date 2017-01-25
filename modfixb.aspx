@@ -66,7 +66,10 @@
 				q_mask(bbmMask);
 				
 				q_cmbParse("cmbWay", '委外,自修');
-								
+				
+				$('#cmbWay').change(function() {
+					bbschange();
+				});
             }
 
 		    function q_gtPost(t_name) {
@@ -110,6 +113,7 @@
 		        }//end for-loop
 		        
 		        _bbsAssign();
+		        bbschange();
 		    }
 		    
 		    function sum() {
@@ -131,11 +135,13 @@
 		    function btnIns() {
                 _btnIns();
                 $('#txtNoa').val('AUTO');
-               	$('#txtDatea').val(q_date());              		    
+               	$('#txtDatea').val(q_date());        
+               	bbschange();
 			}
 			
 		    function btnModi() {
 		        _btnModi();
+		        bbschange();
 		    }
 
 		    function btnPrint() {
@@ -169,6 +175,7 @@
 		    
 		    function refresh(recno) {
 		        _refresh(recno);
+		        bbschange();
 		    }
 
 		    function btnMinus(id) {
@@ -227,7 +234,14 @@
 		    function btnCancel() {
 		        _btnCancel();
 		    }
-			
+		    
+			function bbschange() {
+				if($('#cmbWay').val()=='委外'){
+			        $('.rstgg').show();
+				}else{
+					$('.rstgg').hide();	
+				}
+		    }
 		</script>
 		<style type="text/css">
             #dmain {
@@ -451,7 +465,7 @@
 					<td align="center" style="width:30px;"> </td>
 					<td align="center" style="width:150px;"><a id='lblMechset_s'> </a></td>
 					<td align="center" style="width:325px;"><a id='lblProductno_s'> </a></td>
-					<td align="center" style="width:325px;"><a id='lblTggno_s'> </a></td>
+					<td align="center" style="width:325px;" class="rstgg"><a id='lblTggno_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>					
 					<td align="center" style="width:110px;"><a id='lblMoney_s'> </a></td>
@@ -468,7 +482,7 @@
 						<input id="txtProduct.*" type="text"  class="txt" style="width:55%;"/>
 						<input id="btnProductno.*" type="button" value="..." style="width: 10%;" />
 					</td>
-					<td>
+					<td class="rstgg">
 						<input id="txtTggno.*" type="text" class="txt" style="width:25%;"/>
 						<input id="txtTgg.*"type="text" class="txt" style="width:55%;"/>
 						<input id="btnTggno.*" type="button" value="..." style="width: 10%;" />
