@@ -394,7 +394,7 @@
 							}
 							
 							if(q_getPara('sys.project').toUpperCase()=='PK')
-								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdbno,txtNo3,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtTheory,txtStyle,txtClass,txtUno,txtSize,txtUnit,txtUnit2,txtUcolor,txtScolor', ordbsArray.length, ordbsArray, 'productno,product,spec,dime,width,lengthb,radius,noa,no3,price,mount,weight,total,memo,theory,style,class,uno,size,unit,unit2,ucolor,scolor', 'txtProductno,txtProduct,txtSpec');
+								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdbno,txtNo3,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtTheory,txtStyle,txtClass,txtUno,txtSize,txtUnit,txtUnit2,txtUcolor,txtScolor,txtSource', ordbsArray.length, ordbsArray, 'productno,product,spec,dime,width,lengthb,radius,noa,no3,price,mount,weight,total,memo,theory,style,class,uno,size,unit,unit2,ucolor,scolor,source', 'txtProductno,txtProduct,txtSpec');
 							else
 								ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdbno,txtNo3,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtTheory,txtStyle,txtClass,txtUno,txtSize,txtUnit,txtUnit2', ordbsArray.length, ordbsArray, 'productno,product,spec,dime,width,lengthb,radius,noa,no3,price,mount,weight,total,memo,theory,style,class,uno,size,unit,unit2', 'txtProductno,txtProduct,txtSpec');
 							
