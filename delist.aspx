@@ -81,7 +81,7 @@
             		
             		t_unit = $.trim($('#txtUnit_' + i).val()).toUpperCase();
 					if(!$('#chkAprice_'+i).prop('checked')){
-						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'MT' ||  t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'){
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓'){
 							$('#txtMoney_'+i).val(round(q_mul(q_float('txtInweight_'+i),q_float('txtPrice_'+i)),3));
 							$('#txtMoney2_'+i).val(round(q_mul(q_float('txtInweight_'+i),q_float('txtPrice2_'+i)),0));
 						}else{
@@ -524,8 +524,8 @@
 									newB_ret.push(ordcsArray[j]);
 								}
 							}
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtOrdcno,txtNo2,txtPrice,txtMount,txtWeight,txtInmount,txtInweight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit,txtUnit2', newB_ret.length, newB_ret
-							, 'uno,productno,product,spec,size,dime,width,lengthb,noa,no2,price,mount,weight,mount,weight,total,memo,class,style,unit,unit2', 'txtProductno,txtProduct,txtSpec');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtOrdcno,txtNo2,txtPrice,txtMount,txtWeight,txtInmount,txtInweight,txtTotal,txtMemo,txtClass,txtStyle,txtUnit,txtUnit2,txtSource', newB_ret.length, newB_ret
+							, 'uno,productno,product,spec,size,dime,width,lengthb,noa,no2,price,mount,weight,mount,weight,total,memo,class,style,unit,unit2,source', 'txtProductno,txtProduct,txtSpec');
 							/// 最後 aEmpField 不可以有【數字欄位】
 							
 							//依據ordc 取得lcs 的開狀費
@@ -1365,7 +1365,7 @@
 					<td align="center" style="width:115px;"><a id='lblVatbase_s'> </a><BR><a id='lblVat_s'> </a></td>
 					<td style="width:50px;">自訂<BR>稅額</td>
 					<td align="center" style="width:200px;"><a id='lblMemo_s'> </a></td>
-					<td align="center" style="width:130px;"><a id='lblUno2_s'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblUno2_s'> </a></td>
 					<td align="center" style="width:115px;"><!--<a id='lblBlmoney_s'> </a><BR>--><a id='lblLcmoney_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblOthfee_s'> </a></td>
 					<td align="center" style="width:100px;">成本單價</td>
@@ -1463,7 +1463,7 @@
 						<input class="txt c4" id="txtNo2.*" type="text" />
 						<input id="txtNoq.*" type="hidden" /><input id="recno.*" type="hidden" />
 					</td>
-					<td><input class="txt c1" id="txtUno2.*" type="text"  /></td>
+					<td><input class="txt c1" id="txtUno2.*" type="text" maxlength="30" /></td>
 					<td>
 						<!--<input class="txt num c1" id="txtBlmoney.*" type="text"  />-->
 						<input class="txt num c1" id="txtLcmoney.*" type="text"  />
