@@ -91,6 +91,14 @@
 					$('#textTaxtreaty').val($('#cmbTaxtreaty').val());
 				});
 				
+				
+				$('#cmbPtype').change(function() {
+					if($('#cmbPtype').val()=='5' || $('#cmbPtype').val()=='6' || $('#cmbPtype').val()=='7' ||$('#cmbPtype').val()=='8' || $('#cmbPtype').val()=='9'){
+						$('#chkIshouse').prop('checked',false);
+					}else{
+						$('#chkIshouse').prop('checked',true);
+					}
+				});
             }
 
             function q_boxClose(s2) {
