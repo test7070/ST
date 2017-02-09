@@ -98,7 +98,7 @@
 		    }
 		    
 			function bbsSave(as) {
-		        if (!as['mech']) {
+		        if (!as['mechno'] && !as['datea']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
