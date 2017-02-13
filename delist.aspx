@@ -1358,14 +1358,15 @@
 					<td style="width:50px;">自訂<BR>金額</td>
 					<td align="center" style="width:150px;"><a id='lblStore_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblCointotal_s'> </a><BR><a id='lblTotal_s'> </a></td>
-					<td align="center" style="width:115px;"><a id='lblTariffrate_s'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblUno2_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblCointariff_s'> </a><BR><a id='lblTariff_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblTraderate_s'> </a><BR><a id='lblTrade_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblCommodityrate_s'> </a><BR><a id='lblCommoditytax_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblVatbase_s'> </a><BR><a id='lblVat_s'> </a></td>
 					<td style="width:50px;">自訂<BR>稅額</td>
 					<td align="center" style="width:200px;"><a id='lblMemo_s'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblUno2_s'> </a></td>
+					<td align="center" style="width:115px;"><a id='lblTariffrate_s'> </a></td>
+					
 					<td align="center" style="width:115px;"><!--<a id='lblBlmoney_s'> </a><BR>--><a id='lblLcmoney_s'> </a></td>
 					<td align="center" style="width:115px;"><a id='lblOthfee_s'> </a></td>
 					<td align="center" style="width:100px;">成本單價</td>
@@ -1439,7 +1440,8 @@
 						<input class="txt num c1" id="txtInsurance.*" type="text" style="display:none;"/>
 						<input class="txt num c1" id="txtModification.*" type="text" style="display:none;"/>
 					</td>
-					<td><input class="txt num c1" id="txtTariffrate.*" type="text"  /></td>
+					<td><input class="txt c1" id="txtUno2.*" type="text" maxlength="30" /></td>
+					
 					<td>
 						<input class="txt num c1" id="txtCointariff.*" type="text"  />
 						<input class="txt num c1" id="txtTariff.*" type="text"  />
@@ -1463,7 +1465,7 @@
 						<input class="txt c4" id="txtNo2.*" type="text" />
 						<input id="txtNoq.*" type="hidden" /><input id="recno.*" type="hidden" />
 					</td>
-					<td><input class="txt c1" id="txtUno2.*" type="text" maxlength="30" /></td>
+					<td><input class="txt num c1" id="txtTariffrate.*" type="text"  /></td>
 					<td>
 						<!--<input class="txt num c1" id="txtBlmoney.*" type="text"  />-->
 						<input class="txt num c1" id="txtLcmoney.*" type="text"  />
