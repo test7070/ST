@@ -526,7 +526,7 @@
 									if(t_memo.indexOf(as[0].noa)==-1)
 										t_memo=t_memo+as[0].noa+":"+as[0].memo+" ";
 									
-									if(as[0].trantype=='廠商代送'){
+									if(as[0].trantype=='直寄'){
 										if(as[0].addr2.length>0){
 											if(t_addr.indexOf(as[0].addr2)==-1){
 												t_addr=t_addr+(t_addr.length>0?',':'')+as[0].addr2;
