@@ -814,7 +814,7 @@
 				$('#combAddr').children().remove();
 				if ((q_cur == 1 || q_cur == 2)) {
 					if (t_tggno.length > 0) {
-						q_gt('custaddr', "where=^^ noa='" + t_tggno + "' ^^", 0, 0, 0, "combAddr");
+						q_gt('custaddr', "where=^^ noa='" + t_tggno + "' ^^ stop=100", 0, 0, 0, "combAddr");
 					}
 				}
 			}

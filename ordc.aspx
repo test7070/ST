@@ -134,7 +134,7 @@
 					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
                 }
 				
-				var t_where = "where=^^ 1=0 ^^";
+				var t_where = "where=^^ 1=0 ^^ stop=100";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
 				$('#cmbKind').change(function() {
 					for (var j = 0; j < q_bbsCount; j++) {
@@ -166,7 +166,7 @@
 				});
 				$('#txtTggno').change(function() {
 					if (!emp($('#txtTggno').val())) {
-						var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
+						var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^ stop=100";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 					}
 					if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) ) {
@@ -698,7 +698,7 @@
 				$('#txtAcomp').val(z_acomp);
 				product_change();
 				if (!emp($('#txtTggno').val())) {
-					var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
+					var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^ stop=100";
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
 				
@@ -733,7 +733,7 @@
 				$('#txtProduct').focus();
 				product_change();
 				if (!emp($('#txtTggno').val())) {
-					var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
+					var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^ stop=100";
 					q_gt('custaddr', t_where, 0, 0, 0, "");
 				}
 				
@@ -982,7 +982,7 @@
 				switch (id) {
 					case 'txtTggno':
 						if (!emp($('#txtTggno').val())) {
-							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^";
+							var t_where = "where=^^ noa='" + $('#txtTggno').val() + "' ^^ stop=100";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
 							if(q_getPara('sys.project').toUpperCase()=='XY'){
 								var t_where =" noa='"+$('#txtTggno').val()+"'";
