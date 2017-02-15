@@ -353,8 +353,8 @@
 						var as = _q_appendData("sss", "", true);
 						imports=true;
 						for (var i = 0; i < as.length; i++) {
-							//判斷是否哪些員工要計算薪水//106/02/15 有離職日(當天會發不會等到月底才匯入) 不處理(除復職日有打)
-		                    if ((!emp(as[i].outdate) && as[i].outdate<date_1) || as[i].indate > date_2 || (as[i].outdate!='' && (as[i].reindate=='' || as[i].reindate<date_1) )) {
+							//判斷是否哪些員工要計算薪水 //106/02/15 有離職日當月不會匯入(當天離職會先發，不會等到月底才匯入),除復職日有打
+		                    if ((!emp(as[i].outdate) && as[i].outdate<=date_2 && (as[i].reindate=='' || as[i].reindate<date_1)) || as[i].indate > date_2) {
 		                        as.splice(i, 1);
 		                        i--;
 		                    }else{
