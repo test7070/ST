@@ -61,6 +61,7 @@
 			function mainPost() {
 				q_getFormat();
 				bbmMask = [['txtBirthday', r_picd], ['txtIndate', r_picd], ['txtOutdate', r_picd], ['txtHealth_bdate', r_picd], ['txtHealth_edate', r_picd], ['txtLabor1_bdate', r_picd], ['txtLabor1_edate', r_picd], ['txtLabor2_bdate', r_picd], ['txtLabor2_edate', r_picd]
+				,['txtReindate', r_picd]
 				,['textBmon','99'],['textEmon','99'],['textYear','999']];
 				q_mask(bbmMask);
 
@@ -943,6 +944,8 @@
 						<td><input id="txtIndate" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblOutdate' class="lbl"> </a></td>
 						<td><input id="txtOutdate" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblReindate' class="lbl"> </a></td>
+						<td><input id="txtReindate" type="text" class="txt c1"/></td>
 					</tr>
 					<tr class="isBarCode">
 						<td class="isBarCode vuhide"><span> </span><a id='lblClass5' class="lbl"> </a></td>

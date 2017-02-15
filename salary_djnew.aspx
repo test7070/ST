@@ -21,7 +21,7 @@
         var bbmNum = [['txtMoney', 15, 0, 1],['txtDaymoney', 15, 0, 1],['txtBo_admin', 15, 0, 1],['txtBo_traffic', 15, 0, 1],['txtBo_special', 15, 0, 1],['txtBo_oth', 15, 0, 1],['txtTax_other', 15, 0, 1],['txtMi_total', 15, 0, 1],['txtMtotal', 15, 0, 1],['txtBo_full', 15, 0, 1],['txtAddmoney', 15, 0, 1],['txtBorrow', 15, 0, 1],['txtCh_labor', 15, 0, 1],['txtCh_health', 15, 0, 1],['txtCh_labor_comp', 15, 0, 1],['txtCh_labor_self', 15, 0, 1],['txtWelfare', 15, 0, 1],['txtTotal3', 15, 0, 1],['txtTotal4', 15, 0, 1],['txtTotal5', 15, 0, 1],['txtPlus', 15, 0, 1],['txtMinus', 15, 0, 1]];  
         var bbsNum = [
         	['txtMoney', 15, 0, 1],['txtDaymoney', 15, 0, 1],['txtBo_admin', 15, 0, 1],['txtBo_traffic', 15, 0, 1],['txtBo_special', 15, 0, 1],['txtBo_oth', 15, 0, 1],['txtTotal1', 15, 0, 1],['txtCh_labor1', 15, 0, 1],['txtCh_labor2', 15, 0, 1],['txtCh_health_insure', 15, 0, 1],['txtDay', 15, 1, 1],['txtMtotal', 15, 0, 1],['txtBo_born', 15, 0, 1],['txtBo_night', 15, 0, 1],['txtBo_full', 15, 0, 1],['txtBo_duty', 15, 0, 1],['txtTax_other', 15, 0, 1],['txtTotal2', 15, 0, 1],['txtOstand', 15, 2, 1],['txtAddh2_1', 15, 1, 1],['txtAddh2_2', 15, 1, 1],['txtAddmoney', 15, 0, 1],
-        	['txtAddh100', 15, 1, 1],['txtAddh46_1', 15, 1, 1],['txtAddh46_2', 15, 1, 1],['txtTax_other2', 15, 0, 1],['txtMeals', 15, 0, 1],['txtTotal3', 15, 0, 1],['txtBorrow', 15, 0, 1],['txtCh_labor', 15, 0, 1],['txtChgcash', 15, 0, 1],['txtTax6', 15, 0, 1],['txtStay_tax', 15, 0, 1],['txtTax12', 15, 0, 1],['txtTax18', 15, 0, 1],['txtCh_labor_comp', 15, 0, 1],['txtCh_labor_self', 15, 0, 1],['txtLodging_power_fee', 15, 0, 1],['txtTax', 15, 0, 1],['txtTax5', 15, 0, 1],['txtWelfare', 15, 0, 1],['txtStay_money', 15, 0, 1],['txtRaise_num', 15, 0, 1],['txtCh_health', 15, 0, 1],['txtHplus2', 15, 0, 1],['txtTotal4', 15, 0, 1],
+        	['txtAddh100', 15, 1, 1],['txtAddh46_1', 15, 1, 1],['txtAddh46_2', 15, 1, 1],['txtAddh200', 15, 1, 1],['txtAddh266', 15, 1, 1],['txtTax_other2', 15, 0, 1],['txtMeals', 15, 0, 1],['txtTotal3', 15, 0, 1],['txtBorrow', 15, 0, 1],['txtCh_labor', 15, 0, 1],['txtChgcash', 15, 0, 1],['txtTax6', 15, 0, 1],['txtStay_tax', 15, 0, 1],['txtTax12', 15, 0, 1],['txtTax18', 15, 0, 1],['txtCh_labor_comp', 15, 0, 1],['txtCh_labor_self', 15, 0, 1],['txtLodging_power_fee', 15, 0, 1],['txtTax', 15, 0, 1],['txtTax5', 15, 0, 1],['txtWelfare', 15, 0, 1],['txtStay_money', 15, 0, 1],['txtRaise_num', 15, 0, 1],['txtCh_health', 15, 0, 1],['txtHplus2', 15, 0, 1],['txtTotal4', 15, 0, 1],
         	['txtTotal5', 15, 0, 1],['txtLate', 15, 0, 1],['txtHr_sick', 15, 1, 1],['txtMi_sick', 15, 0, 1],['txtHr_person', 15, 1, 1],['txtMi_person', 15, 0, 1],['txtHr_nosalary', 15, 1, 1],['txtMi_nosalary', 15, 0, 1],['txtHr_leave', 15, 1, 1],['txtMi_leave', 15, 0, 1],['txtPlus', 15, 0, 1],['txtMinus', 15, 0, 1],
         	['txtMoney1', 15, 0, 1],['txtMoney2', 15, 0, 1],['txtMoney3', 15, 0, 1],['txtMoney4', 15, 0, 1],['txtMoney5', 15, 0, 1],['txtMoney6', 15, 0, 1],['txtMoney7', 15, 0, 1],['txtCh_health2', 15, 0, 1],['txtCh_retire2', 15, 0, 1],['txtCh_retire', 15, 0, 1],['txtSa_health', 15, 0, 1],['txtSa_labor', 15, 0, 1],['txtSa_retire', 15, 0, 1]
         	];
@@ -84,7 +84,7 @@
             			$('#txtMon').val($('#txtMon').val().substr(0,3)+'/'+$('#txtMon').val().substr(3,2));
             		else{
             			alert('月份欄位錯誤請，重新輸入!!!');
-            			$('#txtMon').focus();
+            			//$('#txtMon').focus();
             			return;
             		}
             	}
@@ -162,7 +162,7 @@
             $('#btnHideaddmoney').click(function() {
             	if($('#btnHideaddmoney').val().indexOf("隱藏")>-1){
 					$('.btn3').hide();
-	            	$('#tbbs').css("width",(dec($('#tbbs')[0].offsetWidth)-1500)+"px");
+	            	$('#tbbs').css("width",(dec($('#tbbs')[0].offsetWidth)-1700)+"px");
 	            	scroll("tbbs","box",1);
 					$("#btnHideaddmoney").val("加班費顯示");
 				}else{
@@ -176,7 +176,7 @@
 					}else{
 						$('.person2.btn3').hide();$('.person3.btn3').hide();$('.person4.btn3').hide();$('.person1.btn3').show();
 					}
-	            	 $('#tbbs').css("width",(dec($('#tbbs')[0].offsetWidth)+1500)+"px");
+	            	 $('#tbbs').css("width",(dec($('#tbbs')[0].offsetWidth)+1700)+"px");
 	            	 scroll("tbbs","box",1);
 					$("#btnHideaddmoney").val("加班費隱藏");
 				}
@@ -353,7 +353,7 @@
 						var as = _q_appendData("sss", "", true);
 						imports=true;
 						for (var i = 0; i < as.length; i++) {
-							//判斷是否哪些員工要計算薪水 //106/02/15 有離職日(當天會發不會等到月底才匯入) 不處理(除復職日有打)
+							//判斷是否哪些員工要計算薪水//106/02/15 有離職日(當天會發不會等到月底才匯入) 不處理(除復職日有打)
 		                    if ((!emp(as[i].outdate) && as[i].outdate<date_1) || as[i].indate > date_2 || (as[i].outdate!='' && (as[i].reindate=='' || as[i].reindate<date_1) )) {
 		                        as.splice(i, 1);
 		                        i--;
@@ -452,14 +452,14 @@
 						
 						
 						if ($('#cmbPerson').find("option:selected").text().indexOf('日薪')>-1 || $('#cmbPerson').find("option:selected").text().indexOf('時薪')>-1){
-							q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea,txtPartno,txtPart,txtDaymoney,txtBo_admin,txtBo_traffic,txtBo_special,txtBo_oth,txtDay,txtMi_saliday,txtAddh2_1,txtAddh2_2,txtChgcash,txtRaise_num,txtLate,txtHr_sick,txtHr_person,txtHr_nosalary,txtHr_leave,txtMemo,txtPlus,txtMinus,txtBorrow,txtBo_full,txtCh_health,txtCh_labor,txtCh_retire,txtHplus2,txtCh_health2,txtCh_labor2,txtCh_retire2,txtSa_health,txtSa_labor,txtSa_retire,txtTax,txtMoney3'
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea,txtPartno,txtPart,txtDaymoney,txtBo_admin,txtBo_traffic,txtBo_special,txtBo_oth,txtDay,txtMi_saliday,txtAddh2_1,txtAddh2_2,txtChgcash,txtRaise_num,txtLate,txtHr_sick,txtHr_person,txtHr_nosalary,txtHr_leave,txtMemo,txtPlus,txtMinus,txtBorrow,txtBo_full,txtCh_health,txtCh_labor,txtCh_retire,txtHplus2,txtCh_health2,txtCh_labor2,txtCh_retire2,txtSa_health,txtSa_labor,txtSa_retire,txtTax,txtMoney3,txtAddh100,txtAddh200,txtAddh266'
 															, as.length, as
-                                                           , 'sssno,namea,partno,part,salary,bo_admin,traffic,bo_special,bo_oth,day,mi_saliday,saddh1,saddh2,chgcash,mount,late,hr_sick,hr_person,hr_nosalary,hr_leave,memo,plus,minus,borrow,bo_full,he_person,la_person,re_person,hplus2,he_comp,la_comp,re_comp,sa_health,sa_labor,sa_retire,tax,bo_money1'
+                                                           , 'sssno,namea,partno,part,salary,bo_admin,traffic,bo_special,bo_oth,day,mi_saliday,saddh1,saddh2,chgcash,mount,late,hr_sick,hr_person,hr_nosalary,hr_leave,memo,plus,minus,borrow,bo_full,he_person,la_person,re_person,hplus2,he_comp,la_comp,re_comp,sa_health,sa_labor,sa_retire,tax,bo_money1,saddh3,saddh4,saddh5'
                                                            , '');
 						}else{
-                         	q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea,txtPartno,txtPart,txtMoney,txtBo_admin,txtBo_traffic,txtBo_special,txtBo_oth,txtCh_labor1,txtCh_labor2,txtCh_health_insure,txtDay,txtMi_saliday,txtAddh2_1,txtAddh2_2,txtChgcash,txtRaise_num,txtLate,txtHr_sick,txtHr_person,txtHr_nosalary,txtHr_leave,txtMemo,txtPlus,txtMinus,txtBorrow,txtBo_full,txtMi_sick,txtMi_person,txtMi_nosalary,txtMi_leave,txtBo_born,txtBo_night,txtBo_duty,txtTax_other,txtMeals,txtCh_health,txtCh_labor,txtCh_retire,txtHplus2,txtCh_health2,txtCh_labor2,txtCh_retire2,txtSa_health,txtSa_labor,txtSa_retire,txtTax,txtMoney3'
+                         	q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea,txtPartno,txtPart,txtMoney,txtBo_admin,txtBo_traffic,txtBo_special,txtBo_oth,txtCh_labor1,txtCh_labor2,txtCh_health_insure,txtDay,txtMi_saliday,txtAddh2_1,txtAddh2_2,txtChgcash,txtRaise_num,txtLate,txtHr_sick,txtHr_person,txtHr_nosalary,txtHr_leave,txtMemo,txtPlus,txtMinus,txtBorrow,txtBo_full,txtMi_sick,txtMi_person,txtMi_nosalary,txtMi_leave,txtBo_born,txtBo_night,txtBo_duty,txtTax_other,txtMeals,txtCh_health,txtCh_labor,txtCh_retire,txtHplus2,txtCh_health2,txtCh_labor2,txtCh_retire2,txtSa_health,txtSa_labor,txtSa_retire,txtTax,txtMoney3,txtAddh100,txtAddh200,txtAddh266'
 															, as.length, as
-                                                           , 'sssno,namea,partno,part,salary,bo_admin,traffic,bo_special,bo_oth,ch_labor1,ch_labor2,ch_health_insure,day,mi_saliday,saddh1,saddh2,chgcash,mount,late,hr_sick,hr_person,hr_nosalary,hr_leave,memo,plus,minus,borrow,bo_full,mi_sick,mi_person,mi_nosalary,mi_leave,bo_born,bo_night,bo_day,tax_other,meals,he_person,la_person,re_person,hplus2,he_comp,la_comp,re_comp,sa_health,sa_labor,sa_retire,tax,bo_money1'
+                                                           , 'sssno,namea,partno,part,salary,bo_admin,traffic,bo_special,bo_oth,ch_labor1,ch_labor2,ch_health_insure,day,mi_saliday,saddh1,saddh2,chgcash,mount,late,hr_sick,hr_person,hr_nosalary,hr_leave,memo,plus,minus,borrow,bo_full,mi_sick,mi_person,mi_nosalary,mi_leave,bo_born,bo_night,bo_day,tax_other,meals,he_person,la_person,re_person,hplus2,he_comp,la_comp,re_comp,sa_health,sa_labor,sa_retire,tax,bo_money1,saddh3,saddh4,saddh5'
                                                            , '');
                         }
                         
@@ -674,7 +674,13 @@
         			
         			//當有核取時加班費金額可以直接修改
         			if(!$('#chkIsmanual_'+j).prop('checked'))
-        				q_tr('txtAddmoney_'+j,Math.round(dec($('#txtOstand_'+j).val())*1.33*dec($('#txtAddh2_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*1.66*dec($('#txtAddh2_2_'+j).val())));//加班費
+        				q_tr('txtAddmoney_'+j,Math.round(dec($('#txtOstand_'+j).val())*(4/3)*dec($('#txtAddh2_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*(5/3)*dec($('#txtAddh2_2_'+j).val()))
+        				//+Math.round(dec($('#txtOstand_'+j).val())*(4/3)*dec($('#txtAddh46_1_'+j).val()))
+        				//+Math.round(dec($('#txtOstand_'+j).val())*(5/3)*dec($('#txtAddh46_2_'+j).val()))
+        				+Math.round(dec($('#txtOstand_'+j).val())*1*dec($('#txtAddh100_'+j).val()))
+        				+Math.round(dec($('#txtOstand_'+j).val())*2*dec($('#txtAddh200_'+j).val()))
+        				+Math.round(dec($('#txtOstand_'+j).val())*(8/3)*dec($('#txtAddh266_'+j).val()))
+        				);//加班費
         			//應領總額=給付總額+加班費+免稅其他
         			q_tr('txtTotal3_'+j,Math.round(dec($('#txtTotal2_'+j).val())+dec($('#txtAddmoney_'+j).val())+dec($('#txtTax_other2_'+j).val())
         			+dec($('#txtMoney1_'+j).val())+dec($('#txtMoney2_'+j).val())+dec($('#txtMoney3_'+j).val())+dec($('#txtMoney4_'+j).val())+dec($('#txtMoney5_'+j).val())+dec($('#txtMoney6_'+j).val())+dec($('#txtPlus_'+j).val())));
@@ -705,8 +711,9 @@
         			
         			//當有核取時加班費金額可以直接修改
         			if(!$('#chkIsmanual_'+j).prop('checked'))
-        				q_tr('txtAddmoney_'+j,Math.round(dec($('#txtOstand_'+j).val())*1.33*dec($('#txtAddh2_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*1.66*dec($('#txtAddh2_2_'+j).val()))
-        				+Math.round(dec($('#txtOstand_'+j).val())*1.33*dec($('#txtAddh46_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*1.66*dec($('#txtAddh46_2_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*1*dec($('#txtAddh100_'+j).val()))
+        				q_tr('txtAddmoney_'+j,Math.round(dec($('#txtOstand_'+j).val())*(4/3)*dec($('#txtAddh2_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*(5/3)*dec($('#txtAddh2_2_'+j).val()))
+        				+Math.round(dec($('#txtOstand_'+j).val())*(4/3)*dec($('#txtAddh46_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*(5/3)*dec($('#txtAddh46_2_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*1*dec($('#txtAddh100_'+j).val()))
+        				+Math.round(dec($('#txtOstand_'+j).val())*2*dec($('#txtAddh200_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*(8/3)*dec($('#txtAddh266_'+j).val()))
         				);//加班費
         				
         			q_tr('txtTotal3_'+j,Math.round(dec($('#txtTotal2_'+j).val())+dec($('#txtAddmoney_'+j).val())+dec($('#txtTax_other2_'+j).val())
@@ -737,8 +744,9 @@
         			
         			//當有核取時加班費金額可以直接修改
         			if(!$('#chkIsmanual_'+j).prop('checked'))
-        				q_tr('txtAddmoney_'+j,Math.round(dec($('#txtOstand_'+j).val())*1.33*dec($('#txtAddh2_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*1.66*dec($('#txtAddh2_2_'+j).val()))
-        				+Math.round(dec($('#txtOstand_'+j).val())*1.33*dec($('#txtAddh46_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*1.66*dec($('#txtAddh46_2_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*1*dec($('#txtAddh100_'+j).val()))
+        				q_tr('txtAddmoney_'+j,Math.round(dec($('#txtOstand_'+j).val())*(4/3)*dec($('#txtAddh2_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*(5/3)*dec($('#txtAddh2_2_'+j).val()))
+        				+Math.round(dec($('#txtOstand_'+j).val())*(4/3)*dec($('#txtAddh46_1_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*(5/3)*dec($('#txtAddh46_2_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*1*dec($('#txtAddh100_'+j).val()))
+        				+Math.round(dec($('#txtOstand_'+j).val())*2*dec($('#txtAddh200_'+j).val()))+Math.round(dec($('#txtOstand_'+j).val())*(8/3)*dec($('#txtAddh266_'+j).val()))
         				);//加班費
         			
         			q_tr('txtTotal3_'+j,Math.round(dec($('#txtTotal2_'+j).val())+dec($('#txtAddmoney_'+j).val())+dec($('#txtTax_other2_'+j).val())
@@ -938,25 +946,25 @@
         	getdtmp();
         	$('.btn1').show();$('.btn2').show();$('.btn3').show();$('.btn4').show();$('.btn5').show();
              if ($('#cmbPerson').find("option:selected").text().indexOf('本國')>-1){
-             	$('#tbbs').css("width","6400px");
+             	$('#tbbs').css("width","6600px");
              	$('.person2').hide();
              	$('.person3').hide();
              	$('.person4').hide();
              	$('.person1').show();
             }else if ($('#cmbPerson').find("option:selected").text().indexOf('日薪')>-1){
-            	$('#tbbs').css("width","6400px");
+            	$('#tbbs').css("width","6600px");
             	$('.person1').hide();
              	$('.person3').hide();
              	$('.person4').hide();
              	$('.person2').show();
             }else if ($('#cmbPerson').find("option:selected").text().indexOf('時薪')>-1){
-            	$('#tbbs').css("width","6400px");
+            	$('#tbbs').css("width","6600px");
             	$('.person1').hide();
              	$('.person2').hide();
              	$('.person4').hide();
              	$('.person3').show();
             }else{//外勞
-            	$('#tbbs').css("width", "7300px");
+            	$('#tbbs').css("width", "7500px");
 				$('.person1').hide();
              	$('.person2').hide();
              	$('.person3').hide();
@@ -1257,7 +1265,7 @@
         </div>
         <div id="box">
         <div class='dbbs' > 
-        <table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1' style="width: 6300px;background:#cad3ff;">
+        <table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1' style="width: 6500px;background:#cad3ff;">
             <tr style='color:White; background:#003366;' >
                 <td align="center" style="width: 35px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;font-size: 16px;"  /> </td>
                 <td align="center" style="width: 26px;"><a id='vewChks'>選</a></td>
@@ -1294,6 +1302,8 @@
                 <td class="btn3" align="center" style="width: 100px;"><a id='lblAddh46_1s'> </a></td>
                 <td class="btn3" align="center" style="width: 100px;"><a id='lblAddh46_2s'> </a></td>
                 <td class="btn3" align="center" style="width: 100px;"><a id='lblAddh100s'> </a></td>
+                <td class="btn3" align="center" style="width: 100px;"><a id='lblAddh200s'> </a></td>
+                <td class="btn3" align="center" style="width: 100px;"><a id='lblAddh266s'> </a></td>
                 <td class="btn3" align="center" style="width: 100px;"><a id='lblAddmoneys'> </a></td>
                 <td class="btn3" align="center" style="width: 100px;"><a id='lblMoney1s'> </a></td>
                 <td class="btn3" align="center" style="width: 100px;"><a id='lblMoney2s'> </a></td>
@@ -1377,6 +1387,8 @@
                 <td class="btn3"><input class="txt num c1" id="txtAddh46_1.*" type="text" /></td>
                 <td class="btn3"><input class="txt num c1" id="txtAddh46_2.*" type="text" /></td>
                 <td class="btn3"><input class="txt num c1" id="txtAddh100.*" type="text" /></td>
+                <td class="btn3"><input class="txt num c1" id="txtAddh200.*" type="text" /></td>
+                <td class="btn3"><input class="txt num c1" id="txtAddh266.*" type="text" /></td>
                 <td class="btn3"><input class="txt num c1" id="txtAddmoney.*" type="text" /></td>
                 <td class="btn3"><input class="txt num c1" id="txtMoney1.*" type="text" /></td>
                 <td class="btn3"><input class="txt num c1" id="txtMoney2.*" type="text" /></td>
