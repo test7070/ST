@@ -2,11 +2,9 @@ z_rc2st5:--z_rc2st5
 	SET QUOTED_IDENTIFIER OFF
 	declare @cmd nvarchar(max)
 	
-	declare @t_bdate nvarchar(10)
-	declare @t_edate nvarchar(10)
-	
-	set @t_bdate = case when '#non'=[2] then '' else [2] end
-	set @t_edate = case when '#non'=[3] then char(255) else [3] end	
+	declare @t_bdate nvarchar(10) = case when '#non'=[2] then '' else [2] end
+	declare @t_edate nvarchar(10) = case when '#non'=[3] then char(255) else [3] end	
+	declare @t_kind nvarchar(max) = case when '#non'=[21] then '' else [21] end
 	-----------------------------------------------------------------------------
 	declare @tmp table(
 		gno nvarchar(10),
@@ -25,6 +23,7 @@ z_rc2st5:--z_rc2st5
 		,SUM(ISNULL([tax],0)*case when typea='1' then 1 else -1 end)
 	from view_rc2
 	where datea between @t_bdate and @t_edate 
+	and (len(@t_kind)=0 or isnull(kind,'')=@t_kind)
 	group by tggno
 	
 	--update @tmp set tax = ISNULL(a.tax,0)+ISNULL(b.tax,0)

@@ -55,6 +55,16 @@
 				}
 			}
 			function loadFinish(){
+				var t_kind = '';
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'PK':
+						t_kind = q_getPara('sys.stktype')+',2@物料,3@委外';
+						break;
+					default:
+						t_kind = q_getPara('sys.stktype');
+						break;
+				}
+				
 				$('#q_report').q_report({
                     fileName : 'z_rc2st',
                     options : [
@@ -102,6 +112,10 @@
 						type : '5', //10 [20]
 						name : 'xstyle',
 						value : [q_getPara('report.all')].concat(t_style.split('&'))
+					}, {
+						type : '5', //11 [21]
+						name : 'xkind',
+						value : [q_getPara('report.all')].concat(t_kind.split(','))
 					}]
                 });
                 q_popAssign();
