@@ -472,27 +472,33 @@ create table #tmp(
 	PRIMARY KEY (coin,gno,cno,custno,mon)
 )
 
-insert into #tmp (coin,gno,cno,custno,mon,money,total,payed)
+insert into #tmp(coin,gno,cno,custno,mon,money,total,payed)
 select coin,gno,cno,custno,mon,SUM(money),SUM(total),SUM(payed) from (
 	--前期
-	select @t_xcoin coin,'9' gno,cno,a.noa custno,a.mon,sum(unpay*coin.floata) money,0 total,0 payed 
+	select @t_xcoin coin,'9' gno,cno,a.noa custno,a.mon,sum(unpay/coin.floata) money,0 total,0 payed
 	from cust_2s a
 	left join cust b on a.noa = b.noa
-	outer apply (select case when len(@t_xcoin)=0 then 1 else isnull((select top 1 floata from flors where coin=@t_xcoin and a.mon <=edate order by edate desc,noa desc),1) end floata) coin 
+	outer apply (select case when len(a.coin)=0 then 1 else isnull((select top 1 floata from flors where coin=a.coin and a.mon <=edate order by edate desc,noa desc),1) end floata) coin 
 	where a.mon<@t_bsmon and a.noa between @t_bcustno and @t_ecustno
 	and (len(@t_cno)=0 or a.cno=@t_cno)
 	and (len(@t_custtype)=0 or b.typea=@t_custtype)
-	group by cno,a.noa,a.mon
+	group by cno,a.noa,a.mon,a.coin
 	union all
 	--本期
-	select @t_xcoin,'9',cno,a.noa,a.mon,0,totsale*coin.floata,pay 
+	select @t_xcoin,'9',cno,a.noa,a.mon,0,totsale/coin.floata,pay/coin.floata
 	from cust_2s a 
 	left join cust b on a.noa = b.noa
-	outer apply (select case when len(@t_xcoin)=0 then 1 else isnull((select top 1 floata from flors where coin=@t_xcoin and a.mon <=edate order by edate desc,noa desc),1) end floata) coin 
+	outer apply (select case when len(a.coin)=0 then 1 else isnull((select top 1 floata from flors where coin=a.coin and a.mon <=edate order by edate desc,noa desc),1) end floata) coin  
 	where a.mon between @t_bsmon and @t_esmon and a.noa between @t_bcustno and @t_ecustno
 	and (len(@t_cno)=0 or a.cno=@t_cno)
 	and (len(@t_custtype)=0 or b.typea=@t_custtype)
 )tmp group by coin,gno,cno,custno,mon
+
+--單一幣別轉換
+update #tmp
+set money=a.money*b.floata, total=total*b.floata , payed =payed*b.floata
+from #tmp a  outer apply (select case when len(@t_xcoin)=0 then 1 else isnull((select top 1 floata from flors where coin=a.coin and a.mon <=edate order by edate desc,noa desc),1) end floata)b
+where coin!='ALL'
 
 if(@t_xcoin='ALL')
 begin
@@ -503,29 +509,27 @@ begin
 	into @coin
 	while(@@FETCH_STATUS <> -1)
 	begin
-		
 		insert into #tmp (coin,gno,cno,custno,mon,money,total,payed)
 		select coin,gno,cno,custno,mon,SUM(money),SUM(total),SUM(payed) from (
 			--前期
-			select @coin coin,'9' gno,cno,a.noa custno,a.mon,sum(unpay*coin.floata) money,0 total,0 payed 
-			from cust_2s a 
-			left join cust b on a.noa = b.noa
+			select @coin coin,'9' gno,cno,a.custno,a.mon,sum(money*coin.floata) money,0 total,0 payed 
+			from #tmp a 
+			left join cust b on a.custno = b.noa
 			outer apply (select isnull((select top 1 floata from flors where coin=@coin and a.mon <=edate order by edate desc,noa desc),1) floata) coin
-			where a.mon<@t_bsmon and a.noa between @t_bcustno and @t_ecustno
+			where a.mon<@t_bsmon and a.custno between @t_bcustno and @t_ecustno
 			and (len(@t_cno)=0 or a.cno=@t_cno)
 			and (len(@t_custtype)=0 or b.typea=@t_custtype)
-			group by cno,a.noa,a.mon
+			group by cno,a.custno,a.mon
 			union all
 			--本期
-			select @coin,'9',cno,a.noa,a.mon,0,totsale*coin.floata,pay 
-			from cust_2s a 
-			left join cust b on a.noa = b.noa
+			select @coin,'9',cno,a.custno,a.mon,0,total*coin.floata,payed*coin.floata
+			from #tmp a 
+			left join cust b on a.custno = b.noa
 			outer apply (select isnull((select top 1 floata from flors where coin=@coin and a.mon <=edate order by edate desc,noa desc),1) floata) coin
-			where a.mon between @t_bsmon and @t_esmon and a.noa between @t_bcustno and @t_ecustno
+			where a.mon between @t_bsmon and @t_esmon and a.custno between @t_bcustno and @t_ecustno
 			and (len(@t_cno)=0 or a.cno=@t_cno)
 			and (len(@t_custtype)=0 or b.typea=@t_custtype)
 		)tmp group by coin,gno,cno,custno,mon
-		
 		fetch next from cursor_table
 		into @coin
 	end
@@ -756,7 +760,7 @@ declare @tmp table(
 	[money] float,
 	chgs float,
 	paysales float,
-	mons nvarchar(6),
+	mons nvarchar(10),
 	part nvarchar(10),
 	vccno nvarchar(20),
 	unpay float,
@@ -765,13 +769,15 @@ declare @tmp table(
 	indate nvarchar(10),
 	acomp nvarchar(50),
 	account nvarchar(20),
-	memo nvarchar(MAX)
+	memo nvarchar(MAX),
+	coin nvarchar(50)
 )
 insert into @tmp
 	select '0' gno,b.noa,b.noq,a.datea,a.cno,b.acc1,b.acc2
 	,case when c.custno2!='' then c.custno2 when c.custno!='' then c.custno else a.custno end
-	,left(case when c.custno2!='' then c.comp2 when c.custno!='' then c.comp else a.comp end,4),b.money,b.chgs,b.paysale,b.mon,b.part,b.vccno,a.unpay,
-	b.checkno,b.bank,b.indate,left(a.acomp,4),b.account,b.memo
+	,left(case when c.custno2!='' then c.comp2 when c.custno!='' then c.comp else a.comp end,4)
+	,case when a.coin!='' then b.moneyus else b.money end,b.chgs,b.paysale,b.mon,b.part,b.vccno,a.unpay,
+	b.checkno,b.bank,b.indate,left(a.acomp,4),b.account,a.coin+' '+b.memo,isnull(a.coin,'')
 from umm a
 left join umms b on b.noa = a.noa
 left join view_vcc c on b.vccno=c.noa
@@ -789,31 +795,37 @@ where custno=''
 
 insert into @tmp
 	select '1' gno,'','',datea,'','','','','',sum(money),sum(chgs),sum(paysales),'','','',sum(unpay),
-	'','','','','','' m
+	'','','','','','' m,coin
 from @tmp
-group by datea
+group by datea,coin
 
 insert into @tmp
-select '2' gno,'','','999/99/99','','','','','',sum(money),sum(chgs),sum(paysales),'','','',0, '','','','','','' m
+select '2' gno,'','','999/99/99','','','','','',sum(money),sum(chgs),sum(paysales),'','','',0, '','','','','','' m,coin
 from @tmp where gno='0'
+group by coin
+
+update @tmp
+set gno='3'
+where gno=2 and coin=(select max(coin)coin from @tmp where gno=2)
 
 insert into @tmp
-select '3' gno,'','','999/99/99','','',typea,'','',sum(money),sum(chgs),sum(paysales),'','','',0, '','','','','','' m
+select '4' gno,'','','999/99/99','','',typea,'','',sum(money),sum(chgs),sum(paysales),'','','',0, '','','','','','' m,coin
 from @tmp where gno='0' and typea!=''
-group by typea
+group by typea,coin
 
 insert into @tmp
-select '4' gno,'','','999/99/99','','','','','',sum(money),sum(chgs),sum(paysales),'','','',0, '','','','','','' m
+select '5' gno,'','','999/99/99','','','','','',sum(money),sum(chgs),sum(paysales),'','','',0, '','','','','','' m,coin
 from @tmp where gno='0'
+group by coin
 
 select gno,noa,noq,datea,cno,acc1,custno,replace(comp,'~#$',char(39)) comp,
 	case when len(typea)> 4 then REPLACE(typea,'銀行存款','') else typea end typea,
-	reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,money),1)),4,30)) money,
-	reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,chgs),1)),4,30)) chgs,
-	reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,paysales),1)),4,30)) paysales,
-	mons,part,vccno,unpay,checkno,bank,indate,acomp,account,memo +(case when len(memo)>0 then '<BR>'+vccno else vccno end) memo
+	dbo.getComma(money,-1) money,
+	dbo.getComma(chgs,-1) chgs,
+	dbo.getComma(paysales,-1) paysales,
+	mons,part,vccno,unpay,checkno,bank,indate,acomp,account,coin+(case when len(memo)>0 then '<BR>'+vccno else vccno end) memo,coin
 from @tmp
-order by datea,gno,noa,noq;
+order by datea,gno,noa,noq,typea;
 --*************************************************************************************************************************************
 z_umm5:--z_umm5
 declare @t_cno nvarchar(20)
@@ -837,30 +849,31 @@ declare @tmp table(
 	typea nvarchar(50),
 	custno nvarchar(50),
 	comp nvarchar(MAX),
-	[money] int,
-	chgs int,
-	paysales int,
-	mons nvarchar(6),
+	[money] float,
+	chgs float,
+	paysales float,
+	mons nvarchar(10),
 	part nvarchar(10),
 	vccno nvarchar(20),
-	unpay int,
+	unpay float,
 	checkno nvarchar(20),
 	bank nvarchar(20),
 	indate nvarchar(10),
-	opay int,
-	unopay int,
-	textopay int
+	opay float,
+	unopay float,
+	textopay float,
+	coin nvarchar(MAX)
 )
 --上期餘額
 insert into @tmp
 	select '0' gno,null,'000',null,null,'上期餘額',a.custno,b.nick,null,null,null,null,null,null,null,
-	null,null,null,sum(a.opay),sum(a.unopay),SUM(a.opay)-SUM(a.unopay)
+	null,null,null,sum(a.opay),sum(a.unopay),SUM(a.opay)-SUM(a.unopay),isnull(coin,'')
 	from umm a left join cust b on a.custno=b.noa
 	where (LEN(@t_cno) = 0 or a.cno = @t_cno) and
 	(a.datea <@t_bdate) and
 	(a.custno between @t_bcustno and @t_ecustno)
 	and a.custno!='' and a.noa!=''
-	group by a.custno,b.nick
+	group by a.custno,b.nick,coin
 	having sum(a.opay)>0 or sum(a.unopay)>0 or SUM(a.opay)-SUM(a.unopay) >0 --太多客戶會跑很久只顯示有餘額資料的客戶
 
 --指定時間的資料
@@ -868,8 +881,8 @@ insert into @tmp
 	select '0' gno,a.noa,case when len(b.noq)>0 then b.noq else '001' end,a.datea,a.cno,b.acc2
 	,case when c.custno2!='' then c.custno2 when c.custno!='' then c.custno else a.custno end
 	,left(case when c.custno2!='' then c.comp2 when c.custno!='' then c.comp else a.comp end,4)
-	,b.money,b.chgs,b.paysale,b.mon,b.part,b.vccno,a.unpay
-	,b.checkno,b.bank,b.indate,0,0,0
+	,case when a.coin!='' then b.moneyus else b.money end,b.chgs,b.paysale,b.mon,b.part,b.vccno,a.unpay
+	,b.checkno,b.bank,b.indate,0,0,0,isnull(a.coin,'')
 	from umm a
 	left join umms b on b.noa = a.noa
 	left join view_vcc c on b.vccno=c.noa
@@ -906,24 +919,32 @@ deallocate cursor_table
 declare @t_opay float
 set @t_opay=0
 
-
 insert into @tmp
 	select '1' gno,'','',CHAR(255),'','',custno,'',SUM(money),SUM(chgs),SUM(paysales),'','','',0,
-	'','','',sum(opay),sum(unopay),sum(opay) - sum(unopay)
+	'','','',sum(opay),sum(unopay),sum(opay) - sum(unopay),coin
 	from @tmp
-	group by custno
+	group by custno,coin
 
 --只保留一筆預收金額
 	update @tmp set opay=0 where noq>'001'
+	
+update @tmp
+set gno=case when coin=(select min(coin) from @tmp) then 1 else 2 end
+where gno='1'
+	
+insert @tmp(gno,custno,datea)
+select '3',custno,CHAR(255) from @tmp
+group by custno
 
 select gno,noa,noq,datea,cno,typea,custno,replace(comp,'~#$',char(39)) comp,
-	reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money),1)),4,12)) money,
-	reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,chgs),1)),4,12)) chgs,
-	reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,paysales),1)),4,12)) paysales,
+	dbo.getComma(money,-1) money,
+	dbo.getComma(chgs,-1) chgs,
+	dbo.getComma(paysales,-1) paysales,
 	mons,part,vccno,unpay,checkno,bank,indate,
-	reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,opay),1)),4,12)) opay,
-	reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,unopay),1)),4,12)) unopay,
-	reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,textopay),1)),4,12)) textopay
+	dbo.getComma(opay,-1) opay,
+	dbo.getComma(unopay,-1)unopay,
+	dbo.getComma(textopay,-1)textopay
+	,coin
 	from @tmp order by custno,datea,gno,noa,noq;
 --*************************************************************************************************************************************
 z_umm8:--z_umm8
@@ -938,26 +959,35 @@ declare @tmp table(
 	bmoney float,
 	opay float,
 	unopay float,
-	opbalance float
+	opbalance float,
+	coin nvarchar(10)
 )
-
-insert into @tmp
-	select '0'gno,a.noa,a.nick
-	--前期預收
-	,isnull((select SUM(opay-unopay)  from umm where custno=a.noa and datea < @t_bdate),0) bmoney
-	--本期預收
-	,isnull((select SUM(opay)  from umm where custno=a.noa and datea  between @t_bdate and @t_edate),0) opay
-	--本期預收沖帳
-	,isnull((select SUM(unopay)  from umm where custno=a.noa and datea between @t_bdate and @t_edate),0) unopay
-	,0
+insert into @tmp(gno,custno,comp)
+select '9'gno,a.noa,a.nick
 from (select noa,nick from cust union all select noa,namea from carOwner union all select ''noa,''namea union all select null noa,null namea)a
 
-delete @tmp where bmoney=0 and opay=0 and opbalance=0 and unopay=0
+--前期預收
+insert into @tmp(gno,custno,comp,bmoney,opay,unopay,coin)
+select '0',custno,comp,SUM(bmoney),SUM(opay),SUM(unopay),coin
+from(
+	select a.custno,a.comp,SUM(b.opay-b.unopay) bmoney,0 opay,0 unopay,isnull(b.coin,'') coin
+	from @tmp a left join umm b on a.custno=b.custno 
+	where b.datea < @t_bdate
+	group by a.custno,a.comp,b.coin
+	--本期預收	--本期預收沖帳
+	union all
+	select a.custno,a.comp,0 bmoney,sum(b.opay) opay,sum(b.unopay) unopay,isnull(b.coin,'') coin
+	from @tmp a left join umm b on a.custno=b.custno 
+	where datea between @t_bdate and @t_edate
+	group by a.custno,a.comp,b.coin
+)a group by custno,comp,coin
+
+delete @tmp where isnull(bmoney,0)=0 and isnull(opay,0)=0 and isnull(opbalance,0)=0 and isnull(unopay,0)=0
 
 insert into @tmp
-select '1','','',sum(bmoney),sum(opay),sum(unopay),sum(opbalance) from @tmp
+select '1','','',sum(bmoney),sum(opay),sum(unopay),sum(opbalance),coin from @tmp group by coin
 
-select gno,custno,replace(comp,'~#$',char(39)) comp,
+select gno,custno,replace(comp,'~#$',char(39)) comp,coin,
 	reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,bmoney),1)),4,30)) bmoney,
 	reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,opay),1)),4,30)) opays,
 	reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,unopay),1)),4,30)) unopay,
