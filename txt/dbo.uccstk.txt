@@ -1,34 +1,7 @@
-<%@ Page Language="C#" Debug="true"%>
-    <script language="c#" runat="server">     
-        public class ParaIn
-        {
-            public string date;
-        }
-        
-        System.IO.MemoryStream stream = new System.IO.MemoryStream();
-        string connectionString = "";
-        public void Page_Load()
-        {
-        	string db = "st";
-        	if(Request.QueryString["db"] !=null && Request.QueryString["db"].Length>0)
-        		db= Request.QueryString["db"];
-        	connectionString = "Data Source=127.0.0.1,1799;Persist Security Info=True;User ID=sa;Password=artsql963;Database="+db;
-           // connectionString = "Data Source=125.227.231.15,1799;Persist Security Info=True;User ID=sa;Password=artsql963;Database=st";
-
-			var item = new ParaIn();
-            if (Request.QueryString["date"] != null && Request.QueryString["date"].Length > 0)
-            {
-                item.date = Request.QueryString["date"];
-            }
-            
-            //資料
-            System.Data.DataTable dt = new System.Data.DataTable();
-            using (System.Data.SqlClient.SqlConnection connSource = new System.Data.SqlClient.SqlConnection(connectionString))
-            {
-                System.Data.SqlClient.SqlDataAdapter adapter = new System.Data.SqlClient.SqlDataAdapter();
-                connSource.Open();
-                string queryString =@"[dbo].[uccstk] @t_date";
-                /*string queryString = @"uccstk_1:--uccstk_1  裕承隆庫存成本
+ALTER PROCEDURE [dbo].[uccstk](@t_date nvarchar(20))
+as
+begin	
+	--uccstk_1  裕承隆庫存成本
 	SET QUOTED_IDENTIFIER OFF 
 	declare @cmd nvarchar(max) 
 
@@ -154,20 +127,20 @@
 	begin
 		--deli 轉來的不計算
 		set @cmd =
-		"" select 1,'rc2s',@accy,a.noa,a.noq,b.datea""+
-		"" ,a.uno,isnull(a.mount,0),isnull(a.[weight],0)""+
-		"" ,case when d.noa is not null then a.sprice else case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end + case when isnull(a.[weight],0)=0 or isnull(c.weight,0)=0 then 0 else isnull(a.[weight],0)/c.weight*isnull(b.tranmoney,0)/isnull(a.[weight],0) end end""+
-		"" ,case when d.noa is not null then a.sprice2 else case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end end""+
-		"" ,round((case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end+case when isnull(a.[weight],0)=0 or isnull(c.weight,0)=0 then 0 else isnull(a.[weight],0)/c.weight*isnull(b.tranmoney,0)/isnull(a.[weight],0) end)*isnull(a.[weight],0),0)""+
-		"" ,isnull(a.total,0)""+
-		"" ,case when b.noa is null then '表頭遺失' else '' end""+
-		"" ,a.productno""+
-		"" from ""+@tableas+"" a left join ""+@tablea+"" b on a.noa=b.noa""+
-		"" outer apply (select sum(isnull(weight,0)) weight from ""+@tableas+"" where noa=a.noa and not(lower(left(uno,1))='x' or lower(left(uno,1))='y' or lower(left(uno,1))='z')) c""+
-		"" left join deli d on a.noa=d.rc2no""+
-		"" where len(isnull(a.uno,''))>0""+
-		"" and isnull(b.typea,'1')='1'""+
-		"" and not(lower(left(a.uno,1))='x' or lower(left(a.uno,1))='y' or lower(left(a.uno,1))='z')""
+		" select 1,'rc2s',@accy,a.noa,a.noq,b.datea"+
+		" ,a.uno,isnull(a.mount,0),isnull(a.[weight],0)"+
+		" ,case when d.noa is not null then a.sprice else case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end + case when isnull(a.[weight],0)=0 or isnull(c.weight,0)=0 then 0 else isnull(a.[weight],0)/c.weight*isnull(b.tranmoney,0)/isnull(a.[weight],0) end end"+
+		" ,case when d.noa is not null then a.sprice2 else case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end end"+
+		" ,round((case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end+case when isnull(a.[weight],0)=0 or isnull(c.weight,0)=0 then 0 else isnull(a.[weight],0)/c.weight*isnull(b.tranmoney,0)/isnull(a.[weight],0) end)*isnull(a.[weight],0),0)"+
+		" ,isnull(a.total,0)"+
+		" ,case when b.noa is null then '表頭遺失' else '' end"+
+		" ,a.productno"+
+		" from "+@tableas+" a left join "+@tablea+" b on a.noa=b.noa"+
+		" outer apply (select sum(isnull(weight,0)) weight from "+@tableas+" where noa=a.noa and not(lower(left(uno,1))='x' or lower(left(uno,1))='y' or lower(left(uno,1))='z')) c"+
+		" left join deli d on a.noa=d.rc2no"+
+		" where len(isnull(a.uno,''))>0"+
+		" and isnull(b.typea,'1')='1'"+
+		" and not(lower(left(a.uno,1))='x' or lower(left(a.uno,1))='y' or lower(left(a.uno,1))='z')"
 		
 		insert into #z_uccstk(isprice,tablea,accy,noa,noq,datea,uno,mount,[weight],price,price2,[money],money2,memo,productno)
 		execute sp_executesql @cmd,N'@accy nvarchar(20)',@accy=@accy
@@ -189,18 +162,18 @@
 	while(@@FETCH_STATUS <> -1)
 	begin
 		set @cmd =
-		"" select 1,'inas',@accy,a.noa,a.noq,b.datea""+
-		"" ,a.uno,isnull(a.mount,0),isnull(a.[weight],0)""+
-		"" ,case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end+case when isnull(a.[weight],0)=0 or isnull(c.weight,0)=0 then 0 else isnull(a.[weight],0)/c.weight*isnull(b.tranmoney,0)/isnull(a.[weight],0) end""+
-		"" ,case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end""+
-		"" ,round((case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end+case when isnull(a.[weight],0)=0 or isnull(c.weight,0)=0 then 0 else isnull(a.[weight],0)/c.weight*isnull(b.tranmoney,0)/isnull(a.[weight],0) end)*isnull(a.[weight],0),0)""+
-		"" ,isnull(a.total,0)""+
-		"" ,case when b.noa is null then '表頭遺失' else '' end""+
-		"" ,a.productno""+
-		"" from ""+@tableas+"" a left join ""+@tablea+"" b on a.noa=b.noa""+
-		"" outer apply (select sum(isnull(weight,0)) weight from ""+@tableas+"" where noa=a.noa and not(lower(left(uno,1))='x' or lower(left(uno,1))='y' or lower(left(uno,1))='z')) c""+
-		"" where len(isnull(a.uno,''))>0 ""+
-		"" and not(lower(left(a.uno,1))='x' or lower(left(a.uno,1))='y' or lower(left(a.uno,1))='z')""
+		" select 1,'inas',@accy,a.noa,a.noq,b.datea"+
+		" ,a.uno,isnull(a.mount,0),isnull(a.[weight],0)"+
+		" ,case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end+case when isnull(a.[weight],0)=0 or isnull(c.weight,0)=0 then 0 else isnull(a.[weight],0)/c.weight*isnull(b.tranmoney,0)/isnull(a.[weight],0) end"+
+		" ,case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end"+
+		" ,round((case when isnull(a.weight,0)=0 then isnull(a.price,0) else isnull(a.total,0)/isnull(a.weight,0) end+case when isnull(a.[weight],0)=0 or isnull(c.weight,0)=0 then 0 else isnull(a.[weight],0)/c.weight*isnull(b.tranmoney,0)/isnull(a.[weight],0) end)*isnull(a.[weight],0),0)"+
+		" ,isnull(a.total,0)"+
+		" ,case when b.noa is null then '表頭遺失' else '' end"+
+		" ,a.productno"+
+		" from "+@tableas+" a left join "+@tablea+" b on a.noa=b.noa"+
+		" outer apply (select sum(isnull(weight,0)) weight from "+@tableas+" where noa=a.noa and not(lower(left(uno,1))='x' or lower(left(uno,1))='y' or lower(left(uno,1))='z')) c"+
+		" where len(isnull(a.uno,''))>0 "+
+		" and not(lower(left(a.uno,1))='x' or lower(left(a.uno,1))='y' or lower(left(a.uno,1))='z')"
 		
 		insert into #z_uccstk(isprice,tablea,accy,noa,noq,datea,uno,mount,[weight],price,price2,[money],money2,memo,productno)
 		execute sp_executesql @cmd,N'@accy nvarchar(20)',@accy=@accy
@@ -221,13 +194,13 @@
 	while(@@FETCH_STATUS <> -1)
 	begin
 		set @cmd =
-		"" select 0,'cuts',@accy,a.noa,a.noq,b.datea""+
-		"" ,a.bno,isnull(a.mount,0),isnull(a.[wprice],0),isnull(a.[weight],0)""+
-		"" ,case when b.noa is null then '表頭遺失' else '' end""+
-		"" ,a.productno""+
-		"" from ""+@tableas+"" a left join ""+@tablea+"" b on a.noa=b.noa""+
-		"" where len(isnull(a.bno,''))>0 and len(isnull(a.waste,''))=0""+
-		"" and not(lower(left(a.bno,1))='x' or lower(left(a.bno,1))='y' or lower(left(a.bno,1))='z')""
+		" select 0,'cuts',@accy,a.noa,a.noq,b.datea"+
+		" ,a.bno,isnull(a.mount,0),isnull(a.[wprice],0),isnull(a.[weight],0)"+
+		" ,case when b.noa is null then '表頭遺失' else '' end"+
+		" ,a.productno"+
+		" from "+@tableas+" a left join "+@tablea+" b on a.noa=b.noa"+
+		" where len(isnull(a.bno,''))>0 and len(isnull(a.waste,''))=0"+
+		" and not(lower(left(a.bno,1))='x' or lower(left(a.bno,1))='y' or lower(left(a.bno,1))='z')"
 		
 		insert into #z_uccstk(isprice,tablea,accy,noa,noq,datea,uno,mount,cutprice,[weight],memo,productno)
 		execute sp_executesql @cmd,N'@accy nvarchar(20)',@accy=@accy
@@ -248,17 +221,17 @@
 	while(@@FETCH_STATUS <> -1)
 	begin
 		set @cmd =
-		"" select case when (CHARINDEX('代工',b.memo)>0 or CHARINDEX('代工',b.memo2)>0) then 1 else 0 end ""+
-		"" ,'cubu',@accy,a.noa,a.noq,a.datea""+
-		"" ,a.uno,isnull(a.mount,0),isnull(a.[weight],0)""+
-		"" ,case when b.noa is null then '表頭遺失' else '' end""+
-		"" ,a.productno""+
-		"" ,a.groupa""+
-		"" ,0,0,0,0""+
-		"" from ""+@tableau+"" a""+
-		"" left join ""+@tablea+"" b on a.noa=b.noa""+
-		"" where len(isnull(a.uno,''))>0""+
-		"" and not(lower(left(a.uno,1))='x' or lower(left(a.uno,1))='y' or lower(left(a.uno,1))='z')""
+		" select case when (CHARINDEX('代工',b.memo)>0 or CHARINDEX('代工',b.memo2)>0) then 1 else 0 end "+
+		" ,'cubu',@accy,a.noa,a.noq,a.datea"+
+		" ,a.uno,isnull(a.mount,0),isnull(a.[weight],0)"+
+		" ,case when b.noa is null then '表頭遺失' else '' end"+
+		" ,a.productno"+
+		" ,a.groupa"+
+		" ,0,0,0,0"+
+		" from "+@tableau+" a"+
+		" left join "+@tablea+" b on a.noa=b.noa"+
+		" where len(isnull(a.uno,''))>0"+
+		" and not(lower(left(a.uno,1))='x' or lower(left(a.uno,1))='y' or lower(left(a.uno,1))='z')"
 		
 		insert into #z_uccstk(isprice,tablea,accy,noa,noq,datea,uno,mount,[weight],memo,productno,groupa,price,price2,[money],money2)
 		execute sp_executesql @cmd,N'@accy nvarchar(20)',@accy=@accy
@@ -399,7 +372,7 @@
 		begin
 			select @buno='',@gweight=0,@tranmoney=0
 			set @cmd =
-			"" select @buno=uno,@gweight=gweight,@tranmoney=isnull(tranmoney,0) from cut""+@accy+"" where noa=@noa""
+			" select @buno=uno,@gweight=gweight,@tranmoney=isnull(tranmoney,0) from cut"+@accy+" where noa=@noa"
 			execute sp_executesql @cmd,N'@noa nvarchar(20),@buno nvarchar(50) output,@gweight float output,@tranmoney float output'
 			,@noa=@noa,@buno=@buno output,@gweight=@gweight output,@tranmoney=@tranmoney output
 			if(len(@buno)=0 or @gweight=0)
@@ -439,7 +412,7 @@
 		into @tablea,@accy,@noa,@noq,@weight,@productno,@groupa
 		while(@@FETCH_STATUS <> -1)
 		begin
-			print @tablea+'_'+@accy+'_'+@noa+'_'+@noq
+			--print @tablea+'_'+@accy+'_'+@noa+'_'+@noq
 			if exists(select * from #z_uccstk where tablea=@tablea and accy=@accy and noa=@noa and noq=@noq and isprice=0)
 			begin	
 				delete #z_uccstk_tmpa	
@@ -457,9 +430,9 @@
 					and b.uno is not null
 				--select * from #z_uccstk_tmpa
 				--set @cmd =
-				--"" select a.uno,b.productno,a.gweight from cubt""+@accy+"" a ""
-				--+"" left join view_uccb b on a.uno=b.uno""
-				--+"" where a.noa=@noa and b.productno=@productno  and a.gweight>0  and ISNULL(a.groupa,'')=@groupa""
+				--" select a.uno,b.productno,a.gweight from cubt"+@accy+" a "
+				--+" left join view_uccb b on a.uno=b.uno"
+				--+" where a.noa=@noa and b.productno=@productno  and a.gweight>0  and ISNULL(a.groupa,'')=@groupa"
 				--insert into #z_uccstk_tmpa(uno,productno,gweight)
 				--execute sp_executesql @cmd,N'@noa nvarchar(20),@productno nvarchar(20),@groupa nvarchar(20)',@noa=@noa,@productno=@productno,@groupa=@groupa
 	
@@ -528,8 +501,8 @@
 	while(@@FETCH_STATUS <> -1)
 	begin
 		set @cmd = 
-		"" update ""+@tablea+@accy+"" set sprice=@price,sprice2=@price2""+
-		"" where noa=@noa and noq=@noq""
+		" update "+@tablea+@accy+" set sprice=@price,sprice2=@price2"+
+		" where noa=@noa and noq=@noq"
 		execute sp_executesql @cmd,N'@noa nvarchar(20),@noq nvarchar(10),@price float,@price2 float'
 		,@noa=@noa,@noq=@noq,@price=@price,@price2=@price2
 		
@@ -549,10 +522,10 @@
 	into @tablea
 	while(@@FETCH_STATUS <> -1)
 	begin
-		set @cmd = ""update ""+@tablea+"" set sprice=b.sprice
-		from ""+@tablea+"" a
+		set @cmd = "update "+@tablea+" set sprice=b.sprice
+		from "+@tablea+" a
 		left join view_uccb b on a.uno=b.uno 
-		where len(isnull(a.bno,''))>0""
+		where len(isnull(a.bno,''))>0"
 		execute sp_executesql @cmd
 		
 		fetch next from cursor_table
@@ -561,14 +534,5 @@
 	close cursor_table
 	deallocate cursor_table
 	drop table #z_uccstk
-	select 'done' memo;";*/
-                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand(queryString, connSource);
-                cmd.CommandTimeout = 0;
-                cmd.Parameters.AddWithValue("@t_date", item.date);
-                adapter.SelectCommand = cmd;
-                cmd.ExecuteNonQuery(); 
-                connSource.Close();
-            }
-            Response.Write("done");
-        }
-    </script>
+	select 'done' memo
+end
