@@ -511,24 +511,25 @@ begin
 	begin
 		insert into #tmp (coin,gno,cno,custno,mon,money,total,payed)
 		select coin,gno,cno,custno,mon,SUM(money),SUM(total),SUM(payed) from (
-			--前期
-			select @coin coin,'9' gno,cno,a.custno,a.mon,sum(money*coin.floata) money,0 total,0 payed 
-			from #tmp a 
-			left join cust b on a.custno = b.noa
-			outer apply (select isnull((select top 1 floata from flors where coin=@coin and a.mon <=edate order by edate desc,noa desc),1) floata) coin
-			where a.mon<@t_bsmon and a.custno between @t_bcustno and @t_ecustno
-			and (len(@t_cno)=0 or a.cno=@t_cno)
-			and (len(@t_custtype)=0 or b.typea=@t_custtype)
-			group by cno,a.custno,a.mon
-			union all
-			--本期
-			select @coin,'9',cno,a.custno,a.mon,0,total*coin.floata,payed*coin.floata
-			from #tmp a 
-			left join cust b on a.custno = b.noa
-			outer apply (select isnull((select top 1 floata from flors where coin=@coin and a.mon <=edate order by edate desc,noa desc),1) floata) coin
-			where a.mon between @t_bsmon and @t_esmon and a.custno between @t_bcustno and @t_ecustno
-			and (len(@t_cno)=0 or a.cno=@t_cno)
-			and (len(@t_custtype)=0 or b.typea=@t_custtype)
+			--前期 
+			select @coin coin,'9' gno,cno,a.noa custno,a.mon,sum(unpay/coin.floata*c.floata) money,0 total,0 payed 
+			from cust_2s a 
+			left join cust b on a.noa = b.noa
+			outer apply (select case when len(@t_xcoin)=0 then 1 else isnull((select top 1 floata from flors where coin=@coin and a.mon <=edate order by edate desc,noa desc),1) end floata)c 
+			outer apply (select case when len(a.coin)=0 then 1 else isnull((select top 1 floata from flors where coin=a.coin and a.mon <=edate order by edate desc,noa desc),1) end floata) coin  
+			where a.mon<@t_bsmon and a.noa between @t_bcustno and @t_ecustno 
+			and (len(@t_cno)=0 or a.cno=@t_cno) 
+			and (len(@t_custtype)=0 or b.typea=@t_custtype) 
+			group by cno,a.noa,a.mon,a.coin union all 
+			--本期 
+			select @coin,'9',cno,a.noa,a.mon,0,totsale/coin.floata*c.floata,pay/coin.floata *c.floata
+			from cust_2s a 
+			left join cust b on a.noa = b.noa
+			outer apply (select case when len(@t_xcoin)=0 then 1 else isnull((select top 1 floata from flors where coin=@coin and a.mon <=edate order by edate desc,noa desc),1) end floata)c 
+			outer apply (select case when len(a.coin)=0 then 1 else isnull((select top 1 floata from flors where coin=a.coin and a.mon <=edate order by edate desc,noa desc),1) end floata) coin  
+			where a.mon between @t_bsmon and @t_esmon and a.noa between @t_bcustno and @t_ecustno 
+			and (len(@t_cno)=0 or a.cno=@t_cno) 
+			and (len(@t_custtype)=0 or b.typea=@t_custtype) 
 		)tmp group by coin,gno,cno,custno,mon
 		fetch next from cursor_table
 		into @coin
@@ -966,10 +967,10 @@ insert into @tmp(gno,custno,comp)
 select '9'gno,a.noa,a.nick
 from (select noa,nick from cust union all select noa,namea from carOwner union all select ''noa,''namea union all select null noa,null namea)a
 
---前期預收
 insert into @tmp(gno,custno,comp,bmoney,opay,unopay,coin)
 select '0',custno,comp,SUM(bmoney),SUM(opay),SUM(unopay),coin
 from(
+	--前期預收
 	select a.custno,a.comp,SUM(b.opay-b.unopay) bmoney,0 opay,0 unopay,isnull(b.coin,'') coin
 	from @tmp a left join umm b on a.custno=b.custno 
 	where b.datea < @t_bdate
