@@ -27,7 +27,8 @@
             {
                 System.Data.SqlClient.SqlDataAdapter adapter = new System.Data.SqlClient.SqlDataAdapter();
                 connSource.Open();
-                string queryString = @"uccstk_1:--uccstk_1  裕承隆庫存成本
+                string queryString =@"[dbo].[uccstk] @t_date";
+                /*string queryString = @"uccstk_1:--uccstk_1  裕承隆庫存成本
 	SET QUOTED_IDENTIFIER OFF 
 	declare @cmd nvarchar(max) 
 
@@ -560,7 +561,7 @@
 	close cursor_table
 	deallocate cursor_table
 	drop table #z_uccstk
-	select 'done' memo;";
+	select 'done' memo;";*/
                 System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand(queryString, connSource);
                 cmd.CommandTimeout = 0;
                 cmd.Parameters.AddWithValue("@t_date", item.date);
