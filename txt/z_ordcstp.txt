@@ -419,7 +419,7 @@ declare @tmp table(
 	memo nvarchar(max),
 	coin nvarchar(50)
 )
-if(@t_kind = '1')
+if(@t_kind = '1' or len(@t_kind)=0)
 begin
 	insert into @tmp
 		select
@@ -434,7 +434,7 @@ begin
 		or (b.ordcno=@t_xnoa and @t_xno2=''))
 		and (len(@t_kind)='' or d.kind=@t_kind)
 end
-else
+if not(@t_kind = '1' or len(@t_kind)=0)
 begin
 	insert into @tmp
 		select
