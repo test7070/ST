@@ -58,6 +58,11 @@
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'no2'];
 				q_brwCount();
+				if(q_content.length>0){
+					q_content="where=^^ not(stype='3' or stype='4') and "+replaceAll(q_content,"where=^^",'');
+				}else{
+					q_content="where=^^ not(stype='3' or stype='4') ^^ "
+				}
 				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 				q_gt('acomp', 'stop=1 ', 0, 0, 0, "cno_acomp");
 				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
@@ -100,7 +105,8 @@
 				q_mask(bbmMask);
 				bbsMask = [['txtDatea', r_picd]];
 				bbsNum = [['txtPrice', 12, q_getPara('vcc.pricePrecision'), 1], ['txtMount', 9, q_getPara('vcc.mountPrecision'), 1], ['txtTotal', 10, 0, 1],['txtC1', 10, q_getPara('vcc.mountPrecision'), 1], ['txtNotv', 10, q_getPara('vcc.mountPrecision'), 1]];
-				q_cmbParse("cmbStype", q_getPara('orde.stype'));
+				//q_cmbParse("cmbStype", q_getPara('orde.stype'));
+				q_cmbParse("cmbStype", '1@內銷,2@代工,5@計畫生產');
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('vcc.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
@@ -372,7 +378,7 @@
 				
 				$('#combPayterms').change(function() {
 					if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_'+$('#textNoq').val()).val()) && !emp($('#combPayterms').val())){
-						var t_where = "where=^^ a.custno='"+$('#txtCustno').val()+"' and a.productno='"+$('#txtProductno_'+$('#textNoq').val()).val()+"' and a.payterms='"+$('#combPayterms').val()+"' and '"+$('#txtOdate').val()+"'>=a.bdate order by bdate desc,noa desc ^^";
+						var t_where = "where=^^ a.custno='"+$('#txtCustno').val()+"' and a.productno='"+$('#txtProductno_'+$('#textNoq').val()).val()+"' and a.payterms='"+$('#combPayterms').val()+"' and '"+$('#txtOdate').val()+"'>=a.bdate order by bdate desc,noa desc --^^";
 						q_gt('custprices', t_where, 0, 0, 0, "getcustprices", r_accy, 1);
 						var as = _q_appendData("custprices", "", true);
 						if (as[0] != undefined) {
@@ -1058,7 +1064,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('orde_s.aspx', q_name + '_s', "500px", "450px", q_getMsg("popSeek"));
+				q_box('orde_ad_s.aspx', q_name + '_s', "500px", "450px", q_getMsg("popSeek"));
 			}
 
 			function combPaytype_chg() {
@@ -1636,7 +1642,7 @@
 								$('#txtPayterms2_'+b_seq).val($('#cmbPayterms').val().substr(0,$('#cmbPayterms').val().length-2));
 							}
 							
-							var t_where = "where=^^ a.custno='"+$('#txtCustno').val()+"' and a.productno='"+$('#txtProductno_'+b_seq).val()+"' and a.payterms='"+$('#cmbPayterms').val()+"' and '"+$('#txtOdate').val()+"'>=a.bdate order by bdate desc,noa desc ^^";
+							var t_where = "where=^^ a.custno='"+$('#txtCustno').val()+"' and a.productno='"+$('#txtProductno_'+b_seq).val()+"' and a.payterms='"+$('#cmbPayterms').val()+"' and '"+$('#txtOdate').val()+"'>=a.bdate order by bdate desc,noa desc-- ^^";
 							q_gt('custprices', t_where, 0, 0, 0, "getcustprices", r_accy, 1);
 							var as = _q_appendData("custprices", "", true);
 							if (as[0] != undefined) {
@@ -1706,7 +1712,7 @@
 			
 			function bbspaytermschange(n){
 				if(!emp($('#txtCustno').val()) && !emp($('#txtProductno_'+n).val()) && !emp($('#txtPayterms_'+n).val())){
-					var t_where = "where=^^ a.custno='"+$('#txtCustno').val()+"' and (a.productno='"+$('#txtProductno_'+n).val()+"') and a.payterms='"+$('#txtPayterms_'+n).val()+"' and '"+$('#txtOdate').val()+"'>=a.bdate order by bdate desc,noa desc ^^";
+					var t_where = "where=^^ a.custno='"+$('#txtCustno').val()+"' and (a.productno='"+$('#txtProductno_'+n).val()+"') and a.payterms='"+$('#txtPayterms_'+n).val()+"' and '"+$('#txtOdate').val()+"'>=a.bdate order by bdate desc,noa desc --^^";
 					q_gt('custprices', t_where, 0, 0, 0, "getcustprices", r_accy, 1);
 					var as = _q_appendData("custprices", "", true);
 					if (as[0] != undefined) {
