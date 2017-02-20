@@ -389,12 +389,11 @@ z_ordcstp1:--z_ordcstp1
 --------------------**************************************----------------------------
 z_ordcstp3A:--z_ordcstp3A
 z_ordcstp3B:--z_ordcstp3B
-declare @t_kind nvarchar(20)
-declare @t_xnoa nvarchar(35)
-declare @t_xno2 nvarchar(10)
-set @t_kind = case when '#non' = [7] then '' else [7] end
-set @t_xnoa = case when '#non' = [5] then '' else [5] end
-set @t_xno2 = case when '#non' = [6] then '' else [6] end
+SET QUOTED_IDENTIFIER OFF 
+declare @t_kind nvarchar(max)= case when '#non' = [7] then '' else [7] end
+declare @t_xnoa nvarchar(35)= case when '#non' = [5] then '' else [5] end
+declare @t_xno2 nvarchar(10)= case when '#non' = [6] then '' else [6] end
+
 set @t_xnoa = ltrim(rtrim(@t_xnoa))
 set @t_xno2 = ltrim(rtrim(@t_xno2))
 
@@ -419,7 +418,7 @@ declare @tmp table(
 	memo nvarchar(max),
 	coin nvarchar(50)
 )
-if(@t_kind = '1' or len(@t_kind)=0)
+if(len(@t_kind)=0 or @t_kind = '2')
 begin
 	insert into @tmp
 		select
@@ -434,7 +433,7 @@ begin
 		or (b.ordcno=@t_xnoa and @t_xno2=''))
 		and (len(@t_kind)='' or d.kind=@t_kind)
 end
-if not(@t_kind = '1' or len(@t_kind)=0)
+if (len(@t_kind)=0 or @t_kind != '2')
 begin
 	insert into @tmp
 		select
@@ -455,7 +454,9 @@ insert into @tmp(gno,ordcnoa,mount,weight)
 select
 	gno,tablename,
 	destnoa+'-'+destno2 destnoa,ordcnoa,ordcno2,	datea,storeno,stores,
-	productno pno,products,csize,mount
+	productno pno,products
+	,replace(csize,'~#$',"'") csize
+	,mount
 	,isnull(coin+' ','')+dbo.getComma(price,-1) price
 	,weight,uno,memo
 from @tmp order by ordcnoa,gno,datea desc,ordcno2,destnoa,destno2;
