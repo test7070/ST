@@ -81,8 +81,10 @@ if((select count(*) from #tmp)>0)
 begin
 	exec("insert ucce"+@accy+" (noa,datea,kind,store2)	 select '"+@ucceno+"' ,'"+@datea+"','1','Y' ")
 
-	EXEC(" insert ucces"+@accy+"(noa,noq,datea,storeno,store,productno,product,spec,unit,mount,weight,emount2,eweight2,price,total)
-		select '"+@ucceno+"',noq,'"+@datea+"',storeno,store,productno,product,spec,unit,mount,weight,mount,weight,price,total from #tmp
+	EXEC(" insert ucces"+@accy+"(noa,noq,datea,storeno,store,productno,product,spec,unit,mount,weight,emount2,eweight2,price,total,memo)
+		select '"+@ucceno+"',noq,'"+@datea+"',storeno,store,productno,product,spec,unit,mount,weight,mount,weight,price,total 
+		,isnull((select nick from custno where noa=left(a.productno,5) and charindex('-',a.productno)>0 and (select count(*) from acomp where acomp like '%有達%')>0 ),'')
+		from #tmp a
 	")
 end
 
