@@ -36,24 +36,34 @@ from view_orde a
 where case when len(datea)='9' then cast(cast(left(datea,3) as int)+1911 as nvarchar)+right(datea,6) else datea end<@t_qdate 
 and enda='0' and ISNULL(datea,'')!='' and cancel!='1'
 
-update @tmp
-set sss=m.sss+worker
-from(SELECT(SELECT cast(namea AS NVARCHAR ) + ';' from sss FOR XML PATH('')) as sss from sss ord)M 
+declare @namea nvarchar(50)
+declare @email nvarchar(200)
+
+declare cursor_table cursor for
+select namea,email from sss
+open cursor_table
+fetch next from cursor_table
+into @namea,@email
+while(@@FETCH_STATUS <> -1)
+begin		
+	update @tmp
+	set sss=sss+CHAR(59)+@namea,email=case when @email!='' then  email+CHAR(59)+@email else email end
+	
+	fetch next from cursor_table 
+	into @namea,@email
+end
+close cursor_table 
+deallocate cursor_table
 
 update @tmp
-set email=n.email
-from(SELECT(SELECT cast(email AS NVARCHAR ) + ';' from sss where isnull(email,'')!='' FOR XML PATH('')) as email from sss ord)n
-
-update @tmp
-set email=n.email
-from(SELECT(SELECT cast(email AS NVARCHAR ) + ';' from sss where isnull(email,'')!='' FOR XML PATH('')) as email from sss ord)n
+set sss=substring(sss,2,len(sss)),email=substring(email,2,len(email))
 
 Begin Transaction [Trans_Name]
 begin try
-	if not exists(select noa from signform where noa='orde')
+	if not exists(select noa from signform where noa='chkorde')
 	begin
 		insert signform(noa,formname,form,memo,receiver,mailreceiver)
-		select 'orde','訂單未交','orde','未交超過=datea天',sss,email
+		select 'chkorde','訂單未交','chkorde','未交超過=days天',sss,email
 		from @tmp a
 		group by sss,email
 	end

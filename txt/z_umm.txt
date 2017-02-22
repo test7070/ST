@@ -810,9 +810,9 @@ set gno='3'
 where gno=2 and coin=(select max(coin)coin from @tmp where gno=2)
 
 insert into @tmp
-select '4' gno,'','','999/99/99','','',typea,'','',sum(money),sum(chgs),sum(paysales),'','','',0, '','','','','','' m,coin
+select '4' gno,'','','999/99/99','',acc1,typea,'','',sum(money),sum(chgs),sum(paysales),'','','',0, '','','','','','' m,coin
 from @tmp where gno='0' and typea!=''
-group by typea,coin
+group by typea,coin,acc1
 
 insert into @tmp
 select '5' gno,'','','999/99/99','','','','','',sum(money),sum(chgs),sum(paysales),'','','',0, '','','','','','' m,coin
@@ -826,7 +826,7 @@ select gno,noa,noq,datea,cno,acc1,custno,replace(comp,'~#$',char(39)) comp,
 	dbo.getComma(paysales,-1) paysales,
 	mons,part,vccno,unpay,checkno,bank,indate,acomp,account,coin+(case when len(memo)>0 then '<BR>'+vccno else vccno end) memo,coin
 from @tmp
-order by datea,gno,noa,noq,typea;
+order by datea,gno,noa,noq,acc1,typea;
 --*************************************************************************************************************************************
 z_umm5:--z_umm5
 declare @t_cno nvarchar(20)

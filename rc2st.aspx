@@ -48,16 +48,15 @@
 			//, ['txtUno_', 'btnUno_', 'view_uccc', 'uno', 'txtUno_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']);
 			
 			brwCount2 = 12;
-			var isinvosystem = false;
-			t_spec='';
+			var isinvosystem = false,t_spec='',t_coin='';
 			//購買發票系統
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
-				q_gt('rc2a', 'stop=1 ', 0, 0, 0, "isinvosystem");
-				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
+				//!!!!!   gtpost 是非同步    !!!!!!!
 				//判斷是否有買發票系統
+ 				q_gt('rc2a', 'stop=1 ', 0, 0, 0, "isinvosystem");
 			});
 
 			function main() {
@@ -71,6 +70,8 @@
 			function sum() {
 				if (!(q_cur == 1 || q_cur == 2))
 					return;
+				// 2017/02/21  本幣和外幣分別由  total,totalus存	
+					
 				$('#cmbTaxtype').val((($('#cmbTaxtype').val()) ? $('#cmbTaxtype').val() : '1'));
 				$('#txtMoney').attr('readonly', true);
 				$('#txtTax').attr('readonly', true);
@@ -80,24 +81,17 @@
 				$('#txtTotal').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 
 				var t_mount = 0, t_price = 0, t_money = 0, t_moneyus = 0, t_weight = 0, t_total = 0, t_tax = 0;
-				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
+				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_moneyuss = 0, t_weights = 0;
 				var t_unit = '';
+				var t_theory = 0;
 				var t_float = q_float('txtFloata');
 				var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
 				t_kind = t_kind.substr(0, 1);
 
 				for (var j = 0; j < q_bbsCount; j++) {
-				    t_weights = 0;
-					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
-					t_product = $.trim($('#txtProduct_' + j).val());
-					if (t_unit.length == 0 && t_product.length > 0) {
-						if (t_product.indexOf('管') > 0)
-							t_unit = '支';
-						else
-							t_unit = 'KG';
-						$('#txtUnit_' + j).val(t_unit);
-					}
-					//---------------------------------------
+				    t_moneys = 0; 
+				    t_moneyuss = 0;
+				    //---------------------------------------------------------
 					if (t_kind == 'A') {
 						q_tr('txtDime_' + j, q_float('textSize1_' + j));
 						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
@@ -111,54 +105,64 @@
 					} else {//鋼筋、胚
 						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
 					}
-					getTheory(j);
-					var t_Product = $('#txtProduct_' + j).val();
-					if (t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + j).val()) == 0) {
+					t_theory = getTheory(j);
+					
+					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
+					t_product = $.trim($('#txtProduct_' + j).val());
+					if (t_unit.length == 0 && t_product.length > 0) {
+						if (t_product.indexOf('管') > 0)
+							t_unit = '支';
+						else
+							t_unit = 'KG';
+						$('#txtUnit_' + j).val(t_unit);
+					}
+					if (t_product.indexOf('管') > -1 && q_float('txtWeight_' + j) == 0) {
 						$('#txtWeight_' + j).val(getTheory(j));
 					}
 					//---------------------------------------
+					t_prices = q_float('txtPrice_' + j);
+					t_mounts = q_float('txtMount_' + j);
+					t_weights = 0;
 					var t_styles = $.trim($('#txtStyle_' + j).val());
 					var t_unos = $.trim($('#txtUno_' + j).val());
 					var t_dimes = $.trim($('#txtDime_' + j).val());
 					if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
 						t_weights = q_float('txtWeight_' + j);
-					else if(q_getPara('sys.project')=='pk' || q_getPara('sys.project')=='rk'){
+					else if(q_getPara('sys.project').toUpperCase()=='PK' || q_getPara('sys.project').toUpperCase()=='RK'){
 						t_weights = q_float('txtWeight_' + j);
 					}
-					t_prices = q_float('txtPrice_' + j);
-					t_sprices = q_float('txtSprice_' + j);
-					t_mounts = q_float('txtMount_' + j);
-					
-					//RK  sprice 存外幣單價
 					if($('#chkAprice_'+j).prop('checked')){
 						t_moneys = q_float('txtTotal_' + j);
+						t_moneyuss = q_float('txtTotalus_' + j);
 					}
 					else{
 						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							//批   裕承隆  是拿來當運費的單位   不能用
-							if(q_getPara('sys.comp').substring(0,2)=="裕承" && t_unit == '批' )
-								t_moneys = q_mul(t_prices, t_mounts);
-							else
-								t_moneys = q_mul(t_prices, t_weights);
+							if(q_getPara('sys.project').toUpperCase()=="BD" && t_unit == '批' ){
+								t_moneys = q_mul(q_mul(t_prices, t_mounts),t_float==0?1:t_float);
+								if(t_float!=0)
+									t_moneyuss = q_mul(t_prices, t_mounts);
+							}
+							else{
+								t_moneys = q_mul(q_mul(t_prices, t_weights),t_float==0?1:t_float);
+								if(t_float!=0)
+									t_moneyuss = q_mul(t_prices, t_weights);
+							}
 						} else {
-							t_moneys = q_mul(t_prices, t_mounts);
+							t_moneys = q_mul(q_mul(t_prices, t_mounts),t_float==0?1:t_float);
+							if(t_float!=0)
+								t_moneyuss = q_mul(t_prices, t_mounts);
 						}
-						if(q_getPara('sys.project').toUpperCase()!='RK'){
-							if (t_float == 0) {
-								t_moneys = round(t_moneys, 0);
-							} else {
-								t_moneyus = q_add(t_moneyus, round(t_moneys, 2));
-								t_moneys = round(q_mul(t_moneys, t_float), 0);
-							}	
-						}else{
-							//RK  DELI 是小數2位
-							t_moneys = round(t_moneys, 2);
-						}
+						t_moneys = round(t_moneys, 0);
+						t_moneyuss = round(t_moneyuss, 2);//外幣小數位個數,要對應到DELI
+								
 						$('#txtTotal_' + j).val(FormatNumber(t_moneys));
+						$('#txtTotalus_' + j).val(FormatNumber(t_moneyuss));
 					}
 					t_weight = q_add(t_weight, t_weights);
 					t_mount = q_add(t_mount, t_mounts);
 					t_money = q_add(t_money, t_moneys);
+					t_moneyus = q_add(t_moneyus, t_moneyuss);
 				}
 				t_total = t_money;
 				t_tax = 0;
@@ -209,36 +213,36 @@
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
 				$('#txtTotal').val(FormatNumber(t_total));
-				if (t_float == 0)
-					$('#txtTotalus').val(0);
-				else
-					$('#txtTotalus').val(FormatNumber(t_moneyus));
+				$('#txtTotalus').val(FormatNumber(t_moneyus));
 			}
 
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					//聯琦 採購小數位沒有限制,進貨也一樣
-					bbsNum = [['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
-					
-					$('#lblAccno').hide();
-					$('#txtAccno').hide();
-				}else{
-					bbsNum = [['txtPrice', 15, 3, 1], ['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+				
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'RK':
+						//聯琦 採購小數位沒有限制,進貨也一樣
+						bbsNum = [['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtTotalus', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+						
+						$('#lblAccno').hide();
+						$('#txtAccno').hide();
+						$('#lblLcno').text('報關號碼');
+						break;
+					default:
+						bbsNum = [['txtPrice', 15, 3, 1],['txtPriceus', 15, 4, 1], ['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtTotalus', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+						break;
 				}
+				
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('rc2.typea'));
-				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
 				q_cmbParse("combSpec", t_spec,'s');
+				q_cmbParse("cmbCoin", t_coin);
 				
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('#lblLcno').text('報關號碼');
-				}
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
 				$('#txtMemo').change(function(){
@@ -289,8 +293,6 @@
 						q_box("invoice.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'invo', "95%", "95%", q_getMsg('popInvo'));
 					}
 				});
-				
-				
 				
 				$('#lblLcno').click(function() {
 					t_where = '';
@@ -439,6 +441,38 @@
 			var t_uccArray = new Array;
 			function q_gtPost(t_name) {/// 資料下載後 ...
 				switch (t_name) {
+					case 'isinvosystem':
+						var as = _q_appendData("rc2a", "", true);
+						if (as[0] != undefined) {
+							isinvosystem = true;
+							$('.istax').hide();
+						} else {
+							isinvosystem = false;
+						}
+						q_gt('style', '', 0, 0, 0, '');
+						break;
+					case 'style' :
+						var as = _q_appendData("style", "", true);
+						StyleList = new Array();
+						StyleList = as;
+						q_gt('spec', '', 0, 0, 0, '');
+						break;	
+					case 'spec':
+						var as = _q_appendData("spec", "", true);
+						t_spec='';
+						for ( i = 0; i < as.length; i++) {
+							t_spec+=','+as[i].noa+'@'+as[i].product;
+						}
+						q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
+						break;
+					case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						t_coin='';
+						for ( i = 0; i < as.length; i++) {
+							t_coin+=','+as[i].coin;
+						}
+						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+						break;
 					case 'deli_dele':
 						var as = _q_appendData("deli", "", true);
 						var t_delino='';
@@ -471,21 +505,6 @@
 							sum();
 						}
 						break;
-					case 'style' :
-						var as = _q_appendData("style", "", true);
-						StyleList = new Array();
-						StyleList = as;
-						q_gt('spec', '', 0, 0, 0, '');
-						break;
-					case 'spec':
-						var as = _q_appendData("spec", "", true);
-						t_spec='';
-						for ( i = 0; i < as.length; i++) {
-							t_spec+=','+as[i].noa+'@'+as[i].product;
-						}
-						if(t_spec.length==0) t_spec=' ';
-						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-						break;
 					case 'getRc2atax':
 						var as = _q_appendData("rc2a", "", true);
 						if (as[0] != undefined) {
@@ -499,16 +518,7 @@
 							}
 						}
 						break;
-					case 'isinvosystem':
-						var as = _q_appendData("rc2a", "", true);
-						if (as[0] != undefined) {
-							isinvosystem = true;
-							$('.istax').hide();
-						} else {
-							isinvosystem = false;
-						}
-						q_gt('style', '', 0, 0, 0, '');
-						break;
+					
 					case 'btnOk_checkuno':
 						var as = _q_appendData("view_uccb", "", true);
 						if ($('#cmbTypea').val()=='1' && as[0] != undefined) {
@@ -536,19 +546,7 @@
 						$('#txtDatea').focus();
 						size_change();
 						break;
-					case 'flors_coin':
-						var as = _q_appendData("flors", "", true);
-						var z_coin='';
-						for ( i = 0; i < as.length; i++) {
-							z_coin+=','+as[i].coin;
-						}
-						if(z_coin.length==0) z_coin=' ';
-						
-						q_cmbParse("cmbCoin", z_coin);
-						if(abbm[q_recno])
-							$('#cmbCoin').val(abbm[q_recno].coin);
-						
-						break;
+					
 					case 'flors':
 						var as = _q_appendData("flors", "", true);
 						if (as[0] != undefined) {
@@ -993,7 +991,6 @@
 					round : 3
 				};
 				t_theory = theory_st(theory_setting);
-				;
 				t_theory = (dec(t_theory) == 0 ? $('#txtWeight_' + b_seq).val() : t_theory);
 				return t_theory;
 			}
@@ -1033,7 +1030,11 @@
 						$('#txtPrice_' + j).change(function() {
 							sum();
 						});
+						
 						$('#txtTotal_' + j).change(function() {
+							sum();
+						});
+						$('#txtTotalus_' + j).change(function() {
 							sum();
 						});
 						$('#txtStoreno_' + j).bind('contextmenu', function(e) {
@@ -1130,7 +1131,7 @@
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
 					$('.rk').show();
 					$('.RK_hide').hide();
-					$('#lblWeights_st').text('重量/M');
+					$('#lblWeights_st2').html('重量/M<BR>實重');
 					$('#lblSource').text('製造商');
 				}
 			}
@@ -1154,7 +1155,7 @@
 				t_where = "noa=" + $('#txtNoa').val();
 				if(q_getPara('sys.project').toUpperCase()=='RK')
 					q_box("z_rc2_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_rk', "95%", "95%", m_print);
-				else if(q_getPara('sys.comp').substring(0,2)=='傑期')
+				else if(q_getPara('sys.project').toUpperCase()=='PK')
 					q_box("z_rc2_pkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_pk', "95%", "95%", m_print);
 				else
 					q_box("z_rc2stp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
@@ -1256,10 +1257,14 @@
 					$('#txtTotal_'+i).attr('readonly','readonly');
 					if($('#chkAprice_'+i).prop('checked')){
 						$('#txtTotal_'+i).css('color','black').css('background-color','white');
-						if(q_cur==1 || q_cur==2)
+						$('#txtTotalus_'+i).css('color','black').css('background-color','white');
+						if(q_cur==1 || q_cur==2){
 							$('#txtTotal_'+i).removeAttr('readonly');
+							$('#txtTotalus_'+i).removeAttr('readonly');
+						}
 					}else{
 						$('#txtTotal_'+i).css('color','green').css('background-color','rgb(237,237,237)');
+						$('#txtTotalus_'+i).css('color','green').css('background-color','rgb(237,237,237)');
 					}
 				}
 			}
@@ -1738,10 +1743,10 @@
 					<td align="center" style="width:50px;display:none;" class="pk rk"><a id='lblSource'>鋼廠</a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:50px;display:none;" class="pk"><a>數量<br>單位</a></td>
-					<td align="center" style="width:80px;"><a id='lblWeights_st'> </a></td>
+					<td align="center" style="width:80px;"><a id='lblWeights_st2'>重量<BR>實重</a></td>
 					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
-					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblTotals_st'> </a></td>
+					<td align="center" style="width:80px;">單價</td>
+					<td align="center" style="width:100px;">小計<br>外幣小計</td>
 					<td align="center" style="width:20px;">自訂<br>金額</td>
 					<td align="center">
 						<a id='lblMemos_st'> </a><br>
@@ -1803,7 +1808,10 @@
 					<td style="display:none;" class="pk rk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
-					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td>
+						<input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/>
+						<input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/>
+					</td>
 					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>
@@ -1811,7 +1819,7 @@
 					</td>
 					<td>
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
-						<input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/>
+						<input id="txtTotalus.*" type="text" class="txt num" style="width:95%;"/>
 					</td>
 					<td><input id="chkAprice.*" type="checkbox"/></td>
 					<td>
