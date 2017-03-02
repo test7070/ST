@@ -21,27 +21,48 @@
             $(document).ready(function() {
                 q_getId();
                 q_gf('', 'z_salaryp_dj');
-
+                $('#q_report').click(function(e) {
+	                if(r_rank<8){
+						$('#Xsssno').hide();
+						var delete_report=999;
+						for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+							if($('#q_report').data().info.reportData[i].report=='z_salaryp_dj02')
+								delete_report=i;
+						}
+						if($('#q_report div div').text().indexOf('銀行匯款表')>-1){
+							$('#q_report div div').eq(delete_report).hide();
+						}
+						delete_report=999;	
+	                }	                	                	
+				});
             });
 
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_salaryp_dj',
                     options : [{
-                        type : '6',
+                        type : '6',//1 [1]
                         name : 'xmon'
                     }, {
-                        type : '2',
+                        type : '2',//2 [2][3]
                         name : 'xsssno',
                         dbf : 'sss',
                         index : 'noa,namea',
                         src : 'sss_b.aspx'
                     }, {
-                        type : '2',
+                        type : '2',//3 [4][5]
                         name : 'xpartno',
                         dbf : 'part',
                         index : 'noa,part',
                         src : 'part_b.aspx'
+                    }, {
+                        type : '0',//[6]
+                        name : 'userno',
+                        value : r_userno.toUpperCase()
+                    }, {
+                        type : '0',//[7] 
+                        name : 'rank',
+                        value : r_rank
                     }]
                 });
                 q_popAssign();
@@ -51,7 +72,9 @@
                 $('#txtXmon').mask(r_picm);
                 if (window.parent.q_name == "salary")
                     $('#txtXmon').val(window.parent.$('#txtMon').val());
-
+				else
+					$('#txtXmon').val(q_cdn(q_date().substr(0,r_lenm)+'/01',-1).substr(0,r_lenm));
+				
                 var tmp = document.getElementById("btnOk");
                 var tmpbtn = document.createElement("input");
                 tmpbtn.id = "btnOk2"

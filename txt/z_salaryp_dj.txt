@@ -393,6 +393,8 @@ declare @t_esssno nvarchar(20)
 set @t_xmon = case when '#non' = [1] then '' else [1] end
 set @t_bsssno = case when '#non' = [2] then '' else [2] end
 set @t_esssno = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_userno nvarchar(100)='[6]'
+declare @t_rank nvarchar(100)='[7]'
 ---------------------------------------------------------------------------
 declare @tmp table(
 	gno nvarchar(1),
@@ -518,6 +520,12 @@ outer apply(select top 1 * from saladjust where noa=b.sno and datea<=a.datea ord
 left join salvacas e on b.sno=e.sssno and LEFT(b.mon,3)=e.noa
 where (a.mon=@tmon) and
 (b.sno between @t_bsssno and @t_esssno)
+
+if(@t_rank<'8')
+begin
+	delete @tmp where sno!=@t_userno
+	delete @tmpa where sno!=@t_userno
+end
 
 update a
 set rr=rx
