@@ -43,7 +43,12 @@ declare @tmp table(
 	memo nvarchar(MAX),
 	prevyeartime float,
 	limitday float,
-	nextyeartime float
+	nextyeartime float,
+	
+	t_datea float,
+	t_date1 float,
+	t_date2 float,
+	t_year float
 )
 
 insert @tmp
