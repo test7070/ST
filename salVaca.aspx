@@ -90,7 +90,7 @@
 
                         for (var j = 0; j < q_bbsCount; j++) {
                             for (var i = 0; i < as.length; i++) {
-                                if (as[i].noa == $('#txtSssno_' + j).val() || dec($('#txtNoa').val()) - dec(as[i].indate.substr(0, 3)) < 0) {
+                                if (as[i].noa == $('#txtSssno_' + j).val() || dec($('#txtNoa').val()) - dec(as[i].indate.substr(0, r_len)) < 0) {
                                     as.splice(i, 1);
                                     i--;
                                 }

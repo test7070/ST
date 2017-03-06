@@ -17,3 +17,105 @@ begin
 	where mon>=@t_mon
 end
 ;
+---------------------------------------
+inssalvaca:--inssalvaca
+declare @t_year nvarchar(50) = [1]
+
+if((select count(*) from salvaca where noa=@t_year)=0)
+begin
+	insert salvaca(noa,total)
+	select @t_year,0
+end
+
+declare @tmp table(
+	noa nvarchar(255),
+	noq nvarchar(255),
+	sssno nvarchar(255),
+	namea nvarchar(255),
+	id nvarchar(255),
+	job nvarchar(255),
+	jobday nvarchar(255),
+	inday float, 
+	outday float,
+	boutday float,
+	total float,
+	cno nvarchar(50),
+	memo nvarchar(MAX),
+	prevyeartime float,
+	limitday float,
+	nextyeartime float
+)
+
+insert @tmp
+select @t_year,'000',noa,namea,id,job,indate jobday,0 inday,0 outday,0 boutday,0 total,cno,'' memo
+,0 prevyeartime,0 limitday,0 nextyeartime,0,0,0,0
+from sss a where isnull(outdate,'')=''
+and not exists (select * from salvacas where sssno=a.noa and noa=@t_year)
+and ISNULL(indate,'')!='' and left(indate,len(@t_year))<=@t_year
+
+update @tmp
+set t_datea=CAST(@t_year as float)-cast(left(jobday,len(@t_year)) as float)
++((12-cast(left(right(jobday,5),2) as float))/12)
++((31-cast(right(jobday,2) as float)+1)/31/12)
+
+update @tmp
+set t_date1=t_datea-FLOOR(t_datea)
+,t_date2=1-(t_datea-FLOOR(t_datea))
+
+update @tmp
+set inday=round(case 
+when t_datea-t_date2 < 0.5 then 0
+when t_datea-t_date2 < 1 then 3*8
+when t_datea-t_date2 < 2 then 7*8*t_date2
+when t_datea-t_date2 < 3 then 10*8*t_date2
+when t_datea-t_date2 < 5 then 14*8*t_date2
+when t_datea-t_date2 < 10 then 15*8*t_date2
+else case when 15+FLOOR(t_datea-t_date2)-9>30
+then 30*8*t_date2 else (15++FLOOR(t_datea-t_date2)-9)*8*t_date2 end
+end+case 
+when t_datea<0.5 then 0
+when t_datea<1 then 3*8*t_date1
+when t_datea < 2 then 7*8*t_date1
+when t_datea < 3 then 10*8*t_date1
+when t_datea < 5 then 14*8*t_date1
+when t_datea < 10 then 15*8*t_date1
+else case when 15+FLOOR(t_datea)-9>30
+then 30*8*t_date1 else (15++FLOOR(t_datea)-9)*8*t_date1 end
+end,0)
+where (@t_year>='106' and len(@t_year)='3') or (@t_year>='2017' and len(@t_year)='4')
+
+--舊制
+update @tmp
+set inday=round(case
+when t_datea-t_date2<1 then 0
+when t_datea-t_date2<3 then 7*8*t_date2
+when t_datea-t_date2<5 then 10*8*t_date2
+when t_datea-t_date2<10 then 14*8*t_date2
+else case when (14+FLOOR(t_datea-t_date2)-9)>30 then 30*8*t_date2
+else (14+FLOOR(t_datea-t_date2)-9)*8*t_date2 end
+end+case
+when t_datea<1 then 0
+when t_datea<3 then 7*8*t_date1
+when t_datea<5 then 10*8*t_date1
+when t_datea<10 then 14*8*t_date1
+else case when (14+FLOOR(t_datea)-9)>30 then 30*8*t_date1
+else (14+FLOOR(t_datea)-9)*8*t_date1 end
+end,0)
+where not((@t_year>='106' and len(@t_year)='3') or (@t_year>='2017' and len(@t_year)='4'))
+
+update a
+set prevyeartime=isnull(b.nextyeartime,0)
+from @tmp a
+outer apply(select * from salvacas where noa=right('0000'+cast(CAST(@t_year as int)-1 as nvarchar(10)),(len(@t_year))) 
+and sssno=a.sssno
+) b
+
+update a
+set noq=right('000'+cast(cast(isnull(b.mnoq,0) as int)+rec as nvarchar(50)),3)
+from (select *,ROW_NUMBER() over (order by sssno) rec from @tmp) a
+outer apply (select MAX(noq)mnoq from salvacas where noa=@t_year) b
+
+insert salvacas(noa,noq,sssno,namea,id,job,jobday,inday,outday,boutday,total,cno,memo,prevyeartime,limitday,nextyeartime)
+select noa,noq,sssno,namea,id,job,jobday,inday,outday,boutday,total,cno,memo,prevyeartime,limitday,nextyeartime from @tmp
+
+;

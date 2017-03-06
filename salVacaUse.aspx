@@ -219,7 +219,7 @@
                     case 'authority':
                         var as = _q_appendData('authority', '', true);
                         if (as[0] != undefined) {
-                        	if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1){
+                        	if(q_getPara('sys.project').toUpperCase()=='IT'){
 								if (r_rank >= 8)
 	                                q_content = "";
 	                             else if (as.length > 0 && as[0]["pr_ins"] == "true" && sssjob.indexOf('經理')>-1)
@@ -243,7 +243,7 @@
                         if (as[0] != undefined) {
                             ssspartno = as[0].partno;
                             sssjob=as[0].job;
-                            if(q_getPara('sys.comp').indexOf('英特瑞')>-1){
+                            if(q_getPara('sys.project').toUpperCase()=='IT'){
     	                        q_gt('sss', "where=^^ salesgroup='" + as[0].salesgroup + "'^^", 0, 0, 0, "sss_salesgroup");
                             }else{
 	                            q_gt('authority', "where=^^a.noa='salvacause' and a.sssno='" + r_userno + "'^^", q_sqlCount, 1);
@@ -394,6 +394,9 @@
                 $('#txtBdate').val(q_date());
                 $('#txtEdate').val(q_date());
                 $('#txtDatea').focus();
+                
+                //106/03/06 檢查特休主檔
+                q_func('qtxt.query.inssalvaca', 'salary.txt,inssalvaca,' + encodeURI(q_date().substr(0,r_len)));
             }
 
             function btnModi() {
@@ -668,7 +671,14 @@
                     $('#txtHr_used').change();
 				}
             }
-            
+            function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'qtxt.query.inssalvaca':
+						//沒有結果輸出
+						break;
+				}
+			};
+					
 		</script>
 		<style type="text/css">
             #dmain {
