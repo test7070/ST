@@ -1155,3 +1155,19 @@ BEGIN
 	drop table #vccbbs
 END
 ;
+
+---------------------------------------
+updatememo_yc:--updatememo_yc
+SET QUOTED_IDENTIFIER OFF
+declare @t_noa nvarchar(20) = '[1]'
+declare @t_memo nvarchar(20) = '[2]'
+declare @accy nvarchar(20)
+set @accy=isnull((select accy from view_vcc where noa=@t_noa),'') 
+
+EXEC(" update vcc"+@accy+" 
+set memo='"+@t_memo+"'+'chr(10)'+memo 
+where noa='"+@t_noa+"' ") 
+
+select noa,memo from view_vcc where noa=@t_noa
+;
+-----------------------
