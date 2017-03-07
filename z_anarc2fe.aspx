@@ -42,7 +42,7 @@
 						name : 'xcust',
 						dbf : 'cust',
 						index : 'noa,comp',
-						src : 'cust_b.aspx'
+						src : 'tgg_b.aspx'
 					}, {
 						type : '2', //[8][9]
 						name : 'xsales',
