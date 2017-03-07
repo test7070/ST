@@ -32,8 +32,8 @@
 					fileName : 'z_ordcstp',
 					options : [{//[1]
 						type : '0',
-						name : 'accy',
-						value : q_getId()[4]
+						name : 'project',
+						value : q_getPara('sys.project').toUpperCase()
 					}, {//[2]
 						type : '0',
 						name : 'xkind',

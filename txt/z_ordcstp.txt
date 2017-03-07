@@ -2,17 +2,11 @@
 z_ordcstp2:--z_ordcstp2 
 	SET QUOTED_IDENTIFIER OFF
 	declare @cmd nvarchar(max)
-	declare @t_accy nvarchar(max)
-	declare @t_kind nvarchar(max)
-	declare @t_bdate nvarchar(20) 
-	declare @t_edate nvarchar(20) 
-	declare @t_noa nvarchar(30) 
-	
-	set @t_accy = '[1]'
-	set @t_kind = '[2]'
-	set @t_bdate = case when '#non' = [3] then '' else [3] end
-	set @t_edate = case when '#non' = [4] then CHAR(255) else [4] end
-	set @t_noa = case when '#non' = [5] then '' else [5] end
+	declare @t_project nvarchar(max) = '[1]'
+	declare @t_kind nvarchar(max) = '[2]'
+	declare @t_bdate nvarchar(20) = case when '#non' = [3] then '' else [3] end
+	declare @t_edate nvarchar(20) = case when '#non' = [4] then CHAR(255) else [4] end
+	declare @t_noa nvarchar(30) = case when '#non' = [5] then '' else [5] end
 	----------------------------------------------------------------------------------------------
 	declare @t_pageline int = 20   --------一頁幾行
 	----------------------------------------------------------------------------------------------
@@ -88,8 +82,8 @@ z_ordcstp2:--z_ordcstp2
 	" ,b.[money],b.tax,b.total"+
 	" ,a.no2,a.productno,a.product,a.class,a.spec,a.unit,a.mount,a.[weight],a.price,a.total"+
 	" ,case when len(isnull(a.size,''))=0 then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end,a.memo,b.coin"+
-	" from view_ordcs"+@t_accy+" a"+
-	" left join view_ordc"+@t_accy+" b on a.noa = b.noa"+
+	" from view_ordcs a"+
+	" left join view_ordc b on a.accy=b.accy and a.noa = b.noa"+
 	" left join tgg c on b.tggno = c.noa"+
 	" left join acomp d on b.cno=d.noa"+
 	" where b.noa is not null "+
@@ -195,17 +189,12 @@ z_ordcstp2:--z_ordcstp2
 z_ordcstp1:--z_ordcstp1 
 	SET QUOTED_IDENTIFIER OFF
 	declare @cmd nvarchar(max)
-	declare @t_accy nvarchar(max)
-	declare @t_kind nvarchar(max)
-	declare @t_bdate nvarchar(20) 
-	declare @t_edate nvarchar(20) 
-	declare @t_noa nvarchar(30) 
-	
-	set @t_accy = '[1]'
-	set @t_kind = '[2]'
-	set @t_bdate = case when '#non' = [3] then '' else [3] end
-	set @t_edate = case when '#non' = [4] then CHAR(255) else [4] end
-	set @t_noa = case when '#non' = [5] then '' else [5] end
+	declare @t_project nvarchar(max) = '[1]'
+	declare @t_kind nvarchar(max) = '[2]'
+	declare @t_bdate nvarchar(20) = case when '#non' = [3] then '' else [3] end
+	declare @t_edate nvarchar(20) = case when '#non' = [4] then CHAR(255) else [4] end 
+	declare @t_noa nvarchar(30) = case when '#non' = [5] then '' else [5] end 
+
 	----------------------------------------------------------------------------------------------
 	declare @t_pageline int = 20   --------一頁幾行
 	----------------------------------------------------------------------------------------------
@@ -281,8 +270,8 @@ z_ordcstp1:--z_ordcstp1
 	" ,b.[money],b.tax,b.total"+
 	" ,a.no2,a.productno,a.product,a.class,a.spec,a.unit,a.mount,a.[weight],a.price,a.total"+
 	" ,case when len(isnull(a.size,''))=0 then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end,a.memo,b.coin"+
-	" from view_ordcs"+@t_accy+" a"+
-	" left join view_ordc"+@t_accy+" b on a.noa = b.noa"+
+	" from view_ordcs a"+
+	" left join view_ordc b on a.accy=b.accy and a.noa = b.noa"+
 	" left join tgg c on b.tggno = c.noa"+
 	" left join acomp d on b.cno=d.noa"+
 	" where b.noa is not null "+
@@ -389,74 +378,115 @@ z_ordcstp1:--z_ordcstp1
 --------------------**************************************----------------------------
 z_ordcstp3A:--z_ordcstp3A
 z_ordcstp3B:--z_ordcstp3B
-SET QUOTED_IDENTIFIER OFF 
-declare @t_kind nvarchar(max)= case when '#non' = [7] then '' else [7] end
-declare @t_xnoa nvarchar(35)= case when '#non' = [5] then '' else [5] end
-declare @t_xno2 nvarchar(10)= case when '#non' = [6] then '' else [6] end
+SET QUOTED_IDENTIFIER OFF
+	declare @cmd nvarchar(max)
+	declare @t_project nvarchar(max) = '[1]'
+	declare @t_kind nvarchar(max)= case when '#non' = [7] then '' else [7] end
+	declare @t_xnoa nvarchar(35)= case when '#non' = [5] then '' else [5] end
+	declare @t_xno2 nvarchar(10)= case when '#non' = [6] then '' else [6] end
 
 set @t_xnoa = ltrim(rtrim(@t_xnoa))
 set @t_xno2 = ltrim(rtrim(@t_xno2))
 
 declare @tmp table(
-	gno nvarchar(10),
-	tablea nvarchar(50),
-	tablename nvarchar(max),
-	destnoa nvarchar(35),
-	destno2 nvarchar(10),
-	ordcnoa nvarchar(35),
-	ordcno2 nvarchar(10),
-	datea nvarchar(10),
-	storeno nvarchar(35),
-	stores nvarchar(90),
-	productno nvarchar(90),
-	products nvarchar(90),
-	csize nvarchar(max),
-	mount float,
-	price float,
-	weight float,
-	uno nvarchar(max),
-	memo nvarchar(max),
-	coin nvarchar(50)
-)
-if(len(@t_kind)=0 or @t_kind = '2')
-begin
-	insert into @tmp
+		sel int identity(1,1),
+		gno nvarchar(10),
+		tablea nvarchar(50),
+		tablename nvarchar(max),
+		destnoa nvarchar(35),
+		destno2 nvarchar(10),
+		ordcnoa nvarchar(35),
+		ordcno2 nvarchar(10),
+		datea nvarchar(10),
+		storeno nvarchar(35),
+		stores nvarchar(90),
+		productno nvarchar(90),
+		products nvarchar(90),
+		csize nvarchar(max),
+		mount float,
+		price float,
+		weight float,
+		uno nvarchar(max),
+		memo nvarchar(max),
+		coin nvarchar(50)
+	)
+	-- RK
+	declare @t_ordcdate nvarchar(20) = ''
+	declare @t_productno nvarchar(30) = ''
+	
+	if @t_project ='RK'
+	begin
+		select @t_productno=a.productno,@t_ordcdate = b.odate
+		from view_ordcs a
+		left join view_ordc b on a.accy=b.accy and a.noa=b.noa
+		where a.noa=@t_xnoa and  a.no2=@t_xno2
+			
+		insert into @tmp(gno,tablea,tablename,destnoa,destno2
+			,ordcnoa,ordcno2,datea,storeno,stores,productno,products,csize
+			,mount,price,[weight],uno,memo,coin) 
+		select '0','ordc_rk','採購作業',a.noa,a.no3
+			,a.noa,a.no3,b.odate,'' storeno,'' stores,a.productno,a.product,a.size
+			,a.mount,a.price,a.[weight],'' uno,a.memo,'' coin
+		from view_ordcs a
+		left join view_ordc b on a.accy=b.accy and a.noa=b.noa
+		where a.noa!=@t_xnoa 
+		and a.productno=@t_productno
+		and b.odate<@t_ordcdate 
+		order by b.odate desc,a.noa,a.no3
+		
 		select
-			'0','bccin','資材入庫',b.noa,b.noq,b.ordcno,b.no2,a.datea,a.storeno,c.store,b.bccno,b.bccname,
-			'' csize,b.mount,b.price,0,b.uno,b.memo,d.coin
-		from bccin a
-		left join bccins b on a.noa = b.noa
-		left join store c on a.storeno = c.noa
-		left join view_ordc d on b.ordcno=d.noa
-		where ((@t_xnoa='' and @t_xno2='') 
-		or (b.ordcno=@t_xnoa and b.no2=@t_xno2) 
-		or (b.ordcno=@t_xnoa and @t_xno2=''))
-		and (len(@t_kind)='' or d.kind=@t_kind)
-end
-if (len(@t_kind)=0 or @t_kind != '2')
-begin
-	insert into @tmp
+		gno,tablename,
+		destnoa+'-'+destno2 destnoa,ordcnoa,ordcno2,	datea,storeno,stores,
+		productno pno,products
+		,replace(csize,'~#$',"'") csize
+		,mount
+		,isnull(coin+' ','')+dbo.getComma(price,-1) price
+		,weight,uno,memo
+		from @tmp order by datea desc,ordcno2,destnoa,destno2
+	end
+	else
+	begin
+		if(len(@t_kind)=0 or @t_kind = '2')
+		begin
+			insert into @tmp
+				select
+					'0','bccin','資材入庫',b.noa,b.noq,b.ordcno,b.no2,a.datea,a.storeno,c.store,b.bccno,b.bccname,
+					'' csize,b.mount,b.price,0,b.uno,b.memo,d.coin
+				from bccin a
+				left join bccins b on a.noa = b.noa
+				left join store c on a.storeno = c.noa
+				left join view_ordc d on b.ordcno=d.noa
+				where ((@t_xnoa='' and @t_xno2='') 
+				or (b.ordcno=@t_xnoa and b.no2=@t_xno2) 
+				or (b.ordcno=@t_xnoa and @t_xno2=''))
+				and (len(@t_kind)='' or d.kind=@t_kind)
+		end
+		if (len(@t_kind)=0 or @t_kind != '2')
+		begin
+			insert into @tmp
+				select
+					'0','rc2','進貨單',b.noa,b.noq,b.ordeno,b.no2,a.datea,b.storeno,c.store,b.productno,b.product,
+					case when ltrim(rtrim(isnull(b.size,''))) = '' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else ltrim(rtrim(isnull(b.size,''))) end,
+					b.mount,b.price,b.weight,b.uno,b.memo,a.coin
+				from view_rc2 a
+				left join view_rc2s b on a.noa = b.noa
+				left join store c on b.storeno = c.noa
+				left join view_ordc d on b.ordeno=d.noa
+				where ((@t_xnoa='' and @t_xno2='') 
+				or (b.ordeno=@t_xnoa and b.no2=@t_xno2) 
+				or (b.ordeno=@t_xnoa and @t_xno2=''))
+				and (len(@t_kind)='' or d.kind=@t_kind)
+		end
+		insert into @tmp(gno,ordcnoa,mount,weight)
+		select '1',ordcnoa,sum(mount),sum(weight) from @tmp where gno='0' group by ordcnoa
+		
 		select
-			'0','rc2','進貨單',b.noa,b.noq,b.ordeno,b.no2,a.datea,b.storeno,c.store,b.productno,b.product,
-			case when ltrim(rtrim(isnull(b.size,''))) = '' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else ltrim(rtrim(isnull(b.size,''))) end,
-			b.mount,b.price,b.weight,b.uno,b.memo,a.coin
-		from view_rc2 a
-		left join view_rc2s b on a.noa = b.noa
-		left join store c on b.storeno = c.noa
-		left join view_ordc d on b.ordeno=d.noa
-		where ((@t_xnoa='' and @t_xno2='') 
-		or (b.ordeno=@t_xnoa and b.no2=@t_xno2) 
-		or (b.ordeno=@t_xnoa and @t_xno2=''))
-		and (len(@t_kind)='' or d.kind=@t_kind)
-end
-insert into @tmp(gno,ordcnoa,mount,weight)
-	select '1',ordcnoa,sum(mount),sum(weight) from @tmp where gno='0' group by ordcnoa
-select
-	gno,tablename,
-	destnoa+'-'+destno2 destnoa,ordcnoa,ordcno2,	datea,storeno,stores,
-	productno pno,products
-	,replace(csize,'~#$',"'") csize
-	,mount
-	,isnull(coin+' ','')+dbo.getComma(price,-1) price
-	,weight,uno,memo
-from @tmp order by ordcnoa,gno,datea desc,ordcno2,destnoa,destno2;
+		gno,tablename,
+		destnoa+'-'+destno2 destnoa,ordcnoa,ordcno2,	datea,storeno,stores,
+		productno pno,products
+		,replace(csize,'~#$',"'") csize
+		,mount
+		,isnull(coin+' ','')+dbo.getComma(price,-1) price
+		,weight,uno,memo
+		from @tmp order by ordcnoa,gno,datea desc,ordcno2,destnoa,destno2
+	end;
