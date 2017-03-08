@@ -80,7 +80,7 @@ begin
 		when clockin between '12:01' and '13:00' then 4 
 		when clockin between '13:00' and '23:59' then 4+cast(datediff(MINUTE,@tdatea+' 13:00',@tdatea+' '+clockin) as float)
 		else 0 end
-		-isnull((select SUM(hr_used) from salvacause where sssno=a.sssno and a.datea between bdate and edate and a.clockin between btime and etime),'')
+		-(isnull((select SUM(hr_used) from salvacause where sssno=a.sssno and a.datea between bdate and edate and a.clockin between btime and etime),'')*60)
 		from @tmpa a where datea=@datea 
 		
 		update @tmpa
