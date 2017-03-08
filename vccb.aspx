@@ -105,6 +105,16 @@
                     $('#txtMon').val($('#txtDatea').val().substr(0,r_picm));
                 });
                 
+                $('#btnOpen').click(function(e){
+					var t_noa = $.trim($('#txtNoa').val());
+					if(t_noa.length==0){
+						
+					}else{
+						q_box("generateB0101.aspx?db="+q_db+"&bno="+t_noa+"&eno="+t_noa, "generateA0101", "95%", "95%", '');
+					}
+					
+				});
+                
             }
             function q_boxClose(s2) {///   q_boxClose 2/4
                 var ret;
@@ -609,6 +619,8 @@
 				</table>
 			</div>
 		</div>
+		<input type="button" id="btnOpen" value="開立" style="width:100px;height:100px;"/>
+		<input type="button" id="btnCancel" value="作廢" style="width:100px;height:100px;"/>
 		<div class='dbbs' >
 			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1'  >
 				<tr style='color:white; background:#003366;' >
