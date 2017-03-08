@@ -646,7 +646,8 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
-				set @cmount = dbo.getComma(@weight,-1) + @unit
+				--set @cmount = dbo.getComma(@weight,-1) + @unit
+				set @cmount = dbo.getComma(@weight,-1)
 				set @cmount2 = dbo.getComma(@mount,-1) + @string
 			end
 			else
