@@ -399,6 +399,7 @@ declare @t_rank nvarchar(100)='[7]'
 declare @tmp table(
 	gno nvarchar(1),
 	rr int,
+	mon nvarchar(10),
 	sno nvarchar(50),
 	namea nvarchar(50),
 	person nvarchar(50),
@@ -439,7 +440,7 @@ declare @tmp table(
 	salname nvarchar(20)
 )
 insert @tmp
-select case when a.person!='外勞' then 1 else 2 end,'',sno,b.namea,a.person
+select case when a.person!='外勞' then 1 else 2 end,'',a.mon,sno,b.namea,a.person
 	  ,case when outdate>reindate then '離職:'+outdate else '' end
 	  ,case when len(d.level1)=0 then d.job else isnull(d.level1+'職等','')+d.job end,d.level2
 	  ,case when a.person='日薪' then b.daymoney*b.day else b.money end,b.bo_admin,b.bo_special
@@ -464,6 +465,7 @@ set @tmon=left(@tmon,3)+'/'+substring(@tmon,4,2)
 declare @tmpa table(
 	gno nvarchar(1),
 	rr int,
+	mon nvarchar(10),
 	sno nvarchar(50),
 	namea nvarchar(50),
 	person nvarchar(50),
@@ -504,7 +506,7 @@ declare @tmpa table(
 	salname nvarchar(20)
 )
 insert @tmpa
-select case when a.person!='外勞' then 1 else 2 end,'',sno,b.namea,a.person
+select case when a.person!='外勞' then 1 else 2 end,'',a.mon,sno,b.namea,a.person
 	  ,case when outdate>reindate then '離職:'+outdate else '' end
 	  ,case when len(d.level1)=0 then d.job else isnull(d.level1+'職等','')+d.job end,d.level2
 	  ,case when a.person='日薪' then b.daymoney*b.day else b.money end,b.bo_admin,b.bo_special
@@ -521,10 +523,11 @@ left join salvacas e on b.sno=e.sssno and LEFT(b.mon,3)=e.noa
 where (a.mon=@tmon) and
 (b.sno between @t_bsssno and @t_esssno)
 
+--2017/03/08 林顧問要求員工個人薪資從三月份開始查詢 前面一律不能查詢
 if(@t_rank<'8')
 begin
-	delete @tmp where sno!=@t_userno
-	delete @tmpa where sno!=@t_userno
+	delete @tmp where sno!=@t_userno or mon<='106/02' 
+	delete @tmpa where sno!=@t_userno or mon<='106/02'
 end
 
 update a
