@@ -103,7 +103,7 @@ select '',a.productno,a.product,a.noa,a.unit
 ,isnull(d.costb,0),isnull(d.costc,0),isnull(d.costd,0)
 from ucas a --outer apply (select * from uca where noa=a.productno)b
 outer apply (select price from view_costs where productno=a.productno and mon=@t_cmon) c
-outer apply (select SUM(costa)/SUM(mount)costa,SUM(costb)/SUM(mount)costb,SUM(costc)/SUM(mount)costc,SUM(costd)/SUM(mount)costd from view_wcost where productno=a.productno and mon=@t_wmon)d
+outer apply (select SUM(costa)/SUM(mount)costa,SUM(costb)/SUM(mount)costb,SUM(costc)/SUM(mount)costc,SUM(costd)/SUM(mount)costd from view_wcost where productno=a.productno and mon=@t_wmon having SUM(mount)!=0)d
 
 insert into #tmp
 select a.noa,a.noa,a.product,@parent
@@ -114,7 +114,7 @@ select a.noa,a.noa,a.product,@parent
 --,isnull(a.price,0)
 ,isnull(d.costb,0),isnull(d.costc,0),isnull(d.costd,0)
 from uca a outer apply (select price from view_costs where productno=a.noa and mon=@t_cmon)b
-outer apply (select SUM(costa)/SUM(mount)costa,SUM(costb)/SUM(mount)costb,SUM(costc)/SUM(mount)costc,SUM(costd)/SUM(mount)costd from view_wcost where productno=a.noa and mon=@t_wmon)d
+outer apply (select SUM(costa)/SUM(mount)costa,SUM(costb)/SUM(mount)costb,SUM(costc)/SUM(mount)costc,SUM(costd)/SUM(mount)costd from view_wcost where productno=a.noa and mon=@t_wmon having SUM(mount)!=0)d
 where a.noa=@t_pno
 
 CREATE INDEX tmpindex1 ON #tmp (parent)
