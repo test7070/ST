@@ -318,6 +318,9 @@
 			.txt.c2 {
 				width: 95%;
 			}
+			.txt.c3 {
+				width: 50%;
+			}
 			.txt.num {
 				text-align: right;
 			}
@@ -392,7 +395,8 @@
 						<td><input id="txtYearmount" type="text" class="txt c1 num"/></td>
 						<td><span> </span><a id='lblUsemount' class="lbl"> </a></td>
 						<td><input id="txtUsemount" type="text" class="txt c1 num"/></td>
-						<td></td>
+						<td><span> </span><a id='lblFix' class="lbl"> </a></td>
+						<td colspan="1"><input id="txtFix" type="text" class="txt c3 num"/><span> </span>需保養</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoldingcycle' class="lbl"> </a></td>
