@@ -25,7 +25,7 @@
         var bbmNum = [];  
         var bbsNum = [['txtMount', 10, 0,1],['txtMoney', 10, 0,1]];
         var bbmMask = []; 
-        var bbsMask = [['txtBeginmount', 15, 0,1],['txtBeginmoney', 15, 0,1]];
+        var bbsMask = [['txtBeginmount', 15, 0,1],['txtBeginmoney', 15, 0,1],['txtLastmount', 15, 0,1],['txtLastmoney', 15, 0,1]];
         q_sqlCount = 6; brwCount = 6; brwList = []; brwNowPage = 0; brwKey = 'noa';
         aPop = new Array(['txtNou', 'lblNou', 'ucc', 'noa,product', 'txtNou', 'ucc_b.aspx']);
         //ajaxPath = ""; //  execute in Root
@@ -55,7 +55,7 @@
         		$('#lblRc2acc').text('含稅單價');
         		$('#txtRc2acc').css('text-align','right');
 			}
-        	
+			
         	bbsMask = [['txtMon', r_picm]];
             q_mask(bbmMask);
             /*if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
@@ -149,6 +149,8 @@
 							
 							$('#txtBeginmount_'+b_seq).val(0);
 							$('#txtBeginmoney_'+b_seq).val(0);
+							$('#txtLastmount_'+b_seq).val(0);
+							$('#txtLastmoney_'+b_seq).val(0);
 					});
 				}
 			}
@@ -244,6 +246,10 @@
         function refresh(recno) {
             _refresh(recno);
             refreshBbm();
+            
+            if(q_getPara('sys.project').toUpperCase()=='VU2'){
+        		$('.isVU2').show();
+			}
            
         }
 		function refreshBbm(){
@@ -431,7 +437,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 950px;
+                width: 980px;
             }
             .tbbs a {
                 font-size: medium;
@@ -504,6 +510,8 @@
 					<td align="center" style="width:80px;"><a id='lblMon'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblBeginmount'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblBeginmoney'> </a></td>
+					<td class="isVU2" align="center" style="width:200px;display: none;"><a id='lblLastmount'>期末數量</a></td>
+					<td class="isVU2" align="center" style="width:200px;display: none;"><a id='lblLastmoney'>期末金額</a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
@@ -514,6 +522,8 @@
 					<td><input type="text" id="txtMon.*" style="width:97%;" /></td>
 					<td ><input type="text" id="txtBeginmount.*" style="width:97%;text-align: right;" /></td>
 					<td><input type="text" id="txtBeginmoney.*" style="width:97%;text-align: right;" /></td>
+					<td class="isVU2" style="display: none;"><input type="text" id="txtLastmount.*" style="width:97%;text-align: right;" /></td>
+					<td class="isVU2" style="display: none;"><input type="text" id="txtLastmoney.*" style="width:97%;text-align: right;" /></td>
 				</tr>
 			</table>
 		</div>
