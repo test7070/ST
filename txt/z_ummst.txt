@@ -461,6 +461,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	---------------------------------------------------------------------------------------------------
 	declare @tmpa table(
 		sel int identity(1,1)
+		,mon nvarchar(20)
 		,gno nvarchar(10)
 		,pno nvarchar(20)
 		,custno nvarchar(20)
@@ -485,6 +486,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,size nvarchar(max)
 		,price float
 		,[money] float
+		,mount float
 		,cmount nvarchar(max)
 		,cmount2 nvarchar(max)
 
@@ -543,6 +545,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,[money] float
 		,unit2 nvarchar(20)
 	)	
+	declare @mounts float
 	
 	declare cursor_table cursor for
 	select custno,sum(isnull([money],0)),sum(isnull([tax],0)),sum(isnull([total],0)) from @tmp group by custno
@@ -562,23 +565,25 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		into @accy,@noa,@ordeno,@po,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys,@lengthb
 		while(@@FETCH_STATUS <> -1)
 		begin
-		
+			set @mounts = 0
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
+				set @mounts = @weight
 				set @cmount = dbo.getComma(@weight,-1) + @unit
 				set @cmount2 = dbo.getComma(@mount,-1) + case when @lengthb=0 then 'C' else 'PCS' end
 			end
 			else
 			begin
+				set @mounts = @mount
 				set @cmount = dbo.getComma(@mount,-1) + @unit
 				set @cmount2 = dbo.getComma(@weight,-1)
 			end
 			select @stype=''
 			select top 1  @stype=stype from @tmps where custno=@custno and len(stype)>0 
 			
-			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,po,datea,product,pvcno,pvc,size,price,stype,[money],cmount,cmount2)
-			select @custno,'1',1,@accy,@noa,@ordeno,@po,@datea,@product,@pvcno,@pvc,@size,@price,@stype,@moneys,@cmount,@cmount2
+			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,po,datea,product,pvcno,pvc,size,price,stype,[money],mount,cmount,cmount2)
+			select @custno,'1',1,@accy,@noa,@ordeno,@po,@datea,@product,@pvcno,@pvc,@size,@price,@stype,@moneys,@mounts,@cmount,@cmount2
 			
 			fetch next from cursor_table2
 			into @accy,@noa,@ordeno,@po,@datea,@product,@pvcno,@pvc,@size,@unit,@price,@mount,@weight,@moneys,@lengthb
@@ -686,7 +691,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		select top 1 @string = memo from @tmp where custno=@custno and len(isnull(memo,''))>0 order by vccno
 	
 		insert into @tmpa(custno,product,gno,pno,paytype,tmemo)
-		select @custno,CHAR(255),'7',7,@paytype,@string
+		select @custno,CHAR(255),'8',8,@paytype,@string
 		
 		fetch next from cursor_table
 		into @custno,@money,@tax,@total
@@ -703,6 +708,33 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	from @tmpa a
 	outer apply(select top 1 * from conn where noa=a.custno and typea='1') b
 	
+	--月份小計
+	update @tmpa set mon=case when len(ISNULL(datea,''))=0 then CHAR(255) else LEFT(datea,6) end
+	
+	declare cursor_table cursor for
+	select custno,count(1)
+	from(select custno,mon from @tmpa where mon!=CHAR(255) group by custno,mon) a
+	group by custno
+	open cursor_table
+	fetch next from cursor_table
+	into @custno,@n
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if @n>1
+		begin
+			insert into @tmpa(gno,pno,custno,mon,mount,[money])
+			select "7",7,custno,mon,SUM(isnull([mount],0)),SUM(isnull([money],0))
+			from @tmpa
+			where custno=@custno and mon!=CHAR(255) group by custno,mon
+		end
+	
+		fetch next from cursor_table
+		into @custno,@n
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+
 	select gno
 		,'<img src="'+@t_path+'getlogo.aspx?noa=lienchy'+CHAR(38)+'db='+@t_db+'"/>' logo
 		,custno a01
@@ -723,10 +755,11 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,product b05
 		,pvcno b06
 		,size b07
-		,cmount b08
+		,case when gno='7' then dbo.getComma([mount],-1) else cmount end b08
 		,dbo.getComma(price,-1) b09
 		,dbo.getComma([money],-1) b10
 		,cmount2 b11
+		,mon b12
 		,dbo.getComma(tmoney,-1) c01
 		,dbo.getComma(ttax,-1) c02
 		,dbo.getComma(ttotal,-1) c03
@@ -734,7 +767,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,paytype c05
 		,case when len(isnull(tmemo,''))=0 then '' else '五、'+isnull(tmemo,'') end c06
 	from @tmpa 
-	order by custno,pno,product;
+	order by custno,mon,pno,product;
 
 z_ummst9:--z_ummst9
 	SET QUOTED_IDENTIFIER OFF
