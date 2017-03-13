@@ -9,6 +9,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	declare @t_memo nvarchar(max) = case when '#non'=[19] then '' else [19] end
 	declare @t_curnoa nvarchar(max) = case when '#non'=[26] then '' else [26] end
 	------------------------------------------------------------------------
+	------------------------------------------------------------------------
 	declare @tmp table(
 		sel int identity(1,1)
 		,vccaccy nvarchar(10)
@@ -190,7 +191,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
-				set @cmount = dbo.getComma(@weight,-1) + @unit
+				set @cmount = dbo.getComma(@weight,-1) --+ @unit
 				set @cmount2 = dbo.getComma(@mount,-1) + case when @lengthb=0 then 'C' else 'PCS' end
 				set @money_usd = round(@weight*@price,2)
 			end
@@ -234,7 +235,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
-				set @cmount = dbo.getComma(@weight,-1) + @unit
+				set @cmount = dbo.getComma(@weight,-1)     -- + @unit
 				set @cmount2 = dbo.getComma(@mount,-1) + @string
 			end
 			else
