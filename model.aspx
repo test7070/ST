@@ -32,7 +32,8 @@
 			q_desc = 1;
 			aPop = new Array(
 				['txtStationno', 'lblStationno', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'],
-				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx']
+				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx'],
+				['txtModgno', 'lblModg', 'modg', 'noa,namea', 'txtModgno,txtModg', 'modg_b.aspx']
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
@@ -288,10 +289,10 @@
 				height: 35px;
 			}
 			.tbbm tr td {
-				width: 10%;
+				/*width: 10%;*/
 			}
 			.tbbm .tdZ {
-				width: 1%;
+				/*width: 1%;*/
 			}
 			.tbbm tr td span {
 				float: right;
@@ -377,18 +378,25 @@
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td class="tdZ"></td>
+						<td style="width:110px;"> </td>
+						<td style="width:100px;"> </td>
+						<td style="width:110px;"> </td>
+						<td style="width:100px;"> </td>
+						<td style="width:110px;"> </td>
+						<td style="width:100px;"> </td>
+						<td style="width:100px;"> </td>
+						<td style="width:10px;"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblModel' class="lbl"> </a></td>
 						<td><input id="txtModel" type="text" class="txt c1"/></td>
-						<td></td>
+						<td><span> </span><a id='lblModg' class="lbl btn"> </a></td>
+						<td colspan="2">
+							<input id="txtModgno" type="text" class="txt c3"/>
+							<input id="txtModg" type="text" class="txt c3"/>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblYearmount' class="lbl"> </a></td>
@@ -396,7 +404,7 @@
 						<td><span> </span><a id='lblUsemount' class="lbl"> </a></td>
 						<td><input id="txtUsemount" type="text" class="txt c1 num"/></td>
 						<td><span> </span><a id='lblFix' class="lbl"> </a></td>
-						<td colspan="1"><input id="txtFix" type="text" class="txt c3 num"/><span> </span>需保養</td>
+						<td colspan="2"><input id="txtFix" type="text" class="txt c3 num"/><span> </span>需保養</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMoldingcycle' class="lbl"> </a></td>
@@ -406,7 +414,7 @@
 							<input id="txtStationno" type="text" style="width:35%" class="txt"/>
 							<input id="txtStation" type="text" style="width:65%" class="txt"/>
 						</td>
-						<td></td>
+						<td> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblIndate' class="lbl"> </a></td>
@@ -415,7 +423,7 @@
 						<td><input id="txtInmount" type="text" class="txt c1 num"/></td>
 						<td><span> </span><a id='lblInmoney' class="lbl"> </a></td>
 						<td><input id="txtInmoney" type="text" class="txt c1 num"/></td>
-						<td></td>
+						<td> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
