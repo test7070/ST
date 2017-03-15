@@ -30,18 +30,19 @@ create table #tmp(
 	timea nvarchar(100),
 	sssno nvarchar(100),
 	namea nvarchar(100),
-	wtype nvarchar(100),
-	noa nvarchar(100)
+	wtype nvarchar(100)
 )
 
 insert into #tmp
 select SUBSTRING(a.a,3,8)datea,SUBSTRING(a.a,11,4) timea,b.noa,b.namea
-,SUBSTRING(a.a,15,2) work,a.noa--,SUBSTRING(a.a,17,10) barcode
+,SUBSTRING(a.a,15,2) work--,SUBSTRING(a.a,17,10) barcode
 from ztmpxls a left join sss b on SUBSTRING(a.a,17,10)=b.barcode
 and a.a!=''
 
 update #tmp
 set datea=dbo.AD2ChineseEraName(datea),timea=left(timea,2)+':'+RIGHT(timea,2)
+
+--select * from #tmp
 
 --bbm
 create table #bbm(
@@ -68,16 +69,6 @@ create table #bbs(
 )
 
 declare @datea nvarchar(MAX)
-declare @sssno nvarchar(MAX)
-declare @namea nvarchar(MAX)
-declare @timea nvarchar(MAX)
-declare @wtype nvarchar(MAX)
-declare @tsssno nvarchar(MAX)=''
-declare @pwtype nvarchar(MAX)=''
-declare @ttime nvarchar(MAX)=''
-declare @count int=0
-
---select * from #tmp order by sssno,datea,timea,noa
 
 declare cursor_table cursor for
 select datea from #tmp group by datea order by datea --匯入日期
@@ -86,85 +77,13 @@ fetch next from cursor_table
 into @datea
 while(@@FETCH_STATUS <> -1)
 begin
-	set @pwtype='XX'
-	set @tsssno=''
-	set @ttime=''
-	set @count=1
 
-	declare cursor_table2 cursor for
-	select sssno,namea,timea,wtype from #tmp where datea=@datea order by sssno,datea,timea,noa
-	open cursor_table2
-	fetch next from cursor_table2
-	into @sssno,@namea,@timea,@wtype
-	while(@@FETCH_STATUS <> -1)
-	begin
-		if(@tsssno!='' and @tsssno!=@sssno)
-		begin
-			if(@pwtype='1A')
-			begin
-				insert #bbs	
-				select  @datea,@count,@tsssno,namea
-				,case when @pwtype='1A' then @ttime else '' end
-				,'',0,0,0,''
-				from sss a where isnull(outdate,'')='' and noa=@tsssno order by noa
-				set @count=@count+1
-			end
-		
-			set @pwtype='XX'
-			set @ttime=''
-		end
-		if((@wtype='1A' and @pwtype!='2A' and @pwtype!='XX')
-		or (@wtype='2A' and @pwtype!='1A'))
-		begin
-			insert #bbs	
-			select  @datea,@count,@sssno,namea
-			,case when @wtype='1A' then @ttime else '' end
-			,case when @wtype='2A' then @ttime else '' end
-			,0,0,0,''
-			from sss a where isnull(outdate,'')='' and noa=@sssno order by noa
-			set @count=@count+1
-		end
-		
-		if(@pwtype='1A' and @wtype='2A')
-		begin
-			insert #bbs	
-			select  @datea,@count,@sssno,namea,@ttime,@timea,0,0,0,''
-			from sss a where isnull(outdate,'')='' and noa=@sssno order by noa
-			set @count=@count+1
-		end
-		
-		set @pwtype=@wtype
-		set @tsssno=@sssno
-		set @ttime=@timea
-		
-		fetch next from cursor_table2
-		into @sssno,@namea,@timea,@wtype
-	end
-	close cursor_table2
-	deallocate cursor_table2
-	
-	if(@pwtype=@wtype)
-	begin
-		insert #bbs	
-		select  @datea,@count,@tsssno,namea
-		,case when @pwtype='1A' then @ttime else '' end
-		,'',0,0,0,''
-		from sss a where isnull(outdate,'')='' and noa=@tsssno order by noa
-		set @count=@count+1
-	end
-	
 	insert #bbs	
-	select  @datea,ROW_NUMBER() over (order by a.noa)+@count,noa,namea,'','',0,0,0,''
-	from sss a where (isnull(outdate,'')='' or isnull(outdate,'')>@datea)
-	and not exists(select * from #bbs where sssno=a.noa) order by noa
-	
-	update a
-	set noq=rr
-	from (select noq,ROW_NUMBER() over (order by sssno,cast(noq as int))rr  from #bbs)a
-		
-	update a
-	set noq=right(REPLICATE('0',case when xlen>3 then xlen else 3 end)+noq,case when xlen>3 then xlen else 3 end)
-	from #bbs a outer apply (select len(MAX(cast(noq as int)))xlen from #bbs)b
+	select  @datea,right('000'+cast(ROW_NUMBER()over (order by noa)as nvarchar(10)),3),noa,namea
+	,isnull((select top 1 timea from #tmp where sssno=a.noa and wtype='1A' and datea=@datea order by timea),'')
+	,isnull((select top 1 timea from #tmp where sssno=a.noa and wtype='2A' and datea=@datea order by timea desc),'')
+	,0,0,0,''
+	from sss a where isnull(outdate,'')='' order by noa
 	
 	set @t_weekday=DATEPART(WEEKDAY, dbo.ChineseEraName2AD(@datea))-1
 	
@@ -176,11 +95,14 @@ begin
 	begin
 		--105/07/07 出勤加班時數 直接計算出 比對加班單核准 加班時數
 		update #bbs
-		set w133=case when clockout>=@t_offwork and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+		set w133=	case when clockout>=@t_offwork and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
 		then round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+@t_offwork
 		, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+clockout) as float)/60),1) else 0 end
 		where isnull(clockin,'')!='' and isnull(clockout,'')!='' and clockout>=@t_offwork 
 		
+		--update a
+		--set w133=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
+		--from #bbs a
 		--105/07/07 加班時數小時0.5 不列入加班時數
 		update #bbs set w133=case when w133<0.5 then 0 else w133 end
 		update #bbs set w166=case when w133>2 then w133-2 else 0 end
@@ -199,22 +121,27 @@ begin
 		where isnull(a.clockout,'')!=''
 		
 		update a
-		set memo=case when counts!=0 then '請假' else '' end
+		set memo=case when counts!=0 then '請假' else '無打卡資料' end
 		from #bbs a 
 		outer apply (select count(*) counts from salvacause where (@datea between bdate and edate) and sssno=a.sssno and btime=@t_gowork and etime=@t_offwork )b
 		where isnull(a.clockin,'')='' and isnull(a.clockout,'')=''
+		
 	end
 	else
 	begin
 		update #bbs
-		set w100=case when isnull(clockin,'')!='' and isnull(clockout,'')!='' then
+		set w100=	case when isnull(clockin,'')!='' and isnull(clockout,'')!='' then
 		round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockin>@t_gowork then clockin else @t_gowork end 
 		, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockout<@t_offwork then clockout else @t_offwork end) as float)/60),1) else 0 end
 		where isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+	
+		--update a
+		--set w100=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
+		--from #bbs a
 	end
 	
 	insert #bbm
-	select @datea,SUM(w133),SUM(w166),SUM(w100),(select COUNT(*) from (select sssno from #bbs group by sssno)tmp)
+	select @datea,SUM(w133),SUM(w166),SUM(w100),COUNT(*) 
 	,case when 
 	(@datea not in (select noa from holiday where isnull(iswork,0)!=1) --不是假日
 	and @t_weekday!='0' and @t_weekday!='6')--不是禮拜六日
@@ -224,29 +151,94 @@ begin
 	
 	if((select COUNT(*) from salpresent where noa=@datea)=0)
 	begin
-		--新增bbm
 		insert salpresent(noa,w133,w166,w100,mount,holiday)
 		select * from #bbm
-		
 		--新增bbs
-		delete salpresents where noa=@datea
 		insert salpresents(noa,noq,sssno,namea,clockin,clockout,w133,w166,w100,memo)
 		select noa,noq,sssno,namea,clockin,clockout,w133,w166,w100,memo from #bbs 
 	end
 	else
 	begin
-		delete a from salpresents a 
-		where exists (select * from #bbs where noa=a.noa and sssno=a.sssno)
+		--更新bbs
+		--目前有的上班時間比更新時間早
+		update b
+		set b.namea=a.namea,b.clockin=a.clockin
+		from #bbs a left join salpresents b on a.noa=b.noa and a.sssno=b.sssno
+		where b.noa!='' and b.sssno!='' and a.clockin!='' 
+		and a.clockin<= (case when isnull(b.clockin,'99:99:99')='' then '99:99:99' else isnull(b.clockin,'99:99:99') end)
 		
+		--目前有的下班時間比更新時間晚
+		update b
+		set b.namea=a.namea,b.clockout=a.clockout
+		from #bbs a left join salpresents b on a.noa=b.noa and a.sssno=b.sssno
+		where b.noa!='' and b.sssno!='' and a.clockout!='' and a.clockout>=(case when isnull(b.clockout,'00:00:00')='' then '00:00:00' else isnull(b.clockout,'00:00:00') end)
+		
+		--新增bbs(不存在的)
 		insert salpresents(noa,noq,sssno,namea,clockin,clockout,w133,w166,w100,memo)
-		select noa,'x'+noq,sssno,namea,clockin,clockout,w133,w166,w100,memo from #bbs a
-		where not exists (select * from salpresents where noa=a.noa and sssno=a.sssno)
-	
+		select noa,'x'+noq,sssno,namea,clockin,clockout,w133,w166,w100,memo from #bbs 
+		where noa+'_'+sssno not in (select noa+'_'+sssno from salpresents where noa=@datea)
+		
+		--更新資料
+		--非假日
+		if((@datea not in (select noa from holiday where isnull(iswork,0)!=1) --不是假日
+			and @t_weekday!='0' and @t_weekday!='6')--不是禮拜六日
+			or @datea in (select noa from holiday where isnull(iswork,0)=1)--上班日
+		)
+		begin
+			--105/07/07 出勤加班時數 直接計算出 比對加班單核准 加班時數
+			update salpresents
+			set w133=case when clockout>=@t_offwork and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+			then round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+@t_offwork
+			, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+clockout) as float)/60),1) else 0 end
+			where noa=@datea 
+		
+			--update a
+			--set w133=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
+			--from salpresents a where noa=@datea
+			
+			update salpresents set w133=case when w133<0.5 then 0 else w133 end where noa=@datea
+			update salpresents set w166=case when w133>2 then w133-2 else 0 end where noa=@datea
+			update salpresents set w133=case when w133>2 then 2 else w133 end where noa=@datea
+			
+			--更新備註
+			update salpresents set memo='' where noa=@datea
+			
+			update a
+			set memo=case when clockin>@t_gowork and isnull((select count(*) from salvacause where (@datea between bdate and edate) and sssno=a.sssno and a.clockin between btime and (case when etime=@t_offwork2 then @t_gowork2 else etime end ) ),0)=0 then '遲到' else '' end
+			from salpresents a
+			where isnull(a.clockin,'')!='' and noa=@datea
+			
+			update a
+			set memo=memo+
+			case when clockout<@t_offwork and isnull((select count(*) from salvacause where (@datea between bdate and edate) and sssno=a.sssno and a.clockout between (case when btime=@t_gowork2 then @t_offwork2 else btime end) and etime ),0)=0 then (case when len(memo)>0 then ',' else '' end) +'早退' else '' end
+			from salpresents a
+			where isnull(a.clockout,'')!='' and noa=@datea
+			
+			update a
+			set memo=case when counts!=0 then '請假' else '無打卡資料' end
+			from salpresents a 
+			outer apply (select count(*) counts from salvacause where (@datea between bdate and edate) and sssno=a.sssno and btime=@t_gowork and etime=@t_offwork )b
+			where isnull(a.clockin,'')='' and isnull(a.clockout,'')='' and noa=@datea
+			
+		end
+		else
+		begin
+			update salpresents
+			set w100=case when isnull(clockin,'')!='' and isnull(clockout,'')!='' then
+			round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockin>@t_gowork then clockin else @t_gowork end 
+			, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockout<@t_offwork then clockout else @t_offwork end) as float)/60),1) else 0 end
+			where noa=@datea 
+		
+			--update a
+			--set w100=isnull((select sum(hours) from saladd where isnull(isapv,0)=1 and sssno=a.sssno and datea=@datea),0)
+			--from salpresents a where noa=@datea
+		end
+		
 		update a
 		set w100=isnull((select sum(w100) from salpresents where noa=a.noa),0)
 		,w133=isnull((select sum(w133) from salpresents where noa=a.noa),0)
 		,w166=isnull((select sum(w166) from salpresents where noa=a.noa),0)
-		,mount=isnull((select count(*) from (select sssno from salpresents where noa=a.noa group by sssno)tmp),0)
+		,mount=isnull((select count(*) from salpresents where noa=a.noa),0)
 		from salpresent a
 		where a.noa=@datea
 		
@@ -256,12 +248,15 @@ begin
 		where noa=@datea
 		
 		update a
-		set noq=rr
-		from (select noq,ROW_NUMBER() over (order by sssno,noq )rr  from salpresents where noa=@datea)a
+		set noq=b.noq2
+		from salpresents a left join (select noa,sssno,(Rank() OVER (ORDER BY sssno))noq2 from salpresents where noa=@datea)b
+		on a.noa+'_'+a.sssno=b.noa+'_'+b.sssno
+		where a.noa=@datea
 		
 		update salpresents
 		set noq=right('000'+noq,3)
 		where noa=@datea
+	
 	end
 	
 	delete #bbm
@@ -288,4 +283,5 @@ IF OBJECT_ID('tempdb..#bbs')is not null
 BEGIN
    drop table #bbs
 END
+
 ;
