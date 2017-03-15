@@ -68,8 +68,8 @@ begin
 		select noa,@datea,0 from sss where person!='日薪' and isnull(barcode,'')!=''
 		
 		update a
-		set clockin=isnull((select clockin from salpresents where noa=@datea and sssno=a.sssno),'')
-		,clockout=isnull((select clockout from salpresents where noa=@datea and sssno=a.sssno),'')
+		set clockin=isnull((select top 1 clockin from salpresents where noa=@datea and sssno=a.sssno order by noq),'')
+		,clockout=isnull((select top 1 clockout from salpresents where noa=@datea and sssno=a.sssno order by noq desc),'')
 		,b=isnull((select SUM(hr_used) from salvacause where sssno=a.sssno and (@datea between bdate and edate) and (hname like'%事假%' or hname like'%病假%') ),0)
 		,d=isnull((select SUM(hr_used) from salvacause where sssno=a.sssno and (@datea between bdate and edate) and (hname not like'%事假%' and hname not like '%病假%')),0)
 		from @tmpa a where datea=@datea
