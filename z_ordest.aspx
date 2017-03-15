@@ -49,9 +49,9 @@
 				$('#q_report').q_report({
 					fileName : 'z_ordest',
 					options : [{
-						type : '0', //[1]    
-						name : 'accy',
-						value : q_getId()[4]
+						type : '0', //[1]
+						name : 'xproject',
+						value : q_getPara('sys.project').toUpperCase()
 					}, {
 						type : '1', //[2][3]   1
 						name : 'xdate'
