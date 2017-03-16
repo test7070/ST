@@ -882,6 +882,7 @@
 				
 			}
 			
+			var t_dodate='',t_dodatename='';
 			function btnOk() {
 				t_err = '';
 				t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')], ['txtCustno', q_getMsg('lblCustno')], ['txtCno', q_getMsg('btnAcomp')]]);
@@ -1046,6 +1047,33 @@
 						if($('#chkCancel').prop('checked'))
 							$('#chkCancel_'+j).prop('checked','true')
 					}
+				}
+				
+				//106/03/16 限制 訂單交期
+				q_gt('qsys', t_where, 0, 0, 0, "getdodate", r_accy, 1);
+				var as = _q_appendData("qsys", "", true);
+				if (as[0] != undefined) {
+					t_dodatename=as[0].name;
+					t_dodate=as[0].value;
+				}
+				
+				var modi_mount2=0;
+				for(var i=0;i<q_bbsCount;i++){
+					modi_mount2=q_add(modi_mount2,dec($('#txtMount_'+i).val()));
+				}
+				
+				var t_err='';
+				if(t_dodate.length>0 && (q_cur==1 || (q_cur==2 && modi_mount!=modi_mount2)) ){
+					for(var k=0;k<q_bbsCount;k++){
+						if($('#txtDatea_'+k).val()<=t_dodate){
+							t_err=q_getMsg('lblDateas')+"【"+$('#txtDatea_'+k).val()+"】不可低於"+t_dodatename+"【"+t_dodate+"】";
+							break;
+						}	
+					}
+				}
+				if(t_err.length>0){
+					alert(t_err);
+					return;
 				}
 				
 				if (q_cur == 1)
@@ -1468,12 +1496,21 @@
 
 				var t_where = "where=^^ 1=0 ^^ stop=100";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
 			}
-
+			
+			//106/03/16 限制 訂單交期 修改判斷總量是否有變動
+			var modi_mount=0;
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
 					return;
+					
+				modi_mount=0;
+				for(var i=0;i<q_bbsCount;i++){
+					modi_mount=q_add(modi_mount,dec($('#txtMount_'+i).val()));
+				}
 				_btnModi();
+				
 				$('#txtOdate').focus();
 
 				if (!emp($('#txtCustno').val())) {
