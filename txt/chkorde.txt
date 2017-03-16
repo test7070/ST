@@ -1,9 +1,8 @@
 chkorde:--chkorde
 SET QUOTED_IDENTIFIER OFF
-declare @t_qdate nvarchar(10)= '106/02/02'
+declare @t_qdate nvarchar(10)= [1]
 declare @t_userno nvarchar(max) = 'Z001'
 declare @r_len nvarchar(max) = '4'
-declare @r_accy nvarchar(max) = '106'
 declare @t_rank int = 0
 declare @t_user nvarchar(20) = ''
 select @t_rank=[RANK],@t_user=namea from nhpe where noa=@t_userno
@@ -72,7 +71,7 @@ begin try
 
 	insert [sign](noa,datea,timea,form,sender,memo,receiver,zno,zno2,enda)
 	select REPLACE(@t_qdate,'/','')+case when @r_len=4 then REPLICATE('0',5-LEN(rr)) + RTRIM(CAST(rr AS CHAR))else REPLICATE('0',3-LEN(rr)) + RTRIM(CAST(rr AS CHAR)) end,
-	   @t_qdate,left(CONVERT(nvarchar,getdate(),108),5), '訂單未交',@t_user,'未交超過'+kdate+'天',sss,noa,'orde;noa;'+accy,'N'
+	   @t_qdate,left(CONVERT(nvarchar,getdate(),108),5), '訂單未交',@t_user,'未交超過'+kdate+'天',sss,noa,'orde'+CHAR(59)+'noa'+CHAR(59)+accy,'N'
 	from @tmp
 
 	update [sign]
