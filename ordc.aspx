@@ -242,7 +242,7 @@
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "' ^^";
 							q_gt('ordb', t_where, 0, 0, 0, "", r_accy);
 							$('#txtOrdbno').val(b_ret[0].noa);
-							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtOrdbno,txtNo3,txtPrice,txtMount,txtTotal,txtMemo,txtUnit,txtSpec,txtCustno,txtComp', b_ret.length, b_ret, 'productno,product,noa,no3,price,mount,total,memo,unit,spec,custno,comp', 'txtProductno,txtProduct');
+							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtOrdbno,txtNo3,txtPrice,txtMount,txtTotal,txtMemo,txtUnit,txtSpec,txtCustno,txtComp', b_ret.length, b_ret, 'productno,product,noa,no3,price,notv,total,memo,unit,spec,custno,comp', 'txtProductno,txtProduct');
 							
 							//取第一個廠商資料
 							if (q_getPara('sys.project').toUpperCase()=='XY' ){
@@ -665,7 +665,10 @@
 				}
 				if(q_getPara('sys.project').toUpperCase()!='XY'){
 					$('.isCust').hide();
-				}	
+				}
+				if (q_getPara('sys.project').toUpperCase().substr(0,2)!='AD'){
+					$('.isAD').hide();
+				}
 				//金額小計自訂
 				for(var i=0;i<q_bbsCount;i++){
 					$('#txtTotal_'+i).attr('readonly','readonly');
@@ -804,6 +807,8 @@
 					$('#txtOrdbno').hide();
 					$('.floata').hide();
 				}
+				
+
 				
 				if (q_getPara('sys.project').toUpperCase()=='XY' ){
 					var t_ordbno='',t_no3='';
@@ -1365,6 +1370,7 @@
                         <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
                     <td align="center" style="width:20px;"> </td>
+                    <td class="isAD" align="center" style="width:180px;"><a id='lblUno'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblProductno'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblProduct_st'> </a><a class="isSpec">/</a><a id='lblSpec' class="isSpec"> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyles'> </a></td>
@@ -1385,6 +1391,9 @@
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td class="isAD" align="center">
+						<input class="txt c1" id="txtUno.*" type="text" />
+					</td>
 					<td align="center">
 						<input class="txt c1" id="txtProductno1.*" type="text" />
 						<input class="txt c1" id="txtProductno2.*" type="text" />
