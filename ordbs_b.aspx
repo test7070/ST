@@ -10,7 +10,7 @@
         <script src="../script/qbox.js" type="text/javascript"></script>
         <link href="../qbox.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript">
-			var q_name = 'ordbs', t_bbsTag = 'tbbs', t_content = " field=productno,product,unit,mount,noa,no3,price,total,weight,memo,spec,custno,comp,sales,tggno_xy,tgg_xy", afilter = [], bbsKey = ['noa', 'no3'], t_count = 0, as;
+			var q_name = 'ordbs', t_bbsTag = 'tbbs', t_content = " field=productno,product,unit,mount,noa,no3,price,total,weight,memo,notv,spec,custno,comp,sales,tggno_xy,tgg_xy", afilter = [], bbsKey = ['noa', 'no3'], t_count = 0, as;
 			var t_sqlname = 'ordbs';
 			t_postname = q_name;
 			//brwCount2 = 12;
@@ -62,7 +62,7 @@
 			}
 			function q_gtPost() {
 			}
-			function refresh() {
+			function refresh() {			
 				_refresh();
 				$('#checkAllCheckbox').click(function() {
 					$('input[type=checkbox][id^=chkSel]').each(function() {
@@ -244,8 +244,9 @@
                     <td align="center"><a id='lblMount'> </a></td>
                     <!--<td align="center"><a id='lblWeight'></a></td>-->
                     <td align="center"><a id='lblPrice'> </a></td>
-                    <!--<td align="center"><a id='lblNotv'></a></td>-->
-                    <td align="center" class="isCust"><a id='lblCust'> </a></td>
+                    <td align="center"><a id='lblNotv'></a></td>
+                    <!--<td align="center"><a id='lblNotv2'></a>可轉採料</td>-->
+-                    <td align="center" class="isCust"><a id='lblCust'> </a></td>
                     <td align="center" class="isXY" style="display: none;"><a id='lblTgg_xy'>廠商</a></td>
                     <td align="center"><a id='lblNoa'> </a></td>
                     <td align="center"><a id='lblMemo'> </a></td>
@@ -264,7 +265,8 @@
                     <td style="width:5%;"><input class="txt" id="txtMount.*" type="text" style="width:94%; text-align:right;"/></td>
                     <!--<td style="width:8%;"><input class="txt" id="txtWeight.*" type="text" style="width:96%; text-align:right;"/></td>-->
                     <td style="width:6%;"><input class="txt" id="txtPrice.*" type="text" style="width:96%; text-align:right;"/></td>
-                    <!--<td style="width:8%;"><input class="txt" id="txtNotv.*" type="text" style="width:96%; text-align:right;"/></td>-->
+                    <td style="width:5%;"><input class="txt" id="txtNotv.*" type="text" style="width:96%; text-align:right;"/></td>
+                    <!--<td style="width:5%;"><input class="txt" id="txtNotv2.*" type="text" style="width:96%; text-align:right;"/></td>-->
                     <td class="isCust" style="width:8%;">
 	                    <input class="txt" id="txtCustno.*" type="text" style="width:98%;"/>
 	                    <input class="txt" id="txtComp.*" type="text" style="width:98%;"/>
