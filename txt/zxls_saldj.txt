@@ -143,7 +143,7 @@ begin
 	close cursor_table2
 	deallocate cursor_table2
 	
-	if(@pwtype=@wtype)
+	if(@pwtype=@wtype and @pwtype='1A')
 	begin
 		insert #bbs	
 		select  @datea,@count,@tsssno,namea
