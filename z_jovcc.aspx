@@ -43,7 +43,19 @@
 	                    dbf : 'cust',
 	                    index : 'noa,comp',
 	                    src : 'cust_b.aspx'
-	                }]
+	                },{
+                        type : '2', //[14][15]//原廠//20
+                        name : 'tggno',
+                        dbf : 'tgg',
+                        index : 'noa,comp',
+                        src : 'tgg_b.aspx'
+                    },{
+                        type : '0', //[14][15]//原廠//20
+                        name : 'Xgroupano',
+                        dbf : 'uccga',
+                        index : 'noa,namea',
+                        src : ''
+                    }]
                 });
                 q_popAssign();
                 q_getFormat();
