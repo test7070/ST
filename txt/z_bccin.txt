@@ -225,6 +225,9 @@ z_bccinst2:--z_bccinst2
 		,dbo.getComma([ttotal],-1) c03
 		,'' c04
 		,tmemo c05
+		
+		,ctype+'單號：' d01
+		,ctype+'日期：' d02
 		,worker w
 	from @tmp order by pno;
 	
