@@ -205,8 +205,10 @@
 
                 var t_noa = trim($('#txtNoa').val());
                 var t_date = trim($('#txtMon').val());
+                var t_pno = trim($('#txtProductno').val());
+                
                 if (t_noa.length == 0 || t_noa == "AUTO")
-                    q_gtnoa(q_name, replaceAll(q_getPara('sys.key_quaw') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+                    q_gtnoa(q_name, replaceAll((t_date.length == 0 ? q_date() : t_date), '/', '')+t_pno);
                 else
                     wrServer(t_noa);
             }
@@ -243,6 +245,17 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                
+                if(q_cur==2){
+                	$('#txtMon').attr('disabled', 'disabled');
+                	$('#txtProductno').attr('disabled', 'disabled');
+                	$('#lblProduct').hide();
+                	$('#lblXproduct').show();
+                }else{
+                	$('#lblProduct').show();
+                	$('#lblXproduct').hide();	
+                }
+                
             }
 
             function btnMinus(id) {
@@ -494,7 +507,7 @@
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td id='mon' style="text-align: center;">~mon</td>
-						<td id='product' style="text-align: center;">~product</td>
+						<td id='product,50' style="text-align: center;">~product,50</td>
 					</tr>
 				</table>
 			</div>
@@ -516,7 +529,10 @@
 						<td><input id="txtMon" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id="lblProduct" class="lbl btn"> </a></td>
+						<td><span> </span>
+							<a id="lblProduct" class="lbl btn"> </a>
+							<a id="lblXproduct" class="lbl" style="display: none;"> </a>
+						</td>
 						<td><input id="txtProductno" type="text" class="txt c1"/></td>
 						<td colspan="3"><input id="txtProduct" type="text" class="txt c1" /></td>
 					</tr>
@@ -526,17 +542,6 @@
 						<td><span> </span><a id="lblUnit" class="lbl"> </a></td>
 						<td><input id="txtUnit" type="text" class="txt c1"/></td>
 						<td><input id="btnUcc" type="button" style="float: right;"></td>
-					</tr>
-					<tr style="background: beige;">
-						<td><span> </span><a id="lblPrice" class="lbl" style="float: left;margin-left: 15px;"> </a></td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
 					</tr>
 					<tr style="background: beige;">
 						<td><span> </span><a id="lblPrice1" class="lbl"> </a></td>

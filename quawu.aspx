@@ -23,6 +23,8 @@
             var bbsNum = [];
             var bbmMask = [];
             var bbsMask = [];
+            
+            brwCount2 = 5;
 
             aPop = new Array();
 
@@ -61,6 +63,7 @@
 	            	['txtRate8', 15, 2, 1, 1]
 				];
                 q_mask(bbmMask);
+                
 			}
 
             function q_gtPost(t_name) {
@@ -77,6 +80,20 @@
             		
             	}
                 _bbsAssign();
+                $('#btnQuawu').click(function() {
+                	if(window.parent.q_name=='quaw' && (q_cur==1 || q_cur==2)){
+                		q_gt('quawu', "where=^^ noa=isnull((select top 1 noa from drun where tablea='quawu' order by datea desc,timea desc),'') ^^", 0, 0, 0, "getquawu",r_accy,1);
+						var as = _q_appendData("quawu", "", true);
+						if (as[0] != undefined) {
+							for (var i = 0; i < q_bbsCount; i++) {
+								$('#btnMinus_'+i).click();	
+							}
+							
+							q_gridAddRow(bbsHtm, 'tbbs', 'txtExpense,txtRate1,txtRate2,txtRate3,txtRate4,txtRate5,txtRate6,txtRate7,txtRate8', as.length, as
+							, 'expense,rate1,rate2,rate3,rate4,rate5,rate6,rate7,rate8', '');
+						}
+                	}
+				});
             }
 
             function btnOk() {
@@ -101,7 +118,6 @@
 
             function btnMinus(id) {
                 _btnMinus(id);
-                sum();
             }
 
             function btnPlus(org_htm, dest_tag, afield) {
@@ -121,14 +137,17 @@
 		</style>
 	</head>
 	<body>
-		<div  id="dbbs" >
+		<div id="dbbs" >
 			<!--#include file="../inc/pop_modi.inc"-->
 			<table id="tbbs" class='tbbs'  border="2" cellpadding='2' cellspacing='1' style='width:100%'  >
 				<tr style='color:white; background:#003366;' >
 					<input class="txt c1" id="txtNoa.*" type="hidden" />
                     <input id="txtNoq.*" type="hidden" />
 					<td align="center" style="width:1%; max-width:20px;"><input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" /></td>
-					<td align="center" style="width:18%;"><a id='lblExpense_u'> </a></td>
+					<td align="center" style="width:18%;">
+						<a id='lblExpense_u'> </a>
+						<input id="btnQuawu" type="button" style="float: right;">
+					</td>
 					<td align="center" style="width:8%;"><a id='lblRate1_u'> </a></td>
 					<td align="center" style="width:8%;"><a id='lblRate2_u'> </a></td>
 					<td align="center" style="width:8%;"><a id='lblRate3_u'> </a></td>
@@ -151,7 +170,6 @@
 					<td><input id="txtRate8.*" type="text" class="txt c1" style="width:95%;text-align: right;text-align: right;"/></td>
 				</tr>
 			</table>
-			
 		</div>
 		<input id="q_sys" type="hidden" />
 	</body>
