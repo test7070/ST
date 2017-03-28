@@ -9,7 +9,6 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	declare @t_memo nvarchar(max) = case when '#non'=[19] then '' else [19] end
 	declare @t_curnoa nvarchar(max) = case when '#non'=[26] then '' else [26] end
 	------------------------------------------------------------------------
-	------------------------------------------------------------------------
 	declare @tmp table(
 		sel int identity(1,1)
 		,vccaccy nvarchar(10)
@@ -69,7 +68,9 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	)
 	insert into @tmps(custno,vccaccy,vccno,vccnoq,ordeno,ordeno2,datea,uno,style,productno,product,pvcno,pvc
 		,spec,dime,width,lengthb,radius,unit,mount,[weight],price,[money],floata)
-	select b.custno,a.accy,a.noa,a.noq,a.ordeno,a.no2,b.datea,a.uno,a.style,a.productno,a.product,'',''
+	select b.custno,a.accy,a.noa,a.noq
+		,case when len(a.ordeno)=0 then CHAR(255) else '' end
+		,a.no2,b.datea,a.uno,a.style,a.productno,a.product,'',''
 		,a.spec,a.dime,a.width,a.lengthb,a.radius,upper(isnull(a.unit,'')),a.mount,a.[weight],a.price,a.total,b.floata
 	from view_vccs a
 	left join @tmp b on a.accy=b.vccaccy and a.noa=b.vccno
@@ -131,7 +132,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		,tmemo nvarchar(max)
 		,po nvarchar(max)
 		,paytype nvarchar(max)
-		
+		,size nvarchar(max)
 	)	
 	declare @custno nvarchar(max)
 	declare @money float
@@ -191,7 +192,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
-				set @cmount = dbo.getComma(@weight,-1) --+ @unit
+				set @cmount = dbo.getComma(@weight,-1) + @unit
 				set @cmount2 = dbo.getComma(@mount,-1) + case when @lengthb=0 then 'C' else 'PCS' end
 				set @money_usd = round(@weight*@price,2)
 			end
@@ -235,7 +236,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 			--數量欄位若顯示"重量"，備註欄位要顯示"片數"
 			if( LEN(@unit)=0 or @unit='KG' or @unit='公斤' or @unit='噸' or @unit='頓' or @unit='M2' or @unit=N'M²' or @unit='M' or @unit='批')
 			begin
-				set @cmount = dbo.getComma(@weight,-1)     -- + @unit
+				set @cmount = dbo.getComma(@weight,-1)  + @unit
 				set @cmount2 = dbo.getComma(@mount,-1) + @string
 			end
 			else
@@ -314,7 +315,13 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	update @tmpa set coin=b.coin
 	from @tmpa a
 	outer apply(select top 1 coin from @tmp where custno=a.custno) b
-
+	
+	update @tmpa set size=case when dime=0 and width=0 and lengthb=0 then '' else
+			dbo.getComma(dime,-1)
+			+case when ISNULL(radius,0)!=0 then '+'+cast(radius as nvarchar) else '' end
+			+case when ISNULL(width,0)!=0 then '*'+cast(width as nvarchar) else '' end
+			+case when ISNULL(lengthb,0)!=0 then '*'+cast(lengthb as nvarchar) else '*COIL' end end
+			
 	select gno
 		,'<img src="'+@t_path+'getlogo.aspx?noa=LC02'+CHAR(38)+'db='+@t_db+'"/>' logo
 		,custno a01
@@ -328,16 +335,18 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 		,conn a09
 		
 		,floata b00
-		,datea b01
+		,right(datea,5) b01
 		,vccno b02
 		,ordeno b03
 		,po b04
 		,product b05
+		,case when len(pvcno)>0 then pvcno+' ' else '' end+size b06
+		/*,product b05
 		,pvcno b06
 		,dime b07
 		,radius b08
 		,width b09
-		,case when lengthb=0 then 'COIL' else CAST(lengthb as nvarchar) end b10
+		,case when lengthb=0 then 'COIL' else CAST(lengthb as nvarchar) end b10*/
 		,cmount b11
 		,dbo.getComma(price,-1) b12
 		,dbo.getComma(money_usd,-1) b13
@@ -406,7 +415,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,pvcno nvarchar(20)
 		,pvc nvarchar(20)
 		,spec nvarchar(50)
-		,size nvarchar(50)
+		,size nvarchar(max)
 		,dime float
 		,width float
 		,lengthb float
@@ -748,9 +757,9 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,conn+ltrim(rtrim(ISNULL(job,''))) a09
 		,stype a10
 		
-		,datea b01
+		,right(datea,5) b01
 		,vccno b02
-		,ordeno b03
+		,case when ordeno=char(255) then '' else ordeno end b03
 		,po b04
 		,product b05
 		,pvcno b06
