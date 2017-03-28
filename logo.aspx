@@ -57,7 +57,8 @@
 					    fr.onloadend = function(e){
 					    	$('#imgPic').attr('src',fr.result);
 					    	$('#btnFile').val('');
-					    	refreshImg();
+					    	$('#txtImg').val(fr.result);
+					    	//refreshImg();
 					    };
 					}
 				});
