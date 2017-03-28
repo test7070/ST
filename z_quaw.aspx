@@ -19,7 +19,7 @@
             $(document).ready(function() {
                 _q_boxClose();
                 q_getId();
-                q_gf('', 'z_quaw');
+                q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
             });
             function q_gfPost() {
                 $('#q_report').q_report({
@@ -29,7 +29,11 @@
 	                        type : '6', //[1]
 	                        name : 'xmon'
 	                    }, {
-	                        type : '2',	//[2][3]
+							type : '5', //[2]
+							name : 'xcoin',
+							value : coinItem.split(',')
+						}, {
+	                        type : '2',	//[3][4]
 	                        name : 'xuca',
 	                        dbf : 'uca',
 	                        index : 'noa,product',
@@ -38,7 +42,8 @@
                     ]
                 });
                 q_popAssign();
-                q_langShow();
+				q_getFormat();
+				q_langShow();
 
                 $('#txtXmon').mask(r_picm);
                 $('#txtXmon').val(q_date().substr(0,r_lenm));
@@ -47,9 +52,24 @@
 
             function q_boxClose(t_name) {
             }
-
-            function q_gtPost(s2) {
-            }
+			
+			var coinItem='';
+			var firstRun=false;
+            function q_gtPost(t_name) {
+				switch (t_name) {
+					case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						coinItem = "#non@本幣";
+						for ( i = 0; i < as.length; i++) {
+							coinItem = coinItem + (coinItem.length > 0 ? ',' : '') + as[i].coin + '@' + as[i].coin;
+						}
+						firstRun = true;
+						break;
+				}
+				if (coinItem.length > 0 && firstRun) {
+					q_gf('', 'z_quaw');
+				}
+			}
 		</script>
 	</head>
 	<body ondragstart="return false" draggable="false"

@@ -1,0 +1,225 @@
+z_quaw01:--z_quaw01
+declare @t_mon nvarchar(90)
+declare @t_xcoin nvarchar(90)
+declare @t_bpno nvarchar(100)
+declare @t_epno nvarchar(90)
+set @t_mon = case when '#non' = [1] then '' else [1] end
+set @t_xcoin = case when '#non' = [2] then '' else [2] end
+set @t_bpno = case when '#non' = [3] then '' else [3] end
+set @t_epno = case when '#non' = [4] then CHAR(255) else [4] end
+
+declare @t_floata float
+set @t_floata=case when @t_xcoin='' then 1 else isnull((select top 1 floata from flors where coin=@t_xcoin and left(bdate,len(@t_mon))=@t_mon order by bdate desc),0) end
+if(@t_floata=0)
+	set @t_floata=case when @t_xcoin='' then 1 else isnull((select top 1 floata from flors where coin=@t_xcoin order by bdate desc),0) end
+
+declare @tmp table(
+	gno nvarchar(10),
+	qno nvarchar(10),
+	mon nvarchar(10),
+	ucano nvarchar(100),
+	ucaname nvarchar(MAX),
+		
+	noq nvarchar(10),
+	uccno nvarchar(100),
+	uccname nvarchar(MAX),
+	price float,
+	loss float,
+	prono nvarchar(100),
+	process nvarchar(MAX),
+	mount float,
+	umount float,
+	mechno nvarchar(100),
+	mechname nvarchar(MAX),
+	oprice float,
+	gen float,
+	groupbno nvarchar(100),
+	groupbname nvarchar(MAX),
+	memo nvarchar(MAX),
+	
+	expense nvarchar(MAX),
+	aprice float,
+	bprice float,
+	cprice float,
+	dprice float,
+	eprice float,
+	fprice float,
+	gprice float,
+	hprice float
+)
+--bbm
+insert @tmp(gno,qno,mon,ucano,ucaname,expense
+,aprice,bprice,cprice,dprice,eprice,fprice,gprice,hprice)
+select '1','4',a.mon,a.productno,a.product,'本次報價單價'
+,a.price1,a.price2,a.price3,a.price4,a.price5,a.price6,a.price7,a.price8
+from quaw a 
+where a.productno between @t_bpno and @t_epno 
+and (a.mon=@t_mon or len(@t_mon)=0)
+
+--bbs
+insert @tmp (gno,qno,noq,mon,ucano,ucaname,uccno,uccname,price,loss,mount,memo
+,aprice,bprice,cprice,dprice,eprice,fprice,gprice,hprice)
+select '0','0',b.noq,a.mon,a.productno,a.product,b.productno,b.product,b.price,b.loss,b.mount,b.memo
+,b.price1,b.price2,b.price3,b.price4,b.price5,b.price6,b.price7,b.price8
+from quaw a left join quaws b on a.noa=b.noa
+where a.productno between @t_bpno and @t_epno 
+and (a.mon=@t_mon or len(@t_mon)=0)
+
+--bbt
+insert @tmp (gno,qno,noq,mon,ucano,ucaname,prono,process,mechno,mechname,mount,umount,oprice,gen,groupbno,groupbname,memo
+,aprice,bprice,cprice,dprice,eprice,fprice,gprice,hprice)
+select '0','1',b.noq,a.mon,a.productno,a.product,b.processno,b.process,b.mechno,b.mech,b.mount,b.umount,b.price,b.gen,b.groupbno,b.groupb,b.memo
+,b.price1,b.price2,b.price3,b.price4,b.price5,b.price6,b.price7,b.price8
+from quaw a left join quawt b on a.noa=b.noa
+where a.productno between @t_bpno and @t_epno 
+and (a.mon=@t_mon or len(@t_mon)=0)
+
+--合計
+insert @tmp(gno,qno,mon,ucano,ucaname,expense,aprice,bprice,cprice,dprice,eprice,fprice,gprice,hprice)
+select '1','2',mon,ucano,MAX(ucaname),'合計'
+,SUM(aprice),SUM(bprice),SUM(cprice),SUM(dprice),SUM(eprice),SUM(fprice),SUM(gprice),SUM(hprice)
+from @tmp where gno='0' group by mon,ucano
+
+insert @tmp(gno,qno,mon,ucano,ucaname,expense,aprice,bprice,cprice,dprice,eprice,fprice,gprice,hprice)
+select '1','2',mon,ucano,MAX(ucaname),'合計',0,0,0,0,0,0,0,0
+from @tmp a where gno='1' and qno='4'
+and not exists (select * from @tmp where gno='1' and qno='2' and mon=a.mon and ucano=a.ucano)
+group by mon,ucano
+
+update @tmp
+set aprice=aprice/@t_floata
+,bprice=bprice/@t_floata
+,cprice=cprice/@t_floata
+,dprice=dprice/@t_floata
+,eprice=eprice/@t_floata
+,fprice=fprice/@t_floata
+,gprice=gprice/@t_floata
+,hprice=hprice/@t_floata
+
+--bbu
+insert @tmp(gno,qno,noq,mon,ucano,ucaname,expense,aprice,bprice,cprice,dprice,eprice,fprice,gprice,hprice)
+select '1','3-1',b.noq,a.mon,a.productno,a.product,b.expense
+,b.rate1,b.rate2,b.rate3,b.rate4,b.rate5,b.rate6,b.rate7,b.rate8
+from quaw a left join quawu b on a.noa=b.noa
+where a.productno between @t_bpno and @t_epno 
+and (a.mon=@t_mon or len(@t_mon)=0)
+and b.expense is not null and isnull(b.expense,'')!=''
+
+--計算bbu各合計
+declare @qno nvarchar(10)
+declare @mon nvarchar(10)
+declare @ucano nvarchar(100)
+declare @ucaname nvarchar(MAX)
+declare @x_mon nvarchar(10)
+declare @x_ucano nvarchar(100)
+declare @x_ucaname nvarchar(MAX)
+declare @noq nvarchar(10)
+declare @expense nvarchar(MAX)
+declare @aprice float
+declare @bprice float
+declare @cprice float
+declare @dprice float
+declare @eprice float
+declare @fprice float
+declare @gprice float
+declare @hprice float
+declare @x_aprice float
+declare @x_bprice float
+declare @x_cprice float
+declare @x_dprice float
+declare @x_eprice float
+declare @x_fprice float
+declare @x_gprice float
+declare @x_hprice float
+
+declare cursor_table cursor for
+select qno,noq,mon,ucano,ucaname,expense,aprice,bprice,cprice,dprice,eprice,fprice,gprice,hprice
+from @tmp where gno='1' and (qno='3-1' or qno='2')
+order by mon,ucano,gno,qno,noq
+open cursor_table
+fetch next from cursor_table
+into @qno,@noq,@mon,@ucano,@ucaname,@expense,@aprice,@bprice,@cprice,@dprice,@eprice,@fprice,@gprice,@hprice
+while(@@FETCH_STATUS <> -1)
+begin
+	if(@qno='2' or @x_mon!=@mon or @x_ucano!=@ucano)
+	begin
+		set @x_aprice=@aprice
+		set @x_bprice=@bprice
+		set @x_cprice=@cprice
+		set @x_dprice=@dprice
+		set @x_eprice=@eprice
+		set @x_fprice=@fprice
+		set @x_gprice=@gprice
+		set @x_hprice=@hprice
+	end
+	
+	if(@qno='3-1')
+	begin
+		set @x_aprice=@x_aprice*@aprice
+		set @x_bprice=@x_bprice*@bprice
+		set @x_cprice=@x_cprice*@cprice
+		set @x_dprice=@x_dprice*@dprice
+		set @x_eprice=@x_eprice*@eprice
+		set @x_fprice=@x_fprice*@fprice
+		set @x_gprice=@x_gprice*@gprice
+		set @x_hprice=@x_hprice*@hprice
+	
+		insert @tmp(gno,qno,noq,mon,ucano,ucaname,expense,aprice,bprice,cprice,dprice,eprice,fprice,gprice,hprice)
+		select '1','3-2',@noq+'-1',@mon,@ucano,@ucaname,'合計'
+		,@x_aprice,@x_bprice,@x_cprice,@x_dprice,@x_eprice,@x_fprice,@x_gprice,@x_hprice
+	end
+	
+	set @x_mon=@mon
+	set @x_ucano=@ucano
+	set @x_ucaname=@ucaname
+	
+	fetch next from cursor_table 
+	into @qno,@noq,@mon,@ucano,@ucaname,@expense,@aprice,@bprice,@cprice,@dprice,@eprice,@fprice,@gprice,@hprice
+end 
+close cursor_table 
+deallocate cursor_table
+
+update @tmp
+set qno='3'
+where qno='3-1' or qno='3-2'
+
+insert @tmp(gno,qno,mon,ucano,ucaname,expense,aprice,bprice,cprice,dprice,eprice,fprice,gprice,hprice)
+select '2','5',a.mon,a.ucano,a.ucaname,'價差'
+,a.aprice-b.aprice,a.bprice-b.bprice,a.cprice-b.cprice,a.dprice-b.dprice
+,a.eprice-b.eprice,a.fprice-b.fprice,a.gprice-b.gprice,a.hprice-b.hprice
+from @tmp a 
+outer apply (select top 1 * from @tmp where mon=a.mon and ucano=a.ucano and gno='1' and qno!='4' order by noq desc)b
+where a.gno='1' and a.qno='4'
+
+update @tmp
+set aprice=ROUND(aprice,3)
+,bprice=ROUND(bprice,3)
+,cprice=ROUND(cprice,3)
+,dprice=ROUND(dprice,3)
+,eprice=ROUND(eprice,3)
+,fprice=ROUND(fprice,3)
+,gprice=ROUND(gprice,3)
+,hprice=ROUND(hprice,3)
+where (gno='1' and (expense='合計' or qno='2' or qno='4')) or gno='2'
+
+select 
+dbo.getComma(price,-1)price,
+dbo.getComma(loss,-1)loss,
+dbo.getComma(mount,-1)mount,
+dbo.getComma(umount,-1)umount,
+dbo.getComma(oprice,-1)oprice,
+dbo.getComma(gen,-1)gen,
+dbo.getComma(aprice,-1)aprice,
+dbo.getComma(bprice,-1)bprice,
+dbo.getComma(cprice,-1)cprice,
+dbo.getComma(dprice,-1)dprice,
+dbo.getComma(eprice,-1)eprice,
+dbo.getComma(fprice,-1)fprice,
+dbo.getComma(gprice,-1)gprice,
+dbo.getComma(hprice,-1)hprice,
+ROW_NUMBER() over (partition by mon,ucano order by mon,ucano,gno,qno,noq)seq,
+case when @t_xcoin='' then '本幣' else @t_xcoin end coin,
+* from @tmp
+order by  mon,ucano,gno,qno,noq
+;
+-------------------------------------------------------------------------------------------------------------*
