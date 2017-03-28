@@ -1843,6 +1843,7 @@
 			function getpdate(x) {
 				if((q_cur==1 || q_cur==2)){
 					//106/03/27 根據sys orde.dodate +3 若 單一產品數量超出3000 多1天
+					//106/03/28 依據型號 超出模具數多1天
 					var t_dodate=$('#txtOdate').val()>q_date()?$('#txtOdate').val():q_date();
 					var t_where = "where=^^ noa='orde.dodate' ^^";
 					q_gt('qsys', t_where, 0, 0, 0, "",r_accy,1);
@@ -1854,10 +1855,9 @@
 					var holiday = _q_appendData("holiday", "", true);
 					//先加3天
 					var t_addday=3;
-					
-					//該訂單品項總數量超出3000 多1天
 					var t_productno=$('#txtProductno_'+x).val();
-					var t_mount=0;
+					//該訂單品項總數量超出3000 多1天
+					/*var t_mount=0;
 					for (var j = 0; j < (dec(x)+1); j++) {
 						if($('#txtProductno_'+ j).val()==t_productno){
 							t_mount=q_add(t_mount,dec($('#txtMount_'+j).val()));
@@ -1865,8 +1865,67 @@
 					}
 					if(t_mount>3000){
 						t_addday=q_add(t_addday,Math.floor(t_mount/3000))
-					}
+					}*/
 					
+					//106/03/28 依據型號 超出模具數多1天 //找不到模具超過兩萬多一天
+					q_gt('model', "where=^^ exists (select * from uca where noa='"+t_productno+"' and (spec=model.noa or spec=REPLACE(REPLACE(model.noa,'WU-',''),'WU',''))) ^^ stop=100" , 0, 0, 0, "getmodel", r_accy,1);
+					var as = _q_appendData("model", "", true);
+					var modelno='';
+					var modelmount=0;//模具數
+					var modelgen=0; //模具產能
+					if (as[0] != undefined) {
+						modelno=as[0].noa;
+						modelmount=dec(as[0].mount);
+						if(modelmount==0){
+							modelmount=1;
+						}
+						modelgen=q_mul(modelmount,120);
+					}
+					//讀取表身相同型號的品號
+					var modelucc=new Array(); 
+					if(modelno.length>0){
+						var t_where="";
+						for (var j = 0; j < dec(x); j++) {
+							if(!emp($('#txtProductno_'+j).val()))
+								t_where+=" or noa='"+$('#txtProductno_'+j).val()+"'";
+						}
+						if(t_where.length>0){
+							t_where="(1=0 "+t_where+") and exists (select * from model where noa='"+modelno+"' and (noa=uca.spec or REPLACE(REPLACE(noa,'WU-',''),'WU','')=uca.spec)) "
+							q_gt('uca', "where=^^ "+t_where+" ^^ stop=999" , 0, 0, 0, "getuca", r_accy,1);
+							modelucc = _q_appendData("uca", "", true);
+						}
+						var t_mount=dec($('#txtMount_'+x).val());
+						for (var j = 0; j < dec(x); j++) {
+							if($('#txtProductno_'+ j).val()==t_productno){
+								t_mount=q_add(t_mount,dec($('#txtMount_'+j).val()));
+							}else{
+								var t_existsmodel=false;
+								for(var k=0;k<modelucc.length;k++){
+									if($('#txtProductno_'+ j).val()==modelucc[k].noa){
+										t_existsmodel=true;
+										break;
+									}
+								}
+								if(t_existsmodel){
+									t_mount=q_add(t_mount,dec($('#txtMount_'+j).val()));
+								}
+							}
+						}
+						if(t_mount>modelgen){
+							t_addday=q_add(t_addday,Math.floor(t_mount/modelgen))
+						}
+					}else{
+						var t_mount=0;
+						//找不到模具
+						for (var j = 0; j < (dec(x)+1); j++) {
+							if($('#txtProductno_'+ j).val()==t_productno){
+								t_mount=q_add(t_mount,dec($('#txtMount_'+j).val()));
+							}
+						}
+						if(t_mount>20000){
+							t_addday=q_add(t_addday,Math.floor(t_mount/20000))
+						}
+					}
 					while(t_addday>0){
 						t_dodate=q_cdn(t_dodate,1);
 						var t_iswork=true;
