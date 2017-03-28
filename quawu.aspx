@@ -140,15 +140,15 @@
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center"><input class="btn" id="btnMinus.*" type="button" value='-' style="font-weight: bold; " /></td>
-					<td><input id="txtExpense.*" type="text" class="txt c1" style="width:95%"/></td>
-					<td><input id="txtRate1.*" type="text" class="txt c1" style="width:95%;"/></td>
-					<td><input id="txtRate2.*" type="text" class="txt c1" style="width:95%;"/></td>
-					<td><input id="txtRate3.*" type="text" class="txt c1" style="width:95%;"/></td>
-					<td><input id="txtRate4.*" type="text" class="txt c1" style="width:95%;"/></td>
-					<td><input id="txtRate5.*" type="text" class="txt c1" style="width:95%;"/></td>
-					<td><input id="txtRate6.*" type="text" class="txt c1" style="width:95%;"/></td>
-					<td><input id="txtRate7.*" type="text" class="txt c1" style="width:95%;"/></td>
-					<td><input id="txtRate8.*" type="text" class="txt c1" style="width:95%;"/></td>
+					<td><input id="txtExpense.*" type="text" class="txt c1" style="width:95%;"/></td>
+					<td><input id="txtRate1.*" type="text" class="txt c1" style="width:95%;text-align: right;"/></td>
+					<td><input id="txtRate2.*" type="text" class="txt c1" style="width:95%;text-align: right;"/></td>
+					<td><input id="txtRate3.*" type="text" class="txt c1" style="width:95%;text-align: right;"/></td>
+					<td><input id="txtRate4.*" type="text" class="txt c1" style="width:95%;text-align: right;"/></td>
+					<td><input id="txtRate5.*" type="text" class="txt c1" style="width:95%;text-align: right;"/></td>
+					<td><input id="txtRate6.*" type="text" class="txt c1" style="width:95%;text-align: right;"/></td>
+					<td><input id="txtRate7.*" type="text" class="txt c1" style="width:95%;text-align: right;"/></td>
+					<td><input id="txtRate8.*" type="text" class="txt c1" style="width:95%;text-align: right;text-align: right;"/></td>
 				</tr>
 			</table>
 			
