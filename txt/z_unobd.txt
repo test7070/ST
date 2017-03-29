@@ -172,8 +172,12 @@ z_unobd05:--z_unobd05 批號履歷
 	declare @t_traceback nvarchar(max) = case when '#non' = [7] then '' else [7] end
 	declare @t_uno2 nvarchar(50)= case when '#non' = [8] then '' else [8] end
 	---------------------------------------------------------------------------------------
-	--進貨退回沒有處理!!
-	declare @history table(
+	IF OBJECT_ID('tempdb..#z_unobd05')is not null
+	BEGIN
+		drop table #z_unobd05
+	END
+	
+	create table #z_unobd05(
 		sel int identity(1,1),
 		rr int,
 		ischk bit,
@@ -212,14 +216,15 @@ z_unobd05:--z_unobd05 批號履歷
 		select top 1 @t_uno=uno from view_uccb where charindex(@t_uno2,uno2)>0 order by uno
 	end
 	
-	insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+	insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 		,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
-	select 0,0,uno,case when tablea='cubt' then 'cubt_in' when tablea='cubu' then 'cubu_in' else tablea end
+	select 0,0,uno
+		,case when tablea='cubt' then 'cubt_in' when tablea='cubu' then 'cubu_in' else tablea end
 		,accy,noa,noq,datea 
 		,mount,[weight],null,null,sprice,sprice2,productno,product,size,memo
 		from view_uccb where uno=@t_uno
 		
-	update @history set storeno= 
+	update #z_unobd05 set storeno= 
 		case when b.noa is not null then b.storeno
 			 when c.noa is not null then c.storeno
 			 when d.noa is not null then d.storeno
@@ -233,15 +238,14 @@ z_unobd05:--z_unobd05 批號履歷
 			 when e.noa is not null then e.place
 			 when f.noa is not null then f.place
 		else '' end
-	from @history a
+	from #z_unobd05 a
 	left join view_rc2s b on a.tablea='rc2s' and b.typea='1' and a.uno=b.uno	 
 	left join view_inas c on a.tablea='inas' and a.uno=c.uno
 	left join view_cuts d on a.tablea='cuts' and a.uno=d.bno
 	left join view_cubt e on a.tablea='cubt_in' and a.uno=e.bno	
 	left join view_cuts f on a.tablea='cubu' and a.uno=f.bno
-	
 		
-	--		insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+	--		insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 	--	,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 	--select 0,[rank],uno,tablea,accy,noa,noq,datea
 	--from view_cngs a
@@ -257,17 +261,17 @@ z_unobd05:--z_unobd05 批號履歷
 	declare @noq nvarchar(10)
 	declare @datea nvarchar(10)	
 	declare @isvcc2in int = 0
-	while exists(select * from @history where ischk=0) and len(@t_traceback)>0
+	while exists(select * from #z_unobd05 where ischk=0) and len(@t_traceback)>0
 	begin
 		--往回找
 		declare cursor_table cursor for
-		select sel,[rank],uno,tablea,accy,noa,noq from @history where ischk=0
+		select sel,[rank],uno,tablea,accy,noa,noq from #z_unobd05 where ischk=0
 		open cursor_table
 		fetch next from cursor_table
 		into @sel,@rank,@uno,@tablea,@accy,@noa,@noq
 		while(@@FETCH_STATUS <> -1)
 		begin
-			update @history set ischk=1 where sel=@sel
+			update #z_unobd05 set ischk=1 where sel=@sel
 			--判斷是不是出貨轉寄庫
 			set @isvcc2in = 0
 			if @tablea='inas'
@@ -280,7 +284,7 @@ z_unobd05:--z_unobd05 批號履歷
 			
 			if @tablea='cuts'
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select 0,@rank-1,uno,'cut',accy,noa,'',datea 
 				,null,null,gmount,gweight,null,null,productno,product,null,memo
@@ -290,7 +294,7 @@ z_unobd05:--z_unobd05 批號履歷
 			--製管入庫
 			else if @tablea='cubu_in'
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select 0,@rank-1,uno,'cubt_get',a.accy,a.noa,a.noq,b.datea 
 					,null,null,a.gmount,a.gweight,null,null,a.productno,a.product,a.size,a.memo
@@ -301,7 +305,7 @@ z_unobd05:--z_unobd05 批號履歷
 			--派令入庫 找母批號
 			else if @tablea='cubt_in'
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select 0,@rank-1,a.uno,'cubt_get',a.accy,a.noa,a.noq,b.datea 
 					,null,null,a.gmount,a.gweight,null,null,a.productno,a.product,a.size,a.memo
@@ -312,7 +316,7 @@ z_unobd05:--z_unobd05 批號履歷
 			--派令領料 找從哪入庫的
 			else if @tablea='cubt_get'
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select case when tablea='cubu' or tablea='cubt' or tablea='cuts' then 0 else 1 end
 					,@rank-1,uno
@@ -324,7 +328,7 @@ z_unobd05:--z_unobd05 批號履歷
 			--出貨轉寄庫
 			else if @tablea='inas' and @isvcc2in=1
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select 0,@rank-1,a.uno,'vccs',a.accy,a.noa,a.noq,b.datea 
 					,null,null
@@ -337,7 +341,7 @@ z_unobd05:--z_unobd05 批號履歷
 			end
 			else 
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select case when tablea='cubu' or tablea='cubt' or tablea='cuts' then 0 else 1 end
 				,@rank-1,uno
@@ -355,24 +359,24 @@ z_unobd05:--z_unobd05 批號履歷
 	end
 	
 	--往下找	
-	update @history set ischk=0 where [rank]=0
+	update #z_unobd05 set ischk=0 where [rank]=0
 		
 	--排除廢料	
-	while exists(select * from @history where ischk=0 and not(upper(left(uno,1)) between 'X' and 'Y') )
+	while exists(select * from #z_unobd05 where ischk=0 and not(upper(left(uno,1)) between 'X' and 'Y') )
 	begin	
 		declare cursor_table cursor for
-		select sel,[rank],uno,tablea,accy,noa,noq from @history where ischk=0 
+		select sel,[rank],uno,tablea,accy,noa,noq from #z_unobd05 where ischk=0 
 			and not(upper(left(uno,1)) between 'X' and 'Y') --排除廢料
 		open cursor_table
 		fetch next from cursor_table
 		into @sel,@rank,@uno,@tablea,@accy,@noa,@noq
 		while(@@FETCH_STATUS <> -1)
 		begin
-			update @history set ischk=1 where sel=@sel
+			update #z_unobd05 set ischk=1 where sel=@sel
 			--調撥
 			if exists(select * from view_cngs where uno=@uno)
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,storeno,place,memo)
 				select 1,@rank+1,a.uno
 					,'cngs'
@@ -386,7 +390,7 @@ z_unobd05:--z_unobd05 批號履歷
 			--出貨
 			if exists(select * from view_vccs where uno=@uno)
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,sprice3,productno,product,size,memo
 					,unit3)
 				select 1,@rank+1,a.uno
@@ -410,7 +414,7 @@ z_unobd05:--z_unobd05 批號履歷
 			--領料
 			if exists(select * from view_gets where uno=@uno)
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,sprice3,unit3,productno,product,size,memo)
 				select 1,@rank+1,a.uno
 					,case when c.noa is null then 'gets' else 'vccs' end
@@ -431,14 +435,14 @@ z_unobd05:--z_unobd05 批號履歷
 			--裁剪
 			if exists(select * from view_cut where uno=@uno)
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select 1,@rank+1,a.uno,'cut',a.accy,a.noa,'',a.datea 
 					,null,null,a.gmount,a.[gweight],null,null,a.productno,a.product,'',a.memo
 				from view_cut a where uno=@uno
 				and len(ISNULL(uno,''))>0
 				
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select 0,@rank+1,a.bno,'cuts',a.accy,a.noa,a.noq,b.datea 
 					,a.mount,a.[weight],null,null,a.sprice,a.sprice2,a.productno,a.product,a.size,a.memo
@@ -450,7 +454,7 @@ z_unobd05:--z_unobd05 批號履歷
 			--派令
 			if exists(select * from view_cubt where uno=@uno)
 			begin
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select 1,@rank+1,a.uno,'cubt_get',a.accy,a.noa,a.noq,b.datea 
 					,null,null,a.gmount,a.gweight
@@ -460,7 +464,7 @@ z_unobd05:--z_unobd05 批號履歷
 				where a.uno=@uno
 				and len(ISNULL(a.uno,''))>0
 				--cubt
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select 0,@rank+1,a.bno,'cubt_in',a.accy,a.noa,a.noq,b.datea 
 					,a.mount,a.[weight],null,null,null,null,a.productno,a.product,a.size,a.memo
@@ -469,7 +473,7 @@ z_unobd05:--z_unobd05 批號履歷
 				where a.bno=@uno
 				and len(ISNULL(a.bno,''))>0
 				--cubu
-				insert into @history(ischk,[rank],uno,tablea,accy,noa,noq,datea
+				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
 				select 0,@rank+1,a.uno,'cubu_in',a.accy,a.noa,a.noq,b.datea 
 					,a.mount,a.[weight],null,null,a.sprice,a.sprice2,a.productno,a.product,a.size,a.memo
@@ -479,7 +483,7 @@ z_unobd05:--z_unobd05 批號履歷
 				and len(ISNULL(a.uno,''))>0
 			end
 			
-			update @history set ischk=1 where left(uno,1)='-'
+			update #z_unobd05 set ischk=1 where left(uno,1)='-'
 			
 			fetch next from cursor_table
 			into @sel,@rank,@uno,@tablea,@accy,@noa,@noq
@@ -489,54 +493,65 @@ z_unobd05:--z_unobd05 批號履歷
 	end
 	--------------------------------------------------------------------------------------------------------------
 	--CUST  TGG
-	update @history set custno=b.tggno,comp=c.nick
-	from @history a
+	update #z_unobd05 set custno=b.tggno,comp=c.nick
+	from #z_unobd05 a
 	left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
 	left join tgg c on b.tggno=c.noa
 	where a.tablea='rc2s'
 	
-	update @history set custno=b.tggno,comp=c.nick
-	from @history a
+	update #z_unobd05 set custno=b.tggno,comp=c.nick
+	from #z_unobd05 a
 	left join view_ina b on a.accy=b.accy and a.noa=b.noa
 	left join tgg c on b.tggno=c.noa
 	where a.tablea='inas'
 	
-	update @history set custno=b.custno,comp=c.nick
-	from @history a
+	update #z_unobd05 set custno=b.custno,comp=c.nick
+	from #z_unobd05 a
 	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
 	left join cust c on b.custno=c.noa
 	where a.tablea='vccs' or  a.tablea='vccbk'
 	
-	update @history set custno=b.custno,comp=c.nick
-	from @history a
+	update #z_unobd05 set custno=b.custno,comp=c.nick
+	from #z_unobd05 a
 	left join view_get b on a.accy=b.accy and a.noa=b.noa
 	left join cust c on b.custno=c.noa
 	where a.tablea='gets'
 	
-	update @history set custno=b.custno,comp=c.nick
-	from @history a
+	update #z_unobd05 set custno=b.custno,comp=c.nick
+	from #z_unobd05 a
 	left join view_cuts b on a.accy=b.accy and a.noa=b.noa and a.noq=b.noq
 	left join cust c on b.custno=c.noa
 	where a.tablea='cuts'
 	
-	update @history set custno=b.custno,comp=c.nick
-	from @history a
+	update #z_unobd05 set custno=b.custno,comp=c.nick
+	from #z_unobd05 a
 	left join view_cut b on a.accy=b.accy and a.noa=b.noa
 	left join cust c on b.custno=c.noa
 	where a.tablea='cut'
 	
-	update @history set custno=b.custno,comp=c.nick
-	from @history a
+	update #z_unobd05 set custno=b.custno,comp=c.nick
+	from #z_unobd05 a
 	left join view_cubt b on a.accy=b.accy and a.noa=b.noa and a.noq=b.noq
 	left join cust c on b.custno=c.noa
 	where a.tablea='cubt_in'
+	---------------------------------------------------------------------------
+	--進貨退回
+	insert into #z_unobd05(uno,[rank],datea,tablea,accy,noa,noq,custno,comp,mount02,weight02,productno,product,size,memo)
+	select a.uno,a.[rank],c.datea,'rc2bk',b.accy,b.noa,b.noq,c.tggno,c.nick
+		,b.mount,ISNULL(b.[weight],0)
+		,b.productno,b.product,b.size,b.memo 
+	from #z_unobd05 a
+	left join view_rc2s b on b.typea='2' and a.uno=b.uno
+	left join view_rc2 c on b.accy=c.accy and b.noa=c.noa
+	where b.uno is not null 
 	--------------------------------------------------------------------------------------------------------------
-	update @history set rr=b.rr
-	from @history a
-	left join (select sel,ROW_NUMBER()over(order by [rank],datea) rr from @history) b on a.sel=b.sel
+	update #z_unobd05 set rr=b.rr
+	from #z_unobd05 a
+	left join (select sel,ROW_NUMBER()over(order by [rank],datea) rr from #z_unobd05) b on a.sel=b.sel
 
-	update @history set 
+	update #z_unobd05 set 
 		[action]=case when tablea='rc2s' then '進貨'
+			 when tablea='rc2bk' then '進退'
 			 when tablea='inas' then '入庫'
 			 when tablea='cut' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '製管入庫'
 			 when tablea='cut' then '裁剪領料'
@@ -549,8 +564,9 @@ z_unobd05:--z_unobd05 批號履歷
 			 when tablea='cubt_in' then '派令入庫'			 
 			 when tablea='cngs' then '調撥'
 			 else tablea end
-	update @history set 		 
+	update #z_unobd05 set 		 
 		ghref=case when tablea='rc2s' then "rc2_pk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='rc2bk' then "rc2_pk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='inas' then "inast?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='cut' then "cut?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='cuts' then "cut?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
@@ -567,8 +583,9 @@ z_unobd05:--z_unobd05 批號履歷
 		
 	if exists(select * from acomp where CHARINDEX('聯琦',acomp)>0)
 	begin
-		update @history set 
+		update #z_unobd05 set 
 		[action]=case when tablea='rc2s' then '進貨'
+			 when tablea='rc2bk' then '進退'
 			 when tablea='inas' then '入庫'
 			 when tablea='cut' then '裁剪領料'
 			 when tablea='cuts' then '成品進倉'
@@ -582,8 +599,9 @@ z_unobd05:--z_unobd05 批號履歷
 			 when tablea='cngs' then '調撥'
 			 else tablea end
 			 
-		update @history set 		 
+		update #z_unobd05 set 		 
 		ghref=case when tablea='rc2s' then "rc2_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
+			 when tablea='rc2bk' then "rc2_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='inas' then "inast?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='cut' then "cut_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
 			 when tablea='cuts' then "cut_rk?noa=\'"+noa+"\' and "+cast(rr as nvarchar)+"=$rr?"
@@ -634,13 +652,15 @@ z_unobd05:--z_unobd05 批號履歷
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.memo+'</a>' a13--備註
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.product+'</a>' a14--品名
 		,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+case when len(isnull(a.size,''))=0 then b.size else a.size end+'</a>' a15--規格
-	from @history a
+	from #z_unobd05 a
 	left join view_uccb b on a.uno=b.uno
 	left join view_uccb c on c.uno=@t_uno
 	left join view_uccc d on d.uno=@t_uno
 	left join store e on a.storeno=e.noa
 	left join store f on b.storeno=f.noa
-	order by a.[rank],a.datea;
+	order by a.[rank],a.datea
+	
+	drop table #z_unobd05;
 
 
 z_unobd01:--z_unobd01          z_uno1
