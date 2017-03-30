@@ -38,7 +38,9 @@ insert into #tmp
 select SUBSTRING(a.a,3,8)datea,SUBSTRING(a.a,11,4) timea,b.noa,b.namea
 ,SUBSTRING(a.a,15,2) work,a.noa--,SUBSTRING(a.a,17,10) barcode
 from ztmpxls a left join sss b on SUBSTRING(a.a,17,10)=b.barcode
-and a.a!=''
+where a.a!='' and b.noa is not null
+
+delete #tmp where not(wtype='1A' or wtype='2A')
 
 update #tmp
 set datea=dbo.AD2ChineseEraName(datea),timea=left(timea,2)+':'+RIGHT(timea,2)
@@ -119,7 +121,7 @@ begin
 			insert #bbs	
 			select  @datea,@count,@sssno,namea
 			,case when @wtype='1A' then @ttime else '' end
-			,case when @wtype='2A' then @ttime else '' end
+			,case when @wtype='2A' then @timea end
 			,0,0,0,''
 			from sss a where isnull(outdate,'')='' and noa=@sssno order by noa
 			set @count=@count+1
