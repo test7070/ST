@@ -424,7 +424,7 @@ declare @tmp table(
 		insert into @tmp(gno,tablea,tablename,destnoa,destno2
 			,ordcnoa,ordcno2,datea,storeno,stores,productno,products,csize
 			,mount,price,[weight],uno,memo,coin) 
-		select '0','ordc_rk','採購作業',a.noa,a.no3
+		select '0','ordc_rk','採購作業',a.noa,a.no2
 			,a.noa,a.no3,b.odate,'' storeno,'' stores,a.productno,a.product,a.size
 			,a.mount,a.price,a.[weight],'' uno,a.memo,'' coin
 		from view_ordcs a
