@@ -12,7 +12,7 @@
         <script type="text/javascript">
         	q_tables = 's';
             var q_name = "eipflow";
-            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2','txtFilename'];
+            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2','txtFilename','txtSssno','txtNamea'];
             var q_readonlys = [];
             var bbmNum = [];
             var bbsNum = [];
@@ -202,6 +202,8 @@
                 $('#txtNoa').val('AUTO');
                 $('#combEpibaseno').focus();
                 refreshBbm();
+                $('#txtSssno').val(r_userno);
+                $('#txtNamea').val(r_name);
             }
 
             function btnModi() {
@@ -234,11 +236,30 @@
                     return;
                 }
                 
+                var t_bbsStatus=0;
+                for (var i = 0; i < q_bbsCount; i++) {
+                	if(!emp($('#txtStatus_'+i).val())){
+                		t_bbsStatus=i;
+                	}
+				}
+				if(t_bbsStatus>0 && q_cur!=1 && $('#chkIssign').prop('checked')){
+					if(!confirm("簽核已到第"+t_bbsStatus+"層，確定後將會重送簽核，是否繼續?")){
+						Unlock();
+                    	return;
+					}
+				}
+                
                 if(q_cur==1){
 					$('#txtWorker').val(r_name);
 				}else{
 					$('#txtWorker2').val(r_name);
 				}
+				
+				for (var i = 0; i < q_bbsCount; i++) {
+					$('#txtStatus_'+i).val('');
+					$('#txtMemo_'+i).val('');
+				}
+				$('#txtStatus').val('');
 				
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
@@ -497,8 +518,8 @@
 	<body>
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' style="overflow:hidden;">
-			<div class="dview" id="dview" style="float: left; "  >
-				<table class="tview" id="tview"   border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
+			<div class="dview" id="dview" style="float: left; " >
+				<table class="tview" id="tview"  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
 						<td align="center" style="width:3%"><a id='vewChk'> </a></td>
 						<td align="center" style="width:40%"><a id='vewNoa'> </a></td>
@@ -514,7 +535,7 @@
 				</table>
 			</div>
 			<div class='dbbm' style="float: left;">
-				<table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='5'>
+				<table class="tbbm" id="tbbm"  border="0" cellpadding='2'  cellspacing='5'>
 					<tr style="height:1px;">
 						<td style="width: 120px"> </td>
 						<td style="width: 125px"> </td>
@@ -524,13 +545,13 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td><input id="txtNoa"  type="text"  class="txt c1"/></td>
+						<td><input id="txtNoa" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblIssign' class="lbl"> </a></td>
-						<td><input id="chkIssign"  type="checkbox" /></td>
+						<td><input id="chkIssign" type="checkbox" /></td>
 						<td><span> </span><a id='lblStatus' class="lbl"> </a></td>
-						<td><input id="txtStatus"  type="text"  class="txt c1"/></td>
+						<td><input id="txtStatus" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblEpibaseno' class="lbl"> </a></td>
@@ -540,7 +561,7 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
-						<td colspan="3"><input id="txtMemo"  type="text"  class="txt c1"/></td>
+						<td colspan="3"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblFiles' class="lbl"> </a></td>
@@ -553,13 +574,16 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblFilesname' class="lbl"> </a></td>
-						<td colspan="3"><input id="txtFilename"  type="text"  class="txt c1"/></td>
+						<td colspan="3"><input id="txtFilename" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
-						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id='lblSssno' class="lbl"> </a></td>
+						<td><input id="txtSssno" type="text" class="txt c1" style="width: 48%;"/>
+							<input id="txtNamea" type="text" class="txt c1" style="width: 48%;"/>
+							<input id="txtWorker" type="hidden" class="txt c1"/>
+						</td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
-						<td><input id="txtWorker2"  type="text"  class="txt c1"/></td>
+						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td> </td>
 					</tr>
 				</table>
@@ -585,7 +609,11 @@
 							<input type="button" id="btnSno.*" style="font-size: medium; font-weight: bold;" value="."/>
 						</td>
 						<td><input type="text" id="txtNamea.*" class="txt c1" /></td>
-						<td><select id="cmbAct.*" class="txt c1"> </select></td>
+						<td>
+							<select id="cmbAct.*" class="txt c1"> </select>
+							<input type="hidden" id="txtStatus.*"/>
+							<input type="hidden" id="txtMemo.*"/>
+						</td>
 					</tr>
 				</table>
 			</div>
