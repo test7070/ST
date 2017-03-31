@@ -651,7 +651,7 @@ declare @tmpa table(
 
 insert @tmpa
 select sssno
-,sum(round((cast(datediff(MINUTE,cast(cast(left(a.noa,3)as int)+1911 as nvarchar(10))+right(a.noa,6)+' '+a.clockin,cast(cast(left((case when a.clockout<a.clockin then dbo.q_cdn(a.noa,1) else a.noa end),3)as int)+1911 as nvarchar(10))+right((case when a.clockout<a.clockin then dbo.q_cdn(a.noa,1) else a.noa end),6)+' '+a.clockout) as float)/60),1)
+,sum(round((cast(datediff(MINUTE,cast(cast(left(a.noa,3)as int)+1911 as nvarchar(10))+right(a.noa,6)+' '+case when a.clockin<'08:00' then '08:00' else a.clockin end,cast(cast(left((case when a.clockout<a.clockin then dbo.q_cdn(a.noa,1) else a.noa end),3)as int)+1911 as nvarchar(10))+right((case when a.clockout<a.clockin then dbo.q_cdn(a.noa,1) else a.noa end),6)+' '+case when '17:00'<a.clockout then '17:00' else a.clockout end ) as float)/60),1)
 -(case when a.clockin>@t_bresthour or a.clockout<@t_eresthour then 0 else round((cast(datediff(MINUTE,cast(cast(left('103/01/01',3)as int)+1911 as nvarchar(10))+right('103/01/01',6)+' '+@t_bresthour,cast(cast(left((case when @t_eresthour<@t_bresthour then dbo.q_cdn('103/01/01',1) else '103/01/01' end),3)as int)+1911 as nvarchar(10))+right((case when @t_eresthour<@t_bresthour then dbo.q_cdn('103/01/01',1) else '103/01/01' end),6)+' '+@t_eresthour) as float)/60),1) end))
 ,sum(isnull(a.w133,0)+isnull(a.w166,0)+isnull(a.w100,0)),0
 ,sum(case when CHARINDEX('遲到',a.memo)>0 then 1 else 0 end)
@@ -662,6 +662,7 @@ and a.sssno between @t_bsssno and @t_esssno
 and isnull(b.partno,'') between @t_bpartno and @t_epartno
 and (b.typea=@t_typea or len(@t_typea)=0)
 and (len(b.outdate)=0 or b.outdate>=@t_bdate)
+and a.memo!='外出' --106/03/31 增加
 group by sssno
 
 --排除假日
