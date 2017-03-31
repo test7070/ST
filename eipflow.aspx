@@ -12,7 +12,7 @@
         <script type="text/javascript">
         	q_tables = 's';
             var q_name = "eipflow";
-            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2'];
+            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2','txtFilename'];
             var q_readonlys = [];
             var bbmNum = [];
             var bbsNum = [];
@@ -20,12 +20,12 @@
             var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 6;
+            brwCount2 = 8;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
             //ajaxPath = ""; //  execute in Root	
-            aPop = new Array(['txtSno_', 'btnSno_', 'sss', 'noa,namea', 'txtSno_,txtNamea_', 'sss_b.aspx']);
+            aPop = new Array(['txtSno_', 'btnSno_', 'sss', 'noa,namea', '0txtSno_,txtNamea_', 'sss_b.aspx']);
 			q_copy=1;
 			
             $(document).ready(function() {
@@ -58,7 +58,79 @@
                         q_gt('eipbase', t_where, 0, 0, 0, "geteipbase", r_accy);
                     }
                 });
+                
+                $('#btnFiles').change(function() {
+                	if(q_cur==1 || q_cur==2){}else{return;}
+                	file = $(this)[0].files[0];
+					if(file){
+						Lock(1);
+						var ext = '';
+						var extindex = file.name.lastIndexOf('.');
+						if(extindex>=0){
+							ext = file.name.substring(extindex,file.name.length);
+						}
+						$('#txtFilename').val(file.name);
+						$('#txtFiles').val(file.name+'_'+Date.now().toString()+ext);
+						
+						fr = new FileReader();
+						fr.fileName = $('#txtFiles').val();
+					    fr.readAsDataURL(file);
+					    fr.onprogress = function(e){
+							if ( e.lengthComputable ) { 
+								var per = Math.round( (e.loaded * 100) / e.total) ; 
+								$('#FileList').children().last().find('progress').eq(0).attr('value',per);
+							}; 
+						}
+						fr.onloadstart = function(e){
+							$('#FileList').append('<div styly="width:100%;"><progress id="progress" max="100" value="0" ></progress><progress id="progress" max="100" value="0" ></progress><a>'+fr.fileName+'</a></div>');
+						}
+						fr.onloadend = function(e){
+							$('#FileList').children().last().find('progress').eq(0).attr('value',100);
+							console.log(fr.fileName+':'+fr.result.length);
+							var oReq = new XMLHttpRequest();
+							oReq.upload.addEventListener("progress",function(e) {
+								if (e.lengthComputable) {
+									percentComplete = Math.round((e.loaded / e.total) * 100,0);
+									$('#FileList').children().last().find('progress').eq(1).attr('value',percentComplete);
+								}
+							}, false);
+							oReq.upload.addEventListener("load",function(e) {
+								Unlock(1);
+							}, false);
+							oReq.upload.addEventListener("error",function(e) {
+								alert("資料上傳發生錯誤!");
+							}, false);
+								
+							oReq.timeout = 360000;
+							oReq.ontimeout = function () { alert("Timed out!!!"); }
+							oReq.open("POST", 'eipflow_upload.aspx', true);
+							oReq.setRequestHeader("Content-type", "text/plain");
+							oReq.setRequestHeader("FileName", escape(fr.fileName));
+							oReq.send(fr.result);//oReq.send(e.target.result);
+						};
+					}
+					ShowDownlbl();
+				});
             }
+            
+            var guid = (function() {
+				function s4() {return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);}
+				return function() {return s4() + s4() + s4() + s4();};
+			})();
+			
+			function ShowDownlbl() {				
+				$('#lblDownload').hide();
+				
+				if(!emp($('#txtFiles').val()))
+					$('#lblDownload').show();
+										
+				$('#lblDownload').click(function(e) {
+					if(txtfiles.length>0)
+						$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#txtFilename').val()+'&TempName='+$('#txtFiles').val());
+					else
+						alert('無資料...!!');
+				});
+			}
             
             function q_boxClose(s2) {
                 var ret;
@@ -122,14 +194,14 @@
 		            }
 		        }
 		        _bbsAssign();
-		        
+		        ShowDownlbl();
 		    }
 		    
             function btnIns() {
                 _btnIns();
                 $('#txtNoa').val('AUTO');
                 $('#combEpibaseno').focus();
-                refreshBbm()
+                refreshBbm();
             }
 
             function btnModi() {
@@ -137,7 +209,7 @@
                     return;
                 _btnModi();
                 $('#txtMemo').focus();
-                refreshBbm()
+                refreshBbm();
             }
 
             function btnPrint() {
@@ -206,6 +278,7 @@
                 	if($('#vtissign_'+i).text()=="false")
                 		$('#vtissign_'+i).text("");
                 }
+                ShowDownlbl();
             }
             
             function refreshBbm() {
@@ -278,7 +351,7 @@
 		<style type="text/css">
             #dmain {
                 overflow: hidden;
-                width: 800px;
+                width: 1260px;
             }
             .dview {
                 float: left;
@@ -301,7 +374,7 @@
             }
             .dbbm {
                 float: left;
-                width: 500px;
+                width: 600px;
                 margin: -1px;
                 border: 1px black solid;
                 border-radius: 5px;
@@ -384,7 +457,7 @@
             }
 			.dbbs {
 				float: left;
-                width: 650px;
+                width: 900px;
             }
             .dbbs .tbbs {
 				margin: 0;
@@ -470,6 +543,19 @@
 						<td colspan="3"><input id="txtMemo"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id='lblFiles' class="lbl"> </a></td>
+						<td style="text-align: left;" colspan="3">
+							<span style="float: left;"> </span>
+							<input type="file" id="btnFiles" class="btnFiles" value="選擇檔案"/>
+							<input id="txtFiles" type="hidden"/>
+							<a id="lblDownload" class='lbl btn' style="display: none;"> </a>
+						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblFilesname' class="lbl"> </a></td>
+						<td colspan="3"><input id="txtFilename"  type="text"  class="txt c1"/></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
@@ -483,10 +569,10 @@
 				<table id="tbbs" class='tbbs'>
 					<tr style='color:white; background:#003366;' >
 						<td style="width:20px;"><input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
-						<td style="width:40px;"><a id='lblNo_s'> </a></td>
-						<td style="width:200px;"><a id='lblSno_s'> </a></td>
-						<td style="width:240px;"><a id='lblNamea_s'> </a></td>
-						<td style="width:150px;"><a id='lblAct_s'> </a></td>
+						<td style="width:50px;"><a id='lblNo_s'> </a></td>
+						<td style="width:330px;"><a id='lblSno_s'> </a></td>
+						<td style="width:400px;"><a id='lblNamea_s'> </a></td>
+						<td style="width:100px;"><a id='lblAct_s'> </a></td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center">
