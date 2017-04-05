@@ -50,7 +50,7 @@
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
                     },{
-                        type : '0', //[14][15]//原廠//20
+                        type : '2', //[14][15]//原廠//20
                         name : 'Xgroupano',
                         dbf : 'uccga',
                         index : 'noa,namea',
