@@ -12,7 +12,7 @@
         <script type="text/javascript">
         	q_tables = 's';
             var q_name = "eipflow";
-            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2','txtFilename','txtSssno','txtNamea'];
+            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2','txtFilename','txtSssno','txtNamea','txtDatea'];
             var q_readonlys = [];
             var bbmNum = [];
             var bbsNum = [];
@@ -204,6 +204,7 @@
                 refreshBbm();
                 $('#txtSssno').val(r_userno);
                 $('#txtNamea').val(r_name);
+                $('#txtDatea').val(q_date());
             }
 
             function btnModi() {
@@ -236,16 +237,27 @@
                     return;
                 }
                 
-                var t_bbsStatus=0;
+                var t_bbsStatus=-1,t_bbstoflow=-1;
                 for (var i = 0; i < q_bbsCount; i++) {
-                	if(!emp($('#txtStatus_'+i).val())){
+                	if($('#chkEnda_'+i).prop('checked')){
                 		t_bbsStatus=i;
                 	}
+                	if(!emp($('#txtSno_'+i).val())){
+                		t_bbstoflow=i;
+                	}
+                	
 				}
-				if(t_bbsStatus>0 && q_cur!=1 && $('#chkIssign').prop('checked')){
-					if(!confirm("簽核已到第"+t_bbsStatus+"層，確定後將會重送簽核，是否繼續?")){
-						Unlock();
-                    	return;
+				if(t_bbsStatus>-1 && q_cur!=1 && $('#chkIssign').prop('checked')){
+					if(t_bbsStatus==t_bbstoflow){
+						if(!confirm("簽核已到結束，確定後將會再重送簽核，是否繼續?")){
+							Unlock();
+	                    	return;
+						}
+					}else{
+						if(!confirm("簽核已到第"+(t_bbsStatus+1)+"層，確定後將會重送簽核，是否繼續?")){
+							Unlock();
+	                    	return;
+						}
 					}
 				}
                 
@@ -258,8 +270,14 @@
 				for (var i = 0; i < q_bbsCount; i++) {
 					$('#txtStatus_'+i).val('');
 					$('#txtMemo_'+i).val('');
+					$('#chkEnda_'+i).prop('checked',false);
 				}
 				$('#txtStatus').val('');
+				$('#chkEnda').prop('checked',false);
+				$('#txtEdate').val('');
+				if($('#chkIssign').prop('checked'))
+					$('#txtBdate').val(q_date());
+				$('#chkIsbreak').prop('checked',false);
 				
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
@@ -315,6 +333,11 @@
             
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                if(t_para){
+                	$('#btnFiles').attr('disabled','disabled');
+                }else{
+                	$('#btnFiles').removeAttr('disabled');
+                }
             }
 
             function btnMinus(id) {
@@ -546,6 +569,8 @@
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
+						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblIssign' class="lbl"> </a></td>
@@ -581,6 +606,10 @@
 						<td><input id="txtSssno" type="text" class="txt c1" style="width: 48%;"/>
 							<input id="txtNamea" type="text" class="txt c1" style="width: 48%;"/>
 							<input id="txtWorker" type="hidden" class="txt c1"/>
+							<input id="chkEnda" type="checkbox" style="display: none;" />
+							<input id="txtBdate" type="hidden" class="txt c1"/>
+							<input id="txtEdate" type="hidden" class="txt c1"/>
+							<input id="chkIsbreak" type="checkbox" style="display: none;" />
 						</td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
@@ -613,6 +642,7 @@
 							<select id="cmbAct.*" class="txt c1"> </select>
 							<input type="hidden" id="txtStatus.*"/>
 							<input type="hidden" id="txtMemo.*"/>
+							<input type="checkbox" id="chkEnda.*" style="display: none;" />
 						</td>
 					</tr>
 				</table>
