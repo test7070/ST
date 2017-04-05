@@ -6,6 +6,8 @@ declare @t_offwork2 nvarchar(10)='12:00' --中午下班時間
 --加班根據加班單
 --禮拜六休假
 --1A上班 2A下班
+--106/03/31 增加
+--5A外出 6A返回
 
 declare @t_weekday nvarchar(10)--星期
 
@@ -38,7 +40,9 @@ insert into #tmp
 select SUBSTRING(a.a,3,8)datea,SUBSTRING(a.a,11,4) timea,b.noa,b.namea
 ,SUBSTRING(a.a,15,2) work,a.noa--,SUBSTRING(a.a,17,10) barcode
 from ztmpxls a left join sss b on SUBSTRING(a.a,17,10)=b.barcode
-and a.a!=''
+where a.a!='' and b.noa is not null
+
+delete #tmp where not(wtype='1A' or wtype='2A')
 
 update #tmp
 set datea=dbo.AD2ChineseEraName(datea),timea=left(timea,2)+':'+RIGHT(timea,2)
@@ -64,7 +68,8 @@ create table #bbs(
 		w133 float,
 		w166 float,
 		w100 float,
-		memo nvarchar(50)
+		memo nvarchar(50),
+		typea nvarchar(50)
 )
 
 declare @datea nvarchar(MAX)
@@ -74,8 +79,8 @@ declare @timea nvarchar(MAX)
 declare @wtype nvarchar(MAX)
 declare @tsssno nvarchar(MAX)=''
 declare @pwtype nvarchar(MAX)=''
-declare @ttime nvarchar(MAX)=''
 declare @count int=0
+declare @t_count int=0
 
 --select * from #tmp order by sssno,datea,timea,noa
 
@@ -88,54 +93,47 @@ while(@@FETCH_STATUS <> -1)
 begin
 	set @pwtype='XX'
 	set @tsssno=''
-	set @ttime=''
 	set @count=1
-
+	
+	--處理正常上下班--------------------------------------------------------------------
 	declare cursor_table2 cursor for
-	select sssno,namea,timea,wtype from #tmp where datea=@datea order by sssno,datea,timea,noa
+	select sssno,namea,timea,wtype from #tmp where datea=@datea and (wtype='1A' or wtype='2A') order by sssno,datea,timea,noa
 	open cursor_table2
 	fetch next from cursor_table2
 	into @sssno,@namea,@timea,@wtype
 	while(@@FETCH_STATUS <> -1)
 	begin
-		if(@tsssno!='' and @tsssno!=@sssno)
+		if(@sssno!=@tsssno)
+		begin
+			set @pwtype='XX'
+		end
+	
+		if(@wtype='1A')
+		begin
+			insert #bbs	
+			select  @datea,@count,@sssno,namea,@timea,'',0,0,0,'','1'
+			from sss a where isnull(outdate,'')='' and noa=@sssno order by noa
+			set @t_count=@count
+			set @count=@count+1
+		end
+		if(@wtype='2A')
 		begin
 			if(@pwtype='1A')
 			begin
-				insert #bbs	
-				select  @datea,@count,@tsssno,namea
-				,case when @pwtype='1A' then @ttime else '' end
-				,'',0,0,0,''
-				from sss a where isnull(outdate,'')='' and noa=@tsssno order by noa
-				set @count=@count+1
+				update #bbs	set clockout=@timea	where noq=@t_count
 			end
-		
-			set @pwtype='XX'
-			set @ttime=''
-		end
-		if((@wtype='1A' and @pwtype!='2A' and @pwtype!='XX')
-		or (@wtype='2A' and @pwtype!='1A'))
-		begin
-			insert #bbs	
-			select  @datea,@count,@sssno,namea
-			,case when @wtype='1A' then @ttime else '' end
-			,case when @wtype='2A' then @ttime else '' end
-			,0,0,0,''
-			from sss a where isnull(outdate,'')='' and noa=@sssno order by noa
-			set @count=@count+1
-		end
-		
-		if(@pwtype='1A' and @wtype='2A')
-		begin
-			insert #bbs	
-			select  @datea,@count,@sssno,namea,@ttime,@timea,0,0,0,''
-			from sss a where isnull(outdate,'')='' and noa=@sssno order by noa
-			set @count=@count+1
+			else
+			begin
+				insert #bbs	
+				select  @datea,@count,@sssno,namea,'',@timea,0,0,0,'','1'
+				from sss a where isnull(outdate,'')='' and noa=@sssno order by noa
+				set @t_count=0
+				set @count=@count+1	
+			end
 		end
 		
 		set @pwtype=@wtype
 		set @tsssno=@sssno
-		set @ttime=@timea
 		
 		fetch next from cursor_table2
 		into @sssno,@namea,@timea,@wtype
@@ -143,15 +141,53 @@ begin
 	close cursor_table2
 	deallocate cursor_table2
 	
-	if(@pwtype=@wtype and @pwtype='1A')
+	--106/03/31--處理外出返回--------------------------------------------------------------------
+	declare cursor_table2 cursor for
+	select sssno,namea,timea,wtype from #tmp where datea=@datea and (wtype='5A' or wtype='6A') order by sssno,datea,timea,noa
+	open cursor_table2
+	fetch next from cursor_table2
+	into @sssno,@namea,@timea,@wtype
+	while(@@FETCH_STATUS <> -1)
 	begin
-		insert #bbs	
-		select  @datea,@count,@tsssno,namea
-		,case when @pwtype='1A' then @ttime else '' end
-		,'',0,0,0,''
-		from sss a where isnull(outdate,'')='' and noa=@tsssno order by noa
-		set @count=@count+1
+		if(@sssno!=@tsssno)
+		begin
+			set @pwtype='XX'
+		end
+	
+		if(@wtype='5A')
+		begin
+			insert #bbs	
+			select  @datea,@count,@sssno,namea,@timea,'',0,0,0,'','2'
+			from sss a where isnull(outdate,'')='' and noa=@sssno order by noa
+			set @t_count=@count
+			set @count=@count+1
+		end
+		if(@wtype='6A')
+		begin
+			if(@pwtype='5A')
+			begin
+				update #bbs	set clockout=@timea	where noq=@t_count
+			end
+			else
+			begin
+				insert #bbs	
+				select  @datea,@count,@sssno,namea,'',@timea,0,0,0,'','1'
+				from sss a where isnull(outdate,'')='' and noa=@sssno order by noa
+				set @t_count=0
+				set @count=@count+1	
+			end
+		end
+		
+		set @pwtype=@wtype
+		set @tsssno=@sssno
+		
+		fetch next from cursor_table2
+		into @sssno,@namea,@timea,@wtype
 	end
+	close cursor_table2
+	deallocate cursor_table2
+	
+	--------------------------------------------------------------------------------------
 	
 	insert #bbs	
 	select  @datea,ROW_NUMBER() over (order by a.noa)+@count,noa,namea,'','',0,0,0,''
@@ -160,7 +196,7 @@ begin
 	
 	update a
 	set noq=rr
-	from (select noq,ROW_NUMBER() over (order by sssno,cast(noq as int))rr  from #bbs)a
+	from (select noq,ROW_NUMBER() over (order by sssno,clockin,cast(noq as int))rr  from #bbs)a
 		
 	update a
 	set noq=right(REPLICATE('0',case when xlen>3 then xlen else 3 end)+noq,case when xlen>3 then xlen else 3 end)
@@ -179,30 +215,32 @@ begin
 		set w133=case when clockout>=@t_offwork and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
 		then round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+@t_offwork
 		, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+clockout) as float)/60),1) else 0 end
-		where isnull(clockin,'')!='' and isnull(clockout,'')!='' and clockout>=@t_offwork 
+		where isnull(clockin,'')!='' and isnull(clockout,'')!='' and clockout>=@t_offwork and typea='1'
 		
 		--105/07/07 加班時數小時0.5 不列入加班時數
-		update #bbs set w133=case when w133<0.5 then 0 else w133 end
-		update #bbs set w166=case when w133>2 then w133-2 else 0 end
-		update #bbs set w133=case when w133>2 then 2 else w133 end
+		update #bbs set w133=case when w133<0.5 then 0 else w133 end where typea='1'
+		update #bbs set w166=case when w133>2 then w133-2 else 0 end where typea='1'
+		update #bbs set w133=case when w133>2 then 2 else w133 end where typea='1'
 		
 		--更新備註
 		update a
 		set memo=case when clockin>@t_gowork and isnull((select count(*) from salvacause where (@datea between bdate and edate) and sssno=a.sssno and a.clockin between btime and (case when etime=@t_offwork2 then @t_gowork2 else etime end ) ),0)=0 then '遲到' else '' end
 		from #bbs a
-		where isnull(a.clockin,'')!=''
+		where isnull(a.clockin,'')!='' and typea='1'
 		
 		update a
 		set memo=memo+
 		case when clockout<@t_offwork and isnull((select count(*) from salvacause where (@datea between bdate and edate) and sssno=a.sssno and a.clockout between (case when btime=@t_gowork2 then @t_offwork2 else btime end) and etime ),0)=0 then (case when len(memo)>0 then ',' else '' end) +'早退' else '' end
 		from #bbs a
-		where isnull(a.clockout,'')!=''
+		where isnull(a.clockout,'')!='' and typea='1'
 		
 		update a
 		set memo=case when counts!=0 then '請假' else '' end
 		from #bbs a 
 		outer apply (select count(*) counts from salvacause where (@datea between bdate and edate) and sssno=a.sssno and btime=@t_gowork and etime=@t_offwork )b
-		where isnull(a.clockin,'')='' and isnull(a.clockout,'')=''
+		where isnull(a.clockin,'')='' and isnull(a.clockout,'')=''  and typea='1'
+		
+		update a set memo='外出' from #bbs a where typea='2'
 	end
 	else
 	begin
@@ -210,7 +248,7 @@ begin
 		set w100=case when isnull(clockin,'')!='' and isnull(clockout,'')!='' then
 		round((cast(datediff(MINUTE, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockin>@t_gowork then clockin else @t_gowork end 
 		, cast(dbo.ChineseEraName2AD(noa) as nvarchar(20))+' '+case when clockout<@t_offwork then clockout else @t_offwork end) as float)/60),1) else 0 end
-		where isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+		where isnull(clockin,'')!='' and isnull(clockout,'')!='' and typea='1'
 	end
 	
 	insert #bbm

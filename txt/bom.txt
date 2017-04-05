@@ -27,22 +27,22 @@ select @productno,@parent
 
 
 BEGIN TRY
---遞迴
-WITH OrdersTable (productno,noa,Level,sortCol) as
-(
- Select productno,parent,0, CONVERT(nvarchar(128),productno)
- from @tmp
- where parent=@parent
- UNION ALL
- SELECT a.productno,a.parent,OrdersTable.Level+1,CONVERT(nvarchar(128),OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno))
- FROM @tmp a, OrdersTable 
- WHERE a.parent=OrdersTable.productno 
-)
-Select REPLICATE('       ',Level) + productno productno, Level, SortCol
-From OrdersTable order by sortCol
+	--遞迴
+	WITH OrdersTable (productno,noa,Level,sortCol) as
+	(
+	 Select productno,parent,0, CONVERT(nvarchar(128),productno)
+	 from @tmp
+	 where parent=@parent
+	 UNION ALL
+	 SELECT a.productno,a.parent,OrdersTable.Level+1,CONVERT(nvarchar(128),OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno))
+	 FROM @tmp a, OrdersTable 
+	 WHERE a.parent=OrdersTable.productno 
+	)
+	Select REPLICATE('       ',Level) + productno productno, Level, SortCol
+	From OrdersTable order by sortCol
 END TRY
 BEGIN CATCH
- select @@ERROR productno
+	select @@ERROR productno
 END CATCH
 ------------------------------------------------------------------------------------------------------------;
 bomcost:--bomcost
@@ -179,4 +179,71 @@ IF OBJECT_ID('tempdb..#tmp')is not null
 BEGIN
 	drop table #tmp
 END
+;
+------------------------------------------------------------------------------------------------------
+bomucc:--BOMUCC
+declare @productno nvarchar(20)
+declare @parent nvarchar(20)
+
+set @productno=[1]
+set @parent='root'
+
+declare @tmp table(
+	productno nvarchar(100),
+	parent nvarchar(50),
+	product nvarchar(MAX),
+	spec nvarchar(MAX),
+	style nvarchar(MAX),
+	unit nvarchar(MAX),
+	mount float,
+	loss float,
+	dividea float,
+	mul float,
+	memo nvarchar(MAX)
+)
+
+insert into @tmp
+select productno,noa,product,spec,'',unit,mount,loss,dividea,mul,memo from ucas
+
+if(PATINDEX('%.%',@productno)>0)
+begin
+	while(PATINDEX('%.%',@productno)>0)
+	begin
+		insert into @tmp(productno,parent)
+		select left(@productno,PATINDEX('%.%',@productno)-1),@parent
+		set @productno=RIGHT(@productno,LEN(@productno)-PATINDEX('%.%',@productno))
+	end
+end
+insert into @tmp (productno,parent)
+select @productno,@parent 
+
+
+BEGIN TRY
+	--遞迴
+	WITH OrdersTable (productno,noa,product,spec,style,unit,Level,sortCol,mount,loss,dividea,mul,memo) as
+	(
+		Select productno,parent,product,spec,style,unit,0, CONVERT(nvarchar(128),productno)
+		,mount,loss,dividea,mul,memo
+		from @tmp
+		where parent=@parent
+		UNION ALL
+		SELECT a.productno,a.parent,a.product,a.spec,a.style,a.unit,OrdersTable.Level+1,CONVERT(nvarchar(128),OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno))
+		,a.mount,a.loss,a.dividea,a.mul,a.memo
+		FROM @tmp a, OrdersTable 
+		WHERE a.parent=OrdersTable.productno 
+	)
+	Select SortCol,productno,product,spec,style,unit
+	,mount/case when isnull(dividea,1)=0 then 1 else isnull(dividea,1) end*
+	case when isnull(mul,1)=0 then 1 else isnull(mul,1) end mount
+	,loss,memo,c.price
+	From OrdersTable 
+	outer apply (select noa from ucc where noa=OrdersTable.productno) b
+	outer apply (select top 1 price from view_costs where productno=OrdersTable.productno order by mon desc) c
+	where b.noa is not null
+	order by sortCol
+
+END TRY
+BEGIN CATCH
+	select @@ERROR productno
+END CATCH
 ;

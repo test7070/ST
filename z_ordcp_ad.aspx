@@ -29,19 +29,55 @@
                         value : q_getId()[4] 
                     },{/*1 [2][3]*/
                         type : '1',
-                        name : 'xdate'
+                        name : 'xnoa'
                     },{/*2 [4][5]*/
                         type : '1',
-                        name : 'xnoa'
+                        name : 'xdate'
+                    },{/*3 [6][7]*/
+                        type : '1',
+                        name : 'xfdate'
+                    },{
+                        type : '2',/*4 [8][9]*/
+                        name : 'xtggno',
+                        dbf : 'tgg',
+                        index : 'noa,comp',
+                        src : 'tgg_b.aspx'
+                    },{
+                        type : '2',/*5 [10][11]*/
+                        name : 'xproduct',
+                        dbf : 'ucaucc',
+                        index :'noa,product',
+                        src : 'ucaucc_b.aspx'
+                    },{
+                        type : '2', /*6 [12][13]*/
+                        name : 'xsales',
+                        dbf : 'sss',
+                        index : 'noa,namea',
+                        src : 'sss_b.aspx'
                     }]
                 });
                 q_popAssign();
                 q_getFormat();
                 q_langShow();
-                $('#txtXdate1').mask('999/99/99');
-                $('#txtXdate1').datepicker();
-                $('#txtXdate2').mask('999/99/99');
-                $('#txtXdate2').datepicker();
+                $('#txtXdate1').mask(r_picd);
+				$('#txtXdate1').datepicker();
+				$('#txtXdate2').mask(r_picd);
+				$('#txtXdate2').datepicker();
+				$('#txtXfdate1').mask(r_picd);
+				$('#txtXfdate1').datepicker();
+				$('#txtXfdate2').mask(r_picd);
+				$('#txtXfdate2').datepicker();
+				
+				if(r_len==4){                	
+                	$.datepicker.r_len=4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+                }
+				
+				$('#txtXdate1').val(q_date().substr(0,r_lenm)+'/01');
+				$('#txtXdate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',35).substr(0,r_lenm)+'/01',-1));
+				$('#txtXfdate1').val(q_date().substr(0,r_lenm)+'/01');
+				$('#txtXfdate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',35).substr(0,r_lenm)+'/01',-1));
+
                 var t_para = (typeof (q_getId()[4]) == 'undefined' ? '' : q_getId()[4]).split('&');
                 for(var i=0;i<t_para.length;i++){
                     if(t_para[i].indexOf('noa=') >= 0){

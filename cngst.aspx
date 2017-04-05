@@ -667,7 +667,7 @@
 						<td><span> </span><a id="lblNoa" class="lbl" > </a></td>
 						<td><input id="txtNoa"   type="text" class="txt c1"/></td>
 					</tr>
-					<tr class="rk_hide">
+					<tr>
 						<td class="pe_hide"><span> </span><a id="lblKind" class="lbl" > </a></td>
 						<td class="pe_hide"><select id="cmbKind" class="txt c1"> </select></td>
 						<td><span> </span><a id="lblStore" class="lbl btn"> </a></td>

@@ -994,6 +994,15 @@
 								var t_where =" noa='"+$('#txtTggno').val()+"'";
 								q_gt('tgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "xytggdata");
 							}
+							
+							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) ) {
+								for(var i=0;i<q_bbsCount;i++){
+									if(!emp($('#txtProductno1_'+i).val())){
+										var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+i).val()+"' ^^";
+										q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+i);
+									}
+								}
+							}
 						}
 						break;
 					case 'txtProductno1_':
