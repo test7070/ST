@@ -373,6 +373,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @t_memo nvarchar(max) = case when '#non'=[19] then '' else [19] end
 	declare @t_curnoa nvarchar(max) = case when '#non'=[26] then '' else [26] end
 	------------------------------------------------------------------------
+	------------------------------------------------------------------------
 	declare @tmp table(
 		sel int identity(1,1)
 		,vccaccy nvarchar(10)
@@ -390,7 +391,11 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,memo nvarchar(max)
 	)
 	insert into @tmp(vccaccy,vccno,datea,mon,custno,cust,coin,floata,[money],tax,total,memo)
-	select a.accy,a.noa,a.datea,a.mon,a.custno,a.comp,a.coin,a.floata,a.[money],a.tax,a.total,a.memo
+	select a.accy,a.noa,a.datea,a.mon,a.custno,a.comp,a.coin,a.floata
+		,case when a.typea='1' then 1 else -1 end* a.[money]
+		,case when a.typea='1' then 1 else -1 end* a.tax
+		,case when a.typea='1' then 1 else -1 end* a.total
+		,a.memo
 	from view_vcc a
 	where a.custno between @t_bcustno and @t_ecustno
 	and a.mon between @t_bmon and @t_emon
@@ -434,9 +439,14 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	insert into @tmps(custno,vccaccy,vccno,vccnoq,ordeno,ordeno2,datea,uno,style,productno,product,pvcno,pvc
 		,spec,size,dime,width,lengthb,radius,unit,mount,[weight],price,[money])
 	select b.custno,a.accy,a.noa,a.noq,a.ordeno,a.no2,b.datea,a.uno,a.style,a.productno,a.product,'',''
-		,a.spec,a.size,a.dime,a.width,a.lengthb,a.radius,upper(isnull(a.unit,'')),a.mount,a.[weight],a.price,a.total
+		,a.spec,a.size,a.dime,a.width,a.lengthb,a.radius,upper(isnull(a.unit,''))
+		,case when c.typea='1' then 1 else -1 end*a.mount
+		,case when c.typea='1' then 1 else -1 end*a.[weight]
+		,a.price
+		,case when c.typea='1' then 1 else -1 end*a.total
 	from view_vccs a
 	left join @tmp b on a.accy=b.vccaccy and a.noa=b.vccno
+	left join view_vcc c on a.accy=c.accy and a.noa=c.noa
 	where b.sel is not null
 	
 	update @tmps set stype=case c.stype when '1' then '內銷' when '3' then '外銷' else c.stype end
