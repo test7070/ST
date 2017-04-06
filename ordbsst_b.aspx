@@ -11,7 +11,9 @@
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 			var q_name = 'view_ordbs', t_bbsTag = 'tbbs', t_content = "", afilter = [], bbsKey = ['noa', 'no3'], t_count = 0, as;//,acoin,afloata,amemo
-			var t_sqlname = 'ordbs_load2'; t_postname = q_name; brwCount2 = -1;
+			var t_sqlname = 'ordbs_load2'; t_postname = q_name; 
+				brwCount = -1;
+				brwCount2 = -1;;
 			var isBott = false;	/// 是否已按過 最後一頁
 			var txtfield = [], afield, t_data, t_htm;
 			var i, s1;
