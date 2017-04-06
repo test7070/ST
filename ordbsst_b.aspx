@@ -11,7 +11,7 @@
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 			var q_name = 'view_ordbs', t_bbsTag = 'tbbs', t_content = "", afilter = [], bbsKey = ['noa', 'no3'], t_count = 0, as;//,acoin,afloata,amemo
-			var t_sqlname = 'ordbs_load2'; t_postname = q_name; brwCount2 = 12;
+			var t_sqlname = 'ordbs_load2'; t_postname = q_name; brwCount2 = -1;
 			var isBott = false;	/// 是否已按過 最後一頁
 			var txtfield = [], afield, t_data, t_htm;
 			var i, s1;
@@ -60,7 +60,7 @@
 				var w = window.parent;
 				var t_Kind = (w.$('#cmbKind').val()?w.$('#cmbKind').val():'');
 				t_Kind = t_Kind.substring(0, 1);
-				if(t_Kind != 'B'){
+				if(t_Kind != 'B' && t_Kind.length>0){
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					for (var j = 0; j < brwCount2 ; j++) {
 						$('#txtSize4_'+j).attr('hidden', 'true');
