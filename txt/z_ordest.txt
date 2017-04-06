@@ -715,8 +715,8 @@ z_ordest1:--z_ordest1
 	declare @t_edime float = case when '#non'=[23] then 999.990 else cast([23] as float) end
 	declare @t_blengthb float = case when '#non'=[24] then 0.0 else cast([24] as float) end
 	declare @t_elengthb float = case when '#non'=[25] then 99999.9 else cast([25] as float) end
-		------------------------------------------------------------------------------------------------------
-
+	-----------------------
+	
 	set @t_stktype = upper(@t_stktype)
 	declare @swapTmp1 int = 0
 	declare @swapTmp2 int = 0
@@ -835,6 +835,7 @@ z_ordest1:--z_ordest1
 		insert into #z_ordest1(gno,pno,productno,products,spec,csize,odate,mount,weight,total)
 		select '3',2,productno,products,spec,csize,char(255),sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull(total,0))
 		from #z_ordest1
+		where gno='1'
 		group by productno,products,spec,csize
 		
 		update #z_ordest1 set recno=b.recno
@@ -853,6 +854,38 @@ z_ordest1:--z_ordest1
 		from #z_ordest1 
 		order by  pno,productno,products,spec,csize,gno ,odate,noa,no2
 	end	
+	--依日期
+	else if @t_sort='odate'
+	begin
+		--小計
+		insert into #z_ordest1(gno,pno,productno,products,spec,csize,odate,mount,weight,total)
+		select '2',1,char(255),char(255),char(255),char(255),odate,sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull(total,0))
+		from #z_ordest1
+		where gno='1'
+		group by odate
+		--總計
+		insert into #z_ordest1(gno,pno,productno,products,spec,csize,odate,mount,weight,total)
+		select '3',2,char(255),char(255),char(255),char(255),left(odate,6)+CHAR(255),sum(isnull(mount,0)),sum(isnull([weight],0)),sum(isnull(total,0))
+		from #z_ordest1
+		where gno='1'
+		group by left(odate,6)
+		
+		update #z_ordest1 set recno=b.recno
+		from #z_ordest1 a
+		left join (select sel,row_number()over(partition by odate order by odate,pno,productno,products,spec,csize,gno ,odate,noa,no2) recno from #z_ordest1) b on a.sel=b.sel
+
+		select
+		gno,odate,e,noa,no2,custno,comp,productno,products
+		,case when @t_project='RK' then cspec else spec end spec
+		,csize,dime,unit,mount,weight,price,total
+		,recno idno
+		,qhref+"?noa=\'"+noa+"\' and "+cast(recno as nvarchar)+"=$idno?"+accy ghref
+		,coin a01
+		,case when ISNULL(floata,0)=0 then '' else dbo.getComma(floata,-1) end a02
+		from #z_ordest1 
+		order by  odate,pno,productno,products,spec,csize,gno,noa,no2
+	end	
+	
 	drop table #z_ordest1;
 	
 --*****************************************************************************************
