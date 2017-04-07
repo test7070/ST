@@ -12,15 +12,15 @@
         <script type="text/javascript">
         	q_tables = 's';
             var q_name = "eipflow";
-            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2','txtFilename','txtSssno','txtNamea','txtDatea'];
-            var q_readonlys = [];
+            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2','txtFilename','txtSssno','txtNamea','txtDatea','txtBdate'];
+            var q_readonlys = ['txtAct2'];
             var bbmNum = [];
             var bbsNum = [];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 8;
+            brwCount2 = 10;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
@@ -32,6 +32,13 @@
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
+                
+                if (r_rank < 8){
+                	if(q_content.length>0){
+						q_content = "where=^^sssno='" + r_userno + "' and "+replaceAll(q_content,'where=^^','');
+					}
+                }
+				
                 q_gt(q_name, q_content, q_sqlCount, 1)
                 $('#txtNoa').focus();
             });
@@ -125,7 +132,7 @@
 					$('#lblDownload').show();
 										
 				$('#lblDownload').click(function(e) {
-					if(txtfiles.length>0)
+					if($('#txtFilename').val().length>0 && $('#txtFiles').val().length>0)
 						$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#txtFilename').val()+'&TempName='+$('#txtFiles').val());
 					else
 						alert('無資料...!!');
@@ -237,7 +244,7 @@
                     return;
                 }
                 
-                var t_bbsStatus=-1,t_bbstoflow=-1;
+                /*var t_bbsStatus=-1,t_bbstoflow=-1;
                 for (var i = 0; i < q_bbsCount; i++) {
                 	if($('#chkEnda_'+i).prop('checked')){
                 		t_bbsStatus=i;
@@ -259,7 +266,7 @@
 	                    	return;
 						}
 					}
-				}
+				}*/
                 
                 if(q_cur==1){
 					$('#txtWorker').val(r_name);
@@ -267,6 +274,7 @@
 					$('#txtWorker2').val(r_name);
 				}
 				
+				/*
 				for (var i = 0; i < q_bbsCount; i++) {
 					$('#txtStatus_'+i).val('');
 					$('#txtMemo_'+i).val('');
@@ -278,6 +286,16 @@
 				if($('#chkIssign').prop('checked'))
 					$('#txtBdate').val(q_date());
 				$('#chkIsbreak').prop('checked',false);
+				$('#chkIshide').prop('checked',false);
+				*/
+				
+				if($('#chkIssign').prop('checked') && emp($('#txtBdate').val())){
+					$('#txtBdate').val(q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2));
+					$('#txtStatus').val('送出簽核');
+				}
+				if(!$('#chkIssign').prop('checked'))
+					$('#txtBdate').val('');
+				
 				
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
@@ -607,13 +625,17 @@
 							<input id="txtNamea" type="text" class="txt c1" style="width: 48%;"/>
 							<input id="txtWorker" type="hidden" class="txt c1"/>
 							<input id="chkEnda" type="checkbox" style="display: none;" />
-							<input id="txtBdate" type="hidden" class="txt c1"/>
 							<input id="txtEdate" type="hidden" class="txt c1"/>
 							<input id="chkIsbreak" type="checkbox" style="display: none;" />
+							<input id="chkIshide" type="checkbox" style="display: none;" />
 						</td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td> </td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblBdate' class="lbl"> </a></td>
+						<td><input id="txtBdate" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>
@@ -626,6 +648,7 @@
 						<td style="width:330px;"><a id='lblSno_s'> </a></td>
 						<td style="width:400px;"><a id='lblNamea_s'> </a></td>
 						<td style="width:100px;"><a id='lblAct_s'> </a></td>
+						<td style="width:100px;"><a id='lblAct2_s'> </a></td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center">
@@ -644,6 +667,7 @@
 							<input type="hidden" id="txtMemo.*"/>
 							<input type="checkbox" id="chkEnda.*" style="display: none;" />
 						</td>
+						<td><input type="text" id="txtAct2.*" class="txt c1" /></td>
 					</tr>
 				</table>
 			</div>
