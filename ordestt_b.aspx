@@ -194,7 +194,7 @@
                 var t_kind = ((w.$('#cmbKind').val())?w.$('#cmbKind').val():'');
                 t_kind = t_kind.substr(0, 1);	
 
-				if (t_kind == 'A' || t_kind.length==0) {
+				if (t_kind == 'A' ) {
 					$('*[id="sizeTd"]').css('width','208px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
@@ -211,7 +211,7 @@
 						$('#textSize4_' + j).val(0);
 						$('#txtRadius_' + j).val(0);
 					}
-				} else if (t_kind == 'B' || w.q_name=='cub') {
+				} else if (t_kind == 'B' || w.q_name=='cub' || t_kind.length==0) {
 					$('*[id="sizeTd"]').css('width','280px');
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#textSize1_' + j).show();
