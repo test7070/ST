@@ -55,15 +55,20 @@
             function mainPost() {
             	bbmMask = [];
                 q_mask(bbmMask);
+                
+                q_cmbParse("cmbImportant",'普通,重要,很重要');
                 q_cmbParse("cmbAct",q_getPara('eip.act'),'s');
+                
                 q_gt('eipform', '', 0, 0, 0, "");
                 q_gt('eipbase', '', 0, 0, 0, "");
                 
                 $('#combEpibaseno').change(function(e) {
-                    if ($(this).val().length > 0) {
-                        t_where = "where=^^ noa='" + $(this).val() + "'^^";
-                        q_gt('eipbase', t_where, 0, 0, 0, "geteipbase", r_accy);
-                    }
+					if(q_cur==1 || q_cur==2){
+						if ($(this).val().length > 0) {
+							t_where = "where=^^ noa='" + $(this).val() + "'^^";
+							q_gt('eipbase', t_where, 0, 0, 0, "geteipbase", r_accy);
+						}
+					}
                 });
                 
                 $('#btnFiles').change(function() {
@@ -597,8 +602,8 @@
 						<td><input id="txtStatus" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblEpibaseno' class="lbl"> </a></td>
-						<td><select id="combEpibaseno" class="txt c1"> </select></td>
+						<td><span> </span><a id='lblImportant' class="lbl"> </a></td>
+						<td><select id="cmbImportant" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblEpifomno' class="lbl"> </a></td>
 						<td><select id="cmbEpifomno" class="txt c1"> </select></td>
 					</tr>
@@ -636,6 +641,8 @@
 					<tr>
 						<td><span> </span><a id='lblBdate' class="lbl"> </a></td>
 						<td><input id="txtBdate" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblEpibaseno' class="lbl"> </a></td>
+						<td><select id="combEpibaseno" class="txt c1"> </select></td>
 					</tr>
 				</table>
 			</div>

@@ -32,6 +32,7 @@ create table #tmp(
 	namea nvarchar(50),
 	isbreak bit,
 	schedule nvarchar(50),
+	important nvarchar(50),
 	
 	noq nvarchar(50),
 	bsssno nvarchar(MAX),
@@ -44,35 +45,38 @@ create table #tmp(
 )
 --插入發文資料
 insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,isbreak,typea
-,noq,bsssno,bnamea,act,bstatus,bmemo,schedule)
+,noq,bsssno,bnamea,act,bstatus,bmemo,schedule,important)
 select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.isbreak,'1'
 ,b.noq,b.sno,b.namea,b.act,b.status,b.memo
 ,(select cast(SUM(case when isnull(enda,0)=1 then 1 else 0 end)as nvarchar(50))+'/'+ cast(SUM(1)as nvarchar(50))from eipflows where noa=a.noa)
+,a.important
 from eipflow a 
-outer apply (select top 1 * from eipflows where noa=a.noa and enda!=1 and act!='知會' and act!='交辦' order by noq ) b
+outer apply (select top 1 * from eipflows where noa=a.noa and enda!=1 and act!='知會' order by noq ) b
 where ISNULL(a.issign,0)=1 and a.ishide!=1 and a.enda!=1 and sssno=@userno
 --106/04/07 結案後就不顯示
 
 --插入需簽核
 insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,isbreak
-,noq,bsssno,bnamea,act,bstatus,bmemo,typea)
+,noq,bsssno,bnamea,act,bstatus,bmemo,typea,schedule,important)
 select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.isbreak
-,b.noq,b.sno,b.namea,b.act,b.status,b.memo,'2'
+,b.noq,b.sno,b.namea,b.act,b.status,b.memo,case when b.act='交辦' then '3' else '2' end
+,(select cast(SUM(case when isnull(enda,0)=1 then 1 else 0 end)as nvarchar(50))+'/'+ cast(SUM(1)as nvarchar(50))from eipflows where noa=a.noa)
+,a.important
 from eipflow a 
-outer apply (select top 1 * from eipflows where noa=a.noa and enda!=1 and act!='知會' and act!='交辦' order by noq ) b
+outer apply (select top 1 * from eipflows where noa=a.noa and enda!=1 and act!='知會' order by noq ) b
 where ISNULL(a.issign,0)=1  and a.enda!=1
 and CHAR(59)+b.sno+CHAR(59) like '%'+CHAR(59)+@userno+CHAR(59)+'%' and isnull(isbreak,0)=0
 
---插入知會和交辦
+--插入知會
 insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,isbreak
-,noq,bsssno,bnamea,act,bstatus,bmemo,typea)
+,noq,bsssno,bnamea,act,bstatus,bmemo,typea,important)
 select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.isbreak
-,b.noq,b.sno,b.namea,b.act,b.status,b.memo,'3'
+,b.noq,b.sno,b.namea,b.act,b.status,b.memo,'4',a.important
 from eipflow a left join eipflows b on a.noa=b.noa
-where ISNULL(a.issign,0)=1  and (b.act='知會' or b.act='交辦')
+where ISNULL(a.issign,0)=1  and (b.act='知會')
 and ((CHAR(59)+b.sno+CHAR(59) like '%'+CHAR(59)+@userno+CHAR(59)+'%' and isnull(isbreak,0)=0))
-and (noq<isnull((select MAX(noq) from #tmp where typea='2' and noa=a.noa),'')
-or (b.enda=1 and noq>isnull((select MAX(noq) from #tmp where typea='2' and noa=a.noa),'')) )
+and (noq<isnull((select MAX(noq) from #tmp where (typea='2' or typea='3') and noa=a.noa),'')
+or (b.enda=1 and noq>isnull((select MAX(noq) from #tmp where (typea='2' or typea='3') and noa=a.noa),'')) )
 
 declare @num int = 0
 declare @tsssno nvarchar(MAX)=''
@@ -233,18 +237,18 @@ create table #tmp(
 insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,enda,isbreak
 ,noq,bsssno,bnamea,act,bstatus,bmemo,benda,typea)
 select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.enda,a.isbreak
-,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,'2'
+,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,case when b.act='交辦' then '3' else '2' end
 from eipflow a left join eipflows b on a.noa=b.noa
-where ISNULL(a.issign,0)=1 and a.noa=@noa and (b.act!='知會' and b.act!='交辦')
+where ISNULL(a.issign,0)=1 and a.noa=@noa and (b.act!='知會')
 and CHAR(59)+b.sno+CHAR(59) like '%'+CHAR(59)+@userno+CHAR(59)+'%'
 
---插入知會和交辦
+--插入知會
 insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,enda,isbreak
 ,noq,bsssno,bnamea,act,bstatus,bmemo,benda,typea)
 select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.enda,a.isbreak
-,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,'3'
+,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,'4'
 from eipflow a left join eipflows b on a.noa=b.noa
-where ISNULL(a.issign,0)=1  and a.noa=@noa and (b.act='知會' or b.act='交辦')
+where ISNULL(a.issign,0)=1  and a.noa=@noa and (b.act='知會')
 and CHAR(59)+b.sno+CHAR(59) like '%'+CHAR(59)+@userno+CHAR(59)+'%'
 
 declare @num int = 0
@@ -312,7 +316,7 @@ begin
 end
 else
 begin
-	if((select top 1 enda from #tmp where noa=@noa and noq=@noq and act='2')=1)
+	if((select top 1 enda from #tmp where noa=@noa and noq=@noq and (typea='2' or typea='3') )=1)
 	begin
 		set @t_err='簽核已被結案，請重刷畫面!!'
 	end
@@ -324,11 +328,11 @@ begin
 	begin
 		set @t_err='簽核已被退回，請重刷畫面!!'
 	end
-	else if((select MIN(noq) from #tmp where noa=@noa and typea='2' and benda!=1)>@noq)
+	else if((select MIN(noq) from #tmp where noa=@noa and (typea='2' or typea='3') and benda!=1)>@noq)
 	begin
 		set @t_err='簽核已被核可轉至上層，請重刷畫面!!'
 	end
-	else if((select MIN(noq) from #tmp where noa=@noa and typea='2' and benda!=1)<@noq)
+	else if((select MIN(noq) from #tmp where noa=@noa and (typea='2' or typea='3') and benda!=1)<@noq)
 	begin
 		set @t_err='簽核已重送，請重刷畫面!!'
 	end
@@ -405,9 +409,8 @@ begin
 				where noa=@noa and noq=@noq
 			end
 		end
-		if (@t_act='擇辦') --擇一
+		if (@t_act='擇辦' or @t_act='交辦') --擇一
 		begin
-			--拆解會簽名單
 			while(LEN(@tsssno)>0)
 			begin
 				set @ssssno=SUBSTRING(@tsssno,0,charindex(CHAR(59),@tsssno))
@@ -434,7 +437,7 @@ begin
 			set enda=1,memo=@tmemo,status=@tstatus
 			where noa=@noa and noq=@noq
 		end
-		if (@t_act='知會' or @t_act='交辦')
+		if (@t_act='知會')
 		begin
 			--拆解知會名單
 			while(LEN(@tsssno)>0)
@@ -465,9 +468,16 @@ begin
 			where noa=@noa and noq=@noq
 		end
 		
-		set @t_err='簽核完畢!!'
+		if(@t_act='交辦')
+		begin
+			set @t_err='交辦完畢!!'
+		end
+		else
+		begin
+			set @t_err='簽核完畢!!'
+		end
 		
-		--判斷是否為最後階段 或 下階段為知會交辦且為最後階段直接結案
+		--判斷是否為最後階段 或 下階段為知會且為最後階段直接結案
 		declare @mnoq nvarchar(max) = (select MAX(noq) from eipflows where noa=@noa and len(sno)>0)
 		declare @menda nvarchar(max) = (select top 1 enda from eipflows where noa=@noa and noq=@mnoq)
 		declare @nenda nvarchar(max) = (select top 1 enda from eipflows where noa=@noa and noq=@noq)
@@ -481,21 +491,21 @@ begin
 		end
 		else
 		begin
-			if(isnull((select act from eipflows where noa=@noa and noq=@nextnoq and @nextnoq=@mnoq),'') in ('知會','交辦'))
+			if(isnull((select act from eipflows where noa=@noa and noq=@nextnoq and @nextnoq=@mnoq),'')='知會')
 			begin
-				--下階段為知會交辦且為最後階段直接結案
+				--下階段為知會且為最後階段直接結案
 				update eipflows
 				set enda=1
-				where noa=@noa and cast(noq as int)=CAST(@noq as int)+1
+				where noa=@noa and noq=@nextnoq
 				
 				update eipflow
 				set enda=1,status='簽核結案'
 				where noa=@noa
 			
 			end
-			else if(isnull((select act from eipflows where noa=@noa and noq=@nextnoq ),'') in ('知會','交辦'))
+			else if(isnull((select act from eipflows where noa=@noa and noq=@nextnoq ),'') ='知會')
 			begin
-				--下階段為知會交辦
+				--下階段為知會
 				update eipflows
 				set enda=1
 				where noa=@noa and noq=@nextnoq
@@ -582,9 +592,9 @@ create table #tmp(
 insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,enda,isbreak
 ,noq,bsssno,bnamea,act,bstatus,bmemo,benda,typea)
 select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.enda,a.isbreak
-,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,'2'
+,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,case when b.act='交辦' then '3' else '2' end
 from eipflow a left join eipflows b on a.noa=b.noa
-where ISNULL(a.issign,0)=1 and a.noa=@noa and (b.act!='知會' and b.act!='交辦')
+where ISNULL(a.issign,0)=1 and a.noa=@noa and (b.act!='知會')
 and CHAR(59)+b.sno+CHAR(59) like '%'+CHAR(59)+@userno+CHAR(59)+'%'
 
 declare @num int = 0
@@ -651,7 +661,7 @@ begin
 end
 else
 begin
-	if((select top 1 enda from #tmp where noa=@noa and noq=@noq and act='2')=1)
+	if((select top 1 enda from #tmp where noa=@noa and noq=@noq and (typea='2' or typea='3'))=1)
 	begin
 		set @t_err='簽核已被結案，請重刷畫面!!'
 	end
@@ -663,11 +673,11 @@ begin
 	begin
 		set @t_err='簽核已被退回，請重刷畫面!!'
 	end
-	else if((select MIN(noq) from #tmp where noa=@noa and typea='2' and benda!=1)>@noq)
+	else if((select MIN(noq) from #tmp where noa=@noa and (typea='2' or typea='3') and benda!=1)>@noq)
 	begin
 		set @t_err='簽核已被核可轉至上層，請重刷畫面!!'
 	end
-	else if((select MIN(noq) from #tmp where noa=@noa and typea='2' and benda!=1)<@noq)
+	else if((select MIN(noq) from #tmp where noa=@noa and (typea='2' or typea='3') and benda!=1)<@noq)
 	begin
 		set @t_err='簽核已重送，請重刷畫面!!'
 	end
@@ -744,6 +754,11 @@ begin
 end
 
 select @t_err t_err
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+   drop table #tmp
+END
 ;
 -------------------------------------------------------------------------------------------------------------------------------
 signhide:--signhide 簽核隱藏
@@ -926,18 +941,18 @@ create table #tmp(
 insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,enda,isbreak
 ,noq,bsssno,bnamea,act,bstatus,bmemo,benda,typea)
 select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.enda,a.isbreak
-,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,'2'
+,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,case when b.act='交辦' then '3' else '2' end
 from eipflow a left join eipflows b on a.noa=b.noa
-where ISNULL(a.issign,0)=1 and a.noa=@noa and (b.act!='知會' and b.act!='交辦')
+where ISNULL(a.issign,0)=1 and a.noa=@noa and (b.act!='知會')
 and CHAR(59)+b.sno+CHAR(59) like '%'+CHAR(59)+@userno+CHAR(59)+'%'
 
---插入知會和交辦
+--插入知會
 insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,enda,isbreak
 ,noq,bsssno,bnamea,act,bstatus,bmemo,benda,typea)
 select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.enda,a.isbreak
-,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,'3'
+,b.noq,b.sno,b.namea,b.act,b.status,b.memo,b.enda,'4'
 from eipflow a left join eipflows b on a.noa=b.noa
-where ISNULL(a.issign,0)=1  and a.noa=@noa and (b.act='知會' or b.act='交辦')
+where ISNULL(a.issign,0)=1  and a.noa=@noa and (b.act='知會')
 and CHAR(59)+b.sno+CHAR(59) like '%'+CHAR(59)+@userno+CHAR(59)+'%'
 
 declare @num int = 0
@@ -1005,7 +1020,7 @@ begin
 end
 else
 begin
-	if((select top 1 enda from #tmp where noa=@noa and noq=@noq and act='2')=1)
+	if((select top 1 enda from #tmp where noa=@noa and noq=@noq and (typea='2' or typea='3'))=1)
 	begin
 		set @t_err='簽核已被結案，請重刷畫面!!'
 	end
@@ -1017,11 +1032,11 @@ begin
 	begin
 		set @t_err='簽核已被退回，請重刷畫面!!'
 	end
-	else if((select MIN(noq) from #tmp where noa=@noa and typea='2' and benda!=1)>@noq)
+	else if((select MIN(noq) from #tmp where noa=@noa and (typea='2' or typea='3') and benda!=1)>@noq)
 	begin
 		set @t_err='簽核已被核可轉至上層，請重刷畫面!!'
 	end
-	else if((select MIN(noq) from #tmp where noa=@noa and typea='2' and benda!=1)<@noq)
+	else if((select MIN(noq) from #tmp where noa=@noa and (typea='2' or typea='3') and benda!=1)<@noq)
 	begin
 		set @t_err='簽核已重送，請重刷畫面!!'
 	end
@@ -1098,7 +1113,7 @@ begin
 				where noa=@noa and noq=@noq
 			end
 		end
-		if (@t_act='擇辦') --擇一
+		if (@t_act='擇辦' or @t_act='交辦') --擇一
 		begin
 			--拆解會簽名單
 			while(LEN(@tsssno)>0)
@@ -1127,7 +1142,7 @@ begin
 			set enda=1,memo=@tmemo,status=@tstatus
 			where noa=@noa and noq=@noq
 		end
-		if (@t_act='知會' or @t_act='交辦')
+		if (@t_act='知會')
 		begin
 			--拆解知會名單
 			while(LEN(@tsssno)>0)
@@ -1176,7 +1191,7 @@ begin
 			if((select count(*) from eipflows where noa=@noa and noq=@noq+'-2')=0)
 			begin
 				insert eipflows(noa,noq,sno,namea,act,status,memo,enda,act2)
-				select @noa,@noq+'-2',@userno,@namea,'簽核','','',0,'回傳'
+				select @noa,@noq+'-2',@userno,@namea,case when @t_act='交辦' then '交辦' else '簽核' end,'','',0,'回傳'
 			end
 			else
 			begin
@@ -1189,7 +1204,7 @@ begin
 		set @t_err='加簽完畢!!'
 		
 		update eipflow
-		set status='簽核中並加簽給'+@addsname
+		set status='簽核中並加簽給'+@addsname+case when len(@memo)>0 then ' 原因:'+@memo else '' end
 		where noa=@noa
 	end
 end
@@ -1200,4 +1215,143 @@ IF OBJECT_ID('tempdb..#tmp')is not null
 BEGIN
    drop table #tmp
 END
+;
+----------------------------------------------------------------------------------------------------
+signdetail:--signdetail 顯示簽核詳細資料
+SET QUOTED_IDENTIFIER OFF
+declare @noa nvarchar(50)=[1]
+
+declare @tmpa table(
+	typea nvarchar(10),
+	noa nvarchar(50),
+	noq nvarchar(50),
+	aenda bit,
+	abreak bit,
+	snoall nvarchar(MAX),
+	nameall nvarchar(MAX),
+	statusall nvarchar(MAX),
+	memoall nvarchar(MAX),
+	act nvarchar(50),
+	act2 nvarchar(50),
+	benda bit,
+	sno nvarchar(MAX),
+	namea nvarchar(MAX),
+	status nvarchar(MAX),
+	memo nvarchar(MAX)
+)
+insert @tmpa(typea,noa,noq,aenda,abreak,snoall,nameall,statusall,memoall,act,act2,benda,sno,namea,status,memo)
+select case when b.act in ('擇辦','交辦')then '0' else '9' end,a.noa,b.noq,a.enda,a.isbreak,b.sno,b.namea,b.status,b.memo,b.act,b.act2,b.enda
+,b.sno,b.namea,b.status,b.memo
+from eipflow a left join eipflows b on a.noa=b.noa
+where a.noa=@noa and b.act!='知會'
+
+declare @tmp table(
+	num int,
+	sssno nvarchar(50),
+	namea nvarchar(50),
+	status nvarchar(MAX),
+	memo nvarchar(MAX),
+	noa nvarchar(50),
+	noq nvarchar(50)
+)
+
+declare @num int = 0
+declare @tsssno nvarchar(MAX)=''
+declare @tnamea nvarchar(MAX)=''
+declare @tstatus nvarchar(MAX)=''
+declare @tmemo nvarchar(MAX)=''
+declare @ssssno nvarchar(MAX)=''
+declare @snamea nvarchar(MAX)=''
+declare @sstatus nvarchar(MAX)=''
+declare @smemo nvarchar(MAX)=''
+declare @snoa nvarchar(MAX)=''
+declare @snoq nvarchar(MAX)=''
+
+declare cursor_table cursor for
+select snoall+CHAR(59),nameall+CHAR(59),statusall+CHAR(59),memoall+CHAR(59),noa,noq 
+from @tmpa where typea!='0' order by noa
+open cursor_table
+fetch next from cursor_table
+into @tsssno,@tnamea,@tstatus,@tmemo,@snoa,@snoq
+while(@@FETCH_STATUS <> -1)
+begin
+	set @num=0
+	while(LEN(@tsssno)>0)
+	begin
+		set @ssssno=SUBSTRING(@tsssno,0,charindex(CHAR(59),@tsssno))
+		set @snamea=SUBSTRING(@tnamea,0,charindex(CHAR(59),@tnamea))
+		set @sstatus=SUBSTRING(@tstatus,0,charindex(CHAR(59),@tstatus))
+		set @smemo=SUBSTRING(@tmemo,0,charindex(CHAR(59),@tmemo))
+		set @num=@num+1
+				
+		insert @tmp(num,sssno,namea,status,memo,noa,noq)
+		select @num,@ssssno,@snamea,@sstatus,@smemo,@snoa,@snoq
+				
+		set @tsssno=SUBSTRING(@tsssno,charindex(CHAR(59),@tsssno)+1,len(@tsssno))
+		set @tnamea=SUBSTRING(@tnamea,charindex(CHAR(59),@tnamea)+1,len(@tnamea))
+		set @tstatus=SUBSTRING(@tstatus,charindex(CHAR(59),@tstatus)+1,len(@tstatus))
+		set @tmemo=SUBSTRING(@tmemo,charindex(CHAR(59),@tmemo)+1,len(@tmemo))
+	end
+	
+
+	fetch next from cursor_table
+	into @tsssno,@tnamea,@tstatus,@tmemo,@snoa,@snoq
+end
+close cursor_table
+deallocate cursor_table
+
+insert @tmpa(typea,noa,noq,aenda,abreak,snoall,nameall,statusall,memoall,act,act2,benda,sno,namea,status,memo)
+select '0',a.noa,a.noq,a.aenda,a.abreak,a.snoall,a.nameall,a.statusall,a.memoall,a.act,a.act2,a.benda,b.sssno,b.namea,b.status,b.memo
+from @tmpa a left join @tmp b on a.noa=b.noa and a.noq=b.noq
+
+delete @tmpa where typea='9' or sno is null
+
+delete @tmp
+
+declare cursor_table cursor for
+select snoall+CHAR(59),nameall+CHAR(59),statusall+CHAR(59),memoall+CHAR(59),noa,noq 
+from @tmpa where act='擇辦' and benda=1 order by noa
+open cursor_table
+fetch next from cursor_table
+into @tsssno,@tnamea,@tstatus,@tmemo,@snoa,@snoq
+while(@@FETCH_STATUS <> -1)
+begin
+	set @num=0
+	while(LEN(@tsssno)>0)
+	begin
+		set @ssssno=SUBSTRING(@tsssno,0,charindex(CHAR(59),@tsssno))
+		set @snamea=SUBSTRING(@tnamea,0,charindex(CHAR(59),@tnamea))
+		set @sstatus=SUBSTRING(@tstatus,0,charindex(CHAR(59),@tstatus))
+		set @smemo=SUBSTRING(@tmemo,0,charindex(CHAR(59),@tmemo))
+		set @num=@num+1
+				
+		insert @tmp(num,sssno,namea,status,memo,noa,noq)
+		select @num,@ssssno,@snamea,@sstatus,@smemo,@snoa,@snoq
+				
+		set @tsssno=SUBSTRING(@tsssno,charindex(CHAR(59),@tsssno)+1,len(@tsssno))
+		set @tnamea=SUBSTRING(@tnamea,charindex(CHAR(59),@tnamea)+1,len(@tnamea))
+		set @tstatus=SUBSTRING(@tstatus,charindex(CHAR(59),@tstatus)+1,len(@tstatus))
+		set @tmemo=SUBSTRING(@tmemo,charindex(CHAR(59),@tmemo)+1,len(@tmemo))
+	end
+	
+
+	fetch next from cursor_table
+	into @tsssno,@tnamea,@tstatus,@tmemo,@snoa,@snoq
+end
+close cursor_table
+deallocate cursor_table
+
+delete @tmp where status=''
+
+if((select count(*) from @tmp)>0)
+begin
+	update b 
+	set sno=a.sssno,namea=a.namea,status=a.status,memo=a.memo
+	from @tmp a left join @tmpa b on a.noa=b.noa and a.noq=b.noq
+end
+
+update @tmpa
+set status=case when len(status)>0 and abreak=1 and benda=0 then '退回' when len(status)>0 then '同意' else '' end
+
+select noa,noq,aenda,abreak,act,act2,benda,sno,namea,status,memo from @tmpa order by noa,noq
 ;
