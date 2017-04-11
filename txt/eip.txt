@@ -1,11 +1,15 @@
 ﻿sign:--sign 顯示簽核資料
 SET QUOTED_IDENTIFIER OFF
 declare @userno nvarchar(50)=[1]
---declare @rank nvarchar(50)=[2]
---declare @bdate nvarchar(50)=case when '#non'=[3] then '' else [3] end
---declare @edate nvarchar(50)=case when '#non'=[4] then char(255) else [4] end
---declare @noa nvarchar(50)=case when '#non'=[5] then '' else [5] end
---declare @enda nvarchar(50)=case when '#non'=[6] then '' else [6] end
+declare @namea nvarchar(50)=[2]
+declare @rank nvarchar(50)=[3]
+declare @twhere nvarchar(50)=case when '#non'=[4] then '' else [4] end
+declare @bdate nvarchar(50)=case when '#non'=[5] then '' else [5] end
+declare @edate nvarchar(50)=case when '#non'=[6] then char(255) else [6] end
+declare @noa nvarchar(50)=case when '#non'=[7] then '' else [7] end
+declare @enda nvarchar(50)=case when '#non'=[8] then '' else [8] end
+declare @sssno nvarchar(50)=case when '#non'=[9] then '' else [9] end
+declare @important nvarchar(50)=case when '#non'=[10] then '' else [10] end
 
 IF OBJECT_ID('tempdb..#tmp')is not null
 BEGIN
@@ -44,16 +48,50 @@ create table #tmp(
 	typea nvarchar(50),
 )
 --插入發文資料
-insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,isbreak,typea
-,noq,bsssno,bnamea,act,bstatus,bmemo,schedule,important)
-select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.isbreak,'1'
-,b.noq,b.sno,b.namea,b.act,b.status,b.memo
-,(select cast(SUM(case when isnull(enda,0)=1 then 1 else 0 end)as nvarchar(50))+'/'+ cast(SUM(1)as nvarchar(50))from eipflows where noa=a.noa)
-,a.important
-from eipflow a 
-outer apply (select top 1 * from eipflows where noa=a.noa and enda!=1 and act!='知會' order by noq ) b
-where ISNULL(a.issign,0)=1 and a.ishide!=1 and a.enda!=1 and sssno=@userno
---106/04/07 結案後就不顯示
+if(len(@twhere)=0)
+begin
+	insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,isbreak,typea
+	,noq,bsssno,bnamea,act,bstatus,bmemo,schedule,important)
+	select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.isbreak,'1'
+	,b.noq,b.sno,b.namea,b.act,b.status,b.memo
+	,(select cast(SUM(case when isnull(enda,0)=1 then 1 else 0 end)as nvarchar(50))+'/'+ cast(SUM(1)as nvarchar(50))from eipflows where noa=a.noa)
+	,a.important
+	from eipflow a 
+	outer apply (select top 1 * from eipflows where noa=a.noa and enda!=1 and act!='知會' order by noq ) b
+	where ISNULL(a.issign,0)=1 and a.enda!=1 and sssno=@userno
+	--106/04/07 結案後就不顯示
+end
+else
+begin
+	if(@rank<'8')
+	begin
+		insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,isbreak,typea
+		,noq,bsssno,bnamea,act,bstatus,bmemo,schedule,important)
+		select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.isbreak,'1'
+		,b.noq,b.sno,b.namea,b.act,b.status,b.memo
+		,(select cast(SUM(case when isnull(enda,0)=1 then 1 else 0 end)as nvarchar(50))+'/'+ cast(SUM(1)as nvarchar(50))from eipflows where noa=a.noa)
+		,a.important
+		from eipflow a 
+		outer apply (select top 1 * from eipflows where noa=a.noa and enda!=1 and act!='知會' order by noq ) b
+		where ISNULL(a.issign,0)=1 and (len(@enda)=0 or a.enda=@enda) and a.sssno=@userno
+		and a.bdate between @bdate and @edate+' 99:99' and (len(@noa)=0 or a.noa=@noa)
+		and (len(@important)=0 or a.important=@important)
+	end
+	else
+	begin
+		insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,isbreak,typea
+		,noq,bsssno,bnamea,act,bstatus,bmemo,schedule,important)
+		select a.noa,a.epifomno,a.bdate,a.status,a.filename,a.files,a.memo,a.sssno,a.namea,a.isbreak,'1'
+		,b.noq,b.sno,b.namea,b.act,b.status,b.memo
+		,(select cast(SUM(case when isnull(enda,0)=1 then 1 else 0 end)as nvarchar(50))+'/'+ cast(SUM(1)as nvarchar(50))from eipflows where noa=a.noa)
+		,a.important
+		from eipflow a 
+		outer apply (select top 1 * from eipflows where noa=a.noa and enda!=1 and act!='知會' order by noq ) b
+		where ISNULL(a.issign,0)=1 and (len(@enda)=0 or a.enda=@enda) and (len(@sssno)=0 or a.sssno=@sssno )
+		and a.bdate between @bdate and @edate+' 99:99' and (len(@noa)=0 or a.noa=@noa)
+		and (len(@important)=0 or a.important=@important)
+	end
+end
 
 --插入需簽核
 insert #tmp (noa,epifomno,datea,astatus,filename,files,memo,sssno,namea,isbreak
