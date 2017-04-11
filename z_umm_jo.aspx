@@ -18,7 +18,7 @@
             var acompItem = '';
             $(document).ready(function() {
                 q_getId();
-                q_gf('', 'z_pay_jo');
+                q_gf('', 'z_umm_jo');
                 //q_gt('acomp', '', 0, 0, 0, "");
             });
             
@@ -29,7 +29,7 @@
 
             function q_gfPost() {
                 $('#qReport').q_report({
-                    fileName : 'z_pay_jo',
+                    fileName : 'z_umm_jo',
                     options : [{
                         type : '0', //[1]
                         name : 'accy',
