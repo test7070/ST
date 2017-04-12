@@ -235,7 +235,7 @@
                 		var t_sssno=$('#txtSno_'+i).val().split(';');
                 		if(t_sssno.length>1){
                 			ismore=true;
-                			alert('簽核不可多個核核准人!!')
+                			alert('簽核不可多個核准人!!')
                 			break;
                 		}
                 	}
