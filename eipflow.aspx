@@ -25,7 +25,7 @@
             brwNowPage = 0;
             brwKey = 'noa';
             //ajaxPath = ""; //  execute in Root	
-            aPop = new Array(['txtSno_', 'btnSno_', 'sss', 'noa,namea', '0txtSno_,txtNamea_', 'sss_b.aspx']);
+            aPop = new Array(['txtSno_', '', 'sss', 'noa,namea', '0txtSno_,txtNamea_', 'sss_b.aspx']);
 			q_copy=1;
 			
             $(document).ready(function() {
@@ -147,10 +147,31 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'sssall':
+                		b_ret = getb_ret();
+                        ///  q_box() 執行後，選取的資料
+                        if (!b_ret || b_ret.length == 0){
+                        	b_pop='';
+                        	return;	
+                        }
+                        //q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea', b_ret.length, b_ret, 'noa,namea', 'txtSno,txtNamea');
+                        
+                        var n=box_n;
+                        box_n='';
+                        var t_sssno = '', t_namea='';
+						for (var i = 0; i < b_ret.length; i++) {
+							t_sssno=t_sssno+(t_sssno.length>0?';':'')+b_ret[i].noa;
+							t_namea=t_namea+(t_namea.length>0?';':'')+b_ret[i].namea;
+							
+						}
+						$('#txtSno_' + n).val(t_sssno);
+						$('#txtNamea_' + n).val(t_namea);
+                		break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
                 }
+                b_pop='';
             }
 			
             function q_gtPost(t_name) {
@@ -198,14 +219,21 @@
                 q_box('eipflow_s.aspx', q_name + '_s', "500px", "320px", q_getMsg("popSeek"));
             }
             
-             function bbsAssign() {
-		        for (var i = 0; i < q_bbsCount; i++) {
-		            $('#lblNo_' + i).text(i + 1);
-		            if (!$('#btnMinus_' + i).hasClass('isAssign')) {
-		            	
-		            }
-		        }
-		        _bbsAssign();
+            var box_n='';
+            function bbsAssign() {
+				for (var i = 0; i < q_bbsCount; i++) {
+					$('#lblNo_' + i).text(i + 1);
+					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+						$('#btnSno_' + i).click(function() {
+                        	t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							box_n=b_seq;
+                            q_box("sssall_check_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;", 'sssall', "50%", "650px", q_getMsg('popSssallcheck'));
+                        });
+					}
+				}
+				_bbsAssign();
 		        ShowDownlbl();
 		    }
 		    
@@ -422,7 +450,7 @@
             }
             .dview {
                 float: left;
-                width: 300px;
+                width: 500px;
             }
             .tview {
             	width:100%;
@@ -524,7 +552,7 @@
             }
 			.dbbs {
 				float: left;
-                width: 900px;
+                width: 750px;
             }
             .dbbs .tbbs {
 				margin: 0;
@@ -568,9 +596,9 @@
 				<table class="tview" id="tview"  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
 						<td align="center" style="width:3%"><a id='vewChk'> </a></td>
-						<td align="center" style="width:40%"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:17%"><a id='vewIssign'> </a></td>
-						<td align="center" style="width:30%"><a id='vewStatus'> </a></td>
+						<td align="center" style="width:25%"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:10%"><a id='vewIssign'> </a></td>
+						<td align="center" style="width:55%"><a id='vewStatus'> </a></td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=''/></td>

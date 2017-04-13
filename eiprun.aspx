@@ -1235,7 +1235,7 @@
                         var n=$(this).attr('id').replace('lblDownload_','')
                         
 						if($('#eipform_files'+n).text().length>0)
-							$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#eipform_files'+n).text()+'&TempName='+$('#eipform_files'+n).text());
+							$('#xdownload').attr('src','eipform_download.aspx?FileName='+$('#eipform_files'+n).text()+'&TempName='+$('#eipform_files'+n).text());
 							
 					});
                 }

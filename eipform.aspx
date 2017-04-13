@@ -67,8 +67,8 @@
                         	$('#btnFiles').val('');
                         	Unlock(1);
                         	return;
-                        }						
-						
+                        }
+                        
 						$('#txtFiles').val(file.name);
 						
 						fr = new FileReader();
@@ -138,16 +138,6 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
-                    case 'checkClass':
-                        var as = _q_appendData("class", "", true);
-                        if (as[0] != undefined){
-                            alert('已存在 '+as[0].noa+' '+as[0].class);
-                            Unlock(1);
-                            return;
-                        }else{
-                            wrServer($('#txtNoa').val());
-                        }
-                        break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -171,7 +161,7 @@
                 if (emp($('#txtNoa').val()))
                     return;
                 _btnModi();
-                $('#txtClass').focus();
+                $('#txtFormname').focus();
             }
 
             function btnPrint() {
@@ -220,6 +210,11 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                if(t_para){
+                	$('#btnFiles').attr('disabled','disabled');
+                }else{
+                	$('#btnFiles').removeAttr('disabled');
+                }
                 ShowDownlbl();
             }
 
@@ -434,7 +429,7 @@
 						<td style="text-align: left;" colspan="2">
 							<span style="float: left;"> </span>
 							<input type="file" id="btnFiles" class="btnFiles" value="選擇檔案"/>
-							<a id="lblDownload" class='lbl btn' style="display: none;"> </a>
+							<a id="lblDownload" class='lbl btn' style="display: none;">下載</a>
 						</td>
 					</tr>
 					<tr>
