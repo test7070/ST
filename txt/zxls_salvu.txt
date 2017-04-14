@@ -124,6 +124,9 @@ begin
 		where charindex('辦公室',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
 		and (clockout>=@t_offwork or clockout<=@t_timea )
 		
+		--106/04 依正常加班 超過2小時*1.66
+		update #bbs set w133=2,w166=w133-2 where w133>2 and charindex('辦公室',stype)>0
+		
 		--更新備註
 		update a
 		set memo=case when clockin>@t_gowork and isnull((select count(*) from salvacause where (@datea between bdate and edate) and sssno=a.sssno and a.clockin between btime and (case when etime=@t_offwork2 then @t_gowork2 else etime end ) ),0)=0 then '遲到' else '' end
@@ -145,27 +148,39 @@ begin
 	end
 	else
 	begin
+		--update #bbs
+		--set w100= --上班時間小於正常上班時間已正常上班時間
+		--round((cast(datediff(MINUTE,noa+' '+(case when clockin < @t_gowork then @t_gowork else clockin end)
+		--,noa+' '+(case when (clockout>@t_offwork or clockout<=@t_timea ) then @t_offwork else clockout end)) as float)/60),1)
+		---(case when round((cast(datediff(MINUTE,noa+' '+(case when clockin < @t_gowork then @t_gowork else clockin end)
+		--,noa+' '+(case when (clockout>@t_offwork or clockout<=@t_timea ) then @t_offwork else clockout end)) as float)/60),1)>5 then 1 else 0 end)  --扣除休息時間
+		--,memo='值班'
+		--where charindex('辦公室',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+		
+		----加班
+		--update #bbs
+		--set w133=round((cast(datediff(MINUTE,noa+' '+@t_offwork,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout) as float)/60),1)
+		--,memo=memo+(case when len(memo)>0 then ',' else '' end)+'加班'
+		--where charindex('辦公室',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+		--and (clockout>=@t_offwork or clockout<=@t_timea)
+		
+		--106/04 假日都算加班 前2小時*1.33 超過2小時*1.66
 		update #bbs
-		set w100= --上班時間小於正常上班時間已正常上班時間
+		set w133=
 		round((cast(datediff(MINUTE,noa+' '+(case when clockin < @t_gowork then @t_gowork else clockin end)
-		,noa+' '+(case when (clockout>@t_offwork or clockout<=@t_timea ) then @t_offwork else clockout end)) as float)/60),1)
+		,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout ) as float)/60),1)
 		-(case when round((cast(datediff(MINUTE,noa+' '+(case when clockin < @t_gowork then @t_gowork else clockin end)
-		,noa+' '+(case when (clockout>@t_offwork or clockout<=@t_timea ) then @t_offwork else clockout end)) as float)/60),1)>5 then 1 else 0 end)  --扣除休息時間
-		,memo='值班'
+		,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout ) as float)/60),1)>5 then 1 else 0 end)  --扣除休息時間
+		,memo='加班'
 		where charindex('辦公室',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
 		
-		--加班
-		update #bbs
-		set w133=round((cast(datediff(MINUTE,noa+' '+@t_offwork,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout) as float)/60),1)
-		,memo=memo+(case when len(memo)>0 then ',' else '' end)+'加班'
-		where charindex('辦公室',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
-		and (clockout>=@t_offwork or clockout<=@t_timea)
+		update #bbs set w133=2,w166=w133-2 where w133>2 and charindex('辦公室',stype)>0
 	end
 	----------------------------------------------------------
 	--現場----------------------------------------------------
 	if(
 		((select count(*) from holiday where noa=@datea and isnull(iswork,0)!=1)=0 --不是假日
-		and @t_weekday!='0')--不是周日
+		and @t_weekday!='0' and @t_weekday!='6')--不是周日 --106/04不是周六日
 		or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0--上班日
 	)
 	begin
@@ -181,6 +196,9 @@ begin
 		,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout) as float)/60),1)
 		where charindex('現場晚班',stype)>0	and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
 		and (clockout>@b_offwork or clockout<=@t_timea)
+		
+		--106/04 依正常加班 超過2小時*1.66
+		update #bbs set w133=2,w166=w133-2 where w133>2 and charindex('現場',stype)>0
 		
 		--更新備註
 		update a
@@ -223,38 +241,58 @@ begin
 	end
 	else
 	begin
-		--早班
+		----早班
+		--update #bbs
+		--set w100=
+		--round((cast(datediff(MINUTE,noa+' '+(case when clockin < @a_gowork then @a_gowork else clockin end)
+		--,noa+' '+(case when (clockout>@a_offwork or clockout<=@t_timea) then @a_offwork else clockout end)) as float)/60),1)
+		---(case when round((cast(datediff(MINUTE,noa+' '+(case when clockin < @a_gowork then @a_gowork else clockin end)
+		--,noa+' '+(case when (clockout>@a_offwork or clockout<=@t_timea) then @a_offwork else clockout end)) as float)/60),1)>5 then 1 else 0 end)  --扣除休息時間
+		--,memo='值班'
+		--where charindex('現場早班',stype)>0	and isnull(clockin,'')!='' and isnull(clockout,'')!=''
+		
+		----加班
+		--update #bbs
+		--set w133=round((cast(datediff(MINUTE,noa+' '+@a_offwork,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout) as float)/60),1)
+		--,memo=memo+(case when len(memo)>0 then ',' else '' end)+'加班'
+		--where charindex('現場早班',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+		--and (clockout>=@a_offwork or clockout<=@t_timea)
+		
+		--106/04 假日都算加班 前2小時*1.33 超過2小時*1.66
 		update #bbs
-		set w100=
+		set w133=
 		round((cast(datediff(MINUTE,noa+' '+(case when clockin < @a_gowork then @a_gowork else clockin end)
-		,noa+' '+(case when (clockout>@a_offwork or clockout<=@t_timea) then @a_offwork else clockout end)) as float)/60),1)
+		,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout ) as float)/60),1)
 		-(case when round((cast(datediff(MINUTE,noa+' '+(case when clockin < @a_gowork then @a_gowork else clockin end)
-		,noa+' '+(case when (clockout>@a_offwork or clockout<=@t_timea) then @a_offwork else clockout end)) as float)/60),1)>5 then 1 else 0 end)  --扣除休息時間
-		,memo='值班'
-		where charindex('現場早班',stype)>0	and isnull(clockin,'')!='' and isnull(clockout,'')!=''
+		,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout ) as float)/60),1)>5 then 1 else 0 end)  --扣除休息時間
+		,memo='加班'
+		where charindex('現場早班',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 		
 		
-		--加班
-		update #bbs
-		set w133=round((cast(datediff(MINUTE,noa+' '+@a_offwork,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout) as float)/60),1)
-		,memo=memo+(case when len(memo)>0 then ',' else '' end)+'加班'
-		where charindex('現場早班',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
-		and (clockout>=@a_offwork or clockout<=@t_timea)
+		----晚班
+		--update #bbs
+		--set w100=
+		--round((cast(datediff(MINUTE,noa+' '+(case when clockin < @b_gowork then @b_gowork else clockin end)
+		--,noa+' '+(case when (clockout>@b_offwork or clockout<=@t_timea) then @b_offwork else clockout end)) as float)/60),1)
+		--,memo='值班'
+		--where charindex('現場晚班',stype)>0	and isnull(clockin,'')!='' and isnull(clockout,'')!=''
 		
-		--晚班
+		----加班
+		--update #bbs
+		--set w133=round((cast(datediff(MINUTE,noa+' '+@b_offwork,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout) as float)/60),1)
+		--,memo=memo+(case when len(memo)>0 then ',' else '' end)+'加班'
+		--where charindex('現場晚班',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
+		--and (clockout>=@b_offwork or clockout<=@t_timea)
+		
+		--106/04 假日都算加班 前2小時*1.33 超過2小時*1.66
 		update #bbs
-		set w100=
+		set w133=
 		round((cast(datediff(MINUTE,noa+' '+(case when clockin < @b_gowork then @b_gowork else clockin end)
-		,noa+' '+(case when (clockout>@b_offwork or clockout<=@t_timea) then @b_offwork else clockout end)) as float)/60),1)
-		,memo='值班'
-		where charindex('現場晚班',stype)>0	and isnull(clockin,'')!='' and isnull(clockout,'')!=''
-		
-		--加班
-		update #bbs
-		set w133=round((cast(datediff(MINUTE,noa+' '+@b_offwork,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout) as float)/60),1)
-		,memo=memo+(case when len(memo)>0 then ',' else '' end)+'加班'
+		,(case when clockout<=@t_timea then dbo.q_cdn(noa,1) else noa end)+' '+clockout ) as float)/60),1)
+		,memo='加班'
 		where charindex('現場晚班',stype)>0 and isnull(clockin,'')!='' and isnull(clockout,'')!='' 
-		and (clockout>=@b_offwork or clockout<=@t_timea)
-	
+		
+		--106/04
+		update #bbs set w133=2,w166=w133-2 where w133>2 and charindex('現場',stype)>0
 	end
 	----------------------------------------------------------
 	insert #bbm
