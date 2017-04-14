@@ -1,6 +1,6 @@
 <%@ Page Language="C#" Debug="true"%>
     <script language="c#" runat="server">     
-        string savepath = @"F:\doc\eipflow\";
+        string savepath = @"F:\doc\eipform\";
         
         public void Page_Load()
         {
