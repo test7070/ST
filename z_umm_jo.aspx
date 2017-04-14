@@ -47,10 +47,10 @@
                         name : 'xdate'
                     }, {
                         type : '2', //[6][7]
-                        name : 'xtgg',
-                        dbf : 'tgg',
+                        name : 'xcust',
+                        dbf : 'cust',
                         index : 'noa,comp',
-                        src : 'tgg_b.aspx'
+                        src : 'cust_b.aspx'
                     }, {
                         type : '6', //[8]
                         name : 'xfdate'
@@ -72,9 +72,6 @@
                         value : "1@依業務".split(',')
                     }]
                 });
-                
-                $('.q_report .report').css('width','500px');
-                $('.q_report .report div').css('width','250px');
                 
                 q_popAssign();
                 q_getFormat();
