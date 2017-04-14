@@ -4,7 +4,7 @@
         {
          //   try
          //   {
-                string path = @"F:\doc\eip\eipflow\";
+                string path = @"F:\doc\eipflow\";
                 string filename = HttpUtility.UrlDecode(Request.QueryString["FileName"]);
                 string tempname = HttpUtility.UrlDecode(Request.QueryString["TempName"]);
 

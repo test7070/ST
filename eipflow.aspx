@@ -386,8 +386,10 @@
                 _readonly(t_para, empty);
                 if(t_para){
                 	$('#btnFiles').attr('disabled','disabled');
+                	$('#btnViewdoc').removeAttr('disabled');
                 }else{
                 	$('#btnFiles').removeAttr('disabled');
+                	$('#btnViewdoc').attr('disabled','disabled');
                 }
             }
 

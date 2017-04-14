@@ -110,6 +110,19 @@
 					}
 					ShowDownlbl();
 				});
+				
+				$('#btnViewdoc').click(function() {
+					if($('#txtFiles').val().length>0){
+						var extindex = $('#txtFiles').val().lastIndexOf('.');
+						if(extindex>=0){
+							ext = $('#txtFiles').val().substring(extindex,$('#txtFiles').val().length);
+						}
+						if(ext.toUpperCase() == '.DOC' || ext.toUpperCase() == '.DOCX')
+							q_func( 'eip.wordConvert' , $('#txtFiles').val()+',htm,eipform,'+$('#txtNoa').val())
+						/*if(ext.toUpperCase() == '.XLS' || ext.toUpperCase() == '.XLSX')
+							q_func( 'eip.excelConvert' , $('#txtFiles').val()+',htm,eipform,'+$('#txtNoa').val())*/
+					}
+				});
             }
             
             function ShowDownlbl() {				
@@ -124,6 +137,23 @@
 					else
 						alert('無資料...!!');
 				});
+			}
+			
+			function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'eip.wordConvert':
+                		var extindex = $('#txtFiles').val().lastIndexOf('.');
+						if(extindex>=0){
+							ext = $('#txtFiles').val().substring(extindex,$('#txtFiles').val().length);
+						}
+						
+						var filename=replaceAll($('#txtFiles').val(),ext,'');
+                	
+                		var s1 = location.href;
+						var t_path = (s1.substr(7, 5) == 'local' ? xlsPath : s1.substr(0, s1.indexOf('/', 10)) + '/'+q_db+'z/');
+						window.open(t_path + "eipform_read.aspx?files="+filename, "_blank", 'directories=no,location=no,menubar=no,resizable=1,scrollbars=1,status=0,toolbar=1');
+                	break;
+                }
 			}
             
             function q_boxClose(s2) {
@@ -150,7 +180,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('eipform_s.aspx', q_name + '_s', "550px", "400px", q_getMsg("popSeek"));
+                q_box('eipform_s.aspx', q_name + '_s', "500px", "250px", q_getMsg("popSeek"));
             }
             function btnIns() {
                 _btnIns();
@@ -212,8 +242,10 @@
                 _readonly(t_para, empty);
                 if(t_para){
                 	$('#btnFiles').attr('disabled','disabled');
+                	$('#btnViewdoc').removeAttr('disabled');
                 }else{
                 	$('#btnFiles').removeAttr('disabled');
+                	$('#btnViewdoc').attr('disabled','disabled');
                 }
                 ShowDownlbl();
             }
@@ -405,7 +437,7 @@
                 </table>
             </div>
             <div class="dbbm">
-                <table class="tbbm"  id="tbbm">
+                <table class="tbbm" id="tbbm">
                     <tr style="height:1px;">
                         <td> </td>
                         <td> </td>
@@ -415,9 +447,11 @@
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblFormname" class="lbl"> </a></td>
-                        <td><input id="txtFormname"  type="text" class="txt c1"/>
-                        	<input id="txtNoa"  type="hidden" class="txt c1"/>
+                        <td>
+                        	<input id="txtFormname" type="text" class="txt c1"/>
+                        	<input id="txtNoa" type="hidden" class="txt c1"/>
                         </td>
+						<td><input id="btnViewdoc" type="button" value="檢視"></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblMemo" class="lbl"> </a></td>

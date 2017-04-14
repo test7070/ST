@@ -441,7 +441,7 @@
                             
                             var t_filehtml='';
                             if(this.data[n+i]['filename'].length>0){
-                            	t_filehtml="<a id='lblDownload_"+n+"' class='lbl btn signdownload'>下載</a>";
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signdownload'>下載</a>";
                             }
                             $('#eiprunssign_file' + i).html(t_filehtml);
                             $('#eiprunssign_filename' + i).text(this.data[n+i]['filename']);
@@ -631,7 +631,7 @@
                             
                             var t_filehtml='';
                             if(this.data[n+i]['filename'].length>0){
-                            	t_filehtml="<a id='lblDownload_"+n+"' class='lbl btn signtdownload'>下載</a>";
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signtdownload'>下載</a>";
                             }
                             $('#eipruntsign_file' + i).html(t_filehtml);
                             $('#eipruntsign_filename' + i).text(this.data[n+i]['filename']);
@@ -884,7 +884,7 @@
                             
                             var t_filehtml='';
                             if(this.data[n+i]['filename'].length>0){
-                            	t_filehtml="<a id='lblDownload_"+n+"' class='lbl btn signdownload'>下載</a>";
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signdownload'>下載</a>";
                             }
                             $('#eiprunusign_file' + i).html(t_filehtml);
                             $('#eiprunusign_filename' + i).text(this.data[n+i]['filename']);
@@ -1064,7 +1064,7 @@
                             $('#eipflowsign_noa' + i).text(this.data[n+i]['noa']);
                             var t_filehtml='';
                             if(this.data[n+i]['filename'].length>0){
-                            	t_filehtml="<a id='lblDownload_"+n+"' class='lbl btn signflowdownload'>下載</a>";
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signflowdownload'>下載</a>";
                             }
                             $('#eipflowsign_file' + i).html(t_filehtml);
                             $('#eipflowsign_filename' + i).text(this.data[n+i]['filename']);
@@ -1218,7 +1218,7 @@
                             $('#eipform_memo' + i).text(this.data[n+i]['memo']);
                             var t_filehtml='';
                             if(this.data[n+i]['files'].length>0){
-                            	t_filehtml="<a id='lblDownload_"+n+"' class='lbl btn signformdownload'>下載</a>";
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signformdownload'>預覽</a>";
                             }
                             $('#eipform_file' + i).html(t_filehtml);
                             $('#eipform_files' + i).text(this.data[n+i]['files']);
@@ -1234,8 +1234,16 @@
                     $('.signformdownload').click(function(e) {
                         var n=$(this).attr('id').replace('lblDownload_','')
                         
-						if($('#eipform_files'+n).text().length>0)
-							$('#xdownload').attr('src','eipform_download.aspx?FileName='+$('#eipform_files'+n).text()+'&TempName='+$('#eipform_files'+n).text());
+						if($('#eipform_files'+n).text().length>0){
+							var extindex = $('#eipform_files'+n).text().lastIndexOf('.');
+							if(extindex>=0){
+								ext = $('#eipform_files'+n).text().substring(extindex,$('#eipform_files'+n).text().length);
+							}
+							if(ext.toUpperCase() == '.DOC' || ext.toUpperCase() == '.DOCX')
+								q_func( 'eip.wordConvert.files_'+n , $('#eipform_files'+n).text()+',htm,eipform,'+$('#txtNoa').val())
+							else
+								$('#xdownload').attr('src','eipform_download.aspx?FileName='+$('#eipform_files'+n).text()+'&TempName='+$('#eipform_files'+n).text());
+						}
 							
 					});
                 }
@@ -1603,6 +1611,18 @@
 						$('#signdetail_div').css('left',$('#eiprunusign_noa'+n).offset().left+150);
 						$('#signdetail_div').show();
 					}
+                }
+                if(t_func.indexOf('eip.wordConvert.files_')>-1){
+                	var n=replaceAll(t_func,'eip.wordConvert.files_','');
+                	var extindex = $('#eipform_files'+n).text().lastIndexOf('.');
+					if(extindex>=0){
+						ext = $('#eipform_files'+n).text().substring(extindex,$('#eipform_files'+n).text().length);
+					}
+					
+					var filename=replaceAll($('#eipform_files'+n).text(),ext,'');
+					var s1 = location.href;
+					var t_path = (s1.substr(7, 5) == 'local' ? xlsPath : s1.substr(0, s1.indexOf('/', 10)) + '/'+q_db+'z/');
+					window.open(t_path + "eipform_read.aspx?files="+filename, "_blank", 'directories=no,location=no,menubar=no,resizable=1,scrollbars=1,status=0,toolbar=1');
                 }
 			}
 			
