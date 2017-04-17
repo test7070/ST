@@ -81,6 +81,10 @@
 						}
 						$('#txtSno_' + n).val(t_sssno);
 						$('#txtNamea_' + n).val(t_namea);
+						
+						if(b_ret.length>1 && $('#cmbAct_'+n).val()=='簽核'){
+							$('#cmbAct_'+n).val('會簽');
+						}
                         
                         break;
                     case q_name + '_s':
@@ -221,6 +225,23 @@
                 if (t_err.length > 0) {
                     alert(t_err);
                     Unlock();
+                    return;
+                }
+                
+                //檢查簽核是否多人
+                var ismore=false;
+                for (var i = 0; i < q_bbsCount; i++) {
+                	if($('#cmbAct_'+i).val()=='簽核'){
+                		var t_sssno=$('#txtSno_'+i).val().split(';');
+                		if(t_sssno.length>1){
+                			ismore=true;
+                			alert('簽核不可多個核准人!!')
+                			break;
+                		}
+                	}
+                }
+                if(ismore){
+                	Unlock();
                     return;
                 }
 

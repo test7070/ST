@@ -45,11 +45,19 @@
 						type : '8',
 						name : 'xout',//[7]
 						value :('1@含已離職').split(',')
+					},{
+						type : '5',
+						name : 'xorder',//[8]
+						value :('sss@員工編號,part@部門').split(',')
 					}]
 				});
 				q_popAssign();
 				$('#txtXyear').mask(r_pic);
 				$('#txtXyear').val(q_date().substr(0,r_len));
+				
+				$('#Xout').css('width','300px');
+				$('#chkXout').css('width','200px');
+				$('#chkXout span').css('width','150px');
 			}
 
 			function q_boxClose(s2) {

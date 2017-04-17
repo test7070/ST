@@ -26,6 +26,20 @@ BEGIN
    drop table #bbs
 END
 
+--避免上次不正常關閉 先將 cursor 關閉
+BEGIN TRY
+	close cursor_table
+	deallocate cursor_table
+END TRY
+BEGIN CATCH
+END CATCH
+BEGIN TRY
+	close cursor_table2
+	deallocate cursor_table2
+END TRY
+BEGIN CATCH
+END CATCH
+
 --拆解傳入的資料
 create table #tmp(
 	datea nvarchar(100),
@@ -42,7 +56,7 @@ select SUBSTRING(a.a,3,8)datea,SUBSTRING(a.a,11,4) timea,b.noa,b.namea
 from ztmpxls a left join sss b on SUBSTRING(a.a,17,10)=b.barcode
 where a.a!='' and b.noa is not null
 
-delete #tmp where not(wtype='1A' or wtype='2A')
+--delete #tmp where not(wtype='1A' or wtype='2A')
 
 update #tmp
 set datea=dbo.AD2ChineseEraName(datea),timea=left(timea,2)+':'+RIGHT(timea,2)
@@ -190,7 +204,7 @@ begin
 	--------------------------------------------------------------------------------------
 	
 	insert #bbs	
-	select  @datea,ROW_NUMBER() over (order by a.noa)+@count,noa,namea,'','',0,0,0,''
+	select  @datea,ROW_NUMBER() over (order by a.noa)+@count,noa,namea,'','',0,0,0,'','1'
 	from sss a where (isnull(outdate,'')='' or isnull(outdate,'')>@datea)
 	and not exists(select * from #bbs where sssno=a.noa) order by noa
 	

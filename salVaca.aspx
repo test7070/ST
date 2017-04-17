@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -107,6 +107,11 @@
 								/*as[i]._year = dec($('#txtNoa').val())-dec(as[i].indate.substr(0, r_len))+
 								((12-dec(as[i].indate.substr(r_len+1, 2))) /12);*/
 								
+								if (q_getPara('sys.project').toUpperCase()=='VU'){ //106/04/01 94年有結算 特休從94年起算
+									if(as[i].indate<'2005/01/01'){
+										as[i].indate='2005/01/01';
+									}
+								}
 								as[i]._date = dec($('#txtNoa').val())-dec(as[i].indate.substr(0, r_len))
 								+((12-dec(as[i].indate.substr(r_len+1, 2))) /12)
 								+((31-dec(as[i].indate.substr(r_lenm+1, 2))+1)/31/12);
@@ -536,12 +541,12 @@
 	<body>
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' >
-			<div class="dview" id="dview" style="float: left;  width:32%;"  >
-				<table class="tview" id="tview"   border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
+			<div class="dview" id="dview" style="float: left;  width:32%;" >
+				<table class="tview" id="tview"  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
-						<td align="center" style="width:5%"><a id='vewChk'></a></td>
-						<td align="center" style="width:20%"><a id='vewNoa'></a></td>
-						<td align="center" style="width:25%"><a id='vewTotal'></a></td>
+						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
+						<td align="center" style="width:20%"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:25%"><a id='vewTotal'> </a></td>
 
 					</tr>
 					<tr>
@@ -555,33 +560,27 @@
 				</table>
 			</div>
 			<div class='dbbm' style="width: 68%;float:left">
-				<table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='0'>
+				<table class="tbbm" id="tbbm"  border="0" cellpadding='2'  cellspacing='0'>
 					<tr>
-						<td class='td1'><span> </span><a id="lblNoa" class="lbl"></a></td>
-						<td class="td2">
-						<input id="txtNoa"  type="text" class="txt c1"/>
-						</td>
-						<td class='td3'>
-						<input id="btnIndata" type="button" />
-						</td>
-						<td class="td4"></td>
+						<td class='td1'><span> </span><a id="lblNoa" class="lbl"> </a></td>
+						<td class="td2"><input id="txtNoa" type="text" class="txt c1"/></td>
+						<td class='td3'><input id="btnIndata" type="button" /></td>
+						<td class="td4"> </td>
 					</tr>
 					<tr>
-						<td class='td1'><span> </span><a id="lblTotal" class="lbl"></a></td>
-						<td class="td2">
-						<input id="txtTotal"  type="text" class="txt num c1"/>
-						</td>
-						<td class='td3'></td>
-						<td class="td4"></td>
+						<td class='td1'><span> </span><a id="lblTotal" class="lbl"> </a></td>
+						<td class="td2"><input id="txtTotal" type="text" class="txt num c1"/></td>
+						<td class='td3'> </td>
+						<td class="td4"> </td>
 					</tr>
 				</table>
 			</div>
 		</div>
 		<div class='dbbs' style="width: 1700px;">
-			<table id="tbbs" class='tbbs'  border="1"  cellpadding='2' cellspacing='1' >
+			<table id="tbbs" class='tbbs'  border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td align="center">
-					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
+					<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
 					</td>
 					<td align="center" class="td1" style="width: 110px;"><a id='lblSssno'> </a></td>
 					<td align="center" class="td1" style="width: 100px;"><a id='lblNamea'> </a></td>
@@ -599,7 +598,7 @@
 					<td align="center"><a id='lblMemo'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
-					<td style="width:1%;"><input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" /></td>
+					<td style="width:1%;"><input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" /></td>
 					<td >
 						<input class="txt c2" id="txtSssno.*" type="text" />
 						<input id="btnSss.*" type="button" value="." style="width: 1%;float: right;"/>
