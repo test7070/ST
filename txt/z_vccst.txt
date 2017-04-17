@@ -6,10 +6,10 @@ z_vccpk2:--z_vccpk2
 	declare @t_bcust nvarchar(10)= case when '#non'=[8] then '' else [8] end
 	declare @t_ecust nvarchar(10)= case when '#non'=[9] then char(255) else [9] end
 	declare @t_stype nvarchar(20)= case when '#non'=[10] then '' else [10] end
-	declare @t_bwidth float= case when '#non'=[15] then 0.000 else cast([15] as float) end
-	declare @t_ewidth float= case when '#non'=[16] then 999.990 else cast([16] as float) end
-	declare @t_bdime float= case when '#non'=[17] then 0.00 else cast([17] as float)end
-	declare @t_edime float= case when '#non'=[18] then 9999.99 else cast([18] as float) end
+	declare @t_bdime float= case when '#non'=[15] then 0.00 else cast([15] as float)end
+	declare @t_edime float= case when '#non'=[16] then 9999.99 else cast([16] as float) end
+	declare @t_bwidth float= case when '#non'=[17] then 0.000 else cast([17] as float) end
+	declare @t_ewidth float= case when '#non'=[18] then 999.990 else cast([18] as float) end
 	declare @t_blengthb float= case when '#non'=[19] then 0.0 else cast([19] as float) end
 	declare @t_elengthb float= case when '#non'=[20] then 99999.9 else cast([20] as float) end
 	---------------------------------------------------------------------------------------------- 
