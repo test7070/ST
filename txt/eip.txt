@@ -215,7 +215,8 @@ end
 close cursor_table
 deallocate cursor_table
 
-select * from #tmp order by sssno,typea,datea,noa
+select * from #tmp a outer apply (select count(*) filetnum from eipflowt where noa=a.noa)b
+order by sssno,typea,datea,noa
 
 IF OBJECT_ID('tempdb..#tmp')is not null
 BEGIN
@@ -233,6 +234,10 @@ declare @userno nvarchar(max) = [4]
 declare @namea nvarchar(max) = [5]
 declare @dateatime nvarchar(max) = [6]
 declare @t_err nvarchar(max) = ''
+
+declare @addfilename nvarchar(max) = case when '#non'=[7] then '' else [7] end
+declare @addfiles nvarchar(max) = case when '#non'=[8] then '' else [8] end
+declare @addmemo nvarchar(max) = case when '#non'=[9] then '' else [9] end
 	
 IF OBJECT_ID('tempdb..#tmp')is not null
 BEGIN
@@ -568,6 +573,17 @@ begin
 		
 		end
 	end
+end
+
+declare @tnoq nvarchar(max) = ''
+
+if(len(@addfilename)>0)
+begin
+	set @tnoq=isnull((select noq from eipflowt where noa=@noa),'000')
+	set @tnoq=right('000'+cast(cast(@tnoq as int)+1 as nvarchar(50)),3)
+
+	insert eipflowt (noa,noq,filesname,files,memo,upuserno,upname,seq)
+	select @noa,@tnoq,@addfilename,@addfiles,@addmemo,@userno,@namea,@noq
 end
 
 select @t_err t_err
@@ -937,6 +953,10 @@ declare @t_err nvarchar(max) = ''
 declare @addsno nvarchar(max) = [7]
 declare @addsname nvarchar(max) = case when '#non'=[8] then '' else [8] end
 declare @addisreturn nvarchar(max) = [9]
+
+declare @addfilename nvarchar(max) = case when '#non'=[10] then '' else [10] end
+declare @addfiles nvarchar(max) = case when '#non'=[11] then '' else [11] end
+declare @addmemo nvarchar(max) = case when '#non'=[12] then '' else [12] end
 	
 IF OBJECT_ID('tempdb..#tmp')is not null
 BEGIN
@@ -1245,6 +1265,17 @@ begin
 		set status='簽核中並加簽給'+@addsname+case when len(@memo)>0 then ' 原因:'+@memo else '' end
 		where noa=@noa
 	end
+end
+
+declare @tnoq nvarchar(max) = ''
+
+if(len(@addfilename)>0)
+begin
+	set @tnoq=isnull((select noq from eipflowt where noa=@noa),'000')
+	set @tnoq=right('000'+cast(cast(@tnoq as int)+1 as nvarchar(50)),3)
+
+	insert eipflowt (noa,noq,filesname,files,memo,upuserno,upname,seq)
+	select @noa,@tnoq,@addfilename,@addfiles,@addmemo,@userno,@namea,@noq
 end
 
 select @t_err t_err

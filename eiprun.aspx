@@ -27,42 +27,42 @@
                 curCaddr : null,
                 load : function(){
                     var string = "<table id='eiprunsign_table'>";
-                    string+='<tr id="eiprunsign_header">';
-                    string+='<td id="eiprunsign_hide" align="center" style="width:55px;display:none;"></td>';
-                    string+='<td id="eiprunsign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
-                    string+='<td id="eiprunsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
-                    string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:120px;">簽核單號</td>';
-                    string+='<td id="eiprunsign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
-                    string+='<td id="eiprunsign_astatus" onclick="eiprunsign.sort(\'astatus\',false)" title="狀態" align="center" style="width:200px;">簽核狀態</td>';
-                    string+='<td id="eiprunsign_schedule" title="進度" align="center" style="width:50px;">進度</td>';
-                    string+='<td id="eiprunsign_bnamea" onclick="eiprunsign.sort(\'astatus\',false)" title="等待核可人" align="center" style="width:300px;">等待核可人</td>';
-                    string+='<td id="eiprunsign_act" onclick="eiprunsign.sort(\'astatus\',false)" title="需核可動作" align="center" style="width:50px;">需核可動作</td>';
-                    string+='</tr>';
+                   string+='<tr id="eiprunsign_header">';
+                   string+='<td id="eiprunsign_hide" align="center" style="width:55px;display:none;"></td>';
+                   string+='<td id="eiprunsign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
+                   string+='<td id="eiprunsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                   string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:120px;">簽核單號</td>';
+                   string+='<td id="eiprunsign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                   string+='<td id="eiprunsign_astatus" onclick="eiprunsign.sort(\'astatus\',false)" title="狀態" align="center" style="width:200px;">簽核狀態</td>';
+                   string+='<td id="eiprunsign_schedule" title="進度" align="center" style="width:50px;">進度</td>';
+                   string+='<td id="eiprunsign_bnamea" onclick="eiprunsign.sort(\'astatus\',false)" title="等待核可人" align="center" style="width:300px;">等待核可人</td>';
+                   string+='<td id="eiprunsign_act" onclick="eiprunsign.sort(\'astatus\',false)" title="需核可動作" align="center" style="width:50px;">需核可動作</td>';
+                   string+='</tr>';
                     
                     var t_color = ['white','aliceblue'];
                     for(var i=0;i<this.tbCount;i++){
-                        string+='<tr id="eiprunsign_tr'+i+'">';
-                        string+='<td id="eiprunsign_hide'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"><input class="eiprunsign_hide" id="btnEipsignHide_'+i+'" type="button" value="隱藏" style=" width: 50px;" /></td>';
-                        string+='<td id="eiprunsign_restart'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"><input class="eiprunsign_restart" id="btnEipsignRestart_'+i+'" type="button" value="重送" style=" width: 50px;" /></td>';
-                        string+='<td id="eiprunsign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunsign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunsign_noa'+i+'" class="eiprunsignnoa" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunsign_astatus'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunsign_schedule'+i+'" class="eiprunsignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunsign_bnamea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunsign_act'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='</tr>';
+                       string+='<tr id="eiprunsign_tr'+i+'">';
+                       string+='<td id="eiprunsign_hide'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"><input class="eiprunsign_hide" id="btnEipsignHide_'+i+'" type="button" value="隱藏" style=" width: 50px;" /></td>';
+                       string+='<td id="eiprunsign_restart'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"><input class="eiprunsign_restart" id="btnEipsignRestart_'+i+'" type="button" value="重送" style=" width: 50px;" /></td>';
+                       string+='<td id="eiprunsign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunsign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunsign_noa'+i+'" class="eiprunsignnoa" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunsign_astatus'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunsign_schedule'+i+'" class="eiprunsignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunsign_bnamea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunsign_act'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='</tr>';
                     }
-                    string+='</table>';
+                   string+='</table>';
                     
                     $('#eiprun').append(string);
-                    string='';
-                    string+='<input id="btneiprunsign_previous" onclick="eiprunsign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
-                    string+='<input id="btneiprunsign_next" onclick="eiprunsign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
-                    string+='<input id="textEiprunCurPage" onchange="eiprunsign.page(parseInt($(this).val()))" type="text" readonly="readonly"  style="float:left;width:100px;text-align: right;"/>';
-                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
-                    string+='<input id="textEiprunTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                   string='';
+                   string+='<input id="btneiprunsign_previous" onclick="eiprunsign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                   string+='<input id="btneiprunsign_next" onclick="eiprunsign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                   string+='<input id="textEiprunCurPage" onchange="eiprunsign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                   string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                   string+='<input id="textEiprunTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
                     $('#eiprun_control').append(string);
                 },
                 init : function(obj) {
@@ -125,7 +125,7 @@
                     this.sort('noa', false);
                     Unlock();
                 },
-                sort : function(index, isFloat) {
+               sort : function(index, isFloat) {
                     this.curIndex = index;
 
                     if (isFloat) {
@@ -232,46 +232,46 @@
                 curCaddr : null,
                 load : function(){
                     var string = "<table id='eiprunssign_table'>";
-                    string+='<tr id="eiprunssign_header">';
-                    string+='<td id="eiprunssign_signok" title="核準" align="center" style="width:55px;">核準</td>';
-                    string+='<td id="eiprunssign_signok" title="加簽" align="center" style="width:55px;">加簽</td>';
-                    string+='<td id="eiprunssign_signbreak" title="退回" align="center" style="width:55px;">退回</td>';
-                    string+='<td id="eiprunssign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
-                    string+='<td id="eiprunssign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
-                    string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:150px;">簽核單號</td>';
-                    string+='<td id="eiprunssign_namea" onclick="eiprunsign.sort(\'namea\',false)" title="發文者" align="center" style="width:100px; ">發文者</td>';
-                    string+='<td id="eiprunssign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
-                    string+='<td id="eiprunssign_file" title="附件" align="center" style="width:50px; ">附件</td>';
-                    string+='<td id="eiprunssign_schedule" title="進度" align="center" style="width:50px; ">進度</td>';
-                    string+='</tr>';
+                   string+='<tr id="eiprunssign_header">';
+                   string+='<td id="eiprunssign_signok" title="核準" align="center" style="width:55px;">核準</td>';
+                   string+='<td id="eiprunssign_signok" title="加簽" align="center" style="width:55px;">加簽</td>';
+                   string+='<td id="eiprunssign_signbreak" title="退回" align="center" style="width:55px;">退回</td>';
+                   string+='<td id="eiprunssign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
+                   string+='<td id="eiprunssign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                   string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:150px;">簽核單號</td>';
+                   string+='<td id="eiprunssign_namea" onclick="eiprunsign.sort(\'namea\',false)" title="發文者" align="center" style="width:100px; ">發文者</td>';
+                   string+='<td id="eiprunssign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                   string+='<td id="eiprunssign_file" title="附件" align="center" style="width:50px; ">附件</td>';
+                   string+='<td id="eiprunssign_schedule" title="進度" align="center" style="width:50px; ">進度</td>';
+                   string+='</tr>';
                     
                     var t_color = ['white','aliceblue'];
                     for(var i=0;i<this.tbCount;i++){
-                        string+='<tr id="eiprunssign_tr'+i+'">';
-                        string+='<td id="eiprunssign_signok'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunsign_ok" id="btnEipsignOk_'+i+'" type="button" value="核準" style=" width: 50px;" /></td>';
-                        string+='<td id="eiprunssign_signadd'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunsign_add" id="btnEipsignAdd_'+i+'" type="button" value="加簽" style=" width: 50px;" /></td>';
-                        string+='<td id="eiprunssign_signbreak'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunsign_break" id="btnEipsignBreak_'+i+'" type="button" value="退回" style=" width: 50px;" /></td>';
-                        string+='<td id="eiprunssign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunssign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunssign_noa'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunssign_noq'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='<td id="eiprunssign_namea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunssign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunssign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunssign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='<td id="eiprunssign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='<td id="eiprunssign_schedule'+i+'" class="eiprunssignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='</tr>';
+                       string+='<tr id="eiprunssign_tr'+i+'">';
+                       string+='<td id="eiprunssign_signok'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunsign_ok" id="btnEipsignOk_'+i+'" type="button" value="核準" style=" width: 50px;" /></td>';
+                       string+='<td id="eiprunssign_signadd'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunsign_add" id="btnEipsignAdd_'+i+'" type="button" value="加簽" style=" width: 50px;" /></td>';
+                       string+='<td id="eiprunssign_signbreak'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunsign_break" id="btnEipsignBreak_'+i+'" type="button" value="退回" style=" width: 50px;" /></td>';
+                       string+='<td id="eiprunssign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunssign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunssign_noa'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunssign_noq'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eiprunssign_namea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunssign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunssign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunssign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eiprunssign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eiprunssign_schedule'+i+'" class="eiprunssignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='</tr>';
                     }
-                    string+='</table>';
+                   string+='</table>';
                     
                     $('#eipruns').append(string);
-                    string='';
-                    string+='<input id="btneiprunssign_previous" onclick="eiprunssign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
-                    string+='<input id="btneiprunssign_next" onclick="eiprunssign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
-                    string+='<input id="textEiprunsCurPage" onchange="eiprunssign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
-                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
-                    string+='<input id="textEiprunsTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                   string='';
+                   string+='<input id="btneiprunssign_previous" onclick="eiprunssign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                   string+='<input id="btneiprunssign_next" onclick="eiprunssign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                   string+='<input id="textEiprunsCurPage" onchange="eiprunssign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                   string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                   string+='<input id="textEiprunsTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
                     $('#eipruns_control').append(string);
                 },
                 init : function(obj) {
@@ -282,18 +282,27 @@
                         if($('#eiprunssign_noa'+n).text()=='' && $('#eiprunssign_noq'+n).text()=='')
 							return;
 						
-						var tmemo=prompt("意見","");
-						if(tmemo===null){
-							tmemo='';
-						}
-						if(tmemo.length==0){
-							tmemo='#non';
-						}
+						$('#issignadd_div').hide();
+						$('#issignok_div').show();
+						$('#issignok_div').css('top',e.pageY);
+						$('#issignok_div').css('left',e.pageX);
+						$('#txtSignnoa').val($('#eiprunssign_noa'+n).text());
+						$('#txtSignnoq').val($('#eiprunssign_noq'+n).text());
+						$('#txtSigntypea').val('核準');
 						
-						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
-						
-						if(confirm("確定要核准【"+$('#eiprunssign_noa'+n).text()+"】簽核?"))
-							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunssign_noa'+n).text()+';'+$('#eiprunssign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+						/*var tmemo=prompt("意見","");
+							if(tmemo===null){
+								tmemo='';
+							}
+							if(tmemo.length==0){
+								tmemo='#non';
+							}
+							
+							var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+							
+							if(confirm("確定要核准【"+$('#eiprunssign_noa'+n).text()+"】簽核?"))
+								q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunssign_noa'+n).text()+';'+$('#eiprunssign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';#non;#non;#non');
+						*/
 					});
 					
 					$('.eiprunsign_break').unbind('click');
@@ -302,7 +311,10 @@
                         
                         if($('#eiprunssign_noa'+n).text()=='' && $('#eiprunssign_noq'+n).text()=='')
 							return;
-							
+						
+						$('#issignadd_div').hide();
+						$('#issignok_div').hide();
+						
 						var tmemo=prompt("退回原因","");
 						if(tmemo===null){
 							tmemo='';
@@ -324,6 +336,7 @@
                         if($('#eiprunssign_noa'+n).text()=='' && $('#eiprunssign_noq'+n).text()=='')
 							return;
 						
+						$('#issignok_div').hide();
 						$('#issignadd_div').show();
 						$('#issignadd_div').css('top',e.pageY);
 						$('#issignadd_div').css('left',e.pageX);
@@ -361,7 +374,7 @@
                     this.sort('noa', false);
                     Unlock();
                 },
-                sort : function(index, isFloat) {
+               sort : function(index, isFloat) {
                     this.curIndex = index;
 
                     if (isFloat) {
@@ -489,40 +502,40 @@
                 curCaddr : null,
                 load : function(){
                     var string = "<table id='eipruntsign_table'>";
-                    string+='<tr id="eipruntsign_header">';
-                    string+='<td id="eipruntsign_signok" title="確認" align="center" style="width:55px;">確認</td>';
-                    string+='<td id="eipruntsign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
-                    string+='<td id="eipruntsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
-                    string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:150px;">簽核單號</td>';
-                    string+='<td id="eipruntsign_namea" onclick="eiprunsign.sort(\'namea\',false)" title="發文者" align="center" style="width:100px; ">發文者</td>';
-                    string+='<td id="eipruntsign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
-                    string+='<td id="eipruntsign_file" title="附件" align="center" style="width:50px; ">附件</td>';
-                    string+='</tr>';
+                   string+='<tr id="eipruntsign_header">';
+                   string+='<td id="eipruntsign_signok" title="確認" align="center" style="width:55px;">確認</td>';
+                   string+='<td id="eipruntsign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
+                   string+='<td id="eipruntsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                   string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:150px;">簽核單號</td>';
+                   string+='<td id="eipruntsign_namea" onclick="eiprunsign.sort(\'namea\',false)" title="發文者" align="center" style="width:100px; ">發文者</td>';
+                   string+='<td id="eipruntsign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                   string+='<td id="eipruntsign_file" title="附件" align="center" style="width:50px; ">附件</td>';
+                   string+='</tr>';
                     
                     var t_color = ['white','aliceblue'];
                     for(var i=0;i<this.tbCount;i++){
-                        string+='<tr id="eipruntsign_tr'+i+'">';
-                        string+='<td id="eipruntsign_signok'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eipruntsign_ok" id="btnEipsigntOk_'+i+'" type="button" value="確認" style=" width: 50px;" /></td>';
-                        string+='<td id="eipruntsign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipruntsign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipruntsign_noa'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipruntsign_noq'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='<td id="eipruntsign_namea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipruntsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipruntsign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipruntsign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='<td id="eipruntsign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='</tr>';
+                       string+='<tr id="eipruntsign_tr'+i+'">';
+                       string+='<td id="eipruntsign_signok'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eipruntsign_ok" id="btnEipsigntOk_'+i+'" type="button" value="確認" style=" width: 50px;" /></td>';
+                       string+='<td id="eipruntsign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipruntsign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipruntsign_noa'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipruntsign_noq'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eipruntsign_namea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipruntsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipruntsign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipruntsign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eipruntsign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='</tr>';
                     }
-                    string+='</table>';
+                   string+='</table>';
                     
                     $('#eiprunt').append(string);
-                    string='';
-                    string+='<input id="btneipruntsign_previous" onclick="eipruntsign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
-                    string+='<input id="btneipruntsign_next" onclick="eipruntsign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
-                    string+='<input id="textEipruntCurPage" onchange="eipruntsign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
-                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
-                    string+='<input id="textEipruntTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                   string='';
+                   string+='<input id="btneipruntsign_previous" onclick="eipruntsign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                   string+='<input id="btneipruntsign_next" onclick="eipruntsign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                   string+='<input id="textEipruntCurPage" onchange="eipruntsign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                   string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                   string+='<input id="textEipruntTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
                     $('#eiprunt_control').append(string);
                 },
                 init : function(obj) {
@@ -537,7 +550,7 @@
 						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
 						
 						if(confirm("已確認過【"+$('#eipruntsign_noa'+n).text()+"】簽核?"))
-							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eipruntsign_noa'+n).text()+';'+$('#eipruntsign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eipruntsign_noa'+n).text()+';'+$('#eipruntsign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';#non;#non;#non');
 					});
 					
                     this.data = new Array();
@@ -553,7 +566,7 @@
                     this.sort('noa', false);
                     Unlock();
                 },
-                sort : function(index, isFloat) {
+               sort : function(index, isFloat) {
                     this.curIndex = index;
 
                     if (isFloat) {
@@ -676,46 +689,46 @@
                 curCaddr : null,
                 load : function(){
                     var string = "<table id='eiprunusign_table'>";
-                    string+='<tr id="eiprunusign_header">';
-                    string+='<td id="eiprunusign_signok" title="完成" align="center" style="width:55px;">完成</td>';
-                    string+='<td id="eiprunusign_signok" title="加簽" align="center" style="width:55px;">加簽</td>';
-                    string+='<td id="eiprunusign_signbreak" title="退回" align="center" style="width:55px;">退回</td>';
-                    string+='<td id="eiprunusign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
-                    string+='<td id="eiprunusign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
-                    string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:150px;">簽核單號</td>';
-                    string+='<td id="eiprunusign_namea" onclick="eiprunsign.sort(\'namea\',false)" title="發文者" align="center" style="width:100px; ">發文者</td>';
-                    string+='<td id="eiprunusign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
-                    string+='<td id="eiprunusign_file" title="附件" align="center" style="width:50px; ">附件</td>';
-                    string+='<td id="eiprunusign_schedule" title="進度" align="center" style="width:50px; ">進度</td>';
-                    string+='</tr>';
+                   string+='<tr id="eiprunusign_header">';
+                   string+='<td id="eiprunusign_signok" title="完成" align="center" style="width:55px;">完成</td>';
+                   string+='<td id="eiprunusign_signok" title="加簽" align="center" style="width:55px;">加簽</td>';
+                   string+='<td id="eiprunusign_signbreak" title="退回" align="center" style="width:55px;">退回</td>';
+                   string+='<td id="eiprunusign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
+                   string+='<td id="eiprunusign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                   string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:150px;">簽核單號</td>';
+                   string+='<td id="eiprunusign_namea" onclick="eiprunsign.sort(\'namea\',false)" title="發文者" align="center" style="width:100px; ">發文者</td>';
+                   string+='<td id="eiprunusign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                   string+='<td id="eiprunusign_file" title="附件" align="center" style="width:50px; ">附件</td>';
+                   string+='<td id="eiprunusign_schedule" title="進度" align="center" style="width:50px; ">進度</td>';
+                   string+='</tr>';
                     
                     var t_color = ['white','aliceblue'];
                     for(var i=0;i<this.tbCount;i++){
-                        string+='<tr id="eiprunusign_tr'+i+'">';
-                        string+='<td id="eiprunusign_signok'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunusign_ok" id="btnEipsignuOk_'+i+'" type="button" value="完成" style=" width: 50px;" /></td>';
-                        string+='<td id="eiprunusign_signadd'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunusign_add" id="btnEipsignuAdd_'+i+'" type="button" value="加簽" style=" width: 50px;" /></td>';
-                        string+='<td id="eiprunusign_signbreak'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunusign_break" id="btnEipsignuBreak_'+i+'" type="button" value="退回" style=" width: 50px;" /></td>';
-                        string+='<td id="eiprunusign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunusign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunusign_noa'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunusign_noq'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='<td id="eiprunusign_namea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunusign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunusign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eiprunusign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='<td id="eiprunusign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='<td id="eiprunusign_schedule'+i+'" class="eiprunusignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='</tr>';
+                       string+='<tr id="eiprunusign_tr'+i+'">';
+                       string+='<td id="eiprunusign_signok'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunusign_ok" id="btnEipsignuOk_'+i+'" type="button" value="完成" style=" width: 50px;" /></td>';
+                       string+='<td id="eiprunusign_signadd'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunusign_add" id="btnEipsignuAdd_'+i+'" type="button" value="加簽" style=" width: 50px;" /></td>';
+                       string+='<td id="eiprunusign_signbreak'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunusign_break" id="btnEipsignuBreak_'+i+'" type="button" value="退回" style=" width: 50px;" /></td>';
+                       string+='<td id="eiprunusign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunusign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunusign_noa'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunusign_noq'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eiprunusign_namea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunusign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunusign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunusign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eiprunusign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eiprunusign_schedule'+i+'" class="eiprunusignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='</tr>';
                     }
-                    string+='</table>';
+                   string+='</table>';
                     
                     $('#eiprunu').append(string);
-                    string='';
-                    string+='<input id="btneiprunusign_previous" onclick="eiprunusign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
-                    string+='<input id="btneiprunusign_next" onclick="eiprunusign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
-                    string+='<input id="textEiprunuCurPage" onchange="eiprunusign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
-                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
-                    string+='<input id="textEiprunuTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                   string='';
+                   string+='<input id="btneiprunusign_previous" onclick="eiprunusign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                   string+='<input id="btneiprunusign_next" onclick="eiprunusign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                   string+='<input id="textEiprunuCurPage" onchange="eiprunusign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                   string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                   string+='<input id="textEiprunuTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
                     $('#eiprunu_control').append(string);
                 },
                 init : function(obj) {
@@ -725,7 +738,16 @@
                         
                         if($('#eiprunusign_noa'+n).text()=='' && $('#eiprunusign_noq'+n).text()=='')
 							return;
-						var tmemo=prompt("意見","");
+						
+						$('#issignadd_div').hide();
+						$('#issignok_div').show();
+						$('#issignok_div').css('top',e.pageY);
+						$('#issignok_div').css('left',e.pageX);
+						$('#txtSignnoa').val($('#eiprunusign_noa'+n).text());
+						$('#txtSignnoq').val($('#eiprunusign_noq'+n).text());
+						$('#txtSigntypea').val('交辦');
+							
+						/*var tmemo=prompt("意見","");
 						if(tmemo===null){
 							tmemo='';
 						}
@@ -736,7 +758,8 @@
 						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
 						
 						if(confirm("是否已處理完【"+$('#eiprunusign_noa'+n).text()+"】簽核?"))
-							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunusign_noa'+n).text()+';'+$('#eiprunusign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunusign_noa'+n).text()+';'+$('#eiprunusign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';#non;#non;#non');
+						*/
 					});
 					
 					$('.eiprunusign_break').unbind('click');
@@ -767,6 +790,7 @@
                         if($('#eiprunusign_noa'+n).text()=='' && $('#eiprunusign_noq'+n).text()=='')
 							return;
 						
+						$('#issignok_div').hide();
 						$('#issignadd_div').show();
 						$('#issignadd_div').css('top',e.pageY);
 						$('#issignadd_div').css('left',e.pageX);
@@ -804,7 +828,7 @@
                     this.sort('noa', false);
                     Unlock();
                 },
-                sort : function(index, isFloat) {
+               sort : function(index, isFloat) {
                     this.curIndex = index;
 
                     if (isFloat) {
@@ -932,35 +956,35 @@
                 curCaddr : null,
                 load : function(){
                     var string = "<table id='eipflowsign_table'>";
-                    string+='<tr id="eipflowsign_header">';
-                    string+='<td id="eipflowsign_datea" onclick="eipflowsign.sort(\'datea\',false)" title="建檔日期" align="center" style="width:100px; ">建檔日期</td>';
-                    string+='<td id="eipflowsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
-                    string+='<td id="eipflowsign_noa" onclick="eipflowsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:120px;">簽核單號</td>';
-                    string+='<td id="eipflowsign_memo" onclick="eipflowsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
-                    string+='<td id="eipflowsign_file" title="附件" align="center" style="width:50px; ">附件</td>';
-                    string+='</tr>';
+                   string+='<tr id="eipflowsign_header">';
+                   string+='<td id="eipflowsign_datea" onclick="eipflowsign.sort(\'datea\',false)" title="建檔日期" align="center" style="width:100px; ">建檔日期</td>';
+                   string+='<td id="eipflowsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                   string+='<td id="eipflowsign_noa" onclick="eipflowsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:120px;">簽核單號</td>';
+                   string+='<td id="eipflowsign_memo" onclick="eipflowsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                   string+='<td id="eipflowsign_file" title="附件" align="center" style="width:50px; ">附件</td>';
+                   string+='</tr>';
                     
                     var t_color = ['white','aliceblue'];
                     for(var i=0;i<this.tbCount;i++){
-                        string+='<tr id="eipflowsign_tr'+i+'">';
-                        string+='<td id="eipflowsign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipflowsign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipflowsign_noa'+i+'" class="eipflowsignnoa" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipflowsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipflowsign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipflowsign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='<td id="eipflowsign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='</tr>';
+                       string+='<tr id="eipflowsign_tr'+i+'">';
+                       string+='<td id="eipflowsign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipflowsign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipflowsign_noa'+i+'" class="eipflowsignnoa" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipflowsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipflowsign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipflowsign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eipflowsign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='</tr>';
                     }
-                    string+='</table>';
+                   string+='</table>';
                     
                     $('#eipflow').append(string);
-                    string='';
-                    string+='<input id="btneipflowsign_previous" onclick="eipflowsign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
-                    string+='<input id="btneipflowsign_next" onclick="eipflowsign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
-                    string+='<input id="textEipflowCurPage" onchange="eipflowsign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
-                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
-                    string+='<input id="textEipflowTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                   string='';
+                   string+='<input id="btneipflowsign_previous" onclick="eipflowsign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                   string+='<input id="btneipflowsign_next" onclick="eipflowsign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                   string+='<input id="textEipflowCurPage" onchange="eipflowsign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                   string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                   string+='<input id="textEipflowTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
                     $('#eipflow_control').append(string);
                 },
                 init : function(obj) {
@@ -988,7 +1012,7 @@
                     this.sort('noa', false);
                     Unlock();
                 },
-                sort : function(index, isFloat) {
+               sort : function(index, isFloat) {
                     this.curIndex = index;
 
                     if (isFloat) {
@@ -1103,30 +1127,30 @@
                 curCaddr : null,
                 load : function(){
                     var string = "<table id='eipform_table'>";
-                    string+='<tr id="eipform_header">';
-                    string+='<td id="eipform_formname" onclick="eipform.sort(\'formname\',false)" title="表單名稱" align="center" style="width:200px; ">表單名稱</td>';
-                    string+='<td id="eipform_memo" onclick="eipform.sort(\'memo\',false)" title="備註" align="center" style="width:350px; ">備註</td>';
-                    string+='<td id="eipform_file" title="附件" align="center" style="width:50px; ">預覽</td>';
-                    string+='</tr>';
+                   string+='<tr id="eipform_header">';
+                   string+='<td id="eipform_formname" onclick="eipform.sort(\'formname\',false)" title="表單名稱" align="center" style="width:200px; ">表單名稱</td>';
+                   string+='<td id="eipform_memo" onclick="eipform.sort(\'memo\',false)" title="備註" align="center" style="width:350px; ">備註</td>';
+                   string+='<td id="eipform_file" title="附件" align="center" style="width:50px; ">預覽</td>';
+                   string+='</tr>';
                     
                     var t_color = ['white','aliceblue'];
                     for(var i=0;i<this.tbCount;i++){
-                        string+='<tr id="eipform_tr'+i+'">';
-                        string+='<td id="eipform_formname'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipform_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipform_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
-                        string+='<td id="eipform_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
-                        string+='</tr>';
+                       string+='<tr id="eipform_tr'+i+'">';
+                       string+='<td id="eipform_formname'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipform_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipform_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eipform_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='</tr>';
                     }
-                    string+='</table>';
+                   string+='</table>';
                     
                     $('#eipform').append(string);
-                    string='';
-                    string+='<input id="btneipform_previous" onclick="eipform.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
-                    string+='<input id="btneipform_next" onclick="eipform.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
-                    string+='<input id="textEipformCurPage" onchange="eipform.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
-                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
-                    string+='<input id="textEipformTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                   string='';
+                   string+='<input id="btneipform_previous" onclick="eipform.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                   string+='<input id="btneipform_next" onclick="eipform.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                   string+='<input id="textEipformCurPage" onchange="eipform.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                   string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                   string+='<input id="textEipformTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
                     $('#eipform_control').append(string);
                 },
                 init : function(obj) {
@@ -1143,7 +1167,7 @@
                     this.sort('noa', false);
                     Unlock();
                 },
-                sort : function(index, isFloat) {
+               sort : function(index, isFloat) {
                     this.curIndex = index;
 
                     if (isFloat) {
@@ -1359,8 +1383,150 @@
 					+t_bdate+';'+t_edate+';'+t_noa+';'+t_enda+';'+t_sssno+';'+t_important);
 				});
 				
+				$('#btnSignok').click(function() {
+					if(!emp($('#txtSignnoa').val()) && !emp($('#txtSignnoq').val())){
+						var file = $('#btnSignflie')[0].files[0];
+						var filename='#non';
+						var files='#non';
+						var filememo=!emp($('#txtSignfilememo').val())?$('#txtSignfilememo').val():'#non';
+						var tmemo=$('#txtSignmemo').val();
+						if(tmemo.length==0){
+							tmemo='#non';
+						}
+						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+						
+						if($('#txtSigntypea').val()=='核準'){
+							if(confirm("確定要核准【"+$('#txtSignnoa').val()+"】簽核?")){
+								if(file){
+									Lock(1);
+									var ext = '';
+									var extindex = file.name.lastIndexOf('.');
+									if(extindex>=0){
+										ext = file.name.substring(extindex,file.name.length);
+									}
+									filename=file.name;
+									files=file.name+'_'+Date.now().toString()+ext;
+								
+									fr = new FileReader();
+									fr.fileName = files;
+								    fr.readAsDataURL(file);
+								    fr.onprogress = function(e){
+										if ( e.lengthComputable ) { 
+											var per = Math.round( (e.loaded * 100) / e.total) ; 
+											$('#FileList').children().last().find('progress').eq(0).attr('value',per);
+										}; 
+									}
+									fr.onloadstart = function(e){
+										$('#FileList').append('<div styly="width:100%;"><progress id="progress" max="100" value="0" ></progress><progress id="progress" max="100" value="0" ></progress><a>'+fr.fileName+'</a></div>');
+									}
+									fr.onloadend = function(e){
+										$('#FileList').children().last().find('progress').eq(0).attr('value',100);
+										console.log(fr.fileName+':'+fr.result.length);
+										var oReq = new XMLHttpRequest();
+										oReq.upload.addEventListener("progress",function(e) {
+											if (e.lengthComputable) {
+												percentComplete = Math.round((e.loaded / e.total) * 100,0);
+												$('#FileList').children().last().find('progress').eq(1).attr('value',percentComplete);
+											}
+										}, false);
+										oReq.upload.addEventListener("load",function(e) {
+											Unlock(1);
+										}, false);
+										oReq.upload.addEventListener("error",function(e) {
+											alert("資料上傳發生錯誤!");
+										}, false);
+											
+										oReq.timeout = 360000;
+										oReq.ontimeout = function () { alert("Timed out!!!"); }
+										oReq.open("POST", 'eipflow_upload.aspx', true);
+										oReq.setRequestHeader("Content-type", "text/plain");
+										oReq.setRequestHeader("FileName", escape(fr.fileName));
+										oReq.send(fr.result);//oReq.send(e.target.result);
+									};
+									Unlock(1);
+								}
+								q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#txtSignnoa').val()+';'+$('#txtSignnoq').val()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';'+filename+';'+files+';'+filememo);
+							}
+						}
+						if($('#txtSigntypea').val()=='交辦'){
+							if(confirm("是否已處理完【"+$('#txtSignnoa').val()+"】簽核?")){
+								if(file){
+									Lock(1);
+									var ext = '';
+									var extindex = file.name.lastIndexOf('.');
+									if(extindex>=0){
+										ext = file.name.substring(extindex,file.name.length);
+									}
+									filename=file.name;
+									files=file.name+'_'+Date.now().toString()+ext;
+								
+									fr = new FileReader();
+									fr.fileName = files;
+								    fr.readAsDataURL(file);
+								    fr.onprogress = function(e){
+										if ( e.lengthComputable ) { 
+											var per = Math.round( (e.loaded * 100) / e.total) ; 
+											$('#FileList').children().last().find('progress').eq(0).attr('value',per);
+										}; 
+									}
+									fr.onloadstart = function(e){
+										$('#FileList').append('<div styly="width:100%;"><progress id="progress" max="100" value="0" ></progress><progress id="progress" max="100" value="0" ></progress><a>'+fr.fileName+'</a></div>');
+									}
+									fr.onloadend = function(e){
+										$('#FileList').children().last().find('progress').eq(0).attr('value',100);
+										console.log(fr.fileName+':'+fr.result.length);
+										var oReq = new XMLHttpRequest();
+										oReq.upload.addEventListener("progress",function(e) {
+											if (e.lengthComputable) {
+												percentComplete = Math.round((e.loaded / e.total) * 100,0);
+												$('#FileList').children().last().find('progress').eq(1).attr('value',percentComplete);
+											}
+										}, false);
+										oReq.upload.addEventListener("load",function(e) {
+											Unlock(1);
+										}, false);
+										oReq.upload.addEventListener("error",function(e) {
+											alert("資料上傳發生錯誤!");
+										}, false);
+											
+										oReq.timeout = 360000;
+										oReq.ontimeout = function () { alert("Timed out!!!"); }
+										oReq.open("POST", 'eipflow_upload.aspx', true);
+										oReq.setRequestHeader("Content-type", "text/plain");
+										oReq.setRequestHeader("FileName", escape(fr.fileName));
+										oReq.send(fr.result);//oReq.send(e.target.result);
+									};
+									Unlock(1);
+								}
+								q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#txtSignnoa').val()+';'+$('#txtSignnoq').val()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';'+filename+';'+files+';'+filememo);
+							}
+						}
+						
+						$('#txtSignmemo').val('');
+						$('#txtSignnoa').val('');
+						$('#txtSignnoq').val('');
+						$('#btnSignflie').val('');
+						$('#txtSignfilememo').val('');
+						$('#txtSigntypea').val('');
+					}
+				});
+				
+				$('#btnSignclose').click(function() {
+					$('#txtSignmemo').val('');
+					$('#txtSignnoa').val('');
+					$('#txtSignnoq').val('');
+					$('#btnSignflie').val('');
+					$('#txtSignfilememo').val('');
+					$('#txtSigntypea').val('');
+					$('#issignok_div').hide();
+				});
+				
 				$('#btnAddok').click(function() {
 					if(!emp($('#txtAddnoa').val()) && !emp($('#txtAddnoq').val())){
+						var file = $('#btnAddflie')[0].files[0];
+						var filename='#non';
+						var files='#non';
+						var filememo=!emp($('#txtAddfilememo').val())?$('#txtAddfilememo').val():'#non';
 						if(!emp($('#txtAddsno').val())){
 							var tmemo=$('#txtAddmemo').val();
 							var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
@@ -1371,13 +1537,66 @@
 							if(tmemo.length==0)
 								var tmemo='#non';
 								
-							if(confirm("確定要核准【"+$('#txtAddnoa').val()+"】簽核，並加簽給"+$('#txtAddnamea').val()+"?"))
+							if(confirm("確定要核准【"+$('#txtAddnoa').val()+"】簽核，並加簽給"+$('#txtAddnamea').val()+"?")){
+								if(file){
+									Lock(1);
+									var ext = '';
+									var extindex = file.name.lastIndexOf('.');
+									if(extindex>=0){
+										ext = file.name.substring(extindex,file.name.length);
+									}
+									filename=file.name;
+									files=file.name+'_'+Date.now().toString()+ext;
+									
+									fr = new FileReader();
+									fr.fileName = files;
+								    fr.readAsDataURL(file);
+								    fr.onprogress = function(e){
+										if ( e.lengthComputable ) { 
+											var per = Math.round( (e.loaded * 100) / e.total) ; 
+											$('#FileList').children().last().find('progress').eq(0).attr('value',per);
+										}; 
+									}
+									fr.onloadstart = function(e){
+										$('#FileList').append('<div styly="width:100%;"><progress id="progress" max="100" value="0" ></progress><progress id="progress" max="100" value="0" ></progress><a>'+fr.fileName+'</a></div>');
+									}
+									fr.onloadend = function(e){
+										$('#FileList').children().last().find('progress').eq(0).attr('value',100);
+										console.log(fr.fileName+':'+fr.result.length);
+										var oReq = new XMLHttpRequest();
+										oReq.upload.addEventListener("progress",function(e) {
+											if (e.lengthComputable) {
+												percentComplete = Math.round((e.loaded / e.total) * 100,0);
+												$('#FileList').children().last().find('progress').eq(1).attr('value',percentComplete);
+											}
+										}, false);
+										oReq.upload.addEventListener("load",function(e) {
+											Unlock(1);
+										}, false);
+										oReq.upload.addEventListener("error",function(e) {
+											alert("資料上傳發生錯誤!");
+										}, false);
+											
+										oReq.timeout = 360000;
+										oReq.ontimeout = function () { alert("Timed out!!!"); }
+										oReq.open("POST", 'eipflow_upload.aspx', true);
+										oReq.setRequestHeader("Content-type", "text/plain");
+										oReq.setRequestHeader("FileName", escape(fr.fileName));
+										oReq.send(fr.result);//oReq.send(e.target.result);
+									};
+									Unlock(1);
+								}
 								q_func('qtxt.query.signadd', 'eip.txt,signadd,'+$('#txtAddnoa').val()+';'+$('#txtAddnoq').val()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate
-								+';'+$('#txtAddsno').val()+';'+t_namea+';'+t_isreturn);
+								+';'+$('#txtAddsno').val()+';'+t_namea+';'+t_isreturn+';'+filename+';'+files+';'+filememo);
+							}
 							
-							
+							$('#txtAddnoa').val('');
+							$('#txtAddnoq').val('');
 							$('#txtAddsno').val('');
 							$('#txtAddnamea').val('');
+							$('#txtAddmemo').val('');
+							$('#txtAddfilememo').val('');
+							$('#btnAddflie').val('');
 						}else{
 							alert('加簽人員編號禁止空白!!');
 						}
@@ -1385,8 +1604,13 @@
 				});
 				
 				$('#btnAddclose').click(function() {
+					$('#txtAddnoa').val('');
+					$('#txtAddnoq').val('');
 					$('#txtAddsno').val('');
 					$('#txtAddnamea').val('');
+					$('#txtAddmemo').val('');
+					$('#txtAddfilememo').val('');
+					$('#btnAddflie').val('');
 					$('#issignadd_div').hide();
 				});
 				
@@ -1394,6 +1618,11 @@
 					$('#signdetail_div').hide();
 				});
             }
+            
+            var guid = (function() {
+				function s4() {return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);}
+				return function() {return s4() + s4() + s4() + s4();};
+			})();
             
             function q_gtPost(t_name) {
 				switch (t_name) {
@@ -1426,7 +1655,7 @@
 			}
 			
 			function q_funcPost(t_func, result) {
-                switch(t_func) {
+               switch(t_func) {
                 	case 'qtxt.query.eipsign':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
@@ -1437,11 +1666,11 @@
                         	for(var i=0; i<as.length;i++){
                         		if(as[i].typea=='1'){
                         			a_eiprunsign.push(as[i]);
-                        		}else if(as[i].typea=='2'){
+                        		}else if(as[i].typea=='2'){ //需簽核
                         			a_eiprunssign.push(as[i]);
-                        		}else if (as[i].typea=='3'){
+                        		}else if (as[i].typea=='3'){ //交辦
                         			a_eiprunusign.push(as[i]);
-                        		}else{
+                        		}else{ //知會
                         			a_eipruntsign.push(as[i])
                         		}
                         	}
@@ -1460,16 +1689,16 @@
                         		$('#waitsign_tab').text('待簽核');
                         	}
                         	
-                        	eipruntsign.init(a_eipruntsign);
-                        	if(a_eipruntsign.length>0){
-                        		$('#worksign_tab').text('交辦('+a_eipruntsign.length+')');
+                        	eiprunusign.init(a_eiprunusign);
+                        	if(a_eiprunusign.length>0){
+                        		$('#worksign_tab').text('交辦('+a_eiprunusign.length+')');
                         	}else{
                         		$('#worksign_tab').text('交辦');
                         	}
                         	
-                        	eiprunusign.init(a_eiprunusign);
-                        	if(a_eiprunusign.length>0){
-                        		$('#talksign_tab').text('知會('+a_eiprunusign.length+')');
+                        	eipruntsign.init(a_eipruntsign);
+                        	if(a_eipruntsign.length>0){
+                        		$('#talksign_tab').text('知會('+a_eipruntsign.length+')');
                         	}else{
                         		$('#talksign_tab').text('知會');
                         	}
@@ -1942,11 +2171,38 @@
 					<br>
 					<div id="eipform_control"> </div>
 				</div>
+				<div id="issignok_div" style="position:absolute; top:300px; left:400px;width:300px;;display: none;" class="signdiv">
+					<table style="width:100%;background-color:aliceblue" border="1" cellpadding='2'  cellspacing='0'>
+						<tr>
+							<td style="width: 130px;" align="center">意見</td>
+							<td style="width: 170px;" align="center">
+								<input id="txtSignmemo" type="text" style="width: 98%;">
+								<input id="txtSignnoa" type="hidden">
+								<input id="txtSignnoq" type="hidden">
+							</td>
+						</tr>
+						<tr>
+							<td align="center">附加文件</td>
+							<td align="left"><input id="btnSignflie" type="file" value="選擇檔案" style="width: 100%;"></td>
+						</tr>
+						<tr>
+							<td align="center">附加文件說明</td>
+							<td align="left"><input id="txtSignfilememo" type="text" style="width: 98%;"></td>
+						</tr>
+						<tr>
+							<td align="center" colspan='2'>
+								<input id="btnSignok" type="button" value="確認">
+								<input id="btnSignclose" type="button" value="取消">
+								<input id="txtSigntypea" type="hidden">
+							</td>
+						</tr>
+					</table>
+				</div>
 				<div id="issignadd_div" style="position:absolute; top:300px; left:400px;width:300px;;display: none;" class="signdiv">
 					<table style="width:100%;background-color:aliceblue" border="1" cellpadding='2'  cellspacing='0'>
 						<tr>
-							<td style="width: 150px;" align="center">加簽人員編號</td>
-							<td style="width: 150px;" align="center">
+							<td style="width: 130px;" align="center">加簽人員編號</td>
+							<td style="width: 170px;" align="center">
 								<input id="txtAddsno" type="text" style="width: 98%;">
 								<input id="txtAddnoa" type="hidden">
 								<input id="txtAddnoq" type="hidden">
@@ -1954,15 +2210,23 @@
 						</tr>
 						<tr>
 							<td align="center">加簽人員姓名</td>
-							<td align="center"><input id="txtAddnamea" type="text"  style="width: 98%;"></td>
+							<td align="center"><input id="txtAddnamea" type="text" style="width: 98%;"></td>
 						</tr>
 						<tr>
 							<td align="center">加簽原因</td>
-							<td align="center"><input id="txtAddmemo" type="text"  style="width: 98%;"></td>
+							<td align="center"><input id="txtAddmemo" type="text" style="width: 98%;"></td>
 						</tr>
 						<tr>
 							<td align="center">回傳確認</td>
 							<td align="left"><input id="txtAddisreturn" type="checkbox"></td>
+						</tr>
+						<tr>
+							<td align="center">附加文件</td>
+							<td align="left"><input id="btnAddflie" type="file" value="選擇檔案" style="width: 100%;"></td>
+						</tr>
+						<tr>
+							<td align="center">附加文件說明</td>
+							<td align="left"><input id="txtAddfilememo" type="text" style="width: 98%;"></td>
 						</tr>
 						<tr>
 							<td align="center" colspan='2'>
