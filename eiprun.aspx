@@ -11,2223 +11,1984 @@
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 			var q_name = "eiprun";
-			aPop = new Array();
+			aPop = new Array(
+				['txtAddsno', '', 'sss', 'noa,namea', 'txtAddsno,txtAddnamea', 'sss_b.aspx'],
+				['seiprun_sssno', '', 'sss', 'noa,namea', 'seiprun_sssno,seiprun_namea', 'sss_b.aspx']
+			);
+			
+			function eiprunsign() {};
+			
+            eiprunsign.prototype = {
+                data : null,
+                tbCount : 15,
+                curPage : -1,
+                totPage : 0,
+                curIndex : '',
+                curCaddr : null,
+                load : function(){
+                    var string = "<table id='eiprunsign_table'>";
+                    string+='<tr id="eiprunsign_header">';
+                    string+='<td id="eiprunsign_hide" align="center" style="width:55px;display:none;"></td>';
+                    string+='<td id="eiprunsign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
+                    string+='<td id="eiprunsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                    string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:120px;">簽核單號</td>';
+                    string+='<td id="eiprunsign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                    string+='<td id="eiprunsign_astatus" onclick="eiprunsign.sort(\'astatus\',false)" title="狀態" align="center" style="width:200px;">簽核狀態</td>';
+                    string+='<td id="eiprunsign_schedule" title="進度" align="center" style="width:50px;">進度</td>';
+                    string+='<td id="eiprunsign_bnamea" onclick="eiprunsign.sort(\'astatus\',false)" title="等待核可人" align="center" style="width:300px;">等待核可人</td>';
+                    string+='<td id="eiprunsign_act" onclick="eiprunsign.sort(\'astatus\',false)" title="需核可動作" align="center" style="width:50px;">需核可動作</td>';
+                    string+='</tr>';
+                    
+                    var t_color = ['white','aliceblue'];
+                    for(var i=0;i<this.tbCount;i++){
+                        string+='<tr id="eiprunsign_tr'+i+'">';
+                        string+='<td id="eiprunsign_hide'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"><input class="eiprunsign_hide" id="btnEipsignHide_'+i+'" type="button" value="隱藏" style=" width: 50px;" /></td>';
+                        string+='<td id="eiprunsign_restart'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"><input class="eiprunsign_restart" id="btnEipsignRestart_'+i+'" type="button" value="重送" style=" width: 50px;" /></td>';
+                        string+='<td id="eiprunsign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunsign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunsign_noa'+i+'" class="eiprunsignnoa" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunsign_astatus'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunsign_schedule'+i+'" class="eiprunsignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunsign_bnamea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunsign_act'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='</tr>';
+                    }
+                    string+='</table>';
+                    
+                    $('#eiprun').append(string);
+                    string='';
+                    string+='<input id="btneiprunsign_previous" onclick="eiprunsign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                    string+='<input id="btneiprunsign_next" onclick="eiprunsign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                    string+='<input id="textEiprunCurPage" onchange="eiprunsign.page(parseInt($(this).val()))" type="text" readonly="readonly"  style="float:left;width:100px;text-align: right;"/>';
+                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                    string+='<input id="textEiprunTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                    $('#eiprun_control').append(string);
+                },
+                init : function(obj) {
+                	$('.eiprunsign_hide').unbind('click');
+                	$('.eiprunsign_hide').click(function(e) {
+                        var n=$(this).attr('id').replace('btnEipsignHide_','')
+                        
+                        if($('#eiprunsign_noa'+n).text()=='')
+							return;
+							
+						if(confirm("確定要隱藏簽核【"+$('#eiprunsign_noa'+n).text()+"】的資料(將不會再顯示)?"))
+							q_func('qtxt.query.signhide_'+n, 'eip.txt,signhide,'+$('#eiprunsign_noa'+n).text()+';'+r_userno+';'+r_name);
+							
+					});
+					
+					$('.eiprunsign_restart').unbind('click');
+					$('.eiprunsign_restart').click(function(e) {
+                        var n=$(this).attr('id').replace('btnEipsignRestart_','')
+                        
+                        if($('#eiprunsign_noa'+n).text()=='')
+							return;
+							
+						if(confirm("確定要重送簽核【"+$('#eiprunsign_noa'+n).text()+"】?"))
+							q_func('qtxt.query.signrestart_'+n, 'eip.txt,signrestart,'+$('#eiprunsign_noa'+n).text()+';'+r_userno+';'+r_name);
+							
+					});
+					
+					$('.eiprunsignnoa').unbind('click');
+					$('.eiprunsignnoa').click(function(e) {
+                        var n=$(this).attr('id').replace('eiprunsign_noa','')
+                        
+                        if($('#eiprunsign_noa'+n).text()=='')
+							return;
 						
+						var t_where="noa='"+$('#eiprunsign_noa'+n).text()+"'";
+						q_box("eipflow.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'eipflow', "95%", "95%", '簽核流程');
+							
+					});
+					
+					$('.eiprunsignschedule').unbind('click');
+					$('.eiprunsignschedule').click(function(e) {
+                        var n=$(this).attr('id').replace('eiprunsign_schedule','')
+                        
+                        if($('#eiprunsign_noa'+n).text()=='')
+							return;
+						
+						q_func('qtxt.query.signdetail_'+n, 'eip.txt,signdetail,'+$('#eiprunsign_noa'+n).text()+';'+r_userno+';'+r_name);
+					});
+                    
+                    this.data = new Array();
+                    if (obj[0] != undefined) {
+                        for (var i in obj)
+                            if (obj[i]['noa'] != undefined ){
+                                this.data.push(obj[i]);
+                            }
+                    }
+                    
+                    this.totPage = Math.ceil(this.data.length / this.tbCount);
+                    $('#textEiprunTotPage').val(this.totPage);
+                    this.sort('noa', false);
+                    Unlock();
+                },
+                sort : function(index, isFloat) {
+                    this.curIndex = index;
+
+                    if (isFloat) {
+                        this.data.sort(function(a, b) {
+                            var m = parseFloat(a[eiprunsign.curIndex] == undefined ? "0" : a[eiprunsign.curIndex]);
+                            var n = parseFloat(b[eiprunsign.curIndex] == undefined ? "0" : b[eiprunsign.curIndex]);
+                            if (m == n) {
+                                if (a['noa'] < b['noa'])
+                                    return 1;
+                                if (a['noa'] > b['noa'])
+                                    return -1;
+                                return 0;
+                            } else
+                                return n - m;
+                        });
+                    } else {
+                        this.data.sort(function(a, b) {
+                            var m = a[eiprunsign.curIndex] == undefined ? "" : a[eiprunsign.curIndex];
+                            var n = b[eiprunsign.curIndex] == undefined ? "" : b[eiprunsign.curIndex];
+                            if (m == n) {
+                                if (a['noa'] > b['noa'])
+                                    return 1;
+                                if (a['noa'] < b['noa'])
+                                    return -1;
+                                return 0;
+                            } else {
+                                if (m > n)
+                                    return 1;
+                                if (m < n)
+                                    return -1;
+                                return 0;
+                            }
+                        });
+                    }
+                    this.page(1);
+                },
+                next : function() {
+                    if (this.curPage >= this.totPage) {
+                        alert('最末頁。');
+                        return;
+                    }
+                    this.curPage++;
+                    $('#textEiprunCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                previous : function() {
+                    if (this.curPage == 1) {
+                        alert('最前頁。');
+                        return;
+                    }
+                    this.curPage--;
+                    $('#textEiprunCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                page : function(n) {
+                    if (n <= 0 || n > this.totPage) {
+                        this.curPage = 1;
+                        $('#textEiprunCurPage').val(this.curPage);
+                        this.refresh();
+                        return;
+                    }
+                    this.curPage = n;
+                    $('#textEiprunCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                refresh : function() {
+                    //頁面更新
+                    var n = (this.curPage - 1) * this.tbCount;
+                    for (var i = 0; i < this.tbCount; i++) {
+                        if ((n + i) < this.data.length) {
+                        	$('#btnEipsignHide_' + i).removeAttr('disabled');
+                            $('#eiprunsign_datea' + i).text(this.data[n+i]['datea']);
+                            $('#eiprunsign_memo' + i).text(this.data[n+i]['memo']);
+                            $('#eiprunsign_astatus' + i).text(this.data[n+i]['astatus']);
+                            $('#eiprunsign_bnamea' + i).text(this.data[n+i]['bnamea']);
+                            $('#eiprunsign_act' + i).text(this.data[n+i]['act']);
+                            $('#eiprunsign_noa' + i).text(this.data[n+i]['noa']);
+                            $('#eiprunsign_schedule' + i).text(this.data[n+i]['schedule']);
+                            $('#eiprunsign_important' + i).text(this.data[n+i]['important']);
+                            
+                        } else {
+                            $('#btnEipsignHide_' + i).attr('disabled', 'disabled');
+                            $('#eiprunsign_datea' + i).text('');
+                            $('#eiprunsign_memo' + i).text('');
+                            $('#eiprunsign_astatus' + i).text('');
+                            $('#eiprunsign_bnamea' + i).text('');
+                            $('#eiprunsign_act' + i).text('');
+                            $('#eiprunsign_noa' + i).text('');
+                            $('#eiprunsign_schedule' + i).text('');
+                            $('#eiprunsign_important' + i).text('');
+                        }
+                    }
+                }
+            };
+            
+            function eiprunssign() {};
+			
+            eiprunssign.prototype = {
+                data : null,
+                tbCount : 15,
+                curPage : -1,
+                totPage : 0,
+                curIndex : '',
+                curCaddr : null,
+                load : function(){
+                    var string = "<table id='eiprunssign_table'>";
+                    string+='<tr id="eiprunssign_header">';
+                    string+='<td id="eiprunssign_signok" title="核準" align="center" style="width:55px;">核準</td>';
+                    string+='<td id="eiprunssign_signok" title="加簽" align="center" style="width:55px;">加簽</td>';
+                    string+='<td id="eiprunssign_signbreak" title="退回" align="center" style="width:55px;">退回</td>';
+                    string+='<td id="eiprunssign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
+                    string+='<td id="eiprunssign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                    string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:150px;">簽核單號</td>';
+                    string+='<td id="eiprunssign_namea" onclick="eiprunsign.sort(\'namea\',false)" title="發文者" align="center" style="width:100px; ">發文者</td>';
+                    string+='<td id="eiprunssign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                    string+='<td id="eiprunssign_file" title="附件" align="center" style="width:50px; ">附件</td>';
+                    string+='<td id="eiprunssign_schedule" title="進度" align="center" style="width:50px; ">進度</td>';
+                    string+='</tr>';
+                    
+                    var t_color = ['white','aliceblue'];
+                    for(var i=0;i<this.tbCount;i++){
+                        string+='<tr id="eiprunssign_tr'+i+'">';
+                        string+='<td id="eiprunssign_signok'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunsign_ok" id="btnEipsignOk_'+i+'" type="button" value="核準" style=" width: 50px;" /></td>';
+                        string+='<td id="eiprunssign_signadd'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunsign_add" id="btnEipsignAdd_'+i+'" type="button" value="加簽" style=" width: 50px;" /></td>';
+                        string+='<td id="eiprunssign_signbreak'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunsign_break" id="btnEipsignBreak_'+i+'" type="button" value="退回" style=" width: 50px;" /></td>';
+                        string+='<td id="eiprunssign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunssign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunssign_noa'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunssign_noq'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='<td id="eiprunssign_namea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunssign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunssign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunssign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='<td id="eiprunssign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='<td id="eiprunssign_schedule'+i+'" class="eiprunssignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='</tr>';
+                    }
+                    string+='</table>';
+                    
+                    $('#eipruns').append(string);
+                    string='';
+                    string+='<input id="btneiprunssign_previous" onclick="eiprunssign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                    string+='<input id="btneiprunssign_next" onclick="eiprunssign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                    string+='<input id="textEiprunsCurPage" onchange="eiprunssign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                    string+='<input id="textEiprunsTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                    $('#eipruns_control').append(string);
+                },
+                init : function(obj) {
+                	$('.eiprunsign_ok').unbind('click');
+                    $('.eiprunsign_ok').click(function(e) {
+                        var n=$(this).attr('id').replace('btnEipsignOk_','')
+                        
+                        if($('#eiprunssign_noa'+n).text()=='' && $('#eiprunssign_noq'+n).text()=='')
+							return;
+						
+						var tmemo=prompt("意見","");
+						if(tmemo===null){
+							tmemo='';
+						}
+						if(tmemo.length==0){
+							tmemo='#non';
+						}
+						
+						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+						
+						if(confirm("確定要核准【"+$('#eiprunssign_noa'+n).text()+"】簽核?"))
+							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunssign_noa'+n).text()+';'+$('#eiprunssign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+					});
+					
+					$('.eiprunsign_break').unbind('click');
+					$('.eiprunsign_break').click(function(e) {
+                        var n=$(this).attr('id').replace('btnEipsignBreak_','')
+                        
+                        if($('#eiprunssign_noa'+n).text()=='' && $('#eiprunssign_noq'+n).text()=='')
+							return;
+							
+						var tmemo=prompt("退回原因","");
+						if(tmemo===null){
+							tmemo='';
+						}
+						if(tmemo.length==0){
+							tmemo='#non';
+						}
+						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+						
+						if(confirm("確定要退回【"+$('#eiprunssign_noa'+n).text()+"】簽核?"))
+							q_func('qtxt.query.signbreak_'+n, 'eip.txt,signbreak,'+$('#eiprunssign_noa'+n).text()+';'+$('#eiprunssign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+							
+					});
+					
+					$('.eiprunsign_add').unbind('click');
+					$('.eiprunsign_add').click(function(e) {
+                        var n=$(this).attr('id').replace('btnEipsignAdd_','')
+                        
+                        if($('#eiprunssign_noa'+n).text()=='' && $('#eiprunssign_noq'+n).text()=='')
+							return;
+						
+						$('#issignadd_div').show();
+						$('#issignadd_div').css('top',e.pageY);
+						$('#issignadd_div').css('left',e.pageX);
+						$('#txtAddnoa').val($('#eiprunssign_noa'+n).text());
+						$('#txtAddnoq').val($('#eiprunssign_noq'+n).text());
+						
+						/*var tmemo='#non';
+						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+						
+						if(confirm("確定要加簽【"+$('#eiprunssign_noa'+n).text()+"】簽核?"))
+							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunssign_noa'+n).text()+';'+$('#eiprunssign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+						*/
+					});
+					
+					$('.eiprunssignschedule').unbind('click');
+					$('.eiprunssignschedule').click(function(e) {
+                        var n=$(this).attr('id').replace('eiprunssign_schedule','')
+                        
+                        if($('#eiprunssign_noa'+n).text()=='')
+							return;
+						
+						q_func('qtxt.query.signsdetail_'+n, 'eip.txt,signdetail,'+$('#eiprunssign_noa'+n).text()+';'+r_userno+';'+r_name);
+					});
+                    
+                    this.data = new Array();
+                    if (obj[0] != undefined) {
+                        for (var i in obj)
+                            if (obj[i]['noa'] != undefined ){
+                                this.data.push(obj[i]);
+                            }
+                    }
+                    
+                    this.totPage = Math.ceil(this.data.length / this.tbCount);
+                    $('#textEiprunsTotPage').val(this.totPage);
+                    this.sort('noa', false);
+                    Unlock();
+                },
+                sort : function(index, isFloat) {
+                    this.curIndex = index;
+
+                    if (isFloat) {
+                        this.data.sort(function(a, b) {
+                            var m = parseFloat(a[eiprunssign.curIndex] == undefined ? "0" : a[eiprunssign.curIndex]);
+                            var n = parseFloat(b[eiprunssign.curIndex] == undefined ? "0" : b[eiprunssign.curIndex]);
+                            if (m == n) {
+                                if (a['noa'] < b['noa'])
+                                    return 1;
+                                if (a['noa'] > b['noa'])
+                                    return -1;
+                                return 0;
+                            } else
+                                return n - m;
+                        });
+                    } else {
+                        this.data.sort(function(a, b) {
+                            var m = a[eiprunssign.curIndex] == undefined ? "" : a[eiprunssign.curIndex];
+                            var n = b[eiprunssign.curIndex] == undefined ? "" : b[eiprunssign.curIndex];
+                            if (m == n) {
+                                if (a['noa'] > b['noa'])
+                                    return 1;
+                                if (a['noa'] < b['noa'])
+                                    return -1;
+                                return 0;
+                            } else {
+                                if (m > n)
+                                    return 1;
+                                if (m < n)
+                                    return -1;
+                                return 0;
+                            }
+                        });
+                    }
+                    this.page(1);
+                },
+                next : function() {
+                    if (this.curPage >= this.totPage) {
+                        alert('最末頁。');
+                        return;
+                    }
+                    this.curPage++;
+                    $('#textEiprunsCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                previous : function() {
+                    if (this.curPage == 1) {
+                        alert('最前頁。');
+                        return;
+                    }
+                    this.curPage--;
+                    $('#textEiprunsCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                page : function(n) {
+                    if (n <= 0 || n > this.totPage) {
+                        this.curPage = 1;
+                        $('#textEiprunsCurPage').val(this.curPage);
+                        this.refresh();
+                        return;
+                    }
+                    this.curPage = n;
+                    $('#textEiprunsCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                refresh : function() {
+                    //頁面更新
+                    var n = (this.curPage - 1) * this.tbCount;
+                    for (var i = 0; i < this.tbCount; i++) {
+                        if ((n + i) < this.data.length) {
+                        	$('#btnEipsignOk_' + i).removeAttr('disabled');
+                        	$('#btnEipsignAdd_' + i).removeAttr('disabled');
+                        	$('#btnEipsignBreak_' + i).removeAttr('disabled');
+                            $('#eiprunssign_datea' + i).text(this.data[n+i]['datea']);
+                            $('#eiprunssign_memo' + i).text(this.data[n+i]['memo']);
+                            $('#eiprunssign_namea' + i).text(this.data[n+i]['namea']);
+                            
+                            var t_filehtml='';
+                            if(this.data[n+i]['filename'].length>0){
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signdownload'>下載</a>";
+                            }
+                            $('#eiprunssign_file' + i).html(t_filehtml);
+                            $('#eiprunssign_filename' + i).text(this.data[n+i]['filename']);
+                            $('#eiprunssign_files' + i).text(this.data[n+i]['files']);
+                            $('#eiprunssign_noa' + i).text(this.data[n+i]['noa']);
+                            $('#eiprunssign_noq' + i).text(this.data[n+i]['noq']);
+                            $('#eiprunssign_schedule' + i).text(this.data[n+i]['schedule']);
+                            $('#eiprunssign_important' + i).text(this.data[n+i]['important']);
+                        } else {
+                        	$('#btnEipsignOk_' + i).attr('disabled', 'disabled');
+                        	$('#btnEipsignAdd_' + i).attr('disabled', 'disabled');
+                        	$('#btnEipsignBreak_' + i).attr('disabled', 'disabled');
+                            $('#eiprunssign_datea' + i).text('');
+                            $('#eiprunssign_memo' + i).text('');
+                            $('#eiprunssign_namea' + i).text('');
+                            $('#eiprunssign_file' + i).html('');
+                            $('#eiprunssign_filename' + i).text('');
+                            $('#eiprunssign_files' + i).text('');
+                            $('#eiprunssign_noa' + i).text('');
+                            $('#eiprunssign_noq' + i).text('');
+                            $('#eiprunssign_schedule' + i).text('');
+                            $('#eiprunssign_important' + i).text('');
+                        }
+                    }
+                    
+                    $('.signdownload').unbind('click');
+                    $('.signdownload').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownload_','')
+                        
+						if($('#eiprunssign_filename'+n).text().length>0 && $('#eiprunssign_files'+n).text().length>0)
+							$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#eiprunssign_filename'+n).text()+'&TempName='+$('#eiprunssign_files'+n).text());
+							
+					});
+                }
+            };
+            
+            function eipruntsign() {};
+			
+            eipruntsign.prototype = {
+                data : null,
+                tbCount : 15,
+                curPage : -1,
+                totPage : 0,
+                curIndex : '',
+                curCaddr : null,
+                load : function(){
+                    var string = "<table id='eipruntsign_table'>";
+                    string+='<tr id="eipruntsign_header">';
+                    string+='<td id="eipruntsign_signok" title="確認" align="center" style="width:55px;">確認</td>';
+                    string+='<td id="eipruntsign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
+                    string+='<td id="eipruntsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                    string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:150px;">簽核單號</td>';
+                    string+='<td id="eipruntsign_namea" onclick="eiprunsign.sort(\'namea\',false)" title="發文者" align="center" style="width:100px; ">發文者</td>';
+                    string+='<td id="eipruntsign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                    string+='<td id="eipruntsign_file" title="附件" align="center" style="width:50px; ">附件</td>';
+                    string+='</tr>';
+                    
+                    var t_color = ['white','aliceblue'];
+                    for(var i=0;i<this.tbCount;i++){
+                        string+='<tr id="eipruntsign_tr'+i+'">';
+                        string+='<td id="eipruntsign_signok'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eipruntsign_ok" id="btnEipsigntOk_'+i+'" type="button" value="確認" style=" width: 50px;" /></td>';
+                        string+='<td id="eipruntsign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipruntsign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipruntsign_noa'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipruntsign_noq'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='<td id="eipruntsign_namea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipruntsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipruntsign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipruntsign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='<td id="eipruntsign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='</tr>';
+                    }
+                    string+='</table>';
+                    
+                    $('#eiprunt').append(string);
+                    string='';
+                    string+='<input id="btneipruntsign_previous" onclick="eipruntsign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                    string+='<input id="btneipruntsign_next" onclick="eipruntsign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                    string+='<input id="textEipruntCurPage" onchange="eipruntsign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                    string+='<input id="textEipruntTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                    $('#eiprunt_control').append(string);
+                },
+                init : function(obj) {
+                	$('.eipruntsign_ok').unbind('click');
+                    $('.eipruntsign_ok').click(function(e) {
+                        var n=$(this).attr('id').replace('btnEipsigntOk_','')
+                        
+                        if($('#eipruntsign_noa'+n).text()=='' && $('#eipruntsign_noq'+n).text()=='')
+							return;
+						var tmemo='#non';
+						
+						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+						
+						if(confirm("已確認過【"+$('#eipruntsign_noa'+n).text()+"】簽核?"))
+							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eipruntsign_noa'+n).text()+';'+$('#eipruntsign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+					});
+					
+                    this.data = new Array();
+                    if (obj[0] != undefined) {
+                        for (var i in obj)
+                            if (obj[i]['noa'] != undefined ){
+                                this.data.push(obj[i]);
+                            }
+                    }
+                    
+                    this.totPage = Math.ceil(this.data.length / this.tbCount);
+                    $('#textEipruntTotPage').val(this.totPage);
+                    this.sort('noa', false);
+                    Unlock();
+                },
+                sort : function(index, isFloat) {
+                    this.curIndex = index;
+
+                    if (isFloat) {
+                        this.data.sort(function(a, b) {
+                            var m = parseFloat(a[eipruntsign.curIndex] == undefined ? "0" : a[eipruntsign.curIndex]);
+                            var n = parseFloat(b[eipruntsign.curIndex] == undefined ? "0" : b[eipruntsign.curIndex]);
+                            if (m == n) {
+                                if (a['noa'] < b['noa'])
+                                    return 1;
+                                if (a['noa'] > b['noa'])
+                                    return -1;
+                                return 0;
+                            } else
+                                return n - m;
+                        });
+                    } else {
+                        this.data.sort(function(a, b) {
+                            var m = a[eipruntsign.curIndex] == undefined ? "" : a[eipruntsign.curIndex];
+                            var n = b[eipruntsign.curIndex] == undefined ? "" : b[eipruntsign.curIndex];
+                            if (m == n) {
+                                if (a['noa'] > b['noa'])
+                                    return 1;
+                                if (a['noa'] < b['noa'])
+                                    return -1;
+                                return 0;
+                            } else {
+                                if (m > n)
+                                    return 1;
+                                if (m < n)
+                                    return -1;
+                                return 0;
+                            }
+                        });
+                    }
+                    this.page(1);
+                },
+                next : function() {
+                    if (this.curPage >= this.totPage) {
+                        alert('最末頁。');
+                        return;
+                    }
+                    this.curPage++;
+                    $('#textEipruntCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                previous : function() {
+                    if (this.curPage == 1) {
+                        alert('最前頁。');
+                        return;
+                    }
+                    this.curPage--;
+                    $('#textEipruntCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                page : function(n) {
+                    if (n <= 0 || n > this.totPage) {
+                        this.curPage = 1;
+                        $('#textEipruntCurPage').val(this.curPage);
+                        this.refresh();
+                        return;
+                    }
+                    this.curPage = n;
+                    $('#textEipruntCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                refresh : function() {
+                    //頁面更新
+                    var n = (this.curPage - 1) * this.tbCount;
+                    for (var i = 0; i < this.tbCount; i++) {
+                        if ((n + i) < this.data.length) {
+                        	$('#btnEipsigntOk_' + i).removeAttr('disabled');
+                            $('#eipruntsign_datea' + i).text(this.data[n+i]['datea']);
+                            $('#eipruntsign_memo' + i).text(this.data[n+i]['memo']);
+                            $('#eipruntsign_namea' + i).text(this.data[n+i]['namea']);
+                            
+                            var t_filehtml='';
+                            if(this.data[n+i]['filename'].length>0){
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signtdownload'>下載</a>";
+                            }
+                            $('#eipruntsign_file' + i).html(t_filehtml);
+                            $('#eipruntsign_filename' + i).text(this.data[n+i]['filename']);
+                            $('#eipruntsign_files' + i).text(this.data[n+i]['files']);
+                            $('#eipruntsign_noa' + i).text(this.data[n+i]['noa']);
+                            $('#eipruntsign_noq' + i).text(this.data[n+i]['noq']);
+                            $('#eipruntsign_important' + i).text(this.data[n+i]['important']);
+                        } else {
+                        	$('#btnEipsigntOk_' + i).attr('disabled', 'disabled');
+                            $('#eipruntsign_datea' + i).text('');
+                            $('#eipruntsign_memo' + i).text('');
+                            $('#eipruntsign_namea' + i).text('');
+                            $('#eipruntsign_file' + i).html('');
+                            $('#eipruntsign_filename' + i).text('');
+                            $('#eipruntsign_files' + i).text('');
+                            $('#eipruntsign_noa' + i).text('');
+                            $('#eipruntsign_noq' + i).text('');
+                            $('#eipruntsign_important' + i).text('');
+                        }
+                    }
+                    
+                    $('.signtdownload').unbind('click');
+                    $('.signtdownload').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownload_','')
+                        
+						if($('#eipruntsign_filename'+n).text().length>0 && $('#eipruntsign_files'+n).text().length>0)
+							$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#eipruntsign_filename'+n).text()+'&TempName='+$('#eipruntsign_files'+n).text());
+							
+					});
+                }
+            };
+            
+            
+            function eiprunusign() {};
+			
+            eiprunusign.prototype = {
+                data : null,
+                tbCount : 15,
+                curPage : -1,
+                totPage : 0,
+                curIndex : '',
+                curCaddr : null,
+                load : function(){
+                    var string = "<table id='eiprunusign_table'>";
+                    string+='<tr id="eiprunusign_header">';
+                    string+='<td id="eiprunusign_signok" title="完成" align="center" style="width:55px;">完成</td>';
+                    string+='<td id="eiprunusign_signok" title="加簽" align="center" style="width:55px;">加簽</td>';
+                    string+='<td id="eiprunusign_signbreak" title="退回" align="center" style="width:55px;">退回</td>';
+                    string+='<td id="eiprunusign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
+                    string+='<td id="eiprunusign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                    string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:150px;">簽核單號</td>';
+                    string+='<td id="eiprunusign_namea" onclick="eiprunsign.sort(\'namea\',false)" title="發文者" align="center" style="width:100px; ">發文者</td>';
+                    string+='<td id="eiprunusign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                    string+='<td id="eiprunusign_file" title="附件" align="center" style="width:50px; ">附件</td>';
+                    string+='<td id="eiprunusign_schedule" title="進度" align="center" style="width:50px; ">進度</td>';
+                    string+='</tr>';
+                    
+                    var t_color = ['white','aliceblue'];
+                    for(var i=0;i<this.tbCount;i++){
+                        string+='<tr id="eiprunusign_tr'+i+'">';
+                        string+='<td id="eiprunusign_signok'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunusign_ok" id="btnEipsignuOk_'+i+'" type="button" value="完成" style=" width: 50px;" /></td>';
+                        string+='<td id="eiprunusign_signadd'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunusign_add" id="btnEipsignuAdd_'+i+'" type="button" value="加簽" style=" width: 50px;" /></td>';
+                        string+='<td id="eiprunusign_signbreak'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"><input class="eiprunusign_break" id="btnEipsignuBreak_'+i+'" type="button" value="退回" style=" width: 50px;" /></td>';
+                        string+='<td id="eiprunusign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunusign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunusign_noa'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunusign_noq'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='<td id="eiprunusign_namea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunusign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunusign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eiprunusign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='<td id="eiprunusign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='<td id="eiprunusign_schedule'+i+'" class="eiprunusignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='</tr>';
+                    }
+                    string+='</table>';
+                    
+                    $('#eiprunu').append(string);
+                    string='';
+                    string+='<input id="btneiprunusign_previous" onclick="eiprunusign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                    string+='<input id="btneiprunusign_next" onclick="eiprunusign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                    string+='<input id="textEiprunuCurPage" onchange="eiprunusign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                    string+='<input id="textEiprunuTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                    $('#eiprunu_control').append(string);
+                },
+                init : function(obj) {
+                	$('.eiprunusign_ok').unbind('click');
+                    $('.eiprunusign_ok').click(function(e) {
+                        var n=$(this).attr('id').replace('btnEipsignuOk_','')
+                        
+                        if($('#eiprunusign_noa'+n).text()=='' && $('#eiprunusign_noq'+n).text()=='')
+							return;
+						var tmemo=prompt("意見","");
+						if(tmemo===null){
+							tmemo='';
+						}
+						if(tmemo.length==0){
+							tmemo='#non';
+						}
+						
+						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+						
+						if(confirm("是否已處理完【"+$('#eiprunusign_noa'+n).text()+"】簽核?"))
+							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunusign_noa'+n).text()+';'+$('#eiprunusign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+					});
+					
+					$('.eiprunusign_break').unbind('click');
+					$('.eiprunusign_break').click(function(e) {
+                        var n=$(this).attr('id').replace('btnEipsignuBreak_','')
+                        
+                        if($('#eiprunusign_noa'+n).text()=='' && $('#eiprunusign_noq'+n).text()=='')
+							return;
+							
+						var tmemo=prompt("退回原因","");
+						if(tmemo===null){
+							tmemo='';
+						}
+						if(tmemo.length==0){
+							tmemo='#non';
+						}
+						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+						
+						if(confirm("確定要退回【"+$('#eiprunusign_noa'+n).text()+"】簽核?"))
+							q_func('qtxt.query.signbreak_'+n, 'eip.txt,signbreak,'+$('#eiprunusign_noa'+n).text()+';'+$('#eiprunusign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+							
+					});
+					
+					$('.eiprunusign_add').unbind('click');
+					$('.eiprunusign_add').click(function(e) {
+                        var n=$(this).attr('id').replace('btnEipsignuAdd_','')
+                        
+                        if($('#eiprunusign_noa'+n).text()=='' && $('#eiprunusign_noq'+n).text()=='')
+							return;
+						
+						$('#issignadd_div').show();
+						$('#issignadd_div').css('top',e.pageY);
+						$('#issignadd_div').css('left',e.pageX);
+						$('#txtAddnoa').val($('#eiprunusign_noa'+n).text());
+						$('#txtAddnoq').val($('#eiprunusign_noq'+n).text());
+						
+						/*var tmemo='#non';
+						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+						
+						if(confirm("確定要加簽【"+$('#eiprunusign_noa'+n).text()+"】簽核?"))
+							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunusign_noa'+n).text()+';'+$('#eiprunusign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+						*/
+					});
+					
+					$('.eiprunusignschedule').unbind('click');
+					$('.eiprunusignschedule').click(function(e) {
+                        var n=$(this).attr('id').replace('eiprunusign_schedule','')
+                        
+                        if($('#eiprunusign_noa'+n).text()=='')
+							return;
+						
+						q_func('qtxt.query.signtdetail_'+n, 'eip.txt,signdetail,'+$('#eiprunusign_noa'+n).text()+';'+r_userno+';'+r_name);
+					});
+                    
+                    this.data = new Array();
+                    if (obj[0] != undefined) {
+                        for (var i in obj)
+                            if (obj[i]['noa'] != undefined ){
+                                this.data.push(obj[i]);
+                            }
+                    }
+                    
+                    this.totPage = Math.ceil(this.data.length / this.tbCount);
+                    $('#textEiprunuTotPage').val(this.totPage);
+                    this.sort('noa', false);
+                    Unlock();
+                },
+                sort : function(index, isFloat) {
+                    this.curIndex = index;
+
+                    if (isFloat) {
+                        this.data.sort(function(a, b) {
+                            var m = parseFloat(a[eiprunusign.curIndex] == undefined ? "0" : a[eiprunusign.curIndex]);
+                            var n = parseFloat(b[eiprunusign.curIndex] == undefined ? "0" : b[eiprunusign.curIndex]);
+                            if (m == n) {
+                                if (a['noa'] < b['noa'])
+                                    return 1;
+                                if (a['noa'] > b['noa'])
+                                    return -1;
+                                return 0;
+                            } else
+                                return n - m;
+                        });
+                    } else {
+                        this.data.sort(function(a, b) {
+                            var m = a[eiprunusign.curIndex] == undefined ? "" : a[eiprunusign.curIndex];
+                            var n = b[eiprunusign.curIndex] == undefined ? "" : b[eiprunusign.curIndex];
+                            if (m == n) {
+                                if (a['noa'] > b['noa'])
+                                    return 1;
+                                if (a['noa'] < b['noa'])
+                                    return -1;
+                                return 0;
+                            } else {
+                                if (m > n)
+                                    return 1;
+                                if (m < n)
+                                    return -1;
+                                return 0;
+                            }
+                        });
+                    }
+                    this.page(1);
+                },
+                next : function() {
+                    if (this.curPage >= this.totPage) {
+                        alert('最末頁。');
+                        return;
+                    }
+                    this.curPage++;
+                    $('#textEiprunuCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                previous : function() {
+                    if (this.curPage == 1) {
+                        alert('最前頁。');
+                        return;
+                    }
+                    this.curPage--;
+                    $('#textEiprunuCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                page : function(n) {
+                    if (n <= 0 || n > this.totPage) {
+                        this.curPage = 1;
+                        $('#textEiprunuCurPage').val(this.curPage);
+                        this.refresh();
+                        return;
+                    }
+                    this.curPage = n;
+                    $('#textEiprunuCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                refresh : function() {
+                    //頁面更新
+                    var n = (this.curPage - 1) * this.tbCount;
+                    for (var i = 0; i < this.tbCount; i++) {
+                        if ((n + i) < this.data.length) {
+                        	$('#btnEipsignuOk_' + i).removeAttr('disabled');
+                        	$('#btnEipsignuAdd_' + i).removeAttr('disabled');
+                        	$('#btnEipsignuBreak_' + i).removeAttr('disabled');
+                            $('#eiprunusign_datea' + i).text(this.data[n+i]['datea']);
+                            $('#eiprunusign_memo' + i).text(this.data[n+i]['memo']);
+                            $('#eiprunusign_namea' + i).text(this.data[n+i]['namea']);
+                            
+                            var t_filehtml='';
+                            if(this.data[n+i]['filename'].length>0){
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signdownload'>下載</a>";
+                            }
+                            $('#eiprunusign_file' + i).html(t_filehtml);
+                            $('#eiprunusign_filename' + i).text(this.data[n+i]['filename']);
+                            $('#eiprunusign_files' + i).text(this.data[n+i]['files']);
+                            $('#eiprunusign_noa' + i).text(this.data[n+i]['noa']);
+                            $('#eiprunusign_noq' + i).text(this.data[n+i]['noq']);
+                            $('#eiprunusign_schedule' + i).text(this.data[n+i]['schedule']);
+                            $('#eiprunusign_important' + i).text(this.data[n+i]['important']);
+                        } else {
+                        	$('#btnEipsignuOk_' + i).attr('disabled', 'disabled');
+                        	$('#btnEipsignuAdd_' + i).attr('disabled', 'disabled');
+                        	$('#btnEipsignuBreak_' + i).attr('disabled', 'disabled');
+                            $('#eiprunusign_datea' + i).text('');
+                            $('#eiprunusign_memo' + i).text('');
+                            $('#eiprunusign_namea' + i).text('');
+                            $('#eiprunusign_file' + i).html('');
+                            $('#eiprunusign_filename' + i).text('');
+                            $('#eiprunusign_files' + i).text('');
+                            $('#eiprunusign_noa' + i).text('');
+                            $('#eiprunusign_noq' + i).text('');
+                            $('#eiprunusign_schedule' + i).text('');
+                            $('#eiprunusign_important' + i).text('');
+                        }
+                    }
+                    
+                    $('.signdownload').unbind('click');
+                    $('.signdownload').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownload_','')
+                        
+						if($('#eiprunusign_filename'+n).text().length>0 && $('#eiprunusign_files'+n).text().length>0)
+							$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#eiprunusign_filename'+n).text()+'&TempName='+$('#eiprunusign_files'+n).text());
+							
+					});
+                }
+            };
+            
+            function eipflowsign() {};
+			
+            eipflowsign.prototype = {
+                data : null,
+                tbCount : 15,
+                curPage : -1,
+                totPage : 0,
+                curIndex : '',
+                curCaddr : null,
+                load : function(){
+                    var string = "<table id='eipflowsign_table'>";
+                    string+='<tr id="eipflowsign_header">';
+                    string+='<td id="eipflowsign_datea" onclick="eipflowsign.sort(\'datea\',false)" title="建檔日期" align="center" style="width:100px; ">建檔日期</td>';
+                    string+='<td id="eipflowsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
+                    string+='<td id="eipflowsign_noa" onclick="eipflowsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:120px;">簽核單號</td>';
+                    string+='<td id="eipflowsign_memo" onclick="eipflowsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                    string+='<td id="eipflowsign_file" title="附件" align="center" style="width:50px; ">附件</td>';
+                    string+='</tr>';
+                    
+                    var t_color = ['white','aliceblue'];
+                    for(var i=0;i<this.tbCount;i++){
+                        string+='<tr id="eipflowsign_tr'+i+'">';
+                        string+='<td id="eipflowsign_datea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipflowsign_important'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipflowsign_noa'+i+'" class="eipflowsignnoa" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipflowsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipflowsign_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipflowsign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='<td id="eipflowsign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='</tr>';
+                    }
+                    string+='</table>';
+                    
+                    $('#eipflow').append(string);
+                    string='';
+                    string+='<input id="btneipflowsign_previous" onclick="eipflowsign.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                    string+='<input id="btneipflowsign_next" onclick="eipflowsign.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                    string+='<input id="textEipflowCurPage" onchange="eipflowsign.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                    string+='<input id="textEipflowTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                    $('#eipflow_control').append(string);
+                },
+                init : function(obj) {
+					$('.eipflowsignnoa').unbind('click');
+					$('.eipflowsignnoa').click(function(e) {
+                        var n=$(this).attr('id').replace('eipflowsign_noa','')
+                        
+                        if($('#eipflowsign_noa'+n).text()=='')
+							return;
+						
+						var t_where="noa='"+$('#eipflowsign_noa'+n).text()+"'";
+						q_box("eipflow.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'eipflow', "95%", "95%", '簽核流程');
+							
+					});
+                    this.data = new Array();
+                    if (obj[0] != undefined) {
+                        for (var i in obj)
+                            if (obj[i]['noa'] != undefined ){
+                                this.data.push(obj[i]);
+                            }
+                    }
+                    
+                    this.totPage = Math.ceil(this.data.length / this.tbCount);
+                    $('#textEipflowTotPage').val(this.totPage);
+                    this.sort('noa', false);
+                    Unlock();
+                },
+                sort : function(index, isFloat) {
+                    this.curIndex = index;
+
+                    if (isFloat) {
+                        this.data.sort(function(a, b) {
+                            var m = parseFloat(a[eipflowsign.curIndex] == undefined ? "0" : a[eipflowsign.curIndex]);
+                            var n = parseFloat(b[eipflowsign.curIndex] == undefined ? "0" : b[eipflowsign.curIndex]);
+                            if (m == n) {
+                                if (a['noa'] < b['noa'])
+                                    return 1;
+                                if (a['noa'] > b['noa'])
+                                    return -1;
+                                return 0;
+                            } else
+                                return n - m;
+                        });
+                    } else {
+                        this.data.sort(function(a, b) {
+                            var m = a[eipflowsign.curIndex] == undefined ? "" : a[eipflowsign.curIndex];
+                            var n = b[eipflowsign.curIndex] == undefined ? "" : b[eipflowsign.curIndex];
+                            if (m == n) {
+                                if (a['noa'] > b['noa'])
+                                    return 1;
+                                if (a['noa'] < b['noa'])
+                                    return -1;
+                                return 0;
+                            } else {
+                                if (m > n)
+                                    return 1;
+                                if (m < n)
+                                    return -1;
+                                return 0;
+                            }
+                        });
+                    }
+                    this.page(1);
+                },
+                next : function() {
+                    if (this.curPage >= this.totPage) {
+                        alert('最末頁。');
+                        return;
+                    }
+                    this.curPage++;
+                    $('#textEipflowCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                previous : function() {
+                    if (this.curPage == 1) {
+                        alert('最前頁。');
+                        return;
+                    }
+                    this.curPage--;
+                    $('#textEipflowCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                page : function(n) {
+                    if (n <= 0 || n > this.totPage) {
+                        this.curPage = 1;
+                        $('#textEipflowCurPage').val(this.curPage);
+                        this.refresh();
+                        return;
+                    }
+                    this.curPage = n;
+                    $('#textEipflowCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                refresh : function() {
+                    //頁面更新
+                    var n = (this.curPage - 1) * this.tbCount;
+                    for (var i = 0; i < this.tbCount; i++) {
+                        if ((n + i) < this.data.length) {
+                            $('#eipflowsign_datea' + i).text(this.data[n+i]['datea']);
+                            $('#eipflowsign_memo' + i).text(this.data[n+i]['memo']);
+                            $('#eipflowsign_noa' + i).text(this.data[n+i]['noa']);
+                            var t_filehtml='';
+                            if(this.data[n+i]['filename'].length>0){
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signflowdownload'>下載</a>";
+                            }
+                            $('#eipflowsign_file' + i).html(t_filehtml);
+                            $('#eipflowsign_filename' + i).text(this.data[n+i]['filename']);
+                            $('#eipflowsign_files' + i).text(this.data[n+i]['files']);
+                            $('#eipflowsign_important' + i).text(this.data[n+i]['important']);
+                        } else {
+                            $('#eipflowsign_datea' + i).text('');
+                            $('#eipflowsign_memo' + i).text('');
+                            $('#eipflowsign_noa' + i).text('');
+                            $('#eipflowsign_file' + i).html('');
+                            $('#eipflowsign_filename' + i).text('');
+                            $('#eipflowsign_files' + i).text('');
+                            $('#eipflowsign_important' + i).text('');
+                        }
+                    }
+                    
+                    $('.signflowdownload').unbind('click');
+                    $('.signflowdownload').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownload_','')
+                        
+						if($('#eipflowsign_filename'+n).text().length>0 && $('#eipflowsign_files'+n).text().length>0)
+							$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#eipflowsign_filename'+n).text()+'&TempName='+$('#eipflowsign_files'+n).text());
+							
+					});
+                }
+            };
+            
+            function eipform() {};
+			
+            eipform.prototype = {
+                data : null,
+                tbCount : 15,
+                curPage : -1,
+                totPage : 0,
+                curIndex : '',
+                curCaddr : null,
+                load : function(){
+                    var string = "<table id='eipform_table'>";
+                    string+='<tr id="eipform_header">';
+                    string+='<td id="eipform_formname" onclick="eipform.sort(\'formname\',false)" title="表單名稱" align="center" style="width:200px; ">表單名稱</td>';
+                    string+='<td id="eipform_memo" onclick="eipform.sort(\'memo\',false)" title="備註" align="center" style="width:350px; ">備註</td>';
+                    string+='<td id="eipform_file" title="附件" align="center" style="width:50px; ">預覽</td>';
+                    string+='</tr>';
+                    
+                    var t_color = ['white','aliceblue'];
+                    for(var i=0;i<this.tbCount;i++){
+                        string+='<tr id="eipform_tr'+i+'">';
+                        string+='<td id="eipform_formname'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipform_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipform_file'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                        string+='<td id="eipform_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                        string+='</tr>';
+                    }
+                    string+='</table>';
+                    
+                    $('#eipform').append(string);
+                    string='';
+                    string+='<input id="btneipform_previous" onclick="eipform.previous()" type="button" style="float:left;width:100px;" value="上一頁"/>';
+                    string+='<input id="btneipform_next" onclick="eipform.next()" type="button" style="float:left;width:100px;" value="下一頁"/>';
+                    string+='<input id="textEipformCurPage" onchange="eipform.page(parseInt($(this).val()))" type="text" readonly="readonly" style="float:left;width:100px;text-align: right;"/>';
+                    string+='<span style="float:left;display:block;width:10px;font-size: 25px;">/</span>';
+                    string+='<input id="textEipformTotPage"  type="text" readonly="readonly" style="float:left;width:100px;color:green;"/>';
+                    $('#eipform_control').append(string);
+                },
+                init : function(obj) {
+                    this.data = new Array();
+                    if (obj[0] != undefined) {
+                        for (var i in obj)
+                            if (obj[i]['noa'] != undefined ){
+                                this.data.push(obj[i]);
+                            }
+                    }
+                    
+                    this.totPage = Math.ceil(this.data.length / this.tbCount);
+                    $('#textEipformTotPage').val(this.totPage);
+                    this.sort('noa', false);
+                    Unlock();
+                },
+                sort : function(index, isFloat) {
+                    this.curIndex = index;
+
+                    if (isFloat) {
+                        this.data.sort(function(a, b) {
+                            var m = parseFloat(a[eipform.curIndex] == undefined ? "0" : a[eipform.curIndex]);
+                            var n = parseFloat(b[eipform.curIndex] == undefined ? "0" : b[eipform.curIndex]);
+                            if (m == n) {
+                                if (a['noa'] < b['noa'])
+                                    return 1;
+                                if (a['noa'] > b['noa'])
+                                    return -1;
+                                return 0;
+                            } else
+                                return n - m;
+                        });
+                    } else {
+                        this.data.sort(function(a, b) {
+                            var m = a[eipform.curIndex] == undefined ? "" : a[eipform.curIndex];
+                            var n = b[eipform.curIndex] == undefined ? "" : b[eipform.curIndex];
+                            if (m == n) {
+                                if (a['noa'] > b['noa'])
+                                    return 1;
+                                if (a['noa'] < b['noa'])
+                                    return -1;
+                                return 0;
+                            } else {
+                                if (m > n)
+                                    return 1;
+                                if (m < n)
+                                    return -1;
+                                return 0;
+                            }
+                        });
+                    }
+                    this.page(1);
+                },
+                next : function() {
+                    if (this.curPage >= this.totPage) {
+                        alert('最末頁。');
+                        return;
+                    }
+                    this.curPage++;
+                    $('#textEipformCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                previous : function() {
+                    if (this.curPage == 1) {
+                        alert('最前頁。');
+                        return;
+                    }
+                    this.curPage--;
+                    $('#textEipformCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                page : function(n) {
+                    if (n <= 0 || n > this.totPage) {
+                        this.curPage = 1;
+                        $('#textEipformCurPage').val(this.curPage);
+                        this.refresh();
+                        return;
+                    }
+                    this.curPage = n;
+                    $('#textEipformCurPage').val(this.curPage);
+                    this.refresh();
+                },
+                refresh : function() {
+                    //頁面更新
+                    var n = (this.curPage - 1) * this.tbCount;
+                    for (var i = 0; i < this.tbCount; i++) {
+                        if ((n + i) < this.data.length) {
+                            $('#eipform_formname' + i).text(this.data[n+i]['formname']);
+                            $('#eipform_memo' + i).text(this.data[n+i]['memo']);
+                            var t_filehtml='';
+                            if(this.data[n+i]['files'].length>0){
+                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signformdownload'>預覽</a>";
+                            }
+                            $('#eipform_file' + i).html(t_filehtml);
+                            $('#eipform_files' + i).text(this.data[n+i]['files']);
+                        } else {
+                            $('#eipform_formname' + i).text('');
+                            $('#eipform_memo' + i).text('');
+                            $('#eipform_file' + i).html('');
+                            $('#eipform_files' + i).text('');
+                        }
+                    }
+                    
+                    $('.signformdownload').unbind('click');
+                    $('.signformdownload').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownload_','')
+                        
+						if($('#eipform_files'+n).text().length>0){
+							var extindex = $('#eipform_files'+n).text().lastIndexOf('.');
+							if(extindex>=0){
+								ext = $('#eipform_files'+n).text().substring(extindex,$('#eipform_files'+n).text().length);
+							}
+							if(ext.toUpperCase() == '.DOC' || ext.toUpperCase() == '.DOCX')
+								q_func( 'eip.wordConvert.files_'+n , $('#eipform_files'+n).text()+',htm,eipform,'+$('#txtNoa').val())
+							else
+								$('#xdownload').attr('src','eipform_download.aspx?FileName='+$('#eipform_files'+n).text()+'&TempName='+$('#eipform_files'+n).text());
+						}
+							
+					});
+                }
+            };
+            
+            eiprunsign = new eiprunsign();
+            eiprunssign = new eiprunssign();
+            eipruntsign = new eipruntsign();
+            eiprunusign = new eiprunusign();
+            eipflowsign = new eipflowsign();
+            eipform = new eipform();
+            
 			$(document).ready(function() {
 				_q_boxClose();
                 q_getId();
                 q_gf('', q_name);
+                
+                eiprunsign.load();
+                eiprunssign.load();
+                eipruntsign.load();
+                eiprunusign.load();
+                eipflowsign.load();
+                eipform.load();
+                
+                var _showTab = 1;
+				$('.eip_tab').each(function(){
+					// 目前的頁籤區塊
+					var $tab = $(this);
+			 
+					// 當 li 頁籤被點擊時...
+					// 若要改成滑鼠移到 li 頁籤就切換時, 把 click 改成 mouseover
+					$('ul.tabs li', $tab).click(function() {
+						// 找出 li 中的超連結 href(#id)
+						var $this = $(this),
+							_clickTab = $this.find('a').attr('href');
+						// 把目前點擊到的 li 頁籤加上 .active
+						// 並把兄弟元素中有 .active 的都移除 class
+						$this.addClass('active').siblings('.active').removeClass('active');
+						// 淡入相對應的內容並隱藏兄弟元素
+						$(_clickTab).stop(false, true).fadeIn().siblings().hide();
+			 
+						return false;
+					}).find('a').focus(function(){
+						this.blur();
+					});
+					
+					var $defaultLi = $('ul.tabs li', $tab).eq(_showTab).addClass('active');
+					$($defaultLi.find('a').attr('href')).siblings().hide();
+				});
+                
 			});
 			
-			function cucsupdata() {
-				isupdate=true;
-				var bbsrow=document.getElementById("cucs_table").rows.length-1;
-				if(bbsrow>0){ //有資料再刷新
-					var new_where='1=0';
-					for(var i=0;i<bbsrow;i++){
-						if(!emp($('#cucs_noa'+i).text()) && new_where.indexOf($('#cucs_noa'+i).text()+$('#cucs_noq'+i).text())==-1)
-							new_where=new_where+" or (a.noa+'-'+b.noq='"+$('#cucs_noa'+i).text()+"-"+$('#cucs_noq'+i).text()+"' )";
-					}
-					var t_where = "where=^^ 1=1 and ("+new_where+") and isnull(a.gen,0)=0 and isnull(b.mins,0)=0 order by b.size,b.spec,b.lengthb desc,b.noa,b.noq ^^";
-					var t_where1 = "where[1]=^^ d.productno2=b.noa and d.product2=b.noq and c.itype='1' ^^";
-					q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'importcucs', r_accy);
-					Lock();
-				}
-			}
-			
 			function q_gfPost() {
-				chk_cucs=new Array();
-				
 				q_getFormat();
                 q_langShow();
                 q_popAssign();
                 
+                $('#seiprun_bdate').mask(r_picd);
+                $('#seiprun_edate').mask(r_picd);
+                
+                q_cur=2;
+                
                 document.title='EIP簽核作業';
-				
-				//載入案號 資料
-                var t_where = "where=^^ 1=1 and isnull(a.gen,0)=0 and isnull(b.mins,0)=0 order by b.size,b.spec,b.lengthb desc,b.noa,b.noq ^^";
-                var t_where1 = "where[1]=^^ d.productno2=b.noa and d.product2=b.noq and c.itype='1' ^^";
-				q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'init', r_accy);
-				
-				q_cmbParse("combSize", ',#3,#4,#5,#6,#7,#8,#9,#10,#11,#12,#13,#14,#15,#16');
-				q_cmbParse("combOrder",' @ ,memo@備註(標籤)');
-				q_cmbParse("combMechno2",'1@1剪,2@2剪,3@3剪,7@7辦公室');
-				$('#combOrder').val('memo');//1124預設
-				
-				if(r_userno.toUpperCase()=='B01'){
-					$('#combMechno2').val('1');
-				}else if(r_userno.toUpperCase()=='B02'){
-					$('#combMechno2').val('2');
-				}else if(r_userno.toUpperCase()=='B03'){
-					$('#combMechno2').val('3');
-				}else{
-					$('#combMechno2').val('7');
-				}
-				
-				//關閉彈出視窗
-				$('#btnDialog_close').click(function() {
-					$('#dialog').hide();
-				});
-				
+								
 				//登出
 				$('#logout').click(function() {
 					q_logout(q_idr);
 				});
 				
-				//庫存
-				$('#btnStk').click(function() {
-					//window.open("./z_ucc_vu.aspx"+ "?"+ r_userno + ";" + r_name + ";" + q_id +";;" + r_accy);
-					q_box('z_ucc_sf.aspx', 'z_ucc_sf', "95%", "95%", $('#btnStk').val());
+				$('#btnNosign').click(function() {
+					$('.signdiv').hide();
+					$('#nosign_div').show();
 				});
 				
-				//料單報表
-				/*$('#btnCubp').click(function() {
-					q_box('z_cubp_vu.aspx', 'z_ucc_vu', "95%", "95%", $('#btnCubp').val());
-				});*/
-				
-				$('#lblCucnoa').click(function() {
-					q_box("cuc_sf_b.aspx?"+ r_userno + ";" + r_name + ";" + q_id +";1=1 and isnull(gen,0)=0 and exists (select * from view_cucs where noa=a.noa and isnull(mins,0)=0) ;" + r_accy, 'cuc_sf_b', "95%", "95%", '加工單');
+				$('#btnIssign').click(function() {
+					$('.signdiv').hide();
+					$('#issign_div').show();
 				});
 				
-				//匯入
-                $('#btnImport').click(function(e) {
-                	var t_cucno = $('#combCucno').val();
-                	var t_size = $('#combSize').val();
-                	var tx_spec = $('#combSpec').val();
-                	if(t_cucno.length>0){
-                		var t_err = q_chkEmpField([['combMechno', '機　台']]);
-						if (t_err.length > 0) {
-				        	alert(t_err);
-							return;
-						}
-                		
-	                    var t_where = " 1=1 and isnull(a.gen,0)=0 and isnull(b.mins,0)=0 ";
-	                    t_where += q_sqlPara2("a.noa", t_cucno);
-	                    t_where += q_sqlPara2("b.size", t_size);
-	                    t_where += q_sqlPara2("b.spec", tx_spec);
-	                    
-	                    if($('#combOrder').val()=='memo')
-	                    	t_where="where=^^"+t_where+" order by isnull(b.memo,''),b.size,b.spec,b.lengthb desc,b.noa,b.noq ^^";
-	                    else
-	                    	t_where="where=^^"+t_where+" order by b.size,b.spec,b.lengthb desc,b.noa,b.noq ^^";
-	                    var t_where1 = "where[1]=^^ d.productno2=b.noa and d.product2=b.noq and c.itype='1' ^^";
-	                    Lock();
-	                    isupdate=false;
-						q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'importcucs', r_accy);
-						if(chk_cucs.length==0){
-							intervalupdate = setInterval(";");
-							for (var i = 0 ; i < intervalupdate ; i++) {
-							    clearInterval(i); 
-							}
-							intervalupdate=setInterval("cucsupdata()",1000*60);
-							setInterval("dialog_show()",1000*5);
-						}
-					}
-                });
-                
-                //解除鎖定
-                $('#btnCancels').click(function(e) {
-                	chk_cucs=new Array();
-					q_func('qtxt.query.unlockall', 'cuc_sf.txt,unlockall,'+r_userno+';'+r_name);
-					intervalupdate = setInterval(";");
-					for (var i = 0 ; i < intervalupdate ; i++) {
-					    clearInterval(i); 
-					}
-                	intervalupdate=setInterval("cucsupdata()",1000*60);
-                	setInterval("dialog_show()",1000*5);
-                });
-                
-                //完工 清除所有資料
-                $('#btnClear').click(function(e) {
-                	//clearInterval(intervalupdate);
-                	isclear=true;
-                	//目前鎖定資料清空
-                	chk_cucs=new Array();
-                	/*$('#cuct_table .minut').each(function() {
-						$(this).click();
-                    });*/
-                	//初始化cucs
-                	var t_where = "where=^^ 1=1 and isnull(a.gen,0)=0 and isnull(b.mins,0)=0 order by b.size,b.spec,b.lengthb desc,b.noa,b.noq^^";
-                	var t_where1 = "where[1]=^^ d.productno2=b.noa and d.product2=b.noq and c.itype='1' ^^";
-					q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'init', r_accy);
-                });
-                
-                //加工
-                $('#btnCub').click(function(e) {
-                	var t_err = q_chkEmpField([['textDatea', '加工日'],['combMechno', '機　台']]);
-	                if (t_err.length > 0) {
-	                    alert(t_err);
-	                    return;
-	                }
-                	
-					if(chk_cucs.length==0){
-						alert('無選取加工。');
-					}else{
-						//先取得最新的資料再判斷是否要轉加工單						
-                    	var bbsrow=document.getElementById("cucs_table").rows.length-1;
-                    	t_err='';
-                    	for(var j=0;j<bbsrow;j++){
-                    		if($('#cucs_chk'+j).prop('checked')){
-                    			var t_ordeweight=dec($('#cucs_weight'+j).text());
-                    			var t_ordebweight=q_sub(t_ordeweight,dec($('#cucs_eweight'+j).text()));
-                    			var t_ordexweight=dec($('#textXweight_'+j).val());
-                    			if(q_div(q_add(t_ordebweight,t_ordexweight),t_ordeweight)>=1.03){
-                    				t_err=t_err+(t_err.length>0?'\n':'')+'案號【'+$('#cucs_noa'+j).text()+'-'+$('#cucs_noq'+j).text()+'】完工重量超過訂單重量3%，確定是否要入庫?';
-                    			}
-                    		}
-                    	}
-						
-						if(t_err.length>0){
-							if(confirm(t_err)){
-								var t_where = "where=^^ 1=1 and isnull(a.gen,0)=0 and isnull(b.mins,0)=0 order by b.size,b.spec,b.lengthb desc,b.noa,b.noq ^^";
-								var t_where1 = "where[1]=^^ d.productno2=b.noa and d.product2=b.noq and c.itype='1' ^^";
-								q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'tocub', r_accy);
-								Lock();
-							}
+				$('#btnWaitsign').click(function() {
+					$('.signdiv').hide();
+					$('#waitsign_div').show();
+				});
+				
+				$('#btnTalksign').click(function() {
+					$('.signdiv').hide();
+					$('#talksign_div').show();
+				});
+				
+				$('#btnWorksign').click(function() {
+					$('.signdiv').hide();
+					$('#worksign_div').show();
+				});
+				
+				//載入初始資料
+				q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
+				
+				$('#btnEiprun_search').click(function() {
+					var t_bdate=$('#seiprun_bdate').val();
+					var t_edate=$('#seiprun_edate').val();
+					var t_noa=$('#seiprun_noa').val();
+					var t_enda=$('#seiprun_enda').val();
+					var t_sssno=$('#seiprun_sssno').val();
+					var t_important=$('#seiprun_important').val();
+					if(t_bdate.length==0){t_bdate='#non'}
+					if(t_edate.length==0){t_edate='#non'}
+					if(t_noa.length==0){t_noa='#non'}
+					if(t_enda.length==0){t_enda='#non'}
+					if(t_sssno.length==0){t_sssno='#non'}
+					if(t_important.length==0){t_important='#non'}
+					
+					q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';1;'
+					+t_bdate+';'+t_edate+';'+t_noa+';'+t_enda+';'+t_sssno+';'+t_important);
+				});
+				
+				$('#btnAddok').click(function() {
+					if(!emp($('#txtAddnoa').val()) && !emp($('#txtAddnoq').val())){
+						if(!emp($('#txtAddsno').val())){
+							var tmemo=$('#txtAddmemo').val();
+							var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
+							var t_isreturn=$('#txtAddisreturn').prop('checked').toString();
+							var t_namea=$('#txtAddnamea').val();
+							if(t_namea.length==0)
+								var t_namea='#non';
+							if(tmemo.length==0)
+								var tmemo='#non';
+								
+							if(confirm("確定要核准【"+$('#txtAddnoa').val()+"】簽核，並加簽給"+$('#txtAddnamea').val()+"?"))
+								q_func('qtxt.query.signadd', 'eip.txt,signadd,'+$('#txtAddnoa').val()+';'+$('#txtAddnoq').val()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate
+								+';'+$('#txtAddsno').val()+';'+t_namea+';'+t_isreturn);
+							
+							
+							$('#txtAddsno').val('');
+							$('#txtAddnamea').val('');
 						}else{
-							if(confirm("確定是否要入庫?")){//確定轉至加工單
-								var t_where = "where=^^ 1=1 and isnull(a.gen,0)=0 and isnull(b.mins,0)=0 order by b.size,b.spec,b.lengthb desc,b.noa,b.noq ^^";
-								var t_where1 = "where[1]=^^ d.productno2=b.noa and d.product2=b.noq and c.itype='1' ^^";
-								q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'tocub', r_accy);
-								Lock();
-							}
-						}
-					}
-                });
-                
-                //--cuct內容&事件---------------------------------------
-				var string = "<table id='cuct_table' style='width:1240px;word-break:break-all;'>";
-				string+='<tr id="cuct_header">';
-				string+='<td id="cuct_plut" align="center" style="width:40px; color:black;"><input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>';
-				string+='<td id="cuct_product" align="center" style="width:210px; color:black;">批號</td>';
-				string+='<td id="cuct_product" align="center" style="width:120px; color:black;">品名</td>';
-				string+='<td id="cuct_ucolor" align="center" style="width:170px; color:black;">類別</td>';
-				string+='<td id="cuct_spec" align="center" style="width:140px; color:black;">材質</td>';
-				string+='<td id="cuct_size" align="center" style="width:90px; color:black;">號數</td>';
-				string+='<td id="cuct_lengthb" align="center" style="width:90px; color:black;">米數</td>';
-				string+='<td id="cuct_class" align="center" style="width:90px; color:black;">廠牌</td>';
-				string+='<td id="cuct_gmount" align="center" style="width:90px; color:black;">領料件數</td>';
-				string+='<td id="cuct_lengthc" align="center" style="width:90px; color:black;">領料支數</td>';
-				string+='<td id="cuct_gweight" align="center" style="width:110px; color:black;">領料重量</td>';
-				string+='<td id="cuct_xnoa" align="center" style="color:black;display:none;">入庫單號</td>';
-				string+='<td id="cuct_xnoq" align="center" style="color:black;display:none;">入庫單序</td>';
-				string+='</tr>';
-				string+='</table>';
-				$('#cuct').html(string);
-				
-                //事件    
-				$('#btnPlut').click(function() {
-					var now_count=document.getElementById("cuct_table").rows.length-1;	
-                   	t_color = ['DarkBlue','DarkRed'];
-                   	var string='';
-					for(var i=now_count;i<(now_count+bbtaddcount);i++){
-	    				string+='<tr id="cuct_tr'+i+'">';
-	    				string+='<td style="text-align: center;"><input id="btnMinut_'+i+'" class="minut" type="button" style="font-size: medium; font-weight: bold;" value="－"/></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textUno_'+i+'" type="text" class="txt c1" value="" /></td>';
-	    				string+='<td id=cuct_product'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-	    				string+='<td id=cuct_ucolor'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-	    				string+='<td id=cuct_spec'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-	    				string+='<td id=cuct_size'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-	    				string+='<td id=cuct_lengthb'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-	    				string+='<td id=cuct_class'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textGmount_'+i+'" type="text" class="txt num c1" value="" /></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textGlengthc_'+i+'" type="text" class="txt num c1" value="" /></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textGweight_'+i+'" type="text" class="txt num c1" value="" /></td>';
-	    				string+='<td id=cuct_xnoa'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;"></td>';
-	    				string+='<td id=cuct_xnoq'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;"></td>';
-	    				//string+='<td id=cuct_mount'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-	    				//string+='<td id=cuct_lengthc'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-	    				//string+='<td id=cuct_weight'+i+' style="text-align: center;color:'+t_color[i%t_color.length]+'"></td>';
-	    				string+='</tr>';
-					}
-					$('#cuct_table').append(string);
-					
-					//事件
-                    //清空
-                    $('#cuct_table .minut').unbind("click");
-                    $('#cuct_table .minut').each(function(index) {
-						$(this).click(function() {
-							var ns=$(this).attr('id').split('_')[1];
-							var t_uno=$('#textUno_'+ns).val();
-							$('#cuct_tr'+ns+' input[type="text"]').val('').removeAttr('disabled');
-							$('#cuct_product'+ns).text('');
-							$('#cuct_ucolor'+ns).text('');
-							$('#cuct_spec'+ns).text('');
-							$('#cuct_size'+ns).text('');
-							$('#cuct_lengthb'+ns).text('');
-							$('#cuct_class'+ns).text('');
-							//$('#cuct_lengthc'+ns).text('');
-							//$('#cuct_mount'+ns).text('');
-							//$('#cuct_weight'+ns).text('');
-							$('#cuct_xnoa'+ns).text('');
-							$('#cuct_xnoq'+ns).text('');
-							
-							//刪除同批號的資料
-							var cuct_count=document.getElementById("cuct_table").rows.length-1;	
-							for(var i=0;i<cuct_count;i++){
-								if($('#textUno_'+i).val()==t_uno){
-									$('#cuct_tr'+i+' input[type="text"]').val('').removeAttr('disabled');
-									$('#cuct_product'+i).text('');
-									$('#cuct_ucolor'+i).text('');
-									$('#cuct_spec'+i).text('');
-									$('#cuct_size'+i).text('');
-									$('#cuct_lengthb'+i).text('');
-									$('#cuct_class'+i).text('');
-									//$('#cuct_lengthc'+i).text('');
-									//$('#cuct_mount'+i).text('');
-									//$('#cuct_weight'+i).text('');
-									$('#cuct_xnoa'+i).text('');
-									$('#cuct_xnoq'+i).text('');
-								}
-							}
-						});
-                    });
-                    				
-					//所有欄位text
-					$('#cuct_table input[type="text"]').unbind("change");
-					$('#cuct_table input[type="text"]').each(function() {
-						var objname=$(this).attr('id').split('_')[0];
-						var n=$(this).attr('id').split('_')[1];
-						
-						//只能輸入數值
-						if(objname=='textGmount' || objname=='textGlengthc' || objname=='textGweight'){
-							$(this).keyup(function(e) {
-								if(e.which>=37 && e.which<=40){return;}
-								var tmp=$(this).val();
-								tmp=tmp.match(/\d{1,}\.{0,1}\d{0,}/);
-								$(this).val(tmp);
-							});
-						}
-						
-						//變動事件
-						if(objname=='textUno'){
-							$(this).change(function() {
-								if($(this).val()!=''){
-									//找批號
-									q_func('qtxt.query.cuctgetuno_'+n, 'cuc_sf.txt,getuno,'+$(this).val()+';#non'+';#non'+';#non');
-								}else{
-									$('#btnMinut_'+n).click();
-								}
-							});
-						}
-						if(objname=='textGmount'){
-							$(this).change(function() {
-								if($(this).val()!=''){
-									//找批號
-									q_func('qtxt.query.cuctgetunom_'+n, 'cuc_sf.txt,getuno,'+$('#textUno_'+n).val()+';#non'+';'+$('#cuct_xnoa'+n).text()+';'+$('#cuct_xnoq'+n).val());
-								}else{
-									$('#btnMinut_'+n).click();
-								}
-							});
-						}
-					});
-					
-					//移動下一格
-					var SeekF= new Array();
-					$('input:text,select').each(function() {
-						if($(this).attr('disabled')!='disabled')
-							SeekF.push($(this).attr('id'));
-					});
-					$('input:text,select').each(function() {
-						$(this).bind('keydown', function(event) {
-							if( event.which == 13 || event.which == 40) {
-								$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
-								$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
-							}
-						});
-					});
-				});
-				
-				$('#btnPlut').click();
-				
-				//浮動表頭
-				var string = "<div id='cuct_float' style='position:absolute;display:block;left:0px; top:0px;'>";
-				string+="<table id='cuct_table2' style='width:1240px;border-bottom: none;'>";
-				string+='<tr id="cuct_header">';
-				string+='<td id="cuct_plut" align="center" style="width:40px; color:black;"><input id="btnPlut2" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>';
-				string+='<td id="cuct_product" align="center" style="width:210px; color:black;">批號&nbsp;&nbsp;<input type="button" id="btnCub_nouno" value="領料" style="width:60px;font-size: medium; font-weight: bold"/></td>';
-				string+='<td id="cuct_product" align="center" style="width:120px; color:black;">品名</td>';
-				string+='<td id="cuct_ucolor" align="center" style="width:170px; color:black;">類別</td>';
-				string+='<td id="cuct_spec" align="center" style="width:140px; color:black;">材質</td>';
-				string+='<td id="cuct_size" align="center" style="width:90px; color:black;">號數</td>';
-				string+='<td id="cuct_lengthb" align="center" style="width:90px; color:black;">米數</td>';
-				string+='<td id="cuct_class" align="center" style="width:90px; color:black;">廠牌</td>';
-				string+='<td id="cuct_gmount" align="center" style="width:90px; color:black;">領料件數</td>';
-				string+='<td id="cuct_lengthc" align="center" style="width:90px; color:black;">領料支數</td>';
-				string+='<td id="cuct_gweight" align="center" style="width:110px; color:black;">領料重量</td>';
-				string+='<td id="cuct_xnoa" align="center" style="color:black;display:none;">入庫單號</td>';
-				string+='<td id="cuct_xnoq" align="center" style="color:black;display:none;">入庫單序</td>';
-				string+='</tr>';
-				string+='</table>';
-				$('#cuct').append(string);
-				
-				$('#btnPlut2').click(function() {
-					$('#btnPlut').click();
-				});
-				
-				$('#btnCub_nouno').click(function(e) {
-					var t_err = q_chkEmpField([['textDatea', '加工日'],['combMechno', '機　台']]);
-	                if (t_err.length > 0) {
-	                    alert(t_err);
-	                    return;
-	                }
-	                
-	                getunocount=0;
-	                getunoerr='';
-	                var bbtrow=document.getElementById("cuct_table").rows.length-1;
-					for(var j=0;j<bbtrow;j++){
-						if($('#textUno_'+j).val().length>0){
-							getunocount=getunocount+1;
-							q_func('qtxt.query.cuctcheckuno_'+n, 'cuc_sf.txt,getuno,'+$('#textUno_'+j).val()+';#non'+';'+$('#cuct_xnoa'+j).text()+';'+$('#cuct_xnoq'+j).text());
-						}
-					}
-					
-					if(getunocount==0){
-						alert('無領料批號!!');
-					}
-				});
-				
-				//設定滾動條移動時浮動表頭與div的距離
-				$('#cuct').scroll(function(){
-					$('#cuct_float').css('top',$(this).scrollTop()+"px")
-				});
-				
-				//--cucu內容&事件---------------------------------------
-				var string = "<table id='cucu_table' style='width:1240px;word-break:break-all;'>";
-				string+='<tr id="cucu_header">';
-				string+='<td id="cucu_plut" align="center" style="width:40px; color:black;"><input id="btnPluu" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>';
-				string+='<td id="cucu_product" align="center" style="width:110px; color:black;">品名</td>';
-				string+='<td id="cucu_ucolor" align="center" style="width:170px; color:black;">類別</td>';
-				string+='<td id="cucu_spec" align="center" style="width:140px; color:black;">材質</td>';
-				string+='<td id="cucu_size" align="center" style="width:80px; color:black;">號數</td>';
-				string+='<td id="cucu_lengthb" align="center" style="width:80px; color:black;">米數</td>';
-				string+='<td id="cucu_class" align="center" style="width:100px; color:black;">廠牌</td>';
-				string+='<td id="cucu_mount" align="center" style="width:80px; color:black;">件數</td>';
-				string+='<td id="cucu_lengthc" align="center" style="width:90px; color:black;">支數</td>';
-				string+='<td id="cucu_weight" align="center" style="width:90px; color:black;">重量</td>';
-				string+='<td id="cucu_memo" align="center" style="width:220px; color:black;">備註&nbsp;&nbsp;<input id="btnCubs" type="button" style="font-size: medium; font-weight: bold;" value="餘料入庫"/></td>';
-				string+='</tr>';
-				string+='</table>';
-				$('#cucu').html(string);
-				
-                //事件    
-				$('#btnPluu').click(function() {
-					var now_count=document.getElementById("cucu_table").rows.length-1;	
-                   	t_color = ['DarkBlue','DarkRed'];
-                   	var string='';
-					for(var i=now_count;i<(now_count+bbtaddcount);i++){
-	    				string+='<tr id="cucu_tr'+i+'">';
-	    				string+='<td style="text-align: center;"><input id="btnMinut__'+i+'" class="minut" type="button" style="font-size: medium; font-weight: bold;" value="－"/></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textProduct__'+i+'"  type="text" class="txt c3" value="鋼筋"/><select id="combProduct__'+i+'" class="txt comb" style="width: 20px;"> </select></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textUcolor__'+i+'"  type="text" class="txt c3" value="" /><select id="combUcolor__'+i+'" class="txt comb" style="width: 20px;"> </select></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textSpec__'+i+'"  type="text" class="txt c3" /><select id="combSpec__'+i+'" class="txt comb" style="width: 20px;"> </select></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textSize__'+i+'"  type="text" class="txt c3 sizea" style="width:50%;" /><select id="combSize__'+i+'" class="txt comb" style="width: 20px;"> </select></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textLengthb__'+i+'"  type="text" class="txt num c1" /></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textClass__'+i+'"  type="text" class="txt c3" /><select id="combClass__'+i+'" class="txt comb" style="width: 20px;"> </select></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textImount__'+i+'"  type="text" class="txt num c1" /></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textIlengthc__'+i+'"  type="text" class="txt num c1" /></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textIweight__'+i+'"  type="text" class="txt num c1" /></td>';
-	    				string+='<td style="text-align: center;color:'+t_color[i%t_color.length]+'"><input id="textMemo__'+i+'"  type="text" class="txt c1" /></td>';
-	    				string+='</tr>';
-					}
-					$('#cucu_table').append(string);
-					
-					//事件
-					//下拉事件
-					$('#cucu_table .comb').unbind("change");
-                    $('#cucu_table .comb').each(function(index) {
-						$(this).text(''); //清空資料
-						//帶入選項值
-						var n=$(this).attr('id').split('__')[1];
-						var objname=$(this).attr('id').split('__')[0];
-						if(objname=='combProduct'){
-							q_cmbParse("combProduct__"+n, q_getPara('vccs_vu.product'));
-						}
-						if(objname=='combUcolor'){
-							q_cmbParse("combUcolor__"+n, ',定尺,板料,亂尺');
-						}
-						if(objname=='combSpec'){
-							q_cmbParse("combSpec__"+n, t_spec);
-						}
-						if(objname=='combClass'){
-							q_cmbParse("combClass__"+n, t_class);
-						}
-						if(objname=='combSize'){
-							q_cmbParse("combSize__"+n, ',#3,#4,#5,#6,#7,#8,#9,#10,#11,#12,#13,#14,#15,#16');
-						}
-						
-						$(this).change(function() {
-							var textnames=replaceAll(objname,'comb','text')
-							$('#'+textnames+'__'+n).val($('#'+objname+'__'+n).find("option:selected").text());
-							$('#'+objname+'__'+n).val('');
-						});
-                    });
-                    
-                    //清空
-                    $('#cucu_table .minut').unbind("click");
-                    $('#cucu_table .minut').each(function(index) {
-						$(this).click(function() {
-							var ns=$(this).attr('id').split('__')[1];
-							$('#cucu_tr'+ns+' input[type="text"]').val('');
-						});
-                    });
-                    				
-					//所有欄位text
-					$('#cucu_table input[type="text"]').unbind("change");
-					$('#cucu_table input[type="text"]').unbind("keyup");
-					$('#cucu_table input[type="text"]').unbind("focusin");
-					$('#cucu_table input[type="text"]').each(function() {
-						var objname=$(this).attr('id').split('__')[0];
-						var n=$(this).attr('id').split('__')[1];
-						
-						//只能輸入數值
-						if(objname=='textLengthb' || objname=='textImount' || objname=='textIlengthc' || objname=='textIweight'){
-							$(this).keyup(function(e) {
-								if(e.which>=37 && e.which<=40){return;}
-								var tmp=$(this).val();
-								tmp=tmp.match(/\d{1,}\.{0,1}\d{0,}/);
-								$(this).val(tmp);
-							});
-						}
-						//變動事件
-						$(this).change(function() {
-							//號數
-							if(objname=='textSize'){
-								if ($(this).val().substr(0, 1) != '#' &&!emp($(this).val()))
-                        		$(this).val('#' + $(this).val());
-							}
-							
-							if(objname=='textIlengthc' || objname=='textSize' || objname=='textLengthb'){
-								var t_siez=replaceAll($('#textSize__'+n).val(),'#','');
-				            	var t_weight=0;
-				            	switch(t_siez){
-				            		case '3': t_weight=0.560; break;
-				            		case '4': t_weight=0.994; break;
-				            		case '5': t_weight=1.560; break;
-				            		case '6': t_weight=2.250; break;
-				            		case '7': t_weight=3.040; break;
-				            		case '8': t_weight=3.980; break;
-				            		case '9': t_weight=5.080; break;
-				            		case '10': t_weight=6.390; break;
-				            		case '11': t_weight=7.900; break;
-				            		case '12': t_weight=9.570; break;
-				            		case '14': t_weight=11.40; break;
-				            		case '16': t_weight=15.50; break;
-				            		case '18': t_weight=20.20; break;
-				            	}
-				            	
-				            	var t_lengthb=dec($('#textLengthb__'+n).val());
-				            	var t_mount1=dec($('#textIlengthc__'+n).val());
-				            	
-				            	$('#textIweight__'+n).val(round(q_mul(q_mul(t_weight,t_lengthb),t_mount1),0));
-							}
-						});
-						
-					});
-					
-					//移動下一格
-					var SeekF= new Array();
-					$('input:text,select').each(function() {
-						if($(this).attr('disabled')!='disabled')
-							SeekF.push($(this).attr('id'));
-					});
-					$('input:text,select').each(function() {
-						$(this).bind('keydown', function(event) {
-							if( event.which == 13 || event.which == 40) {
-								$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
-								$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
-							}
-						});
-					});
-				});
-				
-				$('#btnCubs').click(function() {
-					var t_err = q_chkEmpField([['textDatea', '加工日'],['combMechno', '機　台']]);
-	                if (t_err.length > 0) {
-	                    alert(t_err);
-	                    return;
-	                }
-	                //入庫
-	                t_err='';
-	                var ts_bbu='';
-	                var bburow=document.getElementById("cucu_table").rows.length-1;
-					var hasbbu=false;
-					var t_datea=emp($('#textDatea').val())?'#non':$('#textDatea').val();
-	                var t_mechno=emp($('#combMechno').val())?'#non':$('#combMechno').val();
-	                var t_memo=emp($('#textMemo').val())?'#non':$('#textMemo').val();
-					for(var j=0;j<bburow;j++){
-	                    var ts_product=$('#textProduct__'+j).val();
-		                var ts_ucolor=$('#textUcolor__'+j).val();
-						var ts_spec=$('#textSpec__'+j).val();
-						var ts_size=$('#textSize__'+j).val();
-						var ts_lengthb=$('#textLengthb__'+j).val();
-						var ts_class=$('#textClass__'+j).val();
-						var ts_imount=$('#textImount__'+j).val();
-						var ts_ilengthc=$('#textIlengthc__'+j).val();
-						var ts_iweight=$('#textIweight__'+j).val();
-						var ts_memo=$('#textMemo__'+j).val();
-																
-						if(!emp(ts_product) || !emp(ts_ucolor) || !emp(ts_spec) || !emp(ts_size) || !emp(ts_lengthb) || !emp(ts_class)){
-							hasbbu=true; //有資料
-							if((ts_ucolor=='定尺' || ts_ucolor=='板料') && dec(ts_lengthb)==0){
-								t_err=t_err+(t_err.length>0?'\n':'')+('第'+(j+1)+'項 '+ts_product+' '+ts_ucolor+' 米數為0');
-							}
-							
-							if (dec(ts_imount)>0 && dec(ts_iweight)>0){ //件數重量>0
-								ts_bbu=ts_bbu
-								+ts_product+"^@^"
-								+ts_ucolor+"^@^"
-								+ts_spec+"^@^"
-								+ts_size+"^@^"
-								+dec(ts_lengthb)+"^@^"
-								+ts_class+"^@^"
-								+dec(ts_imount)+"^@^"
-								+dec(ts_ilengthc)+"^@^"
-								+dec(ts_iweight)+"^@^"
-								+ts_memo+"^@^"
-								+"^#^";
-		                   	}
-						}
-					}
-					if(t_err.length>0){
-						alert(t_err);
-					}else if(!hasbbu){
-						alert('無入庫資料');
-					}else if(ts_bbu.length==0){
-	                   	alert('入庫件數或重量等於零。');
-					}else{
-	                   	if(confirm("確認要入庫?")){
-	                   		Lock();
-		                   	q_func('qtxt.query.cucutocubs', 'cuc_sf.txt,cucutocubs,'
-							+r_accy+';'+t_datea+';'+t_mechno+';'+t_memo+';'+r_userno+';'+r_name+';'+ts_bbu+';1');
+							alert('加簽人員編號禁止空白!!');
 						}
 					}
 				});
 				
-				$('#btnPluu').click();
-				
-				//浮動表頭
-				var string = "<div id='cucu_float' style='position:absolute;display:block;left:0px; top:0px;'>";
-				string+="<table id='cucu_table2' style='width:1240px;border-bottom: none;'>";
-				string+='<tr id="cucu_header">';
-				string+='<td id="cucu_plut" align="center" style="width:40px; color:black;"><input id="btnPluu2" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>';
-				string+='<td id="cucu_product" align="center" style="width:110px; color:black;">品名</td>';
-				string+='<td id="cucu_ucolor" align="center" style="width:170px; color:black;">類別</td>';
-				string+='<td id="cucu_spec" align="center" style="width:140px; color:black;">材質</td>';
-				string+='<td id="cucu_size" align="center" style="width:80px; color:black;">號數</td>';
-				string+='<td id="cucu_lengthb" align="center" style="width:80px; color:black;">米數</td>';
-				string+='<td id="cucu_class" align="center" style="width:100px; color:black;">廠牌</td>';
-				string+='<td id="cucu_mount" align="center" style="width:80px; color:black;">件數</td>';
-				string+='<td id="cucu_lengthc" align="center" style="width:90px; color:black;">支數</td>';
-				string+='<td id="cucu_weight" align="center" style="width:90px; color:black;">重量</td>';
-				string+='<td id="cucu_memo" align="center" style="width:220px; color:black;">備註&nbsp;&nbsp;<input id="btnCubs2" type="button" style="font-size: medium; font-weight: bold;" value="餘料入庫"/></td>';
-				string+='</tr>';
-				string+='</table>';
-				$('#cucu').append(string);
-				
-				$('#btnPluu2').click(function() {
-					$('#btnPluu').click();
-				});
-				$('#btnCubs2').click(function() {
-					$('#btnCubs').click();
+				$('#btnAddclose').click(function() {
+					$('#txtAddsno').val('');
+					$('#txtAddnamea').val('');
+					$('#issignadd_div').hide();
 				});
 				
-				//設定滾動條移動時浮動表頭與div的距離
-				$('#cucu').scroll(function(){
-					$('#cucu_float').css('top',$(this).scrollTop()+"px")
-				});
-				
-				//---------------------------------------------------------------------------------------------------
-				//移動下一格
-				var SeekF= new Array();
-				$('input:text,select').each(function() {
-					if($(this).attr('disabled')!='disabled')
-						SeekF.push($(this).attr('id'));
-				});
-				$('input:text,select').each(function() {
-					$(this).bind('keydown', function(event) {
-						if( event.which == 13 || event.which == 40) {
-							$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
-							$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
-						}
-					});
+				$('#btnSignDetailClose').click(function() {
+					$('#signdetail_div').hide();
 				});
             }
             
             function q_gtPost(t_name) {
 				switch (t_name) {
-					case 'init':
-						//載入bbs表頭
-						var string = "<table id='cucs_table' style='width:1240px;word-break:break-all;'>";
-						string+='<tr id="cucs_header">';
-						string+='<td id="cucs_chk" align="center" style="width:30px; color:black;">鎖定</td>';
-						string+='<td id="cucs_cubno" align="center" style="width:20px; color:black;display:none;">鎖定人</td>'
-						string+='<td id="cucs_noa" align="center" style="width:70px; color:black;">案號</td>'
-						string+='<td id="cucs_noq" align="center" style="width:30px; color:black;">案序</td>'
-						string+='<td id="cucs_ucolor" title="類別" align="center" style="width:120px; color:black;display:none;">類別</td>';
-						string+='<td id="cucs_product" title="品名" align="center" style="width:70px; color:black;display:none;">品名</td>';
-						string+='<td id="cucs_spec" title="材質" align="center" style="width:80px; color:black;">材質</td>';
-						string+='<td id="cucs_size" title="號數" align="center" style="width:50px; color:black;">號數</td>';
-						string+='<td id="cucs_lengthb" title="米數" align="center" style="width:50px; color:black;">米數</td>';
-						string+='<td id="cucs_mount" title="訂單件數" align="center" style="width:50px; color:black;" class="co1">訂單件數</td>';
-						string+='<td id="cucs_1mount" title="訂單支數" align="center" style="width:50px; color:black;" class="co1">訂單支數</td>';
-						string+='<td id="cucs_weight" title="訂單重量" align="center" style="width:50px; color:black;" class="co1">訂單重量</td>';
-						string+='<td id="cucs_emount" title="未完工件數" align="center" style="width:60px; color:black;display:none;" class="co2">未完工件數</td>';
-						string+='<td id="cucs_elengthc" title="未完工支數" align="center" style="width:60px; color:black;display:none;" class="co2">未完工支數</td>';
-						string+='<td id="cucs_eweight" title="未完工重量" align="center" style="width:60px; color:black;display:none;" class="co2">未完工重量</td>';
-						string+='<td id="cucs_cubmount" title="已完工件數" align="center" style="width:60px; color:black;" class="co2">已完工件數</td>';
-						string+='<td id="cucs_cublengthc" title="已完工支數" align="center" style="width:60px; color:black;" class="co2">已完工支數</td>';
-						string+='<td id="cucs_cubweight" title="已完工重量" align="center" style="width:60px; color:black;" class="co2">已完工重量</td>';
-						string+='<td id="cucs_xmount" title="件數" align="center" style="width:50px; color:black;" class="co3">件數</td>';
-						string+='<td id="cucs_xcount" title="支數" align="center" style="width:50px; color:black;" class="co3">支數<BR><input id="btnAutoxcount" type="button" style="font-size: medium; font-weight: bold;" value="代入"></td>';
-						string+='<td id="cucs_xweight" title="重量" align="center" style="width:60px; color:black;" class="co3">重量<BR><a class="total_xweight" style="color: forestgreen;font-weight: bold;"></a></td>';
-						string+='<td id="cucs_class" title="廠牌" align="center" style="width:50px; color:black;">廠牌</td>';
-						string+='<td id="cucs_memo" title="備註(標籤)" align="center" style="width:110px; color:black;">備註(標籤)</td>';
-						string+='<td id="cucs_work" title="工令" align="center" style="width:100px; color:black;">工令</td>';
-						string+='<td id="cucs_custno" title="客戶編號" align="center" style="width:75px; color:black;display:none;">客戶編號</td>';
-						string+='<td id="cucs_cust" title="客戶名稱" align="center" style="width:75px; color:black;">客戶名稱</td>';
-						string+='<td id="cucs_ordeno" title="訂單號碼" align="center" style="width:90px; color:black;display:none;">訂單號碼</td>';
-						string+='<td id="cucs_no2" title="訂單序號" align="center" style="width:90px; color:black;display:none;">訂單序號</td>';
-						//string+='<td id="cucs_mins" align="center" style="width:30px; color:black;">完工</td>';
-						string+="<td id='cucs_mins' align='center' style='width:30px; color:black;'><input type='button' id='btnMins' style='font-size:16px;width: 30px;height: 45px;white-space: inherit;' value='完工'/></td>";
-						string+='<td id="cucs_waste" align="center" style="width:30px; color:black;">待續接</td>';
-						string+='<td id="cucs_hours" align="center" style="width:30px; color:black;">待成型</td>';
-						string+='</tr>';
-						string+='</table>';
-						$('#cucs').html(string);
-						
-						//浮動表頭
-						var string = "<div id='cucs_float' style='position:absolute;display:block;left:0px; top:0px;'>";
-						string+="<table id='cucs_table2' style='width:1240px;border-bottom: none;'>";
-						string+='<tr id="cucs_header">';
-						string+='<td id="cucs_chk" align="center" style="width:30px; color:black;">鎖定</td>';
-						string+='<td id="cucs_cubno" align="center" style="width:20px; color:black;display:none;">鎖定人</td>'
-						string+='<td id="cucs_noa" align="center" style="width:70px; color:black;">案號</td>'
-						string+='<td id="cucs_noq" align="center" style="width:30px; color:black;">案序</td>'
-						string+='<td id="cucs_ucolor" title="類別" align="center" style="width:120px; color:black;display:none;">類別</td>';
-						string+='<td id="cucs_product" title="品名" align="center" style="width:70px; color:black;display:none;">品名</td>';
-						string+='<td id="cucs_spec" title="材質" align="center" style="width:80px; color:black;">材質</td>';
-						string+='<td id="cucs_size" title="號數" align="center" style="width:50px; color:black;">號數</td>';
-						string+='<td id="cucs_lengthb" title="米數" align="center" style="width:50px; color:black;">米數</td>';
-						string+='<td id="cucs_mount" title="訂單件數" align="center" style="width:50px; color:black;" class="co1" >訂單件數</td>';
-						string+='<td id="cucs_1mount" title="訂單支數" align="center" style="width:50px; color:black;" class="co1">訂單支數</td>';
-						string+='<td id="cucs_weight" title="訂單重量" align="center" style="width:50px; color:black;" class="co1">訂單重量</td>';
-						string+='<td id="cucs_emount" title="未完工件數" align="center" style="width:60px; color:black;display:none;" class="co2">未完工件數</td>';
-						string+='<td id="cucs_elengthc" title="未完工支數" align="center" style="width:60px; color:black;display:none;" class="co2">未完工支數</td>';
-						string+='<td id="cucs_eweight" title="未完工重量" align="center" style="width:60px; color:black;display:none;" class="co2">未完工重量</td>';
-						string+='<td id="cucs_cubmount" title="已完工件數" align="center" style="width:60px; color:black;" class="co2">已完工件數</td>';
-						string+='<td id="cucs_cublengthc" title="已完工支數" align="center" style="width:60px; color:black;" class="co2">已完工支數</td>';
-						string+='<td id="cucs_cubweight" title="已完工重量" align="center" style="width:60px; color:black;" class="co2">已完工重量</td>';
-						string+='<td id="cucs_xmount" title="件數" align="center" style="width:50px; color:black;" class="co3">件數</td>';
-						string+='<td id="cucs_xcount" title="支數" align="center" style="width:50px; color:black;" class="co3">支數<BR><input id="btnAutoxcount2" type="button" style="font-size: medium; font-weight: bold;" value="代入"></td>';
-						string+='<td id="cucs_xweight" title="重量" align="center" style="width:60px; color:black;" class="co3">重量<BR><a class="total_xweight" style="color: forestgreen;font-weight: bold;"></a></td>';
-						string+='<td id="cucs_class" title="廠牌" align="center" style="width:50px; color:black;">廠牌</td>';
-						string+='<td id="cucs_memo" title="備註(標籤)" align="center" style="width:110px; color:black;">備註(標籤)</td>';
-						string+='<td id="cucs_work" title="工令" align="center" style="width:100px; color:black;">工令</td>';
-						string+='<td id="cucs_custno" title="客戶編號" align="center" style="width:75px; color:black;display:none;">客戶編號</td>';
-						string+='<td id="cucs_cust" title="客戶名稱" align="center" style="width:75px; color:black;">客戶名稱</td>';
-						string+='<td id="cucs_ordeno" title="訂單號碼" align="center" style="width:90px; color:black;display:none;">訂單號碼</td>';
-						string+='<td id="cucs_no2" title="訂單序號" align="center" style="width:90px; color:black;display:none;">訂單序號</td>';
-						//string+='<td id="cucs_mins" align="center" style="width:30px; color:black;">完工</td>';
-						string+="<td id='cucs_mins' align='center' style='width:30px; color:black;'><input type='button' id='btnMins2' style='font-size:16px;width: 30px;height: 45px;white-space: inherit;' value='完工'/></td>";
-						string+='<td id="cucs_waste" align="center" style="width:30px; color:black;">待續接</td>';
-						string+='<td id="cucs_hours" align="center" style="width:30px; color:black;">待成型</td>';
-						string+='</tr>';
-						string+='</table>';
-						$('#cucs_float').remove();
-						$('#cucs').append(string);
-						
-						//設定滾動條移動時浮動表頭與div的距離
-						$('#cucs').scroll(function(){
-							$('#cucs_float').css('top',$(this).scrollTop()+"px")
-						});
-					
-						var as = _q_appendData("view_cuc", "", true);
-                        var comb_noa='@';
-                        
-                        for(var i=0;i<as.length;i++){
-                        	if(comb_noa.indexOf(as[i].noa)==-1)
-                        		comb_noa=comb_noa+","+as[i].noa+"@"+as[i].noa
-                        }
-                        $('#combCucno').text('');
-                        q_cmbParse("combCucno", comb_noa);
-                        
-                        if(isclear){
-                        	//清空該使用者的全部鎖定
-							q_func('qtxt.query.unlockall', 'cuc_sf.txt,unlockall,'+r_userno+';'+r_name);
+					case 'eipflow':
+						var as = _q_appendData("eipflow", "", true);
+                        eipflowsign.init(as);
+                        if(as.length>0){
+                        	$('#nosign_tab').text('草稿('+as.length+')');
+                        }else{
+                        	$('#nosign_tab').text('草稿');
                         }
                         
-                        //intervalupdate=setInterval("cucsupdata()",1000*60);
+                        q_gt('eipform', 'where=^^1=1^^', 0, 0, 0, "");
+						break;
+					case 'eipform':
+						var as = _q_appendData("eipform", "", true);
+                        eipform.init(as);
+                        if(as.length>0){
+                        	$('#form_tab').text('已存檔表單('+as.length+')');
+                        }else{
+                        	$('#form_tab').text('已存檔表單');
+                        }
                         
-                        $('#btnAutoxcount').click(function() {
-                        	bbsrow=document.getElementById("cucs_table").rows.length-1;//重新取得最新的bbsrow
-                        	
-							for(var i=0;i<bbsrow;i++){
-								if($('#cucs_chk'+i).prop('checked')){
-									$('#textXcount_'+i).val(dec($('#cucs_elengthc'+i).text()));
-									$('#textXcount_'+i).keyup();
-									$('#textXcount_'+i).blur();
-								}
-							}
-                        });
-                        
-                        $('#btnAutoxcount2').click(function() {
-                        	$('#btnAutoxcount').click();
-						});
-						
-						//完工
-		                $('#btnMins').click(function() {
-		                	t_mins_count=0;
-		                	$('#cucs .cucs_mins').each(function(index) {
-								if($(this).prop('checked')){
-									t_mins_count++;
-								}
-							});
-							
-							if(t_mins_count>0){
-								if(confirm("確認要完工?")){
-									$('#cucs .cucs_mins').each(function(index) {
-										if($(this).prop('checked')){
-											var n=$(this).attr('id').replace('cucs_mins','')
-											t_endanoa=$('#cucs_noa'+n).text();
-											t_endanoq=$('#cucs_noq'+n).text();
-											q_func('qtxt.query.enda', 'cuc_sf.txt,enda,'+r_accy+';'+$('#cucs_noa'+n).text()+';'+$('#cucs_noq'+n).text()+';'+r_userno+';'+r_name);
-										}
-									});
-								}else{
-									t_mins_count=0;
-								}
-							}else{
-								alert('無核取完工資料!');
-							}
-						});
-						
-						$('#btnMins2').click(function() {
-                        	$('#btnMins').click();
-						});
-                        break;
-					case 'importcucs':
-						//現在表身資料
-						var bbsrow=document.getElementById("cucs_table").rows.length-1;
-						var as = _q_appendData("view_cuc", "", true);
-						var imp_cucno=''; //匯入的cucno
-						/*if(as[0]!=undefined && !isupdate){ //匯入資料就先鎖單
-							imp_cucno=as[0].noa;
-						}*/
-						//變動核取資料
-						for(var i =0 ;i<as.length;i++){
-                    		var cubno=as[i]['cubno'];
-							if(cubno.length>0){
-								//判斷是否被鎖定或解除鎖定或鎖定時間超過15分
-	                    		var lock_time=cubno.split('##')[3]!=undefined?cubno.split('##')[3]:'';
-								var islock=false;
-								if(lock_time.length>0){
-									islock=true;
-									var now_time = new Date();
-									lock_time = new Date(lock_time);
-									var diff = now_time - lock_time;
-									if(diff>1000 * 60 * 15) //超過15分表示已解除鎖定
-										islock=false;
-								}
-								
-								if(islock && cubno.split('##')[0]==r_userno){ //自己的鎖定資料
-									var t_exists=false;
-		                    		for(var j=0;j<chk_cucs.length;j++){
-		                    			if(as[i]['noa']==chk_cucs[j]['noa'] && as[i]['noq']==chk_cucs[j]['noq']){
-		                    				t_exists=true;
-		                    			}
-		                    		}
-		                    		if(!t_exists){//當不存在時新增
-		                    			chk_cucs.push({
-												noa : as[i]['noa'],
-												noq : as[i]['noq'],
-												xmount : 0,
-												xcount : 0,
-												xweight : 0,
-												ordeno:as[i]['ordeno'],
-												no2:as[i]['no2']
-										});
-		                    		}
-		                    	}else{//被他人鎖定資料 或鎖定時間超過15分
-		                    		for(var j=0;j<chk_cucs.length;j++){
-		                    			if(as[i]['noa']==chk_cucs[j]['noa'] && as[i]['noq']==chk_cucs[j]['noq']){
-		                    				chk_cucs.splice(j, 1);
-		                    				j--;
-                        	 				break;
-		                    			}
-		                    		}
-		                    	}
-		                    }else{//無鎖定資料
-		                    	for(var j=0;j<chk_cucs.length;j++){
-		                    		if(as[i]['noa']==chk_cucs[j]['noa'] && as[i]['noq']==chk_cucs[j]['noq']){
-		                    			chk_cucs.splice(j, 1);
-		                    			j--;
-                        	 			break;
-		                    		}
-		                    	}
-		                    }
-	                    }
-	                    
-						var table_noa='';
-						if(bbsrow!=0){//表示目前有無資料 有要更新資料
-							for(var j=0;j<bbsrow;j++){
-								var bbsexists=false;
-								for(var i =0 ;i<as.length;i++){
-									if(as[i].noa==$('#cucs_noa'+j).text() && as[i].noq==$('#cucs_noq'+j).text()){
-										bbsexists=true;
-										//資料存在,更新表身資料
-										$('#cucs_cubno'+j).text(as[i].cubno);
-										$('#cucs_noa'+j).text(as[i].noa);
-										$('#cucs_noq'+j).text(as[i].noq);
-										$('#cucs_ucolor'+j).text(as[i].ucolor);
-										$('#cucs_product'+j).text(as[i].product);
-										$('#cucs_spec'+j).text(as[i].spec);
-										$('#cucs_size'+j).text(as[i].size);
-										$('#cucs_lengthb'+j).text(as[i].lengthb);
-										$('#cucs_mount'+j).text(as[i].mount);
-										$('#cucs_weight'+j).text(as[i].weight);
-										$('#cucs_1mount'+j).text(as[i].mount1);
-										$('#cucs_emount'+j).text(round(as[i].emount,3));
-										$('#cucs_eweight'+j).text(round(as[i].eweight,3));
-										$('#cucs_elengthc'+j).text(round(as[i].elengthc,3));
-										$('#cucs_cubmount'+j).text(round(dec(as[i].cubmount),3));
-										$('#cucs_cubweight'+j).text(round(dec(as[i].cubweight),3));
-										$('#cucs_cublengthc'+j).text(round(dec(as[i].cublengthc),3));
-										$('#lblCucs_class'+j).text(as[i].class);
-										$('#cucs_memo'+j).text(as[i].memo);
-										$('#cucs_work'+j).text(as[i].size2);
-										$('#cucs_custno'+j).text(as[i].acustno);
-										$('#cucs_cust'+j).text(as[i].acust.substr(0,4));
-										$('#cucs_ordeno'+j).text(as[i].ordeno);
-										$('#cucs_no2'+j).text(as[i].no2);
-										$('#cucs_waste'+j).text((as[i].picname!='直料' && as[i].picname!='板料' && as[i].picname!='')?'Y':'');
-										$('#cucs_hours'+j).text((as[i].paraf!='' || as[i].parag!='')?'Y':'');
-										//移除已存在的資料
-										as.splice(i, 1);
-										i--;
-										break;
-									}
-								}
-								
-								if(isupdate && !bbsexists){//更新資料 bbs 一定要存在 , 不存在表示已完工或資料被刪除
-									//刪除bbs 資料
-									$('#cucs_tr'+j).find('td').css('background', 'lavender');
-									$('#cucs_tr'+j+' .co1').css('background-color', 'antiquewhite');
-		                            $('#cucs_tr'+j+' .co2').css('background-color', 'lightpink');
-		                            $('#cucs_tr'+j+' .co3').css('background-color', 'lightsalmon');
-									$('#cucs_chk'+j).remove();
-									$('#textXmount_'+j).remove();
-									$('#textXcount_'+j).remove();
-									$('#textXweight_'+j).remove();
-									$('#cucs_lbla'+j).text();
-									$('#cucs_cubno'+j).text('');
-									$('#cucs_noa'+j).text('');
-									$('#cucs_noq'+j).text('');
-									$('#cucs_ucolor'+j).text('');
-									$('#cucs_product'+j).text('');
-									$('#cucs_spec'+j).text('');
-									$('#cucs_size'+j).text('');
-									$('#cucs_lengthb'+j).text('');
-									$('#cucs_mount'+j).text('');
-									$('#cucs_weight'+j).text('');
-									$('#cucs_1mount'+j).text('');
-									$('#cucs_emount'+j).text('');
-									$('#cucs_eweight'+j).text('');
-									$('#cucs_elengthc'+j).text('');
-									$('#cucs_cubmount'+j).text('');
-									$('#cucs_cubweight'+j).text('');
-									$('#cucs_cublengthc'+j).text('');
-									$('#lblCucs_class'+j).text('');
-									$('#combXclass_'+j).remove();
-									$('#cucs_memo'+j).text('');
-									$('#cucs_work'+j).text('');
-									$('#cucs_custno'+j).text('');
-									$('#cucs_cust'+j).text('');
-									$('#cucs_ordeno'+j).text('');
-									$('#cucs_no2'+j).text('');
-									$('#cucs_mins'+j).remove();
-									$('#cucs_waste'+j).text('');
-									$('#cucs_hours'+j).text('');
-								}
-							}
-							table_noa=$('#cucs_noa'+(bbsrow-1)).text();
-						}
-						
-						t_color = ['DarkBlue','DarkRed'];
-						var string='';
-						for(var i=0;i<as.length;i++){
-							if(table_noa!='' && table_noa!=as[i].noa){ //不同案號 空依格
-								string+='<tr id="cucs_tr'+(i+bbsrow)+'">';
-								string+='<td style="text-align: center;"></td>';
-								string+='<td id="cucs_cubno'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_noa'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_noq'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_ucolor'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_product'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_spec'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_size'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_lengthb'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_mount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co1"></td>';
-								string+='<td id="cucs_1mount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co1"></td>';
-								string+='<td id="cucs_weight'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co1"></td>';
-								string+='<td id="cucs_emount'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2"></td>';
-								string+='<td id="cucs_elengthc'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2"></td>';
-								string+='<td id="cucs_eweight'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2"></td>';
-								string+='<td id="cucs_cubmount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2"></td>';
-								string+='<td id="cucs_cublengthc'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2"></td>';
-								string+='<td id="cucs_cubweight'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2"></td>';
-								string+='<td id="cucs_xmount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co3"></td>';
-								string+='<td id="cucs_xcount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co3"></td>';
-								string+='<td id="cucs_xweight'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co3"></td>';
-								string+='<td id="cucs_class'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"><a id="lblCucs_class'+(i+bbsrow)+'"></a></td>';
-								string+='<td id="cucs_memo'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_work'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_custno'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_cust'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_ordeno'+(i+bbsrow)+'" style="display:none;font-size: 12px;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_no2'+(i+bbsrow)+'" style="display:none;font-size: 12px;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td style="text-align: center;"></td>';
-								string+='<td id="cucs_hours'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								string+='<td id="cucs_waste'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"></td>';
-								
-								string+='</tr>';
-								bbsrow++;
-							}
-							
-							string+='<tr id="cucs_tr'+(i+bbsrow)+'">';
-							string+='<td style="text-align: center;"><input id="cucs_chk'+(i+bbsrow)+'" class="cucs_chk" type="checkbox"/><a id="cucs_lbla'+(i+bbsrow)+'" ></a></td>';
-							string+='<td id="cucs_cubno'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].cubno+'</td>';
-							string+='<td id="cucs_noa'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].noa+'</td>';
-							string+='<td id="cucs_noq'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].noq+'</td>';
-							string+='<td id="cucs_ucolor'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].ucolor+'</td>';
-							string+='<td id="cucs_product'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].product+'</td>';
-							string+='<td id="cucs_spec'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].spec+'</td>';
-							string+='<td id="cucs_size'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].size+'</td>';
-							string+='<td id="cucs_lengthb'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].lengthb+'</td>';
-							string+='<td id="cucs_mount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co1">'+as[i].mount+'</td>';
-							string+='<td id="cucs_1mount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co1">'+as[i].mount1+'</td>';
-							string+='<td id="cucs_weight'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co1">'+as[i].weight+'</td>';
-							string+='<td id="cucs_emount'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2">'+round(as[i].emount,3)+'</td>';
-							string+='<td id="cucs_elengthc'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2">'+round(as[i].elengthc,3)+'</td>';
-							string+='<td id="cucs_eweight'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2">'+round(as[i].eweight,3)+'</td>';
-							string+='<td id="cucs_cubmount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2">'+round(dec(as[i].cubmount),3)+'</td>';
-							string+='<td id="cucs_cublengthc'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2">'+round(dec(as[i].cublengthc),3)+'</td>';
-							string+='<td id="cucs_cubweight'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co2">'+round(dec(as[i].cubweight),3)+'</td>';
-							string+='<td id="cucs_xmount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co3"><input id="textXmount_'+(i+bbsrow)+'"  type="text" class="xmount txt c1 num" disabled="disabled" /></td>';
-							string+='<td id="cucs_xcount'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co3"><input id="textXcount_'+(i+bbsrow)+'"  type="text" class="xcount txt c1 num" disabled="disabled"/></td>';
-							string+='<td id="cucs_xweight'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+';" class="co3"><input id="textXweight_'+(i+bbsrow)+'"  type="text" class="xweight txt c1 num" disabled="disabled"/></td>';
-							string+='<td id="cucs_class'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'"><a id="lblCucs_class'+(i+bbsrow)+'">'+as[i].class+'</a><select id="combXclass_'+(i+bbsrow)+'" class="txt comb" style="width: 20px;"> </select></td>';
-							string+='<td id="cucs_memo'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].memo+'</td>';
-							string+='<td id="cucs_work'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].size2+'</td>';
-							string+='<td id="cucs_custno'+(i+bbsrow)+'" style="display:none;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].acustno+'</td>';
-							string+='<td id="cucs_cust'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].acust.substr(0,4)+'</td>';
-							string+='<td id="cucs_ordeno'+(i+bbsrow)+'" style="display:none;font-size: 12px;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].ordeno+'</td>';
-							string+='<td id="cucs_no2'+(i+bbsrow)+'" style="display:none;font-size: 12px;text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+as[i].no2+'</td>';
-							string+='<td style="text-align: center;"><input id="cucs_mins'+(i+bbsrow)+'" class="cucs_mins" type="checkbox"/></td>';
-							string+='<td id="cucs_hours'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+((as[i].paraf!='' || as[i].parag!='')?'Y':'')+'</td>';
-							string+='<td id="cucs_waste'+(i+bbsrow)+'" style="text-align: center;color:'+t_color[(i+bbsrow)%t_color.length]+'">'+((as[i].picname!='直料' && as[i].picname!='板料' && as[i].picname!='')?'Y':'')+'</td>';
-							string+='</tr>';
-							
-							table_noa=as[i].noa;
-						}
-						
-						$('#cucs_table').append(string);
-						cucs_refresh();
-						tot_xweight_refresh();
-						if(chk_cucs.length>0){
-							//clearInterval(intervalupdate);
-							intervalupdate = setInterval(";");
-							for (var i = 0 ; i < intervalupdate ; i++) {
-							    clearInterval(i); 
-							}
-							setInterval("dialog_show()",1000*5);
-						}
-						
-						isupdate=false;
-						
-						$('#cucs_table .comb').unbind("change");
-                    	$('#cucs_table .comb').each(function(index) {
-                    		$(this).text('');
-                    		var n=$(this).attr('id').split('_')[1];
-                    		q_cmbParse("combXclass_"+n, t_class);
-                    		$('#combXclass_'+n).val($('#lblCucs_class'+n).text());
-                    		
-                    		$(this).change(function() {
-                    			//1113 更新廠牌到cucs
-                    			q_func('qtxt.query.cucs_class_update', 'cuc_sf.txt,updateclass,'+r_accy+';'+$('#cucs_noa'+n).text()+';'+$('#cucs_noq'+n).text()+';'+r_userno+';'+r_name+';'+$(this).val());
-                    			$('#lblCucs_class'+n).text($(this).val());
-							});
-                    	})
-						
-						//事件更新
-						$('#cucs .cucs_chk').unbind('click');
-						$('#cucs .cucs_chk').click(function(e) {
-							var n=$(this).attr('id').replace('cucs_chk','');
-							if($(this).prop('checked')){
-								var t_err = q_chkEmpField([['combMechno', '機　台']]);
-								
-								var t_err2='';
-								//105/08/15判斷是否已續接或成型
-	                			var t_where = "where=^^ 1=1 and a.noa='"+$('#cucs_noa'+n).text()+"' and b.noq='"+$('#cucs_noq'+n).text()+"'^^";
-								var t_where1 = "where[1]=^^ d.productno2=b.noa and d.product2=b.noq and c.itype!='1' and (d.mount>0 or d.weight>0) ^^";
-								q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'getcubs', r_accy,1);
-								var cubs = _q_appendData("view_cuc", "", true);
-								if (cubs[0] != undefined){
-									if(cubs[0].cubmount>0 || cubs[0].cubweight>0){
-										var t_err2='';
-										if(cubs[0].paraf!='' || cubs[0].parag!='')
-											t_err2='續接';
-										if(cubs[0].picname!='直料' && cubs[0].picname!='板料' && cubs[0].picname!='')
-											t_err2=t_err2+(t_err.length>0?'或':'')+'成型';
-										
-										if(confirm('此加工品項已進行'+t_err2+'生產，是否繼續?')){
-											t_err2='';
-		                				}
-									}
-	                			}else{
-	                				alert('加工單遺失，請確認加工單是否存在!!');
-	                				t_err2='加工單遺失';
-	                			}
-								
-				                if (t_err.length > 0 || chk_cucs.length>=8 || t_err2.length>0) {
-				                	if(t_err.length>0)
-				                    	alert(t_err);
-				                    else if(chk_cucs.length>=8)
-				                    	alert('加工項目超過8筆!!');
-				                    	
-				                    $(this).prop("checked",false).parent().parent().find('td').css('background', 'lavender');
-				                    $('#cucs_tr'+n+' .co1').css('background-color', 'antiquewhite');
-		                            $('#cucs_tr'+n+' .co2').css('background-color', 'lightpink');
-		                            $('#cucs_tr'+n+' .co3').css('background-color', 'lightsalmon');
-		                            
-		                            var cucsno=$('#cucs_noa' + n).text();
-									var eweight=dec($('#cucs_eweight' + n).text());
-									var erate=q_div(dec($('#cucs_eweight' + n).text()),dec($('#cucs_weight' + n).text()));
-									//1126 完工達到97% 呈現灰色
-									if(cucsno!='' && erate<=0.03){
-										$('#cucs_tr'+n).find('td').css('background', 'lightgrey');
-									}
-				                    return;
-				                }
-							}
-							//Lock();
-							var t_where="where=^^  1=1 and a.noa='"+$('#cucs_noa'+n).text()+"' and b.noq='"+$('#cucs_noq'+n).text()+"' and isnull(a.gen,0)=0 and isnull(b.mins,0)=0 ^^";
-							var t_where1 = "where[1]=^^ d.productno2=b.noa and d.product2=b.noq and c.itype='1' ^^";
-							//判斷是否能被鎖定或解除
-							if($(this).prop('checked')){
-								q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'getcanlock_'+n, r_accy);
-							}else{
-								q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'getcanunlock_'+n, r_accy);
-							}
-						});
-	                    
-	                    $('#cucs .num').unbind('blur');
-	                    $('#cucs .num').unbind('keyup');
-	                    $('#cucs .num').unbind('focus');
-	                    $('#cucs .num').each(function() {
-	                    	$(this).blur(function() {
-	                    		var objnamea=$(this).attr('id').split('_')[0];
-		                        var n=$(this).attr('id').split('_')[1];
-		                        //修改暫存資料
-		                        for(var i =0 ;i<chk_cucs.length;i++){
-									if(chk_cucs[i].noa==$('#cucs_noa'+n).text() && chk_cucs[i].noq==$('#cucs_noq'+n).text()){
-										if(objnamea=='textXmount')
-											chk_cucs[i].xmount=$('#'+objnamea+'_'+n).val();
-										if(objnamea=='textXcount')
-											chk_cucs[i].xcount=$('#'+objnamea+'_'+n).val();
-										if(objnamea=='textXweight')
-											chk_cucs[i].xweight=$('#'+objnamea+'_'+n).val();
-		                        	 	break;
-									}
-								}
-							});
-							
-							$(this).focus(function() {
-	                    		var objnamea=$(this).attr('id').split('_')[0];
-		                        var n=$(this).attr('id').split('_')[1];
-		                        if(objnamea=='textXcount')
-		                        	$(this).select();
-							});
-							
-							$(this).keyup(function(e) {
-								if(e.which>=37 && e.which<=40){return;}
-								var tmp=$(this).val();
-								tmp=tmp.match(/\d{1,}\.{0,1}\d{0,}/);
-								$(this).val(tmp);
-								
-								var objnamea=$(this).attr('id').split('_')[0];
-		                        var n=$(this).attr('id').split('_')[1];
-								//1104填入支數時，重量可以運算出理論重量
-		                        if(objnamea=='textXcount'){
-		                        	var t_1mount=dec($('#cucs_1mount'+n).text());
-		                        	var t_xcount=dec($(this).val());
-		                        	if(t_1mount>0){
-		                        		var t_weight=dec($('#cucs_weight'+n).text());
-		                        		$('#textXweight_'+n).val(round(q_mul(q_div(t_weight,t_1mount),t_xcount),0));
-		                        		$('#textXweight_'+n).blur();
-		                        	}
-		                        }
-		                        
-		                        tot_xweight_refresh();
-							});
-						});
-						
-						//完工 //1130 改成多選完工
-						/*$('#cucs .cucs_mins').unbind('click');
-						$('#cucs .cucs_mins').click(function(e) {
-							if($(this).prop('checked')){
-								if(confirm("確認要完工?")){
-									var n=$(this).attr('id').replace('cucs_mins','')
-									t_endanoa=$('#cucs_noa'+n).text();
-									t_endanoq=$('#cucs_noq'+n).text();
-									q_func('qtxt.query.enda', 'cuc_sf.txt,enda,'+r_accy+';'+$('#cucs_noa'+n).text()+';'+$('#cucs_noq'+n).text()+';'+r_userno+';'+r_name);
-								}else{
-									$(this).prop('checked',false);
-								}
-							}							
-						});*/
-						
-						//第一次匯入就先核取
-						bbsrow=document.getElementById("cucs_table").rows.length-1;//重新取得最新的bbsrow
-						if(imp_cucno.length>0){
-							for(var i=0;i<bbsrow;i++){
-								if($('#cucs_noa'+i).text()==imp_cucno && !$('#cucs_chk'+i).prop('checked')
-								&& !$('#cucs_chk'+i).prop('disabled')){ //沒有被核取過的資料 且目前沒被鎖定過
-									$('#cucs_chk'+i).prop('checked',true).parent().parent().find('td').css('background', 'darkturquoise');
-									var t_where="where=^^ 1=1 and a.noa='"+$('#cucs_noa'+i).text()+"' and b.noq='"+$('#cucs_noq'+i).text()+"' and isnull(a.gen,0)=0 and isnull(b.mins,0)=0 ^^";
-									var t_where1 = "where[1]=^^ d.productno2=b.noa and d.product2=b.noq and c.itype='1' ^^";
-									q_gt('cucs_sf', t_where+t_where1, 0, 0, 0,'getcanlock_'+i, r_accy);
-									//$('#cucs_chk'+i).click();
-									//$('#cucs_chk'+i).prop('checked',true).parent().parent().find('td').css('background', 'darkturquoise');
-								}
-							}
-							cucs_refresh();
-						}
-						imp_cucno='';
-						
-						//移動下一格
-						var SeekF= new Array();
-						$('input:text,select').each(function() {
-							if($(this).attr('disabled')!='disabled')
-								SeekF.push($(this).attr('id'));
-						});
-						$('input:text,select').each(function() {
-							$(this).bind('keydown', function(event) {
-								if( event.which == 13 || event.which == 40) {
-									$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).focus();
-									$('#'+SeekF[SeekF.indexOf($(this).attr('id'))+1]).select();
-								}
-							});
-						});
-                        Unlock();
-                    	break;
-                    case 'tocub':
-                    	var as = _q_appendData("view_cuc", "", true);
-                    	if (as[0] != undefined){
-                    		var t_noa='';
-                    		var t_noq='';
-                    		var t_xmount='';
-                    		var t_xcount='';
-                    		var t_xweight='';
-                    		var t_err='';
-                    		for (var i=0;i<chk_cucs.length;i++){
-                    			var t_exists=false;
-                    			for (var j=0;j<as.length;j++){
-                    				if(chk_cucs[i]['noa']==as[j]['noa'] && chk_cucs[i]['noq']==as[j]['noq']){//表示加工排程單存在
-                    					if(as[j]['cubno'].split('##')[0]!=r_userno){
-                    						t_err+=chk_cucs[i]['ordeno']+'-'+chk_cucs[i]['no2']+"鎖定人員非自己本人!!";
-                    					}
-                    					t_exists=true;
-                    					break;
-                    				}
-                    			}
-                    			if(t_err.length>0){
-                    				break;
-                    			}else if(!t_exists){
-                    				t_err=chk_cucs[i]['ordeno']+'-'+chk_cucs[i]['no2']+"加工排程單不存在!!";
-                    				break;
-                    			}else{//表示資料正常
-                    				if(dec(chk_cucs[i]['xmount'])>0 || dec(chk_cucs[i]['xweight'])>0){
-	                    				t_noa=t_noa+chk_cucs[i]['noa']+'^';
-			                    		t_noq=t_noq+chk_cucs[i]['noq']+'^';
-			                    		t_xmount=t_xmount+dec(chk_cucs[i]['xmount'])+'^';
-			                    		t_xcount=t_xcount+dec(chk_cucs[i]['xcount'])+'^';
-			                    		t_xweight=t_xweight+dec(chk_cucs[i]['xweight'])+'^';
-		                    		}
-                    			}
-                    		}
-                    		if(t_err.length>0){
-                    			alert(t_err);
-                    		}else if(t_noa.length==0 || t_noq.length==0){
-                    			alert('排程加工資料無設定數量或重量。');
-                    		}else{
-                    			//表身資料更新
-								var t_datea=emp($('#textDatea').val())?'#non':$('#textDatea').val();
-	                    		var t_mechno=emp($('#combMechno').val())?'#non':$('#combMechno').val();
-	                    		var t_memo=emp($('#textMemo').val())?'#non':$('#textMemo').val();
-	                    		
-	                    		//表身資料
-	                    		var ts_bbt='';
-	                    		if(ts_bbt.length==0){
-	                    			ts_bbt='#non'
-	                    		}
-	                    		q_func('qtxt.query.cucstocub', 'cuc_sf.txt,cucstocub,'
-	                    		+r_accy+';'+t_datea+';'+t_mechno+';'+t_memo+';'
-	                    		+r_userno+';'+r_name+';'+t_noa+';'+t_noq+';'+t_xmount+';'+t_xcount+';'+t_xweight+';1');
-	                    		//取消刷新
-	                    		//clearInterval(intervalupdate);
-							}
-                    	}else{
-                            alert('無排程單!!');
-                    	}
-                    	Unlock();
-                    	break;
-					case 'spec':
-						var as = _q_appendData("spec", "", true);
-						t_spec='@';
-						for ( i = 0; i < as.length; i++) {
-							t_spec+=","+as[i].noa;
-						}
-						q_cmbParse("combSpec", t_spec);
-						
-						$('#cuct_table .comb').each(function(index) {
-							//帶入選項值
-							var n=$(this).attr('id').split('_')[1];
-							var objname=$(this).attr('id').split('_')[0];
-							if(objname=='combSpec'){
-								$(this).text(''); //清空資料
-								q_cmbParse("combSpec_"+n, t_spec);
-							}
-						});
-						$('#cucu_table .comb').each(function(index) {
-							//帶入選項值
-							var n=$(this).attr('id').split('__')[1];
-							var objname=$(this).attr('id').split('__')[0];
-							if(objname=='combSpec'){
-								$(this).text(''); //清空資料
-								q_cmbParse("combSpec__"+n, t_spec);
-							}
-						});
 						break;
-					case 'color':
-						var as = _q_appendData("color", "", true);
-						t_ucolor='@';
-						for ( i = 0; i < as.length; i++) {
-							t_ucolor+=","+as[i].color;
-						}
-						$('#cuct_table .comb').each(function(index) {
-							//帶入選項值
-							var n=$(this).attr('id').split('_')[1];
-							var objname=$(this).attr('id').split('_')[0];
-							if(objname=='combUcolor'){
-								$(this).text(''); //清空資料
-								q_cmbParse("combUcolor_"+n, ',板料');
-							}
-						});
-						$('#cucu_table .comb').each(function(index) {
-							//帶入選項值
-							var n=$(this).attr('id').split('__')[1];
-							var objname=$(this).attr('id').split('__')[0];
-							if(objname=='combUcolor'){
-								$(this).text(''); //清空資料
-								q_cmbParse("combUcolor__"+n, ',定尺,板料,亂尺');
-							}
-						});
-						break;
-					case 'class':
-						var as = _q_appendData("class", "", true);
-						t_class='@';
-						for ( i = 0; i < as.length; i++) {
-							t_class+=","+as[i].noa;
-						}
-						$('#cuct_table .comb').each(function(index) {
-							//帶入選項值
-							var n=$(this).attr('id').split('_')[1];
-							var objname=$(this).attr('id').split('_')[0];
-							if(objname=='combClass'){
-								$(this).text(''); //清空資料
-								q_cmbParse("combClass_"+n, t_class);
-							}
-						});
-						$('#cucu_table .comb').each(function(index) {
-							//帶入選項值
-							var n=$(this).attr('id').split('__')[1];
-							var objname=$(this).attr('id').split('__')[0];
-							if(objname=='combClass'){
-								$(this).text(''); //清空資料
-								q_cmbParse("combClass__"+n, t_class);
-							}
-						});
-						break;
-					case 'mech':
-						var as = _q_appendData("mech", "", true);
-						t_mech='@';
-						for ( i = 0; i < as.length; i++) {
-							t_mech+=","+as[i].noa+"@"+as[i].mech;
-						}
-						$('#combMechno').text();
-						q_cmbParse("combMechno", t_mech);
-						break;
-					/*case 'nouno_getuno':
-						var as = _q_appendData("view_cubs", "", true);
-						if (as[0] != undefined) {
-							var t_nouno='';
-							var bbtrow=document.getElementById("cuct_table").rows.length-1;
-							for(var j=0;j<bbtrow;j++){
-								if($('#textUno_'+j).val().length>0){
-									t_nouno=t_nouno+(t_nouno.length>0?',':'')+$('#textUno_'+j).val();
-								}
-							}
-							t_nouno=$.trim(t_nouno).split(',');
-							var tt_nouno='';
-							var t_mount=0,t_weight=0;
-							for (var i=0;i<t_nouno.length;i++){
-								var t_exists=false;
-								for (var j=0;j<as.length;j++){
-									if(as[j].uno==t_nouno[i]){
-										t_exists=true;
-										t_mount=q_add(t_mount,dec(as[j].mount));
-										t_weight=q_add(t_mount,dec(as[j].weight));
-									}
-								}
-								if(!t_exists){
-									alert("批號【"+t_nouno[i]+"】不存在或已領料!!")
-									tt_nouno='';
-									break;
-								}else if(t_mount<=0 && t_mount<=0){
-									alert("批號【"+t_nouno[i]+"】已領料!!")
-									tt_nouno='';
-									break;
-								}else{
-									tt_nouno=tt_nouno+t_nouno[i]+"#";
-								}
-							}
-							var t_mechno=emp($('#combMechno').val())?'#non':$('#combMechno').val();
-							
-							if(tt_nouno.length>0){
-								q_func('qtxt.query.cubnouno', 'cuc_sf.txt,cubnouno_sf,' + encodeURI(r_accy) + ';' + encodeURI(tt_nouno)+ ';' + encodeURI(t_mechno)+ ';' + encodeURI(r_userno)+ ';' + encodeURI(r_name)+';1');
-								Lock();
-							}
-						}else{
-							alert("批號不存在!!");
-						}
-						break;*/
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
 						break;
 				}
-				if(t_name.indexOf("getcanlock_")>-1){
-					var n=t_name.split('_')[1];
-					var as = _q_appendData("view_cuc", "", true);
-					if (as[0] != undefined){//是否有資料
-						var cubno=as[0].cubno;
-						var islock=false;
-						if(cubno!=''){
-							var lock_time=cubno.split('##')[3]!=undefined?cubno.split('##')[3]:'';
-							if(lock_time.length>0){
-								islock=true;
-								var now_time = new Date();
-								lock_time = new Date(lock_time);
-								var diff = now_time - lock_time;
-								if(diff>1000 * 60 * 15) //超過15分表示已解除鎖定
-									islock=false;
-							}
-						}
-						if(islock && cubno!='' && cubno.split('##')[0] != r_userno){//其他人被鎖定
-							var mechno=cubno.split('##')[2]!=undefined?cubno.split('##')[2]:'';
-							var tt_mech=t_mech.split(',');
-							for(var k=0;k<tt_mech.length;k++){
-								if(tt_mech[k].split('@')[0]==mechno){
-									mechno=tt_mech[k].split('@')[1];
-									break;
-								}
-							}
-							alert("該筆排程已被"+mechno+"鎖定!!");
-							$('#cucs_lbla'+n).text(mechno);
-							$('#cucs_cubno'+n).text(cubno);
-							$('#cucs_chk'+n).prop("checked",false).attr('disabled', 'disabled').parent().parent().find('td').css('background', 'lavender');
-							$('#cucs_tr'+n+' .co1').css('background-color', 'antiquewhite');
-                            $('#cucs_tr'+n+' .co2').css('background-color', 'lightpink');
-                            $('#cucs_tr'+n+' .co3').css('background-color', 'lightsalmon');	
-                        	//檢查是否有暫存 並刪除暫存資料
-                        	 for(var i =0 ;i<chk_cucs.length;i++){
-                        	 	if(chk_cucs[i].noa==$('#cucs_noa'+n).text() && chk_cucs[i].noq==$('#cucs_noq'+n).text()){
-                        	 		chk_cucs.splice(i, 1);
-                        	 		break;
-                        	 	}
-                        	 }
-                        	//關閉欄位修改
-                        	$('#textXmount_'+n).val('').attr('disabled', 'disabled');
-                            $('#textXcount_'+n).val('').attr('disabled', 'disabled');
-                            $('#textXweight_'+n).val('').attr('disabled', 'disabled');
-                            $('#combXclass_'+n).val('').attr('disabled', 'disabled');
-						}else{//未鎖定資料
-							$('#cucs_chk'+n).prop("checked",true).parent().parent().find('td').css('background', 'darkturquoise');
-							//鎖定資料
-                        	q_func('qtxt.query.lock', 'cuc_sf.txt,lock,'+r_accy+';'+$('#cucs_noa'+n).text()+';'+$('#cucs_noq'+n).text()+';'+r_userno+';'+r_name+';'+$('#combMechno').val());
-                        	var t_datea=new Date();
-                        	t_datea=t_datea.getFullYear()+'-'+(t_datea.getMonth()+1>9?t_datea.getMonth():'0'+(t_datea.getMonth()+1))
-                        	+'-'+(t_datea.getDate()+1>9?t_datea.getDate():'0'+t_datea.getDate())
-                        	+' '+(t_datea.getHours()+1>9?t_datea.getHours():'0'+t_datea.getHours())
-                        	+':'+(t_datea.getMinutes()+1>9?t_datea.getMinutes():'0'+t_datea.getMinutes())
-                        	+':'+(t_datea.getSeconds()+1>9?t_datea.getSeconds():'0'+t_datea.getSeconds())
-                        	$('#cucs_cubno'+n).text(r_userno+"##"+r_name+"##"+$('#combMechno').val()+"##"+t_datea);
-                        	//暫存資料
-                        	chk_cucs.push({
-								noa : $('#cucs_noa'+n).text(),
-								noq : $('#cucs_noq'+n).text(),
-								xmount : $('#textXmount_'+n).val(),
-								xcount : $('#textXcount_'+n).val(),
-								xweight : $('#textXweight_'+n).val(),
-								ordeno:$('#cucs_ordeno'+n).text(),
-								no2:$('#cucs_no2'+n).text()
-							});
-                        	//開放欄位修改
-                        	$('#textXmount_'+n).removeAttr('disabled');
-							$('#textXcount_'+n).removeAttr('disabled');
-							$('#textXweight_'+n).removeAttr('disabled');
-							$('#textXmount_'+n).val(1).blur();
-							$('#combXclass_'+n).removeAttr('disabled');
-						}
-					}else{
-						$('#cucs_chk'+n).prop("checked",false).attr('disabled', 'disabled').parent().parent().find('td').css('background', 'lavender');
-						$('#cucs_tr'+n+' .co1').css('background-color', 'antiquewhite');
-						$('#cucs_tr'+n+' .co2').css('background-color', 'lightpink');
-						$('#cucs_tr'+n+' .co3').css('background-color', 'lightsalmon');	
-						alert('該筆排程已完工!!');
-					}
-					//Unlock();
-					tot_xweight_refresh();
-					if(chk_cucs.length==0){
-						intervalupdate = setInterval(";");
-						for (var i = 0 ; i < intervalupdate ; i++) {
-						    clearInterval(i); 
-						}
-						intervalupdate=setInterval("cucsupdata()",1000*60);
-						setInterval("dialog_show()",1000*5);
-					}else{
-						intervalupdate = setInterval(";");
-						for (var i = 0 ; i < intervalupdate ; i++) {
-						    clearInterval(i); 
-						}
-						setInterval("dialog_show()",1000*5);
-					}
-				}
-				if(t_name.indexOf("getcanunlock_")>-1){
-					var n=t_name.split('_')[1];
-					var as = _q_appendData("view_cuc", "", true);
-					if (as[0] != undefined){//是否有資料
-						if(as[0].cubno==''){
-							$('#cucs_cubno'+n).text('');
-							$('#cucs_chk'+n).prop("checked",false).parent().parent().find('td').css('background', 'lavender');
-							$('#cucs_tr'+n+' .co1').css('background-color', 'antiquewhite');
-                            $('#cucs_tr'+n+' .co2').css('background-color', 'lightpink');
-                            $('#cucs_tr'+n+' .co3').css('background-color', 'lightsalmon');
-							alert('該筆排程已被解除鎖定!!');
-						}else if(as[0].cubno!='' && as[0].cubno.split('##')[0] != r_userno){//其他人被鎖定
-							$('#cucs_cubno'+n).text(as[0].cubno);
-							$('#cucs_chk'+n).prop("checked",false).attr('disabled', 'disabled').parent().parent().find('td').css('background', 'lavender');
-							$('#cucs_tr'+n+' .co1').css('background-color', 'antiquewhite');
-                            $('#cucs_tr'+n+' .co2').css('background-color', 'lightpink');
-                            $('#cucs_tr'+n+' .co3').css('background-color', 'lightsalmon');
-							alert('該筆排程已被鎖定!!');
-						}else{//自己鎖定的資料
-                        	//取消鎖定資料
-                            q_func('qtxt.query.unlock', 'cuc_sf.txt,unlock,'+r_accy+';'+$('#cucs_noa'+n).text()+';'+$('#cucs_noq'+n).text()+';'+r_userno+';'+r_name);
-                            $('#cucs_chk'+n).prop("checked",false).parent().parent().find('td').css('background', 'lavender');
-                            $('#cucs_tr'+n+' .co1').css('background-color', 'antiquewhite');
-                            $('#cucs_tr'+n+' .co2').css('background-color', 'lightpink');
-                            $('#cucs_tr'+n+' .co3').css('background-color', 'lightsalmon');
-                            $('#cucs_cubno'+n).text('');
-						}
-					}else{
-						$('#cucs_chk'+n).prop("checked",false).attr('disabled', 'disabled').parent().parent().find('td').css('background', 'lavender');
-						$('#cucs_tr'+n+' .co1').css('background-color', 'antiquewhite');
-                        $('#cucs_tr'+n+' .co2').css('background-color', 'lightpink');
-                        $('#cucs_tr'+n+' .co3').css('background-color', 'lightsalmon');	
-						alert('該筆排程已完工!!');
-					}
-					//刪除暫存資料
-					for(var i =0 ;i<chk_cucs.length;i++){
-                    	if(chk_cucs[i].noa==$('#cucs_noa'+n).text() && chk_cucs[i].noq==$('#cucs_noq'+n).text()){
-                        	chk_cucs.splice(i, 1);
-                        	break;
-                        }
-					}
-					//關閉欄位修改
-					$('#textXmount_'+n).val('').attr('disabled', 'disabled');
-					$('#textXcount_'+n).val('').attr('disabled', 'disabled');
-					$('#textXweight_'+n).val('').attr('disabled', 'disabled');
-					$('#combXclass_'+n).attr('disabled', 'disabled');
-					
-					var cucsno=$('#cucs_noa' + n).text();
-					var eweight=dec($('#cucs_eweight' + n).text());
-					var erate=q_div(dec($('#cucs_eweight' + n).text()),dec($('#cucs_weight' + n).text()));
-					//1126 完工達到97% 呈現灰色
-					if(cucsno!='' && erate<=0.03){
-						$('#cucs_tr'+n).find('td').css('background', 'lightgrey');
-					}
-					//Unlock();
-					tot_xweight_refresh();
-					
-					if(chk_cucs.length==0){
-						intervalupdate = setInterval(";");
-						for (var i = 0 ; i < intervalupdate ; i++) {
-						    clearInterval(i); 
-						}
-						intervalupdate=setInterval("cucsupdata()",1000*60);
-						setInterval("dialog_show()",1000*5);
-					}else{
-						//clearInterval(intervalupdate);
-						intervalupdate = setInterval(";");
-						for (var i = 0 ; i < intervalupdate ; i++) {
-						    clearInterval(i); 
-						}
-						setInterval("dialog_show()",1000*5);
-					}
-				}
 			}
 			
-			var func_cubno='';
-			var nouno_noa=[];
 			function q_funcPost(t_func, result) {
                 switch(t_func) {
-                	case 'qtxt.query.unlockall':
-                			//畫面刷新
-                			cucsupdata();
-                		break;
-                	case 'qtxt.query.cucstocub':
+                	case 'qtxt.query.eipsign':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
-                        	func_cubno=as[0].cubno;
-                        	if(func_cubno.length>0){
-	                        	q_func('cub_post.post', r_accy + ',' + encodeURI(func_cubno) + ',1');
-	                        	//q_func( 'barvu.gen1', func_cubno+','+$('#combMechno2').val());
-	                        	func_cubno='';
-                        	}else{
-                        		alert('加工單產生失敗!!');
+                        	var a_eiprunsign=new Array();
+                        	var a_eiprunssign=new Array();
+                        	var a_eipruntsign=new Array();
+                        	var a_eiprunusign=new Array();
+                        	for(var i=0; i<as.length;i++){
+                        		if(as[i].typea=='1'){
+                        			a_eiprunsign.push(as[i]);
+                        		}else if(as[i].typea=='2'){
+                        			a_eiprunssign.push(as[i]);
+                        		}else if (as[i].typea=='3'){
+                        			a_eiprunusign.push(as[i]);
+                        		}else{
+                        			a_eipruntsign.push(as[i])
+                        		}
                         	}
-                		}
-                		break;
-					case 'cub_post.post':
-						//alert('加工單產生完畢!!'); 1126拿掉提示
-						//1123 保持鎖定狀態，故chk_cucs資料不清空,入庫資料清空//1125完工後件數仍預設帶入1件// 1126取消
-						chk_cucs=[];
-						/*for (var i=0;i<chk_cucs.length;i++){
-                    		chk_cucs[i].xmount=1;
-							chk_cucs[i].xcount='';
-							chk_cucs[i].xweight='';
-                    	}*/
-						//更新畫面
-						cucsupdata();
-						$('#textMemo').val('');//1117 欄位要清空
-						//並重新啟動刷新
-						intervalupdate = setInterval(";");
-						for (var i = 0 ; i < intervalupdate ; i++) {
-						    clearInterval(i); 
-						}
-						intervalupdate=setInterval("cucsupdata()",1000*60);
-						setInterval("dialog_show()",1000*5);
-						break;
-					case 'cub_post.post.cubt':
-						//將領料資料清空
-						$('#cuct_table .minut').each(function() {
-							var n=$(this).attr('id').split('_')[1];
-							$(this).click();
-							$('#textProduct_'+n).val('鋼筋');
-							$('#textUcolor_'+n).val('板料');
-	                    });
-						break;
-					case 'qtxt.query.enda':
-						//刪除核取的資料
-						for(var j=0;j<chk_cucs.length;j++){
-		                    if(t_endanoa==chk_cucs[j]['noa'] && t_endanoq==chk_cucs[j]['noq']){
-		                    	chk_cucs.splice(j, 1);
-		                    	j--;
-		                    	t_endanoa='';
-		                    	t_endanoq='';
-                        		break;
-		                    }
-						}
-						t_mins_count--;
-						//更新畫面
-						if(t_mins_count<=0)
-							cucsupdata();
-						break;
-					case 'qtxt.query.cucutocubs':
-						//入庫
-						var as = _q_appendData("tmp0", "", true, true);
-						if (as[0] != undefined) {
-                        	func_cubno=as[0].cubno;
-                        	if(func_cubno.length>0){
-	                        	q_func('cub_post.post.2', r_accy + ',' + encodeURI(func_cubno) + ',1');
-	                        	//q_func( 'barvu.gen1', func_cubno+','+$('#combMechno2').val());
-	                        	func_cubno='';
+                        	
+                        	eiprunsign.init(a_eiprunsign);
+                        	if(a_eiprunsign.length>0){
+                        		$('#issig_tab').text('簽核中('+a_eiprunsign.length+')');
                         	}else{
-                        		alert('入庫失敗!!');
+                        		$('#issig_tab').text('簽核中');
                         	}
-                		}
+                        	
+                        	eiprunssign.init(a_eiprunssign);
+                        	if(a_eiprunssign.length>0){
+                        		$('#waitsign_tab').text('待簽核('+a_eiprunssign.length+')');
+                        	}else{
+                        		$('#waitsign_tab').text('待簽核');
+                        	}
+                        	
+                        	eipruntsign.init(a_eipruntsign);
+                        	if(a_eipruntsign.length>0){
+                        		$('#worksign_tab').text('交辦('+a_eipruntsign.length+')');
+                        	}else{
+                        		$('#worksign_tab').text('交辦');
+                        	}
+                        	
+                        	eiprunusign.init(a_eiprunusign);
+                        	if(a_eiprunusign.length>0){
+                        		$('#talksign_tab').text('知會('+a_eiprunusign.length+')');
+                        	}else{
+                        		$('#talksign_tab').text('知會');
+                        	}
+                        }
+                        
+                        q_gt('eipflow', 'where=^^issign=0^^', 0, 0, 0, "");
+                        $('#issignadd_div').hide();
+                        $('#signdetail_div').hide();
 						break;
-					case 'cub_post.post.2':
-						Unlock();
-                        alert('入庫完成!!');
-                        $('#cucu_table .minut').each(function() {
-							$(this).click();
-							var n=$(this).attr('id').split('__')[1];
-							$(this).click();
-							$('#textProduct__'+n).val('鋼筋');
-							$('#textUcolor__'+n).val('');
-	                    });
-						//更新畫面
-						cucsupdata();
-						break;
-					case 'qtxt.query.cubnouno':
+					case 'qtxt.query.signadd':
 						var as = _q_appendData("tmp0", "", true, true);
-						if (as[0] != undefined) {
-							var t_cubno=as[0].cubno;
-							if(t_cubno!='')
-								q_func('cub_post.post.nouno', r_accy + ',' + encodeURI(t_cubno) + ',1');
-							else{
-								alert("批號領料錯誤!!");
-								Unlock();
-							}
-						}
-						break;
-					case 'cub_post.post.nouno':
-						var bbtrow=document.getElementById("cuct_table").rows.length-1;
-						for(var j=0;j<bbtrow;j++){
-							$('#btnMinut_'+j).click();
-						}
-						Unlock();
-						alert("批號領料完成!!");
+                        if (as[0] != undefined) {
+                        	alert(as[0].t_err);
+                        }else{
+                        	alert('簽核加簽失敗!!');
+                        }
+                        
+                        $('#txtAddsno').val('');
+						$('#txtAddnamea').val('');
+						$('#issignadd_div').hide();
+						//重新載入資料
+						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
 						break;
                 }
-                if(t_func.indexOf('qtxt.query.cuctcheckuno_')>-1){
-                	var n=t_func.split('_')[1];
+                if(t_func.indexOf('qtxt.query.signhide_')>-1){
+                	var n=replaceAll(t_func,'qtxt.query.signhide_','');
                 	var as = _q_appendData("tmp0", "", true, true);
-                	if (as[0] != undefined) {
-                		if(dec(as[0].mount)<=0 || dec(as[0].weight)<=0 ){
-                			getunoerr=getunoerr+'批號【'+as[0].uno+'】已被領用\n';
-                		}
-                	}else{
-                		getunoerr=getunoerr+'無此批號【'+as[0].uno+'】\n';
-                	}
-                	
-                	getunocount=getunocount-1;
-                	if(getunocount==0){ //批號檢查完畢
-                		if(getunoerr.length>0){
-                			alert(getunoerr);
-                		}else{
-                			var t_mechno=emp($('#combMechno').val())?'#non':$('#combMechno').val();
-							var t_nouno='';
-							var bbtrow=document.getElementById("cuct_table").rows.length-1;
-							for(var j=0;j<bbtrow;j++){
-								if($('#textUno_'+j).val().length>0){
-									t_nouno=t_nouno+$('#textUno_'+j).val()+'@'+$('#textGmount_'+j).val()+'@'+$('#textGlengthc_'+j).val()+'@'+$('#textGweight_'+j).val()+'@'+$('#cuct_xnoa'+j).text()+'@'+$('#cuct_xnoq'+j).text()+'#';
-								}
-							}
-							if(t_nouno.length>0){
-								q_func('qtxt.query.cubnouno', 'cuc_sf.txt,cubnouno_sf,' + encodeURI(r_accy) + ';' + encodeURI(t_nouno)+ ';' + encodeURI(t_mechno)+ ';' + encodeURI(r_userno)+ ';' + encodeURI(r_name)+';1');
-								Lock();
-							}
-                		}
-                	}
+					if (as[0] != undefined) {
+						alert(as[0].t_err);
+						//重新載入資料
+						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
+					}else{
+						alert('隱藏簽核失敗!!');
+					}
                 }
-                if(t_func.indexOf('qtxt.query.cuctgetuno_')>-1){
-                	var n=t_func.split('_')[1];
+                if(t_func.indexOf('qtxt.query.signrestart_')>-1){
+                	var n=replaceAll(t_func,'qtxt.query.signrestart_','');
                 	var as = _q_appendData("tmp0", "", true, true);
-                	if (as[0] != undefined) {
-                		if(dec(as[0].mount)<=0 || dec(as[0].weight)<=0 ){
-                			alert('批號已被領用!!');
-                			$('#btnMinut_'+n).click();
-                			$('#textUno_'+n).focus();
-                		}else{
-                			var tablerow=$('#cuct_table tr').length-1;
-                			while(as.length>1 && dec(n)+as.length>tablerow){
-                				$('#btnPlut2').click();
-                				tablerow=$('#cuct_table tr').length-1;
-                			}
-                			for(var i=0;i<as.length;i++){
-		                		$('#cuct_product'+(dec(n)+i)).text(as[i].product);
-								$('#cuct_ucolor'+(dec(n)+i)).text(as[i].ucolor);
-								$('#cuct_spec'+(dec(n)+i)).text(as[i].spec);
-								$('#cuct_size'+(dec(n)+i)).text(as[i].size);
-								$('#cuct_lengthb'+(dec(n)+i)).text(as[i].lengthb);
-								$('#cuct_class'+(dec(n)+i)).text(as[i].class);
-								$('#cuct_xnoa'+(dec(n)+i)).text(as[i].noa);
-								$('#cuct_xnoq'+(dec(n)+i)).text(as[i].noq);
-								$('#textUno_'+(dec(n)+i)).val(as[i].uno);
-								//$('#cuct_lengthc'+(dec(n)+i)).text(as[i].lengthc);
-								//$('#cuct_mount'+(dec(n)+i)).text(as[i].mount);
-								//$('#cuct_weight'+(dec(n)+i)).text(as[i].weight);
-								$('#textUno_'+(dec(n)+1)).focus();
-								//106/03/27 預設領料件數=1 //106/03/29 板料才領一個，其他全領
-								if(as[0].ucolor=='板料' && as.length==1){
-									$('#textGmount_'+(dec(n)+i)).val(1);
-									$('#textGlengthc_'+(dec(n)+i)).val(round(as[i].lengthc/as[i].mount,0));
-									$('#textGweight_'+(dec(n)+i)).val(round(as[i].weight/as[i].mount,0));
-								}else{
-									$('#textGmount_'+(dec(n)+i)).val(as[i].mount);
-		 							$('#textGlengthc_'+(dec(n)+i)).val(as[i].lengthc);
-		 							$('#textGweight_'+(dec(n)+i)).val(as[i].weight);
-	 							}
-	 							//多鋼筋綁在一起不能單領，要全部領料
-	 							if(as.length>1){
-	 								$('#textUno_'+(dec(n)+i)).attr('disabled', 'disabled');
-	 								$('#textGmount_'+(dec(n)+i)).attr('disabled', 'disabled');
-	 								$('#textGlengthc_'+(dec(n)+i)).attr('disabled', 'disabled');
-	 								$('#textGweight_'+(dec(n)+i)).attr('disabled', 'disabled');
-	 							}
-	 						}
-						}
-                	}else{
-                		alert('無此批號!!');
-                		$('#btnMinut_'+n).click();
-                	}
+					if (as[0] != undefined) {
+						alert(as[0].t_err);
+						//重新載入資料
+						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
+					}else{
+						alert('重送簽核失敗!!');
+					}
                 }
-                if(t_func.indexOf('qtxt.query.cuctgetunom_')>-1){
-                	var n=t_func.split('_')[1];
+                if(t_func.indexOf('qtxt.query.signok_')>-1){
+                	var n=replaceAll(t_func,'qtxt.query.signok_','');
                 	var as = _q_appendData("tmp0", "", true, true);
-                	if (as[0] != undefined) {
-                		if(dec(as[0].mount)<=0 || dec(as[0].weight)<=0 ){
-                			alert('批號已被領用!!');
-                			$('#btnMinut_'+n).click();
-                		}else{
-	                		$('#cuct_product'+n).text(as[0].product);
-							$('#cuct_ucolor'+n).text(as[0].ucolor);
-							$('#cuct_spec'+n).text(as[0].spec);
-							$('#cuct_size'+n).text(as[0].size);
-							$('#cuct_lengthb'+n).text(as[0].lengthb);
-							$('#cuct_class'+n).text(as[0].class);
-							$('#cuct_xnoa'+n).text(as[0].noa);
-							$('#cuct_xnoq'+n).text(as[0].noq);
-							//$('#cuct_lengthc'+n).text(as[0].lengthc);
-							//$('#cuct_mount'+n).text(as[0].mount);
-							//$('#cuct_weight'+n).text(as[0].weight);
-							$('#textGlengthc_'+n).val(round(q_mul(q_div(as[0].lengthc,as[0].mount),dec($('#textGmount_'+n).val())),0));
-							$('#textGweight_'+n).val(round(q_mul(q_div(as[0].weight,as[0].mount),dec($('#textGmount_'+n).val())),0));
+					if (as[0] != undefined) {
+						alert(as[0].t_err);
+						//重新載入資料
+						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
+					}else{
+						alert('簽核核准失敗!!');
+					}
+                }
+                if(t_func.indexOf('qtxt.query.signbreak_')>-1){
+                	var n=replaceAll(t_func,'qtxt.query.signbreak_','');
+                	var as = _q_appendData("tmp0", "", true, true);
+					if (as[0] != undefined) {
+						alert(as[0].t_err);
+						//重新載入資料
+						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
+					}else{
+						alert('簽核退回失敗!!');
+					}
+                }
+                if(t_func.indexOf('qtxt.query.signdetail_')>-1){
+                	var n=replaceAll(t_func,'qtxt.query.signdetail_','');
+                	var as = _q_appendData("tmp0", "", true, true);
+					if (as[0] != undefined) {
+						var rowslength=document.getElementById("signdetail_table").rows.length-1;
+						for (var j = 1; j < rowslength; j++) {
+							document.getElementById("signdetail_table").deleteRow(1);
 						}
-                	}else{
-                		alert('無此批號!!');
-                		$('#btnMinut_'+n).click();
-                	}
+						
+						for (var i = 0; i < as.length; i++) {
+							var tr = document.createElement("tr");
+							tr.id = "sd_"+i;
+							tr.innerHTML = "<td align='center'>"+as[i].namea+"</td>";
+							tr.innerHTML += "<td align='center'>"+as[i].act+"</td>";
+							tr.innerHTML += "<td align='center'>"+as[i].status+"</td>";
+							tr.innerHTML += "<td>"+as[i].memo+"</td>";
+							var tmp = document.getElementById("detail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						$('#signdetail_div').css('top',$('#eiprunsign_noa'+n).offset().top+30);
+						$('#signdetail_div').css('left',$('#eiprunsign_noa'+n).offset().left+150);
+						$('#signdetail_div').show();
+					}
+                }
+                
+                if(t_func.indexOf('qtxt.query.signsdetail_')>-1){
+                	var n=replaceAll(t_func,'qtxt.query.signsdetail_','');
+                	var as = _q_appendData("tmp0", "", true, true);
+					if (as[0] != undefined) {
+						var rowslength=document.getElementById("signdetail_table").rows.length-1;
+						for (var j = 1; j < rowslength; j++) {
+							document.getElementById("signdetail_table").deleteRow(1);
+						}
+						
+						for (var i = 0; i < as.length; i++) {
+							var tr = document.createElement("tr");
+							tr.id = "sd_"+i;
+							tr.innerHTML = "<td align='center'>"+as[i].namea+"</td>";
+							tr.innerHTML += "<td align='center'>"+as[i].act+"</td>";
+							tr.innerHTML += "<td align='center'>"+as[i].status+"</td>";
+							tr.innerHTML += "<td>"+as[i].memo+"</td>";
+							var tmp = document.getElementById("detail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						$('#signdetail_div').css('top',$('#eiprunssign_noa'+n).offset().top+30);
+						$('#signdetail_div').css('left',$('#eiprunssign_noa'+n).offset().left+150);
+						$('#signdetail_div').show();
+					}
+                }
+                
+                if(t_func.indexOf('qtxt.query.signtdetail_')>-1){
+                	var n=replaceAll(t_func,'qtxt.query.signtdetail_','');
+                	var as = _q_appendData("tmp0", "", true, true);
+					if (as[0] != undefined) {
+						var rowslength=document.getElementById("signdetail_table").rows.length-1;
+						for (var j = 1; j < rowslength; j++) {
+							document.getElementById("signdetail_table").deleteRow(1);
+						}
+						
+						for (var i = 0; i < as.length; i++) {
+							var tr = document.createElement("tr");
+							tr.id = "sd_"+i;
+							tr.innerHTML = "<td align='center'>"+as[i].namea+"</td>";
+							tr.innerHTML += "<td align='center'>"+as[i].act+"</td>";
+							tr.innerHTML += "<td align='center'>"+as[i].status+"</td>";
+							tr.innerHTML += "<td>"+as[i].memo+"</td>";
+							var tmp = document.getElementById("detail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						$('#signdetail_div').css('top',$('#eiprunusign_noa'+n).offset().top+30);
+						$('#signdetail_div').css('left',$('#eiprunusign_noa'+n).offset().left+150);
+						$('#signdetail_div').show();
+					}
+                }
+                if(t_func.indexOf('eip.wordConvert.files_')>-1){
+                	var n=replaceAll(t_func,'eip.wordConvert.files_','');
+                	var extindex = $('#eipform_files'+n).text().lastIndexOf('.');
+					if(extindex>=0){
+						ext = $('#eipform_files'+n).text().substring(extindex,$('#eipform_files'+n).text().length);
+					}
+					
+					var filename=replaceAll($('#eipform_files'+n).text(),ext,'');
+					var s1 = location.href;
+					var t_path = (s1.substr(7, 5) == 'local' ? xlsPath : s1.substr(0, s1.indexOf('/', 10)) + '/'+q_db+'z/');
+					window.open(t_path + "eipform_read.aspx?files="+filename, "_blank", 'directories=no,location=no,menubar=no,resizable=1,scrollbars=1,status=0,toolbar=1');
                 }
 			}
 			
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
-					case 'cuc_sf_b':
-						b_ret = getb_ret();
-						if(b_ret && b_ret[0]!=undefined){
-							$('#combCucno').val(b_ret[0].noa);
-						}
-						break;
+					
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
 				}
 				b_pop = '';
 			}
-			
-			function tot_xweight_refresh() {
-				var tot_xweight=0;
-				$('.xweight').each(function(index) {
-					tot_xweight=q_add(tot_xweight,dec($(this).val()));
-				});
-		                        
-				if(tot_xweight!=0)
-		        	$('.total_xweight').text(tot_xweight);
-				else
-					$('.total_xweight').text('');
-			}
-			
-			function cucs_refresh() {
-				var bbsrow=document.getElementById("cucs_table").rows.length-1;
-				for (var i=0;i<bbsrow;i++){
-					var cubno=$('#cucs_cubno' + i).text();
-					var cucsno=$('#cucs_noa' + i).text();
-					var eweight=dec($('#cucs_eweight' + i).text());
-					$('#textXmount_'+i).val('').attr('disabled', 'disabled');
-					$('#textXcount_'+i).val('').attr('disabled', 'disabled');
-					$('#textXweight_'+i).val('').attr('disabled', 'disabled');
-					$('#combXclass_'+i).attr('disabled', 'disabled');
-					if(cubno!=''){
-						var lock_time=cubno.split('##')[3]!=undefined?cubno.split('##')[3]:'';
-						var islock=false;
-						if(lock_time.length>0){
-							islock=true;
-							var now_time = new Date();
-							lock_time = new Date(lock_time);
-							var diff = now_time - lock_time;
-							if(diff>1000 * 60 * 15) //超過15分表示已解除鎖定
-								islock=false;
-						}
-						if(islock && cubno.split('##')[0]!=r_userno){//其他人鎖定
-							var mechno=cubno.split('##')[2]!=undefined?cubno.split('##')[2]:'';
-							var tt_mech=t_mech.split(',');
-							for(var k=0;k<tt_mech.length;k++){
-								if(tt_mech[k].split('@')[0]==mechno){
-									mechno=tt_mech[k].split('@')[1];
-									break;
-								}
-							}
-							
-							$('#cucs_lbla'+i).text(mechno);
-							$('#cucs_chk' + i).attr('disabled', 'disabled');
-                            $('#cucs_chk'+i).prop('checked',false).parent().parent().find('td').css('background', 'lavender');
-                            $('#cucs_tr'+i+' .co1').css('background-color', 'antiquewhite');
-                            $('#cucs_tr'+i+' .co2').css('background-color', 'lightpink');
-                            $('#cucs_tr'+i+' .co3').css('background-color', 'lightsalmon');
-                            $('#cucs_mins' + i).attr('disabled', 'disabled');
-						}else if (islock && cubno.split('##')[0]==r_userno){//自己鎖定
-							$('#cucs_lbla'+i).text('');
-							$('#cucs_chk' + i).removeAttr('disabled');
-                            $('#cucs_chk'+i).prop('checked',true).parent().parent().find('td').css('background', 'darkturquoise');
-                            $('#combMechno').val(cubno.split('##')[2]!=undefined?cubno.split('##')[2]:'');
-                            $('#cucs_mins' + i).removeAttr('disabled');
-                            //text寫入
-                            for(var j =0 ;j<chk_cucs.length;j++){
-                            	if(chk_cucs[j].noa==$('#cucs_noa'+i).text() && chk_cucs[j].noq==$('#cucs_noq'+i).text()){
-		                            $('#textXmount_'+i).val(chk_cucs[j].xmount).removeAttr('disabled');
-									$('#textXcount_'+i).val(chk_cucs[j].xcount).removeAttr('disabled');
-									$('#textXweight_'+i).val(chk_cucs[j].xweight).removeAttr('disabled');
-									$('#combXclass_'+i).removeAttr('disabled');
-									break;
-								}
-							}
-						}else{ //超過鎖定時間
-							$('#cucs_lbla'+i).text('');
-							$('#cucs_chk' + i).removeAttr('disabled');
-							$('#cucs_chk'+i).prop('checked',false).parent().parent().find('td').css('background', 'lavender');
-							$('#cucs_mins' + i).removeAttr('disabled');
-							$('#cucs_tr'+i+' .co1').css('background-color', 'antiquewhite');
-                            $('#cucs_tr'+i+' .co2').css('background-color', 'lightpink');
-                            $('#cucs_tr'+i+' .co3').css('background-color', 'lightsalmon');
-						}
-					}else{//無人鎖定
-						$('#cucs_lbla'+i).text('');
-						$('#cucs_chk' + i).removeAttr('disabled');
-						$('#cucs_chk'+i).prop('checked',false).parent().parent().find('td').css('background', 'lavender');
-						$('#cucs_mins' + i).removeAttr('disabled');
-						$('#cucs_tr'+i+' .co1').css('background-color', 'antiquewhite');
-						$('#cucs_tr'+i+' .co2').css('background-color', 'lightpink');
-						$('#cucs_tr'+i+' .co3').css('background-color', 'lightsalmon');
-					}
-					
-					var erate=q_div(dec($('#cucs_eweight' + i).text()),dec($('#cucs_weight' + i).text()));
-					//1126 完工達到97% 呈現灰色
-					if(cucsno!='' && erate<=0.03){
-						$('#cucs_tr'+i).find('td').css('background', 'lightgrey');
-					}
-				}
-			}
 
 		</script>
 		<style type="text/css">
-			#dmain {
-				overflow: hidden;
-			}
-			.dview {
-				float: left;
-				width: 98%;
-			}
-			.tview {
-				margin: 0;
-				padding: 2px;
-				border: 1px black double;
-				border-spacing: 0;
-				font-size: medium;
-				background-color: #FFFF66;
-				color: blue;
-			}
-			.tview td {
-				padding: 2px;
-				text-align: center;
-				border: 1px black solid;
-			}
-			.dbbm {
-				float: left;
-				width: 98%;
-				margin: -1px;
-				border: 1px black solid;
-				border-radius: 5px;
-			}
-			.tbbm {
-				padding: 0px;
-				border: 1px white double;
-				border-spacing: 0;
-				border-collapse: collapse;
-				font-size: medium;
-				color: blue;
-				background: lavender;
-				width: 100%;
-			}
-			.tbbm tr {
-				height: 35px;
-			}
-			.tbbm tr td {
-				width: 9%;
-			}
-			.tbbm .tdZ {
-				width: 2%;
-			}
-			.tbbm tr td span {
-				float: right;
-				display: block;
-				width: 5px;
-				height: 10px;
-			}
-			.tbbm tr td .lbl {
-				float: right;
-				color: blue;
-				font-size: medium;
-			}
-			.tbbm tr td .lbl.btn {
-				color: #4297D7;
-				font-weight: bolder;
-				font-size: medium;
-			}
-			.tbbm tr td .lbl.btn:hover {
-				color: #FF8F19;
-			}
-			.txt.c1 {
-				width: 98%;
-				float: left;
-			}
-			.txt.c2 {
-				width: 38%;
-				float: left;
-			}
-			.txt.c3 {
-				width: 71%;
-				float: left;
-			}
-			.txt.num {
-				text-align: right;
-			}
-			.tbbm td {
-				margin: 0 -1px;
-				padding: 0;
-			}
-			.tbbm td input[type="text"] {
-				border-width: 1px;
-				padding: 0px;
-				margin: -1px;
-				float: left;
-			}
-			.tbbm select {
-				border-width: 1px;
-				padding: 0px;
-				margin: -1px;
-				font-size: medium;
-			}
-
 			input[type="text"], input[type="button"] {
 				font-size: medium;
 			}
-			.dbbs .tbbs {
-				margin: 0;
-				padding: 2px;
-				border: 2px lightgrey double;
-				border-spacing: 1px;
-				border-collapse: collapse;
+			
+			#eiprunsign_table {
+                border: 5px solid gray;
+                font-size: medium;
+                background-color: white;
+            }
+            #eiprunsign_table tr {
+                height: 30px;
+            }
+            #eiprunsign_table td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                color: black;
+            }
+            #eiprunsign_header td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                background-color: blue;
+                color: white;
+            }
+            
+            #eiprunssign_table {
+                border: 5px solid gray;
+                font-size: medium;
+                background-color: white;
+            }
+            #eiprunssign_table tr {
+                height: 30px;
+            }
+            #eiprunssign_table td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                color: black;
+            }
+            #eiprunssign_header td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                background-color: blue;
+                color: white;
+            }
+            #eiprunssign_table tr td .lbl.btn {
+				color: #4297D7;
+				font-weight: bolder;
 				font-size: medium;
-				color: blue;
-				background: lavender;
+				cursor: pointer;
+			}
+			
+			#eipruntsign_table {
+                border: 5px solid gray;
+                font-size: medium;
+                background-color: white;
+            }
+            #eipruntsign_table tr {
+                height: 30px;
+            }
+            #eipruntsign_table td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                color: black;
+            }
+            #eipruntsign_header td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                background-color: blue;
+                color: white;
+            }
+            #eipruntsign_table tr td .lbl.btn {
+				color: #4297D7;
+				font-weight: bolder;
+				font-size: medium;
+				cursor: pointer;
+			}
+			
+			
+			#eiprunusign_table {
+                border: 5px solid gray;
+                font-size: medium;
+                background-color: white;
+            }
+            #eiprunusign_table tr {
+                height: 30px;
+            }
+            #eiprunusign_table td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                color: black;
+            }
+            #eiprunusign_header td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                background-color: blue;
+                color: white;
+            }
+            #eiprunusign_table tr td .lbl.btn {
+				color: #4297D7;
+				font-weight: bolder;
+				font-size: medium;
+				cursor: pointer;
+			}
+			
+			#eipflowsign_table {
+                border: 5px solid gray;
+                font-size: medium;
+                background-color: white;
+            }
+            #eipflowsign_table tr {
+                height: 30px;
+            }
+            #eipflowsign_table td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                color: black;
+            }
+            #eipflowsign_header td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                background-color: blue;
+                color: white;
+            }            
+            #eipflowsign_table tr td .lbl.btn {
+				color: #4297D7;
+				font-weight: bolder;
+				font-size: medium;
+				cursor: pointer;
+			}
+            
+            
+			#eipform_table {
+                border: 5px solid gray;
+                font-size: medium;
+                background-color: white;
+            }
+            #eipform_table tr {
+                height: 30px;
+            }
+            #eipform_table td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                color: black;
+            }
+            #eipform_header td {
+                padding: 2px;
+                text-align: center;
+                border-width: 0px;
+                background-color: blue;
+                color: white;
+            }            
+            #eipform_table tr td .lbl.btn {
+				color: #4297D7;
+				font-weight: bolder;
+				font-size: medium;
+				cursor: pointer;
+			}
+			
+            ul, li {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			.eip_tab {
+				clear: left;
 				width: 100%;
 			}
-			.dbbs .tbbs tr {
-				height: 35px;
+			ul.tabs {
+				width: 100%;
+				height: 32px;
+				/*border-bottom: 1px solid #999;*/
+				border-left: 1px solid #999;
 			}
-			.dbbs .tbbs tr td {
-				text-align: center;
-				border: 2px lightgrey double;
+			ul.tabs li {
+				float: left;
+				height: 31px;
+				line-height: 31px;
+				overflow: hidden;
+				position: relative;
+				margin-bottom: -1px;
+				border: 1px solid #999;
+				border-left: none;
+				background: #e1e1e1;
 			}
-			#cucs_table {
-                border: 5px solid gray;
-                font-size: medium;
-                background-color: white;
-            }
-            #cucs_table tr {
-                height: 30px;
-            }
-            #cucs_table td {
-                padding: 2px;
-                text-align: center;
-                border-width: 0px;
-                background-color: lavender;
-                color: blue;
-            }
-            #cucs_table .co1{
-                background-color: antiquewhite;
-            }
-            #cucs_table .co2{
-                background-color: lightpink;
-            }
-            #cucs_table .co3{
-                background-color: lightsalmon;
-            }
-            
-            #cucs_table2 {
-                border: 5px solid gray;
-                font-size: medium;
-                background-color: white;
-            }
-            #cucs_table2 tr {
-                height: 30px;
-            }
-            #cucs_table2 td {
-                padding: 2px;
-                text-align: center;
-                border-width: 0px;
-                background-color: lavender;
-                color: blue;
-            }
-            #cucs_table2 .co1{
-                background-color: antiquewhite;
-            }
-            #cucs_table2 .co2{
-                background-color: lightpink;
-            }
-            #cucs_table2 .co3{
-                background-color: lightsalmon;
-            }
-            
-            #cuct_table {
-                border: 5px solid gray;
-                font-size: medium;
-                background-color: white;
-            }
-            #cuct_table tr {
-                height: 30px;
-            }
-            #cuct_table td {
-                padding: 2px;
-                text-align: center;
-                border-width: 0px;
-                background-color: lightblue;
-                color: blue;
-            }
-            
-            #cuct_table2 {
-                border: 5px solid gray;
-                font-size: medium;
-                background-color: white;
-            }
-            #cuct_table2 tr {
-                height: 30px;
-            }
-            #cuct_table2 td {
-                padding: 2px;
-                text-align: center;
-                border-width: 0px;
-                background-color: lightblue;
-                color: blue;
-            }
-            
-             #cucu_table {
-                border: 5px solid gray;
-                font-size: medium;
-                background-color: white;
-            }
-            #cucu_table tr {
-                height: 30px;
-            }
-            #cucu_table td {
-                padding: 2px;
-                text-align: center;
-                border-width: 0px;
-                background-color: gold;
-                color: blue;
-            }
-            
-            #cucu_table2 {
-                border: 5px solid gray;
-                font-size: medium;
-                background-color: white;
-            }
-            #cucu_table2 tr {
-                height: 30px;
-            }
-            #cucu_table2 td {
-                padding: 2px;
-                text-align: center;
-                border-width: 0px;
-                background-color: gold;
-                color: blue;
-            }
-            
+			ul.tabs li a {
+				display: block;
+				padding: 0 20px;
+				color: #000;
+				border: 1px solid #fff;
+				text-decoration: none;
+			}
+			ul.tabs li a:hover {
+				background: #ccc;
+			}
+			ul.tabs li.active  {
+				background: #fff;
+				border-bottom: 1px solid#fff;
+			}
+			ul.tabs li.active a:hover {
+				background: #fff;
+			}
+			div.tab_container {
+				clear: left;
+				width: 100%;
+				/*border: 1px solid #999;*/
+				border-top: none;
+				background: #fff;
+			}
+			div.tab_container .tab_content {
+				padding: 20px;
+			}
+			div.tab_container .tab_content h2 {
+				margin: 0 0 20px;
+			}
 		</style>
 	</head>
-	<body>
+	<body style="background: lightcyan;">
 		<div id='q_menu'> </div>
 		<div id='q_acDiv'> </div>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type='button' id='btnAuthority' name='btnAuthority' style='font-size:16px;' value='權限'/>
-		<a style="color: red;font-size: 20px;font-weight: bolder;">現場裁剪作業</a>
 		<a id='logout' class="lbl" style="color: coral;cursor: pointer;font-weight: bolder;float: right;">登出</a>
-		<BR>
-		<a class="lbl">加工日</a>&nbsp;<input id="textDatea"  type="text" class="txt" style="width: 100px;"/>&nbsp;
-		<a class="lbl">機　台</a>&nbsp;
-			<select id="combMechno" class="txt" style="font-size: medium;"> </select>
-			<!--<input id="textMechno"  type="text" class="txt " style="width: 100px;"/>
-			<input id="textMech"  type="text" class="txt" style="width: 100px;" disabled="disabled"/>-->
-		<a class="lbl">人員組別</a>&nbsp;
-			<select id="combMechno2" class="txt" style="font-size: medium;"> </select>
-		<a class="lbl">生產記錄備註</a>&nbsp;<input id="textMemo"  type="text" class="txt" style="width: 300px;"/>
-		<input type='button' id='btnCub' style='font-size:16px;' value="入庫"/>
-		<input type='button' id='btnCancels' style='font-size:16px;' value="取消鎖定"/>
-		<input type='button' id='btnClear' style='font-size:16px;' value="畫面刷新"/>
-		<input type='button' id='btnStk' style='font-size:16px;' value="庫存表"/>
-		<!--<input type='button' id='btnCubp' style='font-size:16px;' value="料單報表"/>-->
-		<BR>
-		<a id="lblCucnoa" class="lbl" style="color: #4297D7;cursor: pointer;font-weight: bolder;">案　號</a>&nbsp;
-		<select id="combCucno" class="txt" style="font-size: medium;"> </select>
-		&nbsp;<a class="lbl">號　數</a>&nbsp;
-		<select id="combSize" class="txt" style="font-size: medium;"> </select>
-		&nbsp;<a class="lbl">材　質</a>&nbsp;
-		<select id="combSpec" class="txt" style="font-size: medium;"> </select>
-		&nbsp;<a class="lbl">排　序</a>&nbsp;
-		<select id="combOrder" class="txt" style="font-size: medium;"> </select>
-		<input type='button' id='btnImport' style='font-size:16px;' value="匯入"/>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<a style="color: red;">※機台鎖定時間超過15分鐘將自動解除鎖定</a>
-		<div id="cucs" style="float:left;width:100%;height:500px;overflow:auto;position: relative;"> </div> 
-		<!--<div id="cucs_control" style="width:100%;"> </div>--> 
-		<div id="cuct" style="float:left;width:100%;height:80px;overflow:auto;position: relative;"> </div>
-		<div id="cucu" style="float:left;width:100%;height:80px;overflow:auto;position: relative;"> </div>
-		<div id="div_nouno" style="position:absolute; top:70px; left:840px; display:none; width:400px; background-color: #CDFFCE; border: 1px solid gray;">
-			<table id="table_nouno" style="width:100%;" border="1" cellpadding='2'  cellspacing='0'>
-				<tr>
-					<td style="background-color: #f8d463;width: 150px;" align="center">批號</td>
-					<td style="background-color: #f8d463;width: 250px;"><input id="textNouno" type="text" class="txt c1"/></td>
-				</tr>
-				<tr id='nouno_close'>
-					<td align="center" colspan='2'>
-						<input id="btnOk_div_nouno" type="button" value="領料">
-						<input id="btnClose_div_nouno" type="button" value="取消">
-					</td>
-				</tr>
-			</table>
+		<BR><BR>
+		
+		<!--<input id="btnNosign" type="button" style="font-size: 18px;" value="草稿">
+		<input id="btnIssign" type="button" style="font-size: 18px;" value="簽核中">
+		<input id="btnWaitsign" type="button" style="font-size: 18px;" value="待簽核">
+		<input id="btnWorksign" type="button" style="font-size: 18px;" value="交辦">
+		<input id="btnTalksign" type="button" style="font-size: 18px;" value="知會">-->
+		
+		<div class="eip_tab">
+			<ul class="tabs">
+				<li><a id="nosign_tab" href="#nosign_div">草稿</a></li>
+				<li><a id="issig_tab" href="#issign_div">簽核中</a></li>
+				<li><a id="waitsign_tab" href="#waitsign_div">待簽核</a></li>
+				<li><a id="worksign_tab" href="#worksign_div">交辦</a></li>
+				<li><a id="talksign_tab" href="#talksign_div">知會</a></li>
+				<li><a id="form_tab" href="#form_div">已存檔表單</a></li>
+			</ul>
+			<div class="tab_container" style="background: lightcyan;">
+				<div id="nosign_div" style="display: none;text-align: center;" class="signdiv" >
+					<!--<a style="color: blue;font-size: 20px;font-weight: bold;">草稿</a>-->
+					<div id="eipflow"> </div> 
+					<br>
+					<div id="eipflow_control"> </div>
+				</div>
+				<div id="issign_div" style="text-align: center;" class="signdiv">
+					<!--<a style="color: blue;font-size: 20px;font-weight: bold;">簽核中</a>-->
+					<div id="eiprun"> </div> 
+					<br>
+					<div id="eiprun_control" style="float: left;"> </div>
+					<div id="eiprun_search" style="float: left;">
+						<table style="width: 1150px;">
+							<tr>
+								<td style="width: 70px;">發文日期</td>
+								<td><input id="seiprun_bdate" type="text" style="width: 80px;">~<input id="seiprun_edate" type="text" style="width: 80px;"></td>
+								<td style="width: 70px;">簽核單號</td>
+								<td><input id="seiprun_noa" type="text" style="width: 100px;"></td>
+								<td style="width: 70px;">重要性</td>
+								<td><select id="seiprun_important" style="font-size: medium;"><option value="#non">全部</option><option value="普通">普通</option><option value="重要">重要</option><option value="很重要">很重要</option></select></td>
+								<td style="width: 70px;">結案</td>
+								<td><select id="seiprun_enda" style="font-size: medium;"><option value="0">未結案</option><option value="1">結案</option><option value="#non">全部</option></select></td>
+								<td style="width: 70px;">發文者</td>
+								<td><input id="seiprun_sssno" type="text" style="width: 100px;"><input id="seiprun_namea" type="text" style="width: 100px;" disabled="disabled"></td>
+								<td><input id="btnEiprun_search" type="button" value="查詢"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div id="waitsign_div" style="display: none;text-align: center;" class="signdiv">
+					<!--<a style="color: blue;font-size: 20px;font-weight: bold;">待簽核</a>-->
+					<div id="eipruns"> </div> 
+					<br>
+					<div id="eipruns_control"> </div>
+				</div>
+				<div id="worksign_div" style="display: none;text-align: center;" class="signdiv">
+					<!--<a style="color: blue;font-size: 20px;font-weight: bold;">交辦</a>-->
+					<div id="eiprunu"> </div> 
+					<br>
+					<div id="eiprunu_control"> </div>
+				</div>
+				<div id="talksign_div" style="display: none;text-align: center;" class="signdiv">
+					<!--<a style="color: blue;font-size: 20px;font-weight: bold;">知會</a>-->
+					<div id="eiprunt"> </div> 
+					<br>
+					<div id="eiprunt_control"> </div>
+				</div>
+				<div id="form_div" style="display: none;text-align: center;" class="signdiv">
+					<!--<a style="color: blue;font-size: 20px;font-weight: bold;">已存檔表單</a>-->
+					<div id="eipform"> </div> 
+					<br>
+					<div id="eipform_control"> </div>
+				</div>
+				<div id="issignadd_div" style="position:absolute; top:300px; left:400px;width:300px;;display: none;" class="signdiv">
+					<table style="width:100%;background-color:aliceblue" border="1" cellpadding='2'  cellspacing='0'>
+						<tr>
+							<td style="width: 150px;" align="center">加簽人員編號</td>
+							<td style="width: 150px;" align="center">
+								<input id="txtAddsno" type="text" style="width: 98%;">
+								<input id="txtAddnoa" type="hidden">
+								<input id="txtAddnoq" type="hidden">
+							</td>
+						</tr>
+						<tr>
+							<td align="center">加簽人員姓名</td>
+							<td align="center"><input id="txtAddnamea" type="text"  style="width: 98%;"></td>
+						</tr>
+						<tr>
+							<td align="center">加簽原因</td>
+							<td align="center"><input id="txtAddmemo" type="text"  style="width: 98%;"></td>
+						</tr>
+						<tr>
+							<td align="center">回傳確認</td>
+							<td align="left"><input id="txtAddisreturn" type="checkbox"></td>
+						</tr>
+						<tr>
+							<td align="center" colspan='2'>
+								<input id="btnAddok" type="button" value="加簽">
+								<input id="btnAddclose" type="button" value="取消">
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="signdetail_div" style="position:absolute; top:300px; left:400px;width:500px;;display: none;" class="signdiv">
+					<table id="signdetail_table" style="width:100%;background-color:aliceblue" border="1" cellpadding='2'  cellspacing='0'>
+						<tr id='detail_top'>
+							<td style="width: 150px;background-color: lightskyblue;color: white;" align="center">簽核人員</td>
+							<td style="width: 60px;background-color: lightskyblue;color: white;" align="center">動作</td>
+							<td style="width: 60px;background-color: lightskyblue;color: white;" align="center">決定</td>
+							<td style="width: 230px;background-color: lightskyblue;color: white;" align="center">意見</td>
+						</tr>
+						<tr id='detail_close'>
+							<td align="center" colspan='4'>
+								<input id="btnSignDetailClose" type="button" value="關閉">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
 		</div>
-		<div id="dialog" style="position:absolute; top:200px; left:350px;font-size: 30px;color: red;font-weight: bold;">
-			<table style="border: 2px solid gray;padding: 50px;background-color: cornsilk;">
-				<tr>
-					<td>注意事項：</td>
-				</tr>
-				<tr> 
-					<td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1.請務必輸入正確組別</td>
-				</tr>
-				<tr>
-					<td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2.確認所在機台是否正確</td>
-				</tr>
-				<tr><td> </td></tr>
-				<tr style="text-align: center;">
-					<td><BR><input type='button' id='btnDialog_close' style='font-size:20px;' value="關閉"/></td>
-				</tr>
-			</table>
-		</div>
+		<iframe id="xdownload" style="display:none;"> </iframe>
 	</body>
 </html>

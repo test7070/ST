@@ -12,26 +12,33 @@
         <script type="text/javascript">
         	q_tables = 's';
             var q_name = "eipflow";
-            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2','txtFilename','txtSssno','txtNamea','txtDatea'];
-            var q_readonlys = [];
+            var q_readonly = ['txtNoa','txtStatus','txtWorker','txtWorker2','txtFilename','txtSssno','txtNamea','txtDatea','txtBdate'];
+            var q_readonlys = ['txtAct2'];
             var bbmNum = [];
             var bbsNum = [];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 8;
+            brwCount2 = 10;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
             //ajaxPath = ""; //  execute in Root	
-            aPop = new Array(['txtSno_', 'btnSno_', 'sss', 'noa,namea', '0txtSno_,txtNamea_', 'sss_b.aspx']);
+            aPop = new Array(['txtSno_', '', 'sss', 'noa,namea', '0txtSno_,txtNamea_', 'sss_b.aspx']);
 			q_copy=1;
 			
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
+                
+                if (r_rank < 8){
+                	if(q_content.length>0){
+						q_content = "where=^^sssno='" + r_userno + "' and "+replaceAll(q_content,'where=^^','');
+					}
+                }
+				
                 q_gt(q_name, q_content, q_sqlCount, 1)
                 $('#txtNoa').focus();
             });
@@ -48,15 +55,20 @@
             function mainPost() {
             	bbmMask = [];
                 q_mask(bbmMask);
+                
+                q_cmbParse("cmbImportant",'普通,重要,很重要');
                 q_cmbParse("cmbAct",q_getPara('eip.act'),'s');
+                
                 q_gt('eipform', '', 0, 0, 0, "");
                 q_gt('eipbase', '', 0, 0, 0, "");
                 
                 $('#combEpibaseno').change(function(e) {
-                    if ($(this).val().length > 0) {
-                        t_where = "where=^^ noa='" + $(this).val() + "'^^";
-                        q_gt('eipbase', t_where, 0, 0, 0, "geteipbase", r_accy);
-                    }
+					if(q_cur==1 || q_cur==2){
+						if ($(this).val().length > 0) {
+							t_where = "where=^^ noa='" + $(this).val() + "'^^";
+							q_gt('eipbase', t_where, 0, 0, 0, "geteipbase", r_accy);
+						}
+					}
                 });
                 
                 $('#btnFiles').change(function() {
@@ -125,7 +137,7 @@
 					$('#lblDownload').show();
 										
 				$('#lblDownload').click(function(e) {
-					if(txtfiles.length>0)
+					if($('#txtFilename').val().length>0 && $('#txtFiles').val().length>0)
 						$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#txtFilename').val()+'&TempName='+$('#txtFiles').val());
 					else
 						alert('無資料...!!');
@@ -135,10 +147,31 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'sssall':
+                		b_ret = getb_ret();
+                        ///  q_box() 執行後，選取的資料
+                        if (!b_ret || b_ret.length == 0){
+                        	b_pop='';
+                        	return;	
+                        }
+                        //q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea', b_ret.length, b_ret, 'noa,namea', 'txtSno,txtNamea');
+                        
+                        var n=box_n;
+                        box_n='';
+                        var t_sssno = '', t_namea='';
+						for (var i = 0; i < b_ret.length; i++) {
+							t_sssno=t_sssno+(t_sssno.length>0?';':'')+b_ret[i].noa;
+							t_namea=t_namea+(t_namea.length>0?';':'')+b_ret[i].namea;
+							
+						}
+						$('#txtSno_' + n).val(t_sssno);
+						$('#txtNamea_' + n).val(t_namea);
+                		break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
                 }
+                b_pop='';
             }
 			
             function q_gtPost(t_name) {
@@ -186,14 +219,21 @@
                 q_box('eipflow_s.aspx', q_name + '_s', "500px", "320px", q_getMsg("popSeek"));
             }
             
-             function bbsAssign() {
-		        for (var i = 0; i < q_bbsCount; i++) {
-		            $('#lblNo_' + i).text(i + 1);
-		            if (!$('#btnMinus_' + i).hasClass('isAssign')) {
-		            	
-		            }
-		        }
-		        _bbsAssign();
+            var box_n='';
+            function bbsAssign() {
+				for (var i = 0; i < q_bbsCount; i++) {
+					$('#lblNo_' + i).text(i + 1);
+					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+						$('#btnSno_' + i).click(function() {
+                        	t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							box_n=b_seq;
+                            q_box("sssall_check_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;", 'sssall', "50%", "650px", q_getMsg('popSssallcheck'));
+                        });
+					}
+				}
+				_bbsAssign();
 		        ShowDownlbl();
 		    }
 		    
@@ -237,7 +277,7 @@
                     return;
                 }
                 
-                var t_bbsStatus=-1,t_bbstoflow=-1;
+                /*var t_bbsStatus=-1,t_bbstoflow=-1;
                 for (var i = 0; i < q_bbsCount; i++) {
                 	if($('#chkEnda_'+i).prop('checked')){
                 		t_bbsStatus=i;
@@ -259,7 +299,7 @@
 	                    	return;
 						}
 					}
-				}
+				}*/
                 
                 if(q_cur==1){
 					$('#txtWorker').val(r_name);
@@ -267,6 +307,7 @@
 					$('#txtWorker2').val(r_name);
 				}
 				
+				/*
 				for (var i = 0; i < q_bbsCount; i++) {
 					$('#txtStatus_'+i).val('');
 					$('#txtMemo_'+i).val('');
@@ -278,6 +319,16 @@
 				if($('#chkIssign').prop('checked'))
 					$('#txtBdate').val(q_date());
 				$('#chkIsbreak').prop('checked',false);
+				$('#chkIshide').prop('checked',false);
+				*/
+				
+				if($('#chkIssign').prop('checked') && emp($('#txtBdate').val())){
+					$('#txtBdate').val(q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2));
+					$('#txtStatus').val('送出簽核');
+				}
+				if(!$('#chkIssign').prop('checked'))
+					$('#txtBdate').val('');
+				
 				
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
@@ -335,8 +386,10 @@
                 _readonly(t_para, empty);
                 if(t_para){
                 	$('#btnFiles').attr('disabled','disabled');
+                	$('#btnViewdoc').removeAttr('disabled');
                 }else{
                 	$('#btnFiles').removeAttr('disabled');
+                	$('#btnViewdoc').attr('disabled','disabled');
                 }
             }
 
@@ -399,7 +452,7 @@
             }
             .dview {
                 float: left;
-                width: 300px;
+                width: 500px;
             }
             .tview {
             	width:100%;
@@ -501,7 +554,7 @@
             }
 			.dbbs {
 				float: left;
-                width: 900px;
+                width: 750px;
             }
             .dbbs .tbbs {
 				margin: 0;
@@ -545,9 +598,9 @@
 				<table class="tview" id="tview"  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
 						<td align="center" style="width:3%"><a id='vewChk'> </a></td>
-						<td align="center" style="width:40%"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:17%"><a id='vewIssign'> </a></td>
-						<td align="center" style="width:30%"><a id='vewStatus'> </a></td>
+						<td align="center" style="width:25%"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:10%"><a id='vewIssign'> </a></td>
+						<td align="center" style="width:55%"><a id='vewStatus'> </a></td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=''/></td>
@@ -579,8 +632,8 @@
 						<td><input id="txtStatus" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblEpibaseno' class="lbl"> </a></td>
-						<td><select id="combEpibaseno" class="txt c1"> </select></td>
+						<td><span> </span><a id='lblImportant' class="lbl"> </a></td>
+						<td><select id="cmbImportant" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblEpifomno' class="lbl"> </a></td>
 						<td><select id="cmbEpifomno" class="txt c1"> </select></td>
 					</tr>
@@ -607,13 +660,19 @@
 							<input id="txtNamea" type="text" class="txt c1" style="width: 48%;"/>
 							<input id="txtWorker" type="hidden" class="txt c1"/>
 							<input id="chkEnda" type="checkbox" style="display: none;" />
-							<input id="txtBdate" type="hidden" class="txt c1"/>
 							<input id="txtEdate" type="hidden" class="txt c1"/>
 							<input id="chkIsbreak" type="checkbox" style="display: none;" />
+							<input id="chkIshide" type="checkbox" style="display: none;" />
 						</td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 						<td> </td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblBdate' class="lbl"> </a></td>
+						<td><input id="txtBdate" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblEpibaseno' class="lbl"> </a></td>
+						<td><select id="combEpibaseno" class="txt c1"> </select></td>
 					</tr>
 				</table>
 			</div>
@@ -626,6 +685,7 @@
 						<td style="width:330px;"><a id='lblSno_s'> </a></td>
 						<td style="width:400px;"><a id='lblNamea_s'> </a></td>
 						<td style="width:100px;"><a id='lblAct_s'> </a></td>
+						<td style="width:100px;"><a id='lblAct2_s'> </a></td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td align="center">
@@ -644,6 +704,7 @@
 							<input type="hidden" id="txtMemo.*"/>
 							<input type="checkbox" id="chkEnda.*" style="display: none;" />
 						</td>
+						<td><input type="text" id="txtAct2.*" class="txt c1" /></td>
 					</tr>
 				</table>
 			</div>
