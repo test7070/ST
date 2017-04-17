@@ -438,9 +438,9 @@
 					<td align="center" style="width:200px;"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:250px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblEmount2_s'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblEweight2_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblEmoney2_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblWeight_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" /></td>
@@ -453,9 +453,9 @@
 						<input class="txt c1" id="txtProduct.*" type="text" />
 					</td>
 					<td><input id="txtEmount2.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtEweight2.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEmoney2.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtWeight.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtMoney.*" type="text" class="txt num c1"/></td>
 					<td>
 						<input id="txtNoq.*" type="hidden" />
 					</td>
