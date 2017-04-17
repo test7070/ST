@@ -29,7 +29,7 @@
 			brwNowPage = 0;
 			brwKey = 'Datea';
 			aPop = new Array(
-				['txtProductno_', 'btnProduct_', 'ucaucc', 'noa,product,unit,spec', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx']
+				['txtProductno_', 'btnProduct_', 'ucca', 'noa,product', 'txtProductno_,txtProduct_', 'ucca_b.aspx']
 			);
 
 			$(document).ready(function() {
