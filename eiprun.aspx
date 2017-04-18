@@ -32,8 +32,9 @@
                    string+='<td id="eiprunsign_datea" onclick="eiprunsign.sort(\'datea\',false)" title="發文日期" align="center" style="width:90px; ">發文日期</td>';
                    string+='<td id="eiprunsign_important" title="重要性" align="center" style="width:60px; ">重要性</td>';
                    string+='<td id="eiprunsign_noa" onclick="eiprunsign.sort(\'noa\',false)" title="簽核單號" align="center" style="width:120px;">簽核單號</td>';
-                   string+='<td id="eiprunsign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:350px; ">簽核內容</td>';
+                   string+='<td id="eiprunsign_memo" onclick="eiprunsign.sort(\'memo\',false)" title="簽核內容" align="center" style="width:300px; ">簽核內容</td>';
                    string+='<td id="eiprunsign_astatus" onclick="eiprunsign.sort(\'astatus\',false)" title="狀態" align="center" style="width:200px;">簽核狀態</td>';
+                   string+='<td id="eiprunsign_file" title="附件" align="center" style="width:50px;">附件</td>';
                    string+='<td id="eiprunsign_schedule" title="進度" align="center" style="width:50px;">進度</td>';
                    string+='<td id="eiprunsign_bnamea" onclick="eiprunsign.sort(\'astatus\',false)" title="等待核可人" align="center" style="width:300px;">等待核可人</td>';
                    string+='<td id="eiprunsign_act" onclick="eiprunsign.sort(\'astatus\',false)" title="需核可動作" align="center" style="width:50px;">需核可動作</td>';
@@ -49,6 +50,9 @@
                        string+='<td id="eiprunsign_noa'+i+'" class="eiprunsignnoa" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
                        string+='<td id="eiprunsign_memo'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
                        string+='<td id="eiprunsign_astatus'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunsign_file'+i+'" class="eiprunsignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
+                       string+='<td id="eiprunsign_filename'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
+                       string+='<td id="eiprunsign_files'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+';display:none;"></td>';
                        string+='<td id="eiprunsign_schedule'+i+'" class="eiprunsignschedule" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
                        string+='<td id="eiprunsign_bnamea'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
                        string+='<td id="eiprunsign_act'+i+'" style="text-align: center;background-color:'+t_color[i%t_color.length]+'"></td>';
@@ -203,6 +207,19 @@
                             $('#eiprunsign_bnamea' + i).text(this.data[n+i]['bnamea']);
                             $('#eiprunsign_act' + i).text(this.data[n+i]['act']);
                             $('#eiprunsign_noa' + i).text(this.data[n+i]['noa']);
+                            
+                            var t_filehtml='';
+                            if(dec(this.data[n+i]['filetnum'])>0){
+                            	t_filehtml="<a id='lblDownloaddetail_"+i+"' class='lbl btn signdownloaddetail'>顯示</a>";
+                            }else{
+	                            if(this.data[n+i]['filename'].length>0){
+	                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signdownload'>下載</a>";
+	                            }
+                            }
+                            $('#eiprunsign_file' + i).html(t_filehtml);
+                            $('#eiprunsign_filename' + i).text(this.data[n+i]['filename']);
+                            $('#eiprunsign_files' + i).text(this.data[n+i]['files']);
+                            
                             $('#eiprunsign_schedule' + i).text(this.data[n+i]['schedule']);
                             $('#eiprunsign_important' + i).text(this.data[n+i]['important']);
                             
@@ -214,10 +231,74 @@
                             $('#eiprunsign_bnamea' + i).text('');
                             $('#eiprunsign_act' + i).text('');
                             $('#eiprunsign_noa' + i).text('');
+                            $('#eiprunsign_file' + i).html('');
+                            $('#eiprunsign_filename' + i).text('');
+                            $('#eiprunsign_files' + i).text('');
                             $('#eiprunsign_schedule' + i).text('');
                             $('#eiprunsign_important' + i).text('');
                         }
                     }
+                    
+                    $('.signdownload').unbind('click');
+                    $('.signdownload').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownload_','')
+                        
+						if($('#eiprunsign_filename'+n).text().length>0 && $('#eiprunsign_files'+n).text().length>0)
+							$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#eiprunsign_filename'+n).text()+'&TempName='+$('#eiprunsign_files'+n).text());
+							
+					});
+					
+					$('.signdownloaddetail').unbind('click');
+					$('.signdownloaddetail').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownloaddetail_','')
+                        
+                        if($('#eiprunsign_noa'+n).text()=='')
+							return;
+						
+						q_gt('eipflowt', "where=^^noa='"+$('#eiprunsign_noa'+n).text()+"'^^", 0, 0, 0, "getflowt",r_accy,1);
+						var as = _q_appendData("eipflowt", "", true);
+						
+						var rowslength=document.getElementById("downloaddetail_table").rows.length-1;
+						for (var j = 1; j < rowslength; j++) {
+							document.getElementById("downloaddetail_table").deleteRow(1);
+						}
+						
+						if($('#eiprunsign_files'+n).text().length>0 && $('#eiprunsign_filename'+n).text().length>0){
+							var tr = document.createElement("tr");
+							tr.id = "dd_00";
+							tr.innerHTML = "<td align='center'>"+$('#eiprunsign_namea'+n).text()+"</td>";
+							tr.innerHTML += "<td align='center'><a id='lblDowndetails_00' class='lbl btn downdetails'>"+$('#eiprunsign_filename'+n).text()+"</a></td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfilename_00'>"+$('#eiprunsign_filename'+n).text()+"</td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfiles_00'>"+$('#eiprunsign_files'+n).text()+"</td>";
+							tr.innerHTML += "<td>簽核附件</td>";
+							var tmp = document.getElementById("downloaddetail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						
+						for (var i = 0; i < as.length; i++) {
+							var tr = document.createElement("tr");
+							tr.id = "dd_"+i;
+							tr.innerHTML = "<td align='center'>"+as[i].upname+"</td>";
+							tr.innerHTML += "<td align='center'><a id='lblDowndetails_"+i+"' class='lbl btn downdetails'>"+as[i].filesname+"</a></td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfilename_"+i+"'>"+as[i].filesname+"</td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfiles_"+i+"'>"+as[i].files+"</td>";
+							tr.innerHTML += "<td>"+as[i].memo+"</td>";
+							var tmp = document.getElementById("downloaddetail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						
+						$('#downdetails').unbind('click');
+						$('.downdetails').click(function(e) {
+							var xn=$(this).attr('id').replace('lblDowndetails_','')
+							
+							if($('#downdetailfilename_'+xn).text().length>0 && $('#downdetailfiles_'+xn).text().length>0)
+								$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#downdetailfilename_'+xn).text()+'&TempName='+$('#downdetailfiles_'+xn).text());
+						});
+						
+						$('#downloaddetail_div').css('top',$('#lblDownloaddetail_'+n).offset().top+30);
+						$('#downloaddetail_div').css('left',$('#lblDownloaddetail_'+n).offset().left-350);
+						$('#downloaddetail_div').show();
+					});
                 }
             };
             
@@ -301,7 +382,7 @@
 							var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
 							
 							if(confirm("確定要核准【"+$('#eiprunssign_noa'+n).text()+"】簽核?"))
-								q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunssign_noa'+n).text()+';'+$('#eiprunssign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';#non;#non;#non');
+								q_func('qtxt.query.signok', 'eip.txt,signok,'+$('#eiprunssign_noa'+n).text()+';'+$('#eiprunssign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';#non;#non;#non');
 						*/
 					});
 					
@@ -347,7 +428,7 @@
 						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
 						
 						if(confirm("確定要加簽【"+$('#eiprunssign_noa'+n).text()+"】簽核?"))
-							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunssign_noa'+n).text()+';'+$('#eiprunssign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+							q_func('qtxt.query.signok', 'eip.txt,signok,'+$('#eiprunssign_noa'+n).text()+';'+$('#eiprunssign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
 						*/
 					});
 					
@@ -453,8 +534,12 @@
                             $('#eiprunssign_namea' + i).text(this.data[n+i]['namea']);
                             
                             var t_filehtml='';
-                            if(this.data[n+i]['filename'].length>0){
-                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signdownload'>下載</a>";
+                            if(dec(this.data[n+i]['filetnum'])>0){
+                            	t_filehtml="<a id='lblDownloaddetail_"+i+"' class='lbl btn signsdownloaddetail'>顯示</a>";
+                            }else{
+	                            if(this.data[n+i]['filename'].length>0){
+	                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signsdownload'>下載</a>";
+	                            }
                             }
                             $('#eiprunssign_file' + i).html(t_filehtml);
                             $('#eiprunssign_filename' + i).text(this.data[n+i]['filename']);
@@ -480,13 +565,65 @@
                         }
                     }
                     
-                    $('.signdownload').unbind('click');
-                    $('.signdownload').click(function(e) {
+                    $('.signsdownload').unbind('click');
+                    $('.signsdownload').click(function(e) {
                         var n=$(this).attr('id').replace('lblDownload_','')
                         
 						if($('#eiprunssign_filename'+n).text().length>0 && $('#eiprunssign_files'+n).text().length>0)
 							$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#eiprunssign_filename'+n).text()+'&TempName='+$('#eiprunssign_files'+n).text());
 							
+					});
+					
+					$('.signsdownloaddetail').unbind('click');
+					$('.signsdownloaddetail').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownloaddetail_','')
+                        
+                        if($('#eiprunssign_noa'+n).text()=='')
+							return;
+						
+						q_gt('eipflowt', "where=^^noa='"+$('#eiprunssign_noa'+n).text()+"'^^", 0, 0, 0, "getflowt",r_accy,1);
+						var as = _q_appendData("eipflowt", "", true);
+						
+						var rowslength=document.getElementById("downloaddetail_table").rows.length-1;
+						for (var j = 1; j < rowslength; j++) {
+							document.getElementById("downloaddetail_table").deleteRow(1);
+						}
+						
+						if($('#eiprunssign_files'+n).text().length>0 && $('#eiprunssign_filename'+n).text().length>0){
+							var tr = document.createElement("tr");
+							tr.id = "dd_00";
+							tr.innerHTML = "<td align='center'>"+$('#eiprunssign_namea'+n).text()+"</td>";
+							tr.innerHTML += "<td align='center'><a id='lblDowndetails_00' class='lbl btn downdetails'>"+$('#eiprunssign_filename'+n).text()+"</a></td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfilename_00'>"+$('#eiprunssign_filename'+n).text()+"</td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfiles_00'>"+$('#eiprunssign_files'+n).text()+"</td>";
+							tr.innerHTML += "<td>簽核附件</td>";
+							var tmp = document.getElementById("downloaddetail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						
+						for (var i = 0; i < as.length; i++) {
+							var tr = document.createElement("tr");
+							tr.id = "dd_"+i;
+							tr.innerHTML = "<td align='center'>"+as[i].upname+"</td>";
+							tr.innerHTML += "<td align='center'><a id='lblDowndetails_"+i+"' class='lbl btn downdetails'>"+as[i].filesname+"</a></td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfilename_"+i+"'>"+as[i].filesname+"</td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfiles_"+i+"'>"+as[i].files+"</td>";
+							tr.innerHTML += "<td>"+as[i].memo+"</td>";
+							var tmp = document.getElementById("downloaddetail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						
+						$('#downdetails').unbind('click');
+						$('.downdetails').click(function(e) {
+							var xn=$(this).attr('id').replace('lblDowndetails_','')
+							
+							if($('#downdetailfilename_'+xn).text().length>0 && $('#downdetailfiles_'+xn).text().length>0)
+								$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#downdetailfilename_'+xn).text()+'&TempName='+$('#downdetailfiles_'+xn).text());
+						});
+						
+						$('#downloaddetail_div').css('top',$('#lblDownloaddetail_'+n).offset().top+30);
+						$('#downloaddetail_div').css('left',$('#lblDownloaddetail_'+n).offset().left-350);
+						$('#downloaddetail_div').show();
 					});
                 }
             };
@@ -550,7 +687,7 @@
 						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
 						
 						if(confirm("已確認過【"+$('#eipruntsign_noa'+n).text()+"】簽核?"))
-							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eipruntsign_noa'+n).text()+';'+$('#eipruntsign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';#non;#non;#non');
+							q_func('qtxt.query.signok', 'eip.txt,signok,'+$('#eipruntsign_noa'+n).text()+';'+$('#eipruntsign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';#non;#non;#non');
 					});
 					
                     this.data = new Array();
@@ -641,11 +778,16 @@
                             $('#eipruntsign_datea' + i).text(this.data[n+i]['datea']);
                             $('#eipruntsign_memo' + i).text(this.data[n+i]['memo']);
                             $('#eipruntsign_namea' + i).text(this.data[n+i]['namea']);
-                            
+                                                        
                             var t_filehtml='';
-                            if(this.data[n+i]['filename'].length>0){
-                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signtdownload'>下載</a>";
+                            if(dec(this.data[n+i]['filetnum'])>0){
+                            	t_filehtml="<a id='lblDownloaddetail_"+i+"' class='lbl btn signtdownloaddetail'>顯示</a>";
+                            }else{
+	                            if(this.data[n+i]['filename'].length>0){
+	                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signtdownload'>下載</a>";
+	                            }
                             }
+                            
                             $('#eipruntsign_file' + i).html(t_filehtml);
                             $('#eipruntsign_filename' + i).text(this.data[n+i]['filename']);
                             $('#eipruntsign_files' + i).text(this.data[n+i]['files']);
@@ -673,6 +815,58 @@
 						if($('#eipruntsign_filename'+n).text().length>0 && $('#eipruntsign_files'+n).text().length>0)
 							$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#eipruntsign_filename'+n).text()+'&TempName='+$('#eipruntsign_files'+n).text());
 							
+					});
+					
+					$('.signtdownloaddetail').unbind('click');
+					$('.signtdownloaddetail').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownloaddetail_','')
+                        
+                        if($('#eipruntsign_noa'+n).text()=='')
+							return;
+						
+						q_gt('eipflowt', "where=^^noa='"+$('#eipruntsign_noa'+n).text()+"'^^", 0, 0, 0, "getflowt",r_accy,1);
+						var as = _q_appendData("eipflowt", "", true);
+						
+						var rowslength=document.getElementById("downloaddetail_table").rows.length-1;
+						for (var j = 1; j < rowslength; j++) {
+							document.getElementById("downloaddetail_table").deleteRow(1);
+						}
+						
+						if($('#eipruntsign_files'+n).text().length>0 && $('#eipruntsign_filename'+n).text().length>0){
+							var tr = document.createElement("tr");
+							tr.id = "dd_00";
+							tr.innerHTML = "<td align='center'>"+$('#eipruntsign_namea'+n).text()+"</td>";
+							tr.innerHTML += "<td align='center'><a id='lblDowndetails_00' class='lbl btn downdetails'>"+$('#eipruntsign_filename'+n).text()+"</a></td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfilename_00'>"+$('#eipruntsign_filename'+n).text()+"</td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfiles_00'>"+$('#eipruntsign_files'+n).text()+"</td>";
+							tr.innerHTML += "<td>簽核附件</td>";
+							var tmp = document.getElementById("downloaddetail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						
+						for (var i = 0; i < as.length; i++) {
+							var tr = document.createElement("tr");
+							tr.id = "dd_"+i;
+							tr.innerHTML = "<td align='center'>"+as[i].upname+"</td>";
+							tr.innerHTML += "<td align='center'><a id='lblDowndetails_"+i+"' class='lbl btn downdetails'>"+as[i].filesname+"</a></td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfilename_"+i+"'>"+as[i].filesname+"</td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfiles_"+i+"'>"+as[i].files+"</td>";
+							tr.innerHTML += "<td>"+as[i].memo+"</td>";
+							var tmp = document.getElementById("downloaddetail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						
+						$('#downdetails').unbind('click');
+						$('.downdetails').click(function(e) {
+							var xn=$(this).attr('id').replace('lblDowndetails_','')
+							
+							if($('#downdetailfilename_'+xn).text().length>0 && $('#downdetailfiles_'+xn).text().length>0)
+								$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#downdetailfilename_'+xn).text()+'&TempName='+$('#downdetailfiles_'+xn).text());
+						});
+						
+						$('#downloaddetail_div').css('top',$('#lblDownloaddetail_'+n).offset().top+30);
+						$('#downloaddetail_div').css('left',$('#lblDownloaddetail_'+n).offset().left-350);
+						$('#downloaddetail_div').show();
 					});
                 }
             };
@@ -758,7 +952,7 @@
 						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
 						
 						if(confirm("是否已處理完【"+$('#eiprunusign_noa'+n).text()+"】簽核?"))
-							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunusign_noa'+n).text()+';'+$('#eiprunusign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';#non;#non;#non');
+							q_func('qtxt.query.signok', 'eip.txt,signok,'+$('#eiprunusign_noa'+n).text()+';'+$('#eiprunusign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';#non;#non;#non');
 						*/
 					});
 					
@@ -801,7 +995,7 @@
 						var tdate=q_date()+' '+padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2);
 						
 						if(confirm("確定要加簽【"+$('#eiprunusign_noa'+n).text()+"】簽核?"))
-							q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#eiprunusign_noa'+n).text()+';'+$('#eiprunusign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
+							q_func('qtxt.query.signok', 'eip.txt,signok,'+$('#eiprunusign_noa'+n).text()+';'+$('#eiprunusign_noq'+n).text()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate);
 						*/
 					});
 					
@@ -905,11 +1099,16 @@
                             $('#eiprunusign_datea' + i).text(this.data[n+i]['datea']);
                             $('#eiprunusign_memo' + i).text(this.data[n+i]['memo']);
                             $('#eiprunusign_namea' + i).text(this.data[n+i]['namea']);
-                            
+                                                        
                             var t_filehtml='';
-                            if(this.data[n+i]['filename'].length>0){
-                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signdownload'>下載</a>";
+                            if(dec(this.data[n+i]['filetnum'])>0){
+                            	t_filehtml="<a id='lblDownloaddetail_"+i+"' class='lbl btn signudownloaddetail'>顯示</a>";
+                            }else{
+	                            if(this.data[n+i]['filename'].length>0){
+	                            	t_filehtml="<a id='lblDownload_"+i+"' class='lbl btn signudownload'>下載</a>";
+	                            }
                             }
+                            
                             $('#eiprunusign_file' + i).html(t_filehtml);
                             $('#eiprunusign_filename' + i).text(this.data[n+i]['filename']);
                             $('#eiprunusign_files' + i).text(this.data[n+i]['files']);
@@ -934,13 +1133,65 @@
                         }
                     }
                     
-                    $('.signdownload').unbind('click');
-                    $('.signdownload').click(function(e) {
+                    $('.signudownload').unbind('click');
+                    $('.signudownload').click(function(e) {
                         var n=$(this).attr('id').replace('lblDownload_','')
                         
 						if($('#eiprunusign_filename'+n).text().length>0 && $('#eiprunusign_files'+n).text().length>0)
 							$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#eiprunusign_filename'+n).text()+'&TempName='+$('#eiprunusign_files'+n).text());
 							
+					});
+					
+					$('.signudownloaddetail').unbind('click');
+					$('.signudownloaddetail').click(function(e) {
+                        var n=$(this).attr('id').replace('lblDownloaddetail_','')
+                        
+                        if($('#eiprunusign_noa'+n).text()=='')
+							return;
+						
+						q_gt('eipflowt', "where=^^noa='"+$('#eiprunusign_noa'+n).text()+"'^^", 0, 0, 0, "getflowt",r_accy,1);
+						var as = _q_appendData("eipflowt", "", true);
+						
+						var rowslength=document.getElementById("downloaddetail_table").rows.length-1;
+						for (var j = 1; j < rowslength; j++) {
+							document.getElementById("downloaddetail_table").deleteRow(1);
+						}
+						
+						if($('#eiprunusign_files'+n).text().length>0 && $('#eiprunusign_filename'+n).text().length>0){
+							var tr = document.createElement("tr");
+							tr.id = "dd_00";
+							tr.innerHTML = "<td align='center'>"+$('#eiprunusign_namea'+n).text()+"</td>";
+							tr.innerHTML += "<td align='center'><a id='lblDowndetails_00' class='lbl btn downdetails'>"+$('#eiprunusign_filename'+n).text()+"</a></td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfilename_00'>"+$('#eiprunusign_filename'+n).text()+"</td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfiles_00'>"+$('#eiprunusign_files'+n).text()+"</td>";
+							tr.innerHTML += "<td>簽核附件</td>";
+							var tmp = document.getElementById("downloaddetail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						
+						for (var i = 0; i < as.length; i++) {
+							var tr = document.createElement("tr");
+							tr.id = "dd_"+i;
+							tr.innerHTML = "<td align='center'>"+as[i].upname+"</td>";
+							tr.innerHTML += "<td align='center'><a id='lblDowndetails_"+i+"' class='lbl btn downdetails'>"+as[i].filesname+"</a></td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfilename_"+i+"'>"+as[i].filesname+"</td>";
+							tr.innerHTML += "<td style='display:none;' id='downdetailfiles_"+i+"'>"+as[i].files+"</td>";
+							tr.innerHTML += "<td>"+as[i].memo+"</td>";
+							var tmp = document.getElementById("downloaddetail_close");
+							tmp.parentNode.insertBefore(tr,tmp);
+						}
+						
+						$('#downdetails').unbind('click');
+						$('.downdetails').click(function(e) {
+							var xn=$(this).attr('id').replace('lblDowndetails_','')
+							
+							if($('#downdetailfilename_'+xn).text().length>0 && $('#downdetailfiles_'+xn).text().length>0)
+								$('#xdownload').attr('src','eipflow_download.aspx?FileName='+$('#downdetailfilename_'+xn).text()+'&TempName='+$('#downdetailfiles_'+xn).text());
+						});
+						
+						$('#downloaddetail_div').css('top',$('#lblDownloaddetail_'+n).offset().top+30);
+						$('#downloaddetail_div').css('left',$('#lblDownloaddetail_'+n).offset().left-350);
+						$('#downloaddetail_div').show();
 					});
                 }
             };
@@ -1445,7 +1696,7 @@
 									};
 									Unlock(1);
 								}
-								q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#txtSignnoa').val()+';'+$('#txtSignnoq').val()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';'+filename+';'+files+';'+filememo);
+								q_func('qtxt.query.signok', 'eip.txt,signok,'+$('#txtSignnoa').val()+';'+$('#txtSignnoq').val()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';'+filename+';'+files+';'+filememo);
 							}
 						}
 						if($('#txtSigntypea').val()=='交辦'){
@@ -1498,7 +1749,7 @@
 									};
 									Unlock(1);
 								}
-								q_func('qtxt.query.signok_'+n, 'eip.txt,signok,'+$('#txtSignnoa').val()+';'+$('#txtSignnoq').val()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';'+filename+';'+files+';'+filememo);
+								q_func('qtxt.query.signok', 'eip.txt,signok,'+$('#txtSignnoa').val()+';'+$('#txtSignnoq').val()+';'+tmemo+';'+r_userno+';'+r_name+';'+tdate+';'+filename+';'+files+';'+filememo);
 							}
 						}
 						
@@ -1617,6 +1868,10 @@
 				$('#btnSignDetailClose').click(function() {
 					$('#signdetail_div').hide();
 				});
+				
+				$('#btnDownloaddetailClose').click(function() {
+					$('#downloaddetail_div').hide();
+				});
             }
             
             var guid = (function() {
@@ -1706,7 +1961,9 @@
                         
                         q_gt('eipflow', 'where=^^issign=0^^', 0, 0, 0, "");
                         $('#issignadd_div').hide();
+                        $('#issignok_div').hide();
                         $('#signdetail_div').hide();
+                        $('#downloaddetail_div').hide();
 						break;
 					case 'qtxt.query.signadd':
 						var as = _q_appendData("tmp0", "", true, true);
@@ -1716,8 +1973,13 @@
                         	alert('簽核加簽失敗!!');
                         }
                         
-                        $('#txtAddsno').val('');
+                        $('#txtAddnoa').val('');
+						$('#txtAddnoq').val('');
+						$('#txtAddsno').val('');
 						$('#txtAddnamea').val('');
+						$('#txtAddmemo').val('');
+						$('#txtAddfilememo').val('');
+						$('#btnAddflie').val('');
 						$('#issignadd_div').hide();
 						//重新載入資料
 						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
@@ -1728,44 +1990,50 @@
                 	var as = _q_appendData("tmp0", "", true, true);
 					if (as[0] != undefined) {
 						alert(as[0].t_err);
-						//重新載入資料
-						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
 					}else{
 						alert('隱藏簽核失敗!!');
 					}
+					//重新載入資料
+					q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
                 }
                 if(t_func.indexOf('qtxt.query.signrestart_')>-1){
                 	var n=replaceAll(t_func,'qtxt.query.signrestart_','');
                 	var as = _q_appendData("tmp0", "", true, true);
 					if (as[0] != undefined) {
 						alert(as[0].t_err);
-						//重新載入資料
-						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
 					}else{
 						alert('重送簽核失敗!!');
 					}
+					//重新載入資料
+					q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
                 }
-                if(t_func.indexOf('qtxt.query.signok_')>-1){
-                	var n=replaceAll(t_func,'qtxt.query.signok_','');
+                if(t_func.indexOf('qtxt.query.signok')>-1){
                 	var as = _q_appendData("tmp0", "", true, true);
 					if (as[0] != undefined) {
 						alert(as[0].t_err);
-						//重新載入資料
-						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
 					}else{
 						alert('簽核核准失敗!!');
 					}
+					$('#txtSignmemo').val('');
+					$('#txtSignnoa').val('');
+					$('#txtSignnoq').val('');
+					$('#btnSignflie').val('');
+					$('#txtSignfilememo').val('');
+					$('#txtSigntypea').val('');
+					$('#issignok_div').hide();
+					//重新載入資料
+					q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
                 }
                 if(t_func.indexOf('qtxt.query.signbreak_')>-1){
                 	var n=replaceAll(t_func,'qtxt.query.signbreak_','');
                 	var as = _q_appendData("tmp0", "", true, true);
 					if (as[0] != undefined) {
 						alert(as[0].t_err);
-						//重新載入資料
-						q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
 					}else{
 						alert('簽核退回失敗!!');
 					}
+					//重新載入資料
+					q_func('qtxt.query.eipsign', 'eip.txt,sign,'+r_userno+';'+r_name+';'+r_rank+';#non;#non;#non;#non;#non;#non;#non');
                 }
                 if(t_func.indexOf('qtxt.query.signdetail_')>-1){
                 	var n=replaceAll(t_func,'qtxt.query.signdetail_','');
@@ -1893,6 +2161,12 @@
                 background-color: blue;
                 color: white;
             }
+            #eiprunsign_table tr td .lbl.btn {
+				color: #4297D7;
+				font-weight: bolder;
+				font-size: medium;
+				cursor: pointer;
+			}
             
             #eiprunssign_table {
                 border: 5px solid gray;
@@ -2092,6 +2366,13 @@
 			div.tab_container .tab_content h2 {
 				margin: 0 0 20px;
 			}
+			
+			#downloaddetail_table tr td .lbl.btn {
+				color: #4297D7;
+				font-weight: bolder;
+				font-size: medium;
+				cursor: pointer;
+			}
 		</style>
 	</head>
 	<body style="background: lightcyan;">
@@ -2247,6 +2528,20 @@
 						<tr id='detail_close'>
 							<td align="center" colspan='4'>
 								<input id="btnSignDetailClose" type="button" value="關閉">
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="downloaddetail_div" style="position:absolute; top:300px; left:400px;width:500px;;display: none;" class="signdiv">
+					<table id="downloaddetail_table" style="width:100%;background-color:aliceblue" border="1" cellpadding='2'  cellspacing='0'>
+						<tr id='downloaddetail_top'>
+							<td style="width: 100px;background-color: lightskyblue;color: white;" align="center">附加人員</td>
+							<td style="width: 150px;background-color: lightskyblue;color: white;" align="center">附加檔案</td>
+							<td style="width: 250px;background-color: lightskyblue;color: white;" align="center">附加說明</td>
+						</tr>
+						<tr id='downloaddetail_close'>
+							<td align="center" colspan='4'>
+								<input id="btnDownloaddetailClose" type="button" value="關閉">
 							</td>
 						</tr>
 					</table>
