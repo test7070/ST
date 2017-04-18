@@ -94,6 +94,7 @@
 						}
 						q_cmbParse("combOrdeno", t_item);
 					}
+					btnformwritedisabled();
 				});
 				
 				$('#combOrdeno').change(function() {
@@ -101,6 +102,10 @@
 						$('#txtOrdeno').val($('#combOrdeno').val())
 					}
 					$('#combOrdeno')[0].selectedIndex=0;
+				});
+				
+				$('#btnRestart').click(function() {
+					q_func('qtxt.query.signrestart', 'eip.txt,signrestart,'+$('#txtNoa').val()+';'+r_userno+';'+r_name);
 				});
                 
                 $('#btnFiles').change(function() {
@@ -233,6 +238,7 @@
 		                    q_cmbParse("cmbEpifomno", t_item);
 		                    if(abbm[q_recno])
 		                    	$('#cmbEpifomno').val(abbm[q_recno].epifomno);
+		                    btnformwritedisabled();
                         }
                 		break;
                 	case 'eipbase':
@@ -249,6 +255,7 @@
                 		var as = _q_appendData("eipbase", "", true);
                         if (as[0] != undefined) {
                         	$('#cmbEpifomno').val(as[0].epifomno);
+                        	$('#cmbEpifomno').change();
                         	var ass = _q_appendData("eipbases", "", true);
                             q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea,cmbAct', ass.length, ass, 'sno,namea,act', 'txtSno,txtNamea');
                         }
@@ -259,6 +266,21 @@
                         break;
                 }  /// end switch
             }
+            
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'qtxt.query.signrestart':
+                		var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							alert(as[0].t_err);
+							//重刷畫面
+							location.href=location.href;
+						}else{
+							alert('重送簽核失敗!!');
+						}
+                	break;
+                }
+			}
 
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
@@ -282,6 +304,7 @@
 				}
 				_bbsAssign();
 		        ShowDownlbl();
+		        btnformwritedisabled();
 		    }
 		    
             function btnIns() {
@@ -292,6 +315,7 @@
                 $('#txtSssno').val(r_userno);
                 $('#txtNamea').val(r_name);
                 $('#txtDatea').val(q_date());
+                btnformwritedisabled();
             }
 
             function btnModi() {
@@ -300,6 +324,7 @@
                 _btnModi();
                 $('#txtMemo').focus();
                 refreshBbm();
+                btnformwritedisabled();
             }
 
             function btnPrint() {
@@ -416,6 +441,7 @@
                 		$('#vtissign_'+i).text("");
                 }
                 ShowDownlbl();
+                btnformwritedisabled();
             }
             
             function refreshBbm() {
@@ -437,6 +463,19 @@
                 }else{
                 	$('#btnFiles').removeAttr('disabled');
                 	$('#btnViewdoc').attr('disabled','disabled');
+                }
+            }
+            
+            function btnformwritedisabled() {
+                if(emp($('#cmbEpifomno').val())){
+                	$('#btnFormwrite').attr('disabled','disabled');
+                	$('#combOrdeno').attr('disabled','disabled');
+                }else{
+                	$('#btnFormwrite').removeAttr('disabled');
+                	if(q_cur==1 || q_cur==2)
+                		$('#combOrdeno').removeAttr('disabled');
+                	else
+                		$('#combOrdeno').attr('disabled','disabled');
                 }
             }
 
@@ -691,7 +730,10 @@
 							<select id="combOrdeno" class="txt c1" style="width: 20px;"> </select>
 						</td>
 						<td> </td>
-						<td><input id="btnFormwrite" type="button"></td>
+						<td>
+							<input id="btnFormwrite" type="button">
+							<input id="btnRestart" type="button" style="display: none;">
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
