@@ -20,7 +20,7 @@
             var q_readonly = ['txtNoa','txtWorker','txtApprover'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtMount', 15, 3], ['txtPrice', 10, 3], ['txtTotal', 10, 0]];
+            var bbsNum = [['txtMount', 15, 3],['txtEmount', 15, 3], ['txtPrice', 10, 3], ['txtTotal', 10, 0]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -155,7 +155,7 @@
             }
 
             function btnPrint() {
-
+				q_box('z_bccep.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
             }
 
             function wrServer(key_value) {
@@ -429,9 +429,10 @@
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
 					<td align="center" style="width:1%;"> </td>
-					<td align="center" style="width:5%;"><a id='lblBccno'></a></td>
+					<td align="center" style="width:8%;"><a id='lblBccno'></a></td>
 					<td align="center" style="width:18%;"><a id='lblBccname'></a></td>
 					<td align="center" style="width:5%;"><a id='lblMount'></a></td>
+					<td align="center" style="width:5%;"><a id='lblEmount'></a></td>
 					<td align="center" style="width:5%;"><a id='lblPrice'></a></td>
 					<td align="center" style="width:5%;"><a id='lblTotals'></a></td>
 					<td align="center" style="width: 10%;"><a id='lblMemos'> </a></td>
@@ -449,6 +450,7 @@
 					</td>
 					<td><input id="txtBccname.*" type="text" style="width: 95%;" /></td>
 					<td><input id="txtMount.*" type="text" style="width: 95%; text-align: right;"/></td>
+					<td><input id="txtEmount.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtPrice.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtTotal.*" type="text" style="width: 95%; text-align: right;"/></td>
 					<td><input id="txtMemo.*"type="text" style="width: 95%;"/></td>
