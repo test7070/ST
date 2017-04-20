@@ -378,10 +378,11 @@
 		            	var t_where3 = "where[3]=^^ mon='"+$('#txtMon').val()+"' ^^";
 		            	var t_where4 = "where[4]=^^ noa between '"+date_3+"' and '"+date_4+"' and sssno=a.noa ^^";
 		            	var t_where5 = "where[5]=^^ sysgen='1' and mon='"+$('#txtMon').val()+"' ^^";
+		            	var t_where6 = "where[6]=^^ noa between '"+date_1+"' and '"+date_2+"' and sssno=a.noa and noa>=a.indate ^^";
 		            	
 		            	getdtmp();
 		            	
-				        q_gt('salaryst_import', t_where+t_where1+t_where2+t_where3+t_where4+t_where5 , 0, 0, 0, "", r_accy);
+				        q_gt('salaryst_import', t_where+t_where1+t_where2+t_where3+t_where4+t_where5+t_where6 , 0, 0, 0, "", r_accy);
 				        
 	            		break;
 	                case 'salaryst_import':

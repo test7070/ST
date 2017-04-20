@@ -406,7 +406,7 @@ begin
 		--現場----------------------------------------------------
 		if(
 			((select count(*) from holiday where noa=@datea and isnull(iswork,0)!=1)=0 --不是假日
-			and @t_weekday!='0')--不是周日
+			and @t_weekday!='0' and @t_weekday!='6')--不是周日 --106/04不是周六日
 			or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0--上班日
 		)
 		begin
