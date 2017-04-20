@@ -71,6 +71,43 @@
 					}
                 });
                 
+                $('#btnFormwrite').click(function() {
+                	if($('#cmbEpifomno').val()!=''){
+                		var t_tablea='eip'+$('#cmbEpifomno').find("option:selected").text();
+                		var t_noa=$('#txtNoa').val();
+                		t_where = "noa='" + t_noa + "'";
+						q_box(t_tablea+".aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'eip', "95%", "95%", "");
+					}
+				});
+				
+				$('#cmbEpifomno').change(function() {
+					var t_tablea='eip'+$('#cmbEpifomno').find("option:selected").text();
+					$('#combOrdeno').text('');
+					if(t_tablea.length>0){
+						//抓取選擇的eiptable
+						t_where = "where=^^ noa not in (select ordeno from eipflow where epifomno='"+$('#cmbEpifomno').find("option:selected").text()+"' and noa!='"+$('#txtNoa').val()+"')^^";
+						q_gt(t_tablea, t_where, 0, 0, 0, "get"+t_tablea, r_accy,1);
+						var as = _q_appendData(t_tablea, "", true);
+						var t_item = "@";
+						for (i = 0; i < as.length; i++) {
+							t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa;
+						}
+						q_cmbParse("combOrdeno", t_item);
+					}
+					btnformwritedisabled();
+				});
+				
+				$('#combOrdeno').change(function() {
+					if(q_cur==1 || q_cur==2){
+						$('#txtOrdeno').val($('#combOrdeno').val())
+					}
+					$('#combOrdeno')[0].selectedIndex=0;
+				});
+				
+				$('#btnRestart').click(function() {
+					q_func('qtxt.query.signrestart', 'eip.txt,signrestart,'+$('#txtNoa').val()+';'+r_userno+';'+r_name);
+				});
+                
                 $('#btnFiles').change(function() {
                 	if(q_cur==1 || q_cur==2){}else{return;}
                 	file = $(this)[0].files[0];
@@ -147,6 +184,21 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'eip':
+                		var t_tablea='eip'+$('#cmbEpifomno').find("option:selected").text();
+						$('#combOrdeno').text('');
+						if(t_tablea.length>0){
+							//抓取選擇的eiptable
+							t_where = "where=^^ noa not in (select ordeno from eipflow where epifomno='"+$('#cmbEpifomno').find("option:selected").text()+"' and noa!='"+$('#txtNoa').val()+"')^^";
+							q_gt(t_tablea, t_where, 0, 0, 0, "get"+t_tablea, r_accy,1);
+							var as = _q_appendData(t_tablea, "", true);
+							var t_item = "@";
+							for (i = 0; i < as.length; i++) {
+								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa;
+							}
+							q_cmbParse("combOrdeno", t_item);
+						}
+                		break;
                 	case 'sssall':
                 		b_ret = getb_ret();
                         ///  q_box() 執行後，選取的資料
@@ -186,6 +238,7 @@
 		                    q_cmbParse("cmbEpifomno", t_item);
 		                    if(abbm[q_recno])
 		                    	$('#cmbEpifomno').val(abbm[q_recno].epifomno);
+		                    btnformwritedisabled();
                         }
                 		break;
                 	case 'eipbase':
@@ -202,6 +255,7 @@
                 		var as = _q_appendData("eipbase", "", true);
                         if (as[0] != undefined) {
                         	$('#cmbEpifomno').val(as[0].epifomno);
+                        	$('#cmbEpifomno').change();
                         	var ass = _q_appendData("eipbases", "", true);
                             q_gridAddRow(bbsHtm, 'tbbs', 'txtSno,txtNamea,cmbAct', ass.length, ass, 'sno,namea,act', 'txtSno,txtNamea');
                         }
@@ -212,6 +266,21 @@
                         break;
                 }  /// end switch
             }
+            
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'qtxt.query.signrestart':
+                		var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							alert(as[0].t_err);
+							//重刷畫面
+							location.href=location.href;
+						}else{
+							alert('重送簽核失敗!!');
+						}
+                	break;
+                }
+			}
 
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
@@ -235,6 +304,7 @@
 				}
 				_bbsAssign();
 		        ShowDownlbl();
+		        btnformwritedisabled();
 		    }
 		    
             function btnIns() {
@@ -245,6 +315,7 @@
                 $('#txtSssno').val(r_userno);
                 $('#txtNamea').val(r_name);
                 $('#txtDatea').val(q_date());
+                btnformwritedisabled();
             }
 
             function btnModi() {
@@ -253,6 +324,7 @@
                 _btnModi();
                 $('#txtMemo').focus();
                 refreshBbm();
+                btnformwritedisabled();
             }
 
             function btnPrint() {
@@ -369,6 +441,7 @@
                 		$('#vtissign_'+i).text("");
                 }
                 ShowDownlbl();
+                btnformwritedisabled();
             }
             
             function refreshBbm() {
@@ -390,6 +463,19 @@
                 }else{
                 	$('#btnFiles').removeAttr('disabled');
                 	$('#btnViewdoc').attr('disabled','disabled');
+                }
+            }
+            
+            function btnformwritedisabled() {
+                if(emp($('#cmbEpifomno').val())){
+                	$('#btnFormwrite').attr('disabled','disabled');
+                	$('#combOrdeno').attr('disabled','disabled');
+                }else{
+                	$('#btnFormwrite').removeAttr('disabled');
+                	if(q_cur==1 || q_cur==2)
+                		$('#combOrdeno').removeAttr('disabled');
+                	else
+                		$('#combOrdeno').attr('disabled','disabled');
                 }
             }
 
@@ -471,7 +557,7 @@
             }
             .dbbm {
                 float: left;
-                width: 600px;
+                width: 610px;
                 margin: -1px;
                 border: 1px black solid;
                 border-radius: 5px;
@@ -613,10 +699,10 @@
 			<div class='dbbm' style="float: left;">
 				<table class="tbbm" id="tbbm"  border="0" cellpadding='2'  cellspacing='5'>
 					<tr style="height:1px;">
-						<td style="width: 120px"> </td>
-						<td style="width: 125px"> </td>
-						<td style="width: 120px"> </td>
-						<td style="width: 125px"> </td>
+						<td style="width: 130px"> </td>
+						<td style="width: 170px"> </td>
+						<td style="width: 130px"> </td>
+						<td style="width: 170px"> </td>
 						<td style="width: 10px"> </td>
 					</tr>
 					<tr>
@@ -638,12 +724,24 @@
 						<td><select id="cmbEpifomno" class="txt c1"> </select></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id='lblOrdeno' class="lbl"> </a></td>
+						<td>
+							<input id="txtOrdeno" type="text" class="txt c1" style="width: 145px;"/>
+							<select id="combOrdeno" class="txt c1" style="width: 20px;"> </select>
+						</td>
+						<td> </td>
+						<td>
+							<input id="btnFormwrite" type="button">
+							<input id="btnRestart" type="button" style="display: none;">
+						</td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
 						<td colspan="3"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblFiles' class="lbl"> </a></td>
-						<td style="text-align: left;" colspan="3">
+						<td style="text-align: left;" colspan="2">
 							<span style="float: left;"> </span>
 							<input type="file" id="btnFiles" class="btnFiles" value="選擇檔案"/>
 							<input id="txtFiles" type="hidden"/>

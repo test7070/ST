@@ -7,7 +7,16 @@
             {
                 files = Request.QueryString["files"];
                 
-                string path = @"F:\doc\eipform\htm\" + files+ @".htm";
+                string path = "";
+                string filepath = "";
+                
+	            if (Request.QueryString["filepath"] != null && Request.QueryString["filepath"] != "#non" && Request.QueryString["filepath"].Length > 0)
+	            {
+	                filepath = Request.QueryString["filepath"];
+	                path = filepath + files+ @".htm";
+	            }else{
+                	path = @"F:\doc\eipform\htm\" + files+ @".htm";
+				}
 			
 				if (System.IO.File.Exists(path))
 			    {

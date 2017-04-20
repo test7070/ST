@@ -39,11 +39,29 @@
                         name : 'xnoa'
                     },{
 	                    type : '2',//[6][7]
-	                    name : 'cust',
+	                    name : 'xcust',
 	                    dbf : 'cust',
 	                    index : 'noa,comp',
 	                    src : 'cust_b.aspx'
-	                }]
+	                },{
+                        type : '2', //[8][9]
+                        name : 'tggno',
+                        dbf : 'tgg',
+                        index : 'noa,comp',
+                        src : 'tgg_b.aspx'
+                    },{
+                        type : '2', //[10][11]
+                        name : 'Xgroupano',
+                        dbf : 'uccga',
+                        index : 'noa,namea',
+                        src : ''
+                    }, {
+                        type : '2', //[12][13]
+                        name : 'xsale',
+                        dbf : 'sss',
+                        index : 'noa,namea',
+                        src : 'sss_b.aspx'
+                    }]
                 });
                 q_popAssign();
                 q_getFormat();
