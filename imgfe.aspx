@@ -56,7 +56,7 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                bbmNum = [['txtFold',10,0,1]];//['txtOfflength',10,1,1]
+                bbmNum = [['txtFold',10,0,1],['txtOfflength',10,0,1]];
                 bbsNum = [['txtLbottom',10,0,1],['txtSbottom',10,0,1],['txtLfoot',10,0,1],['txtSfoot',10,0,1]];
             	bbtNum = [['txtBtol',10,0,1],['txtRtol',10,0,1],['txtBottom',10,0,1],['txtFoot',10,0,1]];
                 
@@ -569,13 +569,10 @@
 								<input id="txtPara"  type="text" style="display:none;" />	
 							</td>
 						</tr>
-						<!--<tr class="fe" style="display: none;"> --fe因由裁剪單轉訂單所以不需此功能
+						<tr class="fe" style="display: none;">
 							<td><span> </span><a id='lblOfflength' class="lbl"> </a></td>
-							<td>
-								<input id="txtOfflength"  type="text"  class="txt num c1" style="width: 50px;"/>
-								<a class="lbl" style="float: left;">倍*直徑</a>
-							</td>
-						</tr>-->
+							<td><input id="txtOfflength"  type="text"  class="txt num c1" style="width: 50px;"/></td>
+						</tr>
 						<tr class="fe" style="display: none;">
 							<td><span> </span><a id='lblFold' class="lbl"> </a></td>
 							<td>
