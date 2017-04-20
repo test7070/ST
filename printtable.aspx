@@ -21,14 +21,16 @@
             
             var t_field='';
             var pq_name=window.parent.q_name;
+            var pq_db=window.parent.q_db;
             function q_gfPost() {
                 q_getFormat();
                 q_langShow();
                 q_popAssign();
                 
-                initprint('','');
-                
-                $('#lblNoa').text(window.parent.q_getMsg('lblNoa')+'　');
+                if(window.parent.q_getMsg('lblNoa')=='..')
+                	$('#lblNoa').text(window.parent.$('#lblNoa').text());
+                else
+                	$('#lblNoa').text(window.parent.q_getMsg('lblNoa')+'　');
                 
                 $('#btnPrint').click(function() {
                 	var value = $('#print_div')[0].innerHTML;
@@ -48,6 +50,8 @@
 				$('#btnCopy').click(function(e) {
 					var clipboard = new Clipboard('#btnCopy');
 				});
+				
+				initprint('','');
             }
             
             function initprint(bnoa,enoa) {
@@ -60,17 +64,31 @@
                 phtm+="<a style='float:left;'>列印日期："+tdate+"</a><BR>";
                 var pinput=window.parent.$('.tbbm input[type=text],.tbbm select,.tbbm a,.tbbm textarea,.tbbm input[type=checkbox]');
                 
-                phtm+="<table id='printtable' border='1' style='word-break:break-all;text-align: initial;'><tr id='head' style='background-color: cornsilk;'><td style='display:none;'>";
+                phtm+="<table id='printtable' border='1' style='word-break:break-all;text-align:initial;position:absolute;'><tr id='head' style='background-color: cornsilk;'><td style='display:none;'>";
                 var cmbtext="";
                 var table_col=1;
                 var col_with=[];
                 var t_chk=false;
+                var t_plblname='';
+                if(window.parent.q_xchg==1){
+                	window.parent.$('#btnXchg').click();
+                }
+                
                 pinput.each(function(index) {
                 	if(!$(this).is(':hidden') && $(this).attr('id')!=undefined){
-                		if($(this).attr('id')!='lblCopy' && $(this).attr('id').substr(0,4)!='text'){ //複製不用
+                		if($(this).attr('id')!='lblCopy' && $(this).attr('id')!='Copy' && $(this).attr('id').substr(0,4)!='text' //複製不用
+                		//排除特殊
+                		&& !(pq_name=='gqb' && $(this).attr('id')=='lblGqb')
+                		&& !(pq_name=='gqb' && $(this).attr('id')=='lblGqbs')
+                		){
 	                		if($(this).attr('id').substr(0,3)=='lbl' || $(this).attr('id').substr(0,3)=='vew'){
 	                			var plbl=$(this).attr('id');
-	                			phtm+="</td><td id='head_"+table_col+"' style='width:100px;text-align:center;'>"+window.parent.q_getMsg(plbl);
+	                			if(window.parent.q_getMsg(plbl)=='..'){
+	                				phtm+="</td><td id='head_"+table_col+"' style='width:110px;text-align:center;'>"+window.parent.$('#'+plbl).text();
+	                			}else{
+	                				phtm+="</td><td id='head_"+table_col+"' style='width:110px;text-align:center;'>"+window.parent.q_getMsg(plbl);
+	                			}
+	                			t_plblname=plbl;
 	                			if(!t_chk)
 	                				t_field+="#";
 	                			else
@@ -81,8 +99,13 @@
 		                			var ptxt=$(this).attr('id');
 		                			//phtm+="<br><a style='display:none;'>"+ptxt+"</a>";
 		                			if(ptxt.substr(0,3)=='chk'){
-		                				t_field+='#@'+replaceAll(replaceAll(replaceAll(ptxt,'txt',''),'cmb',''),'chk','')+'^^';
-		                				t_chk=true;
+		                				//if(($(this).attr('id')=='chkLok' && pq_name=='accc') || ($(this).attr('id')=='chkNet' && pq_name=='tel')){
+		                				if(ptxt.indexOf(replaceAll(t_plblname,'lbl',''))>-1){
+		                					t_field+='@'+replaceAll(replaceAll(replaceAll(ptxt,'txt',''),'cmb',''),'chk','')+'^^';
+		                				}else{
+		                					t_field+='#@'+replaceAll(replaceAll(replaceAll(ptxt,'txt',''),'cmb',''),'chk','')+'^^';
+			                				t_chk=true;
+		                				}
 		                			}else{
 		                				t_field+='@'+replaceAll(replaceAll(replaceAll(ptxt,'txt',''),'cmb',''),'chk','');
 		                			}
@@ -108,6 +131,12 @@
                 t_field=t_field.split('#');
                 cmbtext=cmbtext.split('#');
                 
+                //傳票
+                var t_r_accy=r_accy;
+                if(pq_name.substr(0,2)=='ac'){
+                	t_r_accy=r_accy+'_'+r_cno;
+                }
+                
                 if(bnoa.length>0 || enoa.length>0){
                 	var t_where="";
                 	if(enoa.length>0){
@@ -116,9 +145,9 @@
                 		t_where="where=^^noa between '"+bnoa+"' and char(255) ^^"
                 	}
                 	
-                	q_gt(pq_name, t_where, 0, 0, 0, "getdb",r_accy,1);
+                	q_gt(pq_name, t_where, 0, 0, 0, "getdb",t_r_accy,1);
                 }else{
-                	q_gt(pq_name, 'where=^^1=1^^', 0, 0, 0, "getdb",r_accy,1);
+                	q_gt(pq_name, 'where=^^1=1^^', 0, 0, 0, "getdb",t_r_accy,1);
                 }
                 
                 var as = _q_appendData(pq_name, "", true);
@@ -166,10 +195,30 @@
                 			}
                 			if(!iscmb){
                 				var ttdata='';
-                				if(t_field[j].indexOf('**')>-1){
+                				if(pq_name=='accc' && (fieldname=='tyear' || fieldname=='accc1')){
+                					if(fieldname=='tyear'){
+	                					phtm+=r_accy;
+	                					ttdata=r_accy;
+                					}
+                					if(fieldname=='accc1'){
+                						if(as[i][fieldname]=='1'){
+                							phtm+='現金收入傳票';
+	                						ttdata='現金收入傳票';
+                						}else if(as[i][fieldname]=='2'){
+                							phtm+='現金支出傳票';
+	                						ttdata='現金支出傳票';
+                						}else{
+                							phtm+='轉帳傳票';
+	                						ttdata='轉帳傳票';
+                						}
+                					}
+                				}else if(as[i][fieldname]==undefined){
+                					phtm+='';
+                					ttdata=''
+                				}else if(tt_field[k].indexOf('**')>-1){
                 					phtm+=FormatNumber(as[i][fieldname]);
                 					ttdata=FormatNumber(as[i][fieldname]);
-                				}else if(t_field[j].indexOf('^^')>-1){
+                				}else if(tt_field[k].indexOf('^^')>-1){
                 					if(as[i][fieldname]=='true'){
                 						phtm+='V';
                 						ttdata='V'
@@ -199,9 +248,11 @@
                 					});
                 				}
                 			}
-                				
-                			if(tt_field.length>2)
-                				phtm+="<br>";
+                			
+                			if(ttdata!=undefined){
+	                			if(ttdata.length>2)
+	                				phtm+="<br>";
+	                		}
                 		}
                 	}
                 	
@@ -213,7 +264,7 @@
                 
                 var table_width=0;
                 for(var m=0;m<col_with.length;m++){
-                	var t_with=100;
+                	var t_with=110;
                 	if(col_with[m].num>24){
                 		t_with=t_with*col_with[m].num/24
                 	}
@@ -223,8 +274,13 @@
                 	table_width+=t_with;
                 }
                 
-                $('#printtable').css('width',table_width+'px');
-                $('#print_div').css('width',table_width+'px');
+                if(table_width>1260){
+	                $('#printtable').css('width',table_width+'px');
+	                $('#print_div').css('width',table_width+'px');
+                }else{
+                	$('#printtable').css('width',((t_field.length-1)*110)+'px');
+	                $('#print_div').css('width','1260px');
+                }
             }
             
             function q_gtPost(t_name) {
