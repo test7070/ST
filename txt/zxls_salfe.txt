@@ -1,6 +1,7 @@
-﻿zxls_salfe:--zxls_salfe 打卡資料上傳
+﻿--zxls_salfe 打卡資料上傳
 --106/01/11 廠務及現場加工人員上班時間更改為07：00～17：10之後為加班時間(原07：00～16：00)
---106/04/17 調整上班時間 早班07:00~16:30上班 16:40~加班 晚班16:40~01:40 --扣除休息和用餐時間
+--106/04/17 調整廠務上班時間 早班07:00~16:30上班 16:40~加班 晚班16:40~01:40 --扣除休息和用餐時間
+--其他人員正常5:00下班
 
 IF OBJECT_ID('tempdb..#tmp')is not null
 BEGIN
@@ -110,19 +111,19 @@ update #bbs set restout='' where restout=restin
 update #bbs set tweek=DATEPART(WEEKDAY,noa)-1
 ----------------------------------------------------------------------------------------
 update a
-set ework=clockout,bwork=case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
+set ework=clockout,bwork=case when b.typea='廠務' then case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end else '17:00:00' end
 from #bbs a outer apply (select typea from sss where noa=a.sssno)b
 where clockout>case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
-and (b.typea='廠務' or b.typea='司機')
+and (b.typea='廠務')
 and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
 
 update a
-set ework=clockout,bwork=case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
+set ework=clockout,bwork='17:00:00'
 from #bbs a outer apply (select typea from sss where noa=a.sssno)b
-where clockout>case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
-and b.typea!='廠務' and b.typea!='司機'
+where clockout>'17:00:00'
+and b.typea!='廠務'
 and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0' and tweek!='6' )--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
@@ -130,18 +131,7 @@ or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--�
 update a
 set ework=clockout,bwork=clockin
 from #bbs a outer apply (select typea from sss where noa=a.sssno)b
-where clockout>case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
-and (b.typea='廠務' or b.typea='司機')
-and not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
-and tweek!='0')--不是周日
-or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
-
-update a
-set ework=clockout,bwork=clockin
-from #bbs a outer apply (select typea from sss where noa=a.sssno)b
-where clockout>case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
-and b.typea!='廠務' and b.typea!='司機'
-and not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+where not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0' and tweek!='6' )--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
 -----------------------------------------------------------------------------------------------------
@@ -153,20 +143,18 @@ set whours=((cast(datediff(MINUTE,case when clockin>='04:00:00' and clockin<='16
 from #bbs a
 outer apply (select typea from sss where noa=a.sssno)b
 where isnull(ework,'')!='' and ework >=case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
-and (b.typea='廠務' or b.typea='司機')
+and (b.typea='廠務')
 and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
 
 --辦公室
 update a
-set whours=((cast(datediff(MINUTE,case when clockin>='04:00:00' and clockin<='16:00:00' then noa else dbo.q_cdn(noa,1) end+' '+case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end,case when clockin>='04:00:00' and clockin<='16:00:00' then noa else dbo.q_cdn(noa,1) end+' '+ework)as float)
--case when clockin>='04:00:00' and clockin<='16:00:00' and ework>='18:30:00' then 20 else 0 end --扣除用餐時間
-)/60)
+set whours=((cast(datediff(MINUTE,noa+' '+'17:00:00',case when clockin>='04:00:00' and clockin<='16:00:00' then noa else dbo.q_cdn(noa,1) end+' '+ework)as float))/60)
 from #bbs a
 outer apply (select typea from sss where noa=a.sssno)b
-where isnull(ework,'')!='' and ework >=case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
-and b.typea!='廠務' and b.typea!='司機'
+where isnull(ework,'')!='' and ework >='17:00:00'
+and b.typea!='廠務'
 and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0' and tweek!='6' )--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
@@ -185,26 +173,18 @@ set whours=((cast(datediff(MINUTE,noa+' '+bwork,case when clockin>='04:00:00' an
 )/60)
 from #bbs a outer apply (select typea from sss where noa=a.sssno)b
 where isnull(bwork,'')!='' and isnull(ework,'')!=''
-and (b.typea='廠務' or b.typea='司機')
+and (b.typea='廠務')
 and not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
 
 update a
-set whours=((cast(datediff(MINUTE,noa+' '+bwork,case when clockin>='04:00:00' and clockin<='16:00:00' then noa else dbo.q_cdn(noa,1) end+' '+ework)as float)
--case when bwork>='04:00:00' and bwork<='16:00:00' and bwork>='08:50:00' then 10 else 0 end --扣除休息時間
--case when bwork>='04:00:00' and bwork<='16:00:00' and ework>='10:30:00' then 10 else 0 end --扣除休息時間
--case when bwork>='04:00:00' and bwork<='16:00:00' and ework>='13:00:00' then 60 else 0 end --扣除用餐時間
--case when bwork>='04:00:00' and bwork<='16:00:00' and ework>='14:50:00' then 10 else 0 end --扣除休息時間
--case when bwork>='04:00:00' and bwork<='16:00:00' and ework>='16:40:00' then 10 else 0 end --扣除休息時間
--case when ework>='18:30:00' then 20 else 0 end --扣除用餐時間
--case when bwork<'04:00:00' and bwork>='15:00:00' and ework>='20:10:00' then 10 else 0 end --扣除休息時間
--case when bwork<'04:00:00' and bwork>='15:00:00' and ework>='22:00:00' then 20 else 0 end --扣除點心時間
--case when bwork<'04:00:00' and bwork>='15:00:00' and ework>='23:40:00' then 10 else 0 end --扣除休息時間
+set whours=((cast(datediff(MINUTE,noa+' '+bwork,noa+' '+ework)as float)
+-case when bwork>='04:00:00' and bwork<='16:00:00' and bwork<='12:00:00' and ework>='13:00:00' then 60 else 0 end --扣除用餐時間
 )/60)
 from #bbs a outer apply (select typea from sss where noa=a.sssno)b
 where isnull(bwork,'')!='' and isnull(ework,'')!=''
-and b.typea!='廠務' and b.typea!='司機'
+and b.typea!='廠務'
 and not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
 and tweek!='0' and tweek!='6')--不是周日
 or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
