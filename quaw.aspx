@@ -133,6 +133,22 @@
 							q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtUnit,txtMount,txtPrice,txtLoss,txtMemo', as.length, as
 							, 'productno,product,unit,mount,price,loss,memo', 'txtProductno,txtProduct');
 						}
+						q_func('qtxt.query.bomucct', 'bom.txt,bomucct,' + encodeURI($('#txtProductno').val()));
+						break;
+					case 'qtxt.query.bomucct':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							for (var i = 0; i < q_bbtCount; i++) {
+								$('#btnMinut__'+i).click();	
+							}
+							
+							for (var i = 0; i < as.length; i++) {
+								as[i]._mount=1;	
+							}
+							
+							q_gridAddRow(bbtHtm, 'tbbs', 'txtProcessno,txtProcess,txtMount,txtUmount,txtPrice', as.length, as
+							, 'processno,process,unit,_mount,mount,price', 'txtProcessno,txtProcess');
+						}
 						break;
                     default:
                         break;

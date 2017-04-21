@@ -247,3 +247,79 @@ BEGIN CATCH
 	select @@ERROR productno
 END CATCH
 ;
+------------------------------------------------------------------------------------------------------
+bomucct:--BOMUCCT
+declare @productno nvarchar(20)
+declare @parent nvarchar(20)
+
+set @productno=[1]
+set @parent='root'
+
+declare @tmp table(
+	productno nvarchar(100),
+	parent nvarchar(50),
+	product nvarchar(MAX),
+	spec nvarchar(MAX),
+	style nvarchar(MAX),
+	unit nvarchar(MAX),
+	mount float,
+	loss float,
+	dividea float,
+	mul float,
+	memo nvarchar(MAX)
+)
+
+insert into @tmp
+select productno,noa,product,spec,'',unit,mount,loss,dividea,mul,memo from ucas
+
+if(PATINDEX('%.%',@productno)>0)
+begin
+	while(PATINDEX('%.%',@productno)>0)
+	begin
+		insert into @tmp(productno,parent)
+		select left(@productno,PATINDEX('%.%',@productno)-1),@parent
+		set @productno=RIGHT(@productno,LEN(@productno)-PATINDEX('%.%',@productno))
+	end
+end
+insert into @tmp (productno,parent)
+select @productno,@parent 
+
+
+BEGIN TRY
+	--遞迴
+	WITH OrdersTable (productno,noa,product,spec,style,unit,Level,sortCol,mount,loss,dividea,mul,memo) as
+	(
+		Select productno,parent,product,spec,style,unit,0, CONVERT(nvarchar(128),productno)
+		,mount,loss,dividea,mul,memo
+		from @tmp
+		where parent=@parent
+		UNION ALL
+		SELECT a.productno,a.parent,a.product,a.spec,a.style,a.unit,OrdersTable.Level+1,CONVERT(nvarchar(128),OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno))
+		,a.mount,a.loss,a.dividea,a.mul,a.memo
+		FROM @tmp a, OrdersTable 
+		WHERE a.parent=OrdersTable.productno 
+	)
+	
+	--Select OrdersTable.SortCol,OrdersTable.productno,OrdersTable.product,OrdersTable.spec,OrdersTable.style,OrdersTable.unit
+	--,OrdersTable.mount/case when isnull(OrdersTable.dividea,1)=0 then 1 else isnull(OrdersTable.dividea,1) end*
+	--case when isnull(OrdersTable.mul,1)=0 then 1 else isnull(OrdersTable.mul,1) end mount
+	--,OrdersTable.loss,OrdersTable.memo
+	--,c.processno,c.process,c.mount,c.loss,c.price
+	--From OrdersTable 
+	--outer apply (select noa from uca where noa=OrdersTable.productno) b
+	--left join ucat c on c.noa=OrdersTable.productno
+	--where b.noa is not null
+	--order by sortCol
+	
+	Select c.processno,c.process,c.mount,c.loss,c.price
+	From OrdersTable 
+	outer apply (select noa from uca where noa=OrdersTable.productno) b
+	left join ucat c on c.noa=OrdersTable.productno
+	where b.noa is not null
+	group by c.processno,c.process,c.mount,c.loss,c.price
+
+END TRY
+BEGIN CATCH
+	select @@ERROR productno
+END CATCH
+;
