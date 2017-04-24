@@ -115,6 +115,7 @@
 				$('#btnUcc').click(function() {
 					if(q_cur==1 || q_cur==2){
 						if(!emp($('#txtProductno').val())){
+							Lock(1);
 							q_func('qtxt.query.bomucc', 'bom.txt,bomucc,' + encodeURI($('#txtProductno').val()));
 						}
 					}
@@ -146,9 +147,33 @@
 								as[i]._mount=1;	
 							}
 							
-							q_gridAddRow(bbtHtm, 'tbbs', 'txtProcessno,txtProcess,txtMount,txtUmount,txtPrice', as.length, as
-							, 'processno,process,unit,_mount,mount,price', 'txtProcessno,txtProcess');
+							q_gridAddRow(bbtHtm, 'tbbt', 'txtProcessno,txtProcess,txtMount,txtUmount,txtPrice', as.length, as
+							, 'processno,process,_mount,mount,price', 'txtProcessno,txtProcess,txtGroupbno,txtGroupb');
 						}
+						
+						q_func('qtxt.query.bomucagroupb', 'bom.txt,bomucagroupb,' + encodeURI($('#txtProductno').val()));
+						
+						break;
+					case 'qtxt.query.bomucagroupb':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							for (var i = 0; i < q_bbtCount; i++) {
+								if(!emp($('#txtGroupb__'+i).val()))
+									$('#btnMinut__'+i).click();	
+							}
+							
+							for (var i = 0; i < as.length; i++) {
+								if(as[i].groupbno.substr(0,1)!='1'){
+									as.splice(i, 1);
+                                    i--;
+								}	
+							}
+							
+							q_gridAddRow(bbtHtm, 'tbbt', 'txtGroupbno,txtGroupb', as.length, as
+							, 'groupbno,namea', 'txtProcessno,txtProcess,txtGroupbno,txtGroupb');
+						}
+						
+						Unlock(1);
 						break;
                     default:
                         break;
