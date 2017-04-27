@@ -658,6 +658,10 @@
 							<td><span> </span><a id='lblTggno' class="lbl"> </a></td>
 							<td><input id="txtTggno"  type="text" class="txt c1" /></td>
 						</tr>
+						<tr class="obu">
+							<td><span> </span><a id='lblIp' class="lbl">對應IP</a></td>
+							<td colspan="3"><input id="txtIp"  type="text" class="txt c1" /></td>
+						</tr>
 						<tr class="schema_tr" style="display:none;"> </tr>
 						<tr style="display:none;">
 							<td><input id="txtStamp"  type="text" class="txt c1"/></td>

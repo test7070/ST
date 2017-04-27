@@ -1,0 +1,96 @@
+﻿issued:--issued
+declare @t_acomp nvarchar(max)=case when '#non'=[1] then '' else [1] end
+declare @t_bnoa nvarchar(max)=case when '#non'=[2] then '' else [2] end
+declare @t_enoa nvarchar(max)=case when '#non'=[3] then '' else [3] end
+declare @acompint int=len(@t_acomp)-len(replace(@t_acomp,'^',''))
+declare @n int=1
+
+declare @acomp table(
+	noa nvarchar(100)
+)
+--公司
+declare @custno nvarchar(100)
+declare cursor_table cursor for
+select @t_acomp
+open cursor_table
+fetch next from cursor_table
+into @custno
+while(@@FETCH_STATUS <> -1)
+begin		
+	while @n<=@acompint
+	begin
+		insert into @acomp(noa)
+		select dbo.split(@t_acomp,'^',@n)
+		set @n = @n + 1
+	end
+	
+	fetch next from cursor_table
+	into @custno
+end
+close cursor_table
+deallocate cursor_table
+
+declare @tmp table(
+	noa nvarchar(100),
+	acomp nvarchar(200),
+	db nvarchar(10)
+)
+insert @tmp
+select a.noa,b.acomp,dbname
+from @acomp a left join acomp b on a.noa=b.noa
+
+declare @db nvarchar(100)
+declare cursor_table cursor for
+select db from @tmp where len(db)!=0 group by db
+open cursor_table
+fetch next from cursor_table
+into @db
+while(@@FETCH_STATUS <> -1)
+begin
+	--st		
+	insert into st.dbo.uca 
+	select * from ST2.dbo.uca
+	where (noa between @t_bnoa and @t_enoa) and(@db='st')
+	insert into st.dbo.ucas 
+	select * from ST2.dbo.ucas
+	where (noa between @t_bnoa and @t_enoa) and(@db='st')
+	insert into st.dbo.ucat 
+	select * from ST2.dbo.ucat
+	where (noa between @t_bnoa and @t_enoa) and(@db='st')
+	--st3	
+	insert into st3.dbo.uca 
+	select * from ST2.dbo.uca
+	where (noa between @t_bnoa and @t_enoa) and(@db='st3')
+	insert into st3.dbo.ucas 
+	select * from ST2.dbo.ucas
+	where (noa between @t_bnoa and @t_enoa) and(@db='st3')
+	insert into st3.dbo.ucat 
+	select * from ST2.dbo.ucat
+	where (noa between @t_bnoa and @t_enoa) and(@db='st3')
+	--st4	
+	insert into st4.dbo.uca 
+	select * from ST2.dbo.uca
+	where (noa between @t_bnoa and @t_enoa) and(@db='st4')
+	insert into st4.dbo.ucas 
+	select * from ST2.dbo.ucas
+	where (noa between @t_bnoa and @t_enoa) and(@db='st4')
+	insert into st4.dbo.ucat 
+	select * from ST2.dbo.ucat
+	where (noa between @t_bnoa and @t_enoa) and(@db='st4')
+	--st5		
+	insert into st5.dbo.uca 
+	select * from ST2.dbo.uca
+	where (noa between @t_bnoa and @t_enoa)and(@db='st5')
+	insert into st5.dbo.ucas 
+	select * from ST2.dbo.ucas
+	where (noa between @t_bnoa and @t_enoa)and(@db='st5')
+	insert into st5.dbo.ucat 
+	select * from ST2.dbo.ucat
+	where (noa between @t_bnoa and @t_enoa)and(@db='st5')
+
+	fetch next from cursor_table
+	into @db
+end
+close cursor_table
+deallocate cursor_table
+;
