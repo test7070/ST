@@ -644,6 +644,11 @@
             function q_gfPost() {
                 q_popAssign();
                 
+                $('#container').css('display', 'none');
+                $('#btnOk').parent().children().css('display', 'none');
+                $('#btnAuthority').css('display', '').css('z-index', '99999').offset({top:10,left:800});
+
+                
                 $('#txtBmon').mask(r_picm);
                 $('#txtEmon').mask(r_picm);
                 $('#txtBmon').val(q_date().substr(0,r_len)+'/01');
@@ -2525,6 +2530,7 @@
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 		<div id="q_menu"> </div>
+		<div><!--#include file="../inc/print_ctrl.inc"--></div>
 		<div style="position: absolute;top: 10px;left:50px;z-index: 1;width:1260px;">
 			<div id="container">
 				<div id="q_report"> </div>
