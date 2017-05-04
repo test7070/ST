@@ -1372,7 +1372,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width:1650px;">
+		<div class='dbbs' style="width:1750px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td  align="center" style="width:30px;">
@@ -1400,10 +1400,10 @@
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td class="isAD" align="center">
+					<td class="isAD">
 						<input class="txt c1" id="txtUno.*" type="text" />
 					</td>
-					<td align="center">
+					<td>
 						<input class="txt c1" id="txtProductno1.*" type="text" />
 						<input class="txt c1" id="txtProductno2.*" type="text" />
 						<input class="txt c1" id="txtProductno3.*" type="text" />
