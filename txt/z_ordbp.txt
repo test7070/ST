@@ -10,8 +10,8 @@
 	declare @t_eldate nvarchar(10) = case when '#non' = [24] then char(255) else [24] end
 	declare @t_btggno nvarchar(90) = case when '#non' = [9] then '' else [9] end
 	declare @t_etggno nvarchar(90) = case when '#non' = [10] then char(255) else [10] end
-	declare @t_bproductno nvarchar(90) = case when '#non' = [11] then '' else [11] end
-	declare @t_eproductno nvarchar(90) = case when '#non' = [12] then char(255) else [12] end
+	declare @t_bproductno nvarchar(300) = case when '#non' = [11] then '' else [11] end
+	declare @t_eproductno nvarchar(300) = case when '#non' = [12] then char(255) else [12] end
 	declare @t_sort nvarchar(max) = [32]
 	declare @t_ttype nvarchar(max) =[33]
 	declare @t_isdetails nvarchar(10) = case when '#non' = [34] then '0' else [34] end
@@ -24,9 +24,9 @@
 		noa nvarchar(20),
 		no3 nvarchar(10),
 		kind nvarchar(10),
-		tggno nvarchar(20),
-		productno nvarchar(20),
-		unit nvarchar(20),
+		tggno nvarchar(100),
+		productno nvarchar(300),
+		unit nvarchar(50),
 		mon nvarchar(10),
 		dd nvarchar(10),
 		mount float,
@@ -44,10 +44,10 @@
 		noa nvarchar(20),
 		no2 nvarchar(10),
 		kind nvarchar(20),
-		tggno nvarchar(20),
-		productno nvarchar(20),
-		product nvarchar(50),
-		unit nvarchar(20),
+		tggno nvarchar(100),
+		productno nvarchar(300),
+		product nvarchar(300),
+		unit nvarchar(50),
 		mount float,
 		omount float,
 		price float,
@@ -227,12 +227,12 @@
 	declare @tmp table(
 		recno int,
 		gno nvarchar(10),
-		pno nvarchar(10),
-		pp1 nvarchar(20),
-		pp2 nvarchar(50),
-		unit nvarchar(20),
-		tt1 nvarchar(20),
-		tt2 nvarchar(50),
+		pno nvarchar(300),
+		pp1 nvarchar(300),
+		pp2 nvarchar(300),
+		unit nvarchar(50),
+		tt1 nvarchar(300),
+		tt2 nvarchar(300),
 		mon nvarchar(10),
 		dd nvarchar(10),
 		mount float,
@@ -901,7 +901,7 @@
 			
 			declare @srecno int
 			declare @gno nvarchar(10)
-			declare @pno nvarchar(10)
+			declare @pno nvarchar(300)
 			declare @xcount int=0
 			declare @scount int=0
 			--重新編輯順序
@@ -965,11 +965,11 @@ z_ordbp06:--z_ordbp06
 		kind nvarchar(20),
 		odate nvarchar(20),
 		
-		tggno nvarchar(20),
-		tgg nvarchar(50),
-		productno nvarchar(20),
-		product nvarchar(50),
-		unit nvarchar(20),
+		tggno nvarchar(100),
+		tgg nvarchar(300),
+		productno nvarchar(300),
+		product nvarchar(300),
+		unit nvarchar(50),
 		mount float,
 		price float,
 		total float,
@@ -1032,12 +1032,12 @@ z_ordbp05:--z_ordbp05
 		accy nvarchar(10),
 		noa nvarchar(20),
 		no3 nvarchar(10),
-		productno nvarchar(20),
-		product nvarchar(50),
-		unit nvarchar(20),
+		productno nvarchar(300),
+		product nvarchar(300),
+		unit nvarchar(50),
 		no4 nvarchar(10),
 		
-		tggno nvarchar(20),
+		tggno nvarchar(100),
 		iprice float,
 		fdate nvarchar(20),
 		mount float,
@@ -1111,12 +1111,12 @@ z_ordbp04:--z_ordbp04
 		pno nvarchar(90),
 		noa nvarchar(50),
 		no3 nvarchar(10),
-		productno nvarchar(90),
-		product nvarchar(50),
-		unit nvarchar(20),
+		productno nvarchar(300),
+		product nvarchar(300),
+		unit nvarchar(50),
 		no4 nvarchar(10),
 		
-		tggno nvarchar(50),
+		tggno nvarchar(100),
 		rdate nvarchar(20),
 		mount float,
 		rprice float,
@@ -1149,7 +1149,7 @@ z_ordbp04:--z_ordbp04
 	end
 
 	--------------------------------------------------
-	declare @tggno nvarchar(20)
+	declare @tggno nvarchar(100)
 	declare @n int 
 	
 	declare cursor_table cursor for
@@ -1189,8 +1189,8 @@ z_ordbp04:--z_ordbp04
 z_ordbp03:--z_ordbp03
 	declare @t_bodate nvarchar(20) = case when '#non' = [13] then '' else [13] end
 	declare @t_eodate nvarchar(20) = case when '#non' = [14] then char(255) else [14] end
-	declare @t_bproductno nvarchar(20) = case when '#non' = [15] then '' else [15] end
-	declare @t_eproductno nvarchar(20) = case when '#non' = [16] then char(255) else [16] end
+	declare @t_bproductno nvarchar(300) = case when '#non' = [15] then '' else [15] end
+	declare @t_eproductno nvarchar(300) = case when '#non' = [16] then char(255) else [16] end
 	declare @t_ordbno nvarchar(20) = case when '#non' = [17] then '' else [17] end
 	declare @t_ordeno nvarchar(20) = case when '#non' = [18] then '' else [18] end
 	declare @t_workgno nvarchar(20) = case when '#non' = [19] then '' else [19] end
@@ -1230,8 +1230,8 @@ z_ordbp03:--z_ordbp03
 		ordeno nvarchar(20),
 		workgno nvarchar(20),
 		
-		productno nvarchar(20),
-		product nvarchar(50),
+		productno nvarchar(300),
+		product nvarchar(300),
 	
 		mount float,
 		price float
@@ -1239,15 +1239,15 @@ z_ordbp03:--z_ordbp03
 
 	create table #tmpc(
 		recno int,
-		productno nvarchar(20),
-		product nvarchar(50),
+		productno nvarchar(300),
+		product nvarchar(300),
 		
 		accy nvarchar(10),
 		noa nvarchar(20),
 		no3 nvarchar(10),
 		no4 nvarchar(10),		
-		tggno nvarchar(20),
-		tgg nvarchar(40),
+		tggno nvarchar(100),
+		tgg nvarchar(300),
 		edate nvarchar(10),
 		pack nvarchar(50),
 		price float,
@@ -1260,8 +1260,8 @@ z_ordbp03:--z_ordbp03
 	--Ordc
 	create table #tmpd(
 		recno int,
-		productno nvarchar(20),
-		product nvarchar(50),
+		productno nvarchar(300),
+		product nvarchar(300),
 		
 		accy nvarchar(10),
 		noa nvarchar(20),
@@ -1275,8 +1275,8 @@ z_ordbp03:--z_ordbp03
 	--Rc2
 	create table #tmpe(
 		recno int,
-		productno nvarchar(20),
-		product nvarchar(50),
+		productno nvarchar(300),
+		product nvarchar(300),
 		
 		accy nvarchar(10),
 		noa nvarchar(20),
@@ -1339,13 +1339,13 @@ z_ordbp03:--z_ordbp03
 		workgno nvarchar(20),
 		ordeno nvarchar(20),
 		
-		productno nvarchar(20),
-		product nvarchar(50),
+		productno nvarchar(300),
+		product nvarchar(300),
 		price float,
 		mount float,
 		
-		tggno nvarchar(20),
-		tgg nvarchar(50),
+		tggno nvarchar(100),
+		tgg nvarchar(300),
 
 		ordcaccy nvarchar(10),
 		ordcno nvarchar(20),
@@ -1481,8 +1481,8 @@ z_ordbp1:--z_ordbp1
 		no4 nvarchar(10),
 		odate nvarchar(10),
 		
-		tggno nvarchar(20),
-		tgg nvarchar(50),
+		tggno nvarchar(100),
+		tgg nvarchar(300),
 		addr nvarchar(max),
 		tel nvarchar(max),
 		fax nvarchar(max),
@@ -1491,9 +1491,9 @@ z_ordbp1:--z_ordbp1
 		trantype nvarchar(20),
 		paytype nvarchar(20),
 		
-		productno nvarchar(50),
-		product nvarchar(200),
-		unit nvarchar(20),
+		productno nvarchar(300),
+		product nvarchar(300),
+		unit nvarchar(50),
 		mount float,
 		price float,
 		total float,
@@ -1529,7 +1529,7 @@ z_ordbp1:--z_ordbp1
 	---------------------------------------------------------------------------------------------------------------
 	declare @accy nvarchar(20)
 	declare @noa nvarchar(20)
-	declare @tggno nvarchar(20)
+	declare @tggno nvarchar(100)
 
 	declare cursor_table cursor for
 	select isnull(tggno,''),count(1) from @tmp group by isnull(tggno,'')
@@ -1574,23 +1574,23 @@ declare @t_noa nvarchar(50) = case when '#non' = [17] then '' else [17] end
 declare @t_kind nvarchar(30) = case when '#non' = [4] then '' else [4] end
 declare @t_bdate nvarchar(10) = case when '#non' = [13] then '' else [13] end
 declare @t_edate nvarchar(10) = case when '#non' = [14] then char(255) else [14] end
-declare @t_btggno nvarchar(90) = case when '#non' = [9] then '' else [9] end
-declare @t_etggno nvarchar(90) = case when '#non' = [10] then char(255) else [10] end
-declare @t_bproductno nvarchar(90) = case when '#non' = [11] then '' else [11] end
-declare @t_eproductno nvarchar(90) = case when '#non' = [12] then char(255) else [12] end
+declare @t_btggno nvarchar(100) = case when '#non' = [9] then '' else [9] end
+declare @t_etggno nvarchar(100) = case when '#non' = [10] then char(255) else [10] end
+declare @t_bproductno nvarchar(300) = case when '#non' = [11] then '' else [11] end
+declare @t_eproductno nvarchar(300) = case when '#non' = [12] then char(255) else [12] end
 	declare @tmp table(
 		gno nvarchar(1),
-		productno nvarchar(30),
-		products nvarchar(90),
-		stype nvarchar(15),
+		productno nvarchar(300),
+		products nvarchar(300),
+		stype nvarchar(300),
 		ordeno nvarchar(30),
 		ordbmount float,
 		ordbunit nvarchar(12),
 		ordcmount float,
 		ordcunit nvarchar(12),
 		price float,
-		tggno nvarchar(30),
-		tggs nvarchar(90),
+		tggno nvarchar(100),
+		tggs nvarchar(300),
 		coin nvarchar(15),
 		taxtype nvarchar(15),
 		odate nvarchar(10),
@@ -1671,8 +1671,8 @@ declare @t_bdatea nvarchar(20) = case when '#non' = [21] then '' else [21] end
 declare @t_edatea nvarchar(20) = case when '#non' = [22] then char(255) else [22] end
 declare @t_bldate nvarchar(20) = case when '#non' = [23] then '' else [23] end
 declare @t_eldate nvarchar(20) = case when '#non' = [24] then char(255) else [24] end
-declare @t_bpno nvarchar(20) = case when '#non' = [25] then '' else [25] end
-declare @t_epno nvarchar(20) = case when '#non' = [26] then char(255) else [26] end
+declare @t_bpno nvarchar(300) = case when '#non' = [25] then '' else [25] end
+declare @t_epno nvarchar(300) = case when '#non' = [26] then char(255) else [26] end
 declare @t_ordc nvarchar(20) = case when '#non' = [27] then '' else [27] end
 declare @xproj nvarchar(20) = '[39]'
 declare @isspec nvarchar(20) = '[40]'
@@ -1681,10 +1681,10 @@ declare @tmp table(
 	gno nvarchar(1),
 	noa nvarchar(50),
 	noq nvarchar(50),
-	pno nvarchar(50),
-	product nvarchar(100),
-	unit nvarchar(20),
-	style nvarchar(50),
+	pno nvarchar(300),
+	product nvarchar(MAX),
+	unit nvarchar(50),
+	style nvarchar(300),
 	tgg nvarchar(100),
 	odate nvarchar(10),
 	ldate nvarchar(10),
@@ -1729,8 +1729,8 @@ from @tmp order by case when ldate='' then '999/99/99' else ldate end,noa,pno
 z_ordbp09:--z_ordbp09
 declare @t_bodate nvarchar(20) = case when '#non' = [5] then '' else [5] end
 declare @t_eodate nvarchar(20) = case when '#non' = [6] then char(255) else [6] end
-declare @t_bpno nvarchar(20) = case when '#non' = [15] then '' else [15] end
-declare @t_epno nvarchar(20) = case when '#non' = [16] then char(255) else [16] end
+declare @t_bpno nvarchar(300) = case when '#non' = [15] then '' else [15] end
+declare @t_epno nvarchar(300) = case when '#non' = [16] then char(255) else [16] end
 declare @t_enda nvarchar(20) = case when '#non' = [38] then '' else [38] end
 --****************************************************************************************
 declare @tmp table(
@@ -1738,10 +1738,10 @@ declare @tmp table(
 	noa nvarchar(50),
 	noq nvarchar(50),
 	odate nvarchar(10),
-	pno nvarchar(50),
-	product nvarchar(100),
-	spec nvarchar(100),
-	unit nvarchar(20),
+	pno nvarchar(300),
+	product nvarchar(300),
+	spec nvarchar(300),
+	unit nvarchar(50),
 	mount float,
 	omount float,
 	c1 float,
@@ -1772,8 +1772,8 @@ from @tmp order by odate,noa,noq;
 z_ordbp10:--z_ordbp10
 declare @t_bodate nvarchar(20) = case when '#non' = [5] then '' else [5] end
 declare @t_eodate nvarchar(20) = case when '#non' = [6] then char(255) else [6] end
-declare @t_bpno nvarchar(20) = case when '#non' = [15] then '' else [15] end
-declare @t_epno nvarchar(20) = case when '#non' = [16] then char(255) else [16] end
+declare @t_bpno nvarchar(300) = case when '#non' = [15] then '' else [15] end
+declare @t_epno nvarchar(300) = case when '#non' = [16] then char(255) else [16] end
 declare @t_enda nvarchar(20) = case when '#non' = [38] then '' else [38] end
 --****************************************************************************************
 declare @tmp table(
@@ -1781,10 +1781,10 @@ declare @tmp table(
 	noa nvarchar(50),
 	noq nvarchar(50),
 	odate nvarchar(10),
-	pno nvarchar(50),
-	product nvarchar(100),
-	spec nvarchar(100),
-	unit nvarchar(20),
+	pno nvarchar(300),
+	product nvarchar(300),
+	spec nvarchar(300),
+	unit nvarchar(50),
 	mount float,
 	omount float,
 	c1 float,
@@ -1816,16 +1816,16 @@ z_ordbp_xy07:--z_ordbp_xy07
 
 declare @t_bnoa nvarchar(50) = case when '#non' = [2] then '' else [2] end
 declare @t_enoa nvarchar(50) = case when '#non' = [3] then char(255) else [3] end
-declare @t_btggno nvarchar(90) = case when '#non' = [9] then '' else [9] end
-declare @t_etggno nvarchar(90) = case when '#non' = [10] then char(255) else [10] end
+declare @t_btggno nvarchar(100) = case when '#non' = [9] then '' else [9] end
+declare @t_etggno nvarchar(100) = case when '#non' = [10] then char(255) else [10] end
 declare @t_bodate nvarchar(20) = case when '#non' = [13] then '' else [13] end
 declare @t_eodate nvarchar(20) = case when '#non' = [14] then char(255) else [14] end
 declare @t_bdatea nvarchar(20) = case when '#non' = [21] then '' else [21] end
 declare @t_edatea nvarchar(20) = case when '#non' = [22] then char(255) else [22] end
 declare @t_bldate nvarchar(20) = case when '#non' = [23] then '' else [23] end
 declare @t_eldate nvarchar(20) = case when '#non' = [24] then char(255) else [24] end
-declare @t_bpno nvarchar(20) = case when '#non' = [25] then '' else [25] end
-declare @t_epno nvarchar(20) = case when '#non' = [26] then char(255) else [26] end
+declare @t_bpno nvarchar(300) = case when '#non' = [25] then '' else [25] end
+declare @t_epno nvarchar(300) = case when '#non' = [26] then char(255) else [26] end
 declare @t_ordc nvarchar(20) = case when '#non' = [27] then '' else [27] end
 declare @xproj nvarchar(20) = '[39]'
 declare @isspec nvarchar(20) = '[40]'
@@ -1835,12 +1835,12 @@ declare @tmp table(
 	gno nvarchar(1),
 	noa nvarchar(50),
 	noq nvarchar(50),
-	pno nvarchar(50),
-	product nvarchar(100),
-	unit nvarchar(20),
-	style nvarchar(50),
+	pno nvarchar(300),
+	product nvarchar(MAX),
+	unit nvarchar(50),
+	style nvarchar(300),
 	tgg nvarchar(100),
-	comp nvarchar(100),
+	comp nvarchar(300),
 	odate nvarchar(10),
 	ldate nvarchar(10),
 	mount float,
