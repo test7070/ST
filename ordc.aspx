@@ -412,6 +412,46 @@
 							$('#txtAddr2').val(ordb[0].addr);
 						}
 						break;
+					case 'btnOk_checkuno':
+						var as = _q_appendData("view_uccb", "", true);
+						if ($('#cmbTypea').val()=='1' && as[0] != undefined) {
+							var msg = '';
+							for (var i = 0; i < as.length; i++) {
+								msg += (msg.length > 0 ? '\n' : '') + as[i].uno + ' 此批號已存在!!\n【' + as[i].action + '】單號：' + as[i].noa;
+							}
+							alert(msg);
+							Unlock(1);
+							return;
+						} else {
+							getUno();
+						}
+						break;
+					default:
+						if (t_name.substring(0, 9) == 'checkUno_') {
+							if($('#cmbTypea').val()=='1'){
+								var n = t_name.split('_')[1];
+								var as = _q_appendData("view_uccb", "", true);
+								if (as[0] != undefined) {
+									var t_uno = $('#txtUno_' + n).val();
+									alert(t_uno + ' 此批號已存在!!\n【' + as[0].action + '】單號：' + as[0].noa);
+									$('#txtUno_' + n).focus();
+								}
+							}
+							
+						} else if (t_name.substring(0, 14) == 'btnOkcheckUno_') {
+							var n = parseInt(t_name.split('_')[1]);
+							var as = _q_appendData("view_uccb", "", true);
+							if ($('#cmbTypea').val()=='1' && as[0] != undefined) {
+								var t_uno = $('#txtUno_' + n).val();
+								alert(t_uno + ' 此批號已存在!!\n【' + as[0].action + '】單號：' + as[0].noa);
+								Unlock(1);
+								return;
+							} else {
+								btnOk_checkUno(n - 1);
+							}
+							break;
+						}
+						break;
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -528,6 +568,27 @@
 					alert('進貨品項單價等於0!!');
 				}
 				
+				//檢查批號
+				for (var i = 0; i < q_bbsCount; i++) {
+					for (var j = i + 1; j < q_bbsCount; j++) {
+						if ($.trim($('#txtUno_' + i).val()).length > 0 && $.trim($('#txtUno_' + i).val()) == $.trim($('#txtUno_' + j).val())) {
+							alert('【' + $.trim($('#txtUno_' + i).val()) + '】' + q_getMsg('lblUno_st') + '重覆。\n' + (i + 1) + ', ' + (j + 1));
+							Unlock(1);
+							return;
+						}
+					}
+				}
+				var t_where = '';
+				for (var i = 0; i < q_bbsCount; i++) {
+					if ($.trim($('#txtUno_' + i).val()).length > 0)
+						t_where += (t_where.length > 0 ? ' or ' : '') + "(uno='" + $.trim($('#txtUno_' + i).val()) + "' and not(tablea='rc2s' and noa='" + $.trim($('#txtNoa').val()) + "'))";
+				}
+				if (t_where.length > 0)
+					q_gt('view_uccb', "where=^^" + t_where + "^^", 0, 0, 0, 'btnOk_checkuno');
+				else
+					getUno();
+		
+				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
@@ -538,6 +599,64 @@
 					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ordc') + $('#txtOdate').val(), '/', ''));
 				else
 					wrServer(s1);
+			}
+			
+			function getUno() {
+				var t_buno = '　';
+				var t_datea = '　';
+				var t_style = '　';
+				for (var i = 0; i < q_bbsCount; i++) {
+					if (i != 0) {
+						t_buno += '&';
+						t_datea += '&';
+						t_style += '&';
+					}
+					if ($('#txtUno_' + i).val().length == 0 ) {
+						if($('#txtProductno_'+i).val().toUpperCase()=='OEM'){
+							
+						}else{
+							t_buno += '';
+							t_datea += $('#txtDatea').val();
+							t_style += $('#txtStyle_' + i).val();
+						}
+					}
+				}
+				q_func('qtxt.query.getuno', 'uno.txt,getuno,' + t_buno + ';' + t_datea + ';' + t_style + ';');
+			}
+			
+			function q_funcPost(t_func, result) {
+				switch(t_func) {
+					case 'qtxt.query.getuno':
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							if (as.length != q_bbsCount) {
+								alert('批號取得異常。');
+							} else {
+								for (var i = 0; i < q_bbsCount; i++) {
+									if ($('#txtUno_' + i).val().length == 0) {
+										if(q_getPara('sys.comp').substring(0,2)=='傑期' && $('#txtProductno_'+i).val().toUpperCase()=='OEM'){
+							
+										}else{
+											$('#txtUno_' + i).val(as[i].uno);
+										}
+									}
+								}
+							}
+						}
+						if (q_cur == 1)
+							$('#txtWorker').val(r_name);
+						else
+							$('#txtWorker2').val(r_name);
+						sum();
+						
+						var t_noa = trim($('#txtNoa').val());
+						var t_date = trim($('#txtDatea').val());
+						if (t_noa.length == 0 || t_noa == "AUTO")
+							q_gtnoa(q_name, replaceAll(q_getPara('sys.key_rc2') + (t_date.length == 0 ? q_date() : t_date), '/', ''));
+						else
+							wrServer(t_noa);
+						break;
+				}
 			}
 
 			function _btnSeek() {
@@ -573,6 +692,14 @@
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#txtUnit_' + j).change(function() {
 							sum();
+						});
+						$('#txtUno_' + j).change(function(e) {
+							if ($('#cmbTypea').val() != '2') {
+								var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+								var t_uno = $.trim($(this).val());
+								var t_noa = $.trim($('#txtNoa').val());
+								q_gt('uccy', "where=^^uno='" + t_uno + "' and not(gform='ordcs' and gnoa='" + t_noa + "')^^", 0, 0, 0, 'checkUno_' + n);
+							}
 						});
 						$('#txtMount_' + j).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
@@ -782,7 +909,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno1'] && !as['productno2'] && !as['productno3'] && !as['product']) {
+				if (!as['uno'] && !as['productno1'] && !as['productno2'] && !as['productno3'] && !as['product']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
