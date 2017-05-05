@@ -121,21 +121,16 @@
 						q_msg($('#txtMon'), "月份要另外設定，請在"+q_getMsg('lblMemo')+"的第一個字打'*'字");
 				});
 				
-				var t_year
-				if(r_len=='4'){
-					t_year=$('#txtDatea').val().substring(0, 4)-1911;
-				}else{
-					t_year=$('#txtDatea').val().substring(0, 3);
-				}
-				
 				$('#lblAccno').click(function() {
+					var t_years=(r_len=='4')?($('#txtDatea').val().substring(0, 4)-1911):$('#txtDatea').val().substring(0, 3);
 					if(!emp($('#txtAccno').val()))
-						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + t_year + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('lblAccno'), true);
+						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" +t_years + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('lblAccno'), true);
 				});
 				
 				$('#lblRc2no').click(function() {
+					var t_years=(r_len=='4')?($('#txtDatea').val().substring(0, 4)-1911):$('#txtDatea').val().substring(0, 3);
 					if(!emp($('#txtRc2no').val()))
-						q_pop('txtRc2no', "rc2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtRc2no').val() + "';" + t_year + '_' + r_cno, 'rc2', 'datea', 'noa', "92%", "1054px", q_getMsg('lblRc2no'), true);
+						q_pop('txtRc2no', "rc2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtRc2no').val() + "';" + t_years + '_' + r_cno, 'rc2', 'datea', 'noa', "92%", "1054px", q_getMsg('lblRc2no'), true);
 				});
 				
 				$('#lblOrdc').click(function() {
