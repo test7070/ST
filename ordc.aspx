@@ -532,7 +532,7 @@
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
-					
+							
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
 					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ordc') + $('#txtOdate').val(), '/', ''));
@@ -573,6 +573,14 @@
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#txtUnit_' + j).change(function() {
 							sum();
+						});
+						$('#txtUno_' + j).change(function(e) {
+							if ($('#cmbTypea').val() != '2') {
+								var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+								var t_uno = $.trim($(this).val());
+								var t_noa = $.trim($('#txtNoa').val());
+								q_gt('uccy', "where=^^uno='" + t_uno + "' and not(gform='ordcs' and gnoa='" + t_noa + "')^^", 0, 0, 0, 'checkUno_' + n);
+							}
 						});
 						$('#txtMount_' + j).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
@@ -782,7 +790,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno1'] && !as['productno2'] && !as['productno3'] && !as['product']) {
+				if (!as['uno'] && !as['productno1'] && !as['productno2'] && !as['productno3'] && !as['product']) {
 					as[bbsKey[1]] = '';
 					return;
 				}

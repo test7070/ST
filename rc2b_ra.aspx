@@ -122,13 +122,15 @@
 				});
 				
 				$('#lblAccno').click(function() {
+					var t_years=(r_len=='4')?($('#txtDatea').val().substring(0, 4)-1911):$('#txtDatea').val().substring(0, 3);
 					if(!emp($('#txtAccno').val()))
-						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('lblAccno'), true);
+						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" +t_years + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('lblAccno'), true);
 				});
 				
 				$('#lblRc2no').click(function() {
+					var t_years=(r_len=='4')?($('#txtDatea').val().substring(0, 4)-1911):$('#txtDatea').val().substring(0, 3);
 					if(!emp($('#txtRc2no').val()))
-						q_pop('txtRc2no', "rc2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtRc2no').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'rc2', 'datea', 'noa', "92%", "1054px", q_getMsg('lblRc2no'), true);
+						q_pop('txtRc2no', "rc2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $('#txtRc2no').val() + "';" + t_years + '_' + r_cno, 'rc2', 'datea', 'noa', "92%", "1054px", q_getMsg('lblRc2no'), true);
 				});
 				
 				$('#lblOrdc').click(function() {
@@ -589,6 +591,12 @@
 				}
 				_bbsAssign();
 				HiddenTreat();
+			}
+
+			function refreshBbs(){
+				if (q_getPara('sys.project').toUpperCase().substr(0,2)=='AD' || q_getPara('sys.project').toUpperCase().substr(0,2)=='JO' ){
+					$('.isAD').hide();
+				}
 			}
 
 			function btnIns() {
@@ -1119,7 +1127,7 @@
 					<td align="center" style="width:180px;"><a id='lblProductno'> </a></td>
 					<td align="center" style="width:220px;"><a id='lblProduct'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit'> </a></td>
-					<td align="center" style="width:120px;">車型</td>
+					<td class="isAD" align="center" style="width:120px;">車型</td>
 					<td align="center" style="width:90px;"><a id='lblInmount'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblUnmount'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblQcresult_s'> </a></td>
@@ -1147,7 +1155,7 @@
 						<input type="text" id="txtSpec.*" class="txt c1"/>
 					</td>
 					<td><input id="txtUnit.*" type="text" class="txt c1"/></td>
-					<td><input id="txtStyle.*" type="text" class="txt c1"/></td>
+					<td class="isAD"><input id="txtStyle.*" type="text" class="txt c1"/></td>
 					<td><input id="txtInmount.*" type="text" class="txt num c1" /></td>
 					<td><input id="txtUnmount.*" type="text" class="txt num c1" /></td>
 					<td><select id="cmbQcresult.*" class="txt c1"> </select></td>
