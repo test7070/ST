@@ -645,7 +645,7 @@
             }
             .dbbm {
                 float: left;
-                width: 800px;
+                width: 900px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -664,7 +664,7 @@
                 height: 35px;
             }
             .tbbm tr td {
-                width: 15%;
+                width: 16%;
             }
             .tbbm .tdZ {
                 width: 1%;
@@ -854,7 +854,7 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl" > </a></td>
-						<td colspan='5'><textarea id="txtMemo" cols="10" rows="5" style="width: 100%; height: 50px;" > </textarea></td>
+						<td colspan='5'><textarea id="txtMemo" rows="4" style="width: 100%; " > </textarea></td>
 					</tr>
 				</table>
 			</div>
