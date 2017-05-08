@@ -142,7 +142,7 @@
 				begin
 					set @memo3 = LEFT(@memo,CHARINDEX('chr(10)',@memo)-1)
 					set @memo4 =  SUBSTRING(@memo,LEN(@memo3)+8,len(@memo))
-					set @memo4 = REPLACE(@memo3,'chr(10)','')
+					set @memo4 = REPLACE(@memo4,'chr(10)','')
 					--set @memo3 = right(@memo,LEN(@memo)-LEN(@memo2)-7+1)
 				end
 				else
