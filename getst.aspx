@@ -853,6 +853,7 @@
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
+						<!-- 裕承隆 備註可以列印4行-->
 						<td><span> </span><a id="lblMemo" class="lbl" > </a></td>
 						<td colspan='5'><textarea id="txtMemo" rows="4" style="width: 100%; " > </textarea></td>
 					</tr>
