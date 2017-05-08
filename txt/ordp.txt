@@ -21,10 +21,10 @@ ordp_ordc:--ordp_ordc
 		cno nvarchar(20),
 		kind nvarchar(20),
 		tggno nvarchar(20),
-		productno nvarchar(20),
-		product nvarchar(50),
-		spec nvarchar(50),
-		unit nvarchar(20),
+		productno nvarchar(300),
+		product nvarchar(300),
+		spec nvarchar(300),
+		unit nvarchar(50),
 		omount float,
 		mount float,
 		price float,
@@ -68,8 +68,8 @@ ordp_ordc:--ordp_ordc
 		ordbaccy nvarchar(10),
 		ordbno nvarchar(20),
 		no3 nvarchar(10),
-		productno nvarchar(20),
-		unit nvarchar(10),
+		productno nvarchar(300),
+		unit nvarchar(50),
 		mount float		
 	)
 	insert into #ordp_tmpt(ordpno,ordpnoq,ordbaccy,ordbno,no3,productno,unit,mount)
@@ -190,8 +190,8 @@ import:--ordb -> ordp
 	declare @t_kind nvarchar(20) = case when '#non'=[1] then '' else [1] end
 	declare @t_btggno nvarchar(20) = [2] 
 	declare @t_etggno nvarchar(20) = case when len([3])=0 then char(255) else [3] end 
-	declare @t_bproductno nvarchar(20) = [4] 
-	declare @t_eproductno nvarchar(20) = case when len([5])=0 then char(255) else [5] end
+	declare @t_bproductno nvarchar(300) = [4] 
+	declare @t_eproductno nvarchar(300) = case when len([5])=0 then char(255) else [5] end
 	declare @t_bodate nvarchar(10) = [6]
 	declare @t_eodate nvarchar(10) = case when len([7])=0 then char(255) else [7] end
 	declare @t_ordbno nvarchar(20) = [8] 
@@ -214,13 +214,13 @@ import:--ordb -> ordp
 		kind nvarchar(20),
 		datea nvarchar(10),
 		
-		tggno nvarchar(20),
-		tgg nvarchar(50),
-		productno nvarchar(20),
-		product nvarchar(50),
-		spec nvarchar(50),
-		style nvarchar(20),
-		unit nvarchar(20),
+		tggno nvarchar(50),
+		tgg nvarchar(200),
+		productno nvarchar(300),
+		product nvarchar(300),
+		spec nvarchar(300),
+		style nvarchar(300),
+		unit nvarchar(50),
 		mount float,
 		omount float,
 		price float,
@@ -282,10 +282,10 @@ import:--ordb -> ordp
 		kind nvarchar(20),
 		tggno nvarchar(20),
 		tgg nvarchar(50),
-		productno nvarchar(20),
-		product nvarchar(50),
-		spec nvarchar(50),
-		unit nvarchar(20),
+		productno nvarchar(300),
+		product nvarchar(300),
+		spec nvarchar(300),
+		unit nvarchar(50),
 		mount float,
 		price float,
 		total float,
@@ -310,10 +310,10 @@ import:--ordb -> ordp
 	declare @datea nvarchar(10)
 	declare @tggno nvarchar(20)
 	declare @tgg nvarchar(50)
-	declare @productno nvarchar(20)
-	declare @product nvarchar(50)
-	declare @unit nvarchar(20)
-	declare @spec nvarchar(50)
+	declare @productno nvarchar(300)
+	declare @product nvarchar(300)
+	declare @unit nvarchar(50)
+	declare @spec nvarchar(300)
 	declare @mount float
 	declare @price float
 	declare @total float
@@ -363,10 +363,10 @@ import:--ordb -> ordp
 		kind nvarchar(20),
 		tggno nvarchar(20),
 		tgg nvarchar(50),
-		productno nvarchar(20),
-		product nvarchar(50),
-		spec nvarchar(50),
-		unit nvarchar(20),
+		productno nvarchar(300),
+		product nvarchar(300),
+		spec nvarchar(300),
+		unit nvarchar(50),
 		mount float,
 		price float,
 		total float,
