@@ -20,7 +20,7 @@
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 10;
+            brwCount2 = 15;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
@@ -43,8 +43,23 @@
             }
 
             function mainPost() {
+            	bbmNum = [
+            		['txtShifttime', 3, 1, 1],['txtOstand', 6, 1, 1]
+            		,['txtDoverhours', 3, 1, 1],['txtOverhours', 4, 1, 1]
+            		,['txtDhoverhours', 3, 1, 1],['txtHoverhours', 4, 1, 1]
+            		,['txtLate', 3, 0, 1],['txtLatenum', 2, 0, 1],['txtLatedfull', 3, 2, 1]
+            		,['txtLate2', 3, 0, 1],['txtLate2dshour', 3, 2, 1],['txtLate2num', 2, 0, 1],['txtLate2dfull', 3, 2, 1]
+            		,['txtLateallnum', 2, 0, 1],['txtLeave', 3, 0, 1]
+            		,['txtVacanodhours', 2, 0, 1],['txtVacanonum', 2, 0, 1],['txtVacahalfdfull', 3, 2, 1]
+            	];
             	q_getFormat();
-            	bbmMask = [['txtBtime', '99:99'], ['txtEtime', '99:99']];
+            	bbmMask = [
+            		['txtBtime', '99:99'], ['txtEtime', '99:99']
+	            	, ['txtBresttime', '99:99'], ['txtEresttime', '99:99']
+	            	, ['txtBresttime2', '99:99'], ['txtEresttime2', '99:99']
+	            	, ['txtBresttime3', '99:99'], ['txtEresttime3', '99:99']
+	            	, ['txtOvertime', '99:99']
+            	];
                 q_mask(bbmMask);
                 
                 $('#txtNoa').change(function(e) {
@@ -63,6 +78,12 @@
                 $('#txtEtime').change(function(e) {
                     if($(this).val()>'23:59'){
                     	alert('請輸入正確的'+q_getMsg('lblBtime')+'!!');
+                    }
+                });
+                
+                $('.resttime').change(function(e) {
+                    if($(this).val()>'23:59'){
+                    	alert('請輸入正確的'+q_getMsg('lblResttime')+'!!');
                     }
                 });
             }
@@ -298,7 +319,7 @@
                 float: left;
             }
             .txt.c2 {
-                width: 45%;
+                width: 22%;
                 float: left;
             }
             .txt.num {
@@ -331,14 +352,14 @@
 	</head>
 	<body>
 		<!--#include file="../inc/toolbar.inc"-->
-		<div id='dmain' style="overflow:hidden;">
-			<div class="dview" id="dview" style="float: left;  width:450px;"  >
+		<div id='dmain' style="overflow:hidden;width: 1260px;">
+			<div class="dview" id="dview" style="float: left;  width:350px;"  >
 				<table class="tview" id="tview"   border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
-						<td align="center" style="width:20%"><a id='vewNoa'> </a></td>
-						<td align="center" style="width:25%"><a id='vewNamea'> </a></td>
-						<td align="center" style="width:50%"><a id='vewBtime'> </a></td>
+						<td align="center" style="width:25%"><a id='vewNoa'> </a></td>
+						<td align="center" style="width:30%"><a id='vewNamea'> </a></td>
+						<td align="center" style="width:45%"><a id='vewBtime'> </a></td>
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=''/></td>
@@ -348,34 +369,142 @@
 					</tr>
 				</table>
 			</div>
-			<div class='dbbm' style="width: 400px;float: left;">
+			<div class='dbbm' style="width: 910px;float: left;">
 				<table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='5'>
 					<tr style="height: 1px;">
-						<td class="td1" style="width: 100px;"> </td>
-						<td class="td2" style="width: 140px;"> </td>
-						<td class="td3" style="width: 140px;"> </td>
-						<td class="td4" style="width: 20px;"> </td>
+						<td style="width: 190px;"> </td>
+						<td style="width: 60px;"> </td>
+						<td style="width: 180px;"> </td>
+						<td style="width: 60px;"> </td>
+						<td style="width: 160px;"> </td>
+						<td style="width: 60px;"> </td>
+						<td style="width: 130px;"> </td>
+						<td style="width: 60px;"> </td>
+						<td style="width: 10px;"> </td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td class="td2"><input id="txtNoa"  type="text" class="txt c1" /></td>
-						<td class="td3"> </td>
-						<td class="td4"> </td>
+						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
+						<td><input id="txtNoa" type="text" class="txt c1" /></td>
+						<td> </td>
+						<td> </td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id='lblNamea' class="lbl"> </a></td>
-						<td class="td2"><input id="txtNamea"  type="text" class="txt c1"/></td>
-						<td class="td3"> </td>
-						<td class="td4"> </td>
+						<td><span> </span><a id='lblNamea' class="lbl"> </a></td>
+						<td><input id="txtNamea" type="text" class="txt c1"/></td>
+						<td> </td>
+						<td> </td>
 					</tr>
 					<tr>
-						<td class="td1"><span> </span><a id='lblBtime' class="lbl"> </a></td>
-						<td class="td2" colspan="2">
-							<input id="txtBtime"  type="text" class="txt c2"/>
-							<a style="float: left;">~</a>
-							<input id="txtEtime"  type="text" class="txt c2"/>
+						<td><span> </span><a id='lblBtime' class="lbl"> </a></td>
+						<td colspan="3">
+							<input id="txtBtime" type="text" class="txt c2"/>
+							<a style="float: left;">　~　</a>
+							<input id="txtEtime" type="text" class="txt c2"/>
 						</td>
-						<td class="td4"> </td>
+						<td> </td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblIsshift' class="lbl">輪班</a></td>
+						<td colspan="2">
+							<input id="chkIsshift" type="checkbox"/>
+							<span> </span><a id='lblShifttime' class="lbl" style="float: none;margin-left: 20px;">輪班時數</a>
+							<span style="width: 60px;float: right;"> </span>
+							<input id="txtShifttime" type="text" class="txt num c1" style="width: 60px;float: right;" />
+						</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblBresttime' class="lbl">休息時間1</a></td>
+						<td colspan="3">
+							<input id="txtBresttime" type="text" class="txt c2 resttime"/>
+							<a style="float: left;">　~　</a>
+							<input id="txtEresttime" type="text" class="txt c2 resttime"/>
+						</td>
+						<td> </td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblBresttime2' class="lbl">休息時間2</a></td>
+						<td colspan="3">
+							<input id="txtBresttime2" type="text" class="txt c2 resttime"/>
+							<a style="float: left;">　~　</a>
+							<input id="txtEresttime2" type="text" class="txt c2 resttime"/>
+						</td>
+						<td> </td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblBresttime3' class="lbl">休息時間3</a></td>
+						<td colspan="3">
+							<input id="txtBresttime3" type="text" class="txt c2 resttime"/>
+							<a style="float: left;">　~　</a>
+							<input id="txtEresttime3" type="text" class="txt c2 resttime"/>
+						</td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: antiquewhite;">
+						<td><span> </span><a id='lblOvertime' class="lbl">加班開始時間</a></td>
+						<td><input id="txtOvertime" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblOstand' class="lbl">加班時薪</a></td>
+						<td><input id="txtOstand" type="text" class="txt num c1" /></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: antiquewhite;">
+						<td><span> </span><a id='lblDoverhours' class="lbl">平日最多時數/天</a></td>
+						<td><input id="txtDoverhours" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblOverhours' class="lbl">平日最多時數/月</a></td>
+						<td><input id="txtOverhours" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblDhoverhours' class="lbl">假日最多時數/天</a></td>
+						<td><input id="txtDhoverhours" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblHoverhours' class="lbl">假日最多時數/月</a></td>
+						<td><input id="txtHoverhours" type="text" class="txt num c1" /></td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: mediumturquoise;">
+						<td><span> </span><a id='lblLate' class="lbl">遲到分鐘數不扣薪</a></td>
+						<td><input id="txtLate" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblLatenum' class="lbl">上下月合計超過次數</a></td>
+						<td><input id="txtLatenum" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblLatedfull' class="lbl">扣除%全勤獎金</a></td>
+						<td><input id="txtLatedfull" type="text" class="txt c1" /></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: mediumturquoise;">
+						<td><span> </span><a id='lblLate2' class="lbl">遲到分鐘數扣薪</a></td>
+						<td><input id="txtLate2" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblLate2dshour' class="lbl">扣%時薪</a></td>
+						<td><input id="txtLate2dshour" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblLate2num' class="lbl">上下月合計超過次數</a></td>
+						<td><input id="txtLate2num" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblLate2dfull' class="lbl">扣除%全勤獎金</a></td>
+						<td><input id="txtLate2dfull" type="text" class="txt c1" /></td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: mediumturquoise;">
+						<td><span> </span><a id='lblLateallnum' class="lbl">總次數扣全數全勤</a></td>
+						<td><input id="txtLateallnum" type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblLeave' class="lbl">超過分鐘數視曠職/事假</a></td>
+						<td><input id="txtLeave" type="text" class="txt c1" style="width: 60px;" /></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: darksalmon;">
+						<td><span> </span><a id='lblVacanodhours' class="lbl">當日請假以內不扣全勤/H</a></td>
+						<td><input id="txtVacanodhours" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblVacanonum' class="lbl">上述超過次數扣除全勤</a></td>
+						<td><input id="txtVacanonum" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblVacahalfdfull' class="lbl">請假半天內扣%全勤</a></td>
+						<td><input id="txtVacahalfdfull" type="text" class="txt num c1" /></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
 					</tr>
 				</table>
 			</div>
