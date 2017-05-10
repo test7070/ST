@@ -25,12 +25,14 @@
             brwNowPage = 0;
             brwKey = 'noa';
             //ajaxPath = ""; //  execute in Root
+            q_copy=1;
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 q_brwCount();
+                q_content=" where=^^isnull(enda,0)=0^^ ";
                 q_gt(q_name, q_content, q_sqlCount, 1)
-                $('#txtNoa').focus
+                $('#txtNoa').focus();
             });
 
             function main() {
@@ -132,6 +134,8 @@
 
             function btnIns() {
                 _btnIns();
+                $('#txtEdate').val('');
+                $('#chkEnda').prop('checked',false);
                 refreshBbm();
                 $('#txtNoa').focus();
             }
@@ -163,6 +167,10 @@
             	
             	if($('#txtBtime').val()>'23:59' || $('#txtEtime').val()>'23:59'){
 					alert('請輸入正確的'+q_getMsg('lblBtime')+'!!');
+				}
+				
+				if($('#chkEnda').prop('checked')){
+					$('#txtEdate').val(q_date());
 				}
             	
                 Lock();
@@ -387,7 +395,9 @@
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1" /></td>
 						<td> </td>
-						<td> </td>
+						<td><span> </span><a id='lblEnda' class="lbl">停用</a></td>
+						<td><input id="chkEnda" type="checkbox"></td>
+						<td><input id="txtEdate" type="hidden"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNamea' class="lbl"> </a></td>
@@ -415,7 +425,7 @@
 						<td> </td>
 						<td><span> </span><a id='lblMeals' class="lbl">伙食費</a></td>
 						<td><input id="txtMeals" type="text" class="txt num c1" style="width: 60px;" /></td>
-						<td><span style="float: left;"> </span>天</td>
+						<td><span style="float: left;"> </span>元/餐</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblBresttime' class="lbl">休息時間1</a></td>
