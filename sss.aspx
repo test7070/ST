@@ -532,7 +532,8 @@
 				$('#txtComp').val($('#cmbCno').find(":selected").text());
 				$('#txtPart').val($('#cmbPartno').find(":selected").text());
 				$('#txtJob').val($('#cmbJobno').find(":selected").text());
-				$('#txtClass5').val($('#combClass5').val().toString());
+				if($('#combClass5').val()!=null)
+					$('#txtClass5').val($('#combClass5').val().toString());
 
 				if (!emp($('#txtId').val()))
 					$('#txtId').val($('#txtId').val().toUpperCase());
