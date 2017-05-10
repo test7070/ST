@@ -496,15 +496,24 @@
 						<td> </td>
 					</tr>
 					<tr style="background-color: darksalmon;">
-						<td><span> </span><a id='lblVacanodhours' class="lbl">當日請假以內不扣全勤/H</a></td>
-						<td><input id="txtVacanodhours" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblVacanonum' class="lbl">上述超過次數扣除全勤</a></td>
-						<td><input id="txtVacanonum" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblVacahalfdfull' class="lbl">請假半天內扣%全勤</a></td>
-						<td><input id="txtVacahalfdfull" type="text" class="txt num c1" /></td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
+						<td colspan="2">
+							<a id='lblVacanodhours1' class="lbl" style="float: left;">當日請假</a>
+							<input id="txtVacanodhours" type="text" class="txt num c1" style="width: 50px;" />
+							<a id='lblVacanodhours2' class="lbl" style="float: left;">/H以內不扣全勤</a>
+						</td>
+						<td colspan="2">
+							<a id='lblVacanonum1' class="lbl" style="float: left;">超過</a>
+							<input id="txtVacanonum" type="text" class="txt num c1" style="width: 50px;" />
+							<a id='lblVacanonum2' class="lbl" style="float: left;">次扣除全勤</a>
+						</td>
+						<td colspan="2" style="background-color: yellowgreen;">
+							<a id='lblVacahalfdfull1' class="lbl" style="float: left;">請假半天內扣</a>
+							<input id="txtVacahalfdfull" type="text" class="txt num c1" style="width: 50px;" />
+							<a id='lblVacahalfdfull2' class="lbl" style="float: left;">%全勤</a>
+						</td>
+						<td style="background-color: yellowgreen;"> </td>
+						<td style="background-color: yellowgreen;"> </td>
+						<td style="background-color: yellowgreen;"> </td>
 					</tr>
 				</table>
 			</div>

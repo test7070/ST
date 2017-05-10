@@ -70,6 +70,9 @@
                     	type : '0',
                     	name : 'r_len',
                     	value : r_len
+                    },{
+                        type : '6',
+                        name : 'xmon'
                     }]
                 });
                 q_popAssign();
@@ -79,9 +82,11 @@
                 
                 $('#txtDate1').mask(r_picd);
                 $('#txtDate2').mask(r_picd);
+                $('#txtXmon').mask(r_picm);
                 
                 $('#txtDate1').val(q_date().substr(0,r_lenm)+'/01');
                 $('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',45).substr(0,r_lenm)+'/01',-1));
+                $('#txtXmon').val(q_date().substr(0,r_lenm));
                 
                 $('#txtXworkhours').css('width','110px');
                 $('#Xworkhours').css('width','197px');
