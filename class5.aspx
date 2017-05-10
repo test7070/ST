@@ -51,6 +51,7 @@
             		,['txtLate2', 3, 0, 1],['txtLate2dshour', 3, 2, 1],['txtLate2num', 2, 0, 1],['txtLate2dfull', 3, 2, 1]
             		,['txtLateallnum', 2, 0, 1],['txtLeave', 3, 0, 1]
             		,['txtVacanodhours', 2, 0, 1],['txtVacanonum', 2, 0, 1],['txtVacahalfdfull', 3, 2, 1]
+            		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 0, 1],['txtMhours2', 2, 0, 1]
             	];
             	q_getFormat();
             	bbmMask = [
@@ -58,7 +59,7 @@
 	            	, ['txtBresttime', '99:99'], ['txtEresttime', '99:99']
 	            	, ['txtBresttime2', '99:99'], ['txtEresttime2', '99:99']
 	            	, ['txtBresttime3', '99:99'], ['txtEresttime3', '99:99']
-	            	, ['txtOvertime', '99:99']
+	            	, ['txtOvertime', '99:99'], ['txtMbtime1', '99:99'], ['txtMbtime2', '99:99']
             	];
                 q_mask(bbmMask);
                 
@@ -411,6 +412,10 @@
 							<span style="width: 60px;float: right;"> </span>
 							<input id="txtShifttime" type="text" class="txt num c1" style="width: 60px;float: right;" />
 						</td>
+						<td> </td>
+						<td><span> </span><a id='lblMeals' class="lbl">伙食費</a></td>
+						<td><input id="txtMeals" type="text" class="txt num c1" style="width: 60px;" /></td>
+						<td><span style="float: left;"> </span>天</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblBresttime' class="lbl">休息時間1</a></td>
@@ -419,7 +424,16 @@
 							<a style="float: left;">　~　</a>
 							<input id="txtEresttime" type="text" class="txt c2 resttime"/>
 						</td>
-						<td> </td>
+						<td><span> </span><a id='lblMtime1' class="lbl">伙食給予起算時間1</a></td>
+						<td><input id="txtMbtime1" type="text" class="txt c1"/></td>
+						<td colspan="2">
+							<span style="float: left;"> </span>
+							<a id='lblMhours1' class="lbl" style="float: left;">超過</a>
+							<span style="float: left;"> </span>
+							<input id="txtMhours1" type="text" class="txt num c2"/>
+							<span style="float: left;"> </span>
+							<a id='lblMhours1-1' class="lbl" style="float: left;">H給予伙食</a>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblBresttime2' class="lbl">休息時間2</a></td>
@@ -428,7 +442,16 @@
 							<a style="float: left;">　~　</a>
 							<input id="txtEresttime2" type="text" class="txt c2 resttime"/>
 						</td>
-						<td> </td>
+						<td><span> </span><a id='lblMtime2' class="lbl">伙食給予起算時間2</a></td>
+						<td><input id="txtMbtime2" type="text" class="txt c1"/></td>
+						<td colspan="2">
+							<span style="float: left;"> </span>
+							<a id='lblMhours2' class="lbl" style="float: left;">超過</a>
+							<span style="float: left;"> </span>
+							<input id="txtMhours2" type="text" class="txt num c2"/>
+							<span style="float: left;"> </span>
+							<a id='lblMhours2-1' class="lbl" style="float: left;">H給予伙食</a>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblBresttime3' class="lbl">休息時間3</a></td>
@@ -463,11 +486,11 @@
 					</tr>
 					<tr style="background-color: mediumturquoise;">
 						<td><span> </span><a id='lblLate' class="lbl">遲到分鐘數不扣薪</a></td>
-						<td><input id="txtLate" type="text" class="txt c1" /></td>
+						<td><input id="txtLate" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLatenum' class="lbl">上下月合計超過次數</a></td>
-						<td><input id="txtLatenum" type="text" class="txt c1" /></td>
+						<td><input id="txtLatenum" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLatedfull' class="lbl">扣除%全勤獎金</a></td>
-						<td><input id="txtLatedfull" type="text" class="txt c1" /></td>
+						<td><input id="txtLatedfull" type="text" class="txt num c1" /></td>
 						<td> </td>
 						<td> </td>
 						<td> </td>
@@ -478,16 +501,16 @@
 						<td><span> </span><a id='lblLate2dshour' class="lbl">扣%時薪</a></td>
 						<td><input id="txtLate2dshour" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLate2num' class="lbl">上下月合計超過次數</a></td>
-						<td><input id="txtLate2num" type="text" class="txt c1" /></td>
+						<td><input id="txtLate2num" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLate2dfull' class="lbl">扣除%全勤獎金</a></td>
-						<td><input id="txtLate2dfull" type="text" class="txt c1" /></td>
+						<td><input id="txtLate2dfull" type="text" class="txt num c1" /></td>
 						<td> </td>
 					</tr>
 					<tr style="background-color: mediumturquoise;">
 						<td><span> </span><a id='lblLateallnum' class="lbl">總次數扣全數全勤</a></td>
-						<td><input id="txtLateallnum" type="text" class="txt c1" /></td>
+						<td><input id="txtLateallnum" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLeave' class="lbl">超過分鐘數視曠職/事假</a></td>
-						<td><input id="txtLeave" type="text" class="txt c1" style="width: 60px;" /></td>
+						<td><input id="txtLeave" type="text" class="txt num c1" style="width: 60px;" /></td>
 						<td> </td>
 						<td> </td>
 						<td> </td>
@@ -498,17 +521,24 @@
 					<tr style="background-color: darksalmon;">
 						<td colspan="2">
 							<a id='lblVacanodhours1' class="lbl" style="float: left;">當日請假</a>
+							<span style="float: left;"> </span>
 							<input id="txtVacanodhours" type="text" class="txt num c1" style="width: 50px;" />
+							<span style="float: left;"> </span>
 							<a id='lblVacanodhours2' class="lbl" style="float: left;">/H以內不扣全勤</a>
 						</td>
 						<td colspan="2">
 							<a id='lblVacanonum1' class="lbl" style="float: left;">超過</a>
+							<span style="float: left;"> </span>
 							<input id="txtVacanonum" type="text" class="txt num c1" style="width: 50px;" />
+							<span style="float: left;"> </span>
 							<a id='lblVacanonum2' class="lbl" style="float: left;">次扣除全勤</a>
 						</td>
 						<td colspan="2" style="background-color: yellowgreen;">
+							<span style="float: left;"> </span>
 							<a id='lblVacahalfdfull1' class="lbl" style="float: left;">請假半天內扣</a>
+							<span style="float: left;"> </span>
 							<input id="txtVacahalfdfull" type="text" class="txt num c1" style="width: 50px;" />
+							<span style="float: left;"> </span>
 							<a id='lblVacahalfdfull2' class="lbl" style="float: left;">%全勤</a>
 						</td>
 						<td style="background-color: yellowgreen;"> </td>
