@@ -73,7 +73,7 @@
 				q_gt('acomp', '', 0, 0, 0, "");
 				q_gt('part', '', 0, 0, 0, "");
 				q_gt('salm', '', 0, 0, 0, "");
-				q_gt('class5', "where=^^ isnull(enda,0)=0 ^^", 0, 0, 0, "");
+				q_gt('class5', "", 0, 0, 0, "");
 				
 				if (q_getPara('sys.project').toUpperCase()=='UU' || q_getPara('sys.project').toUpperCase()=='TN') {
 					$('.sbutton').hide();
