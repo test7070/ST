@@ -4,7 +4,7 @@
 	declare @t_bnoa nvarchar(20) = case when '#non' = [2] then '' else [2] end
 	declare @t_enoa nvarchar(20) = case when '#non' = [3] then char(255) else [3] end
 	
-	declare @t_pageline int = 11 -- 一頁幾行
+	declare @t_pageline int = 12 -- 一頁幾行 
 	-----------------------------------------------------------------------------
 	declare @noa nvarchar(20)
 	declare @datea nvarchar(10)
@@ -62,7 +62,7 @@
 		memo1 nvarchar(max),
 		memo2 nvarchar(max),
 		memo3 nvarchar(max),
-		
+		memo4 nvarchar(max),
 		uno nvarchar(30),
 		productno nvarchar(20),
 		product nvarchar(20),
@@ -97,11 +97,6 @@
 		,custno,comp,tel,fax,addr,memo
 	
 	insert into @tmp(gno,pno,noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo)
-	select '6','5',noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo
-	from @tmp 
-	group by noa,datea,typea,kind,ckind,trantype
-		,custno,comp,tel,fax,addr,memo
-	insert into @tmp(gno,pno,noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo)
 	select '7','5',noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo
 	from @tmp 
 	group by noa,datea,typea,kind,ckind,trantype
@@ -111,11 +106,17 @@
 	from @tmp 
 	group by noa,datea,typea,kind,ckind,trantype
 		,custno,comp,tel,fax,addr,memo
+	insert into @tmp(gno,pno,noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo)
+	select '9','5',noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo
+	from @tmp 
+	group by noa,datea,typea,kind,ckind,trantype
+		,custno,comp,tel,fax,addr,memo
 		
 	declare @memo nvarchar(max)
 	declare @memo1 nvarchar(max)
 	declare @memo2 nvarchar(max)
 	declare @memo3 nvarchar(max)
+	declare @memo4 nvarchar(max)
 	
 	declare cursor_table cursor for
 	select noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo
@@ -135,9 +136,17 @@
 			if(CHARINDEX('chr(10)',@memo)>0)
 			begin
 				set @memo2 = LEFT(@memo,CHARINDEX('chr(10)',@memo)-1)
-				set @memo3 =  SUBSTRING(@memo,LEN(@memo2)+8,len(@memo))
-				set @memo3 = REPLACE(@memo3,'chr(10)','')
-				--set @memo3 = right(@memo,LEN(@memo)-LEN(@memo2)-7+1)
+				set @memo =  SUBSTRING(@memo,LEN(@memo2)+8,len(@memo))
+				
+				if(CHARINDEX('chr(10)',@memo)>0)
+				begin
+					set @memo3 = LEFT(@memo,CHARINDEX('chr(10)',@memo)-1)
+					set @memo4 =  SUBSTRING(@memo,LEN(@memo3)+8,len(@memo))
+					set @memo4 = REPLACE(@memo4,'chr(10)','')
+					--set @memo3 = right(@memo,LEN(@memo)-LEN(@memo2)-7+1)
+				end
+				else
+					set @memo3 = @memo
 			end
 			else
 				set @memo2 = @memo
@@ -152,6 +161,9 @@
 		
 		insert into @tmp(gno,pno,noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo3)
 		select '5','4',@noa,@datea,@typea,@kind,@ckind,@trantype,@custno,@comp,@tel,@fax,@addr,@memo3
+		
+		insert into @tmp(gno,pno,noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr,memo4)
+		select '6','4',@noa,@datea,@typea,@kind,@ckind,@trantype,@custno,@comp,@tel,@fax,@addr,@memo4
 		
 		fetch next from cursor_table
 		into @noa,@datea,@typea,@kind,@ckind,@trantype,@custno,@comp,@tel,@fax,@addr,@memo
@@ -170,7 +182,7 @@
 		while @n%@t_pageline != 0
 		begin
 			insert into @tmp(gno,pno,noa,datea,typea,kind,ckind,trantype,custno,comp,tel,fax,addr)
-			values('9','2',@noa,@datea,@typea,@kind,@ckind,@trantype,@custno,@comp,@tel,@fax,@addr)
+			values('10','2',@noa,@datea,@typea,@kind,@ckind,@trantype,@custno,@comp,@tel,@fax,@addr)
 			set @n=@n+1
 		end
 		fetch next from cursor_table
@@ -196,6 +208,7 @@
 	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.memo1+'</a>' mm1
 	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.memo2+'</a>' mm2
 	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.memo3+'</a>' mm3
+	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.memo4+'</a>' mm4
 	from @tmp a 
 	left join(select noa,COUNT(1) n from @tmp group by noa) b on a.noa=b.noa
 	order by a.noa,a.pno;

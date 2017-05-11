@@ -73,7 +73,7 @@
 				q_gt('acomp', '', 0, 0, 0, "");
 				q_gt('part', '', 0, 0, 0, "");
 				q_gt('salm', '', 0, 0, 0, "");
-				q_gt('class5', '', 0, 0, 0, "");
+				q_gt('class5', "where=^^ isnull(enda,0)=0 ^^", 0, 0, 0, "");
 				
 				if (q_getPara('sys.project').toUpperCase()=='UU' || q_getPara('sys.project').toUpperCase()=='TN') {
 					$('.sbutton').hide();
@@ -379,9 +379,9 @@
 							for ( i = 0; i < as.length; i++) {
 								t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].namea;
 							}
-							q_cmbParse("cmbClass5", t_item);
+							q_cmbParse("combClass5", t_item);
 							if (abbm[q_recno] != undefined)
-								$("#cmbClass5").val(abbm[q_recno].class5);
+								$("#combClass5").val(abbm[q_recno].class5.split(','));
 						}
 						break;
 					case 'acomp':
@@ -532,6 +532,8 @@
 				$('#txtComp').val($('#cmbCno').find(":selected").text());
 				$('#txtPart').val($('#cmbPartno').find(":selected").text());
 				$('#txtJob').val($('#cmbJobno').find(":selected").text());
+				if($('#combClass5').val()!=null)
+					$('#txtClass5').val($('#combClass5').val().toString());
 
 				if (!emp($('#txtId').val()))
 					$('#txtId').val($('#txtId').val().toUpperCase());
@@ -559,13 +561,15 @@
 					var t_noa = $.trim($('#txtNoa').val()).toUpperCase();
 					$('#BarcodeShow').html('<img width="100px" src="https://chart.googleapis.com/chart?chs=100x100&cht=qr&chl='+t_noa+'&chld=L|4">');
 				}
-				if(q_getPara('sys.comp').indexOf('英特瑞')>-1 || q_getPara('sys.comp').indexOf('安美得')>-1)
+				if(q_getPara('sys.project').toUpperCase()=='IT')
 					$('.it').css('text-align','left');
 					
 				if(q_getPara('sys.salb')=='1'){
 					$('#textCountry').val($('#cmbCountry').val());
 					$('#textTaxtreaty').val($('#cmbTaxtreaty').val());
 				}
+				
+				$('#combClass5').val($('#txtClass5').val().split(','));
 			}
 
 			function refreshBbm() {
@@ -574,16 +578,10 @@
 				} else {
 					$('#txtNoa').css('color', 'green').css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 				}
-				var isBarCode = (dec(q_getPara('sss.isbarcode'))==1?true:false);
-				if(isBarCode== true){
-					$('.isBarCode').show();
-				}else{
-					$('.isBarCode').hide();
-				}
+				
 				if(q_getPara('sys.project').toUpperCase()=='VU'){
 					$('.vuhide').hide();
 				}
-				
 				
 				if($("#cmbPerson").val()=='外勞'){
 					$('#txtPassportno').show();
@@ -607,6 +605,12 @@
 					} else {
 						$("#" + WantDisabledArray[k]).removeAttr('disabled', 'disabled');
 					}
+				}
+				
+				if(t_para){
+					$('#combClass5').attr('disabled','disabled');
+				}else{
+					$('#combClass5').removeAttr('disabled');
 				}
 			}
 
@@ -947,11 +951,14 @@
 						<td><span> </span><a id='lblReindate' class="lbl"> </a></td>
 						<td><input id="txtReindate" type="text" class="txt c1"/></td>
 					</tr>
-					<tr class="isBarCode">
-						<td class="isBarCode vuhide"><span> </span><a id='lblClass5' class="lbl"> </a></td>
-						<td class="isBarCode vuhide"><select id="cmbClass5" class="txt c1"> </select></td>
-						<td class="isBarCode"><span> </span><a id='lblBarcode' class="lbl"> </a></td>
-						<td class="isBarCode"><input id="txtBarcode" type="text" class="txt c1" /></td>
+					<tr>
+						<td class="vuhide"><span> </span><a id='lblClass5' class="lbl"> </a></td>
+						<td class="vuhide">
+							<select id="combClass5" class="txt c1" multiple="multiple" size="3"> </select>
+							<input id="txtClass5" type="hidden" class="txt c1"/>
+						</td>
+						<td><span> </span><a id='lblBarcode' class="lbl"> </a></td>
+						<td><input id="txtBarcode" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblConn" class="lbl"> </a></td>

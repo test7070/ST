@@ -41,8 +41,8 @@ insert into @tmp
 	b.uno,d.spec,d.class,b.productno,b.product,
 	dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius),b.unit,
 	b.mount,b.weight,b.memo,a.cardeal,a.carno,a.memo,d.store,b.gweight
-	from get[1] a
-	left join gets[1] b on a.noa = b.noa
+	from view_get a
+	left join view_gets b on a.accy=b.accy and a.noa = b.noa
 	left join cust c on a.custno = c.noa 
 	left join uccc d on d.noa = b.uno
 	where a.noa between @t_bnoa and @t_enoa
