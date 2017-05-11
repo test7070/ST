@@ -1,4 +1,4 @@
-importcub:--importcub,not yet used
+﻿importcub:--importcub,not yet used
 	--聯琦  先使用dbo.orde_cut
 	declare @t_cutno nvarchar(20) = [1]
 	--declare @t_cubno nvarchar(20) = ''
