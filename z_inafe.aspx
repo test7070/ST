@@ -64,15 +64,33 @@
 						name : 'xproject',
 						value : q_getPara('sys.project').toUpperCase()
 					}, {
-                        type : '5', //[9]
+                        type : '2', //[9][10]
+                        name : 'xproduct',
+                        dbf : 'ucaucc',
+                        index : 'noa,product',
+                        src : 'ucaucc_b.aspx'
+                    }, {
+                        type : '2', //[11][12]
+                        name : 'xstore',
+                        dbf : 'store',
+                        index : 'noa,store',
+                        src : 'store_b.aspx'
+                    }, {
+                        type : '2', //[13][14]
+                        name : 'xpart',
+                        dbf : 'part',
+                        index : 'noa,part',
+                        src : 'part_b.aspx'
+                    }, {
+                        type : '5', //[15]
                         name : 'xgroupano',
                         value : uccgaItem.split(',')
                     },{
-						type : '8', //[10]
+						type : '8', //[16]
 						name : 'xshowlengthb',
 						value : "1@顯示箱數".split(',')
 					},{
-						type : '8', //[11]
+						type : '8', //[17]
 						name : 'xshowprice',
 						value : "1@顯示單價".split(',')
 					}]

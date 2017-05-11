@@ -3,6 +3,12 @@ declare @t_accy nvarchar(20)
 declare @t_itype nvarchar(20)
 declare @t_bdate nvarchar(20)
 declare @t_edate nvarchar(20)
+declare @t_bproductno nvarchar(100)
+declare @t_eproductno nvarchar(100)
+declare @t_bstore nvarchar(100)
+declare @t_estore nvarchar(100)
+declare @t_bpart nvarchar(100)
+declare @t_epart nvarchar(100)
 declare @t_groupano nvarchar(30)
 declare @t_xproject nvarchar(MAX)='[8]'
 declare @qhref_acomp nvarchar(10) ='fe'
@@ -13,9 +19,15 @@ set @t_accy = '[1]'
 set @t_itype = case when '#non' = [5] then '' when '全部'=[5] then '' else [5] end
 set @t_bdate = case when '#non' = [6] then '' else [6] end
 set @t_edate = case when '#non' = [7] then CHAR(255) else [7] end
-set @t_groupano = case when '#non'=[9] then '' else (case when [9] = ' ' then '' else [9] end) end
-set @showlengthb = case when '#non' = [10] then '0' else [10] end
-set @showprice = case when '#non' = [11] then '0' else [11] end
+set @t_bproductno = case when '#non' = [9] then '' else [9] end
+set @t_eproductno = case when '#non' = [10] then CHAR(255) else [10] end
+set @t_bstore = case when '#non' = [11] then '' else [11] end
+set @t_estore = case when '#non' = [12] then CHAR(255) else [12] end
+set @t_bpart = case when '#non' = [13] then '' else [13] end
+set @t_epart = case when '#non' = [14] then CHAR(255) else [14] end
+set @t_groupano = case when '#non'=[15] then '' else (case when [15] = ' ' then '' else [15] end) end
+set @showlengthb = case when '#non' = [16] then '0' else [16] end
+set @showprice = case when '#non' = [17] then '0' else [17] end
 
 
 if(@t_xproject='yc')
@@ -54,7 +66,10 @@ left join tgg c on a.tggno=c.noa
 left join view_ucaucc d on b.productno = d.noa 
 where(LEN(@t_itype) = 0 or @t_itype = a.itype) 
 and (isnull(a.datea,'') between @t_bdate and @t_edate) 
-and (len(@t_groupano)=0 or d.groupano = @t_groupano) 
+and (len(@t_groupano)=0 or d.groupano = @t_groupano)
+and(b.productno between @t_bproductno and @t_eproductno)
+and(a.storeno between @t_bstore and @t_estore)
+and(a.stationno between @t_bpart and @t_epart)
 
 update @tmp
 set money=case when isnull(UPPER(unit),'')='KG' or isnull(unit,'')='' then weight*price else mount*price end  
