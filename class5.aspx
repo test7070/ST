@@ -150,6 +150,8 @@
 	                				}
 	                			}
 	                		}
+	                		
+	                		t_update=true;
 	                	}
 	                }
 				});
@@ -170,6 +172,16 @@
 	                			$('#'+fbbm[j]).prop('checked',$('#'+fbbm[j]+'_'+t_n).prop('checked'));
 	                		}else{
 	                			$('#'+fbbm[j]).val($('#'+fbbm[j]+'_'+t_n).val());
+	                		}
+	                	}
+	                }
+            	}else{
+            		for (var j = 0; j < fbbm.length; j++) {
+	                	if(fbbm[j]!='txtNoa' && fbbm[j]!='txtNamea'){
+	                		if(fbbm[j].substr(0,3)=='chk'){
+	                			$('#'+fbbm[j]).prop('checked',false);
+	                		}else{
+	                			$('#'+fbbm[j]).val('');
 	                		}
 	                	}
 	                }
@@ -251,7 +263,8 @@
                 _btnIns();
                 refreshBbm();
                 $('#txtNoa').focus();
-                $('txtBdate').val(q_date());
+                $('#txtBdate').val(q_date());
+                t_update=false;
             }
 
             function btnModi() {
@@ -260,6 +273,7 @@
                 _btnModi();
                 refreshBbm();
                 $('#txtClass5').focus();
+                t_update=false;
             }
 
             function btnPrint() {
@@ -271,7 +285,8 @@
                     return false;
                 Unlock();
             }
-
+			
+			var t_update=false;
             function btnOk() {
             	$('#txtNoa').val($.trim($('#txtNoa').val()));
             	if(emp($('#txtNoa').val())){
@@ -286,6 +301,12 @@
             	
             	if($('#txtBtime').val()>'23:59' || $('#txtEtime').val()>'23:59'){
 					alert('請輸入正確的'+q_getMsg('lblBtime')+'!!');
+				}
+				
+				if(!t_update){
+					if(!confirm("尚未點選【插入/更新表身記錄欄】，是否繼續?\n(表頭資料將清除，只顯示表身最新的生效日資料!!)")){
+						return;
+					}
 				}
             	
                 Lock();
