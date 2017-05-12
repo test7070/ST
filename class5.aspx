@@ -613,6 +613,8 @@
 							<input id="txtBresttime" type="text" class="txt c2 resttime"/>
 							<a style="float: left;">　~　</a>
 							<input id="txtEresttime" type="text" class="txt c2 resttime"/>
+							<span style="float: left;"> </span>
+							<a style="float: left;">(午休)</a>
 						</td>
 						<td><span> </span><a id='lblMtime1' class="lbl">伙食給予起算時間1</a></td>
 						<td><input id="txtMbtime1" type="text" class="txt c1"/></td>

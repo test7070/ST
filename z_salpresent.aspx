@@ -73,6 +73,10 @@
                     },{
                         type : '6',
                         name : 'xmon'
+                    },{
+                        type : '5',
+                        name : 'xorder',
+                        value : ('sssno@員工編號,datea@日期').split(',')
                     }]
                 });
                 q_popAssign();
