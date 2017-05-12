@@ -46,7 +46,7 @@
 				            cbxAcomp[i] = this.value;
 				        });
 				        for (var i = 0; i < cbxAcomp.length; i++) {
-							t_Acomp=t_Acomp+'^'+cbxAcomp[i];
+							t_Acomp=t_Acomp+'/'+cbxAcomp[i];
 						}
                     	if((cbxAcomp.length=='0')){
 							alert('公司未選擇');
@@ -54,7 +54,7 @@
 					    }
 					    var t_bnoa=!emp($('#txtBnoa').val())?trim($('#txtBnoa').val()):'#non';
 					    var t_enoa=!emp($('#txtEnoa').val())?trim($('#txtEnoa').val()):'#non';
-					    q_func('qtxt.query.issued', 'ucaissued.txt,issued,'+encodeURI(t_Acomp)+';'+encodeURI(t_bnoa)+';'+encodeURI(t_enoa));
+					    q_func('qtxt.query.issued', 'ucaissued.txt,issued,'+encodeURI(t_Acomp)+';'+encodeURI(t_bnoa)+';'+encodeURI(t_enoa)+';'+encodeURI(q_db));
 					    $('#btnIssued').attr('disabled','disabled').val('匯入中...');
                 	});
             }
@@ -77,7 +77,7 @@
                         if (as[0] != undefined) {
                             z_acomp = ' @';
                             z_acomph='';
-                            for (var i = 0; i < as.length; i++) {
+                            for (var i = 1; i < as.length; i++) {
                             	z_acomph=z_acomph+('<input type="checkbox" value="'+as[i].noa+'" style="width:25px;height:15px;float:left;"><span style="width:280px;height:30px;display:block;float:left;">'+as[i].acomp+'</span>')
                                 z_acomp += ',' + as[i].noa + '@' + as[i].acomp;
                             }
