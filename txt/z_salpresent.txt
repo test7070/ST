@@ -1045,15 +1045,15 @@ select '1',mon from #tmp group by mon
 
 if(@t_order='sssno')
 begin
-	select * from #tmp order by mon,gno desc,sssno,datea
+	select * from #tmp order by mon,gno,sssno,datea
 end
 else if(@t_order='partno')
 begin
-	select * from #tmp order by mon,gno desc,partno,sssno,datea
+	select * from #tmp order by mon,gno,partno,sssno,datea
 end
 else
 begin
-	select * from #tmp order by mon,gno desc,datea,partno,sssno
+	select * from #tmp order by mon,gno,datea,partno,sssno
 end
 
 IF OBJECT_ID('tempdb..#tmp')is not null
