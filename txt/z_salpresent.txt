@@ -697,16 +697,18 @@ declare @t_esssno nvarchar(50)
 declare @t_bpartno nvarchar(50)
 declare @t_epartno nvarchar(50)
 declare @t_rlen nvarchar(50)
-declare @t_mon nvarchar(50)
+declare @t_bmon nvarchar(50)
+declare @t_emon nvarchar(50)
 declare @t_order nvarchar(50)
 
 set @t_bsssno = case when '#non' = [4] then '' else [4] end
 set @t_esssno = case when '#non' = [5] then CHAR(255) else [5] end
 set @t_bpartno = case when '#non' = [6] then '' else [6] end
 set @t_epartno = case when '#non' = [7] then CHAR(255) else [7] end
-set @t_rlen = '[14]'
-set @t_mon = case when '#non' = [15] then '' else [15] end
-set @t_order = case when '#non' = [16] then '' else [16] end
+set @t_rlen = [14]
+set @t_bmon = case when '#non' = [15] then '' else [15] end
+set @t_emon = case when '#non' = [16] then char(255) else [16] end
+set @t_order = case when '#non' = [17] then '' else [17] end
 -----------------------------------------------------------------------------------------------------------------
 SET QUOTED_IDENTIFIER OFF
 IF OBJECT_ID('tempdb..#tmp')is not null
@@ -803,7 +805,7 @@ order by bdate desc,
 	else ABS(cast(LEFT(clockin,2)as float)-cast(LEFT(btime,2) as float)) end --正常區間
 )c2
 
-where (len(@t_mon)=0 or left(a.noa,CAST(@t_rlen as int)+3)=@t_mon)
+where left(a.noa,CAST(@t_rlen as int)+3) between @t_bmon and @t_emon
 and b.sssno between @t_bsssno and @t_esssno
 and s.partno between @t_bpartno and @t_epartno
 order by sssno
@@ -1043,11 +1045,15 @@ select '1',mon from #tmp group by mon
 
 if(@t_order='sssno')
 begin
-	select * from #tmp order by mon,sssno,datea,gno desc,partno
+	select * from #tmp order by mon,gno desc,sssno,datea
+end
+else if(@t_order='partno')
+begin
+	select * from #tmp order by mon,gno desc,partno,sssno,datea
 end
 else
 begin
-	select * from #tmp order by mon,datea,gno desc,partno,sssno
+	select * from #tmp order by mon,gno desc,datea,partno,sssno
 end
 
 IF OBJECT_ID('tempdb..#tmp')is not null
