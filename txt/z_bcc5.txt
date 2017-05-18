@@ -5,6 +5,8 @@ z_bcc5sta:--z_bcc5sta
 	declare @t_bproductno nvarchar(20) = case when '#non'=[3] then '' else [3] end
 	declare @t_eproductno nvarchar(20) = case when '#non'=[4] then char(255) else [4] end
 	declare @t_storeno nvarchar(max) = case when '#non'=[5] then '' else [5] end
+	declare @t_part nvarchar(max) = case when '#non'=[6] then '' else [6] end
+	declare @t_product nvarchar(max) = case when '#non'=[7] then '' else [7] end
 	-----------------------------------------------------------------------------
 	--裕承隆  無盤點
 	declare @tmp table(
@@ -36,6 +38,7 @@ z_bcc5sta:--z_bcc5sta
 		where a.datea between @t_bdate and @t_edate
 		and ISNULL(b.bccno,'') between @t_bproductno and @t_eproductno
 		and (len(@t_storeno)=0 or CHARINDEX(','+a.storeno+',',','+@t_storeno+',')>0)
+		and (len(@t_product)=0 or CHARINDEX(@t_product,b.bccname)>0)
 		union all
 		select '1' gno,'2','bccout',a.noa,'',a.datea,b.bccno,b.bccname,0,b.mount,b.bkbcc,b.memo
 		from bccout a
@@ -43,6 +46,7 @@ z_bcc5sta:--z_bcc5sta
 		where a.datea between @t_bdate and @t_edate
 		and ISNULL(b.bccno,'') between @t_bproductno and @t_eproductno
 		and (len(@t_storeno)=0 or CHARINDEX(','+a.storeno+',',','+@t_storeno+',')>0)
+		and (len(@t_product)=0 or CHARINDEX(@t_product,b.bccname)>0)
 		union all
 		select '2' gno,'0','','前期存量','','',a.productno,b.product,sum(a.mount),0,0,''
 		from (
@@ -52,6 +56,7 @@ z_bcc5sta:--z_bcc5sta
 			where a.datea < @t_bdate
 			and ISNULL(b.bccno,'') between @t_bproductno and @t_eproductno
 			and (len(@t_storeno)=0 or CHARINDEX(','+a.storeno+',',','+@t_storeno+',')>0)
+			and (len(@t_product)=0 or CHARINDEX(@t_product,b.bccname)>0)
 			union all
 			select b.bccno,isnull(b.bkbcc,0)-isnull(b.mount,0)
 			from bccout a
@@ -59,6 +64,7 @@ z_bcc5sta:--z_bcc5sta
 			where a.datea < @t_bdate
 			and ISNULL(b.bccno,'') between @t_bproductno and @t_eproductno
 			and (len(@t_storeno)=0 or CHARINDEX(','+a.storeno+',',','+@t_storeno+',')>0)
+			and (len(@t_product)=0 or CHARINDEX(@t_product,b.bccname)>0)
 			) a
 		left join bcc b on a.productno=b.noa
 		where isnull(a.mount,0)!=0
