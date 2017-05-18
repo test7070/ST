@@ -15,91 +15,93 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-			t_isInit = false;
             t_part = '';
             t_store = '';
             $(document).ready(function() {
                 q_getId();
-                q_gf('', 'z_bcc5');
+                q_gt('part', '', 0, 0, 0);
             });
             function q_gfPost() {
-                q_gt('part', '', 0, 0, 0);
-                q_gt('store', '', 0, 0, 0);
+                $('#q_report').q_report({
+                    fileName : 'z_bcc5',
+                    options : [{/*1*/
+                        type : '1',
+                        name : 'date'
+                    }, {/*2*/
+                        type : '2',
+                        name : 'bcc',
+                        dbf : 'bcc',
+                        index : 'noa,product',
+                        src : 'bcc_b.aspx'
+                    }, {/*3*/
+                        type : '5',
+                        name : 'xstore',
+                        value : t_store.split(',')
+                    }, {/*4*/
+                        type : '8',
+                        name : 'xpart',
+                        value : t_part.split(',')
+                    },{/*5*/
+                        type : '6',
+                        name : 'xproduct'
+                    }]
+                });
+                q_popAssign();
+                q_langShow();
+
+                $('#txtDate1').mask('999/99/99');
+                $('#txtDate1').datepicker();
+                $('#txtDate2').mask('999/99/99');
+                $('#txtDate2').datepicker();
+
+                var t_date,
+                    t_year,
+                    t_month,
+                    t_day;
+                t_date = new Date();
+                t_date.setDate(1);
+                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtDate1').val(t_year + '/' + t_month + '/' + t_day);
+
+                t_date = new Date();
+                t_date.setDate(35);
+                t_date.setDate(0);
+                t_year = t_date.getUTCFullYear() - 1911;
+                t_year = t_year > 99 ? t_year + '' : '0' + t_year;
+                t_month = t_date.getUTCMonth() + 1;
+                t_month = t_month > 9 ? t_month + '' : '0' + t_month;
+                t_day = t_date.getUTCDate();
+                t_day = t_day > 9 ? t_day + '' : '0' + t_day;
+                $('#txtDate2').val(t_year + '/' + t_month + '/' + t_day);
+
+                $('#chkXstore').children('input').attr('checked', 'checked');
+
             }
 
             function q_gtPost(t_name) {
                 switch (t_name) {
-                    case 'part':
-                        t_part = '';
-                        var as = _q_appendData("part", "", true);
-                        for ( i = 0; i < as.length; i++) {
-                            t_part += (t_part.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
-                        }
-                        break;
-                    case 'store':
-                        t_store = '';
-                        var as = _q_appendData("store", "", true);
-                        t_store += '#non@全部';
-                        for ( i = 0; i < as.length; i++) {
-                            t_store += (t_store.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
-                        }
-                        
-                        break;
-                }
-                if (!t_isInit && t_part.length > 0 && t_store.length > 0) {
-                	t_isInit = true;
-                    $('#q_report').q_report({
-                        fileName : 'z_bcc5',
-                        options : [{/*1*/
-							type : '1',
-							name : 'date'
-						}, {/*2*/
-                            type : '2',
-                            name : 'bcc',
-                            dbf : 'bcc',
-                            index : 'noa,product',
-                            src : 'bcc_b.aspx'
-                        },{/*3*/
-							type : '5',
-							name : 'xstore',
-							value : t_store.split(',')
-						},{/*4*/
-							type : '8',
-							name : 'xpart',
-							value : t_part.split(',')
-						}]
-                    });
-                    q_popAssign();
-                    q_langShow();
-
-                    $('#txtDate1').mask('999/99/99');
-                    $('#txtDate1').datepicker();
-                    $('#txtDate2').mask('999/99/99');
-					$('#txtDate2').datepicker();
-					
-					var t_date,t_year,t_month,t_day;
-	                t_date = new Date();
-	                t_date.setDate(1);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate1').val(t_year+'/'+t_month+'/'+t_day);
-	                
-	                t_date = new Date();
-	                t_date.setDate(35);
-	                t_date.setDate(0);
-	                t_year = t_date.getUTCFullYear()-1911;
-	                t_year = t_year>99?t_year+'':'0'+t_year;
-	                t_month = t_date.getUTCMonth()+1;
-	                t_month = t_month>9?t_month+'':'0'+t_month;
-	                t_day = t_date.getUTCDate();
-	                t_day = t_day>9?t_day+'':'0'+t_day;
-	                $('#txtDate2').val(t_year+'/'+t_month+'/'+t_day);
-	                
-					$('#chkXstore').children('input').attr('checked', 'checked');
+                case 'part':
+                    t_part = '';
+                    var as = _q_appendData("part", "", true);
+                    for ( i = 0; i < as.length; i++) {
+                        t_part += (t_part.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].part;
+                    }
+                    q_gt('store', '', 0, 0, 0);
+                    break;
+                case 'store':
+                    t_store = '';
+                    var as = _q_appendData("store", "", true);
+                    t_store += '#non@全部';
+                    for ( i = 0; i < as.length; i++) {
+                        t_store += (t_store.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].store;
+                    }
+                    q_gf('', 'z_bcc5');
+                    break;
                 }
             }
 

@@ -93,13 +93,36 @@
 		,noa nvarchar(max)
 		,uno nvarchar(max)
 	)
-	
+	-- CUBT
+	declare @tmpb table(
+		sel int identity(1,1)
+		,cubtno nvarchar(20)
+		,noq nvarchar(10)
+		,uno nvarchar(30)
+	)
+
 	--回寫資料
 	DECLARE @chk tinyint = 0
 	Begin Transaction [Trans_Name]
 	
 	begin try
 		--刪除以前匯入的
+		insert into @tmpb(cubtno,noq,uno)
+			select noa,noq,uno
+			from view_cubt 
+			where ordcno=@t_vcfno
+			group by noa,noq,uno
+		
+		--寫入MESS  重算UCCY
+		INSERT INTO mess (datea,qtime,[tables],data,usera,act) 
+		select replace(CONVERT(nvarchar,getdate(),120),'-','')
+			,cubtno+'-'+noq+' DEL '+replace(CONVERT(nvarchar,getdate(),120),':','') qtime
+			,'uccy.cal'
+			,uno+',cubt,'+cubtno+',0'
+			,'erp'
+			,7
+		from @tmpb
+		
 		declare cursor_table cursor for 
 		select accy from view_cubt where ordcno=@t_vcfno group by accy
 		open cursor_table 
@@ -110,13 +133,15 @@
 			set @cmd="delete cubt"+@accy+" where ordcno=@t_vcfno"
 			execute sp_executesql @cmd,N'@t_vcfno nvarchar(20)',@t_vcfno=@t_vcfno
 			IF @@Error <> 0 BEGIN SET @chk = 1 END
-			
+						
 			fetch next from cursor_table 
 			into @accy
 		end 
 		close cursor_table 
 		deallocate cursor_table 
 		
+		
+		---------------------------------------------------------------------------------------
 		declare cursor_table cursor for 
 		select accy from view_cubu where ordeno=@t_vcfno group by accy
 		open cursor_table 
@@ -274,6 +299,17 @@
 		end 
 		close cursor_table 
 		deallocate cursor_table
+
+		--寫入MESS  重算UCCY
+		INSERT INTO mess (datea,qtime,[tables],data,usera,act) 
+		select replace(CONVERT(nvarchar,getdate(),120),'-','')
+			,noa+'-'+noq+' INS '+replace(CONVERT(nvarchar,getdate(),120),':','') qtime
+			,'uccy.cal'
+			,uno+',cubt,'+noa+',1'
+			,'erp'
+			,7
+		from #vcf2cubt
+		group by noa,noq,uno
 		
 		declare cursor_table cursor for 
 		select accy from #vcf2cubu group by accy  
@@ -452,6 +488,7 @@
 		--	,'vcf'
 		--	,''
 		--	,ERROR_MESSAGE()
+		--select ERROR_MESSAGE()
 		insert into @tmp([status],noa,uno)values('error2',@t_vcfno,null)
 		select * from @tmp
 	end catch;
