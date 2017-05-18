@@ -100,7 +100,10 @@ and (@t_project!='RB' or a.typea!='其他')
 --插入遲到早退的且不存在的員工
 insert #tmpa
 select a.sssno,a.namea,b.noa,0 from(
-select sssno,MAX(namea) namea from salpresents where sssno not in (select sssno from #tmpa group by sssno) group by sssno)a
+select sssno,MAX(namea) namea from salpresents 
+where sssno not in (select sssno from #tmpa group by sssno) 
+and noa between @t_bdate and @t_edate
+group by sssno)a
 left join salhtype b on 1=1
 where a.sssno between @t_bsssno and @t_esssno 
 
@@ -375,6 +378,8 @@ set @t_xyear = case when '#non' = [10] then '' else [10] end
 set @t_bsssno = case when '#non'=[6] then '' else [6] end
 set @t_esssno = case when '#non'=[7] then char(255) else [7] end
 
+declare @t_project nvarchar(20)='[11]'
+
 declare @year nvarchar(20) =cast (@t_xyear as int)
 --------------------------------------------------------------------------------------------------
 declare @tmp table(
@@ -413,22 +418,40 @@ update a
 set senior = isnull((select seniority from dbo.seniority('','') where sssno=a.sssno),'')
 from @tmp a
 
-insert into @tmp (gno,partno,inday,outday,boutday,total,prevyeartime,usedtime,ptotl,nextyeartime)
-select '1' gno,char(255),sum(inday),sum(outday),sum(boutday),sum(total),sum(prevyeartime),sum(usedtime),sum(ptotl),sum(nextyeartime)
-from @tmp where gno='0' 
-
-select 
-dbo.getComma(inday,1) inday,
-dbo.getComma(outday,1) outday,
-dbo.getComma(boutday,1) boutday,
-dbo.getComma(total,1) total,
-dbo.getComma(prevyeartime,1) prevyeartime,
-dbo.getComma(limitday,0) limitday,
-dbo.getComma(usedtime,1) usedtime,
-dbo.getComma(ptotl,1) ptotl,
-dbo.getComma(nextyeartime,1) nextyeartime,
-* 
-from @tmp order by partno,gno,jobno,sssno
+insert into @tmp (gno,sssno,partno,inday,outday,boutday,total,prevyeartime,usedtime,ptotl,nextyeartime)
+select '1' gno,char(255),char(255),sum(inday),sum(outday),sum(boutday),sum(total),sum(prevyeartime),sum(usedtime),sum(ptotl),sum(nextyeartime)
+from @tmp where gno='0'
+ 
+if(@t_project='DJ')
+begin
+	select 
+	dbo.getComma(inday,1) inday,
+	dbo.getComma(outday,1) outday,
+	dbo.getComma(boutday,1) boutday,
+	dbo.getComma(total,1) total,
+	dbo.getComma(prevyeartime,1) prevyeartime,
+	dbo.getComma(limitday,0) limitday,
+	dbo.getComma(usedtime,1) usedtime,
+	dbo.getComma(ptotl,1) ptotl,
+	dbo.getComma(nextyeartime,1) nextyeartime,
+	* 
+	from @tmp order by sssno,gno
+end
+else
+begin
+	select 
+	dbo.getComma(inday,1) inday,
+	dbo.getComma(outday,1) outday,
+	dbo.getComma(boutday,1) boutday,
+	dbo.getComma(total,1) total,
+	dbo.getComma(prevyeartime,1) prevyeartime,
+	dbo.getComma(limitday,0) limitday,
+	dbo.getComma(usedtime,1) usedtime,
+	dbo.getComma(ptotl,1) ptotl,
+	dbo.getComma(nextyeartime,1) nextyeartime,
+	* 
+	from @tmp order by partno,gno,jobno,sssno
+end
 ;
 
 z_salvacause5:--z_salvacause5

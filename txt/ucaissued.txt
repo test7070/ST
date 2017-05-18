@@ -1,9 +1,11 @@
 ﻿issued:--issued
+SET QUOTED_IDENTIFIER OFF
 declare @t_acomp nvarchar(max)=case when '#non'=[1] then '' else [1] end
 declare @t_bnoa nvarchar(max)=case when '#non'=[2] then '' else [2] end
 declare @t_enoa nvarchar(max)=case when '#non'=[3] then '' else [3] end
-declare @acompint int=len(@t_acomp)-len(replace(@t_acomp,'^',''))
-declare @n int=1
+declare @q_db nvarchar(max)=case when '#non'=[4] then '' else [4] end
+declare @acompint int=len(@t_acomp)-len(replace(@t_acomp,"/",''))  
+declare @n int=0
 
 declare @acomp table(
 	noa nvarchar(100)
@@ -20,7 +22,7 @@ begin
 	while @n<=@acompint
 	begin
 		insert into @acomp(noa)
-		select dbo.split(@t_acomp,'^',@n)
+		select dbo.split(@t_acomp,'/',@n)
 		set @n = @n + 1
 	end
 	
@@ -33,64 +35,40 @@ deallocate cursor_table
 declare @tmp table(
 	noa nvarchar(100),
 	acomp nvarchar(200),
-	db nvarchar(10)
+	db nvarchar(10),
+	ip nvarchar(100)
 )
 insert @tmp
-select a.noa,b.acomp,dbname
+select a.noa,b.acomp,dbname,case when len(isnull(ip,''))=0 then '127.0.0.1' else ip end
 from @acomp a left join acomp b on a.noa=b.noa
+where len(dbname)!=0
 
-declare @db nvarchar(100)
-declare cursor_table cursor for
-select db from @tmp where len(db)!=0 group by db
-open cursor_table
-fetch next from cursor_table
-into @db
-while(@@FETCH_STATUS <> -1)
-begin
-	--st		
-	insert into st.dbo.uca 
-	select * from ST2.dbo.uca
-	where (noa between @t_bnoa and @t_enoa) and(@db='st')
-	insert into st.dbo.ucas 
-	select * from ST2.dbo.ucas
-	where (noa between @t_bnoa and @t_enoa) and(@db='st')
-	insert into st.dbo.ucat 
-	select * from ST2.dbo.ucat
-	where (noa between @t_bnoa and @t_enoa) and(@db='st')
-	--st3	
-	insert into st3.dbo.uca 
-	select * from ST2.dbo.uca
-	where (noa between @t_bnoa and @t_enoa) and(@db='st3')
-	insert into st3.dbo.ucas 
-	select * from ST2.dbo.ucas
-	where (noa between @t_bnoa and @t_enoa) and(@db='st3')
-	insert into st3.dbo.ucat 
-	select * from ST2.dbo.ucat
-	where (noa between @t_bnoa and @t_enoa) and(@db='st3')
-	--st4	
-	insert into st4.dbo.uca 
-	select * from ST2.dbo.uca
-	where (noa between @t_bnoa and @t_enoa) and(@db='st4')
-	insert into st4.dbo.ucas 
-	select * from ST2.dbo.ucas
-	where (noa between @t_bnoa and @t_enoa) and(@db='st4')
-	insert into st4.dbo.ucat 
-	select * from ST2.dbo.ucat
-	where (noa between @t_bnoa and @t_enoa) and(@db='st4')
-	--st5		
-	insert into st5.dbo.uca 
-	select * from ST2.dbo.uca
-	where (noa between @t_bnoa and @t_enoa)and(@db='st5')
-	insert into st5.dbo.ucas 
-	select * from ST2.dbo.ucas
-	where (noa between @t_bnoa and @t_enoa)and(@db='st5')
-	insert into st5.dbo.ucat 
-	select * from ST2.dbo.ucat
-	where (noa between @t_bnoa and @t_enoa)and(@db='st5')
-
+declare @db nvarchar(50)
+declare @ip nvarchar(100)
+	declare cursor_table cursor for
+	select db,ip from @tmp group by db,ip
+	open cursor_table
 	fetch next from cursor_table
-	into @db
-end
-close cursor_table
-deallocate cursor_table
+	into @db,@ip
+	while(@@FETCH_STATUS <> -1)
+	begin
+		exec("		
+			insert into  ["+@ip+",1799]."+@db+".dbo.uca 
+			select * from "+@q_db+".dbo.uca 
+			where (noa between '"+@t_bnoa+"' and '"+@t_enoa+"')
+			and(noa not in (select noa from  ["+@ip+",1799]."+@db+".dbo.uca))
+			insert into  ["+@ip+",1799]."+@db+".dbo.ucas 
+			select * from "+@q_db+".dbo.ucas
+			where (noa between '"+@t_bnoa+"' and '"+@t_enoa+"')
+			and(noa not in (select noa from  ["+@ip+",1799]."+@db+".dbo.ucas))
+			insert into  ["+@ip+",1799]."+@db+".dbo.ucat 
+			select * from "+@q_db+".dbo.ucat
+			where (noa between '"+@t_bnoa+"' and '"+@t_enoa+"')
+			and(noa not in (select noa from  ["+@ip+",1799]."+@db+".dbo.ucat))")
+
+		fetch next from cursor_table
+		into @db,@ip
+	end
+	close cursor_table
+	deallocate cursor_table
 ;
