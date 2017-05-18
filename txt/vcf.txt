@@ -93,13 +93,34 @@
 		,noa nvarchar(max)
 		,uno nvarchar(max)
 	)
-	
+	-- CUBT
+	declare @tmpb table(
+		sel int identity(1,1)
+		,cubtno nvarchar(20)
+		,uno nvarchar(30)
+	)
+
 	--回寫資料
 	DECLARE @chk tinyint = 0
 	Begin Transaction [Trans_Name]
 	
 	begin try
 		--刪除以前匯入的
+		insert into @tmpb(cubtno,uno)
+			select noa,uno
+			from view_cubt 
+			where ordcno=@t_vcfno
+			group by noa,uno
+		
+		INSERT INTO mess (datea,qtime,[tables],data,usera,act) 
+		select replace(CONVERT(nvarchar,getdate(),120),'-','')
+			,cubtno+' '+replace(CONVERT(nvarchar,getdate(),120),':','') qtime
+			,'uccy.cal'
+			,uno+',cubt,'+cubtno+',0'
+			,'erp'
+			,7
+		from @tmpb
+		
 		declare cursor_table cursor for 
 		select accy from view_cubt where ordcno=@t_vcfno group by accy
 		open cursor_table 
@@ -110,13 +131,15 @@
 			set @cmd="delete cubt"+@accy+" where ordcno=@t_vcfno"
 			execute sp_executesql @cmd,N'@t_vcfno nvarchar(20)',@t_vcfno=@t_vcfno
 			IF @@Error <> 0 BEGIN SET @chk = 1 END
-			
+						
 			fetch next from cursor_table 
 			into @accy
 		end 
 		close cursor_table 
 		deallocate cursor_table 
 		
+		
+		---------------------------------------------------------------------------------------
 		declare cursor_table cursor for 
 		select accy from view_cubu where ordeno=@t_vcfno group by accy
 		open cursor_table 
