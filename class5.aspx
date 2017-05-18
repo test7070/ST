@@ -679,7 +679,7 @@
 					<tr style="background-color: mediumturquoise;">
 						<td><span> </span><a id='lblLate' class="lbl">遲到分鐘數不扣薪</a></td>
 						<td><input id="txtLate" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLatenum' class="lbl">上下月合計超過次數</a></td>
+						<td><span> </span><a id='lblLatenum' class="lbl">上下月次數各超過</a></td>
 						<td><input id="txtLatenum" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLatedfull' class="lbl">扣除%全勤獎金</a></td>
 						<td><input id="txtLatedfull" type="text" class="txt num c1" /></td>
@@ -692,7 +692,7 @@
 						<td><input id="txtLate2" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLate2dshour' class="lbl">扣%時薪</a></td>
 						<td><input id="txtLate2dshour" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLate2num' class="lbl">上下月合計超過次數</a></td>
+						<td><span> </span><a id='lblLate2num' class="lbl">上下月次數各超過</a></td>
 						<td><input id="txtLate2num" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLate2dfull' class="lbl">扣除%全勤獎金</a></td>
 						<td><input id="txtLate2dfull" type="text" class="txt num c1" /></td>
@@ -701,7 +701,7 @@
 					<tr style="background-color: mediumturquoise;">
 						<td><span> </span><a id='lblLateallnum' class="lbl">總次數扣全數全勤</a></td>
 						<td><input id="txtLateallnum" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLeave' class="lbl">超過分鐘數視曠職/事假</a></td>
+						<td><span> </span><a id='lblLeave' class="lbl">超過分鐘數視事假</a></td>
 						<td><input id="txtLeave" type="text" class="txt num c1" style="width: 60px;" /></td>
 						<td> </td>
 						<td> </td>
@@ -765,14 +765,14 @@
 					<td style="width:90px;"><a id='lblDhoverhours_s'>假日<br>最多時數/天</a></td>
 					<td style="width:90px;"><a id='lblHoverhours_s'>假日<br>最多時數/月</a></td>
 					<td style="width:80px;"><a id='lblLate_s'>遲到Min.<br>不扣薪</a></td>
-					<td style="width:85px;"><a id='lblLatenum_s'>上下月遲到<br>超過次數</a></td>
+					<td style="width:85px;"><a id='lblLatenum_s'>上下月遲到<br>各超過次數</a></td>
 					<td style="width:80px;"><a id='lblLatedfull_s'>扣除全勤<br>獎金%</a></td>
 					<td style="width:80px;"><a id='lblLate2_s'>遲到Min.<br>扣薪</a></td>
 					<td style="width:80px;"><a id='lblLate2dshour_s'>扣%時薪</a></td>
-					<td style="width:85px;"><a id='lblLate2num_s'>上下月遲到<br>超過次數</a></td>
+					<td style="width:85px;"><a id='lblLate2num_s'>上下月遲到<br>各超過次數</a></td>
 					<td style="width:80px;"><a id='lblLate2dfull_s'>扣除全勤<br>獎金%</a></td>
 					<td style="width:85px;"><a id='lblLateallnum_s'>總次數扣<br>全額全勤</a></td>
-					<td style="width:100px;"><a id='lblLeave_s'>超過分鐘數<br>視曠職/事假</a></td>
+					<td style="width:100px;"><a id='lblLeave_s'>超過分鐘數<br>視事假</a></td>
 					<td style="width:90px;"><a id='lblVacanodhours_s'>當日請假<br>不扣全勤/H</a></td>
 					<td style="width:80px;"><a id='lblVacanonum_s'>超過次數<br>扣除全勤</a></td>
 					<td style="width:80px;"><a id='lblVacahalfdfull_s'>請假半天<br>扣%全勤</a></td>

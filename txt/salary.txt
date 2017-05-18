@@ -17,7 +17,7 @@ begin
 	where mon>=@t_mon
 end
 ;
----------------------------------------
+---------------------------------------------------------------------------------------------------------------------
 inssalvaca:--inssalvaca
 declare @t_year nvarchar(50) = [1]
 
@@ -123,4 +123,9 @@ outer apply (select MAX(noq)mnoq from salvacas where noa=@t_year) b
 insert salvacas(noa,noq,sssno,namea,id,job,jobday,inday,outday,boutday,total,cno,memo,prevyeartime,limitday,nextyeartime)
 select noa,noq,sssno,namea,id,job,jobday,inday,outday,boutday,total,cno,memo,prevyeartime,limitday,nextyeartime from @tmp
 
+update salvaca
+set total=(select count(*) from salvacas where noa=@t_year)
+where noa=@t_year
+
 ;
+---------------------------------------------------------------------------------------------------------------------
