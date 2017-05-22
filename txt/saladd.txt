@@ -111,11 +111,12 @@ declare @tmp table(
 	sssno nvarchar(50),
 	bofull float,
 	leave float,
-	cb float
+	cb float,
+	late15 float
 )
 
 insert @tmp
-select sssno,1,SUM(a),SUM(cb)
+select sssno,1,SUM(a),SUM(cb),0
 from @tmpa where a!=0 or b+cb!=0 or c!=0 or d!=0
 group by sssno
 
@@ -143,7 +144,6 @@ set bofull=bofull
 when cc.cc>=2 or cd.cc>=2 then 0.5
 when ca.cc>=3 or cb.cc>=3 then 0.5
 else 0 end
-
 from @tmp a 
 outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea <= @mon+'/15' and c<=15 and c>0)ca
 outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea >= @mon+'/16' and c<=15 and c>0)cb
@@ -151,6 +151,12 @@ outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea <= @mon+
 outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea >= @mon+'/16' and c<=30 and c>15)cd
 outer apply (select count(*)cc from @tmpa where sssno=a.sssno and c>30)ce
 where bofull>0
+
+update a
+set late15=cc.cc+cd.cc
+from @tmp a 
+outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea <= @mon+'/15' and c<=30 and c>15)cc
+outer apply (select count(*)cc from @tmpa where sssno=a.sssno and datea >= @mon+'/16' and c<=30 and c>15)cd
 
 select * from @tmp
 

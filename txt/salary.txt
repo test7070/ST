@@ -129,3 +129,687 @@ where noa=@t_year
 
 ;
 ---------------------------------------------------------------------------------------------------------------------
+salaryimport:--salaryimport
+SET QUOTED_IDENTIFIER OFF
+declare @mon nvarchar(50)=[1]
+declare @r_len nvarchar(50)=[2]
+declare @person nvarchar(50)=[3] --本國/日薪/外勞/時薪
+declare @monkind nvarchar(50)=[4] --本國/日薪/外勞/時薪
+declare @proj nvarchar(50)=[5]
+declare @date1 nvarchar(50)=[6] --整月/上/下期
+declare @date2 nvarchar(50)=[7] --整月/上/下期
+declare @date3 nvarchar(50)=[8] --上期 --整月加班超過46小時
+declare @date4 nvarchar(50)=[9] --上期 --整月加班超過46小時
+declare @date5 nvarchar(50)=[10] --下期 --遲到使用
+declare @date6 nvarchar(50)=[11] --下期 --遲到使用
+
+declare @addselect nvarchar(50)=[12] --'0@沒有加班時數,1@根據加班單,2@根據出勤紀錄表,3@根據出勤紀錄自訂加班時數'
+declare @addlimit nvarchar(50)=[13] --'0@無限制,1@根據calss5限制加班總時數'
+
+IF OBJECT_ID('tempdb..#tmpa')is not null
+BEGIN
+   drop table #tmpa
+END
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+   drop table #tmp
+END
+
+create table #tmpa(
+	noa nvarchar(20),
+	noq nvarchar(20),
+	sssno nvarchar(50),
+	namea nvarchar(50),
+	clockin nvarchar(50),
+	clockout nvarchar(50),
+	w133 float,--加班<=2
+	w166 float,--加班>2
+	w100 float,--國訂 日<8
+	w200 float,--日>8
+	w266 float,--六>8
+	------------------------
+	weeks nvarchar(10),
+	holiday bit,--國定假日
+	workday bit,--補假日
+	------------------------
+	class5 nvarchar(50),--身分class5
+	cclass5 nvarchar(50),--當天實際class5
+	btime nvarchar(50),
+	etime nvarchar(50),
+	isshift float,
+	shifthours float,
+	bresttime nvarchar(50),
+	eresttime nvarchar(50),
+	bresttime2 nvarchar(50),
+	eresttime2 nvarchar(50),
+	bresttime3 nvarchar(50),
+	eresttime3 nvarchar(50),
+	---------------------------
+	meals float,
+	mbtime1 nvarchar(50),
+	mhours1 float,
+	mbtime2	nvarchar(50),
+	mhours2 float,
+	-------------------------
+	overtime nvarchar(50),
+	ostand float,
+	doverhours float,
+	overhours float,
+	dhoverhours float,
+	hoverhours float,
+	------------------------
+	late float,
+	latenum	float,
+	latedfull float,
+	late2 float,
+	late2dshour float,
+	late2num float,
+	late2dfull float,
+	lateallnum float,
+	leave float,
+	-----------------------
+	vacanodhours float,
+	vacanonum float,
+	vacahalfdfull float,
+	------------------------
+	workhours float,--工作時數
+	addhours float, --加班單時數
+	-------------------------
+	latemin float, --當天遲到分鐘數
+	earlymin float, --當天早退分鐘數
+	vacahours float, --當天請假時數
+	vacaspecial bit,--特休假
+	-----------------------
+	mealsnum float,--伙食
+)
+
+insert #tmpa(noa,noq,sssno,namea,clockin,clockout,w133,w166,w100,w200,w266
+,class5,cclass5,btime,etime,isshift,shifthours,bresttime,eresttime,bresttime2,eresttime2,bresttime3,eresttime3
+,meals,mbtime1,mhours1,mbtime2,mhours2
+,overtime,ostand,doverhours,overhours,dhoverhours,hoverhours
+,late,latenum,latedfull,late2,late2dshour,late2num,late2dfull,lateallnum,leave
+,vacanodhours,vacanonum,vacahalfdfull,addhours,workhours,latemin,earlymin,vacahours,vacaspecial,mealsnum)
+select a.noa,a.noq,a.sssno,a.namea,a.clockin,a.clockout,a.w133,a.w166,a.w100,isnull(a.w200,0),isnull(a.w266,0)
+,case when isnull(adj.class5,'')!='' then adj.class5 else s.class5 end
+,case when isnull(c1.noa,'')!='' then c1.noa else c2.noa end
+,case when isnull(c1.noa,'')!='' then c1.btime else c2.btime end
+,case when isnull(c1.noa,'')!='' then c1.etime else c2.etime end
+,case when isnull(c1.noa,'')!='' then c1.isshift else c2.isshift end
+,case when isnull(c1.noa,'')!='' then c1.shifthours else c2.shifthours end
+,case when isnull(c1.noa,'')!='' then c1.bresttime else c2.bresttime end
+,case when isnull(c1.noa,'')!='' then c1.eresttime else c2.eresttime end
+,case when isnull(c1.noa,'')!='' then c1.bresttime2 else c2.bresttime2 end
+,case when isnull(c1.noa,'')!='' then c1.eresttime2 else c2.eresttime2 end
+,case when isnull(c1.noa,'')!='' then c1.bresttime3 else c2.bresttime3 end
+,case when isnull(c1.noa,'')!='' then c1.eresttime3 else c2.eresttime3 end
+,case when isnull(adj.meals,0)>0 then isnull(adj.meals,0) when isnull(c1.noa,'')!='' then c1.meals else c2.meals end
+,case when isnull(c1.noa,'')!='' then c1.mbtime1 else c2.mbtime1 end
+,case when isnull(c1.noa,'')!='' then c1.mhours1 else c2.mhours1 end
+,case when isnull(c1.noa,'')!='' then c1.mbtime2 else c2.mbtime2 end
+,case when isnull(c1.noa,'')!='' then c1.mhours2 else c2.mhours2 end
+,case when isnull(c1.noa,'')!='' then c1.overtime else c2.overtime end
+,case when isnull(c1.noa,'')!='' then c1.ostand else c2.ostand end
+,case when isnull(c1.noa,'')!='' then c1.doverhours else c2.doverhours end
+,case when isnull(c1.noa,'')!='' then c1.overhours else c2.overhours end
+,case when isnull(c1.noa,'')!='' then c1.dhoverhours else c2.dhoverhours end
+,case when isnull(c1.noa,'')!='' then c1.hoverhours else c2.hoverhours end
+,case when isnull(c1.noa,'')!='' then c1.late else c2.late end
+,case when isnull(c1.noa,'')!='' then c1.latenum else c2.latenum end
+,case when isnull(c1.noa,'')!='' then c1.latedfull else c2.latedfull end
+,case when isnull(c1.noa,'')!='' then c1.late2 else c2.late2 end
+,case when isnull(c1.noa,'')!='' then c1.late2dshour else c2.late2dshour end
+,case when isnull(c1.noa,'')!='' then c1.late2num else c2.late2num end
+,case when isnull(c1.noa,'')!='' then c1.late2dfull else c2.late2dfull end
+,case when isnull(c1.noa,'')!='' then c1.lateallnum else c2.lateallnum end
+,case when isnull(c1.noa,'')!='' then c1.leave else c2.leave end
+,case when isnull(c1.noa,'')!='' then c1.vacanodhours else c2.vacanodhours end
+,case when isnull(c1.noa,'')!='' then c1.vacanonum else c2.vacanonum end
+,case when isnull(c1.noa,'')!='' then c1.vacahalfdfull else c2.vacahalfdfull end
+,0,0,0,0,0,0,0
+from (select noa,min(noq)noq,sssno,MAX(namea)namea,SUM(w133)w133,SUM(w166)w166,SUM(w100)w100,SUM(w200)w200,SUM(w266)w266
+,MIN(clockin)clockin,MAX(clockout)clockout from salpresents group by noa,sssno) a 
+left join sss s on a.sssno=s.noa
+outer apply (select top 1 * from saladjust where noa=a.sssno and datea<=a.noa order by datea desc)adj
+--非輪班
+outer apply(select top 1 * from class5s  where noa=case when isnull(adj.class5,'')!='' then adj.class5 else s.class5 end
+and bdate<a.noa order by bdate desc --有效日
+)c1
+--輪班(用上班時間與約定上班時間的時差來判斷)
+outer apply(select top 1 * from class5s  where ','+case when isnull(adj.class5,'')!='' then adj.class5 else s.class5 end+',' like '%,'+noa+',%'
+and bdate<a.noa
+order by bdate desc,
+	case when left(btime,2)<='04' and clockin between '20:00:00' and '23:59:59' --昨天進(24)
+	then ABS(cast(LEFT(clockin,2)as float)-cast('24' as float))
+	when left(btime,2)>='20' and clockin between '00:00:00' and '05:00:00' --隔天進(24)
+	then ABS((cast(LEFT(clockin,2)as float)+24)-cast(LEFT(btime,2) as float))
+	else ABS(cast(LEFT(clockin,2)as float)-cast(LEFT(btime,2) as float)) end --正常區間
+)c2
+where left(a.noa,len(@mon))=@mon
+and (s.person=@person or len(@person)=0)
+
+--星期
+update #tmpa set weeks=DATEPART(weekday,case when @r_len='3' then dbo.ChineseEraName2AD(noa) else noa end)-1
+--假日 工作日
+update a set holiday=case when b.noa is null then 0 when isnull(iswork,0)=1 then 0 else 1 end
+,workday=case when b.noa is null then 0 when isnull(iswork,0)=1 then 1 else 0 end
+from #tmpa a outer apply (select * from holiday where noa=a.noa)b
+
+--更新加班時數
+--@addselect --'0@沒有加班時數,1@根據加班單,2@根據出勤紀錄表,3@根據出勤紀錄自訂加班時數'
+if(@addselect='0')
+begin
+	update #tmpa set addhours=0,w100=0,w133=0,w166=0,w200=0,w266=0
+end
+if(@addselect='1')
+begin
+	update a set addhours=isnull(b.hours,0)
+	,w100=0,w133=0,w166=0,w200=0,w266=0 
+	from #tmpa a outer apply (select SUM(hours)hours from saladd where datea=a.noa and sssno=a.sssno and isnull(isapv,0)=1)b
+end
+if(@addselect='2')
+begin
+	update a 
+	set addhours=case when left(overtime,2)>='20' and clockout between '00:00:00' and '08:00:00' --隔天出
+	then round((Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+overtime,Convert(NVARCHAR(10),DateAdd(Day,1,getdate()),20)+' '+clockout))/60.0,1)
+	else round((Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+overtime,Convert(NVARCHAR(10),getdate(),20)+' '+clockout))/60.0,1) end	
+	,w100=0,w133=0,w166=0,w200=0,w266=0 
+	from #tmpa a where isnull(overtime,'')!='' and clockout>isnull(overtime,'')
+end
+if(@addselect='3')
+begin
+	update #tmpa set addhours=isnull(w100,0)+isnull(w133,0)+ISNULL(w166,0)+ISNULL(w200,0)+isnull(w266,0)
+end
+
+--更新加班費
+if(@addselect='1' or @addselect='2')
+begin
+	update #tmpa 
+	set w100=case when holiday=1 or (weeks=0 and workday!=1) then 8 else 0 end
+	,w133=case 
+		when weeks=6 then 2 --六
+		when holiday=1 and addhours>8 then (case when addhours-8>2 then 2 else addhours-8 end)--國訂
+		when weeks=0 then 0 --日
+		else (case when addhours>2 then 2 else addhours end) end --平常日
+	,w166=case 
+		when weeks=6 and addhours<=4 then 2 when weeks=6 and addhours<=8 then 6 --六
+		when holiday=1 and addhours>10 then addhours-10 --國訂
+		when weeks=0 then 0 --日
+		else (case when addhours>2 then addhours-2 else 0 end) end --平常日
+	,w200=case when weeks=0 and addhours>8 then addhours-8 else 0 end --日
+	,w266=case when weeks=6 and addhours>8 then 4 else 0 end --六
+	where addhours>0
+end
+
+--更新遲到分鐘數
+update a 
+set latemin=case when left(btime,2)>='20' and clockin between '00:00:00' and '05:00:00' --隔天入
+then Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+btime,Convert(NVARCHAR(10),DateAdd(Day,1,getdate()),20)+' '+clockin)
+else Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+btime,Convert(NVARCHAR(10),getdate(),20)+' '+clockin) end	
+from #tmpa a where isnull(btime,'')!='' and ISNULL(clockin,'')!='' and (ISNULL(clockin,'')>isnull(btime,'')
+or(left(isnull(btime,''),2)>='20' and isnull(clockin,'') between '00:00:00' and '05:00:00'))
+
+--更新早退分鐘數
+update a 
+set earlymin=case when left(etime,1)='0' and clockout between '20:00:00' and '23:59:59' --昨天出
+then Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+clockout,Convert(NVARCHAR(10),DateAdd(Day,1,getdate()),20)+' '+etime)
+else Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+clockout,Convert(NVARCHAR(10),getdate(),20)+' '+etime) end	
+from #tmpa a where isnull(etime,'')!='' and ISNULL(clockout,'')!='' and (ISNULL(clockout,'')<isnull(etime,'')
+or(left(isnull(etime,''),1)='0' and isnull(clockout,'') between '20:00:00' and '23:59:59'))
+
+--更新請假時數
+--更新請假類別(特休,抵工時不扣全勤)
+update a
+set vacahours=case when isnull(hr_used,0)>8 then 8 else isnull(hr_used,0) end
+,vacaspecial=case when isnull(hr_used,0)>0 and isnull(nospecialcount,0)=0 and ISNULL(specialcount,0)>0 then 1 else 0 end
+from #tmpa a outer apply (select SUM(hr_used)hr_used 
+,sum(case when hname like '%特休%' or hname like '%抵工時%' then 1 else 0 end)specialcount
+,sum(case when hname not like '%特休%' and hname not like '%抵工時%' then 1 else 0 end)nospecialcount
+from salvacause where a.noa between bdate and edate and sssno=a.sssno)b
+
+--更新伙食費
+--伙食1
+update #tmpa
+set mealsnum=case when (clockin<=mbtime1 or (left(mbtime1,2)='00' and clockin between '20:00:00' and '23:59:59'))
+and (right(Convert(NVARCHAR(16),DateAdd(hour,mhours1,Convert(NVARCHAR(10),getdate(),20)+' '+mbtime1),20),5)<=clockout
+or(left(right(Convert(NVARCHAR(16),DateAdd(hour,mhours1,Convert(NVARCHAR(10),getdate(),20)+' '+mbtime1),20),5),2)>='20' and clockout between '00:00:00' and '12:00:00'))
+then 1 else 0 end
+where ISNULL(mbtime1,'')!='' and isnull(mhours1,0)>0 and ISNULL(clockin,'')!='' and ISNULL(clockout,'')!=''
+
+--伙食2
+update #tmpa
+set mealsnum=isnull(mealsnum,0)+
+case when (clockin<=mbtime2 or (left(mbtime2,2)='00' and clockin between '20:00:00' and '23:59:59'))
+and (right(Convert(NVARCHAR(16),DateAdd(hour,mhours2,Convert(NVARCHAR(10),getdate(),20)+' '+mbtime2),20),5)<=clockout
+or(left(right(Convert(NVARCHAR(16),DateAdd(hour,mhours2,Convert(NVARCHAR(10),getdate(),20)+' '+mbtime2),20),5),2)>='20' and clockout between '00:00:00' and '12:00:00'))
+then 1 else 0 end
+where ISNULL(mbtime2,'')!='' and isnull(mhours2,0)>0 and ISNULL(clockin,'')!='' and ISNULL(clockout,'')!=''
+
+--更新工作時數
+update #tmpa
+set workhours=round(
+--正常工作時數
+(case when btime<etime then --非跨日
+	Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+btime,Convert(NVARCHAR(10),getdate(),20)+' '+etime)
+else --跨日
+	Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+btime,Convert(NVARCHAR(10),DateAdd(Day,1,getdate()),20)+' '+etime)
+end
+--判斷休息時間是否再正常上班時間,避開加班時間中的休息時間
+-case when etime>bresttime or (left(etime,1)='0' and bresttime between '19:00' and '23:59') then Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+bresttime,Convert(NVARCHAR(10),getdate(),20)+' '+eresttime)else 0 end
+-case when etime>bresttime2 or (left(etime,1)='0' and bresttime2 between '19:00' and '23:59') then Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+bresttime2,Convert(NVARCHAR(10),getdate(),20)+' '+eresttime2)else 0 end
+-case when etime>bresttime3 or (left(etime,1)='0' and bresttime3 between '19:00' and '23:59') then Datediff(Minute,Convert(NVARCHAR(10),getdate(),20)+' '+bresttime3,Convert(NVARCHAR(10),getdate(),20)+' '+eresttime3)else 0 end
+
+--扣除遲到,早退
+-isnull(latemin,0)-isnull(earlymin,0)
+--扣除請假
+-ISNULL(vacahours,0)
+)/60.0,1)
+where isnull(clockin,'')!='' and isnull(clockout,'')!=''
+
+declare @sssno nvarchar(50)
+declare @datea nvarchar(50)
+declare @weeks nvarchar(50)--星期
+declare @holiday bit--國定假日
+declare @workday bit--補假日
+declare @addhours float--加班時數
+declare @doverhours float --一到五
+declare @overhours float
+declare @dhoverhours float --六日國訂
+declare @hoverhours float
+
+declare @x_sssno nvarchar(50)=char(255)
+declare @x_overhours float
+declare @x_hoverhours float
+
+--控制加班的時數
+if(@addlimit='1' and @addselect!='0') --@addselect='0' 沒有加班時數
+begin
+	declare cursor_table cursor for
+	select sssno,noa,weeks,holiday,workday,addhours
+	,doverhours,overhours,dhoverhours,hoverhours
+	from #tmpa where addhours>0 order by sssno,noa
+	open cursor_table
+	fetch next from cursor_table
+	into @sssno,@datea,@weeks,@holiday,@workday,@addhours,@doverhours,@overhours,@dhoverhours,@hoverhours
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if(@x_sssno!=@sssno)
+		begin
+			set @x_overhours=isnull(@overhours,0)
+			set @x_hoverhours=isnull(@hoverhours,0)
+		end
+		if(@workday=1 or (@holiday=0 and @weeks between '1' and '5')) --平日
+		begin
+			if(@x_overhours>0)--當月平日是否有加班時數
+			begin
+				if(isnull(@addhours,0)>isnull(@doverhours,0)) --當天是否超過限定時數
+				begin
+					if(isnull(@doverhours,0)=0) --沒有加班時數
+					begin
+						update #tmpa set addhours=0,w100=0,w133=0,w166=0,w200=0,w266=0 where noa=@datea and sssno=@sssno
+					end
+					else
+					begin
+						update #tmpa set addhours=@doverhours,w100=0,w200=0,w266=0
+						,w133=case when @doverhours>2 then 2 else @doverhours end
+						,w166=case when @doverhours>2 then @doverhours-2 else 0 end 
+						where noa=@datea and sssno=@sssno
+					
+						set @x_overhours=@x_overhours-isnull(@doverhours,0)
+					end
+				end
+				else
+				begin
+					set @x_overhours=@x_overhours-isnull(@addhours,0)
+				end
+			end
+			else
+			begin
+				update #tmpa set addhours=0,w100=0,w133=0,w166=0,w200=0,w266=0 where noa=@datea and sssno=@sssno
+			end
+		end
+		else--假日
+		begin
+			if(@x_hoverhours>0)--當月假日是否有加班時數
+			begin
+				if(isnull(@addhours,0)>isnull(@dhoverhours,0)) --當天是否超過限定時數
+				begin
+					if(isnull(@dhoverhours,0)=0) --沒有加班時數
+					begin
+						update #tmpa set addhours=0,w100=0,w133=0,w166=0,w200=0,w266=0 where noa=@datea and sssno=@sssno
+					end
+					else
+					begin
+						update #tmpa 
+						set addhours=@dhoverhours
+						,w100=case when @holiday=1 or (@weeks=0 and @workday!=1) then 8 else 0 end
+						,w133=case 
+							when @weeks=6 then 2 --六
+							when @holiday=1 and @dhoverhours>8 then (case when @dhoverhours-8>2 then 2 else @dhoverhours-8 end)--國訂
+							when @weeks=0 then 0 --日
+							else 0 end --平常日
+						,w166=case 
+							when @weeks=6 and @dhoverhours<=4 then 2 when weeks=6 and @dhoverhours<=8 then 6 --六
+							when @holiday=1 and @dhoverhours>10 then @dhoverhours-10 --國訂
+							when @weeks=0 then 0 --日
+							else 0 end --平常日
+						,w200=case when @weeks=0 and @dhoverhours>8 then @dhoverhours-8 else 0 end --日
+						,w266=case when @weeks=6 and @dhoverhours>8 then 4 else 0 end --六
+						where noa=@datea and sssno=@sssno
+						
+						set @x_hoverhours=@x_hoverhours-isnull(@dhoverhours,0)
+					end
+				end
+				else
+				begin
+					set @x_hoverhours=@x_hoverhours-isnull(@addhours,0)
+				end
+			end
+			else
+			begin
+				update #tmpa set addhours=0,w100=0,w133=0,w166=0,w200=0,w266=0 where noa=@datea and sssno=@sssno
+			end
+		end
+		
+		set @x_sssno=@sssno
+	
+		fetch next from cursor_table
+		into @sssno,@datea,@weeks,@holiday,@workday,@addhours,@doverhours,@overhours,@dhoverhours,@hoverhours
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+end
+
+--select * from #tmpa
+
+create table #tmp(
+	sssno nvarchar(max),
+	namea nvarchar(max),
+	partno nvarchar(max),
+	part nvarchar(max),
+	jobno nvarchar(max),
+	job nvarchar(max),
+	person nvarchar(max),
+	indate nvarchar(max),
+	outdate nvarchar(max),
+	iswelfare bit,
+	typea nvarchar(max),
+	
+	salary float,
+	bo_admin float,
+	bo_traffic float,
+	bo_special float,
+	bo_oth float,
+	bo_full float,
+	meals float,
+	
+	bo_money1 float,
+	bo_money2 float,
+	bo_money3 float,
+	bo_money4 float,
+	bo_money5 float,
+	
+	ch_labor1 float, --勞保投保薪資
+	ch_labor2 float, --勞退投保薪資
+	ch_health_insure float, --健保投保薪資
+	raise_num float, --扶養人數
+	
+	ch_health float, --健保自付額
+	as_health float, --健保輔助額
+	he_comp float, --健保公司負擔
+	hplus2 float, --二代健保補價
+	
+	ch_labor float,--勞保自付額
+	as_labor float,--勞保輔助
+	la_comp float, --勞保公司負擔
+	
+	ch_labor_comp float,--勞退公司提繳
+	ch_labor_self float,--勞退個人提繳
+	
+	tax float, --所得稅
+	
+	borrow float, --借支
+	plus float, --其他加項
+	minus float,--其他扣款
+	
+	ismanua bit,--調整
+	ostand float,--加班費基數
+	addh1 float,
+	addh2 float,
+	addh3 float,
+	addh4 float,
+	addh100 float,
+	addh200 float,
+	addh266 float,
+	
+	newday float, --新進員工作日數
+	inday float, --上班天數(日薪)
+	hrs float, --時數(時薪)
+	
+	late float,--遲到/早退
+	hr_sick float,
+	hr_person float,
+	hr_nosalary float,
+	hr_leave float,
+	hr_late float,--遲到扣薪 106/05/19增加
+	memo nvarchar(MAX)
+)
+
+insert #tmp(sssno,namea,partno,part,jobno,job,person,indate,outdate,iswelfare,typea
+,salary,bo_admin,bo_traffic,bo_special,bo_oth,bo_full,meals
+,bo_money1,bo_money2,bo_money3,bo_money4,bo_money5
+,ch_labor1,ch_labor2,ch_health_insure,raise_num
+,ch_health,as_health,he_comp,hplus2
+,ch_labor,as_labor,la_comp
+,ch_labor_comp,ch_labor_self,tax
+,borrow,plus,minus
+,ismanua,ostand
+,addh1,addh2,addh3,addh4,addh100,addh200,addh266
+,newday,inday,hrs,late
+,hr_sick,hr_person,hr_nosalary,hr_leave,memo
+)
+select a.noa sssno,a.namea,a.partno,a.part,a.jobno,a.job,a.person,a.indate,a.outdate,a.iswelfare,a.typea
+,isnull(b.money,0) salary,isnull(b.bo_admin,0)bo_admin,isnull(b.bo_traffic,0)bo_traffic
+,isnull(b.bo_special,0)bo_special,isnull(b.bo_oth,0)bo_oth,isnull(b.bo_full,0) bo_full
+,ISNULL(c.mealsmoney,0)
+,isnull(b.bo_money1,0)bo_money1,isnull(b.bo_money2,0)bo_money2
+,isnull(b.bo_money3,0)bo_money3,isnull(b.bo_money4,0)bo_money4,isnull(b.bo_money5,0)bo_money5
+,isnull(b.sa_labor,0) ch_labor1,isnull(b.sa_retire,0) ch_labor2,isnull(b.sa_health,0) ch_health_insure
+,isnull(b.mount,0) raise_num
+,isnull(b.he_person,0)ch_health,isnull(b.as_health,0)as_health,isnull(b.he_comp,0)he_comp,isnull(b.hplus2,0)
+,isnull(b.la_person,0)ch_labor,isnull(b.as_labor,0),isnull(b.la_comp,0)
+,isnull(b.re_comp,0) ch_labor_comp,isnull(b.re_person,0) ch_labor_self,isnull(b.tax,0)tax
+,isnull(d.borrow,0) borrow,isnull(d.plus,0) plus,isnull(d.minus,0)minus
+,case when g.inday=0 then case when isnull(c1.ostand,0)>0 then 1 else 0 end else case when isnull(e.ostand,0)>0 then 1 else 0 end end --若class5有指定加班費 則加班費需程式要先計算出來
+,case when g.inday=0 then case when isnull(c1.ostand,0)>0 then c1.ostand else 0 end else case when isnull(e.ostand,0)>0 then e.ostand else 0 end end
+,isnull(c.w133,0),isnull(c.w166,0),case when @monkind='下期' then isnull(f.w133,0) else 0 end,case when @monkind='下期' then isnull(f.w166,0) else 0 end
+,isnull(c.w100,0),isnull(c.w200,0),isnull(c.w266,0)
+,case when (left(a.indate,len(@mon))=@mon and isnull(a.indate,'')!='') or (left(a.outdate,len(@mon))=@mon and isnull(a.outdate,'')!='') then 
+	case when (left(a.indate,len(@mon))=left(a.outdate,len(@mon))) --當月進當月離
+	then dbo.q_cdd(a.outdate,a.indate)+1
+	when left(a.outdate,len(@mon))=@mon --當月離職
+	then dbo.q_cdd(a.outdate,@mon+'/01')+1
+	else dbo.q_cdd(@mon+'/'+dbo.q_lastday(@mon),a.indate) end --當月入職
+else 0 end
+,isnull(g.inday,0),isnull(g.workhours,0)
+,isnull(c.latenum,0)+isnull(c.earlynum,0)
+,ISNULL(h.hr_sick,0),ISNULL(h.hr_person,0),ISNULL(h.hr_nosalary,0),ISNULL(h.hr_leave,0)
+,case when (left(a.indate,len(@mon))=@mon and isnull(a.indate,'')!='') or (left(a.outdate,len(@mon))=@mon and isnull(a.outdate,'')!='') then 
+	case when (left(a.indate,len(@mon))=left(a.outdate,len(@mon))) --當月進當月離
+	then "新進員工(工作日:"+cast(dbo.q_cdd(a.outdate,a.indate)+1 as nvarchar(10))+")"
+	when left(a.outdate,len(@mon))=@mon --當月離職
+	then "離職員工(工作日:"+CAST(dbo.q_cdd(a.outdate,@mon+'/01')+1 as nvarchar(10))+")"
+	else "新進員工(工作日:"+cast(dbo.q_cdd(@mon+'/'+dbo.q_lastday(@mon),a.indate) as nvarchar(10))+")" end --當月入職
+else '' end
+from sss a 
+outer apply (select top 1 * from saladjust where noa=a.noa and datea<=@date2 order by datea desc)b
+outer apply (select SUM(meals*mealsnum)mealsmoney,SUM(w133)w133,SUM(w166)w166,SUM(w100)w100,SUM(w200)w200,SUM(w266)w266
+,sum(case when latemin>0 then 1 else 0 end)latenum,sum(case when earlymin>0 then 1 else 0 end)earlynum
+from #tmpa where sssno=a.noa and noa between @date1 and @date2)c
+left join (select sssno,SUM(plus) plus,SUM(minus) minus,SUM(borrow) borrow from salchg where mon=@mon group by sssno) d on a.noa=d.sssno
+outer apply (select top 1 ostand from #tmpa where sssno=a.noa and noa between @date1 and @date2 order by ostand desc)e
+outer apply (select SUM(w133)w133,SUM(w166)w166 from #tmpa where sssno=a.noa and noa between @date3 and @date4)f
+outer apply (select count(*) inday,SUM(workhours)workhours from #tmpa where sssno=a.noa and noa between @date1 and @date2 and clockin!='' and clockout!='')g
+outer apply (select SUM(case when hname like'%病假%' then hr_used else 0 end) hr_sick,SUM(case when hname like'%病假%' then 1 else 0 end) num_sick,
+SUM(case when hname like'%事假%' then hr_used else 0 end) hr_person,SUM(case when hname like'%事假%' then 1 else 0 end) num_person,
+SUM(case when hname like'%無薪%' then hr_used else 0 end) hr_nosalary,SUM(case when hname like'%曠工%' then hr_used else 0 end) hr_leave
+from salvacause where bdate between @date1 and @date2 and sssno=a.noa)h
+--(因沒有時間所以不處理是否輪班,只接取早班)
+outer apply(select top 1 * from class5s  where noa=case when isnull(b.class5,'')!='' then b.class5 else a.class5 end
+and bdate<@date2 order by bdate,btime desc --有效日
+)c1
+where a.person=@person and a.noa!='Z001' and (isnull(outdate,'')='' or @date1<isnull(outdate,''))
+
+--調整加班46小時
+declare @addh1 float--加班時數
+declare @addh2 float--加班時數
+declare @addh3 float--加班時數
+declare @addh4 float--加班時數
+declare @t_fir float=46
+declare @bef_fir01 float=0
+declare @bef_fir02 float=0
+
+declare cursor_table cursor for
+select sssno,addh1,addh2,addh3,addh4 from #tmp order by sssno
+open cursor_table
+fetch next from cursor_table
+into @sssno,@addh1,@addh2,@addh3,@addh4
+while(@@FETCH_STATUS <> -1)
+begin
+	set @t_fir=46
+	set @bef_fir01=0
+	set @bef_fir02=0
+	if(@monkind='本月' or @monkind='上期')
+	begin
+		if(@addh1+@addh2>46)
+		begin
+			set @bef_fir01=case when @addh1>@t_fir then @t_fir else @addh1 end
+			set @bef_fir02=@t_fir-@bef_fir01
+			
+			update #tmp 
+			set addh1=@bef_fir01,addh3=@addh1-@bef_fir01
+			,addh2=@bef_fir02,addh4=@addh2-@bef_fir02
+			where sssno=@sssno
+		end
+	end
+	if(@monkind='下期')
+	begin
+		if(@addh1+@addh2+@addh3+@addh4>46)
+		begin
+			if(@addh3+@addh4>46)--上期已超過46小時
+			begin
+				update #tmp 
+				set addh1=0,addh3=@addh1
+				,addh2=0,addh4=@addh2
+				where sssno=@sssno
+			end
+			else
+			begin
+				set @t_fir=@t_fir-(@addh3+@addh4)
+				set @bef_fir01=case when @addh1>@t_fir then @t_fir else @addh1 end
+				set @bef_fir02=@t_fir-@bef_fir01
+				
+				update #tmp 
+				set addh1=@bef_fir01,addh3=@addh1-@bef_fir01
+				,addh2=@bef_fir02,addh4=@addh2-@bef_fir02
+				where sssno=@sssno
+			end
+		end
+	end
+	fetch next from cursor_table
+	into @sssno,@addh1,@addh2,@addh3,@addh4
+end
+close cursor_table
+deallocate cursor_table
+
+--勞建保 下期扣款
+if(@monkind='上期')
+begin
+	update #tmp
+	set ch_health=0,as_health=0,he_comp=0,hplus2=0
+	,ch_labor=0,as_labor=0,la_comp=0
+	,ch_labor_comp=0,ch_labor_self=0
+end
+
+--處理全勤
+--新進和離職員工(不滿30天)
+update #tmp
+set bo_full=case when newday>=30 or (indate=@mon+'/01' and left(indate,len(@mon))!=left(outdate,len(@mon)))
+or (outdate=@mon+'/'+dbo.q_lastday(@mon) and left(indate,len(@mon))!=left(outdate,len(@mon)))
+then bo_full else 0 end
+where newday>0
+
+if(@monkind='上期' or @monkind='下期')
+begin
+	update #tmp
+	set bo_full=bo_full/2
+end
+
+--遲到扣全勤
+update a
+set bo_full=case 
+--曠職
+when isnull(leavenum,0)>0 then 0
+--請假全天 非特休和補休
+when isnull(b.vaca8h,0)+isnull(c.vaca8h,0)>1 then 0
+--請假 不扣全勤 超過次數
+when ISNULL(b.vaca2h,0)>d.vacanonum or ISNULL(c.vaca2h,0)>d.vacanonum then 0
+--請假半天 超過2次=請全天
+when ISNULL(b.vaca4h,0)+ISNULL(c.vaca4h,0)>1 then 0
+--遲到總次數超過
+when (isnull(b.laten1,0)+isnull(c.laten2,0)+isnull(b.late2n1,0)+isnull(c.late2n2,0))>isnull(d.lateallnum,0) then 0 
+--請假只有半天
+when ISNULL(b.vaca4h,0)+ISNULL(c.vaca4h,0)=1 then round(isnull(a.bo_full,0)*isnull(d.vacahalfdfull,0)/100,0)
+--遲到條件1不扣薪
+when isnull(b.laten1,0)>isnull(d.latenum,0) or isnull(c.laten2,0)>isnull(d.latenum,0) then round(isnull(a.bo_full,0)*isnull(d.latedfull,0)/100,0)
+--遲到條件2扣薪
+when isnull(b.late2n1,0)>isnull(d.late2num,0) or isnull(c.late2n2,0)>isnull(d.late2num,0) then round(isnull(a.bo_full,0)*isnull(d.late2dfull,0)/100,0)
+else a.bo_full end
+from #tmp a 
+outer apply (select sum(case when latemin<=late then 1 else 0 end) laten1 --上月不扣薪次數
+,sum(case when latemin between late+1 and late2 then 1 else 0 end) late2n1  --上月扣薪次數
+,sum(case when latemin > late2 then 1 else 0 end) leaven1  --上月遲到視事假次數
+,SUM(case when vacaspecial=0 and vacahours>=8 then 1 else 0 end)vaca8h --上月請假8H
+,SUM(case when vacaspecial=0 and vacahours<=vacanodhours then 1 else 0 end)vaca2h --上月請假不扣全勤
+,SUM(case when vacaspecial=0 and vacahours<=4 then 1 else 0 end)vaca4h --上月請假半天
+from #tmpa where sssno=a.sssno and noa between @date3 and @date4)b
+outer apply (select sum(case when latemin<=late then 1 else 0 end) laten2 --下月不扣薪次數
+,sum(case when latemin between late+1 and late2 then 1 else 0 end) late2n2  --下月扣薪次數
+,sum(case when latemin > late2 then 1 else 0 end) leaven2  --下月遲到視事假次數
+,SUM(case when vacaspecial=0 and vacahours>=8 then 1 else 0 end)vaca8h --下月請假8H
+,SUM(case when vacaspecial=0 and vacahours<=vacanodhours then 1 else 0 end)vaca2h --下月請假不扣全勤
+,SUM(case when vacaspecial=0 and vacahours<=4 then 1 else 0 end)vaca4h --下月請假半天
+from #tmpa where sssno=a.sssno and noa between @date5 and @date6)c
+outer apply (select top 1 * from #tmpa where sssno=a.sssno and noa between @date3 and @date4 order by noa)d --取第一筆條件
+outer apply (select count(*)leavenum from salvacause where hname like'%曠工%' and sssno=a.sssno and left(bdate,len(@mon))=@mon)e
+where bo_full>0
+
+--處理遲到扣薪
+update a
+set hr_late=round((ISNULL(b.latenum,0))*isnull(d.late2dshour,0)/100,1)
+from #tmp a outer apply (select sum(case when latemin between late+1 and late2 then 1 else 0 end) latenum  --遲到扣薪次數
+from #tmpa where sssno=a.sssno and noa between @date1 and @date2)b
+outer apply (select top 1 * from #tmpa where sssno=a.sssno and noa between @date3 and @date4 order by noa)d --取第一筆條件
+
+--停職扣薪(扣在無薪)扣全勤打再請假單 不扣全勤打在停復職
+update a
+set hr_nosalary=isnull(hr_nosalary,0)+isnull(nodays+1,0)
+from #tmp a outer apply (
+	select SUM(cast(dbo.q_cdd(case when isnull(reindate,'')='' or isnull(reindate,'')>@date2 then @date2 else reindate end,case when @date1>stopdate then @date1 else stopdate end ) as int)) nodays
+	from sssr where noa=a.sssno 
+	and (@date1<case when isnull(reindate,'')='' then @date2 else reindate end or ISNULL(stopdate,'') between @date1 and @date2)
+)b
+
+select * from #tmp
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+   drop table #tmp
+END
+
+IF OBJECT_ID('tempdb..#tmpa')is not null
+BEGIN
+   drop table #tmpa
+END
+;
