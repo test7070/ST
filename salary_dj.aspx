@@ -27,7 +27,7 @@
         	//['txtChgcash', 15, 0, 1],['txtStay_tax', 15, 0, 1],['txtLodging_power_fee', 15, 0, 1],['txtWelfare', 15, 0, 1],['txtStay_money', 15, 0, 1],
         	['txtTax6', 15, 0, 1],['txtTax12', 15, 0, 1],['txtTax18', 15, 0, 1],['txtCh_labor_comp', 15, 0, 1],['txtCh_labor_self', 15, 0, 1],
         	['txtTax', 15, 0, 1],['txtTax5', 15, 0, 1],['txtRaise_num', 15, 0, 1],['txtCh_health', 15, 0, 1],['txtHplus2', 15, 0, 1],['txtTotal4', 15, 0, 1],
-        	['txtTotal5', 15, 0, 1],['txtLate', 15, 0, 1],['txtHr_sick', 15, 1, 1],['txtMi_sick', 15, 0, 1],['txtHr_person', 15, 1, 1],['txtMi_person', 15, 0, 1],['txtHr_nosalary', 15, 1, 1],['txtMi_nosalary', 15, 0, 1],
+        	['txtTotal5', 15, 0, 1],['txtLate', 15, 0, 1],['txtHr_late', 15, 1, 1],['txtMi_late', 15, 0, 1],['txtHr_sick', 15, 1, 1],['txtMi_sick', 15, 0, 1],['txtHr_person', 15, 1, 1],['txtMi_person', 15, 0, 1],['txtHr_nosalary', 15, 1, 1],['txtMi_nosalary', 15, 0, 1],
         	['txtHr_leave', 15, 1, 1],['txtMi_leave', 15, 0, 1],['txtPlus', 15, 0, 1],['txtMinus', 15, 0, 1],
         	['txtMoney1', 15, 0, 1],['txtMoney2', 15, 0, 1],['txtMoney3', 15, 0, 1],['txtMoney4', 15, 0, 1],['txtMoney5', 15, 0, 1],['txtMoney6', 15, 0, 1],['txtMoney7', 15, 0, 1],['txtCh_health2', 15, 0, 1],
         	['txtCh_retire2', 15, 0, 1],['txtCh_retire', 15, 0, 1],['txtSa_health', 15, 0, 1],['txtSa_labor', 15, 0, 1],['txtSa_retire', 15, 0, 1]
