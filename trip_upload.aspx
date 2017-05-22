@@ -1,6 +1,7 @@
 <%@ Page Language="C#" Debug="true"%>
     <script language="c#" runat="server">     
-        string savepath = @"c:\inetpub\wwwroot\doc\trip\";
+        //string savepath = @"c:\inetpub\wwwroot\doc\trip\";
+        string savepath = @"F:\doc\trip\";
         
         public void Page_Load()
         {
