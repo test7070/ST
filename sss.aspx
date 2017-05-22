@@ -84,7 +84,18 @@
 					$('#btnSaladjust').hide();
 				}*/
 				
-				if (q_getPara('sys.project').toUpperCase()=='DJ'){
+				//106/05/22 勞健保以後只開放固定一些客戶使用其他客戶只使用調整記錄來處理勞健保
+				if (
+					q_getPara('sys.project').toUpperCase()=='UU' || q_getPara('sys.project').toUpperCase()=='TN' ||
+					q_getPara('sys.project').toUpperCase()=='RB' || q_getPara('sys.project').toUpperCase()=='DC' ||
+					q_getPara('sys.project').toUpperCase()=='XY' || q_getPara('sys.project').toUpperCase()=='RS' ||
+					q_getPara('sys.project').toUpperCase()=='FE' || q_getPara('sys.project').toUpperCase()=='IT' ||
+					q_getPara('sys.project').toUpperCase()=='AMD' || q_getPara('sys.project').toUpperCase()=='RK' ||
+					q_getPara('sys.project').toUpperCase()=='VU' || q_getPara('sys.project').toUpperCase()=='VU2' ||
+					q_getPara('sys.project').toUpperCase()=='SF'
+				){
+					$('#btnLabases').show();
+				}else{
 					$('#btnLabases').hide();
 				}
 				
