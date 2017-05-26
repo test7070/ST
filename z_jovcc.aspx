@@ -26,7 +26,7 @@
                     options : [{
 						type : '0',//[1]
 						name : 'accy',
-                        value : q_getId()[4] 
+                        value : q_getId() 
                     },{
 						type : '0',//[2]
 						name : 'xproject',
@@ -39,39 +39,38 @@
                         name : 'xnoa'
                     },{
 	                    type : '2',//[6][7]
-	                    name : 'xcust',
+	                    name : 'cust',
 	                    dbf : 'cust',
 	                    index : 'noa,comp',
 	                    src : 'cust_b.aspx'
 	                },{
-<<<<<<< HEAD
-                        type : '2', //[14][15]//原廠//20
-=======
-                        type : '2', //[8][9]
->>>>>>> d86bbe2584f0d0bd1673d7d061988f18ba6b3892
-                        name : 'tggno',
-                        dbf : 'tgg',
-                        index : 'noa,comp',
-                        src : 'tgg_b.aspx'
-                    },{
-<<<<<<< HEAD
-                        type : '2', //[14][15]//原廠//20
-=======
-                        type : '2', //[10][11]
->>>>>>> d86bbe2584f0d0bd1673d7d061988f18ba6b3892
-                        name : 'Xgroupano',
-                        dbf : 'uccga',
-                        index : 'noa,namea',
-                        src : ''
-<<<<<<< HEAD
-=======
-                    }, {
-                        type : '2', //[12][13]
-                        name : 'xsale',
-                        dbf : 'sss',
-                        index : 'noa,namea',
-                        src : 'sss_b.aspx'
->>>>>>> d86bbe2584f0d0bd1673d7d061988f18ba6b3892
+	                    type : '2',//[8][9]
+	                    name : 'tgg',
+	                    dbf : 'tgg',
+	                    index : 'noa,comp',
+	                    src : 'tgg_b.aspx'
+	                },{
+	                    type : '2',//[10][11]
+	                    name : 'uccga',
+	                    dbf : 'uccga',
+	                    index : 'noa,namea',
+	                    src : ''
+	                },{
+	                    type : '2',//[12][13]
+	                    name : 'ucc',
+	                    dbf : 'ucc',
+	                    index : 'noa,product',
+	                    src : 'ucc_b.aspx'
+	                },{
+	                    type : '2',//[14][15]
+	                    name : 'cust2',
+	                    dbf : 'cust2',
+	                    index : 'noa,comp',
+	                    src : ''
+	                },{/*[16]*/
+                        type : '0',
+                        name : 'http',
+                        value:location.host
                     }]
                 });
                 q_popAssign();
