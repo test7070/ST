@@ -242,6 +242,10 @@
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "' ^^";
 							q_gt('ordb', t_where, 0, 0, 0, "", r_accy);
 							$('#txtOrdbno').val(b_ret[0].noa);
+							for (var i=0; i<b_ret.length;i++){
+								b_ret[i].notv=q_sub(dec(b_ret[i].mount),dec(b_ret[i].c1));
+							}
+							
 							ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtOrdbno,txtNo3,txtPrice,txtMount,txtTotal,txtMemo,txtUnit,txtSpec,txtCustno,txtComp', b_ret.length, b_ret, 'productno,product,noa,no3,price,notv,total,memo,unit,spec,custno,comp', 'txtProductno,txtProduct');
 							
 							//取第一個廠商資料
@@ -528,7 +532,7 @@
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
-					
+							
 				var s1 = $('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val();
 				if (s1.length == 0 || s1 == "AUTO")
 					q_gtnoa(q_name, replaceAll(q_getPara('sys.key_ordc') + $('#txtOdate').val(), '/', ''));
@@ -569,6 +573,14 @@
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#txtUnit_' + j).change(function() {
 							sum();
+						});
+						$('#txtUno_' + j).change(function(e) {
+							if ($('#cmbTypea').val() != '2') {
+								var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
+								var t_uno = $.trim($(this).val());
+								var t_noa = $.trim($('#txtNoa').val());
+								q_gt('uccy', "where=^^uno='" + t_uno + "' and not(gform='ordcs' and gnoa='" + t_noa + "')^^", 0, 0, 0, 'checkUno_' + n);
+							}
 						});
 						$('#txtMount_' + j).change(function() {
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
@@ -778,7 +790,7 @@
 			}
 
 			function bbsSave(as) {
-				if (!as['productno1'] && !as['productno2'] && !as['productno3'] && !as['product']) {
+				if (!as['uno'] && !as['productno1'] && !as['productno2'] && !as['productno3'] && !as['product']) {
 					as[bbsKey[1]] = '';
 					return;
 				}
@@ -1372,7 +1384,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width:1650px;">
+		<div class='dbbs' style="width:1750px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1' >
 				<tr style='color:White; background:#003366;' >
 					<td  align="center" style="width:30px;">
@@ -1400,10 +1412,10 @@
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='－' style=" font-weight: bold;" /></td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
-					<td class="isAD" align="center">
+					<td class="isAD">
 						<input class="txt c1" id="txtUno.*" type="text" />
 					</td>
-					<td align="center">
+					<td>
 						<input class="txt c1" id="txtProductno1.*" type="text" />
 						<input class="txt c1" id="txtProductno2.*" type="text" />
 						<input class="txt c1" id="txtProductno3.*" type="text" />

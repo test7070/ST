@@ -543,11 +543,16 @@ declare @noa nvarchar(50)=[2]
 declare @condition nvarchar(20)=[3]--動作 0 刪除, 1 新增[3]
 declare @rc2key nvarchar(50)=[4]--RC2KEY
 declare @vcckey nvarchar(50)=[5]--VCCKEY
+declare @factoryno nvarchar(50)=[6]--廠商編號
 -----------------------------------------------------------------------
 declare @cmd nvarchar(max)
 declare @accy nvarchar(20)
 declare @productno nvarchar(50)=''
 declare @pordeno nvarchar(50)=''
+declare @ip nvarchar(max)=''
+declare @avccno nvarchar(100)=''
+declare @db nvarchar(100)=''
+declare @acount int
 set @productno=isnull((select top 1 productno from view_cub where noa=@noa),'')
 set @pordeno=isnull((select top 1 ordeno from ucx where noa=@productno),'')
 if(LEN(@pordeno)=0 and LEN(@productno)>0)
@@ -582,7 +587,17 @@ begin
 				  where zipcode='"+@noa+"'" 
 		EXECUTE sp_executesql @cmd 
 			set @cmd="delete vcc"+@accy+" where zipcode='"+@noa+"'" 
+		EXECUTE sp_executesql @cmd		
+		
+		set @ip=(select ip from factory where noa=@factoryno)
+		set @db=(select db from factory where noa=@factoryno)
+		
+		set @cmd="delete a from ["+@ip+",1799]."+@db+".dbo.vccs"+@accy+" a left join ["+@ip+",1799]."+@db+".dbo.vcc"+@accy+" b on a.noa=b.noa 
+				  where zipcode='"+@noa+"'" 
 		EXECUTE sp_executesql @cmd 
+			set @cmd="delete ["+@ip+",1799]."+@db+".dbo.vcc"+@accy+" where zipcode='"+@noa+"'" 
+		EXECUTE sp_executesql @cmd
+				
 	end 
 end 
 
@@ -669,6 +684,7 @@ begin
 	---------------------------------------------------------------------------------------------------------
 	--產生出貨單 
 	set @vccno=''
+	set @acount=''
 	if(select count(*) from view_cub where noa=@noa and isnull(enda,0)=1 and isnull(edate,'')!='' and isnull(custno,'')!='' )>0 --寄送才產生出貨單
 	begin
 		--讀取已產生的vccno
@@ -696,35 +712,253 @@ begin
 			--新的進貨單號(後面號碼+1) 
 			set @vccno=@vcckey+REPLACE(@datea,'/','')+right('000'+cast(cast(RIGHT(isnull(@vccno,'000'),3) as int)+1 as nvarchar(10)),3)	
 		end 
+		
+		set @acount=isnull((select count(*) from view_vcc where zipcode=@noa),0)
+		
+		if(@acount=0)
+		begin	
+			--bbm 						
+			exec("insert vcc"+@year+"(noa,zipcode,datea,typea,stype,cno,acomp,mon,invono,invo,custno, 
+				comp,nick,tel,post,addr,post2,addr2,trantype,paytype,tax,memo) 
+				select '"+@vccno+"','"+@noa+"' zipcode,'"+@datea+"' datea,'1' typea,'4' stype 
+				,(select top 1 noa from acomp) cno,(select top 1 acomp from acomp) acomp 
+				,LEFT('"+@datea+"',"+@r_lenm+"),'' invono,'' invo,noa 
+				,comp,nick,tel,zip_comp,addr_comp,'' post2,'' addr2,trantype,paytype,0 tax 
+				,'由連續製令單作業("+@noa+")轉來 ' memo from cust where noa='"+@custno+"' 
+			") 
+				
+			--bbs 
+			exec("insert vccs"+@year+" (noa,noq,productno,product,spec,unit,mount,price,total,memo,custno) 
+			select '"+@vccno+"' noa,'001','_'+a.productno,a.product,a.spec,a.unit,a.mount,a.price,a.mo total,a.memo,a.custno
+			from view_cub a where a.noa='"+ @noa+"' ") 
+				
+			--更新bbm應收 
+			exec("update a
+			set money=isnull((select sum(total) from view_vccs where  noa=a.noa),0),tax=0,
+				total=isnull((select sum(total) from view_vccs where  noa=a.noa),0),
+				payed=isnull((select sum(paysale) from umms where vccno=a.noa ),0),
+				unpay=isnull((select sum(total) from view_vccs where  noa=a.noa),0)-isnull((select sum(paysale) from umms where vccno=a.noa ),0)
+				from vcc"+@year+" a
+			where noa='"+@vccno+"'") 
+				
+			set @accy=(select accy from view_cub where noa=@noa)
+			--更新cubs 
+			exec("update cub"+@accy+" set vcceno='"+@vccno+"' where noa='"+@noa+"' ")
+		end
+		--單據已存在
+		else
+		begin
+			exec("update vcc"+@year+"
+			set custno=a.custno,comp=c.nick,tel=c.tel,fax=c.fax,post=c.zip_comp,addr=c.addr_comp
+				from view_cub a left join vcc"+@year+" b on a.vcceno=b.noa
+				left join cust c on a.custno=c.noa
+			where b.noa='"+@vccno+"'")
+			exec("update vccs"+@year+"
+			set productno='_'+a.productno,product=a.product,spec=a.spec,mount=a.mount,price=a.price,total=a.mo,memo=a.memo,custno=a.custno
+				from view_cub a left join vccs"+@year+" b on a.vcceno=b.noa
+			where b.noa='"+@vccno+"'")
 			
-		--bbm 						
-		exec("insert vcc"+@year+"(noa,zipcode,datea,typea,stype,cno,acomp,mon,invono,invo,custno, 
-			comp,nick,tel,post,addr,post2,addr2,trantype,paytype,tax,memo) 
-			select '"+@vccno+"','"+@noa+"' zipcode,'"+@datea+"' datea,'1' typea,'4' stype 
+			exec("update a
+			set money=isnull((select sum(total) from view_vccs where  noa=a.noa),0),tax=0,
+				total=isnull((select sum(total) from view_vccs where  noa=a.noa),0),
+				payed=isnull((select sum(paysale) from umms where vccno=a.noa ),0),
+				unpay=isnull((select sum(total) from view_vccs where  noa=a.noa),0)-isnull((select sum(paysale) from umms where vccno=a.noa ),0)
+				from vcc"+@year+" a
+			where noa='"+@vccno+"'") 
+		end		
+	end
+	
+	set @vccno=''
+	set @acount=''
+	---------------------------------------------------------------------------------------------------------------------------------------------------------
+	--產生製造商出貨單 
+	if(select count(*) from view_cub where noa=@noa and isnull(menda,0)=1 and isnull(medate,'')!='' and isnull(custno,'')!='' )>0 --寄送才產生出貨單
+	begin
+		
+		set @ip=(select ip from factory where noa=@factoryno)
+		set @db=(select db from factory where noa=@factoryno)
+
+		--讀取已產生的vccno
+		set @vccno=isnull((select mvcceno from view_cub where noa=@noa),'')
+		set @datea=isnull((select medate from view_cub where noa=@noa),'')
+		set @custno=isnull((select custno from view_cub where noa=@noa),'')
+		if (len(@datea)=10)
+			set @r_lenm='7'
+		else 
+			set @r_lenm='6'
+			
+		set @cmd ="select @avccno=isnull(MAX(noa),'') from ["+@ip+",1799]."+@db+".dbo.view_vcc where noa like '"+@vcckey+"'+REPLACE("+@datea+",'/','')+'%'"
+		execute sp_executesql @cmd,N'@avccno nvarchar(90) output',@avccno=@avccno output
+	
+		--沒有vccno產生出貨單號 
+		if(len(@vccno)=0) 
+		begin 
+			--取得當天最後一個出貨單號
+			if(isnull((select MAX(mvcceno) from view_cub where vcceno like @vcckey+REPLACE(@datea,'/','')+'%'),'')>@avccno)
+			begin
+				select @vccno=MAX(mvcceno) from view_cub where vcceno like @vcckey+REPLACE(@datea,'/','')+'%'
+			end
+			else
+			begin
+				set @cmd ="select @vccno=MAX(noa) from ["+@ip+",1799]."+@db+".dbo.view_vcc where noa like '"+@vcckey+"'+REPLACE("+@datea+",'/','')+'%'"
+				execute sp_executesql @cmd,N'@vccno nvarchar(90) output',@vccno=@vccno output
+			end
+				 
+			--新的出貨單號(後面號碼+1) 
+			set @vccno=@vcckey+REPLACE(@datea,'/','')+right('000'+cast(cast(RIGHT(isnull(@vccno,'000'),3) as int)+1 as nvarchar(10)),3)	
+		end 
+		
+		set @cmd ="select @acount=count(*) from ["+@ip+",1799]."+@db+".dbo.view_vcc where zipcode='"+@noa+"'"
+				execute sp_executesql @cmd,N'@acount nvarchar(90) output',@acount=@acount output
+		if(@acount=0) 
+		begin 
+			--bbm 						
+			exec("insert ["+@ip+",1799]."+@db+".dbo.vcc"+@year+"(noa,zipcode,datea,typea,stype,cno,acomp,mon,invono,invo,custno, 
+				comp,nick,tel,post,addr,post2,addr2,trantype,paytype,tax,memo) 
+				select '"+@vccno+"','"+@noa+"' zipcode,'"+@datea+"' datea,'1' typea,'4' stype 
+				,(select top 1 noa from acomp) cno,(select top 1 acomp from acomp) acomp 
+				,LEFT('"+@datea+"',"+@r_lenm+"),'' invono,'' invo,noa 
+				,comp,nick,tel,zip_comp,addr_comp,'' post2,'' addr2,trantype,paytype,0 tax 
+				,'由貿易商連續製令單作業("+@noa+")轉來 ' memo from cust where noa='"+@custno+"' 
+			")
+			
+			--bbs 
+			exec("insert ["+@ip+",1799]."+@db+".dbo.vccs"+@year+" (noa,noq,productno,product,spec,unit,mount,price,total,memo,custno) 
+			select '"+@vccno+"' noa,'001','_'+a.productno,a.product,a.spec,a.unit,a.mount,a.price,a.mo total,a.memo,a.custno
+			from view_cub a where a.noa='"+ @noa+"' ")
+			
+			--更新bbm應收 
+			exec("update a
+			set money=isnull((select sum(total) from ["+@ip+",1799]."+@db+".dbo.view_vccs where  noa=a.noa),0),tax=0,
+				total=isnull((select sum(total) from ["+@ip+",1799]."+@db+".dbo.view_vccs where  noa=a.noa),0),
+				payed=isnull((select sum(paysale) from ["+@ip+",1799]."+@db+".dbo.umms where vccno=a.noa ),0),
+				unpay=isnull((select sum(total) from ["+@ip+",1799]."+@db+".dbo.view_vccs where  noa=a.noa),0)-isnull((select sum(paysale) from ["+@ip+",1799]."+@db+".dbo.umms where vccno=a.noa ),0)
+				from ["+@ip+",1799]."+@db+".dbo.vcc"+@year+" a
+			where noa='"+@vccno+"'") 
+
+			set @accy=(select accy from view_cub where noa=@noa)
+			--更新cubs 
+			exec("update cub"+@accy+" set mvcceno='"+@vccno+"' where noa='"+@noa+"' ")
+		end
+		--單據已存在
+		else
+		begin
+			exec("update ["+@ip+",1799]."+@db+".dbo.vcc"+@year+"
+			set custno=a.custno,comp=c.nick,tel=c.tel,fax=c.fax,post=c.zip_comp,addr=c.addr_comp
+				from view_cub a left join ["+@ip+",1799]."+@db+".dbo.vcc"+@year+" b on a.mvcceno=b.noa
+				left join cust c on a.custno=c.noa
+			where b.noa='"+@vccno+"'")
+			
+			exec("update ["+@ip+",1799]."+@db+".dbo.vccs"+@year+"
+			set productno='_'+a.productno,product=a.product,spec=a.spec,mount=a.mount,price=a.price,total=a.mo,memo=a.memo,custno=a.custno
+				from view_cub a left join ["+@ip+",1799]."+@db+".dbo.vccs"+@year+" b on a.mvcceno=b.noa
+			where b.noa='"+@vccno+"'")
+			
+			exec("update a
+			set money=isnull((select sum(total) from view_vccs where  noa=a.noa),0),tax=0,
+				total=isnull((select sum(total) from view_vccs where  noa=a.noa),0),
+				payed=isnull((select sum(paysale) from umms where vccno=a.noa ),0),
+				unpay=isnull((select sum(total) from view_vccs where  noa=a.noa),0)-isnull((select sum(paysale) from umms where vccno=a.noa ),0)
+				from ["+@ip+",1799]."+@db+".dbo.vcc"+@year+" a
+			where noa='"+@vccno+"'") 
+		end
+		
+		set @datea=isnull((select datea from view_cub where noa=@noa),'')
+		set @tggno=isnull((select factoryno from view_cub where noa=@noa),'')
+		
+		--讀取已產生的rc2no 
+		set @rc2no=isnull((select ordeno from view_cubs where noa=@noa and process='進貨單'),'')
+			  
+		--沒有rc2no產生入庫單號 
+		if(len(@rc2no) ='' ) 
+		begin 
+			--取得當天最後一個進貨單號
+			if(isnull((select MAX(ordeno) from view_cubs where ordeno like @rc2key+REPLACE(@datea,'/','')+'%'),'')>
+				isnull((select MAX(noa) from view_rc2 where noa like @rc2key+REPLACE(@datea,'/','')+'%'),'') )
+			begin
+				select @rc2no=MAX(ordeno) from view_cubs where ordeno like @rc2key+REPLACE(@datea,'/','')+'%'
+			end
+			else
+			begin
+				select @rc2no=MAX(noa) from view_rc2 where noa like @rc2key+REPLACE(@datea,'/','')+'%'
+			end
+				 
+			--新的進貨單號(後面號碼+1) 
+			set @rc2no=@rc2key+REPLACE(@datea,'/','')+right('000'+cast(cast(RIGHT(isnull(@rc2no,'000'),3) as int)+1 as nvarchar(10)),3)	
+		end
+			
+		set @acount=''
+		set @acount=isnull((select count(*) from view_rc2 where postname=@noa),0)
+		if(@acount=0)
+		begin
+			--bbm 						
+			exec("insert rc2"+@year+"(noa,postname,datea,typea,stype,cno,acomp,mon,invono,invo,tggno, 
+			tgg,nick,tel,post,addr,post2,addr2,trantype,paytype,tax,memo) 
+			select '"+@rc2no+"','"+@noa+"' postname,'"+@datea+"' datea,'1' typea,'2' stype 
 			,(select top 1 noa from acomp) cno,(select top 1 acomp from acomp) acomp 
 			,LEFT('"+@datea+"',"+@r_lenm+"),'' invono,'' invo,noa 
 			,comp,nick,tel,zip_comp,addr_comp,'' post2,'' addr2,trantype,paytype,0 tax 
-			,'由連續製令單作業("+@noa+")轉來 ' memo from cust where noa='"+@custno+"' 
-		") 
+			,'由連續製令單作業("+@noa+")轉來 ' memo from tgg where noa='"+@tggno+"' 
+			")
 			
-		--bbs 
-		exec("insert vccs"+@year+" (noa,noq,productno,product,spec,unit,mount,price,total,memo,custno) 
-		select '"+@vccno+"' noa,'001','_'+a.productno,a.product,a.spec,a.unit,a.mount,a.price,a.mo total,a.memo,a.custno
-		from view_cub a where a.noa='"+ @noa+"' ") 
+			--bbs 
+			exec("insert rc2s"+@year+" (noa,noq,productno,product,spec,unit,mount,price,total,memo,custno,comp) 
+			select '"+@rc2no+"' noa,'001','_'+productno,product,spec,unit,mount,price,mo total,memo,custno,comp 
+			from view_cub 
+			where noa='"+ @noa+"'") 
 			
-		--更新bbm應收 
-		exec("update a
-		set money=isnull((select sum(total) from view_vccs where  noa=a.noa),0),tax=0,
-			total=isnull((select sum(total) from view_vccs where  noa=a.noa),0),
-			payed=isnull((select sum(paysale) from umms where vccno=a.noa ),0),
-			unpay=isnull((select sum(total) from view_vccs where  noa=a.noa),0)-isnull((select sum(paysale) from umms where vccno=a.noa ),0)
-			from vcc"+@year+" a
-		where noa='"+@vccno+"'") 
+			--更新bbm應收 
+			exec("update a
+			set money=isnull((select sum(total) from view_rc2s where  noa=a.noa),0),tax=0,
+				total=isnull((select sum(total) from view_rc2s where  noa=a.noa),0)
+				from rc2"+@year+" a
+			where noa='"+@rc2no+"'")
+		end
+		else
+		begin
+			exec("update rc2"+@year+"
+			set tggno=b.factoryno,tgg=c.comp,tel=c.tel,post=c.zip_comp,addr=addr_comp
+				from  rc2"+@year+" a left join view_cub b on a.postname=b.noa
+				left join tgg c on b.factoryno=c.noa 
+			where a.noa='"+@rc2no+"'")
 			
-		set @accy=(select accy from view_cub where noa=@noa)
-		--更新cubs 
-		exec("update cub"+@accy+" set vcceno='"+@vccno+"' where noa='"+@noa+"' ") 			
+			exec("update rc2s"+@year+"
+			set productno='_'+c.productno,product=c.product,spec=c.spec,mount=c.mount,price=c.price,total=c.mo
+				from rc2s"+@year+" a left join rc2"+@year+" b on a.noa=b.noa
+				left join view_cub c on b.postname=c.noa
+			where a.noa='"+@rc2no+"'")
 			
+			--更新bbm應收 
+			exec("update a
+			set money=isnull((select sum(total) from view_rc2s where  noa=a.noa),0),tax=0,
+				total=isnull((select sum(total) from view_rc2s where  noa=a.noa),0)
+				from rc2"+@year+" a
+			where noa='"+@rc2no+"'")
+			
+		end	
+		
+		set @acount=''
+		set @acount=isnull((select count(*) from view_cubs where process='進貨單' and noa=@noa),0)
+		if(@acount=0)
+		begin
+			--樣品單表身插入進貨單
+			exec("update cubs"+@year+"
+			set noq=REPLICATE('0',3-LEN(CAST((noq+1) AS CHAR))) + RTRIM(CAST((noq+1) AS CHAR))
+			where noa='"+@noa+"'")
+			
+			exec("insert cubs"+@year+" (noa,noq,process,price,mo,w02,w01,enda,cut,ordeno)
+			select '"+@noa+"','001','進貨單',b.price,a.money,a.tax,a.total,1,1,'"+@rc2no+"'
+			from view_rc2 a left join view_rc2s b on a.noa=b.noa
+			where a.noa='"+@rc2no+"'")
+		end
+		else
+		begin
+			exec("update cubs"+@year+"
+			set price=b.price,mo=c.money,w02=c.tax,w01=c.total
+				from cubs"+@year+" a left join rc2s"+@year+" b on a.ordeno=b.noa
+					left join rc2"+@year+" c on c.noa=b.noa
+			where a.ordeno='"+@rc2no+"'")
+		end		
 	end
 end 
 ;

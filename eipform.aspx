@@ -20,7 +20,7 @@
             }
 
             var q_name = "eipform";
-            var q_readonly = ['txtFiles','txtWorker','txtWorker2'];
+            var q_readonly = ['txtFiles','txtWorker','txtWorker2','txtPath'];
             var bbmNum = [];
             var bbmMask = [];
             q_sqlCount = 6;
@@ -111,8 +111,9 @@
 					ShowDownlbl();
 				});
 				
-				$('#btnViewdoc').click(function() {
+				$('#lblView').click(function() {
 					if($('#txtFiles').val().length>0){
+						Lock(1);
 						var extindex = $('#txtFiles').val().lastIndexOf('.');
 						if(extindex>=0){
 							ext = $('#txtFiles').val().substring(extindex,$('#txtFiles').val().length);
@@ -123,20 +124,28 @@
 							q_func( 'eip.excelConvert' , $('#txtFiles').val()+',htm,eipform,'+$('#txtNoa').val())*/
 					}
 				});
-            }
-            
-            function ShowDownlbl() {				
-				$('#lblDownload').hide();
 				
-				if(!emp($('#txtFiles').val()))
-					$('#lblDownload').show();
-										
 				$('#lblDownload').click(function(e) {
 					if($('#txtFiles').val().length>0)
 						$('#xdownload').attr('src','eipform_download.aspx?FileName='+$('#txtFiles').val()+'&TempName='+$('#txtFiles').val());
 					else
 						alert('無資料...!!');
 				});
+            }
+            
+            function ShowDownlbl() {				
+				$('#lblDownload').hide();
+				$('#lblView').hide();
+				
+				if(!emp($('#txtFiles').val())){
+					var t_ins=r_ins;
+					if(t_ins==undefined)
+						t_ins=false;
+					
+					if(r_rank>=8 || t_ins)
+						$('#lblDownload').show();
+					$('#lblView').show();
+				}
 			}
 			
 			function q_funcPost(t_func, result) {
@@ -148,10 +157,12 @@
 						}
 						
 						var filename=replaceAll($('#txtFiles').val(),ext,'');
+						var filepath=emp($('#txtPath').val())?'':$('#txtPath').val();
                 	
                 		var s1 = location.href;
 						var t_path = (s1.substr(7, 5) == 'local' ? xlsPath : s1.substr(0, s1.indexOf('/', 10)) + '/'+q_db+'z/');
-						window.open(t_path + "eipform_read.aspx?files="+filename, "_blank", 'directories=no,location=no,menubar=no,resizable=1,scrollbars=1,status=0,toolbar=1');
+						window.open(t_path + "eipform_read.aspx?files="+filename+"&filepath="+filepath, "_blank", 'directories=no,location=no,menubar=no,resizable=1,scrollbars=1,status=0,toolbar=1');
+						Unlock(1);
                 	break;
                 }
 			}
@@ -242,10 +253,8 @@
                 _readonly(t_para, empty);
                 if(t_para){
                 	$('#btnFiles').attr('disabled','disabled');
-                	$('#btnViewdoc').removeAttr('disabled');
                 }else{
                 	$('#btnFiles').removeAttr('disabled');
-                	$('#btnViewdoc').attr('disabled','disabled');
                 }
                 ShowDownlbl();
             }
@@ -369,6 +378,7 @@
             .tbbm tr td .lbl.btn {
                 color: #4297D7;
                 font-weight: bolder;
+				cursor: pointer;
             }
             .tbbm tr td .lbl.btn:hover {
                 color: #FF8F19;
@@ -451,7 +461,6 @@
                         	<input id="txtFormname" type="text" class="txt c1"/>
                         	<input id="txtNoa" type="hidden" class="txt c1"/>
                         </td>
-						<td><input id="btnViewdoc" type="button" value="檢視"></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblMemo" class="lbl"> </a></td>
@@ -463,6 +472,8 @@
 						<td style="text-align: left;" colspan="2">
 							<span style="float: left;"> </span>
 							<input type="file" id="btnFiles" class="btnFiles" value="選擇檔案"/>
+							<a id="lblView" class='lbl btn' style="display: none;">檢視</a>
+							<a id="lblSpec" class='lbl btn'>　</a>
 							<a id="lblDownload" class='lbl btn' style="display: none;">下載</a>
 						</td>
 					</tr>
@@ -471,6 +482,11 @@
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
 						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
+						<td> </td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblPath' class="lbl"> </a></td>
+						<td colspan="3"><input id="txtPath" type="text" class="txt c1"/></td>
 						<td> </td>
 					</tr>
                 </table>

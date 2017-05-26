@@ -69,7 +69,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	insert into @tmps(custno,vccaccy,vccno,vccnoq,ordeno,ordeno2,datea,uno,style,productno,product,pvcno,pvc
 		,spec,dime,width,lengthb,radius,unit,mount,[weight],price,[money],floata)
 	select b.custno,a.accy,a.noa,a.noq
-		,case when len(a.ordeno)=0 then CHAR(255) else '' end
+		,case when len(a.ordeno)=0 then CHAR(255) else a.ordeno end
 		,a.no2,b.datea,a.uno,a.style,a.productno,a.product,'',''
 		,a.spec,a.dime,a.width,a.lengthb,a.radius,upper(isnull(a.unit,'')),a.mount,a.[weight],a.price,a.total,b.floata
 	from view_vccs a
@@ -399,6 +399,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	from view_vcc a
 	where a.custno between @t_bcustno and @t_ecustno
 	and a.mon between @t_bmon and @t_emon
+	order by a.datea,a.accy,a.noa
 	
 	update @tmp set conn=b.namea
 	from @tmp a

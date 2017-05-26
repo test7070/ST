@@ -39,22 +39,39 @@
                         name : 'xnoa'
                     },{
 	                    type : '2',//[6][7]
-	                    name : 'cust',
+	                    name : 'xcust',
 	                    dbf : 'cust',
 	                    index : 'noa,comp',
 	                    src : 'cust_b.aspx'
 	                },{
+<<<<<<< HEAD
                         type : '2', //[14][15]//原廠//20
+=======
+                        type : '2', //[8][9]
+>>>>>>> d86bbe2584f0d0bd1673d7d061988f18ba6b3892
                         name : 'tggno',
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
                     },{
+<<<<<<< HEAD
                         type : '2', //[14][15]//原廠//20
+=======
+                        type : '2', //[10][11]
+>>>>>>> d86bbe2584f0d0bd1673d7d061988f18ba6b3892
                         name : 'Xgroupano',
                         dbf : 'uccga',
                         index : 'noa,namea',
                         src : ''
+<<<<<<< HEAD
+=======
+                    }, {
+                        type : '2', //[12][13]
+                        name : 'xsale',
+                        dbf : 'sss',
+                        index : 'noa,namea',
+                        src : 'sss_b.aspx'
+>>>>>>> d86bbe2584f0d0bd1673d7d061988f18ba6b3892
                     }]
                 });
                 q_popAssign();

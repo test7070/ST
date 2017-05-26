@@ -397,7 +397,7 @@
 						<td><span> </span><a id='lblDcount' class="lbl"> </a></td>
 						<td><input id="txtDcount"  type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblReason' class="lbl"> </a></td>
-						<td>	<select id="cmbReason" class="txt c1"> </select></td>
+						<td><select id="cmbReason" class="txt c1"> </select></td>
 					</tr>
 					<tr >
 						<td><span> </span><a id='lblIslisted' class="lbl"> </a></td>
@@ -407,19 +407,19 @@
 					</tr>
 					<tr >
 						<td><span> </span><a id='lblTypea' class="lbl"> </a></td>
-						<td>	<select id="cmbTypea" class="txt c1"> </select></td>
+						<td><select id="cmbTypea" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblCode' class="lbl"> </a></td>
-						<td>	<select id="cmbCode" class="txt c1"> </select></td>
+						<td><select id="cmbCode" class="txt c1"> </select></td>
 					</tr>
 					<tr >
 						<td><span> </span><a id='lblApplytype' class="lbl"> </a></td>
-						<td>	<select id="cmbApplytype" class="txt c1"> </select></td>
+						<td><select id="cmbApplytype" class="txt c1"> </select></td>
 						<td><span> </span><a id='lblApplyname' class="lbl"> </a></td>
 						<td><input id="txtApplyname"  type="text" class="txt c1" /></td>
 					</tr>
 					<tr >
 						<td><span> </span><a id='lblApplyid' class="lbl"> </a></td>
-						<td>	<select id="txtApplyid" class="txt c1"> </select></td>
+						<td><input id="txtApplyid"  type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblApplytel' class="lbl"> </a></td>
 						<td>
 							<input id="txtApplyarea"  type="text" class="txt c1" style="width: 20%;" />
@@ -431,9 +431,9 @@
 					</tr>
 					<tr >
 						<td><span> </span><a id='lblApplyno' class="lbl"> </a></td>
-						<td>	<select id="txtApplyno" class="txt c1"> </select></td>
+						<td><input id="txtApplyno"  type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblTax2type' class="lbl"> </a></td>
-						<td>	<select id="cmbTax2type" class="txt c1"> </select></td>
+						<td><select id="cmbTax2type" class="txt c1"> </select></td>
 					</tr>
 				</table>
 			</div>

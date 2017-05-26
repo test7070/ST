@@ -26,6 +26,16 @@
                 	$.datepicker.r_len=4;
 					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
                 }
+                
+                $('#q_report').click(function(e) {
+					now_report=$('#q_report').data().info.reportData[$('#q_report').data().info.radioIndex].report;
+					if(now_report=='z_salpresentst4'){
+						$('#reportnote').text('※此報表為提供勞工局檢查正常出勤報表，非公司內部出勤正常報表。');
+						$('#reportnote').show();
+					}else{
+						$('#reportnote').hide();
+					}
+				});
 				                       
             });
             function q_gfPost() {
@@ -70,18 +80,28 @@
                     	type : '0',
                     	name : 'r_len',
                     	value : r_len
+                    },{
+                        type : '1',
+                        name : 'xmon'
+                    },{
+                        type : '5',
+                        name : 'xorder',
+                        value : ('sssno@員工編號,partno@部門-員工,datea@日期').split(',')
                     }]
                 });
                 q_popAssign();
                 q_getFormat();
                 q_langShow();
                 
-                
                 $('#txtDate1').mask(r_picd);
                 $('#txtDate2').mask(r_picd);
+                $('#txtXmon1').mask(r_picm);
+                $('#txtXmon2').mask(r_picm);
                 
                 $('#txtDate1').val(q_date().substr(0,r_lenm)+'/01');
                 $('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',45).substr(0,r_lenm)+'/01',-1));
+                $('#txtXmon1').val(q_date().substr(0,r_lenm));
+                $('#txtXmon2').val(q_date().substr(0,r_lenm));
                 
                 $('#txtXworkhours').css('width','110px');
                 $('#Xworkhours').css('width','197px');
@@ -93,7 +113,6 @@
                 $('#Xtype').css('width','270px');
                 $('.q_report .option div .c4 ').css('font-size','medium');
                 $('.q_report .option div .c4 ').css('width','180px');
-                
                 
                 $('#txtXresthours1').mask('99:99');
                 $('#txtXresthours2').mask('99:99');
@@ -199,6 +218,7 @@
 			<div id="container">
 				<div id="q_report"> </div>
 			</div>
+			<div id="reportnote" style="color: red;display: none;width: 1000px;"> </div>
 			<div class="prt" style="margin-left: -40px;">
 				<!--#include file="../inc/print_ctrl.inc"-->
 			</div>
