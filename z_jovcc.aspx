@@ -67,7 +67,13 @@
 	                    dbf : 'cust2',
 	                    index : 'noa,comp',
 	                    src : ''
-	                },{/*[16]*/
+	                },{
+	                    type : '2',//[16][17]
+	                    name : 'xsale',
+	                    dbf : 'sss',
+	                    index : 'noa,namea',
+	                    src : 'sss_b.aspx'
+	                },{/*[18]*/
                         type : '0',
                         name : 'http',
                         value:location.host
