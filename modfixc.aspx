@@ -842,6 +842,51 @@
 					$("[name='sel']").prop('checked',false)
 					$('#btnInput').removeAttr('disabled');
 				});
+				
+				//拖動table欄位大小----------------------------------------
+				var table = document.getElementById('tbbs');
+				var header = table.rows[0];
+				var tableX = header.clientWidth;
+				var length = header.cells.length;
+				var self;
+				for (var i = 0; i < length; i++) {
+					header.cells[i].onmousedown = function () {
+						self = this;
+						if (event.offsetX > self.offsetWidth - 10) {
+							self.mouseDown = true;
+							self.oldX = event.x;
+							self.oldWidth = self.offsetWidth;
+						}
+					};
+					header.cells[i].onmousemove = function () {
+						if (event.offsetX > this.offsetWidth - 10) {
+							this.style.cursor = 'e-resize';
+						}else{
+							this.style.cursor = 'default';
+						}
+						if (self == undefined) {
+							self = this;
+						}
+						if (self.mouseDown != null && self.mouseDown == true) {
+							self.style.cursor = 'default';
+							if (self.oldWidth + (event.x - self.oldX) > 0) {
+								self.width = self.oldWidth + (event.x - self.oldX);
+							}
+							self.style.width = self.width+ 'px';
+							table.style.width = tableX + (event.x - self.oldX) + 'px';
+							self.style.cursor = 'e-resize';
+						}
+					};
+					table.onmouseup = function () {
+						if (self == undefined) {
+							self = this;
+						}
+						self.mouseDown = false;
+						self.style.cursor = 'default';
+						tableX = header.clientWidth;
+					};
+				}
+				//---------------------------------------
 			}			
 			
 			function btnIns() {
@@ -1231,8 +1276,12 @@
 			.tbbs a {
 				font-size: medium;
 			}
-			input[type="text"], input[type="button"], select {
+			input[type="text"], input[type="button"]{
 				font-size: medium;
+			}
+			select {
+				font-size: medium;
+				height: 24px;
 			}
 			.num {
 				text-align: right;
@@ -1339,7 +1388,8 @@
 					<td align="center" style="width:60px;"><a id='lblErepair_s'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblLoss_s'> </a></td>
 					<td align="center" style="width:60px;"><a id='lblEnbottom_s'> </a></td>
-					<td align="center" style="width:185px;"><a id='lblWay_s'> </a></td>
+					<td align="center" style="width:45px;"> </td>
+					<td align="center" style="width:140px;"><a id='lblWay_s'> </a></td>
 					<td align="center" style="width:61px;"><a id='lblMech_s'> </a></td>
 					<td align="center" style="width:61px;"><a id='lblWorktype_s'> </a></td>
 					<td align="center" style="width:155px;"><a id='lblBdate_s'> </a></td>
@@ -1347,7 +1397,7 @@
 					<td align="center" style="width:87px;"><a id='lblWorker_s'> </a></td>
 					<td align="center" style="width:335px;"><a id='lblMemo_s'> </a></td>
 				</tr>
-				<tr  style='background:#cad3ff;' class="ishide.*">
+				<tr style='height:100px; ;background:#cad3ff;' class="ishide.*">
 					<td align="center">
 						<input id="btnMinus.*" type="button" style="font-size:medium; font-weight:bold; width:90%;" value="-"/>
 						<input id="txtNoq.*" type="text" style="display: none;" />
@@ -1369,74 +1419,84 @@
 					<td><input id="txtErepair.*" type="text" class="num c1" style="width:93%;"/></td>
 					<td><input id="txtLoss.*" type="text" class="num c1" style="width:93%;"/></td>
 					<td><input id="txtEnbottom.*" type="text" class="num c1" style="width:93%;"/></td>
-					<td colspan="6">
-						<span style="width:45px; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt ">第1次</span>
-						<select id="cmbWay.*" class="txt c1" style="float:left;width:140px;"> </select>
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
-						<select id="cmbMech.*" class="txt c1" style="width:62.5px;"> </select>
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
-						<select id="cmbWorktype.*" class="txt c1" style="width:62.5px;"> </select>
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
-						<input id="txtBdate.*" type="text" class="txt c1 a" style="width:82px;" />
+					<td>
+						<span style="width:99%; color:#003377;height:20px; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt ">第1次</span>
+						<br>		
+						<span style="width:99%; color:#003377;height:20px; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt "> </span>
+						<br>
+						<span style="width:99%; color:#003377;height:20px; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt "> </span>
+						<br id="brseq.*" class="way2">
+						<span id="spanseq.*" style="width:99%; color:#003377;height:20px; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt;" class="way2">第2次</span>
+					</td>
+					<td>
+						<select id="cmbWay.*" class="txt c1" style="float:left;width:99%;"> </select>
+						<br>		
+						<select id="cmbWay3.*" class="txt c1" style="float:left;width:99%;"> </select>
+						<br>
+						<select id="cmbWay4.*" class="txt c1" style="float:left;width:99%;"> </select>
+						<br id="brway.*" class="way2">
+						<select id="cmbWay2.*" class="txt c1 way2" style="width:99%;"> </select>
+					</td>
+					<td>
+						<select id="cmbMech.*" class="txt c1" style="width:99%;"> </select>
+						<br>
+						<select id="cmbMech3.*" class="txt c1" style="width:99%;"> </select>
+						<br>
+						<select id="cmbMech4.*" class="txt c1" style="width:99%;"> </select>
+						<br id="brmech.*" class="way2">
+						<select id="cmbMech2.*" class="txt c1 way2" style="width:99%;"> </select>
+					</td>
+					<td>
+						<select id="cmbWorktype.*" class="txt c1" style="width:99%;"> </select>
+						<br>
+						<select id="cmbWorktype3.*" class="txt c1" style="width:99%;"> </select>
+						<br>
+						<select id="cmbWorktype4.*" class="txt c1" style="width:99%;"> </select>
+						<br id="brworktype.*" class="way2">
+						<select id="cmbWorktype2.*" class="txt c1 way2" style="width:99%;"> </select>
+					</td>
+					<td>
+						<input id="txtBdate.*" type="text" class="txt c1 a" style="width:53%;" />
 						<span style="width:13px; float:left; text-align:center">-</span>
-						<input id="txtBtime.*" type="text" class="txt c1 a" style="width:53px;" />
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>				
-						<input id="txtEdate.*" type="text" class="txt c1 a" style="width:82px;"/>
-						<span style="width:13px; float:left;text-align:center">-</span>
-						<input id="txtEtime.*" type="text" class="txt c1 a" style="width:53px;" />
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
-						<input id="txtWorker.*" type="text" class="txt c1" style="width:82px;"/>
-						
-						<span style="width:45px; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt "> </span>
-						<select id="cmbWay3.*" class="txt c1" style="float:left;width:140px;"> </select>
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
-						<select id="cmbMech3.*" class="txt c1" style="width:62.5px;"> </select>
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
-						<select id="cmbWorktype3.*" class="txt c1" style="width:62.5px;"> </select>
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
-						<input id="txtBdate3.*" type="text" class="txt c1 a" style="width:82px;" />
+						<input id="txtBtime.*" type="text" class="txt c1 a" style="width:30%;" />
+						<br>
+						<input id="txtBdate3.*" type="text" class="txt c1 a" style="width:53%;" />
 						<span style="width:13px; float:left; text-align:center">-</span>
-						<input id="txtBtime3.*" type="text" class="txt c1 a" style="width:53px;" />
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>				
-						<input id="txtEdate3.*" type="text" class="txt c1 a" style="width:82px;"/>
-						<span style="width:13px; float:left;text-align:center">-</span>
-						<input id="txtEtime3.*" type="text" class="txt c1 a" style="width:53px;" />
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
-						<input id="txtWorker3.*" type="text" class="txt c1" style="width:82px;"/>
-						
-						<span style="width:45px; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt "> </span>
-						<select id="cmbWay4.*" class="txt c1" style="float:left;width:140px;"> </select>
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
-						<select id="cmbMech4.*" class="txt c1" style="width:62.5px;"> </select>
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
-						<select id="cmbWorktype4.*" class="txt c1" style="width:62.5px;"> </select>
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>	
-						<input id="txtBdate4.*" type="text" class="txt c1 a" style="width:82px;" />
+						<input id="txtBtime3.*" type="text" class="txt c1 a" style="width:30%;" />
+						<br>
+						<input id="txtBdate4.*" type="text" class="txt c1 a" style="width:53%;" />
 						<span style="width:13px; float:left; text-align:center">-</span>
-						<input id="txtBtime4.*" type="text" class="txt c1 a" style="width:53px;" />
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>				
-						<input id="txtEdate4.*" type="text" class="txt c1 a" style="width:82px;"/>
-						<span style="width:13px; float:left;text-align:center">-</span>
-						<input id="txtEtime4.*" type="text" class="txt c1 a" style="width:53px;" />
-						<span style="width:3px; float:left; text-align:center">&nbsp;</span>						
-						<input id="txtWorker4.*" type="text" class="txt c1" style="width:82px;"/>
-						
-						<span id="spanseq.*" style="width:45px; color:#003377; margin-top:5px; float:left; text-align:center; font-weight:bold; font-size:9pt;" class="way2">第2次</span>
-						<select id="cmbWay2.*" class="txt c1 way2" style="width:140px;"> </select>
-						<span id="spanspec3.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>	
-						<select id="cmbMech2.*" class="txt c1 way2" style="width:62.5px;"> </select>
-						<span id="spanspec4.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>	
-						<select id="cmbWorktype2.*" class="txt c1 way2" style="width:62.5px;"> </select>
-						<span id="spanspec5.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>	
-						<input id="txtBdate2.*" type="text" class="txt c1 a way2" style="width:82px;" />
+						<input id="txtBtime4.*" type="text" class="txt c1 a" style="width:30%;" />
+						<br id="brbdate.*" class="way2">
+						<input id="txtBdate2.*" type="text" class="txt c1 a way2" style="width:53%;" />
 						<span id="spandash1.*" style="width:13px; float:left; text-align:center" class="way2">-</span>
-						<input id="txtBtime2.*" type="text" class="txt c1 a way2" style="width:53px;" />
-						<span id="spanspec1.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>					
-						<input id="txtEdate2.*" type="text" class="txt c1 a way2" style="width:82px;"/>
+						<input id="txtBtime2.*" type="text" class="txt c1 a way2" style="width:30%;" />
+					</td>
+					<td>
+						<input id="txtEdate.*" type="text" class="txt c1 a" style="width:53%;"/>
+						<span style="width:13px; float:left;text-align:center">-</span>
+						<input id="txtEtime.*" type="text" class="txt c1 a" style="width:30%;" />
+						<br>
+						<input id="txtEdate3.*" type="text" class="txt c1 a" style="width:53%;"/>
+						<span style="width:13px; float:left;text-align:center">-</span>
+						<input id="txtEtime3.*" type="text" class="txt c1 a" style="width:30%;" />
+						<br>
+						<input id="txtEdate4.*" type="text" class="txt c1 a" style="width:53%;"/>
+						<span style="width:13px; float:left;text-align:center">-</span>
+						<input id="txtEtime4.*" type="text" class="txt c1 a" style="width:30%;" />
+						<br id="bredate.*" class="way2">
+						<input id="txtEdate2.*" type="text" class="txt c1 a way2" style="width:53%;"/>
 						<span id="spandash2.*" style="width:13px; float:left;text-align:center" class="way2">-</span>
-						<input id="txtEtime2.*" type="text" class="txt c1 a way2" style="width:53px;" />
-						<span id="spanspec2.*" style="width:3px; float:left; text-align:center" class="way2">&nbsp;</span>						
-						<input id="txtWorker2.*" type="text" class="txt c1 way2" style="width:82px;"/>			
+						<input id="txtEtime2.*" type="text" class="txt c1 a way2" style="width:30%;" />
+					</td>
+					<td>
+						<input id="txtWorker.*" type="text" class="txt c1" style="width:99%;"/>
+						<br>
+						<input id="txtWorker3.*" type="text" class="txt c1" style="width:99%;"/>
+						<br>
+						<input id="txtWorker4.*" type="text" class="txt c1" style="width:99%;"/>
+						<br id="brworker.*" class="way2">
+						<input id="txtWorker2.*" type="text" class="txt c1 way2" style="width:99%;"/>
 					</td>
 					<td><input id="txtMemo.*" type="text" class="txt c1" style="width:99%;"/></td>	
 				</tr>
