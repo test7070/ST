@@ -79,8 +79,10 @@ begin
 	begin
 		if(@vccno='') --產生vcc
 		begin
-			set @vccno=@t_vcckey+replace(@t_date,'/','')
-			+right('000'+cast(cast(right(isnull((select top 1 noa from view_vcc where noa like @t_vcckey+replace(@t_date,'/','')+'%' order by noa desc),'00000'),3) as int)+1 as nvarchar(10)),3)
+			--106/05/31 vccno跟getno一樣
+			set @vccno=@t_noa
+			--set @vccno=@t_vcckey+replace(@t_date,'/','')
+			--+right('000'+cast(cast(right(isnull((select top 1 noa from view_vcc where noa like @t_vcckey+replace(@t_date,'/','')+'%' order by noa desc),'00000'),3) as int)+1 as nvarchar(10)),3)
 			
 			EXEC("
 			insert vcc"+@accy+" (noa,typea,stype,datea,cno,acomp,mon,paydate,custno,comp,nick,paytype
@@ -97,10 +99,18 @@ begin
 			from view_get a left join cust b on a.custno=b.noa
 			where a.noa='"+@t_noa+"'")
 			
+			--EXEC("
+			--insert vccs"+@accy+"(noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
+			--select '"+@vccno+"',right('000'+cast(ROW_NUMBER() over (order by a.noa,b.noq) as nvarchar(10)),3)
+			--,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
+			--,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'','"+@t_date+"',a.custno,'1'
+			--from view_get a left join view_gets b on a.noa=b.noa 
+			--where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0 ")
+			--106/05/31品項換成加工費
 			EXEC("
 			insert vccs"+@accy+"(noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
 			select '"+@vccno+"',right('000'+cast(ROW_NUMBER() over (order by a.noa,b.noq) as nvarchar(10)),3)
-			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
+			,'加工費','','','',0,'',b.mount,b.weight,b.mweight
 			,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'','"+@t_date+"',a.custno,'1'
 			from view_get a left join view_gets b on a.noa=b.noa 
 			where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0 ")
@@ -121,9 +131,17 @@ begin
 			
 			EXEC("delete vccs"+@accy+" where noa='"+@vccno+"' and ordeno='"+@t_noa+"'")
 			
+			--EXEC("insert vccs"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
+			--select '"+@vccno+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_vccs where noa='"+@vccno+"'),'000') as int))as nvarchar(10)),3)
+			--,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
+			--,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'',c.datea,c.custno,c.typea
+			--from view_get a left join view_gets b on a.noa=b.noa 
+			--outer apply (select * from view_vcc where noa='"+@vccno+"')c
+			--where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0")
+			--106/05/31品項換成加工費
 			EXEC("insert vccs"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
 			select '"+@vccno+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_vccs where noa='"+@vccno+"'),'000') as int))as nvarchar(10)),3)
-			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
+			,'加工費','','','',0,'',b.mount,b.weight,b.mweight
 			,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'',c.datea,c.custno,c.typea
 			from view_get a left join view_gets b on a.noa=b.noa 
 			outer apply (select * from view_vcc where noa='"+@vccno+"')c

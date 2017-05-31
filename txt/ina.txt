@@ -38,11 +38,19 @@ begin
 			,'',0,0,0,'','','',0,0,0,0,0,'由互換進貨"+@t_noa+"轉來','',a.worker,a.worker2,'"+@t_noa+"'
 			from view_ina a left join tgg b on a.tggno=b.noa
 			where a.noa='"+@t_noa+"'")
-					
+			
+			--EXEC("
+			--insert rc2s"+@accy+"(noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,tggno,typea)
+			--select '"+@rc2no+"',right('000'+cast(ROW_NUMBER() over (order by a.noa,b.noq) as nvarchar(10)),3)
+			--,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
+			--,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'','"+@t_date+"',a.tggno,'1'
+			--from view_ina a left join view_inas b on a.noa=b.noa 
+			--where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0 ")
+			--106/05/31品項換成加工費
 			EXEC("
 			insert rc2s"+@accy+"(noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,tggno,typea)
 			select '"+@rc2no+"',right('000'+cast(ROW_NUMBER() over (order by a.noa,b.noq) as nvarchar(10)),3)
-			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
+			,'加工費','','','',0,'',b.mount,b.weight,b.mweight
 			,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'','"+@t_date+"',a.tggno,'1'
 			from view_ina a left join view_inas b on a.noa=b.noa 
 			where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0 ")
@@ -63,6 +71,14 @@ begin
 			
 			EXEC("delete rc2s"+@accy+" where noa='"+@rc2no+"' and ordeno='"+@t_noa+"'")
 			
+			--EXEC("insert rc2s"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
+			--select '"+@rc2no+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_rc2s where noa='"+@rc2no+"'),'000') as int))as nvarchar(10)),3)
+			--,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
+			--,round(b.weight*b.mweight,0),a.storeno,a.store,b.memo,a.noa,b.noq,'',c.datea,c.tggno,c.typea
+			--from view_ina a left join view_inas b on a.noa=b.noa 
+			--outer apply (select * from view_rc2 where noa='"+@rc2no+"')c
+			--where a.noa='"+@t_noa+"' and isnull(b.mweight,0)!=0")
+			--106/05/31品項換成加工費
 			EXEC("insert rc2s"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
 			select '"+@rc2no+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq)+cast(isnull((select MAX(noq) from view_rc2s where noa='"+@rc2no+"'),'000') as int))as nvarchar(10)),3)
 			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.mount,b.weight,b.mweight
