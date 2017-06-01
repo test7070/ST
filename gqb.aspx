@@ -67,6 +67,15 @@
                 }).blur(function() {
                     $(this).attr('size', '1');
                 });
+                
+                $("#cmbTypea").change(function() {
+					if($("#cmbTypea").val()=='1' || $("#cmbTypea").val()=='3'){
+					      $('#lblInvono').text('手動收入會科');
+					}else{
+					      $('#lblInvono').text('手動費用會科');
+					}
+				});
+				
                 $('#txtGqbno').change(function() {
                 	//判斷支票編號是否重複
                 	if($.trim($(this).val()).length>0){
@@ -86,7 +95,6 @@
                     $('#txtTdate').val(q_date());
                 });
 
-                
                 if(q_getPara('sys.project').toUpperCase()=='VU'){                       	
                 	$('#lblTacc1').removeClass('lbl').addClass('lbl btn');
                 	
@@ -473,6 +481,11 @@
 
             function refresh(recno) {
                 _refresh(recno);
+                if($("#cmbTypea").val()=='1' || $("#cmbTypea").val()=='3'){
+                	$('#lblInvono').text('手動收入會科');
+                }else{
+                	$('#lblInvono').text('手動費用會科');
+                }
             }
 			
 			function refreshBbm() {
@@ -815,6 +828,10 @@
 						<td colspan="2"><input id="txtAcc1"  type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblBkaccno' class="lbl btn"> </a></td>
 						<td><input id="txtBkaccno"  type="text" class="txt c1" /></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblInvono' class="lbl"> </a></td>
+						<td colspan="2"><input id="txtInvono"  type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
