@@ -108,6 +108,23 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'getStoreno':
+						var as = _q_appendData("store", "", true);
+						if(as[0]!=undefined){
+							$('#txtStoreno').val(as[0].noa);
+							$('#txtStore').val(as[0].store);
+						}
+						t_where = "noa='"+t_storeinno+"'";
+						q_gt('store', 'where=^^'+t_where+'^^', 0, 0, 0, 'getStoreinno');
+						break;
+					case 'getStoreinno':
+						var as = _q_appendData("store", "", true);
+						if(as[0]!=undefined){
+							$('#txtStoreinno').val(as[0].noa);
+							$('#txtStorein').val(as[0].store);
+						}
+						Save();
+						break;
 					case 'spec':
 						var as = _q_appendData("spec", "", true);
 						t_spec='';
@@ -164,6 +181,28 @@
 			}
 
 			function btnOk() {
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					var t_storeno = '';
+					var t_storeinno = '';
+					for(var i=0;i<q_bbsCount;i++){
+						if($('#txtStoreno_'+i).val().length>0 && $('#txtStoreinno_'+i).val().length>0){
+							t_storeno = $('#txtStoreno_'+i).val();
+							t_storeinno = $('#txtStoreinno_'+i).val();
+							break;
+						}
+					}
+					//回寫倉庫到表頭
+					if(t_storeno.length>0 && t_storeinno.length>0){
+						t_where = "noa='"+t_storeno+"'";
+						q_gt('store', 'where=^^'+t_where+'^^', 0, 0, 0, 'getStoreno');
+					}else{
+						Save();
+					}
+				}else{
+					Save();
+				}
+			}
+			function Save(){
 				Lock(1, {
 					opacity : 0
 				});
@@ -198,7 +237,6 @@
 				else
 					wrServer(t_noa);
 			}
-
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)// 1-3
 					return;
