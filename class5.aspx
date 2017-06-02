@@ -24,7 +24,7 @@
             var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 15;
+            brwCount2 = 18;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
@@ -53,9 +53,9 @@
             		['txtShifthours', 3, 1, 1],['txtOstand', 6, 1, 1]
             		,['txtDoverhours', 3, 1, 1],['txtOverhours', 4, 1, 1]
             		,['txtDhoverhours', 3, 1, 1],['txtHoverhours', 4, 1, 1]
-            		,['txtLate', 3, 0, 1],['txtLatenum', 2, 0, 1],['txtLatedfull', 3, 2, 1]
+            		,['txtLate', 3, 0, 1],['txtLatenum', 2, 0, 1],['txtLatemin', 2, 0, 1],['txtLatedfull', 3, 2, 1]
             		,['txtLate2', 3, 0, 1],['txtLate2dshour', 3, 2, 1],['txtLate2num', 2, 0, 1],['txtLate2dfull', 3, 2, 1]
-            		,['txtLateallnum', 2, 0, 1],['txtLeave', 3, 0, 1]
+            		,['txtLateallnum', 2, 0, 1],['txtLateallmin', 2, 0, 1],['txtLeave', 3, 0, 1]
             		,['txtVacanodhours', 2, 0, 1],['txtVacanonum', 2, 0, 1],['txtVacahalfdfull', 3, 2, 1]
             		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 0, 1],['txtMhours2', 2, 0, 1]
             	];
@@ -63,9 +63,9 @@
             		['txtShifthours', 3, 1, 1],['txtOstand', 6, 1, 1]
             		,['txtDoverhours', 3, 1, 1],['txtOverhours', 4, 1, 1]
             		,['txtDhoverhours', 3, 1, 1],['txtHoverhours', 4, 1, 1]
-            		,['txtLate', 3, 0, 1],['txtLatenum', 2, 0, 1],['txtLatedfull', 3, 2, 1]
+            		,['txtLate', 3, 0, 1],['txtLatenum', 2, 0, 1],['txtLatemin', 2, 0, 1],['txtLatedfull', 3, 2, 1]
             		,['txtLate2', 3, 0, 1],['txtLate2dshour', 3, 2, 1],['txtLate2num', 2, 0, 1],['txtLate2dfull', 3, 2, 1]
-            		,['txtLateallnum', 2, 0, 1],['txtLeave', 3, 0, 1]
+            		,['txtLateallnum', 2, 0, 1],['txtLateallmin', 2, 0, 1],['txtLeave', 3, 0, 1]
             		,['txtVacanodhours', 2, 0, 1],['txtVacanonum', 2, 0, 1],['txtVacahalfdfull', 3, 2, 1]
             		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 0, 1],['txtMhours2', 2, 0, 1]
             	];
@@ -538,7 +538,7 @@
 	<body>
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' style="overflow:hidden;width: 1260px;">
-			<div class="dview" id="dview" style="float: left;  width:350px;"  >
+			<div class="dview" id="dview" style="float: left; width:330px;">
 				<table class="tview" id="tview"   border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;">
 					<tr>
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
@@ -554,14 +554,14 @@
 					</tr>
 				</table>
 			</div>
-			<div class='dbbm' style="width: 910px;float: left;">
+			<div class='dbbm' style="width: 930px;float: left;">
 				<table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='5'>
 					<tr style="height: 1px;">
 						<td style="width: 190px;"> </td>
 						<td style="width: 60px;"> </td>
 						<td style="width: 180px;"> </td>
 						<td style="width: 60px;"> </td>
-						<td style="width: 160px;"> </td>
+						<td style="width: 180px;"> </td>
 						<td style="width: 60px;"> </td>
 						<td style="width: 130px;"> </td>
 						<td style="width: 60px;"> </td>
@@ -681,10 +681,10 @@
 						<td><input id="txtLate" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLatenum' class="lbl">上下月次數各超過</a></td>
 						<td><input id="txtLatenum" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblLatemin' class="lbl">上下月分鐘各超過</a></td>
+						<td><input id="txtLatemin" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblLatedfull' class="lbl">扣除%全勤獎金</a></td>
 						<td><input id="txtLatedfull" type="text" class="txt num c1" /></td>
-						<td> </td>
-						<td> </td>
 						<td> </td>
 					</tr>
 					<tr style="background-color: mediumturquoise;">
@@ -699,12 +699,12 @@
 						<td> </td>
 					</tr>
 					<tr style="background-color: mediumturquoise;">
-						<td><span> </span><a id='lblLateallnum' class="lbl">總次數扣全數全勤</a></td>
+						<td><span> </span><a id='lblLateallnum' class="lbl">遲到總次數扣全數全勤</a></td>
 						<td><input id="txtLateallnum" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLeave' class="lbl">超過分鐘數視事假</a></td>
+						<td><span> </span><a id='lblLateallmin' class="lbl">遲到總分鐘扣全數全勤</a></td>
+						<td><input id="txtLateallmin" type="text" class="txt num c1" /></td>
+						<td><span> </span><a id='lblLeave' class="lbl">遲到超過分鐘數視事假</a></td>
 						<td><input id="txtLeave" type="text" class="txt num c1" style="width: 60px;" /></td>
-						<td> </td>
-						<td> </td>
 						<td> </td>
 						<td> </td>
 						<td> </td>
@@ -740,7 +740,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 2820px;">
+		<div class='dbbs' style="width: 3000px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td style="width:20px;"><input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
@@ -766,12 +766,14 @@
 					<td style="width:90px;"><a id='lblHoverhours_s'>假日<br>最多時數/月</a></td>
 					<td style="width:80px;"><a id='lblLate_s'>遲到Min.<br>不扣薪</a></td>
 					<td style="width:85px;"><a id='lblLatenum_s'>上下月遲到<br>各超過次數</a></td>
+					<td style="width:85px;"><a id='lblLatemin_s'>上下月遲到<br>各超過分鐘</a></td>
 					<td style="width:80px;"><a id='lblLatedfull_s'>扣除全勤<br>獎金%</a></td>
 					<td style="width:80px;"><a id='lblLate2_s'>遲到Min.<br>扣薪</a></td>
 					<td style="width:80px;"><a id='lblLate2dshour_s'>扣%時薪</a></td>
 					<td style="width:85px;"><a id='lblLate2num_s'>上下月遲到<br>各超過次數</a></td>
 					<td style="width:80px;"><a id='lblLate2dfull_s'>扣除全勤<br>獎金%</a></td>
 					<td style="width:85px;"><a id='lblLateallnum_s'>總次數扣<br>全額全勤</a></td>
+					<td style="width:85px;"><a id='lblLateallmin_s'>總分鐘扣<br>全額全勤</a></td>
 					<td style="width:100px;"><a id='lblLeave_s'>超過分鐘數<br>視事假</a></td>
 					<td style="width:90px;"><a id='lblVacanodhours_s'>當日請假<br>不扣全勤/H</a></td>
 					<td style="width:80px;"><a id='lblVacanonum_s'>超過次數<br>扣除全勤</a></td>
@@ -816,12 +818,14 @@
 					<td><input id="txtHoverhours.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLate.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLatenum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatemin.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLatedfull.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLate2.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLate2dshour.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLate2num.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLate2dfull.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLateallnum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLateallmin.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLeave.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtVacanodhours.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtVacanonum.*" type="text" class="txt num c1"/></td>
