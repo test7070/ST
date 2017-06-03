@@ -767,19 +767,19 @@ when isnull(b.laten1,0)>isnull(d.latenum,0) or isnull(c.laten2,0)>isnull(d.laten
 when isnull(b.late2n1,0)>isnull(d.late2num,0) or isnull(c.late2n2,0)>isnull(d.late2num,0) then round(isnull(a.bo_full,0)*isnull(d.late2dfull,0)/100,0)
 else a.bo_full end
 from #tmp a 
-outer apply (select sum(case when latemin<=late then 1 else 0 end) laten1 --上月不扣薪次數
-,sum(case when latemin between late+1 and late2 then 1 else 0 end) late2n1  --上月扣薪次數
-,sum(case when latemin > late2 then 1 else 0 end) leaven1  --上月遲到視事假次數
-,SUM(case when vacaspecial=0 and vacahours>=8 then 1 else 0 end)vaca8h --上月請假8H
-,SUM(case when vacaspecial=0 and vacahours<=vacanodhours then 1 else 0 end)vaca2h --上月請假不扣全勤
-,SUM(case when vacaspecial=0 and vacahours<=4 then 1 else 0 end)vaca4h --上月請假半天
+outer apply (select sum(case when latemin>0 and latemin<=late then 1 else 0 end) laten1 --上月不扣薪次數
+,sum(case when latemin>0 and latemin between late+1 and late2 then 1 else 0 end) late2n1  --上月扣薪次數
+,sum(case when latemin>0 and latemin > late2 then 1 else 0 end) leaven1  --上月遲到視事假次數
+,SUM(case when vacaspecial=0 and vacahours>0 and vacahours>=8 then 1 else 0 end)vaca8h --上月請假8H
+,SUM(case when vacaspecial=0 and vacahours>0 and vacahours<=vacanodhours then 1 else 0 end)vaca2h --上月請假不扣全勤
+,SUM(case when vacaspecial=0 and vacahours>0 and vacahours<=4 then 1 else 0 end)vaca4h --上月請假半天
 from #tmpa where sssno=a.sssno and noa between @date3 and @date4)b
-outer apply (select sum(case when latemin<=late then 1 else 0 end) laten2 --下月不扣薪次數
-,sum(case when latemin between late+1 and late2 then 1 else 0 end) late2n2  --下月扣薪次數
-,sum(case when latemin > late2 then 1 else 0 end) leaven2  --下月遲到視事假次數
-,SUM(case when vacaspecial=0 and vacahours>=8 then 1 else 0 end)vaca8h --下月請假8H
-,SUM(case when vacaspecial=0 and vacahours<=vacanodhours then 1 else 0 end)vaca2h --下月請假不扣全勤
-,SUM(case when vacaspecial=0 and vacahours<=4 then 1 else 0 end)vaca4h --下月請假半天
+outer apply (select sum(case when latemin>0 and latemin<=late then 1 else 0 end) laten2 --下月不扣薪次數
+,sum(case when latemin>0 and latemin between late+1 and late2 then 1 else 0 end) late2n2  --下月扣薪次數
+,sum(case when latemin>0 and latemin > late2 then 1 else 0 end) leaven2  --下月遲到視事假次數
+,SUM(case when vacaspecial=0 and vacahours>0 and vacahours>=8 then 1 else 0 end)vaca8h --下月請假8H
+,SUM(case when vacaspecial=0 and vacahours>0 and vacahours<=vacanodhours then 1 else 0 end)vaca2h --下月請假不扣全勤
+,SUM(case when vacaspecial=0 and vacahours>0 and vacahours<=4 then 1 else 0 end)vaca4h --下月請假半天
 from #tmpa where sssno=a.sssno and noa between @date5 and @date6)c
 outer apply (select top 1 * from #tmpa where sssno=a.sssno and noa between @date3 and @date4 order by noa)d --取第一筆條件
 outer apply (select count(*)leavenum from salvacause where hname like'%曠工%' and sssno=a.sssno and left(bdate,len(@mon))=@mon)e
