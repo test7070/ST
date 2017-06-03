@@ -478,6 +478,24 @@
                         <td><span> </span><a id="lblChgproductno" class="lbl"> </a></td>
                         <td><input id="txtChgproductno" type="text" class="txt c1"/></td>
                     </tr>
+                    <tr style="display:none;">
+                        <td><span> </span><a id="lblOrgpartno" class="lbl"> </a></td>
+                        <td><input id="txtOrgpartno" type="text" class="txt c1"/></td>
+                        <td><span> </span><a id="lblChgpartno" class="lbl"> </a></td>
+                        <td><input id="txtChgpartno" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr style="display:none;">
+                        <td><span> </span><a id="lblOrgtggno" class="lbl"> </a></td>
+                        <td><input id="txtOrgtggno" type="text" class="txt c1"/></td>
+                        <td><span> </span><a id="lblChgtggno" class="lbl"> </a></td>
+                        <td><input id="txtChgtggno" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr style="display:none;">
+                        <td><span> </span><a id="lblOrgstationno" class="lbl"> </a></td>
+                        <td><input id="txtOrgstationno" type="text" class="txt c1"/></td>
+                        <td><span> </span><a id="lblChgstationno" class="lbl"> </a></td>
+                        <td><input id="txtChgstationno" type="text" class="txt c1"/></td>
+                    </tr>
                     <tr>
                         <td><span> </span><a id="lblWorker" class="lbl"> </a></td>
                         <td><input id="txtWorker" type="text" class="txt c1"/></td>
