@@ -54,7 +54,9 @@
 				bbmMask = [['txtDatea', r_picd]];
 				q_mask(bbmMask);
 				bbsNum = [['txtMount', 12, q_getPara('ucca.mountPrecision'), 1], ['txtWeight', 12, q_getPara('ucca.weightPrecision'), 1]
-								, ['txtEmount2', 12, q_getPara('ucca.mountPrecision'), 1], ['txtEweight2', 12, q_getPara('ucca.weightPrecision'), 1]];
+								, ['txtEmount', 12, q_getPara('ucca.mountPrecision'), 1], ['txtEweight',10, 0, 1]
+								, ['txtEmount2', 12, q_getPara('ucca.mountPrecision'), 1], ['txtEweight2', 12, q_getPara('ucca.weightPrecision'), 1]
+								,['txtImoney', 10, 0, 1],['txtEmoney2', 10, 0, 1],['txtMoney', 10, 0, 1]];
 				
 				var t_where = "where=^^ 1=1 ^^";
 				q_gt('acomp', '', 0, 0, 0, "",r_accy);
@@ -378,7 +380,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 1100px;
+				width: 1450px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -434,9 +436,14 @@
 					<td align="center" style="width:1%;">
 						<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
 					</td>
-					<td align="center" style="width:250px;"><a id='lblAcomp_s'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblProductno_s'> </a></td>
-					<td align="center" style="width:250px;"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:220px;"><a id='lblAcomp_s'> </a></td>
+					<td align="center" style="width:120px;"><a id='lblProductno_s'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
+					<td align="center" style="width:100px;"><a id='lblEmount_s'>期初數量</a></td>
+					<td align="center" style="width:100px;"><a id='lblEweight_s'>期初金額</a></td>
+					<td align="center" style="width:100px;"><a id='lblGmount_s'>領料數量</a></td>
+					<td align="center" style="width:100px;"><a id='lblImount_s'>入庫數量</a></td>
+					<td align="center" style="width:100px;"><a id='lblImoney_s'>入庫金額</a></td>
 					<td align="center" style="width:100px;"><a id='lblEmount2_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblEmoney2_s'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
@@ -447,11 +454,16 @@
 					<td><select id="cmbCno.*" class="txt c1" style="font-size: medium;"> </select></td>
 					<td>
 						<input id="btnProduct.*" type="button" value='.' style="float:left;width:1%;" />
-						<input id="txtProductno.*" type="text" style="float:left;width:80%;"/>
+						<input id="txtProductno.*" type="text" style="float:left;width:75%;"/>
 					</td>
 					<td>
 						<input class="txt c1" id="txtProduct.*" type="text" />
 					</td>
+					<td><input id="txtEmount.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEweight.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtGmount.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtImount.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtImoney.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtEmount2.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtEmoney2.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num c1"/></td>
