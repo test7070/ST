@@ -127,6 +127,7 @@ declare @old_noa nvarchar(MAX) = [1]
 declare @new_noa nvarchar(MAX) = [2]
 declare @tablea nvarchar(MAX)
 declare @column nvarchar(MAX)
+declare @mess nvarchar(MAX)='success'
 
 if(@old_noa!='' and @new_noa!='')
 begin
@@ -195,6 +196,7 @@ declare @old_noa nvarchar(MAX) = [1]
 declare @new_noa nvarchar(MAX) = [2]
 declare @tablea nvarchar(MAX)
 declare @column nvarchar(MAX)
+declare @mess nvarchar(MAX)='success'
 
 if(@old_noa!='' and @new_noa!='')
 begin
@@ -257,6 +259,7 @@ declare @old_noa nvarchar(MAX) = [1]
 declare @new_noa nvarchar(MAX) = [2]
 declare @tablea nvarchar(MAX)
 declare @column nvarchar(MAX)
+declare @mess nvarchar(MAX)='success'
 
 if(@old_noa!='' and @new_noa!='')
 begin
