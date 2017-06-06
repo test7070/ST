@@ -156,6 +156,24 @@ BEGIN
    drop table #tmp
 END
 
+IF OBJECT_ID('tempdb..#montmp')is not null
+BEGIN
+   drop table #montmp
+END
+
+create table #montmp(
+	noa nvarchar(20),
+)
+declare @tmpdate nvarchar(50)=@date3 --整月/上/下期
+
+while(@date6>=@tmpdate)
+begin
+	insert #montmp
+	select @tmpdate
+	
+	set @tmpdate=dbo.q_cdn(@tmpdate,1)
+end
+
 create table #tmpa(
 	noa nvarchar(20),
 	noq nvarchar(20),
@@ -220,6 +238,7 @@ create table #tmpa(
 	earlymin float, --當天早退分鐘數
 	vacahours float, --當天請假時數
 	vacaspecial bit,--特休假
+	hr_leave float,--當天曠職
 	-----------------------
 	mealsnum float,--伙食
 )
@@ -229,7 +248,7 @@ insert #tmpa(noa,noq,sssno,namea,clockin,clockout,w133,w166,w100,w200,w266
 ,meals,mbtime1,mhours1,mbtime2,mhours2
 ,overtime,ostand,doverhours,overhours,dhoverhours,hoverhours
 ,late,latenum,latedfull,late2,late2dshour,late2num,late2dfull,lateallnum,leave
-,vacanodhours,vacanonum,vacahalfdfull,addhours,workhours,latemin,earlymin,vacahours,vacaspecial,mealsnum)
+,vacanodhours,vacanonum,vacahalfdfull,addhours,workhours,latemin,earlymin,vacahours,vacaspecial,hr_leave,mealsnum)
 select a.noa,a.noq,a.sssno,a.namea,a.clockin,a.clockout,a.w133,a.w166,a.w100,isnull(a.w200,0),isnull(a.w266,0)
 ,case when isnull(adj.class5,'')!='' then adj.class5 else s.class5 end
 ,case when isnull(c1.noa,'')!='' then c1.noa else c2.noa end
@@ -266,9 +285,13 @@ select a.noa,a.noq,a.sssno,a.namea,a.clockin,a.clockout,a.w133,a.w166,a.w100,isn
 ,case when isnull(c1.noa,'')!='' then c1.vacanodhours else c2.vacanodhours end
 ,case when isnull(c1.noa,'')!='' then c1.vacanonum else c2.vacanonum end
 ,case when isnull(c1.noa,'')!='' then c1.vacahalfdfull else c2.vacahalfdfull end
-,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0
 from (select noa,min(noq)noq,sssno,MAX(namea)namea,SUM(w133)w133,SUM(w166)w166,SUM(w100)w100,SUM(w200)w200,SUM(w266)w266
-,MIN(clockin)clockin,MAX(clockout)clockout from salpresents group by noa,sssno) a 
+,MIN(clockin)clockin,MAX(clockout)clockout from salpresents group by noa,sssno
+union all
+select a.noa,'' noq,s.noa,s.namea,0 w133,0 w166,0 w100,0 w200,0 w266,'' clockin,''clockout 
+from #montmp a,sss s where not exists (select * from salpresents where noa=a.noa and s.noa=sssno)
+) a 
 left join sss s on a.sssno=s.noa
 outer apply (select top 1 * from saladjust where noa=a.sssno and datea<=a.noa order by datea desc)adj
 --非輪班
@@ -366,6 +389,13 @@ from #tmpa a outer apply (select SUM(hr_used)hr_used
 ,sum(case when hname like '%特休%' or hname like '%抵工時%' then 1 else 0 end)specialcount
 ,sum(case when hname not like '%特休%' and hname not like '%抵工時%' then 1 else 0 end)nospecialcount
 from salvacause where a.noa between bdate and edate and sssno=a.sssno)b
+
+--更新曠職時數
+update #tmpa
+set hr_leave=8
+where (workday=1 or (weeks!='0' and weeks!='6' and holiday!=1))  --上班日
+and vacahours=0 --沒請假
+and clockin='' and clockout=''
 
 --更新伙食費
 --伙食1
@@ -750,7 +780,7 @@ end
 update a
 set bo_full=case 
 --曠職
-when isnull(leavenum,0)>0 then 0
+when isnull(e.leavenum,0)+ISNULL(f.hr_leave,0)>0 then 0
 --請假全天 非特休和補休
 when isnull(b.vaca8h,0)+isnull(c.vaca8h,0)>1 then 0
 --請假 不扣全勤 超過次數
@@ -783,6 +813,7 @@ outer apply (select sum(case when latemin>0 and latemin<=late then 1 else 0 end)
 from #tmpa where sssno=a.sssno and noa between @date5 and @date6)c
 outer apply (select top 1 * from #tmpa where sssno=a.sssno and noa between @date3 and @date4 order by noa)d --取第一筆條件
 outer apply (select count(*)leavenum from salvacause where hname like'%曠工%' and sssno=a.sssno and left(bdate,len(@mon))=@mon)e
+outer apply (select sum(hr_leave)hr_leave from #tmpa where sssno=a.sssno and left(noa,len(@mon))=@mon)f
 where bo_full>0
 
 --處理遲到扣薪
@@ -811,5 +842,10 @@ END
 IF OBJECT_ID('tempdb..#tmpa')is not null
 BEGIN
    drop table #tmpa
+END
+
+IF OBJECT_ID('tempdb..#montmp')is not null
+BEGIN
+   drop table #montmp
 END
 ;
