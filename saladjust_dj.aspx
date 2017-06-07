@@ -128,6 +128,75 @@
 									if(emp($('#txtMeals_'+b_seq).val())){
 										$('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
 									}
+									if(emp($('#txtMeals_'+b_seq).val())){
+                                        $('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtMeals_'+b_seq).val())){
+                                        $('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtMeals_'+b_seq).val())){
+                                        $('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtMeals_'+b_seq).val())){
+                                        $('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtMeals_'+b_seq).val())){
+                                        $('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtMeals_'+b_seq).val())){
+                                        $('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtMeals_'+b_seq).val())){
+                                        $('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtMeals_'+b_seq).val())){
+                                        $('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtMeals_'+b_seq).val())){
+                                        $('#txtMeals_'+b_seq).val($('#txtMeals_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtSa_labor_'+b_seq).val())){
+                                        $('#txtSa_labor_'+b_seq).val($('#txtSa_labor_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtLa_comp_'+b_seq).val())){
+                                        $('#txtLa_comp_'+b_seq).val($('#txtLa_comp_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtLa_person_'+b_seq).val())){
+                                        $('#txtLa_person_'+b_seq).val($('#txtLa_person_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtAs_labor_'+b_seq).val())){
+                                        $('#txtAs_labor_'+b_seq).val($('#txtAs_labor_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtSa_health_'+b_seq).val())){
+                                        $('#txtSa_health_'+b_seq).val($('#txtSa_health_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtHe_comp_'+b_seq).val())){
+                                        $('#txtHe_comp_'+b_seq).val($('#txtHe_comp_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtHe_person_'+b_seq).val())){
+                                        $('#txtHe_person_'+b_seq).val($('#txtHe_person_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtAs_health_'+b_seq).val())){
+                                        $('#txtAs_health_'+b_seq).val($('#txtAs_health_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtSa_retire_'+b_seq).val())){
+                                        $('#txtSa_retire_'+b_seq).val($('#txtSa_retire_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtRe_rate_'+b_seq).val())){
+                                        $('#txtRe_rate_'+b_seq).val($('#txtRe_rate_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtRe_comp_'+b_seq).val())){
+                                        $('#txtRe_comp_'+b_seq).val($('#txtRe_comp_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtRe_person_'+b_seq).val())){
+                                        $('#txtRe_person_'+b_seq).val($('#txtRe_person_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtTax_'+b_seq).val())){
+                                        $('#txtTax_'+b_seq).val($('#txtTax_'+(b_seq-1)).val());
+                                    }
+                                    if(emp($('#txtMount_'+b_seq).val())){
+                                        $('#txtMount_'+b_seq).val($('#txtMount_'+(b_seq-1)).val());
+                                    }
 								}
 							}
 						});

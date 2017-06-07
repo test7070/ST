@@ -380,7 +380,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 1450px;
+				width: 850px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -439,15 +439,9 @@
 					<td align="center" style="width:220px;"><a id='lblAcomp_s'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblEmount_s'>期初數量</a></td>
-					<td align="center" style="width:100px;"><a id='lblEweight_s'>期初金額</a></td>
 					<td align="center" style="width:100px;"><a id='lblGmount_s'>領料數量</a></td>
 					<td align="center" style="width:100px;"><a id='lblImount_s'>入庫數量</a></td>
 					<td align="center" style="width:100px;"><a id='lblImoney_s'>入庫金額</a></td>
-					<td align="center" style="width:100px;"><a id='lblEmount2_s'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblEmoney2_s'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
-					<td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" /></td>
@@ -459,15 +453,9 @@
 					<td>
 						<input class="txt c1" id="txtProduct.*" type="text" />
 					</td>
-					<td><input id="txtEmount.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtEweight.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtGmount.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtImount.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtImoney.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtEmount2.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtEmoney2.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtMount.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtMoney.*" type="text" class="txt num c1"/></td>
 					<td>
 						<input id="txtNoq.*" type="hidden" />
 					</td>
