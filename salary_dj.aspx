@@ -353,7 +353,7 @@
 	            	var t_where6 = "where[6]=^^ noa=a.noa and datea<='"+date_2+"' ^^";
 					var t_where7 = "where[7]=^^ sssno=a.noa and datea between '"+date_1+"' and '"+date_2+"' and isnull(isapv,0)=1 ^^";
 					var t_where8 = "where[8]=^^ sssno=a.noa and noa between '"+date_1+"' and '"+date_2+"' and noa>=a.indate and (clockin!='' or clockout!='') group by noa ^^";
-					var t_where9 = "where[9]=^^ sssno=a.noa and noa between '"+date_1+"' and '"+date_2+"' and noa>=a.indate and (clockin!='' or clockout!='') and not exists (select * from  salpresents where noa=sa.noa and sssno=sa.sssno and memo like '%外出%' and clockin!='' and clockout!='' and '12:00'>=clockin and clockout>='13:00') group by noa ^^";
+					var t_where9 = "where[9]=^^ sssno=a.noa and noa between '"+date_1+"' and '"+date_2+"' and noa>=a.indate and (clockin!='' or clockout!='') and clockin<'12:00' and clockout>'13:00' and (select count(*) from salvacause where sssno=sa.sssno and sa.noa between bdate and edate and hr_used>=4)=0 group by noa ^^";
 					
 			        q_gt('salary_dj_import', t_where+t_where1+t_where2+t_where3+t_where4+t_where5+t_where6+t_where7+t_where8+t_where9 , 0, 0, 0, "", r_accy);
 			        $('#txtChangedata').val('');
