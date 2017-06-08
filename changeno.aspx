@@ -28,6 +28,10 @@
             aPop = new Array(
 				['txtOrgcustno', '', 'cust', 'noa,comp', 'txtOrgcustno', 'cust_b.aspx']
 				,['txtOrgproductno', '', 'ucc', 'noa,product', 'txtOrgproductno', 'ucc_b.aspx']
+				,['txtOrgpartno', '', 'part', 'noa,part', 'txtOrgpartno', 'part_b.aspx']
+				,['txtOrgtggno', '', 'tgg', 'noa,comp', 'txtOrgtggno', 'tgg_b.aspx']
+				,['txtOrgstationno', '', 'station', 'noa,station', 'txtOrgstationno', 'station_b.aspx']
+				,['txtOrgacc1', '', 'acc', 'acc1,acc2', 'txtOrgacc1', 'acc_b.aspx']
 			);
 
             $(document).ready(function() {
@@ -46,13 +50,24 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                
+                q_cmbParse("cmbTypea",'cust@客戶編號,tgg@廠商編號,part@部門編號,product@物品編號,station@工作線別編號,acc1@會計科目');
                 $('#btnModi').hide();
                 $('#btnDele').hide();
                 $('#btnPrint').hide();
                 $('#btnSeek').hide(); 
                 
+                $('#cmbTypea').change(function() {
+                	chgtrshow();
+                });
+                
             }
+            
+            function chgtrshow() {
+            	var trchg=$('#cmbTypea').val();
+            	$('.chg').hide();
+                $('.'+trchg).show();
+            }
+            
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
@@ -65,37 +80,6 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
-                	case 'checkCustno_btnOk':
-                		var as = _q_appendData("cust", "", true);
-                		db_cust=true;
-                		if (as[0] != undefined){
-                			alert('客戶 '+as[0].noa+' '+as[0].comp+' 已存在!!');
-                			chg_cust=false;  
-                		}else{
-                			chg_cust=true;
-                			var t_where = "where=^^ noa='" + $('#txtChgcustno').val() + "'^^";
-							q_gt('cust_2s', t_where, 0, 0, 0, "checkCust_2s_btnOk", r_accy);
-                		}
-                		break;
-                	case 'checkCust_2s_btnOk':
-                		var as = _q_appendData("cust_2s", "", true);
-                		if (as[0] != undefined){
-                			alert('客戶編號【'+as[0].noa+'】帳款資料存在禁止編號異動!!');
-                			cust2s_cust=false;
-                		}else{
-                			cust2s_cust=true;
-                		}
-                		break;
-                	case 'checkUcc_btnOk':
-                		var as = _q_appendData("ucc", "", true);
-                		db_ucc=true;
-                		if (as[0] != undefined){
-                			alert('物品 '+as[0].noa+' '+as[0].product+' 已存在!!');
-            				chg_ucc=false;
-                		}else{
-                			chg_ucc=true;
-                		}
-                		break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -103,35 +87,6 @@
                     default:
                         break;
                 } 
-                
-                if(chg_cust && db_cust && cust2s_cust && chg_ucc && db_ucc){
-                	if((!emp($('#txtOrgcustno').val()) && !emp($('#txtChgcustno').val())
-	            	&& emp($('#txtOrgproductno').val()) && emp($('#txtChgproductno').val()))
-	            	|| (!emp($('#txtOrgproductno').val()) && !emp($('#txtChgproductno').val())
-	            	&& emp($('#txtOrgcustno').val()) && emp($('#txtChgcustno').val()))
-	            	){
-	                	$('#txtDatea').val(q_date());
-		            	var timeDate= new Date();
-						var tHours = timeDate.getHours();
-						var tMinutes = timeDate.getMinutes();
-						$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
-	                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
-	                	
-	                	if(!emp($('#txtChgcustno').val())){
-	                		var t_paras = $('#txtOrgcustno').val()+ ';'+$('#txtChgcustno').val();
-							q_func('qtxt.query.custno_change', 'changeno.txt,custno_change,' + t_paras);
-						}
-						if(!emp($('#txtChgproductno').val())){
-							var t_paras = $('#txtOrgproductno').val()+ ';'+$('#txtChgproductno').val();
-							q_func('qtxt.query.uccno_change', 'changeno.txt,uccno_change,' + t_paras);
-						}
-						chg_cust=false;  
-						cust2s_cust=false;
-		            	chg_ucc=false;
-		            	db_cust=false;
-		            	db_ucc=false;
-	            	}
-                }
             }
 
             function _btnSeek() {
@@ -162,48 +117,182 @@
                 Unlock(1);
             }
             
-            //判斷是否可變更
-            var chg_cust=false;
-            var chg_ucc=false;
-            //判斷是否已查詢資料是否已重複
-            var db_cust=false;
-            var cust2s_cust=false;
-            var db_ucc=false;
-            function btnOk() {  
-            	chg_cust=false;  
-            	chg_ucc=false;
-            	db_cust=false;
-            	cust2s_cust=false;
-            	db_ucc=false;
+            function btnOk() {
             	//檢查資料
             	if(emp($('#txtOrgcustno').val()) && emp($('#txtChgcustno').val())
-            	&& emp($('#txtOrgproductno').val()) && emp($('#txtChgproductno').val())){	
+	            	&& emp($('#txtOrgproductno').val()) && emp($('#txtChgproductno').val())
+	            	&& emp($('#txtOrgpartno').val()) && emp($('#txtChgpartno').val())
+	            	&& emp($('#txtOrgtggno').val()) && emp($('#txtChgtggno').val())
+	            	&& emp($('#txtOrgstationno').val()) && emp($('#txtChgstationno').val())
+	            	&& emp($('#txtOrgacc1').val()) && emp($('#txtChgacc1').val())
+            	){	
             		alert('請輸入變更資料!!'); 
             		return;
             	}
-            	if((!emp($('#txtOrgcustno').val()) && !emp($('#txtChgcustno').val())
-            	&& emp($('#txtOrgproductno').val()) && emp($('#txtChgproductno').val()))
-            	|| (!emp($('#txtOrgproductno').val()) && !emp($('#txtChgproductno').val())
-            	&& emp($('#txtOrgcustno').val()) && emp($('#txtChgcustno').val()))
-            	){
-            		if(!emp($('#txtChgcustno').val())){
-            			t_where = "where=^^ noa='" + $('#txtChgcustno').val() + "'^^";
-						q_gt('cust', t_where, 0, 0, 0, "checkCustno_btnOk", r_accy);
-            		}else{
-            			chg_cust=true;
-            			cust2s_cust=true;
-            			db_cust=true;
-            		}
-            		if(!emp($('#txtChgproductno').val())){
-            			t_where = "where=^^ noa='" + $('#txtChgproductno').val() + "'^^";
-						q_gt('ucc', t_where, 0, 0, 0, "checkUcc_btnOk", r_accy);
-            		}else{
-            			chg_ucc=true;
-            			db_ucc=true;
-            		}
-            	}else{
-            		alert('變更資料輸入錯誤!!'); 
-            		return;
+            	
+            	switch($('#cmbTypea').val()) {
+            		case 'cust'://客戶編號
+            			if(!emp($('#txtOrgcustno').val()) && !emp($('#txtChgcustno').val())){
+            				var t_where = "where=^^ noa='" + $('#txtChgcustno').val() + "'^^";
+							q_gt('cust', t_where, 0, 0, 0, "checkCustno_btnOk", r_accy,1);
+							var as = _q_appendData("cust", "", true);
+	                		if (as[0] != undefined){
+	                			alert('客戶編號'+as[0].noa+' '+as[0].comp+' 已存在!!');
+	                		}else{
+	                			var t_where = "where=^^ noa='" + $('#txtChgcustno').val() + "'^^";
+								q_gt('cust_2s', t_where, 0, 0, 0, "checkCust_2s_btnOk", r_accy,1);
+								var as2 = _q_appendData("cust_2s", "", true);
+		                		if (as2[0] != undefined){
+		                			alert('客戶編號【'+as[0].noa+'】帳款資料存在禁止編號異動!!');
+		                		}else{
+		                			//存檔變動
+		                			$('#txtDatea').val(q_date());
+					            	var timeDate= new Date();
+									var tHours = timeDate.getHours();
+									var tMinutes = timeDate.getMinutes();
+									$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+				                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
+				                	
+				                	var t_paras = $('#txtOrgcustno').val()+ ';'+$('#txtChgcustno').val()+';'+q_getPara('sys.project').toUpperCase();
+									q_func('qtxt.query.custno_change', 'changeno.txt,custno_change,' + t_paras);
+		                		}
+	                		}
+            			}else{
+            				alert('請輸入要變動的客戶編號!!'); 
+            			}
+            			break;
+            		case 'tgg'://廠商編號
+            			if(!emp($('#txtOrgtggno').val()) && !emp($('#txtChgtggno').val())){
+            				var t_where = "where=^^ noa='" + $('#txtChgtggno').val() + "'^^";
+							q_gt('tgg', t_where, 0, 0, 0, "checkTggno_btnOk", r_accy,1);
+							var as = _q_appendData("tgg", "", true);
+	                		if (as[0] != undefined){
+	                			alert('廠商編號'+as[0].noa+' '+as[0].comp+' 已存在!!');
+	                		}else{
+	                			var t_where = "where=^^ noa='" + $('#txtChgtggno').val() + "'^^";
+								q_gt('tgg_2s', t_where, 0, 0, 0, "checkTgg_2s_btnOk", r_accy,1);
+								var as2 = _q_appendData("tgg_2s", "", true);
+		                		if (as2[0] != undefined){
+		                			alert('廠商編號【'+as[0].noa+'】帳款資料存在禁止編號異動!!');
+		                		}else{
+		                			//存檔變動
+		                			$('#txtDatea').val(q_date());
+					            	var timeDate= new Date();
+									var tHours = timeDate.getHours();
+									var tMinutes = timeDate.getMinutes();
+									$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+				                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
+				                	
+				                	var t_paras = $('#txtOrgtggno').val()+ ';'+$('#txtChgtggno').val()+';'+q_getPara('sys.project').toUpperCase();
+									q_func('qtxt.query.tggno_change', 'changeno.txt,tggno_change,' + t_paras);
+		                		}
+	                		}
+            			}else{
+            				alert('請輸入要變動的廠商編號!!'); 
+            			}
+            			break;
+            		case 'product'://物品編號
+            			if(!emp($('#txtOrgproductno').val()) && !emp($('#txtChgproductno').val())){
+            				var t_where = "where=^^ noa='" + $('#txtChgproductno').val() + "'^^";
+							q_gt('ucc', t_where, 0, 0, 0, "checkUcc_btnOk", r_accy,1);
+							var as = _q_appendData("ucc", "", true);
+	                		if (as[0] != undefined){
+	                			alert('物品編號 '+as[0].noa+' '+as[0].product+' 已存在!!');
+	                		}else{
+	                			//檢查uca
+	                			var t_where = "where=^^ noa='" + $('#txtChgproductno').val() + "'^^";
+								q_gt('uca', t_where, 0, 0, 0, "checkUca_btnOk", r_accy,1);
+								var as2 = _q_appendData("uca", "", true);
+								if (as2[0] != undefined){
+									alert('物品編號 '+as2[0].noa+' '+as2[0].product+' 已存在!!');
+								}else{
+									//存檔變動
+		                			$('#txtDatea').val(q_date());
+					            	var timeDate= new Date();
+									var tHours = timeDate.getHours();
+									var tMinutes = timeDate.getMinutes();
+									$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+				                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
+		                	
+									var t_paras = $('#txtOrgproductno').val()+ ';'+$('#txtChgproductno').val()+';'+q_getPara('sys.project').toUpperCase();
+									q_func('qtxt.query.uccno_change', 'changeno.txt,uccno_change,' + t_paras);
+								}
+	                		}
+            			}else{
+            				alert('請輸入要變動的物品編號!!'); 
+            			}
+            			break;
+            		case 'part'://部門
+            			if(!emp($('#txtOrgpartno').val()) && !emp($('#txtChgpartno').val())){
+            				var t_where = "where=^^ noa='" + $('#txtChgpartno').val() + "'^^";
+							q_gt('part', t_where, 0, 0, 0, "checkPart_btnOk", r_accy,1);
+							var as = _q_appendData("part", "", true);
+	                		if (as[0] != undefined){
+	                			alert('部門編號 '+as[0].noa+' '+as[0].part+' 已存在!!');
+	                		}else{
+	                			//存檔變動
+	                			$('#txtDatea').val(q_date());
+				            	var timeDate= new Date();
+								var tHours = timeDate.getHours();
+								var tMinutes = timeDate.getMinutes();
+								$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+			                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
+	                	
+								var t_paras = $('#txtOrgpartno').val()+ ';'+$('#txtChgpartno').val()+';'+q_getPara('sys.project').toUpperCase();
+								q_func('qtxt.query.partno_change', 'changeno.txt,partno_change,' + t_paras);
+	                		}
+            			}else{
+            				alert('請輸入要變動的部門編號!!'); 
+            			}
+            			break;
+            		case 'station'://工作線別
+            			if(!emp($('#txtOrgstationno').val()) && !emp($('#txtChgstationno').val())){
+            				var t_where = "where=^^ noa='" + $('#txtChgstationno').val() + "'^^";
+							q_gt('station', t_where, 0, 0, 0, "checkStation_btnOk", r_accy,1);
+							var as = _q_appendData("station", "", true);
+	                		if (as[0] != undefined){
+	                			alert('工作線別編號 '+as[0].noa+' '+as[0].station+' 已存在!!');
+	                		}else{
+	                			//存檔變動
+	                			$('#txtDatea').val(q_date());
+				            	var timeDate= new Date();
+								var tHours = timeDate.getHours();
+								var tMinutes = timeDate.getMinutes();
+								$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+			                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
+	                	
+								var t_paras = $('#txtOrgstationno').val()+ ';'+$('#txtChgstationno').val()+';'+q_getPara('sys.project').toUpperCase();
+								q_func('qtxt.query.stationno_change', 'changeno.txt,stationno_change,' + t_paras);
+	                		}
+            			}else{
+            				alert('請輸入要變動的工作線別編號!!'); 
+            			}
+            			break;
+            		case 'acc1'://會計科目
+            			if(!emp($('#txtOrgacc1').val()) && !emp($('#txtChgacc1').val())){
+            				var t_where = "where=^^ acc1='" + $('#txtChgacc1').val() + "'^^";
+							q_gt('acc', t_where, 0, 0, 0, "checkAcc1_btnOk", r_accy,1);
+							var as = _q_appendData("acc", "", true);
+	                		if (as[0] != undefined){
+	                			alert('會計科目 '+as[0].acc1+' '+as[0].acc2+' 已存在!!');
+	                		}else{
+	                			//存檔變動
+	                			$('#txtDatea').val(q_date());
+				            	var timeDate= new Date();
+								var tHours = timeDate.getHours();
+								var tMinutes = timeDate.getMinutes();
+								$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+			                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
+	                	
+								var t_paras = $('#txtOrgacc1').val()+ ';'+$('#txtChgacc1').val()+';'+q_getPara('sys.project').toUpperCase();
+								q_func('qtxt.query.acc1_change', 'changeno.txt,acc1_change,' + t_paras);
+	                		}
+            			}else{
+            				alert('請輸入要變動的會計科目編號!!'); 
+            			}
+            			break;
+					default:
+						alert('變更資料輸入錯誤!!'); 
             	}
             }
 
@@ -215,10 +304,12 @@
 
             function refresh(recno) {
                 _refresh(recno);
+                chgtrshow();
             }
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                chgtrshow();
             }
 
             function btnMinus(id) {
@@ -283,6 +374,18 @@
                 	case 'txtOrgproductno':
                 		$('#txtChgproductno').focus();
                 		break;
+                	case 'txtOrgtggno':
+                		$('#txtChgtggno').focus();
+                		break;
+                	case 'txtOrgpartno':
+                		$('#txtChgpartno').focus();
+                		break;
+                	case 'txtOrgstationno':
+                		$('#txtChgstationno').focus();
+                		break;
+                	case 'txtOrgacc1':
+                		$('#txtChgacc1').focus();
+                		break;
                     default:
                         break;
                 }
@@ -301,6 +404,17 @@
 							alert('客戶編號更新失敗，請聯絡工程師!!。');
 						}
                 		break;
+                	case 'qtxt.query.tggno_change':
+                		var as = _q_appendData("tmp0", "", true, true);
+                		if (as[0] != undefined) {
+                			if(as[0].mess=='success'){
+		                		alert('廠商編號更新成功!!。');
+							}else
+								alert('廠商編號更新失敗，請聯絡工程師!!。');
+						}else{
+							alert('廠商編號更新失敗，請聯絡工程師!!。');
+						}
+                		break;
                 	case 'qtxt.query.uccno_change':
                 		var as = _q_appendData("tmp0", "", true, true);
                 		if (as[0] != undefined) {
@@ -310,6 +424,39 @@
 								alert('物品編號更新失敗，請聯絡工程師!!。');
 						}else{
 							alert('物品編號更新失敗，請聯絡工程師!!。');
+						}
+                		break;
+                	case 'qtxt.query.partno_change':
+                		var as = _q_appendData("tmp0", "", true, true);
+                		if (as[0] != undefined) {
+                			if(as[0].mess=='success'){
+		                		alert('部門編號更新成功!!。');
+							}else
+								alert('部門編號更新失敗，請聯絡工程師!!。');
+						}else{
+							alert('部門編號更新失敗，請聯絡工程師!!。');
+						}
+                		break;
+                	case 'qtxt.query.stationno_change':
+                		var as = _q_appendData("tmp0", "", true, true);
+                		if (as[0] != undefined) {
+                			if(as[0].mess=='success'){
+		                		alert('工作線別編號更新成功!!。');
+							}else
+								alert('工作線別編號更新失敗，請聯絡工程師!!。');
+						}else{
+							alert('工作線別編號更新失敗，請聯絡工程師!!。');
+						}
+                		break;
+                	case 'qtxt.query.acc1_change':
+                		var as = _q_appendData("tmp0", "", true, true);
+                		if (as[0] != undefined) {
+                			if(as[0].mess=='success'){
+		                		alert('會計科目更新成功!!。');
+							}else
+								alert('會計科目更新失敗，請聯絡工程師!!。');
+						}else{
+							alert('會計科目更新失敗，請聯絡工程師!!。');
 						}
                 		break;
 				}
@@ -459,6 +606,8 @@
                     <tr>
                         <td><span> </span><a id="lblNoa" class="lbl"> </a></td>
                         <td><input id="txtNoa"  type="text" class="txt c1"/></td>
+                        <td><span> </span><a id="lblTypea" class="lbl"> </a></td>
+                        <td><select id="cmbTypea" class="txt c1"> </select></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblDatea" class="lbl"> </a></td>
@@ -466,17 +615,41 @@
                         <td><span> </span><a id="lblTimea" class="lbl"> </a></td>
                         <td><input id="txtTimea" type="text" class="txt c1"/></td>
                     </tr>
-                    <tr>
+                    <tr class="cust chg" style="display:none;">
                         <td><span> </span><a id="lblOrgcustno" class="lbl"> </a></td>
                         <td><input id="txtOrgcustno" type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblChgcustno" class="lbl"> </a></td>
                         <td><input id="txtChgcustno" type="text" class="txt c1"/></td>
                     </tr>
-                    <tr>
+                    <tr class="product chg" style="display:none;">
                         <td><span> </span><a id="lblOrgproductno" class="lbl"> </a></td>
                         <td><input id="txtOrgproductno" type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblChgproductno" class="lbl"> </a></td>
                         <td><input id="txtChgproductno" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr class="part chg" style="display:none;">
+                        <td><span> </span><a id="lblOrgpartno" class="lbl"> </a></td>
+                        <td><input id="txtOrgpartno" type="text" class="txt c1"/></td>
+                        <td><span> </span><a id="lblChgpartno" class="lbl"> </a></td>
+                        <td><input id="txtChgpartno" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr class="tgg chg" style="display:none;">
+                        <td><span> </span><a id="lblOrgtggno" class="lbl"> </a></td>
+                        <td><input id="txtOrgtggno" type="text" class="txt c1"/></td>
+                        <td><span> </span><a id="lblChgtggno" class="lbl"> </a></td>
+                        <td><input id="txtChgtggno" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr class="station chg" style="display:none;">
+                        <td><span> </span><a id="lblOrgstationno" class="lbl"> </a></td>
+                        <td><input id="txtOrgstationno" type="text" class="txt c1"/></td>
+                        <td><span> </span><a id="lblChgstationno" class="lbl"> </a></td>
+                        <td><input id="txtChgstationno" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr class="acc1 chg" style="display:none;">
+                        <td><span> </span><a id="lblOrgacc1" class="lbl"> </a></td>
+                        <td><input id="txtOrgacc1" type="text" class="txt c1"/></td>
+                        <td><span> </span><a id="lblChgacc1" class="lbl"> </a></td>
+                        <td><input id="txtChgacc1" type="text" class="txt c1"/></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblWorker" class="lbl"> </a></td>
