@@ -63,6 +63,11 @@
             		,['txtLateallmin', 3, 0, 1],['txtLatemalldmoney', 5, 0, 1],['txtLatemalldfull', 3, 2, 1]
             		,['txtLateallnum', 3, 0, 1],['txtLatenalldmoney', 5, 0, 1],['txtLatenalldfull', 3, 2, 1]
             		
+            		,['txtEarly', 3, 0, 1],['txtEarlynoallmin', 3, 0, 1],['txtEarlynoallnum', 3, 0, 1]
+            		,['txtEarly2', 3, 0, 1],['txtEarly2dsmoney', 5, 0, 1],['txtEarly2dshour', 3, 2, 1]
+            		,['txtEarly2dnmoney', 5, 0, 1],['txtEarly2dnhour', 3, 2, 1]
+            		,['txtEarlynum', 3, 0, 1],['txtEarlyndmoney', 5, 0, 1],['txtEarlyndfull', 3, 2, 1]
+            		
             		,['txtVacanodhours', 3, 0, 1],['txtVacadsmoney', 5, 0, 1],['txtVacadshour', 3, 2, 1]
             		,['txtVacanum', 3, 0, 1],['txtVacandmoney', 5, 0, 1],['txtVacandfull', 3, 2, 1]
             		,['txtVacahours', 3, 0, 1],['txtVacahdmoney', 5, 0, 1],['txtVacahdfull', 3, 2, 1]
@@ -92,6 +97,11 @@
             		,['txtLate2min', 3, 0, 1],['txtLate2num', 3, 0, 1],['txtLate2dmoney', 5, 0, 1],['txtLate2dfull', 3, 2, 1]
             		,['txtLateallmin', 3, 0, 1],['txtLatemalldmoney', 5, 0, 1],['txtLatemalldfull', 3, 2, 1]
             		,['txtLateallnum', 3, 0, 1],['txtLatenalldmoney', 5, 0, 1],['txtLatenalldfull', 3, 2, 1]
+            		
+            		,['txtEarly', 3, 0, 1],['txtEarlynoallmin', 3, 0, 1],['txtEarlynoallnum', 3, 0, 1]
+            		,['txtEarly2', 3, 0, 1],['txtEarly2dsmoney', 5, 0, 1],['txtEarly2dshour', 3, 2, 1]
+            		,['txtEarly2dnmoney', 5, 0, 1],['txtEarly2dnhour', 3, 2, 1]
+            		,['txtEarlynum', 3, 0, 1],['txtEarlyndmoney', 5, 0, 1],['txtEarlyndfull', 3, 2, 1]
             		
             		,['txtVacanodhours', 3, 0, 1],['txtVacadsmoney', 5, 0, 1],['txtVacadshour', 3, 2, 1]
             		,['txtVacanum', 3, 0, 1],['txtVacandmoney', 5, 0, 1],['txtVacandfull', 3, 2, 1]
@@ -733,6 +743,7 @@
 						</td>
 						<td colspan="7"> </td>
 					</tr>
+					<!------------------------------------------------------------------------->
 					<tr style="background-color: lavender;">
 						<td><span> </span><a class="lbl">遲到</a></td>
 						<td colspan="9"> </td>
@@ -849,6 +860,71 @@
 						<td><input id="txtLatenalldmoney" type="text" class="txt num c1" style="width:85px;" /></td>
 						<td><span> </span><a class="lbl">固定全勤%</a></td>
 						<td><input id="txtLatenalldfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<!------------------------------------------------------------------------->
+					<tr style="background-color: lightskyblue;">
+						<td><span> </span><a class="lbl">早退</a></td>
+						<td colspan="9"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td> </td>
+						<td><span> </span><a class="lbl">不扣薪：</a></td>
+						<td><span> </span><a class="lbl">按日</a></td>
+						<td colspan="2"><input id="txtEarly" type="text" class="txt num c1" style="width:40px;"/>分內不扣薪</td>
+						<td colspan="5"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依期別</a></td>
+						<td colspan="2"><input id="txtEarlynoallmin" type="text" class="txt num c1" style="width:40px;" />分內不扣薪</td>
+						<td colspan="2"><input id="txtEarlynoallnum" type="text" class="txt num c1" style="width:40px;" />次內不扣薪</td>
+						<td colspan="3"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td> </td>
+						<td><span> </span><a class="lbl">扣薪：</a></td>
+						<td><span> </span><a class="lbl">每</a></td>
+						<td><input id="txtEarly2" type="text" class="txt num c1" style="width: 40px;">分計算</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtEarly2dsmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtEarly2dshour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依次計</a></td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtEarly2dnmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtEarly2dnhour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td colspan="2"><span> </span><a class="lbl">早退全勤扣款：</a></td>
+						<td> </td>
+						<td colspan="2">
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtEarlynum" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">總次數，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtEarlyndmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtEarlyndfull" type="text" class="txt num c1" style="width:85px;" /></td>
 						<td> </td>
 					</tr>
 					<!------------------------------------------------------------------------->
@@ -1108,7 +1184,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 7100px;">
+		<div class='dbbs' style="width: 8300px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td style="width:20px;"><input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
@@ -1158,6 +1234,18 @@
 					<td style="width:90px;"><a id='lblLateallnum_s'>按月超過<br>總次數</a></td>
 					<td style="width:90px;"><a id='lblLatenalldmoney_s'>扣全勤<br>固定金額</a></td>
 					<td style="width:90px;"><a id='lblLatenalldfull_s'>扣全勤<br>固定%</a></td>
+					<!----------------------------------------------------------------------->
+					<td style="width:90px;"><a id='lblEarly_s'>早退X分<br>內不扣薪</a></td>
+					<td style="width:100px;"><a id='lblEarlynoallmin_s'>期別中早退X<br>分內不扣薪</a></td>
+					<td style="width:100px;"><a id='lblEarlynoallnum_s'>期別中早退X<br>次內不扣薪</a></td>
+					<td style="width:100px;"><a id='lblEarly2_s'>每間隔X分鐘<br>計算扣薪</a></td>
+					<td style="width:90px;"><a id='lblEarly2dsmoney_s'>依X次扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblEarly2dshour_s'>依X次扣<br>固定時薪%</a></td>
+					<td style="width:90px;"><a id='lblEarly2dnmoney_s'>依早退數扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblEarly2dnhour_s'>依早退數扣<br>固定時薪%</a></td>
+					<td style="width:90px;"><a id='lblEarlynum_s'>按月超過<br>總次數</a></td>
+					<td style="width:90px;"><a id='lblEarlyndmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblEarlyndfull_s'>扣全勤<br>固定%</a></td>
 					<!----------------------------------------------------------------------->
 					<td style="width:90px;"><a id='lblVacanodhours_s'>事假X時<br>內不扣薪</a></td>
 					<td style="width:90px;"><a id='lblVacadsmoney_s'>事假依時扣<br>固定金額</a></td>
@@ -1262,6 +1350,18 @@
 					<td><input id="txtLateallnum.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLatenalldmoney.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLatenalldfull.*" type="text" class="txt num c1"/></td>
+					<!----------------------------------------------------------------------->
+					<td><input id="txtEarly.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlynoallmin.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlynoallnum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2dsmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2dshour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2dnmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2dnhour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlynum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlyndmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlyndfull.*" type="text" class="txt num c1"/></td>
 					<!----------------------------------------------------------------------->
 					<td><input id="txtVacanodhours.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtVacadsmoney.*" type="text" class="txt num c1"/></td>
