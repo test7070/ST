@@ -24,7 +24,7 @@
             var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 18;
+            brwCount2 = 5;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'noa';
@@ -53,21 +53,71 @@
             		['txtShifthours', 3, 1, 1],['txtOstand', 6, 1, 1]
             		,['txtDoverhours', 3, 1, 1],['txtOverhours', 4, 1, 1]
             		,['txtDhoverhours', 3, 1, 1],['txtHoverhours', 4, 1, 1]
-            		,['txtLate', 3, 0, 1],['txtLatenum', 2, 0, 1],['txtLatemin', 2, 0, 1],['txtLatedfull', 3, 2, 1]
-            		,['txtLate2', 3, 0, 1],['txtLate2dshour', 3, 2, 1],['txtLate2num', 2, 0, 1],['txtLate2dfull', 3, 2, 1]
-            		,['txtLateallnum', 2, 0, 1],['txtLateallmin', 2, 0, 1],['txtLeave', 3, 0, 1]
-            		,['txtVacanodhours', 2, 0, 1],['txtVacanonum', 2, 0, 1],['txtVacahalfdfull', 3, 2, 1]
             		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 0, 1],['txtMhours2', 2, 0, 1]
+            		
+            		,['txtLate', 3, 0, 1],['txtLatenoallmin', 3, 0, 1],['txtLatenoallnum', 3, 0, 1]
+            		,['txtLate2', 3, 0, 1],['txtLate2dsmoney', 5, 0, 1],['txtLate2dshour', 3, 2, 1]
+            		,['txtLate2dnmoney', 5, 0, 1],['txtLate2dnhour', 3, 2, 1]
+            		,['txtLatemin', 3, 0, 1],['txtLatenum', 3, 0, 1],['txtLatedmoney', 5, 0, 1],['txtLatedfull', 3, 2, 1]
+            		,['txtLate2min', 3, 0, 1],['txtLate2num', 3, 0, 1],['txtLate2dmoney', 5, 0, 1],['txtLate2dfull', 3, 2, 1]
+            		,['txtLateallmin', 3, 0, 1],['txtLatemalldmoney', 5, 0, 1],['txtLatemalldfull', 3, 2, 1]
+            		,['txtLateallnum', 3, 0, 1],['txtLatenalldmoney', 5, 0, 1],['txtLatenalldfull', 3, 2, 1]
+            		
+            		,['txtEarly', 3, 0, 1],['txtEarlynoallmin', 3, 0, 1],['txtEarlynoallnum', 3, 0, 1]
+            		,['txtEarly2', 3, 0, 1],['txtEarly2dsmoney', 5, 0, 1],['txtEarly2dshour', 3, 2, 1]
+            		,['txtEarly2dnmoney', 5, 0, 1],['txtEarly2dnhour', 3, 2, 1]
+            		,['txtEarlynum', 3, 0, 1],['txtEarlyndmoney', 5, 0, 1],['txtEarlyndfull', 3, 2, 1]
+            		
+            		,['txtVacanodhours', 3, 0, 1],['txtVacadsmoney', 5, 0, 1],['txtVacadshour', 3, 2, 1]
+            		,['txtVacanum', 3, 0, 1],['txtVacandmoney', 5, 0, 1],['txtVacandfull', 3, 2, 1]
+            		,['txtVacahours', 3, 0, 1],['txtVacahdmoney', 5, 0, 1],['txtVacahdfull', 3, 2, 1]
+            		,['txtVacadays', 3, 0, 1],['txtVacaddmoney', 5, 0, 1],['txtVacaddfull', 3, 2, 1]
+            		
+            		,['txtSicknodhours', 3, 0, 1],['txtSickdsmoney', 5, 0, 1],['txtSickdshour', 3, 2, 1]
+            		,['txtSicknum', 3, 0, 1],['txtSickndmoney', 5, 0, 1],['txtSickndfull', 3, 2, 1]
+            		,['txtSickhours', 3, 0, 1],['txtSickhdmoney', 5, 0, 1],['txtSickhdfull', 3, 2, 1]
+            		,['txtSickdays', 3, 0, 1],['txtSickddmoney', 5, 0, 1],['txtSickddfull', 3, 2, 1]
+            		
+            		,['txtLeavedsmoney', 5, 0, 1],['txtLeavedshour', 3, 2, 1]
+            		,['txtLeavendmoney', 5, 0, 1],['txtLeavendfull', 3, 2, 1]
+            		
+            		,['txtFclocknodnum', 3, 0, 1],['txtFclockdsmoney', 5, 0, 1],['txtFclockdshour', 3, 2, 1]
+            		,['txtFclockdnum', 3, 0, 1],['txtFclockndmoney', 5, 0, 1],['txtFclockndfull', 3, 2, 1]
             	];
             	bbsNum = [
             		['txtShifthours', 3, 1, 1],['txtOstand', 6, 1, 1]
             		,['txtDoverhours', 3, 1, 1],['txtOverhours', 4, 1, 1]
             		,['txtDhoverhours', 3, 1, 1],['txtHoverhours', 4, 1, 1]
-            		,['txtLate', 3, 0, 1],['txtLatenum', 2, 0, 1],['txtLatemin', 2, 0, 1],['txtLatedfull', 3, 2, 1]
-            		,['txtLate2', 3, 0, 1],['txtLate2dshour', 3, 2, 1],['txtLate2num', 2, 0, 1],['txtLate2dfull', 3, 2, 1]
-            		,['txtLateallnum', 2, 0, 1],['txtLateallmin', 2, 0, 1],['txtLeave', 3, 0, 1]
-            		,['txtVacanodhours', 2, 0, 1],['txtVacanonum', 2, 0, 1],['txtVacahalfdfull', 3, 2, 1]
             		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 0, 1],['txtMhours2', 2, 0, 1]
+            		
+            		,['txtLate', 3, 0, 1],['txtLatenoallmin', 3, 0, 1],['txtLatenoallnum', 3, 0, 1]
+            		,['txtLate2', 3, 0, 1],['txtLate2dsmoney', 5, 0, 1],['txtLate2dshour', 3, 2, 1]
+            		,['txtLate2dnmoney', 5, 0, 1],['txtLate2dnhour', 3, 2, 1]
+            		,['txtLatemin', 3, 0, 1],['txtLatenum', 3, 0, 1],['txtLatedmoney', 5, 0, 1],['txtLatedfull', 3, 2, 1]
+            		,['txtLate2min', 3, 0, 1],['txtLate2num', 3, 0, 1],['txtLate2dmoney', 5, 0, 1],['txtLate2dfull', 3, 2, 1]
+            		,['txtLateallmin', 3, 0, 1],['txtLatemalldmoney', 5, 0, 1],['txtLatemalldfull', 3, 2, 1]
+            		,['txtLateallnum', 3, 0, 1],['txtLatenalldmoney', 5, 0, 1],['txtLatenalldfull', 3, 2, 1]
+            		
+            		,['txtEarly', 3, 0, 1],['txtEarlynoallmin', 3, 0, 1],['txtEarlynoallnum', 3, 0, 1]
+            		,['txtEarly2', 3, 0, 1],['txtEarly2dsmoney', 5, 0, 1],['txtEarly2dshour', 3, 2, 1]
+            		,['txtEarly2dnmoney', 5, 0, 1],['txtEarly2dnhour', 3, 2, 1]
+            		,['txtEarlynum', 3, 0, 1],['txtEarlyndmoney', 5, 0, 1],['txtEarlyndfull', 3, 2, 1]
+            		
+            		,['txtVacanodhours', 3, 0, 1],['txtVacadsmoney', 5, 0, 1],['txtVacadshour', 3, 2, 1]
+            		,['txtVacanum', 3, 0, 1],['txtVacandmoney', 5, 0, 1],['txtVacandfull', 3, 2, 1]
+            		,['txtVacahours', 3, 0, 1],['txtVacahdmoney', 5, 0, 1],['txtVacahdfull', 3, 2, 1]
+            		,['txtVacadays', 3, 0, 1],['txtVacaddmoney', 5, 0, 1],['txtVacaddfull', 3, 2, 1]
+            		
+            		,['txtSicknodhours', 3, 0, 1],['txtSickdsmoney', 5, 0, 1],['txtSickdshour', 3, 2, 1]
+            		,['txtSicknum', 3, 0, 1],['txtSickndmoney', 5, 0, 1],['txtSickndfull', 3, 2, 1]
+            		,['txtSickhours', 3, 0, 1],['txtSickhdmoney', 5, 0, 1],['txtSickhdfull', 3, 2, 1]
+            		,['txtSickdays', 3, 0, 1],['txtSickddmoney', 5, 0, 1],['txtSickddfull', 3, 2, 1]
+            		
+            		,['txtLeavedsmoney', 5, 0, 1],['txtLeavedshour', 3, 2, 1]
+            		,['txtLeavendmoney', 5, 0, 1],['txtLeavendfull', 3, 2, 1]
+            		
+            		,['txtFclocknodnum', 3, 0, 1],['txtFclockdsmoney', 5, 0, 1],['txtFclockdshour', 3, 2, 1]
+            		,['txtFclockdnum', 3, 0, 1],['txtFclockndmoney', 5, 0, 1],['txtFclockndfull', 3, 2, 1]
             	];
             	q_getFormat();
             	bbmMask = [
@@ -85,6 +135,9 @@
 	            	, ['txtOvertime', '99:99'], ['txtMbtime1', '99:99'], ['txtMbtime2', '99:99']
             	];
                 q_mask(bbmMask);
+                
+                q_cmbParse("cmbKind",'mon@按月,half@按上下期');
+                q_cmbParse("cmbKind",'mon@按月,half@按上下期','s');
                 
                 $('#txtNoa').change(function(e) {
                     $(this).val($.trim($(this).val()).toUpperCase());
@@ -554,17 +607,18 @@
 					</tr>
 				</table>
 			</div>
-			<div class='dbbm' style="width: 930px;float: left;">
+			<div class='dbbm' style="width: 1260px;float: left;">
 				<table class="tbbm"  id="tbbm"   border="0" cellpadding='2'  cellspacing='5'>
 					<tr style="height: 1px;">
-						<td style="width: 190px;"> </td>
-						<td style="width: 60px;"> </td>
-						<td style="width: 180px;"> </td>
-						<td style="width: 60px;"> </td>
-						<td style="width: 180px;"> </td>
-						<td style="width: 60px;"> </td>
-						<td style="width: 130px;"> </td>
-						<td style="width: 60px;"> </td>
+						<td style="width: 165px;"> </td>
+						<td style="width: 100px;"> </td>
+						<td style="width: 200px;"> </td>
+						<td style="width: 100px;"> </td>
+						<td style="width: 200px;"> </td>
+						<td style="width: 100px;"> </td>
+						<td style="width: 140px;"> </td>
+						<td style="width: 100px;"> </td>
+						<td style="width: 140px;"> </td>
 						<td style="width: 10px;"> </td>
 					</tr>
 					<tr>
@@ -598,8 +652,9 @@
 						<td><span> </span><a id='lblIsshift' class="lbl">輪班</a></td>
 						<td colspan="2">
 							<input id="chkIsshift" type="checkbox"/>
-							<span> </span><a id='lblShifthours' class="lbl" style="float: none;margin-left: 20px;">輪班時數</a>
-							<span style="width: 60px;float: right;"> </span>
+							<span> </span>
+							<a id='lblShifthours' class="lbl" style="float: none;margin-left: 20px;">輪班時數</a>
+							<span style="width: 120px;float: right;"> </span>
 							<input id="txtShifthours" type="text" class="txt num c1" style="width: 60px;float: right;" />
 						</td>
 						<td> </td>
@@ -664,6 +719,7 @@
 						<td> </td>
 						<td> </td>
 						<td> </td>
+						<td> </td>
 					</tr>
 					<tr style="background-color: antiquewhite;">
 						<td><span> </span><a id='lblDoverhours' class="lbl">平日最多時數/天</a></td>
@@ -675,72 +731,460 @@
 						<td><span> </span><a id='lblHoverhours' class="lbl">假日最多時數/月</a></td>
 						<td><input id="txtHoverhours" type="text" class="txt num c1" /></td>
 						<td> </td>
-					</tr>
-					<tr style="background-color: mediumturquoise;">
-						<td><span> </span><a id='lblLate' class="lbl">遲到分鐘數不扣薪</a></td>
-						<td><input id="txtLate" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLatenum' class="lbl">上下月次數各超過</a></td>
-						<td><input id="txtLatenum" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLatemin' class="lbl">上下月分鐘各超過</a></td>
-						<td><input id="txtLatemin" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLatedfull' class="lbl">扣除%全勤獎金</a></td>
-						<td><input id="txtLatedfull" type="text" class="txt num c1" /></td>
 						<td> </td>
 					</tr>
-					<tr style="background-color: mediumturquoise;">
-						<td><span> </span><a id='lblLate2' class="lbl">遲到分鐘數扣薪</a></td>
-						<td><input id="txtLate2" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLate2dshour' class="lbl">扣%時薪</a></td>
-						<td><input id="txtLate2dshour" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLate2num' class="lbl">上下月次數各超過</a></td>
-						<td><input id="txtLate2num" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLate2dfull' class="lbl">扣除%全勤獎金</a></td>
-						<td><input id="txtLate2dfull" type="text" class="txt num c1" /></td>
+					<tr style="background-color: azure;">
+						<td><span> </span><a id='lblKind' class="lbl">期別</a></td>
+						<td><select id="cmbKind" class="txt c1"> </select></td>
+						<td>
+							<input id="txtVacanonum" type="hidden"/>
+							<input id="txtVacahalfdfull" type="hidden"/>
+							<input id="txtLeave" type="hidden"/>
+						</td>
+						<td colspan="7"> </td>
+					</tr>
+					<!------------------------------------------------------------------------->
+					<tr style="background-color: lavender;">
+						<td><span> </span><a class="lbl">遲到</a></td>
+						<td colspan="9"> </td>
+					</tr>
+					<tr style="background-color: lavender;">
+						<td> </td>
+						<td><span> </span><a class="lbl">不扣薪：</a></td>
+						<td><span> </span><a class="lbl">按日</a></td>
+						<td colspan="2"><input id="txtLate" type="text" class="txt num c1" style="width:40px;"/>分內不扣薪</td>
+						<td colspan="5"> </td>
+					</tr>
+					<tr style="background-color: lavender;">
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依期別</a></td>
+						<td colspan="2"><input id="txtLatenoallmin" type="text" class="txt num c1" style="width:40px;" />分內不扣薪</td>
+						<td colspan="2"><input id="txtLatenoallnum" type="text" class="txt num c1" style="width:40px;" />次內不扣薪</td>
+						<td colspan="3"> </td>
+					</tr>
+					<tr style="background-color: lavender;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lavender;">
+						<td> </td>
+						<td><span> </span><a class="lbl">扣薪：</a></td>
+						<td><span> </span><a class="lbl">每</a></td>
+						<td><input id="txtLate2" type="text" class="txt num c1" style="width: 40px;">分計算</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtLate2dsmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtLate2dshour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<tr style="background-color: lavender;">
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依次計</a></td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtLate2dnmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtLate2dnhour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<tr style="background-color: lavender;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lavender;">
+						<td colspan="2"><span> </span><a class="lbl">遲到全勤扣款：</a></td>
+						<td><span> </span><a class="lbl">期別1</a></td>
+						<td><input id="txtLatemin" type="text" class="txt num c1" style="width: 40px;">分內</td>
+						<td>
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtLatenum" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">次，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtLatedmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtLatedfull" type="text" class="txt num c1" style="width:85px;" /></td>
 						<td> </td>
 					</tr>
-					<tr style="background-color: mediumturquoise;">
-						<td><span> </span><a id='lblLateallnum' class="lbl">遲到總次數扣全數全勤</a></td>
-						<td><input id="txtLateallnum" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLateallmin' class="lbl">遲到總分鐘扣全數全勤</a></td>
-						<td><input id="txtLateallmin" type="text" class="txt num c1" /></td>
-						<td><span> </span><a id='lblLeave' class="lbl">遲到超過分鐘數視事假</a></td>
-						<td><input id="txtLeave" type="text" class="txt num c1" style="width: 60px;" /></td>
+					<tr style="background-color: lavender;">
 						<td> </td>
 						<td> </td>
-						<td> </td>
+						<td><span> </span><a class="lbl">期別2</a></td>
+						<td><input id="txtLate2min" type="text" class="txt num c1" style="width: 40px;">分內</td>
+						<td>
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtLate2num" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">次，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtLate2dmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtLate2dfull" type="text" class="txt num c1" style="width:85px;" /></td>
 						<td> </td>
 					</tr>
-					<tr style="background-color: darksalmon;">
+					<tr style="background-color: lavender;height: 1px;">
+						<td colspan="2"> </td>
+						<td colspan="8"><hr></td>
+					</tr>
+					<tr style="background-color: lavender;">
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">按月</a></td>
 						<td colspan="2">
-							<a id='lblVacanodhours1' class="lbl" style="float: left;">當日請假</a>
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtLateallmin" type="text" class="txt num c1" style="width: 40px;">
 							<span style="float: left;"> </span>
-							<input id="txtVacanodhours" type="text" class="txt num c1" style="width: 50px;" />
-							<span style="float: left;"> </span>
-							<a id='lblVacanodhours2' class="lbl" style="float: left;">/H以內不扣全勤</a>
+							<a style="float: left;">總分鐘數，扣</a>
 						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtLatemalldmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtLatemalldfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: lavender;">
+						<td> </td>
+						<td> </td>
+						<td> </td>
 						<td colspan="2">
-							<a id='lblVacanonum1' class="lbl" style="float: left;">超過</a>
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtLateallnum" type="text" class="txt num c1" style="width: 40px;">
 							<span style="float: left;"> </span>
-							<input id="txtVacanonum" type="text" class="txt num c1" style="width: 50px;" />
-							<span style="float: left;"> </span>
-							<a id='lblVacanonum2' class="lbl" style="float: left;">次扣除全勤</a>
+							<a style="float: left;">總次數，扣</a>
 						</td>
-						<td colspan="2" style="background-color: yellowgreen;">
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtLatenalldmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtLatenalldfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<!------------------------------------------------------------------------->
+					<tr style="background-color: lightskyblue;">
+						<td><span> </span><a class="lbl">早退</a></td>
+						<td colspan="9"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td> </td>
+						<td><span> </span><a class="lbl">不扣薪：</a></td>
+						<td><span> </span><a class="lbl">按日</a></td>
+						<td colspan="2"><input id="txtEarly" type="text" class="txt num c1" style="width:40px;"/>分內不扣薪</td>
+						<td colspan="5"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依期別</a></td>
+						<td colspan="2"><input id="txtEarlynoallmin" type="text" class="txt num c1" style="width:40px;" />分內不扣薪</td>
+						<td colspan="2"><input id="txtEarlynoallnum" type="text" class="txt num c1" style="width:40px;" />次內不扣薪</td>
+						<td colspan="3"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td> </td>
+						<td><span> </span><a class="lbl">扣薪：</a></td>
+						<td><span> </span><a class="lbl">每</a></td>
+						<td><input id="txtEarly2" type="text" class="txt num c1" style="width: 40px;">分計算</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtEarly2dsmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtEarly2dshour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依次計</a></td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtEarly2dnmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtEarly2dnhour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<tr style="background-color: lightskyblue;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lightskyblue;">
+						<td colspan="2"><span> </span><a class="lbl">早退全勤扣款：</a></td>
+						<td> </td>
+						<td colspan="2">
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtEarlynum" type="text" class="txt num c1" style="width: 40px;">
 							<span style="float: left;"> </span>
-							<a id='lblVacahalfdfull1' class="lbl" style="float: left;">請假半天內扣</a>
-							<span style="float: left;"> </span>
-							<input id="txtVacahalfdfull" type="text" class="txt num c1" style="width: 50px;" />
-							<span style="float: left;"> </span>
-							<a id='lblVacahalfdfull2' class="lbl" style="float: left;">%全勤</a>
+							<a style="float: left;">總次數，扣</a>
 						</td>
-						<td style="background-color: yellowgreen;"> </td>
-						<td style="background-color: yellowgreen;"> </td>
-						<td style="background-color: yellowgreen;"> </td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtEarlyndmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtEarlyndfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<!------------------------------------------------------------------------->
+					<tr style="background-color: lavenderblush;">
+						<td><span> </span><a class="lbl">事假</a></td>
+						<td colspan="9"> </td>
+					</tr>
+					<tr style="background-color: lavenderblush;">
+						<td> </td>
+						<td><span> </span><a class="lbl">不扣薪：</a></td>
+						<td><span> </span><a class="lbl">一日</a></td>
+						<td colspan="2">
+							<input id="txtVacanodhours" type="text" class="txt num c1" style="width: 40px;" />
+							<span style="float: left;"> </span>
+							<a style="float: left;">時內不扣薪</a>
+						</td>
+						<td colspan="5"> </td>
+					</tr>
+					<tr style="background-color: lavenderblush;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lavenderblush;">
+						<td> </td>
+						<td><span> </span><a class="lbl">扣薪：</a></td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依時扣</a></td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtVacadsmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtVacadshour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<tr style="background-color: lavenderblush;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lavenderblush;">
+						<td colspan="2"><span> </span><a class="lbl">事假全勤扣款：</a></td>
+						<td><span> </span><a class="lbl">每期別</a></td>
+						<td colspan="2">
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtVacanum" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">總次數，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtVacandmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtVacandfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: lavenderblush;">
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">每期別</a></td>
+						<td colspan="2">
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtVacahours" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">總時數，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtVacahdmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtVacahdfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: lavenderblush;">
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">每期別</a></td>
+						<td colspan="2">
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtVacadays" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">總天數，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtVacaddmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtVacaddfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<!------------------------------------------------------------------------->
+					<tr style="background-color: lemonchiffon;">
+						<td> </td>
+						<td colspan="3">
+							<input id="chkIsvstotal" type="checkbox" style="float: left;">
+							<a class="lbl" style="float: left;">事病假總次/時/天數合計全勤扣款</a>
+						</td>
+						<td colspan="6"> </td>
+					</tr>
+					<!------------------------------------------------------------------------->
+					<tr style="background-color: lightgreen;">
+						<td><span> </span><a class="lbl">病假</a></td>
+						<td colspan="9"> </td>
+					</tr>
+					<tr style="background-color: lightgreen;">
+						<td> </td>
+						<td><span> </span><a class="lbl">不扣薪：</a></td>
+						<td><span> </span><a class="lbl">一日</a></td>
+						<td colspan="2">
+							<input id="txtSicknodhours" type="text" class="txt num c1" style="width: 40px;" />
+							<span style="float: left;"> </span>
+							<a style="float: left;">時內不扣薪</a>
+						</td>
+						<td colspan="5"> </td>
+					</tr>
+					<tr style="background-color: lightgreen;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lightgreen;">
+						<td> </td>						
+						<td><span> </span><a class="lbl">扣薪：</a></td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依時扣</a></td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtSickdsmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtSickdshour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<tr style="background-color: lightgreen;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lightgreen;">
+						<td colspan="2"><span> </span><a class="lbl">病假全勤扣款：</a></td>
+						<td><span> </span><a class="lbl">每期別</a></td>
+						<td colspan="2">
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtSicknum" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">總次數，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtSickndmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtSickndfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: lightgreen;">
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">每期別</a></td>
+						<td colspan="2">
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtSickhours" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">總次數，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtSickhdmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtSickhdfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: lightgreen;">
+						<td> </td>
+						<td> </td>
+						<td><span> </span><a class="lbl">每期別</a></td>
+						<td colspan="2">
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtSickdays" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">總天數，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtSickddmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtSickddfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<!------------------------------------------------------------------------->
+					<tr style="background-color: lightpink;">
+						<td><span> </span><a class="lbl">曠職</a></td>
+						<td colspan="9"> </td>
+					</tr>
+					<tr style="background-color: lightpink;">
+						<td> </td>
+						<td><span> </span><a class="lbl">扣薪：</a></td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依時扣</a></td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtLeavedsmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtLeavedshour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<tr style="background-color: lightpink;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: lightpink;">
+						<td colspan="2"><span> </span><a class="lbl">曠職全勤扣款：</a></td>
+						<td><span> </span><a class="lbl">每期別</a></td>
+						<td><span> </span><a class="lbl">每次扣</a></td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtLeavendmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtLeavendfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td colspan="2"> </td>
+					</tr>
+					<!------------------------------------------------------------------------->
+					<tr style="background-color: linen;">
+						<td><span> </span><a class="lbl">忘刷</a></td>
+						<td colspan="9"> </td>
+					</tr>
+					<tr style="background-color: linen;">
+						<td> </td>
+						<td><span> </span><a class="lbl">不扣薪：</a></td>
+						<td><span> </span><a class="lbl">依期別</a></td>
+						<td colspan="2">
+							<input id="txtFclocknodnum" type="text" class="txt num c1" style="width:40px;" />
+							<span style="float: left;"> </span>
+							<a style="float: left;">次內不扣薪</a>
+						</td>
+						<td colspan="5"> </td>
+					</tr>
+					<tr style="background-color: linen;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: linen;">
+						<td> </td>
+						<td><span> </span><a class="lbl">扣薪：</a></td>
+						<td> </td>
+						<td><span> </span><a class="lbl">依次計</a></td>
+						<td> </td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtFclockdsmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定時薪%</a></td>
+						<td><input id="txtFclockdshour" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
+					</tr>
+					<tr style="background-color: linen;height: 1px;">
+						<td> </td>
+						<td colspan="9"><hr></td>
+					</tr>
+					<tr style="background-color: linen;">
+						<td colspan="2"><span> </span><a class="lbl">忘刷全勤扣款：</a></td>
+						<td><span> </span><a class="lbl">每期別</a></td>
+						<td colspan="2">
+							<a style="float: left;">超過</a><span style="float: left;"> </span>
+							<input id="txtFclockdnum" type="text" class="txt num c1" style="width: 40px;">
+							<span style="float: left;"> </span>
+							<a style="float: left;">總次數，扣</a>
+						</td>
+						<td><span> </span><a class="lbl">固定金額</a></td>
+						<td><input id="txtFclockndmoney" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td><span> </span><a class="lbl">固定全勤%</a></td>
+						<td><input id="txtFclockndfull" type="text" class="txt num c1" style="width:85px;" /></td>
+						<td> </td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 3000px;">
+		<div class='dbbs' style="width: 8300px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td style="width:20px;"><input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
@@ -764,20 +1208,85 @@
 					<td style="width:90px;"><a id='lblOverhours_s'>平日<br>最多時數/月</a></td>
 					<td style="width:90px;"><a id='lblDhoverhours_s'>假日<br>最多時數/天</a></td>
 					<td style="width:90px;"><a id='lblHoverhours_s'>假日<br>最多時數/月</a></td>
-					<td style="width:80px;"><a id='lblLate_s'>遲到Min.<br>不扣薪</a></td>
-					<td style="width:85px;"><a id='lblLatenum_s'>上下月遲到<br>各超過次數</a></td>
-					<td style="width:85px;"><a id='lblLatemin_s'>上下月遲到<br>各超過分鐘</a></td>
-					<td style="width:80px;"><a id='lblLatedfull_s'>扣除全勤<br>獎金%</a></td>
-					<td style="width:80px;"><a id='lblLate2_s'>遲到Min.<br>扣薪</a></td>
-					<td style="width:80px;"><a id='lblLate2dshour_s'>扣%時薪</a></td>
-					<td style="width:85px;"><a id='lblLate2num_s'>上下月遲到<br>各超過次數</a></td>
-					<td style="width:80px;"><a id='lblLate2dfull_s'>扣除全勤<br>獎金%</a></td>
-					<td style="width:85px;"><a id='lblLateallnum_s'>總次數扣<br>全額全勤</a></td>
-					<td style="width:85px;"><a id='lblLateallmin_s'>總分鐘扣<br>全額全勤</a></td>
-					<td style="width:100px;"><a id='lblLeave_s'>超過分鐘數<br>視事假</a></td>
-					<td style="width:90px;"><a id='lblVacanodhours_s'>當日請假<br>不扣全勤/H</a></td>
-					<td style="width:80px;"><a id='lblVacanonum_s'>超過次數<br>扣除全勤</a></td>
-					<td style="width:80px;"><a id='lblVacahalfdfull_s'>請假半天<br>扣%全勤</a></td>
+					<!----------------------------------------------------------------------->
+					<td style="width:90px;"><a id='lblKind_s'>期別</a></td>
+					<!----------------------------------------------------------------------->
+					<td style="width:90px;"><a id='lblLate_s'>遲到X分<br>內不扣薪</a></td>
+					<td style="width:100px;"><a id='lblLatenoallmin_s'>期別中遲到X<br>分內不扣薪</a></td>
+					<td style="width:100px;"><a id='lblLatenoallnum_s'>期別中遲到X<br>次內不扣薪</a></td>
+					<td style="width:100px;"><a id='lblLate2_s'>每間隔X分鐘<br>計算扣薪</a></td>
+					<td style="width:90px;"><a id='lblLate2dsmoney_s'>依X次扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblLate2dshour_s'>依X次扣<br>固定時薪%</a></td>
+					<td style="width:90px;"><a id='lblLate2dnmoney_s'>依遲到數扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblLate2dnhour_s'>依遲到數扣<br>固定時薪%</a></td>
+					
+					<td style="width:90px;"><a id='lblLatemin_s'>期別1<br>遲到X分內</a></td>
+					<td style="width:90px;"><a id='lblLatenum_s'>超過X次數</a></td>
+					<td style="width:90px;"><a id='lblLatedmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblLatedfull_s'>扣全勤<br>固定%</a></td>
+					<td style="width:90px;"><a id='lblLate2min_s'>期別2<br>遲到X分內</a></td>
+					<td style="width:90px;"><a id='lblLate2num_s'>超過X次數</a></td>
+					<td style="width:90px;"><a id='lblLate2dmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblLate2dfull_s'>扣全勤<br>固定%</a></td>
+					<td style="width:90px;"><a id='lblLateallmin_s'>按月超過<br>總分數</a></td>
+					<td style="width:90px;"><a id='lblLatemalldmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblLatemalldfull_s'>扣全勤<br>固定%</a></td>
+					<td style="width:90px;"><a id='lblLateallnum_s'>按月超過<br>總次數</a></td>
+					<td style="width:90px;"><a id='lblLatenalldmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblLatenalldfull_s'>扣全勤<br>固定%</a></td>
+					<!----------------------------------------------------------------------->
+					<td style="width:90px;"><a id='lblEarly_s'>早退X分<br>內不扣薪</a></td>
+					<td style="width:100px;"><a id='lblEarlynoallmin_s'>期別中早退X<br>分內不扣薪</a></td>
+					<td style="width:100px;"><a id='lblEarlynoallnum_s'>期別中早退X<br>次內不扣薪</a></td>
+					<td style="width:100px;"><a id='lblEarly2_s'>每間隔X分鐘<br>計算扣薪</a></td>
+					<td style="width:90px;"><a id='lblEarly2dsmoney_s'>依X次扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblEarly2dshour_s'>依X次扣<br>固定時薪%</a></td>
+					<td style="width:90px;"><a id='lblEarly2dnmoney_s'>依早退數扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblEarly2dnhour_s'>依早退數扣<br>固定時薪%</a></td>
+					<td style="width:90px;"><a id='lblEarlynum_s'>按月超過<br>總次數</a></td>
+					<td style="width:90px;"><a id='lblEarlyndmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblEarlyndfull_s'>扣全勤<br>固定%</a></td>
+					<!----------------------------------------------------------------------->
+					<td style="width:90px;"><a id='lblVacanodhours_s'>事假X時<br>內不扣薪</a></td>
+					<td style="width:90px;"><a id='lblVacadsmoney_s'>事假依時扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblVacadshour_s'>事假依時扣<br>固定時薪%</a></td>
+					<td style="width:90px;"><a id='lblVacanum_s'>每期別事假<br>超過總次數</a></td>
+					<td style="width:90px;"><a id='lblVacandmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblVacandfull_s'>扣全勤<br>固定%</a></td>
+					<td style="width:90px;"><a id='lblVacahours_s'>每期別事假<br>超過總時數</a></td>
+					<td style="width:90px;"><a id='lblVacahdmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblVacahdfull_s'>扣全勤<br>固定%</a></td>
+					<td style="width:90px;"><a id='lblVacadays_s'>每期別事假<br>超過總天數</a></td>
+					<td style="width:90px;"><a id='lblVacaddmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblVacaddfull_s'>扣全勤<br>固定%</a></td>
+					<!----------------------------------------------------------------------->
+					<td style="width:90px;"><a id='lblIsvstotal_s'>事病假全勤<br>總次數合扣</a></td>
+					<!----------------------------------------------------------------------->
+					<td style="width:90px;"><a id='lblSicknodhours_s'>病假X時<br>內不扣薪</a></td>
+					<td style="width:90px;"><a id='lblSickadsmoney_s'>病假依時扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblSickdshour_s'>病假依時扣<br>固定時薪%</a></td>
+					<td style="width:90px;"><a id='lblSicknum_s'>每期別病假<br>超過總次數</a></td>
+					<td style="width:90px;"><a id='lblSickndmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblSickndfull_s'>扣全勤<br>固定%</a></td>
+					<td style="width:90px;"><a id='lblSickhours_s'>每期別病假<br>超過總時數</a></td>
+					<td style="width:90px;"><a id='lblSickhdmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblSickhdfull_s'>扣全勤<br>固定%</a></td>
+					<td style="width:90px;"><a id='lblSickdays_s'>每期別病假<br>超過總天數</a></td>
+					<td style="width:90px;"><a id='lblSickddmoney_s'>扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblSickddfull_s'>扣全勤<br>固定%</a></td>
+					<!----------------------------------------------------------------------->
+					<td style="width:90px;"><a id='lblLeavedsmoney_s'>曠職依時扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblLeavedshour_s'>曠職依時扣<br>固定時薪%</a></td>
+					<td style="width:90px;"><a id='lblLeavendmoney_s'>曠職扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblLeavendful_s'>曠職扣全勤<br>固定%</a></td>
+					<!----------------------------------------------------------------------->
+					<td style="width:100px;"><a id='lblFclocknodnum_s'>忘刷期別中<br>X次內不扣薪</a></td>
+					<td style="width:90px;"><a id='lblFclockdsmoney_s'>忘刷依次扣<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblFclockdshour_s'>忘刷依次扣<br>固定時薪%</a></td>
+					<td style="width:90px;"><a id='lblFclockdnum_s'>每期別忘刷<br>超過總次數</a></td>
+					<td style="width:90px;"><a id='lblFclockndmoney_s'>忘刷扣全勤<br>固定金額</a></td>
+					<td style="width:90px;"><a id='lblFclockndfull_s'>忘刷扣全勤<br>固定%</a></td>
+					<!----------------------------------------------------------------------->
 				</tr>
 				<tr id="tr.*" class="bbstr" style='background:#cad3ff;'>
 					<td align="center">
@@ -816,20 +1325,84 @@
 					<td><input id="txtOverhours.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtDhoverhours.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtHoverhours.*" type="text" class="txt num c1"/></td>
+					<!----------------------------------------------------------------------->
+					<td><select id="cmbKind.*" class="txt c1"> </select></td>
+					<!----------------------------------------------------------------------->
 					<td><input id="txtLate.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtLatenum.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtLatemin.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtLatedfull.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatenoallmin.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatenoallnum.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLate2.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLate2dsmoney.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLate2dshour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLate2dnmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLate2dnhour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatemin.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatenum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatedmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatedfull.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLate2min.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLate2num.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLate2dmoney.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLate2dfull.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtLateallnum.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtLateallmin.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtLeave.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatemalldmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatemalldfull.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLateallnum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatenalldmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLatenalldfull.*" type="text" class="txt num c1"/></td>
+					<!----------------------------------------------------------------------->
+					<td><input id="txtEarly.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlynoallmin.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlynoallnum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2dsmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2dshour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2dnmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarly2dnhour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlynum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlyndmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtEarlyndfull.*" type="text" class="txt num c1"/></td>
+					<!----------------------------------------------------------------------->
 					<td><input id="txtVacanodhours.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtVacanonum.*" type="text" class="txt num c1"/></td>
-					<td><input id="txtVacahalfdfull.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacadsmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacadshour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacanum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacandmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacandfull.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacahours.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacahdmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacahdfull.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacadays.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacaddmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtVacaddfull.*" type="text" class="txt num c1"/></td>
+					<!----------------------------------------------------------------------->
+					<td><input id="chkIsvstotal.*" type="checkbox"/></td>
+					<!----------------------------------------------------------------------->
+					<td><input id="txtSicknodhours.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickdsmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickdshour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSicknum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickndmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickndfull.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickhours.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickhdmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickhdfull.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickdays.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickddmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtSickddfull.*" type="text" class="txt num c1"/></td>
+					<!----------------------------------------------------------------------->
+					<td><input id="txtLeavedsmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLeavedshour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLeavendmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtLeavendfull.*" type="text" class="txt num c1"/></td>
+					<!----------------------------------------------------------------------->
+					<td><input id="txtFclocknodnum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtFclockdsmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtFclockdshour.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtFclockdnum.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtFclockndmoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtFclockndfull.*" type="text" class="txt num c1"/></td>
+					<!----------------------------------------------------------------------->
 				</tr>
 			</table>
 		</div>
