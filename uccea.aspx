@@ -380,7 +380,7 @@
 				font-size: medium;
 			}
 			.dbbs {
-				width: 850px;
+				width: 1000px;
 			}
 			.dbbs .tbbs {
 				margin: 0;
@@ -442,6 +442,7 @@
 					<td align="center" style="width:100px;"><a id='lblGmount_s'>領料數量</a></td>
 					<td align="center" style="width:100px;"><a id='lblImount_s'>入庫數量</a></td>
 					<td align="center" style="width:100px;"><a id='lblImoney_s'>入庫金額</a></td>
+					<td align="center" style="width:150px;"><a id='lblMemo_s'>備註</a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td><input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" /></td>
@@ -456,6 +457,7 @@
 					<td><input id="txtGmount.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtImount.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtImoney.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtMemo.*" type="text" class="txt num c1"/></td>
 					<td>
 						<input id="txtNoq.*" type="hidden" />
 					</td>
