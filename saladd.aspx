@@ -21,7 +21,7 @@
 
             var q_name = "saladd";
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtNamea'];
-            var bbmNum = [['txtHours', 10, 1, 1]];
+            var bbmNum = [['txtHours', 10, 1, 1],['txtHr_special', 10, 1, 1]];
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -55,7 +55,7 @@
                 q_mask(bbmMask);
                 
                 if(r_rank<8){
-                	q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtNamea','txtHours'];
+                	q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtNamea','txtHours','txtHr_special'];
                 }
 
                 q_cmbParse("cmbTypea", ",工作日,休息日,例假日,國定假日");
@@ -502,9 +502,7 @@
 						<td align="center" style="width:30%; color:black;"><a id='vewNamea'> </a></td>
 					</tr>
 					<tr>
-						<td >
-						<input id="chkBrow.*" type="checkbox" style=''/>
-						</td>
+						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td id='datea' style="text-align: center;">~datea</td>
 						<td id='noa' style="text-align: center;">~noa</td>
 						<td id='namea' style="text-align: center;">~namea</td>
@@ -514,66 +512,58 @@
 			<div class='dbbm'>
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td class="tdZ"></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
-						<td>
-						<input id="txtNoa" type="text" class="txt c1"/>
-						</td>
+						<td><input id="txtNoa" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
-						<td>
-						<input id="txtDatea" type="text" class="txt c1"/>
-						</td>
+						<td><input id="txtDatea" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblTypea" class="lbl"> </a></td>
-						<td><select id="cmbTypea" class="txt c1"></select></td>
+						<td><select id="cmbTypea" class="txt c1"> </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblSssno" class="lbl btn"> </a></td>
 						<td colspan="2">
-						<input id="txtSssno"  type="text" style="width:50%;"/>
-						<input id="txtNamea"  type="text" style="width:50%;"/>
+							<input id="txtSssno"  type="text" style="width:50%;"/>
+							<input id="txtNamea"  type="text" style="width:50%;"/>
 						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblTime" class="lbl"> </a></td>
 						<td colspan="3">
-						<input id="txtBtime" type="text" style="float:left; width:32%;"/>
-						<span style="float:left; display:block; width:3%; height:inherit; color:blue; font-size:14px; text-align:center;">~</span>
-						<input id="txtEtime" type="text" style="float:left; width:32%;"/>
+							<input id="txtBtime" type="text" style="float:left; width:32%;"/>
+							<span style="float:left; display:block; width:3%; height:inherit; color:blue; font-size:14px; text-align:center;">~</span>
+							<input id="txtEtime" type="text" style="float:left; width:32%;"/>
 						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblHours' class="lbl"> </a></td>
-						<td>
-						<input id="txtHours" type="text" class="txt num c1"/>
-						</td>
+						<td><input id="txtHours" type="text" class="txt num c1"/></td>
 						<td><span> </span><a id='lblIsapv' class="lbl"> </a></td>
-						<td>
-						<input id="chkIsapv" type="checkbox"/>
-						</td>
+						<td><input id="chkIsapv" type="checkbox"/></td>
 					</tr>
+					<!--加班單換休欄位暫不開放------------------------------------------->
+					<tr style="display: none;">
+						<td><span> </span><a id='lblHr_special' class="lbl"> </a></td>
+						<td><input id="txtHr_special" type="text" class="txt num c1"/></td>
+					</tr>
+					<!--加班單換休欄位暫不開放------------------------------------------->
 					<tr>
 						<td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-						<td colspan="3">
-						<input id="txtMemo"  type="text" class="txt c1"/>
-						</td>
+						<td colspan="3"><input id="txtMemo"  type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
-						<td>
-						<input id="txtWorker" type="text" class="txt c1"/>
-						</td>
+						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
-						<td>
-						<input id="txtWorker2" type="text" class="txt c1"/>
-						</td>
+						<td><input id="txtWorker2" type="text" class="txt c1"/></td>
 					</tr>
 				</table>
 			</div>

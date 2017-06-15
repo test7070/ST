@@ -55,6 +55,8 @@
             		,['txtDhoverhours', 3, 1, 1],['txtHoverhours', 4, 1, 1]
             		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 0, 1],['txtMhours2', 2, 0, 1]
             		
+            		,['txtWorkday', 2, 0, 1],['txtRestday', 2, 0, 1]
+            		
             		,['txtLate', 3, 0, 1],['txtLatenoallmin', 3, 0, 1],['txtLatenoallnum', 3, 0, 1]
             		,['txtLate2', 3, 0, 1],['txtLate2dsmoney', 5, 0, 1],['txtLate2dshour', 3, 2, 1]
             		,['txtLate2dnmoney', 5, 0, 1],['txtLate2dnhour', 3, 2, 1]
@@ -89,6 +91,8 @@
             		,['txtDoverhours', 3, 1, 1],['txtOverhours', 4, 1, 1]
             		,['txtDhoverhours', 3, 1, 1],['txtHoverhours', 4, 1, 1]
             		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 0, 1],['txtMhours2', 2, 0, 1]
+            		
+            		,['txtWorkday', 2, 0, 1],['txtRestday', 2, 0, 1]
             		
             		,['txtLate', 3, 0, 1],['txtLatenoallmin', 3, 0, 1],['txtLatenoallnum', 3, 0, 1]
             		,['txtLate2', 3, 0, 1],['txtLate2dsmoney', 5, 0, 1],['txtLate2dshour', 3, 2, 1]
@@ -649,20 +653,6 @@
 						<td colspan="4" style="color: red;">※存檔確定後，表頭資料會更新到最新的生效日資料，<BR>　請在存檔前確認表身更新的內容資料。</td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblIsshift' class="lbl">輪班</a></td>
-						<td colspan="2">
-							<input id="chkIsshift" type="checkbox"/>
-							<span> </span>
-							<a id='lblShifthours' class="lbl" style="float: none;margin-left: 20px;">輪班時數</a>
-							<span style="width: 120px;float: right;"> </span>
-							<input id="txtShifthours" type="text" class="txt num c1" style="width: 60px;float: right;" />
-						</td>
-						<td> </td>
-						<td><span> </span><a id='lblMeals' class="lbl">伙食費</a></td>
-						<td><input id="txtMeals" type="text" class="txt num c1" style="width: 60px;" /></td>
-						<td><span style="float: left;"> </span>元/餐</td>
-					</tr>
-					<tr>
 						<td><span> </span><a id='lblBresttime' class="lbl">休息時間1</a></td>
 						<td colspan="3">
 							<input id="txtBresttime" type="text" class="txt c2 resttime"/>
@@ -670,6 +660,17 @@
 							<input id="txtEresttime" type="text" class="txt c2 resttime"/>
 							<span style="float: left;"> </span>
 							<a style="float: left;">(午休)</a>
+						</td>
+						<td><span> </span><a id='lblMeals' class="lbl">伙食費</a></td>
+						<td><input id="txtMeals" type="text" class="txt num c1" style="width: 60px;" /></td>
+						<td><span style="float: left;"> </span>元/餐</td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblBresttime2' class="lbl">休息時間2</a></td>
+						<td colspan="3">
+							<input id="txtBresttime2" type="text" class="txt c2 resttime"/>
+							<a style="float: left;">　~　</a>
+							<input id="txtEresttime2" type="text" class="txt c2 resttime"/>
 						</td>
 						<td><span> </span><a id='lblMtime1' class="lbl">伙食給予起算時間1</a></td>
 						<td><input id="txtMbtime1" type="text" class="txt c1"/></td>
@@ -683,11 +684,11 @@
 						</td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblBresttime2' class="lbl">休息時間2</a></td>
+						<td><span> </span><a id='lblBresttime3' class="lbl">休息時間3</a></td>
 						<td colspan="3">
-							<input id="txtBresttime2" type="text" class="txt c2 resttime"/>
+							<input id="txtBresttime3" type="text" class="txt c2 resttime"/>
 							<a style="float: left;">　~　</a>
-							<input id="txtEresttime2" type="text" class="txt c2 resttime"/>
+							<input id="txtEresttime3" type="text" class="txt c2 resttime"/>
 						</td>
 						<td><span> </span><a id='lblMtime2' class="lbl">伙食給予起算時間2</a></td>
 						<td><input id="txtMbtime2" type="text" class="txt c1"/></td>
@@ -700,15 +701,7 @@
 							<a id='lblMhours2-1' class="lbl" style="float: left;">H給予伙食</a>
 						</td>
 					</tr>
-					<tr>
-						<td><span> </span><a id='lblBresttime3' class="lbl">休息時間3</a></td>
-						<td colspan="3">
-							<input id="txtBresttime3" type="text" class="txt c2 resttime"/>
-							<a style="float: left;">　~　</a>
-							<input id="txtEresttime3" type="text" class="txt c2 resttime"/>
-						</td>
-						<td> </td>
-					</tr>
+					<!------------------------------------------------------------------------->
 					<tr style="background-color: antiquewhite;">
 						<td><span> </span><a id='lblOvertime' class="lbl">加班開始時間</a></td>
 						<td><input id="txtOvertime" type="text" class="txt c1" /></td>
@@ -733,8 +726,31 @@
 						<td> </td>
 						<td> </td>
 					</tr>
+					<!------------------------------------------------------------------------->
+					<tr style="background-color: aquamarine;">
+						<td><span> </span><a id='lblIsshift' class="lbl">輪班</a></td>
+						<td colspan="2">
+							<input id="chkIsshift" type="checkbox"/>
+							<span> </span>
+							<a id='lblShifthours' class="lbl" style="float: none;margin-left: 20px;">輪班時數</a>
+							<span style="width: 120px;float: right;"> </span>
+							<input id="txtShifthours" type="text" class="txt num c1" style="width: 60px;float: right;" />
+						</td>
+						<td> </td>
+						<td colspan="2">
+							<a id='lblWorkday' class="lbl" style="float: left;">工作日數</a>
+							<span style="float: left;"> </span>
+							<input id="txtWorkday" type="text" class="txt c1" style="width: 60px;"/>
+							<span style="float: left;"> </span>
+							<a id='lblRestday' class="lbl" style="float: left;">休息日數</a>
+							<span style="float: left;"> </span>
+							<input id="txtRestday" type="text" class="txt c1" style="width: 60px;"/>
+						</td>
+						<td colspan="4"> </td>
+					</tr>
+					<!------------------------------------------------------------------------->
 					<tr style="background-color: azure;">
-						<td><span> </span><a id='lblKind' class="lbl">期別</a></td>
+						<td><span> </span><a id='lblKind' class="lbl">合計期別</a></td>
 						<td><select id="cmbKind" class="txt c1"> </select></td>
 						<td>
 							<input id="txtVacanonum" type="hidden"/>
@@ -935,7 +951,7 @@
 					<tr style="background-color: lavenderblush;">
 						<td> </td>
 						<td><span> </span><a class="lbl">不扣薪：</a></td>
-						<td><span> </span><a class="lbl">一日</a></td>
+						<td><span> </span><a class="lbl">每期別</a></td>
 						<td colspan="2">
 							<input id="txtVacanodhours" type="text" class="txt num c1" style="width: 40px;" />
 							<span style="float: left;"> </span>
@@ -1026,7 +1042,7 @@
 					<tr style="background-color: lightgreen;">
 						<td> </td>
 						<td><span> </span><a class="lbl">不扣薪：</a></td>
-						<td><span> </span><a class="lbl">一日</a></td>
+						<td><span> </span><a class="lbl">每期別</a></td>
 						<td colspan="2">
 							<input id="txtSicknodhours" type="text" class="txt num c1" style="width: 40px;" />
 							<span style="float: left;"> </span>
@@ -1191,9 +1207,7 @@
 					<td style="width:20px;"> </td>
 					<td style="width:20px;">表頭</td>
 					<td style="width:100px;"><a id='lblBdate_s'>生效日</a></td>
-					<td style="width:150px;"><a id='lblBtime_s'>時間</a></td>
-					<td style="width:50px;"><a id='lblIsshift_s'>輪班</a></td>
-					<td style="width:80px;"><a id='lblShifthours_s'>輪班時數</a></td>
+					<td style="width:150px;"><a id='lblBtime_s'>上班時間</a></td>
 					<td style="width:150px;"><a id='lblBresttime_s'>休息時間1</a></td>
 					<td style="width:150px;"><a id='lblBresttime2_s'>休息時間2</a></td>
 					<td style="width:150px;"><a id='lblBresttime3_s'>休息時間3</a></td>
@@ -1202,14 +1216,20 @@
 					<td style="width:80px;"><a id='lblMhours1_s'>伙食給予1<br>超過H</a></td>
 					<td style="width:80px;"><a id='lblMtime2_s'>伙食給予2<br>起算時間</a></td>
 					<td style="width:80px;"><a id='lblMhours2_s'>伙食給予2<br>超過H</a></td>
+					<!---------------------------------------------------------------------->
 					<td style="width:80px;"><a id='lblOvertime_s'>加班<br>開始時間</a></td>
 					<td style="width:80px;"><a id='lblOstand_s'>加班時薪</a></td>
 					<td style="width:90px;"><a id='lblDoverhours_s'>平日<br>最多時數/天</a></td>
 					<td style="width:90px;"><a id='lblOverhours_s'>平日<br>最多時數/月</a></td>
 					<td style="width:90px;"><a id='lblDhoverhours_s'>假日<br>最多時數/天</a></td>
 					<td style="width:90px;"><a id='lblHoverhours_s'>假日<br>最多時數/月</a></td>
+					<!---------------------------------------------------------------------->
+					<td style="width:50px;"><a id='lblIsshift_s'>輪班</a></td>
+					<td style="width:80px;"><a id='lblShifthours_s'>輪班時數</a></td>
+					<td style="width:80px;"><a id='lblWorkday_s'>工作日數</a></td>
+					<td style="width:80px;"><a id='lblRestday_s'>休息日數</a></td>
 					<!----------------------------------------------------------------------->
-					<td style="width:90px;"><a id='lblKind_s'>期別</a></td>
+					<td style="width:90px;"><a id='lblKind_s'>合計期別</a></td>
 					<!----------------------------------------------------------------------->
 					<td style="width:90px;"><a id='lblLate_s'>遲到X分<br>內不扣薪</a></td>
 					<td style="width:100px;"><a id='lblLatenoallmin_s'>期別中遲到X<br>分內不扣薪</a></td>
@@ -1300,8 +1320,6 @@
 						<input id="txtBtime.*" type="text" class="txt c1" style="width: 60px;"/><a style="float: left;">~</a>
 						<input id="txtEtime.*" type="text" class="txt c1" style="width: 60px;"/>
 					</td>
-					<td><input id="chkIsshift.*" type="checkbox"/></td>
-					<td><input id="txtShifthours.*" type="text" class="txt num c1"/></td>
 					<td>
 						<input id="txtBresttime.*" type="text" class="txt c1" style="width: 60px;"/><a style="float: left;">~</a>
 						<input id="txtEresttime.*" type="text" class="txt c1" style="width: 60px;"/>
@@ -1319,12 +1337,18 @@
 					<td><input id="txtMhours1.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtMbtime2.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMhours2.*" type="text" class="txt num c1"/></td>
+					<!--------------------------------------------------------------------------->
 					<td><input id="txtOvertime.*" type="text" class="txt c1"/></td>
 					<td><input id="txtOstand.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtDoverhours.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtOverhours.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtDhoverhours.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtHoverhours.*" type="text" class="txt num c1"/></td>
+					<!------------------------------------------------------------------------>
+					<td><input id="chkIsshift.*" type="checkbox"/></td>
+					<td><input id="txtShifthours.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtWorkday.*" type="text" class="txt num c1"/></td>
+					<td><input id="txtRestday.*" type="text" class="txt num c1"/></td>
 					<!----------------------------------------------------------------------->
 					<td><select id="cmbKind.*" class="txt c1"> </select></td>
 					<!----------------------------------------------------------------------->
