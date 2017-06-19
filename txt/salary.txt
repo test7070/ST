@@ -314,8 +314,8 @@ create table #tmpa(
 	dearlymin float, --當天早退分鐘數
 	dvacahours float, --當天請假時數
 	vacaspecial bit,--特休假
-	vacasick bit, --事假
-	vacaperson bit, --病假
+	vacasick float, --事假
+	vacaperson float, --病假
 	hr_leave float,--當天曠職
 	-----------------------
 	mealsnum float,--伙食
@@ -584,15 +584,15 @@ begin
 	begin
 		update #tmpa
 		set dvacahours=case when isnull(hr_used,0)>8 then 8 else isnull(hr_used,0) end
-		,vacaspecial=case when isnull(hr_used,0)>0 and isnull(nospecialcount,0)=0 and ISNULL(specialcount,0)>0 then 1 else 0 end
-		,vacasick=case when isnull(hr_used,0)>0 and isnull(sickcount,0)>0 then 1 else 0 end
-		,vacaperson=case when isnull(hr_used,0)>0 and isnull(personcount,0)>0 then 1 else 0 end
+		,vacaspecial=case when isnull(hr_used,0)>0 and isnull(nospecialcount,0)=0 and ISNULL(specialcount,0)>0 then case when ISNULL(specialcount,0)>8 then 8 else ISNULL(specialcount,0)end else 0 end
+		,vacasick=case when isnull(hr_used,0)>0 and isnull(sickcount,0)>0 then case when  isnull(sickcount,0)>8 then 8 else  isnull(sickcount,0) end else 0 end
+		,vacaperson=case when isnull(hr_used,0)>0 and isnull(personcount,0)>0 then case when isnull(personcount,0)>8 then 8 else isnull(personcount,0) end else 0 end
 		from #tmpa a
 		outer apply (select SUM(hr_used)hr_used 
-		,sum(case when hname like '%特休%' or hname like '%抵工時%' then 1 else 0 end)specialcount
-		,sum(case when hname like '%事假%' then 1 else 0 end)personcount
-		,sum(case when hname like '%病假%' then 1 else 0 end)sickcount
-		,sum(case when hname not like '%特休%' and hname not like '%抵工時%' then 1 else 0 end)nospecialcount
+		,sum(case when hname like '%特休%' or hname like '%抵工時%' then hr_used else 0 end)specialcount
+		,sum(case when hname like '%事假%' then hr_used else 0 end)personcount
+		,sum(case when hname like '%病假%' then hr_used else 0 end)sickcount
+		,sum(case when hname not like '%特休%' and hname not like '%抵工時%' then hr_used else 0 end)nospecialcount
 		from salvacause where dbo.q_cdn(@noa,1) between bdate and edate and sssno=@sssno)b
 		where a.noa=@noa and a.noq=@noq and a.sssno=@sssno
 	end
@@ -600,15 +600,15 @@ begin
 	begin
 		update #tmpa
 		set dvacahours=case when isnull(hr_used,0)>8 then 8 else isnull(hr_used,0) end
-		,vacaspecial=case when isnull(hr_used,0)>0 and isnull(nospecialcount,0)=0 and ISNULL(specialcount,0)>0 then 1 else 0 end
-		,vacasick=case when isnull(hr_used,0)>0 and isnull(sickcount,0)>0 then 1 else 0 end
-		,vacaperson=case when isnull(hr_used,0)>0 and isnull(personcount,0)>0 then 1 else 0 end
+		,vacaspecial=case when isnull(hr_used,0)>0 and isnull(nospecialcount,0)=0 and ISNULL(specialcount,0)>0 then case when ISNULL(specialcount,0)>8 then 8 else ISNULL(specialcount,0)end else 0 end
+		,vacasick=case when isnull(hr_used,0)>0 and isnull(sickcount,0)>0 then case when  isnull(sickcount,0)>8 then 8 else  isnull(sickcount,0) end else 0 end
+		,vacaperson=case when isnull(hr_used,0)>0 and isnull(personcount,0)>0 then case when isnull(personcount,0)>8 then 8 else isnull(personcount,0) end else 0 end
 		from #tmpa a
 		outer apply (select SUM(hr_used)hr_used 
-		,sum(case when hname like '%特休%' or hname like '%抵工時%' then 1 else 0 end)specialcount
-		,sum(case when hname like '%事假%' then 1 else 0 end)personcount
-		,sum(case when hname like '%病假%' then 1 else 0 end)sickcount
-		,sum(case when hname not like '%特休%' and hname not like '%抵工時%' then 1 else 0 end)nospecialcount
+		,sum(case when hname like '%特休%' or hname like '%抵工時%' then hr_used else 0 end)specialcount
+		,sum(case when hname like '%事假%' then hr_used else 0 end)personcount
+		,sum(case when hname like '%病假%' then hr_used else 0 end)sickcount
+		,sum(case when hname not like '%特休%' and hname not like '%抵工時%' then hr_used else 0 end)nospecialcount
 		from salvacause where @noa between bdate and edate and sssno=@sssno)b
 		where a.noa=@noa and a.noq=@noq and a.sssno=@sssno
 	end
