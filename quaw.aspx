@@ -18,7 +18,7 @@
 
             q_tables = 't';
             var q_name = "quaw";
-            var q_readonly = ['txtNoa','txtProduct','txtSpec','txtUnit','txtWorker','txtWorker2'];
+            var q_readonly = ['txtNoa','txtProduct','txtSpec','txtUnit','txtWorker','txtWorker2','textTotal'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [];
@@ -280,8 +280,7 @@
 
             function refresh(recno) {
                 _refresh(recno);
-                if (q_cur > 0 && q_cur < 4)
-                    sum();
+                sum();
             }
 
             function readonly(t_para, empty) {
@@ -296,11 +295,13 @@
                 	$('#lblProduct').show();
                 	$('#lblXproduct').hide();	
                 }
+                sum();
                 
             }
 
             function btnMinus(id) {
                 _btnMinus(id);
+                sum()
             }
 
             function btnPlus(org_htm, dest_tag, afield) {
@@ -315,9 +316,12 @@
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
                     if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+                    	$('#txtMount_'+i).change(function() {sum();});
+                    	$('#txtPrice_'+i).change(function() {sum();});
                     }
                 }
                 _bbsAssign();
+                sum()
             }
 
             function bbtAssign() {
@@ -330,8 +334,11 @@
             }
 
             function sum() {
-                if (!(q_cur == 1 || q_cur == 2))
-                    return;
+            	var t_total=0;
+                for (var i = 0; i < q_bbsCount; i++) {
+                	t_total=q_add(t_total,q_mul(dec($('#txtMount_'+i).val()),dec($('#txtPrice_'+i).val())));
+                }
+                $('#textTotal').val(FormatNumber(t_total));
             }
 
             function q_appendData(t_Table) {
@@ -388,6 +395,18 @@
                         break;
                 }
             }
+            
+            function FormatNumber(n) {
+				var xx = "";
+				if (n < 0) {
+					n = Math.abs(n);
+					xx = "-";
+				}
+				n += "";
+				var arr = n.split(".");
+				var re = /(\d{1,3})(?=(\d{3})+$)/g;
+				return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
+			}
 
 		</script>
 		<style type="text/css">
@@ -611,6 +630,8 @@
 						<td colspan="7"><input id="txtMemo" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td><span> </span><a id="lblTotal" class="lbl"> </a></td>
+						<td><input id="textTotal" type="text" class="txt num c1"/></td>
 						<td><span> </span><a id="lblWorker" class="lbl"> </a></td>
 						<td><input id="txtWorker" type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
