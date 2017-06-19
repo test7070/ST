@@ -191,3 +191,157 @@ end
 
 select @vccno vccno
 ;
+
+--*********************************************************************************************************
+get2vcc_vu:--get2vcc_vu
+SET QUOTED_IDENTIFIER OFF
+declare @t_accy nvarchar(50) = [1]
+declare @t_noa nvarchar(50) = case when '#non'=[2] then '' else [2] end
+declare @t_vcckey nvarchar(50) = [3]
+declare @t_date nvarchar(50) = [4]
+declare @t_time nvarchar(50) = [5]
+declare @t_act nvarchar(50) = [6]
+declare @t_userno nvarchar(50) = [7]
+declare @t_name nvarchar(50) = [8]
+declare @t_dvccno nvarchar(50) = [9]
+
+declare @accy nvarchar(20)=''
+declare @vccno nvarchar(50)=''
+declare @existsvcc int=0 --產生的vcc是否存在
+declare @isgetgen int=0 --由get產生
+declare @t_err nvarchar(20)='err'
+
+set @accy=isnull((select accy from view_get where noa=@t_noa),@t_accy)
+set @vccno=isnull((select transtartno from view_get where noa=@t_noa),'')
+
+BEGIN TRY
+	Begin Transaction
+
+	--0清除
+	--1寫入
+	--2刪除
+
+	if(@t_act='2')
+	begin
+		if(@vccno!='')
+		begin
+			--刪除bbs
+			EXEC("delete vccs"+@accy+" where noa='"+@vccno+"'")
+			--更新bbm(表頭不刪除)
+			EXEC("delete vcc"+@accy+" where noa='"+@vccno+"'")
+		end
+		if(@t_dvccno!='')
+		begin
+			--刪除bbs
+			EXEC("delete vccs"+@accy+" where noa='"+@t_dvccno+"'")
+			--更新bbm(表頭不刪除)
+			EXEC("delete vcc"+@accy+" where noa='"+@t_dvccno+"'")
+		end
+	end
+	else if(@t_act='0')
+	begin
+		if(@vccno!='')
+		begin
+			--刪除bbs
+			EXEC("delete vccs"+@accy+" where noa='"+@vccno+"'")
+			--更新bbm(表頭不刪除)
+			update a
+			set custno=b.custno,comp=b.comp,nick=c.nick,paytype=c.paytype
+			,tel=c.tel,fax=c.fax,trantype=c.trantype
+			,post=c.zip_home,addr=c.addr_home,addr2=b.addr
+			,salesno=c.salesno,sales=c.sales
+			,tranadd=b.transtyle,benifit=b.tweight,weight=b.mount
+					,cardealno=b.cardealno,cardeal=b.cardeal,carno=b.carno
+					,price=b.price,tranmoney=b.tranmoney,money=b.money,tax=b.tax
+					,atax=b.atax,total=b.total,memo='由互換出貨'+@t_noa+'轉來',worker=b.worker
+					,worker2=b.worker,part2=@t_noa
+			from vcc106 a outer apply (select * from view_get where noa=@t_noa)b
+			left join cust c on b.custno=c.noa
+			where a.noa=@vccno
+		end
+	end
+	else
+	begin
+		if(@vccno='')
+			set @vccno=@t_noa
+			
+		--判斷vcc的noa是否存在
+		set @existsvcc=isnull((select count(*) from view_vcc where noa=@vccno),0)
+		set @isgetgen=isnull((select count(*) from view_vcc where noa=@vccno and part2=@t_noa),0)
+		if(@isgetgen=0 and @existsvcc=1)
+		begin
+			--重新產生編號(編號被占用或是其他錯誤非正常產生)
+			set @vccno=@t_vcckey+replace(@t_date,'/','')
+			+right('000'+cast(cast(right(isnull((select top 1 noa from view_vcc where noa like @t_vcckey+replace(@t_date,'/','')+'%' order by noa desc),'00000'),3) as int)+1 as nvarchar(10)),3)
+		end
+		
+		--bbm還未產生或被刪除 或 重新產生編號
+		if(@existsvcc=0 or (@isgetgen=0 and @existsvcc=1))
+		begin
+			EXEC("
+				insert vcc"+@t_accy+" (noa,typea,stype,datea,cno,acomp,mon,paydate,custno,comp,nick,paytype
+				,tel,fax,trantype,post,addr,addr2,salesno,sales,invono,tranadd,benifit,weight
+				,cardealno,cardeal,carno,price,tranmoney,money,tax,atax,total,memo,apvmemo,worker,worker2,part2)
+				select '"+@vccno+"','1','1','"+@t_date+"'
+				,(select top 1 noa from acomp order by noa)
+				,(select top 1 acomp from acomp order by noa)
+				,case when len(isnull(b.startdate,''))=0 or right('00'+isnull(b.startdate,''),2)='00'
+				or right('"+@t_date+"',2)<right('00'+isnull(b.startdate,''),2) then left('"+@t_date+"',len('"+@t_date+"')-3) 
+				else left(dbo.q_cdn(left('"+@t_date+"',len('"+@t_date+"')-3)+'/01',35),len('"+@t_date+"')-3) end,a.transtart
+				,a.custno,b.comp,b.nick,b.paytype,b.tel,b.fax,b.trantype,b.zip_home,b.addr_home,a.addr
+				,b.salesno,b.sales,'',a.transtyle,a.tweight,a.mount,a.cardealno,a.cardeal,a.carno
+				,a.price,a.tranmoney,a.money,a.tax,a.atax,a.total,'由互換出貨"+@t_noa+"轉來'
+				,'',a.worker,a.worker2,'"+@t_noa+"'
+				from view_get a left join cust b on a.custno=b.noa
+				where a.noa='"+@t_noa+"'
+			")
+		end
+		
+		set @accy=isnull((select accy from view_vcc where noa=@vccno),@t_accy)
+
+		--產生bbs(全部過去品項)
+		EXEC("insert vccs"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total
+		,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
+		select '"+@vccno+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq))as nvarchar(10)),3)
+		,case when b.product='加工費' or b.product='運費' then b.product else '加工費' end ,'','','',0,''
+		,case when b.product='加工費' or b.product='運費' then b.mount else 0 end
+		,case when b.product='加工費' or b.product='運費' then b.weight else 0 end
+		,b.mweight,b.lengthc
+		,b.storeno,b.store,b.memo,a.noa,b.noq,'',c.datea,c.custno,c.typea
+		from view_get a left join view_gets b on a.noa=b.noa 
+		outer apply (select * from view_vcc where noa='"+@vccno+"')c
+		where a.noa='"+@t_noa+"' ")
+		
+		--更新bbm
+		EXEC("
+		update a
+		set custno=b.custno,comp=b.comp,nick=c.nick,paytype=c.paytype
+		,tel=c.tel,fax=c.fax,trantype=c.trantype
+		,post=c.zip_home,addr=c.addr_home,addr2=b.addr
+		,salesno=c.salesno,sales=c.sales
+		,tranadd=b.transtyle,benifit=b.tweight,weight=b.mount
+				,cardealno=b.cardealno,cardeal=b.cardeal,carno=b.carno
+				,price=b.price,tranmoney=b.tranmoney,money=b.money,tax=b.tax
+				,atax=b.atax,total=b.total,memo='由互換出貨"+@t_noa+"轉來',worker=b.worker
+				,worker2=b.worker,part2='"+@t_noa+"'
+		from vcc"+@accy+" a outer apply (select top 1* from view_get where noa='"+@t_noa+"')b
+		left join cust c on b.custno=c.noa
+		where a.noa='"+@vccno+"'
+		")
+		
+		set @accy=isnull((select accy from view_get where noa=@t_noa),@t_accy)
+		
+		EXEC("update a set transtartno='"+@vccno+"' from get"+@accy+" a where a.noa='"+@t_noa+"'")
+	end
+	set @t_err=''
+
+	Commit Transaction
+
+END TRY
+BEGIN CATCH
+	ROLLBACK
+END CATCH
+
+select @vccno vccno,@t_err err
+
+;
