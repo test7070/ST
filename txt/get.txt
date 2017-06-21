@@ -289,7 +289,7 @@ BEGIN TRY
 				or right('"+@t_date+"',2)<right('00'+isnull(b.startdate,''),2) then left('"+@t_date+"',len('"+@t_date+"')-3) 
 				else left(dbo.q_cdn(left('"+@t_date+"',len('"+@t_date+"')-3)+'/01',35),len('"+@t_date+"')-3) end,a.transtart
 				,a.custno,b.comp,b.nick,b.paytype,b.tel,b.fax,b.trantype,b.zip_home,b.addr_home,a.addr
-				,b.salesno,b.sales,'',a.transtyle,a.tweight,a.mount,a.cardealno,a.cardeal,a.carno
+				,b.salesno,b.sales,'',cast(replace(a.transtyle,',','') as float),a.tweight,a.mount,a.cardealno,a.cardeal,a.carno
 				,a.price,a.tranmoney,a.money,a.tax,a.atax,a.total,'由互換出貨"+@t_noa+"轉來'
 				,'',a.worker,a.worker2,'"+@t_noa+"'
 				from view_get a left join cust b on a.custno=b.noa
@@ -319,7 +319,7 @@ BEGIN TRY
 		,tel=c.tel,fax=c.fax,trantype=c.trantype
 		,post=c.zip_home,addr=c.addr_home,addr2=b.addr
 		,salesno=c.salesno,sales=c.sales
-		,tranadd=b.transtyle,benifit=b.tweight,weight=b.mount
+		,tranadd=cast(replace(b.transtyle,',','') as float),benifit=b.tweight,weight=b.mount
 				,cardealno=b.cardealno,cardeal=b.cardeal,carno=b.carno
 				,price=b.price,tranmoney=b.tranmoney,money=b.money,tax=b.tax
 				,atax=b.atax,total=b.total,memo='由互換出貨"+@t_noa+"轉來',worker=b.worker
@@ -339,6 +339,7 @@ BEGIN TRY
 
 END TRY
 BEGIN CATCH
+	set @vccno=isnull((select transtartno from view_get where noa=@t_noa),'')
 	ROLLBACK
 END CATCH
 
