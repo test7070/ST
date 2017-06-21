@@ -245,19 +245,21 @@ BEGIN TRY
 			--刪除bbs
 			EXEC("delete vccs"+@accy+" where noa='"+@vccno+"'")
 			--更新bbm(表頭不刪除)
-			update a
-			set custno=b.custno,comp=b.comp,nick=c.nick,paytype=c.paytype
-			,tel=c.tel,fax=c.fax,trantype=c.trantype
-			,post=c.zip_home,addr=c.addr_home,addr2=b.addr
-			,salesno=c.salesno,sales=c.sales
-			,tranadd=b.transtyle,benifit=b.tweight,weight=b.mount
-					,cardealno=b.cardealno,cardeal=b.cardeal,carno=b.carno
-					,price=b.price,tranmoney=b.tranmoney,money=b.money,tax=b.tax
-					,atax=b.atax,total=b.total,memo='由互換出貨'+@t_noa+'轉來',worker=b.worker
-					,worker2=b.worker,part2=@t_noa
-			from vcc106 a outer apply (select * from view_get where noa=@t_noa)b
-			left join cust c on b.custno=c.noa
-			where a.noa=@vccno
+			EXEC("
+				update a
+				set custno=b.custno,comp=b.comp,nick=c.nick,paytype=c.paytype
+				,tel=c.tel,fax=c.fax,trantype=c.trantype
+				,post=c.zip_home,addr=c.addr_home,addr2=b.addr
+				,salesno=c.salesno,sales=c.sales
+				,tranadd=cast(replace(b.transtyle,',','') as float),benifit=b.tweight,weight=b.mount
+						,cardealno=b.cardealno,cardeal=b.cardeal,carno=b.carno
+						,price=b.price,tranmoney=b.tranmoney,money=b.money,tax=b.tax
+						,atax=b.atax,total=b.total,memo='由互換出貨"+@t_noa+"轉來',worker=b.worker
+						,worker2=b.worker,part2='"+@t_noa+"'
+				from vcc"+@accy+" a outer apply (select top 1* from view_get where noa='"+@t_noa+"')b
+				left join cust c on b.custno=c.noa
+				where a.noa='"+@vccno+"'
+			")
 		end
 	end
 	else
