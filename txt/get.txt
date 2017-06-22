@@ -247,6 +247,8 @@ declare @t_err nvarchar(20)='err'
 set @accy=isnull((select accy from view_get where noa=@t_noa),@t_accy)
 set @vccno=isnull((select transtartno from view_get where noa=@t_noa),'')
 
+--VU與SF差異VU會全部轉出SF只有單價轉出，VU加工費和運費才有數量和重量
+
 BEGIN TRY
 	Begin Transaction
 

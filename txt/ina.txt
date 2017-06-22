@@ -163,3 +163,163 @@ END CATCH
 
 select @rc2no rc2no,@t_err err
 ;
+------------------------------------------------------------------------------------------------------------
+ina2rc2_vu:--ina2rc2_vu
+SET QUOTED_IDENTIFIER OFF
+declare @t_accy nvarchar(50) = [1]
+declare @t_noa nvarchar(50) = case when '#non'=[2] then '' else [2] end
+declare @t_rc2key nvarchar(50) = [3]
+declare @t_date nvarchar(50) = [4]
+declare @t_time nvarchar(50) = [5]
+declare @t_act nvarchar(50) = [6]
+declare @t_userno nvarchar(50) = [7]
+declare @t_name nvarchar(50) = [8]
+declare @t_drc2no nvarchar(50) = [9]
+
+declare @accy nvarchar(20)=''
+declare @rc2no nvarchar(50)=''
+declare @existsrc2 int=0 --產生的rc2是否存在
+declare @isinagen int=0 --由ina產生
+declare @t_err nvarchar(20)='err'
+
+set @accy=isnull((select accy from view_ina where noa=@t_noa),@t_accy)
+set @rc2no=isnull((select transtartno from view_ina where noa=@t_noa),'')
+
+--VU與SF差異VU會全部轉出SF只有單價轉出，VU加工費和運費才有數量和重量
+
+BEGIN TRY
+	Begin Transaction
+	--0清除
+	--1寫入
+	--2刪除
+	
+	if(@t_act='2')
+	begin
+		if(@rc2no!='')
+		begin
+			--刪除bbs
+			EXEC("delete rc2s"+@accy+" where noa='"+@rc2no+"'")
+			--刪除bbm
+			EXEC("delete rc2"+@accy+" where noa='"+@rc2no+"'")
+		end
+		if(@t_drc2no!='')
+		begin
+			--刪除bbs
+			EXEC("delete rc2s"+@accy+" where noa='"+@t_drc2no+"'")
+			--刪除bbm
+			EXEC("delete rc2"+@accy+" where noa='"+@t_drc2no+"'")
+		end
+	end
+	else if(@t_act='0')
+	begin
+		if(@rc2no!='')
+		begin
+			set @accy=isnull((select accy from view_rc2 where noa=@rc2no),@t_accy)
+			
+			--刪除bbs
+			EXEC("delete rc2s"+@accy+" where noa='"+@rc2no+"'")
+			--更新bbm(表頭不刪除)
+			EXEC("
+				update a
+				set tggno=b.tggno,comp=b.comp,nick=c.nick,paytype=c.paytype
+				,tel=c.tel,fax=c.fax,trantype=c.trantype
+				,post=c.zip_home,addr=c.addr_home,addr2=b.addr
+				,salesno=c.salesno,sales=c.sales
+				,tranadd=cast(replace(b.transtyle,',','') as float),benifit=b.tweight,weight=b.mount
+						,cardealno=b.cardealno,cardeal=b.cardeal,carno=b.carno
+						,price=b.price,tranmoney=b.tranmoney,money=0,tax=0
+						,atax=b.atax,total=0,memo='由互換進貨"+@t_noa+"轉來',worker=b.worker
+						,worker2=b.worker2,part2='"+@t_noa+"'
+				from rc2"+@accy+" a outer apply (select top 1* from view_ina where noa='"+@t_noa+"')b
+				left join tgg c on b.tggno=c.noa
+				where a.noa='"+@rc2no+"'
+			")
+		end
+	end
+	else
+	begin
+		
+		if(@rc2no='')
+			set @rc2no=@t_noa
+	
+		--判斷rc2的noa是否存在
+		set @existsrc2=isnull((select count(*) from view_rc2 where noa=@rc2no),0)
+		set @isinagen=isnull((select count(*) from view_rc2 where noa=@rc2no and part2=@t_noa),0)
+		
+		if(@isinagen=0 and @existsrc2=1)
+		begin
+			--重新產生編號(編號被占用或是其他錯誤非正常產生)
+			set @rc2no=@t_rc2key+replace(@t_date,'/','')
+			+right('000'+cast(cast(right(isnull((select top 1 noa from view_rc2 where noa like @t_rc2key+replace(@t_date,'/','')+'%' order by noa desc),'00000'),3) as int)+1 as nvarchar(10)),3)
+		end
+		
+		--bbm還未產生或被刪除 或 重新產生編號
+		if(@existsrc2=0 or (@isinagen=0 and @existsrc2=1))
+		begin				
+			EXEC("
+				insert rc2"+@accy+" (noa,typea,stype,datea,cno,acomp,mon,tggno,comp,nick,paytype
+				,tel,trantype,post,addr,addr2,salesno,sales,invono,tranadd,benifit,weight
+				,cardealno,cardeal,carno,price,tranmoney,money,tax,atax,total,memo,transtart,worker,worker2,part2)
+				select '"+@rc2no+"','1','1','"+@t_date+"'
+				,(select top 1 noa from acomp order by noa)
+				,(select top 1 acomp from acomp order by noa)
+				,case when len(isnull(b.startdate,''))=0 or right('00'+isnull(b.startdate,''),2)='00'
+				or right('"+@t_date+"',2)<right('00'+isnull(b.startdate,''),2) then left('"+@t_date+"',len('"+@t_date+"')-3) 
+				else left(dbo.q_cdn(left('"+@t_date+"',len('"+@t_date+"')-3)+'/01',35),len('"+@t_date+"')-3) end
+				,a.tggno,b.comp,b.nick,b.paytype,b.tel,b.trantype,b.zip_home,b.addr_home,a.addr
+				,b.salesno,b.sales,'',cast(replace(a.transtyle,',','') as float),a.tweight,a.mount,a.cardealno,a.cardeal,a.carno
+				,a.price,a.tranmoney,a.money,a.tax,a.atax,a.total,'由互換進貨"+@t_noa+"轉來'
+				,'',a.worker,a.worker2,'"+@t_noa+"'
+				from view_ina a left join tgg b on a.tggno=b.noa
+				where a.noa='"+@t_noa+"'
+			")
+		end
+		
+		set @accy=isnull((select accy from view_rc2 where noa=@rc2no),@t_accy)
+
+		--產生bbs			
+		EXEC("insert rc2s"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total
+		,storeno,store,memo,ordeno,no2,uno,datea,custno,typea)
+		select '"+@rc2no+"',right('000'+cast((ROW_NUMBER() over (order by a.noa,b.noq))as nvarchar(10)),3)
+		,case when b.product='加工費' or b.product='運費' then b.product else '加工費' end ,'','','',0,''
+		,case when b.product='加工費' or b.product='運費' then b.mount else 0 end
+		,case when b.product='加工費' or b.product='運費' then b.weight else 0 end
+		,b.mweight,b.lengthc
+		,b.storeno,b.store,b.memo,a.noa,b.noq,'',c.datea,c.tggno,c.typea
+		from view_ina a left join view_inas b on a.noa=b.noa 
+		outer apply (select * from view_rc2 where noa='"+@rc2no+"')c
+		where a.noa='"+@t_noa+"' ")
+					
+		EXEC("
+			update a
+			set tggno=b.tggno,comp=b.comp,nick=c.nick,paytype=c.paytype
+			,tel=c.tel,fax=c.fax,trantype=c.trantype
+			,post=c.zip_home,addr=c.addr_home,addr2=b.addr
+			,salesno=c.salesno,sales=c.sales
+			,tranadd=cast(replace(b.transtyle,',','') as float),benifit=b.tweight,weight=b.mount
+					,cardealno=b.cardealno,cardeal=b.cardeal,carno=b.carno
+					,price=b.price,tranmoney=b.tranmoney,money=b.money,tax=b.tax
+					,atax=b.atax,total=b.total,memo='由互換進貨"+@t_noa+"轉來',worker=b.worker
+					,worker2=b.worker2,part2='"+@t_noa+"'
+			from rc2"+@accy+" a outer apply (select top 1* from view_ina where noa='"+@t_noa+"')b
+			left join tgg c on b.tggno=c.noa
+			where a.noa='"+@rc2no+"'
+		")
+		
+		set @accy=isnull((select accy from view_ina where noa=@t_noa),@t_accy)
+	
+		EXEC("update a set transtartno='"+@rc2no+"' from ina"+@accy+" a where a.noa='"+@t_noa+"'")
+		
+	end
+	
+	set @t_err=''
+	Commit Transaction
+
+END TRY
+BEGIN CATCH
+	set @rc2no=isnull((select transtartno from view_ina where noa=@t_noa),'')
+	ROLLBACK
+END CATCH
+
+select @rc2no rc2no,@t_err err
+;
