@@ -71,6 +71,8 @@
 				if (!(q_cur == 1 || q_cur == 2))
 					return;
 				// 2017/02/21  本幣和外幣分別由  total,totalus存	
+				// 2017/06/22 sprice 單位統一(NTD/KG)
+				
 					
 				$('#cmbTaxtype').val((($('#cmbTaxtype').val()) ? $('#cmbTaxtype').val() : '1'));
 				$('#txtMoney').attr('readonly', true);
@@ -164,6 +166,18 @@
 					t_money = q_add(t_money, t_moneys);
 					t_moneyus = q_add(t_moneyus, t_moneyuss);
 				}
+				// sprice
+				for(var i=0;i<q_bbsCount;i++){
+					var x_weight = q_float('txtWeight_'+i);
+					var x_total = q_float('txtTotal_'+i);
+					if(x_weight!=0){
+						$('#txtSprice_'+i).val(round(q_div(x_total,x_weight),3));
+					}else{
+						$('#txtSprice_'+i).val(0);
+					}
+				}
+				
+				
 				t_total = t_money;
 				t_tax = 0;
 				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
@@ -647,7 +661,8 @@
 									}
 								}
 							}
-							if(t_cost!=0){
+							/*  deli.txt  deli_rk   裡決定
+							 if(t_cost!=0){
 								var t_unit = $.trim($('#txtUnit_' + i).val()).toUpperCase();
 								var t_sprice=0;
 								if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
@@ -662,7 +677,7 @@
 								}
 							}else{
 								$('#txtSprice_'+i).val($('#txtPrice_'+i).val());
-							}
+							}*/
 						}
 						
 						var t_lcno=$('#txtLcno').val();
