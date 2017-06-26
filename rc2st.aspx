@@ -167,16 +167,17 @@
 					t_moneyus = q_add(t_moneyus, t_moneyuss);
 				}
 				// sprice
-				for(var i=0;i<q_bbsCount;i++){
-					var x_weight = q_float('txtWeight_'+i);
-					var x_total = q_float('txtTotal_'+i);
-					if(x_weight!=0){
-						$('#txtSprice_'+i).val(round(q_div(x_total,x_weight),3));
-					}else{
-						$('#txtSprice_'+i).val(0);
+				if(q_getPara('sys.project').toUpperCase()=='RK'){
+					for(var i=0;i<q_bbsCount;i++){
+						var x_weight = q_float('txtWeight_'+i);
+						var x_total = q_float('txtTotal_'+i);
+						if(x_weight!=0){
+							$('#txtSprice_'+i).val(round(q_div(x_total,x_weight),5));
+						}else{
+							$('#txtSprice_'+i).val(0);
+						}
 					}
 				}
-				
 				
 				t_total = t_money;
 				t_tax = 0;
@@ -237,14 +238,14 @@
 				switch(q_getPara('sys.project').toUpperCase()){
 					case 'RK':
 						//聯琦 採購小數位沒有限制,進貨也一樣
-						bbsNum = [['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtTotalus', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+						bbsNum = [['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtTotalus', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
 						
 						$('#lblAccno').hide();
 						$('#txtAccno').hide();
 						$('#lblLcno').text('報關號碼');
 						break;
 					default:
-						bbsNum = [['txtPrice', 15, 3, 1],['txtPriceus', 15, 4, 1], ['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtTotalus', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1],['txtSprice', 15, 3, 1]];
+						bbsNum = [['txtPrice', 15, 3, 1],['txtPriceus', 15, 4, 1], ['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtTotalus', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
 						break;
 				}
 				
