@@ -2779,7 +2779,6 @@ begin
 	--更新全勤
 	if(@bo_full!=@tbo_full)
 	begin
-		select @tbo_full,@bo_full
 		update #tmp set bo_full=case when @bo_full<=0 then 0 else @bo_full end where sssno=@sssno
 	end
 	
