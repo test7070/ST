@@ -729,14 +729,13 @@
 					<!------------------------------------------------------------------------->
 					<tr style="background-color: aquamarine;">
 						<td><span> </span><a id='lblIsshift' class="lbl">輪班</a></td>
-						<td colspan="2">
-							<input id="chkIsshift" type="checkbox"/>
-							<span> </span>
-							<a id='lblShifthours' class="lbl" style="float: none;margin-left: 20px;">輪班時數</a>
-							<span style="width: 120px;float: right;"> </span>
-							<input id="txtShifthours" type="text" class="txt num c1" style="width: 60px;float: right;" />
+						<td colspan="3">
+							<input id="chkIsshift" type="checkbox" style="float: left;"/>
+							<span style="float: left;"> </span>
+							<a id='lblShifthours' class="lbl" style="float: left;margin-left: 20px;">輪班時數/天</a>
+							<span style="width: 10px;float: left;"> </span>
+							<input id="txtShifthours" type="text" class="txt num c1" style="width: 60px;float: left;" />
 						</td>
-						<td> </td>
 						<td colspan="2">
 							<a id='lblWorkday' class="lbl" style="float: left;">工作日數</a>
 							<span style="float: left;"> </span>
@@ -1225,7 +1224,7 @@
 					<td style="width:90px;"><a id='lblHoverhours_s'>假日<br>最多時數/月</a></td>
 					<!---------------------------------------------------------------------->
 					<td style="width:50px;"><a id='lblIsshift_s'>輪班</a></td>
-					<td style="width:80px;"><a id='lblShifthours_s'>輪班時數</a></td>
+					<td style="width:80px;"><a id='lblShifthours_s'>輪班時數<br>/天</a></td>
 					<td style="width:80px;"><a id='lblWorkday_s'>工作日數</a></td>
 					<td style="width:80px;"><a id='lblRestday_s'>休息日數</a></td>
 					<!----------------------------------------------------------------------->
