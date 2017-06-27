@@ -102,7 +102,7 @@
                             //as._year年資
                             //as._date詳細年資
                             //as._day特休天數
-                            if (as[i].indate.length > 0){//判斷到職日是否有輸入，若沒輸入則無特休
+                            if (as[i].indate.length > 0 && as[i].person!='外勞'){//判斷到職日是否有輸入，若沒輸入則無特休
                             //計算到年底年資
 								/*as[i]._year = dec($('#txtNoa').val())-dec(as[i].indate.substr(0, r_len))+
 								((12-dec(as[i].indate.substr(r_len+1, 2))) /12);*/
@@ -146,9 +146,9 @@
                             }*/
 							//新制
 							if((r_len==3 && $('#txtNoa').val()>='106') || (r_len==4 && $('#txtNoa').val()>='2017')){			
-								if (as[i]._date-as[i]._date2 < 0.5)
+								if (as[i]._date < 1) //到職未滿1年 前半期不計算
 									as[i]._day = 0;
-								else if (as[i]._date-as[i]._date2 < 1){
+								else if (as[i]._date-as[i]._date2 < 1){ //去年到職今年滿半年
 									as[i]._day = 3*8;
 								}else if (as[i]._date-as[i]._date2 < 2)
 									as[i]._day = 7*8*as[i]._date2;
@@ -167,7 +167,7 @@
 	                            
 	                            if (as[i]._date < 0.5)
 									as[i]._day += 0;
-								else if (as[i]._date < 1){
+								else if (as[i]._date < 1){ //當年到職滿半年
 									as[i]._day += (3*8*as[i]._date1);
 								}else if (as[i]._date < 2)
 									as[i]._day += (7*8*as[i]._date1);

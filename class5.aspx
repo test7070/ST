@@ -635,13 +635,14 @@
 							<span style="float: left;"> </span>
 							<input id="txtBdate" type="text" class="txt c1" style="width: 100px;"/>
 						</td>
+						<td colspan="2"><input id="btnBBsin" type="button" value="插入/更新表身紀錄欄"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblNamea' class="lbl"> </a></td>
 						<td><input id="txtNamea" type="text" class="txt c1"/></td>
 						<td> </td>
 						<td> </td>
-						<td colspan="2"><input id="btnBBsin" type="button" value="插入/更新表身紀錄欄"></td>
+						<td colspan="5" style="color: red;">※存檔確定後，表頭資料會更新到最新的生效日資料，請在存檔前確認表身更新的內容資料。</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblBtime' class="lbl"> </a></td>
@@ -650,7 +651,44 @@
 							<a style="float: left;">　~　</a>
 							<input id="txtEtime" type="text" class="txt c2"/>
 						</td>
-						<td colspan="4" style="color: red;">※存檔確定後，表頭資料會更新到最新的生效日資料，<BR>　請在存檔前確認表身更新的內容資料。</td>
+						<td><span> </span><a id='lblWorkweek' class="lbl">工作日</a></td>
+						<td colspan="5">
+							<input id="chkWmon" type="checkbox" style="float: left;"/>
+							<span style="float: left;"> </span>
+							<a id='lblWmon' class="lbl" style="float: left;">一</a>
+							<span style="float: left;"> </span>
+							<!----------------------------------------->
+							<input id="chkWtue" type="checkbox" style="float: left;"/>
+							<span style="float: left;"> </span>
+							<a id='lblWtue' class="lbl" style="float: left;">二</a>
+							<span style="float: left;"> </span>
+							<!----------------------------------------->
+							<input id="chkWwed" type="checkbox" style="float: left;"/>
+							<span style="float: left;"> </span>
+							<a id='lblWwed' class="lbl" style="float: left;">三</a>
+							<span style="float: left;"> </span>
+							<!----------------------------------------->
+							<input id="chkWthu" type="checkbox" style="float: left;"/>
+							<span style="float: left;"> </span>
+							<a id='lblWthu' class="lbl" style="float: left;">四</a>
+							<span style="float: left;"> </span>
+							<!----------------------------------------->
+							<input id="chkWfri" type="checkbox" style="float: left;"/>
+							<span style="float: left;"> </span>
+							<a id='lblWfri' class="lbl" style="float: left;">五</a>
+							<span style="float: left;"> </span>
+							<!----------------------------------------->
+							<input id="chkWsat" type="checkbox" style="float: left;"/>
+							<span style="float: left;"> </span>
+							<a id='lblWsat' class="lbl" style="float: left;">六</a>
+							<span style="float: left;"> </span>
+							<!----------------------------------------->
+							<input id="chkWsun" type="checkbox" style="float: left;"/>
+							<span style="float: left;"> </span>
+							<a id='lblWsun' class="lbl" style="float: left;">日</a>
+							<span style="float: left;"> </span>
+							<!----------------------------------------->
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblBresttime' class="lbl">休息時間1</a></td>
@@ -1199,7 +1237,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 8300px;">
+		<div class='dbbs' style="width: 8580px;">
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td style="width:20px;"><input id="btnPlus" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
@@ -1207,9 +1245,11 @@
 					<td style="width:20px;">表頭</td>
 					<td style="width:100px;"><a id='lblBdate_s'>生效日</a></td>
 					<td style="width:150px;"><a id='lblBtime_s'>上班時間</a></td>
+					<td style="width:280px;"><a id='lblWorkweek_s'>工作日</a></td>
 					<td style="width:150px;"><a id='lblBresttime_s'>休息時間1</a></td>
 					<td style="width:150px;"><a id='lblBresttime2_s'>休息時間2</a></td>
 					<td style="width:150px;"><a id='lblBresttime3_s'>休息時間3</a></td>
+					<!--------------------------------------------------------------------->
 					<td style="width:80px;"><a id='lblMeals_s'>伙食費</a></td>
 					<td style="width:80px;"><a id='lblMtime1_s'>伙食給予1<br>起算時間</a></td>
 					<td style="width:80px;"><a id='lblMhours1_s'>伙食給予1<br>超過H</a></td>
@@ -1320,6 +1360,43 @@
 						<input id="txtEtime.*" type="text" class="txt c1" style="width: 60px;"/>
 					</td>
 					<td>
+						<input id="chkWmon.*" type="checkbox" style="float: left;"/>
+						<span style="float: left;"> </span>
+						<a id='lblWmon_s.*' class="lbl" style="float: left;">一</a>
+						<span style="float: left;"> </span>
+						<!----------------------------------------->
+						<input id="chkWtue.*" type="checkbox" style="float: left;"/>
+						<span style="float: left;"> </span>
+						<a id='lblWtue_s.*' class="lbl" style="float: left;">二</a>
+						<span style="float: left;"> </span>
+						<!----------------------------------------->
+						<input id="chkWwed.*" type="checkbox" style="float: left;"/>
+						<span style="float: left;"> </span>
+						<a id='lblWwed_s.*' class="lbl" style="float: left;">三</a>
+						<span style="float: left;"> </span>
+						<!----------------------------------------->
+						<input id="chkWthu.*" type="checkbox" style="float: left;"/>
+						<span style="float: left;"> </span>
+						<a id='lblWthu_s.*' class="lbl" style="float: left;">四</a>
+						<span style="float: left;"> </span>
+						<!----------------------------------------->
+						<input id="chkWfri.*" type="checkbox" style="float: left;"/>
+						<span style="float: left;"> </span>
+						<a id='lblWfri_s.*' class="lbl" style="float: left;">五</a>
+						<span style="float: left;"> </span>
+						<!----------------------------------------->
+						<input id="chkWsat.*" type="checkbox" style="float: left;"/>
+						<span style="float: left;"> </span>
+						<a id='lblWsat_s.*' class="lbl" style="float: left;">六</a>
+						<span style="float: left;"> </span>
+						<!----------------------------------------->
+						<input id="chkWsun.*" type="checkbox" style="float: left;"/>
+						<span style="float: left;"> </span>
+						<a id='lblWsun_s.*' class="lbl" style="float: left;">日</a>
+						<span style="float: left;"> </span>
+						<!----------------------------------------->
+					</td>
+					<td>
 						<input id="txtBresttime.*" type="text" class="txt c1" style="width: 60px;"/><a style="float: left;">~</a>
 						<input id="txtEresttime.*" type="text" class="txt c1" style="width: 60px;"/>
 					</td>
@@ -1331,6 +1408,7 @@
 						<input id="txtBresttime3.*" type="text" class="txt c1" style="width: 60px;"/><a style="float: left;">~</a>
 						<input id="txtEresttime3.*" type="text" class="txt c1" style="width: 60px;"/>
 					</td>
+					<!--------------------------------------------------------------------------->
 					<td><input id="txtMeals.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtMbtime1.*" type="text" class="txt c1"/></td>
 					<td><input id="txtMhours1.*" type="text" class="txt num c1"/></td>
