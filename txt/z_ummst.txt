@@ -325,7 +325,7 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	select gno
 		,'<img src="'+@t_path+'getlogo.aspx?noa=LC02'+CHAR(38)+'db='+@t_db+'"/>' logo
 		,custno a01
-		,cust a02
+		,replace(cust,"~#$","'") a02
 		,tel a03
 		,fax a04
 		,zip+addr a05
@@ -372,7 +372,6 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	declare @t_emon nvarchar(20) = case when '#non'=[14] then char(255) else [14] end
 	declare @t_memo nvarchar(max) = case when '#non'=[19] then '' else [19] end
 	declare @t_curnoa nvarchar(max) = case when '#non'=[26] then '' else [26] end
-	------------------------------------------------------------------------
 	------------------------------------------------------------------------
 	declare @tmpa table(
 		sel int identity(1,1)
@@ -427,8 +426,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,a.ordeno ordeno,a.no2 ordenoq,a.product
 		,case when len(ISNULL(f.spec,''))>0 then f.spec else a.spec end pvcno
 		,a.lengthb
-		,ISNULL(a.size,'')+' '+case when len(isnull(a.style,''))>0 then a.style+' ' else '' end
-			+case when ISNULL(a.dime,0)!=0 then cast(a.dime as nvarchar) else '' end
+		,case when ISNULL(a.dime,0)!=0 then cast(a.dime as nvarchar) else '' end
 			+case when ISNULL(a.radius,0)!=0 then '+'+cast(a.radius as nvarchar) else '' end
 			+case when ISNULL(a.width,0)!=0 then '*'+cast(a.width as nvarchar) else '' end
 			+case when ISNULL(a.lengthb,0)!=0 then '*'+cast(a.lengthb as nvarchar) 
@@ -458,8 +456,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,a.product
 		,case when len(ISNULL(f.spec,''))>0 then f.spec else a.spec end
 		,a.lengthb
-		,ISNULL(a.size,'')+' '+case when len(isnull(a.style,''))>0 then a.style+' ' else '' end
-			+case when ISNULL(a.dime,0)!=0 then cast(a.dime as nvarchar) else '' end
+		,case when ISNULL(a.dime,0)!=0 then cast(a.dime as nvarchar) else '' end
 			+case when ISNULL(a.radius,0)!=0 then '+'+cast(a.radius as nvarchar) else '' end
 			+case when ISNULL(a.width,0)!=0 then '*'+cast(a.width as nvarchar) else '' end
 			+case when ISNULL(a.lengthb,0)!=0 then '*'+cast(a.lengthb as nvarchar) 
@@ -467,8 +464,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,case when CHARINDEX('chr(10)',c.memo)>0 then LEFT(c.memo,CHARINDEX('chr(10)',c.memo)-1) else '' end
 		,a.price
 		,a.unit
-	order by custno,noa,ordeno,ordenoq
-	,case when charindex('運費',a.product)>0 or charindex('包裝',a.product)>0 then 'z' else '1' end
+	order by case when charindex('運費',a.product)>0 or charindex('包裝',a.product)>0 then 'z' else '1' end,custno,noa,ordeno,ordenoq
 		
 	update @tmpa set po=LEFT(memo,CHARINDEX('chr(10)',memo)-1)
 	where CHARINDEX('chr(10)',memo)>0
@@ -535,11 +531,46 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	group by a.custno
 	
 	---- 同品項,數量小計
-	insert into @tmpa(gno,pno,custno,mon,product,mount01,unit01,mount02,unit02) 
-	select '6',6,custno,CHAR(255),product,sum(isnull(mount01,0)),unit01,sum(isnull(mount02,0)),unit02
-	from @tmpa 
-	where pno=1
-	group by custno,product,unit01,unit02
+	--當品名只有一項,卻同時有 C & PCS 時,可以不必顯示 C&PCS   2016/10
+	declare @product nvarchar(50)
+	
+	declare cursor_table cursor for
+	select custno,product from @tmpa group by custno,product
+	open cursor_table
+	fetch next from cursor_table
+	into @custno,@product
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if exists(select * from @tmpa where pno=1 and custno=@custno and product=@product and unit02='C')
+		and exists(select * from @tmpa where pno=1 and custno=@custno and product=@product and unit02='PCS')
+		begin
+			insert into @tmpa(gno,pno,custno,mon,product,mount01,unit01,mount02,unit02) 
+			select '6',6,a.custno,CHAR(255),a.product
+				,sum(isnull(a.mount01,0)),a.unit01
+				,sum(isnull(a.mount02,0)),case a.unit02 when 'C' then '' when 'PCS' then '' end
+			from @tmpa a 
+			where a.pno=1 and custno=@custno and product=@product
+			group by a.custno,a.product,a.unit01,case a.unit02 when 'C' then '' when 'PCS' then '' end
+		end
+		else
+		begin
+			insert into @tmpa(gno,pno,custno,mon,product,mount01,unit01,mount02,unit02) 
+			select '6',6,a.custno,CHAR(255),a.product
+				,sum(isnull(a.mount01,0)),a.unit01
+				,sum(isnull(a.mount02,0)),a.unit02
+			from @tmpa a 
+			where a.pno=1 and custno=@custno and product=@product
+			group by a.custno,a.product,a.unit01,a.unit02
+		end
+		
+		fetch next from cursor_table
+		into @custno,@product
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+	
+	
 	
 	---- 頁尾簽名欄	
 	declare @paytype nvarchar(max)
@@ -559,7 +590,10 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		where b.ordeno is not null 
 		
 		set @tmemo = ''
-		select top 1 @tmemo = memo from @tmpa where custno=@custno and len(isnull(memo,''))>0 order by noa
+		select @tmemo = memo
+		from view_vcc a
+		left join(select top 1 noa from @tmpa where custno=@custno and len(noa)>0 order by noa) b on a.noa=b.noa
+		where b.noa is not null
 		
 		insert into @tmpa(gno,pno,custno,mon,paytype,tmemo)
 		select '7',7,@custno,CHAR(255),@paytype,@tmemo
@@ -569,7 +603,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	end
 	close cursor_table
 	deallocate cursor_table
-	
+
 	--insert into @tmpa(gno,pno,custno,mon)
 	--select '8',8,custno,CHAR(255) from @tmpa where pno=1 group by custno
 	
@@ -608,7 +642,7 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	select gno
 		,'<img src="'+@t_path+'getlogo.aspx?noa=lienchy'+CHAR(38)+'db='+@t_db+'"/>' logo
 		,custno a01
-		,cust a02
+		,replace(cust,"~#$","'") a02
 		,tel a03
 		,fax a04
 		,zip+addr a05
@@ -630,12 +664,13 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 		,dbo.getComma([total],-1) b10
 		,dbo.getComma(mount02,-1) + unit02 b11
 		,mon b12
-		--,dbo.getComma(tmoney,-1) c01
+		,dbo.getComma(mount,-1) c01
 		--,dbo.getComma(ttax,-1) c02
 		--,dbo.getComma(ttotal,-1) c03
-		,tmemo c04
-		,paytype c05
-		,case when len(isnull(@t_memo,''))=0 then '' else '五、'+isnull(@t_memo,'') end c06
+		
+		,paytype c04
+		,@t_memo c05
+		,case when len(isnull(tmemo,''))=0 then '' else '五、'+isnull(tmemo,'') end c06
 	from @tmpa order by custno,mon,pno,recno,sel;
 
 z_ummst9:--z_ummst9
