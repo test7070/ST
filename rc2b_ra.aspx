@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -225,6 +225,31 @@
 						bbssum(i);
 					}
 				});
+				
+				//設定原因目前沒有工作站所以先撈員工部門
+				if(r_partno.length>0){
+					q_gt('reason', "where=^^partno='"+r_partno+"' and typea='rc2b1'^^", 0, 0, 0, "getreason",r_accy,1);
+				}else{
+					q_gt('reason', "where=^^partno='' and typea='rc2b1'^^", 0, 0, 0, "getreason",r_accy,1);
+				}
+				var as2 = _q_appendData("reasons", "", true);
+				var t_item = "@";
+				for (var i = 0; i < as2.length; i++) {
+					t_item = t_item + (t_item.length > 0 ? ',' : '') + as2[i].reason;
+				}
+				q_cmbParse("combReasonb", t_item,'s');
+				
+				if(r_partno.length>0){
+					q_gt('reason', "where=^^partno='"+r_partno+"' and typea='rc2b2'^^", 0, 0, 0, "getreason",r_accy,1);
+				}else{
+					q_gt('reason', "where=^^partno='' and typea='rc2b2'^^", 0, 0, 0, "getreason",r_accy,1);
+				}
+				var as2 = _q_appendData("reasons", "", true);
+				var t_item = "@";
+				for (var i = 0; i < as2.length; i++) {
+					t_item = t_item + (t_item.length > 0 ? ',' : '') + as2[i].reason;
+				}
+				q_cmbParse("combReasonw", t_item,'s');
 			}
 
 			function q_boxClose(s2) {
@@ -426,7 +451,7 @@
 				$('#txtAccno').val(s1[0]);
 				
 				if (q_cur == 1 || emp($('#txtRc2no').val()))
-					q_func('qtxt.query.c0', 'rc2b.txt,post_ra,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+					q_func('qtxt.query.c0', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
 				else
 					q_func('rc2_post.post.a1', r_accy + ',' + $('#txtRc2no').val() + ',0');
 			}
@@ -587,6 +612,22 @@
 							$('#txtQcworker_'+b_seq).val(r_name);
 							$('#txtQctime_'+b_seq).val(padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2));
 						});
+						
+						$('#combReasonb_'+j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if(q_cur==1 || q_cur==2)
+								$('#txtBkrea_'+b_seq).val($('#combReasonb_'+b_seq).find("option:selected").text());
+						});
+						
+						$('#combReasonw_'+j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if(q_cur==1 || q_cur==2)
+								$('#txtWrea_'+b_seq).val($('#combReasonw_'+b_seq).find("option:selected").text());
+						});
 					}
 				}
 				_bbsAssign();
@@ -596,6 +637,7 @@
 			function refreshBbs(){
 				if (q_getPara('sys.project').toUpperCase().substr(0,2)=='AD' || q_getPara('sys.project').toUpperCase().substr(0,2)=='JO' ){
 					$('.isAD').hide();
+					$('.dbbs').css('width','2100px');
 				}
 			}
 
@@ -751,7 +793,7 @@
 					return;
 				q_cur = 3;
 				if(emp($('#txtRc2no').val()))
-					q_func('qtxt.query.c2', 'rc2b.txt,post_ra,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+					q_func('qtxt.query.c2', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
 				else
 					q_func('rc2_post.post.a2', r_accy + ',' + $('#txtRc2no').val() + ',0');
 			}
@@ -841,13 +883,13 @@
 			function q_funcPost(t_func, result) {
 				switch(t_func) {
 					case 'rc2_post.post.a1':
-						q_func('qtxt.query.c0', 'rc2b.txt,post_ra,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+						q_func('qtxt.query.c0', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
 						break;
 					case 'rc2_post.post.a2':
-						q_func('qtxt.query.c2', 'rc2b.txt,post_ra,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
+						q_func('qtxt.query.c2', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';0;'+q_getPara('sys.key_rc2'));
 						break;
 					case 'qtxt.query.c0':
-						q_func('qtxt.query.c1', 'rc2b.txt,post_ra,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';1;'+q_getPara('sys.key_rc2'));
+						q_func('qtxt.query.c1', 'rc2b.txt,post,' + r_accy + ';' + encodeURI($('#txtNoa').val()) + ';1;'+q_getPara('sys.key_rc2'));
 						break;
 					case 'qtxt.query.c1':
 						var as = _q_appendData("tmp0", "", true, true);
@@ -996,7 +1038,6 @@
 				text-align: center;
 				border: 2px lightgrey double;
 			}
-
 		</style>
 	</head>
 	<body>
@@ -1136,7 +1177,7 @@
 					<td align="center" style="width:90px;"><a id='lblPrice_s'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblTotal_s'> </a></td>
 					<td align="center" style="width:200px;"><a id='lblUno_s'> </a></td>
-					<td align="center" style="width:150px;"><a id='lblStore'> </a></td>
+					<td align="center" style="width:130px;"><a id='lblStore'> </a></td>
 					<td align="center" style="width:150px;" class="isRack"><a id='lblRackno_s'> </a></td>
 					<td align="center" style="width:110px;"><a id='lblBkmount'> </a>/<a id='lblBkrea'> </a></td>
 					<td align="center" style="width:110px;"><a id='lblWmount'> </a>/<a id='lblWrea'> </a></td>
@@ -1175,11 +1216,13 @@
 					</td>
 					<td>
 						<input id="txtBkmount.*" type="text" class="txt num c1" />
-						<input id="txtBkrea.*" type="text" class="txt c1" />
+						<input id="txtBkrea.*" type="text" class="txt c1" style="width: 80%;" />
+						<select class=" txt c1" id="combReasonb.*" style="width:20px;"> </select>
 					</td>
 					<td>
 						<input id="txtWmount.*" type="text" class="txt num c1" />
-						<input id="txtWrea.*" type="text" class="txt c1" />
+						<input id="txtWrea.*" type="text" class="txt c1" style="width: 80%;" />
+						<select class=" txt c1" id="combReasonw.*" style="width:20px;"> </select>
 					</td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c1"/>
