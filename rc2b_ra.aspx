@@ -83,6 +83,12 @@
 			}
 			
 			function bbssum(i) {
+				if($('#cmbQcresult_'+i).val()=='AC'){
+					$('#txtMount_'+i).val(q_sub(q_sub(q_float('txtInmount_'+i),q_float('txtBkmount_'+i)),q_float('txtWmount_'+i)));
+				}else{
+					$('#txtMount_'+i).val(0);
+				}
+				
 				var t_mount = q_float('txtWeight_'+i)!=0?q_float('txtWeight_'+i):q_float('txtMount_'+i);
 				$('#txtTotal_' + i).val(round(q_mul(dec($('#txtPrice_' + i).val()), dec(t_mount)), 0));
 				q_tr('txtUnmount_'+i,q_sub(q_sub(q_sub(q_float('txtInmount_'+i),q_float('txtMount_'+i)),q_float('txtBkmount_'+i)),q_float('txtWmount_'+i)));
@@ -212,16 +218,15 @@
 				
 				$('#cmbQcresult').change(function() {
 					for(var i=0;i<q_bbsCount;i++){
-						if(!emp($('#txtProductno_'+i).val())){
-							$('#cmbQcresult_'+i).val($('#cmbQcresult').val())
-							if($('#cmbQcresult_'+i).val()=='AC'){
-								$('#txtMount_'+i).val($('#txtInmount_'+i).val());
-							}else{
-								$('#txtMount_'+i).val(0);
-							}
-							$('#txtQcworker_'+i).val(r_name);
-							$('#txtQctime_'+i).val(padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2));
+						$('#cmbQcresult_'+i).val($('#cmbQcresult').val())
+						if($('#cmbQcresult_'+i).val()=='AC'){
+							$('#txtMount_'+i).val(q_sub(q_sub(q_float('txtInmount_'+i),q_float('txtBkmount_'+i)),q_float('txtWmount_'+i)));
+						}else{
+							$('#txtMount_'+i).val(0);
 						}
+						$('#txtQcworker_'+i).val(r_name);
+						$('#txtQctime_'+i).val(padL(new Date().getHours(), '0', 2)+':'+padL(new Date().getMinutes(),'0',2));
+						
 						bbssum(i);
 					}
 				});
