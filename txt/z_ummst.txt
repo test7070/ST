@@ -521,13 +521,13 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	insert into @tmpa(gno,pno,custno,mon,total) 
 	select '4',4,a.custno,CHAR(255),SUM(isnull(b.tax,0)) tax
 	from (select noa,custno from @tmpa group by noa,custno) a
-	outer apply(select (case when b.typea='1' then 1 else -1 end*tax) tax from view_vcc where noa=a.noa) b 
+	outer apply(select (case when typea='1' then 1 else -1 end*tax) tax from view_vcc where noa=a.noa) b 
 	group by a.custno
 	---- 合計
 	insert into @tmpa(gno,pno,custno,mon,total) 
 	select '5',5,a.custno,CHAR(255),SUM(isnull(b.total,0)) tax
 	from (select noa,custno from @tmpa group by noa,custno) a
-	outer apply(select (case when b.typea='1' then 1 else -1 end*total) total from view_vcc where noa=a.noa) b 
+	outer apply(select (case when typea='1' then 1 else -1 end*total) total from view_vcc where noa=a.noa) b 
 	group by a.custno
 	
 	---- 同品項,數量小計
