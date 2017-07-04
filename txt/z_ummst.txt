@@ -432,11 +432,11 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 			+case when ISNULL(a.lengthb,0)!=0 then '*'+cast(a.lengthb as nvarchar) 
 				when a.dime=0 and a.width=0 and a.radius=0 and a.lengthb=0 then '' else '*COIL' end
 		,SUM(ISNULL(a.lengthc,0))
-		,SUM(ISNULL(a.[mount],0))
-		,SUM(ISNULL(a.[weight],0))
+		,SUM(case when b.typea='1' then 1 else -1 end * ISNULL(a.[mount],0))
+		,SUM(case when b.typea='1' then 1 else -1 end * ISNULL(a.[weight],0))
 		,a.price
 		,a.unit
-		,SUM(ISNULL(a.[total],0))
+		,SUM(case when b.typea='1' then 1 else -1 end * ISNULL(a.[total],0))
 		,case when CHARINDEX('chr(10)',c.memo)>0 then LEFT(c.memo,CHARINDEX('chr(10)',c.memo)-1) else '' end memo
 	from view_vccs a
 	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
@@ -521,13 +521,13 @@ z_umm_rk01:--z_umm_rk01 應收帳款明細表
 	insert into @tmpa(gno,pno,custno,mon,total) 
 	select '4',4,a.custno,CHAR(255),SUM(isnull(b.tax,0)) tax
 	from (select noa,custno from @tmpa group by noa,custno) a
-	outer apply(select tax from view_vcc where noa=a.noa) b 
+	outer apply(select (case when typea='1' then 1 else -1 end*tax) tax from view_vcc where noa=a.noa) b 
 	group by a.custno
 	---- 合計
 	insert into @tmpa(gno,pno,custno,mon,total) 
 	select '5',5,a.custno,CHAR(255),SUM(isnull(b.total,0)) tax
 	from (select noa,custno from @tmpa group by noa,custno) a
-	outer apply(select total from view_vcc where noa=a.noa) b 
+	outer apply(select (case when typea='1' then 1 else -1 end*total) total from view_vcc where noa=a.noa) b 
 	group by a.custno
 	
 	---- 同品項,數量小計
