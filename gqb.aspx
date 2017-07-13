@@ -291,7 +291,7 @@
 
             function btnIns() {
                 var t_curgqbno = $('#txtGqbno').val();
-                if(t_curgqbno.length==0)
+                if(t_curgqbno.length==0 && abbm.length>0)
                 	t_curgqbno = abbm[q_recno].gqbno;
                 
                 var t_data;
