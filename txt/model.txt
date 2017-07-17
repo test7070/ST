@@ -1,0 +1,90 @@
+﻿chgnoa_rs:--chgnoa_rs----------------------------------------------------------------------------------
+--變更模具編號
+SET QUOTED_IDENTIFIER OFF
+declare @noa nvarchar(MAX) = [1] --原模具編號
+declare @chgnoa nvarchar(MAX) = [2] --變動模具編號
+declare @noq nvarchar(MAX) = [3] --項次
+declare @userno nvarchar(max) = [4]
+declare @namea nvarchar(max) = [5]
+declare @cmd nvarchar(max) = ''
+
+set @noq=REPLACE(@noq,'##',',')
+
+IF OBJECT_ID('tempdb..#bbs')is not null
+BEGIN
+	set @cmd = 'drop table #bbs'
+	EXECUTE sp_executesql @cmd
+END
+
+create table #bbs(
+	[noa] [nvarchar](30),
+	recno int,
+	[noq] [nvarchar](3),
+	[memo2] [nvarchar](max), --備註
+	[memo] [nvarchar](max), --備註
+	[productno] [nvarchar](50), --物品編號
+	[model] [nvarchar](50), --名稱
+	[bottom] [float], --圖檔外徑
+	[mount] [float], --庫存數
+	[nob] [nvarchar](30), --作廢日期
+	[datea] [nvarchar](30), --入廠日期
+	[wheel] [nvarchar](10), --明細1
+	[number] [nvarchar](100), --明細2
+)
+
+BEGIN TRY
+	Begin Transaction
+
+	declare @tmpnoq table(
+		noq nvarchar(10)
+	)
+
+	insert @tmpnoq
+	select n from dbo.fnSplit(@noq)
+
+	insert #bbs(noa,recno,noq,memo2,memo,productno,model,bottom,mount,nob,datea,wheel,number)
+	select noa,ROW_NUMBER() over (order by noa,noq),noq,memo2,memo,productno,model,bottom,mount,nob,datea,wheel,number 
+	from models a where noa=@noa
+	and exists (select * from @tmpnoq where noq=a.noq)
+	order by noa,noq
+
+	--取出變動模具編號當前最大noq
+	declare @maxnoq nvarchar(max) = isnull((select MAX(noq) from models where noa=@chgnoa),'000')
+
+	--變更變動模具編號要插入的noq
+	update #bbs
+	set noa=@chgnoa
+	,noq=right('000'+CAST(CAST(@maxnoq as int)+recno as nvarchar(10)),3)
+	,memo2=isnull(memo2,'')+case when len(isnull(memo2,''))>0 then '，' else '' end+'由原模具編號【'+@noa+'】移動至【'+@chgnoa+'】'
+	,memo=isnull(memo,'')+case when len(isnull(memo,''))>0 then '#' else '' end+@noa+'-'+noq+'>'+@chgnoa+'-'+right('000'+CAST(CAST(@maxnoq as int)+recno as nvarchar(10)),3)
+
+	--插入變動模具編號資料
+	insert models(noa,noq,memo2,memo,productno,model,bottom,mount,nob,datea,wheel,number)
+	select noa,noq,memo2,memo,productno,model,bottom,mount,nob,datea,wheel,number from #bbs
+
+	--刪除原模具編號資料
+
+	delete a from models a
+	where noa=@noa and exists (select * from @tmpnoq where noq=a.noq)
+
+	--變更原模具編號noq
+	update a
+	set noq=right('000'+CAST(CAST(recno as int) as nvarchar(10)),3)
+	from (select noq,ROW_NUMBER() over (order by noa,noq)recno from models where noa=@noa)a
+
+	Commit Transaction
+
+END TRY
+BEGIN CATCH
+	ROLLBACK
+END CATCH
+
+select * from #bbs
+
+IF OBJECT_ID('tempdb..#bbs')is not null
+BEGIN
+	set @cmd = 'drop table #bbs'
+	EXECUTE sp_executesql @cmd
+END
+
+;

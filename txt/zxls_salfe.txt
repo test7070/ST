@@ -1,0 +1,328 @@
+﻿zxls_salfe:--zxls_salfe 打卡資料上傳
+--106/01/11 廠務及現場加工人員上班時間更改為07：00～17：10之後為加班時間(原07：00～16：00)
+--106/04/17 調整廠務上班時間 早班07:00~16:30上班 16:40~加班 晚班16:40~01:40 --扣除休息和用餐時間
+--其他人員正常5:00下班
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+   drop table #tmp
+END
+
+IF OBJECT_ID('tempdb..#bbm')is not null
+BEGIN
+   drop table #bbm
+END
+
+IF OBJECT_ID('tempdb..#bbs')is not null
+BEGIN
+   drop table #bbs
+END
+
+create table #tmp(
+	sssno nvarchar(90),
+	namea nvarchar(90),
+	datea nvarchar(20),
+	apm nvarchar(20),
+	timea nvarchar(20),
+	memo nvarchar(100)
+)
+
+insert #tmp(namea,datea,apm,timea,memo)
+select 
+replace(dbo.split(a,' ',0),'&#34'+CHAR(59),''),
+dbo.split(a,' ',1),
+dbo.split(a,' ',2),
+dbo.split(a,' ',3),
+replace(dbo.split(a,' ',4),'&#34'+CHAR(59),'')
+from ztmpxls a
+
+update #tmp
+set timea=case when left(timea,2)!='12' then cast(cast(left(timea,2) as int)+12 as nvarchar(10))+RIGHT(timea,6) else timea end
+where apm='下午' or apm='PM' 
+
+update a
+set sssno=isnull((select top 1 noa from sss where namea=a.namea and dbo.AD2ChineseEraName(a.datea) between indate and case when outdate='' then '999/99/99' else outdate end order by noa ),'')
+from #tmp a 
+
+update #tmp
+set memo=case when memo='1' then '上班簽到'
+when memo='2' then '下班簽退'
+when memo='3' then '加班簽到'
+when memo='4' then '加班簽退'
+when memo='5' then '外出'
+when memo='6' then '返回'
+else '' end
+
+--bbm
+create table #bbm(
+		noa nvarchar(20),
+		w133 float,
+		w166 float,
+		w100 float,
+		mount float,
+		holiday bit,
+)
+
+--bbs
+create table #bbs(
+		noa nvarchar(20),
+		noq nvarchar(10),
+		sssno nvarchar(20),
+		namea nvarchar(50),
+		clockin nvarchar(50),
+		clockout nvarchar(50),
+		restin nvarchar(50),
+		restout nvarchar(50),
+		w133 float,
+		w166 float,
+		w100 float,
+		memo nvarchar(200),
+		bwork nvarchar(50),
+		ework nvarchar(50),
+		whours float,
+		tweek nvarchar(10)
+)
+declare @sssno nvarchar(50)
+declare @namea nvarchar(50)
+declare @datea nvarchar(50)
+declare @timea nvarchar(50)
+declare @memo nvarchar(MAX)
+declare @clockin nvarchar(50)
+declare @clockout nvarchar(50)
+declare @restin nvarchar(50)
+
+--105/05/24 備註只放 是否有請假
+
+--105/06/06 只看時間不看備註
+insert #bbs(noa,sssno,namea,clockin,clockout,restout,restin,bwork,ework,memo)
+select datea,sssno,namea,case when MIN(timea)>'04:00:00' then MIN(timea) else MAX(timea) end,case when MIN(timea)>'04:00:00' then MAX(timea) else MIN(timea) end
+,case when isnull(MIN(timea),'')>='04:00:00' and isnull(MIN(timea),'')<='16:00:00' then MAX(b.restout) else MAX(c.restout) end
+,case when isnull(MIN(timea),'')>='04:00:00' and isnull(MIN(timea),'')<='16:00:00' then MAX(b.restin) else MAX(c.restin) end
+,'','','' from #tmp a
+outer apply (select MAX(timea)restout,MIN(timea)restin from #tmp where datea=a.datea and sssno=a.sssno and namea=a.namea
+and timea between '12:00:00' and '14:00:00')b
+outer apply (select MAX(timea)restout,MIN(timea)restin from #tmp where datea=a.datea and sssno=a.sssno and namea=a.namea
+and timea between '18:10:00' and '19:00:00')c
+group by datea,sssno,namea
+
+update #bbs set clockout='' where clockin=clockout
+update #bbs set restout='' where restout=restin
+
+update #bbs set tweek=DATEPART(WEEKDAY,noa)-1
+----------------------------------------------------------------------------------------
+update a
+set ework=clockout,bwork=case when b.typea='廠務' then case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end else '17:00:00' end
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where clockout>case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
+and (b.typea='廠務')
+and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set ework=clockout,bwork='17:00:00'
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where clockout>'17:00:00'
+and b.typea!='廠務'
+and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0' and tweek!='6' )--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set ework=clockout,bwork=clockin
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0' and tweek!='6' )--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+-----------------------------------------------------------------------------------------------------
+--廠務 司機
+update a
+set whours=((cast(datediff(MINUTE,case when clockin>='04:00:00' and clockin<='16:00:00' then noa else dbo.q_cdn(noa,1) end+' '+case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end,case when clockin>='04:00:00' and clockin<='16:00:00' then noa else dbo.q_cdn(noa,1) end+' '+ework)as float)
+-case when clockin>='04:00:00' and clockin<='16:00:00' and ework>='18:30:00' then 20 else 0 end --扣除用餐時間
+)/60)
+from #bbs a
+outer apply (select typea from sss where noa=a.sssno)b
+where isnull(ework,'')!='' and ework >=case when clockin>='04:00:00' and clockin<='16:00:00' then '16:40:00' else '01:40:00' end
+and (b.typea='廠務')
+and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+--辦公室
+update a
+set whours=((cast(datediff(MINUTE,noa+' '+'17:00:00',case when clockin>='04:00:00' and clockin<='16:00:00' then noa else dbo.q_cdn(noa,1) end+' '+ework)as float))/60)
+from #bbs a
+outer apply (select typea from sss where noa=a.sssno)b
+where isnull(ework,'')!='' and ework >='17:00:00'
+and b.typea!='廠務'
+and ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0' and tweek!='6' )--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set whours=((cast(datediff(MINUTE,noa+' '+bwork,case when clockin>='04:00:00' and clockin<='16:00:00' then noa else dbo.q_cdn(noa,1) end+' '+ework)as float)
+-case when bwork>='04:00:00' and bwork<='16:00:00' and bwork>='08:50:00' then 10 else 0 end --扣除休息時間
+-case when bwork>='04:00:00' and bwork<='16:00:00' and ework>='10:30:00' then 10 else 0 end --扣除休息時間
+-case when bwork>='04:00:00' and bwork<='16:00:00' and ework>='13:00:00' then 60 else 0 end --扣除用餐時間
+-case when bwork>='04:00:00' and bwork<='16:00:00' and ework>='14:50:00' then 10 else 0 end --扣除休息時間
+-case when bwork>='04:00:00' and bwork<='16:00:00' and ework>='16:40:00' then 10 else 0 end --扣除休息時間
+-case when ework>='18:30:00' then 20 else 0 end --扣除用餐時間
+-case when bwork<'04:00:00' and bwork>='15:00:00' and ework>='20:10:00' then 10 else 0 end --扣除休息時間
+-case when bwork<'04:00:00' and bwork>='15:00:00' and ework>='22:00:00' then 20 else 0 end --扣除點心時間
+-case when bwork<'04:00:00' and bwork>='15:00:00' and ework>='23:40:00' then 10 else 0 end --扣除休息時間
+)/60)
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where isnull(bwork,'')!='' and isnull(ework,'')!=''
+and (b.typea='廠務')
+and not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set whours=((cast(datediff(MINUTE,noa+' '+bwork,noa+' '+ework)as float)
+-case when bwork>='04:00:00' and bwork<='16:00:00' and bwork<='12:00:00' and ework>='13:00:00' then 60 else 0 end --扣除用餐時間
+)/60)
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where isnull(bwork,'')!='' and isnull(ework,'')!=''
+and b.typea!='廠務'
+and not((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0' and tweek!='6')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update #bbs
+set whours=cast(whours/0.5 as int)*0.5
+
+update #bbs
+set noa=dbo.AD2ChineseEraName(noa)
+
+update a
+set w133=case when whours>2 then 2 else whours end
+,w166=case when whours>2 then whours-2 else 0 end
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where whours>0 and (b.typea='廠務' or b.typea='司機') and
+((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set w133=case when whours>2 then 2 else whours end
+,w166=case when whours>2 then whours-2 else 0 end
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where whours>0 and b.typea!='廠務' and b.typea!='司機' and
+((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0' and tweek!='6')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set w100=whours
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where whours>0 and (b.typea='廠務' or b.typea='司機') and
+not ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set w100=whours
+from #bbs a outer apply (select typea from sss where noa=a.sssno)b
+where whours>0 and b.typea!='廠務' and b.typea!='司機' and
+not ((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and tweek!='0'  and tweek!='6')--不是周日
+or (select count(*) from holiday where noa=@datea and isnull(iswork,0)=1)>0)--上班日
+
+update #bbs
+set clockin=ISNULL(clockin,''),clockout=ISNULL(clockout,'')
+,w133=ISNULL(w133,0),w166=ISNULL(w166,0),w100=ISNULL(w100,0)
+
+--補沒打卡資料的人工
+insert #bbs(noa,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo,tweek)
+select a.noa,b.noa,b.namea,'','','','',0,0,0,'',a.tweek
+from (select noa,tweek from #bbs group by noa,tweek) a
+,(select * from sss where isnull(outdate,'')='' and (typea='司機' or typea='廠務')) b
+where not exists (select * from #bbs where noa=a.noa and sssno=b.noa)
+and((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and a.tweek!='0')--不是周日
+or (select count(*) from holiday where noa=a.noa and isnull(iswork,0)=1)>0)--上班日
+
+insert #bbs(noa,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo,tweek)
+select a.noa,b.noa,b.namea,'','','','',0,0,0,'',a.tweek
+from (select noa,tweek from #bbs group by noa,tweek) a
+,(select * from sss where isnull(outdate,'')='' and (typea='辦公室')) b
+where not exists (select * from #bbs where noa=a.noa and sssno=b.noa)
+and((( select count(*) from holiday where noa=a.noa and isnull(iswork,0)!=1)=0 --不是假日
+and a.tweek!='0' and a.tweek!='6')--不是周日
+or (select count(*) from holiday where noa=a.noa and isnull(iswork,0)=1)>0)--上班日
+
+update a
+set noq=right('000'+cast(rr as nvarchar(10)),3)
+from (select ROW_NUMBER()over (partition by noa order by noa,sssno,namea) rr,noq from #bbs)a
+
+insert #bbm
+select noa,SUM(w133),SUM(w166),SUM(w100),count(*),case when MAX(tweek)='0' then 1 else 0 end from #bbs group by noa
+
+update a
+set memo=a.memo
++isnull((select top 1 (case when len(a.memo)>0 then ',' else '' end)+hname+' '+btime+'~'+etime+' '+memo from salvacause where a.noa between bdate and edate and sssno=a.sssno),'')
+from #bbs a
+
+--select * from #bbm
+--select * from #bbs
+
+--更新資料
+declare cursor_table cursor for
+select noa from #bbm order by noa
+open cursor_table
+fetch next from cursor_table
+into @datea
+while(@@FETCH_STATUS <> -1)
+begin
+	if((select COUNT(*) from salpresent where noa=@datea)=0)
+	begin
+		insert salpresent (noa,w133,w166,w100,mount,holiday)
+		select noa,w133,w166,w100,mount,holiday from #bbm where noa=@datea
+		
+		insert salpresents (noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo)
+		select noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo from #bbs where noa=@datea
+	end
+	else
+	begin
+		--更新目前資料的noq
+		update salpresents set noq='XX'+noq	where noa=@datea
+		--刪除已存的員工資料
+		delete a from salpresents a 
+		where noa=@datea and exists (select * from #bbm where noa=a.noa and sssno=a.sssno and namea=a.namea)
+		--插入上傳資料
+		insert salpresents (noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo)
+		select noa,noq,sssno,namea,clockin,clockout,restin,restout,w133,w166,w100,memo from #bbs
+		where noa=@datea
+		--更新表頭資料
+		update a
+		set w133=b.w133,w166=b.w166,w100=b.w100,mount=b.mount
+		from salpresent a 
+		outer apply (select SUM(w133)w133,SUM(w166)w166,SUM(w100)w100,count(*)mount from salpresents where noa=a.noa)b
+		where noa=@datea
+		--更新表頭順序
+		update a
+		set noq=right('000'+CAST(rr as nvarchar(10)),3)
+		from (select noq,ROW_NUMBER() over (order by sssno,namea)rr from salpresents where noa=@datea) a 
+	end
+
+	fetch next from cursor_table
+	into @datea
+end
+close cursor_table
+deallocate cursor_table
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+   drop table #tmp
+END
+
+IF OBJECT_ID('tempdb..#bbm')is not null
+BEGIN
+   drop table #bbm
+END
+
+IF OBJECT_ID('tempdb..#bbs')is not null
+BEGIN
+   drop table #bbs
+END;
