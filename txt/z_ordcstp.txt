@@ -465,9 +465,13 @@ declare @tmp table(
 		begin
 			insert into @tmp
 				select
-					'0','rc2','進貨單',b.noa,b.noq,b.ordeno,b.no2,a.datea,b.storeno,c.store,b.productno,b.product,
-					case when ltrim(rtrim(isnull(b.size,''))) = '' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else ltrim(rtrim(isnull(b.size,''))) end,
-					b.mount,b.price,b.weight,b.uno,b.memo,a.coin
+					'0','rc2','進貨單',b.noa,b.noq,b.ordeno,b.no2,a.datea,b.storeno,c.store
+					,b.productno,b.product,
+					case when ltrim(rtrim(isnull(b.size,''))) = '' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else ltrim(rtrim(isnull(b.size,''))) end
+					,case when a.typea='1' then 1 else -1 end * b.mount
+					,b.price
+					,case when a.typea='1' then 1 else -1 end * b.weight
+					,b.uno,b.memo,a.coin
 				from view_rc2 a
 				left join view_rc2s b on a.noa = b.noa
 				left join store c on b.storeno = c.noa
