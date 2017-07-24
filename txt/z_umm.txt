@@ -2796,9 +2796,9 @@ insert #result (gno,noa,datea,mon,custno,comp,money,tax,total1,pay,unpay,total2,
 select '3','','','',custno,comp,SUM(money),sum(tax),SUM(total1),SUM(pay),SUM(unpay),SUM(total2),'' 
 from #result where gno='1' group by custno,comp
 
---預收
+--已收
 update a
-set pay=isnull((select SUM( opay - unopay) total from umm where custno=a.custno),0)
+set pay=pay--+isnull((select SUM( opay - unopay) total from umm where custno=a.custno),0)
 from #result a where gno='3'
 
 delete #result where gno='1'
@@ -2966,7 +2966,7 @@ select
 	,reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,(case when typea !='出' and typea!='稅' and gno='0' then -1 else 1 end)*total1),1)),4,30)) total1
 	,reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,pay),1)),4,30)) pay
 	,reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,(case when typea !='出' and typea!='稅' and gno='0' then -1 else 1 end)*unpay),1)),4,30)) unpay
-	,reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,(case when typea !='出' and typea!='稅' and gno='0' then -1 else 1 end)*total2),1)),4,30)) total2
+	,reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,total2),1)),4,30)) total2
 	,(select count(*) from #result where (gno='0') and (custno=a.custno)) pcount
 	,memo,fax
 from #result a
