@@ -619,10 +619,26 @@
 								}else{
 									$('#txtMemo_'+n).val('');
 								}
+								
+								if(dec($('#txtTotal_'+n).val())==0){
+									alert($('#txtProduct_'+n).val()+' 產品小計金額等於0，請確認輸入數量是否正確!!');
+								}else if(dec($('#txtTotal_'+n).val())>50000){
+									alert($('#txtProduct_'+n).val()+' 產品小計金額大於50000，請確認輸入數量是否正確!!');
+								}
 							}
 						});
 						$('#txtPrice_' + j).change(function() {
+							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							sum();
+							
+							//106/07/24 判斷 金額=0 或超過50000
+							if(q_getPara('sys.project').toUpperCase()=='XY'){
+								if(dec($('#txtTotal_'+n).val())==0){
+									alert($('#txtProduct_'+n).val()+' 產品小計金額等於0，請確認輸入單價是否正確!!');
+								}else if(dec($('#txtTotal_'+n).val())>50000){
+									alert($('#txtProduct_'+n).val()+' 產品小計金額大於50000，請確認輸入單價是否正確!!');
+								}
+							}
 						});
 						$('#txtTotal_' + j).change(function() {
 							sum();
