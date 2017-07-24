@@ -586,7 +586,31 @@
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length-1];
 							if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtTggno').val()) &&!emp($('#txtProductno1_'+n).val())) {
 								var t_where = "where=^^ tggno='" + $('#txtTggno').val() + "' and productno='"+$('#txtProductno1_'+n).val()+"' ^^";
-								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+n);
+								q_gt('ucctgg', t_where, 0, 0, 0, "ucctgg_"+n, r_accy,1);
+								
+								var t_mount=dec($("#txtMount_"+n).val());
+								var t_price=[];
+								var as = _q_appendData("ucctgg", "", true);
+								if (as[0] != undefined) {
+									var ass = _q_appendData("ucctggs", "", true);
+									if (ass[0] != undefined) {
+										for(var k=0;k<ass.length;k++){
+											if(t_mount>=dec(ass[k].mount)){
+												t_price.push({
+													mount:dec(ass[k].mount),
+													price:ass[k].price
+												})
+											}
+										}
+										if(t_price.length>0){
+											t_price.sort(compare);
+											$("#txtPrice_"+n).val(t_price[t_price.length-1].price);
+										}else{
+											$("#txtPrice_"+n).val(0);
+										}
+									}
+								}
+								
 							}
 							sum();
 							if(q_getPara('sys.project').toUpperCase()=='XY'){
