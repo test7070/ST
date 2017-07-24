@@ -95,7 +95,7 @@
 					}, {
 						type : '5', //[16]  10
 						name : 'xsortby',
-						value : 'custno@依客戶,sizea@依尺寸,odate@依日期'.split(',')
+						value : 'custno@依客戶,sizea@依尺寸,dime@依厚度,odate@依日期'.split(',')
 					}, {
 						type : '5', //[17]  11
 						name : 'xstktype',
