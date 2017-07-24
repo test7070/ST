@@ -900,7 +900,8 @@
 				
 				for(var k=0;k<q_bbsCount;k++){
 					if(emp($('#txtDatea_'+k).val())){
-						getpdate(k);
+						//106/07/24 暫時不使用
+						//getpdate(k);
 						//$('#txtDatea_'+k).val(q_cdn($.trim($('#txtOdate').val()),15))
 					}
 					if(!emp($('#txtProductno_'+k).val())){
@@ -1149,7 +1150,8 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							sum();
-							getpdate(b_seq);
+							//106/07/24 暫時不使用
+							//getpdate(b_seq);
 						});
 						$('#txtTotal_' + j).focusout(function() {
 							sum();

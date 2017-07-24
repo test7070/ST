@@ -27,7 +27,7 @@
             brwCount2 = 15;
             aPop = new Array(
 				['txtOrgcustno', '', 'cust', 'noa,comp', 'txtOrgcustno', 'cust_b.aspx']
-				,['txtOrgproductno', '', 'ucc', 'noa,product', 'txtOrgproductno', 'ucc_b.aspx']
+				,['txtOrgproductno', '', 'ucaucc', 'noa,product', 'txtOrgproductno', 'ucaucc_b.aspx']
 				,['txtOrgpartno', '', 'part', 'noa,part', 'txtOrgpartno', 'part_b.aspx']
 				,['txtOrgtggno', '', 'tgg', 'noa,comp', 'txtOrgtggno', 'tgg_b.aspx']
 				,['txtOrgstationno', '', 'station', 'noa,station', 'txtOrgstationno', 'station_b.aspx']
