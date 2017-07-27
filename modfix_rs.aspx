@@ -32,8 +32,9 @@
 			brwKey = 'noa';
 			q_desc = 1;
 			
+			//106/07/27 現場人員仍以架號為主 將其架號篩選拿掉
 			aPop = new Array(			
-				['txtModnoa','lblModnoa','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
+				['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
 				//['txtFrame','lblFrame','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
 				['txtMechno','lblMechno','modeq','noa,device','txtMechno,txtMech','modeq_b.aspx']
 			);
@@ -333,6 +334,19 @@
 
 			function btnCancel() {
 				_btnCancel();
+			}
+			
+			function q_popPost(s1) {
+				switch (s1) {
+					case 'txtModnoa':
+						var t_where = "where=^^ noa=N'" + $('#txtModnoa').val() + "' ^^";
+						q_gt('model', t_where, 0, 0, 0, "getmodel",r_accy,1);
+						var as = _q_appendData("model", "", true);
+						if (as[0] != undefined) {
+							$('#txtFrame').val(as[0].frame);
+						}
+						break;
+				}
 			}
 		</script>
 		<style type="text/css">

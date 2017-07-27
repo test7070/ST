@@ -33,9 +33,10 @@
 			brwKey = 'Noa';
 			q_desc = 1;
 					
+			//106/07/27 現場人員仍以架號為主 將其架號篩選拿掉
 			aPop = new Array(
-				['txtInnoa','lblInnoa','modfix','noa,modnoa,frame,mechno,mech','txtInnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
-				['txtModnoa','lblModnoa','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
+				['txtInnoa','lblInnoa','modfix','noa,modnoa,mechno,mech','txtInnoa,txtModnoa,txtMechno,txtMech','modfix_b.aspx'],
+				['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
 				//['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtInnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtMechno','lblMechno','modeq','noa,device','txtMechno,txtMech','modeq_b.aspx']
 			);
@@ -1165,6 +1166,23 @@
 						}
 						break;
 					case 'txtInnoa':
+						q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"' and not exists (select * from modfixc where noa=modfix.noa and noa!='"+$('#txtNoa').val()+"') and not exists (select * from modout where noa=modfix.noa) ^^ stop=1 ", 0, 0, 0, "getinnoa",r_accy,1);
+						var as = _q_appendData("modfix", "", true);
+						if (as[0] != undefined) {
+							$('#txtModnoa').val(as[0].modnoa);
+							$('#txtFrame').val(as[0].frame);
+							$('#txtMechno').val(as[0].mechno);
+							$('#txtMech').val(as[0].mech);
+							t_indate = as[0].datea;
+						}else{
+							$('#txtModnoa').val('');
+							$('#txtFrame').val('');
+							$('#txtMechno').val('');
+							$('#txtMech').val('');
+							$('#txtInnoa').val('');
+							alert('入庫單號已維修/領用或不存在!!');
+						}
+					
 						//清除表身
 						for(var i=0; i<q_bbsCount; i++){
 							$('#btnMinus_'+i).click();
