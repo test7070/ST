@@ -17,9 +17,9 @@
 
 			q_tables = 's';
 			var q_name = "modfix";
-			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','txtNoa','txtMech','txtFrame','textSum'];
+			var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtMech','textSum','txtModnoa'];
 			var q_readonlys = ['txtDetail1','txtDetail2','txtModel','txtNob','txtWheel1','txtCode1','txtFrame1'];
-			var bbmNum = [['txtFrame',10,0,0]];
+			var bbmNum = [];
 			var bbsNum = [['txtMount1',15,0,0], ['txtWeight1',15,1,0],['txtFrame1',10,0,0]];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -32,9 +32,9 @@
 			brwKey = 'noa';
 			q_desc = 1;
 			
-			//106/07/27 現場人員仍以架號為主 將其架號篩選拿掉
+			//106/07/27 打架號開模具視窗選
 			aPop = new Array(			
-				['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
+				//['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
 				//['txtFrame','lblFrame','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
 				['txtMechno','lblMechno','modeq','noa,device','txtMechno,txtMech','modeq_b.aspx']
 			);
@@ -67,11 +67,37 @@
 						q_gt('model_rs', t_where, 0, 0, 0, "model_rs");
 					}
 				});
+				
+				$('#lblFrame').click(function() {
+					if((q_cur==1 || q_cur==2) && !emp($('#txtFrame').val())){
+						var t_where = "frame='" + $('#txtFrame').val() + "'";
+                		q_box("model_b2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'model_rs', "500px", "650px", '');
+					}
+				});
+				$('#txtFrame').change(function() {
+					$('#txtModnoa').val('');
+					//清除表身
+					for(var i=0; i<q_bbsCount; i++){
+						$('#btnMinus_'+i).click();
+					}
+				});
 			}
 
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'model_rs':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0 || b_ret[0]==undefined)
+								return;
+							$('#txtModnoa').val(b_ret[0].noa);
+							//清除表身
+							for(var i=0; i<q_bbsCount; i++){
+								$('#btnMinus_'+i).click();
+							}
+						}
+						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
@@ -497,10 +523,10 @@
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblModnoa' class="lbl btn" > </a></td>
+						<td><span> </span><a id='lblFrame' class="lbl btn"> </a></td>
+						<td><input id="txtFrame" type="text" class="txt c1"/></td>
+						<td><span> </span><a id='lblModnoa' class="lbl" > </a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblFrame' class="lbl"> </a></td>
-						<td><input id="txtFrame" type="text" class="txt c1"/></td>						
 						<td><span> </span><a id='lblNoa' class="lbl "> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>		
 					</tr>

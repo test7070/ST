@@ -49,13 +49,13 @@
 				</tr>
 				<tr>
 					<td style="width:2%;"><input name="sel"  id="radSel.*" type="radio" /></td>
-					<td style="width:20%;">
+					<td style="width:30%;">
 						<input class="txt" id="txtNoa.*" type="text" style="width:98%;"  readonly="readonly" />
 					</td>
 					<td style="width:20%;">
 						<input class="txt" id="txtFrame.*" type="text" style="width:98%;"  readonly="readonly" />
 					</td>
-					<td style="width:45%;">
+					<td style="width:35%;">
 						<input class="txt" id="txtTgg.*" type="text" style="width:98%;"  readonly="readonly" />
 					</td>
 				</tr>

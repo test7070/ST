@@ -17,9 +17,9 @@
 
 			q_tables = 's';
 			var q_name = "modout";
-			var q_readonly = ['txtNoa','txtMech','txtWorker', 'txtWorker2','txtFrame','textSum'];
+			var q_readonly = ['txtNoa','txtMech','txtWorker', 'txtWorker2','txtFixnoa','txtModnoa','textSum'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail','txtFrame'];
-			var bbmNum = [['txtFrame',10,0,0]];
+			var bbmNum = [];
 			var bbsNum = [['txtMount',15,0,0],['txtFrame',10,0,0]];
 			var bbmMask = [];
 			var bbsMask = [['txtDatea',r_picd]];
@@ -32,11 +32,11 @@
 			brwKey = 'Noa';
 			q_desc = 1;
 			
-			//106/07/27 現場人員仍以架號為主 將其架號篩選拿掉
+			//106/07/27 打架號開模具視窗選
 			aPop = new Array(
-				['txtFixnoa','lblFixnoa','modfix','noa,modnoa,mechno,mech','txtFixnoa,txtModnoa,txtMechno,txtMech','modfix_b.aspx'],
+				//['txtFixnoa','lblFixnoa','modfix','noa,modnoa,mechno,mech','txtFixnoa,txtModnoa,txtMechno,txtMech','modfix_b.aspx'],
 				//['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtFixnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
-				['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
+				//['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
 				['txtMechno','lblMechno','modeq','noa,device','txtMechno,txtMech','modeq_b.aspx'],
 				['txtSssno','lblSssno','nhpe','noa,namea','txtSssno,txtNamea','']
 			);
@@ -126,11 +126,43 @@
 						}*/
 					}
 				});
+				
+				$('#lblFrame').click(function() {
+					if((q_cur==1 || q_cur==2) && !emp($('#txtFrame').val())){
+						var t_where = " frame='" + $('#txtFrame').val() + "' and not exists (select * from modout where noa=modfix.noa and noa!='"+$('#txtNoa').val()+"') ";
+                		q_box("modfix_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'modfix_rs', "500px", "650px", '');
+					}
+				});
+				$('#txtFrame').change(function() {
+					$('#txtFixnoa').val('');
+					$('#txtModnoa').val('');
+					$('#txtMechno').val('');
+					$('#txtMech').val('');
+					//清除表身
+					for(var i=0; i<q_bbsCount; i++){
+						$('#btnMinus_'+i).click();
+					}
+				});
 			}
 
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'modfix_rs':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0 || b_ret[0]==undefined)
+								return;
+							$('#txtFixnoa').val(b_ret[0].noa);
+							$('#txtModnoa').val(b_ret[0].modnoa);
+							$('#txtMechno').val(b_ret[0].mechno);
+							$('#txtMech').val(b_ret[0].mech);
+							//清除表身
+							for(var i=0; i<q_bbsCount; i++){
+								$('#btnMinus_'+i).click();
+							}
+						}
+						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
@@ -564,12 +596,12 @@
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblFixnoa' class="lbl btn" > </a></td>
-						<td><input id="txtFixnoa" type="text" class="txt  c1" /></td>
+						<td><span> </span><a id='lblFrame' class="lbl btn" > </a></td>
+						<td><input id="txtFrame" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblModnoa' class="lbl " > </a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblFrame' class="lbl" > </a></td>
-						<td><input id="txtFrame" type="text" class="txt  c1" /></td>
+						<td><span> </span><a id='lblFixnoa' class="lbl" > </a></td>
+						<td><input id="txtFixnoa" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblNoa' class="lbl " > </a></td>
 						<td><input id="txtNoa" type="text" class="txt  c1" /></td>
 					</tr>
