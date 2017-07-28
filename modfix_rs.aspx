@@ -14,12 +14,11 @@
 			function onPageError(error) {
 				alert("An error occurred:\r\n" + error.Message);
 			}
-
 			q_tables = 's';
 			var q_name = "modfix";
-			var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtMech','textSum','txtModnoa'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','txtNoa','txtMech','txtFrame','textSum'];
 			var q_readonlys = ['txtDetail1','txtDetail2','txtModel','txtNob','txtWheel1','txtCode1','txtFrame1'];
-			var bbmNum = [];
+			var bbmNum = [['txtFrame',10,0,0]];
 			var bbsNum = [['txtMount1',15,0,0], ['txtWeight1',15,1,0],['txtFrame1',10,0,0]];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -32,9 +31,8 @@
 			brwKey = 'noa';
 			q_desc = 1;
 			
-			//106/07/27 打架號開模具視窗選
 			aPop = new Array(			
-				//['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
+				['txtModnoa','lblModnoa','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
 				//['txtFrame','lblFrame','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
 				['txtMechno','lblMechno','modeq','noa,device','txtMechno,txtMech','modeq_b.aspx']
 			);
@@ -67,37 +65,10 @@
 						q_gt('model_rs', t_where, 0, 0, 0, "model_rs");
 					}
 				});
-				
-				$('#lblFrame').click(function() {
-					if((q_cur==1 || q_cur==2) && !emp($('#txtFrame').val())){
-						var t_where = "frame='" + $('#txtFrame').val() + "'";
-                		q_box("model_b2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'model_rs', "500px", "650px", '');
-					}
-				});
-				$('#txtFrame').change(function() {
-					$('#txtModnoa').val('');
-					//清除表身
-					for(var i=0; i<q_bbsCount; i++){
-						$('#btnMinus_'+i).click();
-					}
-				});
 			}
-
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
-					case 'model_rs':
-						if (q_cur > 0 && q_cur < 4) {
-							b_ret = getb_ret();
-							if (!b_ret || b_ret.length == 0 || b_ret[0]==undefined)
-								return;
-							$('#txtModnoa').val(b_ret[0].noa);
-							//清除表身
-							for(var i=0; i<q_bbsCount; i++){
-								$('#btnMinus_'+i).click();
-							}
-						}
-						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
@@ -235,7 +206,6 @@
 			    else
 			    	wrServer(t_noa);
 			}
-
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
@@ -266,27 +236,22 @@
 				}									
 				_bbsAssign();
 			}
-
 			function btnIns() {
 				_btnIns();
 				$('#txtNoa').val('AUTO');
                	$('#txtDatea').val(q_date()); 
 			}
-
 			function btnModi() {			
 				_btnModi();
 			}
-
 			function btnPrint() {
 				q_box('z_modfix_rs.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
-
 			function wrServer(key_value) {
 				var i;
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
 				_btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
 			}
-
 			function bbsSave(as) {
 				if (!as['nob'] || !as['frame1'] || !as['mount1']) {
 					as[bbsKey[1]] = '';
@@ -295,12 +260,10 @@
 				q_nowf();
 				return true;
 			}
-
 			function refresh(recno) {
 				_refresh(recno);	
 				sum();
 			}
-
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 				if(q_cur=='2'){
@@ -309,70 +272,44 @@
 					$('#txtDatea').css('color', '');
 				}
 			}
-
 			function btnMinus(id) {
 				_btnMinus(id);
 			}
-
 			function btnPlus(org_htm, dest_tag, afield) {
 				_btnPlus(org_htm, dest_tag, afield);
 			}
-
 			function q_appendData(t_Table) {
 				return _q_appendData(t_Table);
 			}
-
 			function btnSeek() {
 				_btnSeek();
 			}
-
 			function btnTop() {
 				_btnTop();
 			}
-
 			function btnPrev() {
 				_btnPrev();
 			}
-
 			function btnPrevPage() {
 				_btnPrevPage();
 			}
-
 			function btnNext() {
 				_btnNext();
 			}
-
 			function btnNextPage() {
 				_btnNextPage();
 			}
-
 			function btnBott() {
 				_btnBott();
 			}
-
 			function q_brwAssign(s1) {
 				_q_brwAssign(s1);
 			}
-
 			function btnDele() {
 				_btnDele();
 			}
-
 			function btnCancel() {
 				_btnCancel();
-			}
-			
-			function q_popPost(s1) {
-				switch (s1) {
-					case 'txtModnoa':
-						var t_where = "where=^^ noa=N'" + $('#txtModnoa').val() + "' ^^";
-						q_gt('model', t_where, 0, 0, 0, "getmodel",r_accy,1);
-						var as = _q_appendData("model", "", true);
-						if (as[0] != undefined) {
-							$('#txtFrame').val(as[0].frame);
-						}
-						break;
-				}
 			}
 		</script>
 		<style type="text/css">
@@ -523,10 +460,10 @@
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblFrame' class="lbl btn"> </a></td>
-						<td><input id="txtFrame" type="text" class="txt c1"/></td>
-						<td><span> </span><a id='lblModnoa' class="lbl" > </a></td>
+						<td><span> </span><a id='lblModnoa' class="lbl btn" > </a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
+						<td><span> </span><a id='lblFrame' class="lbl"> </a></td>
+						<td><input id="txtFrame" type="text" class="txt c1"/></td>						
 						<td><span> </span><a id='lblNoa' class="lbl "> </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1"/></td>		
 					</tr>
