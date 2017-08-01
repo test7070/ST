@@ -14,11 +14,12 @@
 			function onPageError(error) {
 				alert("An error occurred:\r\n" + error.Message)
 			}
+
 			q_tables = 's';
 			var q_name = "modfixc";
-			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','textNob','textCode','textDetail','txtFrame','textInnsum','textFixsum'];
+			var q_readonly = ['txtNoa','txtWorker', 'txtWorker2','textNob','textCode','textDetail','txtInnoa','txtModnoa','textInnsum','textFixsum'];
 			var q_readonlys = ['txtNob','txtCode','txtDetail','txtFrame'];
-			var bbmNum = [['txtFrame',10,0,0]];
+			var bbmNum = [];
 			var bbsNum = [['txtWeight',15,1,1], ['txtMount',15,0,1], ['txtFixmount',15,0,1], ['txtBottom',15,2,1], ['txtBebottom',15,2,1], ['txtEnbottom',15,2,1], 
 						  ['txtLastloss',15,1,1], ['txtLoss',15,1,1], ['txtBrepair',15,1,1], ['txtErepair',15,1,1],['txtFrame',10,0,0]];
 			var bbmMask = [];
@@ -32,9 +33,10 @@
 			brwKey = 'Noa';
 			q_desc = 1;
 					
+			//106/07/27 打架號開模具視窗選
 			aPop = new Array(
-				['txtInnoa','lblInnoa','modfix','noa,modnoa,frame,mechno,mech','txtInnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
-				['txtModnoa','lblModnoa','model','noa,frame','txtModnoa,txtFrame','model_b2.aspx'],
+				//['txtInnoa','lblInnoa','modfix','noa,modnoa,mechno,mech','txtInnoa,txtModnoa,txtMechno,txtMech','modfix_b.aspx'],
+				//['txtModnoa','lblModnoa','model','noa','txtModnoa','model_b2.aspx'],
 				//['txtFrame','lblFrame','modfix','noa,modnoa,frame,mechno,mech','txtInnoa,txtModnoa,txtFrame,txtMechno,txtMech','modfix_b.aspx'],
 				['txtMechno','lblMechno','modeq','noa,device','txtMechno,txtMech','modeq_b.aspx']
 			);
@@ -192,10 +194,43 @@
 				$('#textEtime2').focusout(function() {t_focusout='textWorker2';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
 				$('#textWorker2').focusout(function() {t_focusout='textMemo';t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1]}).change(function() {t_focusout='';t_focusout2='';t_fc=0}).mousedown(function() {t_focusout='';t_focusout2='';t_fc=0;});
 				$('#textWorker2').keydown(function(e) {if(e.which==13){t_focusout='';t_focusout2='';t_fc=0;t_fbeq=$("[name='sel']:checked").attr('id').split('_')[1];}});
+				
+				$('#lblFrame').click(function() {
+					if((q_cur==1 || q_cur==2) && !emp($('#txtFrame').val())){
+						var t_where = " frame='" + $('#txtFrame').val() + "'  and not exists (select * from modfixc where noa=modfix.noa and noa!='"+$('#txtNoa').val()+"') and not exists (select * from modout where noa=modfix.noa) ";
+                		q_box("modfix_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'modfix_rs', "500px", "650px", '');
+					}
+				});
+				$('#txtFrame').change(function() {
+					$('#txtInnoa').val('');
+					$('#txtModnoa').val('');
+					$('#txtMechno').val('');
+					$('#txtMech').val('');
+					//清除表身
+					for(var i=0; i<q_bbsCount; i++){
+						$('#btnMinus_'+i).click();
+					}
+				});
 			}          	 
+
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'modfix_rs':
+						if (q_cur > 0 && q_cur < 4) {
+							b_ret = getb_ret();
+							if (!b_ret || b_ret.length == 0 || b_ret[0]==undefined)
+								return;
+							$('#txtInnoa').val(b_ret[0].noa);
+							$('#txtModnoa').val(b_ret[0].modnoa);
+							$('#txtMechno').val(b_ret[0].mechno);
+							$('#txtMech').val(b_ret[0].mech);
+							//清除表身
+							for(var i=0; i<q_bbsCount; i++){
+								$('#btnMinus_'+i).click();
+							}
+						}
+						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
@@ -335,11 +370,13 @@
 			    else
 			    	wrServer(t_noa);
 			}
+
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
 				q_box('modfixc_s.aspx', q_name + '_s', "500px", "420px", q_getMsg("popSeek"));
 			}
+
 			function changeWay(n,pos){
 				var way = $('#cmbWay'+n+"_"+pos).val();
 				$('#cmbMech'+n+"_"+pos).text('');
@@ -457,6 +494,7 @@
 					changeWay("2",j);
 					changeWay("3",j);
 					changeWay("4",j);
+
 					$('#cmbWay_'+j).change(function(){
 						t_IdSeq = -1;
 						q_bodyId($(this).attr('id'));
@@ -890,18 +928,22 @@
 				$('#txtDatea').val(q_date());
 				refreshBbs();
 			}
+
 			function btnModi() {			
 				_btnModi();
 				refreshBbs();
 			}
+
 			function btnPrint() {
 				q_box('z_modfixc_rs.aspx' + "?;;;noa=" + trim($('#txtNoa').val()) + ";" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
 			}
+
 			function wrServer(key_value) {
 				var i;
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
 				_btnOk(key_value, bbmKey[0], bbsKey[1], '', 2);
 			}
+
 			function bbsSave(as) {
 				if (!as['nob']) {
 					as[bbsKey[1]] = '';
@@ -911,6 +953,7 @@
 				as['datea'] = abbm2['datea'];
 				return true;
 			}
+
 			function refresh(recno) {
 				_refresh(recno);
 						
@@ -1080,42 +1123,55 @@
                 	}
                 }
 			}
+
 			function btnMinus(id) {
 				_btnMinus(id);
 			}
+
 			function btnPlus(org_htm, dest_tag, afield) {
 				_btnPlus(org_htm, dest_tag, afield);
 			}
+
 			function q_appendData(t_Table) {
 				return _q_appendData(t_Table);
 			}
+
 			function btnSeek() {
 				_btnSeek();
 			}
+
 			function btnTop() {
 				_btnTop();
 			}
+
 			function btnPrev() {
 				_btnPrev();
 			}
+
 			function btnPrevPage() {
 				_btnPrevPage();
 			}
+
 			function btnNext() {
 				_btnNext();
 			}
+
 			function btnNextPage() {
 				_btnNextPage();
 			}
+
 			function btnBott() {
 				_btnBott();
 			}
+
 			function q_brwAssign(s1) {
 				_q_brwAssign(s1);
 			}
+
 			function btnDele() {
 				_btnDele();
 			}
+
 			function btnCancel() {
 				_btnCancel();
 			}
@@ -1142,6 +1198,23 @@
 						}
 						break;
 					case 'txtInnoa':
+						q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"' and not exists (select * from modfixc where noa=modfix.noa and noa!='"+$('#txtNoa').val()+"') and not exists (select * from modout where noa=modfix.noa) ^^ stop=1 ", 0, 0, 0, "getinnoa",r_accy,1);
+						var as = _q_appendData("modfix", "", true);
+						if (as[0] != undefined) {
+							$('#txtModnoa').val(as[0].modnoa);
+							$('#txtFrame').val(as[0].frame);
+							$('#txtMechno').val(as[0].mechno);
+							$('#txtMech').val(as[0].mech);
+							t_indate = as[0].datea;
+						}else{
+							$('#txtModnoa').val('');
+							$('#txtFrame').val('');
+							$('#txtMechno').val('');
+							$('#txtMech').val('');
+							$('#txtInnoa').val('');
+							alert('入庫單號已維修/領用或不存在!!');
+						}
+					
 						//清除表身
 						for(var i=0; i<q_bbsCount; i++){
 							$('#btnMinus_'+i).click();
@@ -1304,12 +1377,12 @@
 						<td class="tdZ"> </td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblInnoa' class="lbl btn" > </a></td>
-						<td><input id="txtInnoa" type="text" class="txt  c1" /></td>
+						<td><span> </span><a id='lblFrame' class="lbl btn"> </a></td>
+						<td><input id="txtFrame" type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblModnoa' class="lbl " > </a></td>
 						<td><input id="txtModnoa" type="text" class="txt  c1" /></td>
-						<td><span> </span><a id='lblFrame' class="lbl"> </a></td>
-						<td><input id="txtFrame" type="text" class="txt c1"/></td>	
+						<td><span> </span><a id='lblInnoa' class="lbl" > </a></td>
+						<td><input id="txtInnoa" type="text" class="txt  c1" /></td>
 						<td><span> </span><a id='lblNoa' class="lbl " > </a></td>
 						<td><input id="txtNoa" type="text" class="txt c1" /></td>						
 					</tr>
