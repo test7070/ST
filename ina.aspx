@@ -64,6 +64,10 @@
 				q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				q_cmbParse("cmbItype", q_getPara('ina.typea'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
+				
+				if(q_getPara('sys.project').toUpperCase()=='RB')
+					bbsNum = [['txtMount', 10, 0, 1], ['txtPrice', 10, 4, 1], ['txtTotal', 15, 0, 1]];
+				
 				$('#txtPost').change(function(){
 					GetTranPrice();
 				});
