@@ -6,6 +6,7 @@
 	
 	declare @t_pageline int = 12 -- 一頁幾行 
 	-----------------------------------------------------------------------------
+	-----------------------------------------------------------------------------
 	declare @noa nvarchar(20)
 	declare @datea nvarchar(10)
 	declare @typea nvarchar(20)
@@ -45,6 +46,7 @@
 	end
 	--------------------------------------------------------------------------------
 	declare @tmp table(
+		sel int identity(1,1),
 		gno nvarchar(10),
 		pno nvarchar(10),
 		noa nvarchar(20),
@@ -211,4 +213,4 @@
 	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+a.memo4+'</a>' mm4
 	from @tmp a 
 	left join(select noa,COUNT(1) n from @tmp group by noa) b on a.noa=b.noa
-	order by a.noa,a.pno;
+	order by a.noa,a.pno,a.sel;
