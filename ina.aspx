@@ -18,7 +18,7 @@
 			q_tables = 's';
 			var q_name = "ina";
 			var q_readonly = ['txtNoa','txtStation','txtComp','txtStore','txtCardeal','txtAddr','txtTranstart','txtWorker','txtWorker2','txtTotal'];
-			var q_readonlys = ['txtTotal'];
+			var q_readonlys = []; //106/08/02 'txtTotal' 若KEY total 回推單價
 			var bbmNum = [['txtTotal', 15, 0, 1], ['txtPrice', 10, 2, 1], ['txtTranmoney', 15, 0, 1], ['txtTranadd', 15, 2, 1]];
 			var bbsNum = [['txtMount', 10, 0, 1], ['txtPrice', 10, 2, 1], ['txtTotal', 15, 0, 1]];
 			var bbmMask = [];
@@ -217,10 +217,46 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#txtMount_' + j).change(function() {
-							sum();
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if(q_cur==1 || q_cur==2){
+								var t_mount=dec($('#txtMount_'+b_seq).val());
+								var t_price=dec($('#txtPrice_'+b_seq).val());
+								$('#txtTotal_'+b_seq).val(round(q_mul(t_mount,t_price),0));
+								sum();
+							}
 						});
+						
 						$('#txtPrice_' + j).change(function() {
-							sum();
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if(q_cur==1 || q_cur==2){
+								var t_mount=dec($('#txtMount_'+b_seq).val());
+								var t_price=dec($('#txtPrice_'+b_seq).val());
+								$('#txtTotal_'+b_seq).val(round(q_mul(t_mount,t_price),0));
+								sum();
+							}
+						});
+						
+						$('#txtTotal_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if(q_cur==1 || q_cur==2){
+								var t_mount=dec($('#txtMount_'+b_seq).val());
+								var t_total=dec($('#txtTotal_'+b_seq).val());
+								if(t_total==0){
+									$('#txtPrice_'+b_seq).val(0);
+								}else if(t_mount==0){
+									$('#txtPrice_'+b_seq).val(t_total);
+									$('#txtTotal_'+b_seq).val(0);
+								}else{
+									$('#txtPrice_'+b_seq).val(round(q_div(t_total,t_mount),0));	
+								}
+								sum();
+							}
 						});
 					}
 				}
@@ -272,13 +308,13 @@
 			function sum() {
 				var t_price=0,t_mount=0,t_total=0;
 				var tranPrice=0;tranTotal=0;
+				
 				for (var j = 0; j < q_bbsCount; j++) {
-					t_mount = dec($('#txtMount_' + j).val());
-					t_price = dec($('#txtPrice_' + j).val());
-					t_total = q_add(t_total,round(q_mul(t_price,t_mount), 0));
-					$('#txtTotal_' + j).val(round(q_mul(t_price,t_mount), 0));
+					t_total = q_add(t_total,dec($('#txtTotal_' + j).val()));
 				}
+				
 				$('#txtTotal').val(t_total);
+				
 				var addMoney = dec(q_getPara('sys.tranadd'));
 				var addMul = dec($('#txtTranadd').val());
 				tranPrice = dec($('#txtPrice').val());
