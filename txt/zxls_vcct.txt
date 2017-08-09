@@ -150,8 +150,24 @@ begin
 			set @istrue = 0
 	end
 	
-	set @isasset = case when @h='' then 0 else  CAST(@h as bit) end
-	set @isself = case when @i='' then 0 else  CAST(@i as bit) end
+	if(left(@kind,1)='2')
+	begin
+		set @isasset = case when @h='' then 0 else  CAST(@h as bit) end
+	end
+	else
+	begin
+		set @isasset = 0
+	end
+	
+	if(left(@kind,1)='3')
+	begin
+		set @isself = case when @i='' then 0 else  CAST(@i as bit) end
+	end
+	else
+	begin
+		set @isself = 0
+	end
+	
 	set @money = round(CAST(REPLACE(@j,',','') as float),0)
 	
 	--"0@,1@應稅,6@作廢,2@零稅率,3@內含,4@免稅,5@自訂" --內含拿掉
@@ -165,22 +181,89 @@ begin
 		set @tax=0
 	if(@kind='37' or @kind='38' or @kind='32' or (@kind='22' and len(@dutymemo)=0) and @kind='27')
 		set @tax=0
-	set @total = round(CAST(REPLACE(@m,',','') as float),0)
+		
+	--set @total = round(CAST(REPLACE(@m,',','') as float),0)
+	set @total=isnull(@money,0)+isnull(@tax,0)
 	
-	set @mount = CAST(REPLACE(@n,',','') as float)
+	if(left(@kind,1)='2')
+	begin
+		set @mount = CAST(REPLACE(@n,',','') as float)
+	end
+	else
+	begin
+		set @mount=0
+	end
 	set @dutymemo = @o
 	set @book = @p
 	set @sono = @q
 	set @memo = @r
-	set @iscarrier = case when @s='' then 0 else CAST(@s as bit) end
-	set @isnondeductible = case when @t='' then 0 else CAST(@t as bit) end
-	set @isshare = case when @u='' then 0 else  CAST(@u as bit) end
-	set @isadd = case when @v='' then 0 else  CAST(@v as bit) end
+	
+	if(@kind='22' or @kind='23' or @kind='24' or @kind='25' or @kind='27' 
+	or @kind='34' or @kind='36' or @kind='37' or @kind='38')
+	begin
+		set @iscarrier = case when @s='' then 0 else CAST(@s as bit) end
+	end
+	else
+	begin
+		set @iscarrier=0
+	end
+	
+	if(left(@kind,1)='2')
+	begin
+		set @isnondeductible = case when @t='' then 0 else CAST(@t as bit) end
+	end
+	else
+	begin
+		set @isnondeductible=0
+	end
+	
+	if(@kind!='25')
+	begin
+		set @isshare=0
+	end
+	else
+	begin
+		set @isshare = case when @u='' then 0 else  CAST(@u as bit) end
+	end
+	
+	if(@kind='33' or @kind='34' or @kind='37' or @kind='38' 
+	or @kind='21' or @kind='23' or @kind='24' or @kind='28' or @kind='29')
+	begin
+		set @isadd=0
+	end
+	else
+	begin
+		set @isadd = case when @v='' then 0 else  CAST(@v as bit) end
+	end
+	
 	if(@kind='26' or @kind='27')
 		set @isadd=1
-	set @notaxnote = @w
-	set @passtype = @x
-	set @specialtax = @y
+	
+	if(left(@kind,1)='3')
+	begin
+		set @notaxnote = @w
+	end
+	else
+	begin
+		set @notaxnote = ''
+	end
+
+	if(left(@kind,1)='3' and @kind!='33' and @kind!='34')
+	begin
+		set @passtype = @x
+	end
+	else
+	begin
+		set @passtype = ''
+	end
+	if(@kind='37' or @kind='38')
+	begin
+		set @specialtax = @y
+	end
+	else
+	begin
+		set @specialtax = ''
+	end
 	
 	set @noa = @f
 	--當沒有發票號碼但有載具或其他憑證時，當作發票號碼
@@ -200,8 +283,8 @@ begin
 	from vccar a left join vccars b on a.noa = b.noa 
 	where @noa between b.binvono and b.einvono
 	
-	print @bdate+' '+@edate
-	print @noa+' '+@datea
+	--print @bdate+' '+@edate
+	--print @noa+' '+@datea
 	
 	--判斷是否存在此發票號碼
 	if((@datea>=@bdate and @datea<=@edate))
@@ -273,8 +356,6 @@ begin
 		begin
 			delete vcct where noa = @noa and kind in ('33','34','23','24') and mon=@mon
 		end
-		
-		--delete vcct where noa = @noa and (case when @kind in ('33','34','23','24') then '1' else '0' end=case when kind in ('33','34','23','24') then '1' else '0' end)
 		
 		if(@vccno!='')
 		begin
