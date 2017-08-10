@@ -690,6 +690,18 @@
 							}
 						});
 						
+						$('#txtProductno2_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
+						
+						$('#txtProductno3_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
+						
 						$('#chkAprice_'+j).click(function(e){refreshBbs();});
 						
 						$('#txtOrdbno_'+j).bind('contextmenu',function(e) {
@@ -1058,6 +1070,7 @@
 						}
 						break;
 					case 'txtProductno1_':
+						$('#txtProductno_'+b_seq).val($('#txtProductno1_'+b_seq).val());
 						if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtProductno1_'+b_seq).val())){
 							var t_where =" noa='"+$('#txtProductno1_'+b_seq).val()+"' ";
 							q_gt('ucc_xy', "where=^^ "+t_where+" ^^", 0, 0, 0, "getuccspec",r_accy,1);
@@ -1067,6 +1080,14 @@
 								$('#txtSpec_'+b_seq).val(as[0].style+' '+as[0].spec+' '+as[0].engpro);
 							}
 						}
+						break;
+					case 'txtProductno2_':
+						$('#txtProductno_'+b_seq).val($('#txtProductno2_'+b_seq).val());
+						break;
+					case 'txtProductno3_':
+						$('#txtProductno_'+b_seq).val($('#txtProductno3_'+b_seq).val());
+						break;
+					default:
 						break;
 				}
 				id='';
