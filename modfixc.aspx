@@ -1,3 +1,4 @@
+﻿
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
@@ -121,10 +122,20 @@
 				//結案若被勾選則不得再更動bbm資料
 				$('#chkEnda').click(function(){
 					if($('#chkEnda').prop("checked")){
+						var t_date,t_year,t_month,t_day;
+						t_date = new Date();
+						t_year = t_date.getUTCFullYear()-1911;
+						t_year = t_year>99?t_year+'':'0'+t_year;
+						t_month = t_date.getUTCMonth()+1;
+						t_month = t_month>9?t_month+'':'0'+t_month;
+						t_day = t_date.getUTCDate();
+						t_day = t_day>9?t_day+'':'0'+t_day;
+						$('#txtFinishtime').val(t_year+'/'+t_month+'/'+t_day);
 						$("#txtInnoa").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 						$("#txtMechno").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 						$("#txtMech").css('background', 'RGB(237,237,237)').attr('readonly', 'readonly');
 					}else{
+						$('#txtFinishtime').val('');
 						$("#txtInnoa").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 						$("#txtMechno").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
 						$("#txtMech").css('background', 'RGB(255,255,255)').removeAttr('readonly', 'readonly');
@@ -209,7 +220,7 @@
 			var t_data3 = new Array();
 			function q_gtPost(t_name) {
 				switch (t_name) {
-					/*case 'ins_modfixs':
+					case 'ins_modfixs':
 					var as = _q_appendData("modfixs", "", true);
 					if (as[0] != undefined) {
 							t_data1 = as;
@@ -260,7 +271,7 @@
 						if (as[0] != undefined) {
 							t_indate = as[0].datea;
 						}
-						break;*/					
+						break;					
 					case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -269,7 +280,7 @@
 			}
 			
 			//取前一次圖檔底徑、車修後底徑、磨耗作為本次圖檔底徑、車修前底徑、前次磨耗
-			/*function getLast(){
+			function getLast(){
 				var btm,ebtm,erep,loss,noa;
 			  	for(var i=0; i<t_data1.length; i++){	
 			  		btm  = '';
@@ -298,7 +309,7 @@
 			  		$('#txtBrepair_'+i).val(erep);
 			  		$('#txtLastloss_'+i).val(loss);
 			  	}//i-loop
-			}*/
+			}
 			
 			function btnOk() {
 				t_err = q_chkEmpField([['txtDatea', q_getMsg('lblDatea')],['txtModnoa', q_getMsg('lblModnoa')],['txtInnoa', q_getMsg('lblInnoa')]]);
@@ -1273,7 +1284,30 @@
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
-		<!--#include file="../inc/toolbar.inc"-->
+		<div id="toolbar">
+  <div id="q_menu"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input id="btnXchg" type="button" style="display:none;background:url(../image/xchg_24.png) no-repeat;width:28px;height:26px"/>
+  <a id='lblQcopy' style="display:none;"></a>
+  <input id="chekQcopy" type="checkbox" style="display:none;"/>
+  <input id="btnIns" type="button"/>
+  <input id="btnModi" type="button"/>
+  <input id="btnDele" type="button"/>
+  <input id="btnSeek" type="button"/>
+  <input id="btnPrint" type="button"/>
+  <input id="btnPrevPage" type="button"/>
+  <input id="btnPrev" type="button"/>
+  <input id="btnNext" type="button"/>
+  <input id="btnNextPage" type="button"/>
+  <input id="btnOk" type="button" disabled="disabled" />
+  <input id="btnCancel" type="button" disabled="disabled"/>&nbsp;&nbsp;
+  <input id="btnAuthority" type="button" />&nbsp;&nbsp;
+  <span id="btnSign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
+  <span id="btnAsign" style="text-decoration: underline;"></span>&nbsp;&nbsp;
+  <span id="btnLogout" style="text-decoration: underline;color:orange;"></span>&nbsp;&nbsp;
+  <input id="pageNow" type="text"  style="position: relative;text-align:center;"  size="2"/> /
+  <input id="pageAll" type="text"  style="position: relative;text-align:center;"  size="2"/>
+  <div id="q_acDiv"></div>
+</div>
 		<div id='dmain' >
 			<div class="dview" id="dview">
 				<table class="tview" id="tview">
@@ -1340,6 +1374,15 @@
 							<span> </span><a id="lblEnda">結案</a>
 						</td>
 						<td><input id="textTimea" style="width: 50px;text-align: right;">/分</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td align="right">結案日期<span> </span></td>
+						<td><input id="txtFinishtime" style="width:100px;text-align: right;"></td>
 					</tr>
 				</table>
 			</div>
