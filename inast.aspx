@@ -1387,7 +1387,7 @@
 					</td>
 					<td class="pe_hide"><input class="txt c1" id="txtUno2.*" type="text" /></td>
 					<!-- RK因為硬度會有字串,改用brand來存 -->
-					<td class="rk_show"><input class="txt c1" id="txtBrand.*" type="text" /></td>
+					<td class="rk_show" style="display:none;"><input class="txt c1" id="txtBrand.*" type="text" /></td>
 					<td class="rk_hide"><input id="txtHard.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input  id="txtDescr.*" type="text" style="width:95%;"/></td>
 					<td><input class="txt c1" id="txtMemo.*" type="text" style="width:95%;" /></td>
