@@ -17,7 +17,7 @@
 
 			q_tables = 's';
 			var q_name = "model";
-			var q_readonly = ['txtWorker', 'txtWorker2'];
+			var q_readonly = ['txtWorker', 'txtWorker2','txtMaxmodmount'];
 			var q_readonlys = [];
 			var bbmNum = [['txtYearmount', 10, 0, 1], ['txtUsemount', 10, 0, 1], ['txtInmount', 10, 0, 1]
 			, ['txtInmoney', 10, 0, 1], ['txtMount', 10, 0, 1],['txtModmounts',10,0,1],['txtMaxmodmount',10,0,1]];
@@ -65,6 +65,20 @@
 							Unlock();
 						}
 					}
+				});
+				
+				$('#txtInmount').change(function() {
+					if(dec($('#txtInmount').val())==0){
+						$('#txtInmount').val(1);
+					}
+					$('#txtMaxmodmount').val(q_mul(dec($('#txtInmount').val()),dec($('#txtModmounts').val())));
+				});
+				
+				$('#txtModmounts').change(function() {
+					if(dec($('#txtModmounts').val())==0){
+						$('#txtModmounts').val(1);
+					}
+					$('#txtMaxmodmount').val(q_mul(dec($('#txtInmount').val()),dec($('#txtModmounts').val())));
 				});
 			}
 
@@ -147,7 +161,9 @@
 				refreshBbm();
 				$('#txtIndate').val(q_date());
 				$('#txtNoa').focus();
+				$('#txtInmount').val(1);
 				$('#txtModmounts').val(1);
+				$('#txtMaxmodmount').val(1);
 			}
 
 			function btnModi() {
