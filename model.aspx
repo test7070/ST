@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -19,7 +19,8 @@
 			var q_name = "model";
 			var q_readonly = ['txtWorker', 'txtWorker2'];
 			var q_readonlys = [];
-			var bbmNum = [['txtYearmount', 10, 0, 1], ['txtUsemount', 10, 0, 1], ['txtInmount', 10, 0, 1], ['txtInmoney', 10, 0, 1], ['txtMount', 10, 0, 1]];
+			var bbmNum = [['txtYearmount', 10, 0, 1], ['txtUsemount', 10, 0, 1], ['txtInmount', 10, 0, 1]
+			, ['txtInmoney', 10, 0, 1], ['txtMount', 10, 0, 1],['txtModmounts',10,0,1],['txtMaxmodmount',10,0,1]];
 			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -146,6 +147,7 @@
 				refreshBbm();
 				$('#txtIndate').val(q_date());
 				$('#txtNoa').focus();
+				$('#txtModmounts').val(1);
 			}
 
 			function btnModi() {
@@ -423,6 +425,15 @@
 						<td><input id="txtInmount" type="text" class="txt c1 num"/></td>
 						<td><span> </span><a id='lblInmoney' class="lbl"> </a></td>
 						<td><input id="txtInmoney" type="text" class="txt c1 num"/></td>
+						<td> </td>
+					</tr>
+					<tr>
+						<td><span> </span><a id='lblModmounts' class="lbl"> </a></td>
+						<td><input id="txtModmounts" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblMaxmodmount' class="lbl" style="text-align: right;width: 95%;"> </a></td>
+						<td><input id="txtMaxmodmount" type="text" class="txt c1 num"/></td>
+						<td> </td>
+						<td> </td>
 						<td> </td>
 					</tr>
 					<tr>
