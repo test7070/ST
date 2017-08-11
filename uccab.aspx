@@ -56,6 +56,7 @@
 			    q_getFormat();
 				q_mask(bbmMask);
 				$('#txtNoa').val(q_getHref()[1]);
+				$('#txtInvent_').val(q_getHref()[1]);
 				
 			}
 			
@@ -65,6 +66,7 @@
 					$('#btnMinus_' + j).click(function () { 
 						btnMinus($(this).attr('id'));
 					});
+					$('#txtInvent_'+j).val(q_getHref()[1]);
 				} //j
 			}
 			
@@ -74,8 +76,8 @@
 			}
 			
 			function bbsSave(as) {
-				if (!as['invent'] ) {
-					as[bbsKey[0]] = ''; 
+				if (!as['pr_invent'] ) {
+					as[bbsKey[0]] = '';
 					return;
 				}
 				q_getId2( '' , as);  // write keys to as
@@ -145,11 +147,12 @@
 					<tr  style='background:#cad3ff;'>
 						<td align="center">
 							<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-							<input id="txtNoa.*" type="hidden" />
+							<input id="txtNoa.*" type="hidden"/>
 							<input id="txtNoq.*" type="hidden" />
+							<input id="txtInvent.*" type="hidden"/>
 						</td>
-						<td><input class="txt" id="txtInvent.*" type="text" style="width:98%;"/></td>
 						<td><input class="txt" id="txtPr_invent.*" type="text" style="width:98%;"/></td>
+						<td><input class="txt" id="txtProduct.*" type="text" style="width:98%;"/></td>
 						<td><input class="txt" id="txtType.*" type="text" style="width:98%;"/>
 						</td>
 						<td><input class="txt" id="txtUnit.*" type="text" style="width:98%;"/></td>
