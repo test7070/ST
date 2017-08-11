@@ -167,12 +167,42 @@
 						c.height = 100;
 						$("#canvas")[0].getContext("2d").drawImage($('#imgPic')[0],0,0,imgwidth,imgheight,0,0,300,100);
 						$('#txtOrg').val(c.toDataURL());
-						refreshImg(false);
+						
+						if(q_getPara('sys.project').toUpperCase()=='SF'){
+							//106/08/10 SF預先產生圖片
+							$('#imgPic_sf').attr('src',$('#txtOrg').val());
+							refreshImgSF_3();
+						}else{
+							refreshImg(false);
+						}
 					}
 					else
 						$('#txtData').val(c.toDataURL());
 				}
-				
+			}
+			
+			function refreshImgSF_3(){
+				var imagesf = document.getElementById('imgPic_sf');
+				var imgwidth = 300;
+                var imgheight = 100;
+				imagesf.onload = function() {
+					var cx = document.getElementById("canvas_sf");
+					cx.getContext("2d");
+					$('#canvas_sf').width(355).height(119);
+					cx.width = 355;
+					cx.height = 119;
+					$("#canvas_sf")[0].getContext("2d").drawImage($('#imgPic_sf')[0],0,0,imgwidth,imgheight,0,0,355,119);
+					$('#txtBarcode').val(cx.toDataURL());
+					
+					cx.getContext("2d");
+					$('#canvas_sf').width(150).height(50);
+					cx.width = 150;
+					cx.height = 50;
+					$("#canvas_sf")[0].getContext("2d").drawImage($('#imgPic_sf')[0],0,0,imgwidth,imgheight,0,0,150,50);
+					$('#txtImgdata').val(cx.toDataURL());
+					
+					refreshImg(false);
+				}
 			}
 			
             function q_boxClose(s2) {
@@ -580,6 +610,8 @@
 								<input id="txtNamea"  type="text" class="txt c1" />	
 								<input id="txtData"  type="text" style="display:none;" />
 								<input id="txtOrg"  type="text" style="display:none;"/>
+								<input id="txtImgdata"  type="text" style="display:none;"/>
+								<input id="txtBarcode"  type="text" style="display:none;"/>
 								<input id="txtPara"  type="text" style="display:none;" />	
 							</td>
 						</tr>
@@ -615,7 +647,9 @@
 							<td><span> </span><a id='lblImgpci' class="lbl"> </a></td>
 							<td colspan="2" rowspan="4">
 								<img id="imgPic" src="" style="width:300px;height:100px;"/>
+								<img id="imgPic_sf" src="" style="width:300px;height:100px;display: none;"/>
 								<canvas id="canvas" style="display:none"> </canvas>
+								<canvas id="canvas_sf" style="display:none"> </canvas><!--SF用-->
 							</td>
 						</tr>
 						<tr> </tr>

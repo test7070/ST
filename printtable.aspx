@@ -147,10 +147,14 @@
                 	
                 	q_gt(pq_name, t_where, 0, 0, 0, "getdb",t_r_accy,1);
                 }else{
-                	q_gt(pq_name, 'where=^^1=1^^', 0, 0, 0, "getdb",t_r_accy,1);
+                	q_gt(pq_name, 'where=^^1=1^^ stop=1000', 0, 0, 0, "getdb",t_r_accy,1);
                 }
                 
                 var as = _q_appendData(pq_name, "", true);
+                if(as.length==1000){
+                	alert('資料筆數超出1000筆，系統預設先顯示1000筆。\n若需要查詢更多資料，請再按【查詢】顯示。');
+                }
+                
                 for(var i=0;i<as.length;i++){
                 	phtm+="<tr><td style='display:none;'>";
                 	

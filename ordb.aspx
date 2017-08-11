@@ -978,6 +978,18 @@
 	                    		q_box("orde.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + r_accy, 'orde', "95%", "95%", '訂單作業');
 	                    	}
 	                   });
+	                   
+						$('#txtProductno2_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
+						
+						$('#txtProductno3_' + j).change(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+						});
 					}
 				}
 				_bbsAssign();
@@ -1057,6 +1069,8 @@
 			function q_popPost(id) {
 				switch (id) {
 					case 'txtProductno1_':
+						$('#txtProductno_'+b_seq).val($('#txtProductno1_'+b_seq).val());
+						
 						if (q_getPara('sys.project').toUpperCase()=='XY' && !emp($('#txtProductno1_'+b_seq).val()) &&!emp($('#txtTggno').val())){
 							var t_where =" tggno='"+$('#txtTggno').val()+"' and productno='" + $('#txtProductno1_'+b_seq).val() + "'";
 							q_gt('ucctgg', "where=^^ "+t_where+" ^^", 0, 0, 0, "ucctgg");
@@ -1079,6 +1093,12 @@
 								$('#txtSpec_'+b_seq).val(as[0].style+' '+as[0].spec+' '+as[0].engpro);
 							}
 						}
+						break;
+					case 'txtProductno2_':
+						$('#txtProductno_'+b_seq).val($('#txtProductno2_'+b_seq).val());
+						break;
+					case 'txtProductno3_':
+						$('#txtProductno_'+b_seq).val($('#txtProductno3_'+b_seq).val());
 						break;
 					case 'txtTggno':
 						loadCustAddr($.trim($('#txtTggno').val()));

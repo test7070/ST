@@ -291,39 +291,40 @@
 				bofullas = _q_appendData("tmp0", "", true, true);
 				//抓取停職資料
 				q_gt('sssr',"where=^^ '"+$('#txtMon').val()+"' between left(stopdate,6) and left(dbo.q_cdn(reindate,-1),6) ^^", 0, 0, 0, "sssr", r_accy);
-			}else{
-		        var s1 = location.href;
-		        var t_path = (s1.substr(7, 5) == 'local' ? xlsPath : s1.substr(0, s1.indexOf('/', 10)) + '/htm/');
-		        if (t_func == 'banktran.gen') {
-		            window.open(t_path + 'obtdta.txt', "_blank", 'directories=no,location=no,menubar=no,resizable=1,scrollbars=1,status=0,toolbar=1');
-		            return;
-		        }
+				return;
+			}
+			
+			var s1 = location.href;
+			var t_path = (s1.substr(7, 5) == 'local' ? xlsPath : s1.substr(0, s1.indexOf('/', 10)) + '/htm/');
+			if (t_func == 'banktran.gen') {
+				window.open(t_path + 'obtdta.txt', "_blank", 'directories=no,location=no,menubar=no,resizable=1,scrollbars=1,status=0,toolbar=1');
+				return;
+			}
 
-		        if (result.length > 0) {
-		            var s2 = result.split(';');
-		            for (var i = 0; i < s2.length; i++) {
-		                switch (i) {
-		                    case 0:
-		                        $('#txtAccno1').val(s2[i]);
-		                        break;
-		                    case 1:
-		                        $('#txtAccno2').val(s2[i]);
-		                        break;
-		                    case 2:
-		                        $('#txtAccno3').val(s2[i]);
-		                        break;
-		                    case 3:
-		                        $('#txtChkeno').val(s2[i]);
-		                        break;
-		                    case 4:
-		                        $('#txtMemo').val(s2[i]);
-		                        break;
-		                } //end switch
-		            } //end for
-		        } //end  if
-		        alert('功能執行完畢');
-			}	
-		} //endfunction
+			if (result.length > 0) {
+				var s2 = result.split(';');
+				for (var i = 0; i < s2.length; i++) {
+					switch (i) {
+						case 0:
+							$('#txtAccno1').val(s2[i]);
+							break;
+						case 1:
+							$('#txtAccno2').val(s2[i]);
+							break;
+						case 2:
+							$('#txtAccno3').val(s2[i]);
+							break;
+						case 3:
+							$('#txtChkeno').val(s2[i]);
+							break;
+						case 4:
+							$('#txtMemo').val(s2[i]);
+							break;
+					}
+				}
+			}
+			//alert('功能執行完畢');
+		}
 		
         function q_boxClose(s2) { 
            var ret; 

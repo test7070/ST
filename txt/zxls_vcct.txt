@@ -33,27 +33,39 @@ create table #z_vcctrb(
 	book nvarchar(50),
 	sono nvarchar(50),
 	memo nvarchar(max),
-	iscarrier bit
+	iscarrier bit,
+	isnondeductible bit,
+	isshare bit,
+	isadd bit,
+	notaxnote nvarchar(50),
+	passtype nvarchar(50),
+	specialtax nvarchar(50)
 )
-declare @a nvarchar(max)
-declare @b nvarchar(max)
-declare @c nvarchar(max)
-declare @d nvarchar(max)
-declare @e nvarchar(max)
-declare @f nvarchar(max)
-declare @g nvarchar(max)
-declare @h nvarchar(max)
-declare @i nvarchar(max)
-declare @j nvarchar(max)
-declare @k nvarchar(max)
-declare @l nvarchar(max)
-declare @m nvarchar(max)
-declare @n nvarchar(max)
-declare @o nvarchar(max)
-declare @p nvarchar(max)
-declare @q nvarchar(max)
-declare @r nvarchar(max)
-declare @s nvarchar(max)
+declare @a nvarchar(max) --進銷項
+declare @b nvarchar(max) --憑證種類
+declare @c nvarchar(max) --公司
+declare @d nvarchar(max) --發票日期
+declare @e nvarchar(max) --申報月份
+declare @f nvarchar(max) --發票號碼
+declare @g nvarchar(max) --統一編號/發票訖號
+declare @h nvarchar(max) --資產類別
+declare @i nvarchar(max) --自我開立
+declare @j nvarchar(max) --銷售金額
+declare @k nvarchar(max) --稅別
+declare @l nvarchar(max) --營業稅額
+declare @m nvarchar(max) --總計
+declare @n nvarchar(max) --憑證張數
+declare @o nvarchar(max) --其他憑證/載具流水號/海關繳納憑證
+declare @p nvarchar(max) --冊別
+declare @q nvarchar(max) --銷貨單號
+declare @r nvarchar(max) --備註
+declare @s nvarchar(max) --載具
+declare @t nvarchar(max) --不得抵扣
+declare @u nvarchar(max) --分攤
+declare @v nvarchar(max) --彙加
+declare @w nvarchar(max) --銷售註記
+declare @x nvarchar(max) --通關方式
+declare @y nvarchar(max) --特種稅率
 
 declare	@indo nvarchar(10)
 declare @isexist int
@@ -79,6 +91,12 @@ declare	@book nvarchar(50)
 declare	@sono nvarchar(50)
 declare	@memo nvarchar(50)
 declare	@iscarrier bit
+declare	@isnondeductible bit
+declare	@isshare bit
+declare	@isadd bit
+declare	@notaxnote nvarchar(50)
+declare	@passtype nvarchar(50)
+declare	@specialtax nvarchar(50)
 
 declare @sumnum nvarchar(50)='12121241'
 declare @str nvarchar(50)
@@ -88,11 +106,11 @@ declare @bdate nvarchar(10)
 declare @edate nvarchar(10)
 
 declare cursor_table cursor for
-select noa,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s from ztmpxls 
+select noa,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y from ztmpxls 
 where isnull(f,'')!='' and len(f)=10 and f like '[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
 open cursor_table
 fetch next from cursor_table
-into @noa,@a,@b,@c,@d,@e,@f,@g,@h,@i,@j,@k,@l,@m,@n,@o,@p,@q,@r,@s
+into @noa,@a,@b,@c,@d,@e,@f,@g,@h,@i,@j,@k,@l,@m,@n,@o,@p,@q,@r,@s,@t,@u,@v,@w,@x,@y
 while(@@FETCH_STATUS <> -1)
 begin
 	set @indo=@noa
@@ -132,53 +150,168 @@ begin
 			set @istrue = 0
 	end
 	
-	set @isasset = CAST(@h as bit)
-	set @isself = CAST(@i as bit)
+	if(left(@kind,1)='2')
+	begin
+		set @isasset = case when @h='' then 0 else  CAST(@h as bit) end
+	end
+	else
+	begin
+		set @isasset = 0
+	end
+	
+	if(left(@kind,1)='3')
+	begin
+		set @isself = case when @i='' then 0 else  CAST(@i as bit) end
+	end
+	else
+	begin
+		set @isself = 0
+	end
+	
 	set @money = round(CAST(REPLACE(@j,',','') as float),0)
-	--case when @k='9' then CAST(REPLACE(@m,',','') as float) else CAST(REPLACE(@j,',','') as float) end
 	
 	--"0@,1@應稅,6@作廢,2@零稅率,3@內含,4@免稅,5@自訂" --內含拿掉
 	set @taxtype = case when @k = '1' then '1'
 						when @k = '2' then '2'
 						when @k = '3' then '4'
-						--when @k = '9' then '3'
 						when @k = 'D' then 'D'
 						when @k = 'F' then '6' else '1' end
-	set @tax = round(CAST(REPLACE(@l,',','') as float),0) --case when @k='9' then 0 else CAST(REPLACE(@l,',','') as float) end
-	set @total = round(CAST(REPLACE(@m,',','') as float),0)
-	set @mount = CAST(REPLACE(@n,',','') as float)
+	set @tax = round(CAST(REPLACE(@l,',','') as float),0) 
+	if(@taxtype!='1')
+		set @tax=0
+	if(@kind='37' or @kind='38' or @kind='32' or (@kind='22' and len(@dutymemo)=0) and @kind='27')
+		set @tax=0
+		
+	--set @total = round(CAST(REPLACE(@m,',','') as float),0)
+	set @total=isnull(@money,0)+isnull(@tax,0)
+	
+	if(left(@kind,1)='2')
+	begin
+		set @mount = CAST(REPLACE(@n,',','') as float)
+	end
+	else
+	begin
+		set @mount=0
+	end
 	set @dutymemo = @o
 	set @book = @p
 	set @sono = @q
 	set @memo = @r
-	set @iscarrier = CAST(@s as bit)
+	
+	if(@kind='22' or @kind='23' or @kind='24' or @kind='25' or @kind='27' 
+	or @kind='34' or @kind='36' or @kind='37' or @kind='38')
+	begin
+		set @iscarrier = case when @s='' then 0 else CAST(@s as bit) end
+	end
+	else
+	begin
+		set @iscarrier=0
+	end
+	
+	if(left(@kind,1)='2')
+	begin
+		set @isnondeductible = case when @t='' then 0 else CAST(@t as bit) end
+	end
+	else
+	begin
+		set @isnondeductible=0
+	end
+	
+	if(@kind!='25')
+	begin
+		set @isshare=0
+	end
+	else
+	begin
+		set @isshare = case when @u='' then 0 else  CAST(@u as bit) end
+	end
+	
+	if(@kind='33' or @kind='34' or @kind='37' or @kind='38' 
+	or @kind='21' or @kind='23' or @kind='24' or @kind='28' or @kind='29')
+	begin
+		set @isadd=0
+	end
+	else
+	begin
+		set @isadd = case when @v='' then 0 else  CAST(@v as bit) end
+	end
+	
+	if(@kind='26' or @kind='27')
+		set @isadd=1
+	
+	if(left(@kind,1)='3')
+	begin
+		set @notaxnote = @w
+	end
+	else
+	begin
+		set @notaxnote = ''
+	end
+
+	if(left(@kind,1)='3' and @kind!='33' and @kind!='34')
+	begin
+		set @passtype = @x
+	end
+	else
+	begin
+		set @passtype = ''
+	end
+	if(@kind='37' or @kind='38')
+	begin
+		set @specialtax = @y
+	end
+	else
+	begin
+		set @specialtax = ''
+	end
 	
 	set @noa = @f
+	--當沒有發票號碼但有載具或其他憑證時，當作發票號碼
+	if(len(@noa)=0 and len(@dutymemo)>0
+		and (@kind='22' or @kind='23' or @kind='24' or @kind='25' or @kind='27' or @kind='28' or @kind='29'
+		or @kind='34' or @kind='36' or @kind='37' or @kind='38'	))
+	begin
+		set @noa=@dutymemo
+		if(@kind!='28' or @kind!='29' or @kind!='36')
+			set @iscarrier=1
+	end
+	
+	--判斷是否存在 折讓單
 	set @isexist = case when (LEN(ISNULL((select noa from vcct where noa = @noa and (case when @kind in ('33','34','23','24') then '1' else '0' end=case when kind in ('33','34','23','24') then '1' else '0' end) ),''))=0) then 0 else 1 end
 	
-	select @bdate=a.bdate,@edate=a.edate from 
-	vccar a
-	left join vccars b on a.noa = b.noa
+	select @bdate=a.bdate,@edate=a.edate 
+	from vccar a left join vccars b on a.noa = b.noa 
 	where @noa between b.binvono and b.einvono
-	print @bdate+' '+@edate
-	print @noa+' '+@datea
+	
+	--print @bdate+' '+@edate
+	--print @noa+' '+@datea
+	
 	--判斷是否存在此發票號碼
 	if((@datea>=@bdate and @datea<=@edate))
 		set @ishave = 1
 	else
 		set @ishave = 0
-
+		
+	--進項和空白不判斷
 	if (@typea = '1' or @taxtype='D' )
 	begin
 		set @ishave = 1
 		set @istrue = 1
 	end	
+	
+	--憑證不處理
+	if(len(@dutymemo)>0 and @noa=@dutymemo and (@kind='34' or @kind='36' or @kind='37' or @kind='38'))
+	begin
+		set @ishave = 1
+		set @istrue = 1
+	end
 		
 	insert into #z_vcctrb
-	select @indo,@isexist,@noa,@ishave,@typea,@kind,@cno,@acomp,@datea,@mon,@serial,@istrue,@isasset,@isself,@money,@taxtype,@tax,@total,@mount,@dutymemo,@book,@sono,@memo,@iscarrier
+	select @indo,@isexist,@noa,@ishave,@typea,@kind,@cno,@acomp,@datea,@mon,@serial,@istrue,@isasset,@isself,@money,@taxtype,@tax,@total,@mount,@dutymemo,@book,@sono,@memo
+	,@iscarrier,@isnondeductible,@isshare,@isadd,@notaxnote,@passtype,@specialtax
 
 	fetch next from cursor_table
-	into @noa,@a,@b,@c,@d,@e,@f,@g,@h,@i,@j,@k,@l,@m,@n,@o,@p,@q,@r,@s
+	into @noa,@a,@b,@c,@d,@e,@f,@g,@h,@i,@j,@k,@l,@m,@n,@o,@p,@q,@r,@s,@t,@u,@v,@w,@x,@y
 end
 close cursor_table
 deallocate cursor_table
@@ -224,19 +357,20 @@ begin
 			delete vcct where noa = @noa and kind in ('33','34','23','24') and mon=@mon
 		end
 		
-		--delete vcct where noa = @noa and (case when @kind in ('33','34','23','24') then '1' else '0' end=case when kind in ('33','34','23','24') then '1' else '0' end)
-		
 		if(@vccno!='')
 		begin
 			EXEC(" update a set part2=isnull(stuff((select ','+noa from vcct where sono=a.noa FOR XML PATH('')),1,1,''),'') from vcc"+@accy+" a where noa='"+@vccno+"' ")
 		end
 	end
 	
-	insert into vcct(typea,kind,noq,cno,acomp,datea,mon,noa,serial,isasset,isself,money,taxtype,tax,total,mount,dutymemo,book,sono,memo,iscarrier)
+	insert into vcct(typea,kind,noq,cno,acomp,datea,mon,noa,serial,isasset,isself,money,taxtype,tax,total,mount,dutymemo,book,sono,memo
+	,iscarrier,isnondeductible,isshare,isadd,notaxnote,passtype,specialtax )
 	select typea,kind
 	,right('000'+cast(cast(isnull((select MAX(noq) from vcct where noa=a.noa),'0') as int)+1 as nvarchar(10)),3)
 	,cno,acomp,datea,mon,noa,case when serial='00000000' then '' else serial end
-	,isasset,isself,money,taxtype,tax,total,mount,dutymemo,book,sono,memo,iscarrier from #z_vcctrb a where noa = @noa and indo=@indo
+	,isasset,isself,money,taxtype,tax,total,mount,dutymemo,book,sono,memo
+	,iscarrier,isnondeductible,isshare,isadd,notaxnote,passtype,specialtax 
+	from #z_vcctrb a where noa = @noa and indo=@indo
 	
 	if(@sono!='')
 	begin
