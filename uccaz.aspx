@@ -537,8 +537,8 @@
 
             </tr>
             <tr>
-               <td class="td1"><span> </span><a id='lblSalemoney' class="lbl">直接加工</a></td>
-               <td class="td2"><input id="txtSalemoney"  type="text" class="txt c1 num" /></td>
+               <td class="td1"><span> </span><a id='lblWages' class="lbl">直接加工</a></td>
+               <td class="td2"><input id="txtWages"  type="text" class="txt c1 num" /></td>
                <td class="td3"><span> </span><a id='lblMakeless' class="lbl">製造費用</a></td>
                <td class="td4"><input id="txtMakeless"  type="text" class="txt c1 num" /></td>
                <td class="td5"><span> </span><a id='lblSafe_mount' class="lbl">安全存量</a></td>
@@ -547,34 +547,34 @@
                <td class="td8"><input id="txtPrice"  type="text" class="txt c1 num" /></td>
             </tr>
             <tr>
-               <td class="td1"><span> </span><a id='lblCostpers' class="lbl">成本率</a></td>
-               <td class="td2"><input id="txtCostpers"  type="text" class="txt c1 num" /></td>
-               <td class="td3"><span> </span><a id='lblMinuse' class="lbl">最小用量</a></td>
-               <td class="td4"><input id="txtMinuse"  type="text" class="txt c1 num" /></td>
+               <td class="td1"><span> </span><a id='lblCost_pers' class="lbl">成本率</a></td>
+               <td class="td2"><input id="txtCost_pers"  type="text" class="txt c1 num" /></td>
+               <td class="td3"><span> </span><a id='lblMin_use' class="lbl">最小用量</a></td>
+               <td class="td4"><input id="txtMin_use"  type="text" class="txt c1 num" /></td>
                <td class="td5"></td>
                <td class="td6"></td>
                <td class="td7"></td>
-               <td class="td8"><input id="chkEnda" type="checkbox"/><span> </span><a id='lblEnda'>定量生產</a></td>
+               <td class="td8"><input id="chkFix_make" type="checkbox"/><span> </span><a id='lblEnda'>定量生產</a></td>
             </tr>
             <tr>
-               <td class="td1"><span> </span><a id='lblOutmount' class="lbl">日產量</a></td>
-               <td class="td2"><input id="txtOutmount"  type="text" class="txt c1 num" /></td>
+               <td class="td1"><span> </span><a id='lblDay_prod' class="lbl">日產量</a></td>
+               <td class="td2"><input id="txtDay_prod"  type="text" class="txt c1 num" /></td>
                <td class="td3"><span> </span><a id='lblLastmount' class="lbl">產銷日差</a></td>
                <td class="td4"><input id="txtLastmount"  type="text" class="txt c1 num" /></td>
-               <td class="td5"><span> </span><a id='lblUp_day' class="lbl">製造日程</a></td>
-               <td class="td6"><input id="txtUp_day"  type="text" class="txt c1" /></td>
-               <td class="td7"><span> </span><a id='lblInmount' class="lbl">最低產量</a></td>
-               <td class="td8"><input id="txtInmount"  type="text" class="txt c1 num" /></td>
+               <td class="td5"><span> </span><a id='lblU_p_day' class="lbl">製造日程</a></td>
+               <td class="td6"><input id="txtU_p_day"  type="text" class="txt c1 num" /></td>
+               <td class="td7"><span> </span><a id='lblMin_prod' class="lbl">最低產量</a></td>
+               <td class="td8"><input id="txtMin_prod"  type="text" class="txt c1 num" /></td>
             </tr>
             <tr>
-               <td class="td1"><span> </span><a id='lblNou_z' class="lbl">轉入製成品代碼</a></td>
-               <td class="td2"><input id="txtNou"  type="text" class="txt c1" /></td>
+               <td class="td1"><span> </span><a id='lblTodrcr2' class="lbl">轉入製成品代碼</a></td>
+               <td class="td2"><input id="txtTodrcr2"  type="text" class="txt c1" /></td>
                <td class="td3"><span> </span><a id='lblTodate' class="lbl">轉入日期</a></td>
                <td class="td4"><input id="txtTodate"  type="text" class="txt c1" /></td>
-               <td class="td5"><span> </span><a id='lblInmoney' class="lbl">期出約當完成率</a></td>
-               <td class="td6"><input id="txtInmoney"  type="text" class="txt c1 num" /></td>
-               <td class="td7"><span> </span><a id='lblLastmoney' class="lbl">期末約當完成率</a></td>
-               <td class="td8"><input id="txtLastmoney"  type="text" class="txt c1 num" /></td>
+               <td class="td5"><span> </span><a id='lblBokrate' class="lbl">期出約當完成率</a></td>
+               <td class="td6"><input id="txtBokrate"  type="text" class="txt c1 num" /></td>
+               <td class="td7"><span> </span><a id='lblLokrate' class="lbl">期末約當完成率</a></td>
+               <td class="td8"><input id="txtLokrate"  type="text" class="txt c1 num" /></td>
             </tr>
             <tr>
                 <td><span> </span><a id='lblMemo_z' class="lbl">產品規格</a></td>
