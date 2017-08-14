@@ -1,0 +1,348 @@
+ALTER PROCEDURE [dbo].[stkucc2](
+	@t_edate nvarchar(20),
+	@t_bstoreno nvarchar(20),
+	@t_estoreno nvarchar(20),
+	@t_bproductno nvarchar(20),
+	@t_eproductno nvarchar(20))
+as
+begin
+	declare @t_bdate nvarchar(20) = ''
+	------------------------------------------------------
+	IF OBJECT_ID('tempdb..#stkucc2')is not null
+	BEGIN
+		drop table #stkucc2
+	END
+	create table #stkucc2(
+		productno nvarchar(20),
+		storeno nvarchar(20),
+		mount float,
+		[weight] float
+	)
+	
+	--先找出最後一次盤點的日期
+	select top 1 @t_bdate = a.datea
+	from view_ucce a
+	where a.datea<=@t_edate
+	order by a.datea desc,a.noa desc
+	
+	set @t_bdate = ISNULL(@t_bdate,'')
+	----------------------------------------------------------------------------------------
+	-- UCCE
+	insert into #stkucc2(productno,mount,[weight])
+	select a.productno,SUM(ISNULL(a.mount,0)),SUM(ISNULL(a.[weight],0))
+	from view_ucces a
+	left join view_ucce b on a.accy=b.accy and a.noa=b.noa
+	where b.datea=@t_bdate
+	and a.productno between @t_bproductno and @t_eproductno
+	group by a.productno
+	-- RC2
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_rc2s a
+		left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) + ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) + ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(case a.typea when '1' then 1 else -1 end*ISNULL(a.mount,0)) mount
+		,SUM(case a.typea when '1' then 1 else -1 end*ISNULL(a.[weight],0)) [weight]
+		from view_rc2s a
+		left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	-- VCC
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_vccs a
+		left join view_vcc b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) - ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) - ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(case a.typea when '1' then 1 else -1 end*case when isnull(gmount,0)!=0 then ISNULL(a.gmount,0) else ISNULL(a.mount,0)end) mount
+		,SUM(case a.typea when '1' then 1 else -1 end*case when isnull(gweight,0)!=0 then ISNULL(a.gweight,0) else ISNULL(a.[weight],0)end) [weight]
+		from view_vccs a
+		left join view_vcc b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	
+	-- INA
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_inas a
+		left join view_ina b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) + ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) + ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(ISNULL(a.mount,0)) mount
+		,SUM(ISNULL(a.[weight],0)) [weight]
+		from view_inas a
+		left join view_ina b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	
+	-- GET
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_gets a
+		left join view_get b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) - ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) - ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(case when ISNULL(a.gmount,0)!=0 then isnull(a.gmount,0) else ISNULL(a.mount,0) end) mount
+		,SUM(case when ISNULL(a.gweight,0)!=0 then isnull(a.gweight,0) else ISNULL(a.[weight],0) end) [weight]
+		from view_gets a
+		left join view_get b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	
+	-- CUTS
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_cuts a
+		left join view_cut b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) + ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) + ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(ISNULL(a.mount,0)) mount
+		,SUM(ISNULL(a.[weight],0)) [weight]
+		from view_cuts a
+		left join view_cut b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	
+	-- CUT
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_cut a
+		where a.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) - ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) - ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(case when isnull(a.gmount,0)!=0 then isnull(a.gmount,0) else ISNULL(a.mount,0) end) mount
+		,SUM(ISNULL(a.[gweight],0)) [weight]
+		from view_cut a
+		where a.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	-- CUBU
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_cubu a
+		where a.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) + ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) + ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(ISNULL(a.mount,0)) mount
+		,SUM(ISNULL(a.[weight],0)) [weight]
+		from view_cubu a
+		where a.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	
+	-- CUBT
+	-- 優先以CUBT.DATEA為主
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_cubt a
+		left join view_cub b on a.accy=b.accy and a.noa=b.noa
+		where case when len(ISNULL(a.datea,''))>0 then a.datea else b.datea end between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) - ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) - ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(case when ISNULL(a.gmount,0)!=0 then a.gmount else ISNULL(a.mount,0) end) mount
+		,SUM(case when ISNULL(a.gweight,0)!=0 then a.gweight else ISNULL(a.[weight],0) end) [weight]
+		from view_cubt a
+		left join view_cub b on a.accy=b.accy and a.noa=b.noa
+		where case when len(ISNULL(a.datea,''))>0 then a.datea else b.datea end between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	-- VCFS 委外借用 進貨
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from vcfs a
+		where a.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) + ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) + ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(ISNULL(a.mount,0)) mount
+		,SUM(ISNULL(a.[weight],0)) [weight]
+		from vcfs a
+		where a.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	
+	-- VCFS 委外借用 出貨
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from vcft a
+		where a.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) - ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) - ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(ISNULL(a.mount,0)) mount
+		,SUM(ISNULL(a.[weight],0)) [weight]
+		from vcft a
+		where a.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	-- WORKD 委入   進貨
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_workds a
+		left join view_workd b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) + ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) + ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(case a.typea when '1' then 1 else -1 end*ISNULL(a.mount,0)) mount
+		,SUM(case a.typea when '1' then 1 else -1 end*ISNULL(a.[weight],0)) [weight]
+		from view_workds a
+		left join view_workd b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	
+	-- WORKC 委出   出貨
+	insert into #stkucc2(productno)
+	select a.productno
+	from(
+		select a.productno
+		from view_workcs a
+		left join view_workc b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) a
+	left join #stkucc2 b on a.productno=b.productno 
+	where b.productno is null
+	
+	update #stkucc2 set mount= ISNULL(a.mount,0) - ISNULL(b.mount,0)
+		, [weight] = ISNULL(a.[weight],0) - ISNULL(b.[weight],0)
+	from #stkucc2 a
+	left join (select a.productno
+		,SUM(case a.typea when '1' then 1 else -1 end*ISNULL(a.mount,0)) mount
+		,SUM(case a.typea when '1' then 1 else -1 end*ISNULL(a.[weight],0)) [weight]
+		from view_workcs a
+		left join view_workc b on a.accy=b.accy and a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		and a.productno between @t_bproductno and @t_eproductno
+		group by a.productno) b on a.productno=b.productno
+	where b.productno is not null
+	
+	update #stkucc2 set storeno=''
+	
+	select * from #stkucc2
+end
+
+
+
+
+
+

@@ -1,0 +1,499 @@
+﻿z_vcc_be01:--z_vcc_be01
+SET QUOTED_IDENTIFIER OFF
+declare @t_bcustno nvarchar(100)
+declare @t_ecustno  nvarchar(100)	
+set @t_bcustno = case when '#non'=[5] then '' else [5] end
+set @t_ecustno = case when '#non'=[6] then char(255) else [6] end
+
+declare @t_userno nvarchar(100)='[7]'
+declare @t_rank nvarchar(100)='[8]'
+
+declare @tmp table(
+	gno nvarchar(2),
+	grpno nvarchar(100),
+	grpname nvarchar(100),
+	line nvarchar(100),
+	noa nvarchar(100),
+	comp nvarchar(100),
+	datea nvarchar(10)	
+)
+
+insert @tmp(gno,noa,comp,datea)
+select '1',noa,comp,kdate
+from cust
+where (noa between @t_bcustno and @t_ecustno)
+
+if(@t_rank<'8')
+begin
+	delete @tmp where noa!=@t_userno
+end
+
+declare @rr int='1'
+
+while(@rr<5)
+begin
+	insert @tmp(gno,grpno,grpname,line,noa,comp,datea)
+	select @rr+1,a.noa,a.comp,b.unit,b.noa,b.comp,b.kdate
+	from @tmp a left join cust b on a.noa=b.grpno
+	where a.gno=@rr and isnull(b.grpno,'')!=''
+	order by a.noa,a.datea,b.unit
+	
+	set @rr+=1
+end
+
+declare @tmp1 table(
+	gno nvarchar(2),
+	idno nvarchar(2),
+	line1 nvarchar(100),
+	noa1 nvarchar(100),
+	comp1 nvarchar(100),
+	datea1 nvarchar(10),
+	grpno2 nvarchar(100),
+	grpname2 nvarchar(100),
+	line2 nvarchar(100),
+	noa2 nvarchar(100),
+	comp2 nvarchar(100),
+	datea2 nvarchar(10),
+	line3 nvarchar(100),
+	noa3 nvarchar(100),
+	comp3 nvarchar(100),
+	datea3 nvarchar(10),
+	line4 nvarchar(100),
+	noa4 nvarchar(100),
+	comp4 nvarchar(100),
+	datea4 nvarchar(10),
+	line5 nvarchar(100),
+	noa5 nvarchar(100),
+	comp5 nvarchar(100),
+	datea5 nvarchar(10)	
+)
+
+insert @tmp1(gno,grpno2,grpname2,line1,noa1,comp1,line2,noa2,comp2,datea2)
+select '1',grpno,grpname,ROW_NUMBER()over(partition by grpno order by line),grpno,grpname,line,noa,comp,datea
+from @tmp
+where gno='2'
+
+update @tmp1
+set line3=b.line,noa3=b.noa,comp3=b.comp,datea3=b.datea
+from @tmp1 a left join @tmp b on a.noa2=b.grpno
+where b.gno='3' 
+
+update @tmp1
+set line4=b.line,noa4=b.noa,comp4=b.comp,datea4=b.datea
+from @tmp1 a left join @tmp b on a.noa3=b.grpno
+where b.gno='4'
+
+update @tmp1
+set line5=b.line,noa5=b.noa,comp5=b.comp,datea5=b.datea
+from @tmp1 a left join @tmp b on a.noa4=b.grpno
+where b.gno='5'
+
+update @tmp1
+set idno=maxline2
+from @tmp1 a left join (select grpno2,MAX(line2)maxline2 from @tmp1 group by grpno2) b on a.grpno2=b.grpno2
+
+insert @tmp1(gno,noa1)
+select '2',noa1
+from @tmp1
+group by noa1
+
+select 
+gno,noa1
+,case when line1='1' then comp1+' ────' else '' end comp1
+,case when line1='1' then '──── '+comp2 else (case when line1!='1' and idno!=line2 then '├─── '+comp2 else '└─── '+comp2 end ) end comp2
+,'────  '+comp3 comp3,'────  '+comp4 comp4,'────  '+comp5 comp5
+from @tmp1
+order by noa1,gno
+;
+----------------------------------------------------------------------------------------------------------------------------------------
+z_vcc_be02:--z_vcc_be02
+SET QUOTED_IDENTIFIER OFF
+declare @t_bnoa nvarchar(100)
+declare @t_enoa  nvarchar(100)
+declare @t_bdatea nvarchar(100)
+declare @t_edatea  nvarchar(100)
+declare @t_bcustno nvarchar(100)
+declare @t_ecustno  nvarchar(100)		
+set @t_bnoa= case when '#non'=[1] then '#non' else [1] end
+set @t_enoa= case when '#non'=[2] then char(255) else [2] end
+set @t_bdatea= case when '#non'=[3] then '' else [3] end
+set @t_edatea= case when '#non'=[4] then char(255) else [4] end
+set @t_bcustno = case when '#non'=[5] then '' else [5] end
+set @t_ecustno = case when '#non'=[6] then char(255) else [6] end
+
+declare @t_userno nvarchar(100)='[7]'
+declare @t_rank nvarchar(100)='[8]'
+
+declare @tmp table(
+	gno nvarchar(2),
+	grpno nvarchar(100),
+	grpname nvarchar(100),
+	line nvarchar(100),
+	noa nvarchar(100),
+	comp nvarchar(100),
+	datea nvarchar(10),
+	price float	
+)
+
+insert @tmp(gno,noa,comp,datea,price)
+select '1',a.custno,a.comp,kdate,SUM(a.benifit)
+from view_vcc a left join cust b on a.custno=b.noa
+where (a.noa between @t_bnoa and @t_enoa)
+and (a.datea between @t_bdatea and @t_edatea)
+and (a.custno between @t_bcustno and @t_ecustno)
+group by a.custno,a.comp,kdate
+
+if(@t_rank<'8')
+begin
+	delete @tmp where noa!=@t_userno
+end
+
+insert @tmp(gno,grpno,grpname,line,noa,comp,datea)
+select '2',b.noa,b.comp,a.unit,a.noa,a.comp,a.kdate
+from cust a left join @tmp b on a.grpno=b.noa
+where isnull(a.grpno,'')!='' and isnull(b.noa,'')!=''
+
+declare @rr int='2'
+
+while(@rr<5)
+begin
+	insert @tmp(gno,grpno,grpname,line,noa,datea)
+	select @rr+1,a.noa,a.comp,b.unit,min(b.noa),min(b.kdate)
+	from @tmp a left join cust b on a.noa=b.grpno
+	where a.gno=@rr and isnull(b.grpno,'')!=''
+	group by a.noa,a.comp,b.unit,b.kdate,a.datea
+	order by a.noa,a.datea,b.unit
+	set @rr+=1
+end
+
+update @tmp
+set comp=b.comp
+from @tmp a left join  cust b on a.noa=b.noa
+
+update @tmp
+set grpname=b.comp
+from @tmp a left join  cust b on a.grpno=b.noa
+
+declare @tmp1 table(
+	gno nvarchar(2),
+	idno int,
+	line1 nvarchar(100),
+	noa1 nvarchar(100),
+	comp1 nvarchar(100),
+	line2 nvarchar(100),
+	noa2 nvarchar(100),
+	comp2 nvarchar(100),
+	line3 nvarchar(100),
+	noa3 nvarchar(100),
+	comp3 nvarchar(100),
+	line4 nvarchar(100),
+	noa4 nvarchar(100),
+	comp4 nvarchar(100),
+	line5 nvarchar(100),
+	noa5 nvarchar(100),
+	comp5 nvarchar(100),
+	
+	levela  nvarchar(100),
+	onoa nvarchar(100),
+	odate nvarchar(100),
+	ocustno nvarchar(100),
+	ocust nvarchar(100),
+	otypea nvarchar(100),
+	total float,
+	score float,
+	
+	total1 float,
+	total2 float,
+	total3 float,
+	total4 float,
+	total5 float,
+	mon nvarchar(10)
+)
+
+insert @tmp1(gno,idno,noa1,comp1,levela,ocustno,ocust,onoa,odate,otypea,total,score)
+select '1',ROW_NUMBER()over (partition by a.noa order by b.noa),a.noa,a.comp,'1',b.custno,b.comp,b.noa,b.datea,b.typea
+		,case when b.typea='1' then 1 else -1 end*b.benifit,Floor(case when b.typea='1' then 1 else -1 end*b.benifit/800*15)
+from @tmp a left join view_vcc b on a.noa=b.custno
+where gno='1'
+and (b.noa between @t_bnoa and @t_enoa)
+and (b.datea between @t_bdatea and @t_edatea)
+and (b.custno between @t_bcustno and @t_ecustno)
+ 
+insert @tmp1(gno,idno,noa1,comp1,line2,noa2,comp2,levela,ocustno,ocust,onoa,odate,otypea,total,score)
+select '1',ROW_NUMBER()over (partition by a.noa order by b.noa),a.grpno,a.grpname,a.line,a.noa,a.comp,'2',b.custno,b.comp,b.noa,b.datea,b.typea,case when b.typea='1' then 1 else -1 end*b.benifit
+		,floor(case when b.typea='1' then 1 else -1 end*b.benifit/800*4)
+from @tmp a left join view_vcc b on a.noa=b.custno
+where gno='2'
+and (b.noa between @t_bnoa and @t_enoa)
+and (b.datea between @t_bdatea and @t_edatea)
+and (b.custno between @t_bcustno and @t_ecustno)
+
+insert @tmp1(gno,idno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,levela,ocustno,ocust,onoa,odate,otypea,total,score)
+select '1',ROW_NUMBER()over (partition by b.noa order by c.noa),a.noa1,a.comp1,a.line2,a.noa2,a.comp2,b.line,b.noa,b.comp,'3',c.custno,c.comp,c.noa,c.datea,c.typea,case when c.typea='1' then 1 else -1 end*c.benifit
+		,floor(case when c.typea='1' then 1 else -1 end*c.benifit/800*8)
+from @tmp1 a left join @tmp b on a.noa2=b.grpno
+left join view_vcc c on b.noa=c.custno
+where b.gno='3'
+and  (c.noa between @t_bnoa and @t_enoa)
+and (c.datea between @t_bdatea and @t_edatea)
+and (c.custno between @t_bcustno and @t_ecustno)
+
+insert @tmp1(gno,idno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,line4,noa4,comp4,levela,ocustno,ocust,onoa,odate,otypea,total,score)
+select '1',ROW_NUMBER()over (partition by b.noa order by c.noa),a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,b.line,b.noa,b.comp,'4',c.custno,c.comp,c.noa,c.datea,c.typea,case when c.typea='1' then 1 else -1 end*c.benifit
+		,floor(case when c.typea='1' then 1 else -1 end*c.benifit/800*16)
+from @tmp1 a left join @tmp b on a.noa3=b.grpno
+left join view_vcc c on b.noa=c.custno
+where b.gno='4'
+and  (c.noa between @t_bnoa and @t_enoa)
+and (c.datea between @t_bdatea and @t_edatea)
+and (c.custno between @t_bcustno and @t_ecustno)
+
+insert @tmp1(gno,idno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,line4,noa4,comp4,line5,noa5,comp5,levela,ocustno,ocust,onoa,odate,otypea,total,score)
+select '1',ROW_NUMBER()over (partition by b.noa order by c.noa),a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,a.line4,a.noa4,a.comp4,b.line,b.noa,b.comp,'5',c.custno,c.comp,c.noa,c.datea,c.typea,case when c.typea='1' then 1 else -1 end*c.benifit
+		,floor(case when c.typea='1' then 1 else -1 end*c.benifit/800*30)
+from @tmp1 a left join @tmp b on a.noa4=b.grpno
+left join view_vcc c on b.noa=c.custno
+where b.gno='5'
+and  (c.noa between @t_bnoa and @t_enoa)
+and (c.datea between @t_bdatea and @t_edatea)
+and (c.custno between @t_bcustno and @t_ecustno)
+
+update @tmp1
+set mon=case when right(a.odate,2)>=b.startdate and ISNULL(startdate,'')!='' then(case when len(RIGHT(left(a.odate,6),2)+1)<2  then left(a.odate,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(a.odate,6),2)+1) else left(a.odate,4)+CONVERT(VARCHAR(12),RIGHT(left(a.odate,6),2)+1) end) else left(a.odate,6) end
+from @tmp1 a join cust b on a.ocustno=b.noa
+
+update @tmp1
+set total1=isnull(b.total,0)
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='1' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
+update @tmp1
+set total2=isnull(b.total,0)
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='2' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
+update @tmp1
+set total3=isnull(b.total,0)
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='3' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
+update @tmp1
+set total4=isnull(b.total,0)
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='4' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
+update @tmp1
+set total5=isnull(b.total,0)
+from @tmp1 a left join (select noa1,levela,sum(total)total,mon from @tmp1 where levela='5' group by noa1,levela,mon)b on a.noa1=b.noa1 and a.mon=b.mon
+
+update @tmp1
+set score=case when total1='' then 0 else score end
+where levela='2'
+update @tmp1
+set score=case when total1=0 or total2=0 then 0 else score end
+where levela='3'
+update @tmp1
+set score=case when total1=0 or total2=0 or total3=0 then 0 else score end
+where levela='4'
+update @tmp1
+set score=case when total1=0 or total2=0 or total3=0 or total4=0 then 0 else score end
+where levela='5'
+
+insert @tmp1(gno,idno,noa1,line2,noa2,line3,line4,line5,levela,ocust,total,score,mon)
+select '3','9997',noa1,line2,noa2,line3,line4,line5,'第'+levela+'代',ocust,SUM(isnull(total,0)),SUM(score),mon
+from @tmp1
+where levela!=1
+group by noa1,line2,noa2,line3,line4,line5,levela,ocust,mon
+
+insert @tmp1(gno,idno,noa1,comp1,levela,line2,line3,line4,line5,total,score,mon)
+select '4','9998',noa1,comp1,'第1代',CHAR(255),CHAR(255),CHAR(255),CHAR(255),sum(total),SUM(score),mon
+from @tmp1
+where gno!='3'
+group by noa1,comp1,mon
+
+insert @tmp1(gno,idno,noa1,line2,line3,line4,line5,mon)
+select '5','9999',noa1,CHAR(255),CHAR(255),CHAR(255),CHAR(255),mon
+from @tmp1
+group by noa1,mon
+
+select 
+dbo.getcomma(total,0)total
+,dbo.getcomma(score,0)score
+,case when otypea='1' then '出' else '退' end otypea
+,case when  levela='2' then '── '+levela else (case when  levela='3' then '─── '+levela else (case when  levela='4' then '──── '+levela else (case when  levela='5' then '───── '+levela else levela end) end) end) end levela
+,@t_bdatea bdatea
+,@t_edatea edatea
+,*
+from @tmp1
+order by noa1,mon,line2,noa2,line3,line4,line5,gno
+;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+z_vcc_be03:--z_vcc_be03
+SET QUOTED_IDENTIFIER OFF
+declare @t_bnoa nvarchar(100)
+declare @t_enoa  nvarchar(100)
+declare @t_bdatea nvarchar(100)
+declare @t_edatea  nvarchar(100)
+declare @t_bcustno nvarchar(100)
+declare @t_ecustno  nvarchar(100)		
+set @t_bnoa= case when '#non'=[1] then '#non' else [1] end
+set @t_enoa= case when '#non'=[2] then char(255) else [2] end
+set @t_bdatea= case when '#non'=[3] then '' else [3] end
+set @t_edatea= case when '#non'=[4] then char(255) else [4] end
+set @t_bcustno = case when '#non'=[5] then '' else [5] end
+set @t_ecustno = case when '#non'=[6] then char(255) else [6] end
+
+declare @t_userno nvarchar(100)='[7]'
+declare @t_rank nvarchar(100)='[8]'
+
+declare @tmp table(
+	gno nvarchar(2),
+	grpno nvarchar(100),
+	grpname nvarchar(100),
+	line nvarchar(100),
+	noa nvarchar(100),
+	comp nvarchar(100),
+	datea nvarchar(10)	
+)
+
+insert @tmp(gno,noa,comp,datea)
+select '1',a.custno,a.comp,kdate
+from view_vcc a left join cust b on a.custno=b.noa
+where (a.noa between @t_bnoa and @t_enoa)
+and (a.datea between @t_bdatea and @t_edatea)
+and (a.custno between @t_bcustno and @t_ecustno)
+group by a.custno,a.comp,kdate
+
+if(@t_rank<'8')
+begin
+	delete @tmp where noa!=@t_userno
+end
+
+insert @tmp(gno,grpno,grpname,line,noa,comp,datea)
+select '2',b.noa,b.comp,a.unit,a.noa,a.comp,a.kdate
+from cust a left join @tmp b on a.grpno=b.noa
+where isnull(a.grpno,'')!=''
+
+declare @rr int='2'
+
+while(@rr<5)
+begin
+	insert @tmp(gno,grpno,grpname,line,noa,datea)
+	select @rr+1,a.noa,a.comp,b.unit,min(b.noa),min(b.kdate)
+	from @tmp a left join cust b on a.noa=b.grpno
+	where a.gno=@rr and isnull(b.grpno,'')!=''
+	group by a.noa,a.comp,b.unit,b.kdate,a.datea
+	order by a.noa,a.datea,b.unit
+	set @rr+=1
+end
+
+declare @tmp1 table(
+	gno nvarchar(2),
+	idno int,
+	line1 nvarchar(100),
+	noa1 nvarchar(100),
+	comp1 nvarchar(100),
+	line2 nvarchar(100),
+	noa2 nvarchar(100),
+	comp2 nvarchar(100),
+	line3 nvarchar(100),
+	noa3 nvarchar(100),
+	comp3 nvarchar(100),
+	line4 nvarchar(100),
+	noa4 nvarchar(100),
+	comp4 nvarchar(100),
+	line5 nvarchar(100),
+	noa5 nvarchar(100),
+	comp5 nvarchar(100),
+	
+	levela  nvarchar(100),
+	total float,
+	score float,
+	
+	total1 float,
+	total2 float,
+	total3 float,
+	total4 float,
+	total5 float,
+	score1 float,
+	mon nvarchar(10)
+)
+
+insert @tmp1(gno,noa1,comp1,levela,total1,score,mon)
+select '1',a.noa,a.comp,'1',case when b.typea='1' then 1 else -1 end*sum(b.benifit),case when b.typea='1' then 1 else -1 end*sum(b.benifit)/800,
+		case when right(b.datea,2)>=c.startdate and ISNULL(c.startdate,'')!='' then(case when len(RIGHT(left(b.datea,6),2)+1)<2  then left(b.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(b.datea,6),2)+1) else left(b.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(b.datea,6),2)+1) end) else left(b.datea,6) end
+from @tmp a left join view_vcc b on a.noa=b.custno
+	left join cust c on a.noa=c.noa
+where gno='1'
+and  (b.noa between @t_bnoa and @t_enoa)
+and (b.datea between @t_bdatea and @t_edatea)
+and (b.custno between @t_bcustno and @t_ecustno)
+group by a.noa,a.comp,b.typea,b.datea,c.startdate 
+
+insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,levela,total2,score,mon)
+select '1',a.grpno,a.grpname,a.line,a.noa,a.comp,'2',case when b.typea='1' then 1 else -1 end*sum(b.benifit),case when b.typea='1' then 1 else -1 end*sum(b.benifit)/800
+		,case when right(b.datea,2)>=c.startdate and ISNULL(c.startdate,'')!='' then(case when len(RIGHT(left(b.datea,6),2)+1)<2  then left(b.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(b.datea,6),2)+1) else left(b.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(b.datea,6),2)+1) end) else left(b.datea,6) end
+from @tmp a left join view_vcc b on a.noa=b.custno
+	left join cust c on a.noa=c.noa
+where gno='2'
+and (b.noa between @t_bnoa and @t_enoa)
+and (b.datea between @t_bdatea and @t_edatea)
+and (b.custno between @t_bcustno and @t_ecustno)
+group by a.grpno,a.grpname,a.line,a.noa,a.comp,b.typea,b.datea,c.startdate 
+
+insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,levela,total3,score,mon)
+select '1',a.noa1,a.comp1,a.line2,a.noa2,a.comp2,b.line,b.noa,b.comp,'3',case when c.typea='1' then 1 else -1 end*sum(c.benifit),case when c.typea='1' then 1 else -1 end*sum(c.benifit)/800
+		,case when right(c.datea,2)>=d.startdate and ISNULL(d.startdate,'')!='' then(case when len(RIGHT(left(c.datea,6),2)+1)<2  then left(c.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(c.datea,6),2)+1) else left(c.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(c.datea,6),2)+1) end) else left(c.datea,6) end
+from @tmp1 a left join @tmp b on a.noa2=b.grpno
+left join view_vcc c on b.noa=c.custno
+left join cust d on b.noa=d.noa
+where b.gno='3'
+and  (c.noa between @t_bnoa and @t_enoa)
+and (c.datea between @t_bdatea and @t_edatea)
+and (c.custno between @t_bcustno and @t_ecustno)
+group by a.noa1,a.comp1,a.line2,a.noa2,a.comp2,b.line,b.noa,b.comp,c.typea,c.datea,d.startdate 
+
+insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,line4,noa4,comp4,levela,total4,score,mon)
+select '1',a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,b.line,b.noa,b.comp,'4',case when c.typea='1' then 1 else -1 end*sum(c.benifit),case when c.typea='1' then 1 else -1 end*sum(c.benifit)/800
+		,case when right(c.datea,2)>=d.startdate and ISNULL(d.startdate,'')!='' then(case when len(RIGHT(left(c.datea,6),2)+1)<2  then left(c.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(c.datea,6),2)+1) else left(c.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(c.datea,6),2)+1) end) else left(c.datea,6) end
+from @tmp1 a left join @tmp b on a.noa3=b.grpno
+left join view_vcc c on b.noa=c.custno
+left join cust d on b.noa=d.noa
+where b.gno='4'
+and  (c.noa between @t_bnoa and @t_enoa)
+and (c.datea between @t_bdatea and @t_edatea)
+and (c.custno between @t_bcustno and @t_ecustno)
+group by a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,b.line,b.noa,b.comp,c.typea,c.datea,d.startdate 
+
+insert @tmp1(gno,noa1,comp1,line2,noa2,comp2,line3,noa3,comp3,line4,noa4,comp4,line5,noa5,comp5,levela,total5,score,mon)
+select '1',a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,a.line4,a.noa4,a.comp4,b.line,b.noa,b.comp,'5',case when c.typea='1' then 1 else -1 end*sum(c.benifit),case when c.typea='1' then 1 else -1 end*sum(c.benifit)/800
+				,case when right(c.datea,2)>=d.startdate and ISNULL(d.startdate,'')!='' then(case when len(RIGHT(left(c.datea,6),2)+1)<2  then left(c.datea,4)+'0'+CONVERT(VARCHAR(2),RIGHT(left(c.datea,6),2)+1) else left(c.datea,4)+CONVERT(VARCHAR(12),RIGHT(left(c.datea,6),2)+1) end) else left(c.datea,6) end
+from @tmp1 a left join @tmp b on a.noa4=b.grpno
+left join view_vcc c on b.noa=c.custno
+left join cust d on b.noa=d.noa
+where b.gno='5'
+and  (c.noa between @t_bnoa and @t_enoa)
+and (c.datea between @t_bdatea and @t_edatea)
+and (c.custno between @t_bcustno and @t_ecustno)
+group by a.noa1,a.comp1,a.line2,a.noa2,a.comp2,a.line3,a.noa3,a.comp3,a.line4,a.noa4,a.comp4,b.line,b.noa,b.comp,c.typea,c.datea,d.startdate
+
+insert @tmp1(gno,noa1,comp1,total1,total2,total3,total4,total5,score,mon)
+select '0',noa1,comp1,SUM(total1),SUM(total2),SUM(total3),SUM(total4),SUM(total5),SUM(score),mon
+from @tmp1
+group by noa1,comp1,mon
+
+delete @tmp1 where gno=1
+
+update @tmp1
+set total=total1+isnull(total2,0)+isnull(total3,0)+isnull(total4,0)+isnull(total5,0),
+	score=floor(isnull(total1,0)/800*15)
+	+case when isnull(total1,0)=0 then 0 else floor(isnull(total2,0)/800*4) end 
+	+case when isnull(total1,0)=0 or isnull(total2,0)=0 then 0 else floor(isnull(total3,0)/800*8) end
+	+case when isnull(total1,0)=0 or isnull(total2,0)=0 or isnull(total3,0)=0 then 0 else floor(isnull(total4,0)/800*16) end
+	+case when isnull(total1,0)=0 or isnull(total2,0)=0 or isnull(total3,0)=0 or isnull(total4,0)=0 then 0 else floor(isnull(total5,0)/800*30) end
+
+insert @tmp1(gno,idno,noa1,mon)
+select '1','9999',CHAR(255),mon
+from @tmp1
+group by mon
+
+select 
+dbo.getcomma(total,0)total
+,dbo.getcomma(score,0)score
+,* 
+from @tmp1
+where noa1!=''
+order by noa1,gno
+;

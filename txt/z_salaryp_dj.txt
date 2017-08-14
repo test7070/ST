@@ -1,0 +1,724 @@
+﻿z_salaryp_djz01:--z_salaryp_djz01
+SET QUOTED_IDENTIFIER OFF
+declare @t_xmon nvarchar(20)
+declare @t_bsssno nvarchar(20)
+declare @t_esssno nvarchar(20)
+set @t_xmon = case when '#non' = [1] then '' else [1] end
+set @t_bsssno = case when '#non' = [2] then '' else [2] end
+set @t_esssno = case when '#non' = [3] then CHAR(255) else [3] end
+---------------------------------------------------------------------------------------------------------------------------------
+declare @tmp table(
+	gno nvarchar(1),
+	recno int,
+	sssno nvarchar(100),
+	name nvarchar(200),
+	jobno nvarchar(100),
+	job nvarchar(200),
+	levels nvarchar(100),
+	partno nvarchar(20),
+	part nvarchar(50),
+	person nvarchar(50),
+	
+	[money] float,--底薪
+	admin1 float,--主管加給
+	oth1 float,--特別責任加給
+	special1 float,--技術加給
+	full1 float,--全勤獎金
+	meals1 float,--伙食津貼
+	traffic1 float,--交通費
+	addmoney float,--加班費
+	money1 float,--週六加班費(全日)
+	money2 float,--週六加班費(半日)
+	money3 float,--敬業獎金
+	money4 float,--久任獎金
+	money5 float,--考績獎金
+	money6 float,--業績達成獎金
+	salchg1 float,--回收鐵架獎金
+	total1 float,--應領金額
+	
+	labor float,--勞保費
+	health float,--健保費
+	hplus2 float,--2代補充健保
+	inday float,--本年度特休假總日數
+	dayused float,--本月特休日數
+	alluseday float,--累計已休日數
+	speday float,--剩餘特休假日數
+	eventday float,--事假時數
+	sickday  float,--病假時數
+	naday float,--天災假時數
+	othday float,--其他請假日數
+	ps1 float,--事病假扣薪
+	nl1 float,--其他扣薪假
+	
+	tax6 float,--所得稅
+	lodpower float,--食宿費
+	borrow float,--借支
+	salchg2 float,--扣服務費
+	salchg3 float,--代扣法院強制執行費用
+	salchg4 float,--入郵局
+	
+	total2 float,--應扣金額
+	total3 float,--實領金額
+	salhealth float,--健保投保薪資
+	money7 float--申報實領總薪資
+)
+
+insert @tmp
+select '1','',b.sno,b.namea,c.jobno,isnull(c.level1+'職等','')+c.job,c.level2,b.partno,b.part,a.person
+		,case when a.person='日薪' then b.mtotal else b.money end
+		,b.bo_admin,b.bo_oth,b.bo_special,b.bo_full,b.meals,b.bo_traffic,b.addmoney
+		,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6
+		,isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00003'),0)-isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00003'),0)
+		,0
+		,b.ch_labor,b.ch_health,b.hplus2
+		,case when d.inday!=0 then d.inday/8 else 0 end
+		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname='特休假'),0)/8,1)
+		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,3)=left(@t_xmon,3) and hname='特休假'),0)/8,1)
+		,round((isnull(d.inday,0)-isnull(d.boutday,0)-isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,3)=left(@t_xmon,3) and hname='特休假'),0))/8,1)
+		,b.hr_sick,b.hr_person
+		,isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname='天災假'),0)
+		,round(isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,6)=@t_xmon and hname!='天災假' and hname!='特休假' and hname!='病假' and hname!='事假'),0)/8,1)
+		,b.mi_sick+b.mi_person,b.mi_nosalary+b.mi_leave
+		--105/09/05 所得稅欄位加上加減項部分
+		,isnull(b.tax5,0)+isnull(b.tax6,0)+isnull(b.tax12,0)+isnull(b.tax18,0)
+		+isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00007'),0)-isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00007'),0)
+		,b.lodging_power_fee,b.borrow
+		,b.chgcash
+		,isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00008'),0)-isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00008'),0)
+		,isnull((select sum(minus) from salchg where sssno=b.sno and mon=@t_xmon and minusitem='S00002'),0)-isnull((select sum(plus) from salchg where sssno=b.sno and mon=@t_xmon and plusitem='S00002'),0)
+		,0,b.total5,b.sa_health,b.money7	
+from salary a left join salarys b on a.noa=b.noa
+	outer apply(select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc)c
+	left join salvacas d on b.sno=d.sssno and LEFT(b.mon,3)=d.noa
+where b.mon=@t_xmon and b.sno between @t_bsssno and @t_esssno
+
+update @tmp
+set total1=isnull(money,0)+isnull(admin1,0)+isnull(oth1,0)+isnull(special1,0)+isnull(full1,0)+isnull(meals1,0)+isnull(traffic1,0)+	isnull(addmoney,0)
++isnull(money1,0)+isnull(money2,0)+isnull(money3,0)+isnull(money4,0)+isnull(money5,0)+isnull(money6,0)+	isnull(salchg1,0)
+,total2=isnull(labor,0)+isnull(health,0)+isnull(hplus2,0)+isnull(ps1,0)+isnull(nl1,0)
++isnull(tax6,0)+isnull(lodpower,0)+isnull(borrow,0)
++isnull(salchg2,0)+isnull(salchg3,0)+isnull(salchg4,0)
+
+update @tmp
+set gno=case when person='本國' or  person='日薪'  then 1 else 2 end
+--,total3=total1-total2
+
+update sa
+set recno=recnoa
+from (select ROW_NUMBER()over(partition by gno order by sssno)recnoa,recno from @tmp)sa
+
+declare @tmpa table(
+	recno int,
+	gno nvarchar(10),
+	sssno1 nvarchar(100),sssno2 nvarchar(100),sssno3 nvarchar(100),
+	name1 nvarchar(200),name2 nvarchar(200),name3 nvarchar(200),
+	jobno1 nvarchar(100),jobno2 nvarchar(100),jobno3 nvarchar(100),
+	job1 nvarchar(200),job2 nvarchar(200),job3 nvarchar(200),
+	levels1 nvarchar(100),levels2 nvarchar(100),levels3 nvarchar(100),
+	partno1 nvarchar(20),partno2 nvarchar(20),partno3 nvarchar(20),
+	part1 nvarchar(50),	part2 nvarchar(50),	part3 nvarchar(50),
+	person1 nvarchar(50),person2 nvarchar(50),person3 nvarchar(50),
+	
+	money01 float,money02 float,money03 float,
+	admin11 float,admin12 float,admin13 float,
+	oth11 float,oth12 float,oth13 float,
+	special11 float,special12 float,special13 float,
+	full11 float,full12 float,full13 float,
+	meals11 float,meals12 float,meals13 float,
+	traffic11 float,traffic12 float,traffic13 float,
+	addmoney1 float,addmoney2 float,addmoney3 float,
+	money11 float,money12 float,money13 float,
+	money21 float,money22 float,money23 float,
+	money31 float,money32 float,money33 float,
+	money41 float,money42 float,money43 float,
+	money51 float,money52 float,money53 float,
+	money61 float,money62 float,money63 float,
+	salchg11 float,salchg12 float,salchg13 float,
+	total11 float,total12 float,total13 float,
+	
+	labor1 float,labor2 float,labor3 float,
+	health1 float,health2 float,health3 float,
+	hplus21 float,hplus22 float,hplus23 float,
+	
+	inday1 float,inday2 float,inday3 float,
+	dayused1 float,dayused2 float,dayused3 float,
+	alluseday1 float,alluseday2 float,alluseday3 float,
+	speday1 float,speday2 float,speday3 float,
+	eventday1 float,eventday2 float,eventday3 float,
+	sickday1  float,sickday2  float,sickday3  float,
+	naday1 float,naday2 float,naday3 float,
+	othday1 float,othday2 float,othday3 float,
+	
+	ps11 float,ps12 float,ps13 float,
+	nl11 float,nl12 float,nl13 float,
+	tax61 float,tax62 float,tax63 float,
+	lodpower1 float,lodpower2 float,lodpower3 float,
+	borrow1 float,borrow2 float,borrow3 float,
+	salchg21 float,salchg22 float,salchg23 float,
+	salchg31 float,salchg32 float,salchg33 float,
+	salchg41 float,salchg42 float,salchg43 float,
+	total21 float,total22 float,total23 float,
+	total31 float,total32 float,total33 float,
+	salhealth1 float,salhealth2 float,salhealth3 float,
+	money71 float,money72 float,money73 float
+)
+
+insert @tmpa(recno,gno,sssno1,name1,jobno1,job1,levels1,partno1,part1,person1,money01,admin11,oth11,special11,full11,meals11,traffic11,
+			addmoney1,money11,money21,money31,money41,money51,money61,salchg11,total11,labor1,health1,hplus21,inday1,dayused1,alluseday1,speday1,
+			eventday1,sickday1,naday1,othday1,ps11,nl11,tax61,lodpower1,borrow1,salchg21,salchg31,salchg41,total21,total31,salhealth1,money71
+			)
+select ROW_NUMBER()over(partition by gno order by sssno),gno,sssno,name,jobno,job,levels,partno,part,person,[money],admin1,oth1,special1,full1,meals1,traffic1
+		,addmoney,money1,money2,money3,money4,money5,money6,salchg1,total1,labor,health,hplus2,inday,dayused,alluseday,speday
+		,eventday,sickday,naday,othday,ps1,nl1,tax6,lodpower,borrow,salchg2,salchg3,salchg4,total2,total3,salhealth,money7
+from @tmp
+where recno%3=1
+order by sssno
+
+update a
+set gno=b.gno,sssno2=b.sssno,name2=b.name,jobno2=b.jobno,job2=b.job,levels2=b.levels,partno2=b.partno,part2=b.part,person2=b.person
+	,money02=b.[money],admin12=b.admin1,oth12=b.oth1,special12=b.special1,full12=b.full1,meals12=b.meals1,traffic12=b.traffic1
+	,addmoney2=b.addmoney,money12=b.money1,money22=b.money2,money32=b.money3,money42=b.money4,money52=b.money5,money62=b.money6
+	,salchg12=b.salchg1,total12=b.total1
+	,labor2=b.labor,health2=b.health,hplus22=b.hplus2
+	,inday2=b.inday,dayused2=b.dayused,alluseday2=b.alluseday,speday2=b.speday,eventday2=b.eventday,sickday2=b.sickday,naday2=b.naday,othday2=b.othday
+	,ps12=b.ps1,nl12=b.nl1,tax62=b.tax6,lodpower2=b.lodpower,borrow2=b.borrow
+	,salchg22=b.salchg2,salchg32=b.salchg3,salchg42=b.salchg4
+	,total22=b.total2,total32=b.total3,salhealth2=b.salhealth,money72=b.money7
+from  @tmp b left join @tmpa a on ((a.recno-1)*3)+2=b.recno and a.gno=b.gno
+
+update a
+set gno=b.gno,sssno3=b.sssno,name3=b.name,jobno3=b.jobno,job3=b.job,levels3=b.levels,partno3=b.partno,part3=b.part,person3=b.person
+	,money03=b.[money],admin13=b.admin1,oth13=b.oth1,special13=b.special1,full13=b.full1,meals13=b.meals1,traffic13=b.traffic1
+	,addmoney3=b.addmoney,money13=b.money1,money23=b.money2,money33=b.money3,money43=b.money4,money53=b.money5,money63=b.money6
+	,salchg13=b.salchg1,total13=b.total1
+	,labor3=b.labor,health3=b.health,hplus23=b.hplus2
+	,inday3=b.inday,dayused3=b.dayused,alluseday3=b.alluseday,speday3=b.speday,eventday3=b.eventday,sickday3=b.sickday,naday3=b.naday,othday3=b.othday
+	,ps13=b.ps1,nl13=b.nl1,tax63=b.tax6,lodpower3=b.lodpower,borrow3=b.borrow
+	,salchg23=b.salchg2,salchg33=b.salchg3,salchg43=b.salchg4
+	,total23=b.total2,total33=b.total3,salhealth3=b.salhealth,money73=b.money7
+from  @tmp b left join @tmpa a on ((a.recno-1)*3)+3=b.recno and a.gno=b.gno 
+
+select
+recno,gno,sssno1,sssno2,sssno3,name1,name2,name3,jobno1,jobno2,jobno3,job1,job2,job3,
+levels1,levels2,levels3,partno1,partno2,partno3,part1,part2,part3,person1,person2,person3,
+dbo.getComma(money01,0)money01,dbo.getComma(money02,0)money02,dbo.getComma(money03,0)money03,
+dbo.getComma(admin11,0)admin11,dbo.getComma(admin12,0)admin12,dbo.getComma(admin13,0)admin13,
+dbo.getComma(oth11,0)oth11,dbo.getComma(oth12,0)oth12,dbo.getComma(oth13,0)oth13,
+dbo.getComma(special11,0)special11,dbo.getComma(special12,0)special12,dbo.getComma(special13,0)special13,
+dbo.getComma(full11,0)full11,dbo.getComma(full12,0)full12,dbo.getComma(full13,0)full13,
+dbo.getComma(meals11,0)meals11,dbo.getComma(meals12,0)meals12,dbo.getComma(meals13,0)meals13,
+dbo.getComma(traffic11,0)traffic11,dbo.getComma(traffic12,0)traffic12,dbo.getComma(traffic13,0)traffic13,
+dbo.getComma(addmoney1,0)addmoney1,dbo.getComma(addmoney2,0)addmoney2,dbo.getComma(addmoney3,0)addmoney3,
+dbo.getComma(money11,0)money11,dbo.getComma(money12,0)money12,dbo.getComma(money13,0)money13,
+dbo.getComma(money21,0)money21,dbo.getComma(money22,0)money22,dbo.getComma(money23,0)money23,
+dbo.getComma(money31,0)money31,dbo.getComma(money32,0)money32,dbo.getComma(money33,0)money33,
+dbo.getComma(money41,0)money41,dbo.getComma(money42,0)money42,dbo.getComma(money43,0)money43,
+dbo.getComma(money51,0)money51,dbo.getComma(money52,0)money52,dbo.getComma(money53,0)money53,
+dbo.getComma(money61,0)money61,dbo.getComma(money62,0)money62,dbo.getComma(money63,0)money63,
+dbo.getComma(salchg11,0)salchg11,dbo.getComma(salchg12,0)salchg12,dbo.getComma(salchg13,0)salchg13,
+dbo.getComma(total11,0)total11,dbo.getComma(total12,0)total12,dbo.getComma(total13,0)total13,
+--105/8/18 扣項負數顯示 
+dbo.getComma(-1*labor1,0)labor1,dbo.getComma(-1*labor2,0)labor2,dbo.getComma(-1*labor3,0)labor3,
+dbo.getComma(-1*health1,0)health1,dbo.getComma(-1*health2,0)health2,dbo.getComma(-1*health3,0)health3,
+dbo.getComma(-1*hplus21,0)hplus21,dbo.getComma(-1*hplus22,0)hplus22,dbo.getComma(-1*hplus23,0)hplus23,
+inday1,inday2,inday3,dayused1,dayused2,dayused3,alluseday1,alluseday2,alluseday3,speday1,speday2,speday3,
+eventday1,eventday2,eventday3,sickday1,sickday2,sickday3,naday1,naday2,naday3,othday1,othday2,othday3,
+dbo.getComma(-1*ps11,0)ps11,dbo.getComma(-1*ps12,0)ps12,dbo.getComma(-1*ps13,0)ps13,
+dbo.getComma(-1*nl11,0)nl11,dbo.getComma(-1*nl12,0)nl12,dbo.getComma(-1*nl13,0)nl13,
+dbo.getComma(-1*tax61,0)tax61,dbo.getComma(-1*tax62,0)tax62,dbo.getComma(-1*tax63,0)tax63,
+dbo.getComma(-1*lodpower1,0)lodpower1,dbo.getComma(-1*lodpower2,0)lodpower2,dbo.getComma(-1*lodpower3,0)lodpower3,
+dbo.getComma(-1*borrow1,0)borrow1,dbo.getComma(-1*borrow2,0)borrow2,dbo.getComma(-1*borrow3,0)borrow3,
+dbo.getComma(-1*salchg21,0)salchg21,dbo.getComma(-1*salchg22,0)salchg22,dbo.getComma(-1*salchg23,0)salchg23,
+dbo.getComma(-1*salchg31,0)salchg31,dbo.getComma(-1*salchg32,0)salchg32,dbo.getComma(-1*salchg33,0)salchg33,
+dbo.getComma(-1*salchg41,0)salchg41,dbo.getComma(-1*salchg42,0)salchg42,dbo.getComma(-1*salchg43,0)salchg43,
+dbo.getComma(total21,0)total21,dbo.getComma(total22,0)total22,dbo.getComma(total23,0)total23,
+dbo.getComma(total31,0)total31,dbo.getComma(total32,0)total32,dbo.getComma(total33,0)total33,
+dbo.getComma(salhealth1,0)salhealth1,dbo.getComma(salhealth2,0)salhealth2,dbo.getComma(salhealth3,0)salhealth3,
+dbo.getComma(money71,0)money71,dbo.getComma(money72,0)money72,dbo.getComma(money73,0)money73,
+LEFT(@t_xmon,3)years,RIGHT(@t_xmon,2)mon
+from @tmpa
+;
+---------------------------------------------------------------------------------------------------------------------------------
+z_salaryp_djx01:--z_salaryp_dj01(薪資表單張顯示)
+SET QUOTED_IDENTIFIER OFF
+declare @t_xmon nvarchar(20)
+declare @t_bsssno nvarchar(20)
+declare @t_esssno nvarchar(20)
+set @t_xmon = case when '#non' = [1] then '' else [1] end
+set @t_bsssno = case when '#non' = [2] then '' else [2] end
+set @t_esssno = case when '#non' = [3] then CHAR(255) else [3] end
+---------------------------------------------------------------------------------------------------------------------------------
+
+declare @tmp table(
+	gno nvarchar(1),
+	years nvarchar(10),
+	mon nvarchar(10),
+	sssno nvarchar(100),
+	name nvarchar(200),
+	jobno nvarchar(100),
+	job nvarchar(200),
+	levels nvarchar(100),
+	partno nvarchar(20),
+	part nvarchar(50),
+	person nvarchar(50),
+	
+	[money] float,--底薪
+	admin1 float,--主管加給
+	oth1 float,--特別責任加給
+	special1 float,--技術加給
+	full1 float,--全勤獎金
+	meals1 float,--伙食津貼
+	traffic1 float,--交通費
+	addmoney float,--加班費
+	money1 float,--週六加班費(全日)
+	money2 float,--週六加班費(半日)
+	money3 float,--敬業獎金
+	money4 float,--久任獎金
+	money5 float,--考績獎金
+	money6 float,--業績達成獎金
+
+	total1 float,--應領金額
+	labor float,--勞保費
+	health float,--健保費
+	hplus2 float,--2代補充健保
+	
+	inday float,--本年度特休假總日數
+	dayused float,--本月特休日數
+	alluseday float,--累計已休日數
+	speday float,--剩餘特休假日數
+	eventday float,--事假時數
+	sickday  float,--病假時數
+	naday float,--天災假時數
+	othday float,--其他請假日數
+	ps1 float,--事病假扣薪
+	nl1 float,--其他扣薪假
+	
+	tax6 float,--所得稅
+	lodpower float,--食宿費
+	borrow float,--借支
+	
+	total2 float,--應扣金額
+	total3 float,--實領金額
+	sa1health float,--健保投保薪資
+	money7 float--申報實領總薪資
+)
+
+insert @tmp
+select '9',LEFT(@t_xmon,3),right(@t_xmon,2),b.sno,b.namea,c.jobno,isnull(c.level1+'職等','')+c.job,c.level2,b.partno,b.part,a.person
+		,b.money,b.bo_admin,b.bo_oth,b.bo_special,b.bo_full,b.meals,b.bo_traffic,b.addmoney
+		,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6
+		,b.money+b.bo_admin+b.bo_oth+b.bo_special+b.bo_full+b.meals+b.bo_traffic+b.addmoney+b.money1+b.money2+b.money3+b.money4+b.money5+b.money6
+		,b.ch_labor,b.ch_health,b.hplus2,case when d.inday!=0 then d.inday/8 else '' end
+		,'',case when d.inday!=0 then isnull(((d.inday-e.tot_special)/8),0) else 0 end
+		,case when e.tot_special!=0 then e.tot_special/8 else '' end
+		,b.hr_sick,b.hr_person,'','',b.mi_sick+b.mi_person,b.mi_nosalary+b.mi_leave
+		,b.tax6,b.lodging_power_fee,b.borrow
+		,b.ch_labor+b.ch_health+b.hplus2+b.mi_sick+b.mi_person+b.mi_nosalary+b.mi_leave
+		,'',b.sa_health,b.money7	
+from salary a left join salarys b on a.noa=b.noa
+	outer apply(select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc)c
+	left join salvacas d on b.sno=d.sssno and b.noq=d.noq and LEFT(b.mon,3)=d.noa
+	outer apply (select top 1 * from salvacause where sssno=b.sno and Left(bdate,6)=@t_xmon order by bdate desc)e
+where b.mon=@t_xmon
+
+update a
+set total3=total1-total2
+from @tmp a
+
+insert @tmp(gno,years,mon,sssno,name,dayused,naday,othday)
+select '9',LEFT(@t_xmon,3),right(@t_xmon,2),sssno,namea
+		,case when hname='特休假' then sum(hr_used)/8 else '' end
+		,case when hname='天災假' then sum(hr_used) else '' end
+		,case when hname!='天災假' and hname!='特休假' and hname!='病假' and hname!='事假' then sum(hr_used)/8 else '' end
+from salvacause
+where left(bdate,6)=@t_xmon
+group by sssno,namea,hname
+
+insert @tmp
+select '1',years,mon,sssno,name,max(jobno),max(job),max(levels),max(partno),max(part),max(person),max([money]),
+	max(admin1),max(oth1),max(special1),max(full1),max(meals1),max(traffic1),max(addmoney),max(money1),
+	max(money2),max(money3),max(money4),max(money5),max(money6),max(total1),max(labor),max(health),max(hplus2),
+	max(inday),sum(dayused),max(alluseday),max(speday),max(eventday),max(sickday),sum(naday),sum(othday),max(ps1),max(nl1),
+	MAX(tax6),MAX(lodpower),MAX(Borrow),
+	max(total2),max(total3),max(sa1health),max(money7)
+from @tmp
+where gno='9'
+group by years,mon,sssno,name
+
+delete @tmp where gno='9'
+
+---國籍分別
+update sa
+set gno=case when person='本國' then 1 else 2 end
+from @tmp sa
+
+---外籍應領金額
+update aa
+set total1=[money]+admin1+oth1+special1+addmoney+money1+money2 
+from @tmp aa where gno='2'
+
+---外籍應扣金額
+update aa
+set total2=labor+health+hplus2+ps1+nl1+tax6+lodpower+Borrow
+from @tmp aa where gno='2'
+
+---外籍實領金額
+update aa
+set total3=total1-total2
+from @tmp aa where gno='2'
+
+select
+gno,years,mon,sssno,name,jobno,job,levels,partno,part,person,
+dbo.getComma(money,0)money,
+dbo.getComma(admin1,0)admin1,dbo.getComma(oth1,0)oth1,dbo.getComma(special1,0)special1,
+dbo.getComma(full1,0)full1,dbo.getComma(meals1,0)meals1,dbo.getComma(traffic1,0)traffic1,
+dbo.getComma(addmoney,0)addmoney,
+dbo.getComma(money1,0)money1,dbo.getComma(money2,0)money2,dbo.getComma(money3,0)money3,
+dbo.getComma(money4,0)money4,dbo.getComma(money5,0)money5,dbo.getComma(money6,0)money6,
+dbo.getComma(total1,0)total1,
+dbo.getComma(labor,0)labor,dbo.getComma(health,0)health,dbo.getComma(hplus2,0)hplus2,
+inday,dayused,alluseday,speday,eventday,sickday,naday,othday,
+dbo.getComma(ps1,0)ps1,dbo.getComma(nl1,0)nl1,dbo.getComma(tax6,0)tax6,
+dbo.getComma(lodpower,0)lodpower,dbo.getComma(borrow,0)borrow,
+dbo.getComma(total2,0)total2,dbo.getComma(total3,0)total3,dbo.getComma(sa1health,0)sa1health,dbo.getComma(money7,0)money7
+ from @tmp 
+order by sssno
+;
+-------------------------------------------------------------------------------------------
+z_salaryp_dj01:--z_salaryp_dj01
+SET QUOTED_IDENTIFIER OFF
+declare @t_xmon nvarchar(20)
+declare @t_bsssno nvarchar(20)
+declare @t_esssno nvarchar(20)
+set @t_xmon = case when '#non' = [1] then '' else [1] end
+set @t_bsssno = case when '#non' = [2] then '' else [2] end
+set @t_esssno = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_userno nvarchar(100)='[6]'
+declare @t_rank nvarchar(100)='[7]'
+---------------------------------------------------------------------------
+declare @tmp table(
+	gno nvarchar(1),
+	rr int,
+	mon nvarchar(10),
+	sno nvarchar(50),
+	namea nvarchar(50),
+	person nvarchar(50),
+	ted nvarchar(50),--離職日
+	job nvarchar(50),
+	level2 nvarchar(50),
+	money float,
+	bo_admin float,
+	bo_special float,
+	bo_full float,
+	meals float,
+	bo_traffic float,
+	bo_oth float,
+	mi_saliday float,
+	mi_total float,
+	tax_other float,
+	addmoney float,
+	money1 float,
+	money2 float,
+	money3 float,
+	money4 float,
+	money5 float,
+	money6 float,
+	plus float,
+	total3 float,
+	borrow float,
+	ch_health float,
+	ch_labor float,
+	ch_retire float,
+	hplus2 float,
+	tax float,
+	minus float,
+	total4 float,
+	total5 float,
+	sa_health float,
+	money7 float,
+	spday float,
+	salname nvarchar(20)
+)
+insert @tmp
+select case when a.person!='外勞' then 1 else 2 end,'',a.mon,sno,b.namea,a.person
+	  ,case when outdate>reindate then '離職:'+outdate else '' end
+	  ,case when len(d.level1)=0 then d.job else isnull(d.level1+'職等','')+d.job end,d.level2
+	  ,case when a.person='日薪' then b.daymoney*b.day else b.money end,b.bo_admin,b.bo_special
+	  ,b.bo_full,b.meals,b.bo_traffic,b.bo_oth,b.mi_saliday,b.mi_total,b.tax_other,b.addmoney
+	  ,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6,b.plus,b.total3,b.borrow,b.ch_health
+	  ,b.ch_labor,b.ch_retire,b.hplus2,(b.tax+tax5+tax6+tax12+tax18),b.minus,b.total4
+	  ,b.total5,b.sa_health,b.money7
+	  ,round((isnull(e.inday,0)-isnull(e.boutday,0)-isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,3)=left(@t_xmon,3) and hname='特休假'),0))/8,1)
+	  ,case when  a.person='日薪' then '底薪(日薪*天數)' else '底薪' end
+from salarys b left join salary a on a.noa=b.noa
+left join sss c on b.sno=c.noa
+outer apply(select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc)d
+left join salvacas e on b.sno=e.sssno and LEFT(b.mon,3)=e.noa
+where a.mon=@t_xmon and
+(b.sno between @t_bsssno and @t_esssno) 
+
+--上個月
+declare @tmon nvarchar(10)
+set @tmon=cast(cast(LEFT(@t_xmon,3)as int)+1911 as nvarchar(20))+'/'+right(@t_xmon,2)+'/01'
+set @tmon=CONVERT(VARCHAR(7),DATEADD(m,-1,@tmon),12 )+0890000
+set @tmon=left(@tmon,3)+'/'+substring(@tmon,4,2)
+declare @tmpa table(
+	gno nvarchar(1),
+	rr int,
+	mon nvarchar(10),
+	sno nvarchar(50),
+	namea nvarchar(50),
+	person nvarchar(50),
+	ted nvarchar(50),--離職日
+	job nvarchar(50),
+	level2 nvarchar(50),
+	money float,
+	bo_admin float,
+	bo_special float,
+	bo_full float,
+	meals float,
+	bo_traffic float,
+	bo_oth float,
+	mi_saliday float,
+	mi_total float,
+	tax_other float,
+	addmoney float,
+	money1 float,
+	money2 float,
+	money3 float,
+	money4 float,
+	money5 float,
+	money6 float,
+	plus float,
+	total3 float,
+	borrow float,
+	ch_health float,
+	ch_labor float,
+	ch_retire float,
+	hplus2 float,
+	tax float,
+	minus float,
+	total4 float,
+	total5 float,
+	sa_health float,
+	money7 float,
+	spday float,
+	salname nvarchar(20)
+)
+insert @tmpa
+select case when a.person!='外勞' then 1 else 2 end,'',a.mon,sno,b.namea,a.person
+	  ,case when outdate>reindate then '離職:'+outdate else '' end
+	  ,case when len(d.level1)=0 then d.job else isnull(d.level1+'職等','')+d.job end,d.level2
+	  ,case when a.person='日薪' then b.daymoney*b.day else b.money end,b.bo_admin,b.bo_special
+	  ,b.bo_full,b.meals,b.bo_traffic,b.bo_oth,b.mi_saliday,b.mi_total,b.tax_other,b.addmoney
+	  ,b.money1,b.money2,b.money3,b.money4,b.money5,b.money6,b.plus,b.total3,b.borrow,b.ch_health
+	  ,b.ch_labor,b.ch_retire,b.hplus2,(b.tax+tax5+tax6+tax12+tax18),b.minus,b.total4
+	  ,b.total5,b.sa_health,b.money7
+	  ,round((isnull(e.inday,0)-isnull(e.boutday,0)-isnull((select sum(hr_used) from salvacause where sssno=b.sno and left(bdate,3)=left(@t_xmon,3) and hname='特休假'),0))/8,1)
+	  ,case when  a.person='日薪' then '底薪(日薪*天數)' else '底薪' end
+from salarys b left join salary a on a.noa=b.noa
+left join sss c on b.sno=c.noa
+outer apply(select top 1 * from saladjust where noa=b.sno and datea<=a.datea order by datea desc)d
+left join salvacas e on b.sno=e.sssno and LEFT(b.mon,3)=e.noa
+where (a.mon=@tmon) and
+(b.sno between @t_bsssno and @t_esssno)
+
+--2017/03/08 林顧問要求員工個人薪資從三月份開始查詢 前面一律不能查詢
+if(@t_rank<'8')
+begin
+	delete @tmp where sno!=@t_userno or mon<='106/02' 
+	delete @tmpa where sno!=@t_userno or mon<='106/02'
+end
+
+update a
+set rr=rx
+from (select ROW_NUMBER()over(partition by gno order by sno)rx,rr from @tmp)a
+
+declare @tmp1 table(
+	gno nvarchar(1),
+	rr int,
+	sno1 nvarchar(50),sno2 nvarchar(50),sno3 nvarchar(50),
+	name1 nvarchar(50),name2 nvarchar(50),name3 nvarchar(50),
+	person1 nvarchar(50),person2 nvarchar(50),person3 nvarchar(50),
+	ted1 nvarchar(50),ted2 nvarchar(50),ted3 nvarchar(50),
+	job1 nvarchar(50),job2 nvarchar(50),job3 nvarchar(50),
+	levels1 nvarchar(50),levels2 nvarchar(50),levels3 nvarchar(50),
+	salname1 nvarchar(20),salname2 nvarchar(20),salname3 nvarchar(20),
+	ma01 nvarchar(100),mb01 nvarchar(100),mc01 nvarchar(100),ma02 nvarchar(100),mb02 nvarchar(100),mc02 nvarchar(100),
+	ma03 nvarchar(100),mb03 nvarchar(100),mc03 nvarchar(100),ma04 nvarchar(100),mb04 nvarchar(100),mc04 nvarchar(100),
+	ma05 nvarchar(100),mb05 nvarchar(100),mc05 nvarchar(100),ma06 nvarchar(100),mb06 nvarchar(100),mc06 nvarchar(100),
+	ma07 nvarchar(100),mb07 nvarchar(100),mc07 nvarchar(100),ma08 nvarchar(100),mb08 nvarchar(100),mc08 nvarchar(100),
+	ma09 nvarchar(100),mb09 nvarchar(100),mc09 nvarchar(100),ma10 nvarchar(100),mb10 nvarchar(100),mc10 nvarchar(100),
+	ma11 nvarchar(100),mb11 nvarchar(100),mc11 nvarchar(100),ma12 nvarchar(100),mb12 nvarchar(100),mc12 nvarchar(100),
+	ma13 nvarchar(100),mb13 nvarchar(100),mc13 nvarchar(100),ma14 nvarchar(100),mb14 nvarchar(100),mc14 nvarchar(100),
+	ma15 nvarchar(100),mb15 nvarchar(100),mc15 nvarchar(100),ma16 nvarchar(100),mb16 nvarchar(100),mc16 nvarchar(100),
+	ma17 nvarchar(100),mb17 nvarchar(100),mc17 nvarchar(100),ma18 nvarchar(100),mb18 nvarchar(100),mc18 nvarchar(100),
+	ma19 nvarchar(100),mb19 nvarchar(100),mc19 nvarchar(100),ma20 nvarchar(100),mb20 nvarchar(100),mc20 nvarchar(100),
+	ma21 nvarchar(100),mb21 nvarchar(100),mc21 nvarchar(100),ma22 nvarchar(100),mb22 nvarchar(100),mc22 nvarchar(100),
+	ma23 nvarchar(100),mb23 nvarchar(100),mc23 nvarchar(100),ma24 nvarchar(100),mb24 nvarchar(100),mc24 nvarchar(100),
+	ma25 nvarchar(100),mb25 nvarchar(100),mc25 nvarchar(100),ma26 nvarchar(100),mb26 nvarchar(100),mc26 nvarchar(100),
+	ma27 nvarchar(100),mb27 nvarchar(100),mc27 nvarchar(100),ma28 nvarchar(100),mb28 nvarchar(100),mc28 nvarchar(100),
+	ma29 nvarchar(100),mb29 nvarchar(100),mc29 nvarchar(100),ma30 nvarchar(100),mb30 nvarchar(100),mc30 nvarchar(100),
+	specday1 float,specday2 float,specday3 float,
+	ghref nvarchar(max),ghrefb nvarchar(max),ghrefc nvarchar(max),
+	ghrefd nvarchar(max),ghrefe nvarchar(max),ghreff nvarchar(max)
+)
+insert @tmp1(gno,rr,sno1,name1,person1,ted1,job1,levels1,salname1,ma01,ma02,ma03,ma04,ma05,ma06,ma07,ma08,
+		ma09,ma10,ma11,ma12,ma13,ma14,ma15,ma16,ma17,ma18,ma19,ma20,ma21,ma22,ma23,ma24,ma25,ma26,
+		ma27,ma28,ma29,ma30,specday1,ghref,ghrefd)
+select a.gno,a.rr,a.sno,a.namea,a.person,a.ted,a.job,a.level2,a.salname,
+		case when a.money!=b.money then  "<font color='red'>"+dbo.getComma(a.money,0)+"</font>" else dbo.getComma(a.money,0) end,
+		case when a.bo_admin!=b.bo_admin then  "<font color='red'>"+dbo.getComma(a.bo_admin,0)+"</font>" else dbo.getComma(a.bo_admin,0) end,
+		case when a.bo_special!=b.bo_special then  "<font color='red'>"+dbo.getComma(a.bo_special,0)+"</font>" else dbo.getComma(a.bo_special,0) end,
+		case when a.bo_full!=b.bo_full then  "<font color='red'>"+dbo.getComma(a.bo_full,0)+"</font>" else dbo.getComma(a.bo_full,0) end,
+		case when a.meals!=b.meals then  "<font color='red'>"+dbo.getComma(a.meals,0)+"</font>" else dbo.getComma(a.meals,0) end,
+		case when a.bo_traffic!=b.bo_traffic then  "<font color='red'>"+dbo.getComma(a.bo_traffic,0)+"</font>" else dbo.getComma(a.bo_traffic,0) end,
+		case when a.bo_oth!=b.bo_oth then  "<font color='red'>"+dbo.getComma(a.bo_oth,0)+"</font>" else dbo.getComma(a.bo_oth,0) end,
+		case when a.mi_saliday!=b.mi_saliday then  "<font color='red'>"+dbo.getComma(-1*a.mi_saliday,0)+"</font>" else dbo.getComma(-1*a.mi_saliday,0) end,
+		case when a.mi_total!=b.mi_total then  "<font color='red'>"+dbo.getComma(-1*a.mi_total,0)+"</font>" else dbo.getComma(-1*a.mi_total,0) end,
+		case when a.tax_other!=b.tax_other then  "<font color='red'>"+dbo.getComma(a.tax_other,0)+"</font>" else dbo.getComma(a.tax_other,0) end,
+		case when a.addmoney!=b.addmoney then  "<font color='red'>"+dbo.getComma(a.addmoney,0)+"</font>" else dbo.getComma(a.addmoney,0) end,
+		case when a.money1!=b.money1 then  "<font color='red'>"+dbo.getComma(a.money1,0)+"</font>" else dbo.getComma(a.money1,0) end,
+		case when a.money2!=b.money2 then  "<font color='red'>"+dbo.getComma(a.money2,0)+"</font>" else dbo.getComma(a.money2,0) end,
+		case when a.money3!=b.money3 then  "<font color='red'>"+dbo.getComma(a.money3,0)+"</font>" else dbo.getComma(a.money3,0) end,
+		case when a.money4!=b.money4 then  "<font color='red'>"+dbo.getComma(a.money4,0)+"</font>" else dbo.getComma(a.money4,0) end,
+		case when a.money5!=b.money5 then  "<font color='red'>"+dbo.getComma(a.money5,0)+"</font>" else dbo.getComma(a.money5,0) end,
+		case when a.money6!=b.money6 then  "<font color='red'>"+dbo.getComma(a.money6,0)+"</font>" else dbo.getComma(a.money6,0) end,
+		a.plus,
+		case when a.total3!=b.total3 then  "<font color='red'>"+dbo.getComma(a.total3,0)+"</font>" else dbo.getComma(a.total3,0) end,
+		case when a.borrow!=b.borrow then  "<font color='red'>"+dbo.getComma(-1*a.borrow,0)+"</font>" else dbo.getComma(-1*a.borrow,0) end,
+		case when a.ch_labor!=b.ch_labor then  "<font color='red'>"+dbo.getComma(-1*a.ch_labor,0)+"</font>" else dbo.getComma(-1*a.ch_labor,0) end,
+		case when a.ch_health!=b.ch_health then  "<font color='red'>"+dbo.getComma(-1*a.ch_health,0)+"</font>" else dbo.getComma(-1*a.ch_health,0) end,		
+		case when a.ch_retire!=b.ch_retire then  "<font color='red'>"+dbo.getComma(-1*a.ch_retire,0)+"</font>" else dbo.getComma(-1*a.ch_retire,0) end,
+		case when a.hplus2!=b.hplus2 then  "<font color='red'>"+dbo.getComma(-1*a.hplus2,0)+"</font>" else dbo.getComma(-1*a.hplus2,0) end,
+		case when a.tax!=b.tax then  "<font color='red'>"+dbo.getComma(-1*a.tax,0)+"</font>" else dbo.getComma(-1*a.tax,0) end,
+		case when a.minus!=0 then -1*a.minus else 0 end,
+		case when a.total4!=b.total4 then  "<font color='red'>"+dbo.getComma(-1*a.total4,0)+"</font>" else dbo.getComma(-1*a.total4,0) end,
+		case when a.total5!=b.total5 then  "<font color='red'>"+dbo.getComma(a.total5,0)+"</font>" else dbo.getComma(a.total5,0) end,
+		case when a.sa_health!=b.sa_health then  "<font color='red'>"+dbo.getComma(a.sa_health,0)+"</font>" else dbo.getComma(a.sa_health,0) end,
+		case when a.money7!=b.money7 then  "<font color='red'>"+dbo.getComma(a.money7,0)+"</font>" else dbo.getComma(a.money7,0) end,
+		a.spday,
+		"salchg?sssno=\'"+a.sno+"\' and mon=\'"+@t_xmon+"\' and plus!=0 and "+cast(a.plus as nvarchar(15))+"=$ma18","salchg?sssno=\'"+a.sno+"\' and mon=\'"+@t_xmon+"\' and minus!=0 and "+cast(case when a.minus!=0 then -1*a.minus else 0 end as nvarchar(15))+"=$ma26"
+from @tmp a
+outer apply (select * from @tmpa where sno=a.sno) b
+where a.rr%3=1
+order by a.sno
+
+update a
+set gno=b.gno,sno2=b.sno,name2=b.namea,ted2=b.ted,job2=b.job,levels2=b.level2,salname2=b.salname,person2=b.person,
+	mb01=case when b.money!=c.money then  "<font color='red'>"+dbo.getComma(b.money,0)+"</font>" else dbo.getComma(b.money,0) end,
+	mb02=case when b.bo_admin!=c.bo_admin then  "<font color='red'>"+dbo.getComma(b.bo_admin,0)+"</font>" else dbo.getComma(b.bo_admin,0) end,
+	mb03=case when b.bo_special!=c.bo_special then  "<font color='red'>"+dbo.getComma(b.bo_special,0)+"</font>" else dbo.getComma(b.bo_special,0) end,
+	mb04=case when b.bo_full!=c.bo_full then  "<font color='red'>"+dbo.getComma(b.bo_full,0)+"</font>" else dbo.getComma(b.bo_full,0) end,
+	mb05=case when b.meals!=c.meals then  "<font color='red'>"+dbo.getComma(b.meals,0)+"</font>" else dbo.getComma(b.meals,0) end,
+	mb06=case when b.bo_traffic!=c.bo_traffic then  "<font color='red'>"+dbo.getComma(b.bo_traffic,0)+"</font>" else dbo.getComma(b.bo_traffic,0) end,
+	mb07=case when b.bo_oth!=c.bo_oth then  "<font color='red'>"+dbo.getComma(b.bo_oth,0)+"</font>" else dbo.getComma(b.bo_oth,0) end,
+	mb08=case when b.mi_saliday!=c.mi_saliday then  "<font color='red'>"+dbo.getComma(-1*b.mi_saliday,0)+"</font>" else dbo.getComma(-1*b.mi_saliday,0) end,
+	mb09=case when b.mi_total!=c.mi_total then  "<font color='red'>"+dbo.getComma(-1*b.mi_total,0)+"</font>" else dbo.getComma(-1*b.mi_total,0) end,
+	mb10=case when b.tax_other!=c.tax_other then  "<font color='red'>"+dbo.getComma(b.tax_other,0)+"</font>" else dbo.getComma(b.tax_other,0) end,
+	mb11=case when b.addmoney!=c.addmoney then  "<font color='red'>"+dbo.getComma(b.addmoney,0)+"</font>" else dbo.getComma(b.addmoney,0) end,
+	mb12=case when b.money1!=c.money1 then  "<font color='red'>"+dbo.getComma(b.money1,0)+"</font>" else dbo.getComma(b.money1,0) end,
+	mb13=case when b.money2!=c.money2 then  "<font color='red'>"+dbo.getComma(b.money2,0)+"</font>" else dbo.getComma(b.money2,0) end,
+	mb14=case when b.money3!=c.money3 then  "<font color='red'>"+dbo.getComma(b.money3,0)+"</font>" else dbo.getComma(b.money3,0) end,
+	mb15=case when b.money4!=c.money4 then  "<font color='red'>"+dbo.getComma(b.money4,0)+"</font>" else dbo.getComma(b.money4,0) end,
+	mb16=case when b.money5!=c.money5 then  "<font color='red'>"+dbo.getComma(b.money5,0)+"</font>" else dbo.getComma(b.money5,0) end,
+	mb17=case when b.money6!=c.money6 then  "<font color='red'>"+dbo.getComma(b.money6,0)+"</font>" else dbo.getComma(b.money6,0) end,
+	mb18=b.plus,
+	mb19=case when b.total3!=c.total3 then  "<font color='red'>"+dbo.getComma(b.total3,0)+"</font>" else dbo.getComma(b.total3,0) end,
+	mb20=case when b.borrow!=c.borrow then  "<font color='red'>"+dbo.getComma(-1*b.borrow,0)+"</font>" else dbo.getComma(-1*b.borrow,0) end,
+	mb21=case when b.ch_labor!=c.ch_labor then  "<font color='red'>"+dbo.getComma(-1*b.ch_labor,0)+"</font>" else dbo.getComma(-1*b.ch_labor,0) end,
+	mb22=case when b.ch_health!=c.ch_health then  "<font color='red'>"+dbo.getComma(-1*b.ch_health,0)+"</font>" else dbo.getComma(-1*b.ch_health,0) end,	
+	mb23=case when b.ch_retire!=c.ch_retire then  "<font color='red'>"+dbo.getComma(-1*b.ch_retire,0)+"</font>" else dbo.getComma(-1*b.ch_retire,0) end,
+	mb24=case when b.hplus2!=c.hplus2 then  "<font color='red'>"+dbo.getComma(-1*b.hplus2,0)+"</font>" else dbo.getComma(-1*b.hplus2,0) end,
+	mb25=case when b.tax!=c.tax then  "<font color='red'>"+dbo.getComma(-1*b.tax,0)+"</font>" else dbo.getComma(-1*b.tax,0) end,
+	mb26=case when b.minus!=0 then -1*b.minus else 0 end,
+	mb27=case when b.total4!=c.total4 then  "<font color='red'>"+dbo.getComma(-1*b.total4,0)+"</font>" else dbo.getComma(-1*b.total4,0) end,
+	mb28=case when b.total5!=c.total5 then  "<font color='red'>"+dbo.getComma(b.total5,0)+"</font>" else dbo.getComma(b.total5,0) end,
+	mb29=case when b.sa_health!=c.sa_health then  "<font color='red'>"+dbo.getComma(b.sa_health,0)+"</font>" else dbo.getComma(b.sa_health,0) end,
+	mb30=case when b.money7!=c.money7 then  "<font color='red'>"+dbo.getComma(b.money7,0)+"</font>" else dbo.getComma(b.money7,0) end,
+	specday2=b.spday,ghrefc="salchg?sssno=\'"+b.sno+"\' and mon=\'"+@t_xmon+"\' and plus!=0 and "+cast(b.plus as nvarchar(15))+"=$mb18",ghreff="salchg?sssno=\'"+b.sno+"\' and mon=\'"+@t_xmon+"\' and minus!=0 and "+cast(case when b.minus!=0 then -1*b.minus else 0 end as nvarchar(15))+"=$mb26"
+from  @tmp b left join @tmp1 a on a.rr+1=b.rr and a.gno=b.gno
+outer apply (select * from @tmpa where sno=b.sno) c
+
+update a
+set  gno=b.gno,sno3=b.sno,name3=b.namea,ted3=b.ted,job3=b.job,levels3=b.level2,salname3=b.salname,person3=b.person,
+	mc01=case when b.money!=c.money then  "<font color='red'>"+dbo.getComma(b.money,0)+"</font>" else dbo.getComma(b.money,0) end,
+	mc02=case when b.bo_admin!=c.bo_admin then  "<font color='red'>"+dbo.getComma(b.bo_admin,0)+"</font>" else dbo.getComma(b.bo_admin,0) end,
+	mc03=case when b.bo_special!=c.bo_special then  "<font color='red'>"+dbo.getComma(b.bo_special,0)+"</font>" else dbo.getComma(b.bo_special,0) end,
+	mc04=case when b.bo_full!=c.bo_full then  "<font color='red'>"+dbo.getComma(b.bo_full,0)+"</font>" else dbo.getComma(b.bo_full,0) end,
+	mc05=case when b.meals!=c.meals then  "<font color='red'>"+dbo.getComma(b.meals,0)+"</font>" else dbo.getComma(b.meals,0) end,
+	mc06=case when b.bo_traffic!=c.bo_traffic then  "<font color='red'>"+dbo.getComma(b.bo_traffic,0)+"</font>" else dbo.getComma(b.bo_traffic,0) end,
+	mc07=case when b.bo_oth!=c.bo_oth then  "<font color='red'>"+dbo.getComma(b.bo_oth,0)+"</font>" else dbo.getComma(b.bo_oth,0) end,
+	mc08=case when b.mi_saliday!=c.mi_saliday then  "<font color='red'>"+dbo.getComma(-1*b.mi_saliday,0)+"</font>" else dbo.getComma(-1*b.mi_saliday,0) end,
+	mc09=case when b.mi_total!=c.mi_total then  "<font color='red'>"+dbo.getComma(-1*b.mi_total,0)+"</font>" else dbo.getComma(-1*b.mi_total,0) end,
+	mc10=case when b.tax_other!=c.tax_other then  "<font color='red'>"+dbo.getComma(b.tax_other,0)+"</font>" else dbo.getComma(b.tax_other,0) end,
+	mc11=case when b.addmoney!=c.addmoney then  "<font color='red'>"+dbo.getComma(b.addmoney,0)+"</font>" else dbo.getComma(b.addmoney,0) end,
+	mc12=case when b.money1!=c.money1 then  "<font color='red'>"+dbo.getComma(b.money1,0)+"</font>" else dbo.getComma(b.money1,0) end,
+	mc13=case when b.money2!=c.money2 then  "<font color='red'>"+dbo.getComma(b.money2,0)+"</font>" else dbo.getComma(b.money2,0) end,
+	mc14=case when b.money3!=c.money3 then  "<font color='red'>"+dbo.getComma(b.money3,0)+"</font>" else dbo.getComma(b.money3,0) end,
+	mc15=case when b.money4!=c.money4 then  "<font color='red'>"+dbo.getComma(b.money4,0)+"</font>" else dbo.getComma(b.money4,0) end,
+	mc16=case when b.money5!=c.money5 then  "<font color='red'>"+dbo.getComma(b.money5,0)+"</font>" else dbo.getComma(b.money5,0) end,
+	mc17=case when b.money6!=c.money6 then  "<font color='red'>"+dbo.getComma(b.money6,0)+"</font>" else dbo.getComma(b.money6,0) end,
+	mc18=b.plus,
+	mc19=case when b.total3!=c.total3 then  "<font color='red'>"+dbo.getComma(b.total3,0)+"</font>" else dbo.getComma(b.total3,0) end,
+	mc20=case when b.borrow!=c.borrow then  "<font color='red'>"+dbo.getComma(-1*b.borrow,0)+"</font>" else dbo.getComma(-1*b.borrow,0) end,
+	mc21=case when b.ch_labor!=c.ch_labor then  "<font color='red'>"+dbo.getComma(-1*b.ch_labor,0)+"</font>" else dbo.getComma(-1*b.ch_labor,0) end,
+	mc22=case when b.ch_health!=c.ch_health then  "<font color='red'>"+dbo.getComma(-1*b.ch_health,0)+"</font>" else dbo.getComma(-1*b.ch_health,0) end,
+	mc23=case when b.ch_retire!=c.ch_retire then  "<font color='red'>"+dbo.getComma(-1*b.ch_retire,0)+"</font>" else dbo.getComma(-1*b.ch_retire,0) end,
+	mc24=case when b.hplus2!=c.hplus2 then  "<font color='red'>"+dbo.getComma(-1*b.hplus2,0)+"</font>" else dbo.getComma(-1*b.hplus2,0) end,
+	mc25=case when b.tax!=c.tax then  "<font color='red'>"+dbo.getComma(-1*b.tax,0)+"</font>" else dbo.getComma(-1*b.tax,0) end,
+	mc26=case when b.minus!=0 then -1*b.minus else 0 end,
+	mc27=case when b.total4!=c.total4 then  "<font color='red'>"+dbo.getComma(-1*b.total4,0)+"</font>" else dbo.getComma(-1*b.total4,0) end,
+	mc28=case when b.total5!=c.total5 then  "<font color='red'>"+dbo.getComma(b.total5,0)+"</font>" else dbo.getComma(b.total5,0) end,
+	mc29=case when b.sa_health!=c.sa_health then  "<font color='red'>"+dbo.getComma(b.sa_health,0)+"</font>" else dbo.getComma(b.sa_health,0) end,
+	mc30=case when b.money7!=c.money7 then  "<font color='red'>"+dbo.getComma(b.money7,0)+"</font>" else dbo.getComma(b.money7,0) end,
+	specday3=b.spday,ghrefb="salchg?sssno=\'"+b.sno+"\' and mon=\'"+@t_xmon+"\' and plus!=0 and "+cast(b.plus as nvarchar(15))+"=$mc18",ghrefe="salchg?sssno=\'"+b.sno+"\' and mon=\'"+@t_xmon+"\' and minus!=0 and "+cast(case when b.minus!=0 then -1*b.minus else 0 end as nvarchar(15))+"=$mc26"
+from  @tmp b left join @tmp1 a on a.rr+2=b.rr and a.gno=b.gno
+outer apply (select * from @tmpa where sno=b.sno) c
+
+select
+left(@t_xmon,3) years ,right(@t_xmon,2) mon,
+"<font color='red'>"+case when ted1!='' then "("+ted1+")" end+"</font>" ted1,
+"<font color='red'>"+case when ted2!='' then "("+ted2+")" end+"</font>" ted2,
+"<font color='red'>"+case when ted3!='' then "("+ted3+")" end+"</font>" ted3,
+* 
+from @tmp1
+order by gno
+;
+
+-------------------------------------------------------------------------------------------
+z_salaryp_dj02:--z_salaryp_dj02
+SET QUOTED_IDENTIFIER OFF
+declare @t_xmon nvarchar(20)
+set @t_xmon = case when '#non' = [1] then '' else [1] end
+
+declare @tmp table(
+	gno nvarchar(1),
+	idno int,
+	sssno nvarchar(100),
+	namea nvarchar(100),
+	acomp nvarchar(100),
+	total float
+)
+insert @tmp
+select '0',ROW_NUMBER() over (order by b.sno)
+,b.sno
+,isnull((select namea from sss where noa=b.sno),'')
+,isnull((select nick from acomp where noa=isnull((select cno from sss where noa=b.sno),'')),'')
+,SUM(b.total5)
+from salary a left join salarys b on a.noa=b.noa
+where a.mon=@t_xmon
+group by b.sno having SUM(b.total5)>0
+
+if(LEN(@t_xmon)>0)
+	set @t_xmon=left(dbo.ChineseEraName2AD(@t_xmon+'/01'),7)
+	
+if((select count(*) from @tmp)>0)
+begin
+	insert @tmp (gno,total)
+	select '1',sum(total) from @tmp
+end
+
+select dbo.getComma(total,0)total,* ,replace(@t_xmon,'-','年')+'月' mon
+from @tmp order by gno,idno
+;
