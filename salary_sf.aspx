@@ -649,7 +649,7 @@
 		                    q_bodyId($(this).attr('id'));
 		                    b_seq = t_IdSeq;
 		                    
-		                    if($('#txtMemo2_'+b_seq).val().indexOf('1剪')>-1){
+		                    if($('#txtMemo2_'+b_seq).val().indexOf('A剪')>-1){
 		                    	if(dec($('#txtMoney2_'+b_seq).val())>=1800){
 		                    		$('#txtMoney3_'+b_seq).val(3000);
 		                    	}else if(dec($('#txtMoney2_'+b_seq).val())>=1500){
@@ -657,7 +657,7 @@
 		                    	}else{
 		                    		$('#txtMoney3_'+b_seq).val(0);
 		                    	}
-		                    }else if($('#txtMemo2_'+b_seq).val().indexOf('2剪')>-1){
+		                    }else if($('#txtMemo2_'+b_seq).val().indexOf('B剪')>-1){
 		                    	if(dec($('#txtMoney2_'+b_seq).val())>=1200){
 		                    		$('#txtMoney3_'+b_seq).val(3000);
 		                    	}else{
@@ -677,7 +677,7 @@
 		                    q_bodyId($(this).attr('id'));
 		                    b_seq = t_IdSeq;
 		                    
-		                    if($('#txtMemo2_'+b_seq).val().indexOf('1剪')>-1){
+		                    if($('#txtMemo2_'+b_seq).val().indexOf('A剪')>-1){
 		                    	if(dec($('#txtMoney2_'+b_seq).val())>=1800){
 		                    		$('#txtMoney3_'+b_seq).val(3000);
 		                    	}else if(dec($('#txtMoney2_'+b_seq).val())>=1500){
@@ -685,7 +685,7 @@
 		                    	}else{
 		                    		$('#txtMoney3_'+b_seq).val(0);
 		                    	}
-		                    }else if($('#txtMemo2_'+b_seq).val().indexOf('2剪')>-1){
+		                    }else if($('#txtMemo2_'+b_seq).val().indexOf('B剪')>-1){
 		                    	if(dec($('#txtMoney2_'+b_seq).val())>=1200){
 		                    		$('#txtMoney3_'+b_seq).val(3000);
 		                    	}else{
@@ -773,7 +773,7 @@
 									var t_num=$(this).attr('id');
 									
 									if(t_num=='textMoney1' || t_num=='textMoney2'){
-										if($('#txtMemo2_'+n).val().indexOf('1剪')>-1){
+										if($('#txtMemo2_'+n).val().indexOf('A剪')>-1){
 					                    	if(dec($('#textMoney2').val())>=1800){
 					                    		$('#textMoney3').val(3000);
 					                    	}else if(dec($('#textMoney2').val())>=1500){
@@ -781,7 +781,7 @@
 					                    	}else{
 					                    		$('#textMoney3').val(0);
 					                    	}
-					                    }else if($('#txtMemo2_'+n).val().indexOf('2剪')>-1){
+					                    }else if($('#txtMemo2_'+n).val().indexOf('B剪')>-1){
 					                    	if(dec($('#textMoney2').val())>=1200){
 					                    		$('#textMoney3').val(3000);
 					                    	}else{

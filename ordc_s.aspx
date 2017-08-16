@@ -27,12 +27,14 @@
             function q_gfPost() {
                 q_getFormat();
                 q_langShow();
-                bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
+                bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd],['txtBodate', r_picd], ['txtEodate', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbKind", '@全部,'+q_getPara('ordc.kind'));
                 q_cmbParse("cmbTrantype", '@全部,'+q_getPara('sys.tran'));
                 $('#txtBdate').datepicker();
-                $('#txtEdate').datepicker(); 
+                $('#txtEdate').datepicker();
+                $('#txtBodate').datepicker();
+                $('#txtEodate').datepicker();  
                 $('#txtNoa').focus();
                 if(q_getPara('sys.project').toUpperCase()=='XY'){
                 	$('.trantype').show();
@@ -47,11 +49,14 @@
                 t_ordbno = $.trim($('#txtOrdbno').val());
                 t_bdate = $('#txtBdate').val();
                 t_edate = $('#txtEdate').val();
+                t_bodate = $('#txtBodate').val();
+                t_eodate = $('#txtEodate').val();
                 t_trantype = $('#cmbTrantype').val();
                 
                 var t_where = " 1=1 " 
                 + q_sqlPara2("noa", t_noa) 
-                + q_sqlPara2("datea", t_bdate, t_edate)          
+                + q_sqlPara2("datea", t_bdate, t_edate)
+                + q_sqlPara2("odate", t_bodate, t_eodate)
                 + q_sqlPara2("trantype", t_trantype)    
                 + q_sqlPara2("tggno", t_tggno);
                 if (t_kind.length>0)
@@ -94,11 +99,11 @@
                     <td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td   style="width:35%;" ><a id='lblDatea'> </a></td>
+                    <td   style="width:35%;" ><a id='lblOdate'> </a></td>
                     <td style="width:65%;  ">
-	                    <input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
+	                    <input class="txt" id="txtBodate" type="text" style="width:90px; font-size:medium;" />
 	                    <span style="display:inline-block; vertical-align:middle">&sim;</span>
-	                    <input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
+	                    <input class="txt" id="txtEodate" type="text" style="width:93px; font-size:medium;" />
                     </td>
                 </tr>
                 <tr class='seek_tr'>
@@ -117,6 +122,14 @@
 					<td><a>交運方式 </a></td>
 					<td><select id="cmbTrantype" style="width:215px; font-size:medium;"> </select></td>
 				</tr>
+				<tr class='seek_tr'>
+                    <td   style="width:35%;" ><a id='lblDatea'> </a></td>
+                    <td style="width:65%;  ">
+	                    <input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
+	                    <span style="display:inline-block; vertical-align:middle">&sim;</span>
+	                    <input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
+                    </td>
+                </tr>
             </table>
             <!--#include file="../inc/seek_ctrl.inc"-->
         </div>
