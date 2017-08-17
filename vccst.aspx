@@ -22,7 +22,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory'];
+			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq'];
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -1828,11 +1828,11 @@
 					<td align="center" style="width:60px;">寄Y<BR>代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
 					<td align="center" style="width:180px;"><a id='lblMemos_st'></a></td>
+					<td align="center" style="width:60px;">NOQ</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
@@ -1885,6 +1885,7 @@
 						<input id="txtNo2.*" type="text" style="width:20%;" />
 						<input id="recno.*" type="hidden" />
 					</td>
+					<td><input id="txtNoq.*" type="text" style='width: 95%;'/></td>
 				</tr>
 			</table>
 		</div>
