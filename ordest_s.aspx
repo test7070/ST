@@ -76,7 +76,7 @@
 		        + q_sqlPara2("kind", t_kind)
 		        + q_sqlPara2("stype", t_stype)
 		        + q_sqlPara2("noa", t_noa) 
-		        + q_sqlPara2("datea", t_bdate, t_edate)     
+		        + q_sqlPara2("odate", t_bdate, t_edate)//!!大部份都是用ODATE     
 		        + q_sqlPara2("custno", t_custno)
 		        + q_sqlPara2("salesno", t_salesno);
 		        
