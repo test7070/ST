@@ -20,7 +20,7 @@
         }
         q_tables = 's';
         var q_name = "ucca";
-        var q_readonly = ['txtCostpers','txtMinuse','txtOutmount','txtLastmount','txtUp_day','txtInmount','txtNou','txtTodate','txtInmoney'];
+        var q_readonly = [];
         var q_readonlys = [];
         var bbmNum = [];  
         var bbsNum = [['txtMount', 10, 0,1],['txtMoney', 10, 0,1]];
@@ -77,57 +77,21 @@
 			});
 			$('#cmbTypea').change(function(e){
     			if($('#cmbTypea').val()=='商品'){
-                     $('#txtCostpers').css('color','black').css('background','white').removeAttr('readonly');
-                     $('#txtOutmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtLastmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtUp_day').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtInmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtMinuse').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtNou').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtTodate').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtInmoney').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');   
+                     $('.isT1').hide();
+                     $('.isT11').show();
                 }else if($('#cmbTypea').val()=='原料' || $('#cmbTypea').val()=='物料'){
-                     $('#txtCostpers').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtOutmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtLastmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtUp_day').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtInmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtMinuse').css('color','black').css('background','white').removeAttr('readonly');
-                     $('#txtNou').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtTodate').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtInmoney').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
+                         $('.isT2').hide();
+                         $('.isT21').show();
                 }else if($('#cmbTypea').val()=='在製品'){
-                     $('#txtCostpers').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtMinuse').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtNou').css('color','black').css('background','white').removeAttr('readonly');
-                     $('#txtTodate').css('color','black').css('background','white').removeAttr('readonly');
-                     $('#txtInmoney').css('color','black').css('background','white').removeAttr('readonly');
-                     $('#txtOutmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtLastmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtUp_day').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtInmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
+                         $('.isT3').hide();
+                         $('.isT31').show();
                 }else if($('#cmbTypea').val()=='製成品' || $('#cmbTypea').val()=='加工'){
-                     $('#txtCostpers').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtMinuse').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtNou').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtTodate').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtInmoney').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtOutmount').css('color','black').css('background','white').removeAttr('readonly');
-                     $('#txtLastmount').css('color','black').css('background','white').removeAttr('readonly');
-                     $('#txtUp_day').css('color','black').css('background','white').removeAttr('readonly');
-                     $('#txtInmount').css('color','black').css('background','white').removeAttr('readonly');
+                         $('.isT4').hide();
+                         $('.isT41').show();
                 }else{
-                     $('#txtCostpers').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtOutmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtLastmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtUp_day').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
-                     $('#txtInmount').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtMinuse').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtNou').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtTodate').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly');
-                     $('#txtInmoney').css('color','green').css('background','RGB(237,237,237)').attr('readonly','readonly'); 
+                         $('.isT5').hide();
                 }
-                
+                        
                 if($('#cmbTypea').val()=='製成品' || $('#cmbTypea').val()=='在製品' || $('#cmbTypea').val()=='下腳品' || $('#cmbTypea').val()=='加工'){
                     $('#lblSalecost').show();
                     $('#txtSalecost').show();
@@ -280,6 +244,21 @@
         function refresh(recno) {
             _refresh(recno);
             refreshBbm();
+            if($('#cmbTypea').val()=='商品'){
+                     $('.isT1').hide();
+                     $('.isT11').show();
+            }else if($('#cmbTypea').val()=='原料' || $('#cmbTypea').val()=='物料'){
+                     $('.isT2').hide();
+                     $('.isT21').show();
+            }else if($('#cmbTypea').val()=='在製品'){
+                     $('.isT3').hide();
+                     $('.isT31').show();
+            }else if($('#cmbTypea').val()=='製成品' || $('#cmbTypea').val()=='加工'){
+                     $('.isT4').hide();
+                     $('.isT41').show();
+            }else{
+                     $('.isT5').hide();
+            }
             if($('#cmbTypea').val()=='製成品' || $('#cmbTypea').val()=='在製品' || $('#cmbTypea').val()=='下腳品' || $('#cmbTypea').val()=='加工'){
                     $('#lblSalecost').show();
                     $('#txtSalecost').show();
@@ -547,16 +526,14 @@
                <td class="td8"><input id="txtPrice"  type="text" class="txt c1 num" /></td>
             </tr>
             <tr>
-               <td class="td1"><span> </span><a id='lblCost_pers' class="lbl">成本率</a></td>
-               <td class="td2"><input id="txtCost_pers"  type="text" class="txt c1 num" /></td>
-               <td class="td3"><span> </span><a id='lblMin_use' class="lbl">最小用量</a></td>
-               <td class="td4"><input id="txtMin_use"  type="text" class="txt c1 num" /></td>
+               <td class="td1 isT11 isT11 isT4 isT2 isT5 isT3"><span> </span><a id='lblCost_pers' class="lbl">成本率</a></td>
+               <td class="td2 isT11 isT11 isT4 isT2 isT5 isT3"><input id="txtCost_pers"  type="text" class="txt c1 num" /></td>
+               <td class="td3 isT1 isT4 isT21 isT5 isT3"><span> </span><a id='lblMin_use' class="lbl">最小用量</a></td>
+               <td class="td4 isT1 isT4 isT21 isT5 isT3"><input id="txtMin_use"  type="text" class="txt c1 num" /></td>
                <td class="td5"></td>
-               <td class="td6"></td>
-               <td class="td7"></td>
-               <td class="td8"><input id="chkFix_make" type="checkbox"/><span> </span><a id='lblEnda'>定量生產</a></td>
+               <td class="td6"><input id="chkFix_make" type="checkbox"/><span> </span><a id='lblEnda'>定量生產</a></td>
             </tr>
-            <tr>
+            <tr class="isT1 isT41 isT2 isT5 isT3">
                <td class="td1"><span> </span><a id='lblDay_prod' class="lbl">日產量</a></td>
                <td class="td2"><input id="txtDay_prod"  type="text" class="txt c1 num" /></td>
                <td class="td3"><span> </span><a id='lblLastmount' class="lbl">產銷日差</a></td>
@@ -567,12 +544,12 @@
                <td class="td8"><input id="txtMin_prod"  type="text" class="txt c1 num" /></td>
             </tr>
             <tr>
-               <td class="td1"><span> </span><a id='lblTodrcr2' class="lbl">轉入製成品代碼</a></td>
-               <td class="td2"><input id="txtTodrcr2"  type="text" class="txt c1" /></td>
-               <td class="td3"><span> </span><a id='lblTodate' class="lbl">轉入日期</a></td>
-               <td class="td4"><input id="txtTodate"  type="text" class="txt c1" /></td>
-               <td class="td5"><span> </span><a id='lblBokrate' class="lbl">期出約當完成率</a></td>
-               <td class="td6"><input id="txtBokrate"  type="text" class="txt c1 num" /></td>
+               <td class="td1 isT1 isT4 isT2 isT5 isT31"><span> </span><a id='lblTodrcr2' class="lbl">轉入製成品代碼</a></td>
+               <td class="td2 isT1 isT4 isT2 isT5 isT31"><input id="txtTodrcr2"  type="text" class="txt c1" /></td>
+               <td class="td3 isT1 isT4 isT2 isT5 isT31"><span> </span><a id='lblTodate' class="lbl">轉入日期</a></td>
+               <td class="td4 isT1 isT4 isT2 isT5 isT31"><input id="txtTodate"  type="text" class="txt c1" /></td>
+               <td class="td5 isT1 isT4 isT2 isT5 isT31"><span> </span><a id='lblBokrate' class="lbl">期出約當完成率</a></td>
+               <td class="td6 isT1 isT4 isT2 isT5 isT31"><input id="txtBokrate"  type="text" class="txt c1 num" /></td>
                <td class="td7"><span> </span><a id='lblLokrate' class="lbl">期末約當完成率</a></td>
                <td class="td8"><input id="txtLokrate"  type="text" class="txt c1 num" /></td>
             </tr>
