@@ -28,6 +28,7 @@
 			var bbsNum = [['txtBeginmount', 15, 2, 1],['txtBeginmoney', 15, 0, 1],['txtLastmount', 15, 2, 1],['txtUse_mount', 15, 2, 1],['txtTax_mount', 15,2, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
+			aPop = new Array(['txtPr_invent_', '', 'ucca', 'noa,product,typea,unit', '0txtPr_invent_,txtProduct_,txtType_,txtUnit_', 'ucca_b.aspx']);
 			$(document).ready(function () {
 			    bbmKey = [];
                 bbsKey = ['noa', 'noq'];

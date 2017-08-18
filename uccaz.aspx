@@ -213,6 +213,24 @@
 				Unlock();
 				return;
 			}*/
+			if($('#cmbTypea').val()=='商品'){
+			   $('#txtDrcr').val("1");
+			}else if ($('#cmbTypea').val()=='製成品'){
+			   $('#txtDrcr').val("2"); 
+			}else if ($('#cmbTypea').val()=='在製品'){
+			   $('#txtDrcr').val("3"); 
+			}else if ($('#cmbTypea').val()=='原料'){
+			   $('#txtDrcr').val("4");
+			}else if ($('#cmbTypea').val()=='物料'){
+			   $('#txtDrcr').val("5");
+			}else if ($('#cmbTypea').val()=='下腳品'){
+			   $('#txtDrcr').val("6");
+			}else if ($('#cmbTypea').val()=='加工'){
+			   $('#txtDrcr').val("7"); 
+			}else{
+			   $('#txtDrcr').val("8"); 
+			}
+		      
 			if(q_cur==1){
 				t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
 				q_gt('ucca', t_where, 0, 0, 0, "checkUccano_btnOk", r_accy);
@@ -506,7 +524,9 @@
             </tr>
             <tr>
                <td class="td1"><span> </span><a id='lblType' class="lbl"> </a></td>
-               <td class="td2"><select id="cmbTypea" class="txt c1"> </select></td>
+               <td class="td2"><select id="cmbTypea" class="txt c1"> </select>
+                               <input id="txtDrcr"  type="text" class="txt c1" style="display:none;"/>
+               </td>
                <td class="td3"><span> </span><a id='lblBeginmount' class="lbl"> </a></td>
                <td class="td4"><input id="txtBeginmount"  type="text" class="txt c1 num" /></td>
                <td class="td5"><span> </span><a id='lblBeginmoney' class="lbl"> </a></td>
