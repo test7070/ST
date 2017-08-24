@@ -1490,6 +1490,20 @@
 						$('#txtDatea_'+j).datepicker();
 					}
 				}
+				if(q_cur==1 || q_cur==2){
+					$('#btnGetpdate').removeAttr('disabled');
+				}else{
+					$('#btnGetpdate').attr('disabled', 'disabled');
+				}
+				
+				$('#btnGetpdate').unbind('click');
+				$('#btnGetpdate').click(function() {
+					for(var k=0;k<q_bbsCount;k++){
+						if(emp($('#txtDatea_'+k).val())){
+							getpdate(k);
+						}
+					}
+				});
 			}
 
 			function btnIns() {
@@ -2506,7 +2520,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs' style="width: 2085px;">
+		<div class='dbbs' style="width: 2100px;">
 			<table id="tbbs" class='tbbs' border="1" cellpadding='2' cellspacing='1'>
 				<tr style='color:White; background:#003366;' >
 					<td align="center" style="width:45px;"><input class="btn" id="btnPlus" type="button" value='＋' style="font-weight: bold;" /></td>
@@ -2530,8 +2544,8 @@
 					<td align="center" style="width:150px;display: none;" class="isimg"><a id='lblImg_s'> </a></td>
 					<td align="center" style="width:85px;"><a id='lblGemounts'> </a></td>
 					<td align="center" style="width:175px;"><a id='lblMemos_r'>Remark</a></td>
-					<td align="center" style="width:95px;">
-						<a id='lblDateas'> </a>
+					<td align="center" style="width:110px;">
+						<a id='lblDateas'> </a><input id='btnGetpdate' type="button" style="width: 50px;font-size: 12px;font-weight: bold;" value="計算">
 						<BR><a id='lblPlanpdate_s'>生管預交日</a>
 					</td>
 					<td align="center" style="width:43px;"><a id='lblEndas_r'>Closed</a></td>
