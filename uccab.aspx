@@ -28,6 +28,7 @@
 			var bbsNum = [['txtBeginmount', 15, 2, 1],['txtBeginmoney', 15, 0, 1],['txtLastmount', 15, 2, 1],['txtUse_mount', 15, 2, 1],['txtTax_mount', 15,2, 1]];
 			var bbmMask = [];
 			var bbsMask = [];
+			aPop = new Array(['txtPr_invent_', '', 'ucca', 'noa,product,typea,unit', '0txtPr_invent_,txtProduct_,txtType_,txtUnit_', 'ucca_b.aspx']);
 			$(document).ready(function () {
 			    bbmKey = [];
                 bbsKey = ['noa', 'noq'];
@@ -67,12 +68,17 @@
 						btnMinus($(this).attr('id'));
 					});
 					$('#txtInvent_'+j).val(q_getHref()[1]);
+					if($('#txtType_'+j).val()=='原料'){
+                       $('#txtItem_'+j).val("1");
+                    }else{
+                       $('#txtItem_'+j).val("2"); 
+                    }
 				} //j
 			}
 			
 			function btnOk() {
 				t_key = q_getHref();
-				_btnOk(t_key[1], bbsKey[0], bbsKey[1], '', 2); 
+				_btnOk(t_key[1], bbsKey[0], bbsKey[1], '', 2);
 			}
 			
 			function bbsSave(as) {
@@ -154,6 +160,7 @@
 						<td><input class="txt" id="txtPr_invent.*" type="text" style="width:98%;"/></td>
 						<td><input class="txt" id="txtProduct.*" type="text" style="width:98%;"/></td>
 						<td><input class="txt" id="txtType.*" type="text" style="width:98%;"/>
+						    <input id="txtItem.*" type="hidden"/>
 						</td>
 						<td><input class="txt" id="txtUnit.*" type="text" style="width:98%;"/></td>
 						<td><input class="txt num" id="txtUse_mount.*" type="text" style="width:98%;"/></td>
