@@ -87,6 +87,10 @@
                         change_hrours();
                     }
                 });
+                
+                if(q_getPara('sys.project').toUpperCase() == 'NV'){
+                	$('.special').show();
+                }
             }
             
             function change_typea() {
@@ -550,7 +554,7 @@
 						<td><input id="chkIsapv" type="checkbox"/></td>
 					</tr>
 					<!--加班單換休欄位暫不開放------------------------------------------->
-					<tr style="display: none;">
+					<tr class="special" style="display: none;">
 						<td><span> </span><a id='lblHr_special' class="lbl"> </a></td>
 						<td><input id="txtHr_special" type="text" class="txt num c1"/></td>
 					</tr>
