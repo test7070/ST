@@ -1,10 +1,11 @@
+
 ALTER PROCEDURE [dbo].[uccstk](@t_date nvarchar(20))
 as
 begin	
 	--uccstk_1  裕承隆庫存成本
 	SET QUOTED_IDENTIFIER OFF 
 	declare @cmd nvarchar(max) 
-
+	
 	declare @n int
 	declare @listrc2 table(
 		tablea nvarchar(20),
@@ -299,14 +300,16 @@ begin
 		)
 		insert into @err(gno,uno,memo)
 		select '4',uno,'【'+uno+'】批號重覆，請至批號履歷查詢明細。'  from #z_uccstk group by uno having COUNT(1)>1
-		select ROW_NUMBER()over(order by isnull(kind,char(255)),isnull(style,char(255)),isnull(productno,char(255)),radius,dime,width,lengthb,uno) rr
+		/*select ROW_NUMBER()over(order by isnull(kind,char(255)),isnull(style,char(255)),isnull(productno,char(255)),radius,dime,width,lengthb,uno) rr
 		,'' a01,'' a02,'' a03
 		,* 
 		,style s1
 		,productno ppn
 		,product ppt
 		,ghref = 'z_uno?$uno?'
-		from @err
+		from @err*/
+		
+		select top 1 '【'+uno+'】批號重覆，請至批號履歷查詢明細。' memo from #z_uccstk group by uno having COUNT(1)>1
 		return
 	end
 	----怕算太久,只重算365天內的
@@ -535,4 +538,9 @@ begin
 	deallocate cursor_table
 	drop table #z_uccstk
 	select 'done' memo
+end
+
+
+
+
 end
