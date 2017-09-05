@@ -398,13 +398,23 @@ z_acx02:--z_acx02
 	update #z_acx02 set eweight = case when eweight>0 and emount>0 then eweight else 0 end
 		,emount = case when eweight>0 and emount>0 then emount else 0 end	
 	---------------------------------------------------------------------------------------------
-	update #z_acx02 set size= case when c.noa is not null then c.noa+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar)
-		when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end
-		,ranka = isnull(c.recno,99999)
-	from #z_acx02 a
-	left join view_uccb b on a.uno=b.uno
-	left join (select noa,bwidth,ewidth,ROW_NUMBER()over(order by bwidth) recno from beltwidth) c on b.radius between c.bwidth and c.ewidth
-	where b.style = '1' 
+	if exists(select * from acomp where nick=N'裕承隆')
+	begin
+		update #z_acx02 set size= case when c.noa is not null then c.noa+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar)
+			when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end
+			,ranka = isnull(c.recno,99999)
+		from #z_acx02 a
+		left join view_uccb b on a.uno=b.uno
+		left join (select noa,bwidth,ewidth,ROW_NUMBER()over(order by bwidth) recno from beltwidth) c on b.radius between c.bwidth and c.ewidth
+		where b.style = '1' 
+	end
+	else
+	begin
+		update #z_acx02 set size =  case when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(b.width as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end
+		from #z_acx02 a
+		left join view_uccb b on a.uno=b.uno
+		where isnull(b.style,'1') = '1'  
+	end
 	
 	update #z_acx02 set size = case when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(b.width as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end
 	from #z_acx02 a
@@ -535,43 +545,44 @@ z_acx02:--z_acx02
 	, a.pno
 	, a.productno
 	, replace(a.size,space(1),'&nbsp'+char(59)) size
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a01),1)),4,17)) a01
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a02),1)),4,17))+'.'+RIGHT(CAST(a.a02 as nvarchar),3) a02
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a03),1)),4,17)) a03
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a04),1)),4,17)) a04
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a05),1)),4,17))+'.'+RIGHT(CAST(a.a05 as nvarchar),3) a05
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a06),1)),4,17)) a06
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a07),1)),4,17)) a07
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a08),1)),4,17))+'.'+RIGHT(CAST(a.a08 as nvarchar),3) a08
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a09),1)),4,17)) a09
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a10),1)),4,17)) a10
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a11),1)),4,17))+'.'+RIGHT(CAST(a.a11 as nvarchar),3) a11
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a12),1)),4,17)) a12
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a13),1)),4,17))+'.'+RIGHT(CAST(a.a13 as nvarchar),3) a13
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a14),1)),4,17)) a14
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a15),1)),4,17))+'.'+RIGHT(CAST(a.a15 as nvarchar),3) a15
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a16),1)),4,17)) a16
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a17),1)),4,17))+'.'+RIGHT(CAST(a.a17 as nvarchar),3) a17
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a18),1)),4,17)) a18
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a19),1)),4,17)) a19
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a20),1)),4,17)) a20	
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a21),1)),4,17)) a21
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a22),1)),4,17))+'.'+RIGHT(CAST(a.a22 as nvarchar),3) a22
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a23),1)),4,17)) a23
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a24),1)),4,17))+'.'+RIGHT(CAST(a.a24 as nvarchar),3) a24
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a25),1)),4,17)) a25
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a26),1)),4,17))+'.'+RIGHT(CAST(a.a26 as nvarchar),3) a26
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a27),1)),4,17)) a27
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a28),1)),4,17))+'.'+RIGHT(CAST(a.a28 as nvarchar),3) a28
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a29),1)),4,17)) a29
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a30),1)),4,17))+'.'+RIGHT(CAST(a.a30 as nvarchar),3) a30
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a31),1)),4,17))+'.'+RIGHT(CAST(a.a31 as nvarchar),3) a31
-	, reverse(substring(reverse(convert(char(20),CONVERT(money,a.a32),1)),4,17)) a32
+	,dbo.getComma(a.a01,-1) a01
+	,dbo.getComma(a.a02,-1) a02
+	,dbo.getComma(a.a03,-1) a03
+	,dbo.getComma(a.a04,-1) a04
+	,dbo.getComma(a.a05,-1) a05
+	,dbo.getComma(a.a06,-1) a06
+	,dbo.getComma(a.a07,-1) a07
+	,dbo.getComma(a.a08,-1) a08
+	,dbo.getComma(a.a09,-1) a09
+	,dbo.getComma(a.a10,-1) a10
+	,dbo.getComma(a.a11,-1) a11
+	,dbo.getComma(a.a12,-1) a12
+	,dbo.getComma(a.a13,-1) a13
+	,dbo.getComma(a.a14,-1) a14
+	,dbo.getComma(a.a15,-1) a15
+	,dbo.getComma(a.a16,-1) a16
+	,dbo.getComma(a.a17,-1) a17
+	,dbo.getComma(a.a18,-1) a18
+	,dbo.getComma(a.a19,-1) a19
+	,dbo.getComma(a.a20,-1) a20
+	,dbo.getComma(a.a21,-1) a21
+	,dbo.getComma(a.a22,-1) a22
+	,dbo.getComma(a.a23,-1) a23
+	,dbo.getComma(a.a24,-1) a24
+	,dbo.getComma(a.a25,-1) a25
+	,dbo.getComma(a.a26,-1) a26
+	,dbo.getComma(a.a27,-1) a27
+	,dbo.getComma(a.a28,-1) a28
+	,dbo.getComma(a.a29,-1) a29
+	,dbo.getComma(a.a30,-1) a30
+	,dbo.getComma(a.a31,-1) a31
+	,dbo.getComma(a.a32,-1) a32
 	from @tmp a 
 	left join style b on a.style=b.noa
 	order by a.pno,a.style,a.productno,ranka,a.size
 
 	drop table #z_acx02;
+
 
 z_acx01:--z_acx01
 	declare @t_bdate nvarchar(10) = case when '#non'=[13] then '' else [13] end
