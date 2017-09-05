@@ -716,12 +716,12 @@ z_ummst9:--z_ummst9
 		paysale float 
 	)
 	insert into @tmp3(custno,mon,paysale)
-	select case when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]%' then SUBSTRING(a.vccno,0,charindex('-',a.vccno)) 
-		when len(ISNULL(a.vccno,''))=0 and len(ISNULL(c.custno,''))>0 then c.custno
+	select case when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]-TAX' then REVERSE(SUBSTRING(REVERSE(left(a.vccno,len(a.vccno)-4)),CHARINDEX('-',REVERSE(left(a.vccno,len(a.vccno)-4)))+1,len(left(a.vccno,len(a.vccno)-4)))) 
+		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]' then REVERSE(SUBSTRING(REVERSE(a.vccno),CHARINDEX('-',REVERSE(a.vccno))+1,len(a.vccno)))
 		else b.custno end
 	,case when len(ISNULL(a.vccno,''))=0 then '' 
-		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]-TAX' then SUBSTRING(a.vccno,charindex('-',a.vccno)+1,6) 
-		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]' then SUBSTRING(a.vccno,charindex('-',a.vccno)+1,6)
+		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]-TAX' then SUBSTRING(a.vccno,len(a.vccno)-9,6) 
+		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]' then right(a.vccno,6)
 		else isnull(c.mon,'') end
 	,SUM(ISNULL(a.paysale,0))
 	from umms a
@@ -730,16 +730,17 @@ z_ummst9:--z_ummst9
 	where --b.noa is not null and 
 	ISNULL(a.paysale,0)!=0
 	and case when len(ISNULL(a.vccno,''))=0 then '' 
-		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]-TAX' then SUBSTRING(a.vccno,charindex('-',a.vccno)+1,6) 
-		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]' then SUBSTRING(a.vccno,charindex('-',a.vccno)+1,6)
+		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]-TAX' then SUBSTRING(a.vccno,len(a.vccno)-9,6) 
+		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]' then right(a.vccno,6)
 		else isnull(c.mon,'') end <= @t_emon
-	group by case when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]%' then SUBSTRING(a.vccno,0,charindex('-',a.vccno)) 
-		when len(ISNULL(a.vccno,''))=0 and len(ISNULL(c.custno,''))>0 then c.custno
+	group by case when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]-TAX' then REVERSE(SUBSTRING(REVERSE(left(a.vccno,len(a.vccno)-4)),CHARINDEX('-',REVERSE(left(a.vccno,len(a.vccno)-4)))+1,len(left(a.vccno,len(a.vccno)-4)))) 
+		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]' then REVERSE(SUBSTRING(REVERSE(a.vccno),CHARINDEX('-',REVERSE(a.vccno))+1,len(a.vccno)))
 		else b.custno end
 		,case when len(ISNULL(a.vccno,''))=0 then '' 
-		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]-TAX' then SUBSTRING(a.vccno,charindex('-',a.vccno)+1,6) 
-		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]' then SUBSTRING(a.vccno,charindex('-',a.vccno)+1,6)
+		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]-TAX' then SUBSTRING(a.vccno,len(a.vccno)-9,6) 
+		when a.vccno like '%-[0-9][0-9][0-9]/[0-9][0-9]' then right(a.vccno,6)
 		else isnull(c.mon,'') end
+
 	delete @tmp3 where not(custno between @t_bcustno and @t_ecustno)
 	--------------------------------------------------------------------------------------------------
 	declare @tmp table(
