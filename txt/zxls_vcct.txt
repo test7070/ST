@@ -316,12 +316,40 @@ end
 close cursor_table
 deallocate cursor_table
 
+--select '發票號碼' noa,'統一編號' serial,'錯誤訊息' err
+--union all
+--select noa,serial,case when ishave = 0 and istrue = 1 then '發票號碼錯誤'
+--					   when ishave = 1 and istrue = 0 then '統一編號錯誤'
+--					   when ishave = 0 and istrue = 0 then '統一編號、發票號碼錯誤' end
+--from #z_vcctrb where istrue = 0 or ishave = 0
+
+--106/09/05 比對銷項發票主檔
+
 select '發票號碼' noa,'統一編號' serial,'錯誤訊息' err
 union all
-select noa,serial,case when ishave = 0 and istrue = 1 then '發票號碼錯誤'
-					   when ishave = 1 and istrue = 0 then '統一編號錯誤'
-					   when ishave = 0 and istrue = 0 then '統一編號、發票號碼錯誤' end
-from #z_vcctrb where istrue = 0 or ishave = 0 
+select a.noa,a.serial,case when a.ishave = 0 and a.istrue = 1 then '發票號碼錯誤'
+					   when a.ishave = 1 and a.istrue = 0 then '統一編號錯誤'
+					   when a.ishave = 0 and a.istrue = 0 then '統一編號、發票號碼錯誤' 
+					   when len(isnull(c.xmemo,''))>0 then c.xmemo
+					   else '' end
+from #z_vcctrb a 
+outer apply (select top 1 noa from vccars where a.noa between binvono and einvono)b
+outer apply (select top 1 *,case when left(a.kind,1)='3' and a.kind!='33' and a.kind!='34' and a.kind!='38' then 
+	case when b.noa is null then '銷項發票主檔未建立'
+	when a.datea not between xv.bdate and xv.edate then '銷項發票開立日期區間錯誤'
+	when isnull(xv.invoicetype,'')='' then '銷項發票主檔類別未設定'
+	when xv.invoicetype='01' and a.kind!='31' then '憑證種類'+a.kind+'與銷項發票主檔類別01不同'
+	when xv.invoicetype='02' and a.kind!='32' then '憑證種類'+a.kind+'與銷項發票主檔類別02不同'
+	when xv.invoicetype='03' and a.kind!='32' then '憑證種類'+a.kind+'與銷項發票主檔類別03不同'
+	when xv.invoicetype='04' and a.kind!='37' then '憑證種類'+a.kind+'與銷項發票主檔類別04不同'
+	when xv.invoicetype='05' and a.kind!='31' then '憑證種類'+a.kind+'與銷項發票主檔類別05不同'
+	when xv.invoicetype='06' and a.kind!='35' then '憑證種類'+a.kind+'與銷項發票主檔類別06不同'
+	when xv.invoicetype='07' and a.kind!='35' then '憑證種類'+a.kind+'與銷項發票主檔類別07不同'
+	when xv.invoicetype='08' and a.kind!='37' then '憑證種類'+a.kind+'與銷項發票主檔類別08不同'
+	else '' end
+else ''	end xmemo
+from vccar xv where noa=b.noa )c
+where istrue = 0 or ishave = 0 or len(isnull(c.xmemo,''))>0 
 
 --寫入vcct
 declare @accy nvarchar(50)
