@@ -277,7 +277,7 @@ begin
 	end
 	
 	--判斷是否存在 折讓單
-	set @isexist = case when (LEN(ISNULL((select noa from vcct where noa = @noa and (case when @kind in ('33','34','23','24') then '1' else '0' end=case when kind in ('33','34','23','24') then '1' else '0' end) ),''))=0) then 0 else 1 end
+	set @isexist = case when (LEN(ISNULL((select top 1 noa from vcct where noa = @noa and (case when @kind in ('33','34','23','24') then '1' else '0' end=case when kind in ('33','34','23','24') then '1' else '0' end) ),''))=0) then 0 else 1 end
 	
 	select @bdate=a.bdate,@edate=a.edate 
 	from vccar a left join vccars b on a.noa = b.noa 
