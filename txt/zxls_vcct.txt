@@ -356,7 +356,7 @@ declare @accy nvarchar(50)
 declare @vccno nvarchar(50)
 declare @t_sono nvarchar(50)
 declare cursor_table cursor for
-select indo,isexist,noa,sono,kind,mon from #z_vcctrb
+select indo,isexist,noa,sono,kind,mon from #z_vcctrb order by indo
 open cursor_table
 fetch next from cursor_table
 into @indo,@isexist,@noa,@sono,@kind,@mon
@@ -367,7 +367,7 @@ begin
 	set @accy=''
 	
 	--刪除已存在noa
-	if(@isexist = 1)
+	if((select count(*) from vcct where noa=@noa)>0)
 	begin
 		set @t_sono=isnull((select top 1 sono from vcct where noa = @noa and isnull(sono,'')!='' order by datea,kind),'')
 		if(@t_sono!='')
