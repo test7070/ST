@@ -50,7 +50,7 @@
 
             function mainPost() {
                 q_mask(bbmMask);
-                q_cmbParse("cmbTypea",'cust@客戶編號,tgg@廠商編號,part@部門編號,product@物品編號,station@工作線別編號,acc1@會計科目');
+                q_cmbParse("cmbTypea",'cust@客戶編號,tgg@廠商編號,part@部門編號,product@物品編號,station@工作線別編號,acc1@會計科目,sss@員工編號');
                 $('#btnModi').hide();
                 $('#btnDele').hide();
                 $('#btnPrint').hide();
@@ -125,6 +125,7 @@
 	            	&& emp($('#txtOrgtggno').val()) && emp($('#txtChgtggno').val())
 	            	&& emp($('#txtOrgstationno').val()) && emp($('#txtChgstationno').val())
 	            	&& emp($('#txtOrgacc1').val()) && emp($('#txtChgacc1').val())
+	            	&& emp($('#txtOrgsssno').val()) && emp($('#txtChgsssno').val())
             	){	
             		alert('請輸入變更資料!!'); 
             		return;
@@ -289,6 +290,36 @@
 	                		}
             			}else{
             				alert('請輸入要變動的會計科目編號!!'); 
+            			}
+            			break;
+            		case 'sss'://員工編號
+            			if(!emp($('#txtOrgsssno').val()) && !emp($('#txtChgsssno').val())){
+            				var t_where = "where=^^ noa='" + $('#txtChgsssno').val() + "'^^";
+							q_gt('sss', t_where, 0, 0, 0, "checkSssno_btnOk", r_accy,1);
+							var as = _q_appendData("sss", "", true);
+	                		if (as[0] != undefined){
+	                			alert('員工編號'+as[0].noa+' '+as[0].namea+' 已存在!!');
+	                		}else{
+	                			var t_where = "where=^^ noa='" + $('#txtChgsssno').val() + "'^^";
+								q_gt('labase', t_where, 0, 0, 0, "checkLabase_btnOk", r_accy,1);
+								var as2 = _q_appendData("labase", "", true);
+		                		if (as2[0] != undefined){
+		                			alert('勞健保員工編號【'+as[0].noa+' '+as[0].namea+'】已存在!!');
+		                		}else{
+		                			//存檔變動
+		                			$('#txtDatea').val(q_date());
+					            	var timeDate= new Date();
+									var tHours = timeDate.getHours();
+									var tMinutes = timeDate.getMinutes();
+									$('#txtTimea').val(padL(tHours, '0', 2)+':'+padL(tMinutes, '0', 2));
+				                	q_gtnoa(q_name, replaceAll($('#txtDatea').val(), '/', ''));
+				                	
+				                	var t_paras = $('#txtOrgsssno').val()+ ';'+$('#txtChgsssno').val()+';'+q_getPara('sys.project').toUpperCase();
+									q_func('qtxt.query.sssno_change', 'changeno.txt,sssno_change,' + t_paras);
+		                		}
+	                		}
+            			}else{
+            				alert('請輸入要變動的員工編號!!'); 
             			}
             			break;
 					default:
@@ -650,6 +681,12 @@
                         <td><input id="txtOrgacc1" type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblChgacc1" class="lbl"> </a></td>
                         <td><input id="txtChgacc1" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr class="sss chg" style="display:none;">
+                        <td><span> </span><a id="lblOrgsssno" class="lbl"> </a></td>
+                        <td><input id="txtOrgsssno" type="text" class="txt c1"/></td>
+                        <td><span> </span><a id="lblChgsssno" class="lbl"> </a></td>
+                        <td><input id="txtChgsssno" type="text" class="txt c1"/></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblWorker" class="lbl"> </a></td>
