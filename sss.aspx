@@ -92,7 +92,7 @@
 					q_getPara('sys.project').toUpperCase()=='FE' || q_getPara('sys.project').toUpperCase()=='IT' ||
 					q_getPara('sys.project').toUpperCase()=='AMD' || q_getPara('sys.project').toUpperCase()=='RK' ||
 					q_getPara('sys.project').toUpperCase()=='VU' || q_getPara('sys.project').toUpperCase()=='VU2' ||
-					q_getPara('sys.project').toUpperCase()=='SF'
+					q_getPara('sys.project').toUpperCase()=='SF' || q_getPara('sys.project').toUpperCase()=='NV'
 				){
 					$('#btnLabases').show();
 				}else{
