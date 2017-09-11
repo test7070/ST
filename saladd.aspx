@@ -55,7 +55,7 @@
                 q_mask(bbmMask);
                 
                 if(r_rank<8){
-                	q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtNamea','txtHours','txtHr_special'];
+                	q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2', 'txtNamea','txtHours'];
                 }
 
                 q_cmbParse("cmbTypea", ",工作日,休息日,例假日,國定假日");

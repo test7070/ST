@@ -52,6 +52,10 @@
                         type : '0',
                         name : 'xproject',
                         value : q_getPara('sys.project').toUpperCase()
+                    },{
+                        type : '8',
+                        name : 'xoutdate',
+                        value : ('1@含離職人員').split(',')
                     }]
                 });
                 q_popAssign();
