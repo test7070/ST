@@ -69,7 +69,7 @@ z_ordhfep01:--z_ordhfep01
     while(@@FETCH_STATUS <> -1)
     begin
 		select @mm1='',@mm2=''
-		set @n = CHARINDEX('chr(10)',@memo)
+		set @n = CHARINDEX('chr(10)',@memo) -1
 		if @n>0
 		begin
 			set @mm1 = SUBSTRING(@memo,1,@n)
