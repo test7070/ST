@@ -23,7 +23,7 @@
                 q_gf('', 'ucaissued');
                 $('#q_report').hide();
                 $('.prt').hide();
-                q_gt('acomp','', 0, 0, 0, "", r_accy);
+                q_gt('acomp',"where=^^isnull(dbname,'')!='"+q_db+"' and isnull(dbname,'')!='' and isnull(ip,'')!='' ^^", 0, 0, 0, "", r_accy);
             });
             function q_gfPost() {
                 $('#q_report').q_report({
@@ -54,17 +54,24 @@
 					    }
 					    var t_bnoa=!emp($('#txtBnoa').val())?trim($('#txtBnoa').val()):'#non';
 					    var t_enoa=!emp($('#txtEnoa').val())?trim($('#txtEnoa').val()):'#non';
-					    q_func('qtxt.query.issued', 'ucaissued.txt,issued,'+encodeURI(t_Acomp)+';'+encodeURI(t_bnoa)+';'+encodeURI(t_enoa)+';'+encodeURI(q_db));
+					    
+					    var t_hostname=location.hostname;
+					    
+					    q_func('qtxt.query.issued', 'ucaissued.txt,issued,'+encodeURI(t_Acomp)+';'+encodeURI(t_bnoa)+';'+encodeURI(t_enoa)+';'+encodeURI(q_db)+';'+encodeURI(t_hostname));
 					    $('#btnIssued').attr('disabled','disabled').val('匯入中...');
                 	});
             }
             function q_funcPost(t_func, result) {
             	switch(t_func) {
                     case 'qtxt.query.issued':
-                    	alert('發行完成');
-                    	$('#btnIssued').removeAttr('disabled').val('發行');
+                    	var as = _q_appendData("tmp0", "", true);
+                    	if (as[0] != undefined) {
+	                    	alert('發行完成!!');
+	                    	$('#btnIssued').removeAttr('disabled').val('發行');
+                    	}else{
+                    		alert('發行失敗!!');
+                    	}
                         break;
-                    
                     default:
                     	break;
                 }
@@ -77,12 +84,14 @@
                         if (as[0] != undefined) {
                             z_acomp = ' @';
                             z_acomph='';
-                            for (var i = 1; i < as.length; i++) {
-                            	z_acomph=z_acomph+('<input type="checkbox" value="'+as[i].noa+'" style="width:25px;height:15px;float:left;"><span style="width:280px;height:30px;display:block;float:left;">'+as[i].acomp+'</span>')
+                            for (var i = 0; i < as.length; i++) {
+                            	z_acomph=z_acomph+('<input type="checkbox" value="'+as[i].noa+'" style="width:25px;height:15px;float:left;"><span style="width:360px;height:30px;display:block;float:left;">'+as[i].acomp+'</span>')
                                 z_acomp += ',' + as[i].noa + '@' + as[i].acomp;
                             }
+                            $('.chkAcomp').html(z_acomph);
+                        }else{
+                        	$('.chkAcomp').html('公司主檔尚未設定【對應IP】與【對應資料庫名稱】');
                         }
-                        $('.chkAcomp').html(z_acomph);
                 		break;
                 }
             }
@@ -104,7 +113,7 @@
 				<div id="q_report"> </div>
 			</div>
 			<div id="ucf">
-				<table  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;width:450px">
+				<table  border="1" cellpadding='2'  cellspacing='0' style="background-color: #FFFF66;width:500px">
 					<tr>
 						<td align="center" style="width:20%"><a id="lblNoa" class="lbl" style="font-size: medium;">選擇件號</a></td>
 						<td align="left" style="width:80%">
@@ -115,7 +124,7 @@
 					<tr>
 		               <td align="center"><a id='lblAcomp' class="lbl" style="font-size: medium;">公司</a></td>
 		               <td>
-		               		<div id="chkAcomp" style="width: 330px; display: block; float: left;" class="chkAcomp">
+		               		<div id="chkAcomp" style="width: 400px; display: block; float: left;" class="chkAcomp">
 		               		</div>
 		               </td>
 		            </tr>
