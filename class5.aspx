@@ -53,7 +53,7 @@
             		['txtShifthours', 3, 1, 1],['txtOstand', 6, 1, 1]
             		,['txtDoverhours', 3, 1, 1],['txtOverhours', 4, 1, 1]
             		,['txtDhoverhours', 3, 1, 1],['txtHoverhours', 4, 1, 1]
-            		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 0, 1],['txtMhours2', 2, 0, 1]
+            		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 1, 1],['txtMhours2', 2, 1, 1]
             		
             		,['txtWorkday', 2, 0, 1],['txtRestday', 2, 0, 1]
             		
@@ -90,7 +90,7 @@
             		['txtShifthours', 3, 1, 1],['txtOstand', 6, 1, 1]
             		,['txtDoverhours', 3, 1, 1],['txtOverhours', 4, 1, 1]
             		,['txtDhoverhours', 3, 1, 1],['txtHoverhours', 4, 1, 1]
-            		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 0, 1],['txtMhours2', 2, 0, 1]
+            		,['txtMeals', 3, 0, 1],['txtMhours1', 2, 1, 1],['txtMhours2', 2, 1, 1]
             		
             		,['txtWorkday', 2, 0, 1],['txtRestday', 2, 0, 1]
             		

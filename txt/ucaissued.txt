@@ -8,6 +8,12 @@ declare @q_ip nvarchar(max)=case when '#non'=[5] then '' else [5] end
 declare @acompint int=len(@t_acomp)-len(replace(@t_acomp,"/",''))  
 declare @n int=0
 
+--106/09/22 更新發行時間
+declare @datea nvarchar(20)=left(replace(CONVERT(nvarchar,getdate(),120),'-',''),8)
+set @datea= LEFT(@datea,4)+'/'+ RIGHT(LEFT(@datea,6),2)+'/'+RIGHT(@datea,2)
+
+update uca set issuedate=@datea where noa between @t_bnoa and @t_enoa
+
 declare @acomp table(
 	noa nvarchar(100)
 )
