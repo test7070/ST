@@ -1,0 +1,66 @@
+zxls_ucce:--zxls_ucce 變更帳面數量 重量
+SET QUOTED_IDENTIFIER OFF
+IF OBJECT_ID('tempdb..#tmpstk')is not null 
+BEGIN 
+	drop table #tmpstk
+END 
+
+create table #tmpstk(
+	sno nvarchar(50),
+	pno nvarchar(50),
+	mount float,
+	weight float
+)
+
+declare @datea nvarchar(15)
+declare @t_datea nvarchar(15)
+declare @accy nvarchar(15)
+declare @noa nvarchar(15)
+
+declare cursor_table cursor for
+select datea from view_ucce where isnull(store2,'')!='Y' group by datea order by datea
+open cursor_table
+fetch next from cursor_table
+into @datea
+while(@@FETCH_STATUS <> -1)
+begin
+	set @t_datea=dbo.q_cdn(@datea,1)
+	delete #tmpstk
+	insert #tmpstk(sno,pno,mount,weight)
+	select storeno,productno,mount,weight from stkucc(@t_datea,'','')
+	-------------------------------------------------------------------------
+	declare cursor_table2 cursor for
+	select accy,noa from view_ucce where datea=@datea and isnull(store2,'')!='Y'
+	open cursor_table2
+	fetch next from cursor_table2
+	into @accy,@noa
+	while(@@FETCH_STATUS <> -1)
+	begin
+		BEGIN TRY
+			EXEC("update a
+			set emount2=isnull(b.mount,0),eweight2=isnull(b.weight,0)
+			from ucces"+@accy+" a left join #tmpstk b on a.storeno=b.sno and a.productno=b.pno
+			where a.noa='"+@noa+"'
+			
+			update ucce"+@accy+" set store2='Y' where noa='"+@noa+"'")
+		END TRY
+		BEGIN CATCH
+		END CATCH
+	
+		fetch next from cursor_table2
+		into @datea,@noa
+	end
+	close cursor_table2
+	deallocate cursor_table2
+
+	--------------------------------------------------------------------------
+	fetch next from cursor_table
+	into @datea
+end
+close cursor_table
+deallocate cursor_table
+
+IF OBJECT_ID('tempdb..#tmpstk')is not null 
+BEGIN 
+	drop table #tmpstk
+END ;

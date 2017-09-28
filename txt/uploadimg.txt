@@ -1,0 +1,73 @@
+﻿deleimg:--刪除圖片
+
+declare @t_noa nvarchar(50) = [1]
+declare @t_table nvarchar(50) = [2]
+declare @t_dele nvarchar(50) = [3]
+declare @t_img nvarchar(MAX) = ''
+
+if(@t_table='ucc')
+begin
+	set @t_img=(select images from ucc where noa=@t_noa)
+	if(charindex(@t_dele,@t_img)>0)
+	begin
+		set @t_img=SUBSTRING(@t_img,charindex(@t_dele+'.',@t_img),charindex(@t_dele+'.',@t_img)+6)
+		update ucc
+		set images=replace(images,@t_img,'')
+		where noa=@t_noa
+	end
+end
+
+if(@t_table='uca')
+begin
+	set @t_img=(select images from uca where noa=@t_noa)
+	if(charindex(@t_dele,@t_img)>0)
+	begin
+		set @t_img=SUBSTRING(@t_img,charindex(@t_dele+'.',@t_img),charindex(@t_dele+'.',@t_img)+6)
+		update uca
+		set images=replace(images,@t_img,'')
+		where noa=@t_noa
+	end
+end
+
+if(@t_table='ucx')
+begin
+	set @t_img=(select images from ucx where noa=@t_noa)
+	if(charindex(@t_dele,@t_img)>0)
+	begin
+		set @t_img=SUBSTRING(@t_img,charindex(@t_dele+'.',@t_img),charindex(@t_dele+'.',@t_img)+6)
+		update ucx
+		set images=replace(images,@t_img,'')
+		where noa=@t_noa
+	end
+end
+
+;
+---------------------------------------------------------------------
+
+deleimgall:--刪除全部圖片
+
+declare @t_noa nvarchar(50) = [1]
+declare @t_table nvarchar(50) = [2]
+
+if(@t_table='ucc')
+begin
+	update ucc
+	set images=CHAR(59)
+	where noa=@t_noa
+end
+
+if(@t_table='uca')
+begin
+	update uca
+	set images=CHAR(59)
+	where noa=@t_noa
+end
+
+if(@t_table='ucx')
+begin
+	update ucx
+	set images=CHAR(59)
+	where noa=@t_noa
+end
+
+;
