@@ -118,6 +118,19 @@
 				
 				$('#txtXrate').css('text-align','right').val('0');
 				$('#txtXrate').css('width','60px');
+				
+				if(q_getPara('sys.project').toUpperCase()!='BD'){
+					var t_index=-1;
+					for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+						if($('#q_report').data('info').reportData[i].report=='z_anavccst05'){
+							t_index=i;
+							break;	
+						}
+					}
+					if(t_index>-1){
+						$('#q_report div div').eq(i).hide();
+					}
+				}
 			}
 			function q_boxClose(s2) {
 			}
