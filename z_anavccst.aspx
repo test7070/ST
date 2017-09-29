@@ -63,7 +63,7 @@
 						src : 'cust_b.aspx'
 					}, {
 						type : '2', //[5][6]  3
-						name : 'xsss',
+						name : 'xsales',
 						dbf : 'sss',
 						index : 'noa,namea',
 						src : 'sss_b.aspx'
@@ -91,14 +91,23 @@
 					},{
 						type : '1', //[14][15]]   9
 						name : 'xwidth'
+					},{
+						type : '6', //[16]   10  bd使用
+						name : 'xrate'
 					}]
 				});
 				q_popAssign();
 				q_getFormat();
 				q_langShow();
-				$('#txtXdate1').mask('999/99/99');
+				
+				if (r_len == 4) {
+					$.datepicker.r_len = 4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+				}
+				
+				$('#txtXdate1').mask(r_picd);
 				$('#txtXdate1').datepicker();
-				$('#txtXdate2').mask('999/99/99');
+				$('#txtXdate2').mask(r_picd);
 				$('#txtXdate2').datepicker();
 				$('#chkXitem').children('input').attr('checked', 'checked');
 				
@@ -106,6 +115,9 @@
 				$('#txtXdime2').css('text-align','right').val('999');
 				$('#txtXwidth1').css('text-align','right').val('0');
 				$('#txtXwidth2').css('text-align','right').val('9999');
+				
+				$('#txtXrate').css('text-align','right').val('0');
+				$('#txtXrate').css('width','60px');
 			}
 			function q_boxClose(s2) {
 			}
