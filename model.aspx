@@ -80,6 +80,10 @@
 					}
 					$('#txtMaxmodmount').val(q_mul(dec($('#txtInmount').val()),dec($('#txtModmounts').val())));
 				});
+				
+				if(q_getPara('sys.project').toUpperCase()=='AD' || q_getPara('sys.project').toUpperCase()=='JO'){
+					$('#lblFrame').text('儲位架');
+				}
 			}
 
 			function q_boxClose(s2) {
@@ -448,8 +452,8 @@
 						<td><input id="txtModmounts" type="text" class="txt c1 num"/></td>
 						<td><span> </span><a id='lblMaxmodmount' class="lbl" style="text-align: right;width: 95%;"> </a></td>
 						<td><input id="txtMaxmodmount" type="text" class="txt c1 num"/></td>
-						<td> </td>
-						<td> </td>
+						<td><span> </span><a id='lblFrame' class="lbl"> </a></td>
+						<td><input id="txtFrame" type="text" class="txt c1"/></td>
 						<td> </td>
 					</tr>
 					<tr>
