@@ -28,10 +28,11 @@
 			}
 
 			function q_seekStr() {
-				t_noa = $('#txtNoa').val();
+				t_bnoa = $('#txtBnoa').val();
+				t_enoa = $('#txtEnoa').val();
 				t_indate = $('#txtIndate').val();
 				t_stationno = $('#txtStationno').val();
-				var t_where = " 1=1 " + q_sqlPara2("noa", t_noa) +
+				var t_where = " 1=1 " + q_sqlPara2("noa", t_bnoa, t_enoa) +
 												 q_sqlPara2("indate", t_indate) +
 												 q_sqlPara2("stationno", t_stationno);
 				t_where = ' where=^^' + t_where + '^^ ';
@@ -51,15 +52,19 @@
 		<div style='width:400px; text-align:center;padding:15px;' >
 			<table id="seek"  border="1"   cellpadding='3' cellspacing='2' style='width:100%;' >
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblNoa'></a></td>
-					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
+					<td class='seek'  style="width:20%;"><a id='lblNoa'> </a></td>
+					<td>
+						<input class="txt" id="txtBnoa" type="text" style="width:90px; font-size:medium;" />
+	                    <span style="display:inline-block; vertical-align:middle">&sim;</span>
+	                    <input class="txt" id="txtEnoa" type="text" style="width:93px; font-size:medium;" />
+					</td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblIndate'></a></td>
+					<td class='seek'  style="width:20%;"><a id='lblIndate'> </a></td>
 					<td><input class="txt" id="txtIndate" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 				<tr class='seek_tr'>
-					<td class='seek'  style="width:20%;"><a id='lblStationno'></a></td>
+					<td class='seek'  style="width:20%;"><a id='lblStationno'> </a></td>
 					<td>
 						<input class="txt" id="txtStationno" type="text" style="width:90px; font-size:medium;" />
 						&nbsp;
