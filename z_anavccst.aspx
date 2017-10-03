@@ -130,7 +130,10 @@
 					if(t_index>-1){
 						$('#q_report div div').eq(i).hide();
 					}
+				}else{
+					$('#chkXoption01').children('input').attr('checked', 'checked');
 				}
+				
 			}
 			function q_boxClose(s2) {
 			}

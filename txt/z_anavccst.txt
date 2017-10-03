@@ -782,3 +782,134 @@ select
 	cast(perscnt as nvarchar) + '%' perscnt
 from @tmp order by rankno;
 ---************************************************************************************
+z_anavccst05:--z_anavccst05
+declare @t_bdate nvarchar(10)= case when '#non'=[1] then '' else [1] end
+declare @t_edate nvarchar(10)= case when '#non'=[2] then char(255) else [2] end
+declare @t_bsssno nvarchar(20)= case when '#non'=[5] then '' else [5] end
+declare @t_esssno nvarchar(20)= case when '#non'=[6] then char(255) else [6] end
+declare @t_detail nvarchar(max)= case when '#non'=[8] then '' else [8] end
+declare @t_rate nvarchar(max)= case when '#non'=[16] then '0' else [16] end
+declare @rate float=0
+
+begin try
+	set @rate = cast(@t_rate as float)
+end try
+begin catch
+	--nothing
+end catch
+
+declare @result table(
+	gno nvarchar(10),
+	noa nvarchar(30),
+	noq nvarchar(20),
+	datea nvarchar(10),
+	sssno nvarchar(50),
+	sales nvarchar(50),
+	custno nvarchar(50),
+	comp nvarchar(MAX),
+	productno nvarchar(50),
+	product nvarchar(MAX),
+	uno nvarchar(50),
+	mount float,
+	weight float,
+	price float,
+	total float,
+	sdate nvarchar(10),
+	sprice float,
+	wprice float,
+	tprice float,
+	purchase float,
+	paytype nvarchar(100),
+	pday int,--天數
+	ratem float,
+	tranprice float,
+	tranm float,
+	profit float,
+	benifit float
+)
+
+insert @result
+select '0',a.noa,b.noq,a.datea,a.salesno,a.sales,a.custno
+,case when len(c.nick)>0 then c.nick else c.comp end
+,b.productno,b.product,b.uno
+,case when a.typea='1' then 1 else -1 end*b.mount
+,case when a.typea='1' then 1 else -1 end*b.weight
+,b.price,case when a.typea='1' then 1 else -1 end*b.total
+,'',0,0,0,0,a.paytype,0,0
+,case when a.price!=0 then a.price else case when isnull(a.weight,0)!=0 then a.tranmoney/a.weight else 0 end end
+,a.tranmoney,0,0
+from view_vcc a left join view_vccs b on a.noa=b.noa left join cust c on a.custno=c.noa
+where isnull(a.datea,'') between @t_bdate and @t_edate
+and isnull(a.sales,'') between @t_bsssno and @t_esssno
+and a.stype!='2' and isnull(b.productno,'')!=''
+
+--更新成本單價
+update a
+set sdate=isnull(case when b.rnoa is null then c.idatea else b.rdatea end,'')
+,sprice=isnull(case when b.rnoa is null then c.iprice else b.rprice end,0)
+,wprice=isnull(d.wprice,0)
+,tprice=isnull(case when b.rnoa is null then c.itprice else b.rtprice end,'')
+from @result a
+outer apply (select top 1 rb.noa rnoa,ra.price rprice,rb.datea rdatea
+,case when isnull(rb.price,0)!=0 then isnull(rb.price,0) else case when isnull(rb.weight,0)=0 then 0 else (rb.tranmoney/rb.weight) end end rtprice
+from view_rc2s ra left join view_rc2 rb on ra.noa=rb.noa
+where left(a.uno,len(ra.uno))=ra.uno and isnull(ra.uno,'')!='' order by ra.uno,rb.datea,rb.noa)b
+outer apply (select top 1 ib.noa inoa ,ia.price iprice,ib.datea idatea
+,case when isnull(ib.price,0)!=0 then isnull(ib.price,0) else case when isnull(ib.weight,0)=0 then 0 else (ib.tranmoney/ib.weight) end end itprice
+from view_inas ia left join view_ina ib on ia.noa=ib.noa
+where left(a.uno,len(uno))=uno and isnull(uno,'')!='' order by ia.uno,ib.datea,ib.noa)c
+outer apply (select top 1 noa cnoa,wprice,datea cdatea from view_cuts where left(a.uno,len(bno))=bno and isnull(bno,'')!='' order by bno,datea,noa)d
+where isnull(a.uno,'')!=''
+
+--更新利息天數
+update @result
+set pday=cast(dbo.get_num(paytype)as int)
+where paytype!='' and paytype like '%[0-9]%'
+
+--成本
+update @result set purchase=round((sprice+wprice+tprice)*weight,0)
+--利息
+update @result set ratem=round(purchase*@rate*pday/100/365,0)
+--利潤
+update @result set profit=round(total-purchase-tranm-ratem,0)
+
+if(@t_detail like '%明細%')
+begin
+	--毛利率
+	update @result set benifit=case when (purchase+tranm+ratem)=0 then 0 else round((profit/(purchase+tranm+ratem))*100,2) end
+end
+else
+begin
+	insert @result(gno,sssno,sales,productno,product,mount,weight,total,purchase,ratem,tranm,profit)
+	select '2' gno,sssno,MAX(sales),productno,product,SUM(mount),SUM(weight),SUM(total),SUM(purchase),SUM(ratem),SUM(tranm),SUM(profit) from @result
+	group by sssno,productno,product
+	delete @result where gno='0'
+	update @result set gno='0'
+end
+
+if((select count(*) from @result)>0)
+begin
+	insert @result(gno,noa,noq,datea,sssno,sales,custno,comp,productno,product,uno,mount,weight,price,total
+	,sdate,sprice,wprice,tprice,purchase,paytype,pday,ratem,tranprice,tranm,profit,benifit)
+	select '1',CHAR(255),CHAR(255),CHAR(255),sssno,MAX(sales),CHAR(255),CHAR(255),CHAR(255),CHAR(255),CHAR(255)
+	,SUM(mount),SUM(weight),0,SUM(total),CHAR(255),0,0,0,0,'',0,SUM(ratem),0,SUM(tranm),SUM(profit),0
+	from @result group by sssno
+end
+
+select 
+dbo.getComma(mount,-1)mount,
+dbo.getComma(weight,-1)weight,
+dbo.getComma(price,-1)price,
+dbo.getComma(total,-1)total,
+dbo.getComma(sprice,-1)sprice,
+dbo.getComma(wprice,-1)wprice,
+dbo.getComma(tprice,-1)tprice,
+dbo.getComma(purchase,-1)purchase,
+dbo.getComma(ratem,-1)ratem,
+dbo.getComma(tranprice,-1)tranprice,
+dbo.getComma(tranm,-1)tranm,
+dbo.getComma(profit,-1)profit,
+dbo.getComma(benifit,-1)benifit,
+* from @result order by sssno,gno,datea,noa,noq
+;
+--***********************************************************************************
