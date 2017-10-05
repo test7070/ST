@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -22,8 +22,8 @@
             q_desc = 1;
             q_tables = 's';
             var q_name = "vcce";
-            var q_readonly = ['txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtWeight'];
-            var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2'];
+            var q_readonly = ['txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtWeight','cmbStype'];
+            var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtEweight','txtEcount'];
             var bbmNum = [['txtWeight', 10, 3, 1]];
             var bbsNum = [['txtWeight', 10, 3, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1],['txtEweight', 10, 3, 1], ['txtEcount', 10, 2, 1],['txtAdjweight', 10, 3, 1], ['txtAdjcount', 10, 2, 1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbmMask = [];
@@ -104,6 +104,7 @@
                 q_getFormat();
                 q_cmbParse("cmbKind", q_getPara('sys.stktype'));
                 q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
+                q_cmbParse("cmbStype", '@,'+q_getPara('orde.stype'));
                 bbmMask = [['txtDatea', r_picd], ['txtCldate', r_picd]];
                 q_mask(bbmMask);
                 
@@ -111,26 +112,18 @@
                     size_change();
                     sum();
                 });
-                /* 若非本會計年度則無法存檔 */
-                $('#txtDatea').focusout(function() {
-                    if ($(this).val().substr(0, 3) != r_accy) {
-                        $('#btnOk').attr('disabled', 'disabled');
-                        alert(q_getMsg('lblDatea') + '非本會計年度。');
-                    } else {
-                        $('#btnOk').removeAttr('disabled');
-                    }
-                });
-
+                
                 $('#btnOrdeimport').click(function() {
                     var t_ordeno = $('#txtOrdeno').val();
-                    var t_where = ' 1=1 ';
+                    var t_where = ' 1=1 and isnull(enda,0)=0 and isnull(cancel,0)=0 ';
                     var t_custno = trim($('#txtCustno').val());
                     if (t_ordeno.length > 0) {
                         t_where += q_sqlPara2('noa', t_ordeno);
                     }
-                    t_where += q_sqlPara2('custno', t_custno)+ "and kind='" + $('#cmbKind').val() + "'";
+                    t_where += q_sqlPara2('custno', t_custno)+ "and kind='" + $('#cmbKind').val() + "' and isnull(sale,0)=1 "; //106/10/05只抓售的內容
                     q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordet', "95%", "95%", q_getMsg('popOrde'));
                 });
+                
                 $('#btnVcceImport').click(function() {
                     var t_ordeno = $('#txtOrdeno').val();
                     var t_custno = $('#txtCustno').val();
@@ -139,6 +132,7 @@
                     t_where += q_sqlPara2('ordeno', t_ordeno) + q_sqlPara2('custno', t_custno) + " and ((len(gmemo)=0) or gmemo='cubu')";
                     q_box("vcce_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + r_accy, 'view_vcce_import', "95%", "95%", q_getMsg('popVcceImport'));
                 });
+                
                 $('#txtAddr_post').change(function() {
                     var t_custno = trim($(this).val());
                     if (!emp(t_custno)) {
@@ -147,6 +141,7 @@
                         q_gt('cust', t_where, 0, 0, 0, "");
                     }
                 });
+                
                 $('#txtDeivery_addr').change(function() {
                     var t_custno = trim($(this).val());
                     if (!emp(t_custno)) {
@@ -155,8 +150,9 @@
                         q_gt('cust', t_where, 0, 0, 0, "");
                     }
                 });
-                if (q_getPara('sys.project').toUpperCase()=='RS'){
-					$('.isRS').show();
+                
+                if (q_getPara('sys.project').toUpperCase()=='RS' || q_getPara('sys.project').toUpperCase()=='BD'){
+					$('.isorde').show();
 				}
             }
 
@@ -190,7 +186,7 @@
                             $('#txtOrdeno').val(b_ret[0].noa);
 							var t_where = "where=^^ noa='"+b_ret[0].noa+"'";
 							q_gt('view_orde', t_where, 0, 0, 0, "",r_accy);                            
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtWeight,txtMount', b_ret.length, b_ret, 'uno,noa,no3,productno,product,radius,dime,width,lengthb,weight,mount', 'txtProductno');
+                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtOrdeno,txtNo2,txtProductno,txtProduct,txtRadius,txtWidth,txtDime,txtLengthb,txtSpec,txtMount,txtWeight,txtPrice,txtStyle,txtSize', b_ret.length, b_ret, 'uno,noa,no2,productno,product,radius,width,dime,lengthb,spec,mount,weight,price,style,size', 'txtProductno');
                             /// 最後 aEmpField 不可以有【數字欄位】
                         }
                         sum();
@@ -226,6 +222,7 @@
 							(trim($('#txtTel').val())==''?$('#txtTel').val(as[0].tel):'');
 							(trim($('#txtAddr_post').val())==''?$('#txtAddr_post').val(as[0].addr):'');
 							$('#cmbTrantype').val(as[0].trantype);
+							$('#cmbStype').val(as[0].stype)
 						}
 						break;
                     case q_name:
@@ -561,6 +558,7 @@
                 	}
                 }
                 size_change();
+                $('#cmbStype').attr('disabled','disabled');
             }
 
             function btnMinus(id) {
@@ -869,15 +867,15 @@
 			<div class="dbbm">
 				<table class="tbbm"  id="tbbm">
 					<tr style="height:1px;">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td class="tdZ"></td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
@@ -917,25 +915,19 @@
 						<td colspan="3">
 						<input id="txtAddr_post"  type="text" class="txt c1"/>
 						</td>
-						<td><span> </span><a id="lblStype" class="lbl"> </a></td>
-						<td><input id="txtStype"  type="text" class="txt c1"/></td>
-						<td>
-						<input id="btnSearchuno" type="button" style="display:none;"/>
-						</td>
-						<td>
-						<input id="btnSearchstk" type="button" style="display:none;" />
-						</td>
+						<td><span> </span><a id="lblStype" class="lbl isorde" style="display: none;"> </a></td>
+						<td><select id="cmbStype" class="txt c1 isorde" style="display: none;"> </select></td>
+						<td><span> </span><a id="lblOrdeno" class="lbl isorde" style="display: none;"> </a></td>
+						<td><input id="txtOrdeno"  type="text" class="txt c1 isorde" style="display: none;"/></td>
+						<td><input id="btnOrdeimport" type="button" title="only ordet" class="isorde" style="display: none;" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblDeivery_addr" class="lbl"> </a></td>
-						<td colspan="3">
-						<input id="txtDeivery_addr"  type="text" class="txt c1"/>
-						<td></td>
+						<td colspan="3"><input id="txtDeivery_addr"  type="text" class="txt c1"/></td>
+						<td> </td>
 						<td><input id="btnVcceImport" type="button" title="cut cubu"/></td>
-						</td>
-						<td><span> </span><a id="lblOrdeno" class="lbl isRS" style="display: none;"> </a></td>
-						<td><input id="txtOrdeno"  type="text" class="txt c1 isRS" style="display: none;"/></td>
-						<td><input id="btnOrdeimport" type="button" title="only ordet" class="isRS" style="display: none;" /></td>
+						<td><input id="btnSearchuno" type="button" style="display:none;"/></td>
+						<td><input id="btnSearchstk" type="button" style="display:none;" /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWeight" class="lbl"> </a></td>
@@ -960,7 +952,7 @@
 					<td  align="center" style="width:30px;">
 					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
 					</td>
-					<td align="center" style="width:20px;"></td>
+					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:250px;"><a id='lblUno_s'> </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>

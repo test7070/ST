@@ -587,7 +587,7 @@
                     return;
                 }
                 for(var i=0;i<q_bbsCount;i++){
-                    if(q_float('txtMount_'+i)!=0 && !$('#chkSale_'+i).prop('checked') && !$('#chkIscut_'+i).prop('checked')){
+                    if(q_float('txtMount_'+i)!=0 && !$('#chkSale_'+i).prop('checked') && !$('#chkOrdc_'+i).prop('checked')){
                         $('#chkCut_'+i).prop('checked',true);
                     }
                     getTheory(i);
