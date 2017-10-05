@@ -1,23 +1,23 @@
 sprice_se2:--sprice_se2 --bd
 declare @t_uno nvarchar(max)= case when '#non'=[1] then '' else [1] end
 
-set @t_uno=REPLACE(@t_uno,'#',',') --§å¸¹½Ğ¥Î#¸¹¹j¶}
+set @t_uno=REPLACE(@t_uno,'#',',') --æ‰¹è™Ÿè«‹ç”¨#è™Ÿéš”é–‹
 
 declare @uno table(
 	uno nvarchar(50),
-	tablea nvarchar(50), --¶i³fÃş§O
-	noa nvarchar(50), --¶i³f³æ¸¹
-	sdate nvarchar(20), --¶i³f¤é´Á
-	sprice float, --¶i³f³æ»ù
-	wprice float, --¥[¤u³æ»ù
-	tprice float, --¹B¶O³æ»ù
-	purchase float --³æ»ù¥[Á`
+	tablea nvarchar(50), --é€²è²¨é¡åˆ¥
+	noa nvarchar(50), --é€²è²¨å–®è™Ÿ
+	sdate nvarchar(20), --é€²è²¨æ—¥æœŸ
+	sprice float, --é€²è²¨å–®åƒ¹
+	wprice float, --åŠ å·¥å–®åƒ¹
+	tprice float, --é‹è²»å–®åƒ¹
+	purchase float --å–®åƒ¹åŠ ç¸½
 )
 
 insert @uno (uno)
 select item from dbo.fnSplit(@t_uno)
 
---§ó·s¦¨¥»³æ»ù
+--æ›´æ–°æˆæœ¬å–®åƒ¹
 update a
 set tablea=isnull(case when b.rnoa is null then 'ina' else 'rc2' end,'')
 ,noa=isnull(case when b.rnoa is null then c.inoa else b.rnoa end,'')
@@ -37,7 +37,7 @@ where left(a.uno,len(uno))=uno and isnull(uno,'')!='' order by ia.uno,ib.datea,i
 outer apply (select top 1 noa cnoa,wprice,datea cdatea from view_cuts where left(a.uno,len(bno))=bno and isnull(bno,'')!='' order by bno,datea,noa)d
 where isnull(a.uno,'')!=''
 
---¦¨¥»
+--æˆæœ¬
 update @uno set purchase=(sprice+wprice+tprice)
 
 select * from @uno

@@ -336,7 +336,7 @@
 					$('#txtVccatax').show();
 				}
 				
-				if(q_getPara('sys.project').toUpperCase()=='BD'){
+				if(q_getPara('sys.project').toUpperCase()=='BD' && r_rank>'6'){
 					$('#lblBenifit').text('損益');
 					$('.benifit').show();
 				}else{
@@ -655,13 +655,15 @@
 						//計算損益
 						if(q_getPara('sys.project').toUpperCase()=='BD'){
 							var UnoList = GetUnoList().split(',');
-							var t_where ="1=0";
+							var t_uno ="";
 							for (var k = 0; k < UnoList.length; k++) {
-								t_where+=" or uno='"+UnoList[k]+"'";
-							}							
-							var t_where = "where=^^"+t_where+"^^";
-							q_gt('view_uccb', t_where, 0, 0, 0, "getsprice", r_accy,1);
-							var as = _q_appendData("view_uccb", "", true);
+								if(t_uno.indexOf(UnoList[k]+'#')==-1)
+									t_uno+=UnoList[k]+"#";
+							}
+							q_func('qtxt.query.sprice_se2', 'sprice.txt,sprice_se2,' 
+							+ encodeURI(t_uno)+';'+encodeURI(r_userno)+';'+encodeURI(r_name),r_accy,1);
+							
+							var as = _q_appendData("tmp0", "", true, true);
 							var t_cost=0,t_money=dec($('#txtMoney').val());
 							for (var j = 0; j < q_bbsCount; j++) {
 								var t_weight=dec($('#txtWeight_'+j).val());
@@ -675,7 +677,7 @@
 									}
 								}
 							}
-							$('#txtBenifit').val((t_money-t_cost)*($('#cmbTypea').val()=='2'?-1:1));
+							$('#txtBenifit').val(round(t_money-t_cost,0)*($('#cmbTypea').val()=='2'?-1:1));
 						}
 						
 						var t_noa = trim($('#txtNoa').val());
