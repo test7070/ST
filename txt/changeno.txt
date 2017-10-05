@@ -356,3 +356,109 @@ end
 
 select @mess mess
 ;
+--------------------------------------------------------------------------------
+sssno_change:--sssno_change
+SET QUOTED_IDENTIFIER OFF
+declare @old_noa nvarchar(MAX) = [1]
+declare @new_noa nvarchar(MAX) = [2]
+declare @tablea nvarchar(MAX)
+declare @column nvarchar(MAX)
+declare @mess nvarchar(MAX)='success'
+
+if(@old_noa!='' and @new_noa!='')
+begin
+	BEGIN TRY
+		Begin Transaction
+	
+		declare cursor_table cursor for 
+		SELECT TABLE_NAME,COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+		WHERE (COLUMN_NAME like '%sssno%' or COLUMN_NAME like '%salesno%' or COLUMN_NAME = 'sno'
+		or COLUMN_NAME = 'outsno' or COLUMN_NAME = 'insno') 
+		and TABLE_NAME not like 'view_%' and TABLE_NAME !='changeno' 
+		and TABLE_NAME !='postas'
+		and TABLE_NAME !='eipbases' and TABLE_NAME !='eipflows'  and TABLE_NAME !='eipmans'
+		order by TABLE_NAME
+		open cursor_table 
+		fetch next from cursor_table 
+		into @tablea,@column
+		while(@@FETCH_STATUS <> -1) 
+		begin 
+			
+			EXEC(" update "+@tablea+" set "+@column+"='"+@new_noa+"' where "+@column+"='"+@old_noa+"'")		
+	
+			fetch next from cursor_table 
+			into @tablea,@column
+		end 
+		close cursor_table 
+		deallocate cursor_table 
+			
+		--密碼主檔nhpe不變更
+		
+		--員工主檔
+		update sss set noa=@new_noa where noa=@old_noa
+		
+		--所屬部門
+		update ssspart set noa=@new_noa where noa=@old_noa
+		
+		--薪資調整記錄
+		update saladjust set noa=@new_noa where noa=@old_noa
+		
+		--停/復職紀錄
+		update sssr set noa=@new_noa where noa=@old_noa
+		
+		--人事異動紀錄
+		update ssschg set noa=@new_noa where noa=@old_noa
+		
+		--健勞保
+		update labase set noa=@new_noa where noa=@old_noa
+		update labases set noa=@new_noa where noa=@old_noa
+		
+		--員工投退保日
+		update labased set noa=@new_noa where noa=@old_noa
+		
+		--投保歷史紀錄
+		update salinsures set noa=@new_noa where noa=@old_noa
+
+		--所得設定
+		update sssu set noa=@new_noa where noa=@old_noa
+
+		--簽核
+		update signform set checkerno=@new_noa where isnull(checkerno,'')=@old_noa
+		update signform set approvemano=@new_noa where isnull(approvemano,'')=@old_noa
+		update signform set approvefino=@new_noa where isnull(approvefino,'')=@old_noa
+		update signform set approvegmno=@new_noa where isnull(approvegmno,'')=@old_noa
+		update signform set approvebsno=@new_noa where isnull(approvebsno,'')=@old_noa
+
+		--eip系列 多員工編號分號間隔
+		update a 
+		set sno=SUBSTRING(b.chgstr,1,len(b.chgstr)-1)
+		from eipbases a outer apply (select STUFF(replace(CHAR(59)+a.sno+CHAR(59),CHAR(59)+@old_noa+CHAR(59),CHAR(59)+@new_noa+CHAR(59)),1,1,'') chgstr )b
+		where CHAR(59)+a.sno+CHAR(59) like '%'+CHAR(59)+@old_noa+CHAR(59)+'%'
+		
+		update a 
+		set sno=SUBSTRING(b.chgstr,1,len(b.chgstr)-1)
+		from eipflows a outer apply (select STUFF(replace(CHAR(59)+a.sno+CHAR(59),CHAR(59)+@old_noa+CHAR(59),CHAR(59)+@new_noa+CHAR(59)),1,1,'') chgstr )b
+		where CHAR(59)+a.sno+CHAR(59) like '%'+CHAR(59)+@old_noa+CHAR(59)+'%'
+		
+		update a 
+		set sno=SUBSTRING(b.chgstr,1,len(b.chgstr)-1)
+		from eipmans a outer apply (select STUFF(replace(CHAR(59)+a.sno+CHAR(59),CHAR(59)+@old_noa+CHAR(59),CHAR(59)+@new_noa+CHAR(59)),1,1,'') chgstr )b
+		where CHAR(59)+a.sno+CHAR(59) like '%'+CHAR(59)+@old_noa+CHAR(59)+'%'
+		
+		Commit Transaction
+	
+	END TRY
+	BEGIN CATCH
+		ROLLBACK
+		set @mess='failure'
+		close cursor_table 
+		deallocate cursor_table
+	END CATCH
+end
+else 
+begin
+	set @mess='failure'
+end
+
+select @mess mess
+;

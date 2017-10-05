@@ -672,6 +672,10 @@
 							</td>					
 							<td><input type="checkbox" class="schema_chk" style="float:left;"/></td>
 						</tr>
+						<tr>
+							<td><span> </span><a id='lblAes' class="lbl">AES金鑰</a></td>
+							<td colspan="3"><input id="txtAes" type="text" class="txt c1" /></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>

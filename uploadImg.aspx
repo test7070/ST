@@ -122,7 +122,7 @@
             Response.Write("</form>");
             Response.Write("</div>");
         	string uri = Request.Url.ToString();
-        	string noa =uri.Split(';')[3].Split('=')[1].Replace("'","");   
+        	string noa =uri.Split(';')[3].Split('=')[1].Replace("'","").Replace("/","CHR(47)");   
             //Response.Write(noa);
             
             if (formSize == 0)

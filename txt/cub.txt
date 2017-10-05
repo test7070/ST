@@ -962,3 +962,60 @@ begin
 	end
 end 
 ;
+-----------------------------------------------------------------------------------
+cub_apv:--cub_apv
+SET QUOTED_IDENTIFIER OFF
+declare @year nvarchar(20)=[1]--年度[1]
+declare @noa nvarchar(50)=[2]
+declare @r_userno nvarchar(50)=[3]
+declare @r_name nvarchar(50)=[4]
+declare @t_apv nvarchar(50)=[5]
+
+declare @accy nvarchar(20)
+set @accy=isnull((select accy from view_cub where noa=@noa),@year)
+
+declare @datea nvarchar(20)=left(replace(CONVERT(nvarchar,getdate(),120),'-',''),8)
+declare @timea nvarchar(20)=right(replace(CONVERT(nvarchar,getdate(),120),'-',''),8)
+set @datea= LEFT(@datea,4)+'/'+ RIGHT(LEFT(@datea,6),2)+'/'+RIGHT(@datea,2)
+
+if(@t_apv='checker')
+begin
+	EXEC("update cub"+@accy+" set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+	select noa,checker,checkerdate from view_cub where noa=@noa
+end
+
+if(@t_apv='approve')
+begin
+	EXEC("update cub"+@accy+" set approve='"+@r_name+"',approvedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+	select noa,checker,checkerdate,approve,approvedate from view_cub where noa=@noa
+end
+
+declare @ipto nvarchar(20)=isnull((select ipto from view_cub where noa=@noa),'')
+declare @ucxno nvarchar(20)=isnull((select ucxno from view_cub where noa=@noa),'')
+declare @ip nvarchar(20)=isnull((select ip from acomp where noa=@ipto),'')
+declare @db nvarchar(20)=isnull((select dbname from acomp where noa=@ipto),'')
+
+declare @cmd nvarchar(MAX)=''
+declare @count int=0
+
+if(@t_apv='issue')
+begin	
+	--回寫ucx 只要寫入貿易端即可 本機端不用
+	set @cmd ="select @count=count(*) from ["+@ip+",1799]."+@db+".dbo.ucx where noa='"+@ucxno+"' "
+	execute sp_executesql @cmd,N'@count int output',@count=@count output
+	
+	--表示沒有重複KEY
+	if(@count=0)
+	begin
+		--寫入UCX
+		EXEC("insert ucx(noa,kdate,product,typea,spec,unit,groupeno,groupfno,ucano,ordeno)
+		select '"+@ucxno+"','"+@datea+"',product,'2',spec,unit,m1,m4,productno,ordeno
+		from view_cub where noa='"+@noa+"'")
+	
+		EXEC("update cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+	end
+	
+	select @ip tip,@db tdb,noa,checker,checkerdate,approve,approvedate,issuedate from view_cub where noa=@noa
+end
+;
+----------------------------------------------------------------------------------

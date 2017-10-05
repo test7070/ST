@@ -1053,7 +1053,8 @@
 				
 				//106/03/16 限制 訂單交期 106/03/17後面等確定再改抓orde.dodate
 				//var t_where="where=^^noa='qsys.orde.dodate'^^"
-				var t_where="where=^^noa='orde.dodate'^^"
+				//106/09/14 不判斷
+				/*var t_where="where=^^noa='orde.dodate'^^"
 				q_gt('qsys', t_where, 0, 0, 0, "getdodate", r_accy, 1);
 				var as = _q_appendData("qsys", "", true);
 				if (as[0] != undefined) {
@@ -1069,7 +1070,7 @@
 				var t_err='';
 				if(t_dodate.length>0 && (q_cur==1 || (q_cur==2 && modi_mount!=modi_mount2)) ){
 					for(var k=0;k<q_bbsCount;k++){
-						if($('#txtDatea_'+k).val()<=t_dodate){
+						if($('#txtDatea_'+k).val()<=t_dodate && !emp($('#txtDatea_'+k).val())){
 							t_err=q_getMsg('lblDateas')+"【"+$('#txtDatea_'+k).val()+"】不可低於"+t_dodatename+"【"+t_dodate+"】";
 							break;
 						}	
@@ -1078,7 +1079,7 @@
 				if(t_err.length>0){
 					alert(t_err);
 					return;
-				}
+				}*/
 				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
@@ -2415,7 +2416,7 @@
 						<td class="td3" colspan="2"><input id="txtAcomp" type="text" class="txt c1"/></td>
 						<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
 						<td class="td6"colspan="2"><input id="txtContract" type="text" class="txt c1"/></td>
-						<td class="td8" align="center"><input id="btnOrdem" type="button"/></td>
+						<td class="td8" align="center"><input id="btnOrdem" type="button" style="display: none;"/></td>
 					</tr>
 					<tr class="tr3">
 						<td class="td1"><span> </span><a id="lblCust" class="lbl btn"> </a></td>

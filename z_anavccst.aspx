@@ -15,7 +15,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
-			var uccgaItem = '';
+			var uccgaItem = '',cnoitem='';
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
@@ -33,7 +33,7 @@
 						
 			});
 			function q_gfPost() {
-				q_gt('uccga', '', 0, 0, 0, "");	
+				q_gt('uccga', '', 0, 0, 0, "");
 			}
 			function q_gtPost(t_name) {
 				switch (t_name) {
@@ -43,6 +43,16 @@
 						 	uccgaItem = ' @未設定';
 							for (var i = 0; i < as.length; i++) {
 								uccgaItem += (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
+							}
+						}
+						q_gt('acomp', '', 0, 0, 0, "");
+						break;
+					case 'acomp':
+						var as = _q_appendData("acomp", "", true);
+						if (as[0] != undefined) {
+							cnoitem = '#non@全部';
+							for (var i = 0; i < as.length; i++) {
+								cnoitem += (cnoitem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].nick;
 							}
 						}
 						loadFinish();
@@ -63,7 +73,7 @@
 						src : 'cust_b.aspx'
 					}, {
 						type : '2', //[5][6]  3
-						name : 'xsss',
+						name : 'xsales',
 						dbf : 'sss',
 						index : 'noa,namea',
 						src : 'sss_b.aspx'
@@ -91,14 +101,27 @@
 					},{
 						type : '1', //[14][15]]   9
 						name : 'xwidth'
-					}]
+					},{
+						type : '6', //[16]   10  bd使用
+						name : 'xrate'
+					}, {
+                        type : '5',//[17]   11  bd使用
+                        name : 'xcno',
+                        value : cnoitem.split(',')
+                    }]
 				});
 				q_popAssign();
 				q_getFormat();
 				q_langShow();
-				$('#txtXdate1').mask('999/99/99');
+				
+				if (r_len == 4) {
+					$.datepicker.r_len = 4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+				}
+				
+				$('#txtXdate1').mask(r_picd);
 				$('#txtXdate1').datepicker();
-				$('#txtXdate2').mask('999/99/99');
+				$('#txtXdate2').mask(r_picd);
 				$('#txtXdate2').datepicker();
 				$('#chkXitem').children('input').attr('checked', 'checked');
 				
@@ -106,6 +129,25 @@
 				$('#txtXdime2').css('text-align','right').val('999');
 				$('#txtXwidth1').css('text-align','right').val('0');
 				$('#txtXwidth2').css('text-align','right').val('9999');
+				
+				$('#txtXrate').css('text-align','right').val('0');
+				$('#txtXrate').css('width','60px');
+				
+				if(q_getPara('sys.project').toUpperCase()!='BD'){
+					var t_index=-1;
+					for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+						if($('#q_report').data('info').reportData[i].report=='z_anavccst05'){
+							t_index=i;
+							break;	
+						}
+					}
+					if(t_index>-1){
+						$('#q_report div div').eq(i).hide();
+					}
+				}else{
+					$('#chkXoption01').children('input').attr('checked', 'checked');
+				}
+				
 			}
 			function q_boxClose(s2) {
 			}
