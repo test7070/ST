@@ -23,7 +23,7 @@
             q_tables = 's';
             var q_name = "vcce";
             var q_readonly = ['txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtWeight','cmbStype'];
-            var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2'];
+            var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2','txtEweight','txtEcount'];
             var bbmNum = [['txtWeight', 10, 3, 1]];
             var bbsNum = [['txtWeight', 10, 3, 1], ['txtMount', 10, 2, 1], ['txtTheory', 10, 3, 1],['txtEweight', 10, 3, 1], ['txtEcount', 10, 2, 1],['txtAdjweight', 10, 3, 1], ['txtAdjcount', 10, 2, 1],['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
             var bbmMask = [];
