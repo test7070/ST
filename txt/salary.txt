@@ -3097,3 +3097,221 @@ BEGIN
 END
 
 ;
+---------------------------------------------------------------------------------------------------------------------
+salaryimport2:--salaryimport2
+SET QUOTED_IDENTIFIER OFF
+declare @mon nvarchar(50)=[1]
+declare @r_len nvarchar(50)=[2]
+declare @person nvarchar(50)=[3] --本國/日薪/外勞/時薪
+declare @monkind nvarchar(50)=[4] --本月/上期/下期
+declare @proj nvarchar(50)=[5]
+declare @date1 nvarchar(50)=[6] --整月/上/下期
+declare @date2 nvarchar(50)=[7] --整月/上/下期
+
+IF OBJECT_ID('tempdb..#tmpa')is not null
+BEGIN
+   drop table #tmpa
+END
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+   drop table #tmp
+END
+
+IF OBJECT_ID('tempdb..#montmp')is not null
+BEGIN
+   drop table #montmp
+END
+
+create table #tmp(
+	sssno nvarchar(max),
+	namea nvarchar(max),
+	partno nvarchar(max),
+	part nvarchar(max),
+	jobno nvarchar(max),
+	job nvarchar(max),
+	person nvarchar(max),
+	indate nvarchar(max),
+	outdate nvarchar(max),
+	iswelfare bit,
+	typea nvarchar(max),
+	
+	salary float,
+	bo_admin float,
+	bo_traffic float,
+	bo_special float,
+	bo_oth float,
+	bo_full float,
+	meals float,
+	
+	bo_money1 float,
+	bo_money2 float,
+	bo_money3 float,
+	bo_money4 float,
+	bo_money5 float,
+	
+	ch_labor1 float, --勞保投保薪資
+	ch_labor2 float, --勞退投保薪資
+	ch_health_insure float, --健保投保薪資
+	raise_num float, --扶養人數
+	
+	ch_health float, --健保自付額
+	as_health float, --健保輔助額
+	he_comp float, --健保公司負擔
+	hplus2 float, --二代健保補價
+	
+	ch_labor float,--勞保自付額
+	as_labor float,--勞保輔助
+	la_comp float, --勞保公司負擔
+	
+	ch_labor_comp float,--勞退公司提繳
+	ch_labor_self float,--勞退個人提繳
+	
+	tax float, --所得稅
+	
+	borrow float, --借支
+	plus float, --其他加項
+	minus float,--其他扣款
+	
+	ismanua bit,--調整
+	ostand float,--加班費基數
+	addh1 float,
+	addh2 float,
+	addh3 float,
+	addh4 float,
+	addh100 float,
+	addh200 float,
+	addh266 float,
+	
+	newday float, --新進員工作日數
+	inday float, --上班天數(日薪)
+	hrs float, --時數(時薪)
+	
+	late float,--遲到/早退
+	hr_sick float,
+	mi_sick float,
+	hr_person float,
+	mi_person float,
+	hr_nosalary float,
+	mi_nosalary float,
+	hr_leave float,
+	mi_leave float,
+	hr_late float,--遲到扣薪 106/05/19增加
+	mi_late float,
+	memo nvarchar(MAX)
+)
+
+insert #tmp(sssno,namea,partno,part,jobno,job,person,indate,outdate,iswelfare,typea
+,salary,bo_admin,bo_traffic,bo_special,bo_oth,bo_full,meals
+,bo_money1,bo_money2,bo_money3,bo_money4,bo_money5
+,ch_labor1,ch_labor2,ch_health_insure,raise_num
+,ch_health,as_health,he_comp,hplus2
+,ch_labor,as_labor,la_comp
+,ch_labor_comp,ch_labor_self,tax
+,borrow,plus,minus
+,ismanua,ostand
+,addh1,addh2,addh3,addh4,addh100,addh200,addh266
+,newday,inday,hrs,late
+,hr_sick,hr_person,hr_nosalary,hr_leave,hr_late,memo
+)
+select a.noa sssno,a.namea,a.partno,a.part,a.jobno,a.job,a.person,a.indate,a.outdate,a.iswelfare,a.typea
+,isnull(b.money,0) salary,isnull(b.bo_admin,0)bo_admin,isnull(b.bo_traffic,0)bo_traffic
+,isnull(b.bo_special,0)bo_special,isnull(b.bo_oth,0)bo_oth,isnull(b.bo_full,0) bo_full
+,0 mealsmoney
+,isnull(b.bo_money1,0)bo_money1,isnull(b.bo_money2,0)bo_money2
+,isnull(b.bo_money3,0)bo_money3,isnull(b.bo_money4,0)bo_money4,isnull(b.bo_money5,0)bo_money5
+,case when lab.noa is not null then isnull(b2.sa_labor,0) else isnull(b.sa_labor,0)end ch_labor1
+,case when lab.noa is not null then isnull(b2.sa_retire,0) else isnull(b.sa_retire,0)end ch_labor2
+,case when lab.noa is not null then isnull(b2.sa_health,0) else isnull(b.sa_health,0)end ch_health_insure
+,case when lab.noa is not null then isnull(b2.mount,0) else isnull(b.mount,0)end raise_num
+,case when lab.noa is not null then isnull(b2.he_person,0) else isnull(b.he_person,0)end ch_health
+,case when lab.noa is not null then isnull(lab.as_health,0) else isnull(b.as_health,0) end as_health
+,case when lab.noa is not null then isnull(b2.he_comp,0) else isnull(b.he_comp,0)end he_comp
+,case when lab.noa is not null then isnull(b2.hplus2,0) else isnull(b.hplus2,0)end hplus2
+,case when lab.noa is not null then isnull(b2.la_person,0) else isnull(b.la_person,0)end ch_labor
+,case when lab.noa is not null then isnull(lab.as_labor,0) else isnull(b.as_labor,0)end as_labor
+,case when lab.noa is not null then isnull(b2.la_comp,0) else isnull(b.la_comp,0)end la_comp
+,case when lab.noa is not null then isnull(b2.re_comp,0) else isnull(b.re_comp,0) end ch_labor_comp
+,case when lab.noa is not null then isnull(b2.re_person,0) else isnull(b.re_person,0)end ch_labor_self
+,isnull(b.tax,0)tax
+,isnull(d.borrow,0) borrow,isnull(d.plus,0) plus,isnull(d.minus,0)minus
+,0 --若class5有指定加班費 則加班費需程式要先計算出來
+,0 ostand
+,0 w133,0 w166,case when @monkind='下期' then 0 else 0 end,case when @monkind='下期' then 0 else 0 end
+,0 w100,0 w200,0 w266
+,case when (left(a.indate,len(@mon))=@mon and isnull(a.indate,'')!='') or (left(a.outdate,len(@mon))=@mon and isnull(a.outdate,'')!='') then 
+	case when (left(a.indate,len(@mon))=left(a.outdate,len(@mon))) --當月進當月離
+	then dbo.q_cdd(a.outdate,a.indate)+1
+	when left(a.outdate,len(@mon))=@mon --當月離職
+	then dbo.q_cdd(a.outdate,@mon+'/01')+1
+	else dbo.q_cdd(@mon+'/'+dbo.q_lastday(@mon),a.indate) end --當月入職
+else 0 end
+,0 inday,0 workhours,0
+,ISNULL(h.hr_sick,0),ISNULL(h.hr_person,0),ISNULL(h.hr_nosalary,0),ISNULL(h.hr_leave,0),round(ISNULL(0,0)/60,1) dlemin
+,case when (left(a.indate,len(@mon))=@mon and isnull(a.indate,'')!='') or (left(a.outdate,len(@mon))=@mon and isnull(a.outdate,'')!='') then 
+	case when (left(a.indate,len(@mon))=left(a.outdate,len(@mon))) --當月進當月離
+	then "新進員工(工作日:"+cast(dbo.q_cdd(a.outdate,a.indate)+1 as nvarchar(10))+")"
+	when left(a.outdate,len(@mon))=@mon --當月離職
+	then "離職員工(工作日:"+CAST(dbo.q_cdd(a.outdate,@mon+'/01')+1 as nvarchar(10))+")"
+	else "新進員工(工作日:"+cast(dbo.q_cdd(@mon+'/'+dbo.q_lastday(@mon),a.indate) as nvarchar(10))+")" end --當月入職
+else '' end
+from sss a 
+outer apply (select top 1 * from saladjust where noa=a.noa and datea<=@date2 order by datea desc)b
+outer apply (select top 1 noa,as_health,as_labor from labase where noa=a.noa)lab
+outer apply (select SUM(he_person)he_person,SUM(he_comp)he_comp
+,SUM(la_person)la_person,SUM(la_comp)la_comp,SUM(re_person)re_person,SUM(re_comp)re_comp,SUM(disaster)disaster,SUM(salary)salary
+,SUM(sa_health)sa_health,SUM(sa_labor)sa_labor,SUM(sa_retire)sa_retire,SUM(hplus2)hplus2,MAX(mount)mount
+from salinsures where noa=a.noa and mon=@mon)b2
+left join (select sssno,SUM(plus) plus,SUM(minus) minus,SUM(borrow) borrow from salchg where mon=@mon group by sssno) d on a.noa=d.sssno
+outer apply (select SUM(case when hname like'%病假%' then hr_used else 0 end) hr_sick,
+SUM(case when hname like'%事假%' then hr_used else 0 end) hr_person,
+SUM(case when hname like'%無薪%' then hr_used else 0 end) hr_nosalary
+,SUM(case when hname like'%曠工%' then hr_used else 0 end) hr_leave
+from salvacause where bdate between @date1 and @date2 and sssno=a.noa)h
+--(因沒有時間所以不處理是否輪班,只接取早班)
+outer apply(
+	select top 1 * from class5s where noa=case when isnull(b.class5,'')!='' then b.class5 else a.class5 end
+	and bdate<@date2 order by bdate,btime desc --有效日
+)c1 where a.person=@person and a.noa!='Z001' 
+and (ISNULL(a.outdate,'')='' or @date1<ISNULL(a.outdate,''))
+and (ISNULL(a.indate,'')!='' and ISNULL(a.indate,'')<=@date2 )
+
+select sssno,namea,partno,part,jobno,job,person,indate,outdate,iswelfare,typea
+,ISNULL(salary,0) salary,ISNULL(bo_admin,0) bo_admin,ISNULL(bo_traffic,0) bo_traffic
+,ISNULL(bo_special,0) bo_special,ISNULL(bo_oth,0) bo_oth,ISNULL(bo_full,0) bo_full
+,ISNULL(meals,0) meals,ISNULL(bo_money1,0) bo_money1,ISNULL(bo_money2,0) bo_money2
+,ISNULL(bo_money3,0) bo_money3,ISNULL(bo_money4,0) bo_money4,ISNULL(bo_money5,0) bo_money5
+,ISNULL(ch_labor1,0) ch_labor1,ISNULL(ch_labor2,0) ch_labor2,ISNULL(ch_health_insure,0) ch_health_insure
+,ISNULL(raise_num,0) raise_num,ISNULL(ch_health,0) ch_health
+,ISNULL(as_health,0) as_health,ISNULL(he_comp,0) he_comp,ISNULL(hplus2,0) hplus2
+,ISNULL(ch_labor,0) ch_labor,ISNULL(as_labor,0) as_labor,ISNULL(la_comp,0) la_comp
+,ISNULL(ch_labor_comp,0) ch_labor_comp,ISNULL(ch_labor_self,0) ch_labor_self
+,ISNULL(tax,0) tax,ISNULL(borrow,0) borrow,ISNULL(plus,0) plus,ISNULL(minus,0) minus
+,ISNULL(ismanua,0) ismanua,ISNULL(ostand,0) ostand
+,ISNULL(addh1,0) addh1,ISNULL(addh2,0) addh2,ISNULL(addh3,0) addh3,ISNULL(addh4,0) addh4
+,ISNULL(addh100,0) addh100,ISNULL(addh200,0) addh200,ISNULL(addh266,0) addh266
+,ISNULL(newday,0) newday,ISNULL(inday,0) inday,ISNULL(hrs,0) hrs,ISNULL(late,0) late
+,ISNULL(hr_sick,0) hr_sick,ISNULL(mi_sick,0) mi_sick
+,ISNULL(hr_person,0) hr_person,ISNULL(mi_person,0) mi_person
+,ISNULL(hr_nosalary,0) hr_nosalary,ISNULL(mi_nosalary,0) mi_nosalary
+,ISNULL(hr_leave,0) hr_leave,ISNULL(mi_leave,0) mi_leave
+,ISNULL(hr_late,0) hr_late,ISNULL(mi_late,0) mi_late
+,ISNULL(memo,'') memo
+from #tmp order by sssno
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+   drop table #tmp
+END
+
+IF OBJECT_ID('tempdb..#tmpa')is not null
+BEGIN
+   drop table #tmpa
+END
+
+IF OBJECT_ID('tempdb..#montmp')is not null
+BEGIN
+   drop table #montmp
+END
+
+;

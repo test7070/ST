@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
@@ -70,41 +70,23 @@
 					}]
 				});
 				q_popAssign();
-
-				var r_1911=1911;
-				if(q_getPara('sys.project')=='vu'){
-					r_1911 = 0;
-					$('#txtXmon1').mask('9999/99');
-					$('#txtXmon2').mask('9999/99');
-					$('#txtCmon').mask('9999/99');
-					$('#txtXyear').mask('9999');
-					$('#txtXyear').val(q_date().substring(0, 4));
-				}else{
-					r_1911=1911;
-					$('#txtXmon1').mask('999/99');
-					$('#txtXmon2').mask('999/99');
-					$('#txtCmon').mask('999/99');
-					$('#txtXyear').mask('999');
-					$('#txtXyear').val(q_date().substring(0, 3));
+				q_getFormat();
+				q_langShow();
+				
+				if (r_len == 4) {
+					$.datepicker.r_len = 4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
 				}
 				
-				var t_date, t_year, t_month, t_day;
-				t_date = new Date();
-				t_date.setDate(1);
-				t_year = t_date.getUTCFullYear() - r_1911;
-				t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-				t_month = t_date.getUTCMonth() + 1;
-				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-				$('#txtXmon1').val(t_year + '/' + t_month);
-				t_date = new Date();
-				t_date.setDate(1);
-				t_year = t_date.getUTCFullYear() - r_1911;
-				t_year = t_year > 99 ? t_year + '' : '0' + t_year;
-				t_month = t_date.getUTCMonth() + 1;
-				t_month = t_month > 9 ? t_month + '' : '0' + t_month;
-				$('#txtXmon2').val(t_year + '/' + t_month);
+				$('#txtXmon1').mask(r_picm);
+				$('#txtXmon2').mask(r_picm);
+				$('#txtCmon').mask(r_picm);
+				$('#txtXyear').mask(r_pic);
+				$('#txtXyear').val(q_date().substring(0, r_len));
+				
+				$('#txtXmon1').val(q_date().substring(0, r_lenm));
+				$('#txtXmon2').val(q_date().substring(0, r_lenm));
 
-				$('#txtXyear').val(t_year);
 				$('#txtSalary1').val(0);
 				$('#txtSalary2').val(999999);
 			}
