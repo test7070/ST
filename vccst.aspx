@@ -256,15 +256,6 @@
 					}
 				});
 				//=====================================================================
-				/* 若非本會計年度則無法存檔 */
-				$('#txtDatea').focusout(function() {
-					if ($(this).val().substr(0, 3) != r_accy) {
-						$('#btnOk').attr('disabled', 'disabled');
-						alert(q_getMsg('lblDatea') + '非本會計年度。');
-					} else {
-						$('#btnOk').removeAttr('disabled');
-					}
-				});
 				$('#btnVcceImport').click(function() {
 					var t_ordeno = $('#txtOrdeno').val();
 					var t_custno = $('#txtCustno').val();
@@ -342,6 +333,13 @@
 				}else{
 					$('.benifit').hide();
 				}
+				
+				if(q_getPara('sys.project').toUpperCase()=='BD'){
+					$('#btnOrdeno').hide();
+					$('#btnVcceImport').hide();
+					$('#btnImportVcce').val('發貨匯入').show();//只有發貨匯入
+				}
+				
 			}
 			function q_boxClose(s2) {/// q_boxClose 2/4
 				var ret;
@@ -698,7 +696,7 @@
 							}
 						}
 						for (var i = 0; i < vcces_as.length; i++) {
-							if (vcces_as[i].mount <= 0 || vcces_as[i].weight <= 0 || vcces_as[i].ordeno == '') {
+							if (vcces_as[i].mount <= 0 && vcces_as[i].weight <= 0) { //|| vcces_as[i].ordeno == ''
 								vcces_as.splice(i, 1);
 								i--;
 							}
@@ -717,10 +715,16 @@
 								distinctArray.push(vcces_as[i].ordeno);
 							}
 							distinctArray = distinct(distinctArray);
+							var t_ordes='';
 							for (var i = 0; i < distinctArray.length; i++) {
 								inStr += "'" + distinctArray[i] + "',";
+								t_ordes+=distinctArray[i] + ",";
 							}
 							inStr = inStr.substring(0, inStr.length - 1);
+							t_ordes = t_ordes.substring(0, t_ordes.length - 1);
+							if(q_getPara('sys.project').toUpperCase()=='BD'){
+								$('#txtOrdeno').val(t_ordes);
+							}
 							if (trim(inStr).length > 0) {
 								var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
 								q_gt('view_ordes', t_where, 0, 0, 0, "", r_accy);
@@ -1364,6 +1368,10 @@
 					$('#txtMon').removeAttr('readonly');
 				else
 					$('#txtMon').attr('readonly', 'readonly');*/
+				
+				if(q_getPara('sys.project').toUpperCase()=='BD'){
+					$('#txtOrdeno').attr('disabled', 'disabled');
+				}
 			}
 			function btnMinus(id) {
 				_btnMinus(id);
@@ -1743,10 +1751,7 @@
 							<input id="txtComp" type="text" style="float:left;width:75%;"/>
 							<input id="txtNick" type="text" style="display:none;"/>
 						</td>
-						<td>
-							<input id="btnOrdeno" type="button" class="lbl"/>
-							<!--<span> </span><a id='lblOrdeno' class="lbl btn"> </a>-->
-						</td>
+						<td><span> </span><a id='lblOrdeno' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtOrdeno" type="text" class="txt c1" /></td>
 					</tr>
 					<tr>
@@ -1798,7 +1803,7 @@
 							<span style="float:left;display:block;width:10px;"> </span>
 							<select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'> </select>
 						</td>
-						<td> </td>
+						<td><input id="btnOrdeno" type="button" class="lbl"/></td>
 						<td colspan="2">
 							<input id="btnImportVcce" type="button"/>
 							<input id="btnVcceImport" type="button" title="cut cubu"/>
