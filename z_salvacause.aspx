@@ -66,15 +66,25 @@
                 t_noa  =  t_noa.replace('noa=','');
                 $('#txtXnoa').val(t_noa).width(100);
                 
-                $('#txtXyear').val(q_date().substr(0,3));
-                $('#txtXyear').mask('999');
-                $('#txtXdate1').mask('999/99/99');
+                
+                
+                 if(r_len==4){
+                    var r_1911=0;                  
+                    $.datepicker.r_len=4;
+                    //$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+                    $('#txtXyear').mask('9999');
+                    $('#txtXyear').val(q_date().substr(0,4));
+                }else{
+                    $('#txtXyear').mask('999');
+                    $('#txtXyear').val(q_date().substr(0,3));
+                }
+                $('#txtXdate1').mask(r_picd);
                 $('#txtXdate1').datepicker();
-                $('#txtXdate2').mask('999/99/99');
+                $('#txtXdate2').mask(r_picd);
                 $('#txtXdate2').datepicker();
-                $('#txtYdate1').mask('999/99/99');
+                $('#txtYdate1').mask(r_picd);
                 $('#txtYdate1').datepicker();
-                $('#txtYdate2').mask('999/99/99');
+                $('#txtYdate2').mask(r_picd);
                 $('#txtYdate2').datepicker();
                 
                  
