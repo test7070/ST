@@ -205,6 +205,10 @@
 							name : 'showunpay', //只顯示未收
 							value : "1@只顯示未收,2@顯示貨單備註".split(',')
 						}, {
+                            type : '8', //[23]
+                            name : 'showunpay', //只顯示未收
+                            value : "1@只顯示未收,2@顯示貨單備註".split(',')
+                        }, {
 							type : '2', //[23][24]
 							name : 'xctype',
 							dbf : 'custtype',

@@ -15,7 +15,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"> </script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
-			var uccgaItem = '';
+			var uccgaItem = '',cnoitem='';
 			$(document).ready(function() {
 				_q_boxClose();
 				q_getId();
@@ -33,7 +33,7 @@
 						
 			});
 			function q_gfPost() {
-				q_gt('uccga', '', 0, 0, 0, "");	
+				q_gt('uccga', '', 0, 0, 0, "");
 			}
 			function q_gtPost(t_name) {
 				switch (t_name) {
@@ -43,6 +43,16 @@
 						 	uccgaItem = ' @未設定';
 							for (var i = 0; i < as.length; i++) {
 								uccgaItem += (uccgaItem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].namea;
+							}
+						}
+						q_gt('acomp', '', 0, 0, 0, "");
+						break;
+					case 'acomp':
+						var as = _q_appendData("acomp", "", true);
+						if (as[0] != undefined) {
+							cnoitem = '#non@全部';
+							for (var i = 0; i < as.length; i++) {
+								cnoitem += (cnoitem.length > 0 ? ',' : '') + as[i].noa + '@' + as[i].noa+' . '+as[i].nick;
 							}
 						}
 						loadFinish();
@@ -94,7 +104,11 @@
 					},{
 						type : '6', //[16]   10  bd使用
 						name : 'xrate'
-					}]
+					}, {
+                        type : '5',//[17]   11  bd使用
+                        name : 'xcno',
+                        value : cnoitem.split(',')
+                    }]
 				});
 				q_popAssign();
 				q_getFormat();
@@ -118,6 +132,22 @@
 				
 				$('#txtXrate').css('text-align','right').val('0');
 				$('#txtXrate').css('width','60px');
+				
+				if(q_getPara('sys.project').toUpperCase()!='BD'){
+					var t_index=-1;
+					for(var i=0;i<$('#q_report').data().info.reportData.length;i++){
+						if($('#q_report').data('info').reportData[i].report=='z_anavccst05'){
+							t_index=i;
+							break;	
+						}
+					}
+					if(t_index>-1){
+						$('#q_report div div').eq(i).hide();
+					}
+				}else{
+					$('#chkXoption01').children('input').attr('checked', 'checked');
+				}
+				
 			}
 			function q_boxClose(s2) {
 			}

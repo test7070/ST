@@ -80,6 +80,10 @@
 					}
 					$('#txtMaxmodmount').val(q_mul(dec($('#txtInmount').val()),dec($('#txtModmounts').val())));
 				});
+				
+				if(q_getPara('sys.project').toUpperCase()=='AD' || q_getPara('sys.project').toUpperCase()=='JO'){
+					$('#lblFrame').text('儲位架');
+				}
 			}
 
 			function q_boxClose(s2) {
@@ -128,14 +132,11 @@
 					$('#txtWorker').val(r_name);
 				else
 					$('#txtWorker2').val(r_name);
+					
 				$('#txtNoa').val($.trim($('#txtNoa').val()));
+				
 				var t_noa=$('#txtNoa').val();
-				if ((/^(\w+|\w+\u002D\w+)$/g).test(t_noa)) {
-				} else {
-					alert('編號只允許 英文(A-Z)、數字(0-9)及dash(-)。' + String.fromCharCode(13) + 'EX: A01、A01-001');
-					Unlock();
-					return;
-				}
+				
 				if (q_cur == 1) {
 					t_where = "where=^^ noa='" + t_noa + "'^^";
 					q_gt('model', t_where, 0, 0, 0, "checkModelno_btnOk", r_accy);
@@ -448,8 +449,8 @@
 						<td><input id="txtModmounts" type="text" class="txt c1 num"/></td>
 						<td><span> </span><a id='lblMaxmodmount' class="lbl" style="text-align: right;width: 95%;"> </a></td>
 						<td><input id="txtMaxmodmount" type="text" class="txt c1 num"/></td>
-						<td> </td>
-						<td> </td>
+						<td><span> </span><a id='lblFrame' class="lbl"> </a></td>
+						<td><input id="txtFrame" type="text" class="txt c1"/></td>
 						<td> </td>
 					</tr>
 					<tr>
