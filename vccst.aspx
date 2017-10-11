@@ -277,8 +277,8 @@
 						if (t_custno.length == 0) {
 							alert('請輸入 : 【' + q_getMsg('lblCust') + '】');
 						} else {
-							t_where = "where=^^ custno='" + t_custno + "' ^^";
-							q_gt('view_vcces', t_where, 0, 0, 0, "", r_accy);
+							t_where = "where=^^ b.custno='" + t_custno + "' and b.kind='"+$('#cmbKind').val()+"' and (a.mount-isnull(c.vmount,0)>0 or a.weight-isnull(c.vweight,0)>0) ^^";
+							q_gt('vcce_vcc', t_where, 0, 0, 0, "", r_accy);
 						}
 					}
 				});
@@ -569,26 +569,6 @@
 							focus_addr = '';
 						}
 						break;
-					case 'view_vcces':
-						vcces_as = _q_appendData("view_vcces", "", true);
-						if (vcces_as[0] != undefined) {
-							var distinctArray = new Array;
-							var inStr = '';
-							for (var i = 0; i < vcces_as.length; i++) {
-								distinctArray.push(vcces_as[i].ordeno);
-							}
-							distinctArray = distinct(distinctArray);
-							for (var i = 0; i < distinctArray.length; i++) {
-								inStr += "'" + distinctArray[i] + "',";
-							}
-							inStr = inStr.substring(0, inStr.length - 1);
-							if (trim(inStr).length > 0) {
-								var t_where = "where=^^ ordeno in(" + inStr + ") and (isnull(ordeno,'') != '') ^^";
-								q_gt('view_vccs', t_where, 0, 0, 0, "", r_accy);
-							}
-						}
-						sum();
-						break;
 					case 'checkApv':
 						var as = _q_appendData("view_orde", "", true);
 						var ErrStr = '';
@@ -685,53 +665,45 @@
 						else
 							wrServer(t_noa);
 						break;
-					case 'view_vccs':
-						var vccs_as = _q_appendData("view_vccs", "", true);
-						for (var i = 0; i < vccs_as.length; i++) {
-							for (var j = 0; j < vcces_as.length; j++) {
-								if ((vcces_as[j].ordeno == vccs_as[i].ordeno) && (vcces_as[j].no2 == vccs_as[i].no2)) {
-									vcces_as[j].mount = dec(vcces_as[j].mount) - dec(vccs_as[i].mount);
-									vcces_as[j].weight = dec(vcces_as[j].weight) - dec(vccs_as[i].weight);
-								}
-							}
-						}
-						for (var i = 0; i < vcces_as.length; i++) {
-							if (vcces_as[i].mount <= 0 && vcces_as[i].weight <= 0) { //|| vcces_as[i].ordeno == ''
-								vcces_as.splice(i, 1);
-								i--;
-							}
-						}
-						if (vcces_as[0] != undefined) {
+					case 'vcce_vcc':
+						var as = _q_appendData("view_vcces", "", true);
+						
+						if (as[0] != undefined) {
 							for (var i = 0; i < q_bbsCount; i++) {
 								$('#btnMinus_' + i).click();
 							};
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtStyle,txtOrdeno,txtNo2,txtSize', vcces_as.length, vcces_as, 'uno,productno,product,spec,radius,dime,width,lengthb,mount,weight,price,style,ordeno,no2,size', 'txtUno');
+							for (var i = 0; i < as.length; i++) {
+								as[i].emount=q_sub(dec(as[i].mount),dec(as[i].vmount));
+								as[i].eweight=q_sub(dec(as[i].weight),dec(as[i].vweight));
+							}
+							
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtUnit,txtStyle,txtOrdeno,txtNo2,txtSize'
+							, as.length, as, 'uno,productno,product,spec,radius,dime,width,lengthb,emount,eweight,oprice,ounit,style,ordeno,no2,size', 'txtUno');
+							
+							$('#txtTel').val(as[0].tel);//電話
+							$('#cmbTrantype').val(as[0].trantype);//交運方式
+							$('#txtPrice').val(as[0].vccetotal);//運費
+							$('#txtCardealno').val(as[0].cardealno);//車行
+							$('#txtCardeal').val(as[0].cardeal);
+							$('#txtCarno').val(as[0].carno);//車牌
+							$('#txtAddr2').val(as[0].addr_post);//送貨地址
+							
 							size_change();
 							sum();
-							//get ordes.price <Start>
 							var distinctArray = new Array;
-							var inStr = '';
-							for (var i = 0; i < vcces_as.length; i++) {
-								distinctArray.push(vcces_as[i].ordeno);
+							for (var i = 0; i < as.length; i++) {
+								distinctArray.push(as[i].ordeno);
 							}
 							distinctArray = distinct(distinctArray);
 							var t_ordes='';
 							for (var i = 0; i < distinctArray.length; i++) {
-								inStr += "'" + distinctArray[i] + "',";
 								t_ordes+=distinctArray[i] + ",";
 							}
-							inStr = inStr.substring(0, inStr.length - 1);
 							t_ordes = t_ordes.substring(0, t_ordes.length - 1);
 							if(q_getPara('sys.project').toUpperCase()=='BD'){
 								$('#txtOrdeno').val(t_ordes);
 							}
-							if (trim(inStr).length > 0) {
-								var t_where = "where=^^ noa in(" + inStr + ") and (isnull(noa,'') != '') ^^";
-								q_gt('view_ordes', t_where, 0, 0, 0, "", r_accy);
-							}
-							//get ordes.price <End>
 						}
-						vcces_as = new Array;
 						break;
 					case 'custaddr':
 						var as = _q_appendData("custaddr", "", true);
@@ -1296,9 +1268,10 @@
 			}
 			function refresh(recno) {
 				_refresh(recno);
-				if (r_rank < 9) {
+				/*if (r_rank < 9) {
 					$('#btnImportVcce').css('display', 'none');
-				}
+				}*/
+				
 				size_change();
 				//q_popPost('txtProductno_');
 				$('input[id*="txtProduct_"]').each(function() {
@@ -1654,7 +1627,7 @@
 				margin: -1px;
 			}
 			.dbbs {
-				width: 1740px;
+				width: 1730px;
 			}
 			.tbbs a {
 				font-size: medium;
@@ -1866,12 +1839,11 @@
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblWeight_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
-					<td align="center" style="width:80px;">合計<br>理論重</td>
+					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a><br><a id='lblTheory'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:60px;">寄Y<BR>代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
-					<td align="center" style="width:180px;"><a id='lblMemos_st'> </a></td>
-					<td align="center" style="width:60px;">NOQ</td>
+					<td align="center" style="width:230px;"><a id='lblMemos_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
@@ -1927,8 +1899,8 @@
 						<input id="txtOrdeno.*" type="text" style="width:65%;" />
 						<input id="txtNo2.*" type="text" style="width:20%;" />
 						<input id="recno.*" type="hidden" />
+						<input id="txtNoq.*" type="text" style='display: none;'/>
 					</td>
-					<td><input id="txtNoq.*" type="text" style='width: 95%;'/></td>
 				</tr>
 			</table>
 		</div>
