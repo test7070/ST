@@ -35,13 +35,13 @@
             brwKey = 'noa';
             aPop = new Array(['txtCustno', 'lblCustno', 'cust', 'noa,comp,nick,tel,trantype,addr_fact', 'txtCustno,txtComp,txtNick,txtTel,cmbTrantype,txtAddr_post', 'cust_b.aspx']
             , ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
-            , ['txtStoreno2', 'lblStore2', 'store', 'noa,store', 'txtStoreno2,txtStore2', 'store_b.aspx'],
-             ['txtAddr_post', '', 'view_road', 'memo', '0txtAddr_post', 'road_b.aspx'],
-              ['txtDeivery_addr', '', 'view_road', 'memo', '0txtDeivery_addr', 'road_b.aspx'], 
-              ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,radius,dime,width,lengthb,spec,class', 'txtUno_,txtProductno_,txtProduct_,txtRadius_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtClass_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
-               ,['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
-               , ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
-               ,['txtCardeal', 'lblCardeal', 'cardeal', 'comp', 'txtCardeal', 'cardeal_b.aspx']);
+            , ['txtStoreno2', 'lblStore2', 'store', 'noa,store', 'txtStoreno2,txtStore2', 'store_b.aspx']
+            , ['txtAddr_post', '', 'view_road', 'memo', '0txtAddr_post', 'road_b.aspx']
+            , ['txtDeivery_addr', '', 'view_road', 'memo', '0txtDeivery_addr', 'road_b.aspx']
+            , ['txtUno_', 'btnUno_', 'view_uccc', 'uno,productno,product,radius,dime,width,lengthb,spec,class', 'txtUno_,txtProductno_,txtProduct_,txtRadius_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtClass_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%']
+            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'] 
+            , ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
+            , ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']);
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -120,7 +120,10 @@
                     if (t_ordeno.length > 0) {
                         t_where += q_sqlPara2('noa', t_ordeno);
                     }
-                    t_where += q_sqlPara2('custno', t_custno)+ "and kind='" + $('#cmbKind').val() + "' and isnull(sale,0)=1 "; //106/10/05只抓售的內容
+                    //106/10/05"訂單匯入"只抓訂單"售"的內容 "製成品匯入"只抓"加工"明細的內容
+                    t_where += q_sqlPara2('custno', t_custno)+ "and kind='" + $('#cmbKind').val() + "' and isnull(sale,0)=1 ";
+                    //106/10/06 訂單只會匯入一次
+                    t_where +=" and not exists (select * from view_vcces x where x.ordeno=view_ordes"+r_accy+".noa and x.no2=view_ordes"+r_accy+".no2)";
                     q_box("ordests_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'ordet', "95%", "95%", q_getMsg('popOrde'));
                 });
                 
@@ -825,7 +828,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 1700px;
+                width: 1500px;
             }
             .tbbs a {
                 font-size: medium;
@@ -881,11 +884,9 @@
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text" class="txt c1"/></td>
 						<td><select id="cmbKind" class="txt" class="txt c1"> </select></td>
+						<td> </td>
 						<td><span> </span><a id="lblNoa" class="lbl"> </a></td>
 						<td><input id="txtNoa"  type="text" class="txt c1"/></td>
-						<td><span> </span><a id="lblCldate" class="lbl"> </a></td>
-						<td><input id="txtCldate"  type="text" class="txt c1"/></td>
-						<td><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblCustno" class="lbl btn"> </a></td>
@@ -894,19 +895,25 @@
 							<input id="txtComp"  type="text" style="float:left;width:70%;"/>
 							<input id="txtNick"  type="text" style="display:none;"/>
 						</td>
-						<td><span> </span><a id="lblCaseno" class="lbl"> </a></td>
-						<td><input id="txtCaseno"  type="text" class="txt c1"/></td>
-						<td><input id="txtCaseno2"  type="text" class="txt c1"/></td>
+						<td><span> </span><a id="lblCldate" class="lbl"> </a></td>
+						<td><input id="txtCldate"  type="text" class="txt c1"/></td>
+						<td><input type="button" id="btnTip" value="?" onclick="tipShow()"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblTel" class="lbl"> </a></td>
-						<td>
-						<input id="txtTel"  type="text" class="txt c1"/>
-						</td>
+						<td><input id="txtTel"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
 						<td><select id="cmbTrantype" class="txt c1" name="D1" > </select></td>
+						<td><span> </span><a id="lblCaseno" class="lbl"> </a></td>
+						<td colspan="3">
+							<input id="txtCaseno"  type="text" class="txt c1" style="width: 49%;"/>
+							<input id="txtCaseno2"  type="text" class="txt c1" style="width: 49%;"/>
+						</td>
+					</tr>
+					<tr>
 						<td><span> </span><a id="lblCardeal" class="lbl btn"> </a></td>
-						<td><input id="txtCardeal"  type="text" class="txt c1"/></td>
+						<td><input id="txtCardealno"  type="text" class="txt c1"/></td>
+						<td colspan="2"><input id="txtCardeal"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblCarno" class="lbl"> </a></td>
 						<td><input id="txtCarno"  type="text" class="txt c1"/></td>
 					</tr>
@@ -949,9 +956,7 @@
 		<div class='dbbs'>
 			<table id="tbbs" class='tbbs' style=' text-align:center'>
 				<tr style='color:white; background:#003366;' >
-					<td  align="center" style="width:30px;">
-					<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
-					</td>
+					<td  align="center" style="width:30px;"><input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;"/></td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:250px;"><a id='lblUno_s'> </a></td>
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
@@ -966,78 +971,63 @@
 					<td align="center" style="width:30px;"><a id='lblEnds_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblEweight_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblEcount_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblAdjweight_s'> </a></td>
-					<td align="center" style="width:80px;"><a id='lblAdjcount_s'> </a></td>
-					<td align="center" style="width:170px;"><a id='lblMemo_s'> </a><br><a id='lblOrdeno_s'> </a></td>
+					<td align="center" style="width:80px;display: none;" class="adj"><a id='lblAdjweight_s'> </a></td>
+					<td align="center" style="width:80px;display: none;" class="adj"><a id='lblAdjcount_s'> </a></td>
+					<td align="center" style="width:200px;"><a id='lblMemo_s'> </a><br><a id='lblOrdeno_s'> </a></td>
 				</tr>
 				<tr  style='background:#cad3ff;'>
 					<td align="center">
-					<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-					<input id="txtNoq.*" type="text" style="display: none;" />
+						<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
+						<input id="txtNoq.*" type="text" style="display: none;" />
 					</td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
-					<input class="btn" id="btnUno.*" type="button" value='.' style="width:1%;"/>
-					<input id="txtUno.*" type="text" style="width:83%;"/>
+						<input class="btn" id="btnUno.*" type="button" value='.' style="width:1%;"/>
+						<input id="txtUno.*" type="text" style="width:83%;"/>
 					</td>
 					<td>
 						<input id="txtProductno.*" type="text" style="width:95%;" />
 						<input type="text" id="txtProduct.*" style="width:95%;" />
 						<input class="btn" id="btnProduct.*" type="button" style="display:none;"/>
 					</td>
-					<td><input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
+					<td>
+						<input type="text" id="txtStyle.*" style="width:95%;text-align:center;" />
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
 					<td><input id="txtClass.*" type="text" style='width: 95%;'/></td>
 					<td>
-					<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-					<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
-						x
-					</div>
-					<input class="txt num" id="textSize2.*" type="text" style="float: left;width:55px;"  disabled="disabled"/>
-					<div id="x2.*" style="float: left;display:block;width:20px;padding-top: 4px;">
-						x
-					</div>
-					<input class="txt num" id="textSize3.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
-					<div id="x3.*" style="float: left;display:block;width:20px;padding-top: 4px;">
-						x
-					</div>
-					<input class="txt num" id="textSize4.*" type="text"  style="float: left;width:55px;" disabled="disabled"/>
-					<!--上為虛擬下為實際-->
-					<input id="txtRadius.*" type="text" style="display:none;"/>
-					<input id="txtWidth.*" type="text" style="display:none;"/>
-					<input id="txtDime.*" type="text" style="display:none;"/>
-					<input id="txtLengthb.*" type="text" style="display:none;"/>
-					<input id="txtSpec.*" type="text" style="float:left;"/>
+						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
+						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
+							x
+						</div>
+						<input class="txt num" id="textSize2.*" type="text" style="float: left;width:55px;"  disabled="disabled"/>
+						<div id="x2.*" style="float: left;display:block;width:20px;padding-top: 4px;">
+							x
+						</div>
+						<input class="txt num" id="textSize3.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
+						<div id="x3.*" style="float: left;display:block;width:20px;padding-top: 4px;">
+							x
+						</div>
+						<input class="txt num" id="textSize4.*" type="text"  style="float: left;width:55px;" disabled="disabled"/>
+						<!--上為虛擬下為實際-->
+						<input id="txtRadius.*" type="text" style="display:none;"/>
+						<input id="txtWidth.*" type="text" style="display:none;"/>
+						<input id="txtDime.*" type="text" style="display:none;"/>
+						<input id="txtLengthb.*" type="text" style="display:none;"/>
+						<input id="txtSpec.*" type="text" style="float:left;"/>
 					</td>
-					<td class="rs_hide">
-					<input id="txtSize.*" type="text" style="width:95%;" />
-					</td>
+					<td class="rs_hide"><input id="txtSize.*" type="text" style="width:95%;" /></td>
+					<td ><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td ><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td align="center" ><input id="chkEnda.*" type="checkbox"/></td>
+					<td ><input id="txtEweight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td><input id="txtEcount.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display: none;" class="adj"><input id="txtAdjweight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display: none;" class="adj"><input id="txtAdjcount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td >
-					<input id="txtMount.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
-					<td >
-					<input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
-					<td align="center" >
-					<input id="chkEnda.*" type="checkbox"/>
-					</td>
-					<td >
-					<input id="txtEweight.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
-					<td>
-						<input id="txtEcount.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
-					<td>
-						<input id="txtAdjweight.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
-					<td>
-						<input id="txtAdjcount.*" type="text" class="txt num" style="width:95%;"/>
-					</td>
-					<td >
-					<input id="txtMemo.*" type="text" class="txt" style="width:95%;"/>
-					<input id="txtOrdeno.*" type="text" style="width:65%;" />
-					<input id="txtNo2.*" type="text" style="width:20%;" />
+						<input id="txtMemo.*" type="text" class="txt" style="width:95%;"/>
+						<input id="txtOrdeno.*" type="text" style="width:65%;" />
+						<input id="txtNo2.*" type="text" style="width:20%;" />
 					</td>
 				</tr>
 			</table>
