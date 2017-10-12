@@ -82,7 +82,7 @@ begin
 	)
 	insert into @tmp(datea,tablea,accy,noa,noq,[weight])
 	select b.datea,'vccs',a.accy,a.noa,a.noq
-		,case when isnull(a.gweight,0)=0 then isnull(a.[weight],0) else a.gweight end
+		,case when b.typea='1' then 1 else -1 end * case when isnull(a.gweight,0)=0 then isnull(a.[weight],0) else a.gweight end
 	from view_vccs a
 	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
 	where a.uno = @uno
@@ -111,7 +111,6 @@ begin
 	select @weight_in=[weight] from view_uccb where uno=@uno
 	select @weight_out=sum([weight]) from @tmp
 	-------------------------------------------------------
-	--假如已領料完,尾差由最後一筆修正
 	if @weight_in>@weight_out
 	begin
 		select @scost = case when @weight_in=0 then 0 else round([weight] / @weight_in * @total,0) end
@@ -120,6 +119,7 @@ begin
 	end
 	else 
 	begin
+		--假如已領料完,尾差由最後一筆修正
 		update @tmp set recno=b.recno
 		from @tmp a
 		left join (select sel,row_number()over(order by datea,accy,noa,noq) recno from @tmp) b on a.sel=b.sel
