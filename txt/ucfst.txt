@@ -1,0 +1,170 @@
+ucfst:
+	SET QUOTED_IDENTIFIER OFF 
+	declare @cmd nvarchar(max)
+	declare @t_bdate nvarchar(20) = '106/09/01'
+	declare @t_edate nvarchar(20) = '106/09/30'
+	-------------------------------------------------------------------------
+	-- 出貨、領料成本
+	declare @tmp_scost table(
+		sel int identity(1,1)
+		,tablea nvarchar(20)
+		,accy nvarchar(10)
+		,noa nvarchar(20)
+		,noq nvarchar(10)
+		,uno nvarchar(30)	
+		,scost float
+	)
+	-- VCCS
+	insert into @tmp_scost(tablea,accy,noa,noq,uno)
+	select 'vccs',a.accy,a.noa,a.noq,a.uno
+	from view_vccs a
+	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
+	where b.datea between @t_bdate and @t_edate
+	and len(isnull(a.uno,''))>0
+	and not(left(a.uno,1) between 'X' and 'Z')--排除廢料
+	-- GETS
+	insert into @tmp_scost(tablea,accy,noa,noq,uno)
+	select 'gets',a.accy,a.noa,a.noq,a.uno
+	from view_gets a
+	left join view_get b on a.accy=b.accy and a.noa=b.noa
+	where b.datea between @t_bdate and @t_edate
+	and len(isnull(a.uno,''))>0
+	and not(left(a.uno,1) between 'X' and 'Z')--排除廢料
+	-- CUT
+	insert into @tmp_scost(tablea,accy,noa,noq,uno)
+	select 'cut',a.accy,a.noa,'',a.uno
+	from view_cut a
+	where a.datea between @t_bdate and @t_edate
+	and len(isnull(a.uno,''))>0
+	and not(left(a.uno,1) between 'X' and 'Z')--排除廢料
+	-- CUBT
+	insert into @tmp_scost(tablea,accy,noa,noq,uno)
+	select 'cubt',a.accy,a.noa,a.noq,a.uno
+	from view_cubt a
+	where a.datea between @t_bdate and @t_edate
+	and len(isnull(a.uno,''))>0
+	and not(left(a.uno,1) between 'X' and 'Z')--排除廢料
+	----------------------------------------------------------------------------------------------
+	declare @sel int,@tablea nvarchar(20),@accy nvarchar(10),@noa nvarchar(20),@noq nvarchar(10)
+	declare @scost float
+	
+	declare cursor_table cursor for
+	select sel,tablea,accy,noa,noq from @tmp_scost
+	open cursor_table
+	fetch next from cursor_table
+	into @sel,@tablea,@accy,@noa,@noq
+	while(@@FETCH_STATUS <> -1)
+	begin
+		begin try
+			select @scost = dbo.getScost_st(@tablea,@accy,@noa,@noq)
+		end try
+		begin catch
+			--select @sel,ERROR_MESSAGE()
+			select @scost = 0
+		end catch
+		update @tmp_scost set scost = @scost where sel=@sel
+		fetch next from cursor_table
+		into @sel,@tablea,@accy,@noa,@noq
+	end
+	close cursor_table
+	deallocate cursor_table
+	----------------------------------------------------------------------------------------------
+	-- 進貨、入庫成本
+	declare @tmp_total table(
+		sel int identity(1,1)
+		,tablea nvarchar(20)
+		,accy nvarchar(10)
+		,noa nvarchar(20)
+		,noq nvarchar(10)
+		,uno nvarchar(30)	
+		,datea nvarchar(20)
+		,total float
+	)
+	---只算 CUTS、CUBU
+	----CUTS
+	insert into @tmp_total(tablea,accy,noa,noq,uno,datea)
+	select 'cuts',a.accy,a.noa,a.noq,a.bno,b.datea
+	from view_cuts a
+	left join view_cut b on a.accy=b.accy and a.noa=b.noa
+	where b.datea between @t_bdate and @t_edate
+	and len(isnull(a.bno,''))>0
+	and not(left(a.bno,1) between 'X' and 'Z')--排除廢料
+	----CUBU
+	insert into @tmp_total(tablea,accy,noa,noq,uno,datea)
+	select 'cubu',a.accy,a.noa,a.noq,a.uno,a.datea
+	from view_vccs a
+	where a.datea between @t_bdate and @t_edate
+	and len(isnull(a.uno,''))>0
+	and not(left(a.uno,1) between 'X' and 'Z')--排除廢料
+	---------------------------------------------------------------------------------------
+	-- 原則上 批號不會重複
+	-- CUTS.total 、 CUBU.total   (!!金額都含運費、加工費， 進貨、入庫不含)
+	declare @uno nvarchar(30)
+	declare @datea nvarchar(20)
+	declare @total float
+	
+	declare cursor_table cursor for
+	select uno,datea from @tmp_total group by uno,datea
+	open cursor_table
+	fetch next from cursor_table
+	into @uno,@datea
+	while(@@FETCH_STATUS <> -1)
+	begin
+		begin try
+			select @total = dbo.getTotal_st(@uno,@datea)
+		end try
+		begin catch
+			--select @sel,ERROR_MESSAGE()
+			select @total = 0
+		end catch
+		update @tmp_total set total=@total where uno=@uno and datea=@datea
+		fetch next from cursor_table
+		into @uno,@datea
+	end
+	close cursor_table
+	deallocate cursor_table
+	-----------------------------------------------------------------------------------------------------------
+	--回寫資料庫
+	declare cursor_table cursor for
+	select tablea,accy,noa,noq,total from @tmp_total
+	open cursor_table
+	fetch next from cursor_table
+	into @tablea,@accy,@noa,@noq,@total
+	while(@@FETCH_STATUS <> -1)
+	begin
+		set @cmd = "update "+@tablea+@accy+" set total=@total where noa=@noa and @noq=@noq"
+		execute sp_executesql @cmd,N'@noa nvarchar(20),@noq nvarchar(10),@total float'
+			,@noa=@noa,@noq=@noq,@total=@total
+		
+		fetch next from cursor_table
+		into @tablea,@accy,@noa,@noq,@total
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+	declare cursor_table cursor for
+	select tablea,accy,noa,noq,scost from @tmp_scost
+	open cursor_table
+	fetch next from cursor_table
+	into @tablea,@accy,@noa,@noq,@scost
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if @tablea='vccs' or @tablea='gets' or @tablea='cubt'
+		begin
+			set @cmd = "update "+@tablea+@accy+" set scost=@scost where noa=@noa and @noq=@noq"
+		end
+		else if @tablea='cut'
+		begin
+			set @cmd = "update "+@tablea+@accy+" set scost=@scost where noa=@noa"
+		end
+		execute sp_executesql @cmd,N'@noa nvarchar(20),@noq nvarchar(10),@scost float'
+			,@noa=@noa,@noq=@noq,@scost=@scost
+		
+		fetch next from cursor_table
+		into @tablea,@accy,@noa,@noq,@scost
+	end
+	close cursor_table
+	deallocate cursor_table
+
+	select * from @tmp_scost
+	select * from @tmp_total;
