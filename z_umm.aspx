@@ -203,12 +203,8 @@
 						}, {
 							type : '8', //[22]
 							name : 'showunpay', //只顯示未收
-							value : "1@只顯示未收,2@顯示貨單備註".split(',')
+							value : "1@".split(',')
 						}, {
-                            type : '8', //[23]
-                            name : 'showunpay', //只顯示未收
-                            value : "1@只顯示未收,2@顯示貨單備註".split(',')
-                        }, {
 							type : '2', //[23][24]
 							name : 'xctype',
 							dbf : 'custtype',
@@ -229,7 +225,7 @@
 						}, {
 							type : '8', //[28]
 							name : 'showordetotal', //顯示單據小計
-							value : "1@顯示單據小計".split(',')
+							value : "1@".split(',')
 						},{
                         	type : '6', //[29] //4-4
                       	  	name : 'multcust'
@@ -240,7 +236,11 @@
 							type : '5', //[31]
 							name : 'custtype', 
 							value : custtypeItem.split(',')
-						}]
+						}, {
+                            type : '8', //[32]
+                            name : 'showmemo', //顯示貨單備註
+                            value : "2@".split(',')
+                        }]
 					});
 					q_popAssign();
 					q_getFormat();
@@ -264,9 +264,20 @@
 					$('.q_report .report').css('width', '460px');
 					$('.q_report .report div').css('width', '220px');
 					
-					$('#Showordetotal').css('width','300px');
-					$('#chkShowordetotal').css('width','220px');
-					$('#chkShowordetotal span').css('width','180px');
+					$('#Showordetotal').css('width', '300px').css('height', '30px');
+					$('#Showordetotal .label').css('width','100px');
+					$('#chkShowordetotal').css('width', '0px').css('margin-top', '5px');
+					$('#chkShowordetotal span').css('width','0px');
+					
+					$('#Showunpay').css('width', '300px').css('height', '30px');
+                    $('#Showunpay .label').css('width','85px');
+                    $('#chkShowunpay').css('width', '0px').css('margin-top', '5px');
+                    $('#chkShowunpay span').css('width','0px');
+					
+					$('#Showmemo').css('width', '300px').css('height', '30px');
+                    $('#Showmemo .label').css('width','100px');
+                    $('#chkShowmemo').css('width', '0px').css('margin-top', '5px');
+                    $('#chkShowmemo span').css('width','0px');
 					
 					$('#txtDate1').val(q_date().substr(0,r_lenm)+'/01')
 					$('#txtDate2').val(q_cdn(q_cdn(q_date().substr(0,r_lenm)+'/01',35).substr(0,r_lenm)+'/01',-1))

@@ -1,0 +1,207 @@
+ALTER function [dbo].[getTotal_st](@uno nvarchar(30))
+returns float
+as
+begin
+	declare @edate nvarchar(20) = '105/12/31' --關帳日，此日期前的都不再計算
+	declare @total float = 0
+	declare @scost float = 0
+	declare @tranmoney float = 0
+	declare @weight float = 0
+	
+	declare @scost_s float = 0
+	declare @tranmoney_s float = 0
+	
+	declare @groupa nvarchar(10) = ''
+	---------------------------------------------------------------------------------------------------
+	declare @tablea nvarchar(20)='',@accy nvarchar(10)='',@noa nvarchar(20)='',@noq nvarchar(10)=''
+	
+	if exists(select top 1 * from view_rc2s where uno=@uno)
+	begin
+		if exists(select top 1 *
+			from view_rc2s a
+			left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
+			where a.uno=@uno
+			and b.datea<=@edate)
+		begin
+			select @total = sum(case when b.typea='1' then 1 else -1 end * isnull(a.total,0)) 
+			from view_rc2s a 
+			left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
+			where a.uno=@uno
+			return @total  --RETURN
+		end
+		
+		select top 1 @tablea='rc2s',@accy=accy,@noa=noa,@noq=noq
+		from view_rc2s
+		where uno=@uno
+	end
+	else if exists(select top 1 * from view_inas where uno=@uno)
+	begin
+		if exists(select top 1 *
+			from view_inas a
+			left join view_ina b on a.accy=b.accy and a.noa=b.noa
+			where a.uno=@uno
+			and b.datea<=@edate)
+		begin
+			select top 1 @total = total from view_inas where uno=@uno
+			return @total  --RETURN
+		end
+		
+		select top 1 @tablea='inas',@accy=accy,@noa=noa,@noq=noq
+		from view_inas
+		where uno=@uno
+	end
+	else if exists(select top 1 * from view_cuts where bno=@uno)
+	begin
+		if exists(select top 1 *
+			from view_cuts a
+			left join view_cut b on a.accy=b.accy and a.noa=b.noa
+			where a.bno=@uno
+			and b.datea<=@edate)
+		begin
+			select top 1 @total = total from view_cuts where bno=@uno
+			return @total  --RETURN
+		end
+		
+		select top 1 @tablea='cuts',@accy=accy,@noa=noa,@noq=noq
+		from view_cuts
+		where bno=@uno
+	end
+	else if exists(select top 1 * from view_cubu where uno=@uno)
+	begin
+		if exists(select top 1 *
+			from view_cubu a
+			where a.uno=@uno
+			and a.datea<=@edate)
+		begin
+			select top 1 @total = total from view_cubu where uno=@uno
+			return @total  --RETURN
+		end
+		
+		select top 1 @tablea='cubu',@accy=accy,@noa=noa,@noq=noq
+		from view_cubu
+		where uno=@uno
+	end
+	----------------------------------------------------------------------
+	declare @tmp table(
+		sel int identity(1,1)
+		,accy nvarchar(10)
+		,noa nvarchar(20)
+		,noq nvarchar(10)
+		,uno nvarchar(30)
+		,groupa nvarchar(20) --群組  (CUB有用到)
+		,[weight] float
+		,total float
+		,wprice float --加工單價
+		,wcost float --加工費用   (CUT)
+		,tranmoney float --運費
+	)
+	if @tablea='rc2s'
+	begin
+		insert into @tmp(accy,noa,noq,uno,[weight],total)
+		select a.accy,a.noa,a.noq,a.uno
+			,case when b.typea='1' then 1 else -1 end * isnull(a.[weight],0)
+			,case when b.typea='1' then 1 else -1 end * isnull(a.total,0)
+		from view_rc2s a
+		left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
+		where a.accy=@accy and a.noa=@noa
+		and len(isnull(a.uno,''))>0
+		and not(left(a.uno,1) between 'X' and 'Z')--排除廢料
+		order by a.accy,a.noa,a.noq
+		
+		select @weight = sum([weight]) from @tmp
+		select @tranmoney = tranmoney
+		from view_rc2 where accy=@accy and noa=@noa
+		
+		update @tmp set tranmoney = case when isnull(@weight,0)=0 then 0 else round([weight]/@weight*@tranmoney,0) end
+		--修正尾差
+		select @tranmoney_s=sum(tranmoney) from @tmp
+		update @tmp set tranmoney = a.tranmoney + (@tranmoney - @tranmoney_s)
+		from @tmp a
+		outer apply(select top 1 sel from @tmp order by sel desc) b
+		where a.sel=b.sel
+	end
+	else if @tablea='inas'
+	begin
+		insert into @tmp(accy,noa,noq,uno,[weight],total)
+		select accy,noa,noq,uno,[weight],total
+		from view_inas
+		where accy=@accy and noa=@noa
+		and len(isnull(uno,''))>0
+		and not(left(uno,1) between 'X' and 'Z')--排除廢料
+		order by accy,noa,noq
+		
+		select @weight = sum([weight]) from @tmp
+		select @tranmoney = tranmoney
+		from view_ina where accy=@accy and noa=@noa
+		
+		update @tmp set tranmoney = case when isnull(@weight,0)=0 then 0 else round([weight]/@weight*@tranmoney,0) end
+		--修正尾差
+		select @tranmoney_s=sum(tranmoney) from @tmp
+		update @tmp set tranmoney = a.tranmoney + (@tranmoney - @tranmoney_s)
+		from @tmp a
+		outer apply(select top 1 sel from @tmp order by sel desc) b
+		where a.sel=b.sel
+	end
+	else if @tablea='cuts'
+	begin
+		insert into @tmp(accy,noa,noq,uno,[weight],wprice)
+		select accy,noa,noq,bno,[weight],isnull(wprice,0)
+		from view_cuts
+		where accy=@accy and noa=@noa
+		and len(isnull(bno,''))>0
+		and not(left(bno,1) between 'X' and 'Z')--排除廢料
+		order by accy,noa,noq
+		
+		select @weight = sum([weight]) from @tmp
+		select @scost = dbo.getScost_st('cut',@accy,@noa,'') 
+		select @tranmoney = tranmoney
+		from view_cut where accy=@accy and noa=@noa
+		
+		update @tmp set total = case when isnull(@weight,0)=0 then 0 else round([weight]/@weight*@scost,0) end
+			,wcost = round(wprice*[weight],0)
+			,tranmoney = case when isnull(@weight,0)=0 then 0 else round([weight]/@weight*@tranmoney,0) end
+		--修正尾差
+		select @scost_s= sum(total),@tranmoney_s=sum(tranmoney) from @tmp
+		update @tmp set total = a.total + (@scost - @scost_s)
+			,tranmoney = a.tranmoney + (@tranmoney - @tranmoney_s)
+		from @tmp a
+		outer apply(select top 1 sel from @tmp order by sel desc) b
+		where a.sel=b.sel
+	end
+	else if @tablea='cubu'
+	begin
+		select @groupa=isnull(groupa,'') from view_cubu where accy=@accy and noa=@noa and noq=@noq
+	
+		insert into @tmp(accy,noa,noq,uno,groupa,[weight])
+		select accy,noa,noq,uno,groupa,[weight]
+		from view_cubu
+		where accy=@accy and noa=@noa 
+		and isnull(groupa,'')=@groupa
+		and len(isnull(uno,''))>0
+		and not(left(uno,1) between 'X' and 'Z')--排除廢料
+		order by accy,noa,noq
+		
+		select @weight=sum([weight]) from @tmp
+		
+		select @scost = sum([dbo].[getScost_st]('cubt',a.accy,a.noa,a.noq))
+		from view_cubt a
+		where a.accy=@accy and a.noa=@noa
+		and isnull(groupa,'')=@groupa
+		
+		update @tmp set total = case when @weight=0 then 0 else round([weight]*@scost/@weight,0) end
+			,wcost = 0
+			,tranmoney=0
+		--修正尾差
+		select @scost_s= sum(total) from @tmp
+		update @tmp set total = a.total + (@scost - @scost_s)
+		from @tmp a
+		outer apply(select top 1 sel from @tmp order by sel desc) b
+		where a.sel=b.sel
+	end
+	
+	select @total= isnull(total,0) + isnull(wcost,0) + isnull(tranmoney,0)
+	from @tmp 
+	where accy=@accy and noa=@noa and noq=@noq
+	
+	return @total
+end

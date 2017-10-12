@@ -1387,6 +1387,7 @@ declare @t_showunpay nvarchar(30)
 declare @t_xcoin nvarchar(20)
 declare @t_showordetotal nvarchar(30)
 declare @t_multcust nvarchar(max)
+declare @t_showmemo nvarchar(30)
 
 set @t_cno = case when '#non' = [1] then '' else [1] end
 set @t_bdate = case when '#non'=[3] then '' else [3] end
@@ -1404,6 +1405,7 @@ set @t_xcoin = case when '#non' = [27] then '' else [27] end
 set @t_showordetotal = case when '#non'=[28] then '0' else [28] end
 set @t_multcust = case when '#non' = [29] then '' else '.'+[29]+'.' end
 declare @t_project nvarchar(50)=case when '#non' = '[26]' then '' else '[26]' end
+set @t_showmemo = case when '#non'=[32] then '0' else [32] end
 -------------------------------------------------------------------------------------------------------------------------
 declare @coin nvarchar(20)
 declare @cmd nvarchar(max) 
@@ -2507,6 +2509,8 @@ declare @t_esalesno nvarchar(20)
 declare @t_showunpay nvarchar(30)
 declare @t_bcusttype nvarchar(50)
 declare @t_ecusttype nvarchar(50)
+declare @t_showmemo nvarchar(30)
+
 set @t_bdate = case when '#non'=[3] then '' else [3] end
 set @t_edate = case when '#non'=[4] then char(255) else [4] end
 set @t_bmon = case when '#non'=[13] then '' else [13] end
@@ -2518,6 +2522,7 @@ set @t_esalesno = case when '#non'=[16] then char(255) else [16] end
 set @t_showunpay = case when '#non'=[22] then '0' else [22] end
 set @t_bcusttype = case when '#non'=[23] then '' else [23] end
 set @t_ecusttype = case when '#non'=[24] then char(255) else [24] end
+set @t_showmemo = case when '#non'=[32] then '0' else [32] end
 -------------------------------------------------------------------------------------------------------------
 declare @cmd nvarchar(max)
 IF OBJECT_ID('tempdb..#result')is not null
@@ -2810,7 +2815,7 @@ from #result a where gno='3'
 delete #result where gno='1'
 ----------------------------------------------------
 --貨單備註
-if(CHARINDEX('2',@t_showunpay)>0)
+if(CHARINDEX('2',@t_showmemo)>0)
 begin
 	update #result set memo=b.memo 
 		from #result a
@@ -3002,6 +3007,7 @@ declare @t_eproductno nvarchar(30)
 declare @t_showunpay nvarchar(30)
 declare @t_xcoin nvarchar(20)
 declare @t_showordetotal nvarchar(30)
+declare @t_showmemo nvarchar(30)
 
 set @t_cno = case when '#non' = [1] then '' else [1] end
 set @t_bdate = case when '#non'=[3] then '' else [3] end
@@ -3018,6 +3024,7 @@ set @t_showunpay = case when '#non'=[22] then '0' else [22] end
 set @t_xcoin = case when '#non' = [27] then '' else [27] end
 set @t_showordetotal = case when '#non'=[28] then '0' else [28] end
 declare @t_project nvarchar(50)=case when '#non' = '[26]' then '' else '[26]' end
+set @t_showmemo = case when '#non'=[32] then '0' else [32] end
 -------------------------------------------------------------------------------------------------------------------------
 declare @coin nvarchar(20)
 
