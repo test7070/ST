@@ -1390,7 +1390,7 @@
 						<td align="center" style="width:70px"><a id='vewOdate'> </a></td>
 						<td align="center" style="width:150px"><a id='vewTgg'> </a></td>
 						<td align="center" style="width:150px"><a id='vewTggt'> </a></td>
-						<td align="center" style="width:100px"><a>成交日期</a></td>
+						<td align="center" style="width:100px"><a id='vewFinish'>成交日期</a></td>
 					</tr>
 					<tr>
 						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
@@ -1534,25 +1534,25 @@
                     </td>
                     <td align="center" style="width:20px;"> </td>
 					<td id="tdpno" align="center" style="width:200px;"><a id='lblProductno'> </a></td>
-					<td id="tdspec" align="center" style="width:200px;">品名/規格</td>
+					<td id="tdspec" align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
 					<td align="center" style="width:95px;" class="isStyle"><a id='lblStyles'> </a></td>
 					<td align="center" style="width:40px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:110px;"><a id='lblOmount_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblPrices'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblTotals'> </a></td>
-					<td align="center" style="width:100px;">已採購量<br>未採購量</td>
-					<td align="center" >備註</td>
+					<td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
+					<td align="center" ><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:120px;" class="isCust"><a id='lblCustnos'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblLdates'> </a></td>
-					<td align="center" style="width:50px;">詢價<br>記錄</td>
-					<td align="center" style="width:50px;">歷史詢<br>價記錄</td>
-					<td align="center" style="width:50px;">採購詢<br>建議量</td>
-					<td align="center" style="width:50px;">採購<br>統計</td>
-					<td align="center" style="width:50px;">進貨<br>記錄</td>
+					<td align="center" style="width:50px;"><a id='lblPrice_s'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblPrice_st'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblPrice_ot'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblReport'> </a></td>
+					<td align="center" style="width:50px;"><a id='lblReport2'> </a></td>
 					<!--<td align="center" style="width:50px;">未成交</td>-->
-					<td align="center" style="width:50px;">取消</td>
-					<td align="center" style="width:50px;">結案</td>
+					<td align="center" style="width:50px;"><a id='lblCancel_s'> </a</td>
+					<td align="center" style="width:50px;"><a id='lblEnda'> </a</td>
 				</tr>
 				<tr style='background:#cad3ff;'>
 					<td align="center">
