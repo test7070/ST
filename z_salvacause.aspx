@@ -62,22 +62,17 @@
                 q_getFormat();
                 q_langShow();
                 
-                 var t_noa=typeof(q_getId()[5])=='undefined'?'':q_getId()[5];
+                var t_noa=typeof(q_getId()[5])=='undefined'?'':q_getId()[5];
                 t_noa  =  t_noa.replace('noa=','');
                 $('#txtXnoa').val(t_noa).width(100);
                 
-                
-                
-                 if(r_len==4){
-                    var r_1911=0;                  
+                if(r_len==4){                
                     $.datepicker.r_len=4;
                     //$.datepicker.setDefaults($.datepicker.regional["ENG"]);
-                    $('#txtXyear').mask('9999');
-                    $('#txtXyear').val(q_date().substr(0,4));
-                }else{
-                    $('#txtXyear').mask('999');
-                    $('#txtXyear').val(q_date().substr(0,3));
                 }
+                
+                $('#txtXyear').mask(r_pic);
+                $('#txtXyear').val(q_date().substr(0,r_len));
                 $('#txtXdate1').mask(r_picd);
                 $('#txtXdate1').datepicker();
                 $('#txtXdate2').mask(r_picd);
@@ -86,8 +81,6 @@
                 $('#txtYdate1').datepicker();
                 $('#txtYdate2').mask(r_picd);
                 $('#txtYdate2').datepicker();
-                
-                 
             }
 
             function q_boxClose(s2) {
