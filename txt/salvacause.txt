@@ -1,0 +1,9 @@
+﻿salvacause_apv:--salvacause_apv 請假核准
+declare @t_noa nvarchar(max)= case when '#non'=[1] then '' else [1] end
+declare @t_userno nvarchar(max)= case when '#non'=[2] then '' else [2] end
+declare @t_name nvarchar(max)= case when '#non'=[3] then '' else [3] end
+
+update salvacause set apv=@t_name,hr_used=hr_apv where noa=@t_noa
+
+select noa,apv,hr_used from salvacause where noa=@t_noa
+;
