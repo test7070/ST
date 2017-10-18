@@ -57,6 +57,7 @@ select @t_year,'000',noa,namea,id,job,indate jobday,0 inday,0 outday,0 boutday,0
 from sss a where isnull(outdate,'')=''
 and not exists (select * from salvacas where sssno=a.noa and noa=@t_year)
 and ISNULL(indate,'')!='' and left(indate,len(@t_year))<=@t_year
+and len(indate)=len(@t_year)+6 and indate like '%[0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]'
 
 update @tmp
 set t_datea=CAST(@t_year as float)-cast(left(jobday,len(@t_year)) as float)
@@ -3019,8 +3020,9 @@ begin
 	--放入已使用的補修時數
 	update a
 	set hrspecial=isnull(b.used,0)
-	from #tmpa a outer apply (select SUM(used)used from dbo.carryforwards(0,'','')where sssno=a.sssno and datea=a.noa)b
+	from #tmpa a outer apply (select SUM(used)used from dbo.carryforwards(0,'','',1)where sssno=a.sssno and datea=a.noa)b
 	
+	--106/10/12後面請假客戶都需核准才會計算時數 故換休預設寫1
 	---------------------------------------------------------------------------
 	--抵扣換休 --給予加班費 扣除已換休時數 換薪時數必須給予換算較高的比例，故先扣除低換算比例
 	update #tmpa

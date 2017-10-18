@@ -2,68 +2,29 @@ ALTER function [dbo].[getScost_st](@tablea nvarchar(20),@accy nvarchar(10),@noa 
 returns float
 as
 begin
-	declare @edate nvarchar(20) = '105/12/31' --關帳日，此日期前的都不再計算
 	declare @scost float = 0
 	declare @uno nvarchar(30) = ''
 	
 	if @tablea='vccs'
 	begin
-		if exists(select *
-			from view_vccs a
-			left join view_vcc b on a.accy=b.accy and a.noa=b.noa
-			where a.accy=@accy and a.noa=@noa and a.noq=@noq
-			and b.datea<=@edate)
-		begin
-			select @scost = scost from view_vccs where accy=@accy and noa=@noa and noq=@noq
-			return @scost  --RETURN
-		end
-	
 		select @uno=uno 
 		from view_vccs
 		where accy=@accy and noa=@noa and noq=@noq
 	end
 	else if @tablea='gets'
 	begin
-		if exists(select *
-			from view_gets a
-			left join view_get b on a.accy=b.accy and a.noa=b.noa
-			where a.accy=@accy and a.noa=@noa and a.noq=@noq
-			and b.datea<=@edate)
-		begin
-			select @scost = scost from view_vccs where accy=@accy and noa=@noa and noq=@noq
-			return @scost  --RETURN
-		end
-		
 		select @uno=uno 
 		from view_gets
 		where accy=@accy and noa=@noa and noq=@noq
 	end
 	else if @tablea='cut'
 	begin
-		if exists(select *
-			from view_cut
-			where accy=@accy and noa=@noa
-			and datea<=@edate)
-		begin
-			select @scost = scost from view_cut where accy=@accy and noa=@noa
-			return @scost  --RETURN
-		end
-		
 		select @uno=uno 
 		from view_cut
 		where accy=@accy and noa=@noa
 	end
 	else if @tablea='cubt'
 	begin
-		if exists(select *
-			from view_cubt 	a
-			where a.accy=@accy and a.noa=@noa and a.noq=@noq		
-			and datea<=@edate)
-		begin
-			select @scost = scost from view_cubt where accy=@accy and noa=@noa and noq=@noq
-			return @scost  --RETURN
-		end
-		
 		select @uno=uno 
 		from view_cubt
 		where accy=@accy and noa=@noa and noq=@noq
@@ -77,43 +38,61 @@ begin
 		,accy nvarchar(10)
 		,noa nvarchar(20)
 		,noq nvarchar(10)
+		,uno nvarchar(30)
 		,[weight] float
 		,scost float
+		
+		,total float
 	)
-	insert into @tmp(datea,tablea,accy,noa,noq,[weight])
-	select b.datea,'vccs',a.accy,a.noa,a.noq
+	insert into @tmp(datea,tablea,accy,noa,noq,uno,[weight])
+	select b.datea,'vccs',a.accy,a.noa,a.noq,a.uno
 		,case when b.typea='1' then 1 else -1 end * case when isnull(a.gweight,0)=0 then isnull(a.[weight],0) else a.gweight end
 	from view_vccs a
 	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
 	where a.uno = @uno
 	
-	insert into @tmp(datea,tablea,accy,noa,noq,[weight])
-	select b.datea,'gets',a.accy,a.noa,a.noq
+	insert into @tmp(datea,tablea,accy,noa,noq,uno,[weight])
+	select b.datea,'gets',a.accy,a.noa,a.noq,a.uno
 		,case when isnull(a.gweight,0)=0 then isnull(a.[weight],0) else a.gweight end
 	from view_gets a
 	left join view_get b on a.accy=b.accy and a.noa=b.noa 
 	where a.uno = @uno
 
-	insert into @tmp(datea,tablea,accy,noa,noq,[weight])
-	select a.datea,'cut',a.accy,a.noa,'',isnull(a.gweight,0)
+	insert into @tmp(datea,tablea,accy,noa,noq,uno,[weight])
+	select a.datea,'cut',a.accy,a.noa,'',a.uno,isnull(a.gweight,0)
 	from view_cut a
 	where a.uno = @uno
 
-	insert into @tmp(datea,tablea,accy,noa,noq,[weight])
-	select a.datea,'cubt',a.accy,a.noa,a.noq
+	insert into @tmp(datea,tablea,accy,noa,noq,uno,[weight])
+	select a.datea,'cubt',a.accy,a.noa,a.noq,a.uno
 		,case when isnull(a.gweight,0)=0 then isnull(a.[weight],0) else a.gweight end
 	from view_cubt a
 	where a.uno = @uno
 	------------------------------------------------------
-	declare @total float = dbo.getTotal_st(@uno)
-	declare @weight_in float = 0
-	declare @weight_out float = 0
+	--計算進貨成本
+	declare @x_uno nvarchar(30),@x_date nvarchar(20)
+	
+	declare cursor_table cursor for
+	select uno,datea from @tmp group by uno,datea
+	open cursor_table
+	fetch next from cursor_table
+	into @x_uno,@x_date
+	while(@@FETCH_STATUS <> -1)
+	begin
+		update @tmp set total=dbo.getTotal_st(@x_uno,@x_date) where uno=@x_uno and datea=@x_date
+		fetch next from cursor_table
+		into @x_uno,@x_date
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+	declare @weight_in float = 0,@weight_out float = 0 
 	select @weight_in=[weight] from view_uccb where uno=@uno
 	select @weight_out=sum([weight]) from @tmp
 	-------------------------------------------------------
 	if @weight_in>@weight_out
 	begin
-		select @scost = case when @weight_in=0 then 0 else round([weight] / @weight_in * @total,0) end
+		select @scost = case when @weight_in=0 then 0 else round([weight] / @weight_in * total,0) end
 		from @tmp 
 		where tablea=@tablea and accy=@accy and noa=@noa and noq=@noq
 	end
@@ -124,11 +103,11 @@ begin
 		from @tmp a
 		left join (select sel,row_number()over(order by datea,accy,noa,noq) recno from @tmp) b on a.sel=b.sel
 		
-		update @tmp set scost =  case when @weight_in=0 then 0 else round([weight] / @weight_in * @total,0) end
+		update @tmp set scost =  case when @weight_in=0 then 0 else round([weight] / @weight_in * total,0) end
 		
 		declare @scost_s float = 0
 		select @scost_s=sum(isnull(scost,0)) from @tmp
-		update @tmp set scost = a.scost + (@total - @scost_s) 
+		update @tmp set scost = a.scost + (a.total - @scost_s) 
 		from @tmp a
 		outer apply(select top 1 sel from @tmp order by recno desc) b
 		where a.sel=b.sel

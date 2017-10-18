@@ -16,8 +16,8 @@
             }
 
             var q_name = "salvacause";
-            var q_readonly = ['txtNoa', 'txtHr_special', 'txtTot_special', 'txtJob','txtNamea','txtHname','txtPart'];
-            var bbmNum = [['txtHr_used', 10, 1, 1], ['txtHr_special', 10, 1, 1], ['txtTot_special', 10, 1, 1]];
+            var q_readonly = ['txtNoa', 'txtHr_special', 'txtTot_special', 'txtJob','txtNamea','txtHname','txtPart','txtApv'];
+            var bbmNum = [['txtHr_used', 10, 1, 1], ['txtHr_special', 10, 1, 1], ['txtTot_special', 10, 1, 1],['txtHr_apv', 10, 1, 1]];
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -81,7 +81,12 @@
                         
                         //找員工假別可用天數
                         if(issalyear){
-                        	var t_where = "where=^^ ['" + t_year + "','" + $('#txtSssno').val() + "','" + $('#txtNoa').val() + "'," + q_getPara('salvacause.carryforwards') + ") ^^";
+                        	var t_apv=0;
+							if(!$('#btnApv').is(":hidden")){//使用簽核
+								t_apv=1;
+							}
+                        	
+                        	var t_where = "where=^^ ['" + t_year + "','" + $('#txtSssno').val() + "','" + $('#txtNoa').val() + "'," + q_getPara('salvacause.carryforwards') + ","+t_apv+") ^^";
                         	q_gt('salyear_vacause', t_where, 0, 0, 0, "", r_accy);
                         }
                     }
@@ -148,32 +153,95 @@
                     if ($('#txtHname').val().indexOf('抵工時') > -1)
                     	$("#btnCarryforwards").removeAttr("disabled");
                 });
+                
+                $('#txtHr_apv').change(function() {
+                    if (emp($('#txtSssno').val())) {
+                        alert('請先填寫員工編號!!');
+                        $('#txtHr_apv').val('0');
+                        return;
+                    }
+                    if (emp($('#txtHtype').val())) {
+                        alert('請先填寫假別!!');
+                        $('#txtHr_apv').val('0');
+                        return;
+                    }
+                    if ($('#txtHname').val().indexOf('特休') > -1)
+                        q_tr('txtTot_special', t_tot_special - q_float('txtHr_used'));
+                    
+                    if ($('#txtHname').val().indexOf('抵工時') > -1)
+                    	$("#btnCarryforwards").removeAttr("disabled");
+                });
 
                 $('#lblAgent').click(function() {
                     q_box("sss_b2.aspx", 'sss', "450px", "700px", $('#lblAgent').text());
                 });
 				
+				//ST 換休 預設開啟
 				$('#btnCarryforwards').click(function() {
 					var t_err = '';
-					t_err = q_chkEmpField([['txtSssno', q_getMsg('lblSss')], ['txtBdate', q_getMsg('lblBdate')], ['txtHr_used', q_getMsg('lblHr_used')]]);
+					t_err = q_chkEmpField([['txtSssno', q_getMsg('lblSss')], ['txtBdate', q_getMsg('lblBdate')]]);
 					if (t_err.length > 0) {
 						alert(t_err);
 						return;
 					}
-					/*if(dec($('#txtHr_used').val())<=0){
-						alert('請先輸入請假時數!!');
-						return;
-					}*/
 					
-					var t_carryforwards=dec(q_getPara('salvacause.carryforwards'));//換休期限				
-					if(q_getPara('sys.project').toUpperCase()=='NV'){
-						var t_where="sssno='"+$('#txtSssno').val()+"' and exists (select datea from dbo.carryforwards("+t_carryforwards+",'"+$('#txtSssno').val()+"','"+$('#txtNoa').val()+"') where ('"+$('#txtEdate').val()+"' between datea and enddate) and special-used!=0 and datea=saladd.datea)";
+					if(dec($('#txtHr_used').val())<=0 && dec($('#txtHr_apv').val())<=0){
+						alert('請先輸入'+q_getMsg('lblHr_used')+'!!');
+						return;
+					}
+					
+					var t_carryforwards=dec(q_getPara('salvacause.carryforwards'));//換休期限
+					var t_apv=0;
+					if(!$('#btnApv').is(":hidden")){//使用簽核
+						t_apv=1;
+					}
+					
+					if(q_getPara('sys.project').toUpperCase()=='NV'){ //採用加班單換休
+						var t_where="sssno='"+$('#txtSssno').val()+"' and exists (select datea from dbo.carryforwards("+t_carryforwards+",'"+$('#txtSssno').val()+"','"+$('#txtNoa').val()+"',"+t_apv+") where ('"+$('#txtEdate').val()+"' between datea and enddate) and special-used!=0 and datea=saladd.datea)";
 						q_box("saladd_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where , 'salpresents', "600px", "95%", $('#btnCarryforwards').val());
 					}else{
-						var t_where="sssno='"+$('#txtSssno').val()+"' and exists (select datea from dbo.carryforwards("+t_carryforwards+",'"+$('#txtSssno').val()+"','"+$('#txtNoa').val()+"') where ('"+$('#txtEdate').val()+"' between datea and enddate) and special-used!=0 and datea=salpresents.noa)";
+						var t_where="sssno='"+$('#txtSssno').val()+"' and exists (select datea from dbo.carryforwards("+t_carryforwards+",'"+$('#txtSssno').val()+"','"+$('#txtNoa').val()+"',"+t_apv+") where ('"+$('#txtEdate').val()+"' between datea and enddate) and special-used!=0 and datea=salpresents.noa)";
 						q_box("salpresents_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where , 'salpresents', "600px", "95%", $('#btnCarryforwards').val());
 					}	
                 });
+                
+                //106/10/12 開始的客戶請假都需要核准 之前的客戶都先隱藏
+                if(q_getPara('sys.project').toUpperCase()=='DC' ||
+                	q_getPara('sys.project').toUpperCase()=='IT' || q_getPara('sys.project').toUpperCase()=='AMD' ||
+                	q_getPara('sys.project').toUpperCase()=='TN' ||
+                	q_getPara('sys.project').toUpperCase()=='VU' || q_getPara('sys.project').toUpperCase()=='SF' ||
+                	q_getPara('sys.project').toUpperCase()=='XY' || q_getPara('sys.project').toUpperCase()=='RB' ||
+                	q_getPara('sys.project').toUpperCase()=='FE' || q_getPara('sys.project').toUpperCase()=='RK' ||
+                	q_getPara('sys.project').toUpperCase()=='DJ'
+                ){
+                	//不使用核准
+                }else{ //NV
+                	$('#txtHr_used').hide();
+                	$('.apv').show();	
+                }
+                
+                $('#btnApv').click(function() {
+					if (!emp($('#txtApv').val())) {
+						alert('已核准!!');
+						return;
+					}
+					if (!emp($('#txtNoa').val())) {
+						var t_noa=$('#txtNoa').val();
+						
+                        q_func('qtxt.query.salvacause_apv', 'salvacause.txt,salvacause_apv,' 
+							+ encodeURI(t_noa)+';'+encodeURI(r_userno)+';'+encodeURI(r_name),r_accy,1);
+							
+						var as = _q_appendData("tmp0", "", true, true);
+						if (as[0] != undefined) {
+							if($('#txtNoa').val()==as[0].noa){
+								$('#txtApv').val(as[0].apv);
+								$('#txtHr_used').val(as[0].hr_used);
+								abbm[q_recno]['apv'] = as[0].apv;
+								abbm[q_recno]['hr_used'] = as[0].hr_used;
+							}
+						}
+                    }
+				});
             }
 
             function q_boxClose(s2) {
@@ -362,7 +430,12 @@
 	                        
 	                        //找員工假別可用天數
 	                        if(issalyear){
-	                        	var t_where = "where=^^ ['" + t_year + "','" + $('#txtSssno').val() + "','" + $('#txtNoa').val() + "'," + q_getPara('salvacause.carryforwards') + ") ^^";
+	                        	var t_apv=0;
+								if(!$('#btnApv').is(":hidden")){//使用簽核
+									t_apv=1;
+								}
+	                        	
+	                        	var t_where = "where=^^ ['" + t_year + "','" + $('#txtSssno').val() + "','" + $('#txtNoa').val() + "'," + q_getPara('salvacause.carryforwards') + ","+t_apv+") ^^";
 	                        	q_gt('salyear_vacause', t_where, 0, 0, 0, "", r_accy);
 	                        }
 	                    }
@@ -408,10 +481,16 @@
                     return;
                 t_tot_special = dec($('#txtTot_special').val()) + dec($('#txtHr_used').val())
                 _btnModi();
-                $('#txtHr_used').focus();
+                $('#txtBdate').focus();
                 $('#txtDatea').attr('readonly', true);
                 $('#txtSssno').attr('readonly', true);
                 $('#txtNamea').attr('readonly', true);
+                
+                //簽核需重送
+                $('#txtApv').val('');
+                if(!$('#btnApv').is(":hidden")){//使用簽核
+                	$('#txtHr_used').val(0); //實際請假時數歸零,等核准在寫入
+                }
                 
                 if (!emp($('#txtSssno').val())) {
                 	var t_year=r_accy;
@@ -424,7 +503,12 @@
 					
 					//找員工假別可用天數
 					if(issalyear){
-	                	var t_where = "where=^^ ['" + t_year + "','" + $('#txtSssno').val() + "','" + $('#txtNoa').val() + "'," + q_getPara('salvacause.carryforwards') + ") ^^";
+						var t_apv=0;
+						if(!$('#btnApv').is(":hidden")){//使用簽核
+							t_apv=1;
+						}
+						
+	                	var t_where = "where=^^ ['" + t_year + "','" + $('#txtSssno').val() + "','" + $('#txtNoa').val() + "'," + q_getPara('salvacause.carryforwards') + ","+t_apv+") ^^";
 	                	q_gt('salyear_vacause', t_where, 0, 0, 0, "", r_accy);
 	                }
 				}
@@ -443,6 +527,13 @@
                     return;
                 }
                 
+                var t_hr_used=0;
+                if(!$('#btnApv').is(":hidden")){//使用簽核
+                	t_hr_used=dec($('#txtHr_apv').val());
+                }else{
+                	t_hr_used=dec($('#txtHr_used').val());
+                }
+                
                 //判斷補特休
                 if($('#txtHname').val().indexOf('補特休')>-1){
                 	//判斷是否有補特休
@@ -457,7 +548,7 @@
                 	}
                 	
                 	//判斷是否超請補特休時數
-                	if(q_add(prev_special_outtime,dec($('#txtHr_used').val()))>prevyeartime){
+                	if(q_add(prev_special_outtime,t_hr_used)>prevyeartime){
                 		alert("超請補特休時數!!\n已請時數："+prev_special_outtime+"\n剩餘時數："+q_sub(prevyeartime,prev_special_outtime));
                 		return;
                 	}
@@ -470,7 +561,7 @@
                 	for (var i = 0; i < c_memo.length; i=i+2) {
 	            		c_used=q_add(c_used,dec(c_memo[i+1]));
 					}
-                	if(c_used!=dec($('#txtHr_used').val())){
+                	if(c_used!=t_hr_used){
                 		alert("抵扣工時與請假時數不符!!");
                 		return;
                 	}
@@ -513,9 +604,17 @@
                 	$("#cmbSalyear_vacause").removeAttr("disabled");
                 	if($('#txtHname').val().indexOf('抵工時') > -1)
 						$("#btnCarryforwards").removeAttr("disabled");
+						
+					$("#btnApv").attr("disabled", "disabled");
 				} else {
 					$("#cmbSalyear_vacause").attr("disabled", "disabled");
 					$("#btnCarryforwards").attr("disabled", "disabled");
+					
+					if(r_rank<8 && !q_authRun(2)){
+						$("#btnApv").attr("disabled", "disabled");
+					}else{
+						$("#btnApv").removeAttr("disabled");
+					}
 				}
                 if(!issalyear)
                 	$('#cmbSalyear_vacause').hide();
@@ -671,9 +770,14 @@
 
                         use_hr = use_hr +(8* count);
 					}
-
-                    $('#txtHr_used').val(use_hr);
-                    $('#txtHr_used').change();
+					
+					if(!$('#btnApv').is(":hidden")){//使用簽核
+						$('#txtHr_apv').val(use_hr);
+						$('#txtHr_apv').change();
+					}else{
+						$('#txtHr_used').val(use_hr);
+                    	$('#txtHr_used').change();
+					}
 				}
             }
             function q_funcPost(t_func, result) {
@@ -838,9 +942,9 @@
 					<tr>
 						<td style="width: 110px;"><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td style="width: 170px;"><input id="txtNoa"  type="text"  class="txt c1"/></td>
-						<td style="width: 140px;"><!--<input id="btnAuto"  type="button" />--></td>
-						<td style="width: 140px;"> </td>
-						<td style="width: 140px;"> </td>
+						<td style="width: 140px;"><span> </span><a id='lblApv' class="lbl apv" style="display: none;"> </a></td>
+						<td style="width: 140px;"><input id="txtApv" type="text" class="txt c1 apv" style="display: none;"/></td>
+						<td style="width: 140px;"><input id="btnApv" type="button" class="apv" style="display: none;"/></td>
 						<td style="width: 140px;"> </td>
 					</tr>
 					<tr>
@@ -897,7 +1001,10 @@
 							<input id="txtEtime"  type="text" class="txt" style="width: 65px;"/>
 						</td>
 						<td><span> </span><a id='lblHr_used' class="lbl"> </a></td>
-						<td><input id="txtHr_used"  type="text" class="txt num c1"/></td>
+						<td>
+							<input id="txtHr_used" type="text" class="txt num c1"/><!--實際請假時數-->
+							<input id="txtHr_apv" type="text" class="txt num c1 apv" style="display: none;"/> <!--等待核准時數,非實際請假時數,需核准後才會將值寫入實際請假時數-->
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl"> </a></td>
