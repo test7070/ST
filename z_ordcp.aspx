@@ -46,6 +46,14 @@
                         type : '0',
                         name : 'isspec',
                         value : q_getPara('sys.isspec')
+                    },{/* [9]*/
+                        type : '0',
+                        name : 'addr',
+                        value : q_getPara('sys.addr')
+                    },{/* [10]*/
+                        type : '0',
+                        name : 'addr2',
+                        value : q_getPara('sys.addr2')
                     }]
                 });
                 q_popAssign();
