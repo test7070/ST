@@ -54,7 +54,11 @@
                         dbf : 'sss',
                         index : 'noa,namea',
                         src : 'sss_b.aspx'
-                    }]
+                    }, {
+						type : '0', //[14]
+						name : 'xip',
+						value : location.hostname
+					}]
                 });
                 q_popAssign();
                 q_getFormat();
