@@ -148,7 +148,7 @@
 					var t_where = '';
 					
 					if (q_getPara('sys.project').toUpperCase()=='XY' ) {
-						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and b.datea>='"+q_date()+"' ";
+						t_where = "isnull(b.enda,0)!=1 and isnull(b.cancel,0)!=1 and b.datea>='"+q_date()+"' and b.mount!=0 ";
 						t_where = t_where+ q_sqlPara2("a.tggno", t_tggno)  + q_sqlPara2("a.noa", t_ordbno) ;
 						t_where = t_where+" and a.kind='" + $('#cmbKind').val() + "' ";
 					}else {

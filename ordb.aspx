@@ -209,7 +209,7 @@
 					//q_box("ordes_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";"+t_where+";"+r_accy, 'ordes', "95%", "95%", q_getMsg('popOrde'));
 					
 					if (q_getPara('sys.project').toUpperCase()=='XY'){
-						var t_where =" isnull(enda,'0')='0' and ISNULL(cancel,'0')='0' ";//105/03/02 便品也可以匯入 and charindex('-',productno)>0
+						var t_where =" isnull(enda,'0')='0' and ISNULL(cancel,'0')='0' and mount!=0 ";//105/03/02 便品也可以匯入 and charindex('-',productno)>0
 						//105/03/02 請購過的不能再出現 一次請完
 						t_where +=" and not exists(select * from view_ordbs where ordeno=a.noa and no2=a.no2 and noa!='"+$('#txtNoa').val()+"')";
 						//排除已出過貨
@@ -694,10 +694,10 @@
 				}
 				
 				if(q_getPara('ordb.accu')=='1' && !chack_accu &&q_getPara('sys.project').toUpperCase()=='RB'){
-					var t_year = $.trim($('#txtOdate').val()).substr(0,3);
+					var t_year = $.trim($('#txtOdate').val()).substr(0,r_len);
 					var t_where='',t_where1='';
-					t_where="where=^^left(a.datea,3)='"+t_year+"' and isnull(a.cancel,0)=0 and isnull(b.cancel,0)=0 and a.noa!='"+$('#txtNoa').val()+"'^^"
-					t_where1="where[1]=^^left(c.mon,3)='"+t_year+"' ^^"
+					t_where="where=^^left(a.datea,"+r_len+")='"+t_year+"' and isnull(a.cancel,0)=0 and isnull(b.cancel,0)=0 and a.noa!='"+$('#txtNoa').val()+"'^^"
+					t_where1="where[1]=^^left(c.mon,"+r_len+")='"+t_year+"' ^^"
 					q_gt('accu_ordb', t_where+t_where1, 0, 0, 0, "check_accu",r_accy);
 					return;
 				}
@@ -751,6 +751,15 @@
 				} else {
 					for (var j = 0; j < q_bbsCount; j++) {
 						$('#txtProductno_' + j).val($('#txtProductno3_' + j).val());
+					}
+				}
+				
+				//106/10/25 品號有KEY數量!=0
+				for (var i = 0; i < q_bbsCount; i++) {
+					if(!emp($('#txtProductno_' + i).val()) && dec($('#txtMount_'+i).val())==0){
+						alert($('#txtProduct_' + i).val()+' '+q_getMsg('lblMount_st') + '不可為零。');
+						Unlock(1);
+						return;
 					}
 				}
 				
