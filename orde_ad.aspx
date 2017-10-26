@@ -2588,7 +2588,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td> </td>
+						<td><span> </span><a id='lblUpload' class='lbl'> </a></td>
 						<td colspan="4">
 							<input id="btnUpload" type="file"/>
 							<input id="btnDownload" type="button"/>
