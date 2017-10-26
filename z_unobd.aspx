@@ -63,9 +63,9 @@
 				$('#txtXenddate').mask('999/99/99');
 				$('#txtXenddate').datepicker();
 				$('#Xnoa').css('width','98%');
-                $('#txtXnoa').css('width','85%');
-                $('#Xuno2').css('width','98%');
-                $('#txtXuno2').css('width','85%');
+                $('#txtXnoa').css('width','80%');
+                $('#Xuno2').css('width','90%');
+                $('#txtXuno2').css('width','80%');
                 $('#lblXuno2').text('原批號');
 			}
 
