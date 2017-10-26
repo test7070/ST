@@ -467,6 +467,68 @@
 					ucagroupdivmove = false;
 					$('#div_ucagroup').hide();
 				});
+				
+				//106/10/25 增加
+				$('#btnUpload').change(function() {
+					if(!(q_cur==1 || q_cur==2)){
+						return;
+					}
+					var file = $(this)[0].files[0];
+					if(file){
+						Lock(1);
+						var ext = '';
+						var extindex = file.name.lastIndexOf('.');
+						if(extindex>=0){
+							ext = file.name.substring(extindex,file.name.length);
+						}
+						$('#txtUpfile').val(file.name);
+						
+						fr = new FileReader();
+						fr.fileName = $('#txtUpfile').val();
+					    fr.readAsDataURL(file);
+					    fr.onprogress = function(e){
+							if ( e.lengthComputable ) { 
+								var per = Math.round( (e.loaded * 100) / e.total) ; 
+								$('#FileList').children().last().find('progress').eq(0).attr('value',per);
+							}; 
+						}
+						fr.onloadstart = function(e){
+							$('#FileList').append('<div styly="width:100%;"><progress id="progress" max="100" value="0" ></progress><progress id="progress" max="100" value="0" ></progress><a>'+fr.fileName+'</a></div>');
+						}
+						fr.onloadend = function(e){
+							$('#FileList').children().last().find('progress').eq(0).attr('value',100);
+							console.log(fr.fileName+':'+fr.result.length);
+							var oReq = new XMLHttpRequest();
+							oReq.upload.addEventListener("progress",function(e) {
+								if (e.lengthComputable) {
+									percentComplete = Math.round((e.loaded / e.total) * 100,0);
+									$('#FileList').children().last().find('progress').eq(1).attr('value',percentComplete);
+								}
+							}, false);
+							oReq.upload.addEventListener("load",function(e) {
+								Unlock(1);
+							}, false);
+							oReq.upload.addEventListener("error",function(e) {
+								alert("資料上傳發生錯誤!");
+							}, false);
+								
+							oReq.timeout = 360000;
+							oReq.ontimeout = function () { alert("Timed out!!!"); }
+							oReq.open("POST", 'orde_upload.aspx', true);
+							oReq.setRequestHeader("Content-type", "text/plain");
+							oReq.setRequestHeader("FileName", escape(fr.fileName));
+							oReq.send(fr.result);//oReq.send(e.target.result);
+						};
+					}
+				});
+				
+				$('#btnDownload').click(function(){
+					if($('#txtUpfile').val().length>0){
+						$('#xdownload').attr('src','orde_download.aspx?FileName='+$('#txtUpfile').val()+'&TempName='+$('#txtUpfile').val());
+                    }else{    
+						alert('No Data!!');
+					}
+				});
 			}
 			
 			function divtrantypechange(){
@@ -1603,6 +1665,7 @@
 				$('#div_addr2').hide();
 				$('#div_ucagroup').hide();
 				HiddenTreat();
+				$('#btnUpload').val('');
 			}
 
 			function readonly(t_para, empty) {
@@ -1612,19 +1675,23 @@
 					$('#combAddr').attr('disabled', 'disabled');
 					$('#txtOdate').datepicker( 'destroy' );
 					$('#btnOrdem').removeAttr('disabled');
+					$('#btnUpload').attr('disabled', 'disabled');
 				} else {
 					$('#btnOrdei').attr('disabled', 'disabled');
 					$('#combAddr').removeAttr('disabled');
 					$('#txtOdate').datepicker();
 					$('#btnOrdem').attr('disabled', 'disabled');
+					$('#btnUpload').removeAttr('disabled', 'disabled');
 				}	
 				
 				$('#div_addr2').hide();
 				readonly_addr2();
 				HiddenTreat();
 				
-				if(q_getPara('sys.project').toUpperCase()=="PK")
+				if(q_getPara('sys.project').toUpperCase()=="PK"){
 					$('#cmbStype').attr('disabled', 'disabled');
+				}
+				$('#btnUpload').val('');
 			}
 			
 			function HiddenTreat() {
@@ -2416,7 +2483,9 @@
 						<td class="td3" colspan="2"><input id="txtAcomp" type="text" class="txt c1"/></td>
 						<td class="td5" ><span> </span><a id='lblContract' class="lbl"> </a></td>
 						<td class="td6"colspan="2"><input id="txtContract" type="text" class="txt c1"/></td>
-						<td class="td8" align="center"><input id="btnOrdem" type="button" style="display: none;"/></td>
+						<td class="td8" align="center">
+							<input id="btnOrdem" type="button" style="display: none;"/>
+						</td>
 					</tr>
 					<tr class="tr3">
 						<td class="td1"><span> </span><a id="lblCust" class="lbl btn"> </a></td>
@@ -2516,6 +2585,14 @@
 						<td class="td1"><span> </span><a id='lblMemo' class='lbl'> </a></td>
 						<td class="td2" colspan='7'>
 							<textarea id="txtMemo" cols="10" rows="5" style="width: 99%;height: 50px;"> </textarea>
+						</td>
+					</tr>
+					<tr>
+						<td> </td>
+						<td colspan="4">
+							<input id="btnUpload" type="file"/>
+							<input id="btnDownload" type="button"/>
+							<input id="txtUpfile" type="hidden">
 						</td>
 					</tr>
 				</table>
@@ -2641,5 +2718,7 @@
 			</table>
 		</div>
 		<input id="q_sys" type="hidden" />
+		<div style="width:100%;display: none;" id="FileList"> </div>
+		<iframe id="xdownload" style="display:none;"> </iframe>
 	</body>
 </html>
