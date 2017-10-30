@@ -1,4 +1,172 @@
-﻿z_ordest8:--z_ordest8        pk
+﻿z_ordest_bd4:
+	declare @t_bodate nvarchar(10) = case when '#non'=[4] then '' else [4] end
+	declare @t_eodate nvarchar(10) = case when '#non'=[5] then char(255) else [5] end
+	declare @t_bpno nvarchar(10) = case when '#non'=[10] then '' else [10] end
+	declare @t_epno nvarchar(10) = case when '#non'=[11] then char(255) else [11] end
+	
+declare @tmp table(
+	gno nvarchar(100),
+	noa nvarchar(30),
+	custno nvarchar(10),
+	cust nvarchar(100),
+	uno nvarchar(30),
+	productno nvarchar(20),
+	product nvarchar(max),
+	size nvarchar(30),
+	[weight] float,
+	weighta float,
+	price float,
+	typea nvarchar(5),
+	endp nvarchar(5),
+	bdate nvarchar(20),
+	edate nvarchar(20)
+)
+insert into @tmp (gno,noa,custno,cust,uno,productno,product,size,weight,weighta,price,typea,endp,bdate,edate)
+select '0',b.noa,b.custno,a.comp,b.uno,b.productno,b.product,b.size,b.weight,b.notv,a.price,a.trantype,case when b.enda='1' then 'Y' else 'N' end,@t_bodate,@t_eodate
+from view_orde a
+left join view_ordes b on a.noa=b.noa
+where b.notv>0 and a.odate between @t_bodate and @t_eodate and b.productno between @t_bpno and @t_epno
+
+insert into @tmp (gno,product,weighta)
+select '1',b.product,b.b
+from (select count(1) a,product,sum(weighta) b from @tmp group by product) b
+
+select * from @tmp order by product,gno;
+---------------------------------------------------------------------
+z_ordest_bd3:
+	declare @t_bodate nvarchar(10) = case when '#non'=[4] then '' else [4] end
+	declare @t_eodate nvarchar(10) = case when '#non'=[5] then char(255) else [5] end
+	declare @t_bcustno nvarchar(20) = case when '#non'=[6] then '' else [6] end
+	declare @t_ecustno nvarchar(20) = case when '#non'=[7] then char(255) else [7] end
+declare @tmp table(
+	gno nvarchar(100),
+	noa nvarchar(30),
+	noq nvarchar(100),
+	custno nvarchar(10),
+	cust nvarchar(100),
+	custa nvarchar(100),
+	uno nvarchar(30),
+	product nvarchar(max),
+	size nvarchar(30),
+	[weight] float,
+	weighta float,
+	price float,
+	typea nvarchar(5),
+	endp nvarchar(5),
+	bdate nvarchar(20),
+	edate nvarchar(20)
+)
+insert into @tmp (gno,noa,noq,custno,cust,custa,uno,product,size,weight,weighta,price,typea,endp,bdate,edate)
+select '0',b.noa,ROW_NUMBER()over(partition by a.comp order by a.noa),b.custno,a.comp,a.comp,b.uno,b.product,b.size,b.weight,b.notv,a.price,a.trantype,case when b.enda='1' then 'Y' else 'N' end
+,@t_bodate,@t_eodate
+from view_orde a
+left join view_ordes b on a.noa=b.noa
+where b.notv>0 and a.odate between @t_bodate and @t_eodate and a.custno between @t_bcustno and @t_ecustno
+
+declare @a nvarchar(50)
+declare @cust nvarchar(50)
+declare cursor_table cursor for 
+select COUNT(*) a,cust from @tmp where noa!='' group by cust
+open cursor_table 
+fetch next from cursor_table 
+into @a,@cust
+while(@@FETCH_STATUS <> -1) 
+begin
+	insert into @tmp (gno,custa) values('1',@cust)	
+	fetch next from cursor_table
+	into @a,@cust
+end 
+close cursor_table 
+deallocate cursor_table
+
+update @tmp set noq = RIGHT('000' + noq ,3)
+update @tmp set noa='',custno='',cust='' where noq!='001'
+
+select * from @tmp order by custa,gno;
+-------------------------------------------------------------------------------------------
+z_ordest_bd2:
+	declare @t_bodate nvarchar(10) = case when '#non'=[4] then '' else [4] end
+	declare @t_eodate nvarchar(10) = case when '#non'=[5] then char(255) else [5] end
+	declare @t_bnoa nvarchar(20) = case when '#non'=[37] then '' else [37] end
+	declare @t_enoa nvarchar(20) = case when '#non'=[38] then char(255) else [38] end
+declare @tmp table(
+	gno nvarchar(100),
+	noa nvarchar(100),
+	nob nvarchar(100),
+	noq nvarchar(5),
+	custno nvarchar(10),
+	cust nvarchar(100),
+	uno nvarchar(30),
+	product nvarchar(max),
+	size nvarchar(30),
+	[weight] float,
+	weighta float,
+	mount float,
+	price float,
+	typea nvarchar(5),
+	proj nvarchar(5)
+)
+insert into @tmp (gno,noa,nob,noq,custno,cust,uno,product,size,weight,weighta,mount,price,typea,proj)
+select '0',b.noa,b.noa,b.no2,b.custno,a.comp,b.uno,b.product,b.size,b.weight,b.notv,a.mount,a.price,a.trantype,case when a.isproj='1' then 'Y' else 'N' end
+from view_orde a
+left join view_ordes b on a.noa=b.noa
+where b.notv>0 and a.odate between @t_bodate and @t_eodate  and a.noa between @t_bnoa and @t_enoa
+insert into @tmp(gno,weight,weighta)
+select '2',sum(weight),SUM(weighta)
+from @tmp
+
+declare @a nvarchar(50)
+declare @noa nvarchar(50)
+declare cursor_table cursor for 
+select COUNT(*) a,noa from @tmp where noa!='' group by noa
+open cursor_table 
+fetch next from cursor_table 
+into @a,@noa
+while(@@FETCH_STATUS <> -1) 
+begin
+	insert into @tmp (gno,nob) values('1',@noa)	
+	fetch next from cursor_table 
+	into @a,@noa
+end 
+close cursor_table 
+deallocate cursor_table
+update @tmp set noa='',custno='',cust='' where noq!='001'
+select * from @tmp order by nob desc,gno;
+-------------------------------------------------------------------------------------------------------
+z_ordest_bd1:
+	declare @t_bodate nvarchar(10) = case when '#non'=[4] then '' else [4] end
+	declare @t_eodate nvarchar(10) = case when '#non'=[5] then char(255) else [5] end
+	declare @t_bcustno nvarchar(20) = case when '#non'=[6] then '' else [6] end
+	declare @t_ecustno nvarchar(20) = case when '#non'=[7] then char(255) else [7] end
+declare @tmp table(
+	gno nvarchar(100),
+	noa nvarchar(30),
+	noq nvarchar(100),
+	cno nvarchar(10),
+	cust nvarchar(100),
+	product nvarchar(max),
+	size nvarchar(30),
+	c1 float,
+	notv float,
+	mount float,
+	price float,
+	money float,
+	endp nvarchar(1),
+	bdate nvarchar(20),
+	edate nvarchar(20)
+)
+insert into @tmp (gno,noa,noq,cno,cust,product,size,c1,notv,mount,price,money,endp,bdate,edate)
+select '0',b.noa,b.no2,b.custno,a.comp,b.product,b.size,b.c1,b.notv,b.mount,b.price,b.notv*b.price,case when a.enda ='1' then 'Y' else 'N' end,@t_bodate,@t_eodate
+from view_orde a
+left join view_ordes b on a.noa=b.noa
+where b.notv>0 and a.odate between @t_bodate and @t_eodate and a.custno between @t_bcustno and @t_ecustno
+insert into @tmp (gno,cno,mount,c1,notv,money)
+select '1',cno,SUM(mount),SUM(c1),SUM(notv),SUM(money)
+from @tmp group by cno
+
+select * from @tmp order by cno,gno;
+-------------------------------------------------------------------------------------------------
+z_ordest8:--z_ordest8        pk
 	SET QUOTED_IDENTIFIER OFF
 	declare @t_bdate nvarchar(20) = case when '#non'=[2] then '' else [2] end
 	declare @t_edate nvarchar(20) = case when '#non'=[3] then char(255) else [3] end

@@ -136,6 +136,10 @@
 						type : '5', //[36] 22
 						name : 'xstyle',
 						value : t_style.split('&')
+					},
+					{
+						type : '1', //[37][38] 23
+						name : 'xnoa'
 					}]
 				});
 				q_popAssign();
