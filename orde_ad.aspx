@@ -1808,29 +1808,31 @@
 								$('#txtPackway_'+b_seq).val(as[0].packway);
 								isucccust=true;
 							}
-							if(isucccust)
+							//106/10/30 不取第一種包裝 但客戶有設定仍去撈取
+							if(isucccust){
 								var t_where = "where=^^ noa='"+$('#txtProductno_'+b_seq).val()+"' and packway='"+$('#txtPackwayno_'+b_seq).val()+"' ^^";
-							else
-								var t_where = "where=^^ noa='"+$('#txtProductno_'+b_seq).val()+"'  ^^";
-							q_gt('pack2s', t_where, 0, 0, 0, "gettop1pack2s", r_accy, 1);
-							var as = _q_appendData("pack2s", "", true);
-							if (as[0] != undefined) {
-								$('#txtPackwayno_'+b_seq).val(as[0].packway);
-								$('#txtPackway_'+b_seq).val(as[0].pack);
-								//計算重量
-								var t_weight=0;
-								var t_mount=dec($('#txtMount_'+b_seq).val());
-								var t_uweight=dec(as[0].uweight);
-								var t_inmount=dec(as[0].inmount)==0?1:dec(as[0].inmount);
-								var t_outmount=dec(as[0].outmount)==0?1:dec(as[0].outmount);
-								var t_inweight=dec(as[0].inweight);
-								var t_outweight=dec(as[0].outweight);
-								var t_cuft=dec(as[0].cuft);
-								var t_pfmount=q_mul(t_inmount,t_outmount)==0?0:Math.floor(q_div(t_mount,q_mul(t_inmount,t_outmount))); //一整箱
-								var t_pcmount=q_mul(t_inmount,t_outmount)==0?0:Math.ceil(q_div(t_mount,q_mul(t_inmount,t_outmount))); //總箱數
-								var t_emount=q_sub(t_mount,q_mul(t_pfmount,q_mul(t_inmount,t_outmount))); //散裝數量
-								
-								$('#txtCuft_'+b_seq).val(q_mul(t_cuft,t_pcmount));
+							//else
+							//	var t_where = "where=^^ noa='"+$('#txtProductno_'+b_seq).val()+"'  ^^";
+								q_gt('pack2s', t_where, 0, 0, 0, "gettop1pack2s", r_accy, 1);
+								var as = _q_appendData("pack2s", "", true);
+								if (as[0] != undefined) {
+									$('#txtPackwayno_'+b_seq).val(as[0].packway);
+									$('#txtPackway_'+b_seq).val(as[0].pack);
+									//計算重量
+									var t_weight=0;
+									var t_mount=dec($('#txtMount_'+b_seq).val());
+									var t_uweight=dec(as[0].uweight);
+									var t_inmount=dec(as[0].inmount)==0?1:dec(as[0].inmount);
+									var t_outmount=dec(as[0].outmount)==0?1:dec(as[0].outmount);
+									var t_inweight=dec(as[0].inweight);
+									var t_outweight=dec(as[0].outweight);
+									var t_cuft=dec(as[0].cuft);
+									var t_pfmount=q_mul(t_inmount,t_outmount)==0?0:Math.floor(q_div(t_mount,q_mul(t_inmount,t_outmount))); //一整箱
+									var t_pcmount=q_mul(t_inmount,t_outmount)==0?0:Math.ceil(q_div(t_mount,q_mul(t_inmount,t_outmount))); //總箱數
+									var t_emount=q_sub(t_mount,q_mul(t_pfmount,q_mul(t_inmount,t_outmount))); //散裝數量
+									
+									$('#txtCuft_'+b_seq).val(q_mul(t_cuft,t_pcmount));
+								}
 							}
 							sum();
 						}
