@@ -450,15 +450,14 @@ set @t_custtype = case when '#non' = [31] then '' else [31] end
 -----------------------------------------------------------------------------------------------------------
 SET QUOTED_IDENTIFIER OFF
 declare @cmd nvarchar(max)
-IF OBJECT_ID('tempdb..#tmp')is not null
+IF OBJECT_ID('tempdb..#z_umm7')is not null
 BEGIN
-	set @cmd = 'drop table #tmp'
-	EXECUTE sp_executesql @cmd
+	drop table #z_umm7
 END
 
 declare @coin nvarchar(20)
 
-create table #tmp(
+create table #z_umm7(
 	coin nvarchar(20),
 	gno nvarchar(1),
 	cno nvarchar(50),
@@ -472,7 +471,7 @@ create table #tmp(
 	PRIMARY KEY (coin,gno,cno,custno,mon)
 )
 
-insert into #tmp(coin,gno,cno,custno,mon,money,total,payed)
+insert into #z_umm7(coin,gno,cno,custno,mon,money,total,payed)
 select coin,gno,cno,custno,mon,SUM(money),SUM(total),SUM(payed) from (
 	--前期
 	select @t_xcoin coin,'9' gno,cno,a.noa custno,a.mon,sum(unpay/coin.floata) money,0 total,0 payed
@@ -495,9 +494,9 @@ select coin,gno,cno,custno,mon,SUM(money),SUM(total),SUM(payed) from (
 )tmp group by coin,gno,cno,custno,mon
 
 --單一幣別轉換
-update #tmp
+update #z_umm7
 set money=a.money*b.floata, total=total*b.floata , payed =payed*b.floata
-from #tmp a  outer apply (select case when len(@t_xcoin)=0 then 1 else isnull((select top 1 floata from flors where coin=a.coin and a.mon <=edate order by edate desc,noa desc),1) end floata)b
+from #z_umm7 a  outer apply (select case when len(@t_xcoin)=0 then 1 else isnull((select top 1 floata from flors where coin=a.coin and a.mon <=edate order by edate desc,noa desc),1) end floata)b
 where coin!='ALL'
 
 if(@t_xcoin='ALL')
@@ -509,7 +508,7 @@ begin
 	into @coin
 	while(@@FETCH_STATUS <> -1)
 	begin
-		insert into #tmp (coin,gno,cno,custno,mon,money,total,payed)
+		insert into #z_umm7 (coin,gno,cno,custno,mon,money,total,payed)
 		select coin,gno,cno,custno,mon,SUM(money),SUM(total),SUM(payed) from (
 			--前期 
 			select @coin coin,'9' gno,cno,a.noa custno,a.mon,sum(unpay/coin.floata*c.floata) money,0 total,0 payed 
@@ -540,62 +539,62 @@ end
 
 if(@t_xcoin='ALL')
 begin
-	update #tmp set coin='' where coin=@t_xcoin
+	update #z_umm7 set coin='' where coin=@t_xcoin
 end
 
 --加總
-insert into #tmp (coin,gno,cno,mon,custno,money,total,payed)
-select coin,'0',cno,mon,custno,SUM(money),SUM(total),SUM(payed) from #tmp 
+insert into #z_umm7 (coin,gno,cno,mon,custno,money,total,payed)
+select coin,'0',cno,mon,custno,SUM(money),SUM(total),SUM(payed) from #z_umm7 
 group by coin,cno,custno,mon order by coin,cno,custno,mon
 
-delete #tmp where money=0 and total=0 and payed=0
+delete #z_umm7 where money=0 and total=0 and payed=0
 
-delete #tmp where gno='9'
+delete #z_umm7 where gno='9'
 
 --插入本期有的資料,最小未收月份
-insert #tmp (gno,mon,custno,money,total,payed,coin,cno)
+insert #z_umm7 (gno,mon,custno,money,total,payed,coin,cno)
 select '1',MIN(mon),custno,0,SUM(total),sum(payed),coin,cno
-from #tmp where gno='0'
+from #z_umm7 where gno='0'
 group by custno,coin,cno
 
 --插入沒有本期金額最小月份的未收金額
-insert #tmp (gno,mon,custno,money,total,payed,coin,cno)
+insert #z_umm7 (gno,mon,custno,money,total,payed,coin,cno)
 select '1',MIN(mon),custno,0,0,0,coin,cno
-from #tmp a 
-where gno='0' and not exists (select * from #tmp where gno='1' and custno=a.custno and coin=a.coin and cno=a.cno)
+from #z_umm7 a 
+where gno='0' and not exists (select * from #z_umm7 where gno='1' and custno=a.custno and coin=a.coin and cno=a.cno)
 group by custno,coin,cno
 
 --更新最小未收月份金額
 update a
-set money=isnull((select money from #tmp where gno='0' and mon=a.mon and custno=a.custno and coin=a.coin and cno=a.cno),0)
-from #tmp a where gno='1'
+set money=isnull((select money from #z_umm7 where gno='0' and mon=a.mon and custno=a.custno and coin=a.coin and cno=a.cno),0)
+from #z_umm7 a where gno='1'
 
 --插入其他未收金額
-insert #tmp (gno,mon,custno,cno,coin,money,total,payed,unpay)
+insert #z_umm7 (gno,mon,custno,cno,coin,money,total,payed,unpay)
 select '2',mon,custno,cno,coin,money,total,payed,0
-from #tmp a 
-where gno='0' and not exists (select * from #tmp where gno='1' and custno=a.custno and coin=a.coin and cno=a.cno and mon=a.mon)
+from #z_umm7 a 
+where gno='0' and not exists (select * from #z_umm7 where gno='1' and custno=a.custno and coin=a.coin and cno=a.cno and mon=a.mon)
 and mon not between @t_bsmon and @t_esmon
 
-delete #tmp where gno='0'
+delete #z_umm7 where gno='0'
 
 update a
-set unpay=(select sum(isnull(money,0)+isnull(total,0)-isnull(payed,0)) from #tmp where custno=a.custno and coin=a.coin and cno=a.cno)
-from #tmp a
+set unpay=(select sum(isnull(money,0)+isnull(total,0)-isnull(payed,0)) from #z_umm7 where custno=a.custno and coin=a.coin and cno=a.cno)
+from #z_umm7 a
 where gno='1'
 
 --總計
-insert into #tmp (coin,gno,cno,custno,comp,mon,money,total,payed,unpay)
-select coin,'3'gno,cno,char(255),'',CHAR(255),sum(money),sum(total),sum(payed),SUM(unpay) from #tmp 
+insert into #z_umm7 (coin,gno,cno,custno,comp,mon,money,total,payed,unpay)
+select coin,'3'gno,cno,char(255),'',CHAR(255),sum(money),sum(total),sum(payed),SUM(unpay) from #z_umm7 
 group by coin,cno
 
 update a 
 set comp=isnull((select top 1 nick from (select nick from cust where noa=a.custno)tmp),'')
-from #tmp a
+from #z_umm7 a
 
 update a 
 set comp=isnull((select top 1 namea from (select namea from carOwner where noa=a.custno union select namea from sss where noa=a.custno)tmp),'')
-from #tmp a where isnull(comp,'')=''
+from #z_umm7 a where isnull(comp,'')=''
 
 select gno,cno,isnull((select top 1 acomp from acomp where a.cno=noa),'') acomp,custno,replace(comp,'~#$',char(39)) comp,mon
 	,reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,money),1)),(case when coin!='' then 0 else 4 end),30)) money
@@ -603,12 +602,11 @@ select gno,cno,isnull((select top 1 acomp from acomp where a.cno=noa),'') acomp,
 	,reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,payed),1)),(case when coin!='' then 0 else 4 end),30)) payed
 	,reverse(substring(reverse(convert(nvarchar(30),CONVERT(money,unpay),1)),(case when coin!='' then 0 else 4 end),30)) unpay
 	,case when coin!='' then '_'+coin else '' end coin
-from #tmp a order by coin,cno,custno,gno,mon
+from #z_umm7 a order by coin,cno,custno,gno,mon
 
-IF OBJECT_ID('tempdb..#tmp')is not null
+IF OBJECT_ID('tempdb..#z_umm7')is not null
 BEGIN
-	set @cmd = 'drop table #tmp'
-	EXECUTE sp_executesql @cmd
+	drop table #z_umm7
 END
 ;
 --********************************************************************************
