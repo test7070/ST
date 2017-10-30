@@ -88,6 +88,10 @@
 						type : '8', //[22] 1
 						name : 'detail',
 						value : (new Array('detail@明細'))
+					},
+					{
+						type : '1', //[23][24] 1
+						name : 'Xnoa',
 					}]
 				});
 				q_popAssign();

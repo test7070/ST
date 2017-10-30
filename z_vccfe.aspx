@@ -258,7 +258,7 @@
                 $('#txtXemon1').val(r_accy + '/01').mask(r_picd);
                 $('#txtXemon2').val(r_accy + '/12').mask(r_picd);
                 $('#Xmemo').removeClass('a2').addClass('a1');
-                $('#txtXmemo').css('width', '85%');
+               /* $('#txtXmemo').css('width', '85%');
                 $('#Xgroupano select').css('width', '150px');
                 $('.q_report .report').css('width', '420px');
                 $('.q_report .report div').css('width', '200px');
@@ -266,7 +266,7 @@
                 $('#Xshowinvono').css('width', '300px').css('height', '30px');
                 $('#Xshowinvono .label').css('width','0px');
                 $('#chkXshowinvono').css('width', '220px').css('margin-top', '5px');
-                $('#chkXshowinvono span').css('width','180px')
+                $('#chkXshowinvono span').css('width','180px')*/
                 
                 $('#txtVmon1').mask(r_picd);
                 $('#txtVmon2').mask(r_picd);

@@ -1,4 +1,145 @@
-﻿z_ordcst05:--z_ordcst05	    pk
+﻿z_ordcst_bd3:
+declare @t_bodate nvarchar(10)
+declare @t_eodate nvarchar(10)
+declare @t_btgg nvarchar(10)
+declare @t_etgg nvarchar(10)
+declare @t_bpno nvarchar(10)
+declare @t_epno nvarchar(10)
+set @t_bodate = case when '#non'=[4] then '' else [4] end
+set @t_eodate = case when '#non'=[5] then char(255) else [5] end
+set @t_btgg = case when '#non'=[6] then '' else [6] end
+set @t_etgg = case when '#non'=[7] then char(255) else [7] end
+set @t_bpno = case when '#non'=[10] then '' else [10] end
+set @t_epno = case when '#non'=[11] then char(255) else [11] end
+declare @tmp table(
+	gno nvarchar(1),
+	noq nvarchar(10),
+	tggno nvarchar(100),
+	tgg nvarchar(100),
+	tggg nvarchar(100),
+	product nvarchar(100),
+	size nvarchar(100),
+	noa nvarchar(20),
+	price float,
+	weight float,
+	c1 int,
+	notv int,
+	ct float,
+	proj nvarchar(1),
+	ep nvarchar(1),
+	date1 nvarchar(20),
+	date2 nvarchar(20)
+)
+insert into @tmp (gno,noq,tggno,tgg,tggg,product,size,noa,price,weight,c1,notv,ct,proj,ep,date1,date2)
+select '0',ROW_NUMBER()over(partition by a.tgg order by b.noa),a.tggno,a.tgg,a.tgg,b.product,b.size,a.noa,b.price,b.weight,b.c1,b.notv,case when b.weight > 0 then ROUND((b.notv/b.weight)*100,1) else 0 end,case when a.isproj =1 then 'Y' else 'N' end,case when a.enda =1 then 'Y' else 'N' end
+,@t_bodate,@t_eodate
+from view_ordc a
+left join view_ordcs b on a.noa=b.noa
+where a.odate between @t_bodate and @t_eodate and a.tggno between @t_btgg and @t_etgg and b.product between @t_bpno and @t_epno and b.notv>0
+
+insert into @tmp (gno,tggg)
+select '1',b.tggg
+from (select count(1) a,tggg from @tmp group by tggg) b
+
+update @tmp set noq = RIGHT('000' + noq , 3)
+update @tmp set tggno='',tgg='' where noq!='001'
+
+
+select * from @tmp order by tggg,gno;
+---------------------------------------------------------------------------------------
+z_ordcst_bd2:
+declare @t_bodate nvarchar(10)
+declare @t_eodate nvarchar(10)
+declare @t_btgg nvarchar(10)
+declare @t_etgg nvarchar(10)
+declare @t_bpno nvarchar(10)
+declare @t_epno nvarchar(10)
+set @t_bodate = case when '#non'=[4] then '' else [4] end
+set @t_eodate = case when '#non'=[5] then char(255) else [5] end
+set @t_btgg = case when '#non'=[6] then '' else [6] end
+set @t_etgg = case when '#non'=[7] then char(255) else [7] end
+set @t_bpno = case when '#non'=[10] then '' else [10] end
+set @t_epno = case when '#non'=[11] then char(255) else [11] end
+declare @tmp table(
+	gno nvarchar(1),
+	noq nvarchar(5),
+	tggno nvarchar(100),
+	source nvarchar(100),
+	tgg nvarchar(100),
+	tggg nvarchar(100),
+	spec nvarchar(100),
+	level nvarchar(100),
+	product nvarchar(100),
+	size nvarchar(100),
+	price float,
+	noa nvarchar(100),
+	weight float,
+	c1 int,
+	notv int,
+	proj nvarchar(1),
+	ep nvarchar(1),
+	date1 nvarchar(20),
+	date2 nvarchar(20)
+)
+insert into @tmp (gno,noq,tggno,source,tgg,tggg,spec,level,product,size,price,noa,weight,c1,notv,proj,ep,date1,date2)
+select '0',ROW_NUMBER()over(partition by a.tgg order by b.noa),a.tggno,b.source,a.tgg,a.tgg,b.spec,b.class,b.product,b.size,b.price,a.noa,b.weight,b.c1,b.notv,case when a.isproj='1' then 'Y' else 'N' end,case when a.enda='1' then 'Y' else 'N' end,@t_bodate,@t_eodate
+from view_ordc a
+left join view_ordcs b on a.noa=b.noa
+where a.odate between @t_bodate and @t_eodate and a.tggno between @t_btgg and @t_etgg and b.product between @t_bpno and @t_epno and b.notv>0
+
+update @tmp set noq= RIGHT('000'+noq,3)
+update @tmp set tggno='',tgg='',source='' where noq!='001'
+
+insert into @tmp (gno,tggg,weight,notv)
+select '1',tggg,weight,notv
+from (select count(1) a,tggg,SUM(WEIGHT) WEIGHT,SUM(notv) notv from @tmp group by tggg) b
+select * from @tmp order by tggg desc,gno;
+
+------------------------------------------------------------------------------
+z_ordcst_bd1:
+declare @t_bodate nvarchar(10)
+declare @t_eodate nvarchar(10)
+declare @t_bnoa nvarchar(20)
+declare @t_enoa nvarchar(20)
+set @t_bodate = case when '#non'=[4] then '' else [4] end
+set @t_eodate = case when '#non'=[5] then char(255) else [5] end
+set @t_bnoa = case when '#non'=[23] then '' else [23] end
+set @t_enoa = case when '#non'=[24] then char(255) else [24] end
+declare @tmp table(
+	gno nvarchar(1),
+	ordcno nvarchar(30),
+	tno nvarchar(100),
+	tgg nvarchar(100),
+	ordcdate nvarchar(30),
+	datea nvarchar(30),
+	
+	source nvarchar(100),
+	spec nvarchar(100),
+	level nvarchar(100),
+	product nvarchar(100),
+	size nvarchar(100),
+	price float,
+	weight float,
+	c1 int,
+	notv int,
+	ct float,
+	proj nvarchar(1),
+	ep nvarchar(1)
+)
+insert into @tmp (gno,ordcno,tno,tgg,ordcdate,datea,source,spec,level,product,size,price,weight,c1,notv,ct,proj,ep)
+select '0',a.noa,a.tggno,a.tgg,a.odate,a.datea,b.source,b.spec,b.class,b.product,b.size,b.price,b.weight,b.c1,b.notv,case when b.weight > 0 then ROUND((b.notv/b.weight)*100,1) else 0 end
+,case when a.isproj = 1 then 'Y' else 'N' end,case when a.enda = 1 then 'Y' else 'N' end
+from view_ordc a
+left join view_ordcs b on a.noa=b.noa
+where a.odate between @t_bodate and @t_eodate and a.noa between @t_bnoa and @t_enoa
+
+insert into @tmp (gno,ordcno,weight,notv)
+select '1',ordcno,SUM(weight),SUM(notv)
+from @tmp  group by ordcno
+
+select * from @tmp order by ordcno,gno;
+------------------------------------------------------------------------------------------
+z_ordcst05:--z_ordcst05	    pk
 	SET QUOTED_IDENTIFIER OFF 
 	declare @cmd nvarchar(max) 
 	declare @t_bdate nvarchar(20) = case when '#non'=[2] then '' else [2] end
