@@ -1,0 +1,144 @@
+z_ucc_bd01:--z_ucc_bd01	
+	SET QUOTED_IDENTIFIER OFF 
+	declare @t_cmd nvarchar(max)
+	declare @t_path nvarchar(max) = N'[1]'
+	declare @t_db nvarchar(max) = N'[2]'
+	
+	declare @t_itype nvarchar(max) = N'[3]'
+	declare @t_bproductno nvarchar(max) = case when '#non'=N[4] then '' else N[4] end 
+	declare @t_eproductno nvarchar(max) = case when '#non'=N[5] then char(255) else N[5] end 
+	declare @t_bdime decimal(25,8) = 0
+	declare @t_edime decimal(25,8) = 999999
+	declare @t_bwidth decimal(25,8) = 0
+	declare @t_ewidth decimal(25,8) = 999999
+	declare @t_blength decimal(25,8) = 0
+	declare @t_elength decimal(25,8) = 999999
+	declare @t_bradius decimal(25,8) = 0
+	declare @t_eradius decimal(25,8) = 999999
+	begin try
+		set @t_bdime = case when '#non'=[6] then 0 else cast([6] as decimal(25,8)) end 
+		set @t_edime = case when '#non'=[7] then 99999 else cast([7] as decimal(25,8)) end 
+	end try
+	begin catch
+		set @t_bdime = 0
+		set @t_edime = 999999
+	end catch
+	begin try
+		set @t_bwidth = case when '#non'=[8] then 0 else cast([8] as decimal(25,8)) end 
+		set @t_ewidth = case when '#non'=[9] then 99999 else cast([9] as decimal(25,8)) end 
+	end try
+	begin catch
+		set @t_bwidth = 0
+		set @t_ewidth = 999999
+	end catch
+	begin try
+		set @t_blength = case when '#non'=[10] then 0 else cast([10] as decimal(25,8)) end 
+		set @t_elength = case when '#non'=[11] then 99999 else cast([11] as decimal(25,8)) end 
+	end try
+	begin catch
+		set @t_blength = 0
+		set @t_elength = 999999
+	end catch
+	begin try
+		set @t_bradius = case when '#non'=[12] then 0 else cast([12] as decimal(25,8)) end 
+		set @t_eradius = case when '#non'=[13] then 99999 else cast([13] as decimal(25,8)) end 
+	end try
+	begin catch
+		set @t_bradius = 0
+		set @t_eradius = 999999
+	end catch
+	
+	declare @t_storeno nvarchar(max) = case when '#non'=N[14] then '' else N[14] end 
+	declare @t_place nvarchar(max) = case when '#non'=N[15] then '' else N[15] end 
+	declare @t_uno nvarchar(max) = case when '#non'=N[16] then '' else N[16] end 
+	declare @t_custno nvarchar(max) = case when '#non'=N[17] then '' else N[17] end 
+	declare @t_spec nvarchar(max) = case when '#non'=N[18] then '' else N[18] end 
+	--------------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#z_ucc_bd01')is not null
+	BEGIN
+		drop table #z_ucc_bd01
+	END
+	create table #z_ucc_bd01(
+		sel int identity(1,1)
+		,gno nvarchar(20)
+		,pno int
+		,recno int
+		,uno nvarchar(30)
+		,indate nvarchar(20)
+		,storeno nvarchar(20)
+		,store nvarchar(50)
+		,[source] nvarchar(20)
+		,spec nvarchar(50)
+		,[class] nvarchar(20)
+		,custno nvarchar(30)
+		,productno nvarchar(30)
+		,product nvarchar(max)
+		,size nvarchar(max)
+		,dime float
+		,width float
+		,lengthb float
+		,radius float
+		,mount float
+		,[weight] float
+		,memo nvarchar(max)
+	)
+	insert into #z_ucc_bd01(gno,pno,uno,indate,storeno,store,[source],[spec],[class]
+		,productno,product,size,dime,width,lengthb,radius,mount,[weight],memo,custno)
+	select '1',1,a.uno,b.datea,b.storeno,e.store,b.[source],b.[spec],b.[class]
+		,b.productno,d.product,b.size,b.dime,b.width,b.lengthb,b.radius,a.emount,a.[eweight],b.memo
+		,b.custno
+	from uccy a
+	left join view_uccb b on a.uno=b.uno
+	left join dbo.fnSplit(@t_itype) c on b.itype=c.n 
+	left join uccc d on b.productno=d.noa 
+	left join store e on b.storeno=e.noa
+	where isnull(b.productno,'') between @t_bproductno and @t_eproductno
+	
+	delete #z_ucc_bd01 
+	where dime not between @t_bdime and @t_edime
+		and width not between @t_bwidth and @t_ewidth
+		and lengthb not between @t_blength and @t_elength
+		and radius not between @t_bradius and @t_eradius
+		and not (len(@t_storeno)=0 or CHARINDEX(','+storeno+',',','+@t_storeno+',')>0)
+		and not (len(@t_place)=0 or [source]=@t_place)
+		and not (len(@t_uno)=0 or [uno]=@t_uno)
+		and not (len(@t_custno)=0 or [custno]=@t_custno)
+		and not (len(@t_spec)=0 or [spec]=@t_spec)
+		
+	
+	--MEMO當初有存其他資料,要忽略
+	update #z_ucc_bd01 set memo = LEFT(memo,CHARINDEX('chr(10)',memo)-1)
+	where CHARINDEX('chr(10)',memo)>0
+	
+	update #z_ucc_bd01 set recno=b.recno
+	from #z_ucc_bd01 a
+	left join (select sel,ROW_NUMBER()over(partition by productno order by dime,width,lengthb,uno) recno from #z_ucc_bd01) b on a.sel=b.sel
+	
+	
+	insert into #z_ucc_bd01(gno,pno,productno,mount,[weight])
+	select '2',2,productno,SUM(ISNULL(mount,0)),SUM(ISNULL([weight],0))
+	from #z_ucc_bd01
+	where gno='1'
+	group by productno
+	
+	insert into #z_ucc_bd01(gno,pno,productno,mount,[weight])
+	select '3',3,CHAR(255),SUM(ISNULL(mount,0)),SUM(ISNULL([weight],0))
+	from #z_ucc_bd01
+	where gno='1'
+	
+	select gno
+		,indate a01
+		,storeno a02
+		,[source] a03
+		,uno a04
+		,spec a05
+		,[class] a06
+		,productno a07
+		,CAST(dime as nvarchar)+'*'+CAST(width as nvarchar)+'*'+case when lengthb=0 then 'C' else CAST(lengthb as nvarchar) end a08
+		,dbo.getComma(mount,-1) a09
+		,dbo.getComma([weight],-1) a10
+		,memo a11
+	from #z_ucc_bd01
+	order by productno,pno,recno
+	drop table #z_ucc_bd01;
