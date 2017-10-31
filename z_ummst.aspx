@@ -147,12 +147,12 @@
                 $('#txtSmon1').mask(r_picm);
                 $('#txtSmon2').mask(r_picm);
                 $('#Xmemo').removeClass('a2').addClass('a1');
-                $('#txtXmemo').css('width', '85%');
+                /*$('#txtXmemo').css('width', '85%');
                 $('.q_report .report').css('width', '420px');
                 $('.q_report .report div').css('width', '200px');
 				$('#Curnoa').removeClass('a2').addClass('a1');
                 $('#txtCurnoa').css('width', '85%');
-                
+                */
                 
                 $('#txtDate1').val(q_date().substr(0, r_lenm) + '/01');
                 $('#txtSmon1').val(q_date().substr(0, r_lenm));
