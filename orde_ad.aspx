@@ -1809,10 +1809,11 @@
 								isucccust=true;
 							}
 							//106/10/30 不取第一種包裝 但客戶有設定仍去撈取
-							if(isucccust){
+							//106/10/31 直接取第一種包裝方式
+							/*if(isucccust){
 								var t_where = "where=^^ noa='"+$('#txtProductno_'+b_seq).val()+"' and packway='"+$('#txtPackwayno_'+b_seq).val()+"' ^^";
-							//else
-							//	var t_where = "where=^^ noa='"+$('#txtProductno_'+b_seq).val()+"'  ^^";
+							else*/
+								var t_where = "where=^^ noa='"+$('#txtProductno_'+b_seq).val()+"'  ^^";
 								q_gt('pack2s', t_where, 0, 0, 0, "gettop1pack2s", r_accy, 1);
 								var as = _q_appendData("pack2s", "", true);
 								if (as[0] != undefined) {
@@ -1833,7 +1834,7 @@
 									
 									$('#txtCuft_'+b_seq).val(q_mul(t_cuft,t_pcmount));
 								}
-							}
+							//}
 							sum();
 						}
 						break;
