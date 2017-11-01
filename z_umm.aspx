@@ -260,7 +260,7 @@
 					$('#txtSmon1').mask(r_picm);
 					$('#txtSmon2').mask(r_picm);
 					$('#Xmemo').removeClass('a2').addClass('a1');
-					$('#txtXmemo').css('width', '85%');
+					$('#txtXmemo').css('width', '83%');
 					$('.q_report .report').css('width', '460px');
 					$('.q_report .report div').css('width', '220px');
 					
@@ -315,14 +315,14 @@
 					}
 					
 					$('#Multcust').css("width","605px");
-					$('#txtMultcust').css("width","515px");
+					$('#txtMultcust').css("width","505px");
 					$('#lblMultcust').css("color","#0000ff");
 					$('#lblMultcust').click(function(e) {
 	                	q_box("cust_b2.aspx?;;;;", 'cust', "600px", "90%", q_getMsg("popCust"));
 	                });
 	                
 	                $('#Acckey').css("width","605px");
-					$('#txtAcckey').css("width","515px");
+					$('#txtAcckey').css("width","505px");
 					$('#txtAcckey').click(function(e) {
 	                	q_msg($(this),'多關鍵字請用,隔開');
 	                });
