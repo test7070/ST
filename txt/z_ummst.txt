@@ -1,3 +1,334 @@
+﻿z_ummst_bd2:
+SET QUOTED_IDENTIFIER OFF 
+declare @cmd nvarchar(max) 
+declare @t_bmon nvarchar(10)
+declare @t_emon nvarchar(10)
+declare @t_bcustno nvarchar(10)
+declare @t_ecustno nvarchar(10)
+set @t_bmon = case when '#non'=[3] then '' else [3] end
+set @t_emon = case when '#non'=[4] then char(255) else [4] end
+set @t_bcustno = case when '#non'=[5] then '' else [5] end
+set @t_ecustno = case when '#non'=[6] then char(255) else [6] end
+--------------------------------------------------------------------------------- 
+IF OBJECT_ID('tempdb..#tmp1')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp1' 
+EXECUTE sp_executesql @cmd 
+END 
+IF OBJECT_ID('tempdb..#tmp2')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp2' 
+EXECUTE sp_executesql @cmd 
+END 
+IF OBJECT_ID('tempdb..#tmp3')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp3' 
+EXECUTE sp_executesql @cmd 
+END 
+IF OBJECT_ID('tempdb..#tmp4')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp4' 
+EXECUTE sp_executesql @cmd 
+END 
+IF OBJECT_ID('tempdb..#tmp5')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp5' 
+EXECUTE sp_executesql @cmd 
+END 
+
+create table #tmp1( 
+custno nvarchar(20), 
+mon nvarchar(10),--帳款月份	
+[money] float, 
+tax float, 
+total float 
+) 
+create table #tmp2( 
+custno nvarchar(20), 
+mon nvarchar(20),--帳款月份 
+[money] float, 
+tax float, 
+total float 
+) 
+create table #tmp3( 
+custno nvarchar(20), 
+mon nvarchar(20),--帳款月份 
+paysale float 
+) 
+
+create table #tmp4( 
+custno nvarchar(20), 
+mon nvarchar(10), 
+[money] float, 
+tax float, 
+paysale float, 
+unpay float 
+) 
+
+create table #tmp5( 
+gno nvarchar(10), 
+custno nvarchar(20), 
+cust nvarchar(300), 
+memo nvarchar(max), 
+sell float, 
+ct float, 
+bmon nvarchar(30), 
+emon nvarchar(30), 
+[money] float, 
+pay float, 
+unpay float 
+) 
+
+declare @tmp table ( 
+gno nvarchar(10), 
+noq nvarchar(5), 
+custno nvarchar(20), 
+cust nvarchar(300), 
+memo nvarchar(max), 
+sell float, 
+ct float, 
+bmon nvarchar(30), 
+emon nvarchar(30), 
+[money] float, 
+pay float, 
+unpay float 
+) 
+insert into #tmp1(custno,mon,[money],tax,total) 
+select custno,mon 
+,SUM(case when typea='1' then ISNULL([money],0) else -ISNULL([money],0) end) 
+,SUM(case when typea='1' then ISNULL([tax],0) else -ISNULL([tax],0) end) 
+,SUM(case when typea='1' then ISNULL([total],0) else -ISNULL([total],0) end) 
+from view_vcc 
+where custno between @t_bcustno and @t_ecustno 
+and mon<=@t_emon 
+group by custno,mon 
+
+if((select count(*) from acomp where acomp like '%信屹%')>0)--月結 將折讓單稅額也要付款 
+begin 
+insert into #tmp2(custno,mon,[money],tax,total) 
+select custno,mon,SUM(money),SUM(tax),SUM(total) from ( 
+select custno,mon,ISNULL([money],0)[money],ISNULL([tax],0)tax,ISNULL([total],0)total 
+from vcca 
+where custno between @t_bcustno and @t_ecustno 
+and mon<=@t_emon 
+union all 
+select custno,mon,-1*ISNULL([money],0)[money],-1*ISNULL([tax],0)tax,-1*ISNULL([total],0)total 
+from vccb 
+where (typea='1' or typea='2') and custno between @t_bcustno and @t_ecustno 
+and mon<=@t_emon 
+)tmp group by custno,mon 
+end 
+else 
+begin 
+insert into #tmp2(custno,mon,[money],tax,total) 
+select custno,mon,SUM(ISNULL([money],0)),SUM(ISNULL([tax],0)),SUM(ISNULL([total],0)) 
+from vcca 
+where custno between @t_bcustno and @t_ecustno 
+and mon<=@t_emon 
+group by custno,mon 
+end 
+
+insert into #tmp3(custno,mon,paysale) 
+select case when isnull(a.custno,'')!='' then a.custno 
+when isnull(c.custno,'')!='' then c.custno else b.custno end 
+,case when isnull(a.paymon,'')!='' then a.paymon else isnull(c.mon,'') end 
+,SUM(ISNULL(a.paysale,0)) 
+from umms a 
+left join umm b on a.noa=b.noa 
+left join view_vcc c on a.accy=c.accy and a.vccno=c.noa 
+where --b.noa is not null and 
+ISNULL(a.paysale,0)!=0 
+and case when isnull(a.custno,'')!='' then a.custno 
+when isnull(c.custno,'')!='' then c.custno else b.custno end between @t_bcustno and @t_ecustno 
+and case when isnull(a.paymon,'')!='' then a.paymon else isnull(c.mon,'') end <= @t_emon 
+group by case when isnull(a.custno,'')!='' then a.custno 
+when isnull(c.custno,'')!='' then c.custno else b.custno end 
+,case when isnull(a.paymon,'')!='' then a.paymon else isnull(c.mon,'') end 
+--------------------------------------------------------------------------------------- 
+insert into #tmp4(custno,mon,[money],tax) 
+select custno,mon,[money],tax from #tmp1 
+
+--------------------------------------------------------------------------------------- 
+update #tmp4 set tax = isnull(a.tax,0) + isnull(b.tax,0) 
+from #tmp4 a 
+left join #tmp2 b on a.custno=b.custno and a.mon=b.mon 
+
+insert into #tmp4(custno,mon,[money],tax) 
+select custno,mon,0,tax from #tmp2 a 
+where not exists(select * from #tmp4 where custno=a.custno and mon=a.mon) 
+--------------------------------------------------------------------------------------- 
+update #tmp4 set paysale=ISNULL(b.paysale,0) 
+from #tmp4 a 
+left join #tmp3 b on a.custno=b.custno and a.mon=b.mon 
+
+insert into #tmp4(custno,mon,[money],tax,paysale) 
+select custno,mon,0,0,paysale from #tmp3 a 
+where not exists(select * from #tmp4 where custno=a.custno and mon=a.mon) 
+--------------------------------------------------------------------------------------- 
+update #tmp4 set unpay = ISNULL(money,0)+ISNULL(tax,0)-ISNULL(paysale,0) 
+
+--------------------------------------------------------------------------------------- 
+declare @custno nvarchar(20) 
+declare @noq int =1 
+declare @mon nvarchar(10) 
+declare @money float 
+declare @tax float 
+declare @pay float 
+declare @unpay float 
+
+declare cursor_table cursor for 
+select custno from #tmp4 group by custno 
+open cursor_table 
+fetch next from cursor_table 
+into @custno 
+while(@@FETCH_STATUS <> -1) 
+begin 
+set @cmd = '' 
+declare cursor_table2 cursor for 
+select mon,unpay from #tmp4 
+where custno=@custno and unpay !=0 and mon<@t_bmon 
+order by mon 
+open cursor_table2 
+fetch next from cursor_table2 
+into @mon,@unpay 
+while(@@FETCH_STATUS <> -1) 
+begin 
+set @cmd = @cmd + case when LEN(@cmd)>0 then ', ' else '' end 
++case when len(@mon)>0 then @mon else '無帳款月份'end 
++'：'+reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,@unpay),1)),4,12)) 
+
+fetch next from cursor_table2 
+into @mon,@unpay 
+end 
+close cursor_table2 
+deallocate cursor_table2 
+
+select @money=0,@tax=0,@pay=0,@unpay=0 
+select @money=SUM(ISNULL([money],0)),@tax=SUM(ISNULL([tax],0)),@pay=SUM(ISNULL([paysale],0)) from #tmp4 where custno=@custno and mon between @t_bmon and @t_emon 
+select @unpay=SUM(ISNULL([unpay],0)) from #tmp4 where custno=@custno 
+
+insert into #tmp5(gno,custno,memo,[money],pay,unpay)values('1',@custno,@cmd,@money+@tax,@pay,@unpay) 
+set @noq= @noq+1 
+fetch next from cursor_table 
+into @custno 
+end 
+close cursor_table 
+deallocate cursor_table 
+
+-- dele no data
+delete #tmp5 where ISNULL([money],0)=0 and ISNULL([pay],0)=0 and ISNULL([unpay],0)=0 and len(ISNULL(memo,''))=0 
+
+insert into #tmp5(gno,[money],pay,unpay) 
+select '2',SUM(ISNULL([money],0)),SUM(ISNULL(pay,0)),SUM(ISNULL(unpay,0)) from #tmp5 
+update #tmp5 set bmon=@t_bmon,emon=@t_emon 
+update a set a.sell = isnull(b.a,0) 
+from #tmp5 a 
+outer apply(select SUM(money) a,custno from view_vcc where mon between a.bmon and a.emon and a.custno=custno group by custno) b 
+update a set a.ct = isnull(b.a,0) 
+from #tmp5 a 
+outer apply(select SUM(tax) a,custno from view_vcc where mon between a.bmon and a.emon and a.custno=custno group by custno) b 
+update a set cust =b.comp 
+from #tmp5 a outer apply(select * from cust)b 
+where a.custno=b.noa 
+
+insert into @tmp
+select gno,ROW_NUMBER()over(partition by bmon order by custno),custno,cust,memo,sell,ct,bmon,emon,[money],pay,unpay from #tmp5 where gno='1'
+insert into @tmp
+select gno,ROW_NUMBER()over(partition by bmon order by custno),custno,cust,memo,sell,ct,bmon,emon,[money],pay,unpay from #tmp5 where gno='2'
+update @tmp set noq = right('000' + noq ,3)
+
+select a.*,b.nick 
+,dbo.getComma(a.[money],-1) aa1 
+,dbo.getComma(a.[pay],-1) aa2 
+,dbo.getComma(a.[unpay],-1) aa3 
+,@t_bmon as bmon 
+,@t_emon as emon 
+from @tmp a 
+left join cust b on a.custno=b.noa 
+order by gno,custno
+
+IF OBJECT_ID('tempdb..#tmp1')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp1' 
+EXECUTE sp_executesql @cmd 
+END 
+IF OBJECT_ID('tempdb..#tmp2')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp2' 
+EXECUTE sp_executesql @cmd 
+END 
+IF OBJECT_ID('tempdb..#tmp3')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp3' 
+EXECUTE sp_executesql @cmd 
+END 
+IF OBJECT_ID('tempdb..#tmp4')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp4' 
+EXECUTE sp_executesql @cmd 
+END 
+IF OBJECT_ID('tempdb..#tmp5')is not null 
+BEGIN 
+set @cmd = 'drop table #tmp5' 
+EXECUTE sp_executesql @cmd 
+END 
+;
+-----------------------------------------------------------------------------------------------------------------
+z_ummst_bd1:
+SET QUOTED_IDENTIFIER OFF
+declare @t_bdate nvarchar(10)
+declare @t_edate nvarchar(10)
+declare @t_bcust nvarchar(10)
+declare @t_ecust nvarchar(10)
+set @t_bdate = case when '#non'=[3] then '' else [3] end
+set @t_edate = case when '#non'=[4] then char(255) else [4] end
+set @t_bcust = case when '#non'=[5] then '' else [5] end
+set @t_ecust = case when '#non'=[6] then char(255) else [6] end
+declare @tmp table(
+	gno nvarchar(1),
+	noq nvarchar(5),
+	mon nvarchar(10),
+	cno nvarchar(10),
+	cust nvarchar(100),
+	addr nvarchar(300),
+	sales nvarchar(30),
+	mm nvarchar(10),
+	serial nvarchar(20),
+	tel nvarchar(100),
+	
+	datea nvarchar(30),
+	typea nvarchar(5),
+	noa nvarchar(30),
+	total float,
+	product nvarchar(30),
+	spec nvarchar(30),
+	size nvarchar(100),
+	mount float,
+	weight float,
+	price float,
+	total2 float
+)
+insert into @tmp (gno,noq,mon,cno,cust,addr,sales,mm,serial,tel,datea,typea,noa,total,product,spec,size,mount,weight,price,total2)
+select '0',b.noq,SUBSTRING(a.datea,5,2),a.custno,a.comp,a.addr,a.sales,SUBSTRING(a.datea,1,6),c.serial,a.tel
+,a.datea,case when a.typea='1' then '出' else '退' end,a.noa,b.total,b.product,b.spec,b.size,b.mount,b.weight,b.price,b.mount*b.price
+from view_vcc a
+left join view_vccs b on a.noa=b.noa
+left join cust c on c.noa=a.custno
+where a.datea between @t_bdate and @t_edate and
+a.custno between @t_bcust and @t_ecust
+
+update @tmp set datea='',typea='',noa='',total=NULL where noq!='001'
+
+insert into @tmp (gno,cust,total2)
+select '1',cust,SUM(total2)
+from @tmp group by cust
+
+insert into @tmp (gno,cust,total2)
+select '2',cust,SUM(total2)
+from @tmp group by cust
+
+select * from @tmp order by cust,gno;
+---------------------------------------------------------------------------------
 z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)	
 	SET QUOTED_IDENTIFIER OFF
 	declare @t_path nvarchar(max) = '[23]'
@@ -1044,7 +1375,6 @@ z_ummst03:--z_ummst03
 	declare @t_memo nvarchar(max) = case when '#non' = [19] then '' else [19] end
 	declare @t_proj nvarchar(max) = '[25]'
 	---------------------------------------------------------------------------------
-	---------------------------------------------------------------------------------
 	declare @tmp1 table(
 		custno nvarchar(20),
 		mon nvarchar(10),
@@ -1248,11 +1578,8 @@ z_ummst03:--z_ummst03
 	declare @totpage int
 	
 	declare @result table(
-		sel int identity(1,1),
 		gno nvarchar(10),
 		pno int,
-		recno int,
-		curpage int,
 		totpage int,
 		custno nvarchar(20),
 		[money] float,
@@ -1386,14 +1713,8 @@ z_ummst03:--z_ummst03
 	close cursor_table
 	deallocate cursor_table
 
-	update @result set recno=b.recno
-	from @result a
-	left join (select sel,ROW_NUMBER()over(partition by custno order by case when len(isnull(vccno,''))=0 then 2 else 1 end,isnull(vccno,''),pno) recno from @result) b on a.sel=b.sel
-	
-	update @result set curpage = ceiling( (recno-1)/@linecount)+1
-	
 	select a.* 
-	,a.curpage pp
+	,(ROW_NUMBER()over(partition by a.custno order by pno)-1)/@linecount+1 pp
 	,a.totpage qq
 	,a.datea dd
 	,a.typea tt
@@ -1418,7 +1739,7 @@ z_ummst03:--z_ummst03
 	from @result a
 	left join cust b on a.custno=b.noa
 	order by a.custno,case when len(isnull(a.vccno,''))=0 then 2 else 1 end,isnull(a.vccno,''),a.pno;
-	
+
 z_ummst02:--z_ummst02 
 	SET QUOTED_IDENTIFIER OFF 
 	declare @cmd nvarchar(max) 
