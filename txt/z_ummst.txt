@@ -1044,6 +1044,7 @@ z_ummst03:--z_ummst03
 	declare @t_memo nvarchar(max) = case when '#non' = [19] then '' else [19] end
 	declare @t_proj nvarchar(max) = '[25]'
 	---------------------------------------------------------------------------------
+	---------------------------------------------------------------------------------
 	declare @tmp1 table(
 		custno nvarchar(20),
 		mon nvarchar(10),
@@ -1247,8 +1248,11 @@ z_ummst03:--z_ummst03
 	declare @totpage int
 	
 	declare @result table(
+		sel int identity(1,1),
 		gno nvarchar(10),
 		pno int,
+		recno int,
+		curpage int,
 		totpage int,
 		custno nvarchar(20),
 		[money] float,
@@ -1382,8 +1386,14 @@ z_ummst03:--z_ummst03
 	close cursor_table
 	deallocate cursor_table
 
+	update @result set recno=b.recno
+	from @result a
+	left join (select sel,ROW_NUMBER()over(partition by custno order by case when len(isnull(vccno,''))=0 then 2 else 1 end,isnull(vccno,''),pno) recno from @result) b on a.sel=b.sel
+	
+	update @result set curpage = ceiling( (recno-1)/@linecount)+1
+	
 	select a.* 
-	,(ROW_NUMBER()over(partition by a.custno order by pno)-1)/@linecount+1 pp
+	,a.curpage pp
 	,a.totpage qq
 	,a.datea dd
 	,a.typea tt
@@ -1408,7 +1418,7 @@ z_ummst03:--z_ummst03
 	from @result a
 	left join cust b on a.custno=b.noa
 	order by a.custno,case when len(isnull(a.vccno,''))=0 then 2 else 1 end,isnull(a.vccno,''),a.pno;
-
+	
 z_ummst02:--z_ummst02 
 	SET QUOTED_IDENTIFIER OFF 
 	declare @cmd nvarchar(max) 
