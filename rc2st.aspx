@@ -140,7 +140,7 @@
 					else{
 						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M²' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							//批   裕承隆  是拿來當運費的單位   不能用
-							if(q_getPara('sys.project').toUpperCase()=="BD" && t_unit == '批' ){
+							if(q_getPara('sys.project').toUpperCase()=="BDV" && t_unit == '批' ){
 								t_moneys = q_mul(q_mul(t_prices, t_mounts),t_float==0?1:t_float);
 								if(t_float!=0)
 									t_moneyuss = q_mul(t_prices, t_mounts);

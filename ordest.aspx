@@ -322,7 +322,7 @@
                 
                 OrdenoAndNo2On_Change();
                 
-                if(q_getPara('sys.project').toUpperCase()=="BD" || q_getPara('sys.project').toUpperCase()=="RS"){
+                if(q_getPara('sys.project').toUpperCase()=="BDV" || q_getPara('sys.project').toUpperCase()=="RS"){
                 	$('#btnBBTShow').hide();
                 }
             }
@@ -1003,7 +1003,7 @@
                 size_change();
                 OrdenoAndNo2On_Change();
                 
-                if(q_getPara('sys.project').toUpperCase()=="BD" || q_getPara('sys.project').toUpperCase()=="RS"){
+                if(q_getPara('sys.project').toUpperCase()=="BDV" || q_getPara('sys.project').toUpperCase()=="RS"){
                 	$('.ordet').hide();
                 	$('.bbsuno').show();
                 	$('.bbssource').show();
