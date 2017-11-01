@@ -60,11 +60,11 @@
 						value : [q_getPara('report.all')].concat(q_getPara('uccc.itype'))
 					}, {
 						type : '5', //[4] 1
-						name : 'xbproduct3',
+						name : 'xbproduct',
 						value : t_ucc.split('&')
 					}, {
 						type : '5', //[5] 2
-						name : 'xeproduct3',
+						name : 'xeproduct',
 						value : t_ucc.split('&')
 					}, {
 						type : '1', //[6][7] 3
@@ -74,7 +74,7 @@
 						name : 'xwidth'
 					}, {
 						type : '1', //[10][11] 5
-						name : 'xlengthb'
+						name : 'xlength'
 					}, {
 						type : '1', //[12][13] 6
 						name : 'xradius'
@@ -92,7 +92,7 @@
 						type : '6', //[17] 10
 						name : 'xcust'
 					}, {
-						type : '6', //[18] 9
+						type : '6', //[18] 11
 						name : 'xspec'
 					}]
 				});
@@ -100,10 +100,10 @@
 				q_getFormat();
 				q_langShow();
 				
-				$('#Xbproduct3 select').change(function(e){
-					$('#Xeproduct3 select').val($('#Xbproduct3 select').val());
+				$('#Xbproduct select').change(function(e){
+					$('#Xeproduct select').val($('#Xbproduct select').val());
 				});
-				$('#Xeproduct3 select')[0].selectedIndex=$('#Xeproduct3 select').children().length-1;
+				$('#Xeproduct select')[0].selectedIndex=$('#Xeproduct select').children().length-1;
 			}
 
 			function q_boxClose(s2) {

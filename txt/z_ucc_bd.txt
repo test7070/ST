@@ -54,7 +54,6 @@ z_ucc_bd01:--z_ucc_bd01
 	declare @t_custno nvarchar(max) = case when '#non'=N[17] then '' else N[17] end 
 	declare @t_spec nvarchar(max) = case when '#non'=N[18] then '' else N[18] end 
 	--------------------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------
 	IF OBJECT_ID('tempdb..#z_ucc_bd01')is not null
 	BEGIN
 		drop table #z_ucc_bd01
@@ -94,17 +93,20 @@ z_ucc_bd01:--z_ucc_bd01
 	left join uccc d on b.productno=d.noa 
 	left join store e on b.storeno=e.noa
 	where isnull(b.productno,'') between @t_bproductno and @t_eproductno
+	and len(ISNULL(b.waste,''))=0
+	and left(a.uno,1) not between 'X' and 'Z'
+	and (isnull(a.emount,0)>0 or ISNULL(a.eweight,0)>0)
 	
 	delete #z_ucc_bd01 
 	where dime not between @t_bdime and @t_edime
-		and width not between @t_bwidth and @t_ewidth
-		and lengthb not between @t_blength and @t_elength
-		and radius not between @t_bradius and @t_eradius
-		and not (len(@t_storeno)=0 or CHARINDEX(','+storeno+',',','+@t_storeno+',')>0)
-		and not (len(@t_place)=0 or [source]=@t_place)
-		and not (len(@t_uno)=0 or [uno]=@t_uno)
-		and not (len(@t_custno)=0 or [custno]=@t_custno)
-		and not (len(@t_spec)=0 or [spec]=@t_spec)
+		or width not between @t_bwidth and @t_ewidth
+		or lengthb not between @t_blength and @t_elength
+		or radius not between @t_bradius and @t_eradius
+		or not (len(@t_storeno)=0 or CHARINDEX(','+storeno+',',','+@t_storeno+',')>0)
+		or not (len(@t_place)=0 or [source]=@t_place)
+		or not (len(@t_uno)=0 or [uno]=@t_uno)
+		or not (len(@t_custno)=0 or [custno]=@t_custno)
+		or not (len(@t_spec)=0 or [spec]=@t_spec)
 		
 	
 	--MEMO當初有存其他資料,要忽略
