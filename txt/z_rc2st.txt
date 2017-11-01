@@ -299,8 +299,11 @@ declare @result table(
 insert into @result(gno,type,noa,datea,tggno,comp,addr_invo,tel,productno,xproduct,unit,mount,weight,price
 	,total,pcount,csize,qhref,coin,spec,source)
 	select '0' gno, (case when a.typea='2' then '退' else '進' end), a.noa, a.datea, 
-		   a.tggno, isnull(c.comp,''), isnull(c.addr_invo,''), isnull(c.tel,''), b.productno, b.product, b.unit, 
-	       b.mount, b.weight, b.price, b.total, 0 pcount,
+		   a.tggno, isnull(c.comp,''), isnull(c.addr_invo,''), isnull(c.tel,''), b.productno, b.product, b.unit 
+	       ,(case when a.typea='2' then -1 else 1 end)*b.mount
+	       ,(case when a.typea='2' then -1 else 1 end)*b.weight
+	       , b.price
+	       ,(case when a.typea='2' then -1 else 1 end)*b.total, 0 pcount,
 	       (case when ltrim(rtrim(isnull(b.size,'')))='' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else b.size end),'rc2st'+b.accy
 	       ,a.coin,b.spec,b.source
 	from view_rc2s b
@@ -373,8 +376,11 @@ declare @result table(
 insert into @result(gno,type,noa,datea,tggno,comp,productno,xproduct,unit,mount,weight,price,total
 	,csize,qhref,coin,spec,source)
 	select '0' gno, (case when a.typea='2' then '退' else '進' end), a.noa,a.datea, 
-		   a.tggno, isnull(c.comp,''), b.productno, b.product, b.unit, 
-	       b.mount, b.weight, b.price, b.total,
+		   a.tggno, isnull(c.comp,''), b.productno, b.product, b.unit 
+	       ,(case when a.typea='2' then -1 else 1 end)*b.mount
+	       ,(case when a.typea='2' then -1 else 1 end)*b.weight
+	       , b.price
+	       ,(case when a.typea='2' then -1 else 1 end)*b.total,
 	       (case when ltrim(rtrim(isnull(b.size,'')))='' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else b.size end),'rc2st'+b.accy
 	       ,a.coin,b.spec,b.source
 	from view_rc2s b
@@ -445,7 +451,11 @@ declare @result table(
 insert into @result(gno,type,noa,datea,tggno,comp,productno,xproduct,unit,mount,weight
 	,price,total,memo,csize,qhref,coin,spec,source)
 	select '0', (case when a.typea='2' then '退' else '進' end),a.noa,a.datea,a.tggno,
-			 isnull(c.comp,''), b.productno, b.product, b.unit,b.mount, b.weight, b.price, b.total,a.memo,
+			 isnull(c.comp,''), b.productno, b.product, b.unit
+			 ,(case when a.typea='2' then -1 else 1 end)*b.mount
+			 ,(case when a.typea='2' then -1 else 1 end)*b.weight
+			 , b.price
+			 ,(case when a.typea='2' then -1 else 1 end)*b.total,a.memo,
 			 (case when ltrim(rtrim(isnull(b.size,'')))='' then dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) else b.size end),'rc2st'+b.accy
 			 ,a.coin,b.spec,b.source
 	from view_rc2s b
