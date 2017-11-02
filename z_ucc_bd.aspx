@@ -94,11 +94,21 @@
 					}, {
 						type : '6', //[18] 11
 						name : 'xspec'
-					}]
+					}, {
+						type : '6', //[19] 12
+						name : 'xdate'
+					}, {
+                        type : '8',//[20] 13
+                        name : 'xdetail',
+                        value : "1@明細".split(',')
+                    }]
 				});
 				q_popAssign();
 				q_getFormat();
 				q_langShow();
+				
+				$('#txtXdate').mask(r_picd);
+				$('#txtXdate').datepicker();
 				
 				$('#Xbproduct select').change(function(e){
 					$('#Xeproduct select').val($('#Xbproduct select').val());
