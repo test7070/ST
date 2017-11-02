@@ -255,8 +255,10 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
-				q_cmbParse("combSpec", t_spec,'s');
-				q_cmbParse("cmbCoin", t_coin);
+				if(t_spec.length>0)
+					q_cmbParse("combSpec", t_spec,'s');
+				if(t_coin.length>0)
+					q_cmbParse("cmbCoin", t_coin);
 				
 				
 				//限制帳款月份的輸入 只有在備註的第一個字為*才能手動輸入					
