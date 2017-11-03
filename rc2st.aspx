@@ -396,9 +396,16 @@
                         			break;
                         		}
                         	}
-                        	q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit'
-                        	, newArray.length, newArray
-							, 'productno,product,spec,spec,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,unit', 'txtProductno');        	
+                        	if(q_getPara('sys.project').toUpperCase()=='PK'){
+                        		//傑期   errmemo 改存訂單號碼
+                        		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtErrmemo'
+	                        	, newArray.length, newArray
+								, 'productno,product,spec,spec,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,unit,errmemo', 'txtProductno'); 
+                        	}else{
+                        		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit'
+	                        	, newArray.length, newArray
+								, 'productno,product,spec,spec,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,unit', 'txtProductno'); 
+                        	}    	
                         	sum();
                         }else{
                         	Unlock(1);
