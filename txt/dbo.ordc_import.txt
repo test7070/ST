@@ -1,3 +1,13 @@
+USE [ST]
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[ordc_import]    Script Date: 11/03/2017 11:49:52 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max), @t_noa nvarchar(max),@para nvarchar(max))
 	returns @tmp table(
 		sel int identity(1,1)
@@ -68,7 +78,7 @@ ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max)
 			from view_ordcs a
 			left join view_ordc b on a.accy=b.accy and a.noa=b.noa
 			left join tgg c on b.tggno=c.noa
-			left join view_ordct d on a.accy=d.accy and a.no2=d.no2
+			left join view_ordct d on a.accy=d.accy  and a.noa=d.noa and a.no2=d.no2
 			where ISNULL(b.enda,0) = 0
 			and ISNULL(a.enda,0) = 0
 			and (len(@t_tggno)=0 or b.tggno=@t_tggno)
@@ -114,6 +124,7 @@ ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max)
 		--delete @tmp where emount<=0 and eweight<=0
 		return
 	end	
+
 GO
 
 
