@@ -148,10 +148,10 @@
 				$('#txtXdate1').css('width','90px');
 				$('#txtXdate2').css('width','90px');
 				$('#Xshowlengthb').css('width','300px').css('height','30px');
-				$('#chkXshowlengthb').css('width','215px');
+				$('#chkXshowlengthb').css('width','210px');
 				$('#chkXshowlengthb span').css('width','175px');
 				$('#Xshowprice').css('width','300px').css('height','30px');
-				$('#chkXshowprice').css('width','215px');
+				$('#chkXshowprice').css('width','210px');
 				$('#chkXshowprice span').css('width','175px');
             }
 
