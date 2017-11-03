@@ -87,6 +87,10 @@
                         type : '5',
                         name : 'xorder',
                         value : ('sssno@員工編號,partno@部門-員工,datea@日期').split(',')
+                    }, {
+                        type : '0',
+                        name : 'project',
+                        value : q_getPara('sys.project').toUpperCase()
                     }]
                 });
                 q_popAssign();
@@ -103,13 +107,15 @@
                 $('#txtXmon1').val(q_date().substr(0,r_lenm));
                 $('#txtXmon2').val(q_date().substr(0,r_lenm));
                 
-                $('#txtXworkhours').css('width','110px');
+                $('#txtXworkhours').css('width','100px');
                 $('#Xworkhours').css('width','197px');
-                $('#txtXlate').css('width','110px');
+                $('#txtXlate').css('width','100px');
                 $('#Xlate').css('width','197px');
-                $('#txtXearly').css('width','110px');
+                $('#txtXearly').css('width','100px');
                 $('#Xearly').css('width','197px');
                 $('#Xresthours').css('width','330px');
+                $('#txtXresthours1').css('width','100px');
+                $('#txtXresthours2').css('width','100px');
                 $('#Xtype').css('width','270px');
                 $('.q_report .option div .c4 ').css('font-size','medium');
                 $('.q_report .option div .c4 ').css('width','180px');
