@@ -30,20 +30,27 @@ begin
 		deallocate cursor_table 
 	
 		--客戶主檔
-		update cust set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='cust')>0)
+			update cust set noa=@new_noa where noa=@old_noa
 		
 		--收款
-		update cust_2s set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='cust_2s')>0)
+			update cust_2s set noa=@new_noa where noa=@old_noa
 		
 		--帳務設定
-		update custm set noa=@new_noa where noa=@old_noa
-		update custms set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='custm')>0)
+		begin
+			update custm set noa=@new_noa where noa=@old_noa
+			update custms set noa=@new_noa where noa=@old_noa
+		end
 		
 		--聯絡人
-		update conn set noa=@new_noa where noa=@old_noa and typea='1'
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='conn')>0)
+			update conn set noa=@new_noa where noa=@old_noa and typea='1'
 		
 		--信用額度
-		update usecrd set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='usecrd')>0)
+			update usecrd set noa=@new_noa where noa=@old_noa
 		
 		Commit Transaction
 	
@@ -95,13 +102,16 @@ begin
 		deallocate cursor_table 
 	
 		--廠商主檔
-		update tgg set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='tgg')>0)
+			update tgg set noa=@new_noa where noa=@old_noa
 		
 		--付款
-		update tgg_2s set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='tgg_2s')>0)
+			update tgg_2s set noa=@new_noa where noa=@old_noa
 		
 		--聯絡人
-		update conn set noa=@new_noa where noa=@old_noa and typea='2'
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='conn')>0)
+			update conn set noa=@new_noa where noa=@old_noa and typea='2'
 		
 		Commit Transaction
 	
@@ -156,21 +166,29 @@ begin
 		deallocate cursor_table 
 		
 		--物品主檔
-		update ucc set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='ucc')>0)
+			update ucc set noa=@new_noa where noa=@old_noa
 		--BOM主檔
-		update uca set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='uca')>0)
+			update uca set noa=@new_noa where noa=@old_noa
 		--客戶料號
-		update ucccust set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='ucccust')>0)
+			update ucccust set noa=@new_noa where noa=@old_noa
 		--替代品
-		update ucctd set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='ucctd')>0)
+			update ucctd set noa=@new_noa where noa=@old_noa
 		--產品包裝
-		update pack2 set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='pack2')>0)
+			update pack2 set noa=@new_noa where noa=@old_noa
 		--產品包裝
-		update pack2s set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='pack2s')>0)
+			update pack2s set noa=@new_noa where noa=@old_noa
 		--加扣單價
-		update ucap set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='ucap')>0)
+			update ucap set noa=@new_noa where noa=@old_noa
 		--使用模具
-		update ucab set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='ucab')>0)
+			update ucab set noa=@new_noa where noa=@old_noa
 		
 		Commit Transaction
 	
@@ -230,10 +248,12 @@ begin
 		deallocate cursor_table 
 		
 		--主檔
-		update part set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='part')>0)
+			update part set noa=@new_noa where noa=@old_noa
 		
 		--零用金員工部門
-		update chgcash set partno=@new_noa where partno=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='chgcash')>0)
+			update chgcash set partno=@new_noa where partno=@old_noa
 		
 		Commit Transaction
 	
@@ -286,7 +306,8 @@ begin
 		deallocate cursor_table 
 		
 		--主檔
-		update station set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='station')>0)
+			update station set noa=@new_noa where noa=@old_noa
 		
 		Commit Transaction
 	
@@ -395,56 +416,72 @@ begin
 		--密碼主檔nhpe不變更
 		
 		--員工主檔
-		update sss set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='sss')>0)
+			update sss set noa=@new_noa where noa=@old_noa
 		
 		--所屬部門
-		update ssspart set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='ssspart')>0)
+			update ssspart set noa=@new_noa where noa=@old_noa
 		
 		--薪資調整記錄
-		update saladjust set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='saladjust')>0)
+			update saladjust set noa=@new_noa where noa=@old_noa
 		
 		--停/復職紀錄
-		update sssr set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='sssr')>0)
+			update sssr set noa=@new_noa where noa=@old_noa
 		
 		--人事異動紀錄
-		update ssschg set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='ssschg')>0)
+			update ssschg set noa=@new_noa where noa=@old_noa
 		
 		--健勞保
-		update labase set noa=@new_noa where noa=@old_noa
-		update labases set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='labase')>0)
+		begin
+			update labase set noa=@new_noa where noa=@old_noa
+			update labases set noa=@new_noa where noa=@old_noa
+		end
 		
 		--員工投退保日
-		update labased set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='labased')>0)
+			update labased set noa=@new_noa where noa=@old_noa
 		
 		--投保歷史紀錄
-		update salinsures set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='salinsures')>0)
+			update salinsures set noa=@new_noa where noa=@old_noa
 
 		--所得設定
-		update sssu set noa=@new_noa where noa=@old_noa
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='sssu')>0)
+			update sssu set noa=@new_noa where noa=@old_noa
 
 		--簽核
-		update signform set checkerno=@new_noa where isnull(checkerno,'')=@old_noa
-		update signform set approvemano=@new_noa where isnull(approvemano,'')=@old_noa
-		update signform set approvefino=@new_noa where isnull(approvefino,'')=@old_noa
-		update signform set approvegmno=@new_noa where isnull(approvegmno,'')=@old_noa
-		update signform set approvebsno=@new_noa where isnull(approvebsno,'')=@old_noa
-
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='signform')>0)
+		begin
+			update signform set checkerno=@new_noa where isnull(checkerno,'')=@old_noa
+			update signform set approvemano=@new_noa where isnull(approvemano,'')=@old_noa
+			update signform set approvefino=@new_noa where isnull(approvefino,'')=@old_noa
+			update signform set approvegmno=@new_noa where isnull(approvegmno,'')=@old_noa
+			update signform set approvebsno=@new_noa where isnull(approvebsno,'')=@old_noa
+		end
+		
 		--eip系列 多員工編號分號間隔
-		update a 
-		set sno=SUBSTRING(b.chgstr,1,len(b.chgstr)-1)
-		from eipbases a outer apply (select STUFF(replace(CHAR(59)+a.sno+CHAR(59),CHAR(59)+@old_noa+CHAR(59),CHAR(59)+@new_noa+CHAR(59)),1,1,'') chgstr )b
-		where CHAR(59)+a.sno+CHAR(59) like '%'+CHAR(59)+@old_noa+CHAR(59)+'%'
-		
-		update a 
-		set sno=SUBSTRING(b.chgstr,1,len(b.chgstr)-1)
-		from eipflows a outer apply (select STUFF(replace(CHAR(59)+a.sno+CHAR(59),CHAR(59)+@old_noa+CHAR(59),CHAR(59)+@new_noa+CHAR(59)),1,1,'') chgstr )b
-		where CHAR(59)+a.sno+CHAR(59) like '%'+CHAR(59)+@old_noa+CHAR(59)+'%'
-		
-		update a 
-		set sno=SUBSTRING(b.chgstr,1,len(b.chgstr)-1)
-		from eipmans a outer apply (select STUFF(replace(CHAR(59)+a.sno+CHAR(59),CHAR(59)+@old_noa+CHAR(59),CHAR(59)+@new_noa+CHAR(59)),1,1,'') chgstr )b
-		where CHAR(59)+a.sno+CHAR(59) like '%'+CHAR(59)+@old_noa+CHAR(59)+'%'
-		
+		if((SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='eipbases')>0)
+		begin
+			update a 
+			set sno=SUBSTRING(b.chgstr,1,len(b.chgstr)-1)
+			from eipbases a outer apply (select STUFF(replace(CHAR(59)+a.sno+CHAR(59),CHAR(59)+@old_noa+CHAR(59),CHAR(59)+@new_noa+CHAR(59)),1,1,'') chgstr )b
+			where CHAR(59)+a.sno+CHAR(59) like '%'+CHAR(59)+@old_noa+CHAR(59)+'%'
+			
+			update a 
+			set sno=SUBSTRING(b.chgstr,1,len(b.chgstr)-1)
+			from eipflows a outer apply (select STUFF(replace(CHAR(59)+a.sno+CHAR(59),CHAR(59)+@old_noa+CHAR(59),CHAR(59)+@new_noa+CHAR(59)),1,1,'') chgstr )b
+			where CHAR(59)+a.sno+CHAR(59) like '%'+CHAR(59)+@old_noa+CHAR(59)+'%'
+			
+			update a 
+			set sno=SUBSTRING(b.chgstr,1,len(b.chgstr)-1)
+			from eipmans a outer apply (select STUFF(replace(CHAR(59)+a.sno+CHAR(59),CHAR(59)+@old_noa+CHAR(59),CHAR(59)+@new_noa+CHAR(59)),1,1,'') chgstr )b
+			where CHAR(59)+a.sno+CHAR(59) like '%'+CHAR(59)+@old_noa+CHAR(59)+'%'
+		end
 		Commit Transaction
 	
 	END TRY
