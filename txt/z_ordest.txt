@@ -3,35 +3,36 @@
 	declare @t_eodate nvarchar(10) = case when '#non'=[5] then char(255) else [5] end
 	declare @t_bpno nvarchar(10) = case when '#non'=[10] then '' else [10] end
 	declare @t_epno nvarchar(10) = case when '#non'=[11] then char(255) else [11] end
-	
 declare @tmp table(
 	gno nvarchar(100),
 	noa nvarchar(30),
+	noq nvarchar(10),
 	custno nvarchar(10),
 	cust nvarchar(100),
 	uno nvarchar(30),
-	productno nvarchar(20),
 	product nvarchar(max),
 	size nvarchar(30),
 	[weight] float,
+	c1 float,
 	weighta float,
-	price float,
-	typea nvarchar(5),
-	endp nvarchar(5),
-	bdate nvarchar(20),
-	edate nvarchar(20)
+	mount float
 )
-insert into @tmp (gno,noa,custno,cust,uno,productno,product,size,weight,weighta,price,typea,endp,bdate,edate)
-select '0',b.noa,b.custno,a.comp,b.uno,b.productno,b.product,b.size,b.weight,b.notv,a.price,a.trantype,case when b.enda='1' then 'Y' else 'N' end,@t_bodate,@t_eodate
+insert into @tmp (gno,noa,noq,custno,cust,uno,product,size,weight,weighta,mount)
+select '0',b.noa,b.no2,c.noa,c.nick,b.uno,b.product,b.size,b.weight,b.notv,b.mount
 from view_orde a
 left join view_ordes b on a.noa=b.noa
+left join cust c on c.noa=a.custno
 where b.notv>0 and a.odate between @t_bodate and @t_eodate and b.productno between @t_bpno and @t_epno
 
-insert into @tmp (gno,product,weighta)
-select '1',b.product,b.b
-from (select count(1) a,product,sum(weighta) b from @tmp group by product) b
+insert into @tmp (gno,product,weight,mount)
+select '1',b.product,b.b,b.c
+from (select count(1) a,product,sum(weight) b,sum(mount) c from @tmp group by product) b
 
-select * from @tmp order by product,gno;
+update a set a.weighta = a.weight - b.a from @tmp a
+outer apply(select SUM(weight) a,ordeno,no2 from view_vccs where ordeno=a.noa group by ordeno,no2) b
+where b.ordeno = a.noa and b.no2=a.noq
+update @tmp set c1 = weight-weighta
+select a.*,@t_bodate as bdate,@t_eodate as edate from @tmp a order by product,gno;
 ---------------------------------------------------------------------
 z_ordest_bd3:
 	declare @t_bodate nvarchar(10) = case when '#non'=[4] then '' else [4] end
@@ -41,32 +42,32 @@ z_ordest_bd3:
 declare @tmp table(
 	gno nvarchar(100),
 	noa nvarchar(30),
-	noq nvarchar(100),
+	noq nvarchar(10),
+	nob nvarchar(10),
 	custno nvarchar(10),
 	cust nvarchar(100),
 	custa nvarchar(100),
 	uno nvarchar(30),
 	product nvarchar(max),
-	size nvarchar(30),
+	spec nvarchar(30),
 	[weight] float,
+	c1 float,
 	weighta float,
-	price float,
-	typea nvarchar(5),
-	endp nvarchar(5),
-	bdate nvarchar(20),
-	edate nvarchar(20)
+	mount float,
+	datea nvarchar(20),
+	sales nvarchar(10)
 )
-insert into @tmp (gno,noa,noq,custno,cust,custa,uno,product,size,weight,weighta,price,typea,endp,bdate,edate)
-select '0',b.noa,ROW_NUMBER()over(partition by a.comp order by a.noa),b.custno,a.comp,a.comp,b.uno,b.product,b.size,b.weight,b.notv,a.price,a.trantype,case when b.enda='1' then 'Y' else 'N' end
-,@t_bodate,@t_eodate
+insert into @tmp (gno,noa,noq,nob,custno,cust,custa,uno,product,spec,weight,c1,weighta,mount,datea,sales)
+select '0',b.noa,b.no2,ROW_NUMBER()over(partition by b.cust order by b.accy),c.noa,c.nick,c.noa,b.uno,b.product,b.spec,b.weight,b.c1,b.notv,b.mount,b.datea,a.sales
 from view_orde a
 left join view_ordes b on a.noa=b.noa
+left join cust c on c.noa=a.custno
 where b.notv>0 and a.odate between @t_bodate and @t_eodate and a.custno between @t_bcustno and @t_ecustno
 
 declare @a nvarchar(50)
 declare @cust nvarchar(50)
 declare cursor_table cursor for 
-select COUNT(*) a,cust from @tmp where noa!='' group by cust
+select COUNT(*) a,custno from @tmp where noa!='' group by custno
 open cursor_table 
 fetch next from cursor_table 
 into @a,@cust
@@ -79,10 +80,17 @@ end
 close cursor_table 
 deallocate cursor_table
 
-update @tmp set noq = RIGHT('000' + noq ,3)
-update @tmp set noa='',custno='',cust='' where noq!='001'
+update @tmp set nob = RIGHT('000' + nob ,3)
 
-select * from @tmp order by custa,gno;
+update a set a.weighta = a.weight - b.a from @tmp a
+outer apply(select SUM(weight) a,ordeno,no2 from view_vccs where ordeno=a.noa group by ordeno,no2) b
+where b.ordeno = a.noa and b.no2=a.noq
+update @tmp set custno='',cust='' where nob!='001'
+update @tmp set c1 = weight- weighta
+update a set a.weighta = b.a from @tmp a
+outer apply (select SUM(weighta) a,custa from @tmp group by custa) b
+where a.custa=b.custa and gno='1'
+select a.*,@t_bodate as bdate,@t_eodate as edate from @tmp a order by custa,gno;
 -------------------------------------------------------------------------------------------
 z_ordest_bd2:
 	declare @t_bodate nvarchar(10) = case when '#non'=[4] then '' else [4] end
@@ -107,30 +115,42 @@ declare @tmp table(
 	proj nvarchar(5)
 )
 insert into @tmp (gno,noa,nob,noq,custno,cust,uno,product,size,weight,weighta,mount,price,typea,proj)
-select '0',b.noa,b.noa,b.no2,b.custno,a.comp,b.uno,b.product,b.size,b.weight,b.notv,a.mount,a.price,a.trantype,case when a.isproj='1' then 'Y' else 'N' end
+select '0',b.noa,b.noa,ROW_NUMBER()over(partition by b.noa order by b.accy),c.noa,c.nick,b.uno,b.product,b.size,b.weight,b.notv,a.mount,a.price,a.trantype,case when a.isproj='1' then 'Y' else 'N' end
 from view_orde a
 left join view_ordes b on a.noa=b.noa
+left join cust c on c.noa=a.custno
 where b.notv>0 and a.odate between @t_bodate and @t_eodate  and a.noa between @t_bnoa and @t_enoa
-insert into @tmp(gno,weight,weighta)
-select '2',sum(weight),SUM(weighta)
-from @tmp
 
-declare @a nvarchar(50)
+update @tmp set weighta = weight where weighta is null
+
+update @tmp set noq = RIGHT ('000'+noq ,3)
+update @tmp set noa='',custno='',cust='' where noq!='001'
+delete from @tmp where nob is null and gno='0'
+
 declare @noa nvarchar(50)
+declare @a nvarchar(50)
 declare cursor_table cursor for 
-select COUNT(*) a,noa from @tmp where noa!='' group by noa
+select nob,sum(weighta) a from @tmp where nob is not null group by nob
 open cursor_table 
 fetch next from cursor_table 
-into @a,@noa
+into @noa,@a
 while(@@FETCH_STATUS <> -1) 
 begin
-	insert into @tmp (gno,nob) values('1',@noa)	
+	insert into @tmp (gno,nob,weighta) values('1',@noa,@a)	
 	fetch next from cursor_table 
-	into @a,@noa
+	into @noa,@a
 end 
 close cursor_table 
 deallocate cursor_table
-update @tmp set noa='',custno='',cust='' where noq!='001'
+
+insert into @tmp(gno,weight,weighta)
+select '2',sum(weight),SUM(weighta)
+from @tmp where gno='0' and weighta>0
+
+update a set a.weighta = a.weight - b.a from @tmp a
+outer apply(select SUM(weight) a,ordeno,no2 from view_vccs where ordeno=a.noa group by ordeno,no2) b
+where b.ordeno = a.nob and b.no2=a.noq
+
 select * from @tmp order by nob desc,gno;
 -------------------------------------------------------------------------------------------------------
 z_ordest_bd1:
@@ -142,29 +162,41 @@ declare @tmp table(
 	gno nvarchar(100),
 	noa nvarchar(30),
 	noq nvarchar(100),
+	no2 nvarchar(10),
 	cno nvarchar(10),
 	cust nvarchar(100),
 	product nvarchar(max),
 	size nvarchar(30),
+	dime nvarchar(30),
+	width nvarchar(30),
+	lengthb nvarchar(30),
 	c1 float,
 	notv float,
-	mount float,
+	weight float,
 	price float,
 	money float,
-	endp nvarchar(1),
-	bdate nvarchar(20),
-	edate nvarchar(20)
+	endp nvarchar(1)
 )
-insert into @tmp (gno,noa,noq,cno,cust,product,size,c1,notv,mount,price,money,endp,bdate,edate)
-select '0',b.noa,b.no2,b.custno,a.comp,b.product,b.size,b.c1,b.notv,b.mount,b.price,b.notv*b.price,case when a.enda ='1' then 'Y' else 'N' end,@t_bodate,@t_eodate
+insert into @tmp (gno,noa,noq,no2,cno,cust,product,size,dime,width,lengthb,c1,notv,weight,price,money,endp)
+select '0',b.noa,b.no2,b.no2,c.noa,c.nick,b.product,b.size,b.dime,b.width,b.lengthb,b.c1,b.notv,b.weight,b.price,round(b.notv*b.price,0),case when a.enda ='1' then 'Y' else 'N' end 
 from view_orde a
 left join view_ordes b on a.noa=b.noa
+left join cust c on a.custno=c.noa
 where b.notv>0 and a.odate between @t_bodate and @t_eodate and a.custno between @t_bcustno and @t_ecustno
-insert into @tmp (gno,cno,mount,c1,notv,money)
-select '1',cno,SUM(mount),SUM(c1),SUM(notv),SUM(money)
-from @tmp group by cno
 
-select * from @tmp order by cno,gno;
+insert into @tmp (gno,noa,weight,c1,notv,money)
+select '1',noa,SUM(weight),SUM(c1),SUM(notv),SUM(money)
+from @tmp group by noa
+
+update a set a.notv = a.weight - b.a from @tmp a
+outer apply(select SUM(weight) a,ordeno,no2 from view_vccs where ordeno=a.noa group by ordeno,no2) b
+where b.ordeno = a.noa and b.no2 = a.no2
+
+update @tmp set notv = weight where notv is null
+update @tmp set c1 = weight-notv
+delete from @tmp where money < 1
+
+select a.*,@t_bodate as bdate,@t_eodate as edate from @tmp a where notv>0 order by noa,gno;
 -------------------------------------------------------------------------------------------------
 z_ordest8:--z_ordest8        pk
 	SET QUOTED_IDENTIFIER OFF
