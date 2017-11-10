@@ -970,6 +970,7 @@ declare @noa nvarchar(50)=[2]
 declare @r_userno nvarchar(50)=[3]
 declare @r_name nvarchar(50)=[4]
 declare @t_apv nvarchar(50)=[5]
+declare @q_ip nvarchar(50)=[6]
 
 declare @accy nvarchar(20)
 set @accy=isnull((select accy from view_cub where noa=@noa),@year)
@@ -978,25 +979,87 @@ declare @datea nvarchar(20)=left(replace(CONVERT(nvarchar,getdate(),120),'-','')
 declare @timea nvarchar(20)=right(replace(CONVERT(nvarchar,getdate(),120),'-',''),8)
 set @datea= LEFT(@datea,4)+'/'+ RIGHT(LEFT(@datea,6),2)+'/'+RIGHT(@datea,2)
 
+--106/11/09 應完工日=業務核准日+7
+declare @udatea nvarchar(20)=dbo.q_cdn(@datea,7)
+
+declare @ipto nvarchar(20)=isnull((select ipto from view_cub where noa=@noa),'')
+declare @ipfrom nvarchar(20)=isnull((select ipfrom from view_cub where noa=@noa),'')
+declare @ucxno nvarchar(20)=isnull((select ucxno from view_cub where noa=@noa),'')
+declare @ip nvarchar(20)=isnull((select ip from acomp where noa=@ipto),'')
+declare @db nvarchar(20)=isnull((select dbname from acomp where noa=@ipto),'')
+declare @cmd nvarchar(MAX)=''
+declare @count int=0
+
+if(@q_ip=@ip)
+	set @ip='127.0.0.1'
+
 if(@t_apv='checker')
 begin
-	EXEC("update cub"+@accy+" set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
-	select noa,checker,checkerdate from view_cub where noa=@noa
+	EXEC("update cub"+@accy+" set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"'
+	,uindate=case when isnull(uindate,'')='' then '"+@udatea+"' else uindate end where noa='"+@noa+"'")
+	select noa,checker,checkerdate,uindate from view_cub where noa=@noa
+	
+	set @cmd ="select @count=count(*) from ["+@ip+",1799]."+@db+".dbo.cub where noa='"+@noa+"' "
+	execute sp_executesql @cmd,N'@count int output',@count=@count output
+	
+	--表示沒有重複KEY
+	if(@count=0)
+	begin
+		--106/11/09 CUB 複製到 ipto(st2)
+		EXEC("
+			insert ["+@ip+",1799]."+@db+".cub"+@accy+"
+			select * from cub"+@accy+" where noa='"+@noa+"'
+		")
+		
+		EXEC("
+			insert ["+@ip+",1799]."+@db+".cubs"+@accy+"
+			select * from cubs"+@accy+" where noa='"+@noa+"'
+		")
+	end
+	else
+	begin
+		--更新表頭
+		EXEC("update ["+@ip+",1799]."+@db+".cub"+@accy+"
+		set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"'
+		,uindate=case when isnull(uindate,'')='' then '"+@udatea+"' else uindate end where noa='"+@noa+"'")
+	
+		--刪除bbs
+		EXEC("delete ["+@ip+",1799]."+@db+".cubs"+@accy+" where noa='"+@noa+"'")
+		
+		--重新插入bbs
+		EXEC("
+			insert ["+@ip+",1799]."+@db+".cubs"+@accy+"
+			select * from cubs"+@accy+" where noa='"+@noa+"'
+		")
+	end
+	
 end
+
+
+set @ip =isnull((select ip from acomp where noa=@ipfrom),'')
+if(@q_ip=@ip)
+	set @ip='127.0.0.1'
+set @db =isnull((select dbname from acomp where noa=@ipfrom),'')
 
 if(@t_apv='approve')
 begin
 	EXEC("update cub"+@accy+" set approve='"+@r_name+"',approvedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
 	select noa,checker,checkerdate,approve,approvedate from view_cub where noa=@noa
+	
+	--106/11/09 回寫ipfrom(st4) bbs, bbm 只有approve
+	EXEC("update ["+@ip+",1799]."+@db+".cub"+@accy+" 
+	set approve='"+@r_name+"',approvedate='"+@datea+' '+@timea+"' 
+	where noa='"+@noa+"'")
+	
+	--刪除bbs
+	EXEC("delete ["+@ip+",1799]."+@db+".cubs"+@accy+" where noa='"+@noa+"'")
+	
+	--重新插入bbs
+	EXEC("
+		insert ["+@ip+",1799]."+@db+".cubs"+@accy+"
+		select * from cubs"+@accy+" where noa='"+@noa+"'
+	")
 end
-
-declare @ipto nvarchar(20)=isnull((select ipto from view_cub where noa=@noa),'')
-declare @ucxno nvarchar(20)=isnull((select ucxno from view_cub where noa=@noa),'')
-declare @ip nvarchar(20)=isnull((select ip from acomp where noa=@ipto),'')
-declare @db nvarchar(20)=isnull((select dbname from acomp where noa=@ipto),'')
-
-declare @cmd nvarchar(MAX)=''
-declare @count int=0
 
 if(@t_apv='issue')
 begin	
@@ -1013,6 +1076,8 @@ begin
 		from view_cub where noa='"+@noa+"'")
 	
 		EXEC("update cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+		
+		EXEC("update ["+@ip+",1799]."+@db+".cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
 	end
 	
 	select @ip tip,@db tdb,noa,checker,checkerdate,approve,approvedate,issuedate from view_cub where noa=@noa
