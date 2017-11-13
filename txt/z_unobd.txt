@@ -244,6 +244,8 @@ z_unobd05:--z_unobd05 批號履歷
 	left join view_cuts d on a.tablea='cuts' and a.uno=d.bno
 	left join view_cubt e on a.tablea='cubt_in' and a.uno=e.bno	
 	left join view_cuts f on a.tablea='cubu' and a.uno=f.bno
+	
+	
 		
 	--		insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
 	--	,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
@@ -443,9 +445,9 @@ z_unobd05:--z_unobd05 批號履歷
 				and len(ISNULL(uno,''))>0
 				
 				insert into #z_unobd05(ischk,[rank],uno,tablea,accy,noa,noq,datea
-					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo)
+					,mount01,weight01,mount02,weight02,sprice,sprice2,productno,product,size,memo,place)
 				select 0,@rank+1,a.bno,'cuts',a.accy,a.noa,a.noq,b.datea 
-					,a.mount,a.[weight],null,null,a.sprice,a.sprice2,a.productno,a.product,a.size,a.memo
+					,a.mount,a.[weight],null,null,a.sprice,a.sprice2,a.productno,a.product,a.size,a.memo,a.place
 				from view_cuts a 
 				left join view_cut b on a.accy=b.accy and a.noa=b.noa
 				where b.uno=@uno
