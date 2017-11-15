@@ -1138,8 +1138,8 @@ begin
 			
 			if(@q_proj='AD' or @q_proj='JO')
 			begin
-				EXEC("update cubs"+@accy+" set datea='"+@datea+"' where noa='"+@noa+"' and noq='006' ")
-				EXEC("update ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" set datea='"+@datea+"' where noa='"+@noa+"' and noq='006' ")
+				EXEC("update cubs"+@accy+" set datea='"+@datea+"',enda=1 where noa='"+@noa+"' and noq='006' ")
+				EXEC("update ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" set datea='"+@datea+"',enda=1 where noa='"+@noa+"' and noq='006' ")
 			end
 			
 		end
