@@ -1,13 +1,3 @@
-USE [ST]
-GO
-
-/****** Object:  UserDefinedFunction [dbo].[ordc_import]    Script Date: 11/03/2017 11:49:52 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max), @t_noa nvarchar(max),@para nvarchar(max))
 	returns @tmp table(
 		sel int identity(1,1)
@@ -55,6 +45,7 @@ ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max)
 		,ordeno nvarchar(20)
 		,ordeno2 nvarchar(10)
 		,errmemo nvarchar(max)
+		
 	) as
 	begin
 		if @para='rc2_pk'
@@ -86,6 +77,12 @@ ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max)
 			and ((upper(@para)='BCCIN' and b.kind='A6') or (upper(@para)!='BCCIN'))
 			order by case when len(isnull(a.rdate,''))>0 then a.rdate else b.datea end desc,a.accy,a.noa,a.no2
 			
+			--委外只要一筆即可
+			delete @tmp 
+			from @tmp a
+			left join (select sel, row_number()over(partition by accy,noa,no2 order by sel) recno from @tmp) b on a.sel=b.sel
+			where a.kind = '3'
+			and b.recno!=0
 		end
 		else
 		begin
@@ -124,7 +121,3 @@ ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max)
 		--delete @tmp where emount<=0 and eweight<=0
 		return
 	end	
-
-GO
-
-
