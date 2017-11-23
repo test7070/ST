@@ -82,7 +82,7 @@ ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max)
 			from @tmp a
 			left join (select sel, row_number()over(partition by accy,noa,no2 order by sel) recno from @tmp) b on a.sel=b.sel
 			where a.kind = '3'
-			and b.recno!=0
+			and b.recno!=1
 		end
 		else
 		begin
