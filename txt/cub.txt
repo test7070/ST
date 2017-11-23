@@ -971,6 +971,8 @@ declare @r_userno nvarchar(50)=[3]
 declare @r_name nvarchar(50)=[4]
 declare @t_apv nvarchar(50)=[5]
 declare @q_ip nvarchar(50)=[6]
+declare @q_proj nvarchar(50)=[7]
+declare @q_bbs nvarchar(50)=[8]
 
 declare @accy nvarchar(20)
 set @accy=isnull((select accy from view_cub where noa=@noa),@year)
@@ -995,44 +997,68 @@ if(@q_ip=@ip)
 
 if(@t_apv='checker')
 begin
-	EXEC("update cub"+@accy+" set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"'
-	,uindate=case when isnull(uindate,'')='' then '"+@udatea+"' else uindate end where noa='"+@noa+"'")
-	select noa,checker,checkerdate,uindate from view_cub where noa=@noa
-	
-	set @cmd ="select @count=count(*) from ["+@ip+",1799]."+@db+".dbo.cub where noa='"+@noa+"' "
-	execute sp_executesql @cmd,N'@count int output',@count=@count output
-	
-	--表示沒有重複KEY
-	if(@count=0)
+	--尚未核准
+	if(@q_bbs='0')
 	begin
-		--106/11/09 CUB 複製到 ipto(st2)
-		EXEC("
-			insert ["+@ip+",1799]."+@db+".cub"+@accy+"
-			select * from cub"+@accy+" where noa='"+@noa+"'
-		")
+		EXEC("update cub"+@accy+" set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"'
+		,uindate=case when isnull(uindate,'')='' then '"+@udatea+"' else uindate end where noa='"+@noa+"'")
+		select noa,checker,checkerdate,uindate from view_cub where noa=@noa
 		
-		EXEC("
-			insert ["+@ip+",1799]."+@db+".cubs"+@accy+"
-			select * from cubs"+@accy+" where noa='"+@noa+"'
-		")
+		set @cmd ="select @count=count(*) from ["+@ip+",1799]."+@db+".dbo.view_cub where noa='"+@noa+"' "
+		execute sp_executesql @cmd,N'@count int output',@count=@count output
+		
+		--不同DB
+		if(@ipto!=@ipfrom)
+		begin
+			--表示沒有重複KEY
+			if(@count=0)
+			begin
+				--106/11/09 CUB 複製到 ipto(st2)
+				EXEC("
+					insert ["+@ip+",1799]."+@db+".dbo.cub"+@accy+"
+					select * from cub"+@accy+" where noa='"+@noa+"'
+				")
+				
+				EXEC("
+					insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
+					select * from cubs"+@accy+" where noa='"+@noa+"'
+				")
+			end
+		end
 	end
 	else
 	begin
-		--更新表頭
-		EXEC("update ["+@ip+",1799]."+@db+".cub"+@accy+"
-		set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"'
-		,uindate=case when isnull(uindate,'')='' then '"+@udatea+"' else uindate end where noa='"+@noa+"'")
-	
-		--刪除bbs
-		EXEC("delete ["+@ip+",1799]."+@db+".cubs"+@accy+" where noa='"+@noa+"'")
-		
-		--重新插入bbs
-		EXEC("
-			insert ["+@ip+",1799]."+@db+".cubs"+@accy+"
-			select * from cubs"+@accy+" where noa='"+@noa+"'
-		")
+	--已被核准過 只更新表身
+		--不同DB
+		if(@ipto!=@ipfrom)
+		begin
+			if(@q_proj='AD' or @q_proj='JO')
+			begin
+				--刪除bbs
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'
+					and noq!='006' and noq!='007' and noq!='008' and noq!='013'
+				")
+				
+				--重新插入bbs
+				EXEC("
+					insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
+					select * from cubs"+@accy+" where noa='"+@noa+"' 
+					and noq!='006' and noq!='007' and noq!='008' and noq!='013'
+				")
+			end
+			else
+			begin
+				--刪除bbs(目前尚未確定哪個項目各屬於哪個公司管理 所以全部刪除再重新刪除)
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'")
+				
+				--重新插入bbs
+				EXEC("
+					insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
+					select * from cubs"+@accy+" where noa='"+@noa+"'
+				")
+			end
+		end
 	end
-	
 end
 
 
@@ -1043,41 +1069,88 @@ set @db =isnull((select dbname from acomp where noa=@ipfrom),'')
 
 if(@t_apv='approve')
 begin
-	EXEC("update cub"+@accy+" set approve='"+@r_name+"',approvedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
-	select noa,checker,checkerdate,approve,approvedate from view_cub where noa=@noa
+	--尚未核准
+	if(@q_bbs='0')
+	begin
+		EXEC("update cub"+@accy+" set approve='"+@r_name+"',approvedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+		select noa,checker,checkerdate,approve,approvedate from view_cub where noa=@noa
+	end
 	
-	--106/11/09 回寫ipfrom(st4) bbs, bbm 只有approve
-	EXEC("update ["+@ip+",1799]."+@db+".cub"+@accy+" 
-	set approve='"+@r_name+"',approvedate='"+@datea+' '+@timea+"' 
-	where noa='"+@noa+"'")
-	
-	--刪除bbs
-	EXEC("delete ["+@ip+",1799]."+@db+".cubs"+@accy+" where noa='"+@noa+"'")
-	
-	--重新插入bbs
-	EXEC("
-		insert ["+@ip+",1799]."+@db+".cubs"+@accy+"
-		select * from cubs"+@accy+" where noa='"+@noa+"'
-	")
+	--不同DB
+	if(@ipto!=@ipfrom)
+	begin
+		if(@q_bbs='0')
+		begin
+			--106/11/09 回寫ipfrom(st4) bbs, bbm 只有approve
+			EXEC("update ["+@ip+",1799]."+@db+".dbo.cub"+@accy+" 
+			set approve='"+@r_name+"',approvedate='"+@datea+' '+@timea+"' 
+			where noa='"+@noa+"'")
+		end
+		
+		if(@q_proj='AD' or @q_proj='JO')
+		begin
+			--刪除bbs(目前尚未確定哪個項目各屬於哪個公司管理 所以全部刪除再重新刪除)
+			EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'
+				and (noq='006' or noq='007' or noq='008' or noq='013')
+			")
+			
+			--重新插入bbs
+			EXEC("
+				insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
+				select * from cubs"+@accy+" where noa='"+@noa+"'
+				and (noq='006' or noq='007' or noq='008' or noq='013')
+			")
+		end
+		else
+		begin
+			--刪除bbs(目前尚未確定哪個項目各屬於哪個公司管理 所以全部刪除再重新刪除)
+			EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'")
+			
+			--重新插入bbs
+			EXEC("
+				insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
+				select * from cubs"+@accy+" where noa='"+@noa+"'
+			")
+		end
+	end
 end
 
 if(@t_apv='issue')
-begin	
-	--回寫ucx 只要寫入貿易端即可 本機端不用
-	set @cmd ="select @count=count(*) from ["+@ip+",1799]."+@db+".dbo.ucx where noa='"+@ucxno+"' "
-	execute sp_executesql @cmd,N'@count int output',@count=@count output
-	
-	--表示沒有重複KEY
-	if(@count=0)
+begin
+	--不同DB
+	if(@ipto!=@ipfrom)
 	begin
-		--寫入UCX
+		--回寫ucx 只要寫入貿易端即可 本機端不用
+		set @cmd ="select @count=count(*) from ["+@ip+",1799]."+@db+".dbo.ucx where noa='"+@ucxno+"' "
+		execute sp_executesql @cmd,N'@count int output',@count=@count output
+		
+		--表示沒有重複KEY
+		if(@count=0)
+		begin
+			--寫入Ipfrom.UCX
+			EXEC("insert ["+@ip+",1799]."+@db+".dbo.ucx(noa,kdate,product,typea,spec,unit,groupeno,groupfno,ucano,ordeno)
+			select '"+@ucxno+"','"+@datea+"',product,'2',spec,unit,m1,m4,productno,ordeno
+			from view_cub where noa='"+@noa+"'")
+		
+			EXEC("update cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+			
+			EXEC("update ["+@ip+",1799]."+@db+".dbo.cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+			
+			if(@q_proj='AD' or @q_proj='JO')
+			begin
+				EXEC("update cubs"+@accy+" set datea='"+@datea+"',enda=1 where noa='"+@noa+"' and noq='006' ")
+				EXEC("update ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" set datea='"+@datea+"',enda=1 where noa='"+@noa+"' and noq='006' ")
+			end
+			
+		end
+	end
+	else
+	begin
 		EXEC("insert ucx(noa,kdate,product,typea,spec,unit,groupeno,groupfno,ucano,ordeno)
 		select '"+@ucxno+"','"+@datea+"',product,'2',spec,unit,m1,m4,productno,ordeno
 		from view_cub where noa='"+@noa+"'")
-	
-		EXEC("update cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
 		
-		EXEC("update ["+@ip+",1799]."+@db+".cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+		EXEC("update cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
 	end
 	
 	select @ip tip,@db tdb,noa,checker,checkerdate,approve,approvedate,issuedate from view_cub where noa=@noa
