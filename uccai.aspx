@@ -31,7 +31,7 @@
 				});
 				
 				aPop = new Array(
-					['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx']
+					['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,invoicetitle,serial', 'txtCustno,txtComp', 'cust_b.aspx']
 					//,['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx']
 				);
 				
