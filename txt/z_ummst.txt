@@ -734,7 +734,8 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	from view_vccs a
 	left join @tmp b on a.accy=b.vccaccy and a.noa=b.vccno
 	where b.sel is not null
-	order by b.custno,b.datea,a.ordeno,a.product,a.dime,a.width,a.lengthb,a.radius,a.unit,a.price
+	order by b.custno,a.ordeno,a.no2,a.noa,a.noq
+	--order by b.custno,b.datea,a.ordeno,a.product,a.dime,a.width,a.lengthb,a.radius,a.unit,a.price
 	
 	update @tmps set ordememo=b.memo
 	from @tmps a
