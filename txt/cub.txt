@@ -1036,14 +1036,16 @@ begin
 			begin
 				--刪除bbs
 				EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'
-					and noq!='006' and noq!='007' and noq!='008' and noq!='013'
+					and noq!='002' and noq!='003' and noq!='004' and noq!='005' and noq!='006'
+					and noq!='009' and noq!='011' and noq!='014' and noq!='015' and noq!='016' and noq!='021'
 				")
 				
 				--重新插入bbs
 				EXEC("
 					insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
 					select * from cubs"+@accy+" where noa='"+@noa+"' 
-					and noq!='006' and noq!='007' and noq!='008' and noq!='013'
+					and noq!='002' and noq!='003' and noq!='004' and noq!='005' and noq!='006'
+					and noq!='009' and noq!='011' and noq!='014' and noq!='015' and noq!='016' and noq!='021'
 				")
 			end
 			else
@@ -1057,6 +1059,48 @@ begin
 					select * from cubs"+@accy+" where noa='"+@noa+"'
 				")
 			end
+		end
+	end
+end
+
+if(@t_apv='review')
+begin
+	EXEC("update cub"+@accy+" set reviewdate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+	select noa,checker,checkerdate,reviewdate from view_cub where noa=@noa
+	
+	if(@ipto!=@ipfrom)
+	begin
+		--回寫ipto
+		EXEC("update ["+@ip+",1799]."+@db+".dbo.cub"+@accy+" 
+		set reviewdate='"+@datea+' '+@timea+"'
+		where noa='"+@noa+"'")
+		
+		if(@q_proj='AD' or @q_proj='JO')
+		begin
+			--刪除bbs
+			EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'
+				and noq!='002' and noq!='003' and noq!='004' and noq!='005' and noq!='006'
+				and noq!='009' and noq!='011' and noq!='014' and noq!='015' and noq!='016' and noq!='021'
+			")
+			
+			--重新插入bbs
+			EXEC("
+				insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
+				select * from cubs"+@accy+" where noa='"+@noa+"'
+				and noq!='002' and noq!='003' and noq!='004' and noq!='005' and noq!='006'
+				and noq!='009' and noq!='011' and noq!='014' and noq!='015' and noq!='016' and noq!='021'
+			")
+		end
+		else
+		begin
+			--刪除bbs(目前尚未確定哪個項目各屬於哪個公司管理 所以全部刪除再重新刪除)
+			EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'")
+			
+			--重新插入bbs
+			EXEC("
+				insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
+				select * from cubs"+@accy+" where noa='"+@noa+"'
+			")
 		end
 	end
 end
@@ -1089,16 +1133,18 @@ begin
 		
 		if(@q_proj='AD' or @q_proj='JO')
 		begin
-			--刪除bbs(目前尚未確定哪個項目各屬於哪個公司管理 所以全部刪除再重新刪除)
+			--刪除bbs
 			EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'
-				and (noq='006' or noq='007' or noq='008' or noq='013')
+				and (noq='002' or noq='003' or noq='004' or noq='005' or noq='006'
+					or noq='009' or noq='011' or noq='014' or noq='015' or noq='016' or noq='021')
 			")
 			
 			--重新插入bbs
 			EXEC("
 				insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
 				select * from cubs"+@accy+" where noa='"+@noa+"'
-				and (noq='006' or noq='007' or noq='008' or noq='013')
+				and (noq='002' or noq='003' or noq='004' or noq='005' or noq='006'
+					or noq='009' or noq='011' or noq='014' or noq='015' or noq='016' or noq='021')
 			")
 		end
 		else
@@ -1138,8 +1184,8 @@ begin
 			
 			if(@q_proj='AD' or @q_proj='JO')
 			begin
-				EXEC("update cubs"+@accy+" set datea='"+@datea+"',enda=1 where noa='"+@noa+"' and noq='006' ")
-				EXEC("update ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" set datea='"+@datea+"',enda=1 where noa='"+@noa+"' and noq='006' ")
+				EXEC("update cubs"+@accy+" set datea='"+@datea+"',enda=1 where noa='"+@noa+"' and noq='014' ")
+				EXEC("update ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" set datea='"+@datea+"',enda=1 where noa='"+@noa+"' and noq='014' ")
 			end
 			
 		end
