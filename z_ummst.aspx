@@ -146,7 +146,7 @@
                 $('#txtXdate2').mask('99/99');
                 $('#txtSmon1').mask(r_picm);
                 $('#txtSmon2').mask(r_picm);
-                $('#Xmemo').removeClass('a2').addClass('a1');
+                //$('#Xmemo').removeClass('a2').addClass('a1');
                 /*$('#txtXmemo').css('width', '85%');
                 $('.q_report .report').css('width', '420px');
                 $('.q_report .report div').css('width', '200px');
