@@ -65,6 +65,12 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd],['txtBodate', r_picd],['txtEodate', r_picd],['txtBldate', r_picd],['txtEldate', r_picd]];
                 q_mask(bbmMask);
+                
+                if(r_len==4){                	
+                	$.datepicker.r_len=4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+                }
+                
                 q_cmbParse("cmbKind", q_getPara('report.all')+','+q_getPara('ordb.kind'));
 				t_uccg = ' @';
                 for(var i=0;i<z_uccga.length;i++){

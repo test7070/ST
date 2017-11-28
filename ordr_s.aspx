@@ -29,6 +29,12 @@
                 q_langShow();
                 bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd],['txtBapvdate', r_picd], ['txtEapvdate', r_picd]];
                 q_mask(bbmMask);
+                
+                if(r_len==4){                	
+                	$.datepicker.r_len=4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+                }
+                
                 $('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
 				$('#txtBapvdate').datepicker();
