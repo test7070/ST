@@ -78,7 +78,7 @@
                 //----------------------------------------------------------
                 $('#btnImport').click(function(e){
                 	var t_noa = $('#txtNoa').val();
-                	var t_workgno = $('#txtWorkgno').val();
+                	var t_workgno = replaceAll($('#txtWorkgno').val(),',','##');
                 	var t_style = $('#txtStyle').val();
                 	var t_bworkdate = $('#txtBworkdate').val();
                 	var t_eworkdate = $('#txtEworkdate').val();
@@ -108,7 +108,7 @@
                 
                 $('#combWorkgno').change(function() {
                 	if(q_cur==1 || q_cur==2)
-                		$('#txtWorkgno').val($('#combWorkgno').val());
+                		$('#txtWorkgno').val(replaceAll(replaceAll($('#combWorkgno').val().toString(),'選擇排產單號,',''),'選擇排產單號',''));
 				});
             }
             function checkAll(){
@@ -204,7 +204,7 @@
                 	case 'workg':
                 		var as = _q_appendData("workg", "", true);
                 		var workstye=q_getPara('workg.stype').split(',');
-                		t_item = '@選擇排產單號';
+                		t_item = '選擇排產單號';
 		                for(var i=0;i<as.length;i++){
 		                	var stype='';
 		                	for(var j=0;j<workstye.length;j++){
@@ -227,6 +227,9 @@
 		                		
 		                	if(as[i].worker.length>0)
 		                		t_item +=' '+as[i].worker;
+		                }
+		                if(t_item.length==0){
+		                	t_item = '@';
 		                }
 		                q_cmbParse("combWorkgno",t_item);
                 		break;
@@ -640,14 +643,17 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
-						<td>
-							<input id="txtWorkgno"  type="text"  class="txt c1" style="width: 125px;"/>
-							<select id="combWorkgno" class="txt c1" style="width: 20px; float: right;font-size: medium;"> </select>
+						<td colspan="3">
+							<select id="combWorkgno" class="txt c1" style="float: right;font-size: medium;"multiple="multiple" size="5"> </select>
 						</td>
-						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
-						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td> </td>
+						<td colspan="3"><input id="txtWorkgno"  type="text"  class="txt c1" style="width: 99%;"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
+						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id="lblWorkdate" class="lbl"> </a></td>
 						<td colspan="2">
 							<input id="txtBworkdate"  type="text" style="float:left;width:45%"/>

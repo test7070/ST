@@ -211,10 +211,10 @@ ordr_orda:--ordr_orda
 	where b.apv=1
 	
 	select 'done' msg;
-	
+----------------------------------------------------------------------------------------------------
 orda_ordr: -- orda_ordr
 	declare @t_noa nvarchar(20) = [1]
-	declare @t_workgno nvarchar(20) = [2]
+	declare @t_workgno nvarchar(MAX) = [2]
 	declare @t_style nvarchar(50) = [3]
 	declare @t_bworkdate nvarchar(10) = [4]
 	declare @t_eworkdate nvarchar(10) = [5]
@@ -222,18 +222,54 @@ orda_ordr: -- orda_ordr
 	declare @t_uccgbno nvarchar(20) = [7]
 	declare @t_uccgcno nvarchar(20)= [8]
 
-	select b.* 
+	--select b.* 
+	--from orda a
+	--left join ordas b on a.noa=b.noa
+	--left join ucc c on b.productno=c.noa
+	--where b.noa is not null
+	--and isnull(b.apv,0) = 1
+	--and not exists(select noa from ordrs where noa!=@t_noa and ordano=a.noa and ordanoq=b.noq)
+	--and (len(@t_workgno)=0 or @t_workgno=a.workgno)
+	--and (len(@t_style)=0 or @t_style=b.style)
+	--and (len(@t_bworkdate)=0 or @t_bworkdate<=b.workdate)
+	--and (len(@t_eworkdate)=0 or @t_eworkdate>=b.workdate)
+	--and (len(@t_uccgano)=0 or @t_uccgano=c.groupano)
+	--and (len(@t_uccgbno)=0 or @t_uccgbno=c.groupbno)
+	--and (len(@t_uccgcno)=0 or @t_uccgcno=c.groupcno)
+	--order by a.noa desc,b.noq
+	
+	--106/11/28 合併相同產品的數量,並多選排產單號
+	select ''noa,''noq,''datea
+	,b.productno,MAX(b.product)product,MAX(b.unit)unit,MAX(b.spec)spec,MAX(b.style)style
+	,SUM(b.gmount)gmount
+	,MAX(b.stkmount)stkmount
+	,MAX(b.schmount)schmount
+	,MAX(b.safemount)safemount
+	,SUM(b.netmount)netmount
+	,MIN(b.fdate)fdate
+	,SUM(b.fmount)fmount
+	,SUM(b.mount)mount
+	,'' memo
+	,MIN(b.ldate)ldate
+	,SUM(b.wmount)wmount
+	,ISNULL(STUFF((select ','+apvmemo from ordas where productno=b.productno and len(apvmemo)>0 FOR XML PATH('')),1,1,''),'') apvmemo
+	,SUM(b.apvmount)apvmount
+	,MIN(b.workdate)workdate
 	from orda a
 	left join ordas b on a.noa=b.noa
 	left join ucc c on b.productno=c.noa
 	where b.noa is not null
-	and isnull(b.apv,0) = 1
+	--106/11/28 改為去看sign 是否結案 因為apv會因每次簽核而變false
+	and exists (select * from sign where zno=a.noa and enda='Y')
 	and not exists(select noa from ordrs where noa!=@t_noa and ordano=a.noa and ordanoq=b.noq)
-	and (len(@t_workgno)=0 or @t_workgno=a.workgno)
+	and (len(@t_workgno)=0 or @t_workgno like '%'+a.workgno+'%')
 	and (len(@t_style)=0 or @t_style=b.style)
 	and (len(@t_bworkdate)=0 or @t_bworkdate<=b.workdate)
 	and (len(@t_eworkdate)=0 or @t_eworkdate>=b.workdate)
 	and (len(@t_uccgano)=0 or @t_uccgano=c.groupano)
 	and (len(@t_uccgbno)=0 or @t_uccgbno=c.groupbno)
 	and (len(@t_uccgcno)=0 or @t_uccgcno=c.groupcno)
-	order by a.noa desc,b.noq;
+	group by b.productno
+	order by b.productno
+	;
+	
