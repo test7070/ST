@@ -24,8 +24,8 @@
             var bbmNum = [['txtBday',10,0,1]];
             var bbsNum = [['txtGmount',10,2,1]];
             var bbtNum = [];
-            var bbmMask = [['txtApvdate','999/99/99'],['txtBworkdate','999/99/99'],['txtEworkdate','999/99/99'],['txtDatea','999/99/99']];
-            var bbsMask = [['txtWorkdate','999/99/99'],['txtFdate','999/99/99']];
+            var bbmMask = [];
+            var bbsMask = [];
             var bbtMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -55,6 +55,9 @@
             }
 
             function mainPost() {
+            	q_getFormat();
+            	bbmMask = [['txtApvdate',r_picd],['txtBworkdate',r_picd],['txtEworkdate',r_picd],['txtDatea',r_picd]];
+            	bbsMask = [['txtWorkdate',r_picd],['txtFdate',r_picd]];
                 q_mask(bbmMask);
                 q_gt('workg', "stop=100", 0, 0, 0, 'workg', r_accy);
                 t_uccg = ' @';

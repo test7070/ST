@@ -24,8 +24,8 @@
             var bbmNum = [];
             var bbsNum = [['txtMount',10,2,1],['txtWeight',10,2,1],['txtLengthb',10,0,1]];
             var bbtNum = [];
-            var bbmMask = [['txtDatea','999/99/99'],['txtWdate','999/99/99']];
-            var bbsMask = [['txtDatea','999/99/99']];
+            var bbmMask = [];
+            var bbsMask = [];
             var bbtMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -69,6 +69,9 @@
             }
 
             function mainPost() {
+            	q_getFormat();
+            	bbmMask = [['txtDatea',r_picd],['txtWdate',r_picd]];
+            	bbsMask = [['txtDatea',r_picd]];
                 q_mask(bbmMask);
                 $('#btnFile').change(function(e){
 					event.stopPropagation(); 
