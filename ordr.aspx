@@ -606,7 +606,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1800px;
+                width: 2000px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -784,7 +784,7 @@
 					<td style="width:80px;"><a id='lbl_netmount'>淨需求量</a></td>
 					<td style="width:80px;"><a id='lbl_fdate'>預測日期</a></td>
 					<td style="width:80px;"><a id='lbl_fmount'>預測需求</a></td>
-					<td style="width:80px;"><a id='lbl_memo'>備註</a></td>
+					<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
 					
 				</tr>
 				<tr  style='background:#cad3ff;'>

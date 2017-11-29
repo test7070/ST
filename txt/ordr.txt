@@ -17,6 +17,22 @@ ordr_ordb:--ordr_ordb
 	set @t_odate=dbo.q_cdn(@t_odate,-1*@t_bday)
 	--set @t_odate = dbo.AD2ChineseEraName(dateadd(DD,-1*@t_bday,dbo.ChineseEraName2AD(@t_odate)))
 	--================================================================================================
+	-------------------------------------------------
+	--106/11/29表身增加廠商,避免找不到欄位出錯欄位不存在時自動增加
+	IF EXISTS(
+	select * from sys.tables a left join sys.columns b on a.object_id = b.object_id 
+	where a.name='ordrs' and b.name='tggno' and b.column_id is null)
+	begin
+		ALTER TABLE ordrs ADD tggno NVARCHAR(50) NULL
+	end
+	
+	IF EXISTS(
+	select * from sys.tables a left join sys.columns b on a.object_id = b.object_id 
+	where a.name='ordrs' and b.name='comp' and b.column_id is null)
+	begin
+		ALTER TABLE ordrs ADD comp NVARCHAR(255) NULL
+	end
+	-------------------------------------------------
 	IF OBJECT_ID('tempdb..#ordr_ordb')is not null
 	BEGIN
 		drop table #ordr_ordb
@@ -27,12 +43,12 @@ ordr_ordb:--ordr_ordb
 		tggno nvarchar(20)
 	)
 	insert into #ordr_ordb(datea,tggno)
-	select a.apvdate,ISNULL(c.tggno,'')
+	select a.apvdate,case when isnull(b.tggno,'')>0 then isnull(b.tggno,'') else ISNULL(c.tggno,'') end
 	from ordr a
 	left join ordrs b on a.noa=b.noa
 	left join ucc c on b.productno=c.noa
 	where a.noa=@t_ordrno
-	group by a.apvdate,ISNULL(c.tggno,'')
+	group by a.apvdate,case when isnull(b.tggno,'')>0 then isnull(b.tggno,'') else ISNULL(c.tggno,'') end
 	
 	IF OBJECT_ID('tempdb..#ordr_ordbs')is not null
 	BEGIN
@@ -56,7 +72,8 @@ ordr_ordb:--ordr_ordb
 		ldate nvarchar(10)
 	)
 	insert into #ordr_ordbs(tggno,productno,product,unit,price,mount,ldate,omount,stdmount)
-	select ISNULL(c.tggno,''),ISNULL(b.productno,''),ISNULL(c.product,'')
+	select case when isnull(b.tggno,'')>0 then isnull(b.tggno,'') else ISNULL(c.tggno,'') end
+		,ISNULL(b.productno,''),ISNULL(c.product,'')
 		,ISNULL(b.unit,''),ISNULL(c.inprice,''),SUM(case when ISNULL(b.apvmount,0)=0 then ISNULL(b.netmount,0)+ISNULL(b.fmount,0) else ISNULL(b.apvmount,0) end)
 		--,dbo.AD2ChineseEraName(dateadd(DD,-1*@t_bday,dbo.ChineseEraName2AD(MIN(ISNULL(b.workdate,'')))))
 		,dbo.q_cdn(MIN(ISNULL(b.workdate,'')),-1*@t_bday)
@@ -65,7 +82,8 @@ ordr_ordb:--ordr_ordb
 	left join ordrs b on a.noa=b.noa
 	left join ucc c on b.productno=c.noa
 	where a.noa=@t_ordrno
-	group by ISNULL(c.tggno,''),ISNULL(b.productno,''),ISNULL(c.product,''),ISNULL(b.unit,''),ISNULL(c.inprice,'')
+	group by case when isnull(b.tggno,'')>0 then isnull(b.tggno,'') else ISNULL(c.tggno,'') end 
+	,ISNULL(b.productno,''),ISNULL(c.product,''),ISNULL(b.unit,''),ISNULL(c.inprice,'')
 	
 	update #ordr_ordbs set no3=RIGHT('000'+CAST(b.recno as nvarchar),3)
 		,c1=0,notv=b.mount,total = ROUND(b.mount*b.price,0)
