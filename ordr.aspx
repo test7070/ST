@@ -35,7 +35,10 @@
             q_desc = 1;
             brwCount2 = 8;
 
-            aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
+            aPop = new Array(
+            	['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
+            	,['txtTggno_', 'btnTggno_', 'tgg', 'noa,nick', 'txtTggno_,txtComp_', 'tgg_b.aspx']
+            );
 			
 			var z_uccga= new Array(),z_uccgb= new Array(),z_uccgc= new Array();
             $(document).ready(function() {
@@ -418,6 +421,26 @@
                     }
                 }
                 _bbsAssign();
+                
+                $('#btnTggbbscopy').unbind('click');
+                $('#btnTggbbscopy').click(function() {
+                	var t_tggno='',t_comp='';
+                	for (var i = 0; i < q_bbsCount; i++) {
+                		if(i==0){
+                			t_tggno=$('#txtTggno_'+i).val();
+                			t_comp=$('#txtComp_'+i).val();
+                		}else{
+                			if(!emp($('#txtTggno_'+i).val()) && t_tggno!=$('#txtTggno_'+i).val()){
+                				t_tggno=$('#txtTggno_'+i).val();
+                				t_comp=$('#txtComp_'+i).val();
+                			}else{
+                				$('#txtTggno_'+i).val(t_tggno);
+                				$('#txtComp_'+i).val(t_comp);
+                			}
+                		}
+                	}
+				});
+                
             }
 			function imgDisplay(obj){
 				$(obj).hide();
@@ -583,7 +606,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1500px;
+                width: 1800px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -747,9 +770,10 @@
 					<td style="width:20px;"><a id='lbl_apv'>核準</a><input id="chkApv" class="checkAll" type="checkbox" onclick="checkAll()"/></td>
 					<td style="width:100px;"><a id='lbl_apvmemo'>簽核意見</a></td>
 					<td style="width:80px;"><a id='lbl_apvmount'>異動數量</a></td>
+					<td style="width:250px;"><a id='lbl_tgg'>指定廠商</a><input id="btnTggbbscopy" type="button" value='≡'></td>
 					<td style="width:100px;"><a id='lbl_workdate'>開工日</a></td>
 					<td style="width:80px;"><a id='lbl_style'>機型</a></td>
-					<td style="width:350px;"><a id='lbl_product'>物品</a></td>
+					<td style="width:400px;"><a id='lbl_product'>物品</a></td>
 					<td style="width:150px;"><a id='lbl_spec'>規格</a></td>
 					<td style="width:50px;"><a id='lbl_unit'>單位</a></td>
 					<td style="width:80px;"><a id='lbl_gmount'>毛需求</a></td>
@@ -774,11 +798,15 @@
 					<td align="center"><input id="chkApv.*" type="checkbox"/></td>
 					<td><input class="txt" id="txtApvmemo.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt num" id="txtApvmount.*" type="text" style="width:95%;" title=""/></td>
+					<td>
+						<input class="txt" id="txtTggno.*" type="text" style="width:40%;" title=""/>
+						<input class="txt" id="txtComp.*" type="text" style="width:50%;" title=""/>
+					</td>
 					<td><input class="txt" id="txtWorkdate.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt" id="txtStyle.*" type="text" style="width:95%;" title=""/></td>
 					<td>
-						<input class="txt" id="txtProductno.*" type="text" style="width:60%; float:left;"/>
-						<input class="txt" id="txtProduct.*" type="text" style="width:35%;float:left;"/>
+						<input class="txt" id="txtProductno.*" type="text" style="width:50%; float:left;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:45%;float:left;"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
 					<td><input class="txt" id="txtSpec.*" type="text" style="width:95%;" title=""/></td>
