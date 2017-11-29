@@ -95,6 +95,7 @@
                 		+ ';' + encodeURI(t_uccgbno)
                 		+ ';' + encodeURI(t_uccgcno);
                 	q_func('qtxt.query.orda_ordr', t_string );
+                	
                 });
                 
                 $('#btnOrdb').click(function(e){
@@ -119,12 +120,49 @@
                 	case 'qtxt.query.orda_ordr':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
+                        	//106/11/28 應合併數量已無法判斷是否有相同的排產內容匯入，所以將其已存在的品項不會再匯入
+                        	for(var i=0;i<as.length;i++){
+                        		for (var j = 0; j < q_bbsCount; j++) {
+                        			if(as[i].productno==$('#txtProductno_'+j).val()){
+                        				as[i].splice(i, 1);
+                        				i--;
+                        				break;
+                        			}
+                        		}
+                        	}
+                        	
                             q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtApvmount,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
                         	, as.length, as, 'noa,noq,apvmemo,apvmount,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
                         	sum();
-                        } else {
+                        }/*else {
                             alert('無資料，請確認物料需求表是否是送簽核!');
-                        }
+                        }*/
+                       	var a_workgno=$('#txtWorkgno').val().split(',');
+	                	var t_where='1=0';
+	                	for(var i=0;i<a_workgno.length;i++){
+	                		if(a_workgno[i]!='選擇排產單號')
+	                			t_where+=" or workgno like '%"+a_workgno[i]+"%'";
+	                	}
+	                	t_where="where=^^exists (select * from orda where sign.zno=noa and ("+t_where+")) and isnull(enda,'')!='Y'^^"
+	                	q_gt('sign', t_where, 0, 0, 0, 'getnosign', r_accy,1);
+	                	var tas = _q_appendData("sign", "", true, true);
+						var t_where2='1=0';
+						for(var i=0;i<tas.length;i++){
+							t_where2+=" or noa='"+tas[i].zno+"'";
+						}
+						t_where2="where=^^"+t_where2+"^^"
+						q_gt('orda', t_where2, 0, 0, 0, 'getordaworkg', r_accy,1);
+						var tas = _q_appendData("orda", "", true, true);
+						var tmp_workgno='';
+						for(var i=0;i<tas.length;i++){
+							tmp_workgno+=(tmp_workgno.length>0?',':'')+tas[i].workgno;
+						}
+						if(tmp_workgno.length>0){
+							alert(tmp_workgno+'尚未簽核!!');
+						}else{
+							if(as.length==0)
+								alert('無資料，請確認物料需求表是否是送簽核!');
+						}
                 		break;
             		case 'qtxt.query.ordr_ordb':
                 		var as = _q_appendData("tmp0", "", true, true);
