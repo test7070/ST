@@ -42,8 +42,8 @@
                 t_noa = $.trim($('#txtNoa').val());
                 t_bdate = $.trim($('#txtBdate').val());
                 t_edate = $.trim($('#txtEdate').val());
-                t_custno = $.trim($('#txtCustno').val());
-                t_comp = $.trim($('#txtComp').val());
+                t_tggno = $.trim($('#txtTggno').val());
+                t_tgg = $.trim($('#txtTgg').val());
                 t_productno = $.trim($('#txtProductno').val());
                 t_product = $.trim($('#txtProduct').val());
 
@@ -53,7 +53,7 @@
 					+ q_sqlPara2("tggno", t_tggno) 
 					+ q_sqlPara2("productno", t_productno);
 				
-				if(t_comp.length>0)
+				if(t_tgg.length>0)
 					t_where += " and charindex('"+t_tgg+"',tgg)>0";
 				if(t_product.length>0)
 					t_where += " and charindex('"+t_product+"',product)>0";
