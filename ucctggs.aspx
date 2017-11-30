@@ -34,7 +34,7 @@
             	['txtProductno', 'lblProduct', 'view_ucaucc', 'noa,product,unit', 'txtProductno,txtProduct,txtUnit', 'ucaucc_b.aspx']);
             	
 			$(document).ready(function() {
-				bbmKey = ['noa'];
+				bbmKey = ['noa','noq'];
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1);
 			});
