@@ -24,7 +24,7 @@
             var bbmNum = [];
             var bbsNum = [];
             var bbtNum = [];
-            var bbmMask = [['txtDatea','999/99/99']];
+            var bbmMask = [];
             var bbsMask = [];
             var bbtMask = [];
             q_sqlCount = 6;
@@ -55,6 +55,8 @@
             }
 
             function mainPost() {
+            	q_getFormat();
+            	bbmMask = [['txtDatea',r_picd]];
                 q_mask(bbmMask);
                
                 $('#btnWorkj').click(function(e){

@@ -292,7 +292,9 @@ begin
 	END TRY
 	BEGIN CATCH
 	END CATCH
-end;
+end
+select @noa noa,@storeno storeno
+;
 -------------------------------------------------------------------------------------------------------------------------
 cubnouno_vu:--cubnouno_vu
 SET QUOTED_IDENTIFIER OFF

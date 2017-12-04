@@ -24,8 +24,8 @@
             var bbmNum = [['txtBday',10,0,1]];
             var bbsNum = [['txtGmount',10,2,1]];
             var bbtNum = [];
-            var bbmMask = [['txtApvdate','999/99/99'],['txtBworkdate','999/99/99'],['txtEworkdate','999/99/99'],['txtDatea','999/99/99']];
-            var bbsMask = [['txtWorkdate','999/99/99'],['txtFdate','999/99/99']];
+            var bbmMask = [];
+            var bbsMask = [];
             var bbtMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -35,7 +35,10 @@
             q_desc = 1;
             brwCount2 = 8;
 
-            aPop = new Array(['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']);
+            aPop = new Array(
+            	['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
+            	,['txtTggno_', 'btnTggno_', 'tgg', 'noa,nick', 'txtTggno_,txtComp_', 'tgg_b.aspx']
+            );
 			
 			var z_uccga= new Array(),z_uccgb= new Array(),z_uccgc= new Array();
             $(document).ready(function() {
@@ -55,6 +58,9 @@
             }
 
             function mainPost() {
+            	q_getFormat();
+            	bbmMask = [['txtApvdate',r_picd],['txtBworkdate',r_picd],['txtEworkdate',r_picd],['txtDatea',r_picd]];
+            	bbsMask = [['txtWorkdate',r_picd],['txtFdate',r_picd]];
                 q_mask(bbmMask);
                 q_gt('workg', "stop=100", 0, 0, 0, 'workg', r_accy);
                 t_uccg = ' @';
@@ -75,7 +81,7 @@
                 //----------------------------------------------------------
                 $('#btnImport').click(function(e){
                 	var t_noa = $('#txtNoa').val();
-                	var t_workgno = $('#txtWorkgno').val();
+                	var t_workgno = replaceAll($('#txtWorkgno').val(),',','##');
                 	var t_style = $('#txtStyle').val();
                 	var t_bworkdate = $('#txtBworkdate').val();
                 	var t_eworkdate = $('#txtEworkdate').val();
@@ -92,6 +98,7 @@
                 		+ ';' + encodeURI(t_uccgbno)
                 		+ ';' + encodeURI(t_uccgcno);
                 	q_func('qtxt.query.orda_ordr', t_string );
+                	
                 });
                 
                 $('#btnOrdb').click(function(e){
@@ -105,7 +112,7 @@
                 
                 $('#combWorkgno').change(function() {
                 	if(q_cur==1 || q_cur==2)
-                		$('#txtWorkgno').val($('#combWorkgno').val());
+                		$('#txtWorkgno').val(replaceAll(replaceAll($('#combWorkgno').val().toString(),'選擇排產單號,',''),'選擇排產單號',''));
 				});
             }
             function checkAll(){
@@ -116,12 +123,49 @@
                 	case 'qtxt.query.orda_ordr':
                 		var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
+                        	//106/11/28 應合併數量已無法判斷是否有相同的排產內容匯入，所以將其已存在的品項不會再匯入
+                        	for(var i=0;i<as.length;i++){
+                        		for (var j = 0; j < q_bbsCount; j++) {
+                        			if(as[i].productno==$('#txtProductno_'+j).val()){
+                        				as[i].splice(i, 1);
+                        				i--;
+                        				break;
+                        			}
+                        		}
+                        	}
+                        	
                             q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtApvmount,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
                         	, as.length, as, 'noa,noq,apvmemo,apvmount,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
                         	sum();
-                        } else {
+                        }/*else {
                             alert('無資料，請確認物料需求表是否是送簽核!');
-                        }
+                        }*/
+                       	var a_workgno=$('#txtWorkgno').val().split(',');
+	                	var t_where='1=0';
+	                	for(var i=0;i<a_workgno.length;i++){
+	                		if(a_workgno[i]!='選擇排產單號')
+	                			t_where+=" or workgno like '%"+a_workgno[i]+"%'";
+	                	}
+	                	t_where="where=^^exists (select * from orda where sign.zno=noa and ("+t_where+")) and isnull(enda,'')!='Y'^^"
+	                	q_gt('sign', t_where, 0, 0, 0, 'getnosign', r_accy,1);
+	                	var tas = _q_appendData("sign", "", true, true);
+						var t_where2='1=0';
+						for(var i=0;i<tas.length;i++){
+							t_where2+=" or noa='"+tas[i].zno+"'";
+						}
+						t_where2="where=^^"+t_where2+"^^"
+						q_gt('orda', t_where2, 0, 0, 0, 'getordaworkg', r_accy,1);
+						var tas = _q_appendData("orda", "", true, true);
+						var tmp_workgno='';
+						for(var i=0;i<tas.length;i++){
+							tmp_workgno+=(tmp_workgno.length>0?',':'')+tas[i].workgno;
+						}
+						if(tmp_workgno.length>0){
+							alert(tmp_workgno+'尚未簽核!!');
+						}else{
+							if(as.length==0)
+								alert('無資料，請確認物料需求表是否是送簽核!');
+						}
                 		break;
             		case 'qtxt.query.ordr_ordb':
                 		var as = _q_appendData("tmp0", "", true, true);
@@ -201,7 +245,7 @@
                 	case 'workg':
                 		var as = _q_appendData("workg", "", true);
                 		var workstye=q_getPara('workg.stype').split(',');
-                		t_item = '@選擇排產單號';
+                		t_item = '選擇排產單號';
 		                for(var i=0;i<as.length;i++){
 		                	var stype='';
 		                	for(var j=0;j<workstye.length;j++){
@@ -224,6 +268,9 @@
 		                		
 		                	if(as[i].worker.length>0)
 		                		t_item +=' '+as[i].worker;
+		                }
+		                if(t_item.length==0){
+		                	t_item = '@';
 		                }
 		                q_cmbParse("combWorkgno",t_item);
                 		break;
@@ -374,6 +421,26 @@
                     }
                 }
                 _bbsAssign();
+                
+                $('#btnTggbbscopy').unbind('click');
+                $('#btnTggbbscopy').click(function() {
+                	var t_tggno='',t_comp='';
+                	for (var i = 0; i < q_bbsCount; i++) {
+                		if(i==0){
+                			t_tggno=$('#txtTggno_'+i).val();
+                			t_comp=$('#txtComp_'+i).val();
+                		}else{
+                			if(!emp($('#txtTggno_'+i).val()) && t_tggno!=$('#txtTggno_'+i).val()){
+                				t_tggno=$('#txtTggno_'+i).val();
+                				t_comp=$('#txtComp_'+i).val();
+                			}else{
+                				$('#txtTggno_'+i).val(t_tggno);
+                				$('#txtComp_'+i).val(t_comp);
+                			}
+                		}
+                	}
+				});
+                
             }
 			function imgDisplay(obj){
 				$(obj).hide();
@@ -539,7 +606,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 1500px;
+                width: 2000px;
             }
             .dbbs .tbbs {
                 margin: 0;
@@ -637,14 +704,17 @@
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
-						<td>
-							<input id="txtWorkgno"  type="text"  class="txt c1" style="width: 125px;"/>
-							<select id="combWorkgno" class="txt c1" style="width: 20px; float: right;font-size: medium;"> </select>
+						<td colspan="3">
+							<select id="combWorkgno" class="txt c1" style="float: right;font-size: medium;"multiple="multiple" size="5"> </select>
 						</td>
-						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
-						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
 					</tr>
 					<tr>
+						<td> </td>
+						<td colspan="3"><input id="txtWorkgno"  type="text"  class="txt c1" style="width: 99%;"/></td>
+					</tr>
+					<tr>
+						<td><span> </span><a id="lblStyle" class="lbl"> </a></td>
+						<td><input id="txtStyle"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id="lblWorkdate" class="lbl"> </a></td>
 						<td colspan="2">
 							<input id="txtBworkdate"  type="text" style="float:left;width:45%"/>
@@ -700,9 +770,10 @@
 					<td style="width:20px;"><a id='lbl_apv'>核準</a><input id="chkApv" class="checkAll" type="checkbox" onclick="checkAll()"/></td>
 					<td style="width:100px;"><a id='lbl_apvmemo'>簽核意見</a></td>
 					<td style="width:80px;"><a id='lbl_apvmount'>異動數量</a></td>
+					<td style="width:250px;"><a id='lbl_tgg'>指定廠商</a><input id="btnTggbbscopy" type="button" value='≡'></td>
 					<td style="width:100px;"><a id='lbl_workdate'>開工日</a></td>
 					<td style="width:80px;"><a id='lbl_style'>機型</a></td>
-					<td style="width:350px;"><a id='lbl_product'>物品</a></td>
+					<td style="width:400px;"><a id='lbl_product'>物品</a></td>
 					<td style="width:150px;"><a id='lbl_spec'>規格</a></td>
 					<td style="width:50px;"><a id='lbl_unit'>單位</a></td>
 					<td style="width:80px;"><a id='lbl_gmount'>毛需求</a></td>
@@ -713,7 +784,7 @@
 					<td style="width:80px;"><a id='lbl_netmount'>淨需求量</a></td>
 					<td style="width:80px;"><a id='lbl_fdate'>預測日期</a></td>
 					<td style="width:80px;"><a id='lbl_fmount'>預測需求</a></td>
-					<td style="width:80px;"><a id='lbl_memo'>備註</a></td>
+					<td style="width:200px;"><a id='lbl_memo'>備註</a></td>
 					
 				</tr>
 				<tr  style='background:#cad3ff;'>
@@ -727,11 +798,15 @@
 					<td align="center"><input id="chkApv.*" type="checkbox"/></td>
 					<td><input class="txt" id="txtApvmemo.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt num" id="txtApvmount.*" type="text" style="width:95%;" title=""/></td>
+					<td>
+						<input class="txt" id="txtTggno.*" type="text" style="width:40%;" title=""/>
+						<input class="txt" id="txtComp.*" type="text" style="width:50%;" title=""/>
+					</td>
 					<td><input class="txt" id="txtWorkdate.*" type="text" style="width:95%;" title=""/></td>
 					<td><input class="txt" id="txtStyle.*" type="text" style="width:95%;" title=""/></td>
 					<td>
-						<input class="txt" id="txtProductno.*" type="text" style="width:60%; float:left;"/>
-						<input class="txt" id="txtProduct.*" type="text" style="width:35%;float:left;"/>
+						<input class="txt" id="txtProductno.*" type="text" style="width:50%; float:left;"/>
+						<input class="txt" id="txtProduct.*" type="text" style="width:45%;float:left;"/>
 						<input id="btnProduct.*" type="button" style="display:none;">
 					</td>
 					<td><input class="txt" id="txtSpec.*" type="text" style="width:95%;" title=""/></td>

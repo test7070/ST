@@ -67,11 +67,15 @@ declare @t_bmon nvarchar(50)
 declare @t_emon nvarchar(50)
 declare @t_typea nvarchar(50)
 declare @t_invosix nvarchar(50)
+declare @t_len int
+declare @t_lenm int
 
 set @t_bmon = case when '#non'=[10] then '' else [10] end
 set @t_emon = case when '#non'=[11] then char(255) else [11] end
 set @t_typea = case when '#non'=[12] then '' else [12] end
 set @t_invosix = case when '#non'=[14] then '' else [14] end
+set @t_len = [15]
+set @t_lenm=@t_len+3
 ---------------------------------------------------------------------------------
 declare @tmp table(
 	gno nvarchar(1),
@@ -108,8 +112,9 @@ declare @einvono nvarchar(30)
 
 
 declare cursor_table cursor for 
-select rev,cno,binvono,einvono,SUBSTRING(bdate,1,3)+' 年 '+SUBSTRING(bdate,5,2)+'~'+SUBSTRING(edate,5,2) from vccar 
-where((LEFT(bdate,6) between @t_bmon and @t_emon) or (LEFT(edate,6) between @t_bmon and @t_emon)) and (LEN(@t_typea)=0 or @t_typea=rev)
+select rev,cno,binvono,einvono,cast(cast(SUBSTRING(bdate,1,@t_len) as int)-case when @t_len=4 then 1911 else 0 end as nvarchar(50))
++' 年 '+SUBSTRING(bdate,@t_len+2,2)+'~'+SUBSTRING(edate,@t_len+2,2) from vccar 
+where((LEFT(bdate,@t_lenm) between @t_bmon and @t_emon) or (LEFT(edate,@t_lenm) between @t_bmon and @t_emon)) and (LEN(@t_typea)=0 or @t_typea=rev)
 and (len(@t_invosix)=0 or left(binvono,len(@t_invosix))=@t_invosix or left(einvono,len(@t_invosix))=@t_invosix or @t_invosix between binvono and einvono)
 order by rev,binvono
 open cursor_table 
@@ -133,7 +138,7 @@ begin
 			if(len(@t_invosix)=0 or (@t_invosix=LEFT(@fir+cast(@beg as nvarchar(10)),len(@t_invosix))))
 			begin
 				insert into @tmp(gno,rec,cno,mon,rev,npg,b2e,id1,noa1,id2,noa2)
-				select '1',@rec,@cno,@mon,@rev,RIGHT('0000'+CAST(@npg as nvarchar(5)),4),RIGHT(@beg,2)+'~'+CAST(CAST(RIGHT(@beg,2)as int)+49 as nvarchar(5)),RIGHT(@beg+@j,2),@fir+CAST(@beg+@j as nvarchar(10)),RIGHT(@beg+@j+25,2),@fir+CAST(@beg+@j+25 as nvarchar(10))
+				select '1',@rec,@cno,@mon,@rev,RIGHT('0000'+CAST(@npg as nvarchar(5)),4),RIGHT(@beg,2)+'~'+CAST(CAST(RIGHT(@beg,2)as int)+49 as nvarchar(5)),RIGHT(@beg+@j,2),@fir+RIGHT(REPLICATE('0',8)+CAST(@beg+@j as nvarchar(10)),8),RIGHT(@beg+@j+25,2),@fir+RIGHT(REPLICATE('0',8)+CAST(@beg+@j+25 as nvarchar(10)),8)
 			end
 			
 			set @j = @j + 1
