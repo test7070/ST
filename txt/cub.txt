@@ -999,70 +999,9 @@ if(@q_ip=@ip)
 
 if(@t_apv='checker')
 begin
-	--尚未核准
-	if(@q_bbs='0')
-	begin
-		EXEC("update cub"+@accy+" set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"'
-		,uindate=case when isnull(uindate,'')='' then '"+@udatea+"' else uindate end where noa='"+@noa+"'")
-		select noa,checker,checkerdate,uindate from view_cub where noa=@noa
-		
-		set @cmd ="select @count=count(*) from ["+@ip+",1799]."+@db+".dbo.view_cub where noa='"+@noa+"' "
-		execute sp_executesql @cmd,N'@count int output',@count=@count output
-		
-		--不同DB
-		if(@ipto!=@ipfrom)
-		begin
-			--表示沒有重複KEY
-			if(@count=0)
-			begin
-				--106/11/09 CUB 複製到 ipto(st2)
-				EXEC("
-					insert ["+@ip+",1799]."+@db+".dbo.cub"+@accy+"
-					select * from cub"+@accy+" where noa='"+@noa+"'
-				")
-				
-				EXEC("
-					insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
-					select * from cubs"+@accy+" where noa='"+@noa+"'
-				")
-			end
-		end
-	end
-	else
-	begin
-	--已被核准過 只更新表身
-		--不同DB
-		if(@ipto!=@ipfrom)
-		begin
-			if(@q_proj='AD' or @q_proj='JO')
-			begin
-				--刪除bbs
-				EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'
-					and noq!='002' and noq!='003' and noq!='004' and noq!='005' and noq!='006'
-					and noq!='009' and noq!='011' and noq!='014' and noq!='015' and noq!='016' and noq!='021'
-				")
-				
-				--重新插入bbs
-				EXEC("
-					insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
-					select * from cubs"+@accy+" where noa='"+@noa+"' 
-					and noq!='002' and noq!='003' and noq!='004' and noq!='005' and noq!='006'
-					and noq!='009' and noq!='011' and noq!='014' and noq!='015' and noq!='016' and noq!='021'
-				")
-			end
-			else
-			begin
-				--刪除bbs(目前尚未確定哪個項目各屬於哪個公司管理 所以全部刪除再重新刪除)
-				EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'")
-				
-				--重新插入bbs
-				EXEC("
-					insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
-					select * from cubs"+@accy+" where noa='"+@noa+"'
-				")
-			end
-		end
-	end
+	EXEC("update cub"+@accy+" set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"'
+	,uindate=case when isnull(uindate,'')='' then '"+@udatea+"' else uindate end where noa='"+@noa+"'")
+	select noa,checker,checkerdate,uindate from view_cub where noa=@noa
 end
 
 if(@t_apv='review')
@@ -1070,38 +1009,26 @@ begin
 	EXEC("update cub"+@accy+" set reviewdate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
 	select noa,checker,checkerdate,reviewdate from view_cub where noa=@noa
 	
+	--不同DB
 	if(@ipto!=@ipfrom)
 	begin
-		--回寫ipto
-		EXEC("update ["+@ip+",1799]."+@db+".dbo.cub"+@accy+" 
-		set reviewdate='"+@datea+' '+@timea+"'
-		where noa='"+@noa+"'")
-		
-		if(@q_proj='AD' or @q_proj='JO')
+		--表示沒有重複KEY
+		if(@count=0)
 		begin
-			--刪除bbs
-			EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'
-				and noq!='002' and noq!='003' and noq!='004' and noq!='005' and noq!='006'
-				and noq!='009' and noq!='011' and noq!='014' and noq!='015' and noq!='016' and noq!='021'
+			--106/11/09 CUB 複製到 ipto(st2)
+			EXEC("
+				insert ["+@ip+",1799]."+@db+".dbo.cub"+@accy+"
+				select * from cub"+@accy+" where noa='"+@noa+"'
 			")
 			
-			--重新插入bbs
 			EXEC("
 				insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
 				select * from cubs"+@accy+" where noa='"+@noa+"'
-				and noq!='002' and noq!='003' and noq!='004' and noq!='005' and noq!='006'
-				and noq!='009' and noq!='011' and noq!='014' and noq!='015' and noq!='016' and noq!='021'
 			")
-		end
-		else
-		begin
-			--刪除bbs(目前尚未確定哪個項目各屬於哪個公司管理 所以全部刪除再重新刪除)
-			EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'")
 			
-			--重新插入bbs
 			EXEC("
-				insert ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+"
-				select * from cubs"+@accy+" where noa='"+@noa+"'
+				insert ["+@ip+",1799]."+@db+".dbo.cubt"+@accy+"
+				select * from cubt"+@accy+" where noa='"+@noa+"'
 			")
 		end
 	end
@@ -1160,6 +1087,16 @@ begin
 				select * from cubs"+@accy+" where noa='"+@noa+"'
 			")
 		end
+		
+		--刪除BBT 全部刪除再全部寫入
+		EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubt"+@accy+" where noa='"+@noa+"'")
+			
+		--重新插入bbt
+		EXEC("
+			insert ["+@ip+",1799]."+@db+".dbo.cubt"+@accy+"
+			select * from cubt"+@accy+" where noa='"+@noa+"'
+		")
+		
 	end
 end
 
