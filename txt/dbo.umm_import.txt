@@ -1,0 +1,141 @@
+ALTER function [dbo].[umm_import](
+	@t_ummno nvarchar(20)
+	,@t_custno nvarchar(20)
+	,@t_custno2 nvarchar(max)
+	,@t_mon nvarchar(20)
+	,@t_typea nvarchar(50)
+)
+returns @tmpa table(
+	cno nvarchar(20),
+	custno nvarchar(20),
+	mon nvarchar(20),
+	coin nvarchar(20),
+	unpay float,
+	tablea nvarchar(20),
+	tableaccy nvarchar(20),
+	vccno nvarchar(20),
+	memo nvarchar(max)
+)as
+begin	
+	set @t_custno2 = '@'+@t_custno2+'@'  --逗號 改由 @ 取代
+	--104/04/22 避免客戶編號空白的帶入
+	set @t_custno2 = '@'+case when @t_custno2!='' then @t_custno2 else @t_custno end +'@'  --逗號 改由 @ 取代
+	declare @tmp table(
+		cno nvarchar(20),
+		custno nvarchar(20),
+		mon nvarchar(20),
+		coin nvarchar(20),
+		unpay float,
+		tablea nvarchar(20),
+		tableaccy nvarchar(20),
+		vccno nvarchar(20),
+		memo nvarchar(max)
+	)
+	if upper(@t_typea)='MON'
+	begin
+		--=======================月結=============================
+		insert into @tmp(cno,custno,mon,coin,unpay,vccno)
+		select cno,noa,mon,coin,SUM(unpay),noa+'-'+mon
+		from(
+			select cno,noa,mon,coin,unpay
+			from cust_2s
+			where unpay!=0 and len(noa)>0
+			and (noa = @t_custno or charindex('@'+noa+'@',@t_custno2)>0)
+			and (len(@t_mon)=0 or mon<=@t_mon)
+			union all
+			select cno,custno,paymon,coin,paysale
+			from umms 
+			where custno=@t_custno and noa=@t_ummno and paysale!=0)a
+		group by cno,noa,mon,coin
+		having SUM(unpay)!=0
+	end
+	else if (left(upper(@t_typea),2)='VU' or left(upper(@t_typea),2)='SF') --智勝 單據結 @t_typea='專案名稱#合約編號#含稅/內含'
+	begin
+		if(dbo.split(@t_typea,'#',1)!='')--合約
+		begin
+			insert into @tmp(cno,custno,mon,coin,unpay,tablea,tableaccy,vccno)
+			select isnull(a.cno,''),case when len(isnull(a.custno2,''))>0 then a.custno2 else isnull(a.custno,'') end
+				,isnull(a.mon,''),isnull(a.coin,'')
+				--,case when a.typea='1' then isnull(a.total,0) else -isnull(a.total,0) end -isnull(b.paysale,0)
+				,(case when a.typea='1' then 1 else -1 end*case when isnull(a.totalus,0)!=0 then isnull(a.totalus,0) else isnull(a.total,0)end)-isnull(b.paysale,0)
+				,'vcc_'+LOWER(left(@t_typea,2)),a.accy,a.noa
+			from view_vcc a
+			outer apply(select SUM(paysale) paysale from umms where (left(tablea,3)='vcc' and tablea!='vcca') and vccno=a.noa and noa!=@t_ummno) b
+			where (@t_custno=case when len(isnull(a.custno2,''))>0 then a.custno2 else isnull(a.custno,'') end
+				or charindex('@'+case when len(isnull(a.custno2,''))>0 then a.custno2 else isnull(a.custno,'') end+'@',@t_custno2)>0)
+			and (len(@t_mon)=0 or a.mon<=@t_mon)
+			--and case when a.typea='1' then isnull(a.total,0) else -isnull(a.total,0) end != isnull(b.paysale,0)
+			and (case when a.typea='1' then 1 else -1 end*case when isnull(a.totalus,0)!=0 then isnull(a.totalus,0) else isnull(a.total,0)end)!= isnull(b.paysale,0)
+			and (charindex(dbo.split(dbo.split(apvmemo,'##',0),'@',0),dbo.split(@t_typea,'#',1))>0
+			or charindex(dbo.split(dbo.split(apvmemo,'##',1),'@',0),dbo.split(@t_typea,'#',1))>0)
+			--and charindex(dbo.split(@t_typea,'#',1),a.apvmemo)>0
+		end
+		else
+		begin
+			insert into @tmp(cno,custno,mon,coin,unpay,tablea,tableaccy,vccno)
+			select isnull(a.cno,''),case when len(isnull(a.custno2,''))>0 then a.custno2 else isnull(a.custno,'') end
+				,isnull(a.mon,''),isnull(a.coin,'')
+				--,case when a.typea='1' then isnull(a.total,0) else -isnull(a.total,0) end -isnull(b.paysale,0)
+				,(case when a.typea='1' then 1 else -1 end*case when isnull(a.totalus,0)!=0 then isnull(a.totalus,0) else isnull(a.total,0)end)-isnull(b.paysale,0)
+				,'vcc_'+LOWER(left(@t_typea,2)),a.accy,a.noa
+			from view_vcc a
+			outer apply(select SUM(paysale) paysale from umms where (left(tablea,3)='vcc' and tablea!='vcca') and vccno=a.noa and noa!=@t_ummno) b
+			where (@t_custno=case when len(isnull(a.custno2,''))>0 then a.custno2 else isnull(a.custno,'') end
+				or charindex('@'+case when len(isnull(a.custno2,''))>0 then a.custno2 else isnull(a.custno,'') end+'@',@t_custno2)>0)
+			and (len(@t_mon)=0 or a.mon<=@t_mon)
+			--and case when a.typea='1' then isnull(a.total,0) else -isnull(a.total,0) end != isnull(b.paysale,0)
+			and (case when a.typea='1' then 1 else -1 end*case when isnull(a.totalus,0)!=0 then isnull(a.totalus,0) else isnull(a.total,0)end)!= isnull(b.paysale,0)
+			
+			if dbo.split(@t_typea,'#',2)!='3' --內含不抓VCCA
+			begin
+				insert into @tmp(cno,custno,mon,coin,unpay,tablea,tableaccy,vccno)
+				select isnull(a.cno,''),isnull(a.custno,''),isnull(a.mon,''),'',isnull(a.tax,0)-isnull(b.paysale,0)-isnull(c.tax,0)
+					,'vcca','',a.noa
+				from vcca a
+				outer apply(select SUM(paysale) paysale from umms where tablea='vcca' and vccno=a.noa and noa!=@t_ummno) b
+				outer apply(select SUM(tax) tax from vccbs where invono=a.noa) c
+				where (a.custno=@t_custno or charindex('@'+a.custno+'@',@t_custno2)>0)
+				and (len(@t_mon)=0 or a.mon<=@t_mon)
+				and isnull(a.tax,0) != isnull(b.paysale,0)
+			end
+		end
+	end
+	else
+	begin
+		--=======================單據結=============================
+		insert into @tmp(cno,custno,mon,coin,unpay,tablea,tableaccy,vccno)
+		select isnull(a.cno,''),case when len(isnull(a.custno2,''))>0 then a.custno2 else isnull(a.custno,'') end
+			,isnull(a.mon,''),isnull(a.coin,'')
+			,--105/06/20 外幣處理
+			--case when a.typea='1' then isnull(a.total,0) else -isnull(a.total,0) end -isnull(b.paysale,0)
+			(case when a.typea='1' then 1 else -1 end*case when round(isnull(a.totalus,0),5)!=0 then round(isnull(a.totalus,0),5) else round(isnull(a.total,0),5) end) - round(isnull(b.paysale,0),5)
+			,'vcc',a.accy,a.noa
+		from view_vcc a
+		outer apply(select SUM(paysale) paysale from umms where (left(tablea,3)='vcc' and tablea!='vcca') and vccno=a.noa and noa!=@t_ummno and coin=a.coin) b
+		where (@t_custno=case when len(isnull(a.custno2,''))>0 then a.custno2 else isnull(a.custno,'') end
+			or charindex('@'+case when len(isnull(a.custno2,''))>0 then a.custno2 else isnull(a.custno,'') end+'@',@t_custno2)>0)
+		and (len(@t_mon)=0 or a.mon<=@t_mon)
+		--and case when a.typea='1' then isnull(a.total,0) else -isnull(a.total,0) end != isnull(b.paysale,0)
+		and (case when a.typea='1' then 1 else -1 end*case when round(isnull(a.totalus,0),5)!=0 then round(isnull(a.totalus,0),5) else round(isnull(a.total,0),5) end)!= round(isnull(b.paysale,0),5)
+		
+		if @t_typea!='3' --內含不抓VCCA
+		begin
+			insert into @tmp(cno,custno,mon,coin,unpay,tablea,tableaccy,vccno)
+			select isnull(a.cno,''),isnull(a.custno,''),isnull(a.mon,''),'',isnull(a.tax,0)-isnull(b.paysale,0)-isnull(c.tax,0)
+				,'vcca','',a.noa
+			from vcca a
+			outer apply(select SUM(paysale) paysale from umms where tablea='vcca' and vccno=a.noa and noa!=@t_ummno) b
+			outer apply(select SUM(tax) tax from vccbs where invono=a.noa) c
+			where (a.custno=@t_custno or charindex('@'+a.custno+'@',@t_custno2)>0)
+			and (len(@t_mon)=0 or a.mon<=@t_mon)
+			and isnull(a.tax,0) != isnull(b.paysale,0)
+		end
+	end
+	update @tmp set memo=b.nick
+	from @tmp a
+	left join cust b on a.custno=b.noa
+	
+	insert into @tmpa
+	select * from @tmp order by cno,custno,coin,vccno,mon,tablea,tableaccy
+	return
+end
