@@ -42,7 +42,7 @@ insert into @tmp
 select
 	'0',ROW_NUMBER()over(partition by a.noa order by a.noa),1,0
 	,a.noa,a.odate,a.kind,a.tggno,c.comp,a.tel,a.fax,a.addr,a.addr2,a.trantype,a.trandate,a.paytype,replace(a.memo,'chr(10)','<BR>'),a.money,a.tax,a.total
-	,b.productno,b.product,b.spec,b.unit,b.mount,b.price,b.total,replace(b.memo,'chr(10)','<BR>'),b.comp
+	,dbo.charbr(b.productno,11),b.product,b.spec,b.unit,b.mount,b.price,b.total,replace(b.memo,'chr(10)','<BR>'),b.comp
 from view_ordc[1] a
 left join view_ordcs[1] b on a.noa = b.noa
 left join tgg c on a.tggno = c.noa
