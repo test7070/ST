@@ -1066,6 +1066,18 @@ begin
 			EXEC("update ["+@ip+",1799]."+@db+".dbo.cub"+@accy+" 
 			set approve='"+@r_name+"',approvedate='"+@datea+' '+@timea+"' 
 			where noa='"+@noa+"'")
+			
+			--106/12/12 更新表頭
+			EXEC("
+			update a
+				set productno=b.productno,product=b.product,processno=b.processno,process=b.process
+				,tggno=b.tggno,tgg=b.tgg,spec=b.spec,unit=b.unit,itype=b.itype,level=b.level
+				,m13=b.m13,m1=b.m1,m4=b.m4,bdate=b.bdate,uindate=b.uindate,m9=b.m9,m10=b.m10,m3=b.m3
+				,m6=b.m6,m7=b.m7,m8=b.m8,m5=b.m5,m11=b.m11,m12=b.m12,memo2=b.memo2,memo=b.memo,ucxno=b.ucxno
+				from ["+@ip+",1799]."+@db+".dbo.cub"+@accy+" a
+				outer apply (select top 1 * from view_cub where noa='"+@noa+"')b
+				where a.noa='"+@noa+"'
+			")
 		end
 		
 		if(@q_proj='AD' or @q_proj='JO')
@@ -1128,6 +1140,18 @@ begin
 			EXEC("update cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
 			
 			EXEC("update ["+@ip+",1799]."+@db+".dbo.cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+			
+			--106/12/12 更新表頭
+			EXEC("
+			update a
+				set productno=b.productno,product=b.product,processno=b.processno,process=b.process
+				,tggno=b.tggno,tgg=b.tgg,spec=b.spec,unit=b.unit,itype=b.itype,level=b.level
+				,m13=b.m13,m1=b.m1,m4=b.m4,bdate=b.bdate,uindate=b.uindate,m9=b.m9,m10=b.m10,m3=b.m3
+				,m6=b.m6,m7=b.m7,m8=b.m8,m5=b.m5,m11=b.m11,m12=b.m12,memo2=b.memo2,memo=b.memo,ucxno=b.ucxno
+				from ["+@ip+",1799]."+@db+".dbo.cub"+@accy+" a
+				outer apply (select top 1 * from view_cub where noa='"+@noa+"')b
+				where a.noa='"+@noa+"'
+			")
 			
 			if(@q_proj='AD' or @q_proj='JO')
 			begin
