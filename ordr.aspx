@@ -18,7 +18,7 @@
 			q_bbsLen = 10;
             q_tables = 't';
             var q_name = "ordr";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea','txtOrdbno','txtApvdate'];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea','txtOrdbno','txtApvdate','txtWorkgno'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [['txtBday',10,0,1]];
@@ -62,7 +62,9 @@
             	bbmMask = [['txtApvdate',r_picd],['txtBworkdate',r_picd],['txtEworkdate',r_picd],['txtDatea',r_picd]];
             	bbsMask = [['txtWorkdate',r_picd],['txtFdate',r_picd]];
                 q_mask(bbmMask);
-                q_gt('workg', "stop=100", 0, 0, 0, 'workg', r_accy);
+                
+                q_gt('view_workg', "where=^^ exists (select * from orda where workgno like '%'+view_workg.noa+'%') and not exists (select * from ordr where workgno like '%'+view_workg.noa+'%') ^^ stop=100", 0, 0, 0, 'view_workg', r_accy);
+                
                 t_uccg = ' @';
                 for(var i=0;i<z_uccga.length;i++){
                 	t_uccg +=','+z_uccga[i].noa+'@'+z_uccga[i].noa+'. '+z_uccga[i].namea;
@@ -242,8 +244,8 @@
                 		}
                 		q_gt(q_name, q_content, q_sqlCount, 1);
                 		break;
-                	case 'workg':
-                		var as = _q_appendData("workg", "", true);
+                	case 'view_workg':
+                		var as = _q_appendData("view_workg", "", true);
                 		var workstye=q_getPara('workg.stype').split(',');
                 		t_item = '選擇排產單號';
 		                for(var i=0;i<as.length;i++){
@@ -272,6 +274,7 @@
 		                if(t_item.length==0){
 		                	t_item = '@';
 		                }
+		                $('#combWorkgno').text('');
 		                q_cmbParse("combWorkgno",t_item);
                 		break;
                     case q_name:
@@ -315,6 +318,9 @@
 
             function btnIns() {
                 _btnIns();
+                
+                q_gt('view_workg', "where=^^ exists (select * from orda where workgno like '%'+view_workg.noa+'%') and not exists (select * from ordr where workgno like '%'+view_workg.noa+'%') ^^ stop=100", 0, 0, 0, 'view_workg', r_accy);
+                
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
                 $('#txtBday').val(dec(q_getPara('ordc.prein')));
@@ -325,6 +331,9 @@
                 if (emp($('#txtNoa').val()))
                     return;
             	_btnModi();
+            	
+            	q_gt('view_workg', "where=^^ exists (select * from orda where workgno like '%'+view_workg.noa+'%') and not exists (select * from ordr where noa!='"+$('#txtNoa').val()+"' and workgno like '%'+view_workg.noa+'%') ^^ stop=100", 0, 0, 0, 'view_workg', r_accy);
+            	
             	$('#txtDatea').focus();
             }
 
