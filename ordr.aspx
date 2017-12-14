@@ -717,7 +717,7 @@
 							<select id="combWorkgno" class="txt c1" style="float: right;font-size: medium;"multiple="multiple" size="5"> </select>
 						</td>
 						<td colspan="2" style="color: red;">
-							※排產合併的物料需求表，請一次匯入勿做篩選。(只能匯入一次)
+							※排產的物料需求表，盡量請一次匯入勿做篩選。(只能匯入一次)
 						</td>
 					</tr>
 					<tr>
