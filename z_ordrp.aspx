@@ -104,13 +104,22 @@
 						type : '5', //[7]
 						name : 'uccgcno',
 						value : t_uccgc.split(',')
+					},{
+						type : '1', //[8][9]
+						name : 'xnoa'
 					}]
 				});
 				q_popAssign();
+				q_getFormat();
 				q_langShow();
-				$('#txtRworkdate1').mask('999/99/99');
+				
+				if (r_len == 4) {
+					$.datepicker.r_len = 4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+				}
+				$('#txtRworkdate1').mask(r_picd);
 				$('#txtRworkdate1').datepicker();
-				$('#txtRworkdate2').mask('999/99/99');
+				$('#txtRworkdate2').mask(r_picd);
 				$('#txtRworkdate2').datepicker();
 			}
 

@@ -256,47 +256,78 @@ orda_ordr: -- orda_ordr
 	--and (len(@t_uccgcno)=0 or @t_uccgcno=c.groupcno)
 	--order by a.noa desc,b.noq
 	
+	---------------------------------------------------------------
+	
+	--set @t_workgno=replace(@t_workgno,'##',',')
+	
+	--declare @tmp table(
+	--	workgno nvarchar(50)
+	--)
+	--insert @tmp
+	--select item from dbo.fnSplit(@t_workgno)
+	
+	----106/11/28 合併相同產品的數量,並多選排產單號
+	--select ''noa,''noq,''datea
+	--,b.productno,MAX(b.product)product,MAX(b.unit)unit,MAX(b.spec)spec,MAX(b.style)style
+	--,SUM(b.gmount)gmount
+	--,MAX(b.stkmount)stkmount
+	--,MAX(b.schmount)schmount
+	--,MAX(b.safemount)safemount
+	--,SUM(b.netmount)netmount
+	--,MIN(b.fdate)fdate
+	--,SUM(b.fmount)fmount
+	--,SUM(b.mount)mount
+	--,'' memo
+	--,MIN(b.ldate)ldate
+	--,SUM(b.wmount)wmount
+	--,ISNULL(STUFF((select ','+apvmemo from ordas where productno=b.productno and len(apvmemo)>0 FOR XML PATH('')),1,1,''),'') apvmemo
+	--,SUM(b.apvmount)apvmount
+	--,MIN(b.workdate)workdate
+	--from orda a
+	--left join ordas b on a.noa=b.noa
+	--left join ucc c on b.productno=c.noa
+	--where b.noa is not null
+	----106/11/28 改為去看sign 是否結案 因為apv會因每次簽核而變false
+	--and exists (select * from sign where zno=a.noa and enda='Y')
+	--and (len(@t_workgno)=0 or exists (select * from @tmp x where a.workgno like '%'+x.workgno+'%') )
+	----106/11/28因合併所以無法判斷是否已匯入過
+	----and not exists(select noa from ordrs where noa!=@t_noa and ordano=a.noa and ordanoq=b.noq)
+	--and (len(@t_style)=0 or @t_style=b.style)
+	--and (len(@t_bworkdate)=0 or @t_bworkdate<=b.workdate)
+	--and (len(@t_eworkdate)=0 or @t_eworkdate>=b.workdate)
+	--and (len(@t_uccgano)=0 or @t_uccgano=c.groupano)
+	--and (len(@t_uccgbno)=0 or @t_uccgbno=c.groupbno)
+	--and (len(@t_uccgcno)=0 or @t_uccgcno=c.groupcno)
+	--group by b.productno
+	--order by b.productno
+	
+	-------------------------------------------------------------------
+	--106/12/14 明細寫入bbt 總計寫入bbs
 	set @t_workgno=replace(@t_workgno,'##',',')
 	
 	declare @tmp table(
-		workgno nvarchar(50)
+		ordano nvarchar(50)
 	)
 	insert @tmp
 	select item from dbo.fnSplit(@t_workgno)
-	
-	--106/11/28 合併相同產品的數量,並多選排產單號
-	select ''noa,''noq,''datea
-	,b.productno,MAX(b.product)product,MAX(b.unit)unit,MAX(b.spec)spec,MAX(b.style)style
-	,SUM(b.gmount)gmount
-	,MAX(b.stkmount)stkmount
-	,MAX(b.schmount)schmount
-	,MAX(b.safemount)safemount
-	,SUM(b.netmount)netmount
-	,MIN(b.fdate)fdate
-	,SUM(b.fmount)fmount
-	,SUM(b.mount)mount
-	,'' memo
-	,MIN(b.ldate)ldate
-	,SUM(b.wmount)wmount
-	,ISNULL(STUFF((select ','+apvmemo from ordas where productno=b.productno and len(apvmemo)>0 FOR XML PATH('')),1,1,''),'') apvmemo
-	,SUM(b.apvmount)apvmount
-	,MIN(b.workdate)workdate
+
+	select b.* 
 	from orda a
 	left join ordas b on a.noa=b.noa
 	left join ucc c on b.productno=c.noa
 	where b.noa is not null
 	--106/11/28 改為去看sign 是否結案 因為apv會因每次簽核而變false
 	and exists (select * from sign where zno=a.noa and enda='Y')
-	and (len(@t_workgno)=0 or exists (select * from @tmp x where a.workgno like '%'+x.workgno+'%') )
-	--106/11/28因合併所以無法判斷是否已匯入過
-	--and not exists(select noa from ordrs where noa!=@t_noa and ordano=a.noa and ordanoq=b.noq)
+	--排除bbt已匯入過的資料
+	and not exists(select noa from ordrt where noa!=@t_noa and ordano=a.noa and ordanoq=b.noq)
+	----106/11/28 多選
+	and (len(@t_workgno)=0 or exists (select * from @tmp x where a.noa=ordano))
 	and (len(@t_style)=0 or @t_style=b.style)
 	and (len(@t_bworkdate)=0 or @t_bworkdate<=b.workdate)
 	and (len(@t_eworkdate)=0 or @t_eworkdate>=b.workdate)
 	and (len(@t_uccgano)=0 or @t_uccgano=c.groupano)
 	and (len(@t_uccgbno)=0 or @t_uccgbno=c.groupbno)
 	and (len(@t_uccgcno)=0 or @t_uccgcno=c.groupcno)
-	group by b.productno
-	order by b.productno
-	;
+	order by b.productno,a.noa desc,b.noq
 	
+	;
