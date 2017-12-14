@@ -680,7 +680,7 @@
 	>
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' style="overflow:visible;">
-			<div class="dview" id="dview" >
+			<div class="dview" id="dview" style="word-break: break-all;">
 				<table class="tview" id="tview" >
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
@@ -715,6 +715,9 @@
 						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
 						<td colspan="3">
 							<select id="combWorkgno" class="txt c1" style="float: right;font-size: medium;"multiple="multiple" size="5"> </select>
+						</td>
+						<td colspan="2" style="color: red;">
+							※排產合併的物料需求表，請一次匯入勿做篩選。(只能匯入一次)
 						</td>
 					</tr>
 					<tr>

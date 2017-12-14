@@ -1,7 +1,7 @@
 z_ordrp01:--z_ordrp01 
 	SET QUOTED_IDENTIFIER OFF
-	declare @t_apv int = case when '#non'=[1] then null else cast([1] as int) end
-	declare @t_workgno nvarchar(20) = case when '#non'=[2] then '' else [2] end
+	declare @t_apv nvarchar(50) = case when '#non'=[1] then '' else [1] end
+	declare @t_workgno nvarchar(50) = case when '#non'=[2] then '' else [2] end
 	declare @t_brworkdate nvarchar(20) = case when '#non'=[3] then '' else [3] end
 	declare @t_erworkdate nvarchar(20) = case when '#non'=[4] then char(255) else [4] end
 	declare @t_uccgano nvarchar(20) = case when '#non'=[5] then '' else [5] end
@@ -10,19 +10,20 @@ z_ordrp01:--z_ordrp01
 	-----------------------------------------------------------------------------------------------
 	declare @tmp table(
 		gno nvarchar(10),
-		pno nvarchar(10),
+		pno nvarchar(50),
 		recno int,
-		ordano nvarchar(20),
+		ordano nvarchar(50),
 		ordanoq nvarchar(10),
 		apv bit,
-		apvmemo nvarchar(50),
+		apvmemo nvarchar(MAX),
+		apvmount float,
 		rworkdate nvarchar(10),
 		datea nvarchar(10),
-		productno nvarchar(20),
-		product nvarchar(50),
-		unit nvarchar(20),
-		spec nvarchar(50),
-		style nvarchar(50),
+		productno nvarchar(150),
+		product nvarchar(MAX),
+		unit nvarchar(50),
+		spec nvarchar(MAX),
+		style nvarchar(MAX),
 		gmount float,
 		stkmount float,
 		schmount float,
@@ -36,18 +37,19 @@ z_ordrp01:--z_ordrp01
 		wmount float
 	)
 	
-	insert into @tmp(gno,pno,recno,ordano,ordanoq,apv,apvmemo
+	insert into @tmp(gno,pno,recno,ordano,ordanoq,apv,apvmemo,apvmount
 		,rworkdate,datea,productno,product,unit,spec,style,gmount,stkmount
 		,schmount,netmount,fdate,fmount,mount,memo,ldate,wmount)
 	select '1','1',ROW_NUMBER()over(order by isnull(b.workdate,''),a.noa,b.noq)
-		,a.noa,b.noq,b.apv,b.apvmemo
-		,isnull(b.workdate,''),b.datea,b.productno,b.product,b.unit,b.spec,b.style,b.gmount,b.stkmount
+		,a.noa,b.noq,b.apv,b.apvmemo,b.apvmount
+		,isnull(b.workdate,''),b.datea,b.productno,replace(b.product,"~#$","'"),b.unit
+		,replace(b.spec,"~#$","'"),b.style,b.gmount,b.stkmount
 		,b.schmount,b.netmount,b.fdate,b.fmount,b.mount,b.memo,b.ldate,b.wmount
 	from orda a
 	left join ordas b on a.noa=b.noa
 	left join ucc d on b.productno=d.noa
 	where b.noa is not null
-	and (@t_apv is null or b.apv=@t_apv)
+	and (len(@t_apv)=0 or exists (select * from sign where zno=a.noa and enda=@t_apv))
 	and (len(@t_workgno)=0 or @t_workgno=a.workgno)
 	and (isnull(b.workdate,'') between @t_brworkdate and @t_erworkdate)
 	and (len(@t_uccgano)=0 or @t_uccgano=d.groupano)
@@ -71,5 +73,102 @@ z_ordrp01:--z_ordrp01
 		,fdate a11--預測日期	
 		,fmount a12--預測需求	
 		,memo a13--備註
+		,apvmount a14--異動數量
 		,* 
 	from @tmp order by pno,recno;
+--******************************************************************************************************
+z_ordrp02:--z_ordrp02 
+SET QUOTED_IDENTIFIER OFF
+
+declare @t_uccgano nvarchar(20) = case when '#non'=[5] then '' else [5] end
+declare @t_uccgbno nvarchar(20) = case when '#non'=[6] then '' else [6] end
+declare @t_uccgcno nvarchar(20) = case when '#non'=[7] then '' else [7] end
+	-----------------------------------------------------------------------------------------------
+	--物料需求表
+	declare @tmp table(
+		ordano nvarchar(50),
+		ordanoq nvarchar(10),
+		workgno nvarchar(MAX),
+		productno nvarchar(150),
+		product nvarchar(MAX),
+		unit nvarchar(50),
+		spec nvarchar(MAX),
+		style nvarchar(MAX),
+		netmount float,
+		fmount float,
+		apvmount float,
+		memo nvarchar(max)
+	)
+	
+	insert into @tmp(ordano,ordanoq,workgno,productno,product,unit,spec,style,apvmount,netmount,fmount,memo)
+	select a.noa,b.noq,a.workgno,b.productno,replace(b.product,"~#$","'")
+	,b.unit,replace(b.spec,"~#$","'"),b.style,b.apvmount,b.netmount,b.fmount,b.memo
+	from orda a	left join ordas b on a.noa=b.noa
+	left join ucc d on b.productno=d.noa
+	where b.noa is not null
+	and (len(@t_uccgano)=0 or @t_uccgano=d.groupano)
+	and (len(@t_uccgbno)=0 or @t_uccgbno=d.groupbno)
+	and (len(@t_uccgcno)=0 or @t_uccgcno=d.groupcno)
+	and exists (select * from sign where zno=a.noa and enda='Y') --已核可
+	
+	--請購建議書
+	declare @tmpa table(
+		ordarno nvarchar(50),
+		ordarnoq nvarchar(50),
+		workgno nvarchar(4000),
+		productno nvarchar(150),
+		product nvarchar(MAX),
+		unit nvarchar(50),
+		netmount float,
+		fmount float,
+		apvmount float
+	)
+	
+	insert @tmpa
+	select a.noa,b.noq,a.workgno,b.productno,b.product,b.unit,b.netmount,b.fmount,b.apvmount
+	from ordr a left join ordrs b on a.noa=b.noa
+	left join ucc d on b.productno=d.noa
+	where b.productno is not null
+	and case when ISNULL(b.apvmount,0)>0 then ISNULL(b.apvmount,0) else ISNULL(b.netmount,0)+ISNULL(b.fmount,0) end>0
+	and (len(@t_uccgano)=0 or @t_uccgano=d.groupano)
+	and (len(@t_uccgbno)=0 or @t_uccgbno=d.groupbno)
+	and (len(@t_uccgcno)=0 or @t_uccgcno=d.groupcno)
+	
+	--合併
+	declare @tmpb table(
+		productno nvarchar(150),
+		product nvarchar(MAX),
+		unit nvarchar(50),
+		mount float,
+		bmount float,
+		unmount float
+	)
+	
+	insert @tmpb(productno,product,unit,mount,bmount,unmount)
+	select productno,product,unit,SUM(mount),SUM(bmount),0 from (
+		select productno,product,unit
+		,case when ISNULL(apvmount,0)>0 then ISNULL(apvmount,0) else ISNULL(netmount,0)+ISNULL(fmount,0) end mount 
+		,0 bmount
+		from @tmp
+		union all
+		select productno,product,unit
+		,0 mount
+		,case when ISNULL(apvmount,0)>0 then ISNULL(apvmount,0) else ISNULL(netmount,0)+ISNULL(fmount,0) end bmount
+		from @tmpa
+	)xtmp group by productno,product,unit
+	
+	update @tmpb set unmount=mount-bmount
+	
+	delete @tmpb where unmount<=0
+	
+	select '1' gno,
+	ROW_NUMBER() over (order by productno)rr,
+	productno a01,
+	product a02,
+	unit a03,
+	dbo.getComma(mount,-1) a04,
+	dbo.getComma(bmount,-1) a05,
+	dbo.getComma(unmount,-1) a06,
+	* 
+	from @tmpb order by productno
+;

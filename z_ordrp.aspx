@@ -85,7 +85,7 @@
 					options : [{
 						type : '5', //[1]
 						name : 'apv',
-						value : (' @全部,1@已核准,2@未核准').split(',')
+						value : (' @全部,Y@已核准,N@未核准').split(',')
 					},{
 						type : '6', //[2]
 						name : 'workgno'
