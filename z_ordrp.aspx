@@ -85,7 +85,7 @@
 					options : [{
 						type : '5', //[1]
 						name : 'apv',
-						value : (' @全部,1@已核准,2@未核准').split(',')
+						value : (' @全部,Y@已核准,N@未核准').split(',')
 					},{
 						type : '6', //[2]
 						name : 'workgno'
@@ -104,13 +104,22 @@
 						type : '5', //[7]
 						name : 'uccgcno',
 						value : t_uccgc.split(',')
+					},{
+						type : '1', //[8][9]
+						name : 'xnoa'
 					}]
 				});
 				q_popAssign();
+				q_getFormat();
 				q_langShow();
-				$('#txtRworkdate1').mask('999/99/99');
+				
+				if (r_len == 4) {
+					$.datepicker.r_len = 4;
+					//$.datepicker.setDefaults($.datepicker.regional["ENG"]);
+				}
+				$('#txtRworkdate1').mask(r_picd);
 				$('#txtRworkdate1').datepicker();
-				$('#txtRworkdate2').mask('999/99/99');
+				$('#txtRworkdate2').mask(r_picd);
 				$('#txtRworkdate2').datepicker();
 			}
 
