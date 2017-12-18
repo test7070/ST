@@ -18,8 +18,8 @@
 			q_bbsLen = 10;
             q_tables = 't';
             var q_name = "ordr";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea','txtOrdbno','txtApvdate'];
-            var q_readonlys = [];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtDatea','txtOrdbno','txtApvdate','txtWorkgno'];
+            var q_readonlys = ['txtWorkdate','txtStyle','txtProductno','txtProduct','txtSpec','txtUnit','txtGmount','txtWmount','txtStkmount','txtSchmount','txtSafemount','txtNetmount','txtFdate','txtFmount','txtMemo'];
             var q_readonlyt = [];
             var bbmNum = [['txtBday',10,0,1]];
             var bbsNum = [['txtGmount',10,2,1]];
@@ -62,7 +62,11 @@
             	bbmMask = [['txtApvdate',r_picd],['txtBworkdate',r_picd],['txtEworkdate',r_picd],['txtDatea',r_picd]];
             	bbsMask = [['txtWorkdate',r_picd],['txtFdate',r_picd]];
                 q_mask(bbmMask);
-                q_gt('workg', "stop=100", 0, 0, 0, 'workg', r_accy);
+                
+                //q_gt('view_workg', "where=^^ exists (select * from orda where workgno like '%'+view_workg.noa+'%') and not exists (select * from ordr where workgno like '%'+view_workg.noa+'%') ^^ stop=100", 0, 0, 0, 'view_workg', r_accy);
+                
+                q_gt('orda', "where=^^ exists (select * from ordas x where noa=orda.noa and not exists (select * from ordrt where ordano=x.noa and ordanoq=x.noq)) ^^ stop=100", 0, 0, 0, 'ordalist', r_accy);
+                
                 t_uccg = ' @';
                 for(var i=0;i<z_uccga.length;i++){
                 	t_uccg +=','+z_uccga[i].noa+'@'+z_uccga[i].noa+'. '+z_uccga[i].namea;
@@ -80,6 +84,10 @@
                 q_cmbParse("cmbUccgcno",t_uccg);
                 //----------------------------------------------------------
                 $('#btnImport').click(function(e){
+                	for (var i = 0; i < q_bbtCount; i++) {
+	                	$('#btnMinut__'+i).click();
+	                }
+                	
                 	var t_noa = $('#txtNoa').val();
                 	var t_workgno = replaceAll($('#txtWorkgno').val(),',','##');
                 	var t_style = $('#txtStyle').val();
@@ -114,6 +122,11 @@
                 	if(q_cur==1 || q_cur==2)
                 		$('#txtWorkgno').val(replaceAll(replaceAll($('#combWorkgno').val().toString(),'選擇排產單號,',''),'選擇排產單號',''));
 				});
+				
+				$('#combOrdano').change(function() {
+                	if(q_cur==1 || q_cur==2)
+                		$('#txtWorkgno').val(replaceAll(replaceAll($('#combOrdano').val().toString(),'選擇物料需求單號,',''),'選擇物料需求單號',''));
+				});
             }
             function checkAll(){
             	$('#tbbs').find('input[type="checkbox"]').prop('checked',$('.checkAll').prop('checked'));
@@ -125,43 +138,41 @@
                         if (as[0] != undefined) {
                         	//106/11/28 應合併數量已無法判斷是否有相同的排產內容匯入，所以將其已存在的品項不會再匯入
                         	for(var i=0;i<as.length;i++){
-                        		for (var j = 0; j < q_bbsCount; j++) {
-                        			if(as[i].productno==$('#txtProductno_'+j).val()){
-                        				as[i].splice(i, 1);
+                        		for (var j = 0; j < q_bbtCount; j++) {
+                        			if(as[i].noa==$('#txtOrdano__'+j).val() || as[i].noq==$('#txtOrdanoq__'+j).val()){
+                        				as.splice(i, 1);
                         				i--;
                         				break;
                         			}
                         		}
                         	}
                         	
-                            q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtApvmount,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
-                        	, as.length, as, 'noa,noq,apvmemo,apvmount,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '','');
-                        	sum();
-                        }/*else {
-                            alert('無資料，請確認物料需求表是否是送簽核!');
-                        }*/
+                        	//106/12/14 明細寫入bbt bbs為產品加總
+                            q_gridAddRow(bbtHtm, 'tbbt', 'txtOrdano,txtOrdanoq,txtApvmemo,txtApvmount,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
+                        	, as.length, as, 'noa,noq,apvmemo,apvmount,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', 'txtOrdano,txtOrdanoq');
+                        	
+                        	bbtupdatebbs();
+                        	
+                        	//sum();
+                        }
+                        
+                        //106/12/14 調整為ordano
                        	var a_workgno=$('#txtWorkgno').val().split(',');
+                       	
 	                	var t_where='1=0';
 	                	for(var i=0;i<a_workgno.length;i++){
-	                		if(a_workgno[i]!='選擇排產單號')
-	                			t_where+=" or workgno like '%"+a_workgno[i]+"%'";
+	                		if(a_workgno[i]!='選擇物料需求單號')
+	                			t_where+=" or zno='"+a_workgno[i]+"'";
 	                	}
-	                	t_where="where=^^exists (select * from orda where sign.zno=noa and ("+t_where+")) and isnull(enda,'')!='Y'^^"
+	                	t_where="where=^^ zno2 like 'orda%' and ("+t_where+") and isnull(enda,'')!='Y'^^"
 	                	q_gt('sign', t_where, 0, 0, 0, 'getnosign', r_accy,1);
 	                	var tas = _q_appendData("sign", "", true, true);
-						var t_where2='1=0';
+						var t_orda='';
 						for(var i=0;i<tas.length;i++){
-							t_where2+=" or noa='"+tas[i].zno+"'";
+							t_orda+=(t_orda.length>0?',':'')+tas[i].zno+"'";
 						}
-						t_where2="where=^^"+t_where2+"^^"
-						q_gt('orda', t_where2, 0, 0, 0, 'getordaworkg', r_accy,1);
-						var tas = _q_appendData("orda", "", true, true);
-						var tmp_workgno='';
-						for(var i=0;i<tas.length;i++){
-							tmp_workgno+=(tmp_workgno.length>0?',':'')+tas[i].workgno;
-						}
-						if(tmp_workgno.length>0){
-							alert(tmp_workgno+'尚未簽核!!');
+						if(t_orda.length>0){
+							alert(t_orda+'尚未簽核完成!!');
 						}else{
 							if(as.length==0)
 								alert('無資料，請確認物料需求表是否是送簽核!');
@@ -194,6 +205,65 @@
                         break;
                 }
             }
+            
+            function bbtupdatebbs() {
+            	//清除表身內容 勿使用btnMinus>會更新到bbt
+            	for (var i = 0; i < q_bbsCount; i++) {
+            		for (var j = 0; j < fbbs.length; j++) {
+            			if(fbbs[j].substr(0,3)=='chk'){
+            				$('#'+fbbs[j]+'_'+i).prop('checked',false);
+            			}else{
+            				$('#'+fbbs[j]+'_'+i).val('');
+            			}
+            		}
+            	}
+            	
+            	var as=[];
+            	var isexists=false;
+            	for (var i = 0; i < q_bbtCount; i++) {
+            		isexists=false;
+            		for (var j = 0; j < as.length; j++) {
+            			if($('#txtProductno__'+i).val()==as[j].productno){
+            				isexists=true;
+            				as[j].apvmount=q_add(dec(as[j].apvmount),dec($('#txtApvmount__'+i).val()));
+            				as[j].netmount=q_add(dec(as[j].netmount),dec($('#txtNetmount__'+i).val()));
+            				as[j].fmount=q_add(dec(as[j].fmount),dec($('#txtFmount__'+i).val()));
+            				
+            				as[j].workdate=as[j].workdate>$('#txtWorkdate__'+i).val()?$('#txtWorkdate__'+i).val():as[j].workdate;
+            				as[j].fdate=as[j].fdate>$('#txtFdate__'+i).val()?$('#txtFdate__'+i).val():as[j].fdate;
+            				break;
+            			}
+            		}
+            		
+            		if(!isexists){
+            			as.push({
+            				'noa':'',
+            				'noq':'',
+            				'apvmemo':$('#txtApvmemo__'+i).val(),
+            				'apvmount':$('#txtApvmount__'+i).val(),
+            				'productno':$('#txtProductno__'+i).val(),
+            				'product':$('#txtProduct__'+i).val(),
+            				'spec':$('#txtSpec__'+i).val(),
+            				'unit':$('#txtUnit__'+i).val(),
+            				'workdate':$('#txtWorkdate__'+i).val(),
+            				'style':$('#txtStyle__'+i).val(),
+            				'gmount':$('#txtGmount__'+i).val(),
+            				'stkmount':$('#txtStkmount__'+i).val(),
+            				'schmount':$('#txtSchmount__'+i).val(),
+            				'safemount':$('#txtSafemount__'+i).val(),
+            				'netmount':$('#txtNetmount__'+i).val(),
+            				'fdate':$('#txtFdate__'+i).val(),
+            				'fmount':$('#txtFmount__'+i).val(),
+            				'memo':$('#txtMemo__'+i).val(),
+            				'wmount':$('#txtWmount__'+i).val()
+            			});
+            		}
+            	}
+            	
+            	q_gridAddRow(bbsHtm, 'tbbs', 'txtOrdano,txtOrdanoq,txtApvmemo,txtApvmount,txtProductno,txtProduct,txtSpec,txtUnit,txtWorkdate,txtStyle,txtGmount,txtStkmount,txtSchmount,txtSafemount,txtNetmount,txtFdate,txtFmount,txtMemo,txtWmount'
+                , as.length, as, 'noa,noq,apvmemo,apvmount,productno,product,spec,unit,workdate,style,gmount,stkmount,schmount,safemount,netmount,fdate,fmount,memo,wmount', '');
+            }
+            
 			function q_popPost(id) {
                 switch (id) {
                     default:
@@ -242,8 +312,8 @@
                 		}
                 		q_gt(q_name, q_content, q_sqlCount, 1);
                 		break;
-                	case 'workg':
-                		var as = _q_appendData("workg", "", true);
+                	case 'view_workg':
+                		var as = _q_appendData("view_workg", "", true);
                 		var workstye=q_getPara('workg.stype').split(',');
                 		t_item = '選擇排產單號';
 		                for(var i=0;i<as.length;i++){
@@ -272,7 +342,27 @@
 		                if(t_item.length==0){
 		                	t_item = '@';
 		                }
+		                $('#combWorkgno').text('');
 		                q_cmbParse("combWorkgno",t_item);
+                		break;
+                	case 'ordalist':
+                		var as = _q_appendData("orda", "", true);
+                		t_item = '選擇物料需求單號';
+		                for(var i=0;i<as.length;i++){
+		                	
+		                	t_item +=','+as[i].noa+'@'+as[i].noa;
+		                		
+		                	if(as[i].workgno.length>0)
+		                		t_item +=' 排產單號:'+replaceAll(as[i].workgno,',','，');
+		                		
+		                	if(as[i].worker.length>0)
+		                		t_item +=' '+as[i].worker;
+		                }
+		                if(t_item.length==0){
+		                	t_item = '@';
+		                }
+		                $('#combOrdano').text('');
+		                q_cmbParse("combOrdano",t_item);
                 		break;
                     case q_name:
                         if (q_cur == 4)
@@ -315,6 +405,10 @@
 
             function btnIns() {
                 _btnIns();
+                
+                //q_gt('view_workg', "where=^^ exists (select * from orda where workgno like '%'+view_workg.noa+'%') and not exists (select * from ordr where workgno like '%'+view_workg.noa+'%') ^^ stop=100", 0, 0, 0, 'view_workg', r_accy);
+                q_gt('orda', "where=^^ exists (select * from ordas x where noa=orda.noa and not exists (select * from ordrt where ordano=x.noa and ordanoq=x.noq)) ^^ stop=100", 0, 0, 0, 'ordalist', r_accy);
+                
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
                 $('#txtBday').val(dec(q_getPara('ordc.prein')));
@@ -325,6 +419,10 @@
                 if (emp($('#txtNoa').val()))
                     return;
             	_btnModi();
+            	
+            	//q_gt('view_workg', "where=^^ exists (select * from orda where workgno like '%'+view_workg.noa+'%') and not exists (select * from ordr where noa!='"+$('#txtNoa').val()+"' and workgno like '%'+view_workg.noa+'%') ^^ stop=100", 0, 0, 0, 'view_workg', r_accy);
+            	q_gt('orda', "where=^^ exists (select * from ordas x where noa=orda.noa and not exists (select * from ordrt where noa!='"+$('#txtNoa').val()+"' and ordano=x.noa and ordanoq=x.noq)) ^^ stop=100", 0, 0, 0, 'ordalist', r_accy);
+            	
             	$('#txtDatea').focus();
             }
 
@@ -376,6 +474,15 @@
                 q_nowf();
                 return true;
             }
+            
+            function bbtSave(as) {
+                if (!as['productno']) {
+                    as[bbsKey[1]] = '';
+                    return;
+                }
+                q_nowf();
+                return true;
+            }
 
             function refresh(recno) {
                 _refresh(recno);
@@ -388,26 +495,33 @@
                     $('#btnImport').attr('disabled','disabled');
                     $('#chkApv').attr('disabled','disabled');
                     $('#btnOrdb').removeAttr('disabled');
-                    $('#combWorkgno')[0].selectedIndex=0;
-                    $('#combWorkgno').attr('disabled','disabled');
+                    //$('#combWorkgno')[0].selectedIndex=0;
+                    //$('#combWorkgno').attr('disabled','disabled');
+                    $('#combOrdano')[0].selectedIndex=0;
+                    $('#combOrdano').attr('disabled','disabled');
                 } else {	
                     //$('#txtDatea').datepicker();
                     $('#btnImport').removeAttr('disabled');
                     $('#chkApv').removeAttr('disabled');
                     $('#btnOrdb').attr('disabled','disabled');
-                    $('#combWorkgno').removeAttr('disabled');
+                    //$('#combWorkgno').removeAttr('disabled');
+                    $('#combOrdano').removeAttr('disabled');
                 }
             }
 
             function btnMinus(id) {
+            	var n=replaceAll(id,'btnMinus_','');
+            	var t_pno=$('#txtProductno_'+n).val();
                 _btnMinus(id);
+                
+                //表身加總刪除 bbt明細也刪除
+                for (var i = 0; i < q_bbtCount; i++) {
+                	if(t_pno==$('#txtProductno__'+i).val()){
+                		$('#btnMinut__'+i).click();
+                	}	
+                }
             }
-            /*function btnPlus(org_htm, dest_tag, afield) {
-                _btnPlus(org_htm, dest_tag, afield);
-            }
-            function btnPlut(org_htm, dest_tag, afield) {
-                _btnPlut(org_htm, dest_tag, afield);
-            }*/
+            
             function bbsAssign() {
                 for (var i = 0; i < q_bbsCount; i++) {
                     $('#lblNo_' + i).text(i + 1);
@@ -418,6 +532,30 @@
                             var n = $(this).attr('id').replace('txtProductno_', '');
                             $('#btnProduct_'+n).click();
                         });
+                        
+                        $('#txtApvmount_'+i).change(function() {
+                        	t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							
+							var t_amount=dec($('#txtApvmount_'+b_seq).val());
+							var tpno=$('#txtProductno_'+b_seq).val();
+							
+							if(tpno.length>0){
+								var tp1=true;
+								//第一個品項 變成異動的數量 後面調整成0
+								for (var j = 0; j < q_bbtCount; j++) {
+									if(tpno==$('#txtProductno__'+j).val()){
+										if(tp1){
+											$('#txtApvmount__'+j).val(t_amount);
+											tp1=false;
+										}else{
+											$('#txtApvmount__'+j).val(0);
+										}
+									}
+								}
+							}
+						});
                     }
                 }
                 _bbsAssign();
@@ -671,7 +809,7 @@
 	>
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' style="overflow:visible;">
-			<div class="dview" id="dview" >
+			<div class="dview" id="dview" style="word-break: break-all;">
 				<table class="tview" id="tview" >
 					<tr>
 						<td style="width:20px; color:black;"><a id='vewChk'> </a></td>
@@ -702,10 +840,17 @@
 						<td><span> </span><a id="lblDatea" class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text"  class="txt c1"/></td>
 					</tr>
-					<tr>
+					<!--106/12/14 改成抓ordano匯入 已便orda判斷是否已匯入表身-->
+					<!--<tr>
 						<td><span> </span><a id="lblWorkgno" class="lbl"> </a></td>
 						<td colspan="3">
 							<select id="combWorkgno" class="txt c1" style="float: right;font-size: medium;"multiple="multiple" size="5"> </select>
+						</td>
+					</tr>-->
+					<tr>
+						<td><span> </span><a id="lblOrdano" class="lbl"> </a></td>
+						<td colspan="3">
+							<select id="combOrdano" class="txt c1" style="float: right;font-size: medium;"multiple="multiple" size="5"> </select>
 						</td>
 					</tr>
 					<tr>
@@ -825,19 +970,59 @@
 		</div>
 		
 		<input id="q_sys" type="hidden" />
-		<div id="dbbt" style="position: absolute;top:280px; left:800px; display:none;width:300px;">
+		<div id="dbbt" style="display:none;width:2000px;">
 			<table id="tbbt">
 				<tr class="head" style="color:white; background:#003366;">
 					<td style="display:none;"><input id="btnPlut" type="button" style="font-size: medium; font-weight: bold;" value="＋"/></td>
 					<td style="width:20px;"> </td>
+					<td style="width:200px;"><a id='lblOrdano_t'>物需單號</a></td>
+					<td style="width:100px;"><a id='lblApvmemo_t'>簽核意見</a></td>
+					<td style="width:80px;"><a id='lblApvmount_t'>異動數量</a></td>
+					<td style="width:100px;"><a id='lblWorkdate_t'>開工日</a></td>
+					<td style="width:80px;"><a id='lblStyle_t'>機型</a></td>
+					<td style="width:200px;"><a id='lblProduct_t'>物品</a></td>
+					<td style="width:150px;"><a id='lblSpec_t'>規格</a></td>
+					<td style="width:50px;"><a id='lblUnit_t'>單位</a></td>
+					<td style="width:80px;"><a id='lblGmount_t'>毛需求</a></td>
+					<td style="width:80px;"><a id='lblWmount_t'>製令未領</a></td>
+					<td style="width:80px;"><a id='lblStkmount_t'>庫存量</a></td>
+					<td style="width:80px;"><a id='lblSchmount_t'>在途量</a></td>
+					<td style="width:80px;"><a id='lblSafemount_t'>安全存量</a></td>
+					<td style="width:80px;"><a id='lblNetmount_t'>淨需求量</a></td>
+					<td style="width:80px;"><a id='lblFdate_t'>預測日期</a></td>
+					<td style="width:80px;"><a id='lblFmount_t'>預測需求</a></td>
+					<td style="width:200px;"><a id='lblMemo_t'>備註</a></td>
 				</tr>
 				<tr>
 					<td style="display:none;">
 						<input id="btnMinut..*"  type="button" style="font-size: medium; font-weight: bold;" value="－"/>
 						<input class="txt" id="txtNoq..*" type="text" style="display: none;"/>
-						<input class="txt" id="txtNo2..*" type="text" style="display: none;"/>
 					</td>
 					<td><a id="lblNo..*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
+					<td>
+						<input id="txtOrdano..*" type="text" style="width:70%;"/>
+						<input id="txtOrdanoq..*" type="text" style="width:20%;"/>
+					</td>
+					<td><input class="txt" id="txtApvmemo..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtApvmount..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtWorkdate..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtStyle..*" type="text" style="width:95%;" title=""/></td>
+					<td>
+						<input class="txt" id="txtProductno..*" type="text" style="width:50%; float:left;"/>
+						<input class="txt" id="txtProduct..*" type="text" style="width:45%;float:left;"/>
+						<input id="btnProduct..*" type="button" style="display:none;">
+					</td>
+					<td><input class="txt" id="txtSpec..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtUnit..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtGmount..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtWmount..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtStkmount..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtSchmount..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtSafemount..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtNetmount..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtFdate..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt num" id="txtFmount..*" type="text" style="width:95%;" title=""/></td>
+					<td><input class="txt" id="txtMemo..*" type="text" style="width:95%;" title=""/></td>
 				</tr>
 			</table>
 		</div>

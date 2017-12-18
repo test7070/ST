@@ -71,6 +71,7 @@
             }
 
             function mainPost() {
+            	bbmMask=[['txtCoin','AAA']]
                 q_mask(bbmMask);
                 
                 $('#txtNoa').change(function(e){
@@ -643,8 +644,11 @@
 						<tr>
 							<td><span> </span><a id='lblInsur_disaster' class="lbl"> </a></td>
 							<td><input id="txtInsur_disaster"  type="text" class="txt c1" /></td>
-							<td> </td>
-							<td><input id='btnAcompu' type="button" class='salb'/></td>
+							<td><span> </span><a id='lblCoin' class="lbl">幣別</a></td>
+							<td>
+								<input id="txtCoin" type="text" class="txt c1" style="width: 50%;" />
+								<input id='btnAcompu' type="button" class='salb'/>
+							</td>
 						</tr>
 						<tr class="obu">
 							<td><span> </span><a id='lblObu' class="lbl"> </a></td>
