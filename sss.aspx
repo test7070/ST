@@ -77,9 +77,15 @@
 				
 				if (q_getPara('sys.project').toUpperCase()=='UU' || q_getPara('sys.project').toUpperCase()=='TN') {
 					$('.sbutton').hide();
-				}if (q_getPara('sys.project').toUpperCase()=='DJ') {
+				}
+				if (q_getPara('sys.project').toUpperCase()=='DJ') {
 					$('#btnSaladjust').show();
-				}/*else if(r_rank<8){
+				}
+				if (q_getPara('sys.project').toUpperCase()=='RB' && r_rank<8) {//106/12/21
+					$('.sbutton').hide();
+				}
+				
+				/*else if(r_rank<8){
 					$('#btnLabases').hide();
 					$('#btnSaladjust').hide();
 				}*/
