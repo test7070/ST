@@ -65,8 +65,12 @@ from @tmp a order by a.modelno,a.indatea,a.modgno;
 z_model2:--z_model2
 declare @t_bmodelno nvarchar(90)
 declare @t_emodelno nvarchar(90)
+declare @t_bmodgno nvarchar(90)
+declare @t_emodgno nvarchar(90)
 set @t_bmodelno = case when '#non' = [2] then '' else [2] end
 set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
+set @t_bmodgno = case when '#non' = [5] then '' else [5] end
+set @t_emodgno = case when '#non' = [6] then CHAR(255) else [6] end
 declare @tmp table(
 	gno nvarchar(10),
 	idno int identity(0,1),
@@ -89,7 +93,8 @@ insert into @tmp
 	outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
 	outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
 	outer apply(select sum(inmount) mount from moget where (a.noa=modelno) and (len(isnull(insno,'')) > 0)) d
-	where (a.noa between @t_bmodelno and @t_emodelno) and (isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0))>0
+	where (a.noa between @t_bmodelno and @t_emodelno) and (a.modgno between @t_bmodgno and @t_emodgno) 
+			and (isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0))>0
 insert into @tmp
 	select
 		a.*
@@ -147,6 +152,8 @@ select
 	a.stkmount a06,
 	a.ghref
 from @tmp a order by a.modelno,a.models,a.gno,a.datea;
+
+
 -----------------------------------------------------------------------------------------
 z_model3:--z_model3
 declare @t_bmodelno nvarchar(90)
