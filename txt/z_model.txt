@@ -1,19 +1,25 @@
 z_model1:--z_model1
 declare @t_bmodelno nvarchar(90)
 declare @t_emodelno nvarchar(90)
-declare @t_bstationno nvarchar(90)
-declare @t_estationno nvarchar(90)
+declare @t_bmodgno nvarchar(90)
+declare @t_emodgno nvarchar(90)
+--declare @t_bstationno nvarchar(90)
+--declare @t_estationno nvarchar(90)
 set @t_bmodelno = case when '#non' = [2] then '' else [2] end
 set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
-set @t_bstationno = case when '#non' = [5] then '' else [5] end
-set @t_estationno = case when '#non' = [6] then CHAR(255) else [6] end
+set @t_bmodgno = case when '#non' = [5] then '' else [5] end
+set @t_emodgno = case when '#non' = [6] then CHAR(255) else [6] end
+--set @t_bstationno = case when '#non' = [5] then '' else [5] end
+--set @t_estationno = case when '#non' = [6] then CHAR(255) else [6] end
 
 declare @tmp table(
 	gno nvarchar(10),
 	modelno nvarchar(90),
 	models nvarchar(max),
-	stationno nvarchar(90),
-	station nvarchar(90),
+	modgno nvarchar(90),
+	modg nvarchar(90),
+	--stationno nvarchar(90),
+	--station nvarchar(90),
 	agelimit float,
 	indatea nvarchar(10),
 	inmount float,
@@ -24,14 +30,16 @@ declare @tmp table(
 )
 insert into @tmp
 	select
-		'0',a.noa,a.model,a.stationno,a.station,a.yearmount,a.indate,
+		--'0',a.noa,a.model,a.stationno,a.station,a.yearmount,a.indate,
+		'0',a.noa,a.model,a.modgno,a.modg,a.yearmount,a.indate,
 		isnull(a.inmount,0),isnull(b.mount,0),isnull(c.mount,0),isnull(d.mount,0),0
 	from model a
 	outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
 	outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
 	outer apply(select sum(inmount) mount from moget where (a.noa=modelno) and (len(isnull(insno,'')) > 0)) d
 	where (a.noa between @t_bmodelno and @t_emodelno)
-	and isnull(a.stationno,'') between @t_bstationno and @t_estationno
+	and isnull(a.modgno,'') between @t_bmodgno and @t_emodgno
+	--and isnull(a.stationno,'') between @t_bstationno and @t_estationno
 	
 update @tmp set stkmount = inmount-outmount-lendmount+returnmount
 
@@ -39,8 +47,10 @@ select
 	a.gno,
 	a.modelno a01,
 	a.models a02,
-	a.stationno a10,
-	a.station a11,
+	--a.stationno a10,
+	a.modgno a10,
+	--a.station a11,
+	a.modg a11,
 	a.agelimit a03,
 	a.indatea a04,
 	a.inmount a05,
@@ -48,7 +58,9 @@ select
 	a.lendmount a07,
 	a.returnmount a08,
 	a.stkmount a09
-from @tmp a order by a.modelno,a.indatea,a.stationno;
+from @tmp a order by a.modelno,a.indatea,a.modgno;
+
+
 -------------------------------------------------------------------------------------------------------------*
 z_model2:--z_model2
 declare @t_bmodelno nvarchar(90)
