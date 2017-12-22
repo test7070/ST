@@ -464,7 +464,7 @@
 				</table>
 			</div>
 		</div>
-		<div class='dbbs'>
+		<div class='dbbs' style="display: none;"><!--106/12/22 隱藏-->
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
 					<td  align="center" style="width:1%;">

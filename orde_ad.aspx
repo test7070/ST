@@ -158,6 +158,8 @@
 					if (!emp($('#txtCustno').val())) {
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^ stop=100";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
+						
+						checkbbsuca();
 					}
 				});
 
@@ -1144,6 +1146,8 @@
 					return;
 				}*/
 				
+				checkbbsuca();
+				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
@@ -1200,6 +1204,7 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							//q_change($(this), 'ucc', 'noa', 'noa,product,unit');
+							checkbbsuca();
 						});
 
 						$('#txtUnit_' + j).focusout(function() {
@@ -1762,6 +1767,8 @@
 						if (!emp($('#txtCustno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^ stop=100";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
+							
+							checkbbsuca();
 						}
 						break;
 					case 'txtProductno_':
@@ -1838,6 +1845,7 @@
 							//}
 							sum();
 						}
+						checkbbsuca();
 						break;
 				}
 			}
@@ -2054,6 +2062,35 @@
 				}
 			}
 			
+			//106/12/21
+			function checkbbsuca(){
+				if(!emp($('#txtCustno').val())){
+					var t_where='1=0';
+					for(var i=0;i<q_bbsCount;i++){
+						if(!emp($('#txtProductno_'+i).val())){
+							t_where=t_where+" or noa='"+$('#txtProductno_'+i).val()+"'";
+						}
+					}
+					t_where="where=^^("+t_where+") and isnull(custno,'')!='' and isnull(custno,'')!='"+$('#txtCustno').val()+"' ^^";
+					q_gt('uca', t_where, 0, 0, 0, "", r_accy,1);
+					var as = _q_appendData("uca", "", true);
+					var t_err='';
+					for(var i=0;i<as.length;i++){
+						t_err=t_err+'件號:'+as[i].noa+' 專屬客戶【'+as[i].custno+'】與銷售客戶【'+$('#txtCustno').val()+'】不同\n';
+					}
+					if(t_err.length>0){
+						alert(t_err);
+					}
+					//刪除資料行
+					for(var j=0;j<as.length;j++){
+						for(var i=0;i<q_bbsCount;i++){
+							if(as[j].noa==$('#txtProductno_'+i).val()){
+								$('#btnMinus_'+i).click();
+							}
+						}
+					}
+				}
+			}
 		</script>
 		<style type="text/css">
 			#dmain {

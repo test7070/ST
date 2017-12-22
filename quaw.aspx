@@ -18,7 +18,7 @@
 
             q_tables = 't';
             var q_name = "quaw";
-            var q_readonly = ['txtNoa','txtProduct','txtSpec','txtUnit','txtWorker','txtWorker2','textTotal'];
+            var q_readonly = ['txtNoa','txtProduct','txtSpec','txtUnit','txtWorker','txtWorker2','textTotal','txtPackwayno'];
             var q_readonlys = [];
             var q_readonlyt = [];
             var bbmNum = [];
@@ -120,6 +120,11 @@
 						}
 					}
 				});
+				
+				$('#lblPackwayno').click(function() {
+					var t_where = "noa='" + $('#txtProductno').val() + "'";
+					q_box("pack2_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'pack2b', "95%", "95%", '包裝方式');
+				});
             }
 
             function q_funcPost(t_func, result) {
@@ -197,6 +202,33 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
+                	case 'pack2b':
+                		if(q_cur==1 || q_cur==2){
+	                		ret = getb_ret();
+							if (ret != undefined) {
+								$('#txtPackwayno').val(ret[0].packway);
+								//$('#txtPackway').val(ret[0].pack);
+								
+								for (var i = 0; i < q_bbsCount; i++) {
+									//內包裝材1
+									if($('#txtProduct_'+i).val().toUpperCase()=='[PK1]'){
+										$('#txtProductno_'+i).val(ret[0].pk1no);
+										$('#txtProduct_'+i).val(ret[0].pk1);
+									}
+									//內包裝材2
+									if($('#txtProduct_'+i).val().toUpperCase()=='[PK2]'){
+										$('#txtProductno_'+i).val(ret[0].pk2no);
+										$('#txtProduct_'+i).val(ret[0].pk2);
+									}
+									//外包裝材
+									if($('#txtProduct_'+i).val().toUpperCase()=='[PK3]'){
+										$('#txtProductno_'+i).val(ret[0].pk3no);
+										$('#txtProduct_'+i).val(ret[0].pk3);
+									}
+								}
+							}
+						}
+                		break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
@@ -595,6 +627,8 @@
 						</td>
 						<td><input id="txtProductno" type="text" class="txt c1"/></td>
 						<td colspan="3"><input id="txtProduct" type="text" class="txt c1" /></td>
+						<td><span> </span><a id="lblPackwayno" class="lbl btn"> </a></td>
+						<td><input id="txtPackwayno" type="text" class="txt c1"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id="lblSpec" class="lbl"> </a></td>
