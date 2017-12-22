@@ -25,7 +25,7 @@
             var bbsMask = [];
             q_sqlCount = 6;
             brwCount = 6;
-            brwCount2 = 3;
+            brwCount2 = 4;
             brwList = [];
             brwNowPage = 0;
             brwKey = 'Datea';
@@ -52,9 +52,30 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd],['txtYeara', r_pic],['txtCoin', 'AAA']];
                 q_mask(bbmMask);
+                var prec=dec(q_getPara('accc.prec'));
+                bbsNum = [
+                	['txtA01', 15, prec, 1],['txtB01', 15, prec, 1],['txtC01', 15, prec, 1],['txtD01', 15, prec, 1],['txtE01', 15, prec, 1],['txtF01', 15, prec, 1],['txtG01', 15, prec, 1],['txtH01', 15, prec, 1],['txtI01', 15, prec, 1],['txtJ01', 15, prec, 1],['txtK01', 15, prec, 1],['txtL01', 15, prec, 1],['txtM01', 15, prec, 1],['txtN01', 15, prec, 1],['txtO01', 15, prec, 1],['txtP01', 15, prec, 1],['txtQ01', 15, prec, 1],['txtR01', 15, prec, 1],['txtS01', 15, prec, 1],['txtT01', 15, prec, 1],['txtU01', 15, prec, 1],['txtV01', 15, prec, 1],['txtW01', 15, prec, 1],['txtX01', 15, prec, 1],['txtY01', 15, prec, 1],['txtZ01', 15, prec, 1]
+	                ,['txtA02', 15, prec, 1],['txtB02', 15, prec, 1],['txtC02', 15, prec, 1],['txtD02', 15, prec, 1],['txtE02', 15, prec, 1],['txtF02', 15, prec, 1],['txtG02', 15, prec, 1],['txtH02', 15, prec, 1],['txtI02', 15, prec, 1],['txtJ02', 15, prec, 1],['txtK02', 15, prec, 1],['txtL02', 15, prec, 1],['txtM02', 15, prec, 1],['txtN02', 15, prec, 1],['txtO02', 15, prec, 1],['txtP02', 15, prec, 1],['txtQ02', 15, prec, 1],['txtR02', 15, prec, 1],['txtS02', 15, prec, 1],['txtT02', 15, prec, 1],['txtU02', 15, prec, 1],['txtV02', 15, prec, 1],['txtW02', 15, prec, 1],['txtX02', 15, prec, 1],['txtY02', 15, prec, 1],['txtZ02', 15, prec, 1]
+	                ,['txtA03', 15, prec, 1],['txtB03', 15, prec, 1],['txtC03', 15, prec, 1],['txtD03', 15, prec, 1],['txtE03', 15, prec, 1],['txtF03', 15, prec, 1],['txtG03', 15, prec, 1],['txtH03', 15, prec, 1],['txtI03', 15, prec, 1],['txtJ03', 15, prec, 1],['txtK03', 15, prec, 1],['txtL03', 15, prec, 1],['txtM03', 15, prec, 1],['txtN03', 15, prec, 1],['txtO03', 15, prec, 1],['txtP03', 15, prec, 1],['txtQ03', 15, prec, 1],['txtR03', 15, prec, 1],['txtS03', 15, prec, 1],['txtT03', 15, prec, 1],['txtU03', 15, prec, 1],['txtV03', 15, prec, 1],['txtW03', 15, prec, 1],['txtX03', 15, prec, 1],['txtY03', 15, prec, 1],['txtZ03', 15, prec, 1]
+	                ,['txtA04', 15, 5, 1],['txtB04', 15, 5, 1],['txtC04', 15, 5, 1],['txtD04', 15, 5, 1],['txtE04', 15, 5, 1],['txtF04', 15, 5, 1],['txtG04', 15, 5, 1],['txtH04', 15, 5, 1],['txtI04', 15, 5, 1],['txtJ04', 15, 5, 1],['txtK04', 15, 5, 1],['txtL04', 15, 5, 1],['txtM04', 15, 5, 1],['txtN04', 15, 5, 1],['txtO04', 15, 5, 1],['txtP04', 15, 5, 1],['txtQ04', 15, 5, 1],['txtR04', 15, 5, 1],['txtS04', 15, 5, 1],['txtT04', 15, 5, 1],['txtU04', 15, 5, 1],['txtV04', 15, 5, 1],['txtW04', 15, 5, 1],['txtX04', 15, 5, 1],['txtY04', 15, 5, 1],['txtZ04', 15, 5, 1]
+	                ,['txtA05', 15, prec, 1],['txtB05', 15, prec, 1],['txtC05', 15, prec, 1],['txtD05', 15, prec, 1],['txtE05', 15, prec, 1],['txtF05', 15, prec, 1],['txtG05', 15, prec, 1],['txtH05', 15, prec, 1],['txtI05', 15, prec, 1],['txtJ05', 15, prec, 1],['txtK05', 15, prec, 1],['txtL05', 15, prec, 1],['txtM05', 15, prec, 1],['txtN05', 15, prec, 1],['txtO05', 15, prec, 1],['txtP05', 15, prec, 1],['txtQ05', 15, prec, 1],['txtR05', 15, prec, 1],['txtS05', 15, prec, 1],['txtT05', 15, prec, 1],['txtU05', 15, prec, 1],['txtV05', 15, prec, 1],['txtW05', 15, prec, 1],['txtX05', 15, prec, 1],['txtY05', 15, prec, 1],['txtZ05', 15, prec, 1]
+                ];
                 
                 $('#btnMergeacccs').click(function() {
-                	langcopy();
+                	if(!emp($('#txtCno').val()) && !emp($('#txtYeara').val())){
+						var t_hostname=location.hostname;
+	                	q_func('qtxt.query.acif', 'acif.txt,acif,' 
+							+encodeURI(q_getPara('sys.project').toUpperCase())
+							+';'+encodeURI($('#txtCno').val())
+							+';'+encodeURI($('#txtYeara').val())
+							+';'+encodeURI(r_len)
+							+';'+encodeURI(t_hostname)
+							+';'+encodeURI(q_db)
+							+';'+encodeURI(r_userno)
+						);
+					}else{
+						alert('【公司編號】與【立帳年度】禁止空白!!');
+					}
                 });
                 
                 $('#combLang').change(function() {
@@ -110,29 +131,13 @@
                 for (var j = 0; j < q_bbsCount; j++) {
                     $('#lblNo_' + j).text(j + 1);
                     if (!$('#btnMinus_' + j).hasClass('isAssign')){
-                    	
-                    } 
+                    	$('.num').change(function() {
+                    		sum();
+						});
+                    }
                 }
                 _bbsAssign();
                 langcopy();
-                var t_width=14050;//總寬度
-                var t_dwidth=0;//每隱藏一間公司少500
-                //只會用到5間公司
-                if(q_getPara('sys.project').toUpperCase()=='JO' || q_getPara('sys.project').toUpperCase()=='AD'){
-                	//F之後的公司隱藏
-                	//97=a,122=z
-                	for(var i=97;i<=122;i++){
-                		if(i>102){
-                			var tclass=String.fromCharCode(i);
-                			$('.comp-'+tclass).hide();
-                			
-                			t_dwidth=t_dwidth+500;
-                		}
-                	}
-                }
-                t_width=t_width-t_dwidth;
-                $('.dbbs').css('width',t_width.toString()+'px');
-                $('.topbbs').css('width',t_width.toString()+'px');
             }
             
             function langcopy() {
@@ -142,6 +147,8 @@
             	var tlbl4=q_getMsg('lblA04');
             	var tlbl5=q_getMsg('lblA05');
             	//65=A,90=Z
+            	
+            	var t_hidea=0;//本公司隱藏內容
             	for(var i=65;i<=90;i++){
             		var tlbl=String.fromCharCode(i);
             		$('#lbl'+tlbl+'01').text(tlbl1);
@@ -155,10 +162,38 @@
             		var t_cno=$('#txt'+tlbl+'cno').val();
             		
             		$('#labl'+tlbl+'01').html(tlbl+(t_comp.length>0?' '+t_comp:'')+(t_coin.length>0?'<BR>'+t_coin:''));
+            		
+            		//隱藏本公司匯率與轉換後
+            		var ttlbl=String.fromCharCode(i).toLowerCase();
+            		if(t_cno==$('#txtCno').val() && t_cno.length>0){
+            			$('.f'+ttlbl+'4').hide();
+            			$('.f'+ttlbl+'5').hide();
+            			$('#topbbs .comp-'+ttlbl+'').css('width','360px');
+            			t_hidea=240;
+            		}else{
+            			$('#topbbs .comp-'+ttlbl+'').css('width','600px');
+            		}
             	}
             	
-            	
-            	//txtAnick
+            	var t_width=16645;//總寬度
+                var t_dwidth=0;//每隱藏一間公司少600
+                //只會用到5間公司
+                if(q_getPara('sys.project').toUpperCase()=='JO' || q_getPara('sys.project').toUpperCase()=='AD'){
+                	//F之後的公司隱藏
+                	//97=a,122=z
+                	for(var i=97;i<=122;i++){
+                		if(i>102){
+                			var tclass=String.fromCharCode(i);
+                			$('.comp-'+tclass).hide();
+                			
+                			t_dwidth=t_dwidth+600;
+                		}
+                	}
+                }
+                t_width=t_width-t_dwidth-t_hidea;
+                $('.dbbs').css('width',t_width.toString()+'px');
+                $('#tbbs').css('width',t_width.toString()+'px')
+                $('.topbbs').css('width',t_width.toString()+'px');
             }
 
             function btnIns() {
@@ -214,7 +249,77 @@
             }
 
             function sum() {
-                
+            	var prec=dec(q_getPara('accc.prec'));
+				for (var j = 0; j < q_bbsCount; j++) {
+					$('#txtA03_'+j).val(dec($('#txtA01_'+j).val())-dec($('#txtA02_'+j).val()));
+					$('#txtB03_'+j).val(dec($('#txtB01_'+j).val())-dec($('#txtB02_'+j).val()));
+					$('#txtC03_'+j).val(dec($('#txtC01_'+j).val())-dec($('#txtC02_'+j).val()));
+					$('#txtD03_'+j).val(dec($('#txtD01_'+j).val())-dec($('#txtD02_'+j).val()));
+					$('#txtE03_'+j).val(dec($('#txtE01_'+j).val())-dec($('#txtE02_'+j).val()));
+					$('#txtF03_'+j).val(dec($('#txtF01_'+j).val())-dec($('#txtF02_'+j).val()));
+					$('#txtG03_'+j).val(dec($('#txtG01_'+j).val())-dec($('#txtG02_'+j).val()));
+					$('#txtH03_'+j).val(dec($('#txtH01_'+j).val())-dec($('#txtH02_'+j).val()));
+					$('#txtI03_'+j).val(dec($('#txtI01_'+j).val())-dec($('#txtI02_'+j).val()));
+					$('#txtJ03_'+j).val(dec($('#txtJ01_'+j).val())-dec($('#txtJ02_'+j).val()));
+					$('#txtK03_'+j).val(dec($('#txtK01_'+j).val())-dec($('#txtK02_'+j).val()));
+					$('#txtL03_'+j).val(dec($('#txtL01_'+j).val())-dec($('#txtL02_'+j).val()));
+					$('#txtM03_'+j).val(dec($('#txtM01_'+j).val())-dec($('#txtM02_'+j).val()));
+					$('#txtN03_'+j).val(dec($('#txtN01_'+j).val())-dec($('#txtN02_'+j).val()));
+					$('#txtO03_'+j).val(dec($('#txtO01_'+j).val())-dec($('#txtO02_'+j).val()));
+					$('#txtP03_'+j).val(dec($('#txtP01_'+j).val())-dec($('#txtP02_'+j).val()));
+					$('#txtQ03_'+j).val(dec($('#txtQ01_'+j).val())-dec($('#txtQ02_'+j).val()));
+					$('#txtR03_'+j).val(dec($('#txtR01_'+j).val())-dec($('#txtR02_'+j).val()));
+					$('#txtS03_'+j).val(dec($('#txtS01_'+j).val())-dec($('#txtS02_'+j).val()));
+					$('#txtT03_'+j).val(dec($('#txtT01_'+j).val())-dec($('#txtT02_'+j).val()));
+					$('#txtU03_'+j).val(dec($('#txtU01_'+j).val())-dec($('#txtU02_'+j).val()));
+					$('#txtV03_'+j).val(dec($('#txtV01_'+j).val())-dec($('#txtV02_'+j).val()));
+					$('#txtW03_'+j).val(dec($('#txtW01_'+j).val())-dec($('#txtW02_'+j).val()));
+					$('#txtX03_'+j).val(dec($('#txtX01_'+j).val())-dec($('#txtX02_'+j).val()));
+					$('#txtY03_'+j).val(dec($('#txtY01_'+j).val())-dec($('#txtY02_'+j).val()));
+					$('#txtZ03_'+j).val(dec($('#txtZ01_'+j).val())-dec($('#txtZ02_'+j).val()));
+					
+					$('#txtA05_'+j).val(round(q_mul(dec($('#txtA03_'+j).val()),dec($('#txtA04_'+j).val())),prec));
+					$('#txtB05_'+j).val(round(q_mul(dec($('#txtB03_'+j).val()),dec($('#txtB04_'+j).val())),prec));
+					$('#txtC05_'+j).val(round(q_mul(dec($('#txtC03_'+j).val()),dec($('#txtC04_'+j).val())),prec));
+					$('#txtD05_'+j).val(round(q_mul(dec($('#txtD03_'+j).val()),dec($('#txtD04_'+j).val())),prec));
+					$('#txtE05_'+j).val(round(q_mul(dec($('#txtE03_'+j).val()),dec($('#txtE04_'+j).val())),prec));
+					$('#txtF05_'+j).val(round(q_mul(dec($('#txtF03_'+j).val()),dec($('#txtF04_'+j).val())),prec));
+					$('#txtG05_'+j).val(round(q_mul(dec($('#txtG03_'+j).val()),dec($('#txtG04_'+j).val())),prec));
+					$('#txtH05_'+j).val(round(q_mul(dec($('#txtH03_'+j).val()),dec($('#txtH04_'+j).val())),prec));
+					$('#txtI05_'+j).val(round(q_mul(dec($('#txtI03_'+j).val()),dec($('#txtI04_'+j).val())),prec));
+					$('#txtJ05_'+j).val(round(q_mul(dec($('#txtJ03_'+j).val()),dec($('#txtJ04_'+j).val())),prec));
+					$('#txtK05_'+j).val(round(q_mul(dec($('#txtK03_'+j).val()),dec($('#txtK04_'+j).val())),prec));
+					$('#txtL05_'+j).val(round(q_mul(dec($('#txtL03_'+j).val()),dec($('#txtL04_'+j).val())),prec));
+					$('#txtM05_'+j).val(round(q_mul(dec($('#txtM03_'+j).val()),dec($('#txtM04_'+j).val())),prec));
+					$('#txtN05_'+j).val(round(q_mul(dec($('#txtN03_'+j).val()),dec($('#txtN04_'+j).val())),prec));
+					$('#txtO05_'+j).val(round(q_mul(dec($('#txtO03_'+j).val()),dec($('#txtO04_'+j).val())),prec));
+					$('#txtP05_'+j).val(round(q_mul(dec($('#txtP03_'+j).val()),dec($('#txtP04_'+j).val())),prec));
+					$('#txtQ05_'+j).val(round(q_mul(dec($('#txtQ03_'+j).val()),dec($('#txtQ04_'+j).val())),prec));
+					$('#txtR05_'+j).val(round(q_mul(dec($('#txtR03_'+j).val()),dec($('#txtR04_'+j).val())),prec));
+					$('#txtS05_'+j).val(round(q_mul(dec($('#txtS03_'+j).val()),dec($('#txtS04_'+j).val())),prec));
+					$('#txtT05_'+j).val(round(q_mul(dec($('#txtT03_'+j).val()),dec($('#txtT04_'+j).val())),prec));
+					$('#txtU05_'+j).val(round(q_mul(dec($('#txtU03_'+j).val()),dec($('#txtU04_'+j).val())),prec));
+					$('#txtV05_'+j).val(round(q_mul(dec($('#txtV03_'+j).val()),dec($('#txtV04_'+j).val())),prec));
+					$('#txtW05_'+j).val(round(q_mul(dec($('#txtW03_'+j).val()),dec($('#txtW04_'+j).val())),prec));
+					$('#txtX05_'+j).val(round(q_mul(dec($('#txtX03_'+j).val()),dec($('#txtX04_'+j).val())),prec));
+					$('#txtY05_'+j).val(round(q_mul(dec($('#txtY03_'+j).val()),dec($('#txtY04_'+j).val())),prec));
+					$('#txtZ05_'+j).val(round(q_mul(dec($('#txtZ03_'+j).val()),dec($('#txtZ04_'+j).val())),prec));
+                	
+                	//合併總金額
+                	var bmoney=0;
+                	bmoney=dec($('#txtA05_'+j).val())+dec($('#txtB05_'+j).val())+dec($('#txtC05_'+j).val())+
+                	dec($('#txtD05_'+j).val())+dec($('#txtE05_'+j).val())+dec($('#txtF05_'+j).val())+
+                	dec($('#txtG05_'+j).val())+dec($('#txtH05_'+j).val())+dec($('#txtI05_'+j).val())+
+                	dec($('#txtJ05_'+j).val())+dec($('#txtK05_'+j).val())+dec($('#txtL05_'+j).val())+
+                	dec($('#txtM05_'+j).val())+dec($('#txtN05_'+j).val())+dec($('#txtO05_'+j).val())+
+                	dec($('#txtP05_'+j).val())+dec($('#txtQ05_'+j).val())+dec($('#txtR05_'+j).val())+
+                	dec($('#txtS05_'+j).val())+dec($('#txtT05_'+j).val())+dec($('#txtU05_'+j).val())+
+                	dec($('#txtV05_'+j).val())+dec($('#txtW05_'+j).val())+dec($('#txtX05_'+j).val())+
+                	dec($('#txtY05_'+j).val())+dec($('#txtZ05_'+j).val());
+                	$('#txtBmoney_'+j).val(bmoney);
+                	$('#txtEmoney_'+j).val(bmoney+(dec($('#txtDmoney_'+j).val())-dec($('#txtDmoney_'+j).val())));
+                	
+               }
             }
 
             function refresh(recno) {
@@ -223,6 +328,11 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                if(t_para){
+                	$('#btnMergeacccs').attr('disabled', 'disabled');
+                }else{
+                	$('#btnMergeacccs').removeAttr('disabled');
+                }
             }
 
             function btnMinus(id) {
@@ -277,6 +387,144 @@
             function btnCancel() {
                 _btnCancel();
             }
+            
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                	case 'qtxt.query.acif':
+                	var as = _q_appendData("tmp0", "", true, true);
+                	if (as[0] != undefined) {
+                		$('#txtAcno').val(as[0].acno);
+                		$('#txtBcno').val(as[0].bcno);
+                		$('#txtCcno').val(as[0].ccno);
+                		$('#txtDcno').val(as[0].dcno);
+                		$('#txtEcno').val(as[0].ecno);
+                		$('#txtFcno').val(as[0].fcno);
+                		$('#txtGcno').val(as[0].gcno);
+                		$('#txtHcno').val(as[0].hcno);
+                		$('#txtIcno').val(as[0].icno);
+                		$('#txtJcno').val(as[0].jcno);
+                		$('#txtKcno').val(as[0].kcno);
+                		$('#txtLcno').val(as[0].lcno);
+                		$('#txtMcno').val(as[0].mcno);
+                		$('#txtNcno').val(as[0].ncno);
+                		$('#txtOcno').val(as[0].ocno);
+                		$('#txtPcno').val(as[0].pcno);
+                		$('#txtQcno').val(as[0].qcno);
+                		$('#txtRcno').val(as[0].rcno);
+                		$('#txtScno').val(as[0].scno);
+                		$('#txtTcno').val(as[0].tcno);
+                		$('#txtUcno').val(as[0].ucno);
+                		$('#txtVcno').val(as[0].vcno);
+                		$('#txtWcno').val(as[0].wcno);
+                		$('#txtXcno').val(as[0].xcno);
+                		$('#txtYcno').val(as[0].ycno);
+                		$('#txtZcno').val(as[0].zcno);
+                		
+                		$('#txtAcomp').val(as[0].acomp);
+                		$('#txtBcomp').val(as[0].bcomp);
+                		$('#txtCcomp').val(as[0].ccomp);
+                		$('#txtDcomp').val(as[0].dcomp);
+                		$('#txtEcomp').val(as[0].ecomp);
+                		$('#txtFcomp').val(as[0].fcomp);
+                		$('#txtGcomp').val(as[0].gcomp);
+                		$('#txtHcomp').val(as[0].hcomp);
+                		$('#txtIcomp').val(as[0].icomp);
+                		$('#txtJcomp').val(as[0].jcomp);
+                		$('#txtKcomp').val(as[0].kcomp);
+                		$('#txtLcomp').val(as[0].lcomp);
+                		$('#txtMcomp').val(as[0].mcomp);
+                		$('#txtNcomp').val(as[0].ncomp);
+                		$('#txtOcomp').val(as[0].ocomp);
+                		$('#txtPcomp').val(as[0].pcomp);
+                		$('#txtQcomp').val(as[0].qcomp);
+                		$('#txtRcomp').val(as[0].rcomp);
+                		$('#txtScomp').val(as[0].scomp);
+                		$('#txtTcomp').val(as[0].tcomp);
+                		$('#txtUcomp').val(as[0].ucomp);
+                		$('#txtVcomp').val(as[0].vcomp);
+                		$('#txtWcomp').val(as[0].wcomp);
+                		$('#txtXcomp').val(as[0].xcomp);
+                		$('#txtYcomp').val(as[0].ycomp);
+                		$('#txtZcomp').val(as[0].zcomp);
+                		
+                		$('#txtAnick').val(as[0].anick);
+                		$('#txtBnick').val(as[0].bnick);
+                		$('#txtCnick').val(as[0].cnick);
+                		$('#txtDnick').val(as[0].dnick);
+                		$('#txtEnick').val(as[0].enick);
+                		$('#txtFnick').val(as[0].fnick);
+                		$('#txtGnick').val(as[0].gnick);
+                		$('#txtHnick').val(as[0].hnick);
+                		$('#txtInick').val(as[0].inick);
+                		$('#txtJnick').val(as[0].jnick);
+                		$('#txtKnick').val(as[0].knick);
+                		$('#txtLnick').val(as[0].lnick);
+                		$('#txtMnick').val(as[0].mnick);
+                		$('#txtNnick').val(as[0].nnick);
+                		$('#txtOnick').val(as[0].onick);
+                		$('#txtPnick').val(as[0].pnick);
+                		$('#txtQnick').val(as[0].qnick);
+                		$('#txtRnick').val(as[0].rnick);
+                		$('#txtSnick').val(as[0].snick);
+                		$('#txtTnick').val(as[0].tnick);
+                		$('#txtUnick').val(as[0].unick);
+                		$('#txtVnick').val(as[0].vnick);
+                		$('#txtWnick').val(as[0].wnick);
+                		$('#txtXnick').val(as[0].xnick);
+                		$('#txtYnick').val(as[0].ynick);
+                		$('#txtZnick').val(as[0].znick);
+                		
+                		$('#txtAcoin').val(as[0].acoin);
+                		$('#txtBcoin').val(as[0].bcoin);
+                		$('#txtCcoin').val(as[0].ccoin);
+                		$('#txtDcoin').val(as[0].dcoin);
+                		$('#txtEcoin').val(as[0].ecoin);
+                		$('#txtFcoin').val(as[0].fcoin);
+                		$('#txtGcoin').val(as[0].gcoin);
+                		$('#txtHcoin').val(as[0].hcoin);
+                		$('#txtIcoin').val(as[0].icoin);
+                		$('#txtJcoin').val(as[0].jcoin);
+                		$('#txtKcoin').val(as[0].kcoin);
+                		$('#txtLcoin').val(as[0].lcoin);
+                		$('#txtMcoin').val(as[0].mcoin);
+                		$('#txtNcoin').val(as[0].ncoin);
+                		$('#txtOcoin').val(as[0].ocoin);
+                		$('#txtPcoin').val(as[0].pcoin);
+                		$('#txtQcoin').val(as[0].qcoin);
+                		$('#txtRcoin').val(as[0].rcoin);
+                		$('#txtScoin').val(as[0].scoin);
+                		$('#txtTcoin').val(as[0].tcoin);
+                		$('#txtUcoin').val(as[0].ucoin);
+                		$('#txtVcoin').val(as[0].vcoin);
+                		$('#txtWcoin').val(as[0].wcoin);
+                		$('#txtXcoin').val(as[0].xcoin);
+                		$('#txtYcoin').val(as[0].ycoin);
+                		$('#txtZcoin').val(as[0].zcoin);
+                		
+                		//清除表身
+                		for (var j = 0; j < q_bbsCount; j++) {
+                			$('#btnMinus_'+j).click();
+                		}
+                		
+                		for (var i = 0; i < as.length; i++) {
+                			if(as[i].tacc1=='1ZZ.'){ //資產-總計：
+                				as[i].acc1='';
+                			}	
+                		}
+                		
+                		q_gridAddRow(bbsHtm, 'tbbs'
+                		, 'txtAcc1,txtAcc2,txtA01,txtA02,txtA03,txtA04,txtA05,txtB01,txtB02,txtB03,txtB04,txtB05,txtC01,txtC02,txtC03,txtC04,txtC05,txtD01,txtD02,txtD03,txtD04,txtD05,txtE01,txtE02,txtE03,txtE04,txtE05,txtF01,txtF02,txtF03,txtF04,txtF05,txtG01,txtG02,txtG03,txtG04,txtG05,txtH01,txtH02,txtH03,txtH04,txtH05,txtI01,txtI02,txtI03,txtI04,txtI05,txtJ01,txtJ02,txtJ03,txtJ04,txtJ05,txtK01,txtK02,txtK03,txtK04,txtK05,txtL01,txtL02,txtL03,txtL04,txtL05,txtM01,txtM02,txtM03,txtM04,txtM05,txtN01,txtN02,txtN03,txtN04,txtN05,txtO01,txtO02,txtO03,txtO04,txtO05,txtP01,txtP02,txtP03,txtP04,txtP05,txtQ01,txtQ02,txtQ03,txtQ04,txtQ05,txtR01,txtR02,txtR03,txtR04,txtR05,txtS01,txtS02,txtS03,txtS04,txtS05,txtT01,txtT02,txtT03,txtT04,txtT05,txtU01,txtU02,txtU03,txtU04,txtU05,txtV01,txtV02,txtV03,txtV04,txtV05,txtW01,txtW02,txtW03,txtW04,txtW05,txtX01,txtX02,txtX03,txtX04,txtX05,txtY01,txtY02,txtY03,txtY04,txtY05,txtZ01,txtZ02,txtZ03,txtZ04,txtZ05'
+                		, as.length, as
+                		, 'acc1,acc2,a01,a02,a03,a04,a05,b01,b02,b03,b04,b05,c01,c02,c03,c04,c05,d01,d02,d03,d04,d05,e01,e02,e03,e04,e05,f01,f02,f03,f04,f05,g01,g02,g03,g04,g05,h01,h02,h03,h04,h05,i01,i02,i03,i04,i05,j01,j02,j03,j04,j05,k01,k02,k03,k04,k05,l01,l02,l03,l04,l05,m01,m02,m03,m04,m05,n01,n02,n03,n04,n05,o01,o02,o03,o04,o05,p01,p02,p03,p04,p05,q01,q02,q03,q04,q05,r01,r02,r03,r04,r05,s01,s02,s03,s04,s05,t01,t02,t03,t04,t05,u01,u02,u03,u04,u05,v01,v02,v03,v04,v05,w01,w02,w03,w04,w05,x01,x02,x03,x04,x05,y01,y02,y03,y04,y05,z01,z02,z03,z04,z05', 'txtAcc1', '');
+                		
+                		sum();
+                	}else{
+                		alert('無會計資料!!');
+                	}
+                	langcopy();
+                	break;
+                }
+			}
 		</script>
 		<style type="text/css">
             #dmain {
@@ -369,7 +617,7 @@
                 margin: -1px;
             }
             .dbbs {
-                width: 14050px;
+                width: 16645px;
             }
             .tbbs a {
                 font-size: medium;
@@ -490,36 +738,36 @@
 			</div>
 		</div>
 		<!--VVV抬頭用VVV-->
-		<div class='topbbs' style="width: 14050px;margin-bottom: -2px;">
+		<div class='topbbs' style="width: 16645px;margin-bottom: -2px;">
 			<table id="topbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;'>
 					<td align="center" style="width:445px;"><a id='lblAcc'> </a></td>
-					<td align="center" style="width:500px;" class="comp-a"><a id='lablA01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-b"><a id='lablB01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-c"><a id='lablC01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-d"><a id='lablD01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-e"><a id='lablE01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-f"><a id='lablF01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-g"><a id='lablG01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-h"><a id='lablH01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-i"><a id='lablI01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-j"><a id='lablJ01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-k"><a id='lablK01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-l"><a id='lablL01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-m"><a id='lablM01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-n"><a id='lablN01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-o"><a id='lablO01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-p"><a id='lablP01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-q"><a id='lablQ01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-r"><a id='lablR01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-s"><a id='lablS01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-t"><a id='lablT01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-u"><a id='lablU01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-v"><a id='lablV01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-w"><a id='lablW01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-x"><a id='lablX01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-y"><a id='lablY01'> </a></td>
-					<td align="center" style="width:500px;" class="comp-z"><a id='lablZ01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-a"><a id='lablA01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-b"><a id='lablB01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-c"><a id='lablC01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-d"><a id='lablD01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-e"><a id='lablE01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-f"><a id='lablF01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-g"><a id='lablG01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-h"><a id='lablH01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-i"><a id='lablI01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-j"><a id='lablJ01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-k"><a id='lablK01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-l"><a id='lablL01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-m"><a id='lablM01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-n"><a id='lablN01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-o"><a id='lablO01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-p"><a id='lablP01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-q"><a id='lablQ01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-r"><a id='lablR01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-s"><a id='lablS01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-t"><a id='lablT01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-u"><a id='lablU01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-v"><a id='lablV01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-w"><a id='lablW01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-x"><a id='lablX01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-y"><a id='lablY01'> </a></td>
+					<td align="center" style="width:550px;" class="comp-z"><a id='lablZ01'> </a></td>
 					<td align="center" style="width:600px;"><a id='lblMerge'> </a></td>
 				</tr>
 			</table>
@@ -530,138 +778,138 @@
 				<tr style='color:white; background:#003366;' >
 					<td align="center" style="width:35px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:40px;"> </td>
-					<td align="center" style="width:170px;"><a id='lblAcc1'> </a></td>
-					<td align="center" style="width:200px;"><a id='lblAcc2'> </a></td>
-					<td align="center" style="width:100px;" class="comp-a"><a id='lblA01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-a"><a id='lblA02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-a"><a id='lblA03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-a"><a id='lblA04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-a"><a id='lblA05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-b"><a id='lblB01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-b"><a id='lblB02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-b"><a id='lblB03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-b"><a id='lblB04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-b"><a id='lblB05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-c"><a id='lblC01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-c"><a id='lblC02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-c"><a id='lblC03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-c"><a id='lblC04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-c"><a id='lblC05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-d"><a id='lblD01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-d"><a id='lblD02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-d"><a id='lblD03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-d"><a id='lblD04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-d"><a id='lblD05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-e"><a id='lblE01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-e"><a id='lblE02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-e"><a id='lblE03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-e"><a id='lblE04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-e"><a id='lblE05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-f"><a id='lblF01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-f"><a id='lblF02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-f"><a id='lblF03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-f"><a id='lblF04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-f"><a id='lblF05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-g"><a id='lblG01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-g"><a id='lblG02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-g"><a id='lblG03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-g"><a id='lblG04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-g"><a id='lblG05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-h"><a id='lblH01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-h"><a id='lblH02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-h"><a id='lblH03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-h"><a id='lblH04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-h"><a id='lblH05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-i"><a id='lblI01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-i"><a id='lblI02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-i"><a id='lblI03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-i"><a id='lblI04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-i"><a id='lblI05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-j"><a id='lblJ01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-j"><a id='lblJ02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-j"><a id='lblJ03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-j"><a id='lblJ04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-j"><a id='lblJ05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-k"><a id='lblK01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-k"><a id='lblK02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-k"><a id='lblK03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-k"><a id='lblK04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-k"><a id='lblK05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-l"><a id='lblL01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-l"><a id='lblL02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-l"><a id='lblL03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-l"><a id='lblL04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-l"><a id='lblL05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-m"><a id='lblM01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-m"><a id='lblM02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-m"><a id='lblM03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-m"><a id='lblM04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-m"><a id='lblM05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-n"><a id='lblN01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-n"><a id='lblN02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-n"><a id='lblN03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-n"><a id='lblN04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-n"><a id='lblN05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-o"><a id='lblO01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-o"><a id='lblO02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-o"><a id='lblO03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-o"><a id='lblO04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-o"><a id='lblO05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-p"><a id='lblP01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-p"><a id='lblP02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-p"><a id='lblP03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-p"><a id='lblP04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-p"><a id='lblP05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-q"><a id='lblQ01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-q"><a id='lblQ02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-q"><a id='lblQ03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-q"><a id='lblQ04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-q"><a id='lblQ05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-r"><a id='lblR01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-r"><a id='lblR02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-r"><a id='lblR03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-r"><a id='lblR04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-r"><a id='lblR05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-s"><a id='lblS01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-s"><a id='lblS02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-s"><a id='lblS03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-s"><a id='lblS04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-s"><a id='lblS05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-t"><a id='lblT01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-t"><a id='lblT02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-t"><a id='lblT03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-t"><a id='lblT04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-t"><a id='lblT05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-u"><a id='lblU01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-u"><a id='lblU02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-u"><a id='lblU03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-u"><a id='lblU04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-u"><a id='lblU05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-v"><a id='lblV01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-v"><a id='lblV02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-v"><a id='lblV03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-v"><a id='lblV04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-v"><a id='lblV05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-w"><a id='lblW01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-w"><a id='lblW02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-w"><a id='lblW03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-w"><a id='lblW04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-w"><a id='lblW05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-x"><a id='lblX01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-x"><a id='lblX02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-x"><a id='lblX03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-x"><a id='lblX04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-x"><a id='lblX05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-y"><a id='lblY01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-y"><a id='lblY02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-y"><a id='lblY03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-y"><a id='lblY04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-y"><a id='lblY05'> </a></td>
-					<td align="center" style="width:100px;" class="comp-z"><a id='lblZ01'> </a></td>
-					<td align="center" style="width:100px;" class="comp-z"><a id='lblZ02'> </a></td>
-					<td align="center" style="width:100px;" class="comp-z"><a id='lblZ03'> </a></td>
-					<td align="center" style="width:100px;" class="comp-z"><a id='lblZ04'> </a></td>
-					<td align="center" style="width:100px;" class="comp-z"><a id='lblZ05'> </a></td>
+					<td align="center" style="width:140px;"><a id='lblAcc1'> </a></td>
+					<td align="center" style="width:230px;"><a id='lblAcc2'> </a></td>
+					<td align="center" style="width:120px;" class="comp-a fa1"><a id='lblA01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-a fa2"><a id='lblA02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-a fa3"><a id='lblA03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-a fa4"><a id='lblA04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-a fa5"><a id='lblA05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-b fb1"><a id='lblB01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-b fb2"><a id='lblB02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-b fb3"><a id='lblB03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-b fb4"><a id='lblB04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-b fb5"><a id='lblB05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-c fc1"><a id='lblC01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-c fc2"><a id='lblC02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-c fc3"><a id='lblC03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-c fc4"><a id='lblC04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-c fc5"><a id='lblC05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-d fd1"><a id='lblD01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-d fd2"><a id='lblD02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-d fd3"><a id='lblD03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-d fd4"><a id='lblD04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-d fd5"><a id='lblD05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-e fe1"><a id='lblE01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-e fe2"><a id='lblE02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-e fe3"><a id='lblE03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-e fe4"><a id='lblE04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-e fe5"><a id='lblE05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-f ff1"><a id='lblF01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-f ff2"><a id='lblF02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-f ff3"><a id='lblF03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-f ff4"><a id='lblF04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-f ff5"><a id='lblF05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-g fg1"><a id='lblG01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-g fg2"><a id='lblG02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-g fg3"><a id='lblG03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-g fg4"><a id='lblG04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-g fg5"><a id='lblG05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-h fh1"><a id='lblH01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-h fh2"><a id='lblH02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-h fh3"><a id='lblH03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-h fh4"><a id='lblH04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-h fh5"><a id='lblH05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-i fi1"><a id='lblI01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-i fi2"><a id='lblI02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-i fi3"><a id='lblI03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-i fi4"><a id='lblI04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-i fi5"><a id='lblI05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-j fj1"><a id='lblJ01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-j fj2"><a id='lblJ02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-j fj3"><a id='lblJ03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-j fj4"><a id='lblJ04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-j fj5"><a id='lblJ05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-k fk1"><a id='lblK01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-k fk2"><a id='lblK02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-k fk3"><a id='lblK03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-k fk4"><a id='lblK04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-k fk5"><a id='lblK05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-l fl1"><a id='lblL01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-l fl2"><a id='lblL02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-l fl3"><a id='lblL03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-l fl4"><a id='lblL04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-l fl5"><a id='lblL05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-m fm1"><a id='lblM01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-m fm2"><a id='lblM02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-m fm3"><a id='lblM03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-m fm4"><a id='lblM04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-m fm5"><a id='lblM05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-n fn1"><a id='lblN01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-n fn2"><a id='lblN02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-n fn3"><a id='lblN03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-n fn4"><a id='lblN04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-n fn5"><a id='lblN05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-o fo1"><a id='lblO01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-o fo2"><a id='lblO02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-o fo3"><a id='lblO03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-o fo4"><a id='lblO04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-o fo5"><a id='lblO05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-p fp1"><a id='lblP01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-p fp2"><a id='lblP02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-p fp3"><a id='lblP03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-p fp4"><a id='lblP04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-p fp5"><a id='lblP05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-q fq1"><a id='lblQ01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-q fq2"><a id='lblQ02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-q fq3"><a id='lblQ03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-q fq4"><a id='lblQ04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-q fq5"><a id='lblQ05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-r fr1"><a id='lblR01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-r fr2"><a id='lblR02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-r fr3"><a id='lblR03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-r fr4"><a id='lblR04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-r fr5"><a id='lblR05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-s fs1"><a id='lblS01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-s fs2"><a id='lblS02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-s fs3"><a id='lblS03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-s fs4"><a id='lblS04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-s fs5"><a id='lblS05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-t ft1"><a id='lblT01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-t ft2"><a id='lblT02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-t ft3"><a id='lblT03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-t ft4"><a id='lblT04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-t ft5"><a id='lblT05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-u fu1"><a id='lblU01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-u fu2"><a id='lblU02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-u fu3"><a id='lblU03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-u fu4"><a id='lblU04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-u fu5"><a id='lblU05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-v fv1"><a id='lblV01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-v fv2"><a id='lblV02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-v fv3"><a id='lblV03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-v fv4"><a id='lblV04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-v fv5"><a id='lblV05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-w fw1"><a id='lblW01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-w fw2"><a id='lblW02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-w fw3"><a id='lblW03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-w fw4"><a id='lblW04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-w fw5"><a id='lblW05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-x fx1"><a id='lblX01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-x fx2"><a id='lblX02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-x fx3"><a id='lblX03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-x fx4"><a id='lblX04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-x fx5"><a id='lblX05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-y fy1"><a id='lblY01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-y fy2"><a id='lblY02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-y fy3"><a id='lblY03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-y fy4"><a id='lblY04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-y fy5"><a id='lblY05'> </a></td>
+					<td align="center" style="width:120px;" class="comp-z fz1"><a id='lblZ01'> </a></td>
+					<td align="center" style="width:120px;" class="comp-z fz2"><a id='lblZ02'> </a></td>
+					<td align="center" style="width:120px;" class="comp-z fz3"><a id='lblZ03'> </a></td>
+					<td align="center" style="width:120px;" class="comp-z fz4"><a id='lblZ04'> </a></td>
+					<td align="center" style="width:120px;" class="comp-z fz5"><a id='lblZ05'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblBmoney'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblDmoney'> </a></td>
 					<td align="center" style="width:150px;"><a id='lblCmoney'> </a></td>
@@ -676,139 +924,139 @@
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
 						<input id="btnAcc.*" type="button" value="." style="float:left;width: 10px;"/>
-						<input id="txtAcc1.*" type="text" style="float:left;width: 85%;" />
+						<input id="txtAcc1.*" type="text" style="float:left;width: 84%;" />
 					</td>
 					<td><input id="txtAcc2.*" type="text" class="txt c1"/></td>
-					<td class="comp-a"><input id="txtA01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-a"><input id="txtA02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-a"><input id="txtA03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-a"><input id="txtA04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-a"><input id="txtA05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-b"><input id="txtB01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-b"><input id="txtB02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-b"><input id="txtB03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-b"><input id="txtB04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-b"><input id="txtB05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-c"><input id="txtC01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-c"><input id="txtC02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-c"><input id="txtC03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-c"><input id="txtC04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-c"><input id="txtC05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-d"><input id="txtD01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-d"><input id="txtD02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-d"><input id="txtD03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-d"><input id="txtD04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-d"><input id="txtD05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-e"><input id="txtE01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-e"><input id="txtE02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-e"><input id="txtE03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-e"><input id="txtE04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-e"><input id="txtE05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-f"><input id="txtF01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-f"><input id="txtF02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-f"><input id="txtF03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-f"><input id="txtF04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-f"><input id="txtF05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-g"><input id="txtG01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-g"><input id="txtG02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-g"><input id="txtG03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-g"><input id="txtG04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-g"><input id="txtG05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-h"><input id="txtH01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-h"><input id="txtH02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-h"><input id="txtH03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-h"><input id="txtH04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-h"><input id="txtH05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-i"><input id="txtI01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-i"><input id="txtI02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-i"><input id="txtI03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-i"><input id="txtI04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-i"><input id="txtI05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-j"><input id="txtJ01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-j"><input id="txtJ02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-j"><input id="txtJ03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-j"><input id="txtJ04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-j"><input id="txtJ05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-k"><input id="txtK01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-k"><input id="txtK02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-k"><input id="txtK03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-k"><input id="txtK04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-k"><input id="txtK05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-l"><input id="txtL01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-l"><input id="txtL02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-l"><input id="txtL03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-l"><input id="txtL04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-l"><input id="txtL05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-m"><input id="txtM01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-m"><input id="txtM02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-m"><input id="txtM03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-m"><input id="txtM04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-m"><input id="txtM05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-n"><input id="txtN01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-n"><input id="txtN02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-n"><input id="txtN03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-n"><input id="txtN04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-n"><input id="txtN05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-o"><input id="txtO01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-o"><input id="txtO02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-o"><input id="txtO03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-o"><input id="txtO04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-o"><input id="txtO05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-p"><input id="txtP01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-p"><input id="txtP02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-p"><input id="txtP03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-p"><input id="txtP04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-p"><input id="txtP05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-q"><input id="txtQ01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-q"><input id="txtQ02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-q"><input id="txtQ03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-q"><input id="txtQ04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-q"><input id="txtQ05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-r"><input id="txtR01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-r"><input id="txtR02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-r"><input id="txtR03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-r"><input id="txtR04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-r"><input id="txtR05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-s"><input id="txtS01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-s"><input id="txtS02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-s"><input id="txtS03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-s"><input id="txtS04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-s"><input id="txtS05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-t"><input id="txtT01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-t"><input id="txtT02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-t"><input id="txtT03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-t"><input id="txtT04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-t"><input id="txtT05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-u"><input id="txtU01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-u"><input id="txtU02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-u"><input id="txtU03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-u"><input id="txtU04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-u"><input id="txtU05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-v"><input id="txtV01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-v"><input id="txtV02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-v"><input id="txtV03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-v"><input id="txtV04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-v"><input id="txtV05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-w"><input id="txtW01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-w"><input id="txtW02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-w"><input id="txtW03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-w"><input id="txtW04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-w"><input id="txtW05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-x"><input id="txtX01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-x"><input id="txtX02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-x"><input id="txtX03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-x"><input id="txtX04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-x"><input id="txtX05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-y"><input id="txtY01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-y"><input id="txtY02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-y"><input id="txtY03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-y"><input id="txtY04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-y"><input id="txtY05.*" type="text" class="txt num c1"/></td>
-					<td class="comp-z"><input id="txtZ01.*" type="text" class="txt num c1"/></td>
-					<td class="comp-z"><input id="txtZ02.*" type="text" class="txt num c1"/></td>
-					<td class="comp-z"><input id="txtZ03.*" type="text" class="txt num c1"/></td>
-					<td class="comp-z"><input id="txtZ04.*" type="text" class="txt num c1"/></td>
-					<td class="comp-z"><input id="txtZ05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-a fa1"><input id="txtA01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-a fa2"><input id="txtA02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-a fa3"><input id="txtA03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-a fa4"><input id="txtA04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-a fa5"><input id="txtA05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-b fb1"><input id="txtB01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-b fb2"><input id="txtB02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-b fb3"><input id="txtB03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-b fb4"><input id="txtB04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-b fb5"><input id="txtB05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-c fc1"><input id="txtC01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-c fc2"><input id="txtC02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-c fc3"><input id="txtC03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-c fc4"><input id="txtC04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-c fc5"><input id="txtC05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-d fd1"><input id="txtD01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-d fd2"><input id="txtD02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-d fd3"><input id="txtD03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-d fd4"><input id="txtD04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-d fd5"><input id="txtD05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-e fe1"><input id="txtE01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-e fe2"><input id="txtE02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-e fe3"><input id="txtE03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-e fe4"><input id="txtE04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-e fe5"><input id="txtE05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-f ff1"><input id="txtF01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-f ff2"><input id="txtF02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-f ff3"><input id="txtF03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-f ff4"><input id="txtF04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-f ff5"><input id="txtF05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-g fg1"><input id="txtG01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-g fg2"><input id="txtG02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-g fg3"><input id="txtG03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-g fg4"><input id="txtG04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-g fg5"><input id="txtG05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-h fh1"><input id="txtH01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-h fh2"><input id="txtH02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-h fh3"><input id="txtH03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-h fh4"><input id="txtH04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-h fh5"><input id="txtH05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-i fi1"><input id="txtI01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-i fi2"><input id="txtI02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-i fi3"><input id="txtI03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-i fi4"><input id="txtI04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-i fi5"><input id="txtI05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-j fj1"><input id="txtJ01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-j fj2"><input id="txtJ02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-j fj3"><input id="txtJ03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-j fj4"><input id="txtJ04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-j fj5"><input id="txtJ05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-k fk1"><input id="txtK01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-k fk2"><input id="txtK02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-k fk3"><input id="txtK03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-k fk4"><input id="txtK04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-k fk5"><input id="txtK05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-l fl1"><input id="txtL01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-l fl2"><input id="txtL02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-l fl3"><input id="txtL03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-l fl4"><input id="txtL04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-l fl5"><input id="txtL05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-m fm1"><input id="txtM01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-m fm2"><input id="txtM02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-m fm3"><input id="txtM03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-m fm4"><input id="txtM04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-m fm5"><input id="txtM05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-n fn1"><input id="txtN01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-n fn2"><input id="txtN02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-n fn3"><input id="txtN03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-n fn4"><input id="txtN04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-n fn5"><input id="txtN05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-o fo1"><input id="txtO01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-o fo2"><input id="txtO02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-o fo3"><input id="txtO03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-o fo4"><input id="txtO04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-o fo5"><input id="txtO05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-p fp1"><input id="txtP01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-p fp2"><input id="txtP02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-p fp3"><input id="txtP03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-p fp4"><input id="txtP04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-p fp5"><input id="txtP05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-q fq1"><input id="txtQ01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-q fq2"><input id="txtQ02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-q fq3"><input id="txtQ03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-q fq4"><input id="txtQ04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-q fq5"><input id="txtQ05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-r fr1"><input id="txtR01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-r fr2"><input id="txtR02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-r fr3"><input id="txtR03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-r fr4"><input id="txtR04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-r fr5"><input id="txtR05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-s fs1"><input id="txtS01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-s fs2"><input id="txtS02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-s fs3"><input id="txtS03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-s fs4"><input id="txtS04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-s fs5"><input id="txtS05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-t ft1"><input id="txtT01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-t ft2"><input id="txtT02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-t ft3"><input id="txtT03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-t ft4"><input id="txtT04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-t ft5"><input id="txtT05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-u fu1"><input id="txtU01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-u fu2"><input id="txtU02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-u fu3"><input id="txtU03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-u fu4"><input id="txtU04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-u fu5"><input id="txtU05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-v fv1"><input id="txtV01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-v fv2"><input id="txtV02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-v fv3"><input id="txtV03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-v fv4"><input id="txtV04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-v fv5"><input id="txtV05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-w fw1"><input id="txtW01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-w fw2"><input id="txtW02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-w fw3"><input id="txtW03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-w fw4"><input id="txtW04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-w fw5"><input id="txtW05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-x fx1"><input id="txtX01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-x fx2"><input id="txtX02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-x fx3"><input id="txtX03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-x fx4"><input id="txtX04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-x fx5"><input id="txtX05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-y fy1"><input id="txtY01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-y fy2"><input id="txtY02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-y fy3"><input id="txtY03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-y fy4"><input id="txtY04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-y fy5"><input id="txtY05.*" type="text" class="txt num c1"/></td>
+					<td class="comp-z fz1"><input id="txtZ01.*" type="text" class="txt num c1"/></td>
+					<td class="comp-z fz2"><input id="txtZ02.*" type="text" class="txt num c1"/></td>
+					<td class="comp-z fz3"><input id="txtZ03.*" type="text" class="txt num c1"/></td>
+					<td class="comp-z fz4"><input id="txtZ04.*" type="text" class="txt num c1"/></td>
+					<td class="comp-z fz5"><input id="txtZ05.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtBmoney.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtDmoney.*" type="text" class="txt num c1"/></td>
 					<td><input id="txtCmoney.*" type="text" class="txt num c1"/></td>
