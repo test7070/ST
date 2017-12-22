@@ -388,7 +388,7 @@ SET QUOTED_IDENTIFIER OFF
 set @t_xnoa = ltrim(rtrim(@t_xnoa))
 set @t_xno2 = ltrim(rtrim(@t_xno2))
 
-declare @tmp table(
+	declare @tmp table(
 		sel int identity(1,1),
 		gno nvarchar(10),
 		tablea nvarchar(50),
@@ -442,6 +442,7 @@ declare @tmp table(
 		,mount
 		,isnull(coin+' ','')+dbo.getComma(price,-1) price
 		,weight,uno,memo
+		,'廠商' cstore
 		from @tmp order by datea desc,ordcno2,destnoa,destno2
 	end
 	else
@@ -492,5 +493,6 @@ declare @tmp table(
 		,mount
 		,isnull(coin+' ','')+dbo.getComma(price,-1) price
 		,weight,uno,memo
+		,'倉庫' cstore
 		from @tmp order by ordcnoa,gno,datea desc,ordcno2,destnoa,destno2
 	end;
