@@ -91,7 +91,7 @@ insert into @tmp
 	outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
 	outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
 	outer apply(select sum(inmount) mount from moget where (a.noa=modelno) and (len(isnull(insno,'')) > 0)) d
-	where (a.noa between @t_bmodelno and @t_emodelno) and (isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0))>0
+	where (a.noa between @t_bmodelno and @t_emodelno) and (a.modgno between @t_bmodgno and @t_emodgno) and (isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0))>0
 
 insert into @tmp
 	select
