@@ -93,12 +93,12 @@
 			and	 len(isnull(a.ucolor,''))>0 
 			--------------------------------------------------------------------
 			declare @maxnoq nvarchar = '000'
-			select @maxnoq = MAX(noq) from #cub2get where len(ISNULL(noq,''))>0
+			select top 1 @maxnoq = cast(noq as int) from #cub2get order by cast(isnull(noq,0) as int) desc
 			declare @max int = cast(isnull(@maxnoq,'0') as int)
-			
-			update #cub2get set noq=right('00'+CAST(b.recno as nvarchar),3)
+	
+			update #cub2get set noq=right('00'+CAST(b.recno+@max as nvarchar),3)
 			from #cub2get a
-			left join (select sel,ROW_NUMBER()over(order by sel) recno from #cub2get) b on a.sel=b.sel
+			left join (select sel,ROW_NUMBER()over(order by sel) recno from #cub2get where len(ISNULL(noq,'')) = 0) b on a.sel=b.sel
 			where len(ISNULL(noq,'')) = 0
 
 			Begin Transaction [Trans_Name]
@@ -136,6 +136,7 @@
 			end try
 			begin catch
 				Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
+				select ERROR_MESSAGE()
 			end catch
 		end
 	end;
