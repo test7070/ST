@@ -163,6 +163,85 @@ z_model3:--z_model3
 --set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
 declare @t_bmodelno nvarchar(90) = case when '#non' = [2] then '' else [2] end
 declare @t_emodelno nvarchar(90) = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_enda nvarchar(90)=[4]
+declare @t_bmodgno nvarchar(90) = case when '#non' = [5] then '' else [5] end
+declare @t_emodgno nvarchar(90) = case when '#non' = [6] then CHAR(255) else [6] end
+declare @tmp table(
+	rr int,
+	datea nvarchar(10),
+	modelno nvarchar(100),
+	modela nvarchar(200),
+	mount float,
+	typea nvarchar(20),
+	modnoa nvarchar(50),--模具編號
+	model nvarchar(100),--模具名稱
+	modgno nvarchar(90),--模具群組編號
+	modg nvarchar(100),--模具群組名稱
+	usemount float,--日前使用次數
+	fixmount float,--保養次數
+	smount float,--可使用次數
+	fdate nvarchar(10),
+	fnoa nvarchar(100),
+	usetotal float
+)
+insert @tmp(rr,datea,modelno,modela,mount,typea,modnoa,b.model,modgno,modg,fdate,fnoa,fixmount,smount,usemount)
+select ROW_NUMBER()over(partition by a.modelno order by a.modelno,a.datea,b.noa),a.workdate,a.modelno,a.model,1
+,case when c.datea>a.datea and c.datea<convert(nvarchar,getdate(),111) then '已保養' else (case when c.datea>a.datea and c.datea>convert(nvarchar,getdate(),111) then '即將保養' else '尚未保養' end) end
+,b.noa,b.model,b.modgno,b.modg,c.datea,c.noa,b.fix,b.usemount,case when ISNULL(c.datea,'')='' or c.datea>convert(nvarchar,getdate(),111) then 1 else 0 end
+from view_work a
+left join model b on a.modelno=b.noa
+outer apply(select top 1 * from modfix where a.datea<datea and  b.noa=modnoa order by datea)c
+
+update @tmp
+set mount=(select SUM(mount) from @tmp where rr<=a.rr and a.modelno=modelno)
+,usemount=(select SUM(usemount) from @tmp where rr<=a.rr and a.modelno=modelno and fnoa=a.fnoa)
+,usetotal=(select SUM(usemount) from @tmp where a.modelno=modelno and fdate=a.fdate)
+from @tmp a
+
+declare @tmpa table(
+	gno nvarchar(1),
+	modnoa nvarchar(50),
+	modela nvarchar(100),
+	modgno nvarchar(90),
+	modg nvarchar(100),
+	datea nvarchar(10),
+	typea nvarchar(20),
+	mount float,
+	usemount float,--日前使用次數
+	fixmount float,--保養次數
+	smount float,--可使用次數
+	fdate nvarchar(10),--保養日期
+	fnoa nvarchar(100)--保養單號
+)
+insert @tmpa
+select '0',isnull(modnoa,''),modela,modgno,modg,max(datea),typea,max(mount),max(usemount),fixmount,smount,fdate,fnoa
+from @tmp group by modnoa,modela,modgno,modg,typea,fixmount,smount,fdate,fnoa
+
+if(@t_enda='1')
+	begin
+		select * from @tmpa where typea='過期未保養'  and (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
+	end
+else if(@t_enda='2')
+	begin
+		select * from @tmpa where (typea='尚未保養' or typea='即將保養') and (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
+	end
+else if(@t_enda='3')
+	begin
+		select * from @tmpa where typea='已保養' and (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
+	end
+else
+	begin
+	select * from @tmpa where (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
+end;
+
+-------------------------------------------
+z_model3bk:--z_model3bk
+--declare @t_bmodelno nvarchar(90)
+--declare @t_emodelno nvarchar(90)
+--set @t_bmodelno = case when '#non' = [2] then '' else [2] end
+--set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_bmodelno nvarchar(90) = case when '#non' = [2] then '' else [2] end
+declare @t_emodelno nvarchar(90) = case when '#non' = [3] then CHAR(255) else [3] end
 declare @t_bmodgno nvarchar(90) = case when '#non' = [5] then '' else [5] end
 declare @t_emodgno nvarchar(90) = case when '#non' = [6] then CHAR(255) else [6] end
 declare @t_enda nvarchar(90)=[4]
