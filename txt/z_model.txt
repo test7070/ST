@@ -235,38 +235,3 @@ else
 	begin
 	select * from @tmpa where (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
 end;
-declare @tmpa table(
-	gno nvarchar(1),
-	modnoa nvarchar(50),
-	model nvarchar(100),
-	modgno nvarchar(90),
-	modg nvarchar(100),
-	datea nvarchar(10),
-	typea nvarchar(20),
-	mount float,
-	usemount float,--日前使用次數
-	fixmount float,--保養次數
-	smount float,--可使用次數
-	fdate nvarchar(10),
-	fnoa nvarchar(100)
-)
-insert @tmpa
-select '0',isnull(modnoa,''),model,modgno,modg,max(datea),typea,max(mount),max(usemount),fixmount,smount,fdate,fnoa
-from @tmp group by modnoa,model,modgno,modg,typea,fixmount,smount,fdate,fnoa
-
-if(@t_enda='1')
-	begin
-		select * from @tmpa where typea='過期未保養'  and (modnoa between @t_bmodelno and @t_emodelno) and (modnoa between @t_bmodgno and @t_emodgno)
-	end
-else if(@t_enda='2')
-	begin
-		select * from @tmpa where (typea='尚未保養' or typea='即將保養') and (modnoa between @t_bmodelno and @t_emodelno) and (modnoa between @t_bmodgno and @t_emodgno)
-	end
-else if(@t_enda='3')
-	begin
-		select * from @tmpa where typea='已保養' and (modnoa between @t_bmodelno and @t_emodelno) and (modnoa between @t_bmodgno and @t_emodgno)
-	end
-else
-	begin
-	select * from @tmpa where (modnoa between @t_bmodelno and @t_emodelno) and (modnoa between @t_bmodgno and @t_emodgno)
-end;
