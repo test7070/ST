@@ -45,7 +45,7 @@
 			, ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
 			, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']);
 			
-			var t_spec='';
+			t_spec='',t_store=new Array();
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
@@ -132,6 +132,14 @@
 							t_spec+=','+as[i].noa+'@'+as[i].product;
 						}
 						if(t_spec.length==0) t_spec=' ';
+						q_gt('store', '', 0, 0, 0, '');
+						break;
+					case 'store':
+						var as = _q_appendData("store", "", true);
+						t_store=new Array();
+						for ( i = 0; i < as.length; i++) {
+							t_store.push({noa:as[i].noa,store:as[i].store});
+						}
 						q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 						break;
 					case q_name:
@@ -182,22 +190,35 @@
 
 			function btnOk() {
 				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					var t_storeno = '';
-					var t_storeinno = '';
+					//var t_storeno = '';
+					//var t_storeinno = '';
 					for(var i=0;i<q_bbsCount;i++){
 						if($('#txtStoreno_'+i).val().length>0 && $('#txtStoreinno_'+i).val().length>0){
-							t_storeno = $('#txtStoreno_'+i).val();
-							t_storeinno = $('#txtStoreinno_'+i).val();
+							for(var j=0;j<t_store.length;j++){
+								if($('#txtStoreno_'+i).val()==t_store[j].noa){
+									$('#txtStoreno').val(t_store[j].noa);
+									$('#txtStore').val(t_store[j].store);
+									break;	
+								}
+							}
+							for(var j=0;j<t_store.length;j++){
+								if($('#txtStoreinno_'+i).val()==t_store[j].noa){
+									$('#txtStoreinno').val(t_store[j].noa);
+									$('#txtStorein').val(t_store[j].store);
+									break;	
+								}
+							}
 							break;
 						}
 					}
+					Save();
 					//回寫倉庫到表頭
-					if(t_storeno.length>0 && t_storeinno.length>0){
+					/*if(t_storeno.length>0 && t_storeinno.length>0){
 						t_where = "noa='"+t_storeno+"'";
 						q_gt('store', 'where=^^'+t_where+'^^', 0, 0, 0, 'getStoreno');
 					}else{
 						Save();
-					}
+					}*/
 				}else{
 					Save();
 				}
