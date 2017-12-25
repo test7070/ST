@@ -1,0 +1,166 @@
+z_acifp01:--z_acifp01
+SET QUOTED_IDENTIFIER OFF
+declare @t_xyear nvarchar(10)
+declare @t_typea nvarchar(10)
+declare @t_proj nvarchar(20)='[1]'
+declare @t_rlen nvarchar(20)='[2]'
+
+set @t_xyear = case when '#non' = [3] then '' else [3] end
+set @t_typea = case when '#non' = [4] then '' else [4] end
+
+declare @tmp table(
+	gno nvarchar(10),
+	noa nvarchar(MAX),
+	noq nvarchar(100),
+	xxcoin nvarchar(MAX),
+	acc1 nvarchar(MAX),
+	acc2 nvarchar(MAX),
+	
+	acno nvarchar(50),acomp nvarchar(MAX),anick nvarchar(MAX),acoin nvarchar(50),
+	a01 float,a02 float,a03 float,a04 float,a05 float,
+	bcno nvarchar(50),bcomp nvarchar(MAX),bnick nvarchar(MAX),bcoin nvarchar(50),
+	b01 float,b02 float,b03 float,b04 float,b05 float,
+	ccno nvarchar(50),ccomp nvarchar(MAX),cnick nvarchar(MAX),ccoin nvarchar(50),
+	c01 float,c02 float,c03 float,c04 float,c05 float,
+	dcno nvarchar(50),dcomp nvarchar(MAX),dnick nvarchar(MAX),dcoin nvarchar(50),
+	d01 float,d02 float,d03 float,d04 float,d05 float,
+	ecno nvarchar(50),ecomp nvarchar(MAX),enick nvarchar(MAX),ecoin nvarchar(50),
+	e01 float,e02 float,e03 float,e04 float,e05 float,
+	fcno nvarchar(50),fcomp nvarchar(MAX),fnick nvarchar(MAX),fcoin nvarchar(50),
+	f01 float,f02 float,f03 float,f04 float,f05 float,
+	gcno nvarchar(50),gcomp nvarchar(MAX),gnick nvarchar(MAX),gcoin nvarchar(50),
+	g01 float,g02 float,g03 float,g04 float,g05 float,
+	hcno nvarchar(50),hcomp nvarchar(MAX),hnick nvarchar(MAX),hcoin nvarchar(50),
+	h01 float,h02 float,h03 float,h04 float,h05 float,
+	icno nvarchar(50),icomp nvarchar(MAX),inick nvarchar(MAX),icoin nvarchar(50),
+	i01 float,i02 float,i03 float,i04 float,i05 float,
+	jcno nvarchar(50),jcomp nvarchar(MAX),jnick nvarchar(MAX),jcoin nvarchar(50),
+	j01 float,j02 float,j03 float,j04 float,j05 float,
+	kcno nvarchar(50),kcomp nvarchar(MAX),knick nvarchar(MAX),kcoin nvarchar(50),
+	k01 float,k02 float,k03 float,k04 float,k05 float,
+	lcno nvarchar(50),lcomp nvarchar(MAX),lnick nvarchar(MAX),lcoin nvarchar(50),
+	l01 float,l02 float,l03 float,l04 float,l05 float,
+	mcno nvarchar(50),mcomp nvarchar(MAX),mnick nvarchar(MAX),mcoin nvarchar(50),
+	m01 float,m02 float,m03 float,m04 float,m05 float,
+	ncno nvarchar(50),ncomp nvarchar(MAX),nnick nvarchar(MAX),ncoin nvarchar(50),
+	n01 float,n02 float,n03 float,n04 float,n05 float,
+	ocno nvarchar(50),ocomp nvarchar(MAX),onick nvarchar(MAX),ocoin nvarchar(50),
+	o01 float,o02 float,o03 float,o04 float,o05 float,
+	pcno nvarchar(50),pcomp nvarchar(MAX),pnick nvarchar(MAX),pcoin nvarchar(50),
+	p01 float,p02 float,p03 float,p04 float,p05 float,
+	qcno nvarchar(50),qcomp nvarchar(MAX),qnick nvarchar(MAX),qcoin nvarchar(50),
+	q01 float,q02 float,q03 float,q04 float,q05 float,
+	rcno nvarchar(50),rcomp nvarchar(MAX),rnick nvarchar(MAX),rcoin nvarchar(50),
+	r01 float,r02 float,r03 float,r04 float,r05 float,
+	scno nvarchar(50),scomp nvarchar(MAX),snick nvarchar(MAX),scoin nvarchar(50),
+	s01 float,s02 float,s03 float,s04 float,s05 float,
+	tcno nvarchar(50),tcomp nvarchar(MAX),tnick nvarchar(MAX),tcoin nvarchar(50),
+	t01 float,t02 float,t03 float,t04 float,t05 float,
+	ucno nvarchar(50),ucomp nvarchar(MAX),unick nvarchar(MAX),ucoin nvarchar(50),
+	u01 float,u02 float,u03 float,u04 float,u05 float,
+	vcno nvarchar(50),vcomp nvarchar(MAX),vnick nvarchar(MAX),vcoin nvarchar(50),
+	v01 float,v02 float,v03 float,v04 float,v05 float,
+	wcno nvarchar(50),wcomp nvarchar(MAX),wnick nvarchar(MAX),wcoin nvarchar(50),
+	w01 float,w02 float,w03 float,w04 float,w05 float,
+	xcno nvarchar(50),xcomp nvarchar(MAX),xnick nvarchar(MAX),xcoin nvarchar(50),
+	x01 float,x02 float,x03 float,x04 float,x05 float,
+	ycno nvarchar(50),ycomp nvarchar(MAX),ynick nvarchar(MAX),ycoin nvarchar(50),
+	y01 float,y02 float,y03 float,y04 float,y05 float,
+	zcno nvarchar(50),zcomp nvarchar(MAX),znick nvarchar(MAX),zcoin nvarchar(50),
+	z01 float,z02 float,z03 float,z04 float,z05 float,
+	
+	bmoney float,dmoney float,cmoney float,emoney float
+	
+)
+
+	insert @tmp
+	select '0',a.noa,b.noq,a.coin,b.acc1,b.acc2
+	,a.acno,a.acomp,a.anick,a.acoin,b.a01,b.a02,b.a03,b.a04,b.a05
+	,a.bcno,a.bcomp,a.bnick,a.bcoin,b.b01,b.b02,b.b03,b.b04,b.b05
+	,a.ccno,a.ccomp,a.cnick,a.ccoin,b.c01,b.c02,b.c03,b.c04,b.c05
+	,a.dcno,a.dcomp,a.dnick,a.dcoin,b.d01,b.d02,b.d03,b.d04,b.d05
+	,a.ecno,a.ecomp,a.enick,a.ecoin,b.e01,b.e02,b.e03,b.e04,b.e05
+	,a.fcno,a.fcomp,a.fnick,a.fcoin,b.f01,b.f02,b.f03,b.f04,b.f05
+	,a.gcno,a.gcomp,a.gnick,a.gcoin,b.g01,b.g02,b.g03,b.g04,b.g05
+	,a.hcno,a.hcomp,a.hnick,a.hcoin,b.h01,b.h02,b.h03,b.h04,b.h05
+	,a.icno,a.icomp,a.inick,a.icoin,b.i01,b.i02,b.i03,b.i04,b.i05
+	,a.jcno,a.jcomp,a.jnick,a.jcoin,b.j01,b.j02,b.j03,b.j04,b.j05
+	,a.kcno,a.kcomp,a.knick,a.kcoin,b.k01,b.k02,b.k03,b.k04,b.k05
+	,a.lcno,a.lcomp,a.lnick,a.lcoin,b.l01,b.l02,b.l03,b.l04,b.l05
+	,a.mcno,a.mcomp,a.mnick,a.mcoin,b.m01,b.m02,b.m03,b.m04,b.m05
+	,a.ncno,a.ncomp,a.nnick,a.ncoin,b.n01,b.n02,b.n03,b.n04,b.n05
+	,a.ocno,a.ocomp,a.onick,a.ocoin,b.o01,b.o02,b.o03,b.o04,b.o05
+	,a.pcno,a.pcomp,a.pnick,a.pcoin,b.p01,b.p02,b.p03,b.p04,b.p05
+	,a.qcno,a.qcomp,a.qnick,a.qcoin,b.q01,b.q02,b.q03,b.q04,b.q05
+	,a.rcno,a.rcomp,a.rnick,a.rcoin,b.r01,b.r02,b.r03,b.r04,b.r05
+	,a.scno,a.scomp,a.snick,a.scoin,b.s01,b.s02,b.s03,b.s04,b.s05
+	,a.tcno,a.tcomp,a.tnick,a.tcoin,b.t01,b.t02,b.t03,b.t04,b.t05
+	,a.ucno,a.ucomp,a.unick,a.ucoin,b.u01,b.u02,b.u03,b.u04,b.u05
+	,a.vcno,a.vcomp,a.vnick,a.vcoin,b.v01,b.v02,b.v03,b.v04,b.v05
+	,a.wcno,a.wcomp,a.wnick,a.wcoin,b.w01,b.w02,b.w03,b.w04,b.w05
+	,a.xcno,a.xcomp,a.xnick,a.xcoin,b.x01,b.x02,b.x03,b.x04,b.x05
+	,a.ycno,a.ycomp,a.ynick,a.ycoin,b.y01,b.y02,b.y03,b.y04,b.y05
+	,a.zcno,a.zcomp,a.znick,a.zcoin,b.z01,b.z02,b.z03,b.z04,b.z05
+	,b.bmoney,b.dmoney,b.cmoney,b.emoney
+	from acif a left join acifs b on a.noa=b.noa
+	where a.yeara=@t_xyear
+	
+	declare @t_delnoq nvarchar(20)=''
+	if(@t_typea='1')
+	begin
+		set @t_delnoq=(select Min(noq) from @tmp where acc1 like '2%')
+		delete @tmp where noq>=@t_delnoq
+	end
+	
+	if(@t_typea='2')
+	begin
+		set @t_delnoq=(select Min(noq) from @tmp where acc1 like '2%')
+		delete @tmp where noq<@t_delnoq
+		set @t_delnoq=(select Min(noq) from @tmp where acc1 >'4')
+		delete @tmp where noq>=@t_delnoq
+	end
+	
+	if(@t_typea='3')
+	begin
+		set @t_delnoq=(select MIN(noq) from @tmp where acc1 >'4')
+		delete @tmp where noq<@t_delnoq
+	end
+	
+	update @tmp set gno='1' where acc2 like '%合計：'
+	
+	update @tmp set gno='2' where acc2 like '%總計：'
+	
+	insert @tmp (gno,noa,noq)
+	select '3',noa,CHAR(255)
+	from @tmp group by noa
+
+select 
+dbo.getComma(a01,-1)a01,dbo.getComma(a02,-1)a02,dbo.getComma(a03,-1)a03,dbo.getComma(a04,-1)a04,dbo.getComma(a05,-1)a05,
+dbo.getComma(b01,-1)b01,dbo.getComma(b02,-1)b02,dbo.getComma(b03,-1)b03,dbo.getComma(b04,-1)b04,dbo.getComma(b05,-1)b05,
+dbo.getComma(c01,-1)c01,dbo.getComma(c02,-1)c02,dbo.getComma(c03,-1)c03,dbo.getComma(c04,-1)c04,dbo.getComma(c05,-1)c05,
+dbo.getComma(d01,-1)d01,dbo.getComma(d02,-1)d02,dbo.getComma(d03,-1)d03,dbo.getComma(d04,-1)d04,dbo.getComma(d05,-1)d05,
+dbo.getComma(e01,-1)e01,dbo.getComma(e02,-1)e02,dbo.getComma(e03,-1)e03,dbo.getComma(e04,-1)e04,dbo.getComma(e05,-1)e05,
+dbo.getComma(f01,-1)f01,dbo.getComma(f02,-1)f02,dbo.getComma(f03,-1)f03,dbo.getComma(f04,-1)f04,dbo.getComma(f05,-1)f05,
+dbo.getComma(g01,-1)g01,dbo.getComma(g02,-1)g02,dbo.getComma(g03,-1)g03,dbo.getComma(g04,-1)g04,dbo.getComma(g05,-1)g05,
+dbo.getComma(h01,-1)h01,dbo.getComma(h02,-1)h02,dbo.getComma(h03,-1)h03,dbo.getComma(h04,-1)h04,dbo.getComma(h05,-1)h05,
+dbo.getComma(i01,-1)i01,dbo.getComma(i02,-1)i02,dbo.getComma(i03,-1)i03,dbo.getComma(i04,-1)i04,dbo.getComma(i05,-1)i05,
+dbo.getComma(j01,-1)j01,dbo.getComma(j02,-1)j02,dbo.getComma(j03,-1)j03,dbo.getComma(j04,-1)j04,dbo.getComma(j05,-1)j05,
+dbo.getComma(k01,-1)k01,dbo.getComma(k02,-1)k02,dbo.getComma(k03,-1)k03,dbo.getComma(k04,-1)k04,dbo.getComma(k05,-1)k05,
+dbo.getComma(l01,-1)l01,dbo.getComma(l02,-1)l02,dbo.getComma(l03,-1)l03,dbo.getComma(l04,-1)l04,dbo.getComma(l05,-1)l05,
+dbo.getComma(m01,-1)m01,dbo.getComma(m02,-1)m02,dbo.getComma(m03,-1)m03,dbo.getComma(m04,-1)m04,dbo.getComma(m05,-1)m05,
+dbo.getComma(n01,-1)n01,dbo.getComma(n02,-1)n02,dbo.getComma(n03,-1)n03,dbo.getComma(n04,-1)n04,dbo.getComma(n05,-1)n05,
+dbo.getComma(o01,-1)o01,dbo.getComma(o02,-1)o02,dbo.getComma(o03,-1)o03,dbo.getComma(o04,-1)o04,dbo.getComma(o05,-1)o05,
+dbo.getComma(p01,-1)p01,dbo.getComma(p02,-1)p02,dbo.getComma(p03,-1)p03,dbo.getComma(p04,-1)p04,dbo.getComma(p05,-1)p05,
+dbo.getComma(q01,-1)q01,dbo.getComma(q02,-1)q02,dbo.getComma(q03,-1)q03,dbo.getComma(q04,-1)q04,dbo.getComma(q05,-1)q05,
+dbo.getComma(r01,-1)r01,dbo.getComma(r02,-1)r02,dbo.getComma(r03,-1)r03,dbo.getComma(r04,-1)r04,dbo.getComma(r05,-1)r05,
+dbo.getComma(s01,-1)s01,dbo.getComma(s02,-1)s02,dbo.getComma(s03,-1)s03,dbo.getComma(s04,-1)s04,dbo.getComma(s05,-1)s05,
+dbo.getComma(t01,-1)t01,dbo.getComma(t02,-1)t02,dbo.getComma(t03,-1)t03,dbo.getComma(t04,-1)t04,dbo.getComma(t05,-1)t05,
+dbo.getComma(u01,-1)u01,dbo.getComma(u02,-1)u02,dbo.getComma(u03,-1)u03,dbo.getComma(u04,-1)u04,dbo.getComma(u05,-1)u05,
+dbo.getComma(v01,-1)v01,dbo.getComma(v02,-1)v02,dbo.getComma(v03,-1)v03,dbo.getComma(v04,-1)v04,dbo.getComma(v05,-1)v05,
+dbo.getComma(w01,-1)w01,dbo.getComma(w02,-1)w02,dbo.getComma(w03,-1)w03,dbo.getComma(w04,-1)w04,dbo.getComma(w05,-1)w05,
+dbo.getComma(x01,-1)x01,dbo.getComma(x02,-1)x02,dbo.getComma(x03,-1)x03,dbo.getComma(x04,-1)x04,dbo.getComma(x05,-1)x05,
+dbo.getComma(y01,-1)y01,dbo.getComma(y02,-1)y02,dbo.getComma(y03,-1)y03,dbo.getComma(y04,-1)y04,dbo.getComma(y05,-1)y05,
+dbo.getComma(z01,-1)z01,dbo.getComma(z02,-1)z02,dbo.getComma(z03,-1)z03,dbo.getComma(z04,-1)z04,dbo.getComma(z05,-1)z05,
+dbo.getComma(bmoney,-1)bmoney,dbo.getComma(dmoney,-1)dmoney,dbo.getComma(cmoney,-1)cmoney,dbo.getComma(emoney,-1)emoney,
+* from @tmp order by noa,noq
+;

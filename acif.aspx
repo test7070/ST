@@ -17,7 +17,7 @@
 
             q_tables = 's';
             var q_name = "acif";
-            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtComp'];
+            var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtComp','txtCoin'];
             var q_readonlys = [];
             var bbmNum = [];
             var bbsNum = [];
@@ -38,7 +38,15 @@
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1)
-            });
+                
+            }).mousedown(function (e) {
+		        if (!$('#div_row').is(':hidden')) {
+		            if (mouse_div) {
+		                $('#div_row').hide();
+		            }
+		            mouse_div = true;
+		        }
+		    });
 
             function main() {
                 if (dataErr) {
@@ -81,6 +89,21 @@
                 $('#combLang').change(function() {
                 	langcopy();
 				});
+				
+				//上方插入空白行
+		        $('#lblTop_row').mousedown(function (e) {
+		            if (e.button == 0) {
+		                mouse_div = false;
+		                q_bbs_addrow(row_bbsbbt, row_b_seq, 0);
+		            }
+		        });
+		        //下方插入空白行
+		        $('#lblDown_row').mousedown(function (e) {
+		            if (e.button == 0) {
+		                mouse_div = false;
+		                q_bbs_addrow(row_bbsbbt, row_b_seq, 1);
+		            }
+		        });
             }
 
             function q_boxClose(s2) {
@@ -134,6 +157,23 @@
                     	$('.num').change(function() {
                     		sum();
 						});
+						
+						$('#btnMinus_' + j).bind('contextmenu', function (e) {
+							if (e.button == 2) {
+								e.preventDefault();
+			                    mouse_div = true;
+			                    ////////////控制顯示位置
+			                    $('#div_row').css('top', e.pageY);
+			                    $('#div_row').css('left', e.pageX);
+			                    ////////////
+			                    t_IdSeq = -1;
+			                    q_bodyId($(this).attr('id'));
+			                    b_seq = t_IdSeq;
+			                    $('#div_row').show();
+			                    row_b_seq = b_seq;
+								row_bbsbbt = 'bbs';
+							}
+		                });
                     }
                 }
                 _bbsAssign();
@@ -163,13 +203,13 @@
             		
             		$('#labl'+tlbl+'01').html(tlbl+(t_comp.length>0?' '+t_comp:'')+(t_coin.length>0?'<BR>'+t_coin:''));
             		
-            		//隱藏本公司匯率與轉換後
+            		//隱藏本公司或幣別相同 的 匯率與轉換後
             		var ttlbl=String.fromCharCode(i).toLowerCase();
-            		if(t_cno==$('#txtCno').val() && t_cno.length>0){
+            		if((t_cno==$('#txtCno').val() || t_coin==$('#txtCoin').val()) && t_cno.length>0){
             			$('.f'+ttlbl+'4').hide();
             			$('.f'+ttlbl+'5').hide();
             			$('#topbbs .comp-'+ttlbl+'').css('width','360px');
-            			t_hidea=240;
+            			t_hidea=q_add(t_hidea,240);
             		}else{
             			$('#topbbs .comp-'+ttlbl+'').css('width','600px');
             		}
@@ -247,80 +287,99 @@
                 q_nowf();
                 return true;
             }
-
-            function sum() {
-            	var prec=dec(q_getPara('accc.prec'));
-				for (var j = 0; j < q_bbsCount; j++) {
-					$('#txtA03_'+j).val(dec($('#txtA01_'+j).val())-dec($('#txtA02_'+j).val()));
-					$('#txtB03_'+j).val(dec($('#txtB01_'+j).val())-dec($('#txtB02_'+j).val()));
-					$('#txtC03_'+j).val(dec($('#txtC01_'+j).val())-dec($('#txtC02_'+j).val()));
-					$('#txtD03_'+j).val(dec($('#txtD01_'+j).val())-dec($('#txtD02_'+j).val()));
-					$('#txtE03_'+j).val(dec($('#txtE01_'+j).val())-dec($('#txtE02_'+j).val()));
-					$('#txtF03_'+j).val(dec($('#txtF01_'+j).val())-dec($('#txtF02_'+j).val()));
-					$('#txtG03_'+j).val(dec($('#txtG01_'+j).val())-dec($('#txtG02_'+j).val()));
-					$('#txtH03_'+j).val(dec($('#txtH01_'+j).val())-dec($('#txtH02_'+j).val()));
-					$('#txtI03_'+j).val(dec($('#txtI01_'+j).val())-dec($('#txtI02_'+j).val()));
-					$('#txtJ03_'+j).val(dec($('#txtJ01_'+j).val())-dec($('#txtJ02_'+j).val()));
-					$('#txtK03_'+j).val(dec($('#txtK01_'+j).val())-dec($('#txtK02_'+j).val()));
-					$('#txtL03_'+j).val(dec($('#txtL01_'+j).val())-dec($('#txtL02_'+j).val()));
-					$('#txtM03_'+j).val(dec($('#txtM01_'+j).val())-dec($('#txtM02_'+j).val()));
-					$('#txtN03_'+j).val(dec($('#txtN01_'+j).val())-dec($('#txtN02_'+j).val()));
-					$('#txtO03_'+j).val(dec($('#txtO01_'+j).val())-dec($('#txtO02_'+j).val()));
-					$('#txtP03_'+j).val(dec($('#txtP01_'+j).val())-dec($('#txtP02_'+j).val()));
-					$('#txtQ03_'+j).val(dec($('#txtQ01_'+j).val())-dec($('#txtQ02_'+j).val()));
-					$('#txtR03_'+j).val(dec($('#txtR01_'+j).val())-dec($('#txtR02_'+j).val()));
-					$('#txtS03_'+j).val(dec($('#txtS01_'+j).val())-dec($('#txtS02_'+j).val()));
-					$('#txtT03_'+j).val(dec($('#txtT01_'+j).val())-dec($('#txtT02_'+j).val()));
-					$('#txtU03_'+j).val(dec($('#txtU01_'+j).val())-dec($('#txtU02_'+j).val()));
-					$('#txtV03_'+j).val(dec($('#txtV01_'+j).val())-dec($('#txtV02_'+j).val()));
-					$('#txtW03_'+j).val(dec($('#txtW01_'+j).val())-dec($('#txtW02_'+j).val()));
-					$('#txtX03_'+j).val(dec($('#txtX01_'+j).val())-dec($('#txtX02_'+j).val()));
-					$('#txtY03_'+j).val(dec($('#txtY01_'+j).val())-dec($('#txtY02_'+j).val()));
-					$('#txtZ03_'+j).val(dec($('#txtZ01_'+j).val())-dec($('#txtZ02_'+j).val()));
-					
-					$('#txtA05_'+j).val(round(q_mul(dec($('#txtA03_'+j).val()),dec($('#txtA04_'+j).val())),prec));
-					$('#txtB05_'+j).val(round(q_mul(dec($('#txtB03_'+j).val()),dec($('#txtB04_'+j).val())),prec));
-					$('#txtC05_'+j).val(round(q_mul(dec($('#txtC03_'+j).val()),dec($('#txtC04_'+j).val())),prec));
-					$('#txtD05_'+j).val(round(q_mul(dec($('#txtD03_'+j).val()),dec($('#txtD04_'+j).val())),prec));
-					$('#txtE05_'+j).val(round(q_mul(dec($('#txtE03_'+j).val()),dec($('#txtE04_'+j).val())),prec));
-					$('#txtF05_'+j).val(round(q_mul(dec($('#txtF03_'+j).val()),dec($('#txtF04_'+j).val())),prec));
-					$('#txtG05_'+j).val(round(q_mul(dec($('#txtG03_'+j).val()),dec($('#txtG04_'+j).val())),prec));
-					$('#txtH05_'+j).val(round(q_mul(dec($('#txtH03_'+j).val()),dec($('#txtH04_'+j).val())),prec));
-					$('#txtI05_'+j).val(round(q_mul(dec($('#txtI03_'+j).val()),dec($('#txtI04_'+j).val())),prec));
-					$('#txtJ05_'+j).val(round(q_mul(dec($('#txtJ03_'+j).val()),dec($('#txtJ04_'+j).val())),prec));
-					$('#txtK05_'+j).val(round(q_mul(dec($('#txtK03_'+j).val()),dec($('#txtK04_'+j).val())),prec));
-					$('#txtL05_'+j).val(round(q_mul(dec($('#txtL03_'+j).val()),dec($('#txtL04_'+j).val())),prec));
-					$('#txtM05_'+j).val(round(q_mul(dec($('#txtM03_'+j).val()),dec($('#txtM04_'+j).val())),prec));
-					$('#txtN05_'+j).val(round(q_mul(dec($('#txtN03_'+j).val()),dec($('#txtN04_'+j).val())),prec));
-					$('#txtO05_'+j).val(round(q_mul(dec($('#txtO03_'+j).val()),dec($('#txtO04_'+j).val())),prec));
-					$('#txtP05_'+j).val(round(q_mul(dec($('#txtP03_'+j).val()),dec($('#txtP04_'+j).val())),prec));
-					$('#txtQ05_'+j).val(round(q_mul(dec($('#txtQ03_'+j).val()),dec($('#txtQ04_'+j).val())),prec));
-					$('#txtR05_'+j).val(round(q_mul(dec($('#txtR03_'+j).val()),dec($('#txtR04_'+j).val())),prec));
-					$('#txtS05_'+j).val(round(q_mul(dec($('#txtS03_'+j).val()),dec($('#txtS04_'+j).val())),prec));
-					$('#txtT05_'+j).val(round(q_mul(dec($('#txtT03_'+j).val()),dec($('#txtT04_'+j).val())),prec));
-					$('#txtU05_'+j).val(round(q_mul(dec($('#txtU03_'+j).val()),dec($('#txtU04_'+j).val())),prec));
-					$('#txtV05_'+j).val(round(q_mul(dec($('#txtV03_'+j).val()),dec($('#txtV04_'+j).val())),prec));
-					$('#txtW05_'+j).val(round(q_mul(dec($('#txtW03_'+j).val()),dec($('#txtW04_'+j).val())),prec));
-					$('#txtX05_'+j).val(round(q_mul(dec($('#txtX03_'+j).val()),dec($('#txtX04_'+j).val())),prec));
-					$('#txtY05_'+j).val(round(q_mul(dec($('#txtY03_'+j).val()),dec($('#txtY04_'+j).val())),prec));
-					$('#txtZ05_'+j).val(round(q_mul(dec($('#txtZ03_'+j).val()),dec($('#txtZ04_'+j).val())),prec));
-                	
-                	//合併總金額
-                	var bmoney=0;
-                	bmoney=dec($('#txtA05_'+j).val())+dec($('#txtB05_'+j).val())+dec($('#txtC05_'+j).val())+
-                	dec($('#txtD05_'+j).val())+dec($('#txtE05_'+j).val())+dec($('#txtF05_'+j).val())+
-                	dec($('#txtG05_'+j).val())+dec($('#txtH05_'+j).val())+dec($('#txtI05_'+j).val())+
-                	dec($('#txtJ05_'+j).val())+dec($('#txtK05_'+j).val())+dec($('#txtL05_'+j).val())+
-                	dec($('#txtM05_'+j).val())+dec($('#txtN05_'+j).val())+dec($('#txtO05_'+j).val())+
-                	dec($('#txtP05_'+j).val())+dec($('#txtQ05_'+j).val())+dec($('#txtR05_'+j).val())+
-                	dec($('#txtS05_'+j).val())+dec($('#txtT05_'+j).val())+dec($('#txtU05_'+j).val())+
-                	dec($('#txtV05_'+j).val())+dec($('#txtW05_'+j).val())+dec($('#txtX05_'+j).val())+
-                	dec($('#txtY05_'+j).val())+dec($('#txtZ05_'+j).val());
-                	$('#txtBmoney_'+j).val(bmoney);
-                	$('#txtEmoney_'+j).val(bmoney+(dec($('#txtDmoney_'+j).val())-dec($('#txtDmoney_'+j).val())));
-                	
-               }
-            }
+			
+			function sum() {
+				var prec=dec(q_getPara('accc.prec'));
+				//65=A,90=Z
+				var t_maxcno=90; //避免不必要的計算時間
+				if(q_getPara('sys.project').toUpperCase()=='JO' || q_getPara('sys.project').toUpperCase()=='AD'){
+					t_maxcno=69; //只用5間公司
+				}
+            	for(var i=65;i<=t_maxcno;i++){
+            		var tcno=String.fromCharCode(i);
+            		var t1_1=0,t1_2=0,t1_3=0,t1_5=0;//大類合計
+					var t2_1=0,t2_2=0,t2_3=0,t2_5=0;//中類合計
+					var s_1=0,s_2=0,s_3=0,s_5=0;//特殊2和3合計
+					for (var j = 0; j < q_bbsCount; j++) {
+						//---------------------------------------------------------------------------
+						$('#txt'+tcno+'03_'+j).val(dec($('#txt'+tcno+'01_'+j).val())-dec($('#txt'+tcno+'02_'+j).val()));
+						$('#txt'+tcno+'05_'+j).val(round(q_mul(dec($('#txt'+tcno+'03_'+j).val()),dec($('#txt'+tcno+'04_'+j).val())),prec));
+						//-----------------------------------------------------------------------------
+						var tacc1=$('#txtAcc1_'+j).val();
+						var tacc2=$('#txtAcc2_'+j).val();
+						var tm01=dec($('#txt'+tcno+'01_'+j).val());
+						var tm02=dec($('#txt'+tcno+'02_'+j).val());
+						var tm03=dec($('#txt'+tcno+'03_'+j).val());
+						var tm04=dec($('#txt'+tcno+'04_'+j).val());
+						var tm05=dec($('#txt'+tcno+'05_'+j).val());
+						
+						if((tacc1.toUpperCase().indexOf('X')>0 || tacc1=='') && (tacc2.indexOf('合計：')>0 || tacc2.indexOf('總計：')>0)){
+							//合計 和 總計
+							if(tacc2.indexOf('負債及權益-總計：')>-1){
+								$('#txt'+tcno+'01_'+j).val(s_1);
+								$('#txt'+tcno+'02_'+j).val(s_2);
+								$('#txt'+tcno+'03_'+j).val(s_3);
+								$('#txt'+tcno+'05_'+j).val(s_5);
+								
+								s_1=0,s_2=0,s_3=0,s_5=0;
+								t2_1=0,t2_2=0,t2_3=0,t2_5=0;
+								t1_1=0,t1_2=0,t1_3=0,t1_5=0;
+							}else if(tacc2.indexOf('合計：')>0){
+								$('#txt'+tcno+'01_'+j).val(t2_1);
+								$('#txt'+tcno+'02_'+j).val(t2_2);
+								$('#txt'+tcno+'03_'+j).val(t2_3);
+								$('#txt'+tcno+'05_'+j).val(t2_5);
+								
+								t2_1=0,t2_2=0,t2_3=0,t2_5=0;
+							}else if(tacc2.indexOf('總計：')>0){
+								$('#txt'+tcno+'01_'+j).val(t1_1);
+								$('#txt'+tcno+'02_'+j).val(t1_2);
+								$('#txt'+tcno+'03_'+j).val(t1_3);
+								$('#txt'+tcno+'05_'+j).val(t1_5);
+								
+								t2_1=0,t2_2=0,t2_3=0,t2_5=0;
+								t1_1=0,t1_2=0,t1_3=0,t1_5=0;
+							}
+							
+						}else if (tacc1.length>0 && tacc1.toUpperCase().indexOf('X')==-1){
+							//一般科目
+							var s1=tacc1.substr(0,1);
+							var s2=tacc1.substr(0,2);
+							
+							t1_1=q_add(t1_1,tm01);
+							t1_2=q_add(t1_2,tm02);
+							t1_3=q_add(t1_3,tm03);
+							t1_5=q_add(t1_5,tm05);
+								
+							t2_1=q_add(t2_1,tm01);
+							t2_2=q_add(t2_2,tm02);
+							t2_3=q_add(t2_3,tm03);
+							t2_5=q_add(t2_5,tm05);
+							
+							if(s1=='2' || s1=='3'){
+								s_1=q_add(s_1,tm01);
+								s_2=q_add(s_2,tm02);
+								s_3=q_add(s_3,tm03);
+								s_5=q_add(s_5,tm05);
+							}
+						}
+						
+						//合併總金額
+	                	var bmoney=0;
+	                	bmoney=dec($('#txtA05_'+j).val())+dec($('#txtB05_'+j).val())+dec($('#txtC05_'+j).val())+
+	                	dec($('#txtD05_'+j).val())+dec($('#txtE05_'+j).val())+dec($('#txtF05_'+j).val())+
+	                	dec($('#txtG05_'+j).val())+dec($('#txtH05_'+j).val())+dec($('#txtI05_'+j).val())+
+	                	dec($('#txtJ05_'+j).val())+dec($('#txtK05_'+j).val())+dec($('#txtL05_'+j).val())+
+	                	dec($('#txtM05_'+j).val())+dec($('#txtN05_'+j).val())+dec($('#txtO05_'+j).val())+
+	                	dec($('#txtP05_'+j).val())+dec($('#txtQ05_'+j).val())+dec($('#txtR05_'+j).val())+
+	                	dec($('#txtS05_'+j).val())+dec($('#txtT05_'+j).val())+dec($('#txtU05_'+j).val())+
+	                	dec($('#txtV05_'+j).val())+dec($('#txtW05_'+j).val())+dec($('#txtX05_'+j).val())+
+	                	dec($('#txtY05_'+j).val())+dec($('#txtZ05_'+j).val());
+	                	$('#txtBmoney_'+j).val(bmoney);
+	                	$('#txtEmoney_'+j).val(bmoney+(dec($('#txtDmoney_'+j).val())-dec($('#txtDmoney_'+j).val())));
+					}
+				}
+			}
 
             function refresh(recno) {
                 _refresh(recno);
@@ -330,6 +389,7 @@
                 _readonly(t_para, empty);
                 if(t_para){
                 	$('#btnMergeacccs').attr('disabled', 'disabled');
+                	$('#div_row').hide();
                 }else{
                 	$('#btnMergeacccs').removeAttr('disabled');
                 }
@@ -507,7 +567,7 @@
                 		}
                 		
                 		for (var i = 0; i < as.length; i++) {
-                			if(as[i].tacc1=='1ZZ.'){ //資產-總計：
+                			if(as[i].tacc1=='1ZZ.' || as[i].tacc1=='2ZZ.' || as[i].tacc1=='3ZZ.'){ //資產-總計： & 負債-總計： & 權益-總計：
                 				as[i].acc1='';
                 			}	
                 		}
@@ -525,6 +585,42 @@
                 	break;
                 }
 			}
+			
+			var mouse_div = true; //控制滑鼠消失div
+			var row_bbsbbt = ''; //判斷是bbs或bbt增加欄位
+		    var row_b_seq = ''; //判斷第幾個row
+		    //插入欄位
+		    function q_bbs_addrow(bbsbbt, row, topdown) {
+		        //取得目前行
+		        var rows_b_seq = dec(row) + dec(topdown);
+		        if (bbsbbt == 'bbs') {
+		            q_gridAddRow(bbsHtm, 'tbbs', 'txtNoq', 1);
+		            //目前行的資料往下移動
+		            for (var i = q_bbsCount - 1; i >= rows_b_seq; i--) {
+		                for (var j = 0; j < fbbs.length; j++) {
+		                    if (i != rows_b_seq)
+		                        $('#' + fbbs[j] + '_' + i).val($('#' + fbbs[j] + '_' + (i - 1)).val());
+		                    else
+		                        $('#' + fbbs[j] + '_' + i).val('');
+		                }
+		            }
+		        }
+		        if (bbsbbt == 'bbt') {
+		            q_gridAddRow(bbtHtm, 'tbbt', fbbt, 1, '', '', '', '__');
+		            //目前行的資料往下移動
+		            for (var i = q_bbtCount - 1; i >= rows_b_seq; i--) {
+		                for (var j = 0; j < fbbt.length; j++) {
+		                    if (i != rows_b_seq)
+		                        $('#' + fbbt[j] + '__' + i).val($('#' + fbbt[j] + '__' + (i - 1)).val());
+		                    else
+		                        $('#' + fbbt[j] + '__' + i).val('');
+		                }
+		            }
+		        }
+		        $('#div_row').hide();
+		        row_bbsbbt = '';
+		        row_b_seq = '';
+		    }
 		</script>
 		<style type="text/css">
             #dmain {
@@ -628,6 +724,23 @@
             .num {
                 text-align: right;
             }
+            #div_row{
+				display:none;
+				width:750px;
+				background-color: #ffffff;
+				position: absolute;
+				left: 20px;
+				z-index: 50;
+			}
+			.table_row tr td .lbl.btn {
+                color: #000000;
+                font-weight: bolder;
+                font-size: medium;
+                cursor: pointer;
+            }
+            .table_row tr td .lbl.btn:hover {
+                color: #FF8F19;
+            }
 		</style>
 	</head>
 	<body ondragstart="return false" draggable="false"
@@ -635,6 +748,16 @@
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	>
+		<div id="div_row" style="position:absolute; top:300px; left:500px; display:none; width:150px; background-color: #ffffff; ">
+			<table id="table_row"  class="table_row" style="width:100%;" border="1" cellpadding='1'  cellspacing='0'>
+				<tr>
+					<td align="center" ><a id="lblTop_row" class="lbl btn">上方插入空白行</a></td>
+				</tr>
+				<tr>
+					<td align="center" ><a id="lblDown_row" class="lbl btn">下方插入空白行</a></td>
+				</tr>
+			</table>
+		</div>
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain' >
 			<div class="dview" id="dview">
