@@ -157,10 +157,14 @@ select
 from @tmp a order by a.modelno,a.models,a.gno,a.datea;
 -----------------------------------------------------------------------------------------
 z_model3:--z_model3
-declare @t_bmodelno nvarchar(90)
-declare @t_emodelno nvarchar(90)
-set @t_bmodelno = case when '#non' = [2] then '' else [2] end
-set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
+--declare @t_bmodelno nvarchar(90)
+--declare @t_emodelno nvarchar(90)
+--set @t_bmodelno = case when '#non' = [2] then '' else [2] end
+--set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_bmodelno nvarchar(90) = case when '#non' = [2] then '' else [2] end
+declare @t_emodelno nvarchar(90) = case when '#non' = [3] then CHAR(255) else [3] end
+--declare @t_bmodgno nvarchar(90) = case when '#non' = [5] then '' else [5] end
+--declare @t_emodgno nvarchar(90) = case when '#non' = [6] then CHAR(255) else [6] end
 declare @t_enda nvarchar(90)=[4]
 declare @tmp table(
 	rr int,
@@ -173,6 +177,8 @@ declare @tmp table(
 	typea nvarchar(20),
 	modnoa nvarchar(50),
 	model nvarchar(100),
+	modgno nvarchar(90),
+	modg nvarchar(100),
 	usemount float,--日前使用次數
 	fixmount float,--保養次數
 	smount float,--可使用次數
@@ -180,13 +186,12 @@ declare @tmp table(
 	fnoa nvarchar(100),
 	usetotal float
 )
-insert @tmp(rr,datea,stationno,station,mechno,mech,mount,typea,modnoa,model,fdate,fnoa,fixmount,smount,usemount)
-select ROW_NUMBER()over(partition by a.stationno,a.mech order by a.stationno,a.datea,a.mechno,b.noa)
-,a.datea,a.stationno,a.station,a.mechno,a.mech,1
-,case when c.datea>a.datea and c.datea<convert(nvarchar,getdate(),111) then '已保養' else (case when c.datea>a.datea and c.datea>convert(nvarchar,getdate(),111) then '即將保養' else '尚未保養' end) end
-,b.noa,b.model,c.datea,c.noa,b.fix,b.usemount
-,case when ISNULL(c.datea,'')='' or c.datea>convert(nvarchar,getdate(),111) then 1 else 0 end
+insert @tmp(rr,datea,stationno,station,mechno,mech,
+			mount,typea,modnoa,model,modgno,modg,fdate,fnoa,fixmount,smount,usemount)
 
+select ROW_NUMBER()over(partition by a.stationno,a.mech order by a.stationno,a.datea,a.mechno,b.noa),a.datea,a.stationno,a.station,a.mechno,a.mech,1
+,case when c.datea>a.datea and c.datea<convert(nvarchar,getdate(),111) then '已保養' else (case when c.datea>a.datea and c.datea>convert(nvarchar,getdate(),111) then '即將保養' else '尚未保養' end) end
+,b.noa,b.model,b.modgno,b.modg,c.datea,c.noa,b.fix,b.usemount,case when ISNULL(c.datea,'')='' or c.datea>convert(nvarchar,getdate(),111) then 1 else 0 end
 from view_workb a
 left join model b on a.stationno=b.stationno
 outer apply(select top 1 * from modfix where a.datea<datea and  a.mechno=mechno and b.noa=modnoa order by datea)c
@@ -201,6 +206,8 @@ declare @tmpa table(
 	gno nvarchar(1),
 	modnoa nvarchar(50),
 	model nvarchar(100),
+	modgno nvarchar(90),
+	modg nvarchar(100),
 	datea nvarchar(10),
 	typea nvarchar(20),
 	mount float,
@@ -210,27 +217,23 @@ declare @tmpa table(
 	fdate nvarchar(10),
 	fnoa nvarchar(100)
 )
-
 insert @tmpa
-select '0',isnull(modnoa,''),model,max(datea),typea,max(mount),max(usemount),fixmount,smount,fdate,fnoa
-from @tmp
-group by modnoa,model,typea,fixmount,smount,fdate,fnoa
-
+select '0',isnull(modnoa,''),model,modgno,modg,max(datea),typea,max(mount),max(usemount),fixmount,smount,fdate,fnoa
+from @tmp group by modnoa,model,modgno,modg,typea,fixmount,smount,fdate,fnoa
 
 if(@t_enda='1')
-begin
-select * from @tmpa where typea='過期未保養'  and (modnoa between @t_bmodelno and @t_emodelno)
-end
+	begin
+		select * from @tmpa where typea='過期未保養'  and (modnoa between @t_bmodelno and @t_emodelno)
+	end
 else if(@t_enda='2')
-begin
-select * from @tmpa where (typea='尚未保養' or typea='即將保養') and (modnoa between @t_bmodelno and @t_emodelno)
-end
+	begin
+		select * from @tmpa where (typea='尚未保養' or typea='即將保養') and (modnoa between @t_bmodelno and @t_emodelno)
+	end
 else if(@t_enda='3')
-begin
-select * from @tmpa where typea='已保養' and (modnoa between @t_bmodelno and @t_emodelno)
-end
+	begin
+		select * from @tmpa where typea='已保養' and (modnoa between @t_bmodelno and @t_emodelno)
+	end
 else
-begin
-select * from @tmpa where (modnoa between @t_bmodelno and @t_emodelno)
-end
-;
+	begin
+	select * from @tmpa where (modnoa between @t_bmodelno and @t_emodelno)
+end;
