@@ -63,14 +63,10 @@ from @tmp a order by a.modelno,a.indatea,a.modgno;
 
 -------------------------------------------------------------------------------------------------------------*
 z_model2:--z_model2
-declare @t_bmodelno nvarchar(90)
-declare @t_emodelno nvarchar(90)
-declare @t_bmodgno nvarchar(90)
-declare @t_emodgno nvarchar(90)
-set @t_bmodelno = case when '#non' = [2] then '' else [2] end
-set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
-set @t_bmodgno = case when '#non' = [5] then '' else [5] end
-set @t_emodgno = case when '#non' = [6] then CHAR(255) else [6] end
+declare @t_bmodelno nvarchar(90) = case when '#non' = [2] then '' else [2] end
+declare @t_emodelno nvarchar(90) = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_bmodgno nvarchar(90) = case when '#non' = [5] then '' else [5] end
+declare @t_emodgno nvarchar(90) = case when '#non' = [6] then CHAR(255) else [6] end
 declare @tmp table(
 	gno nvarchar(10),
 	idno int identity(0,1),
@@ -80,6 +76,8 @@ declare @tmp table(
 	models nvarchar(max),
 	datea nvarchar(10),
 	noa nvarchar(50),
+	modgno nvarchar(50),
+	modg nvarchar(50),
 	mount float,
 	stkmount float,
 	ghref nvarchar(max)
@@ -87,28 +85,31 @@ declare @tmp table(
 ----------stktype->1=+,2=-
 insert into @tmp
 	select
-		'0','',0,a.noa,a.model,'' datea,'' noa,0 inmount,
+		'0','',0,a.noa,a.model,'' datea,'' noa,a.modgno,a.modg,0 inmount,
 		isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0),''
 	from model a
 	outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
 	outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
 	outer apply(select sum(inmount) mount from moget where (a.noa=modelno) and (len(isnull(insno,'')) > 0)) d
-	where (a.noa between @t_bmodelno and @t_emodelno) and (a.modgno between @t_bmodgno and @t_emodgno) 
-			and (isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0))>0
+	where (a.noa between @t_bmodelno and @t_emodelno) and (isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0))>0
+
 insert into @tmp
 	select
 		a.*
 	from (
-		select '1' gno,'取得' gettype,1 stktype,a.noa modelno,a.model,a.indate,a.noa,a.inmount,0 stkmount,'model' ghref from model a
+		select '1' gno,'取得' gettype,1 stktype,a.noa modelno,a.model,a.indate,a.noa,0 modgno,0 modg,a.inmount,0 stkmount,'model' ghref from model a
 		union all
-		select '1' gno,'報廢' gettype,2 stktype,a.modelno modelno,a.model,a.datea,a.noa,a.mount,0 stkmount,'moout' ghref from moout a
+		select '1' gno,'報廢' gettype,2 stktype,a.modelno modelno,a.model,a.datea,a.noa,0 modgno,0 modg,a.mount,0 stkmount,'moout' ghref from moout a
 		union all
-		select '1' gno,'借出' gettype,2 stktype,a.modelno modelno,a.model,a.outdate,a.noa,a.outmount,0 stkmount,'moget' ghref from moget a where (len(isnull(a.outsno,'')) > 0)
+		select '1' gno,'借出' gettype,2 stktype,a.modelno modelno,a.model,a.outdate,a.noa,0 modgno,0 modg,a.outmount,0 stkmount,'moget' ghref from moget a where (len(isnull(a.outsno,'')) > 0)
 		union all
-		select '1' gno,'歸還' gettype,1 stktype,a.modelno modelno,a.model,a.indate,a.noa,a.inmount,0 stkmount,'moget' ghref from moget a where (len(isnull(a.insno,'')) > 0)
+		select '1' gno,'歸還' gettype,1 stktype,a.modelno modelno,a.model,a.indate,a.noa,0 modgno,0 modg,a.inmount,0 stkmount,'moget' ghref from moget a where (len(isnull(a.insno,'')) > 0)
 	) a
 	outer apply(select top 1 modelno,models,stkmount from @tmp where (a.modelno=modelno) and (a.model=models) and (gno='0')) b
 	where (b.modelno is not null) and (b.models is not null) and (b.stkmount > 0)
+
+
+
 declare @idno int
 declare @modelno nvarchar(90)
 declare @models nvarchar(max)
@@ -143,6 +144,8 @@ deallocate cursor_table
 update @tmp set ghref=ghref+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?' where gno='1'
 select
 	a.gno,
+	a.modgno a07,
+	a.modg a08,
 	a.modelno a01,
 	a.models a02,
 	a.gettype a03,
@@ -152,8 +155,6 @@ select
 	a.stkmount a06,
 	a.ghref
 from @tmp a order by a.modelno,a.models,a.gno,a.datea;
-
-
 -----------------------------------------------------------------------------------------
 z_model3:--z_model3
 declare @t_bmodelno nvarchar(90)
