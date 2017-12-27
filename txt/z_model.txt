@@ -23,8 +23,7 @@ declare @tmp table(
 	outmount float,
 	lendmount float,
 	returnmount float,
-	stkmount float
-)
+	stkmount float )
 insert into @tmp
 	select '0',a.noa,a.model,a.modgno,a.modg,a.stationno,a.station,a.usemount,a.fix,a.yearmount,a.indate,isnull(a.inmount,0),isnull(b.mount,0),isnull(c.mount,0),isnull(d.mount,0),0
 	from model a
@@ -41,7 +40,7 @@ select
 	a.modg a11,
 	a.usemount a12,
 	a.fix a13,
-	a.stationno a14,--工作線別
+	a.stationno a14,
 	a.station a15,
 	a.yearmount a03,
 	a.indatea a04,
@@ -74,8 +73,7 @@ declare @tmp table(
 )
 ----------stktype->1=+,2=-
 insert into @tmp
-	select
-		'0','',0,a.noa,a.model,'' datea,'' noa,a.modgno,a.modg,0 inmount, isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0),''
+	select '0','',0,a.noa,a.model,'' datea,'' noa,a.modgno,a.modg,0 inmount, isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0),''
 	from model a
 		outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
 		outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
@@ -91,8 +89,7 @@ insert into @tmp
 		union all
 		select '1' gno,'歸還' gettype,1 stktype,a.modelno modelno,a.model,a.indate,a.noa,0 modgno,0 modg,a.inmount,0 stkmount,'moget' ghref from moget a where (len(isnull(a.insno,'')) > 0)
 	) a
-	outer apply(select top 1 modelno,models,stkmount from @tmp where (a.modelno=modelno) and (a.model=models) and (gno='0')) b
-	where (b.modelno is not null) and (b.models is not null) and (b.stkmount > 0)
+	outer apply(select top 1 modelno,models,stkmount from @tmp where (a.modelno=modelno) and (a.model=models) and (gno='0')) b where (b.modelno is not null) and (b.models is not null) and (b.stkmount > 0)
 	
 declare @idno int
 declare @modelno nvarchar(90)
@@ -106,17 +103,16 @@ declare cursor_table cursor for
 	select a.idno,a.modelno,a.models,a.stktype,mount from @tmp a where gno='1' order by a.modelno,a.models,a.datea
 open cursor_table
 fetch next from cursor_table
-into @idno,@modelno,@models,@stktype,@mount
-while(@@FETCH_STATUS <> -1)
+into @idno,@modelno,@models,@stktype,@mount while(@@FETCH_STATUS <> -1)
 begin
 	if((@modelno = @lastmodelno) and (@models = @lastmodels))
-	begin
-		set @c_stkmount = @c_stkmount + isnull((case when @stktype='1' then @mount else @mount*(-1) end),0)
-	end
+		begin
+			set @c_stkmount = @c_stkmount + isnull((case when @stktype='1' then @mount else @mount*(-1) end),0)
+		end
 	else
-	begin
-		set @c_stkmount = @mount
-	end
+		begin
+			set @c_stkmount = @mount
+		end
 	update @tmp set stkmount=@c_stkmount where idno=@idno
 	set @lastmodelno = @modelno
 	set @lastmodels = @models
@@ -132,7 +128,6 @@ select
 	a.modg a08,
 	a.modelno a01,
 	a.models a02,
-	
 	a.gettype a03,
 	a.noa,
 	a.datea a04,
@@ -172,7 +167,6 @@ a.fix smount,c.datea fdate,c.noa fnoa
 from model a
 left join view_work b on a.noa = b.modelno
 left join modfix c on a.noa = c.modnoa
---group by modnoa,modela,modgno,modg,typea,fixmount,smount,fdate,fnoa
 if(@t_enda='1')
 	begin
 		select * from @tmpa where typea='過期未保養'  and (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
