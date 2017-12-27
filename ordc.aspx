@@ -765,7 +765,6 @@
 					z_acomp = as[0].acomp;
 					z_nick = as[0].nick;
 				}
-				break;
 				_btnIns();
 				$('#chkIsproj').attr('checked', true);
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val('AUTO');

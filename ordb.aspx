@@ -628,7 +628,6 @@
 					z_acomp = as[0].acomp;
 					z_nick = as[0].nick;
 				}
-				break;
 				_btnIns();
 				$('#chkIsproj').attr('checked', true);
 				$('#txtNoa').val('AUTO');
