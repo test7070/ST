@@ -6,11 +6,13 @@
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
 		<script src='../script/qj_mess.js' type="text/javascript"></script>
+		<script src="../script/qbox.js" type="text/javascript"></script>
 		<script src='../script/mask.js' type="text/javascript"></script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 			var q_name = "model_s";
-			var aPop = new Array(['txtStationno', 'lblStationno', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx']);
+			var aPop = new Array(['txtStationno', 'lblStationno', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'],
+								 ['txtModgno', 'lblModg', 'modg', 'noa,namea', 'txtModgno,txtModg', 'modg_b.aspx']);
 			$(document).ready(function() {
 				main();
 			});
@@ -32,9 +34,11 @@
 				t_enoa = $('#txtEnoa').val();
 				t_indate = $('#txtIndate').val();
 				t_stationno = $('#txtStationno').val();
+				t_Modgno = $('#txtModgno').val();
 				var t_where = " 1=1 " + q_sqlPara2("noa", t_bnoa, t_enoa) +
 												 q_sqlPara2("indate", t_indate) +
-												 q_sqlPara2("stationno", t_stationno);
+												 q_sqlPara2("stationno", t_stationno)+
+												 q_sqlPara2("Modgno", t_Modgno);
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
 			}
@@ -69,6 +73,14 @@
 						<input class="txt" id="txtStationno" type="text" style="width:90px; font-size:medium;" />
 						&nbsp;
 						<input class="txt" id="txtStation" type="text" style="width:115px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek'  style="width:20%;"><a id='lblModg'> </a></td>
+					<td>
+						<input class="txt" id="txtModgno" type="text" style="width:90px; font-size:medium;" />
+						&nbsp;
+						<input class="txt" id="txtModg" type="text" style="width:115px; font-size:medium;" />
 					</td>
 				</tr>
 			</table>

@@ -18,7 +18,7 @@
 			q_tables = 's';
 			var q_name = "moget";
 			var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtModel','txtOutnamea','txtInnamea'];
-			var q_readonlys = [];
+			var q_readonlys = ['txtWorkno'];
 			var bbmNum = [['txtOutmount',10,0,1],['txtInmount',10,0,1]];
 			var bbsNum = [['txtOrdmount',10,0,1],['txtMomount',10,0,1]];
 			var bbmMask = [];
@@ -52,8 +52,62 @@
 			}
 
 			function mainPost() {
-				bbmMask = [['txtDatea',r_picd],['txtOutdate',r_picd],['txtIndate',r_picd]];
+				$('#txtWorkno').change(function() {
+					if(!emp($('#txtWorkno').val())){
+						if($('#txtWorkno').val().substr(1,1).replace(/[^\d]/g,'')!=''){
+							var t_where = "where=^^ noa ='" + $('#txtWorkno').val() + "' and isnull(enda,0)!=1 and isnull(isfreeze,0)!=1 and (tggno is null or tggno='') ^^";
+							q_gt('work', t_where, 0, 0, 0, "", r_accy);
+						}else{
+							alert("【"+$('#txtWorkno').val()+"】是模擬製令不得入庫!!");
+						}
+					}
+				});
+				bbmMask = [['txtOutdate',r_picd],['txtIndate',r_picd]];
 				q_mask(bbmMask);
+				
+				$('#btnWork').click(function() {
+					//1030630不用判斷工作中心是否有填寫
+					var t_err = '';
+					t_err = q_chkEmpField([['txtModelno', q_getMsg('lblModelno')]]);
+					// 檢查空白
+					if (t_err.length > 0) {
+						alert(t_err);
+						return;
+					}
+					if(!emp($('#txtWorkno').val()) && $('#txtWorkno').val().substr(1,1).replace(/[^\d]/g,'')==''){
+						alert("【"+$('#txtWorkno').val()+"】是模擬製令不得入庫!!");
+						return;
+					}
+					
+					if(!emp($('#txtWorkno').val())){
+						var t_where = "where=^^ noa ='" + $('#txtWorkno').val() + "' and isnull(enda,0)!=1 and isnull(isfreeze,0)!=1 and (tggno is null or tggno='')^^";
+						q_gt('work', t_where, 0, 0, 0, "", r_accy);
+					}else{
+						var t_where = '1=1 ';
+						t_where += "and isnull(enda,0)!=1 and isnull(isfreeze,0)!=1 and (tggno is null or tggno='')";
+						
+						if (!emp($('#txtModelno').val())) 
+							t_where += " and Modelno='" + $('#txtModelno').val() + "' ";
+							
+						var noa = $.trim($('#txtWorkno').val());
+						if(noa.length > 0 ){
+							t_where += " and noa=N'"+noa+"'";
+						}
+						//1030310 加入應完工日的條件
+						var t_bdate = $.trim($('#txtOutdate').val());
+						var t_edate = $.trim($('#txtIndate').val());
+						if(t_bdate.length > 0 || t_edate.length>0){
+							if(t_edate.length == 0) t_edate=r_picd
+							t_where += " and uindate between '"+t_bdate+"' and '"+t_edate+"'";
+						}
+						t_where+=" and noa like 'W[0-9]%' ";
+						
+						//原先的資料
+						t_where += " or noa in (select noa from view_works where noa='" + $('#txtNoa').val() + "')";
+						
+						q_box("work_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'work', "95%", "95%", q_getMsg('popWork'));
+					}
+				});
 			}
 
 			function q_boxClose(s2) {
@@ -108,7 +162,7 @@
 							$('#txtWorker').val(r_name);
 						else
 							$('#txtWorker2').val(r_name);
-						
+
 						if (t_noa.length == 0 || t_noa == "AUTO")
 							q_gtnoa(q_name, replaceAll((t_date.length == 0 ? q_date() : t_date), '/', ''));
 						else
@@ -117,6 +171,33 @@
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
+						break;
+					case 'work':
+						var as = _q_appendData("work", "", true);
+						var t_stationno = '', t_station = '';
+						for ( var i = 0; i < as.length; i++) {
+							for (var j = 0; j < q_bbsCount; j++) {
+								if(!emp($('#txtWorkno_'+j).val()) && as[i].noa==$('#txtWorkno_'+j).val()){
+									//排除已在BBS內的work
+									as.splice(i, 1);
+									i--;
+									break;
+								}
+							}
+						}
+						
+						/*var ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtStyle,txtUnit,txtSpec,txtMount,txtMemo,txtWorkno,txtOrdeno,
+												txtNo2,txtWk_mount,txtWk_inmount,txtWk_unmount', as.length, as
+						, 'productno,product,style,unit,spec,smount,memo,noa,ordeno,no2,mount,inmount,smount', 'txtWorkno');*/
+						
+						var ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtWorkno,txtOrdeno', 
+						as.length, as
+						,'productno,product,noa,ordeno', 'txtWorkno');
+
+						if (t_stationno.length != 0 || t_station.length != 0) {
+							$('#txtStationno').val(t_stationno);
+							$('#txtStation').val(t_station);
+						}
 						break;
 				}
 			}
@@ -151,11 +232,19 @@
 			function bbsAssign(){
 				for (var i = 0; i < q_bbsCount ; i++) {
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
+						$('#txtWorkno_' + i).click(function() {
+							t_IdSeq = -1;
+							q_bodyId($(this).attr('id'));
+							b_seq = t_IdSeq;
+							if (!emp($('#txtWorkno_' + b_seq).val())) {
+								t_where = "noa='" + $('#txtWorkno_' + b_seq).val() + "'";
+								q_box("work.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'bbs_work', "95%", "95%", q_getMsg('PopWork'));
+							}
+						});
 					}
 				}
 				_bbsAssign();
 			}
-
 			function bbsSave(as) {
 				if (!as['ordeno']) {
 					as[bbsKey[1]] = '';
@@ -164,7 +253,6 @@
 				q_nowf();
 				return true;
 			}
-
 			function btnOk() {
 				Lock();
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtModelno', q_getMsg('lblModelno')]]);
@@ -447,6 +535,7 @@
 							<input id="txtModelno" type="text" class="txt c2" />
 							<input id="txtModel" type="text" class="txt c3" />
 						</td>
+						<td><input type="button" id="btnWork"></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblOutsno' class="lbl btn"> </a></td>
@@ -495,12 +584,13 @@
 						<td align="center" style="width:1%;">
 							<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
 						</td>
-						<td align="center" style="width:120px;"><a id='lblOrdeno_s'> </a></td>
+						<td align="center" style="width:130px;"><a id='lblOrdeno_s'> </a></td>
 						<td align="center" style="width:30px;"><a id='lblNo2_s'> </a></td>
 						<td align="center" style="width:120px;"><a id='lblProductno_s'> </a></td>
 						<td align="center" style="width:120px;"><a id='lblProduct_s'> </a></td>
 						<td align="center" style="width:80px;"><a id='lblOrdmount_s'> </a></td>
 						<td align="center" style="width:80px;"><a id='lblMomount_s'> </a></td>
+						<td align="center" style="width:130px;"><a id='lblWorknos_s'> </a></td>
 					</tr>
 					<tr style='background:#cad3ff;'>
 						<td>
@@ -515,6 +605,7 @@
 						<td><input class="txt c1" id="txtProduct.*" type="text" /></td>
 						<td><input class="txt c1 num" id="txtOrdmount.*" type="text" /></td>
 						<td><input class="txt c1 num" id="txtMomount.*" type="text" /></td>
+						<td><input class="txt c1" id="txtWorkno.*" type="text" /></td>
 						<td style="display:none;">
 							<input id="txtNoq.*" type="hidden" />
 							<input id="recno.*" type="hidden" />
