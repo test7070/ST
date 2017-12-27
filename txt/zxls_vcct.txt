@@ -107,7 +107,7 @@ declare @edate nvarchar(10)
 
 declare cursor_table cursor for
 select noa,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y from ztmpxls 
-where ((isnull(f,'')!='' and len(f)=10 and f like '[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
+where ((isnull(f,'')!='' ) --and len(f)=10 and f like '[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' --106/12/26 為了顯示發票號碼錯誤這裡不先判斷等候面寫入時再處理
 or isnull(o,'')!='') and isnull(f,'')!='發票號碼'
 open cursor_table
 fetch next from cursor_table
@@ -357,7 +357,9 @@ declare @accy nvarchar(50)
 declare @vccno nvarchar(50)
 declare @t_sono nvarchar(50)
 declare cursor_table cursor for
-select indo,isexist,noa,sono,kind,mon from #z_vcctrb order by indo
+select indo,isexist,noa,sono,kind,mon from #z_vcctrb 
+where len(noa)=10 and noa like '[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+order by indo
 open cursor_table
 fetch next from cursor_table
 into @indo,@isexist,@noa,@sono,@kind,@mon
