@@ -132,6 +132,11 @@
                     return;
                 }
                 
+                //noq 清空
+                for (var j = 0; j < q_bbsCount; j++) {
+                	$('#txtNoq_'+j).val('');	
+                }
+                
 				if(q_cur==1)
 					$('#txtWorker').val(r_name);
 				else
