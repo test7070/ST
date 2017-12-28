@@ -37,6 +37,7 @@
 				bbmKey = ['noa','noq'];
 				q_brwCount();
 				q_gt(q_name, q_content, q_sqlCount, 1);
+				q_gt('flors_coin', '', 0, 0, 0, "flors_coin");
 			});
 			
 			function sum(){
@@ -70,6 +71,18 @@
 
 			function q_gtPost(t_name) {
 				switch (t_name) {
+					case 'flors_coin':
+						var as = _q_appendData("flors", "", true);
+						var z_coin='';
+						for ( i = 0; i < as.length; i++) {
+							z_coin+=','+as[i].coin;
+						}
+						if(z_coin.length==0) z_coin=' ';
+						
+						q_cmbParse("cmbCoin", z_coin);
+						if(abbm[q_recno])
+							$('#cmbCoin').val(abbm[q_recno].coin);
+						break;	
 					case q_name:
 						if (q_cur == 4)
 							q_Seek_gtPost();
@@ -387,6 +400,8 @@
 					<tr>
 						<td><span> </span><a id='lblPrice' class="lbl">採購單價</a></td>
 						<td><input id="txtPrice" type="text" class="txt c1 num"/></td>
+						<td><span> </span><a id='lblCoin' class="lbl">幣別</a></td>
+						<td><select id="cmbCoin" class="txt c1"> </select></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblMemo' class="lbl">備註</a></td>
