@@ -1,15 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
-		<title></title>
+		<title> </title>
 		<script src="../script/jquery.min.js" type="text/javascript"></script>
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
 		<script src='../script/qj_mess.js' type="text/javascript"></script>
-		<script src="../script/qbox.js" type="text/javascript"></script>
 		<script src='../script/mask.js' type="text/javascript"></script>
+		<script src="../script/qbox.js" type="text/javascript"></script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
-
+		<link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+		<script src="css/jquery/ui/jquery.ui.core.js"></script>
+		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
+		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			this.errorHandler = null;
 			function onPageError(error) {
@@ -38,11 +41,10 @@
 			);
 			$(document).ready(function() {
 				bbmKey = ['noa'];
-				bbsKey = ['noa','noq'];
+				bbsKey = ['noa', 'noq'];
 				q_brwCount();
-				q_gt(q_name, q_content, q_sqlCount, 1);
+				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
 			});
-
 			function main() {
 				if (dataErr) {
 					dataErr = false;
@@ -50,8 +52,18 @@
 				}
 				mainForm(0);
 			}
-
 			function mainPost() {
+				q_getFormat();
+				bbmMask = [['txtDatea', r_picd], ['txtBdate', r_picd], ['txtEdate', r_picd],['txtWorktime','99:99']];
+				q_mask(bbmMask);
+				
+				$('#txtWorkano').click(function() {
+					if (!emp($('#txtWorkano').val())) {
+						t_where = "noa='" + $('#txtWorkano').val() + "'";
+						q_box("worka.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'worka', "95%", "95%", q_getMsg('PopWorka'));
+					}
+				});
+
 				$('#txtWorkno').change(function() {
 					if(!emp($('#txtWorkno').val())){
 						if($('#txtWorkno').val().substr(1,1).replace(/[^\d]/g,'')!=''){
@@ -62,9 +74,6 @@
 						}
 					}
 				});
-				bbmMask = [['txtOutdate',r_picd],['txtIndate',r_picd]];
-				q_mask(bbmMask);
-				
 				$('#btnWork').click(function() {
 					//1030630不用判斷工作中心是否有填寫
 					var t_err = '';
@@ -86,13 +95,16 @@
 						var t_where = '1=1 ';
 						t_where += "and isnull(enda,0)!=1 and isnull(isfreeze,0)!=1 and (tggno is null or tggno='')";
 						
+						/*if (!emp($('#txtStationno').val())) 
+							t_where += " and stationno='" + $('#txtStationno').val() + "' ";*/
 						if (!emp($('#txtModelno').val())) 
 							t_where += " and Modelno='" + $('#txtModelno').val() + "' ";
 							
-						var noa = $.trim($('#txtWorkno').val());
-						if(noa.length > 0 ){
-							t_where += " and noa=N'"+noa+"'";
+						var workno = $.trim($('#txtWorkno').val());
+						if(workno.length > 0 ){
+							t_where += " and noa=N'"+workno+"'";
 						}
+						
 						//1030310 加入應完工日的條件
 						var t_bdate = $.trim($('#txtOutdate').val());
 						var t_edate = $.trim($('#txtIndate').val());
@@ -103,20 +115,52 @@
 						t_where+=" and noa like 'W[0-9]%' ";
 						
 						//原先的資料
-						t_where += " or noa in (select noa from view_works where noa='" + $('#txtNoa').val() + "')";
+						t_where += " or noa in (select noa from mogets where noa='" + $('#txtNoa').val() + "')";
 						
 						q_box("work_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'work', "95%", "95%", q_getMsg('popWork'));
 					}
 				});
+				$('#btnClose_div_stk').click(function() {
+					$('#div_stk').toggle();
+				});
+				
+				if (q_getPara('sys.project').toUpperCase()=='AD' || q_getPara('sys.project').toUpperCase()=='JO'){
+					$('.team').show();
+				}
+				
+			}
+
+			function getInStr(HasNoaArray) {
+				var NewArray = new Array();
+				for (var i = 0; i < HasNoaArray.length; i++) {
+					NewArray.push("'" + HasNoaArray[i].noa + "'");
+				}
+				return NewArray.toString();
 			}
 
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
+					case 'work':
+						b_ret = getb_ret();
+						if (b_ret && (q_cur == 1 || q_cur == 2)) {
+							/*$('#txtStationno').val(b_ret[0].stationno);
+							$('#txtStation').val(b_ret[0].station);*/
+							$('#txtModelno').val(b_ret[0].Modelno);
+							$('#txtModel').val(b_ret[0].model);
+							//清空表身資料
+							for (var i = 0; i < q_bbsCount; i++) {
+								$('#btnMinus_' + i).click();
+							}
+							var t_where = "where=^^ noa in(" + getInStr(b_ret) + ")^^";
+							q_gt('work', t_where, 0, 0, 0, "", r_accy);
+						}
+						break;
 					case q_name + '_s':
 						q_boxClose2(s2);
 						break;
 				}
+				b_pop = '';
 			}
 
 			function q_gtPost(t_name) {
@@ -162,19 +206,16 @@
 							$('#txtWorker').val(r_name);
 						else
 							$('#txtWorker2').val(r_name);
-
+						
 						if (t_noa.length == 0 || t_noa == "AUTO")
 							q_gtnoa(q_name, replaceAll((t_date.length == 0 ? q_date() : t_date), '/', ''));
 						else
 							wrServer(t_noa);
 						break;
-					case q_name:
-						if (q_cur == 4)
-							q_Seek_gtPost();
-						break;
+						
 					case 'work':
 						var as = _q_appendData("work", "", true);
-						var t_stationno = '', t_station = '';
+						var t_modelno = '', t_model = '';
 						for ( var i = 0; i < as.length; i++) {
 							for (var j = 0; j < q_bbsCount; j++) {
 								if(!emp($('#txtWorkno_'+j).val()) && as[i].noa==$('#txtWorkno_'+j).val()){
@@ -185,66 +226,49 @@
 								}
 							}
 						}
-						
-						/*var ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtStyle,txtUnit,txtSpec,txtMount,txtMemo,txtWorkno,txtOrdeno,
-												txtNo2,txtWk_mount,txtWk_inmount,txtWk_unmount', as.length, as
-						, 'productno,product,style,unit,spec,smount,memo,noa,ordeno,no2,mount,inmount,smount', 'txtWorkno');*/
-						
-						var ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtWorkno,txtOrdeno', 
-						as.length, as
-						,'productno,product,noa,ordeno', 'txtWorkno');
-
-						if (t_stationno.length != 0 || t_station.length != 0) {
-							$('#txtStationno').val(t_stationno);
-							$('#txtStation').val(t_station);
+						for ( var i = 0; i < as.length; i++) {
+							if (as[i].modelno != '') {
+								t_modelno = as[i].modelno;
+								t_model = as[i].model;
+							}
+							//扣掉本入庫單以入庫的數量
+							for (var j = 0; j < abbsNow.length; j++) {
+								if (abbsNow[j].workno == as[i].noa) {
+									as[i].inmount = dec(as[i].inmount) - dec(abbsNow[j].mount);
+								}
+							}
+							//本次入庫量
+							as[i].smount=dec(as[i].mount)-dec(as[i].inmount);
 						}
+						
+						var ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtStyle,txtUnit,txtSpec,txtMount,txtMemo,txtWorkno,txtOrdeno,txtNo2,txtWk_mount,txtWk_inmount,txtWk_unmount', as.length, as
+						, 'productno,product,style,unit,spec,smount,memo,noa,ordeno,no2,mount,inmount,smount', 'txtWorkno');
+
+						if (t_modelno.length != 0 || t_station.length != 0) {
+							$('#txtModelno').val(t_modelno);
+							$('#txtmodel').val(t_model);
+						}
+						break;
+					case q_name:
+						if (q_cur == 4)
+							q_Seek_gtPost();
 						break;
 				}
 			}
-
-			function _btnSeek() {
-				if (q_cur > 0 && q_cur < 4)
-					return;
-				q_box('moget_s.aspx', q_name + '_s', "500px", "450px", q_getMsg("popSeek"));
-			}
-
 			function btnIns() {
 				_btnIns();
 				$('#txtDatea').val(q_date());
 				$('#txtNoa').val('AUTO');
 			}
-
-			function btnModi() {
-				if (emp($('#txtNoa').val()))
-					return;
-				_btnModi();
-			}
-
-			function btnPrint() {
-			}
-
-			function q_stPost() {
-				if (!(q_cur == 1 || q_cur == 2))
-					return false;
-				Unlock();
-			}
-
+			
 			function bbsAssign(){
 				for (var i = 0; i < q_bbsCount ; i++) {
 					if (!$('#btnMinus_' + i).hasClass('isAssign')) {
-						$('#txtWorkno_' + i).click(function() {
-							t_IdSeq = -1;
-							q_bodyId($(this).attr('id'));
-							b_seq = t_IdSeq;
-							if (!emp($('#txtWorkno_' + b_seq).val())) {
-								t_where = "noa='" + $('#txtWorkno_' + b_seq).val() + "'";
-								q_box("work.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'bbs_work', "95%", "95%", q_getMsg('PopWork'));
-							}
-						});
 					}
 				}
 				_bbsAssign();
 			}
+
 			function bbsSave(as) {
 				if (!as['ordeno']) {
 					as[bbsKey[1]] = '';
@@ -296,7 +320,6 @@
 				var t_where = "where=^^ (modelno='"+t_modelno+"') and (noa!='"+t_noa+"')^^";
 				q_gt('view_modelstk', t_where, 0, 0, 0, "modelStk_Check", r_accy);
 			}
-
 			function wrServer(key_value) {
 				var i;
 				xmlSql = '';
@@ -306,14 +329,22 @@
 				_btnOk(key_value, bbmKey[0], '', '', 2);
 			}
 
+			function combPay_chg() {
+			}
+			function btnModi() {
+				if (emp($('#txtNoa').val()))
+					return;
+				_btnModi();
+			}
+
+			function btnPrint() {
+			}
 			function refresh(recno) {
 				_refresh(recno);
 			}
-
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
 			}
-
 			function btnMinus(id) {
 				_btnMinus(id);
 			}
@@ -323,7 +354,7 @@
 			}
 
 			function q_appendData(t_Table) {
-				return _q_appendData(t_Table);
+				dataErr = !_q_appendData(t_Table);
 			}
 
 			function btnSeek() {
@@ -584,7 +615,7 @@
 						<td align="center" style="width:1%;">
 							<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
 						</td>
-						<td align="center" style="width:130px;"><a id='lblOrdeno_s'> </a></td>
+						<td align="center" style="width:120px;"><a id='lblOrdeno_s'> </a></td>
 						<td align="center" style="width:30px;"><a id='lblNo2_s'> </a></td>
 						<td align="center" style="width:120px;"><a id='lblProductno_s'> </a></td>
 						<td align="center" style="width:120px;"><a id='lblProduct_s'> </a></td>
