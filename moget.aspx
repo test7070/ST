@@ -6,13 +6,9 @@
 		<script src='../script/qj2.js' type="text/javascript"></script>
 		<script src='qset.js' type="text/javascript"></script>
 		<script src='../script/qj_mess.js' type="text/javascript"></script>
-		<script src='../script/mask.js' type="text/javascript"></script>
 		<script src="../script/qbox.js" type="text/javascript"></script>
+		<script src='../script/mask.js' type="text/javascript"></script>
 		<link href="../qbox.css" rel="stylesheet" type="text/css" />
-		<link href="css/jquery/themes/redmond/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-		<script src="css/jquery/ui/jquery.ui.core.js"></script>
-		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
-		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
 			this.errorHandler = null;
 			function onPageError(error) {
@@ -43,7 +39,7 @@
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
 				q_brwCount();
-				q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+				q_gt(q_name, q_content, q_sqlCount, 1);
 			});
 			function main() {
 				if (dataErr) {
@@ -54,7 +50,7 @@
 			}
 			function mainPost() {
 				q_getFormat();
-				bbmMask = [['txtDatea', r_picd], ['txtBdate', r_picd], ['txtEdate', r_picd],['txtWorktime','99:99']];
+				bbmMask = [['txtDatea', r_picd], ['txtOutdate', r_picd], ['txtIndate', r_picd],['txtOuttime','99:99'],['txtIntime','99:99']];
 				q_mask(bbmMask);
 				
 				$('#txtWorkano').click(function() {
@@ -212,7 +208,11 @@
 						else
 							wrServer(t_noa);
 						break;
-						
+					case q_name:
+						if (q_cur == 4)
+							q_Seek_gtPost();
+						break;
+
 					case 'work':
 						var as = _q_appendData("work", "", true);
 						var t_modelno = '', t_model = '';
@@ -255,10 +255,33 @@
 						break;
 				}
 			}
+			
+			function _btnSeek() {
+				if (q_cur > 0 && q_cur < 4)
+					return;
+				q_box('moget_s.aspx', q_name + '_s', "500px", "450px", q_getMsg("popSeek"));
+			}
+			
 			function btnIns() {
 				_btnIns();
 				$('#txtDatea').val(q_date());
 				$('#txtNoa').val('AUTO');
+			}
+
+			function btnModi() {
+				if (emp($('#txtNoa').val()))
+					return;
+				_btnModi();
+			}
+			
+
+			function btnPrint() {
+			}
+
+			function q_stPost() {
+				if (!(q_cur == 1 || q_cur == 2))
+					return false;
+				Unlock();
 			}
 			
 			function bbsAssign(){
@@ -290,7 +313,7 @@
 				if(t_outmount==0 && t_inmount==0){
 					t_err2 += '請輸入['+q_getMsg('lblOutmount')+']或['+q_getMsg('lblInmount') + ']\n';
 				}else{
-					if(t_outmount > 0 && (t_outsno.length==0 || t_outdate.length==0)){
+					if(t_outmount > 0 && (t_outsno.length==0 || t_outdate.length==0 )){
 						if(t_outsno.length==0){
 							t_err2 += '請輸入['+q_getMsg('lblOutsno')+']\n';
 						}else{
@@ -320,6 +343,8 @@
 				var t_where = "where=^^ (modelno='"+t_modelno+"') and (noa!='"+t_noa+"')^^";
 				q_gt('view_modelstk', t_where, 0, 0, 0, "modelStk_Check", r_accy);
 			}
+			
+			
 			function wrServer(key_value) {
 				var i;
 				xmlSql = '';
@@ -327,17 +352,6 @@
 					xmlSql = q_preXml();
 				$('#txt' + bbmKey[0].substr(0, 1).toUpperCase() + bbmKey[0].substr(1)).val(key_value);
 				_btnOk(key_value, bbmKey[0], '', '', 2);
-			}
-
-			function combPay_chg() {
-			}
-			function btnModi() {
-				if (emp($('#txtNoa').val()))
-					return;
-				_btnModi();
-			}
-
-			function btnPrint() {
 			}
 			function refresh(recno) {
 				_refresh(recno);
@@ -467,6 +481,10 @@
 				width: 95%;
 				float: left;
 			}
+			.c1_1 {
+				width: 40%;
+				float: left;
+			}
 			.c2 {
 				width: 35%;
 				float: left;
@@ -525,8 +543,7 @@
 	<body ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-	>
+	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 		<!--#include file="../inc/toolbar.inc"-->
 		<div id='dmain'>
 			<div class="dview" id="dview">
@@ -546,7 +563,7 @@
 				</table>
 			</div>
 			<div class='dbbm'>
-				<table class="tbbm"  id="tbbm">
+				<table class="tbbm" id="tbbm">
 					<tr style="height:1px;">
 						<td> </td>
 						<td> </td>
@@ -578,7 +595,8 @@
 					<tr>
 						<td><span> </span><a id='lblOutdate' class="lbl"> </a></td>
 						<td><input id="txtOutdate" type="text" class="txt c1"/></td>
-						<td><span> </span><a id='lblOutmount' class="lbl"> </a></td>
+						<td><input id="txtOuttime" type="text" class="txt c1_1"/></td>
+						<td><span></span><a id='lblOutmount' class="lbl"></a></td>
 						<td><input id="txtOutmount" type="text" class="txt c1 num"/></td>
 					</tr>
 					<tr>
@@ -591,6 +609,7 @@
 					<tr>
 						<td><span> </span><a id='lblIndate' class="lbl"> </a></td>
 						<td><input id="txtIndate" type="text" class="txt c1"/></td>
+						<td><input id="txtIntime" type="text" class="txt c1_1"/></td>
 						<td><span> </span><a id='lblInmount' class="lbl"> </a></td>
 						<td><input id="txtInmount" type="text" class="txt c1 num"/></td>
 					</tr>
