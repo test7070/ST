@@ -73,7 +73,8 @@
 				$('#btnWork').click(function() {
 					//1030630不用判斷工作中心是否有填寫
 					var t_err = '';
-					t_err = q_chkEmpField([['txtModelno', q_getMsg('lblModelno')]]);
+					//t_err = q_chkEmpField([['txtModelno', q_getMsg('lblModelno')]]);
+					t_err += '警告：\n　　　請輸入[ '+q_getMsg('lblModelno')+' ]才可匯入製令單\n';
 					// 檢查空白
 					if (t_err.length > 0) {
 						alert(t_err);
@@ -123,9 +124,7 @@
 				if (q_getPara('sys.project').toUpperCase()=='AD' || q_getPara('sys.project').toUpperCase()=='JO'){
 					$('.team').show();
 				}
-				
 			}
-
 			function getInStr(HasNoaArray) {
 				var NewArray = new Array();
 				for (var i = 0; i < HasNoaArray.length; i++) {
@@ -133,7 +132,6 @@
 				}
 				return NewArray.toString();
 			}
-
 			function q_boxClose(s2) {
 				var ret;
 				switch (b_pop) {
@@ -158,7 +156,6 @@
 				}
 				b_pop = '';
 			}
-
 			function q_gtPost(t_name) {
 				switch (t_name) {
 					case 'modelStk_Check':
@@ -306,20 +303,27 @@
 				var t_err2 = '';
 				var t_outsno = $.trim($('#txtOutsno').val());
 				var t_outdate = $.trim($('#txtOutdate').val());
+				var t_outtime = $.trim($('#txtOuttime').val());
 				var t_outmount = dec($('#txtOutmount').val());
 				var t_insno = $.trim($('#txtInsno').val());
 				var t_indate = $.trim($('#txtIndate').val());
 				var t_inmount = dec($('#txtInmount').val());
-				if(t_outmount==0 && t_inmount==0){
+				var t_intime = $.trim($('#txtIntime').val());
+				if (t_outmount==0 || t_outsno.length==0 || t_outdate.length==0 || t_outtime.length==0){
+					t_err2 += '請檢查['+q_getMsg('lblOutsno')+']　是否有輸入\n　　　';
+					t_err2 += '['+q_getMsg('lblOutdate')+']\n　　　['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
+				}else if (t_inmount==0 || t_insno.length==0 || t_indate.length==0 || t_intime.length==0){
+					t_err2 += '請檢查['+q_getMsg('lblInsno')+']　是否有輸入\n　　　';
+					t_err2 += '['+q_getMsg('lblIndate')+']\n　　　['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
+				}
+				/*if(t_outmount==0 && t_inmount==0){
 					t_err2 += '請輸入['+q_getMsg('lblOutmount')+']或['+q_getMsg('lblInmount') + ']\n';
 				}else{
-					if(t_outmount > 0 && (t_outsno.length==0 || t_outdate.length==0 )){
-						if(t_outsno.length==0){
-							t_err2 += '請輸入['+q_getMsg('lblOutsno')+']\n';
-						}else{
-							t_err2 += '請輸入['+q_getMsg('lblOutdate')+']\n';
+					if(t_outmount > 0 && (t_outsno.length==0 || t_outdate.length==0 || t_outtime.length==0)){
+						if(t_outsno.length==0 && t_outdate.length==0 && t_outtime.length==0){
+							t_err2 += '請檢查['+q_getMsg('lblOutsno')+']\n['+q_getMsg('lblOutdate')+']\n['+q_getMsg('lblOuttime')+']\n是否有輸入';
 						}
-					}else if(t_outmount == 0 && (t_outsno.length>0 || t_outdate.length>0)){
+					}else if(t_outmount == 0){
 						t_err2 += '請輸入['+q_getMsg('lblOutmount')+']\n';
 					}
 					
@@ -332,13 +336,12 @@
 					}else if(t_inmount == 0 && (t_insno.length>0 || t_indate.length>0)){
 						t_err2 += '請輸入['+q_getMsg('lblInmount')+']\n';
 					}
-				}
+				}*/
 				if (t_err.length > 0 || t_err2.length > 0) {
 					alert(t_err+t_err2);
 					Unlock();
 					return;
 				}
-				var t_noa = trim($('#txtNoa').val());
 				var t_modelno = trim($('#txtModelno').val());
 				var t_where = "where=^^ (modelno='"+t_modelno+"') and (noa!='"+t_noa+"')^^";
 				q_gt('view_modelstk', t_where, 0, 0, 0, "modelStk_Check", r_accy);
@@ -470,6 +473,11 @@
 				color: blue;
 				font-size: medium;
 			}
+			.tbbm tr td .lbl_1 {
+				float: left;
+				color: blue;
+				font-size: medium;
+			}
 			.tbbm tr td .lbl.btn {
 				color: #4297D7;
 				font-weight: bolder;
@@ -595,7 +603,7 @@
 					<tr>
 						<td><span> </span><a id='lblOutdate' class="lbl"> </a></td>
 						<td><input id="txtOutdate" type="text" class="txt c1"/></td>
-						<td><input id="txtOuttime" type="text" class="txt c1_1"/></td>
+						<td><a id='lblOuttime' class="lbl_1"></a><input id="txtOuttime" type="text" class="txt c1_1"/></td>
 						<td><span></span><a id='lblOutmount' class="lbl"></a></td>
 						<td><input id="txtOutmount" type="text" class="txt c1 num"/></td>
 					</tr>
@@ -609,7 +617,7 @@
 					<tr>
 						<td><span> </span><a id='lblIndate' class="lbl"> </a></td>
 						<td><input id="txtIndate" type="text" class="txt c1"/></td>
-						<td><input id="txtIntime" type="text" class="txt c1_1"/></td>
+						<td><a id='lblIntime' class="lbl_1"></a><input id="txtIntime" type="text" class="txt c1_1"/></td>
 						<td><span> </span><a id='lblInmount' class="lbl"> </a></td>
 						<td><input id="txtInmount" type="text" class="txt c1 num"/></td>
 					</tr>
