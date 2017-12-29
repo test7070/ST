@@ -71,10 +71,10 @@
 					}
 				});
 				$('#btnWork').click(function() {
+				
 					//1030630不用判斷工作中心是否有填寫
 					var t_err = '';
-					//t_err = q_chkEmpField([['txtModelno', q_getMsg('lblModelno')]]);
-					t_err += '警告：\n　　　請輸入[ '+q_getMsg('lblModelno')+' ]才可匯入製令單\n';
+					t_err = q_chkEmpField([['txtModelno', q_getMsg('lblModelno')]]);
 					// 檢查空白
 					if (t_err.length > 0) {
 						alert(t_err);
@@ -342,6 +342,7 @@
 					Unlock();
 					return;
 				}
+				var t_noa = trim($('#txtNoa').val());
 				var t_modelno = trim($('#txtModelno').val());
 				var t_where = "where=^^ (modelno='"+t_modelno+"') and (noa!='"+t_noa+"')^^";
 				q_gt('view_modelstk', t_where, 0, 0, 0, "modelStk_Check", r_accy);
