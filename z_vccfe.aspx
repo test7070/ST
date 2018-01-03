@@ -207,6 +207,9 @@
                         type : '0', //[38]
                         name : 'rank',
                         value : r_rank
+                    }, {
+                        type : '6', //[39]
+                        name : 'xaddr2'
                     }]
                 });
                 q_popAssign();
