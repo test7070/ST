@@ -1,0 +1,307 @@
+﻿acif:--acif
+SET QUOTED_IDENTIFIER OFF
+declare @proj nvarchar(50)=[1]
+declare @qcno nvarchar(50)=[2]
+declare @year nvarchar(50)=[3]
+declare @rlen nvarchar(50)=[4]
+declare @qip nvarchar(50)=[5]
+declare @qdb nvarchar(50)=[6]
+declare @userno nvarchar(50)=[7]
+
+declare @accy nvarchar(50)=@year
+
+begin TRY
+	drop table #tmp
+	drop table #tacomp
+end TRY
+begin CATCH
+end CATCH
+
+create table #tmp(
+	tacc1 nvarchar(50),--處理放的順序使用
+	acc1 nvarchar(50),
+	acc2 nvarchar(MAX),
+	
+	acno nvarchar(50),acomp nvarchar(MAX),anick nvarchar(MAX),acoin nvarchar(50),
+	a01 float,a02 float,a03 float,a04 float,a05 float,
+	bcno nvarchar(50),bcomp nvarchar(MAX),bnick nvarchar(MAX),bcoin nvarchar(50),
+	b01 float,b02 float,b03 float,b04 float,b05 float,
+	ccno nvarchar(50),ccomp nvarchar(MAX),cnick nvarchar(MAX),ccoin nvarchar(50),
+	c01 float,c02 float,c03 float,c04 float,c05 float,
+	dcno nvarchar(50),dcomp nvarchar(MAX),dnick nvarchar(MAX),dcoin nvarchar(50),
+	d01 float,d02 float,d03 float,d04 float,d05 float,
+	ecno nvarchar(50),ecomp nvarchar(MAX),enick nvarchar(MAX),ecoin nvarchar(50),
+	e01 float,e02 float,e03 float,e04 float,e05 float,
+	fcno nvarchar(50),fcomp nvarchar(MAX),fnick nvarchar(MAX),fcoin nvarchar(50),
+	f01 float,f02 float,f03 float,f04 float,f05 float,
+	gcno nvarchar(50),gcomp nvarchar(MAX),gnick nvarchar(MAX),gcoin nvarchar(50),
+	g01 float,g02 float,g03 float,g04 float,g05 float,
+	hcno nvarchar(50),hcomp nvarchar(MAX),hnick nvarchar(MAX),hcoin nvarchar(50),
+	h01 float,h02 float,h03 float,h04 float,h05 float,
+	icno nvarchar(50),icomp nvarchar(MAX),inick nvarchar(MAX),icoin nvarchar(50),
+	i01 float,i02 float,i03 float,i04 float,i05 float,
+	jcno nvarchar(50),jcomp nvarchar(MAX),jnick nvarchar(MAX),jcoin nvarchar(50),
+	j01 float,j02 float,j03 float,j04 float,j05 float,
+	kcno nvarchar(50),kcomp nvarchar(MAX),knick nvarchar(MAX),kcoin nvarchar(50),
+	k01 float,k02 float,k03 float,k04 float,k05 float,
+	lcno nvarchar(50),lcomp nvarchar(MAX),lnick nvarchar(MAX),lcoin nvarchar(50),
+	l01 float,l02 float,l03 float,l04 float,l05 float,
+	mcno nvarchar(50),mcomp nvarchar(MAX),mnick nvarchar(MAX),mcoin nvarchar(50),
+	m01 float,m02 float,m03 float,m04 float,m05 float,
+	ncno nvarchar(50),ncomp nvarchar(MAX),nnick nvarchar(MAX),ncoin nvarchar(50),
+	n01 float,n02 float,n03 float,n04 float,n05 float,
+	ocno nvarchar(50),ocomp nvarchar(MAX),onick nvarchar(MAX),ocoin nvarchar(50),
+	o01 float,o02 float,o03 float,o04 float,o05 float,
+	pcno nvarchar(50),pcomp nvarchar(MAX),pnick nvarchar(MAX),pcoin nvarchar(50),
+	p01 float,p02 float,p03 float,p04 float,p05 float,
+	qcno nvarchar(50),qcomp nvarchar(MAX),qnick nvarchar(MAX),qcoin nvarchar(50),
+	q01 float,q02 float,q03 float,q04 float,q05 float,
+	rcno nvarchar(50),rcomp nvarchar(MAX),rnick nvarchar(MAX),rcoin nvarchar(50),
+	r01 float,r02 float,r03 float,r04 float,r05 float,
+	scno nvarchar(50),scomp nvarchar(MAX),snick nvarchar(MAX),scoin nvarchar(50),
+	s01 float,s02 float,s03 float,s04 float,s05 float,
+	tcno nvarchar(50),tcomp nvarchar(MAX),tnick nvarchar(MAX),tcoin nvarchar(50),
+	t01 float,t02 float,t03 float,t04 float,t05 float,
+	ucno nvarchar(50),ucomp nvarchar(MAX),unick nvarchar(MAX),ucoin nvarchar(50),
+	u01 float,u02 float,u03 float,u04 float,u05 float,
+	vcno nvarchar(50),vcomp nvarchar(MAX),vnick nvarchar(MAX),vcoin nvarchar(50),
+	v01 float,v02 float,v03 float,v04 float,v05 float,
+	wcno nvarchar(50),wcomp nvarchar(MAX),wnick nvarchar(MAX),wcoin nvarchar(50),
+	w01 float,w02 float,w03 float,w04 float,w05 float,
+	xcno nvarchar(50),xcomp nvarchar(MAX),xnick nvarchar(MAX),xcoin nvarchar(50),
+	x01 float,x02 float,x03 float,x04 float,x05 float,
+	ycno nvarchar(50),ycomp nvarchar(MAX),ynick nvarchar(MAX),ycoin nvarchar(50),
+	y01 float,y02 float,y03 float,y04 float,y05 float,
+	zcno nvarchar(50),zcomp nvarchar(MAX),znick nvarchar(MAX),zcoin nvarchar(50),
+	z01 float,z02 float,z03 float,z04 float,z05 float
+)
+
+if @rlen='4'
+set @accy=right('000'+CAST(CAST(@year as int)-1911 as nvarchar(50)),3)
+
+--插入母科目
+EXEC(" insert #tmp(tacc1,acc1,acc2) select acc1,acc1,acc2 from acc"+@accy+"_1 where len(acc1)=5")
+
+--公司
+create table #tacomp(
+	recno int, --顯示順序 (依公司編號)
+	cno nvarchar(50),
+	acomp nvarchar(MAX),
+	nick nvarchar(MAX),
+	coin nvarchar(50),
+	ip nvarchar(MAX),
+	db nvarchar(50)
+)
+insert #tacomp
+select ROW_NUMBER() over (order by noa),noa,acomp,nick,isnull(coin,''),ip,UPPER(dbname) from acomp
+where isnull(ip,'')!='' and isnull(dbname,'')!=''
+
+update #tacomp
+set ip=case when @qip=ip then '127.0.0.1' else ip end
+
+declare @recno int
+declare @cno nvarchar(50)
+declare @comp nvarchar(50)
+declare @nick nvarchar(50)
+declare @coin nvarchar(50)
+declare @ip nvarchar(50)
+declare @db nvarchar(50)
+
+declare @trecno int=96
+declare @fcno nvarchar(10)='a'
+
+declare cursor_table cursor for
+select recno,cno,acomp,nick,coin,ip,db from #tacomp order by recno
+open cursor_table
+fetch next from cursor_table
+into @recno,@cno,@comp,@nick,@coin,@ip,@db
+while(@@FETCH_STATUS <> -1)
+begin
+	--01查核數	
+	--02關係人交易
+	--03查核數-關係人交易
+	--04匯率
+	--05轉換後
+	
+	--變動公司欄位號
+	set @fcno=CHAR(@trecno+@recno)
+	
+	EXEC("
+		update a
+		set "+@fcno+"cno='"+@cno+"',"+@fcno+"comp=N'"+@comp+"',"+@fcno+"nick=N'"+@nick+"',"+@fcno+"coin='"+@coin+"'
+		,"+@fcno+"01=isnull(b.money,0),"+@fcno+"02=isnull(c.money,0),"+@fcno+"03=isnull(b.money,0)-isnull(c.money,0)
+		,"+@fcno+"04=isnull(d.floata,1),"+@fcno+"05=(isnull(b.money,0)-isnull(c.money,0))*isnull(d.floata,1)
+		from #tmp a
+		outer apply (select SUM(dmoney-cmoney)money from ["+@ip+",1799]."+@db+".dbo.acccs"+@accy+"_1 where left(accc5,5)=a.acc1)b
+		outer apply (select SUM(dmoney-cmoney)money from ["+@ip+",1799]."+@db+".dbo.acccs"+@accy+"_1 where left(accc5,5)=a.acc1 and isnull(cno,'')!='')c
+		outer apply (select top 1 floata from flors where left(edate,len('"+@year+"'))='"+@year+"' and coin='"+@coin+"' order by edate desc)d
+	")
+	
+	fetch next from cursor_table
+	into @recno,@cno,@comp,@nick,@coin,@ip,@db
+end
+close cursor_table
+deallocate cursor_table
+
+--刪除全部金額都是0的會科
+delete #tmp
+where isnull(a01,0)=0 and isnull(a02,0)=0 and isnull(a03,0)=0 and isnull(a05,0)=0
+and isnull(b01,0)=0 and isnull(b02,0)=0 and isnull(b03,0)=0 and isnull(b05,0)=0 
+and isnull(c01,0)=0 and isnull(c02,0)=0 and isnull(c03,0)=0 and isnull(c05,0)=0 
+and isnull(d01,0)=0 and isnull(d02,0)=0 and isnull(d03,0)=0 and isnull(d05,0)=0 
+and isnull(e01,0)=0 and isnull(e02,0)=0 and isnull(e03,0)=0 and isnull(e05,0)=0 
+and isnull(f01,0)=0 and isnull(f02,0)=0 and isnull(f03,0)=0 and isnull(f05,0)=0 
+and isnull(g01,0)=0 and isnull(g02,0)=0 and isnull(g03,0)=0 and isnull(g05,0)=0 
+and isnull(h01,0)=0 and isnull(h02,0)=0 and isnull(h03,0)=0 and isnull(h05,0)=0 
+and isnull(i01,0)=0 and isnull(i02,0)=0 and isnull(i03,0)=0 and isnull(i05,0)=0 
+and isnull(j01,0)=0 and isnull(j02,0)=0 and isnull(j03,0)=0 and isnull(j05,0)=0 
+and isnull(k01,0)=0 and isnull(k02,0)=0 and isnull(k03,0)=0 and isnull(k05,0)=0 
+and isnull(l01,0)=0 and isnull(l02,0)=0 and isnull(l03,0)=0 and isnull(l05,0)=0 
+and isnull(m01,0)=0 and isnull(m02,0)=0 and isnull(m03,0)=0 and isnull(m05,0)=0 
+and isnull(n01,0)=0 and isnull(n02,0)=0 and isnull(n03,0)=0 and isnull(n05,0)=0 
+and isnull(o01,0)=0 and isnull(o02,0)=0 and isnull(o03,0)=0 and isnull(o05,0)=0 
+and isnull(p01,0)=0 and isnull(p02,0)=0 and isnull(p03,0)=0 and isnull(p05,0)=0 
+and isnull(q01,0)=0 and isnull(q02,0)=0 and isnull(q03,0)=0 and isnull(q05,0)=0 
+and isnull(r01,0)=0 and isnull(r02,0)=0 and isnull(r03,0)=0 and isnull(r05,0)=0 
+and isnull(s01,0)=0 and isnull(s02,0)=0 and isnull(s03,0)=0 and isnull(s05,0)=0 
+and isnull(t01,0)=0 and isnull(t02,0)=0 and isnull(t03,0)=0 and isnull(t05,0)=0 
+and isnull(u01,0)=0 and isnull(u02,0)=0 and isnull(u03,0)=0 and isnull(u05,0)=0 
+and isnull(v01,0)=0 and isnull(v02,0)=0 and isnull(v03,0)=0 and isnull(v05,0)=0 
+and isnull(w01,0)=0 and isnull(w02,0)=0 and isnull(w03,0)=0 and isnull(w05,0)=0 
+and isnull(x01,0)=0 and isnull(x02,0)=0 and isnull(x03,0)=0 and isnull(x05,0)=0 
+and isnull(y01,0)=0 and isnull(y02,0)=0 and isnull(y03,0)=0 and isnull(y05,0)=0 
+and isnull(z01,0)=0 and isnull(z02,0)=0 and isnull(z03,0)=0 and isnull(z05,0)=0
+
+--插入大類 中類
+insert #tmp(tacc1,acc1,acc2)
+--必要插入大類------------------------
+select '1','1xxx.','資產'
+union all
+select '2','2xxx.','負債'
+union all
+select '3','31xx.','歸屬於母公司業主之權益'
+--非必要中類-------------------------
+if(select count(*) from #tmp where left(tacc1,2)='11')>1
+begin
+	insert #tmp(tacc1,acc1,acc2)
+	select '11','11xx.','流動資產'
+end
+if(select count(*) from #tmp where left(tacc1,3)='130')>1
+begin
+	insert #tmp(tacc1,acc1,acc2)
+	select '130','130x.','存貨'
+end
+if(select count(*) from #tmp where left(tacc1,2)='15')>1
+begin
+	insert #tmp(tacc1,acc1,acc2)
+	select '15','15xx.','非流動資產'
+end
+if(select count(*) from #tmp where left(tacc1,2)='21')>1
+begin
+	insert #tmp(tacc1,acc1,acc2)
+	select '21','21xx.','流動負債'
+end
+if(select count(*) from #tmp where left(tacc1,2)='35')>1
+begin
+	insert #tmp(tacc1,acc1,acc2)
+	select '35','35xx.','共同控制下前手權益'
+end
+if(select count(*) from #tmp where left(tacc1,3)='355')>1
+begin
+	insert #tmp(tacc1,acc1,acc2)
+	select '355','355x.','合併前非屬共同控制股權'
+end
+if(select count(*) from #tmp where left(tacc1,2)='36')>1
+begin
+	insert #tmp(tacc1,acc1,acc2)
+	select '36','36xx.','非控制權益'
+end
+if(select count(*) from #tmp where left(tacc1,2)='39')>1
+begin
+	insert #tmp(tacc1,acc1,acc2)
+	select '39','3XXX.','權益'  --特殊位置
+end
+
+--合計欄
+insert #tmp(tacc1,acc1,acc2)
+select left(tacc1,2)+'ZZ.',acc1
+,acc2+case when len(left(tacc1,2))=2 then '-合計：' else '-總計：' end 
+from #tmp
+where right(acc1,3)='xx.' order by tacc1
+
+--合計欄
+insert #tmp(tacc1,acc1,acc2)
+select left(tacc1,2)+'ZZ.',acc1
+,acc2+case when len(left(tacc1,2))=2 then '-合計：' else '-總計：' end 
+from #tmp a where right(acc1,3)='00.' 
+and not exists (select * from #tmp where tacc1=left(a.tacc1,2)+'ZZ.')
+
+--特殊合計欄--負債及股東權益總計
+insert #tmp(tacc1,acc1,acc2)
+select '3ZZZ','','負債及權益-總計：'
+
+insert #tmp(tacc1,acc1,acc2)
+select '9ZZZ','','損益-總計：'
+----------------------------------------------------------------
+--更新插入欄的公司 與 合計 總計
+declare cursor_table cursor for
+select recno,cno,acomp,nick,coin,ip,db from #tacomp order by recno
+open cursor_table
+fetch next from cursor_table
+into @recno,@cno,@comp,@nick,@coin,@ip,@db
+while(@@FETCH_STATUS <> -1)
+begin
+	--變動公司欄位號
+	set @fcno=CHAR(@trecno+@recno)
+	
+	--公司
+	EXEC("
+		update a
+		set "+@fcno+"cno='"+@cno+"',"+@fcno+"comp=N'"+@comp+"',"+@fcno+"nick=N'"+@nick+"',"+@fcno+"coin='"+@coin+"'
+		,"+@fcno+"01=0,"+@fcno+"02=0,"+@fcno+"03=0,"+@fcno+"04=isnull(d.floata,1),"+@fcno+"05=0
+		from #tmp a outer apply (select top 1 floata from flors where left(edate,len('"+@year+"'))='"+@year+"' and coin='"+@coin+"' order by edate desc)d
+		where a."+@fcno+"cno is null
+	")
+	
+	--合計 總計
+	EXEC("
+	update a
+	set "+@fcno+"01=b."+@fcno+"01,"+@fcno+"02=b."+@fcno+"02,"+@fcno+"03=b."+@fcno+"03,"+@fcno+"04=b."+@fcno+"04,"+@fcno+"05=b."+@fcno+"05
+	from  #tmp a outer apply (select SUM("+@fcno+"01)"+@fcno+"01 ,SUM("+@fcno+"02)"+@fcno+"02,SUM("+@fcno+"03)"+@fcno+"03,MAX("+@fcno+"04)"+@fcno+"04,SUM("+@fcno+"05)"+@fcno+"05
+	from #tmp where left(tacc1,len(REPLACE(a.tacc1,'ZZ.','')))=REPLACE(a.tacc1,'ZZ.','') and tacc1 not like '%ZZ.')b
+	where tacc1 like '%ZZ.'
+	")
+	
+	--特殊3ZZZ 9ZZZ(負債+權益,費用)
+	EXEC("
+	update a
+	set "+@fcno+"01=b."+@fcno+"01,"+@fcno+"02=b."+@fcno+"02,"+@fcno+"03=b."+@fcno+"03,"+@fcno+"04=b."+@fcno+"04,"+@fcno+"05=b."+@fcno+"05
+	from  #tmp a outer apply (select SUM("+@fcno+"01)"+@fcno+"01 ,SUM("+@fcno+"02)"+@fcno+"02,SUM("+@fcno+"03)"+@fcno+"03,MAX("+@fcno+"04)"+@fcno+"04,SUM("+@fcno+"05)"+@fcno+"05
+	from #tmp where (left(tacc1,1)='2' or left(tacc1,1)='3') and tacc1 not like '%ZZ.')b
+	where tacc1='3ZZZ'
+	")
+	
+	EXEC("
+	update a
+	set "+@fcno+"01=b."+@fcno+"01,"+@fcno+"02=b."+@fcno+"02,"+@fcno+"03=b."+@fcno+"03,"+@fcno+"04=b."+@fcno+"04,"+@fcno+"05=b."+@fcno+"05
+	from  #tmp a outer apply (select SUM("+@fcno+"01)"+@fcno+"01 ,SUM("+@fcno+"02)"+@fcno+"02,SUM("+@fcno+"03)"+@fcno+"03,MAX("+@fcno+"04)"+@fcno+"04,SUM("+@fcno+"05)"+@fcno+"05
+	from #tmp where left(tacc1,1)>'3' and tacc1 not like '%ZZ.')b
+	where tacc1='9ZZZ'
+	")
+	
+	fetch next from cursor_table
+	into @recno,@cno,@comp,@nick,@coin,@ip,@db
+end
+close cursor_table
+deallocate cursor_table
+-----------------------------------------------------------------
+
+select * from #tmp order by tacc1
+
+begin TRY
+	drop table #tmp
+	drop table #tacomp
+end TRY
+begin CATCH
+end CATCH
+;

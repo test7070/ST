@@ -385,10 +385,10 @@ SET QUOTED_IDENTIFIER OFF
 	declare @t_xnoa nvarchar(35)= case when '#non' = [5] then '' else [5] end
 	declare @t_xno2 nvarchar(10)= case when '#non' = [6] then '' else [6] end
 
-set @t_xnoa = ltrim(rtrim(@t_xnoa))
-set @t_xno2 = ltrim(rtrim(@t_xno2))
+	set @t_xnoa = ltrim(rtrim(@t_xnoa))
+	set @t_xno2 = ltrim(rtrim(@t_xno2))
 
-declare @tmp table(
+	declare @tmp table(
 		sel int identity(1,1),
 		gno nvarchar(10),
 		tablea nvarchar(50),
@@ -413,27 +413,64 @@ declare @tmp table(
 	-- RK
 	declare @t_ordcdate nvarchar(20) = ''
 	declare @t_productno nvarchar(30) = ''
+	declare @kind nvarchar(max)
+	declare @dime float
+	declare @width float
+	declare @lengthb float
+	declare @spec nvarchar(max)
 	
 	if @t_project ='RK'
 	begin
 		select @t_productno=a.productno,@t_ordcdate = b.odate
+			,@kind=a.kind,@dime=a.dime,@width=a.width,@lengthb=a.lengthb,@spec=a.spec
 		from view_ordcs a
 		left join view_ordc b on a.accy=b.accy and a.noa=b.noa
 		where a.noa=@t_xnoa and  a.no2=@t_xno2
-			
-		insert into @tmp(gno,tablea,tablename,destnoa,destno2
-			,ordcnoa,ordcno2,datea,storeno,stores,productno,products,csize
-			,mount,price,[weight],uno,memo,coin) 
-		select '0','ordc_rk','採購作業',a.noa,a.no2
-			,a.noa,a.no3,b.odate,b.tggno storeno,b.tgg stores,a.productno,a.product,a.size
-			,a.mount,a.price,a.[weight],'' uno,a.memo,'' coin
-		from view_ordcs a
-		left join view_ordc b on a.accy=b.accy and a.noa=b.noa
-		where a.noa!=@t_xnoa 
-		and a.productno=@t_productno
-		and b.odate<@t_ordcdate 
-		order by b.odate desc,a.noa,a.no3
-		
+
+		--金屬底材需依厚度*寬度*長度、規格
+		if @kind='A1'
+		begin
+			insert into @tmp(gno,tablea,tablename,destnoa,destno2
+				,ordcnoa,ordcno2,datea,storeno,stores,productno,products,csize
+				,mount,price,[weight],uno,memo,coin) 
+			select '0','ordc_rk','採購作業',a.noa,a.no2
+				,a.noa,a.no3,b.odate,b.tggno storeno,b.tgg stores,a.productno,a.product
+				,case when len(a.size)>0 then a.size
+				else (case when ISNULL(a.dime,0)=0 then '' else CAST(a.dime as nvarchar) end 
+					+case when ISNULL(a.dime,0)=0 or ISNULL(a.width,0)=0 then '' else '*' end 
+					+case when ISNULL(a.width,0)=0 then '' else CAST(a.width as nvarchar) end 
+					+case when ISNULL(a.width,0)=0 or ISNULL(a.lengthb,0)=0 then '' else '*' end 
+					+case when ISNULL(a.lengthb,0)=0 then '' else CAST(a.lengthb as nvarchar) end 
+					+case when Upper(ISNULL(a.spec,''))='MM' or a.kind='A1' or a.kind='A4' or a.kind='A5' then 'mm' else '' end 
+					+case when len(c.product)>0 then ' '+c.product else '' end ) 
+				end
+				,a.mount,a.price,a.[weight],'' uno,a.memo,'' coin
+			from view_ordcs a
+			left join view_ordc b on a.accy=b.accy and a.noa=b.noa
+			left join spec c on a.spec=c.noa
+			where a.noa!=@t_xnoa 
+			and b.odate<@t_ordcdate 
+			and a.dime=@dime 
+			and a.width=@width
+			and a.lengthb=@lengthb
+			and a.spec=@spec
+			order by b.odate desc,a.noa,a.no3
+		end
+		else	
+		begin
+			insert into @tmp(gno,tablea,tablename,destnoa,destno2
+				,ordcnoa,ordcno2,datea,storeno,stores,productno,products,csize
+				,mount,price,[weight],uno,memo,coin) 
+			select '0','ordc_rk','採購作業',a.noa,a.no2
+				,a.noa,a.no3,b.odate,b.tggno storeno,b.tgg stores,a.productno,a.product,a.size
+				,a.mount,a.price,a.[weight],'' uno,a.memo,'' coin
+			from view_ordcs a
+			left join view_ordc b on a.accy=b.accy and a.noa=b.noa
+			where a.noa!=@t_xnoa 
+			and a.productno=@t_productno
+			and b.odate<@t_ordcdate 
+			order by b.odate desc,a.noa,a.no3
+		end
 		select
 		gno,tablename,
 		destnoa+'-'+destno2 destnoa,ordcnoa,ordcno2,	datea,storeno,stores,
@@ -442,6 +479,7 @@ declare @tmp table(
 		,mount
 		,isnull(coin+' ','')+dbo.getComma(price,-1) price
 		,weight,uno,memo
+		,'廠商' cstore
 		from @tmp order by datea desc,ordcno2,destnoa,destno2
 	end
 	else
@@ -492,5 +530,6 @@ declare @tmp table(
 		,mount
 		,isnull(coin+' ','')+dbo.getComma(price,-1) price
 		,weight,uno,memo
+		,'倉庫' cstore
 		from @tmp order by ordcnoa,gno,datea desc,ordcno2,destnoa,destno2
 	end;

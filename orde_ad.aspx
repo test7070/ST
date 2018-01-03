@@ -158,6 +158,8 @@
 					if (!emp($('#txtCustno').val())) {
 						var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^ stop=100";
 						q_gt('custaddr', t_where, 0, 0, 0, "");
+						
+						checkbbsuca();
 					}
 				});
 
@@ -1144,6 +1146,8 @@
 					return;
 				}*/
 				
+				checkbbsuca();
+				
 				if (q_cur == 1)
 					$('#txtWorker').val(r_name);
 				else
@@ -1200,6 +1204,7 @@
 							q_bodyId($(this).attr('id'));
 							b_seq = t_IdSeq;
 							//q_change($(this), 'ucc', 'noa', 'noa,product,unit');
+							checkbbsuca();
 						});
 
 						$('#txtUnit_' + j).focusout(function() {
@@ -1554,18 +1559,27 @@
 						$('#txtDatea_'+j).datepicker();
 					}
 				}
-				if(q_cur==1 || q_cur==2){
+				/*if(q_cur==1 || q_cur==2){
 					$('#btnGetpdate').removeAttr('disabled');
 				}else{
 					$('#btnGetpdate').attr('disabled', 'disabled');
-				}
+				}*/
 				
 				$('#btnGetpdate').unbind('click');
 				$('#btnGetpdate').click(function() {
+					var t_message='';//106/12/29 顯示訊息
 					for(var k=0;k<q_bbsCount;k++){
-						if(emp($('#txtDatea_'+k).val())){
-							getpdate(k);
+						if(q_cur==1|| q_cur==2){
+							if(emp($('#txtDatea_'+k).val())){
+								getpdate(k);
+							}
+						}else{
+							if($('#txtProductno_'+k).val().length>0)
+								t_message+="第"+(k+1)+"項  "+$('#txtProductno_'+k).val()+"  "+$('#txtMount_'+k).val()+"/"+$('#txtUnit_'+k).val()+"  預交日:"+getpdate(k)+"\n";
 						}
+					}
+					if(!(q_cur==1|| q_cur==2) && t_message.length>0){
+						alert(t_message);
 					}
 				});
 			}
@@ -1762,6 +1776,8 @@
 						if (!emp($('#txtCustno').val())) {
 							var t_where = "where=^^ noa='" + $('#txtCustno').val() + "'^^ stop=100";
 							q_gt('custaddr', t_where, 0, 0, 0, "");
+							
+							checkbbsuca();
 						}
 						break;
 					case 'txtProductno_':
@@ -1838,6 +1854,7 @@
 							//}
 							sum();
 						}
+						checkbbsuca();
 						break;
 				}
 			}
@@ -1929,7 +1946,7 @@
 			}
 			
 			function getpdate(x) {
-				if((q_cur==1 || q_cur==2)){
+				//if((q_cur==1 || q_cur==2)){
 					//106/03/27 根據sys orde.dodate +3 若 單一產品數量超出3000 多1天
 					//106/03/28 依據型號 超出模具數多1天
 					var t_dodate=$('#txtOdate').val()>q_date()?$('#txtOdate').val():q_date();
@@ -2050,10 +2067,43 @@
 							t_addday--;
 						}
 					}
-					$('#txtDatea_'+x).val(t_dodate);
-				}
+					if(q_cur==1 || q_cur==2){
+						$('#txtDatea_'+x).val(t_dodate);
+					}else{
+						return t_dodate;
+					}
+				//}
 			}
 			
+			//106/12/21
+			function checkbbsuca(){
+				if(!emp($('#txtCustno').val())){
+					var t_where='1=0';
+					for(var i=0;i<q_bbsCount;i++){
+						if(!emp($('#txtProductno_'+i).val())){
+							t_where=t_where+" or noa='"+$('#txtProductno_'+i).val()+"'";
+						}
+					}
+					t_where="where=^^("+t_where+") and isnull(custno,'')!='' and isnull(custno,'')!='"+$('#txtCustno').val()+"' ^^";
+					q_gt('uca', t_where, 0, 0, 0, "", r_accy,1);
+					var as = _q_appendData("uca", "", true);
+					var t_err='';
+					for(var i=0;i<as.length;i++){
+						t_err=t_err+'件號:'+as[i].noa+' 專屬客戶【'+as[i].custno+'】與銷售客戶【'+$('#txtCustno').val()+'】不同\n';
+					}
+					if(t_err.length>0){
+						alert(t_err);
+					}
+					//刪除資料行
+					for(var j=0;j<as.length;j++){
+						for(var i=0;i<q_bbsCount;i++){
+							if(as[j].noa==$('#txtProductno_'+i).val()){
+								$('#btnMinus_'+i).click();
+							}
+						}
+					}
+				}
+			}
 		</script>
 		<style type="text/css">
 			#dmain {

@@ -1,60 +1,73 @@
 z_model1:--z_model1
-declare @t_bmodelno nvarchar(90)
-declare @t_emodelno nvarchar(90)
-declare @t_bstationno nvarchar(90)
-declare @t_estationno nvarchar(90)
-set @t_bmodelno = case when '#non' = [2] then '' else [2] end
-set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
-set @t_bstationno = case when '#non' = [5] then '' else [5] end
-set @t_estationno = case when '#non' = [6] then CHAR(255) else [6] end
-
+declare @t_bmodelno nvarchar(90) = case when '#non' = [2] then '' else [2] end
+declare @t_emodelno nvarchar(90) = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_bmodgno nvarchar(90) = case when '#non' = [5] then '' else [5] end
+declare @t_emodgno nvarchar(90) = case when '#non' = [6] then CHAR(255) else [6] end
+declare @t_bdate nvarchar(90) = case when '#non' = [7] then '' else [7] end
+declare @t_edate nvarchar(90) = case when '#non' = [8] then CHAR(255) else [8] end
+declare @t_bstation nvarchar(90) = case when '#non' = [9] then '' else [9] end
+declare @t_estation nvarchar(90) = case when '#non' = [10] then CHAR(255) else [10] end
 declare @tmp table(
 	gno nvarchar(10),
 	modelno nvarchar(90),
 	models nvarchar(max),
+	modgno nvarchar(90),
+	modg nvarchar(90),
 	stationno nvarchar(90),
 	station nvarchar(90),
-	agelimit float,
+	usemount float,
+	fix float,
+	yearmount float,
 	indatea nvarchar(10),
 	inmount float,
 	outmount float,
 	lendmount float,
 	returnmount float,
-	stkmount float
-)
+	stkmount float,
+	notreturned float,
+	totalmount float,
+	usedmount float,
+	remainder float
+	)
 insert into @tmp
-	select
-		'0',a.noa,a.model,a.stationno,a.station,a.yearmount,a.indate,
-		isnull(a.inmount,0),isnull(b.mount,0),isnull(c.mount,0),isnull(d.mount,0),0
-	from model a
-	outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
-	outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
-	outer apply(select sum(inmount) mount from moget where (a.noa=modelno) and (len(isnull(insno,'')) > 0)) d
-	where (a.noa between @t_bmodelno and @t_emodelno)
-	and isnull(a.stationno,'') between @t_bstationno and @t_estationno
-	
+	select '0',a.noa,a.model,a.modgno,a.modg,a.stationno,a.station,a.usemount,a.fix,a.yearmount,a.indate,
+	isnull(a.inmount,0),isnull(b.mount,0),isnull(c.mount,0),isnull(d.mount,0),0,0,0,(select count(noa) from view_work where a.noa = modelno) usedmount,0
+	from model a outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
+				 outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
+				 outer apply(select sum(inmount) mount from moget where (a.noa=modelno) and (len(isnull(insno,'')) > 0)) d
+				 where (a.noa between @t_bmodelno and @t_emodelno) and (isnull(a.modgno,'') between @t_bmodgno and @t_emodgno) and (isnull(a.stationno,'') between @t_bstation and @t_estation) AND (a.indate between @t_bdate and @t_edate)
 update @tmp set stkmount = inmount-outmount-lendmount+returnmount
-
+update @tmp set notreturned = lendmount-returnmount
+update @tmp set totalmount = inmount-outmount
+update @tmp set remainder = usemount-usedmount
 select
 	a.gno,
 	a.modelno a01,
 	a.models a02,
-	a.stationno a10,
-	a.station a11,
-	a.agelimit a03,
+	a.modgno a10,
+	a.modg a11,
+	a.usemount a12,
+	a.fix a13,
+	a.stationno a14,
+	a.station a15,
+	a.yearmount a03,
 	a.indatea a04,
 	a.inmount a05,
 	a.outmount a06,
 	a.lendmount a07,
 	a.returnmount a08,
-	a.stkmount a09
-from @tmp a order by a.modelno,a.indatea,a.stationno;
+	a.stkmount a09,
+	a.notreturned a16,
+	a.totalmount a17,
+	a.usedmount a18,
+	a.remainder a19
+from @tmp a order by a.stationno,a.modgno,a.modelno,a.indatea;
 -------------------------------------------------------------------------------------------------------------*
 z_model2:--z_model2
-declare @t_bmodelno nvarchar(90)
-declare @t_emodelno nvarchar(90)
-set @t_bmodelno = case when '#non' = [2] then '' else [2] end
-set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_bmodelno nvarchar(90) = case when '#non' = [2] then '' else [2] end
+declare @t_emodelno nvarchar(90) = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_bmodgno nvarchar(90) = case when '#non' = [5] then '' else [5] end
+declare @t_emodgno nvarchar(90) = case when '#non' = [6] then CHAR(255) else [6] end
 declare @tmp table(
 	gno nvarchar(10),
 	idno int identity(0,1),
@@ -64,34 +77,32 @@ declare @tmp table(
 	models nvarchar(max),
 	datea nvarchar(10),
 	noa nvarchar(50),
+	modgno nvarchar(50),
+	modg nvarchar(50),
 	mount float,
 	stkmount float,
 	ghref nvarchar(max)
 )
 ----------stktype->1=+,2=-
 insert into @tmp
-	select
-		'0','',0,a.noa,a.model,'' datea,'' noa,0 inmount,
-		isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0),''
+	select '0','',0,a.noa,a.model,'' datea,'' noa,a.modgno,a.modg,0 inmount, isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0),''
 	from model a
-	outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
-	outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
-	outer apply(select sum(inmount) mount from moget where (a.noa=modelno) and (len(isnull(insno,'')) > 0)) d
-	where (a.noa between @t_bmodelno and @t_emodelno) and (isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0))>0
+		outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
+		outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
+		outer apply(select sum(inmount) mount from moget where (a.noa=modelno) and (len(isnull(insno,'')) > 0)) d
+	where (a.noa between @t_bmodelno and @t_emodelno) and (a.modgno between @t_bmodgno and @t_emodgno) and (isnull(a.inmount,0)-isnull(b.mount,0)-isnull(c.mount,0)+isnull(d.mount,0))>0
 insert into @tmp
-	select
-		a.*
-	from (
-		select '1' gno,'取得' gettype,1 stktype,a.noa modelno,a.model,a.indate,a.noa,a.inmount,0 stkmount,'model' ghref from model a
+	select a.* from (
+		select '1' gno,'取得' gettype,1 stktype,a.noa modelno,a.model,a.indate,a.noa,0 modgno,0 modg,a.inmount,0 stkmount,'model' ghref from model a
 		union all
-		select '1' gno,'報廢' gettype,2 stktype,a.modelno modelno,a.model,a.datea,a.noa,a.mount,0 stkmount,'moout' ghref from moout a
+		select '1' gno,'報廢' gettype,2 stktype,a.modelno modelno,a.model,a.datea,a.noa,0 modgno,0 modg,a.mount,0 stkmount,'moout' ghref from moout a
 		union all
-		select '1' gno,'借出' gettype,2 stktype,a.modelno modelno,a.model,a.outdate,a.noa,a.outmount,0 stkmount,'moget' ghref from moget a where (len(isnull(a.outsno,'')) > 0)
+		select '1' gno,'借出' gettype,2 stktype,a.modelno modelno,a.model,a.outdate,a.noa,0 modgno,0 modg,a.outmount,0 stkmount,'moget' ghref from moget a where (len(isnull(a.outsno,'')) > 0)
 		union all
-		select '1' gno,'歸還' gettype,1 stktype,a.modelno modelno,a.model,a.indate,a.noa,a.inmount,0 stkmount,'moget' ghref from moget a where (len(isnull(a.insno,'')) > 0)
+		select '1' gno,'歸還' gettype,1 stktype,a.modelno modelno,a.model,a.indate,a.noa,0 modgno,0 modg,a.inmount,0 stkmount,'moget' ghref from moget a where (len(isnull(a.insno,'')) > 0)
 	) a
-	outer apply(select top 1 modelno,models,stkmount from @tmp where (a.modelno=modelno) and (a.model=models) and (gno='0')) b
-	where (b.modelno is not null) and (b.models is not null) and (b.stkmount > 0)
+	outer apply(select top 1 modelno,models,stkmount from @tmp where (a.modelno=modelno) and (a.model=models) and (gno='0')) b where (b.modelno is not null) and (b.models is not null) and (b.stkmount > 0)
+	
 declare @idno int
 declare @modelno nvarchar(90)
 declare @models nvarchar(max)
@@ -104,17 +115,16 @@ declare cursor_table cursor for
 	select a.idno,a.modelno,a.models,a.stktype,mount from @tmp a where gno='1' order by a.modelno,a.models,a.datea
 open cursor_table
 fetch next from cursor_table
-into @idno,@modelno,@models,@stktype,@mount
-while(@@FETCH_STATUS <> -1)
+into @idno,@modelno,@models,@stktype,@mount while(@@FETCH_STATUS <> -1)
 begin
 	if((@modelno = @lastmodelno) and (@models = @lastmodels))
-	begin
-		set @c_stkmount = @c_stkmount + isnull((case when @stktype='1' then @mount else @mount*(-1) end),0)
-	end
+		begin
+			set @c_stkmount = @c_stkmount + isnull((case when @stktype='1' then @mount else @mount*(-1) end),0)
+		end
 	else
-	begin
-		set @c_stkmount = @mount
-	end
+		begin
+			set @c_stkmount = @mount
+		end
 	update @tmp set stkmount=@c_stkmount where idno=@idno
 	set @lastmodelno = @modelno
 	set @lastmodels = @models
@@ -126,6 +136,8 @@ deallocate cursor_table
 update @tmp set ghref=ghref+'?left(noa,'+cast(len(noa) as nvarchar)+')=$noa?' where gno='1'
 select
 	a.gno,
+	a.modgno a07,
+	a.modg a08,
 	a.modelno a01,
 	a.models a02,
 	a.gettype a03,
@@ -137,80 +149,48 @@ select
 from @tmp a order by a.modelno,a.models,a.gno,a.datea;
 -----------------------------------------------------------------------------------------
 z_model3:--z_model3
-declare @t_bmodelno nvarchar(90)
-declare @t_emodelno nvarchar(90)
-set @t_bmodelno = case when '#non' = [2] then '' else [2] end
-set @t_emodelno = case when '#non' = [3] then CHAR(255) else [3] end
+declare @t_bmodelno nvarchar(90) = case when '#non' = [2] then '' else [2] end
+declare @t_emodelno nvarchar(90) = case when '#non' = [3] then CHAR(255) else [3] end
 declare @t_enda nvarchar(90)=[4]
-declare @tmp table(
-	rr int,
-	datea nvarchar(10),
-	stationno nvarchar(100),
-	station nvarchar(200),
-	mechno nvarchar(50),
-	mech nvarchar(100),
-	mount float,
-	typea nvarchar(20),
-	modnoa nvarchar(50),
-	model nvarchar(100),
-	usemount float,--日前使用次數
-	fixmount float,--保養次數
-	smount float,--可使用次數
-	fdate nvarchar(10),
-	fnoa nvarchar(100),
-	usetotal float
-)
-insert @tmp(rr,datea,stationno,station,mechno,mech,mount,typea,modnoa,model,fdate,fnoa,fixmount,smount,usemount)
-select ROW_NUMBER()over(partition by a.stationno,a.mech order by a.stationno,a.datea,a.mechno,b.noa)
-,a.datea,a.stationno,a.station,a.mechno,a.mech,1
-,case when c.datea>a.datea and c.datea<convert(nvarchar,getdate(),111) then '已保養' else (case when c.datea>a.datea and c.datea>convert(nvarchar,getdate(),111) then '即將保養' else '尚未保養' end) end
-,b.noa,b.model,c.datea,c.noa,b.fix,b.usemount
-,case when ISNULL(c.datea,'')='' or c.datea>convert(nvarchar,getdate(),111) then 1 else 0 end
-
-from view_workb a
-left join model b on a.stationno=b.stationno
-outer apply(select top 1 * from modfix where a.datea<datea and  a.mechno=mechno and b.noa=modnoa order by datea)c
-
-update @tmp
-set mount=(select SUM(mount) from @tmp where rr<=a.rr and a.stationno=stationno and a.mechno=mechno and a.modnoa=modnoa)
-,usemount=(select SUM(usemount) from @tmp where rr<=a.rr and a.stationno=stationno and a.mechno=mechno and a.modnoa=modnoa and fnoa=a.fnoa)
-,usetotal=(select SUM(usemount) from @tmp where a.stationno=stationno and a.mechno=mechno and a.modnoa=modnoa and fdate=a.fdate)
-from @tmp a
-
+declare @t_bmodgno nvarchar(90) = case when '#non' = [5] then '' else [5] end
+declare @t_emodgno nvarchar(90) = case when '#non' = [6] then CHAR(255) else [6] end
 declare @tmpa table(
 	gno nvarchar(1),
 	modnoa nvarchar(50),
-	model nvarchar(100),
-	datea nvarchar(10),
+	modela nvarchar(100),
+	modgno nvarchar(90),
+	modg nvarchar(100),
+	datea nvarchar(10),--使用日期
 	typea nvarchar(20),
-	mount float,
+	mount float,--已使用次數
 	usemount float,--日前使用次數
 	fixmount float,--保養次數
 	smount float,--可使用次數
-	fdate nvarchar(10),
-	fnoa nvarchar(100)
+	fdate nvarchar(10),--保養日期
+	fnoa nvarchar(100)--保養單號
 )
-
 insert @tmpa
-select '0',isnull(modnoa,''),model,max(datea),typea,max(mount),max(usemount),fixmount,smount,fdate,fnoa
-from @tmp
-group by modnoa,model,typea,fixmount,smount,fdate,fnoa
-
-
+select '0' gno,a.noa modnoa,a.model modela,a.modgno modgno,a.modg modg,b.workdate datea,
+case when c.datea>b.workdate and c.datea<convert(nvarchar,getdate(),111) then '已保養' else (case when c.datea>b.workdate and c.datea>convert(nvarchar,getdate(),111) then '即將保養' else '尚未保養' end) end typea,
+(select count(noa) from view_work where a.noa = modelno) mount,
+(select count(noa) from view_work where a.noa = modelno) usemount,
+(a.fix-(select count(noa) from view_work where a.noa = modelno))fixmount,a.fix smount,c.datea fdate,c.noa fnoa
+from model a
+left join view_work b on a.noa = b.modelno
+left join modfix c on a.noa = c.modnoa
 if(@t_enda='1')
-begin
-select * from @tmpa where typea='過期未保養'  and (modnoa between @t_bmodelno and @t_emodelno)
-end
+	begin
+		select * from @tmpa where typea='過期未保養'  and (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
+	end
 else if(@t_enda='2')
-begin
-select * from @tmpa where (typea='尚未保養' or typea='即將保養') and (modnoa between @t_bmodelno and @t_emodelno)
-end
+	begin
+		select * from @tmpa where (typea='尚未保養' or typea='即將保養') and (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
+	end
 else if(@t_enda='3')
-begin
-select * from @tmpa where typea='已保養' and (modnoa between @t_bmodelno and @t_emodelno)
-end
+	begin
+		select * from @tmpa where typea='已保養' and (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
+	end
 else
-begin
-select * from @tmpa where (modnoa between @t_bmodelno and @t_emodelno)
-end
-;
+	begin
+	select * from @tmpa where (modnoa between @t_bmodelno and @t_emodelno) and (modgno between @t_bmodgno and @t_emodgno)
+end;

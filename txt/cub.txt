@@ -93,12 +93,12 @@
 			and	 len(isnull(a.ucolor,''))>0 
 			--------------------------------------------------------------------
 			declare @maxnoq nvarchar = '000'
-			select @maxnoq = MAX(noq) from #cub2get where len(ISNULL(noq,''))>0
+			select top 1 @maxnoq = cast(noq as int) from #cub2get order by cast(isnull(noq,0) as int) desc
 			declare @max int = cast(isnull(@maxnoq,'0') as int)
-			
-			update #cub2get set noq=right('00'+CAST(b.recno as nvarchar),3)
+	
+			update #cub2get set noq=right('00'+CAST(b.recno+@max as nvarchar),3)
 			from #cub2get a
-			left join (select sel,ROW_NUMBER()over(order by sel) recno from #cub2get) b on a.sel=b.sel
+			left join (select sel,ROW_NUMBER()over(order by sel) recno from #cub2get where len(ISNULL(noq,'')) = 0) b on a.sel=b.sel
 			where len(ISNULL(noq,'')) = 0
 
 			Begin Transaction [Trans_Name]
@@ -136,6 +136,7 @@
 			end try
 			begin catch
 				Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
+				select ERROR_MESSAGE()
 			end catch
 		end
 	end;
@@ -1047,7 +1048,7 @@ if(@q_ip=@ip)
 
 if(@t_apv='checker')
 begin
-	EXEC("update cub"+@accy+" set checker='"+@r_name+"',checkerdate='"+@datea+' '+@timea+"'
+	EXEC("update cub"+@accy+" set checker=N'"+@r_name+"',checkerdate='"+@datea+' '+@timea+"'
 	,uindate=case when isnull(uindate,'')='' then '"+@udatea+"' else uindate end where noa='"+@noa+"'")
 	select noa,checker,checkerdate,uindate from view_cub where noa=@noa
 end
@@ -1082,6 +1083,29 @@ begin
 	end
 end
 
+--106/12/28 最高權限人修改清除全部核准內容 並刪除轉出單子
+if(@t_apv='deleter')
+begin
+	EXEC("update cub"+@accy+" set checker='',checkerdate='',reviewdate=''
+	,approve='',approvedate='',issuedate=''	where noa='"+@noa+"'")
+	
+	--不同DB
+	if(@ipto!=@ipfrom and len(@ipto)>0)
+	begin
+		--刪除以轉出單子
+		EXEC("delete ["+@ip+",1799]."+@db+".dbo.cub"+@accy+" where noa='"+@noa+"'")
+		EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubs"+@accy+" where noa='"+@noa+"'")
+		EXEC("delete ["+@ip+",1799]."+@db+".dbo.cubt"+@accy+" where noa='"+@noa+"'")
+	end
+	
+	--刪除ucx
+	if(len(isnull(@ucxno,''))>0)
+		delete ucx where noa=@ucxno
+	
+	select noa,checker,checkerdate,reviewdate,approve,approvedate,issuedate
+	from view_cub where noa=@noa
+
+end
 
 set @ip =isnull((select ip from acomp where noa=@ipfrom),'')
 if(@q_ip=@ip)
@@ -1093,7 +1117,7 @@ begin
 	--尚未核准
 	if(@q_bbs='0')
 	begin
-		EXEC("update cub"+@accy+" set approve='"+@r_name+"',approvedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
+		EXEC("update cub"+@accy+" set approve=N'"+@r_name+"',approvedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
 		select noa,checker,checkerdate,approve,approvedate from view_cub where noa=@noa
 	end
 	
@@ -1212,5 +1236,6 @@ begin
 	
 	select @ip tip,@db tdb,noa,checker,checkerdate,approve,approvedate,issuedate from view_cub where noa=@noa
 end
+
 ;
 ----------------------------------------------------------------------------------
