@@ -695,6 +695,9 @@ declare @t_accy nvarchar(50) = [2]
 declare @t_datea nvarchar(30) = [3]
 declare @t_worker nvarchar(50) = [4]
 declare @t_len nvarchar(10)=[5]
+declare @q_ip nvarchar(50)=[6]
+declare @q_db nvarchar(50)=[7]
+declare @q_proj nvarchar(50)=[8]
 
 IF OBJECT_ID('tempdb..#tmpa')is not null
 BEGIN
@@ -721,35 +724,36 @@ BEGIN
 	drop table #vccbbs
 END
 
-BEGIN TRY
-	Begin Transaction
-
-	create table #tmpa(
-		vnoa nvarchar(50),
-		vnoq nvarchar(50),
-		productno nvarchar(100),
-		product nvarchar(MAX),
-		spec nvarchar(MAX),
-		mount float,
-		price float,
-		total float,
-		memo nvarchar(MAX),
-		
-		ip nvarchar(50),
-		db nvarchar(50),
-		
-		tordeno nvarchar(50),
-		tordeno2 nvarchar(50),
-		tordcno nvarchar(50),
-		tordcno2 nvarchar(50),
-		trc2accy nvarchar(50),
-		trc2no nvarchar(50),
-		trc2noq nvarchar(50),
-		tvccaccy nvarchar(50),
-		tvccno nvarchar(50),
-		tvccnoq nvarchar(50)
-	)
+create table #tmpa(
+	vnoa nvarchar(50),
+	vnoq nvarchar(50),
+	productno nvarchar(100),
+	product nvarchar(MAX),
+	spec nvarchar(MAX),
+	mount float,
+	price float,
+	total float,
+	memo nvarchar(MAX),
 	
+	ip nvarchar(50),
+	db nvarchar(50),
+	
+	tordeno nvarchar(50),
+	tordeno2 nvarchar(50),
+	tordcno nvarchar(50),
+	tordcno2 nvarchar(50),
+	trc2accy nvarchar(50),
+	trc2no nvarchar(50),
+	trc2noq nvarchar(50),
+	tvccaccy nvarchar(50),
+	tvccno nvarchar(50),
+	tvccnoq nvarchar(50)
+)
+
+
+BEGIN TRY
+	--Begin Transaction ----沒有開放DTC所以暫時不使用
+
 	insert #tmpa(vnoa,vnoq,productno,product,spec,mount,price,total,memo,tordeno,tordeno2,ip,db)
 	select a.noa,a.noq,a.productno,a.product,a.spec,a.mount,a.price,a.total,a.memo,b.quatno,b.no3,c.postname,c.postname 
 	from view_vccs a left join view_ordes b on a.ordeno=b.noa and a.no2=b.no2
@@ -812,6 +816,9 @@ BEGIN TRY
 	begin	
 		update #tmpa
 		set ip=dbo.split(ip,'##',0),db=dbo.split(db,'##',1)
+		
+		update #tmpa
+		set ip=case when ip=@q_ip then '127.0.0.1' else ip end
 		
 		declare @vnoa nvarchar(50)
 		declare @vnoq nvarchar(50)
@@ -932,7 +939,7 @@ BEGIN TRY
 				,a.post,a.addr,a.post2,a.addr2,a.noa,b.tranmoney
 				,b.cardealno,b.cardealno,b.price,b.carno,b.transtyle
 				,b.transtartno,b.transtart,a.salesno,a.sales,b.money,b.tax,b.total,b.atax
-				,b.coin,b.floata,b.totalus,a.custno2,a.cust2,'由'+left(a.gtime,2)+'出貨單【"+@t_noa+"】轉來',b.worker,b.worker2,'"+@t_noa+"'
+				,b.coin,b.floata,b.totalus,a.custno2,a.cust2,'由'+a.gtime+'出貨單【"+@t_noa+"】轉來',b.worker,b.worker2,'"+@t_noa+"'
 				,'"+@ip+"','"+@db+"'
 				from ["+@ip+",1799]."+@db+".dbo.view_orde a
 				outer apply (select top 1 * from view_vcc where noa='"+@t_noa+"') b
@@ -1130,13 +1137,13 @@ BEGIN TRY
 		from vcc"+@t_accy+" a outer apply (select top 1 vnoa,trc2no,tvccno from #tmpa group by vnoa,trc2no,tvccno)b 
 		where noa='"+@t_noa+"'")
 	
-		EXEC("select vnoa,trc2no,tvccno	from #tmpa group by vnoa,trc2no,tvccno")	
+		--EXEC("select vnoa,trc2no,tvccno from #tmpa group by vnoa,trc2no,tvccno")
 	end
 
-Commit Transaction
+--Commit Transaction
 END TRY
 BEGIN CATCH
-	ROLLBACK
+	--ROLLBACK
 	
 	BEGIN TRY
 		close cursor_table
@@ -1145,6 +1152,8 @@ BEGIN CATCH
 	BEGIN CATCH
 	END CATCH
 END CATCH
+
+EXEC("select vnoa,trc2no,tvccno from #tmpa group by vnoa,trc2no,tvccno")
 
 IF OBJECT_ID('tempdb..#tmpa')is not null
 BEGIN

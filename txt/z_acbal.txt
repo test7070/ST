@@ -599,6 +599,53 @@ end
 close cursor_table 
 deallocate cursor_table 
 
+--前期沖帳 --107/01/02 
+declare cursor_table cursor for 
+select MIN(rec),accc5,ISNULL(bal,'') from #tmp where accc3 = '期初沖帳' group by accc5,bal
+open cursor_table 
+fetch next from cursor_table 
+into @rec,@accc5,@bal
+while(@@FETCH_STATUS <> -1) 
+begin
+
+	set @cmd = 
+	"update #tmp 
+		set money2 = (
+		select SUM(case when LEFT(accc5,1)='1' or LEFT(accc5,1)='5' or LEFT(accc5,1)='6' or LEFT(accc5,1)='8' or LEFT(accc5,1)='9' then cmoney else dmoney end)
+		from ("
+
+	declare cursor_table2 cursor for
+	select replace(tablea,'accc','acccs'),accy,case when @t_rlen='4' then cast(cast(yy as int)+1911 as nvarchar(10)) else yy end,ROW_NUMBER()over (order by accy) from @listaccc
+	open cursor_table2
+	fetch next from cursor_table2
+	into @tableas,@taccy,@yy,@idno
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if(@idno!=1)
+		set @cmd=@cmd+" union all 
+		"
+		set @cmd=@cmd+ 
+		"select * from acccs"+@taccy+" a
+			where ('"+@yy+"/'+accc2 between '"+@t_bdate+"' and '"+@t_edate+"')
+			and accc5 = '"+@accc5+"' and not exists (select * from #tmp where bal=ISNULL(a.bal,'')) and ISNULL(bal,'')!=''
+		"
+		
+		fetch next from cursor_table2
+		into @tableas,@taccy,@yy,@idno
+	end
+	close cursor_table2
+	deallocate cursor_table2
+	
+	set @cmd=@cmd+")tmpx ) where accc5 = '"+@accc5+"' and accc3 = '期初沖帳' "
+	
+	execute sp_executesql @cmd
+	
+	fetch next from cursor_table 
+	into @rec,@accc5,@bal
+end 
+close cursor_table 
+deallocate cursor_table 
+
 --未沖餘額(原始金額-沖帳金額)
 update #tmp set total = money1-money2 where money1 is not null and money2 is not null
 
