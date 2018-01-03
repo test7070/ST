@@ -17,10 +17,10 @@
 
 			q_tables = 's';
 			var q_name = "model";
-			var q_readonly = ['txtWorker', 'txtWorker2','txtMaxmodmount'];
+			var q_readonly = ['txtWorker', 'txtWorker2','txtMaxmodmount','txtOutmount','txtMoget'];
 			var q_readonlys = [];
-			var bbmNum = [['txtYearmount', 10, 0, 1], ['txtUsemount', 10, 0, 1], ['txtInmount', 10, 0, 1]
-			, ['txtInmoney', 10, 0, 1], ['txtMount', 10, 0, 1],['txtModmounts',10,0,1],['txtMaxmodmount',10,0,1]];
+			var bbmNum = [['txtYearmount', 10, 0, 1], ['txtUsemount', 10, 0, 1], ['txtInmount', 10, 0, 1], ['txtInmoney', 10, 0, 1], 
+						  ['txtMount', 10, 0, 1],['txtModmounts',10,0,1],['txtMaxmodmount',10,0,1]];
 			var bbsNum = [];
 			var bbmMask = [];
 			var bbsMask = [];
@@ -32,6 +32,7 @@
 			brwKey = 'Noa';
 			q_desc = 1;
 			aPop = new Array(
+				['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx'],
 				['txtStationno', 'lblStationno', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'],
 				['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucaucc_b.aspx'],
 				['txtModgno', 'lblModg', 'modg', 'noa,namea', 'txtModgno,txtModg', 'modg_b.aspx']
@@ -454,6 +455,17 @@
 						<td> </td>
 					</tr>
 					<tr>
+						<td><span> </span><a id='lblTgg2' class="lbl btn"> </a><a id='lblTggk' class="lbl btn"> </a></td>
+						<td>
+							<input id="txtTggno" type="text" class="txt c2"/>
+							<input id="txtTgg" type="text" class="txt c2"/>
+						</td>
+						<td><span> </span><a id='lblMoget' class="lbl"> </a></td>
+						<td><input id="txtMoget"  type="text"  class="txt c1"/></td>
+						<td><span> </span><a id='lblOutmount' class="lbl"> </a></td>
+						<td><input id="txtOutmount" type="text" class="txt c1"/></td>
+					</tr>
+					<tr>
 						<td><span> </span><a id='lblWorker' class="lbl"> </a></td>
 						<td><input id="txtWorker"  type="text"  class="txt c1"/></td>
 						<td><span> </span><a id='lblWorker2' class="lbl"> </a></td>
@@ -467,8 +479,8 @@
 		<div class='dbbs' style="display: none;"><!--106/12/22 隱藏-->
 			<table id="tbbs" class='tbbs'>
 				<tr style='color:white; background:#003366;' >
-					<td  align="center" style="width:1%;">
-						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
+					<td align="center" style="width:1%;">
+						<input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"/>
 					</td>
 					<td align="center" style="width:15%;"><a id='lblProductno_s'> </a></td>
 					<td align="center" style="width:25%;"><a id='lblProduct_s'> </a></td>
