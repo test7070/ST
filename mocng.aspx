@@ -317,14 +317,24 @@
 					if (t_Tggno.length==0){
 						t_err2 += '請檢查['+q_getMsg('lblTgg')+']　是否有輸入';
 					}else{
-						if (t_outmount==0  || t_outdate.length==0 || t_outtime.length==0){
-							t_err2 += '請檢查['+q_getMsg('lblOutdate')+']　是否有輸入\n　　　';
-							t_err2 += '['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
-						}else if (t_inmount==0 || t_indate.length==0 || t_intime.length==0){
-							t_err2 += '請檢查['+q_getMsg('lblIndate')+']　是否有輸入\n　　　';
-							t_err2 += '['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
+						if(t_Type.val='委入'){
+							if(t_inmount==0 || t_indate.length==0 || t_intime.length==0){
+								t_err2 += '請檢查['+q_getMsg('lblIndate')+']　是否有輸入\n　　　';
+								t_err2 += '['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
+							}else if(t_outmount==1  || t_outdate.length==1 || t_outtime.length==1){
+								t_err2 += '請清空['+q_getMsg('lblOutdate')+']　欄位資料\n　　　';
+								t_err2 += '['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
+							}
+						}else if(t_Type.val='委出'){
+							if (t_outmount==0  || t_outdate.length==0 || t_outtime.length==0){
+								t_err2 += '請檢查['+q_getMsg('lblOutdate')+']　是否有輸入\n　　　';
+								t_err2 += '['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
+							}else if (t_inmount==0 || t_indate.length==0 || t_intime.length==0){
+								t_err2 += '請檢查['+q_getMsg('lblIndate')+']　是否有輸入\n　　　';
+								t_err2 += '['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
+							}
 						}
-					}
+					}	
 				}
 				if (t_err.length > 0 || t_err2.length > 0) {
 					alert(t_err+t_err2);
