@@ -27,19 +27,28 @@ declare @tmp table(
 	notreturned float,
 	totalmount float,
 	usedmount float,
-	remainder float
+	remainder float,
+	cngoutmount float,
+	cngreturned float,
+	cngnotreturned float,
+	cnginmount float
 	)
 insert into @tmp
 	select '0',a.noa,a.model,a.modgno,a.modg,a.stationno,a.station,a.usemount,a.fix,a.yearmount,a.indate,
-	isnull(a.inmount,0),isnull(b.mount,0),isnull(c.mount,0),isnull(d.mount,0),0,0,0,(select count(noa) from view_work where a.noa = modelno) usedmount,0
+	isnull(a.inmount,0),isnull(b.mount,0),isnull(c.mount,0),isnull(d.mount,0),0,0,0,(select count(noa) from view_work where a.noa = modelno) usedmount,0,
+	isnull(e.mount,0),isnull(f.mount,0),0,isnull(g.mount,0)
 	from model a outer apply(select sum(mount) mount from moout where (a.noa=modelno)) b
 				 outer apply(select sum(outmount) mount from moget where (a.noa=modelno) and (len(isnull(outsno,'')) > 0)) c
 				 outer apply(select sum(inmount) mount from moget where (a.noa=modelno) and (len(isnull(insno,'')) > 0)) d
+				 outer apply(select sum(outmount) mount from mocng where (a.noa=modelno) and type='委出') e
+				 outer apply(select sum(inmount) mount from mocng where (a.noa=modelno) and type='委出') f
+				 outer apply(select sum(inmount) mount from mocng where (a.noa=modelno) and type='委入') g
 				 where (a.noa between @t_bmodelno and @t_emodelno) and (isnull(a.modgno,'') between @t_bmodgno and @t_emodgno) and (isnull(a.stationno,'') between @t_bstation and @t_estation) AND (a.indate between @t_bdate and @t_edate)
-update @tmp set stkmount = inmount-outmount-lendmount+returnmount
+update @tmp set stkmount = inmount-outmount-lendmount+returnmount+cnginmount-cngnotreturned
 update @tmp set notreturned = lendmount-returnmount
-update @tmp set totalmount = inmount-outmount
+update @tmp set totalmount = inmount-outmount+cnginmount
 update @tmp set remainder = usemount-usedmount
+update @tmp set cngnotreturned = cngoutmount-cngreturned
 select
 	a.gno,
 	a.modelno a01,
@@ -56,11 +65,15 @@ select
 	a.outmount a06,
 	a.lendmount a07,
 	a.returnmount a08,
-	a.stkmount a09,
-	a.notreturned a16,
-	a.totalmount a17,
+	a.stkmount a09,			--現在庫存量
+	a.notreturned a16,		
+	a.totalmount a17,		--總庫存量
 	a.usedmount a18,
-	a.remainder a19
+	a.remainder a19,
+	a.cngoutmount a20,
+	a.cngreturned a21,
+	a.cngnotreturned a22,
+	a.cnginmount a23 
 from @tmp a order by a.stationno,a.modgno,a.modelno,a.indatea;
 -------------------------------------------------------------------------------------------------------------*
 z_model2:--z_model2

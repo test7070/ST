@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -207,9 +207,6 @@
                         type : '0', //[38]
                         name : 'rank',
                         value : r_rank
-                    }, {
-                        type : '6', //[39]
-                        name : 'xaddr2'
                     }]
                 });
                 q_popAssign();
@@ -271,8 +268,8 @@
                 $('#chkXshowinvono').css('width', '220px').css('margin-top', '5px');
                 $('#chkXshowinvono span').css('width','180px')*/
                 
-                $('#txtVmon1').mask(r_picd);
-                $('#txtVmon2').mask(r_picd);
+                $('#txtVmon1').mask(r_picm);
+                $('#txtVmon2').mask(r_picm);
                 $('#txtVmon1').val(q_date().substr(0,r_lenm));
                 $('#txtVmon2').val(q_date().substr(0,r_lenm));
                 $('#txtVdate1').mask(r_picd);

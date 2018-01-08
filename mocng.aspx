@@ -301,6 +301,7 @@
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtModelno', q_getMsg('lblModelno')]]);
 				var t_err2 = '';
 				var t_Tggno = $.trim($('#txtTggno').val());
+				var t_Type = $.trim($('#cmbType').val());
 				//var t_outsno = $.trim($('#txtOutsno').val());
 				var t_outdate = $.trim($('#txtOutdate').val());
 				var t_outtime = $.trim($('#txtOuttime').val());
@@ -310,16 +311,30 @@
 				var t_inmount = dec($('#txtInmount').val());
 				var t_intime = $.trim($('#txtIntime').val());
 				
-				if (t_Tggno.length==0){
-					t_err2 += '請檢查['+q_getMsg('lblTgg')+']　是否有輸入';
+				if(t_Type.length==0){
+					t_err2 += '請選擇['+q_getMsg('lblType')+']';
 				}else{
-					if (t_outmount==0  || t_outdate.length==0 || t_outtime.length==0){
-						t_err2 += '請檢查['+q_getMsg('lblOutdate')+']　是否有輸入\n　　　';
-						t_err2 += '['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
-					}else if (t_inmount==0 || t_indate.length==0 || t_intime.length==0){
-						t_err2 += '請檢查['+q_getMsg('lblIndate')+']　是否有輸入\n　　　';
-						t_err2 += '['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
-					}
+					if (t_Tggno.length==0){
+						t_err2 += '請檢查['+q_getMsg('lblTgg')+']　是否有輸入';
+					}else{
+						if(t_Type.val='委入'){
+							if(t_inmount==0 || t_indate.length==0 || t_intime.length==0){
+								t_err2 += '請檢查['+q_getMsg('lblIndate')+']　是否有輸入\n　　　';
+								t_err2 += '['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
+							}else if(t_outmount==1  || t_outdate.length==1 || t_outtime.length==1){
+								t_err2 += '請清空['+q_getMsg('lblOutdate')+']　欄位資料\n　　　';
+								t_err2 += '['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
+							}
+						}else if(t_Type.val='委出'){
+							if (t_outmount==0  || t_outdate.length==0 || t_outtime.length==0){
+								t_err2 += '請檢查['+q_getMsg('lblOutdate')+']　是否有輸入\n　　　';
+								t_err2 += '['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
+							}else if (t_inmount==0 || t_indate.length==0 || t_intime.length==0){
+								t_err2 += '請檢查['+q_getMsg('lblIndate')+']　是否有輸入\n　　　';
+								t_err2 += '['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
+							}
+						}
+					}	
 				}
 				if (t_err.length > 0 || t_err2.length > 0) {
 					alert(t_err+t_err2);
@@ -569,7 +584,13 @@
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblType' class="lbl"> </a></td>
-						<td><input id="txtType"  type="text" class="txt c1" /></td>
+						<td><!---<input id="txtType"  type="text" class="txt c1" />--->
+							<select id="cmbType" class="txt c1">
+								<option value ="">　　</option>
+								<option value ="委出">委出</option>
+								<option value ="委入">委入</option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblModelno' class="lbl btn"> </a></td>
