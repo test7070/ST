@@ -62,7 +62,7 @@ begin try
 	if not exists(select noa from signform where noa='chkorde')
 	begin
 		insert signform(noa,formname,form,memo,receiver,mailreceiver)
-		select 'chkorde','�q�楼��','chkorde','����W�L=days��',sss,email
+		select 'chkorde','訂單未交','chkorde','未交超過=days天',sss,email
 		from @tmp a
 		group by sss,email
 	end
@@ -71,17 +71,17 @@ begin try
 
 	insert [sign](noa,datea,timea,form,sender,memo,receiver,zno,zno2,enda)
 	select REPLACE(@t_qdate,'/','')+case when @r_len=4 then REPLICATE('0',5-LEN(rr)) + RTRIM(CAST(rr AS CHAR))else REPLICATE('0',3-LEN(rr)) + RTRIM(CAST(rr AS CHAR)) end,
-	   @t_qdate,left(CONVERT(nvarchar,getdate(),108),5), '�q�楼��',@t_user,'����W�L'+kdate+'��',sss,noa,'orde'+CHAR(59)+'noa'+CHAR(59)+accy,'N'
+	   @t_qdate,left(CONVERT(nvarchar,getdate(),108),5), '訂單未交',@t_user,'未交超過'+kdate+'天',sss,noa,'orde'+CHAR(59)+'noa'+CHAR(59)+accy,'N'
 	from @tmp
 
 	update [sign]
 	set checker=b.checker,approvebs=b.approvebs,approvefi=b.approvefi,approvegm=b.approvegm,approvema=b.approvema
 	from [sign] a left join signform b on a.form=b.formname
-	where a.form='�q�楼��' and a.datea=@t_qdate
+	where a.form='訂單未交' and a.datea=@t_qdate
 
-	Commit Transaction [Trans_Name] -- ����Ҧ��ާ@�ҳy�����ܧ�
+	Commit Transaction [Trans_Name] -- 提交所有操作所造成的變更
 end try
 begin catch
-	Rollback Transaction [Trans_Name] -- �_��Ҧ��ާ@�ҳy�����ܧ�
+	Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
 end catch
 ;
