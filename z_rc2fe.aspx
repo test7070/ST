@@ -84,6 +84,9 @@
 						type : '0',//[16]
 						name : 'xproject',
 						value : q_getPara('sys.project').toUpperCase()
+					},{
+						type : '1',//[17][18]
+						name : 'Price',
 					}]
                 });
                 q_popAssign();
