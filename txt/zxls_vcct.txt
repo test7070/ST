@@ -293,6 +293,12 @@ begin
 	else
 		set @ishave = 0
 		
+	--折讓不判斷 在發票主檔區間
+	if(@kind='33' or @kind='34')
+	begin
+		set @ishave = 1
+	end
+		
 	--進項和空白不判斷
 	if (@typea = '1' or @taxtype='D' )
 	begin
