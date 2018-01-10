@@ -28,12 +28,12 @@ declare @tmp table(
 	worker nvarchar(100)
 )
 insert @tmp
-select accy,a.noa,ROW_NUMBER()over(partition by @t_qdate order by noa),datea,@t_qdate,DATEDIFF(day,case when len(datea)='9' then 
-	   cast(cast(left(datea,3) as int)+1911 as nvarchar)+right(datea,6) else datea end,@t_qdate)
+select accy,a.noa,ROW_NUMBER()over(partition by @t_qdate order by noa),datea,@t_qdate,DATEDIFF(day,case when len(odate)='9' then 
+	   cast(cast(left(odate,3) as int)+1911 as nvarchar)+right(odate,6) else odate end,@t_qdate)
 	   ,'','',worker
 from view_orde a
-where case when len(datea)='9' then cast(cast(left(datea,3) as int)+1911 as nvarchar)+right(datea,6) else datea end<@t_qdate 
-and enda='0' and ISNULL(datea,'')!='' and cancel!='1'
+where case when len(odate)='9' then cast(cast(left(odate,3) as int)+1911 as nvarchar)+right(odate,6) else odate end<@t_qdate 
+and enda='0' and ISNULL(odate,'')!='' and cancel!='1'
 
 declare @namea nvarchar(50)
 declare @email nvarchar(200)
@@ -62,7 +62,7 @@ begin try
 	if not exists(select noa from signform where noa='chkorde')
 	begin
 		insert signform(noa,formname,form,memo,receiver,mailreceiver)
-		select 'chkorde','­q³æ¥¼¥æ','chkorde','¥¼¥æ¶W¹L=days¤Ñ',sss,email
+		select 'chkorde','è¨‚å–®æœªäº¤','chkorde','æœªäº¤è¶…éŽ=dayså¤©',sss,email
 		from @tmp a
 		group by sss,email
 	end
@@ -71,17 +71,17 @@ begin try
 
 	insert [sign](noa,datea,timea,form,sender,memo,receiver,zno,zno2,enda)
 	select REPLACE(@t_qdate,'/','')+case when @r_len=4 then REPLICATE('0',5-LEN(rr)) + RTRIM(CAST(rr AS CHAR))else REPLICATE('0',3-LEN(rr)) + RTRIM(CAST(rr AS CHAR)) end,
-	   @t_qdate,left(CONVERT(nvarchar,getdate(),108),5), '­q³æ¥¼¥æ',@t_user,'¥¼¥æ¶W¹L'+kdate+'¤Ñ',sss,noa,'orde'+CHAR(59)+'noa'+CHAR(59)+accy,'N'
+	   @t_qdate,left(CONVERT(nvarchar,getdate(),108),5), 'è¨‚å–®æœªäº¤',@t_user,'æœªäº¤è¶…éŽ'+kdate+'å¤©',sss,noa,'orde'+CHAR(59)+'noa'+CHAR(59)+accy,'N'
 	from @tmp
 
 	update [sign]
 	set checker=b.checker,approvebs=b.approvebs,approvefi=b.approvefi,approvegm=b.approvegm,approvema=b.approvema
 	from [sign] a left join signform b on a.form=b.formname
-	where a.form='­q³æ¥¼¥æ' and a.datea=@t_qdate
+	where a.form='è¨‚å–®æœªäº¤' and a.datea=@t_qdate
 
-	Commit Transaction [Trans_Name] -- ´£¥æ©Ò¦³¾Þ§@©Ò³y¦¨ªºÅÜ§ó
+	Commit Transaction [Trans_Name] -- æäº¤æ‰€æœ‰æ“ä½œæ‰€é€ æˆçš„è®Šæ›´
 end try
 begin catch
-	Rollback Transaction [Trans_Name] -- ´_­ì©Ò¦³¾Þ§@©Ò³y¦¨ªºÅÜ§ó
+	Rollback Transaction [Trans_Name] -- å¾©åŽŸæ‰€æœ‰æ“ä½œæ‰€é€ æˆçš„è®Šæ›´
 end catch
 ;

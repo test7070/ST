@@ -15,7 +15,7 @@
 				alert("An error occurred:\r\n" + error.Message);
 			}
 			q_tables = 's';
-			var q_name = "moget";
+			var q_name = "mocng";
 			var q_readonly = ['txtNoa','txtWorker','txtWorker2','txtModel','txtOutnamea','txtInnamea'];
 			var q_readonlys = ['txtWorkno'];
 			var bbmNum = [['txtOutmount',10,0,1],['txtInmount',10,0,1]];
@@ -31,8 +31,7 @@
 			q_desc = 1;
 			aPop = new Array(
 				['txtModelno', 'lblModelno', 'model', 'noa,model', 'txtModelno,txtModel', 'model_b.aspx'],
-				['txtOutsno', 'lblOutsno', 'sss', 'noa,namea', 'txtOutsno,txtOutnamea', 'sss_b.aspx'],
-				['txtInsno', 'lblInsno', 'sss', 'noa,namea', 'txtInsno,txtInnamea', 'sss_b.aspx'],
+				['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'Tgg_b.aspx'],
 				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
 			);
 			$(document).ready(function() {
@@ -112,7 +111,7 @@
 						t_where+=" and noa like 'W[0-9]%' ";
 						
 						//原先的資料
-						t_where += " or noa in (select noa from mogets where noa='" + $('#txtNoa').val() + "')";
+						t_where += " or noa in (select noa from mocngs where noa='" + $('#txtNoa').val() + "')";
 						
 						q_box("work_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, 'work', "95%", "95%", q_getMsg('popWork'));
 					}
@@ -173,7 +172,7 @@
 							for(var i=0;i<as.length;i++){
 								var thisStkType = as[i].stktype;
 								var thisMount = dec(as[i].mount);
-								if(as[i].tablea=='moget'){
+								if(as[i].tablea=='mocng'){
 									trueMount = trueMount+(thisMount*(thisStkType=='1'?(-1):1));
 								}
 								t_mount = t_mount+(thisMount*(thisStkType=='1'?(1):(-1)));
@@ -256,7 +255,7 @@
 			function _btnSeek() {
 				if (q_cur > 0 && q_cur < 4)
 					return;
-				q_box('moget_s.aspx', q_name + '_s', "500px", "450px", q_getMsg("popSeek"));
+				q_box('mocng_s.aspx', q_name + '_s', "500px", "450px", q_getMsg("popSeek"));
 			}
 			
 			function btnIns() {
@@ -301,42 +300,42 @@
 				Lock();
 				var t_err = q_chkEmpField([['txtNoa', q_getMsg('lblNoa')],['txtModelno', q_getMsg('lblModelno')]]);
 				var t_err2 = '';
-				var t_outsno = $.trim($('#txtOutsno').val());
+				var t_Tggno = $.trim($('#txtTggno').val());
+				var t_Type = $.trim($('#cmbType').val());
+				//var t_outsno = $.trim($('#txtOutsno').val());
 				var t_outdate = $.trim($('#txtOutdate').val());
 				var t_outtime = $.trim($('#txtOuttime').val());
 				var t_outmount = dec($('#txtOutmount').val());
-				var t_insno = $.trim($('#txtInsno').val());
+				//var t_insno = $.trim($('#txtInsno').val());
 				var t_indate = $.trim($('#txtIndate').val());
 				var t_inmount = dec($('#txtInmount').val());
 				var t_intime = $.trim($('#txtIntime').val());
-				if (t_outmount==0 || t_outsno.length==0 || t_outdate.length==0 || t_outtime.length==0){
-					t_err2 += '請檢查['+q_getMsg('lblOutsno')+']　是否有輸入\n　　　';
-					t_err2 += '['+q_getMsg('lblOutdate')+']\n　　　['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
-				}else if (t_inmount==0 || t_insno.length==0 || t_indate.length==0 || t_intime.length==0){
-					t_err2 += '請檢查['+q_getMsg('lblInsno')+']　是否有輸入\n　　　';
-					t_err2 += '['+q_getMsg('lblIndate')+']\n　　　['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
-				}
-				/*if(t_outmount==0 && t_inmount==0){
-					t_err2 += '請輸入['+q_getMsg('lblOutmount')+']或['+q_getMsg('lblInmount') + ']\n';
+				
+				if(t_Type.length==0){
+					t_err2 += '請選擇['+q_getMsg('lblType')+']';
 				}else{
-					if(t_outmount > 0 && (t_outsno.length==0 || t_outdate.length==0 || t_outtime.length==0)){
-						if(t_outsno.length==0 && t_outdate.length==0 && t_outtime.length==0){
-							t_err2 += '請檢查['+q_getMsg('lblOutsno')+']\n['+q_getMsg('lblOutdate')+']\n['+q_getMsg('lblOuttime')+']\n是否有輸入';
+					if (t_Tggno.length==0){
+						t_err2 += '請檢查['+q_getMsg('lblTgg')+']　是否有輸入';
+					}else{
+						if(t_Type.val='委入'){
+							if(t_inmount==0 || t_indate.length==0 || t_intime.length==0){
+								t_err2 += '請檢查['+q_getMsg('lblIndate')+']　是否有輸入\n　　　';
+								t_err2 += '['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
+							}else if(t_outmount==1  || t_outdate.length==1 || t_outtime.length==1){
+								t_err2 += '請清空['+q_getMsg('lblOutdate')+']　欄位資料\n　　　';
+								t_err2 += '['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
+							}
+						}else if(t_Type.val='委出'){
+							if (t_outmount==0  || t_outdate.length==0 || t_outtime.length==0){
+								t_err2 += '請檢查['+q_getMsg('lblOutdate')+']　是否有輸入\n　　　';
+								t_err2 += '['+q_getMsg('lblOuttime')+']\n　　　['+q_getMsg('lblOutmount')+']\n';
+							}else if (t_inmount==0 || t_indate.length==0 || t_intime.length==0){
+								t_err2 += '請檢查['+q_getMsg('lblIndate')+']　是否有輸入\n　　　';
+								t_err2 += '['+q_getMsg('lblIntime')+']\n　　　['+q_getMsg('lblInmount')+']\n';
+							}
 						}
-					}else if(t_outmount == 0){
-						t_err2 += '請輸入['+q_getMsg('lblOutmount')+']\n';
-					}
-					
-					if(t_inmount > 0 && (t_insno.length==0 || t_indate.length==0)){
-						if(t_insno.length==0){
-							t_err2 += '請輸入['+q_getMsg('lblInsno')+']\n';
-						}else{
-							t_err2 += '請輸入['+q_getMsg('lblIndate')+']\n';
-						}
-					}else if(t_inmount == 0 && (t_insno.length>0 || t_indate.length>0)){
-						t_err2 += '請輸入['+q_getMsg('lblInmount')+']\n';
-					}
-				}*/
+					}	
+				}
 				if (t_err.length > 0 || t_err2.length > 0) {
 					alert(t_err+t_err2);
 					Unlock();
@@ -475,7 +474,8 @@
 				font-size: medium;
 			}
 			.tbbm tr td .lbl_1 {
-				float: left;
+				//float: left;
+				float: right;
 				color: blue;
 				font-size: medium;
 			}
@@ -563,9 +563,7 @@
 						<td align="center" style="width:250px; color:black;"><a id='vewModel'> </a></td>
 					</tr>
 					<tr>
-						<td >
-						<input id="chkBrow.*" type="checkbox" style=' '/>
-						</td>
+						<td><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td id='modelno' style="text-align: center;">~modelno</td>
 						<td id='model,8' style="text-align: left;">~model,8</td>
 					</tr>
@@ -585,6 +583,14 @@
 						<td><input id="txtNoa"  type="text" class="txt c1" /></td>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
 						<td><input id="txtDatea"  type="text" class="txt c1" /></td>
+						<td><span> </span><a id='lblType' class="lbl"> </a></td>
+						<td><!---<input id="txtType"  type="text" class="txt c1" />--->
+							<select id="cmbType" class="txt c1">
+								<option value ="">　　</option>
+								<option value ="委出">委出</option>
+								<option value ="委入">委入</option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblModelno' class="lbl btn"> </a></td>
@@ -595,30 +601,25 @@
 						<td><input type="button" id="btnWork"></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblOutsno' class="lbl btn"> </a></td>
+						<td><span> </span><a id='lblTgg' class="lbl btn"> </a></td>
 						<td colspan="2">
-							<input id="txtOutsno" type="text" class="txt c2" />
-							<input id="txtOutnamea" type="text" class="txt c3" />
+							<input id="txtTggno" type="text" class="txt c2" />
+							<input id="txtTgg" type="text" class="txt c3" />
 						</td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblOutdate' class="lbl"> </a></td>
 						<td><input id="txtOutdate" type="text" class="txt c1"/></td>
-						<td><a id='lblOuttime' class="lbl_1"></a><input id="txtOuttime" type="text" class="txt c1_1"/></td>
+						<td><a id='lblOuttime' class="lbl_1"></a></td>
+						<td><input id="txtOuttime" type="text" class="txt c1_1"/></td>
 						<td><span></span><a id='lblOutmount' class="lbl"></a></td>
 						<td><input id="txtOutmount" type="text" class="txt c1 num"/></td>
 					</tr>
 					<tr>
-						<td><span> </span><a id='lblInsno' class="lbl btn"> </a></td>
-						<td colspan="2">
-							<input id="txtInsno" type="text" class="txt c2" />
-							<input id="txtInnamea" type="text" class="txt c3" />
-						</td>
-					</tr>
-					<tr>
 						<td><span> </span><a id='lblIndate' class="lbl"> </a></td>
 						<td><input id="txtIndate" type="text" class="txt c1"/></td>
-						<td><a id='lblIntime' class="lbl_1"></a><input id="txtIntime" type="text" class="txt c1_1"/></td>
+						<td><a id='lblIntime' class="lbl_1"></a></td>
+						<td><input id="txtIntime" type="text" class="txt c1_1"/></td>
 						<td><span> </span><a id='lblInmount' class="lbl"> </a></td>
 						<td><input id="txtInmount" type="text" class="txt c1 num"/></td>
 					</tr>
