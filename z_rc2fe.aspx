@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" >
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -84,6 +84,13 @@
 						type : '0',//[16]
 						name : 'xproject',
 						value : q_getPara('sys.project').toUpperCase()
+					},{
+						type : '5',//[17]
+						name : 'Price',
+						value:('0@全部,1@無單價').split(',')
+					},{
+						type : '6',//[18]
+						name : 'Price2'
 					}]
                 });
                 q_popAssign();
@@ -132,6 +139,13 @@
                 $('#txtXdate2').val(t_year + '/' + t_month + '/' + t_day);
                 $('#txtXmon2').val(t_year + '/' + t_month);
                 
+                $('#txtPrice2').val(0).addClass('num').focusout(function() {
+				if(($('#txtPrice2').val().length)>=1)
+                    $(this).val(dec($(this).val()));
+                    if ($(this).val() == 'NaN')
+                        $(this).val(0);
+                });
+
                 if(window.parent.q_name=='rc2a'){ //1041215
                 	var t_report=999;
 					for(var i=0;i<$('#q_report').data().info.reportData.length;i++){

@@ -179,7 +179,7 @@ select '1','1xxx.','資產'
 union all
 select '2','2xxx.','負債'
 union all
-select '31','31xx.','歸屬於母公司業主之權益'
+select '3','31xx.','歸屬於母公司業主之權益'
 --非必要中類-------------------------
 if(select count(*) from #tmp where left(tacc1,2)='11')>1
 begin
@@ -241,7 +241,7 @@ insert #tmp(tacc1,acc1,acc2)
 select '3ZZZ','','負債及權益-總計：'
 
 insert #tmp(tacc1,acc1,acc2)
-select '9ZZZ','','費用-總計：'
+select '9ZZZ','','損益-總計：'
 ----------------------------------------------------------------
 --更新插入欄的公司 與 合計 總計
 declare cursor_table cursor for
