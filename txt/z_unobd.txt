@@ -140,13 +140,13 @@ z_unork01:--z_unork01 批號履歷
 		,dbo.getComma(isnull(c.emount,0),-1) b04
 		,dbo.getComma(isnull(c.eweight,0),-1) b05
 		,a.ctable a01
-		,case when a.tablea='rc2' then "<a href="+CHAR(34)+"JavaScript:q_box('rc2st.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
-			when a.tablea='vcc'then "<a href="+CHAR(34)+"JavaScript:q_box('vcc_rk.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
-			when a.tablea='ina' then "<a href="+CHAR(34)+"JavaScript:q_box('inast.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
-			when a.tablea='cuts' then "<a href="+CHAR(34)+"JavaScript:q_box('cut_rk.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
-			when a.tablea='cub' or a.tablea='cubt' or a.tablea='cubu' then "<a href="+CHAR(34)+"JavaScript:q_box('cub_rk.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
-			when a.tablea='get' then "<a href="+CHAR(34)+"JavaScript:q_box('get_rk.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
-			when a.tablea='cng' then "<a href="+CHAR(34)+"JavaScript:q_box('cngst.aspx',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+		,case when a.tablea='rc2' then "<a href="+CHAR(34)+"JavaScript:q_box('rc2st.aspx?' + r_userno + '"+CHAR(59)+"' + r_name + '"+CHAR(59)+"' + q_id + '"+CHAR(59)+"noa=\'"+a.noa+"\'"+CHAR(59)+a.accy+"_1',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='vcc'then "<a href="+CHAR(34)+"JavaScript:q_box('vcc_rk.aspx?' + r_userno + '"+CHAR(59)+"' + r_name + '"+CHAR(59)+"' + q_id + '"+CHAR(59)+"noa=\'"+a.noa+"\'"+CHAR(59)+a.accy+"_1',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='ina' then "<a href="+CHAR(34)+"JavaScript:q_box('inast.aspx?' + r_userno + '"+CHAR(59)+"' + r_name + '"+CHAR(59)+"' + q_id + '"+CHAR(59)+"noa=\'"+a.noa+"\'"+CHAR(59)+a.accy+"_1',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='cuts' then "<a href="+CHAR(34)+"JavaScript:q_box('cut_rk.aspx?' + r_userno + '"+CHAR(59)+"' + r_name + '"+CHAR(59)+"' + q_id + '"+CHAR(59)+"noa=\'"+a.noa+"\'"+CHAR(59)+a.accy+"_1',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='cub' or a.tablea='cubt' or a.tablea='cubu' then "<a href="+CHAR(34)+"JavaScript:q_box('cub_rk.aspx?' + r_userno + '"+CHAR(59)+"' + r_name + '"+CHAR(59)+"' + q_id + '"+CHAR(59)+"noa=\'"+a.noa+"\'"+CHAR(59)+a.accy+"_1',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='get' then "<a href="+CHAR(34)+"JavaScript:q_box('get_rk.aspx?' + r_userno + '"+CHAR(59)+"' + r_name + '"+CHAR(59)+"' + q_id + '"+CHAR(59)+"noa=\'"+a.noa+"\'"+CHAR(59)+a.accy+"_1',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
+			when a.tablea='cng' then "<a href="+CHAR(34)+"JavaScript:q_box('cngst.aspx?' + r_userno + '"+CHAR(59)+"' + r_name + '"+CHAR(59)+"' + q_id + '"+CHAR(59)+"noa=\'"+a.noa+"\'"+CHAR(59)+a.accy+"_1',' "+CHAR(59)+"noa=\'"+a.noa+"\'','95%','95%','"+a.accy+"')"+char(34)+">"+a.noa+"</a>"
 			end a02
 		,a.datea a03
 		,a.comp a04
