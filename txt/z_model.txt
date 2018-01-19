@@ -31,7 +31,7 @@ declare @tmp table(
 	cngoutmount float,
 	cngreturned float,
 	cngnotreturned float,
-	cnginmount float
+	cnginmount float,
 	)
 insert into @tmp
 	select '0',a.noa,a.model,a.modgno,a.modg,a.stationno,a.station,a.usemount,a.fix,a.yearmount,a.indate,
@@ -55,25 +55,25 @@ select
 	a.models a02,
 	a.modgno a10,
 	a.modg a11,
-	a.usemount a12,
-	a.fix a13,
-	a.stationno a14,
-	a.station a15,
-	a.yearmount a03,
-	a.indatea a04,
-	a.inmount a05,
-	a.outmount a06,
-	a.lendmount a07,
-	a.returnmount a08,
-	a.stkmount a09,			--現在庫存量
-	a.notreturned a16,		
-	a.totalmount a17,		--總庫存量
-	a.usedmount a18,
-	a.remainder a19,
-	a.cngoutmount a20,
-	a.cngreturned a21,
-	a.cngnotreturned a22,
-	a.cnginmount a23 
+	a.usemount a12,--可使用次數
+	a.fix a13,--使用次數需保養
+	a.stationno a14,--工作線別編號
+	a.station a15,--工作線別
+	a.yearmount a03,--使用年限
+	a.indatea a04,--取得日
+	a.inmount a05,--取得數
+	a.outmount a06,--報廢數量
+	a.lendmount a07,--領用數量
+	a.returnmount a08,--歸還數量
+	a.stkmount a09,--現在庫存量
+	a.notreturned a16,--未歸還數量	
+	a.totalmount a17,--總庫存量
+	a.usedmount a18,--已使用次數
+	a.remainder a19,--餘使用次數
+	a.cngoutmount a20,--委出數量
+	a.cngreturned a21,--委出歸還數量
+	a.cngnotreturned a22,--委出未歸還數量
+	a.cnginmount a23 --委外入庫數量
 from @tmp a order by a.stationno,a.modgno,a.modelno,a.indatea;
 -------------------------------------------------------------------------------------------------------------*
 z_model2:--z_model2
