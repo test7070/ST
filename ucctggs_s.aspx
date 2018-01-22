@@ -36,6 +36,12 @@
 				$('#txtNoa').focus();
                 //$('#txtBdate').datepicker();
                 //$('#txtEdate').datepicker();
+                if(q_getPara('sys.project').toUpperCase()=="AD" || q_getPara('sys.project').toUpperCase()=="JO"){
+	                aPop = new Array(
+	                	['txtTggno', 'lblTggno', 'tgg', 'noa,comp', 'txtTggno', 'tgg_b.aspx'],
+	                	['txtProductno', 'lblProductno', 'ucx', 'noa,product', 'txtProductno', 'ucx_b.aspx']
+	            	);
+            	}
             }
 
             function q_seekStr() {
