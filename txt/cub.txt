@@ -1239,3 +1239,32 @@ end
 
 ;
 ----------------------------------------------------------------------------------
+safemountfe:--safemountfe
+declare @t_enddate nvarchar(10) = case when '#non'=[1] then '' else [1] end 
+declare @t_spec nvarchar(20) = case when '#non'=[2] then char(255) else [2] end 
+declare @t_size nvarchar(20) = case when '#non'=[3] then char(255) else [3] end 
+
+declare @t_bproductno nvarchar(30) = case when '#non'='#non' then '' else '#non' end 
+declare @t_eproductno nvarchar(30) = case when '#non'='#non' then char(255) else '#non' end 
+declare @t_bstoreno nvarchar(20) = case when '#non'='#non' then '' else '#non' end 
+declare @t_estoreno nvarchar(20) = case when '#non'='#non' then char(255) else '#non' end 
+
+declare @tmpa table( 
+	productno nvarchar(30), 
+	storeno nvarchar(30), 
+	mount decimal(18, 4), 
+	[weight] decimal(18, 4)
+) 
+insert into @tmpa(productno,storeno,mount,weight)
+execute dbo.stkucc2 @t_enddate,@t_bstoreno,@t_estoreno,@t_bproductno,@t_eproductno 
+
+delete a from @tmpa a where not exists (select * from view_ucaucc where noa=a.productno) 
+
+select a.*,isnull(b.safemount,0)safemount,b.product
+from @tmpa a left join view_ucaucc b on a.productno=b.noa
+where b.product like '%M' and b.product like '鋼筋%'
+and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+and a.mount<isnull(b.safemount,0)
+and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
+order by productno
+;
