@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
@@ -622,6 +623,16 @@
 						<tr>
 							<td><span> </span><a id='lblAddr_invo' class="lbl"> </a></td>
 							<td colspan="3"><input id="txtAddr_invo"  type="text" class="txt c1" />	</td>
+						</tr>
+                        <tr>
+							<td><span> </span><a id='lblAddr2' class="lbl">地址(寄送)</a></td>
+							<td colspan="3"><input id="txtAddr2"  type="text" class="txt c1" />	</td>
+						</tr><tr>
+							<td><span> </span><a id='lblTel2' class="lbl">電話(寄送)</a></td>
+							<td colspan="3"><input id="txtTel2"  type="text" class="txt c1" />	</td>
+						</tr><tr>
+							<td><span> </span><a id='lblFax2' class="lbl">傳真(寄送)</a></td>
+							<td colspan="3"><input id="txtFax2"  type="text" class="txt c1" />	</td>
 						</tr>
 						<tr>
 							<td><span> </span><a id='lblEmail' class="lbl"> </a></td>
