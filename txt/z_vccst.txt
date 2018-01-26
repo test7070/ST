@@ -463,7 +463,9 @@ z_vccpk2:--z_vccpk2
 		select
 			1,'1',b.noa,b.datea,a.ordeno,a.no2,a.uno,a.product,a.productno,b.kind,
 			case when ltrim(rtrim(a.size)) = '' then dbo.csize(b.kind,a.dime,a.width,a.lengthb,a.radius) else a.size end,
-			a.spec,a.style,a.weight,a.mount,a.price,(a.price * a.theory),e.nick,b.carno,'vcc_pk'+a.accy,b.coin
+			a.spec,a.style,a.weight,a.mount,a.price
+			,a.total--,(a.price * a.theory)
+			,e.nick,b.carno,'vcc_pk'+a.accy,b.coin
 			,a.tranmoney,a.item,a.unit
 			,a.scolor,a.[class],g.custorde,a.total,b.typea
 		from view_vccs a
