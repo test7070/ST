@@ -28,6 +28,7 @@
 			['txtApartno_', 'txtApartno_', 'part', 'noa,part', 'txtApartno_,txtApart_','part_b.aspx'],
 			['txtOjobno_', 'txtOjobno_', 'salm', 'noa,job', 'txtOjobno_,txtOjob_','salm_b.aspx'],
 			['txtAjobno_', 'txtAjobno_', 'salm', 'noa,job', 'txtAjobno_,txtAjob_','salm_b.aspx']);
+			var t_authRun=false;
 			$(document).ready(function () {
 				bbmKey = [];
 				bbsKey = ['noa', 'noq'];
@@ -39,7 +40,8 @@
 				if (!q_paraChk())
 					return;
 				
-				main();
+				var t_where = "where=^^ a.noa='" + q_name + "' and a.sssno='"+r_userno+"' ^^";
+				q_gt('authority', t_where, 0, 0, 0, "getauthRun", r_accy);
 			});            /// end ready
 
 			function main() {
@@ -48,7 +50,7 @@
 					dataErr = false;
 					return;
 				}
-				if(q_authRun())
+				if(t_authRun)
 					mainBrow(6, t_content, t_sqlname, t_postname);
 				else
 					alert('無使用權限');
@@ -59,9 +61,6 @@
 				bbsMask = [['txtDatea', r_picd],['txtBfdatea', r_picd]];
 				q_mask(bbsMask);
 
-				
-
-				
 				var no_auth=true;
 				
 				for(var i = 0; i < q_auth.length; i++) {
@@ -183,8 +182,27 @@
 			
 			function sum() { }
 			
-			function q_gtPost() {
-			}
+			function q_gtPost(t_name) {
+                switch (t_name) {
+                	case 'getauthRun':
+						var as = _q_appendData("authority", "", true, true);
+						if (as[0] != undefined) {
+							if (as[0]["pr_run"] == "true"){
+								t_authRun=true;
+							}
+						}
+						if(r_rank>=8){
+							t_authRun=true;
+						}
+						main();
+						break;
+                    case q_name:
+                        if (q_cur == 4)
+                            q_Seek_gtPost();
+                        break;
+                }  /// end switch
+
+            }
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);

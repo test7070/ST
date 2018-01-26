@@ -56,7 +56,12 @@
 			function mainPost() {
 				bbmMask = [['txtPricedate', r_picd]];
 				q_mask(bbmMask);
-				
+				if(q_getPara('sys.project').toUpperCase()=="AD" || q_getPara('sys.project').toUpperCase()=="JO"){
+					aPop = new Array(
+						['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx'],
+		            	['txtProductno', 'lblProduct', 'ucx', 'noa,product,unit', 'txtProductno,txtProduct,txtUnit', 'ucx_b.aspx']
+		            );
+				}
 			}
 
 			function q_boxClose(s2) {

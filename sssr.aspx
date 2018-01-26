@@ -25,7 +25,7 @@
             var bbsMask = [];
 
             aPop = new Array(['txtCno_', 'btnCno_', 'acomp', 'noa,acomp', 'txtCno_,txtAcomp_', 'acomp_b.aspx']);
-
+			var t_authRun=false;
             $(document).ready(function() {
                 bbmKey = [];
                 bbsKey = ['noa', 'noq'];
@@ -37,7 +37,8 @@
                 if(!q_paraChk())
                     return;
 
-                main();
+                var t_where = "where=^^ a.noa='" + q_name + "' and a.sssno='"+r_userno+"' ^^";
+				q_gt('authority', t_where, 0, 0, 0, "getauthRun", r_accy);
             });
             
             function main() {
@@ -45,7 +46,7 @@
                     dataErr = false;
                     return;
                 }
-                if(q_authRun())
+                if(t_authRun)
 					mainBrow(6, t_content, t_sqlname, t_postname);
 				else
 					alert('無使用權限');
@@ -60,6 +61,18 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) {
+                	case 'getauthRun':
+						var as = _q_appendData("authority", "", true, true);
+						if (as[0] != undefined) {
+							if (as[0]["pr_run"] == "true"){
+								t_authRun=true;
+							}
+						}
+						if(r_rank>=8){
+							t_authRun=true;
+						}
+						main();
+						break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();

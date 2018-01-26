@@ -1019,7 +1019,7 @@ SET QUOTED_IDENTIFIER OFF
 declare @year nvarchar(20)=[1]--年度[1]
 declare @noa nvarchar(50)=[2]
 declare @r_userno nvarchar(50)=[3]
-declare @r_name nvarchar(50)=[4]
+declare @r_name nvarchar(50)=N[4]
 declare @t_apv nvarchar(50)=[5]
 declare @q_ip nvarchar(50)=[6]
 declare @q_proj nvarchar(50)=[7]
