@@ -1241,8 +1241,8 @@ end
 ----------------------------------------------------------------------------------
 safemountfe:--safemountfe
 declare @t_enddate nvarchar(10) = case when '#non'=[1] then '' else [1] end 
-declare @t_spec nvarchar(20) = case when '#non'=[2] then char(255) else [2] end 
-declare @t_size nvarchar(20) = case when '#non'=[3] then char(255) else [3] end 
+declare @t_spec nvarchar(20) = case when '#non'=[2] then '' else [2] end 
+declare @t_size nvarchar(20) = case when '#non'=[3] then '' else [3] end 
 
 declare @t_bproductno nvarchar(30) = case when '#non'='#non' then '' else '#non' end 
 declare @t_eproductno nvarchar(30) = case when '#non'='#non' then char(255) else '#non' end 
@@ -1261,10 +1261,55 @@ execute dbo.stkucc2 @t_enddate,@t_bstoreno,@t_estoreno,@t_bproductno,@t_eproduct
 delete a from @tmpa a where not exists (select * from view_ucaucc where noa=a.productno) 
 
 select a.*,isnull(b.safemount,0)safemount,b.product
+,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
+,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
+*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
 from @tmpa a left join view_ucaucc b on a.productno=b.noa
+left join adpro c on a.productno=c.noa
 where b.product like '%M' and b.product like '鋼筋%'
 and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
 and a.mount<isnull(b.safemount,0)
 and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
-order by productno
+order by a.productno
+;
+------------------------------------------------------------------------
+upadpro:--upadpro 安全庫存增加模式
+declare @t_enddate nvarchar(10) = case when '#non'=[1] then '' else [1] end 
+declare @t_spec nvarchar(20) = case when '#non'=[2] then '' else [2] end 
+declare @t_size nvarchar(20) = case when '#non'=[3] then '' else [3] end 
+
+declare @t_bproductno nvarchar(30) = case when '#non'='#non' then '' else '#non' end 
+declare @t_eproductno nvarchar(30) = case when '#non'='#non' then char(255) else '#non' end 
+declare @t_bstoreno nvarchar(20) = case when '#non'='#non' then '' else '#non' end 
+declare @t_estoreno nvarchar(20) = case when '#non'='#non' then char(255) else '#non' end 
+
+declare @tmpa table( 
+	productno nvarchar(30), 
+	storeno nvarchar(30), 
+	mount decimal(18, 4), 
+	[weight] decimal(18, 4)
+) 
+insert into @tmpa(productno,storeno,mount,weight)
+execute dbo.stkucc2 @t_enddate,@t_bstoreno,@t_estoreno,@t_bproductno,@t_eproductno 
+
+delete a from @tmpa a where not exists (select * from view_ucaucc where noa=a.productno) 
+
+update a
+set exprice=1,exreprice=case when isnull(a.exprice,0)=0 then 0 else 1 end
+from adpro a left join ucc b on a.noa=b.noa
+where exists (select * from @tmpa where productno=a.noa and mount<isnull(b.safemount,0))
+and not exists (select * from adsize where a.product like '%'+left(mon,2)+'.0M') --排除板料
+and a.product like '%M' and a.product like '鋼筋%'
+
+select a.*,isnull(b.safemount,0)safemount,b.product
+,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
+,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
+*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
+from @tmpa a left join view_ucaucc b on a.productno=b.noa
+left join adpro c on a.productno=c.noa
+where b.product like '%M' and b.product like '鋼筋%'
+and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+and a.mount<isnull(b.safemount,0)
+and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
+order by a.productno
 ;
