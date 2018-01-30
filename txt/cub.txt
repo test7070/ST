@@ -1260,6 +1260,12 @@ execute dbo.stkucc2 @t_enddate,@t_bstoreno,@t_estoreno,@t_bproductno,@t_eproduct
 
 delete a from @tmpa a where not exists (select * from view_ucaucc where noa=a.productno) 
 
+insert adpro(noa,productno,product,diffprice,exprice,exreprice)
+select noa,noa,product,10,0,0 from ucc a
+where not exists (select * from adsize where a.product like '%'+left(mon,2)+'.0M') --排除板料
+and not exists (select * from adpro where noa=a.noa) --排除已新增
+and a.product like '%M' and a.product like '鋼筋%'
+
 select a.*,isnull(b.safemount,0)safemount,b.product
 ,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
 ,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
@@ -1292,7 +1298,13 @@ declare @tmpa table(
 insert into @tmpa(productno,storeno,mount,weight)
 execute dbo.stkucc2 @t_enddate,@t_bstoreno,@t_estoreno,@t_bproductno,@t_eproductno 
 
-delete a from @tmpa a where not exists (select * from view_ucaucc where noa=a.productno) 
+delete a from @tmpa a where not exists (select * from view_ucaucc where noa=a.productno)
+
+insert adpro(noa,productno,product,diffprice,exprice,exreprice)
+select noa,noa,product,10,0,0 from ucc a
+where not exists (select * from adsize where a.product like '%'+left(mon,2)+'.0M') --排除板料
+and not exists (select * from adpro where noa=a.noa) --排除已新增
+and a.product like '%M' and a.product like '鋼筋%'
 
 update a
 set exprice=1,exreprice=case when isnull(a.exprice,0)=0 then 0 else 1 end
