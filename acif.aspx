@@ -153,7 +153,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)// 1-3
                     return;
-                q_box('acif_s.aspx', q_name + '_s', "550px", "400px", q_getMsg("popSeek"));
+                q_box('acif_s.aspx', q_name + '_s', "550px", "250px", q_getMsg("popSeek"));
             }
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
