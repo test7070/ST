@@ -375,8 +375,8 @@
 		
 			delete #xcub2get
 			--鋼捲  數量都當做 0
-			insert into #xcub2get(uno,productno,product,mount,[weight])
-			select a.uno,b.productno,b.product,0,a.[weight]
+			insert into #xcub2get(noa,noq,uno,productno,product,mount,[weight])
+			select a.noa,a.noq,a.uno,b.productno,b.product,0,a.[weight]
 			from view_cubs a 
 			left join view_uccb b on a.uno=b.uno
 			where a.accy=@accy and a.noa=@noa
@@ -384,13 +384,20 @@
 			--皮膜
 			--因為CUBT就會扣了,所以就不算了
 			--物料  批號存在ucolor那欄   數量都當做 0
-			insert into #xcub2get(uno,productno,product,mount,[weight],vcfno)
-			select a.ucolor,a.productno,a.product,0,a.[weight],a.ordeno
+			insert into #xcub2get(noa,noq,uno,productno,product,mount,[weight],vcfno)
+			select a.noa,'',a.ucolor,a.productno,a.product,0,a.[weight],a.ordeno
 			from view_cubu a
 			where a.accy=@accy and a.noa=@noa
 			and	 len(isnull(a.ucolor,''))>0 
 			--------------------------------------------------------------------
-			update #xcub2get set noa=@noa, noq =  right('00'+CAST(sel as nvarchar),3)
+			set @maxnoq = ''
+			select top 1 @maxnoq = noq from #xcub2get order by noq desc
+			
+			update #xcub2get set noq= RIGHT('00'+ cast(b.recno + case when len(isnull(@maxnoq,''))=0 then 0 else CAST(@maxnoq as int) end as nvarchar),3)
+			from #xcub2get a
+			left join (select sel,ROW_NUMBER()over(order by sel) recno from #xcub2get where len(noq)=0) b on a.sel=b.sel
+			where b.sel is not null
+			
 			begin try
 				--寫入GETS
 				set @cmd = 'insert into gets'+@accy+' (noa,noq,uno,productno,product,mount,[weight],eweight,mweight,gmount,gweight,ordeno)
