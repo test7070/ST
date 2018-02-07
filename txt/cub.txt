@@ -1239,3 +1239,349 @@ end
 
 ;
 ----------------------------------------------------------------------------------
+safemountfe:--safemountfe
+declare @t_enddate nvarchar(10) = case when '#non'=[1] then '' else [1] end 
+declare @t_spec nvarchar(20) = case when '#non'=[2] then '' else [2] end 
+declare @t_size nvarchar(20) = case when '#non'=[3] then '' else [3] end
+declare @t_safe nvarchar(20) = case when '#non'=[4] then '9' else [4] end 
+
+declare @t_bproductno nvarchar(30) = case when '#non'='#non' then '' else '#non' end 
+declare @t_eproductno nvarchar(30) = case when '#non'='#non' then char(255) else '#non' end 
+declare @t_bstoreno nvarchar(20) = case when '#non'='#non' then '' else '#non' end 
+declare @t_estoreno nvarchar(20) = case when '#non'='#non' then char(255) else '#non' end 
+
+declare @tmpa table( 
+	productno nvarchar(30), 
+	storeno nvarchar(30), 
+	mount decimal(18, 4), 
+	[weight] decimal(18, 4)
+) 
+insert into @tmpa(productno,storeno,mount,weight)
+execute dbo.stkucc2 @t_enddate,@t_bstoreno,@t_estoreno,@t_bproductno,@t_eproductno 
+
+delete a from @tmpa a where not exists (select * from view_ucaucc where noa=a.productno) 
+
+--107/02/06 不使用增量模式
+--insert adpro(noa,productno,product,diffprice,exprice,exreprice)
+--select noa,noa,product,10,0,0 from ucc a
+--where not exists (select * from adsize where a.product like '%'+left(mon,2)+'.0M') --排除板料
+--and not exists (select * from adpro where noa=a.noa) --排除已新增
+--and a.product like '%M' and a.product like '鋼筋%'
+
+------------------------------------------------------------------------------------------
+--未裁剪量
+declare @tmpb table( 
+	spec nvarchar(50),
+	size nvarchar(50),
+	lengthb float,
+	mount float
+)
+insert @tmpb
+select case when a.product like '%SD280W%' then 'SD280W' when a.product like '%SD280%' then 'SD280' 
+when a.product like '%SD420W%' then 'SD420W' when a.product like '%SD420%' then 'SD420' else '' end spec
+,case when a.product like '%3#%' then '3#' when a.product like '%4#%' then '4#'
+when a.product like '%5#%' then '5#' when a.product like '%6#%' then '6#'
+when a.product like '%7#%' then '7#' when a.product like '%8#%' then '8#'
+when a.product like '%9#%' then '9#' when a.product like '%10#%' then '10#'
+when a.product like '%11#%' then '11#' else '' end size
+,a.lengthb,sum(isnull(a.mount,0)-isnull(b.mount,0)) 
+from workjs a outer apply (select sum(mount)mount from view_cubu where ordeno=a.noa and no2=a.noq)b
+left join workj c on a.noa=c.noa
+where a.productno!='' and a.lengthb>0 and a.mount>0
+and not exists (select * from view_orde where (enda=1 or cancel=1) and noa=c.ordeno)
+group by case when a.product like '%SD280W%' then 'SD280W' when a.product like '%SD280%' then 'SD280' 
+when a.product like '%SD420W%' then 'SD420W' when a.product like '%SD420%' then 'SD420' else '' end
+,case when a.product like '%3#%' then '3#' when a.product like '%4#%' then '4#'
+when a.product like '%5#%' then '5#' when a.product like '%6#%' then '6#'
+when a.product like '%7#%' then '7#' when a.product like '%8#%' then '8#'
+when a.product like '%9#%' then '9#' when a.product like '%10#%' then '10#'
+when a.product like '%11#%' then '11#' else '' end,a.lengthb
+------------------------------------------------------------------------------------------
+
+if(@t_safe='0')
+begin
+	select a.*,isnull(b.safemount,0)safemount,b.product
+	--,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
+	--,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
+	--*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
+	,isnull(case when round(b.safemount*2.5,0)<=a.mount then 0 
+	when round(b.safemount*2.5,0)<=a.mount+round(b.safemount*0.25,0) then round(b.safemount*2.5,0)-a.mount
+	else round(b.safemount*0.25,0) end,0) addsafe
+	,isnull(d.mount,0) notv
+	from @tmpa a left join view_ucaucc b on a.productno=b.noa
+	left join adpro c on a.productno=c.noa
+	outer apply (select top 1 * from @tmpb 
+	where case when b.product like '%SD280W%' then 'SD280W' when b.product like '%SD280%' then 'SD280' 
+	when b.product like '%SD420W%' then 'SD420W' when b.product like '%SD420%' then 'SD420' else '' end=spec
+	and case when b.product like '%3#%' then '3#' when b.product like '%4#%' then '4#'
+	when b.product like '%5#%' then '5#' when b.product like '%6#%' then '6#'
+	when b.product like '%7#%' then '7#' when b.product like '%8#%' then '8#'
+	when b.product like '%9#%' then '9#' when b.product like '%10#%' then '10#'
+	when b.product like '%11#%' then '11#' else '' end=size
+	and cast(replace(dbo.split(b.product,'*',1),'M','') as float)*100=lengthb)d
+	where b.product like '%M' and b.product like '鋼筋%'
+	and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+	and a.mount<isnull(b.safemount,0)
+	and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
+	order by a.productno
+end
+else if(@t_safe='1')
+begin
+	select a.*,isnull(b.safemount,0)safemount,b.product
+	--,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
+	--,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
+	--*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
+	,isnull(case when round(b.safemount*2.5,0)<=a.mount then 0 
+	when round(b.safemount*2.5,0)<=a.mount+round(b.safemount*0.25,0) then round(b.safemount*2.5,0)-a.mount
+	else round(b.safemount*0.25,0) end,0) addsafe
+	,isnull(d.mount,0) notv
+	from @tmpa a left join view_ucaucc b on a.productno=b.noa
+	left join adpro c on a.productno=c.noa
+	outer apply (select top 1 * from @tmpb 
+	where case when b.product like '%SD280W%' then 'SD280W' when b.product like '%SD280%' then 'SD280' 
+	when b.product like '%SD420W%' then 'SD420W' when b.product like '%SD420%' then 'SD420' else '' end=spec
+	and case when b.product like '%3#%' then '3#' when b.product like '%4#%' then '4#'
+	when b.product like '%5#%' then '5#' when b.product like '%6#%' then '6#'
+	when b.product like '%7#%' then '7#' when b.product like '%8#%' then '8#'
+	when b.product like '%9#%' then '9#' when b.product like '%10#%' then '10#'
+	when b.product like '%11#%' then '11#' else '' end=size
+	and cast(replace(dbo.split(b.product,'*',1),'M','') as float)*100=lengthb)d
+	where b.product like '%M' and b.product like '鋼筋%'
+	and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+	and a.mount>=isnull(b.safemount,0)
+	and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
+	order by a.productno
+end
+else
+begin
+	select a.*,isnull(b.safemount,0)safemount,b.product
+	--,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
+	--,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
+	--*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
+	,isnull(case when round(b.safemount*2.5,0)<=a.mount then 0 
+	when round(b.safemount*2.5,0)<=a.mount+round(b.safemount*0.25,0) then round(b.safemount*2.5,0)-a.mount
+	else round(b.safemount*0.25,0) end,0) addsafe
+	,isnull(d.mount,0) notv
+	from @tmpa a left join view_ucaucc b on a.productno=b.noa
+	left join adpro c on a.productno=c.noa
+	outer apply (select top 1 * from @tmpb 
+	where case when b.product like '%SD280W%' then 'SD280W' when b.product like '%SD280%' then 'SD280' 
+	when b.product like '%SD420W%' then 'SD420W' when b.product like '%SD420%' then 'SD420' else '' end=spec
+	and case when b.product like '%3#%' then '3#' when b.product like '%4#%' then '4#'
+	when b.product like '%5#%' then '5#' when b.product like '%6#%' then '6#'
+	when b.product like '%7#%' then '7#' when b.product like '%8#%' then '8#'
+	when b.product like '%9#%' then '9#' when b.product like '%10#%' then '10#'
+	when b.product like '%11#%' then '11#' else '' end=size
+	and cast(replace(dbo.split(b.product,'*',1),'M','') as float)*100=lengthb)d
+	where b.product like '%M' and b.product like '鋼筋%'
+	and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+	and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
+	order by a.productno
+end
+;
+------------------------------------------------------------------------
+upadprofe:--upadprofe 安全庫存增加模式
+declare @t_enddate nvarchar(10) = case when '#non'=[1] then '' else [1] end 
+declare @t_spec nvarchar(20) = case when '#non'=[2] then '' else [2] end 
+declare @t_size nvarchar(20) = case when '#non'=[3] then '' else [3] end 
+
+declare @t_bproductno nvarchar(30) = case when '#non'='#non' then '' else '#non' end 
+declare @t_eproductno nvarchar(30) = case when '#non'='#non' then char(255) else '#non' end 
+declare @t_bstoreno nvarchar(20) = case when '#non'='#non' then '' else '#non' end 
+declare @t_estoreno nvarchar(20) = case when '#non'='#non' then char(255) else '#non' end 
+
+declare @tmpa table( 
+	productno nvarchar(30), 
+	storeno nvarchar(30), 
+	mount decimal(18, 4), 
+	[weight] decimal(18, 4)
+) 
+insert into @tmpa(productno,storeno,mount,weight)
+execute dbo.stkucc2 @t_enddate,@t_bstoreno,@t_estoreno,@t_bproductno,@t_eproductno 
+
+delete a from @tmpa a where not exists (select * from view_ucaucc where noa=a.productno)
+
+insert adpro(noa,productno,product,diffprice,exprice,exreprice)
+select noa,noa,product,10,0,0 from ucc a
+where not exists (select * from adsize where a.product like '%'+left(mon,2)+'.0M') --排除板料
+and not exists (select * from adpro where noa=a.noa) --排除已新增
+and a.product like '%M' and a.product like '鋼筋%'
+
+update a
+set exprice=1,exreprice=case when isnull(a.exprice,0)=0 then 0 else 1 end
+from adpro a left join ucc b on a.noa=b.noa
+where exists (select * from @tmpa where productno=a.noa and mount<isnull(b.safemount,0))
+and not exists (select * from adsize where a.product like '%'+left(mon,2)+'.0M') --排除板料
+and a.product like '%M' and a.product like '鋼筋%'
+
+select a.*,isnull(b.safemount,0)safemount,b.product
+,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
+,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
+*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
+from @tmpa a left join view_ucaucc b on a.productno=b.noa
+left join adpro c on a.productno=c.noa
+where b.product like '%M' and b.product like '鋼筋%'
+and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+and a.mount<isnull(b.safemount,0)
+and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
+order by a.productno
+;
+-----------------------------------------------------------------------------------------
+autocubufe:--autocubufe 多配支數自動入庫
+SET QUOTED_IDENTIFIER OFF
+declare @noa nvarchar(20)=case when '#non'=[1] then '' else [1] end
+declare @datea nvarchar(20)=case when '#non'=[2] then '' else [2] end
+
+declare @tmpa table( 
+	gno nvarchar(1),
+	spec nvarchar(50),
+	size nvarchar(50),
+	lengthb float,
+	tmount float,
+	smount float
+)
+
+declare @tmpb table( 
+	lengthb float,
+	w03 float
+)
+
+declare @spec nvarchar(20)
+declare @size nvarchar(20)
+declare @prduct nvarchar(MAX)
+declare @memo nvarchar(MAX)
+declare @nor nvarchar(MAX)
+declare @mount float
+declare @cutmemo nvarchar(MAX)
+declare @lengthb float
+
+declare cursor_table cursor for
+select product,memo2,nor,gmount from view_cubt where noa=@noa
+open cursor_table 
+fetch next from cursor_table 
+into @prduct,@memo,@nor,@mount
+while(@@FETCH_STATUS <> -1) 
+begin 
+	set @spec=case when @prduct like '%SD280W%' then 'SD280W' when @prduct like '%SD280%' then 'SD280' 
+		when @prduct like '%SD420W%' then 'SD420W' when @prduct like '%SD420%' then 'SD420' else '' end
+	
+	set @size=case when @prduct like '%3#%' then '3#' when @prduct like '%4#%' then '4#'
+		when @prduct like '%5#%' then '5#' when @prduct like '%6#%' then '6#'
+		when @prduct like '%7#%' then '7#' when @prduct like '%8#%' then '8#'
+		when @prduct like '%9#%' then '9#' when @prduct like '%10#%' then '10#'
+		when @prduct like '%11#%' then '11#' else '' end
+	
+	set @cutmemo=replace(replace(replace(dbo.split(@memo,'=',0),'+',','),'*','@'),'(入庫)','')
+	
+	delete @tmpb
+	insert @tmpb(lengthb,w03)
+	select lengthb,w03 from view_cubs a 
+	left join fnSplit(@nor)c on cast(noq as int)=cast(item as int)
+	 where noa=@noa and c.n is not null
+	
+	insert @tmpa(gno,spec,size,lengthb,tmount,smount)
+	select '0',@spec,@size,case when isnull(w03,0)>0 then b.lengthb else cast(n as float) end,cast(item as float)*@mount,0
+	from fnSplit(@cutmemo) a outer apply (select top 1 * from @tmpb where cast(a.n as float) between lengthb-w03 and lengthb)b
+		
+	fetch next from cursor_table 
+	into @prduct,@memo,@nor,@mount
+end 
+close cursor_table 
+deallocate cursor_table
+
+declare cursor_table cursor for
+select product,lengthb,mount from view_cubs where noa=@noa
+open cursor_table 
+fetch next from cursor_table 
+into @prduct,@lengthb,@mount
+while(@@FETCH_STATUS <> -1) 
+begin 
+	set @spec=case when @prduct like '%SD280W%' then 'SD280W' when @prduct like '%SD280%' then 'SD280' 
+		when @prduct like '%SD420W%' then 'SD420W' when @prduct like '%SD420%' then 'SD420' else '' end
+	
+	set @size=case when @prduct like '%3#%' then '3#' when @prduct like '%4#%' then '4#'
+		when @prduct like '%5#%' then '5#' when @prduct like '%6#%' then '6#'
+		when @prduct like '%7#%' then '7#' when @prduct like '%8#%' then '8#'
+		when @prduct like '%9#%' then '9#' when @prduct like '%10#%' then '10#'
+		when @prduct like '%11#%' then '11#' else '' end
+	
+	insert @tmpa(gno,spec,size,lengthb,tmount,smount)
+	select '0',@spec,@size,@lengthb,0,@mount
+		
+	fetch next from cursor_table 
+	into @prduct,@lengthb,@mount
+end 
+close cursor_table 
+deallocate cursor_table
+
+insert @tmpa(gno,spec,size,lengthb,tmount,smount)
+select '1',spec,size,lengthb,SUM(tmount),SUM(smount)
+from @tmpa group by spec,size,lengthb
+
+delete @tmpa where gno='0'
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+	drop table #tmp
+END
+
+create table #tmp(
+	noa nvarchar(50),
+	noq nvarchar(50),
+	productno nvarchar(50),
+	product nvarchar(MAX),
+	lengthb float,
+	mount float,
+	weight float,
+	size nvarchar(50),
+	spec nvarchar(50)
+)
+
+--多裁剪
+insert #tmp(noa,productno,product,lengthb,mount,size,spec)
+select @noa,isnull(b.noa,'')
+,case when b.noa is null then '鋼筋熱軋'+a.spec+' '+a.size+'*'+dbo.getComma(lengthb/100,-1)+'M' else b.product end product
+,a.lengthb,a.tmount-a.smount inmount,a.size,a.spec
+from @tmpa a 
+left join (select * from ucc where product like '鋼筋熱軋%' and product like '%M')b 
+on case when b.product like '%SD280W%' then 'SD280W' when b.product like '%SD280%' then 'SD280' 
+when b.product like '%SD420W%' then 'SD420W' when b.product like '%SD420%' then 'SD420' else '' end=a.spec
+and case when b.product like '%3#%' then '3#' when b.product like '%4#%' then '4#'
+when b.product like '%5#%' then '5#' when b.product like '%6#%' then '6#'
+when b.product like '%7#%' then '7#' when b.product like '%8#%' then '8#'
+when b.product like '%9#%' then '9#' when b.product like '%10#%' then '10#'
+when b.product like '%11#%' then '11#' else '' end=a.size
+and cast(replace(dbo.split(b.product,'*',1),'M','') as float)*100=a.lengthb
+where tmount-smount>0
+
+update #tmp
+set weight=round(case when size='3#' then 0.56
+when size='4#' then 0.994 when size='5#' then 1.56
+when size='6#' then 2.25 when size='7#' then 3.04
+when size='8#' then 3.98 when size='9#' then 5.08
+when size='10#' then 6.39 when size='11#' then 7.9
+when size='12#' then 9.57 when size='14#' then 11.4
+when size='16#' then 15.5 when size='18#' then 20.2
+else 0 end*mount*lengthb/100,0)
+
+declare @accy nvarchar(20)=(select top 1 accy from view_cub where noa=@noa)
+
+--刪除之前已寫入多入庫內容
+EXEC("delete cubu"+@accy+" where noa='"+@noa+"' and source='erp' ")
+
+declare @noq nvarchar(20)=isnull((select MAX(noq) from view_cubu where noa=@noa),'000')
+
+update a
+set noq=right('000'+CAST(CAST(@noq as int)+rr as nvarchar(50)),3)
+from (select noq,ROW_NUMBER() over (order by noa,spec,size,lengthb) rr from #tmp )a
+
+EXEC("
+	insert cubu"+@accy+"(noa,noq,productno,product,lengthb,mount,weight,datea,memo,source)
+	select noa,noq,productno,product,lengthb,mount,weight,'"+@datea+"','多配支數','erp' from #tmp
+")
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+	drop table #tmp
+END
+;

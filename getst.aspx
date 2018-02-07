@@ -645,7 +645,7 @@
             }
             .dbbm {
                 float: left;
-                width: 900px;
+                width: 1200px;
                 /*margin: -1px;
                  border: 1px black solid;*/
                 border-radius: 5px;
@@ -752,7 +752,7 @@
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
 	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 		<!--#include file="../inc/toolbar.inc"-->
-		<div style="overflow: auto;display:block;width:1280px;">
+		<div style="overflow: auto;display:block;width:1600px;">
 			<div class="dview" id="dview" >
 				<table class="tview" id="tview">
 					<tr>
@@ -855,7 +855,7 @@
 					<tr>
 						<!-- 裕承隆 備註可以列印4行-->
 						<td><span> </span><a id="lblMemo" class="lbl" > </a></td>
-						<td colspan='5'><textarea id="txtMemo" rows="4" style="width: 100%; " > </textarea></td>
+						<td colspan='5'><textarea id="txtMemo" rows="4" style="width: 100%;" > </textarea></td>
 					</tr>
 				</table>
 			</div>
