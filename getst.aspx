@@ -45,6 +45,7 @@
 			);
 			
 			var para = new Array();//若有值就自動新增修改
+			var parent;
 			$(document).ready(function() {
 				bbmKey = ['noa'];
 				bbsKey = ['noa', 'noq'];
@@ -54,6 +55,11 @@
 	            	para = JSON.parse(q_getId()[3].replace('1=1^^',''));
 	            	if(para.noa==undefined || para.length==0){
 		            }else{
+		            	/*if(para.source='vcc'){
+		            		console.log(window.parent);
+		            	//	$(window.parent).Lock(1);
+		            	}*/
+		            		
 		            	q_content = "where=^^noa='"+para.noa+"'^^ ";
 		            }
 	            }catch(e){
@@ -193,10 +199,10 @@
 			function q_stPost() {
 				if (!(q_cur == 1 || q_cur == 2))
 					return false;
-				if(q_getPara('sys.project').toUpperCase()=='PK'){
+				/*if(q_getPara('sys.project').toUpperCase()=='PK'){
 					var t_noa = $.trim($('#txtNoa').val());
 					q_func('qtxt.query.get_vcc', 'get.txt,get_vcc,'+t_noa);
-				}
+				}*/
 				/*if(q_getPara('sys.project')=='rk'){
 					var t_noa = $('#txtNoa').val();
 					if(t_noa.length>0){
