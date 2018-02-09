@@ -54,13 +54,13 @@
 	
 	if @length>0
 	begin
-	update @tmpa set mount = round(b.mount*a.lengthb/@length,0)
-		,[weight] = round(b.[weight]*a.lengthb/@length,0)
+	update @tmpa set mount = round(b.mount*a.lengthb/@length,2)
+		,[weight] = round(b.[weight]*a.lengthb/@length,2)
 	from @tmpa a
 	left join vcfs b on a.vcfsno=b.noa and a.vcfsnoq=b.noq
 	end
 	------------------------------------------------------------------------------------------
-	--修正誤差,統一補在第一筆
+	--修正誤差,統一補在最後一筆
 	declare @vcfsno nvarchar(20)
 	declare @vcfsnoq nvarchar(10)
 	declare @mount decimal(25,2)
@@ -81,7 +81,7 @@
 		
 		update @tmpa set mount = ISNULL(mount,0)+@diffmount,[weight] = ISNULL([weight],0)+@diffweight
 		from @tmpa a
-		outer apply(select top 1 sel from @tmpa where vcfsno=@vcfsno and vcfsnoq=@vcfsnoq order by sel) b
+		outer apply(select top 1 sel from @tmpa where vcfsno=@vcfsno and vcfsnoq=@vcfsnoq order by sel desc) b
 		where a.sel=b.sel
 		
 		fetch next from cursor_table 
