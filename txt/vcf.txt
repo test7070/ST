@@ -14,7 +14,7 @@
 		,cubaccy nvarchar(10)
 		,cubno nvarchar(20)
 		,cubnoq nvarchar(10)
-		,coilweight float
+		,lengthb float
 		
 		,vcfsno nvarchar(20)
 		,vcfsnoq nvarchar(10)
@@ -22,12 +22,12 @@
 		,uno nvarchar(30)
 		,productno nvarchar(30)
 		,product nvarchar(50)
-		,mount float
-		,[weight] float
+		,mount decimal(25,2)
+		,[weight] decimal(25,2)
 	)
 	--2016/08/23  改為可依全部或部份去分攤
-	insert into @tmpa(cubaccy,cubno,cubnoq,coilweight,vcfsno,vcfsnoq,kind,uno,productno,product)
-	select a.accy,a.noa,a.noq,ISNULL(a.[weight],0),d.noa,d.noq,d.custno,d.uno,d.productno,d.product
+	insert into @tmpa(cubaccy,cubno,cubnoq,lengthb,vcfsno,vcfsnoq,kind,uno,productno,product)
+	select a.accy,a.noa,a.noq,ISNULL(a.[w09],0),d.noa,d.noq,d.custno,d.uno,d.productno,d.product
 	from view_cubs a
 	left join view_cub b on a.accy=b.accy and a.noa=b.noa
 	left join vcft c on c.noa=@t_vcfno
@@ -35,34 +35,38 @@
 	where (a.makeno=c.uno or b.vcceno=c.uno )--依表身or表頭的製造批號
 	and d.custno!='3'
 	
-	insert into @tmpa(cubaccy,cubno,cubnoq,coilweight,vcfsno,vcfsnoq,kind,uno,productno,product)
-	select a.accy,a.noa,'',ISNULL(b.[weight],0),d.noa,d.noq,d.custno,d.uno,d.productno,d.product
+	insert into @tmpa(cubaccy,cubno,cubnoq,lengthb,vcfsno,vcfsnoq,kind,uno,productno,product)
+	select a.accy,a.noa,'',ISNULL(b.[w09],0),d.noa,d.noq,d.custno,d.uno,d.productno,d.product
 	from view_cub a
-	left join (select accy, noa,SUM(ISNULL([weight],0)) [weight] from view_cubs group by accy,noa) b on a.accy=b.accy and a.noa=b.noa
+	left join (select accy, noa,SUM(ISNULL([w09],0)) [w09] from view_cubs group by accy,noa) b on a.accy=b.accy and a.noa=b.noa
 	left join vcft c on c.noa=@t_vcfno
 	left join vcfs d on d.noa=@t_vcfno
 	where a.vcceno=c.uno --依表頭的製造批號
 	and d.custno='3'
 	-----------------------------------------------------------------------------------------
-	declare @weight float = 0
+	declare @length float = 0
 	
-	select @weight=SUM(ISNULL(a.[weight],0))
+	select @length=SUM(ISNULL(a.[w09],0))
 	from view_cubs a
 	left join view_cub b on a.accy=b.accy and a.noa=b.noa
 	left join (select uno from vcft where noa=@t_vcfno group by uno) c on b.vcceno=c.uno
 	where c.uno is not null 
 	
-	update @tmpa set mount = case when a.coilweight=0 then 0 else  round(b.mount*a.coilweight/@weight,0) end
-		,[weight] = case when a.coilweight=0 then 0 else  round(b.[weight]*a.coilweight/@weight,0) end 
+	if @length>0
+	begin
+	update @tmpa set mount = round(b.mount*a.lengthb/@length,2)
+		,[weight] = round(b.[weight]*a.lengthb/@length,2)
 	from @tmpa a
 	left join vcfs b on a.vcfsno=b.noa and a.vcfsnoq=b.noq
+	end
 	------------------------------------------------------------------------------------------
-	--修正誤差,統一補在第一筆
+	--修正誤差,統一補在最後一筆
 	declare @vcfsno nvarchar(20)
 	declare @vcfsnoq nvarchar(10)
-	declare @mount float
-	declare @diffmount float
-	declare @diffweight float
+	declare @mount decimal(25,2)
+	declare @weight decimal(25,2)
+	declare @diffmount decimal(25,2)
+	declare @diffweight decimal(25,2)
 
 	declare cursor_table cursor for 
 	select vcfsno,vcfsnoq,SUM(ISNULL(mount,0)),SUM(ISNULL([weight],0))
@@ -77,7 +81,7 @@
 		
 		update @tmpa set mount = ISNULL(mount,0)+@diffmount,[weight] = ISNULL([weight],0)+@diffweight
 		from @tmpa a
-		outer apply(select top 1 sel from @tmpa where vcfsno=@vcfsno and vcfsnoq=@vcfsnoq order by sel) b
+		outer apply(select top 1 sel from @tmpa where vcfsno=@vcfsno and vcfsnoq=@vcfsnoq order by sel desc) b
 		where a.sel=b.sel
 		
 		fetch next from cursor_table 
@@ -130,7 +134,7 @@
 		into @accy
 		while(@@FETCH_STATUS <> -1) 
 		begin
-			set @cmd="delete cubt"+@accy+" where ordcno=@t_vcfno"
+			set @cmd='delete cubt'+@accy+' where ordcno=@t_vcfno'
 			execute sp_executesql @cmd,N'@t_vcfno nvarchar(20)',@t_vcfno=@t_vcfno
 			IF @@Error <> 0 BEGIN SET @chk = 1 END
 						
@@ -140,7 +144,6 @@
 		close cursor_table 
 		deallocate cursor_table 
 		
-		
 		---------------------------------------------------------------------------------------
 		declare cursor_table cursor for 
 		select accy from view_cubu where ordeno=@t_vcfno group by accy
@@ -149,7 +152,7 @@
 		into @accy
 		while(@@FETCH_STATUS <> -1) 
 		begin
-			set @cmd="delete cubu"+@accy+" where ordeno=@t_vcfno"
+			set @cmd='delete cubu'+@accy+' where ordeno=@t_vcfno'
 			execute sp_executesql @cmd,N'@t_vcfno nvarchar(20)',@t_vcfno=@t_vcfno
 			IF @@Error <> 0 BEGIN SET @chk = 1 END
 			
@@ -166,7 +169,7 @@
 		into @accy
 		while(@@FETCH_STATUS <> -1) 
 		begin
-			set @cmd="delete gets"+@accy+" where ordeno=@t_vcfno"
+			set @cmd='delete gets'+@accy+' where ordeno=@t_vcfno'
 			execute sp_executesql @cmd,N'@t_vcfno nvarchar(20)',@t_vcfno=@t_vcfno
 			IF @@Error <> 0 BEGIN SET @chk = 1 END
 			
@@ -286,12 +289,12 @@
 		while(@@FETCH_STATUS <> -1) 
 		begin
 			set @cmd =
-			"insert into cubt"+@accy+"(noa,noq,nor,kind,uno,productno,product
+			'insert into cubt'+@accy+'(noa,noq,nor,kind,uno,productno,product
 				,mount,[weight],wweight,ordcno,ordcno2)
 			select noa,noq,nor,kind,uno,productno,product
 				,0,mount,[weight],vcfsno,vcfsnoq
 			from #vcf2cubt
-			where accy=@accy"
+			where accy=@accy'
 			execute sp_executesql @cmd,N'@accy nvarchar(10)',@accy=@accy
 			
 			fetch next from cursor_table 
@@ -319,12 +322,12 @@
 		while(@@FETCH_STATUS <> -1) 
 		begin
 			set @cmd =
-			"insert into cubu"+@accy+"(noa,noq,ucolor,productno,product
+			'insert into cubu'+@accy+'(noa,noq,ucolor,productno,product
 				,mount,[weight],ordeno,no2)
 			select noa,noq,uno,productno,product
 				,0,[weight],vcfsno,vcfsnoq
 			from #vcf2cubu
-			where accy=@accy"
+			where accy=@accy'
 			execute sp_executesql @cmd,N'@accy nvarchar(10)',@accy=@accy
 			
 			fetch next from cursor_table 
