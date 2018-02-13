@@ -26,14 +26,15 @@
 		,[weight] decimal(25,2)
 	)
 	--2016/08/23  改為可依全部或部份去分攤
-	insert into @tmpa(cubaccy,cubno,cubnoq,lengthb,vcfsno,vcfsnoq,kind,uno,productno,product)
+	--皮膜保護膜改由CUBT中輸入
+	/*insert into @tmpa(cubaccy,cubno,cubnoq,lengthb,vcfsno,vcfsnoq,kind,uno,productno,product)
 	select a.accy,a.noa,a.noq,ISNULL(a.[w09],0),d.noa,d.noq,d.custno,d.uno,d.productno,d.product
 	from view_cubs a
 	left join view_cub b on a.accy=b.accy and a.noa=b.noa
 	left join vcft c on c.noa=@t_vcfno
 	left join vcfs d on d.noa=@t_vcfno
 	where (a.makeno=c.uno or b.vcceno=c.uno )--依表身or表頭的製造批號
-	and d.custno!='3'
+	and d.custno!='3'*/
 	
 	insert into @tmpa(cubaccy,cubno,cubnoq,lengthb,vcfsno,vcfsnoq,kind,uno,productno,product)
 	select a.accy,a.noa,'',ISNULL(b.[w09],0),d.noa,d.noq,d.custno,d.uno,d.productno,d.product
