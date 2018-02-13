@@ -1254,7 +1254,9 @@ declare @tmpa table(
 	productno nvarchar(30), 
 	storeno nvarchar(30), 
 	mount decimal(18, 4), 
-	[weight] decimal(18, 4)
+	[weight] decimal(18, 4),
+	lengthb float,
+	product nvarchar(MAX)
 ) 
 insert into @tmpa(productno,storeno,mount,weight)
 execute dbo.stkucc2 @t_enddate,@t_bstoreno,@t_estoreno,@t_bproductno,@t_eproductno 
@@ -1297,10 +1299,33 @@ when a.product like '%7#%' then '7#' when a.product like '%8#%' then '8#'
 when a.product like '%9#%' then '9#' when a.product like '%10#%' then '10#'
 when a.product like '%11#%' then '11#' else '' end,a.lengthb
 ------------------------------------------------------------------------------------------
+delete a
+from @tmpa a left join view_ucaucc b on a.productno=b.noa
+where not(b.product like '%M' and b.product like '鋼筋%')
+
+update a
+set product=b.product
+from @tmpa a left join view_ucaucc b on a.productno=b.noa
+where b.product like '%M' and b.product like '鋼筋%'
+
+update @tmpa
+set lengthb=cast(replace(dbo.split(product,'*',1),'M','') as float)*100
+
+--換算成實際支數
+update @tmpa
+set mount=floor(weight/(lengthb/100)/
+(case when product like '%3#%' then 0.56
+when product like '%4#%' then 0.994 when product like '%5#%' then 1.56
+when product like '%6#%' then 2.25 when product like '%7#%' then 3.04
+when product like '%8#%' then 3.98 when product like '%9#%' then 5.08
+when product like '%10#%' then 6.39 when product like '%11#%' then 7.9
+when product like '%12#%' then 9.57 when product like '%14#%' then 11.4
+when product like '%16#%' then 15.5 when product like '%18#%' then 20.2
+else 0 end))
 
 if(@t_safe='0') --低於安全量
 begin
-	select a.*,isnull(b.safemount,0)safemount,b.product
+	select a.*,isnull(b.safemount,0)safemount
 	--,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
 	--,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
 	--*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
@@ -1319,15 +1344,14 @@ begin
 	when b.product like '%9#%' then '9#' when b.product like '%10#%' then '10#'
 	when b.product like '%11#%' then '11#' else '' end=size
 	and cast(replace(dbo.split(b.product,'*',1),'M','') as float)*100=lengthb)d
-	where b.product like '%M' and b.product like '鋼筋%'
-	and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+	where not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
 	and a.mount<isnull(b.safemount,0)
 	and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
 	order by a.productno
 end
 else if(@t_safe='1') --高於安全量
 begin
-	select a.*,isnull(b.safemount,0)safemount,b.product
+	select a.*,isnull(b.safemount,0)safemount
 	--,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
 	--,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
 	--*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
@@ -1346,15 +1370,14 @@ begin
 	when b.product like '%9#%' then '9#' when b.product like '%10#%' then '10#'
 	when b.product like '%11#%' then '11#' else '' end=size
 	and cast(replace(dbo.split(b.product,'*',1),'M','') as float)*100=lengthb)d
-	where b.product like '%M' and b.product like '鋼筋%'
-	and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+	where not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
 	and a.mount>=isnull(b.safemount,0)
 	and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
 	order by a.productno
 end
 else if(@t_safe='2') --低於2.5倍安全量
 begin
-	select a.*,isnull(b.safemount,0)safemount,b.product
+	select a.*,isnull(b.safemount,0)safemount
 	--,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
 	--,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
 	--*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
@@ -1373,15 +1396,14 @@ begin
 	when b.product like '%9#%' then '9#' when b.product like '%10#%' then '10#'
 	when b.product like '%11#%' then '11#' else '' end=size
 	and cast(replace(dbo.split(b.product,'*',1),'M','') as float)*100=lengthb)d
-	where b.product like '%M' and b.product like '鋼筋%'
-	and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+	where not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
 	and a.mount<round(isnull(b.safemount,0)*2.5,0)
 	and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
 	order by a.productno
 end
 else --全部
 begin
-	select a.*,isnull(b.safemount,0)safemount,b.product
+	select a.*,isnull(b.safemount,0)safemount
 	--,isnull(c.diffprice,0) addp,isnull(c.exprice,0) adp1,isnull(c.exreprice,0) adp2 --增量,第一次,第二次
 	--,isnull(b.safemount,0)+(round((isnull(b.safemount,0)*(isnull(c.diffprice,0)/100)),0)
 	--*(case when isnull(c.exprice,0)>0 then 1 else 0 end+case when isnull(c.exreprice,0)>0 then 1 else 0 end)) addsafe
@@ -1400,14 +1422,13 @@ begin
 	when b.product like '%9#%' then '9#' when b.product like '%10#%' then '10#'
 	when b.product like '%11#%' then '11#' else '' end=size
 	and cast(replace(dbo.split(b.product,'*',1),'M','') as float)*100=lengthb)d
-	where b.product like '%M' and b.product like '鋼筋%'
-	and not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
+	where not exists (select * from adsize where b.product like '%'+left(mon,2)+'.0M') --排除板料
 	and b.product like '%'+@t_spec+'%' and b.product like '%'+@t_size+'%'
 	order by a.productno
 end
 ;
 ------------------------------------------------------------------------
-upadprofe:--upadprofe 安全庫存增加模式
+upadprofe:--upadprofe 安全庫存增加模式 107/02/06 不使用
 declare @t_enddate nvarchar(10) = case when '#non'=[1] then '' else [1] end 
 declare @t_spec nvarchar(20) = case when '#non'=[2] then '' else [2] end 
 declare @t_size nvarchar(20) = case when '#non'=[3] then '' else [3] end 
@@ -1483,7 +1504,7 @@ declare @cutmemo nvarchar(MAX)
 declare @lengthb float
 
 declare cursor_table cursor for
-select product,memo2,nor,gmount from view_cubt where noa=@noa
+select product,memo2,nor,radius from view_cubt where noa=@noa
 open cursor_table 
 fetch next from cursor_table 
 into @prduct,@memo,@nor,@mount
@@ -1603,8 +1624,8 @@ set noq=right('000'+CAST(CAST(@noq as int)+rr as nvarchar(50)),3)
 from (select noq,ROW_NUMBER() over (order by noa,spec,size,lengthb) rr from #tmp )a
 
 EXEC("
-	insert cubu"+@accy+"(noa,noq,productno,product,lengthb,mount,weight,datea,memo,source)
-	select noa,noq,productno,product,lengthb,mount,weight,'"+@datea+"','多配支數','erp' from #tmp
+	insert cubu"+@accy+"(noa,noq,productno,product,lengthb,radius,mount,weight,datea,memo,source)
+	select noa,noq,productno,product,lengthb,mount,weight,weight,'"+@datea+"','多配支數','erp' from #tmp
 ")
 
 IF OBJECT_ID('tempdb..#tmp')is not null
