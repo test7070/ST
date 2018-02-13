@@ -489,15 +489,15 @@
 	begin catch
 		Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
 		--有錯誤就都不執行
-		--insert into drun(datea,timea,usera,[action],noa,tablea,title,memo)
-		--select dbo.AD2ChineseEraName( CONVERT(nvarchar,getdate(),111))
-		--	,LEFT(CONVERT(nvarchar,getdate(),108),5)
-		--	,''
-		--	,'vcf2cub錯誤'
-		--	,@t_vcfno
-		--	,'vcf'
-		--	,''
-		--	,ERROR_MESSAGE()
+		insert into drun(datea,timea,usera,[action],noa,tablea,title,memo)
+		select CONVERT(nvarchar,getdate(),111)
+			,LEFT(CONVERT(nvarchar,getdate(),108),5)
+			,''
+			,'vcf2cub錯誤'
+			,@t_vcfno
+			,'vcf'
+			,''
+			,ERROR_MESSAGE()
 		--select ERROR_MESSAGE()
 		insert into @tmp([status],noa,uno)values('error2',@t_vcfno,null)
 		select * from @tmp
