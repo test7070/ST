@@ -1180,7 +1180,6 @@ BEGIN
 	drop table #vccbbs
 END
 ;
-
 ---------------------------------------
 updatememo_yc:--updatememo_yc
 SET QUOTED_IDENTIFIER OFF
@@ -1195,4 +1194,3 @@ where noa='"+@t_noa+"' ")
 
 select noa,memo from view_vcc where noa=@t_noa
 ;
------------------------
