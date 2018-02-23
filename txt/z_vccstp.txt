@@ -395,6 +395,7 @@ declare @tmp table(
 	kind nvarchar(15),
 	stype nvarchar(30),
 	noa nvarchar(50),
+	noq nvarchar(10),
 	typea nvarchar(10),
 	datea nvarchar(20),
 	custno nvarchar(30),
@@ -425,7 +426,7 @@ begin
 		select
 			'0',
 			ROW_NUMBER()over(partition by a.noa order by a.noa),1,
-			a.kind,a.stype,a.noa,a.typea,a.datea,a.custno,a.comp,a.tel,(case when a.addr2!='' then a.post2+a.addr2 else a.post+a.addr end),a.cardeal,a.carno,a.memo,
+			a.kind,a.stype,a.noa,b.noq,a.typea,a.datea,a.custno,a.comp,a.tel,(case when a.addr2!='' then a.post2+a.addr2 else a.post+a.addr end),a.cardeal,a.carno,a.memo,
 			a.money,
 			case when @checkUcca>0 then 0 else isnull(a.tax,0) end,
 			a.total,b.ordeno+(case when isnull(d.itype,'')='3' then '寄庫' else '' end),b.uno,b.spec,
@@ -455,7 +456,7 @@ begin
 		select
 			'0',
 			ROW_NUMBER()over(partition by a.noa order by a.noa),1,
-			a.kind,a.stype,a.noa,a.typea,a.datea,a.custno,a.comp,a.tel,(case when a.addr2!='' then a.post2+a.addr2 else a.post+a.addr end),a.cardeal,a.carno,a.memo,
+			a.kind,a.stype,a.noa,'' noq,a.typea,a.datea,a.custno,a.comp,a.tel,(case when a.addr2!='' then a.post2+a.addr2 else a.post+a.addr end),a.cardeal,a.carno,a.memo,
 			a.money,
 			case when @checkUcca>0 then 0 else isnull(a.tax,0) end,
 			a.total,b.ordeno+(case when isnull(d.itype,'')='3' then '寄庫' else '' end),'',b.spec,case when charindex(left(max(uno),1),'XYZ') > 0 then  (case when len(b.product) > 0 then b.product else '廢料' end) else b.product end ,
@@ -537,8 +538,8 @@ begin
 	begin
 		while(@k > 0)
 		begin
-			insert into @tmp(gno,orderno,pageno,noa,typea,trantype,memo,kind,stype,custno,custs,tax,money,total)
-				select '0',(@orderno+1),@pageno,@noa,typea,trantype,memo,kind,stype,custno,custs,tax,money,total from @tmp where idno = @idno
+			insert into @tmp(gno,orderno,pageno,noa,noq,typea,trantype,memo,kind,stype,custno,custs,tax,money,total)
+				select '0',(@orderno+1),@pageno,@noa,CHAR(255),typea,trantype,memo,kind,stype,custno,custs,tax,money,total from @tmp where idno = @idno
 			set @k = @k-1
 			set @orderno = @orderno +1
 		end
@@ -560,11 +561,11 @@ end
 update @tmp set csize = replace(csize,'~#$','''')
 update @tmp set stype = (case stype when '1' then '買賣' when '2' then '加工' when '3' then '代工' end)
 select
-	gno,idno,orderno,pageno,kind,noa,typea,datea,custno,custs,tel,addr,cardeal,carno,memo,stype,
-	reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money),1)),4,12)) money,
-	reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tax),1)),4,12)) tax,
-	reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,total),1)),4,12)) total,
-	'&nbsp'+CHAR(59)+ordeno ordeno
+	gno,idno,orderno,pageno,kind,noa,typea,datea,custno,custs,tel,addr,cardeal,carno,memo,stype
+	,dbo.getComma([money],-1) [money]
+	,dbo.getComma([tax],-1) [tax]
+	,dbo.getComma([total],-1) [total]
+	,'&nbsp'+CHAR(59)+ordeno ordeno
 	,case when len(uno)>11 then '' else uno end uno,spec,
 	products,
 	csize
@@ -575,7 +576,7 @@ select
 	case when trantype='自取' then '' else 'V' end aa,
 	case when trantype='自取' then 'V' else '' end bb,
 	case when typea='2' then '退貨' else '' end isout
-from @tmp  order by noa desc,pageno,gno,orderno;
+from @tmp  order by noa desc,pageno,gno,noq,orderno;
 
 z_vccstp2B:--z_vccstp2B
 	SET QUOTED_IDENTIFIER OFF
