@@ -603,59 +603,69 @@ z_acx01:--z_acx01
 		style nvarchar(20),
 		
 		brc2s decimal(14,3),
+		brc2sbk decimal(14,3),
 		binas decimal(14,3),
 		bcuts decimal(14,3),
 		bcubu decimal(14,3),
 		bcubuz decimal(14,3),
 		
 		bvccs decimal(14,3),
+		bvccsbk decimal(14,3),
 		bgets decimal(14,3),
 		bcut decimal(14,3),
 		bcubt decimal(14,3),
 		bcubtz decimal(14,3),
 		
 		brc2sm decimal(14,3),
+		brc2smbk decimal(14,3),
 		binasm decimal(14,3),
 		bcutsm decimal(14,3),
 		bcubum decimal(14,3),
 		bcubumz decimal(14,3),
 		
 		bvccsm decimal(14,3),
+		bvccsmbk decimal(14,3),
 		bgetsm decimal(14,3),
 		bcutm decimal(14,3),
 		bcubtm decimal(14,3),
 		bcubtmz decimal(14,3),
 		
 		bvccsmoney decimal(14,3),
+		bvccsmoneybk decimal(14,3),
 		
 		bweight decimal(14,3),
 		bmount decimal(14,3),
 		------------
 		rc2s decimal(14,3),
+		rc2sbk decimal(14,3),
 		inas decimal(14,3),
 		cuts decimal(14,3),
 		cubu decimal(14,3),
 		cubuz decimal(14,3),
 		
 		vccs decimal(14,3),
+		vccsbk decimal(14,3),
 		gets decimal(14,3),
 		cut decimal(14,3),
 		cubt decimal(14,3),
 		cubtz decimal(14,3),
 		
 		rc2sm decimal(14,3),
+		rc2smbk decimal(14,3),
 		inasm decimal(14,3),
 		cutsm decimal(14,3),
 		cubum decimal(14,3),
 		cubumz decimal(14,3),
 		
 		vccsm decimal(14,3),
+		vccsmbk decimal(14,3),
 		getsm decimal(14,3),
 		cutm decimal(14,3),
 		cubtm decimal(14,3),
 		cubtmz decimal(14,3),
 		
 		vccsmoney decimal(14,3),
+		vccsmoneybk decimal(14,3),
 		
 		[weight] decimal(14,3),
 		mount decimal(14,3),
@@ -675,7 +685,7 @@ z_acx01:--z_acx01
 	and len(ISNULL(a.uno,''))>0
 	--and upper(left(isnull(a.uno,''),1)) between '0' and '9'
 	and not upper(left(isnull(a.uno,''),1)) between 'X' and 'Z'
-	
+
 	insert into #z_acx(tablea,uno,productno,style,binas,binasm)
 	select 'inas',isnull(a.uno,''),isnull(a.productno,''),isnull(a.style,''),ISNULL(a.weight,0),ISNULL(a.mount,0)
 	from view_inas a
@@ -707,14 +717,39 @@ z_acx01:--z_acx01
 	--and upper(left(isnull(a.uno,''),1)) between '0' and '9'
 	and not upper(left(isnull(a.uno,''),1)) between 'X' and 'Z'
 	----------------------------------------------------------------------------------------------
-	--出
 	declare @uno nvarchar(50)
 	declare @weight float
 	declare @mount float
 	declare @weightz float
 	declare @mountz float
 	declare @total float
+	----進貨退回
+	declare cursor_table cursor for
+	select isnull(a.uno,''),sum(ISNULL(a.weight,0)),sum(ISNULL(a.mount,0))
+	from view_rc2s a
+	left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
+	where b.noa is not null and b.datea < @t_bdate
+	and b.typea='2'
+	and len(ISNULL(a.uno,''))>0
+	--and upper(left(isnull(a.uno,''),1)) between '0' and '9'
+	and not upper(left(isnull(a.uno,''),1)) between 'X' and 'Z'
+	group by isnull(a.uno,'')
+	open cursor_table
+	fetch next from cursor_table
+	into @uno,@weight,@mount
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if exists(select uno from #z_acx where uno=@uno)
+			update #z_acx set brc2sbk = @weight,brc2smbk=@mount where uno=@uno
+		else
+			insert into #z_acx(uno,brc2sbk,brc2smbk)values(@uno,@weight,@mount)			
+		fetch next from cursor_table
+		into @uno,@weight,@mount
+	end
+	close cursor_table
+	deallocate cursor_table
 	
+	--出
 	declare cursor_table cursor for
 	select isnull(a.uno,''),sum(ISNULL(a.weight,0)),sum(ISNULL(a.mount,0)),sum(isnull(a.total,0))
 	from view_vccs a
@@ -734,6 +769,32 @@ z_acx01:--z_acx01
 			update #z_acx set bvccs = @weight,bvccsm=@mount,bvccsmoney=@total where uno=@uno
 		else
 			insert into #z_acx(uno,bvccs,bvccsm,bvccsmoney)values(@uno,@weight,@mount,@total)			
+		fetch next from cursor_table
+		into @uno,@weight,@mount,@total
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+	----出貨退回
+	declare cursor_table cursor for
+	select isnull(a.uno,''),sum(ISNULL(a.weight,0)),sum(ISNULL(a.mount,0)),sum(isnull(a.total,0))
+	from view_vccs a
+	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
+	where b.noa is not null and b.datea < @t_bdate
+	and b.typea = '2'
+	and len(ISNULL(a.uno,''))>0
+	--and upper(left(isnull(a.uno,''),1)) between '0' and '9'
+	and not upper(left(isnull(a.uno,''),1)) between 'X' and 'Z'
+	group by isnull(a.uno,'')
+	open cursor_table
+	fetch next from cursor_table
+	into @uno,@weight,@mount,@total
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if exists(select uno from #z_acx where uno=@uno)
+			update #z_acx set bvccsbk = @weight,bvccsmbk=@mount,bvccsmoneybk=@total where uno=@uno
+		else
+			insert into #z_acx(uno,bvccsbk,bvccsmbk,bvccsmoneybk)values(@uno,@weight,@mount,@total)			
 		fetch next from cursor_table
 		into @uno,@weight,@mount,@total
 	end
@@ -861,6 +922,32 @@ z_acx01:--z_acx01
 	--and upper(left(isnull(a.uno,''),1)) between '0' and '9'
 	and not upper(left(isnull(a.uno,''),1)) between 'X' and 'Z'
 	----------------------------------------------------------------------------------------------
+	----進貨退回
+	declare cursor_table cursor for
+	select isnull(a.uno,''),sum(ISNULL(a.weight,0)),sum(ISNULL(a.mount,0))
+	from view_rc2s a
+	left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
+	where b.noa is not null and b.datea between @t_bdate and @t_edate
+	and b.typea='2'
+	and len(ISNULL(a.uno,''))>0
+	--and upper(left(isnull(a.uno,''),1)) between '0' and '9'
+	and not upper(left(isnull(a.uno,''),1)) between 'X' and 'Z'
+	group by isnull(a.uno,'')
+	open cursor_table
+	fetch next from cursor_table
+	into @uno,@weight,@mount
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if exists(select uno from #z_acx where uno=@uno)
+			update #z_acx set rc2sbk = @weight,rc2smbk=@mount where uno=@uno
+		else
+			insert into #z_acx(uno,rc2sbk,rc2smbk)values(@uno,@weight,@mount)			
+		fetch next from cursor_table
+		into @uno,@weight,@mount
+	end
+	close cursor_table
+	deallocate cursor_table
+	
 	--出
 	declare cursor_table cursor for
 	select isnull(a.uno,''),sum(ISNULL(a.weight,0)),sum(ISNULL(a.mount,0)),sum(ISNULL(a.total,0))
@@ -886,6 +973,33 @@ z_acx01:--z_acx01
 	end
 	close cursor_table
 	deallocate cursor_table
+	
+	-- 出貨退回
+	declare cursor_table cursor for
+	select isnull(a.uno,''),sum(ISNULL(a.weight,0)),sum(ISNULL(a.mount,0)),sum(ISNULL(a.total,0))
+	from view_vccs a
+	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
+	where b.noa is not null and b.datea between @t_bdate and @t_edate
+	and b.typea = '2'
+	and len(ISNULL(a.uno,''))>0
+	--and upper(left(isnull(a.uno,''),1)) between '0' and '9'
+	and not upper(left(isnull(a.uno,''),1)) between 'X' and 'Z'
+	group by isnull(a.uno,'')
+	open cursor_table
+	fetch next from cursor_table
+	into @uno,@weight,@mount,@total
+	while(@@FETCH_STATUS <> -1)
+	begin
+		if exists(select uno from #z_acx where uno=@uno)
+			update #z_acx set vccsbk = @weight,vccsmbk=@mount,vccsmoneybk=@total where uno=@uno
+		else
+			insert into #z_acx(uno,vccsbk,vccsmbk,vccsmoneybk)values(@uno,@weight,@mount,@total)			
+		fetch next from cursor_table
+		into @uno,@weight,@mount,@total
+	end
+	close cursor_table
+	deallocate cursor_table
+	
 	
 	declare cursor_table cursor for
 	select isnull(a.uno,''),sum(ISNULL(a.gweight,0)),sum(ISNULL(a.gmount,0))
@@ -968,14 +1082,14 @@ z_acx01:--z_acx01
 	left join view_uccb b on a.uno=b.uno
 	where not (len(@t_itype)=0 or CHARINDEX(','+b.itype+',',','+@t_itype+',')>0)
 	
-	update #z_acx set bweight = isnull(brc2s,0)+isnull(binas,0)+isnull(bcuts,0)+isnull(bcubu,0)+isnull(bcubuz,0)
-		-isnull(bvccs,0)-isnull(bgets,0)-isnull(bcut,0)-isnull(bcubt,0)-isnull(bcubtz,0)
-		,bmount = isnull(brc2sm,0)+isnull(binasm,0)+isnull(bcutsm,0)+isnull(bcubum,0)+isnull(bcubumz,0)
-		-isnull(bvccsm,0)-isnull(bgetsm,0)-isnull(bcutm,0)-isnull(bcubtm,0)-isnull(bcubtmz,0)
-		,[weight] = isnull(rc2s,0)+isnull(inas,0)+isnull(cuts,0)+isnull(cubu,0)+isnull(cubuz,0)
-		-isnull(vccs,0)-isnull(gets,0)-isnull(cut,0)-isnull(cubt,0)-isnull(cubtz,0)
-		,mount = isnull(rc2sm,0)+isnull(inasm,0)+isnull(cutsm,0)+isnull(cubum,0)+isnull(cubumz,0)
-		-isnull(vccsm,0)-isnull(getsm,0)-isnull(cutm,0)-isnull(cubtm,0)	-isnull(cubtmz,0)	
+	update #z_acx set bweight = isnull(brc2s,0)-isnull(brc2sbk,0)+isnull(binas,0)+isnull(bcuts,0)+isnull(bcubu,0)+isnull(bcubuz,0)
+		-isnull(bvccs,0)+isnull(bvccsbk,0)-isnull(bgets,0)-isnull(bcut,0)-isnull(bcubt,0)-isnull(bcubtz,0)
+		,bmount = isnull(brc2sm,0)-isnull(brc2smbk,0)+isnull(binasm,0)+isnull(bcutsm,0)+isnull(bcubum,0)+isnull(bcubumz,0)
+		-isnull(bvccsm,0)+isnull(bvccsmbk,0)-isnull(bgetsm,0)-isnull(bcutm,0)-isnull(bcubtm,0)-isnull(bcubtmz,0)
+		,[weight] = isnull(rc2s,0)-isnull(rc2sbk,0)+isnull(inas,0)+isnull(cuts,0)+isnull(cubu,0)+isnull(cubuz,0)
+		-isnull(vccs,0)+isnull(vccsbk,0)-isnull(gets,0)-isnull(cut,0)-isnull(cubt,0)-isnull(cubtz,0)
+		,mount = isnull(rc2sm,0)-isnull(rc2smbk,0)+isnull(inasm,0)+isnull(cutsm,0)+isnull(cubum,0)+isnull(cubumz,0)
+		-isnull(vccsm,0)+isnull(vccsmbk,0)-isnull(getsm,0)-isnull(cutm,0)-isnull(cubtm,0)	-isnull(cubtmz,0)	
 	update #z_acx set bweight = case when bweight>0 and bmount>0 then bweight else 0 end
 		,bmount = case when bweight>0 and bmount>0 then bmount else 0 end	
 	update #z_acx set eweight = bweight+[weight],emount =bmount+mount
@@ -1019,11 +1133,19 @@ z_acx01:--z_acx01
 		a30 decimal(20,3),
 		a31 decimal(20,3),
 		a32 decimal(20,3)
+		,a33 decimal(20,3)
+		,a34 decimal(20,3)
+		,a35 decimal(20,3)
+		,a36 decimal(20,3)
+		,a37 decimal(20,3)
+		,a38 decimal(20,3)
+		,a39 decimal(20,3)
 	)
 	insert into @tmp(gno,pno,productno,style
 		,a01,a02,a03,a04,a05,a06,a07,a08,a09,a10
 		,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20
-		,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32)
+		,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32
+		,a33,a34,a35,a36,a37,a38,a39)
 	select '1','1',a.productno,a.style
 		,SUM(ISNULL(bmount,0)) a01
 		,SUM(ISNULL(bweight,0)) a02
@@ -1059,6 +1181,15 @@ z_acx01:--z_acx01
 		,SUM(ISNULL(eweight,0)) a30
 		,0 a31
 		,round(SUM(ISNULL(eweight*b.sprice,0)),0) a32
+		
+		,SUM(ISNULL(rc2smbk,0)) a33
+		,SUM(ISNULL(rc2sbk,0)) a34
+		,round(SUM(ISNULL(rc2sbk*b.sprice,0)),0) a35
+		
+		,SUM(ISNULL(vccsmbk,0)) a36
+		,SUM(ISNULL(vccsbk,0)) a37
+		,round(SUM(ISNULL(vccsbk*b.sprice,0)),0) a38
+		,SUM(ISNULL(vccsmoneybk,0)) a39
 	from #z_acx a
 	left join view_uccb b on a.uno=b.uno
 	where ((a.bweight>0 or a.bmount>0) 
@@ -1125,6 +1256,13 @@ z_acx01:--z_acx01
 	,dbo.getComma(a.a30,-1) a30
 	,dbo.getComma(a.a31,-1) a31
 	,dbo.getComma(a.a32,-1) a32
+	,dbo.getComma(a.a33,-1) a33
+	,dbo.getComma(a.a34,-1) a34
+	,dbo.getComma(a.a35,-1) a35
+	,dbo.getComma(a.a36,-1) a36
+	,dbo.getComma(a.a37,-1) a37
+	,dbo.getComma(a.a38,-1) a38
+	,dbo.getComma(a.a39,-1) a39
 	from @tmp a 
 	left join style b on a.style=b.noa
 	order by a.pno,a.style,a.productno
@@ -1288,7 +1426,7 @@ z_uccstk01:--z_uccstk01
 		gno nvarchar(10),
 		uno nvarchar(50),
 		mount float,
-		[weight] decimal(15,2),
+		[weight] decimal(15,3),
 		price decimal(15,2),
 		[money] float,
 		dime float,
