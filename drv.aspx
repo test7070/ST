@@ -783,7 +783,7 @@
 						
 						//讀取workvs的資料
 						if (workj[0] != undefined){
-		                    var t_where="where=^^ uno like '"+workj.noa+"%' ^^";
+		                    var t_where="where=^^ uno like '"+workj[0].noa+"%' ^^";
 							q_gt('workvs', t_where, 0, 0, 0,'workjs_workvs', r_accy);
 						}
 						
