@@ -579,6 +579,7 @@ z_ordest5:--z_ordest5
 	declare @t_elength float = cast(case when '#non'=[25] then '99999' else [25] end as float)
 	set @t_sort = upper(@t_sort)
 	-----------------------------------------------------------------------------------------
+	-----------------------------------------------------------------------------------------
 	IF OBJECT_ID('tempdb..#z_ordest5_a')is not null
 	BEGIN
 		drop table  #z_ordest5_a
@@ -634,13 +635,15 @@ z_ordest5:--z_ordest5
 	
 	update #z_ordest5_a set tmount = ISNULL(a.tmount,0)+b.mount,tweight = ISNULL(a.tweight,0)+b.weight
 	from #z_ordest5_a a
-	outer apply(select SUM(mount) mount,SUM(weight) weight from view_vccs where ordeno=a.ordeno and no2=a.ordeno2) b
+	outer apply(select SUM(x.mount) mount,SUM(x.weight) weight 
+		from view_vccs x
+		left join view_vcc y on x.accy=y.accy and x.noa=y.noa
+		where y.typea='1' and x.ordeno=a.ordeno and x.no2=a.ordeno2) b
 	------------------------------------------------------------------------------------------------------
 	delete #z_ordest5_a where not( ISNULL(tmount,0)<ISNULL(mount,0) and ISNULL(tweight,0)<ISNULL(weight,0))
 	update #z_ordest5_a set csize = dbo.csize('B2',dime,width,lengthb,radius)
 		,notmount = ISNULL(mount,0)-ISNULL(tmount,0)
 		,notweight = ISNULL(weight,0)-ISNULL(tweight,0)
-	
 	
 	-------------------------------------------------------------------------------------------------------
 	IF OBJECT_ID('tempdb..#z_ordest5_b')is not null
