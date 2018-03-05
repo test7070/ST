@@ -771,7 +771,7 @@
 	                        string+='<td id="workjs_noq'+i+'" style="text-align: center;color:'+t_color[i%t_color.length]+';display:none;">'+workjs[i].noq+'</td>';
 	                        string+='</tr>';
 	                        
-	                        workvs_uno_where=workvs_uno_where+(workvs_uno_where.length>0?' or ':'')+" charindex('"+workjs[i].noa+'-'+workjs[i].noq+"',uno)>0 ";
+	                        //workvs_uno_where=workvs_uno_where+(workvs_uno_where.length>0?' or ':'')+" charindex('"+workjs[i].noa+'-'+workjs[i].noq+"',uno)>0 ";
 	                    }
 	                    string+='</table>';
 	                    
@@ -782,8 +782,10 @@
 						q_gt('mech', t_where, 0, 0, 0,'workjs_mech', r_accy);
 						
 						//讀取workvs的資料
-	                    var t_where="where=^^ "+workvs_uno_where+" ^^";
-						q_gt('workvs', t_where, 0, 0, 0,'workjs_workvs', r_accy);
+						if (workj[0] != undefined){
+		                    var t_where="where=^^ uno like '"+workj[0].noa+"%' ^^";
+							q_gt('workvs', t_where, 0, 0, 0,'workjs_workvs', r_accy);
+						}
 						
 						break;	
 					case 'workjs_mech':
