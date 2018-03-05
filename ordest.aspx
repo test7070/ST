@@ -1037,7 +1037,15 @@
 
             function btnPrint() {
                 t_where = "noa='" + $('#txtNoa').val() + "'";
-                q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                
+                switch(q_getPara('sys.project').toUpperCase()){
+                	case 'BD':
+                	q_box("z_ordebdp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                		break;
+                	default:
+                		q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                		break;
+                }
             }
 
             function wrServer(key_value) {
