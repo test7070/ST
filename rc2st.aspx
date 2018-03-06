@@ -1151,13 +1151,21 @@
 				_bbsAssign();
 				size_change();
 				refreshBbs();
-				if(q_getPara('sys.project').toUpperCase()=='PK')
-					$('.pk').show();
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('.rk').show();
-					$('.RK_hide').hide();
-					$('#lblWeights_st2').html('重量/M<BR>實重');
-					$('#lblSource').text('製造商');
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'PK':
+						$('.pk').show();
+						break;
+					case 'RK':
+						$('.rk').show();
+						$('.RK_hide').hide();
+						$('#lblWeights_st2').html('重量/M<BR>實重');
+						$('#lblSource').text('製造商');
+						break;
+					case 'BD':
+						$('.bd').show();
+						break;
+					default:
+						break;
 				}
 			}
 
@@ -1224,12 +1232,22 @@
 
 			function refresh(recno) {
 				_refresh(recno);
-				if(q_getPara('sys.project').toUpperCase()=='PK')
-					$('.pk').show();
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('.sprice').show();
-					$('.RK_hide').hide();
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'PK':
+						$('.pk').show();
+						break;
+					case 'RK':
+						$('.rk').show();
+						$('.sprice').show();
+						$('.RK_hide').hide();
+						break;
+					case 'BD':
+						$('.bd').show();
+						break;
+					default:
+						break;
 				}
+				
 				size_change();
 				//q_popPost('txtProductno_');
 				$('input[id*="txtProduct_"]').each(function() {
@@ -1773,7 +1791,7 @@
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>寬度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>長度</a></td>
-					<td align="center" style="width:50px;display:none;" class="pk rk"><a id='lblSource'>鋼廠</a></td>
+					<td align="center" style="width:50px;display:none;" class="pk rk bd"><a id='lblSource'>鋼廠</a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:50px;display:none;" class="pk"><a>數量<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblWeights_st2'>重量<BR>實重</a></td>
@@ -1838,7 +1856,7 @@
 					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td style="display:none;" class="pk rk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
+					<td style="display:none;" class="pk rk bd"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td>
