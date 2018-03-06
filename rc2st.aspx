@@ -1281,11 +1281,20 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
-				if(q_getPara('sys.project').toUpperCase()=='PK')
-					$('.pk').show();
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('.sprice').show();
-					$('.RK_hide').hide();
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'PK':
+						$('.pk').show();
+						break;
+					case 'RK':
+						$('.rk').show();
+						$('.sprice').show();
+						$('.RK_hide').hide();
+						break;
+					case 'BD':
+						$('.bd').show();
+						break;
+					default:
+						break;
 				}
 					
 				size_change();
