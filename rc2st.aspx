@@ -252,7 +252,12 @@
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('rc2.typea'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
-				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+				
+				} else{
+					q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
+				}
+				
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
 				if(t_spec.length>0)
