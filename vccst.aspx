@@ -218,6 +218,13 @@
 					if ($('#txtMon').attr("readonly") == "readonly" && (q_cur == 1 || q_cur == 2))
 						q_msg($('#txtMon'), "月份要另外設定，請在" + q_getMsg('lblMemo') + "的第一個字打'*'字");
 				});*/
+				
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+						$('#').hide();
+					} else{
+						$('#').show();
+					}
+				
 				$("#cmbTypea").focus(function() {
 					var len = $(this).children().length > 0 ? $(this).children().length : 1;
 					$(this).attr('size', len + "");
@@ -1341,7 +1348,6 @@
 					$('#txtMon').removeAttr('readonly');
 				else
 					$('#txtMon').attr('readonly', 'readonly');*/
-				
 				if(q_getPara('sys.project').toUpperCase()=='BD'){
 					$('#txtOrdeno').attr('disabled', 'disabled');
 				}
@@ -1646,8 +1652,7 @@
 	<body ondragstart="return false" draggable="false"
 	ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
 	ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-	>
+	ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();">
 		<div style="overflow: auto;display:block;">
 			<!--#include file="../inc/toolbar.inc"-->
 		</div>
