@@ -252,16 +252,15 @@
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('rc2.typea'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
-				if (q_getPara('sys.project').toUpperCase()=='FP'){
-				
-				} else{
-					q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
-				}
-				
+				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
 				if(t_spec.length>0)
-					q_cmbParse("combSpec", t_spec,'s');
+					if (q_getPara('sys.project').toUpperCase()=='FP'){
+					
+					} else{
+						q_cmbParse("combSpec", t_spec,'s');
+					}
 				if(t_coin.length>0)
 					q_cmbParse("cmbCoin", t_coin);
 				
