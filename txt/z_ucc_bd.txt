@@ -975,8 +975,7 @@ z_ucc_bd01:--z_ucc_bd01
 	insert into #z_ucc_bd01(gno,pno,uno,indate,storeno,store,[source],[spec],[class]
 		,productno,product,size,dime,width,lengthb,radius,mount,[weight],memo,custno)
 	select '1',1,a.uno,b.datea,b.storeno,e.store,b.[source],b.[spec],b.[class]
-		,b.productno,d.product,b.size,b.dime,b.width,b.lengthb,b.radius,a.emount,a.[eweight],b.memo
-		,b.custno
+		,b.productno,d.product,b.size,b.dime,b.width,b.lengthb,b.radius,a.emount,a.[eweight],b.memo,b.custno
 	from uccy a
 	left join view_uccb b on a.uno=b.uno
 	left join dbo.fnSplit(@t_itype) c on b.itype=c.n 

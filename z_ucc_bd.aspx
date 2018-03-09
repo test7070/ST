@@ -42,7 +42,6 @@
 						break;
                 }
 			}
-			
 			function q_gfPost() {
 				$('#q_report').q_report({
 					fileName : 'z_ucc_bd',

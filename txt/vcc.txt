@@ -263,7 +263,7 @@ vcc2cng_rb:--vcc2cng_rb
 		EXECUTE sp_executesql @cmd
 	END
 ;
------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------
 changequat_vu:--changequat_vu
 SET QUOTED_IDENTIFIER OFF 
 declare @t_accy nvarchar(50) = [1]
@@ -1180,7 +1180,6 @@ BEGIN
 	drop table #vccbbs
 END
 ;
-
 ---------------------------------------
 updatememo_yc:--updatememo_yc
 SET QUOTED_IDENTIFIER OFF
@@ -1195,4 +1194,3 @@ where noa='"+@t_noa+"' ")
 
 select noa,memo from view_vcc where noa=@t_noa
 ;
------------------------

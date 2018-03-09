@@ -248,15 +248,32 @@
 						bbsNum = [['txtPrice', 15, 3, 1],['txtPriceus', 15, 4, 1], ['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtTotalus', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
 						break;
 				}
-				
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('#lblOrdc').hide();
+					$('#txtOrdcno').hide();
+				} else{
+					$('#lblOrdc').show();
+					$('#txtOrdcno').show();
+				}
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('rc2.typea'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'BD':
+						q_cmbParse("cmbKind", '進貨,費用,費用(製),維修,加工,代工');
+						break;	
+					default:
+						q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+						break;
+				}
 				if(t_spec.length>0)
-					q_cmbParse("combSpec", t_spec,'s');
+					if (q_getPara('sys.project').toUpperCase()=='FP'){
+					
+					} else{
+						q_cmbParse("combSpec", t_spec,'s');
+					}
 				if(t_coin.length>0)
 					q_cmbParse("cmbCoin", t_coin);
 				
@@ -1151,13 +1168,25 @@
 				_bbsAssign();
 				size_change();
 				refreshBbs();
-				if(q_getPara('sys.project').toUpperCase()=='PK')
-					$('.pk').show();
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('.rk').show();
-					$('.RK_hide').hide();
-					$('#lblWeights_st2').html('重量/M<BR>實重');
-					$('#lblSource').text('製造商');
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'PK':
+						$('.pk').show();
+						break;
+					case 'RK':
+						$('.rk').show();
+						$('.RK_hide').hide();
+						$('#lblWeights_st2').html('重量/M<BR>實重');
+						$('#lblSource').text('製造商');
+						break;
+					case 'FP':
+						$('.Ordctd').hide();
+						$('.Ordctds').hide();
+						break;
+					case 'BD':
+						$('.bd').show();
+						break;
+					default:
+						break;
 				}
 			}
 
@@ -1178,12 +1207,20 @@
 
 			function btnPrint() {
 				t_where = "noa=" + $('#txtNoa').val();
-				if(q_getPara('sys.project').toUpperCase()=='RK')
-					q_box("z_rc2_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_rk', "95%", "95%", m_print);
-				else if(q_getPara('sys.project').toUpperCase()=='PK')
-					q_box("z_rc2_pkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_pk', "95%", "95%", m_print);
-				else
-					q_box("z_rc2stp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'RK':
+						q_box("z_rc2_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_rk', "95%", "95%", m_print);
+						break;
+					case 'PK':
+						q_box("z_rc2_pkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_pk', "95%", "95%", m_print);
+						break;
+					case 'BD':
+						q_box("z_rc2bdp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_pk', "95%", "95%", m_print);
+						break;	
+					default:
+						q_box("z_rc2stp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+						break;
+				}
 			}
 
 			function wrServer(key_value) {
@@ -1216,12 +1253,26 @@
 
 			function refresh(recno) {
 				_refresh(recno);
-				if(q_getPara('sys.project').toUpperCase()=='PK')
-					$('.pk').show();
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('.sprice').show();
-					$('.RK_hide').hide();
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'PK':
+						$('.pk').show();
+						break;
+					case 'RK':
+						$('.rk').show();
+						$('.sprice').show();
+						$('.RK_hide').hide();
+						break;
+					case 'FP':
+						$('.Ordctd').hide();
+						$('.Ordctds').hide();
+						break;
+					case 'BD':
+						$('.bd').show();
+						break;
+					default:
+						break;
 				}
+				
 				size_change();
 				//q_popPost('txtProductno_');
 				$('input[id*="txtProduct_"]').each(function() {
@@ -1255,11 +1306,24 @@
 
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
-				if(q_getPara('sys.project').toUpperCase()=='PK')
-					$('.pk').show();
-				if(q_getPara('sys.project').toUpperCase()=='RK'){
-					$('.sprice').show();
-					$('.RK_hide').hide();
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'PK':
+						$('.pk').show();
+						break;
+					case 'RK':
+						$('.rk').show();
+						$('.sprice').show();
+						$('.RK_hide').hide();
+						break;
+					case 'FP':
+						$('.Ordctd').hide();
+						$('.Ordctds').hide();
+						break;
+					case 'BD':
+						$('.bd').show();
+						break;
+					default:
+						break;
 				}
 					
 				size_change();
@@ -1602,7 +1666,7 @@
 			</div>
 			<div class="dbbm">
 				<table class="tbbm"  id="tbbm">
-					<tr style="height:1px;">
+					<tr style="height:0px;">
 						<td> </td>
 						<td> </td>
 						<td> </td>
@@ -1749,7 +1813,7 @@
 		<div class='dbbs'>
 			<table id="tbbs" class='tbbs' style=' text-align:center'>
 				<tr style='color:white; background:#003366;' >
-					<td align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+					<td align="center" style="width:30px;"><input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:30px;display:none;"><a>群組</a></td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
@@ -1758,14 +1822,13 @@
 					<td align="center" style="width:80px;" class="RK_hide"><a>等級</a></td>
 					<td align="center" style="width:140px;display:none;" class="pk">規範<BR>國別</td>
 					<td align="center" style="width:340px;" id='Size'>
-						<a id='lblSize_help'> </a><BR>
-						<a id='lblSize_st'> </a>
+						<a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a>
 					</td>
 					<td align="center" style="width:150px;" class="RK_hide"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>寬度</a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>長度</a></td>
-					<td align="center" style="width:50px;display:none;" class="pk rk"><a id='lblSource'>鋼廠</a></td>
+					<td align="center" style="width:50px;display:none;" class="pk rk bd"><a id='lblSource'>鋼廠</a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:50px;display:none;" class="pk"><a>數量<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblWeights_st2'>重量<BR>實重</a></td>
@@ -1783,9 +1846,9 @@
 					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPlace_st'> </a></td>
-					<td align="center" style="width:190px;"><a id='lblOrdcnos_st'> </a></td>
+					<td align="center" style="width:190px;" class="Ordctds"><a id='lblOrdcnos_st'> </a></td>
 				</tr>
-				<tr  style='background:#cad3ff;'>
+				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
 						<input id="txtNoq.*" type="text" style="display: none;" />
@@ -1830,7 +1893,7 @@
 					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td style="display:none;" class="pk rk"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
+					<td style="display:none;" class="pk rk bd"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td>
@@ -1861,7 +1924,7 @@
 						<input id="btnStoreno.*" type="button" style="display:none;" />
 					</td>
 					<td><input id="txtPlace.*" type="text" style="width:95%;"/></td>
-					<td>
+					<td class="Ordctds">
 						<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
 						<input id="txtNo2.*" type="text"  style="width:40px;float:left;"/>
 					</td>

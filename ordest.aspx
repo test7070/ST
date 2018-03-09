@@ -232,7 +232,16 @@
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
                 $('#btnOrdei').hide();
                 //外銷訂單按鈕隱藏
-                
+
+				
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('#lblQuat').hide();
+					$('#txtQuatno').hide();
+				} else{
+					$('#lblQuat').show();
+					$('#txtQuatno').show();
+				}
+				
                 q_gt('spec', '', 0, 0, 0, "", r_accy);
                 $('#lblQuat').click(function() {
                     if(!(q_cur==1 || q_cur ==2))
@@ -1037,7 +1046,15 @@
 
             function btnPrint() {
                 t_where = "noa='" + $('#txtNoa').val() + "'";
-                q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                
+                switch(q_getPara('sys.project').toUpperCase()){
+                	case 'BD':
+                	q_box("z_ordebdp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                		break;
+                	default:
+                		q_box("z_ordestp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where, '', "95%", "95%", q_getMsg('popPrint'));
+                		break;
+                }
             }
 
             function wrServer(key_value) {
@@ -1626,8 +1643,7 @@
     <body ondragstart="return false" draggable="false"
     ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
     ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-    ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-    >
+    ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();" >
         <div id="sizeInfo" style="position: absolute;display:none;width:200px;">
             <table style="background:#8ADF39;border: 2px white double;"> 
                 <tr>
