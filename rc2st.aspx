@@ -260,7 +260,14 @@
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
-				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'BD':
+						q_cmbParse("cmbKind", '進貨,費用,費用(製),維修,加工,代工');
+						break;	
+					default:
+						q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+						break;
+				}
 				if(t_spec.length>0)
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
 					

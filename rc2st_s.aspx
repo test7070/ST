@@ -30,10 +30,16 @@
                 bbmMask = [['txtBdate', r_picd], ['txtEdate', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbTypea", '@全部,'+q_getPara('rc2.typea'));
-                if(q_getPara('sys.project').toUpperCase()=='PK'){
-					q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype') + ',2@物料,3@委外');
-				}else{
-                	q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype'));
+                switch(q_getPara('sys.project').toUpperCase()){
+                	case 'BD':
+						q_cmbParse("cmbKind", '@全部,進貨,費用,費用(製),維修,加工,代工');
+						break;
+					case 'PK':
+						q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype') + ',2@物料,3@委外');
+						break;
+					default:
+	                	q_cmbParse("cmbKind", '@全部,'+q_getPara('sys.stktype'));
+	                	break;
                 }
                 $('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
