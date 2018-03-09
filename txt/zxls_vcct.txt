@@ -362,13 +362,16 @@ where istrue = 0 or ishave = 0 or len(isnull(c.xmemo,''))>0
 declare @accy nvarchar(50)
 declare @vccno nvarchar(50)
 declare @t_sono nvarchar(50)
+declare @dele float
 declare cursor_table cursor for
-select indo,isexist,noa,sono,kind,mon from #z_vcctrb 
+select indo,isexist,noa,sono,kind,mon 
+,ROW_NUMBER()over (partition by noa,mon order by noa,mon,indo)dele
+from #z_vcctrb 
 where len(noa)=10 --and noa like '[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
 order by indo
 open cursor_table
 fetch next from cursor_table
-into @indo,@isexist,@noa,@sono,@kind,@mon
+into @indo,@isexist,@noa,@sono,@kind,@mon,@dele
 while(@@FETCH_STATUS <> -1)
 begin
 	set @t_sono=''
@@ -391,7 +394,8 @@ begin
 		end
 		else --刪除同月份的折讓單否則就新增
 		begin
-			delete vcct where noa = @noa and kind in ('33','34','23','24') and mon=@mon
+			if(@dele=1)
+				delete vcct where noa = @noa and kind in ('33','34','23','24') and mon=@mon
 		end
 		
 		if(@vccno!='')
@@ -421,7 +425,7 @@ begin
 	end
 	
 	fetch next from cursor_table
-	into @indo,@isexist,@noa,@sono,@kind,@mon
+	into @indo,@isexist,@noa,@sono,@kind,@mon,@dele
 end
 close cursor_table
 deallocate cursor_table
