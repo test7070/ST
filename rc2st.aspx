@@ -248,13 +248,13 @@
 						bbsNum = [['txtPrice', 15, 3, 1],['txtPriceus', 15, 4, 1], ['txtHard', 10, 2, 1], ['txtTotal', 12, 2, 1], ['txtTotalus', 12, 2, 1], ['txtMount', 10, 2, 1], ['txtWeight', 10, 2, 1], ['txtGweight', 10, 2, 1], ['txtTheory', 10, 3, 1], ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1], ['textSize4', 10, 2, 1]];
 						break;
 				}
-					if (q_getPara('sys.project').toUpperCase()=='FP'){
-						$('#lblOrdc').hide();
-						$('#txtOrdcno').hide();
-					} else{
-						$('#lblOrdc').show();
-						$('#txtOrdcno').show();
-					}
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('#lblOrdc').hide();
+					$('#txtOrdcno').hide();
+				} else{
+					$('#lblOrdc').show();
+					$('#txtOrdcno').show();
+				}
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('rc2.typea'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));

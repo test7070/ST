@@ -26,8 +26,7 @@
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
-				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1]
-				, ['txtBenifit', 10, 0, 1]
+				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1], ['txtBenifit', 10, 0, 1]
 			];
 			var bbsNum = [
 				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
@@ -218,12 +217,6 @@
 					if ($('#txtMon').attr("readonly") == "readonly" && (q_cur == 1 || q_cur == 2))
 						q_msg($('#txtMon'), "月份要另外設定，請在" + q_getMsg('lblMemo') + "的第一個字打'*'字");
 				});*/
-				
-				if (q_getPara('sys.project').toUpperCase()=='FP'){
-						$('#').hide();
-					} else{
-						$('#').show();
-					}
 				
 				$("#cmbTypea").focus(function() {
 					var len = $(this).children().length > 0 ? $(this).children().length : 1;
