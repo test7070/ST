@@ -1171,6 +1171,10 @@
 						$('#lblWeights_st2').html('重量/M<BR>實重');
 						$('#lblSource').text('製造商');
 						break;
+					case 'FP':
+						$('.Ordctd').hide();
+						$('.Ordctds').hide();
+						break;
 					case 'BD':
 						$('.bd').show();
 						break;
@@ -1251,6 +1255,10 @@
 						$('.sprice').show();
 						$('.RK_hide').hide();
 						break;
+					case 'FP':
+						$('.Ordctd').hide();
+						$('.Ordctds').hide();
+						break;
 					case 'BD':
 						$('.bd').show();
 						break;
@@ -1299,6 +1307,10 @@
 						$('.rk').show();
 						$('.sprice').show();
 						$('.RK_hide').hide();
+						break;
+					case 'FP':
+						$('.Ordctd').hide();
+						$('.Ordctds').hide();
 						break;
 					case 'BD':
 						$('.bd').show();
@@ -1647,7 +1659,7 @@
 			</div>
 			<div class="dbbm">
 				<table class="tbbm"  id="tbbm">
-					<tr style="height:1px;">
+					<tr style="height:0px;">
 						<td> </td>
 						<td> </td>
 						<td> </td>
@@ -1794,7 +1806,7 @@
 		<div class='dbbs'>
 			<table id="tbbs" class='tbbs' style=' text-align:center'>
 				<tr style='color:white; background:#003366;' >
-					<td align="center" style="width:30px;"><input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
+					<td align="center" style="width:30px;"><input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;"  /></td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:30px;display:none;"><a>群組</a></td>
 					<td align="center" style="width:250px;"><a id='lblUno_st'> </a></td>
@@ -1803,8 +1815,7 @@
 					<td align="center" style="width:80px;" class="RK_hide"><a>等級</a></td>
 					<td align="center" style="width:140px;display:none;" class="pk">規範<BR>國別</td>
 					<td align="center" style="width:340px;" id='Size'>
-						<a id='lblSize_help'> </a><BR>
-						<a id='lblSize_st'> </a>
+						<a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a>
 					</td>
 					<td align="center" style="width:150px;" class="RK_hide"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px;display:none;" class="pk"><a>進貨<BR>厚度</a></td>
@@ -1828,9 +1839,9 @@
 					<td align="center" style="width:250px;"><a id='lblUno2_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblStoreno_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPlace_st'> </a></td>
-					<td align="center" style="width:190px;"><a id='lblOrdcnos_st'> </a></td>
+					<td align="center" style="width:190px;" class="Ordctds"><a id='lblOrdcnos_st'> </a></td>
 				</tr>
-				<tr  style='background:#cad3ff;'>
+				<tr style='background:#cad3ff;'>
 					<td align="center">
 						<input class="btn"  id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
 						<input id="txtNoq.*" type="text" style="display: none;" />
@@ -1906,7 +1917,7 @@
 						<input id="btnStoreno.*" type="button" style="display:none;" />
 					</td>
 					<td><input id="txtPlace.*" type="text" style="width:95%;"/></td>
-					<td>
+					<td class="Ordctds">
 						<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
 						<input id="txtNo2.*" type="text"  style="width:40px;float:left;"/>
 					</td>

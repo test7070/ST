@@ -1643,8 +1643,7 @@
     <body ondragstart="return false" draggable="false"
     ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
     ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-    ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
-    >
+    ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();" >
         <div id="sizeInfo" style="position: absolute;display:none;width:200px;">
             <table style="background:#8ADF39;border: 2px white double;"> 
                 <tr>
