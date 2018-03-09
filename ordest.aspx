@@ -232,7 +232,16 @@
                 q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
                 $('#btnOrdei').hide();
                 //外銷訂單按鈕隱藏
-                
+
+				
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('#lblQuat').hide();
+					$('#txtQuatno').hide();
+				} else{
+					$('#lblQuat').show();
+					$('#txtQuatno').show();
+				}
+				
                 q_gt('spec', '', 0, 0, 0, "", r_accy);
                 $('#lblQuat').click(function() {
                     if(!(q_cur==1 || q_cur ==2))
