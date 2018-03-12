@@ -1232,7 +1232,6 @@
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
                 size_change();
-
                 if (t_para)
                     $('#btnOrdei').removeAttr('disabled');
                 else
