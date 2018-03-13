@@ -384,6 +384,6 @@ BEGIN CATCH
 	ROLLBACK
 END CATCH
 
-select @vccno vccno,@t_err err
+select @t_noa noa,@vccno vccno,@t_err err
 
 ;
