@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
     <head>
-        <title></title>
+        <title> </title>
         <script src="../script/jquery.min.js" type="text/javascript"></script>
         <script src='../script/qj2.js' type="text/javascript"></script>
         <script src='qset.js' type="text/javascript"></script>
@@ -1185,7 +1185,8 @@
                         ret = getb_ret();
                         if (!ret || ret.length == 0)
                             return;
-                        if (ret.length > 0 && ret[0] != undefined) {
+                        if (ret.length > 0 && ret[0] != undefined) 
+                        {
                             if (emp($('#txtRadius_' + b_seq).val()) || $('#txtRadius_' + b_seq).val() == 0)
                                 $('#txtRadius_' + b_seq).val(ret[0].radius);
                             if (emp($('#txtWidth_' + b_seq).val()) || $('#txtWidth_' + b_seq).val() == 0)
@@ -1683,18 +1684,18 @@
             </div>
             <div class="dbbm">
                 <table class="tbbm"  id="tbbm">
-                    <tr style="height:1px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="tdZ"></td></tr>
+                    <tr style="height:1px;"><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td class="tdZ"> </td></tr>
                     <tr>
                         <td><span> </span><a id='lblOdate' class="lbl"> </a></td>
                         <td><input id="txtOdate"  type="text"  class="txt c1"/></td>
-                        <td><select id="cmbStype" class="txt c1"></select></td>
+                        <td><select id="cmbStype" class="txt c1"> </select></td>
                         <td align="center">
                             <input id="chkIsproj" type="checkbox"/>
                             <span> </span><a id='lblIsproj'> </a>
                         </td>
                         <td><input id="btnOrdei" type="button" /></td>
                         <td><span> </span><a id='lblKind' class="lbl"> </a></td>
-                        <td><select id="cmbKind" class="txt c1"></select></td>
+                        <td><select id="cmbKind" class="txt c1"> </select></td>
                         <td><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
                     </tr>
                     <tr>
@@ -1738,7 +1739,7 @@
                             <input id="txtAddr"  type="text" style="float:left;width:75%;" />
                         </td>
                         <td><span> </span><a id='lblTrantype' class="lbl"> </a></td>
-                        <td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" ></select></td>
+                        <td colspan="2"><select id="cmbTrantype" class="txt c1" name="D1" > </select></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id='lblAddr2' class="lbl"> </a></td>
@@ -1749,7 +1750,7 @@
                         <td><span> </span><a id='lblPaytype' class="lbl"> </a></td>
                         <td colspan="2">
                         <input id="txtPaytype" type="text" style="float:left; width:87%;"/>
-                        <select id="combPaytype" style="float:left; width:26px;"></select></td>
+                        <select id="combPaytype" style="float:left; width:26px;"> </select></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id='lblTotalus' class="lbl"> </a></td>
@@ -1757,8 +1758,8 @@
                         <td><span> </span><a id='lblFloata' class="lbl"> </a></td>
                         <td><input id="txtFloata" type="text" class="txt num c1"/></td>
                         <td>
-							<span style="float:left;display:block;width:10px;"></span>
-							<select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'></select>
+							<span style="float:left;display:block;width:10px;"> </span>
+							<select id="cmbCoin" style="float:left;width:80px;" onchange='coin_chg()'> </select>
 						</td>
                         <td><span> </span><a id='lblWeight' class="lbl"> </a></td>
                         <td><input id="txtWeight"  type="text" class="txt num c1"/></td>
@@ -1767,16 +1768,16 @@
                     <tr>
                         <td><span> </span><a id='lblMoney' class="lbl"> </a></td>
                         <td><input id="txtMoney" type="text" class="txt num c1"/></td>
-                        <td><span> </span><a id='lblTax' class="lbl"></a></td>
+                        <td><span> </span><a id='lblTax' class="lbl"> </a></td>
                         <td><input id="txtTax" type="text" class="txt num c1"/></td>
-                        <td><span style="float:left;display:block;width:10px;"></span><select id="cmbTaxtype" style="float:left;width:80px;" > </select></td>
+                        <td><span style="float:left;display:block;width:10px;"> </span><select id="cmbTaxtype" style="float:left;width:80px;" > </select></td>
                         <td><span> </span><a id='lblTotal' class="lbl"> </a></td>
                         <td><input id="txtTotal" type="text" class="txt num c1"/></td>
                         <td align="center"><input id="btnOrdem" type="button"/></td>
                     </tr>
                     <tr>
-                        <td><span></span><a id='lblMemo' class="lbl"> </a></td>
-                        <td colspan="6"><textarea id="txtMemo" cols="10" rows="5" style="height: 50px;" class="txt c1"></textarea></td>
+                        <td><span> </span><a id='lblMemo' class="lbl"> </a></td>
+                        <td colspan="6"><textarea id="txtMemo" cols="10" rows="5" style="height: 50px;" class="txt c1"> </textarea></td>
                         <td align="center"><input id="btnCredit" type="button"/></td>
                     </tr>
                     <tr>
@@ -1801,11 +1802,11 @@
                 <tr style='color:white; background:#003366;' >
                     <td align="center" style="width:30px;"><input class="btn" id="btnPlus" type="button" value="+" style="font-weight:bold;"/></td>
                     <td align="center" style="width:20px;"> </td>
-                    <td align="center" style="width:60px;"><a id='lblNo2'></a></td>
-                    <td align="center" style="width:120px;"><a id='lblProductno'></a></td>
-                    <td align="center" style="width:80px;"><a id='lblStyle_st'></a></td>
+                    <td align="center" style="width:60px;"><a id="lblNo2"> </a></td>
+                    <td align="center" style="width:120px;"><a id="lblProductno"> </a></td>
+                    <td align="center" style="width:80px;"><a id="lblStyle_st"> </a></td>
                     <td align="center" style="width:140px;" class="bbsunotr">
-                    	<a id='lblProduct_s'></a><BR class="bbsuno" style="display:none;"><a id="lblUno_s" class="bbsuno" style="display: none;"></a>
+                    	<a id="lblProduct_s" > </a><BR class="bbsuno" style="display:none;" ><a id="lblUno_s" class="bbsuno" style="display: none;" > </a>
                     </td>
                     <td align="center" style="width:80px;display: none;" class="bbssource"><a id='lblSource_s_st'> </a></td>
                     <td align="center" style="width:50px;"><a id='lblClasss'> </a></td>
@@ -1902,16 +1903,16 @@
                     <td class="td1" align="center" style="width:1%; max-width:20px;">
 						<input class="btn" id="btnPlut" type="button" value='+' style="font-weight: bold;" />
                     </td>
-                    <td align="center" style="width:20px;"></td>
-                    <td align="center" style="width:60px;"><a id='lblNo2_t'></a></td>
-                    <td class="td2" align="center" style="width:250px;"><a id='lblUno_t'></a></td>
-                    <td class="td3" align="center" style="width:120px;"><a id='lblProduct_t'></a></td>
-                    <td class="td4" align="center" style="width:120px;"><a id='lblProductno_t'></a></td>
-                    <td align="center" id='Sizet'><a id='lblSize_help'> </a></td>
-                    <td class="td8" align="center" style="width:80px;"><a id='lblMount_t'></a></td>
-                    <td class="td9" align="center" style="width:120px;"><a id='lblWeight_t'></a></td>
-                    <td class="td9" align="center" style="width:30px;"><a id='lblIssale_t'></a></td>
-                    <td class="td10" align="center" style="width:150px;"><a id='lblSource_t'></a></td>
+                    <td align="center" style="width:20px;"> </td>
+                    <td align="center" style="width:60px;"><a id='lblNo2_t'> </a></td>
+                    <td class="td2" align="center" style="width:250px;"><a id='lblUno_t'> </a></td>
+                    <td class="td3" align="center" style="width:120px;"><a id='lblProduct_t'> </a></td>
+                    <td class="td4" align="center" style="width:120px;"><a id='lblProductno_t'> </a></td>
+                    <td align="center" id="Sizet"> <a id='lblSize_help'> </a></td>
+                    <td class="td8" align="center" style="width:80px;"><a id='lblMount_t'> </a></td>
+                    <td class="td9" align="center" style="width:120px;"><a id='lblWeight_t'> </a></td>
+                    <td class="td9" align="center" style="width:30px;"><a id='lblIssale_t'> </a></td>
+                    <td class="td10" align="center" style="width:150px;"><a id='lblSource_t'> </a></td>
                 </tr>
                 <tr>
                     <td class="td1" align="center">
