@@ -8,86 +8,92 @@ declare @t_ecustno nvarchar(10) = case when '#non'=[6] then char(255) else [6] e
 --------------------------------------------------------------------------------- 
 IF OBJECT_ID('tempdb..#tmp1')is not null 
 BEGIN 
-set @cmd = 'drop table #tmp1' 
-EXECUTE sp_executesql @cmd 
-END 
-IF OBJECT_ID('tempdb..#tmp2')is not null 
-BEGIN 
-set @cmd = 'drop table #tmp2' 
-EXECUTE sp_executesql @cmd 
-END 
-IF OBJECT_ID('tempdb..#tmp3')is not null 
-BEGIN 
-set @cmd = 'drop table #tmp3' 
-EXECUTE sp_executesql @cmd 
-END 
-IF OBJECT_ID('tempdb..#tmp4')is not null 
-BEGIN 
-set @cmd = 'drop table #tmp4' 
-EXECUTE sp_executesql @cmd 
-END 
-IF OBJECT_ID('tempdb..#tmp5')is not null 
-BEGIN 
-set @cmd = 'drop table #tmp5' 
-EXECUTE sp_executesql @cmd 
+	set @cmd = 'drop table #tmp1' 
+	EXECUTE sp_executesql @cmd 
 END 
 
-create table #tmp1( 
-custno nvarchar(20), 
-mon nvarchar(10),--帳款月份	
-[money] float, 
-tax float, 
-total float 
+IF OBJECT_ID('tempdb..#tmp2')is not null 
+BEGIN 
+	set @cmd = 'drop table #tmp2' 
+	EXECUTE sp_executesql @cmd 
+END 
+
+IF OBJECT_ID('tempdb..#tmp3')is not null 
+BEGIN 
+	set @cmd = 'drop table #tmp3' 
+	EXECUTE sp_executesql @cmd 
+END 
+
+IF OBJECT_ID('tempdb..#tmp4')is not null 
+BEGIN 
+	set @cmd = 'drop table #tmp4' 
+	EXECUTE sp_executesql @cmd 
+END 
+
+IF OBJECT_ID('tempdb..#tmp5')is not null 
+BEGIN 
+	set @cmd = 'drop table #tmp5' 
+	EXECUTE sp_executesql @cmd 
+END 
+
+create table #tmp1(
+	custno nvarchar(20), 
+	mon nvarchar(10),--帳款月份	
+	[money] float, 
+	tax float, 
+	total float 
 ) 
+
 create table #tmp2( 
-custno nvarchar(20), 
-mon nvarchar(20),--帳款月份 
-[money] float, 
-tax float, 
-total float 
+	custno nvarchar(20), 
+	mon nvarchar(20),--帳款月份 
+	[money] float, 
+	tax float, 
+	total float 
 ) 
+
 create table #tmp3( 
-custno nvarchar(20), 
-mon nvarchar(20),--帳款月份 
-paysale float 
+	custno nvarchar(20), 
+	mon nvarchar(20),--帳款月份 
+	paysale float 
 ) 
 
 create table #tmp4( 
-custno nvarchar(20), 
-mon nvarchar(10), 
-[money] float, 
-tax float, 
-paysale float, 
-unpay float 
+	custno nvarchar(20), 
+	mon nvarchar(10), 
+	[money] float, 
+	tax float, 
+	paysale float, 
+	unpay float 
 ) 
 
-create table #tmp5( 
-gno nvarchar(10), 
-custno nvarchar(20), 
-cust nvarchar(300), 
-memo nvarchar(max), 
-sell float, 
-ct float, 
-bmon nvarchar(30), 
-emon nvarchar(30), 
-[money] float, 
-pay float, 
-unpay float 
+create table #tmp5(
+	gno nvarchar(10), 
+	custno nvarchar(20), 
+	cust nvarchar(300), 
+	memo nvarchar(max), 
+	sell float, 
+	ct float, 
+	bmon nvarchar(30), 
+	emon nvarchar(30), 
+	[money] float, 
+	pay float, 
+	unpay float 
 ) 
 
 declare @tmp table ( 
-gno nvarchar(10), 
-noq nvarchar(5), 
-custno nvarchar(20), 
-cust nvarchar(300), 
-memo nvarchar(max), 
-sell float, 
-ct float, 
-bmon nvarchar(30), 
-emon nvarchar(30), 
-[money] float, 
-pay float, 
-unpay float 
+	gno nvarchar(10), 
+	noq nvarchar(5), 
+	custno nvarchar(20), 
+	cust nvarchar(300), 
+	memo nvarchar(max), 
+	sell float, 
+	ct float, 
+	bmon nvarchar(30), 
+	emon nvarchar(30), 
+	[money] float, 
+	pay float, 
+	unpay float 
 ) 
 insert into #tmp1(custno,mon,[money],tax,total) 
 select custno,mon 
