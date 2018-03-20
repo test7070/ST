@@ -28,12 +28,13 @@
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1], ['txtBenifit', 10, 0, 1]
 			];
-			var bbsNum = [
-				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
-				['txtMount', 10, 2, 1], ['txtTheory', 12, 3, 1], ['txtGweight', 10, 3, 1],
-				['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
-				['textSize4', 10, 2, 1]
-			];
+            var bbsNum = [
+                    ['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
+                    ['txtMount', 10, 2, 1], ['txtTheory', 12, 0, 1], ['txtGweight', 10, 3, 1],
+                    ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
+                    ['textSize4', 10, 2, 1]
+            ];
+			
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
 			q_sqlCount = 6;
@@ -196,7 +197,7 @@
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
-				q_cmbParse("cmbStype", q_getPara('vccst.stype'));
+                q_cmbParse("cmbStype", q_getPara('vccst.stype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
