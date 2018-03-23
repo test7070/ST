@@ -199,6 +199,10 @@
 				}
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('#txtVccatax').val(FormatNumber(t_tax));
+				}
+					
 				$('#txtTotal').val(FormatNumber(t_total));
 				if (t_float == 0)
 					$('#txtTotalus').val(0);
@@ -337,8 +341,8 @@
 					}
 				});
 				if (isinvosystem) {
-					$('.istax').hide();
-					$('#txtVccatax').show();
+						$('.istax').show();
+						$('#txtVccatax').show();
 				}
 				
 				if(q_getPara('sys.project').toUpperCase()=='BD' && r_rank>'6'){
@@ -1301,6 +1305,7 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
+					
 			}
 			var ret;
 			//勿刪
@@ -1806,15 +1811,15 @@
 						<td><input id="txtMoney" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
-							<input id="txtTax" type="text" class="txt num c1 istax" />
-							<input id="txtVccatax" type="text" class="txt num c1 " style="display:none;" />
+							<input id="txtTax" type="text" class="txt num c1" />
+							<input id="txtVccatax" type="text" class="txt num c1 istax" style="display:none;" />
 						</td>
 						<td>
 							<span style="float:left;display:block;width:10px;"> </span>
 							<select id="cmbTaxtype" style="float:left;width:80px;"> </select>
 						</td>
-						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
-						<td><input id="txtTotal" type="text" class="txt num c1 istax" /></td>
+						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
+						<td><input id="txtTotal" type="text" class="txt num c1 " /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWeight' class="lbl"> </a></td>
