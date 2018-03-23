@@ -22,7 +22,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus','txtBenifit'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq','txtProduct'];
+			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq'];
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -96,7 +96,12 @@
 						if (t_product.indexOf('管') > 0)
 							t_unit = '支';
 						else
-							t_unit = 'KG';
+							if (q_getPara('sys.project').toUpperCase()=='FP'){
+								t_unit = '片';
+							}else{
+								t_unit = 'KG';
+							}
+							
 						$('#txtUnit_' + j).val(t_unit);
 					}
 					//---------------------------------------
