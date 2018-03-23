@@ -22,7 +22,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus','txtBenifit'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq'];
+			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq','txtProduct'];
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -49,7 +49,7 @@
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
-				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
+				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],
 				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
@@ -187,7 +187,11 @@
 				if (t_price != 0) {
 					$('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
 				}
-				$('#txtWeight').val(FormatNumber(t_weight));
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('#txtWeight').val(0);
+				}else{
+					$('#txtWeight').val(FormatNumber(t_weight));
+				}
 				$('#txtMoney').val(FormatNumber(t_money));
 				$('#txtTax').val(FormatNumber(t_tax));
 				$('#txtTotal').val(FormatNumber(t_total));
@@ -682,8 +686,7 @@
 								as[i].eweight=q_sub(dec(as[i].weight),dec(as[i].vweight));
 							}
 							
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtUnit,txtStyle,txtOrdeno,txtNo2,txtSize'
-							, as.length, as, 'uno,productno,product,spec,radius,dime,width,lengthb,emount,eweight,oprice,ounit,style,ordeno,no2,size', 'txtUno');
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtUnit,txtStyle,txtOrdeno,txtNo2,txtSize' , as.length, as, 'uno,productno,product,spec,radius,dime,width,lengthb,emount,eweight,oprice,ounit,style,ordeno,no2,size', 'txtUno');
 							
 							$('#txtTel').val(as[0].tel);//電話
 							$('#cmbTrantype').val(as[0].trantype);//交運方式
@@ -1070,9 +1073,13 @@
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#txtStyle_' + j).blur(function() {
-							$('input[id*="txtProduct_"]').each(function() {
+							/*$('input[id*="txtProduct_"]').each(function() {
 								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
+							});*/ //alan
+							$('input[id*="txtProduct_"]').each(function() {
+								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+								$(this).attr('OldValue', $('#txtProduct_' + thisId).val());
 							});
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							ProductAddStyle(n);
