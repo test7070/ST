@@ -14,7 +14,10 @@
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"> </script>
 		<script type="text/javascript">
             var q_name = "ordcst_s";
-			aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,nick', 'txtTggno', 'tgg_b.aspx']);
+			aPop = new Array(
+				['txtTggno', 'lblTgg', 'tgg', 'noa,nick', 'txtTggno', 'tgg_b.aspx']
+				,['txtBproductno', '', 'ucaucc', 'noa,product', '0txtBproductno', 'ucaucc_b.aspx']
+				,['txtEproductno', '', 'ucaucc', 'noa,product', '0txtEproductno', 'ucaucc_b.aspx']);
             $(document).ready(function() {
                 main();
             });
@@ -48,11 +51,15 @@
 		        t_tggno = $.trim($('#txtTggno').val());
 		        t_tgg = $.trim($('#txtTgg').val());
 
-		        t_bdate = $('#txtBdate').val();
-		        t_edate = $('#txtEdate').val();
-		        t_bodate = $('#txtBodate').val();
-		        t_eodate = $('#txtEodate').val();
-				t_contract = $('#txtContract').val();
+		        t_bdate = $.trim($('#txtBdate').val());
+		        t_edate = $.trim($('#txtEdate').val());
+		        t_bodate = $.trim($('#txtBodate').val());
+		        t_eodate = $.trim($('#txtEodate').val());
+				t_contract = $.trim($('#txtContract').val());
+				
+				t_bproductno = $.trim($('#txtBproductno').val());
+				t_eproductno = $.trim($('#txtEproductno').val());
+				t_product = $.trim($('#txtProduct').val());
 				
 		        var t_where = " 1=1 " 
 		        + q_sqlPara2("kind", t_kind)
@@ -69,6 +76,13 @@
 		       	}
 		       	if(t_enda=='1'){
 		       		t_where += " and (enda=1 or exists(select noa from view_ordcs"+r_accy+" where view_ordcs"+r_accy+".noa=view_ordc"+r_accy+".noa and view_ordcs"+r_accy+".enda=1))";
+		       	}
+		       	
+		       	if(t_bproductno.length>0 || t_eproductno.length>0){
+					t_where += " and exists(select noa from view_ordcs"+r_accy+" where view_ordcs"+r_accy+".noa=view_ordc"+r_accy+".noa and view_ordcs"+r_accy+".productno between N'"+t_bproductno+"' and "+(t_eproductno.length>0?"N'"+t_eproductno+"'":"char(255)")+" )";		       		
+		       	}
+		       	if(t_product.length>0){
+		       		t_where += " and exists(select noa from view_ordcs"+r_accy+" where view_ordcs"+r_accy+".noa=view_ordc"+r_accy+".noa and charindex(N'"+t_product+"',view_ordcs"+r_accy+".product)>0)";
 		       	}
 		       	
 		        t_where = ' where=^^' + t_where + '^^ ';
@@ -138,6 +152,18 @@
 					<td>
 					<input class="txt" id="txtContract" type="text" style="width:215px; font-size:medium;" />
 					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td   style="width:35%;" ><a id='lblProductno'>品號</a></td>
+					<td style="width:65%;  ">
+					<input class="txt" id="txtBproductno" type="text" style="width:90px; font-size:medium;" />
+					<span style="display:inline-block; vertical-align:middle">&sim;</span>
+					<input class="txt" id="txtEproductno" type="text" style="width:93px; font-size:medium;" />
+					</td>
+				</tr>
+				<tr class='seek_tr'>
+					<td class='seek' style="width:20%;"><a id='lblProduct'>品名</a></td>
+					<td><input class="txt" id="txtProduct" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
 			</table>
 			<!--#include file="../inc/seek_ctrl.inc"-->
