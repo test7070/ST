@@ -28,12 +28,13 @@
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1], ['txtBenifit', 10, 0, 1]
 			];
-			var bbsNum = [
-				['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
-				['txtMount', 10, 2, 1], ['txtTheory', 12, 3, 1], ['txtGweight', 10, 3, 1],
-				['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
-				['textSize4', 10, 2, 1]
-			];
+            var bbsNum = [
+                    ['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
+                    ['txtMount', 10, 2, 1], ['txtTheory', 12, 0, 1], ['txtGweight', 10, 3, 1],
+                    ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
+                    ['textSize4', 10, 2, 1]
+            ];
+			
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
 			q_sqlCount = 6;
@@ -48,8 +49,8 @@
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
-				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
@@ -95,7 +96,12 @@
 						if (t_product.indexOf('管') > 0)
 							t_unit = '支';
 						else
-							t_unit = 'KG';
+							if (q_getPara('sys.project').toUpperCase()=='FP'){
+								t_unit = '片';
+							}else{
+								t_unit = 'KG';
+							}
+							
 						$('#txtUnit_' + j).val(t_unit);
 					}
 					//---------------------------------------
@@ -117,10 +123,14 @@
 					t_weights = q_float('txtWeight_' + j);
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
-					if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
-						t_moneys = q_mul(t_prices, t_weights);
-					} else {
-						t_moneys = q_mul(t_prices, t_mounts);
+					if (q_getPara('sys.project').toUpperCase()=='FP'){
+							t_moneys = q_mul(t_prices, t_weights);
+					}else{
+						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
+							t_moneys = q_mul(t_prices, t_weights);
+						} else {
+							t_moneys = q_mul(t_prices, t_mounts);
+						}
 					}
 					if (t_float == 0) {
 						t_moneys = round(t_moneys, 0);
@@ -137,12 +147,16 @@
 					t_money = q_add(t_money, t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 				}
+				calTax();
 				/*t_money = q_add(t_money,t_tranmoney);*/
-				t_total = t_money;
-				t_tax = 0;
-				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
+				/*t_total = t_money;
+				t_taxrate = parseFloat((q_getPara('sys.taxrate')) / 100);
 				if (!isinvosystem) {
 					switch ($('#cmbTaxtype').val()) {
+						case '0': // 無
+							t_tax = 0.05;
+							t_total = q_add(t_money, t_tax);
+							break;
 						case '1':
 							// 應稅
 							t_tax = round(q_mul(t_money, t_taxrate), 0);
@@ -177,26 +191,68 @@
 							break;
 						default:
 					}
-				}
+				
+				}*/
 				t_price = q_float('txtPrice');
 				if (t_price != 0) {
 					$('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
 				}
-				$('#txtWeight').val(FormatNumber(t_weight));
-				$('#txtMoney').val(FormatNumber(t_money));
-				$('#txtTax').val(FormatNumber(t_tax));
-				$('#txtTotal').val(FormatNumber(t_total));
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('#txtWeight').val(0);
+				}else{
+					$('#txtWeight').val(FormatNumber(t_weight));
+				}
 				if (t_float == 0)
 					$('#txtTotalus').val(0);
 				else
 					$('#txtTotalus').val(FormatNumber(t_moneyus));
 			}
+			function calTax() {
+                var t_money = 0, t_tax = 0, t_total = 0;
+                for (var j = 0; j < q_bbsCount; j++) {
+                    t_money += q_float('txtTotal_' + j);
+                }
+                t_total = t_money;
+                var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
+                switch ($('#cmbTaxtype').val()) {
+                    case '1': // 應稅
+                        t_tax = round(q_mul(t_money, t_taxrate), 0);
+                        t_total = q_add(t_money, t_tax);
+                        break;
+                    case '2': //零稅率
+                        t_tax = 0;
+                        t_total = q_add(t_money, t_tax);
+                        break;
+                    case '3': // 內含
+                        t_tax = round(q_mul(q_div(t_money, q_add(1, t_taxrate)), t_taxrate), 0);
+                        t_total = t_money;
+                        t_money = q_sub(t_total, t_tax);
+                        break;
+                    case '4': // 免稅
+                        t_tax = 0;
+                        t_total = q_add(t_money, t_tax);
+                        break;
+                    case '5': // 自定
+                        $('#txtTax').attr('readonly', false);
+                        $('#txtTax').css('background-color', 'white').css('color', 'black');
+                        t_tax = round(q_float('txtTax'), 0);
+                        t_total = q_add(t_money, t_tax);
+                        break;
+                    case '6': // 作廢-清空資料
+                        t_money = 0, t_tax = 0, t_total = 0;
+                        break;
+                    default:
+                }
+                $('#txtMoney').val(FormatNumber(t_money));
+                $('#txtTax').val(FormatNumber(t_tax));
+                $('#txtTotal').val(FormatNumber(t_total));
+            }
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
-				q_cmbParse("cmbStype", q_getPara('vccst.stype'));
+                q_cmbParse("cmbStype", q_getPara('vccst.stype'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
 				q_cmbParse("combPaytype", q_getPara('rc2.paytype'));
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
@@ -323,8 +379,8 @@
 					}
 				});
 				if (isinvosystem) {
-					$('.istax').hide();
-					$('#txtVccatax').show();
+						$('.istax').show();
+						$('#txtVccatax').show();
 				}
 				
 				if(q_getPara('sys.project').toUpperCase()=='BD' && r_rank>'6'){
@@ -677,8 +733,7 @@
 								as[i].eweight=q_sub(dec(as[i].weight),dec(as[i].vweight));
 							}
 							
-							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtUnit,txtStyle,txtOrdeno,txtNo2,txtSize'
-							, as.length, as, 'uno,productno,product,spec,radius,dime,width,lengthb,emount,eweight,oprice,ounit,style,ordeno,no2,size', 'txtUno');
+							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtUno,txtProductno,txtProduct,txtSpec,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtPrice,txtUnit,txtStyle,txtOrdeno,txtNo2,txtSize' , as.length, as, 'uno,productno,product,spec,radius,dime,width,lengthb,emount,eweight,oprice,ounit,style,ordeno,no2,size', 'txtUno');
 							
 							$('#txtTel').val(as[0].tel);//電話
 							$('#cmbTrantype').val(as[0].trantype);//交運方式
@@ -1065,9 +1120,13 @@
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#txtStyle_' + j).blur(function() {
-							$('input[id*="txtProduct_"]').each(function() {
+							/*$('input[id*="txtProduct_"]').each(function() {
 								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
+							});*/ //alan
+							$('input[id*="txtProduct_"]').each(function() {
+								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+								$(this).attr('OldValue', $('#txtProduct_' + thisId).val());
 							});
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							ProductAddStyle(n);
@@ -1232,11 +1291,10 @@
 				sum();
 			}
 			function btnPrint() {
-				//q_box('z_vccstp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
 				if (q_getPara('sys.project').toUpperCase()=='FP'){
-					q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
-					//q_box("z_vccstp_fp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp_fp', "95%", "95%", q_getMsg('popPrint'));
+					q_box("z_vccp_FP.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccp_FP', "95%", "95%", q_getMsg('popPrint'));
 				}else{
+					//q_box('z_vccstp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
 					q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
 				}
 			}
@@ -1285,6 +1343,7 @@
 				});
 				if (isinvosystem)
 					$('.istax').hide();
+					
 			}
 			var ret;
 			//勿刪
@@ -1790,15 +1849,15 @@
 						<td><input id="txtMoney" type="text" class="txt num c1" /></td>
 						<td><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td>
-							<input id="txtTax" type="text" class="txt num c1 istax" />
-							<input id="txtVccatax" type="text" class="txt num c1 " style="display:none;" />
+							<input id="txtTax" type="text" class="txt num c1" />
+							<input id="txtVccatax" type="text" class="txt num c1 istax" style="display:none;" />
 						</td>
 						<td>
 							<span style="float:left;display:block;width:10px;"> </span>
-							<select id="cmbTaxtype" style="float:left;width:80px;"> </select>
+							<select id="cmbTaxtype" style="float:left;width:80px;" onchange="calTax();"> </select>
 						</td>
-						<td><span> </span><a id='lblTotal' class="lbl istax"> </a></td>
-						<td><input id="txtTotal" type="text" class="txt num c1 istax" /></td>
+						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
+						<td><input id="txtTotal" type="text" class="txt num c1 " /></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblWeight' class="lbl"> </a></td>
@@ -1849,9 +1908,7 @@
 					<td align="center" style="width:230px;"><a id='lblMemos_st'> </a></td>
 				</tr>
 				<tr style='background:#cad3ff;'>
-					<td align="center">
-						<input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" />
-					</td>
+					<td align="center"><input class="btn" id="btnMinus.*" type="button" value='-' style=" font-weight: bold;" /></td>
 					<td><a id="lblNo.*" style="font-weight: bold;text-align: center;display: block;"> </a></td>
 					<td>
 						<input class="btn" id="btnUno.*" type="button" value='.' style="width:10%;"/>
