@@ -147,12 +147,16 @@
 					t_money = q_add(t_money, t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 				}
+				calTax();
 				/*t_money = q_add(t_money,t_tranmoney);*/
-				t_total = t_money;
-				t_tax = 0;
-				t_taxrate = parseFloat(q_getPara('sys.taxrate')) / 100;
+				/*t_total = t_money;
+				t_taxrate = parseFloat((q_getPara('sys.taxrate')) / 100);
 				if (!isinvosystem) {
 					switch ($('#cmbTaxtype').val()) {
+						case '0': // 無
+							t_tax = 0.05;
+							t_total = q_add(t_money, t_tax);
+							break;
 						case '1':
 							// 應稅
 							t_tax = round(q_mul(t_money, t_taxrate), 0);
@@ -187,7 +191,8 @@
 							break;
 						default:
 					}
-				}
+				
+				}*/
 				t_price = q_float('txtPrice');
 				if (t_price != 0) {
 					$('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
@@ -197,18 +202,51 @@
 				}else{
 					$('#txtWeight').val(FormatNumber(t_weight));
 				}
-				$('#txtMoney').val(FormatNumber(t_money));
-				$('#txtTax').val(FormatNumber(t_tax));
-				if (q_getPara('sys.project').toUpperCase()=='FP'){
-					$('#txtVccatax').val(FormatNumber(t_tax));
-				}
-					
-				$('#txtTotal').val(FormatNumber(t_total));
 				if (t_float == 0)
 					$('#txtTotalus').val(0);
 				else
 					$('#txtTotalus').val(FormatNumber(t_moneyus));
 			}
+			function calTax() {
+                var t_money = 0, t_tax = 0, t_total = 0;
+                for (var j = 0; j < q_bbsCount; j++) {
+                    t_money += q_float('txtTotal_' + j);
+                }
+                t_total = t_money;
+                var t_taxrate = q_div(parseFloat(q_getPara('sys.taxrate')), 100);
+                switch ($('#cmbTaxtype').val()) {
+                    case '1': // 應稅
+                        t_tax = round(q_mul(t_money, t_taxrate), 0);
+                        t_total = q_add(t_money, t_tax);
+                        break;
+                    case '2': //零稅率
+                        t_tax = 0;
+                        t_total = q_add(t_money, t_tax);
+                        break;
+                    case '3': // 內含
+                        t_tax = round(q_mul(q_div(t_money, q_add(1, t_taxrate)), t_taxrate), 0);
+                        t_total = t_money;
+                        t_money = q_sub(t_total, t_tax);
+                        break;
+                    case '4': // 免稅
+                        t_tax = 0;
+                        t_total = q_add(t_money, t_tax);
+                        break;
+                    case '5': // 自定
+                        $('#txtTax').attr('readonly', false);
+                        $('#txtTax').css('background-color', 'white').css('color', 'black');
+                        t_tax = round(q_float('txtTax'), 0);
+                        t_total = q_add(t_money, t_tax);
+                        break;
+                    case '6': // 作廢-清空資料
+                        t_money = 0, t_tax = 0, t_total = 0;
+                        break;
+                    default:
+                }
+                $('#txtMoney').val(FormatNumber(t_money));
+                $('#txtTax').val(FormatNumber(t_tax));
+                $('#txtTotal').val(FormatNumber(t_total));
+            }
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
@@ -1816,7 +1854,7 @@
 						</td>
 						<td>
 							<span style="float:left;display:block;width:10px;"> </span>
-							<select id="cmbTaxtype" style="float:left;width:80px;"> </select>
+							<select id="cmbTaxtype" style="float:left;width:80px;" onchange="calTax();"> </select>
 						</td>
 						<td><span> </span><a id='lblTotal' class="lbl"> </a></td>
 						<td><input id="txtTotal" type="text" class="txt num c1 " /></td>
