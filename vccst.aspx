@@ -28,12 +28,13 @@
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1], ['txtBenifit', 10, 0, 1]
 			];
-            var bbsNum = [
+			
+				var bbsNum = [
                     ['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
                     ['txtMount', 10, 2, 1], ['txtTheory', 12, 0, 1], ['txtGweight', 10, 3, 1],
                     ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
                     ['textSize4', 10, 2, 1]
-            ];
+				];
 			
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
@@ -101,7 +102,6 @@
 							}else{
 								t_unit = 'KG';
 							}
-							
 						$('#txtUnit_' + j).val(t_unit);
 					}
 					//---------------------------------------
@@ -148,51 +148,6 @@
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
 				}
 				calTax();
-				/*t_money = q_add(t_money,t_tranmoney);*/
-				/*t_total = t_money;
-				t_taxrate = parseFloat((q_getPara('sys.taxrate')) / 100);
-				if (!isinvosystem) {
-					switch ($('#cmbTaxtype').val()) {
-						case '0': // 無
-							t_tax = 0.05;
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '1':
-							// 應稅
-							t_tax = round(q_mul(t_money, t_taxrate), 0);
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '2':
-							//零稅率
-							t_tax = 0;
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '3':
-							// 內含
-							t_tax = q_sub(t_money, round(q_div(t_money, q_add(1, t_taxrate)), 0));
-							t_total = t_money;
-							t_money = q_sub(t_total, t_tax);
-							break;
-						case '4':
-							// 免稅
-							t_tax = 0;
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '5':
-							// 自定
-							$('#txtTax').attr('readonly', false);
-							$('#txtTax').css('background-color', 'white').css('color', 'black');
-							t_tax = round(q_float('txtTax'), 0);
-							t_total = q_add(t_money, t_tax);
-							break;
-						case '6':
-							// 作廢-清空資料
-							t_money = 0, t_tax = 0, t_total = 0;
-							break;
-						default:
-					}
-				
-				}*/
 				t_price = q_float('txtPrice');
 				if (t_price != 0) {
 					$('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
@@ -1251,9 +1206,21 @@
 				}//j
 				_bbsAssign();
 				size_change();
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'FP':
+						$('.SizeA').hide();
+						break;
+					default:
+						break;
+				}
 			}
 			function btnIns() {
+
+				
 				_btnIns();
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('#cmbStype').val(2); //榮泉預設加工(因大多數為加工單)
+				}
 				$('#cmbTaxtype').val(1);
 				Lock(1, {
 					opacity : 0
@@ -1328,6 +1295,13 @@
 			}
 			function refresh(recno) {
 				_refresh(recno);
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'FP':
+						$('.SizeA').hide();
+						break;
+					default:
+						break;
+				}
 				/*if (r_rank < 9) {
 					$('#btnImportVcce').css('display', 'none');
 				}*/
@@ -1383,6 +1357,13 @@
 			}
 			function readonly(t_para, empty) {
 				_readonly(t_para, empty);
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'FP':
+						$('.SizeA').hide();
+						break;
+					default:
+						break;
+				}
 				var WantDisabledArray = ['btnImportVcce', 'btnVcceImport'];
 				for (var k = 0; k < WantDisabledArray.length; k++) {
 					if (q_cur == 1 || q_cur == 2) {
@@ -1456,6 +1437,7 @@
 					$('input[id*="textSize"]').attr('disabled', 'disabled');
 				}
 				$('#cmbKind').val((($('#cmbKind').val()) ? $('#cmbKind').val() : q_getPara('vcc.kind')));
+				
 				var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
 				t_kind = t_kind.substr(0, 1);
 				if (t_kind == 'A') {
@@ -1892,8 +1874,8 @@
 					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td align="center" style="width:120px;"><a id='lblProduct_st'> </a></td>
-					<td align="center" id="Size"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
-					<td align="center" style="width:180px;" class="rs_hide"><a id='lblSizea_st'> </a></td>
+					<td align="center" id="Size" class="SizeA"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
+					<td align="center" style="width:400px;" class="rs_hide"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:30px;"><a id='lblUnit'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblWeight_st'> </a></td>
@@ -1920,7 +1902,7 @@
 					<td><input type="text" id="txtStyle.*" style="width:85%;text-align:center;" /></td>
 					<td><input type="text" id="txtProduct.*" style="width:95%;" /></td>
 					<!--<td><input class="txt c1" id="txtSpec.*" type="text"/></td>-->
-					<td>
+					<td class="SizeA">
 						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
 						<input class="txt num" id="textSize2.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
