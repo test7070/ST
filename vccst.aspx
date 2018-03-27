@@ -197,11 +197,8 @@
 				if (t_price != 0) {
 					$('#txtTranmoney').val(FormatNumber(round(q_mul(t_weight, t_price), 0)));
 				}
-				if (q_getPara('sys.project').toUpperCase()=='FP'){
-					$('#txtWeight').val(0);
-				}else{
 					$('#txtWeight').val(FormatNumber(t_weight));
-				}
+			
 				if (t_float == 0)
 					$('#txtTotalus').val(0);
 				else
