@@ -29,13 +29,21 @@
 				['txtTotalus', 10, 2, 1], ['txtWeight', 10, 3, 1], ['txtFloata', 10, 4, 1], ['txtBenifit', 10, 0, 1]
 			];
 			
+			if (q_getPara('sys.project').toUpperCase()=='FP'){
+				var bbsNum = [
+                    ['txtPrice', 15, 1, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 13, 0, 1],
+                    ['txtMount', 10, 2, 1], ['txtTheory', 12, 2, 0], ['txtGweight', 10, 3, 1],
+                    ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
+                    ['textSize4', 10, 2, 1]
+				];
+			}else{
 				var bbsNum = [
                     ['txtPrice', 15, 3, 1], ['txtTotal', 12, 2, 1, 1], ['txtWeight', 10, 3, 1],
                     ['txtMount', 10, 2, 1], ['txtTheory', 12, 0, 1], ['txtGweight', 10, 3, 1],
                     ['textSize1', 10, 3, 1], ['textSize2', 10, 2, 1], ['textSize3', 10, 3, 1],
                     ['textSize4', 10, 2, 1]
 				];
-			
+			}
 			var bbmMask = [];
 			var bbsMask = [['txtStyle', 'A']];
 			q_sqlCount = 6;
@@ -225,14 +233,7 @@
 					if ($('#txtMon').attr("readonly") == "readonly" && (q_cur == 1 || q_cur == 2))
 						q_msg($('#txtMon'), "月份要另外設定，請在" + q_getMsg('lblMemo') + "的第一個字打'*'字");
 				});*/
-				
-				if (q_getPara('sys.project').toUpperCase()=='FP'){
-					if ($('#cmbStype').val(2)){
-						$('.SizeA').show();
-					}else{
-						$('.SizeA').hide();
-					}
-				}
+
 				$("#cmbTypea").focus(function() {
 					var len = $(this).children().length > 0 ? $(this).children().length : 1;
 					$(this).attr('size', len + "");
@@ -1215,7 +1216,11 @@
 				size_change();
 				switch(q_getPara('sys.project').toUpperCase()){
 					case 'FP':
-						$('.SizeA').hide();
+						if ($('#cmbStype').val(2)){
+							$('.SizeA').show();
+						}else{
+							$('.SizeA').hide();
+						}
 						break;
 					default:
 						break;
@@ -1226,7 +1231,6 @@
 				if (q_getPara('sys.project').toUpperCase()=='FP'){
 					$('#cmbStype').val(2); //榮泉預設加工(因大多數為加工單)
 				}
-				
 				$('#cmbTaxtype').val(1);
 				Lock(1, {
 					opacity : 0
@@ -1358,7 +1362,11 @@
 				_readonly(t_para, empty);
 				switch(q_getPara('sys.project').toUpperCase()){
 					case 'FP':
-						$('.SizeA').hide();
+						if ($('#cmbStype').val(2)){
+							$('.SizeA').show();
+						}else{
+							$('.SizeA').hide();
+						}
 						break;
 					default:
 						break;
@@ -1576,6 +1584,28 @@
 					$('#txtPost2').val($('#combAddr').find("option:selected").val());
 				}
 			}
+			
+			
+				function showdiv(ele){  	///榮泉要求加工顯示厚寬長
+					var Value = ele.options[ele.options.selectedIndex].value;
+					if (q_getPara('sys.project').toUpperCase()=='FP'){
+						if( Value == 1 ){
+							$('.SizeA').hide();
+						}else if ( Value == 2 ){
+							$('.SizeA').show();
+						}else if ( Value == 3 ){
+							$('.SizeA').hide();
+						}
+					}else{
+						if( Value == 1 ){
+							$('.SizeA').show();
+						}else if ( Value == 2 ){
+							$('.SizeA').show();
+						}else if ( Value == 3 ){
+							$('.SizeA').show();
+						}
+					}
+				}
 		</script>
 		<style type="text/css">
 			#dmain {
@@ -1711,30 +1741,21 @@
 			<div class="dbbm">
 				<table class="tbbm" id="tbbm">
 					<tr style="height:1px;">
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td> </td>
-						<td class="tdZ"> </td>
+						<td> </td><td> </td><td> </td><td> </td><td> </td>
+						<td> </td><td> </td><td> </td><td class="tdZ"> </td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblType' class="lbl"> </a></td>
 						<td>
 							<select id="cmbTypea" class="txt" style="width:40%;"> </select>
-							<select id="cmbStype" class="txt" style="width:60%;"> </select>
+							<select id="cmbStype" class="txt" style="width:60%;" onChange="return showdiv(this)"> </select>
 						</td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"> </select></td>
 						<td> </td>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
-						<td class="tdZ">
-							<input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/>
-						</td>
+						<td class="tdZ"><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
 					</tr>
 					<tr>
 						<td><span> </span><a id='lblDatea' class="lbl"> </a></td>
@@ -1901,7 +1922,7 @@
 					<td><input type="text" id="txtStyle.*" style="width:85%;text-align:center;" /></td>
 					<td><input type="text" id="txtProduct.*" style="width:95%;" /></td>
 					<!--<td><input class="txt c1" id="txtSpec.*" type="text"/></td>-->
-					<td class="SizeA">
+					<td class="SizeA"  id="Sizes" >
 						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
 						<input class="txt num" id="textSize2.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
