@@ -226,6 +226,13 @@
 						q_msg($('#txtMon'), "月份要另外設定，請在" + q_getMsg('lblMemo') + "的第一個字打'*'字");
 				});*/
 				
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					if ($('#cmbStype').val(2)){
+						$('.SizeA').show();
+					}else{
+						$('.SizeA').hide();
+					}
+				}
 				$("#cmbTypea").focus(function() {
 					var len = $(this).children().length > 0 ? $(this).children().length : 1;
 					$(this).attr('size', len + "");
@@ -1215,12 +1222,11 @@
 				}
 			}
 			function btnIns() {
-
-				
 				_btnIns();
 				if (q_getPara('sys.project').toUpperCase()=='FP'){
 					$('#cmbStype').val(2); //榮泉預設加工(因大多數為加工單)
 				}
+				
 				$('#cmbTaxtype').val(1);
 				Lock(1, {
 					opacity : 0
@@ -1295,13 +1301,6 @@
 			}
 			function refresh(recno) {
 				_refresh(recno);
-				switch(q_getPara('sys.project').toUpperCase()){
-					case 'FP':
-						$('.SizeA').hide();
-						break;
-					default:
-						break;
-				}
 				/*if (r_rank < 9) {
 					$('#btnImportVcce').css('display', 'none');
 				}*/
