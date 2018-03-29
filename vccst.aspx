@@ -21,7 +21,12 @@
 			q_desc = 1;
 			q_tables = 's';
 			var q_name = "vcc";
-			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus','txtBenifit'];
+			if (q_getPara('sys.project').toUpperCase()=='FP'){
+				var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTax', 'txtTotalus','txtBenifit'];
+			}else{
+				var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtWeight', 'txtTotal', 'txtTax', 'txtTotalus','txtBenifit'];
+			}
+			
 			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq'];
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
@@ -1080,10 +1085,6 @@
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
 						$('#txtStyle_' + j).blur(function() {
-							/*$('input[id*="txtProduct_"]').each(function() {
-								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-								$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
-							});*/ //alan
 							$('input[id*="txtProduct_"]').each(function() {
 								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								$(this).attr('OldValue', $('#txtProduct_' + thisId).val());
@@ -1091,35 +1092,50 @@
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							ProductAddStyle(n);
 							sum();
-							$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+							if (q_getPara('sys.project').toUpperCase()=='FP'){
+							}else{
+								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+							}
 						});
 						//將虛擬欄位數值帶入實際欄位並計算公式----------------------------------------------------------
 						$('#textSize1_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if (q_getPara('sys.project').toUpperCase()=='FP'){
+								}else{
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								}
 							}
 						});
 						$('#textSize2_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if (q_getPara('sys.project').toUpperCase()=='FP'){
+								}else{
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								}
 							}
 						});
 						$('#textSize3_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if (q_getPara('sys.project').toUpperCase()=='FP'){
+								}else{
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								}
 							}
 						});
 						$('#textSize4_' + j).focusout(function() {
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if (q_getPara('sys.project').toUpperCase()=='FP'){
+								}else{
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								}
 							}
 						});
 						$('#txtSize_' + j).change(function(e) {
@@ -1175,7 +1191,10 @@
 								//nothing
 							}
 							sum();
-							$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if (q_getPara('sys.project').toUpperCase()=='FP'){
+								}else{
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								}
 						});
 						//-------------------------------------------------
 						$('#txtSpec_' + j).change(function() {
@@ -1201,7 +1220,10 @@
 							if (q_cur == 1 || q_cur == 2) {
 								var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								sum();
-								$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								if (q_getPara('sys.project').toUpperCase()=='FP'){
+								}else{
+									$('#txtWeight_' + n).val($('#txtTheory_' + n).val());
+								}
 							}
 						});
 						$('#txtOrdeno_' + j).click(function() {
