@@ -67,6 +67,9 @@
                         type : '0', //[14]
                         name : 'xip',
                         value : location.hostname
+                    }, {/*8 [15][16]*/
+                        type : '1',
+                        name : 'xcnoa'
                     }]
                 });
 
@@ -86,6 +89,8 @@
                 var t_key = q_getHref();
                 if (t_key[1] != undefined) {
                     $('#txtXnoa').val(t_key[1]);
+                    $('#txtXcnoa1').val(t_key[1]);
+                    $('#txtXcnoa2').val(t_key[1]);
                 }
 
                 if(r_len==4){                 
