@@ -1609,7 +1609,7 @@
 						if( Value == 1 ){
 							$('.SizeA').hide();
 						}else if ( Value == 2 ){
-							$('.SizeA').show();
+							$('.SizeA').hide();
 						}else if ( Value == 3 ){
 							$('.SizeA').hide();
 						}
