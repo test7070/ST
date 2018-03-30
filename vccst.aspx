@@ -58,7 +58,7 @@
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
-				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],
+				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,unit2', 'ucc_b.aspx'],
 				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
@@ -149,8 +149,15 @@
 					var t_styles = $.trim($('#txtStyle_' + j).val());
 					var t_unos = $.trim($('#txtUno_' + j).val());
 					var t_dimes = $.trim($('#txtDime_' + j).val());
-					if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
+					
+					
+					if (q_getPara('sys.project').toUpperCase()=='FP'){
+						if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
+							t_weight = q_add(t_weight, t_weights);
+					}else{
 						t_weight = q_add(t_weight, t_weights);
+					}
+					
 					t_mount = q_add(t_mount, t_mounts);
 					t_money = q_add(t_money, t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
@@ -209,6 +216,11 @@
             }
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
+				
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('.SizeA').hide();
+				}
+				
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
@@ -218,6 +230,7 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
+				
 				q_gt('spec', '', 0, 0, 0, "", r_accy);
 				var t_where = "where=^^ 1=0 ^^ stop=100";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -1231,17 +1244,13 @@
 				}//j
 				_bbsAssign();
 				size_change();
-				switch(q_getPara('sys.project').toUpperCase()){
-					case 'FP':
-						if ($('#cmbStype').val(2)){
-							$('.SizeA').show();
-						}else{
-							$('.SizeA').hide();
-						}
-						break;
-					default:
-						break;
+				
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('.SizeA').hide();
+				}else{
+					$('.SizeA').show();
 				}
+				
 			}
 			function btnIns() {
 				_btnIns();
@@ -1325,7 +1334,14 @@
 				/*if (r_rank < 9) {
 					$('#btnImportVcce').css('display', 'none');
 				}*/
-				
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'FP':
+						$('.Ordctd').hide();
+						$('.Ordctds').hide();
+						break;
+					default:
+						break;
+				}
 				size_change();
 				//q_popPost('txtProductno_');
 				$('input[id*="txtProduct_"]').each(function() {
@@ -1379,11 +1395,7 @@
 				_readonly(t_para, empty);
 				switch(q_getPara('sys.project').toUpperCase()){
 					case 'FP':
-						if ($('#cmbStype').val(2)){
-							$('.SizeA').show();
-						}else{
-							$('.SizeA').hide();
-						}
+						$('.SizeA').hide();
 						break;
 					default:
 						break;
@@ -1601,28 +1613,6 @@
 					$('#txtPost2').val($('#combAddr').find("option:selected").val());
 				}
 			}
-			
-			
-				function showdiv(ele){  	///榮泉要求加工顯示厚寬長
-					var Value = ele.options[ele.options.selectedIndex].value;
-					if (q_getPara('sys.project').toUpperCase()=='FP'){
-						if( Value == 1 ){
-							$('.SizeA').hide();
-						}else if ( Value == 2 ){
-							$('.SizeA').hide();
-						}else if ( Value == 3 ){
-							$('.SizeA').hide();
-						}
-					}else{
-						if( Value == 1 ){
-							$('.SizeA').show();
-						}else if ( Value == 2 ){
-							$('.SizeA').show();
-						}else if ( Value == 3 ){
-							$('.SizeA').show();
-						}
-					}
-				}
 		</script>
 		<style type="text/css">
 			#dmain {
