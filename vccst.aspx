@@ -52,17 +52,33 @@
 			brwNowPage = 0;
 			brwKey = 'noa';
 			//ajaxPath = "";
-			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
-				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
-				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
-				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,unit2', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
-				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
-				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-			);
+			
+				aPop = new Array(
+					['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
+					['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+					['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
+					['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
+					['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
+					/*['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],*/
+					['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucc_b.aspx'],
+					['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+					['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
+					['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
+				);
+			/*
+				aPop = new Array(
+					['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
+					['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+					['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
+					['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
+					['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
+					['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],
+					['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+					['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
+					['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
+				);
+		*/
+			
 			brwCount2 = 12;
 			var isinvosystem = false;
 			//購買發票系統
@@ -80,6 +96,7 @@
 				}
 				mainForm(1);
 			}
+			
 			var t_spec;
 			function sum() {
 				if (!(q_cur == 1 || q_cur == 2))
@@ -101,16 +118,16 @@
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
 					t_product = $.trim($('#txtProduct_' + j).val());
-					if (t_unit.length == 0 && t_product.length > 0) {
-						if (t_product.indexOf('管') > 0)
-							t_unit = '支';
-						else
-							if (q_getPara('sys.project').toUpperCase()=='FP'){
-								t_unit = '片';
-							}else{
+					
+					if (q_getPara('sys.project').toUpperCase()=='FP'){
+					}else{
+						if (t_unit.length == 0 && t_product.length > 0) {
+							if (t_product.indexOf('管') > 0)
+								t_unit = '支';
+							else
 								t_unit = 'KG';
-							}
-						$('#txtUnit_' + j).val(t_unit);
+							$('#txtUnit_' + j).val(t_unit);
+						}
 					}
 					//---------------------------------------
 					if (t_kind == 'A') {
@@ -174,6 +191,9 @@
 				else
 					$('#txtTotalus').val(FormatNumber(t_moneyus));
 			}
+			
+			
+			
 			function calTax() {
                 var t_money = 0, t_tax = 0, t_total = 0;
                 for (var j = 0; j < q_bbsCount; j++) {
@@ -370,7 +390,7 @@
 				}
 				
 			}
-			function q_boxClose(s2) {/// q_boxClose 2/4
+			function q_boxClose(s2) {/* q_boxClose 2/4 */
 				var ret;
 				switch (b_pop) {
 					case 'view_vcce_import':
@@ -404,7 +424,7 @@
 					case 'ordes':
 						if (q_cur > 0 && q_cur < 4) {// q_cur： 0 = 瀏覽狀態 1=新增 2=修改 3=刪除 4=查詢
 							b_ret = getb_ret();
-							/// q_box() 執行後，選取的資料
+							/* q_box() 執行後，選取的資料*/
 							if (!b_ret || b_ret.length == 0) {
 								b_pop = '';
 								return;
@@ -434,7 +454,7 @@
 							var t_where = "where=^^ noa='" + b_ret[0].noa + "'";
 							q_gt('view_orde', t_where, 0, 0, 0, "", r_accy);
 							AddRet = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtRadius,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2,txtUno,txtMount,txtWeight,txtPrice,txtSize,txtStyle', b_ret.length, b_ret, 'productno,product,radius,dime,width,lengthb,unit,noa,no2,uno,mount,weight,price,size,style', 'txtProductno');
-							/// 最後 aEmpField 不可以有【數字欄位】
+							/* 最後 aEmpField 不可以有【數字欄位】*/
 							for (var i = 0; i < AddRet.length; i++) {
 								$('#txtMount_' + i).change();
 							}
@@ -1088,7 +1108,7 @@
 					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
 				}
 			}
-			function bbsAssign() {/// 表身運算式
+			function bbsAssign() {  	/*表身運算式*/
 				for (var j = 0; j < q_bbsCount; j++) {
 					$('#lblNo_' + j).text(j + 1);
 					if (!$('#btnMinus_' + j).hasClass('isAssign')) {
@@ -1096,6 +1116,10 @@
 							$('input[id*="txtProduct_"]').each(function() {
 								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 								$(this).attr('OldValue', $('#txtProduct_' + thisId).val());
+							});
+							$('input[id*="txtUnit_"]').each(function() {
+								thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+								$(this).attr('OldValue', $('#txtUnit_' + thisId).val());
 							});
 							var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 							ProductAddStyle(n);
@@ -1345,6 +1369,10 @@
 				size_change();
 				//q_popPost('txtProductno_');
 				$('input[id*="txtProduct_"]').each(function() {
+					thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
+					$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
+				});
+				$('input[id*="txtUnit_"]').each(function() {
 					thisId = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
 					$(this).attr('OldValue', $('#txtProductno_' + thisId).val());
 				});
