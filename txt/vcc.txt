@@ -817,8 +817,9 @@ BEGIN TRY
 		update #tmpa
 		set ip=dbo.split(ip,'##',0),db=dbo.split(db,'##',1)
 		
-		update #tmpa
-		set ip=case when ip=@q_ip then '127.0.0.1' else ip end
+		--107/03/31 取消
+		--update #tmpa
+		--set ip=case when ip=@q_ip then '127.0.0.1' else ip end
 		
 		declare @vnoa nvarchar(50)
 		declare @vnoq nvarchar(50)

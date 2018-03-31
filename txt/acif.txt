@@ -96,8 +96,9 @@ insert #tacomp
 select ROW_NUMBER() over (order by noa),noa,acomp,nick,isnull(coin,''),ip,UPPER(dbname) from acomp
 where isnull(ip,'')!='' and isnull(dbname,'')!=''
 
-update #tacomp
-set ip=case when @qip=ip then '127.0.0.1' else ip end
+--107/03/31 取消
+--update #tacomp
+--set ip=case when @qip=ip then '127.0.0.1' else ip end
 
 declare @recno int
 declare @cno nvarchar(50)

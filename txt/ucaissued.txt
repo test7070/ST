@@ -45,8 +45,15 @@ declare @tmp table(
 	db nvarchar(10),
 	ip nvarchar(100)
 )
+
+--107/03/31
+--insert @tmp
+--select a.noa,b.acomp,dbname,case when len(isnull(ip,''))=0 or isnull(ip,'')=@q_ip then '127.0.0.1' else ip end
+--from @acomp a left join acomp b on a.noa=b.noa
+--where len(dbname)!=0
+
 insert @tmp
-select a.noa,b.acomp,dbname,case when len(isnull(ip,''))=0 or isnull(ip,'')=@q_ip then '127.0.0.1' else ip end
+select a.noa,b.acomp,dbname,ip
 from @acomp a left join acomp b on a.noa=b.noa
 where len(dbname)!=0
 

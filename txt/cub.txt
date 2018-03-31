@@ -1065,8 +1065,9 @@ declare @db nvarchar(20)=isnull((select dbname from acomp where noa=@ipto),'')
 declare @cmd nvarchar(MAX)=''
 declare @count int=0
 
-if(@q_ip=@ip)
-	set @ip='127.0.0.1'
+--107/03/31 取消
+--if(@q_ip=@ip)
+--	set @ip='127.0.0.1'
 
 if(@t_apv='checker')
 begin
@@ -1130,8 +1131,9 @@ begin
 end
 
 set @ip =isnull((select ip from acomp where noa=@ipfrom),'')
-if(@q_ip=@ip)
-	set @ip='127.0.0.1'
+--107/03/31 取消
+--if(@q_ip=@ip)
+--	set @ip='127.0.0.1'
 set @db =isnull((select dbname from acomp where noa=@ipfrom),'')
 
 if(@t_apv='approve')
