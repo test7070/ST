@@ -270,7 +270,6 @@
 				}
 				if(t_spec.length>0)
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
-					
 					} else{
 						q_cmbParse("combSpec", t_spec,'s');
 					}
