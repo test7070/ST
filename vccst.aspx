@@ -51,34 +51,19 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'noa';
-			//ajaxPath = "";
-			
-				aPop = new Array(
-					['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
-					['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-					['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-					['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
-					['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
-					/*['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],*/
-					['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucc_b.aspx'],
-					['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
-					['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
-					['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-				);
-			/*
-				aPop = new Array(
-					['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
-					['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-					['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-					['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
-					['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
-					['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],
-					['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
-					['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
-					['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-				);
-		*/
-			
+			//ajaxPath = "";			
+			aPop = new Array(
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
+				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
+				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
+				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
+				/*['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],*/
+				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucc_b.aspx'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
+				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
+			);
 			brwCount2 = 12;
 			var isinvosystem = false;
 			//購買發票系統
@@ -167,11 +152,10 @@
 					var t_unos = $.trim($('#txtUno_' + j).val());
 					var t_dimes = $.trim($('#txtDime_' + j).val());
 					
-					
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
-						if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
 							t_weight = q_add(t_weight, t_weights);
 					}else{
+						if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
 						t_weight = q_add(t_weight, t_weights);
 					}
 					
@@ -191,8 +175,6 @@
 				else
 					$('#txtTotalus').val(FormatNumber(t_moneyus));
 			}
-			
-			
 			
 			function calTax() {
                 var t_money = 0, t_tax = 0, t_total = 0;
@@ -236,11 +218,9 @@
             }
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
-				
 				if (q_getPara('sys.project').toUpperCase()=='FP'){
 					$('.SizeA').hide();
 				}
-				
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
@@ -1268,13 +1248,9 @@
 				}//j
 				_bbsAssign();
 				size_change();
-				
 				if (q_getPara('sys.project').toUpperCase()=='FP'){
 					$('.SizeA').hide();
-				}else{
-					$('.SizeA').show();
 				}
-				
 			}
 			function btnIns() {
 				_btnIns();
@@ -1574,6 +1550,7 @@
 				var re = /(\d{1,3})(?=(\d{3})+$)/g;
 				return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
 			}
+///////////////////////////////////////////////////////////
 			function tipShow() {
 				Lock(1);
 				tipInit();
@@ -1635,7 +1612,7 @@
 					});
 				}
 			}
-			function combAddr_chg() {/// 只有 comb 開頭，才需要寫 onChange() ，其餘 cmb 連結資料庫
+			function combAddr_chg() {   /*只有 comb 開頭，才需要寫 onChange() ，其餘 cmb 連結資料庫*/
 				if (q_cur == 1 || q_cur == 2) {
 					$('#txtAddr2').val($('#combAddr').find("option:selected").text());
 					$('#txtPost2').val($('#combAddr').find("option:selected").val());
