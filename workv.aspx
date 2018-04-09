@@ -93,9 +93,12 @@
 					    	}
 					    	for(var i=0;i<t_array.length;i++){
 					    		$('#txtUno_'+i).val(t_array[i]);
-					    		$('#txtUno_'+i).focusout();
+					    		$('#txtUno_'+i).css('color','black');
+					    		//$('#txtUno_'+i).focusout();
 					    	}
 					    	$('#btnFile').val('');
+					    	//檢查是否已有匯入
+					    	checkUno(0);
 					    };
 					}
 				});
@@ -104,7 +107,7 @@
                 	t_pmount = 0;
                 	t_maxNo2 = 0;
                 	for(var i=0;i<q_bbtCount;i++){
-                		t_no2 = parseInt($('#txtNo2__'+i).val())
+                		t_no2 = parseInt($('#txtNo2__'+i).val());
                 		t_maxNo2 = t_no2>t_maxNo2?t_no2:t_maxNo2;
                 	}
                 	//------------------------------------------
@@ -166,6 +169,14 @@
                 	$('#txtPmount_'+n).val(t_pmount);
                 });
             }
+            function checkUno(n){
+            	//檢查是否有重複匯入的
+            	var t_noa = $.trim($('#txtNoa').val());
+            	var t_uno = $.trim($('#txtUno_'+n).val());
+            	if(n<=q_bbsCount)
+            		q_func('qtxt.query.checkDuplicate_'+n, 'workv.txt,checkDuplicate,' + encodeURI(t_noa)+';'+encodeURI(t_uno),r_accy,1);
+            }
+            
             function getBbsNoq(strN){
             	for(var i=0;i<q_bbsCount;i++){
             		
@@ -176,6 +187,17 @@
             function q_funcPost(t_func, result) {
                 switch(t_func) {            	
                     default:
+                    	if(t_func.substring(0,26)=='qtxt.query.checkDuplicate_'){
+                    		var n = t_func.replace('qtxt.query.checkDuplicate_','');
+                    		var as = _q_appendData("tmp0", "", true, true);
+                    		if(as[0].n == "0"){
+                    			$('#txtUno_'+n).focusout();
+                    		}else{
+                    			//有重複的
+                    			$('#txtUno_'+n).css('color','red');
+                    		}	
+                    		checkUno(parseInt(n)+1);
+                    	}
                         break;
                 }
             }
