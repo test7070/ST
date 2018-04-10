@@ -22,7 +22,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTax', 'txtTotalus','txtBenifit'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq','txtUnit2'];
+			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq','txtUnit2','txtGweight'];
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -53,7 +53,7 @@
 			brwKey = 'noa';
 			//ajaxPath = "";			
 			aPop = new Array(
-				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_comp,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtAddr2,txtPaytype', 'cust_b.aspx'],
 				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
 				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
 				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
@@ -139,10 +139,13 @@
 					getTheory(j);
 					//---------------------------------------
 					t_weights = q_float('txtWeight_' + j);
+					t_mweights = q_float('txtMweight_' + j);
+					t_gweights = q_float('txtGweight_' + j);
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
 							t_moneys = q_mul(t_prices, t_weights);
+							t_tweight = (t_weights-t_mweights);
 					}else{
 						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							t_moneys = q_mul(t_prices, t_weights);
@@ -161,15 +164,17 @@
 					var t_dimes = $.trim($('#txtDime_' + j).val());
 					
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
-							t_weight = q_add(t_weight, t_weights);
+							//t_weight = q_add(t_weight, t_weights);
+							t_weight = q_add(t_weight, t_gweights); //因為有扣重問題 所以實際領重加總為總重
 					}else{
 						if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
-						t_weight = q_add(t_weight, t_weights);
+							t_weight = q_add(t_weight, t_weights);
 					}
 					
 					t_mount = q_add(t_mount, t_mounts);
 					t_money = q_add(t_money, t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
+					$('#txtGweight_' + j).val(FormatNumber(t_tweight));
 				}
 				calTax();
 				t_price = q_float('txtPrice');
@@ -1932,6 +1937,7 @@
 					<td align="center" style="width:100px;"><a id='lblWeight_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a><br><a id='lblTheory'> </a></td>
+					<td align="center" style="width:100px;">扣重</td>
 					<td align="center" style="width:100px;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:60px;">寄Y<BR>代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
@@ -1978,6 +1984,7 @@
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
 						<input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/>
 					</td>
+					<td><input id="txtMweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input class="txt" id="txtUsecoil.*" type="text" style="text-align:center;width:95%;"/></td>
 					<td>
