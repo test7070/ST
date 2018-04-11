@@ -1,0 +1,46 @@
+
+	SET QUOTED_IDENTIFIER ON
+	GO
+
+	alter function [dbo].[uccy_import](
+		@t_productno nvarchar(max)
+		,@t_bdime float
+		,@t_edime float
+		,@t_bwidth float
+		,@t_ewidth float
+		,@t_blengthb float
+		,@t_elengthb float)
+	returns @tmp table(
+		sel int identity(1,1)
+		,uno nvarchar(30)
+		,emount float
+		,eweight float
+		,datea nvarchar(20)
+		,productno nvarchar(20)
+		,product nvarchar(50)
+		,radius float
+		,dime float
+		,width float
+		,lengthb float
+		,spec nvarchar(30)
+		,storeno nvarchar(20)
+		,[class] nvarchar(20)
+		,[source] nvarchar(30)
+	) as
+	begin
+		insert into @tmp(uno,emount,eweight,datea,productno,product
+			,radius,dime,width,lengthb,spec,storeno,[class],[source])
+		select a.uno,a.emount,a.eweight,b.datea,b.productno,b.product
+			,b.radius,isnull(b.dime,0),isnull(b.width,0),isnull(b.lengthb,0)
+			,b.spec,b.storeno,b.[class],b.[source]
+		from uccy a
+		left join view_uccb b on a.uno=b.uno
+		order by productno,isnull(dime,0),isnull(width,0),isnull(lengthb,0)
+		
+		delete @tmp 
+		where not( (len(@t_productno)=0 or productno=@t_productno)
+			and (dime between @t_bdime and @t_edime)
+			and (width between @t_bwidth and @t_ewidth)
+			and (lengthb between @t_blengthb and @t_elengthb))
+		return
+	end	
