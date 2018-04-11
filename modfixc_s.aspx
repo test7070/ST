@@ -36,6 +36,12 @@
 				$('#txtBdate').datepicker();
 				$('#txtEdate').datepicker(); 
 				$('#txtNoa').focus();
+				
+                if (q_getPara('sys.project').toUpperCase()=='UJ') {
+                    $('.isNUJ').hide();
+                    $('#lblNoa').text('電腦編號');
+                }              
+                
 			}
 
 			function q_seekStr() {
@@ -60,6 +66,7 @@
                  	 
 				t_where = ' where=^^' + t_where + '^^ ';
 				return t_where;
+				
 			}
 		</script>
 		<style type="text/css">
@@ -86,22 +93,22 @@
 					<td class='seek'  style="width:20%;"><a id='lblNoa'> </a></td>
 					<td><input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
-				<tr class='seek_tr'>
+				<tr class='seek_tr isNUJ'>
 					<td class='seek'  style="width:20%;"><a id='lblFrame'> </a></td>
 					<td><input class="txt" id="txtFrame" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
-				<tr class='seek_tr'>
+				<tr class='seek_tr isNUJ'>
 					<td class='seek'  style="width:20%;"><a id='lblMechno'> </a></td>
 					<td>
 						<input class="txt" id="txtMechno" type="text" style="width:108px; font-size:medium;" />
 						<input class="txt" id="txtMech" type="text" style="width:100px; font-size:medium;" />
 					</td>
 				</tr>
-				<tr class='seek_tr'>
+				<tr class='seek_tr isNUJ'>
 					<td class='seek'  style="width:20%;"><a id='lblModnoa'> </a></td>
 					<td><input class="txt" id="txtModnoa" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
-				<tr class='seek_tr'>
+				<tr class='seek_tr isNUJ'>
 					<td class='seek'  style="width:20%;"><a id='lblInnoa'> </a></td>
 					<td><input class="txt" id="txtInnoa" type="text" style="width:215px; font-size:medium;" /></td>
 				</tr>
