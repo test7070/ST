@@ -322,9 +322,13 @@
                 
                 OrdenoAndNo2On_Change();
                 
-                if(q_getPara('sys.project').toUpperCase()=="BDV" || q_getPara('sys.project').toUpperCase()=="RS"){
+                if(q_getPara('sys.project').toUpperCase()=="BDV" 
+                	|| q_getPara('sys.project').toUpperCase()=="RS"){
                 	$('#btnBBTShow').hide();
                 }
+                if(q_getPara('sys.project').toUpperCase()=="BD"){
+                	$('#dbbt').show();
+                } 
             }
             
             function showSizeInfo(e){
@@ -335,6 +339,14 @@
             function q_boxClose(s2) {///   q_boxClose 2/4 /// 查詢視窗、客戶視窗、訂單視窗  關閉時執行
                 var ret;
                 switch (b_pop) {/// 重要：不可以直接 return ，最後需執行 originalClose();
+                	case 'uccy_import':
+                		q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtProduct,txtProductno,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtSource', b_ret.length, b_ret, 'uno,product,productno,radius,dime,width,lengthb,emount,eweight,source', 'txtUno,txtProduct,txtProductno', '__');
+                		
+                		/*q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtSize,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtSource,txtStyle,txtClass'
+	                        	, b_ret.length, b_ret
+								, 'productno,product,spec,spec,dime,width,lengthb,radius,size,noa,no2,price,mount,weight,total,memo,unit,source,style,class', 'txtProductno'); 
+                		*/
+                		break;
                     case 'quats':
                         if (q_cur > 0 && q_cur < 4) {
                             b_ret = getb_ret();
@@ -975,27 +987,46 @@
                             sum();
                         });
                         $('#btnOrdet_' + j).click(function() {
-                            
-                            var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-                            qBoxNo3id = n;
-							var t_where = ' 1=1 and radius=0 ';
-							var t_productno = trim($('#txtProductno_' + n).val());
-							var t_bdime = dec($('#txtDime_' + n).val())-0.8;
-							var t_edime = dec($('#txtDime_' + n).val())+0.8;
-							var t_width = dec($('#txtWidth_' + n).val());
-							var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
-							var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
-							
-							var t_array = {productno:t_productno
-									,bdime:t_bdime
-									,edime:t_edime
-									,width:t_width
-									,blength:t_blengthb
-									,elength:t_elengthb}
-
-							q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;;" + encodeURIComponent(JSON.stringify(t_array)), 'uccc', "95%", "95%", q_getMsg('popUccc'));
+                        	var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                         	
-                        
+                            if(q_getPara('sys.project').toUpperCase() == 'BD'){
+                            	var t_productno = $.trim($('#txtTggno').val());
+                            	var t_bdime = dec($('#txtDime_' + n).val())-0.8;
+                            	var t_edime = dec($('#txtDime_' + n).val())+0.8;
+                            	var t_bwidth = dec($('#txtWidth_' + n).val());
+                            	var t_ewidth = dec($('#txtWidth_' + n).val());
+								var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
+								var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
+								
+		                        var t_where = '';
+		                        q_box("uccy_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + ";" + JSON.stringify({
+		                            productno : t_productno,
+		                            bdime : t_bdime,
+		                            edime : t_edime,
+		                            bwidth : t_bwidth,
+		                            ewidth : t_ewidth,
+		                            blengthb : t_blengthb,
+		                            elengthb : t_elengthb
+		                        }), "uccy_import", "95%", "95%", '');
+                            }else{
+	                            qBoxNo3id = n;
+								var t_where = ' 1=1 and radius=0 ';
+								var t_productno = trim($('#txtProductno_' + n).val());
+								var t_bdime = dec($('#txtDime_' + n).val())-0.8;
+								var t_edime = dec($('#txtDime_' + n).val())+0.8;
+								var t_width = dec($('#txtWidth_' + n).val());
+								var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
+								var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
+								
+								var t_array = {productno:t_productno
+										,bdime:t_bdime
+										,edime:t_edime
+										,width:t_width
+										,blength:t_blengthb
+										,elength:t_elengthb}
+	
+								q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;;" + encodeURIComponent(JSON.stringify(t_array)), 'uccc', "95%", "95%", q_getMsg('popUccc'));
+                            }
                         });
                     }
                 }
