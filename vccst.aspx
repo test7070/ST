@@ -144,7 +144,11 @@
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
+						if (t_unit == '式') {
+							t_moneys = q_mul(t_prices, t_mounts);
+						} else {
 							t_moneys = q_mul(t_prices, t_weights);
+						}
 							t_tweight = (t_weights-t_mweights);
 					}else{
 						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
