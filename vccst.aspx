@@ -22,7 +22,7 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTax', 'txtTotalus','txtBenifit'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq'];
+			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq','txtUnit2','txtGweight'];
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -51,34 +51,19 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'noa';
-			//ajaxPath = "";
-			
-				aPop = new Array(
-					['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
-					['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-					['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-					['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
-					['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
-					/*['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],*/
-					['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucc_b.aspx'],
-					['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
-					['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
-					['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-				);
-			/*
-				aPop = new Array(
-					['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtPaytype', 'cust_b.aspx'],
-					['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
-					['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
-					['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
-					['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
-					['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],
-					['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
-					['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
-					['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-				);
-		*/
-			
+			//ajaxPath = "";			
+			aPop = new Array(
+				['txtCustno', 'lblCust', 'cust', 'noa,comp,nick,tel,zip_fact,addr_comp,addr_fact,paytype', 'txtCustno,txtComp,txtNick,txtTel,txtPost,txtAddr,txtAddr2,txtPaytype', 'cust_b.aspx'],
+				['txtSalesno', 'lblSales', 'sss', 'noa,namea', 'txtSalesno,txtSales', 'sss_b.aspx'],
+				['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'],
+				['txtAddr', '', 'view_road', 'memo,zipcode', '0txtAddr,txtPost', 'road_b.aspx'],
+				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
+				/*['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],*/
+				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucc_b.aspx'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
+				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
+			);
 			brwCount2 = 12;
 			var isinvosystem = false;
 			//購買發票系統
@@ -111,15 +96,23 @@
 				var t_mount = 0, t_price = 0, t_money = 0, t_moneyus = 0, t_weight = 0, t_total = 0, t_tax = 0;
 				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
 				var t_unit = '';
+				var t_unit2 = '';
 				var t_float = q_float('txtFloata');
 				var t_tranmoney = dec($('#txtTranmoney').val());
 				var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
 				t_kind = t_kind.substr(0, 1);
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
+					t_unit2 = $.trim($('#txtUnit2_' + j).val()).toUpperCase();
 					t_product = $.trim($('#txtProduct_' + j).val());
-					
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
+						if (t_unit2.length == 0 && t_product.length > 0) {
+							if (t_product.indexOf('管') > 0)
+								t_unit2 = '支';
+							else
+								t_unit2 = 'KG';
+							$('#txtUnit2_' + j).val(t_unit2);
+						}
 					}else{
 						if (t_unit.length == 0 && t_product.length > 0) {
 							if (t_product.indexOf('管') > 0)
@@ -146,10 +139,17 @@
 					getTheory(j);
 					//---------------------------------------
 					t_weights = q_float('txtWeight_' + j);
+					t_mweights = q_float('txtMweight_' + j);
+					t_gweights = q_float('txtGweight_' + j);
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
+						if (t_unit == '式') {
+							t_moneys = q_mul(t_prices, t_mounts);
+						} else {
 							t_moneys = q_mul(t_prices, t_weights);
+						}
+							t_tweight = (t_weights-t_mweights);
 					}else{
 						if (t_unit.length == 0 || t_unit == 'KG' || t_unit == 'M2' || t_unit == 'M' || t_unit == '批' || t_unit == '公斤' || t_unit == '噸' || t_unit == '頓') {
 							t_moneys = q_mul(t_prices, t_weights);
@@ -167,17 +167,18 @@
 					var t_unos = $.trim($('#txtUno_' + j).val());
 					var t_dimes = $.trim($('#txtDime_' + j).val());
 					
-					
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
+							//t_weight = q_add(t_weight, t_weights);
+							t_weight = q_add(t_weight, t_gweights); //因為有扣重問題 所以實際領重加總為總重
+					}else{
 						if (!(t_styles == '' && t_unos == '' && t_dimes == 0))
 							t_weight = q_add(t_weight, t_weights);
-					}else{
-						t_weight = q_add(t_weight, t_weights);
 					}
 					
 					t_mount = q_add(t_mount, t_mounts);
 					t_money = q_add(t_money, t_moneys);
 					$('#txtTotal_' + j).val(FormatNumber(t_moneys));
+					$('#txtGweight_' + j).val(FormatNumber(t_tweight));
 				}
 				calTax();
 				t_price = q_float('txtPrice');
@@ -191,8 +192,6 @@
 				else
 					$('#txtTotalus').val(FormatNumber(t_moneyus));
 			}
-			
-			
 			
 			function calTax() {
                 var t_money = 0, t_tax = 0, t_total = 0;
@@ -236,11 +235,13 @@
             }
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
-				
 				if (q_getPara('sys.project').toUpperCase()=='FP'){
 					$('.SizeA').hide();
+					$('.Unit2').show();
+				}else{
+					$('.SizeA').show();
+					$('.Unit2').hide();
 				}
-				
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				q_cmbParse("cmbTypea", q_getPara('vcc.typea'));
@@ -250,7 +251,7 @@
 				q_cmbParse("cmbTrantype", q_getPara('sys.tran'));
 				q_cmbParse("cmbTaxtype", q_getPara('sys.taxtype'));
 				q_cmbParse("cmbKind", q_getPara('sys.stktype'));
-				
+				q_cmbParse("cmbKd", q_getPara('sys.project'));
 				q_gt('spec', '', 0, 0, 0, "", r_accy);
 				var t_where = "where=^^ 1=0 ^^ stop=100";
 				q_gt('custaddr', t_where, 0, 0, 0, "");
@@ -1268,13 +1269,14 @@
 				}//j
 				_bbsAssign();
 				size_change();
-				
+					$('.Unit2').hide();
 				if (q_getPara('sys.project').toUpperCase()=='FP'){
 					$('.SizeA').hide();
+					$('.Unit2').show();
 				}else{
 					$('.SizeA').show();
+					$('.Unit2').hide();
 				}
-				
 			}
 			function btnIns() {
 				_btnIns();
@@ -1424,6 +1426,7 @@
 				switch(q_getPara('sys.project').toUpperCase()){
 					case 'FP':
 						$('.SizeA').hide();
+						$('.Unit2').show();
 						break;
 					default:
 						break;
@@ -1574,6 +1577,7 @@
 				var re = /(\d{1,3})(?=(\d{3})+$)/g;
 				return xx + arr[0].replace(re, "$1,") + (arr.length == 2 ? "." + arr[1] : "");
 			}
+///////////////////////////////////////////////////////////
 			function tipShow() {
 				Lock(1);
 				tipInit();
@@ -1635,7 +1639,7 @@
 					});
 				}
 			}
-			function combAddr_chg() {/// 只有 comb 開頭，才需要寫 onChange() ，其餘 cmb 連結資料庫
+			function combAddr_chg() {   /*只有 comb 開頭，才需要寫 onChange() ，其餘 cmb 連結資料庫*/
 				if (q_cur == 1 || q_cur == 2) {
 					$('#txtAddr2').val($('#combAddr').find("option:selected").text());
 					$('#txtPost2').val($('#combAddr').find("option:selected").val());
@@ -1787,7 +1791,7 @@
 						</td>
 						<td><span> </span><a id='lblKind' class="lbl"> </a></td>
 						<td><select id="cmbKind" class="txt c1"> </select></td>
-						<td> </td>
+						<td><select id="cmbKd" class="txt c1" style="display:none;"> </select></td>
 						<td><span> </span><a id='lblNoa' class="lbl"> </a></td>
 						<td colspan="2"><input id="txtNoa" type="text" class="txt c1"/></td>
 						<td class="tdZ"><input type="button" id="btnTip" value="?" style="float:right;" onclick="tipShow()"/></td>
@@ -1874,7 +1878,7 @@
 						</td>
 						<td><input id="btnOrdeno" type="button" class="lbl"/></td>
 						<td colspan="2">
-							<input id="btnImportVcce" type="button"/>
+							<input id="btnImportVcce" type="button" />
 							<input id="btnVcceImport" type="button" title="cut cubu"/>
 						</td>
 					</tr>
@@ -1931,11 +1935,13 @@
 					<td align="center" style="width:120px;"><a id='lblProduct_st'> </a></td>
 					<td align="center" id="Size" class="SizeA"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:400px;" class="rs_hide"><a id='lblSizea_st'> </a></td>
-					<td align="center" style="width:30px;"><a id='lblUnit'> </a></td>
+					<td align="center" style="width:40px;"><a id='lblUnit'> </a></td>
+					<td align="center" style="width:40px;" class="Unit2">發票<a id='lblUnit_s'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:100px;"><a id='lblWeight_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a><br><a id='lblTheory'> </a></td>
+					<td align="center" style="width:100px;">扣重</td>
 					<td align="center" style="width:100px;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:60px;">寄Y<BR>代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
@@ -1974,6 +1980,7 @@
 					</td>
 					<td class="rs_hide"><input id="txtSize.*" type="text" style="width:95%;" /></td>
 					<td><input id="txtUnit.*" type="text" class="txt num" style="width:95%;text-align: center;"/></td>
+					<td class="Unit2"><input id="txtUnit2.*" type="text" class="txt num" style="width:95%;text-align: center;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtPrice.*" type="text" class="txt num" style="width:95%;"/></td>
@@ -1981,6 +1988,7 @@
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
 						<input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/>
 					</td>
+					<td><input id="txtMweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input class="txt" id="txtUsecoil.*" type="text" style="text-align:center;width:95%;"/></td>
 					<td>

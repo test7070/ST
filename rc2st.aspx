@@ -297,16 +297,25 @@
 				$('#lblOrdc').click(function() {
 					if (!(q_cur == 1 || q_cur == 2))
 						return;
-					if(q_getPara('sys.project').toUpperCase()=='RK'){
-                		var t_tggno = $.trim($('#txtTggno').val());
-                		var t_kind = $('#cmbKind').val();
-                		var t_noa = $('#txtNoa').val();
-                		var t_where ='';
-                		q_box("ordc_import_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({tggno:t_tggno,kind:t_kind,noa:t_noa,page:'rc2st'}), "ordc_import", "95%", "95%", '');
-                	}
-                	else{
-                		lblOrdc();
-                	}
+					switch(q_getPara('sys.project').toUpperCase()){
+						case 'RK':
+							var t_tggno = $.trim($('#txtTggno').val());
+	                		var t_kind = $('#cmbKind').val();
+	                		var t_noa = $('#txtNoa').val();
+	                		var t_where ='';
+	                		q_box("ordc_import_rk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({tggno:t_tggno,kind:t_kind,noa:t_noa,page:'rc2st'}), "ordc_import", "95%", "95%", '');
+							break;
+						case 'BD':
+							var t_tggno = $.trim($('#txtTggno').val());
+	                		var t_kind = ''; //$('#cmbKind').val();
+	                		var t_noa = $('#txtNoa').val();
+	                		var t_where ='';
+	                		q_box("ordc_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where+";"+";"+JSON.stringify({tggno:t_tggno,kind:t_kind,noa:t_noa,page:'rc2st'}), "ordc_import", "95%", "95%", '');
+							break;
+						default:
+							lblOrdc();
+							break;
+					}
 				});
 				
 				$('#cmbKind').change(function() {
@@ -418,9 +427,9 @@
 	                        	, newArray.length, newArray
 								, 'productno,product,spec,spec,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,unit,errmemo', 'txtProductno'); 
                         	}else{
-                        		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit'
+                        		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtSize,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtSource,txtStyle,txtClass'
 	                        	, newArray.length, newArray
-								, 'productno,product,spec,spec,dime,width,lengthb,radius,noa,no2,price,mount,weight,total,memo,unit', 'txtProductno'); 
+								, 'productno,product,spec,spec,dime,width,lengthb,radius,size,noa,no2,price,mount,weight,total,memo,unit,source,style,class', 'txtProductno'); 
                         	}    	
                         	sum();
                         }else{
@@ -1432,6 +1441,9 @@
 				$('#cmbKind').val((($('#cmbKind').val()) ? $('#cmbKind').val() : q_getPara('vcc.kind')));
 				var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
 				t_kind = t_kind.substr(0, 1);
+				//隆昊固定顯示厚、寬、長
+				t_kind = q_getPara('sys.project').toUpperCase()=='BD'?'A':t_kind;
+				
 				if (t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					$('#Size').css('width', '220px');

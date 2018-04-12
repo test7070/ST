@@ -40,6 +40,10 @@
 				$('#txtBapvdate').datepicker();
 				$('#txtEapvdate').datepicker(); 
                 $('#txtNoa').focus();
+                
+                if (q_getPara('sys.project').toUpperCase()=='UJ') {
+                    $('.isNUJ').hide();
+                } 
             }
 
             function q_seekStr() {
@@ -87,7 +91,7 @@
 					<input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
 					</td>
 				</tr>
-				<tr class='seek_tr'>
+				<tr class='seek_tr isNUJ'>
 					<td   style="width:35%;" ><a id='lblApvdate'></a></td>
 					<td style="width:65%;  ">
 					<input class="txt" id="txtBapvdate" type="text" style="width:90px; font-size:medium;" />
