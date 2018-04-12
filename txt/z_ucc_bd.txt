@@ -1030,18 +1030,18 @@ z_ucc_bd01:--z_ucc_bd01
 	
 	select gno
 		,indate a01
-		,itype a02a
-		,citype a02b
-		,storeno a03
-		,[source] a04
-		,uno a05
-		,spec a06
-		,[class] a07
-		,productno a08
-		,CAST(dime as nvarchar)+'*'+CAST(width as nvarchar)+'*'+case when lengthb=0 then 'C' else CAST(lengthb as nvarchar) end a09
-		,dbo.getComma(mount,-1) a10
-		,dbo.getComma([weight],-1) a11
-		,memo a12
+		--,itype 
+		--,citype
+		,storeno a02
+		,[source] a03
+		,uno a04
+		,spec a05
+		,[class] a06
+		,productno a07
+		,CAST(dime as nvarchar)+'*'+CAST(width as nvarchar)+'*'+case when lengthb=0 then 'C' else CAST(lengthb as nvarchar) end a08
+		,dbo.getComma(mount,-1) a09
+		,dbo.getComma([weight],-1) a10
+		,memo a11
 	from #z_ucc_bd01
 	order by productno,pno,recno
 	drop table #z_ucc_bd01;
