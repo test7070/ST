@@ -1,8 +1,15 @@
+USE [ST]
+GO
 
-	SET QUOTED_IDENTIFIER ON
-	GO
+/****** Object:  UserDefinedFunction [dbo].[uccy_import]    Script Date: 2018/4/12 上午 08:44:43 ******/
+SET ANSI_NULLS ON
+GO
 
-	alter function [dbo].[uccy_import](
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+	ALTER function [dbo].[uccy_import](
 		@t_productno nvarchar(max)
 		,@t_bdime float
 		,@t_edime float
@@ -24,6 +31,7 @@
 		,lengthb float
 		,spec nvarchar(30)
 		,storeno nvarchar(20)
+		,store nvarchar(30)
 		,[class] nvarchar(20)
 		,[source] nvarchar(30)
 	) as
@@ -37,6 +45,10 @@
 		left join view_uccb b on a.uno=b.uno
 		order by productno,isnull(dime,0),isnull(width,0),isnull(lengthb,0)
 		
+		update @tmp set store=case when len(isnull(b.store,''))=0 then a.storeno else b.store end
+		from @tmp a
+		left join store b on a.storeno=b.noa
+
 		delete @tmp 
 		where not( (len(@t_productno)=0 or productno=@t_productno)
 			and (dime between @t_bdime and @t_edime)
@@ -44,3 +56,6 @@
 			and (lengthb between @t_blengthb and @t_elengthb))
 		return
 	end	
+GO
+
+

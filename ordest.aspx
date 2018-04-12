@@ -340,8 +340,10 @@
                 var ret;
                 switch (b_pop) {/// 重要：不可以直接 return ，最後需執行 originalClose();
                 	case 'uccy_import':
+                		
                 		q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtProduct,txtProductno,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtSource', b_ret.length, b_ret, 'uno,product,productno,radius,dime,width,lengthb,emount,eweight,source', 'txtUno,txtProduct,txtProductno', '__');
                 		
+                		$('#dbbt').show();
                 		/*q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtSize,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtSource,txtStyle,txtClass'
 	                        	, b_ret.length, b_ret
 								, 'productno,product,spec,spec,dime,width,lengthb,radius,size,noa,no2,price,mount,weight,total,memo,unit,source,style,class', 'txtProductno'); 

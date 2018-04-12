@@ -88,6 +88,7 @@
 					<td align="center" style="width:80px;max-width: 80px;">等級</td>
 					<td align="center" style="width:80px;max-width: 80px;">規格</td>
 					<td align="center" style="width:80px;max-width: 80px;">鋼廠</td>
+					<td align="center" style="width:80px;max-width: 80px;">倉庫</td>
 					<td align="center" style="width:80px;max-width: 80px;">數量</td>
 					<td align="center" style="width:80px;max-width: 80px;">重量</td>
 				</tr>
@@ -108,6 +109,7 @@
 					<td align="center" style="width:80px;max-width: 80px;">等級</td>
 					<td align="center" style="width:80px;max-width: 80px;">規格</td>
 					<td align="center" style="width:80px;max-width: 80px;">鋼廠</td>
+					<td align="center" style="width:80px;max-width: 80px;">倉庫</td>
 					<td align="center" style="width:80px;max-width: 80px;">數量</td>
 					<td align="center" style="width:80px;max-width: 80px;">重量</td>
 				</tr>
@@ -124,6 +126,7 @@
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtClass.*" style="float:left;width:95%;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtSpec.*" style="float:left;width:95%;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtSource.*" style="float:left;width:95%;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtStore.*" style="float:left;width:95%;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtEmount.*" style="float:left;width:95%;text-align: right;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtEweight.*" style="float:left;width:95%;text-align: right;"/></td>
 				</tr>
