@@ -56,7 +56,7 @@
 					},{
 						type : '0', //[3]
 						name : 'itype',
-						value : [q_getPara('report.all')].concat(q_getPara('uccc.itype'))
+						value : q_getPara('uccc.itype')
 					}, {
 						type : '5', //[4] 1
 						name : 'xbproduct',
@@ -78,28 +78,32 @@
 						type : '1', //[12][13] 6
 						name : 'xradius'
 					}, {
-                        type : '8',//[14] 7
-                        name : 'xstore',
-                        value : t_store.split(',')
-                    }, {
-						type : '6', //[15] 8
+						type : '6', //[14] 7
 						name : 'xplace'
 					}, {
-						type : '6', //[16] 9
+						type : '6', //[15] 8
 						name : 'xuno'
 					}, {
-						type : '6', //[17] 10
+						type : '6', //[16] 9
 						name : 'xcust'
 					}, {
-						type : '6', //[18] 11
+						type : '6', //[17] 10
 						name : 'xspec'
 					}, {
+                        type : '8',//[18] 11
+                        name : 'xitype',
+                        value : q_getPara('uccc.itype').split(',')
+                    }, {
 						type : '6', //[19] 12
 						name : 'xdate'
 					}, {
                         type : '8',//[20] 13
                         name : 'xdetail',
                         value : "1@明細".split(',')
+                    }, {
+                        type : '8',//[21] 14
+                        name : 'xstore',
+                        value : t_store.split(',')
                     }]
 				});
 				q_popAssign();
