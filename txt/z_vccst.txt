@@ -333,81 +333,179 @@ from @tmp group by cust
 select * from @tmp order by cust,gno;
 -----------------------------------------------------------------------------------------------
 z_vcc_bd1:--z_vcc_bd1
-SET QUOTED_IDENTIFIER OFF
-declare @t_bdate nvarchar(10)
-declare @t_edate nvarchar(10)
-declare @t_bpno nvarchar(35)
-declare @t_epno nvarchar(35)
-declare @t_bcust nvarchar(10)
-declare @t_ecust nvarchar(10)
-declare @t_stype nvarchar(20)
-declare @t_bradius float
-declare @t_eradius float
-declare @t_bwidth float
-declare @t_ewidth float
-declare @t_bdime float
-declare @t_edime float
-declare @t_blengthb float
-declare @t_elengthb float
-set @t_bdate = case when '#non'=[2] then '' else [2] end
-set @t_edate = case when '#non'=[3] then char(255) else [3] end
-set @t_bpno = case when '#non'=[6] then '' else [6] end
-set @t_epno = case when '#non'=[7] then char(255) else [7] end
-set @t_bcust = case when '#non'=[8] then '' else [8] end
-set @t_ecust = case when '#non'=[9] then char(255) else [9] end
-set @t_stype = case when '#non'=[10] then '' else [10] end
-set @t_bradius = case when '#non'=[13] then 0.00 else cast([13] as float) end
-set @t_eradius = case when '#non'=[14] then 9999.99 else cast([14] as float) end
-set @t_bwidth = case when '#non'=[15] then 0.00 else cast([15] as float)end
-set @t_ewidth = case when '#non'=[16] then 9999.99 else cast([16] as float) end
-set @t_bdime = case when '#non'=[17] then 0.000 else cast([17] as float) end
-set @t_edime = case when '#non'=[18] then 999.990 else cast([18] as float) end
-set @t_blengthb = case when '#non'=[19] then 0.0 else cast([19] as float) end
-set @t_elengthb = case when '#non'=[20] then 99999.9 else cast([20] as float) end
-declare @tmp table(
-	gno nvarchar(10),
-	typea nvarchar(10),
-	noa nvarchar(100),
-	nob nvarchar(100),
-	noq nvarchar(5),
-	datea nvarchar(30),
-	cust nvarchar(100),
-	uno nvarchar(50),
-	product nvarchar(50),
-	spec nvarchar(30),
-	size nvarchar(30),
-	mount float,
-	weight float,
-	price float,
-	total float,
-	total2 float
-)
+	SET QUOTED_IDENTIFIER OFF
+	declare @t_bdate nvarchar(10) = case when '#non'=[2] then '' else [2] end
+	declare @t_edate nvarchar(10) = case when '#non'=[3] then char(255) else [3] end
+	declare @t_bpno nvarchar(35) = case when '#non'=[6] then '' else [6] end
+	declare @t_epno nvarchar(35) = case when '#non'=[7] then char(255) else [7] end
+	declare @t_bcust nvarchar(10) = case when '#non'=[8] then '' else [8] end
+	declare @t_ecust nvarchar(10) = case when '#non'=[9] then char(255) else [9] end
+	declare @t_stype nvarchar(20) = case when '#non'=[10] then '' else [10] end
+	declare @t_bradius float = case when '#non'=[13] then 0.00 else cast([13] as float) end
+	declare @t_eradius float = case when '#non'=[14] then 9999.99 else cast([14] as float) end
+	declare @t_bwidth float = case when '#non'=[15] then 0.00 else cast([15] as float)end
+	declare @t_ewidth float = case when '#non'=[16] then 9999.99 else cast([16] as float) end
+	declare @t_bdime float = case when '#non'=[17] then 0.000 else cast([17] as float) end
+	declare @t_edime float = case when '#non'=[18] then 999.990 else cast([18] as float) end
+	declare @t_blengthb float = case when '#non'=[19] then 0.0 else cast([19] as float) end
+	declare @t_elengthb float = case when '#non'=[20] then 99999.9 else cast([20] as float) end
+	declare @c_rate nvarchar(max) = case when '#non'=[23] then '' else [23] end
+	declare @t_rate float = 0
+	begin try
+		set @t_rate = cast(@c_rate as float)
+	end try
+	begin catch
+		set @t_rate = 0
+	end catch
+	-----------------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#z_vcc_bd01')is not null
+	BEGIN
+		drop table #z_vcc_bd01
+	END
+	create table #z_vcc_bd01(
+		sel int identity(1,1)
+		,gno nvarchar(10)
+		,pno int
+		,recno int
+		,accy nvarchar(10)
+		,noa nvarchar(20)
+		,noq nvarchar(10)
+		,typea nvarchar(20)
+		,datea nvarchar(20)
+		,sdate nvarchar(20) -- uccb.datea
+		,[day] int --datea - sdate + 1
+		,day2 int
+		,cpay nvarchar(max)
+		,payday int -- 只算月結的,其餘都當作現金,當天付
+		,custno nvarchar(20)
+		,cust nvarchar(30)
+		,uno nvarchar(30)
+		,productno nvarchar(30)
+		,product nvarchar(30)
+		,spec nvarchar(30)
+		,dime float
+		,width float
+		,lengthb float
+		,radius float
+		,price float -- vccs.price
+		,[weight] float -- vccs.weight
+		,[money] float  -- vccs.money
+		,tranmoney_vcc float -- 出貨運費 
+		,[cost] float -- 進貨成本
+		,interest float  -- 利息
+		,profit float  -- 利潤
+		,profit_rate float -- 毛利率
+		,sprice float -- view_uccb.sprice
+		,tranprice_vcc float -- vcc.tranprice
+		,salesno nvarchar(20)
+		,sales nvarchar(30)
+	)
+	insert into #z_vcc_bd01(gno,pno,accy,noa,noq,typea
+		,datea,custno,cust,uno,productno,product,spec,dime,width,lengthb,radius
+		,price,cpay,tranprice_vcc,[weight],[money]
+		,salesno,sales)
+	select '1' gno,1 pno,a.accy,a.noa,a.noq,b.typea
+		,b.datea,b.custno,b.nick,a.uno,a.productno,a.product,a.spec,a.dime,a.width,a.lengthb,a.radius
+		,a.price,b.pay,isnull(b.price,0),a.[weight],a.[total]
+		,b.salesno,b.sales
+	from view_vccs a
+	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
+	where len(isnull(a.uno,''))>0
+	and isnull(b.datea,'') between @t_bdate and @t_edate
+	and isnull(a.productno,'') between @t_bpno and @t_epno
+	and isnull(b.custno,'') between @t_bcust and @t_ecust 
+	and isnull(a.dime,0) between @t_bdime and @t_edime
+	and isnull(a.width,0) between @t_bwidth and @t_ewidth
+	and isnull(a.lengthb,0) between @t_blengthb and @t_elengthb
+	and isnull(a.radius,0) between @t_bradius and @t_eradius
 
-insert into @tmp (gno,typea,noa,nob,noq,datea,cust,uno,product,spec,size,mount,weight,price)
-select '0','出',
-"<a href="+CHAR(34)+"JavaScript:q_box('vccst.aspx',' "+CHAR(59)+"noa=\'"+b.noa+"\'','95%','95%','"+'106'+"')"+char(34)+">"+b.noa+"</a>"
-,b.noa,b.noq,a.datea,c.nick,b.uno,b.product
-,b.productno,b.size,b.mount,b.weight,b.price
-from view_vcc a
-left join view_vccs b on a.noa=b.noa
-left join cust c on c.noa=a.custno
-where a.typea = '1' and a.datea between @t_bdate and @t_edate and 
-a.custno between @t_bcust and @t_ecust and
-((len(@t_stype) = 0) or (a.stype=@t_stype)) and
-b.productno between @t_bpno and @t_epno and
-b.width between @t_bwidth and @t_ewidth and
-b.dime between @t_bdime and @t_edime and
-b.lengthb between @t_blengthb and @t_elengthb
+	-----------------------------------------------------------------------------------------------------
+	update #z_vcc_bd01 set sdate=b.datea,sprice=b.sprice
+	from #z_vcc_bd01 a
+	left join view_uccb b on a.uno=b.uno
 
-update a set a.total=b.tax,a.total2=b.money from @tmp a
-outer apply(select * from view_vcc) b where a.nob=b.noa
+	update #z_vcc_bd01 set [day] = datediff(DD,dbo.ChineseEraName2AD(sdate),dbo.ChineseEraName2AD(datea)) + 1
+	--------------------------------------------------------------------------------------------------------------
+	declare @sel int
+	declare @datea nvarchar(20)
+	declare @cpay nvarchar(max)
+	declare @string nvarchar(max)
+	declare @n int
 
-update @tmp set noa='',typea='',datea='',cust='',total=0,total2=0 where noq!='001' and gno='0'
+	declare cursor_table cursor for
+	select sel,datea,isnull(cpay,'') from #z_vcc_bd01 where charindex('月結',cpay)>0  
+	open cursor_table
+	fetch next from cursor_table
+	into @sel,@datea,@cpay
+	while(@@FETCH_STATUS <> -1)
+	begin
+		select @n=0,@string=''
 
-insert into @tmp (gno,mount,weight,total,total2)
-select '1',SUM(mount),SUM(weight),SUM(total),SUM(total2) from @tmp
+		while @n<len(@cpay)
+		begin
+			if(substring(@cpay,@n,1) like '[0-9]')
+				set @string = @string + substring(@cpay,@n,1)
+			set @n = @n + 1
+		end
 
-select a.*,@t_bdate as bdate,@t_edate as edate from @tmp a order by gno;
+		update #z_vcc_bd01 set payday = cast(case when len(@string)=0 then '0' else @string end as int) where sel=@sel
+
+		fetch next from cursor_table
+		into @sel,@datea,@cpay
+	end
+	close cursor_table
+	deallocate cursor_table
+
+	-- 金額一律用 單價*重量,算大概就行了,暫不需攤提到很精確
+
+	update #z_vcc_bd01 set day2=  case when isnull(payday,0)=0 then [day] else [day] + DAY(dateadd(DD,-1,dateadd(MM,1,dbo.ChineseEraName2AD(left(datea,6)+'/01')))) - cast(right(datea,2) as int) + isnull(payday,0) end
+	--  view_uccb.sprice 已事先算好。  
+	--  view_uccb.sprice = (進貨單價 + 進貨運費單價) + 加工單價 
+	update #z_vcc_bd01 set [cost] = round(isnull(sprice,0) * isnull([weight],0),0)
+	-- 利息 = 進貨成本*利率*天數/100/365
+	update #z_vcc_bd01 set [interest] = round((sprice) * [weight] * @t_rate * [day2] / 100 / 365,0) 
+	-- 出貨運費 
+	update #z_vcc_bd01 set tranmoney_vcc = round(isnull(tranprice_vcc,0) * [weight],0)
+	-- 利潤 = 銷貨金額 - 進貨成本 - (出貨)運費成本 - 利息
+	update #z_vcc_bd01 set [profit] = isnull([money],0) - isnull([cost],0) - isnull([tranmoney_vcc],0) - isnull([interest],0)
+	-- 毛利率 = 利潤 / (進貨成本 + (出貨)運費成本 + 利息)
+	update #z_vcc_bd01 set [profit_rate] = case (isnull([cost],0) + isnull([tranmoney_vcc],0) + isnull([interest],0)) when 0 then 0 else  round([profit] / ([cost] + [tranmoney_vcc] + [interest])*100,2) end
+	--------
+	update #z_vcc_bd01 set recno=b.recno
+	from #z_vcc_bd01 a
+	left join (select sel,ROW_NUMBER()over(order by datea,noa,noq) recno from #z_vcc_bd01) b on a.sel=b.sel
+	
+	-- 合計
+	insert into #z_vcc_bd01(gno,pno,[weight],[money],tranmoney_vcc,[cost],interest,profit)
+	select '2',2,sum(isnull([weight],0)),sum(isnull([money],0)),sum(isnull(tranmoney_vcc,0))
+		,sum(isnull([cost],0)),sum(isnull(interest,0)),sum(isnull(profit,0))
+	from #z_vcc_bd01
+	where pno = 1
+	------------------------------------------------------------------------------------------------------------------------
+	select gno 
+		,@t_bdate bdate
+		,@t_edate edate
+		,datea a01 --銷貨日期	
+		,custno a02--客戶編號	
+		,cust a03--客戶名稱	
+		,productno a04--品名	
+		,uno a05--批號	
+		,dbo.getComma([weight],-1) a06--銷貨重量		
+		,price a07--銷售單價	
+		,dbo.getComma([money],-1) a08--銷貨金額	
+		,sdate a09--進貨日期	
+		,sprice a10--進貨單價	
+		,dbo.getComma([cost],-1) a11--進貨成本	
+		,cpay a12--票期天數	
+		,dbo.getComma([interest],-1) a13--利息	
+		,tranprice_vcc a14--運單價	
+		,dbo.getComma([tranmoney_vcc],-1) a15--運費金額	
+		,dbo.getComma([profit],-1) a16--利潤	
+		,profit_rate a17--毛利率	
+		,sales a18--業務員
+	from #z_vcc_bd01 
+	order by pno,recno
+	drop table #z_vcc_bd01;
 -----------------------------------------------------------------------------------------------
 z_vccpk2:--z_vccpk2
 	declare @t_bdate nvarchar(10)= case when '#non'=[2] then '' else [2] end
