@@ -406,11 +406,14 @@ z_vcc_bd1:--z_vcc_bd1
 		,salesno,sales)
 	select '1' gno,1 pno,a.accy,a.noa,a.noq,b.typea
 		,b.datea,b.custno,b.nick,a.uno,a.productno,a.product,a.spec,a.dime,a.width,a.lengthb,a.radius
-		,a.price,b.pay,isnull(b.price,0),a.[weight],a.[total]
+		,a.price,b.pay,isnull(b.price,0)
+		,case when b.typea='1' then 1 else -1 end * a.[weight]
+		,case when b.typea='1' then 1 else -1 end * a.[total]
 		,b.salesno,b.sales
 	from view_vccs a
 	left join view_vcc b on a.accy=b.accy and a.noa=b.noa
-	where len(isnull(a.uno,''))>0
+	where isnull(b.stype,'')!='3' -- 代工不算
+	and len(isnull(a.uno,''))>0
 	and isnull(b.datea,'') between @t_bdate and @t_edate
 	and isnull(a.productno,'') between @t_bpno and @t_epno
 	and isnull(b.custno,'') between @t_bcust and @t_ecust 
