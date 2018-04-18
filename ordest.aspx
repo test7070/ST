@@ -341,7 +341,7 @@
                 switch (b_pop) {/// 重要：不可以直接 return ，最後需執行 originalClose();
                 	case 'uccy_import':
                 		
-                		q_gridAddRow(bbtHtm, 'tbbt', 'txtUno,txtProduct,txtProductno,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtSource', b_ret.length, b_ret, 'uno,product,productno,radius,dime,width,lengthb,emount,eweight,source', 'txtUno,txtProduct,txtProductno', '__');
+                		q_gridAddRow(bbtHtm, 'tbbt', 'txtNo3,txtUno,txtProduct,txtProductno,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtSource', b_ret.length, b_ret, 'no2,uno,product,productno,radius,dime,width,lengthb,emount,eweight,source', 'txtUno,txtProduct,txtProductno', '__');
                 		
                 		$('#dbbt').show();
                 		/*q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtSize,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtSource,txtStyle,txtClass'
@@ -992,9 +992,11 @@
                         	var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                         	
                             if(q_getPara('sys.project').toUpperCase() == 'BD'){
-                            	var t_productno = $.trim($('#txtTggno').val());
-                            	var t_bdime = dec($('#txtDime_' + n).val())-0.8;
-                            	var t_edime = dec($('#txtDime_' + n).val())+0.8;
+                            	//隓昊  品號要一樣、厚度正負0.2
+                            	var t_no2 = $.trim($('#txtNo2_'+n).val()); // 重要,沒有就要先產生:  這樣才能知道寫到ORDET的是屬於哪筆明細的
+                            	var t_productno = $.trim($('#txtProductno_'+n).val());
+                            	var t_bdime = dec($('#txtDime_' + n).val())-0.2;
+                            	var t_edime = dec($('#txtDime_' + n).val())+0.2;
                             	var t_bwidth = dec($('#txtWidth_' + n).val());
                             	var t_ewidth = dec($('#txtWidth_' + n).val());
 								var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
@@ -1008,7 +1010,8 @@
 		                            bwidth : t_bwidth,
 		                            ewidth : t_ewidth,
 		                            blengthb : t_blengthb,
-		                            elengthb : t_elengthb
+		                            elengthb : t_elengthb,
+		                            no2 : t_no2
 		                        }), "uccy_import", "95%", "95%", '');
                             }else{
 	                            qBoxNo3id = n;
@@ -1046,6 +1049,7 @@
 
             function btnIns() {
                 _btnIns();
+                bbsAssign();//產生NO2
                 $('#cmbTaxtype').val(1);
                 Lock(1, {
                     opacity : 0

@@ -14,7 +14,7 @@
 		<script src="css/jquery/ui/jquery.ui.widget.js"></script>
 		<script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
 		<script type="text/javascript">
-            var q_name = "uccy_import", t_content = "where=^^['',0,0,0,0,0,0)^^", bbsKey = ['uno'], as;
+            var q_name = "uccy_import", t_content = "where=^^['',0,0,0,0,0,0,'')^^", bbsKey = ['uno'], as;
             var isBott = false;
             var txtfield = [], afield, t_data, t_htm, t_bbsTag = 'tbbs';
             var bbsNum = [['txtEweight', 2, 0, 1],['txtEmount', 2, 0, 1]];
@@ -34,7 +34,7 @@
                 var t_para = new Array();
 	            try{
 	            	t_para = JSON.parse(decodeURIComponent(q_getId()[5]));
-	            	t_content = "where=^^['"+t_para.productno+"',"+t_para.bdime+","+t_para.edime+","+t_para.bwidth+","+t_para.ewidth+","+t_para.blengthb+","+t_para.elengthb+")^^";
+	            	t_content = "where=^^['"+t_para.productno+"',"+t_para.bdime+","+t_para.edime+","+t_para.bwidth+","+t_para.ewidth+","+t_para.blengthb+","+t_para.elengthb+",'"+t_para.no2+"')^^";
 	            }catch(e){
 	            } 
 	            brwCount = -1;
