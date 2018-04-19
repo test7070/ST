@@ -1,0 +1,59 @@
+SET QUOTED_IDENTIFIER ON
+GO
+alter function [dbo].[orde_import](
+	@t_table nvarchar(max) -- 判斷是哪個作業呼叫的 VCC、CUT
+	,@t_noa nvarchar(max)
+	,@t_custno nvarchar(max)
+	,@t_kind nvarchar(max)   
+	,@t_bdate nvarchar(max)
+	,@t_edate nvarchar(max)
+	,@t_productno nvarchar(max)
+	,@t_bdime float
+	,@t_edime float
+	,@t_bwidth float
+	,@t_ewidth float
+	,@t_blength float
+	,@t_elength float
+	,@para nvarchar(max))
+	returns @tmp table(
+		sel int identity(1,1)
+		,accy nvarchar(10)
+		,noa nvarchar(20)--訂單編號
+		,no2 nvarchar(10)
+		,custno nvarchar(20)
+		,cust nvarchar(max)--客戶名稱
+		,productno nvarchar(20)--品號
+		,product nvarchar(max)--品名
+		,spec nvarchar(max)--材質
+		,dime float--厚度
+		,width float--寬度
+		,lengthb float--長度
+		,radius float
+		,mount float--數量
+		,[weight] float--重量
+		,unit nvarchar(max)
+		,c1 float--已交量
+		,notv float--未交量
+		,n int--本次裁剪數量
+		,memo nvarchar(max)--備註
+	) as
+	begin
+		insert into @tmp(accy,noa,no2,custno,cust,productno,product,spec,dime,width,lengthb,radius
+			,mount,[weight],unit,c1,notv,memo)
+		select a.accy,a.noa,a.no2,b.custno,c.nick,a.productno,a.product,a.spec,a.dime,a.width,a.lengthb,a.radius
+			,a.mount,a.[weight],a.unit,a.c1,a.notv,a.memo
+		from view_ordes a
+		left join view_orde b on a.accy=b.accy and a.noa=b.noa
+		left join cust c on b.custno=c.noa
+		where isnull(a.enda,0)=0 and isnull(b.enda,0)=0 and isnull(b.cancel,0)=0 
+		and (len(@t_custno)=0 or b.custno=@t_custno)
+		and (len(@t_productno)=0 or a.productno=@t_productno)
+		and isnull(a.dime,0) between @t_bdime and @t_edime
+		and isnull(a.width,0) between @t_bwidth and @t_ewidth
+		and isnull(a.lengthb,0) between @t_blength and @t_elength
+		order by a.accy desc,a.noa desc,a.no2
+
+		
+		return
+	end	
+GO
