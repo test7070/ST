@@ -38,7 +38,8 @@
 
 		function mainPost() { 
 			q_mask(bbmMask);
-			q_cmbParse("cmbTypea", q_getPara('mech.typea'));
+			//q_cmbParse("cmbTypea", q_getPara('mech.typea'));
+			q_cmbParse("cmbTypea", q_getPara('cut.type2'));
 			
 			if (q_getPara('sys.project').toUpperCase()=='VU'){
 				document.title='加工組別主檔';
@@ -275,13 +276,13 @@
 						<td align="center" style="width:5%"><a id='vewChk'> </a></td>
 						<td align="center" style="width:5%"><a id='vewNoa'> </a></td>
 						<td align="center" style="width:25%"><a id='vewMech'> </a></td>
-						<td align="center" style="width:25%" class="vu_hide"><a id='vewTypea'> </a></td>
+						<!--<td align="center" style="width:25%" class="vu_hide"><a id='vewTypea'> </a></td>-->
 					</tr>
 					<tr>
 						<td ><input id="chkBrow.*" type="checkbox" style=''/></td>
 						<td align="center" id='noa'>~noa</td>
 						<td align="center" id='mech'>~mech</td>
-						<td align="center" id='typea=mech.typea' class="vu_hide">~typea=mech.typea</td>
+						<!--<td align="center" id='typea=mech.typea' class="vu_hide">~typea=mech.typea</td>-->
 					</tr>
 				</table>
 			</div>

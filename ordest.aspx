@@ -1173,6 +1173,10 @@
             ///////////////////////////////////////////////////  以下提供事件程式，有需要時修改
             function refresh(recno) {
                 _refresh(recno);
+                if ( q_getPara('sys.project').toUpperCase()=='BD'){　
+					$('#lblscut_st').text('剪板');
+					$('.BDshow').show();
+				}
                 var obj = $('.control_end2');
                 for(var i=0;i<obj.length;i++){
                     switch(obj.eq(i).html()){
@@ -1861,7 +1865,9 @@
                     <td align="center" style="width:250px;"><a id='lblMemos'> </a></td>
                     <td align="center" style="width:120px;"><a id='lblProductno2_s_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblssale_st'> </a></td>
+                    <td align="center" style="width:40px;display:none;" class="BDshow"><a>分條</a></td>
                     <td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
+                    
                     <td align="center" style="width:40px;"><a id='lblOrdc_s_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblEnda_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
@@ -1927,6 +1933,7 @@
 	                    <input type="text" id="txtProductno2.*"  style="width:75px; float:left;"/>
                     </td>
                     <td align="center"><input id="chkSale.*" type="checkbox"/></td>
+                    <td align="center" class="BDshow" style="display:none;"><input id="chkSlit.*" type="checkbox"/></td>
                     <td align="center"><input id="chkCut.*" type="checkbox"/></td>
                     <td align="center"><input id="chkOrdc.*" type="checkbox"/></td>
                     <td align="center"><input id="chkEnda.*" type="checkbox"/></td>
