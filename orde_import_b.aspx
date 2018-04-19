@@ -45,8 +45,8 @@
 	            		+t_para.edime+","
 	            		+t_para.bwidth+","
 	            		+t_para.ewidth+","
-	            		+t_para.blengthb+","
-	            		+t_para.elengthb+","
+	            		+t_para.blength+","
+	            		+t_para.elength+","
 	            		+"'"+t_para.para+"')^^";
 	            }catch(e){
 	            } 
@@ -94,6 +94,8 @@
 					<td align="center" style="width:80px;max-width: 80px;">客戶名稱</td>
 					<td align="center" style="width:80px;max-width: 80px;">品號</td>
 					<td align="center" style="width:80px;max-width: 80px;">品名</td>
+					<td align="center" style="width:80px;max-width: 80px;">型</td>
+					<td align="center" style="width:80px;max-width: 80px;">等級</td>
 					<td align="center" style="width:80px;max-width: 80px;">材質</td>
 					<td align="center" style="width:80px;max-width: 80px;">厚度</td>
 					<td align="center" style="width:80px;max-width: 80px;">寬度</td>
@@ -117,6 +119,8 @@
 					<td align="center" style="width:80px;max-width: 80px;">客戶名稱</td>
 					<td align="center" style="width:80px;max-width: 80px;">品號</td>
 					<td align="center" style="width:80px;max-width: 80px;">品名</td>
+					<td align="center" style="width:80px;max-width: 80px;">型</td>
+					<td align="center" style="width:80px;max-width: 80px;">等級</td>
 					<td align="center" style="width:80px;max-width: 80px;">材質</td>
 					<td align="center" style="width:80px;max-width: 80px;">厚度</td>
 					<td align="center" style="width:80px;max-width: 80px;">寬度</td>
@@ -136,17 +140,24 @@
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtCust.*" style="float:left;width:95%;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtProductno.*" style="float:left;width:95%;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtProduct.*" style="float:left;width:95%;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtStyle.*" style="float:left;width:95%;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtClass.*" style="float:left;width:95%;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtSpec.*" style="float:left;width:95%;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtDime.*" style="float:left;width:95%;text-align: right;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtWidth.*" style="float:left;width:95%;text-align: right;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtLengthb.*" style="float:left;width:95%;text-align: right;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtStyle.*" style="float:left;width:95%;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtClass.*" style="float:left;width:95%;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtSpec.*" style="float:left;width:95%;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtSource.*" style="float:left;width:95%;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtStore.*" style="float:left;width:95%;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtEmount.*" style="float:left;width:95%;text-align: right;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtEweight.*" style="float:left;width:95%;text-align: right;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtMount.*" style="float:left;width:95%;text-align: right;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtWeight.*" style="float:left;width:95%;text-align: right;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtUnit.*" style="float:left;width:95%;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtNotv.*" style="float:left;width:95%;text-align: right;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtN.*" style="float:left;width:95%;text-align: right;"/></td>
+					<td style="width:80px;max-width: 80px;">
+						<input type="text" readonly="readonly" id="txtAccy.*" style="float:left;display:none;"/>
+						<input type="text" readonly="readonly" id="txtNoa.*" style="float:left;width:95%;"/>
+						<input type="text" readonly="readonly" id="txtNoq.*" style="float:left;display:none;"/>
+					</td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtMemo.*" style="float:left;width:95%;text-align: right;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtC1.*" style="float:left;width:95%;text-align: right;"/></td>
 				</tr>
 			</table>
 		</div>

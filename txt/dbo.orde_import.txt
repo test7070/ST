@@ -36,12 +36,14 @@ alter function [dbo].[orde_import](
 		,notv float--未交量
 		,n int--本次裁剪數量
 		,memo nvarchar(max)--備註
+		,style nvarchar(max)
+		,[class] nvarchar(max)
 	) as
 	begin
 		insert into @tmp(accy,noa,no2,custno,cust,productno,product,spec,dime,width,lengthb,radius
-			,mount,[weight],unit,c1,notv,memo)
+			,mount,[weight],unit,c1,notv,memo,style,[class])
 		select a.accy,a.noa,a.no2,b.custno,c.nick,a.productno,a.product,a.spec,a.dime,a.width,a.lengthb,a.radius
-			,a.mount,a.[weight],a.unit,a.c1,a.notv,a.memo
+			,a.mount,a.[weight],a.unit,a.c1,a.notv,a.memo,a.style,a.[class]
 		from view_ordes a
 		left join view_orde b on a.accy=b.accy and a.noa=b.noa
 		left join cust c on b.custno=c.noa
@@ -52,8 +54,6 @@ alter function [dbo].[orde_import](
 		and isnull(a.width,0) between @t_bwidth and @t_ewidth
 		and isnull(a.lengthb,0) between @t_blength and @t_elength
 		order by a.accy desc,a.noa desc,a.no2
-
-		
 		return
 	end	
 GO
