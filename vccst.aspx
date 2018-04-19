@@ -144,7 +144,7 @@
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
-						if (t_unit == '次' || t_product='切工-小顆鋼捲') {
+						if (t_unit == '次' || t_product == '切工-小顆鋼捲') {
 							t_moneys = q_mul(t_prices, t_mounts);
 						} else {
 							t_moneys = q_mul(t_prices, t_weights);
