@@ -1,12 +1,8 @@
-USE [ST]
-GO
-
-/****** Object:  UserDefinedFunction [dbo].[uccy_import]    Script Date: 2018/4/12 上午 08:44:43 ******/
-SET ANSI_NULLS ON
-GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
+
 
 
 	ALTER function [dbo].[uccy_import](
@@ -16,12 +12,16 @@ GO
 		,@t_bwidth float
 		,@t_ewidth float
 		,@t_blengthb float
-		,@t_elengthb float)
+		,@t_elengthb float
+		,@t_no2 nvarchar(max))
 	returns @tmp table(
 		sel int identity(1,1)
+		,no2 nvarchar(10)
 		,uno nvarchar(30)
-		,emount float
-		,eweight float
+		,mount float --入庫數量
+		,[weight] float --入庫重量
+		,emount float -- 庫存數量
+		,eweight float --庫存重量
 		,datea nvarchar(20)
 		,productno nvarchar(20)
 		,product nvarchar(50)
@@ -36,9 +36,9 @@ GO
 		,[source] nvarchar(30)
 	) as
 	begin
-		insert into @tmp(uno,emount,eweight,datea,productno,product
+		insert into @tmp(no2,uno,mount,[weight],emount,eweight,datea,productno,product
 			,radius,dime,width,lengthb,spec,storeno,[class],[source])
-		select a.uno,a.emount,a.eweight,b.datea,b.productno,b.product
+		select @t_no2,a.uno,b.mount,b.[weight],a.emount,a.eweight,b.datea,b.productno,b.product
 			,b.radius,isnull(b.dime,0),isnull(b.width,0),isnull(b.lengthb,0)
 			,b.spec,b.storeno,b.[class],b.[source]
 		from uccy a

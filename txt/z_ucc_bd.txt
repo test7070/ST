@@ -976,11 +976,13 @@ z_ucc_bd01:--z_ucc_bd01
 		,mount float
 		,[weight] float
 		,memo nvarchar(max)
+		,sprice float
 	)
 	insert into #z_ucc_bd01(gno,pno,uno,indate,itype,storeno,store,[source],[spec],[class]
-		,productno,product,size,dime,width,lengthb,radius,mount,[weight],memo,custno)
+		,productno,product,size,dime,width,lengthb,radius,mount,[weight],memo,custno,sprice)
 	select '1',1,a.uno,b.datea,b.itype,b.storeno,e.store,b.[source],b.[spec],b.[class]
 		,b.productno,d.product,b.size,b.dime,b.width,b.lengthb,b.radius,a.emount,a.[eweight],b.memo,b.custno
+		,b.sprice
 	from uccy a
 	left join view_uccb b on a.uno=b.uno
 	left join uccc d on b.productno=d.noa 
@@ -1032,7 +1034,7 @@ z_ucc_bd01:--z_ucc_bd01
 		,indate a01
 		--,itype 
 		--,citype
-		,storeno a02
+		,case when len(isnull(store,''))>0 then store else storeno end a02
 		,[source] a03
 		,uno a04
 		,spec a05
@@ -1041,7 +1043,8 @@ z_ucc_bd01:--z_ucc_bd01
 		,CAST(dime as nvarchar)+'*'+CAST(width as nvarchar)+'*'+case when lengthb=0 then 'C' else CAST(lengthb as nvarchar) end a08
 		,dbo.getComma(mount,-1) a09
 		,dbo.getComma([weight],-1) a10
-		,memo a11
+		,dbo.getComma([sprice],-1) a11
+		,memo a12
 	from #z_ucc_bd01
 	order by productno,pno,recno
 	drop table #z_ucc_bd01;

@@ -144,7 +144,7 @@
 					t_prices = q_float('txtPrice_' + j);
 					t_mounts = q_float('txtMount_' + j);
 					if (q_getPara('sys.project').toUpperCase()=='FP'){
-						if (t_unit == '式') {
+						if (t_unit == '次' || t_product == '切工-小顆鋼捲') {
 							t_moneys = q_mul(t_prices, t_mounts);
 						} else {
 							t_moneys = q_mul(t_prices, t_weights);
@@ -1941,7 +1941,7 @@
 					<td align="center" style="width:100px;"><a id='lblWeight_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblPrices_st'> </a></td>
 					<td align="center" style="width:80px;"><a id='lblTotal_s'> </a><br><a id='lblTheory'> </a></td>
-					<td align="center" style="width:100px;">扣重</td>
+					<td align="center" style="width:100px;"  class="Unit2">扣重</td>
 					<td align="center" style="width:100px;"><a id='lblGweight_st'> </a></td>
 					<td align="center" style="width:60px;">寄Y<BR>代Z</td>
 					<td align="center" style="width:80px;"><a id='lblStore2_st'> </a></td>
@@ -1988,7 +1988,7 @@
 						<input id="txtTotal.*" type="text" class="txt num" style="width:95%;"/>
 						<input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/>
 					</td>
-					<td><input id="txtMweight.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td class="Unit2"><input id="txtMweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input class="txt" id="txtUsecoil.*" type="text" style="text-align:center;width:95%;"/></td>
 					<td>
