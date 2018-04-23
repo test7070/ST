@@ -150,7 +150,7 @@
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtWeight.*" style="float:left;width:95%;text-align: right;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtUnit.*" style="float:left;width:95%;"/></td>
 					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtNotv.*" style="float:left;width:95%;text-align: right;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtN.*" style="float:left;width:95%;text-align: right;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" id="txtN.*" style="float:left;width:95%;text-align: right;"/></td>
 					<td style="width:80px;max-width: 80px;">
 						<input type="text" readonly="readonly" id="txtAccy.*" style="float:left;display:none;"/>
 						<input type="text" readonly="readonly" id="txtNoa.*" style="float:left;width:95%;"/>

@@ -89,12 +89,11 @@
 				var t_float = q_float('txtFloata');
 				var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
 				t_kind = t_kind.substr(0, 1);
-
 				for (var j = 0; j < q_bbsCount; j++) {
 				    t_moneys = 0; 
 				    t_moneyuss = 0;
 				    //---------------------------------------------------------
-					if (t_kind == 'A') {
+					if (!(/[A-Z]/.test(t_kind)) || t_kind == 'A') {
 						q_tr('txtDime_' + j, q_float('textSize1_' + j));
 						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
 						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
@@ -1128,16 +1127,7 @@
 							$('#textSize2_' + n).val('');
 							$('#textSize3_' + n).val('');
 							$('#textSize4_' + n).val('');
-							if ($('#cmbKind').val() == 'A1') {//鋼捲鋼板
-								if (!(data.length == 2 || data.length == 3)) {
-									alert(q_getPara('transize.error01'));
-									return;
-								}
-								$('#textSize1_' + n).val((data[0] != undefined ? (data[0].toString().length > 0 ? (isNaN(parseFloat(data[0])) ? 0 : parseFloat(data[0])) : 0) : 0));
-								$('#textSize2_' + n).val((data[1] != undefined ? (data[1].toString().length > 0 ? (isNaN(parseFloat(data[1])) ? 0 : parseFloat(data[1])) : 0) : 0));
-								$('#textSize3_' + n).val((data[2] != undefined ? (data[2].toString().length > 0 ? (isNaN(parseFloat(data[2])) ? 0 : parseFloat(data[2])) : 0) : 0));
-								sum();
-							} else if ($('#cmbKind').val() == 'A4') {//鋼胚
+							if ($('#cmbKind').val() == 'A4') {//鋼胚
 								if (!(data.length == 2 || data.length == 3)) {
 									alert(q_getPara('transize.error04'));
 									return;
@@ -1167,7 +1157,15 @@
 								}
 								$('#textSize1_' + n).val((data[0] != undefined ? (data[0].toString().length > 0 ? (isNaN(parseFloat(data[0])) ? 0 : parseFloat(data[0])) : 0) : 0));
 							} else {
-								//nothing
+								//鋼捲鋼板
+								if (!(data.length == 2 || data.length == 3)) {
+									alert(q_getPara('transize.error01'));
+									return;
+								}
+								$('#textSize1_' + n).val((data[0] != undefined ? (data[0].toString().length > 0 ? (isNaN(parseFloat(data[0])) ? 0 : parseFloat(data[0])) : 0) : 0));
+								$('#textSize2_' + n).val((data[1] != undefined ? (data[1].toString().length > 0 ? (isNaN(parseFloat(data[1])) ? 0 : parseFloat(data[1])) : 0) : 0));
+								$('#textSize3_' + n).val((data[2] != undefined ? (data[2].toString().length > 0 ? (isNaN(parseFloat(data[2])) ? 0 : parseFloat(data[2])) : 0) : 0));
+								sum();
 							}
 							sum();
 						});
@@ -1444,7 +1442,7 @@
 				//隆昊固定顯示厚、寬、長
 				t_kind = q_getPara('sys.project').toUpperCase()=='BD'?'A':t_kind;
 				
-				if (t_kind == 'A') {
+				if (/[A-Z]/.test(t_kind) || t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					$('#Size').css('width', '220px');
 					for (var j = 0; j < q_bbsCount; j++) {
