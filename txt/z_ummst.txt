@@ -3778,6 +3778,7 @@ from vcca a left join cust c on a.custno=c.noa
 where a.tax > 0 and (a.taxtype='1' or a.taxtype='5') and ([22]!=3) and
 	  ((case when isnull(a.mon,'')='' then left(a.datea,6) else a.mon end) between @t_bmon and @t_emon) and
 	  (a.custno between @t_bcustno and @t_ecustno) 
+	  and not exists(select noa from acomp where nick=N'榮泉鋼鐵') -- 榮泉:出貨單、發票都會有稅額, 所以發票的不要算
 union all 
 select '0' gno,0 pageno,0 totpage,0 orderno, '折' typea, a.vccno,a.noa, a.datea, (case when isnull(a.mon,'')='' then left(a.datea,6) else a.mon end),
 	   a.custno, '' comp, '' addr_invo,'' serial, '' tel,
@@ -3788,6 +3789,7 @@ where (a.typea='1' or a.typea='2') and (select count(*) from acomp where acomp l
 	  a.tax > 0  and ([22]!=3) and
 	  ((case when isnull(a.mon,'')='' then left(a.datea,6) else a.mon end) between @t_bmon and @t_emon) and
 	  (a.custno between @t_bcustno and @t_ecustno) 
+	  and not exists(select noa from acomp where nick=N'榮泉鋼鐵') -- 榮泉:出貨單、發票都會有稅額, 所以發票的不要算
 order by custno,gno,mon,datea,noa
 
 update a 
@@ -4135,6 +4137,7 @@ from vcca a left join cust c on a.custno=c.noa
 where a.tax > 0 and (a.taxtype='1' or a.taxtype='5') and ([22]!=3) and
 	  ((case when isnull(a.mon,'')='' then left(a.datea,6) else a.mon end) between @t_bmon and @t_emon) and
 	  (a.custno between @t_bcustno and @t_ecustno) 
+	  and not exists(select noa from acomp where nick=N'榮泉鋼鐵') -- 榮泉:出貨單、發票都會有稅額, 所以發票的不要算
 union all 
 select '0' gno,0 pageno,0 totpage,0 orderno, '折' typea, a.vccno,a.noa, a.datea, (case when isnull(a.mon,'')='' then left(a.datea,6) else a.mon end),
 	   a.custno, '' comp, '' addr_invo,'' serial, '' tel,
@@ -4145,6 +4148,7 @@ where (a.typea='1' or a.typea='2') and (select count(*) from acomp where acomp l
 	  a.tax > 0  and ([22]!=3) and
 	  ((case when isnull(a.mon,'')='' then left(a.datea,6) else a.mon end) between @t_bmon and @t_emon) and
 	  (a.custno between @t_bcustno and @t_ecustno) 
+	  and not exists(select noa from acomp where nick=N'榮泉鋼鐵') -- 榮泉:出貨單、發票都會有稅額, 所以發票的不要算
 order by custno,gno,mon,datea,noa
 
 update a 

@@ -89,12 +89,11 @@
 				var t_float = q_float('txtFloata');
 				var t_kind = (($('#cmbKind').val()) ? $('#cmbKind').val() : '');
 				t_kind = t_kind.substr(0, 1);
-
 				for (var j = 0; j < q_bbsCount; j++) {
 				    t_moneys = 0; 
 				    t_moneyuss = 0;
 				    //---------------------------------------------------------
-					if (t_kind == 'A') {
+					if (!(/[A-Z]/.test(t_kind)) || t_kind == 'A') {
 						q_tr('txtDime_' + j, q_float('textSize1_' + j));
 						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
 						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
@@ -400,27 +399,44 @@
 					case 'ordc_import':
                         if (b_ret != null) {
                         	as = b_ret;
-                        	var curItem,newArray= new Array();
-                        	for(var i=0;i<as.length;i++){
-                        		if(as[i].cnt>1){
-                        			curItem = as[i];
-                        			curItem.mount=curItem.mount/curItem.cnt;
-                        			curItem.weight=curItem.weight/curItem.cnt;
-                        			curItem.total=round(curItem.total/curItem.cnt,0);
-
-                        			for(var j=0;j<curItem.cnt;j++){
-                        				newArray.push(curItem);
-                        			}
-                        		}else{
-                    				newArray.push(as[i]);
-                        		}
-                        	}
                         	for(var i=0;i<as.length;i++){
                         		if(as[i].noa.length>0){
                         			$('#txtOrdcno').val(as[i].noa);
+                        			$('#txtCno').val(as[i].cno);
+                        			$('#txtAcomp').val(as[i].acomp);
+                        			$('#txtTggno').val(as[i].tggno);
+                        			$('#txtTgg').val(as[i].tgg);
+                        			$('#txtNick').val(as[i].nick);
+                        			$('#txtTel').val(as[i].tel);
+                        			$('#txtFax').val(as[i].fax);
+                        			$('#txtPost').val(as[i].post);
+                        			$('#txtAddr').val(as[i].addr);
+                        			$('#txtPost2').val(as[i].post2);
+                        			$('#txtAddr2').val(as[i].addr2);
+                        			$('#txtPaytype').val(as[i].paytype);
+                        			$('#cmbTrantype').val(as[i].trantype);
+                        			$('#txtFloata').val(as[i].floata);
+                        			$('#cmbCoin').val(as[i].coin);
                         			break;
                         		}
                         	}
+                        	var curItem,newArray= new Array();
+	                        	for(var i=0;i<as.length;i++){
+	                        		if(as[i].cnt>1){
+	                        			curItem = as[i];
+	                        			curItem.mount=curItem.mount/curItem.cnt;
+	                        			curItem.weight=curItem.weight/curItem.cnt;
+	                        			curItem.emount=curItem.emount/curItem.cnt;
+	                        			curItem.eweight=curItem.eweight/curItem.cnt;
+	                        			curItem.total=round(curItem.total/curItem.cnt,0);
+	
+	                        			for(var j=0;j<curItem.cnt;j++){
+	                        				newArray.push(curItem);
+	                        			}
+	                        		}else{
+	                    				newArray.push(as[i]);
+	                        		}
+	                        	}
                         	if(q_getPara('sys.project').toUpperCase()=='PK'){
                         		//傑期   errmemo 改存訂單號碼
                         		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtErrmemo'
@@ -429,7 +445,7 @@
                         	}else{
                         		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtSize,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtSource,txtStyle,txtClass'
 	                        	, newArray.length, newArray
-								, 'productno,product,spec,spec,dime,width,lengthb,radius,size,noa,no2,price,mount,weight,total,memo,unit,source,style,class', 'txtProductno'); 
+								, 'productno,product,spec,spec,dime,width,lengthb,radius,size,noa,no2,price,emount,eweight,total,memo,unit,source,style,class', 'txtProductno'); 
                         	}    	
                         	sum();
                         }else{
@@ -1128,16 +1144,7 @@
 							$('#textSize2_' + n).val('');
 							$('#textSize3_' + n).val('');
 							$('#textSize4_' + n).val('');
-							if ($('#cmbKind').val() == 'A1') {//鋼捲鋼板
-								if (!(data.length == 2 || data.length == 3)) {
-									alert(q_getPara('transize.error01'));
-									return;
-								}
-								$('#textSize1_' + n).val((data[0] != undefined ? (data[0].toString().length > 0 ? (isNaN(parseFloat(data[0])) ? 0 : parseFloat(data[0])) : 0) : 0));
-								$('#textSize2_' + n).val((data[1] != undefined ? (data[1].toString().length > 0 ? (isNaN(parseFloat(data[1])) ? 0 : parseFloat(data[1])) : 0) : 0));
-								$('#textSize3_' + n).val((data[2] != undefined ? (data[2].toString().length > 0 ? (isNaN(parseFloat(data[2])) ? 0 : parseFloat(data[2])) : 0) : 0));
-								sum();
-							} else if ($('#cmbKind').val() == 'A4') {//鋼胚
+							if ($('#cmbKind').val() == 'A4') {//鋼胚
 								if (!(data.length == 2 || data.length == 3)) {
 									alert(q_getPara('transize.error04'));
 									return;
@@ -1167,7 +1174,15 @@
 								}
 								$('#textSize1_' + n).val((data[0] != undefined ? (data[0].toString().length > 0 ? (isNaN(parseFloat(data[0])) ? 0 : parseFloat(data[0])) : 0) : 0));
 							} else {
-								//nothing
+								//鋼捲鋼板
+								if (!(data.length == 2 || data.length == 3)) {
+									alert(q_getPara('transize.error01'));
+									return;
+								}
+								$('#textSize1_' + n).val((data[0] != undefined ? (data[0].toString().length > 0 ? (isNaN(parseFloat(data[0])) ? 0 : parseFloat(data[0])) : 0) : 0));
+								$('#textSize2_' + n).val((data[1] != undefined ? (data[1].toString().length > 0 ? (isNaN(parseFloat(data[1])) ? 0 : parseFloat(data[1])) : 0) : 0));
+								$('#textSize3_' + n).val((data[2] != undefined ? (data[2].toString().length > 0 ? (isNaN(parseFloat(data[2])) ? 0 : parseFloat(data[2])) : 0) : 0));
+								sum();
 							}
 							sum();
 						});
@@ -1444,7 +1459,7 @@
 				//隆昊固定顯示厚、寬、長
 				t_kind = q_getPara('sys.project').toUpperCase()=='BD'?'A':t_kind;
 				
-				if (t_kind == 'A') {
+				if (/[A-Z]/.test(t_kind) || t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					$('#Size').css('width', '220px');
 					for (var j = 0; j < q_bbsCount; j++) {
