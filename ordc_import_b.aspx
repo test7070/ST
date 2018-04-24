@@ -144,8 +144,8 @@
 						<input type="text" readonly="readonly" id="txtSpec.*" style="display:none;"/>
 					</td>
 					<td style="width:50px;max-width: 50px;"><input type="text" readonly="readonly" id="txtUnit.*" style="float:left;width:95%;text-align: center;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtMount.*" style="float:left;width:95%;text-align: right;"/></td>
-					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtWeight.*" style="float:left;width:95%;text-align: right;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtEmount.*" style="float:left;width:95%;text-align: right;"/></td>
+					<td style="width:80px;max-width: 80px;"><input type="text" readonly="readonly" id="txtEweight.*" style="float:left;width:95%;text-align: right;"/></td>
 					<td style="width:70px;max-width: 70px;background-color: pink;"><input type="text" id="txtCnt.*" class="txt num" style="float:left;width:95%;text-align: right;"/></td>
 					<td style="width:200px;max-width: 200px;"><input type="text" readonly="readonly" id="txtMemo.*" style="float:left;width:95%;"/></td>
 				</tr>

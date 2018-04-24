@@ -399,21 +399,6 @@
 					case 'ordc_import':
                         if (b_ret != null) {
                         	as = b_ret;
-                        	var curItem,newArray= new Array();
-                        	for(var i=0;i<as.length;i++){
-                        		if(as[i].cnt>1){
-                        			curItem = as[i];
-                        			curItem.mount=curItem.mount/curItem.cnt;
-                        			curItem.weight=curItem.weight/curItem.cnt;
-                        			curItem.total=round(curItem.total/curItem.cnt,0);
-
-                        			for(var j=0;j<curItem.cnt;j++){
-                        				newArray.push(curItem);
-                        			}
-                        		}else{
-                    				newArray.push(as[i]);
-                        		}
-                        	}
                         	for(var i=0;i<as.length;i++){
                         		if(as[i].noa.length>0){
                         			$('#txtOrdcno').val(as[i].noa);
@@ -430,6 +415,23 @@
                         			break;
                         		}
                         	}
+                        	var curItem,newArray= new Array();
+	                        	for(var i=0;i<as.length;i++){
+	                        		if(as[i].cnt>1){
+	                        			curItem = as[i];
+	                        			curItem.mount=curItem.mount/curItem.cnt;
+	                        			curItem.weight=curItem.weight/curItem.cnt;
+	                        			curItem.emount=curItem.emount/curItem.cnt;
+	                        			curItem.eweight=curItem.eweight/curItem.cnt;
+	                        			curItem.total=round(curItem.total/curItem.cnt,0);
+	
+	                        			for(var j=0;j<curItem.cnt;j++){
+	                        				newArray.push(curItem);
+	                        			}
+	                        		}else{
+	                    				newArray.push(as[i]);
+	                        		}
+	                        	}
                         	if(q_getPara('sys.project').toUpperCase()=='PK'){
                         		//傑期   errmemo 改存訂單號碼
                         		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtErrmemo'
@@ -438,7 +440,7 @@
                         	}else{
                         		q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtSize,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtSource,txtStyle,txtClass'
 	                        	, newArray.length, newArray
-								, 'productno,product,spec,spec,dime,width,lengthb,radius,size,noa,no2,price,mount,weight,total,memo,unit,source,style,class', 'txtProductno'); 
+								, 'productno,product,spec,spec,dime,width,lengthb,radius,size,noa,no2,price,emount,eweight,total,memo,unit,source,style,class', 'txtProductno'); 
                         	}    	
                         	sum();
                         }else{
