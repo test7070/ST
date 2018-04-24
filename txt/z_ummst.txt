@@ -4284,7 +4284,7 @@ from #result a where gno='3'
 delete #result where gno='1'
 ----------------------------------------------------
 declare @idno int
-declare @pageCount int = 12 --一頁含合計共幾行
+declare @pageCount int = 25 --一頁含合計共幾行
 declare @totalLineCount int = 5 --合計有幾行
 ----------------------------------------------------
 ------>>頁數處理 gno='1' 空白行 gno='2' 跳頁 gno='3' 合計
