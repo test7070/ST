@@ -1,3 +1,101 @@
+uccstk_bd: --- uccstk_bd  隆昊 SPRICE 計算
+	SET QUOTED_IDENTIFIER OFF
+	declare @cmd nvarchar(max)
+	declare @t_bdate nvarchar(20) = case when '#non'=[13] then '' else [13] end
+	declare @t_edate nvarchar(20) = case when '#non'=[14] then char(255) else [14] end
+	--------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#uccstk_bd')is not null
+	BEGIN
+		drop table #uccstk_bd
+	END
+	create table #uccstk_bd(
+		sel int identity(1,1)
+		,tablea nvarchar(20)
+		,accy nvarchar(10)
+		,noa nvarchar(20)
+		,noq nvarchar(10)
+		,uno nvarchar(30)
+		,sprice float
+	)
+	insert into #uccstk_bd(tablea,accy,noa,noq,uno)
+	select 'rc2s' tablea,a.accy,a.noa,a.noq,a.uno
+	from view_rc2s a
+	left join view_rc2 b on a.accy=b.accy and a.noa=b.noa
+	where b.datea between @t_bdate and @t_edate
+
+	insert into #uccstk_bd(tablea,accy,noa,noq,uno)
+	select 'inas' tablea,a.accy,a.noa,a.noq,a.uno
+	from view_inas a
+	left join view_ina b on a.accy=b.accy and a.noa=b.noa
+	where b.datea between @t_bdate and @t_edate
+
+	insert into #uccstk_bd(tablea,accy,noa,noq,uno)
+	select 'cuts' tablea,a.accy,a.noa,a.noq,a.bno
+	from view_cuts a
+	left join view_cut b on a.accy=b.accy and a.noa=b.noa
+	where b.datea between @t_bdate and @t_edate
+	----------------------------------------------------------------------------------------------------------
+	declare @sel int,@uno nvarchar(max),@sprice float
+	
+	declare cursor_table cursor for
+	select sel,uno from #uccstk_bd
+	open cursor_table
+	fetch next from cursor_table
+	into @sel,@uno
+	while(@@FETCH_STATUS <> -1)
+	begin
+		select @sprice = 0
+		begin try
+			select @sprice = isnull(price,0)+isnull(tprice,0)+isnull(wprice,0) from dbo.getSprice_bd(@uno)
+		end try
+		begin catch
+			select @sprice = -1
+		end catch
+
+		update #uccstk_bd set sprice = @sprice where sel = @sel
+
+		fetch next from cursor_table
+		into @sel,@uno
+	end
+	close cursor_table
+	deallocate cursor_table
+	-------------------------------------------------------------------------------------
+	-- update data
+	declare @accy nvarchar(max)
+
+	declare cursor_table cursor for
+	select accy from #uccstk_bd group by accy
+	open cursor_table
+	fetch next from cursor_table
+	into @accy
+	while(@@FETCH_STATUS <> -1)
+	begin
+		set @cmd ="update rc2s"+@accy+" set sprice = b.sprice
+		from rc2s"+@accy+" a
+		left join #uccstk_bd b on b.tablea = 'rc2s' and b.accy=@accy and b.noa=a.noa and b.noq=a.noq
+		where b.sel is not null"
+		execute sp_executesql @cmd,N'@accy nvarchar(20)',@accy=@accy
+
+		set @cmd ="update inas"+@accy+" set sprice = b.sprice
+		from inas"+@accy+" a
+		left join #uccstk_bd b on b.tablea = 'inas' and b.accy=@accy and b.noa=a.noa and b.noq=a.noq
+		where b.sel is not null"
+		execute sp_executesql @cmd,N'@accy nvarchar(20)',@accy=@accy
+		
+		set @cmd ="update cuts"+@accy+" set sprice = b.sprice
+		from cuts"+@accy+" a
+		left join #uccstk_bd b on b.tablea = 'cuts' and b.accy=@accy and b.noa=a.noa and b.noq=a.noq
+		where b.sel is not null"
+		execute sp_executesql @cmd,N'@accy nvarchar(20)',@accy=@accy
+
+		fetch next from cursor_table
+		into @accy
+	end
+	close cursor_table
+	deallocate cursor_table
+
+	select @t_bdate + ' ~ '+ @t_edate + '  計算結束!' msg;
+
 z_acx02:--z_acx02
 	declare @t_bdate nvarchar(10) = case when '#non'=[13] then '' else [13] end
 	declare @t_edate nvarchar(10) = case when '#non'=[14] then char(255) else [14] end
