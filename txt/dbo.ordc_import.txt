@@ -7,6 +7,7 @@ ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max)
 		,rdate nvarchar(20)
 		,tggno nvarchar(20)
 		,tgg nvarchar(50)
+		,nick nvarchar(20)
 		,kind nvarchar(20)
 		,accy nvarchar(10)
 		,noa nvarchar(20)
@@ -54,19 +55,21 @@ ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max)
 		,trantype nvarchar(max)
 		,floata float
 		,coin nvarchar(max)
+		,cno nvarchar(20)
+		,acomp nvarchar(max)
 	) as
 	begin
 		--  ordc_import  採購匯入    RC2  BCCIN
 		--  rc2.noa 和 bccin.noa  單號不可以一樣(英文代碼),不然判斷會出錯
-		insert into @tmp(rdate,tggno,tgg,kind,accy,noa,no2
+		insert into @tmp(rdate,tggno,tgg,nick,kind,accy,noa,no2
 			,productno,product,style,spec,dime,width,lengthb,radius,mount,[weight],unit,price,memo
 			,cnt,class,[source],ucolor,scolor,size,unit2
-			,tel,fax,post,addr,post2,addr2,paytype,trantype,floata,coin)
+			,tel,fax,post,addr,post2,addr2,paytype,trantype,floata,coin,cno,acomp)
 		select case when len(isnull(a.rdate,''))>0 then a.rdate else b.datea end
-			,b.tggno,c.nick,b.kind,a.accy,a.noa,a.no2
+			,b.tggno,b.tgg,c.nick,b.kind,a.accy,a.noa,a.no2
 			,a.productno,a.product,a.style,a.spec,a.dime,a.width,a.lengthb,a.radius,a.mount,a.[weight],a.unit,a.price,a.memo
 			,1,a.class,a.[source],a.ucolor,a.scolor,a.size,a.unit2
-			,b.tel,b.fax,b.post,b.addr,b.post2,b.addr2,b.paytype,b.trantype,b.floata,b.coin
+			,b.tel,b.fax,b.post,b.addr,b.post2,b.addr2,b.paytype,b.trantype,b.floata,b.coin,b.cno,b.acomp
 		from view_ordcs a
 		left join view_ordc b on a.accy=b.accy and a.noa=b.noa
 		left join tgg c on b.tggno=c.noa
@@ -92,5 +95,3 @@ ALTER function [dbo].[ordc_import](@t_tggno nvarchar(max), @t_kind nvarchar(max)
 		return
 	end	
 GO
-
-

@@ -402,6 +402,11 @@
                         	for(var i=0;i<as.length;i++){
                         		if(as[i].noa.length>0){
                         			$('#txtOrdcno').val(as[i].noa);
+                        			$('#txtCno').val(as[i].cno);
+                        			$('#txtAcomp').val(as[i].acomp);
+                        			$('#txtTggno').val(as[i].tggno);
+                        			$('#txtTgg').val(as[i].tgg);
+                        			$('#txtNick').val(as[i].nick);
                         			$('#txtTel').val(as[i].tel);
                         			$('#txtFax').val(as[i].fax);
                         			$('#txtPost').val(as[i].post);
