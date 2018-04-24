@@ -417,6 +417,16 @@
                         	for(var i=0;i<as.length;i++){
                         		if(as[i].noa.length>0){
                         			$('#txtOrdcno').val(as[i].noa);
+                        			$('#txtTel').val(as[i].tel);
+                        			$('#txtFax').val(as[i].fax);
+                        			$('#txtPost').val(as[i].post);
+                        			$('#txtAddr').val(as[i].addr);
+                        			$('#txtPost2').val(as[i].post2);
+                        			$('#txtAddr2').val(as[i].addr2);
+                        			$('#txtPaytype').val(as[i].paytype);
+                        			$('#cmbTrantype').val(as[i].trantype);
+                        			$('#txtFloata').val(as[i].floata);
+                        			$('#cmbCoin').val(as[i].coin);
                         			break;
                         		}
                         	}
