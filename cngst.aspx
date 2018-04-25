@@ -370,10 +370,6 @@
 						q_box('z_cngstp.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
 						break;
 				}
-				if(q_getPara('sys.project').toUpperCase()=='RK')
-					
-				else
-					
 			}
 
 			function wrServer(key_value) {
