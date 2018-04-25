@@ -766,6 +766,9 @@
             function btnPrint() {
             	t_where = "noa=" + $('#txtNoa').val();
             	switch(q_getPara('sys.project').toUpperCase()){
+            		case 'BD':
+            			q_box("z_inabdp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'inabdp', "95%", "95%", m_print);
+            			break;
             		case 'RK':
             			q_box("z_ina_rkp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'rc2_rk', "95%", "95%", m_print);
             			break;
