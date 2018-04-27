@@ -1963,7 +1963,7 @@
 					<td><input type="text" id="txtStyle.*" style="width:85%;text-align:center;" /></td>
 					<td><input type="text" id="txtProduct.*" style="width:95%;" /></td>
 					<!--<td><input class="txt c1" id="txtSpec.*" type="text"/></td>-->
-					<td class="SizeA"  id="Sizes" >
+					<td class="SizeA" id="Sizes" >
 						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
 						<input class="txt num" id="textSize2.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
