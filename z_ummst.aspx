@@ -28,6 +28,43 @@
             
             function q_gfPost() {
             	q_gt('flors_coin', '', 0, 0, 0, "");
+				
+				
+				$('#btnOk').before($('#btnOk').clone().attr('id', 'btnOk2').attr('value','查詢').show()).hide();
+				$('#btnOk2').click(function() {
+					var t_invoice = $.trim($('#txtYnoa').val());
+					var binvono = $.trim($('#txtXnoa1').val());
+					var einvono = $.trim($('#txtXnoa2').val());
+					var detail = $('#chkXdetail').children().eq(0).prop('checked')?"true":"false";
+					var autoprint = $('#chkXautoprint').children().eq(0).prop('checked')?"true":"false";
+					var bdate = $.trim($('#txtXdate1').val());
+					var edate = $.trim($('#txtXdate2').val());
+					
+					switch($('#q_report').data('info').radioIndex) {
+						case 3:
+							switch(q_getPara('sys.project').toUpperCase()){
+								case 'RS':
+									pdf_vcca01_rs(binvono,einvono,bdate,edate);
+									break;
+								default:
+								    if (q_getPara('sys.project').toUpperCase()=='FP'){
+                                        window.open("./pdf_Einvo02_half.aspx?db="+q_db+"&bno="+$('#txtXnoa1').val()+"&eno="+$('#txtXnoa2').val()+"&bdate="+$('#txtXdate1').val()+"&edate="+$('#txtXdate2').val());
+                                    }else{
+                                        window.open("./pdf_Einvo02.aspx?db="+q_db+"&bno="+$('#txtXnoa1').val()+"&eno="+$('#txtXnoa2').val()+"&bdate="+$('#txtXdate1').val()+"&edate="+$('#txtXdate2').val());
+                                    }
+									break;
+							}
+                            break;
+                  		default:
+                  			$('#result').hide();
+                  			$('#btnOk').click();
+                  			break;
+                  	}
+					
+				});
+				
+				
+				
             }
 
             function q_boxClose(s2) {
