@@ -386,7 +386,7 @@
 				}
 				
 				if(q_getPara('sys.project').toUpperCase()=='BD'){
-					$('#btnOrdeno').hide();
+					//$('#btnOrdeno').hide();
 					$('#btnVcceImport').hide();
 					$('#btnImportVcce').val('發貨匯入').show();//只有發貨匯入
 				}
