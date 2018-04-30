@@ -577,6 +577,8 @@
 							$('#txtCno').val(as[0].noa);
 							$('#txtAcomp').val(as[0].nick);
 						}
+						var t_where = "where=^^ 1=0^^ stop=100";
+						q_gt('custaddr', t_where, 0, 0, 0, "");
 						Unlock(1);
 						$('#txtNoa').val('AUTO');
 						$('#txtDatea').val(q_date());
@@ -1289,8 +1291,7 @@
 					opacity : 0
 				});
 				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
-				var t_where = "where=^^ 1=0^^ stop=100";
-				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
 			}
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
