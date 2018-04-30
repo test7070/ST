@@ -95,7 +95,7 @@
 				$('#txtTax').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 				$('#txtTotal').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 				var t_mount = 0, t_price = 0, t_money = 0, t_moneyus = 0, t_weight = 0, t_total = 0, t_tax = 0;
-				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0, t_gweights = 0, t_mweights = 0;
+				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weight = 0, t_weights = 0, t_gweights = 0, t_mweights = 0;
 				var t_unit = '';
 				var t_unit2 = '';
 				var t_float = q_float('txtFloata');
@@ -139,6 +139,7 @@
 					}
 					getTheory(j);
 					//---------------------------------------
+					t_weights = q_float('txtWeight_' + j);
 					t_weights = q_float('txtWeight_' + j);
 					t_mweights = q_float('txtMweight_' + j);
 					t_gweights = q_float('txtGweight_' + j);
