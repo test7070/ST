@@ -38,11 +38,11 @@
 	            ['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'], 
 	            ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtComp', 'tgg_b.aspx'], 
 	            ['txtCustno', 'lblCust', 'cust', 'noa,comp', 'txtCustno,txtCust', 'cust_b.aspx'], 
-	            ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-	            , ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
-            	, ['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx']
-	            , ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%']
-            	, ['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
+	            ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx'],
+	            ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx'],
+            	['txtStyle_', 'btnStyle_', 'style', 'noa,product', 'txtStyle_', 'style_b.aspx'],
+	            ['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
+            	['txtStoreno_', 'btnStore_', 'store', 'noa,store', 'txtStoreno_,txtStore_', 'store_b.aspx']
             );
             brwCount2 = 7;
             $(document).ready(function() {
@@ -198,6 +198,11 @@
 			}
             function mainPost() {
                 q_getFormat();
+				if (q_getPara('sys.project').toUpperCase()=='FP'){
+					$('.SizeA').hide();
+				}else{
+					$('.SizeA').show();
+				}
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
                 q_cmbParse("cmbTypea", q_getPara('ina.typea'));
@@ -715,6 +720,11 @@
 
                         //-------------------------------------------------------------------------------------
                     }
+					if (q_getPara('sys.project').toUpperCase()=='FP'){
+						$('.SizeA').hide();
+					}else{
+						$('.SizeA').show();
+					}
                 }
                 _bbsAssign();
                 size_change();
@@ -838,6 +848,13 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'FP':
+						$('.SizeA').hide();
+						break;
+					default:
+						break;
+				}
                 size_change();
                 if(q_getPara('sys.comp').substring(0,2)=='傑期'){
                 	$('.pk').show();
@@ -1310,7 +1327,7 @@
 					<td align="center" style="width:120px;"><a>品號<BR>品名</a></td>
 					<td align="center" style="width:30px;"><a id='lblStyle_st'> </a></td>
 					<td class="pe_hide" align="center" style="width:80px;"><a>等級</a></td>
-					<td align="center" id='Size'><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
+					<td align="center" id='Size' class="SizeA"><a id='lblSize_help'> </a><BR><a id='lblSize_st'> </a></td>
 					<td align="center" style="width:250px;" class="rs_hide"><a id='lblSizea_st'> </a></td>
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>厚度</a></td>
 					<td align="center" style="width:80px; display:none;" class="pk"><a>進貨<BR>寬度</a></td>
@@ -1346,7 +1363,7 @@
 						<input id="btnStyle.*" type="button" style="display:none;" value="."/>
 					</td>
 					<td class="pe_hide"><input id="txtClass.*" type="text" style='width: 95%;'/></td>
-					<td>
+					<td class="SizeA" >
 						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >
 							x
