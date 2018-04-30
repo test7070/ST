@@ -233,7 +233,7 @@
                 $('#txtMoney').val(FormatNumber(t_money));
                 $('#txtTax').val(FormatNumber(t_tax));
                 $('#txtTotal').val(FormatNumber(t_total));
-            }
+            } 
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
 				if (q_getPara('sys.project').toUpperCase()=='FP'){
