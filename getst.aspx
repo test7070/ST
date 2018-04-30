@@ -413,10 +413,18 @@
 			}
 
 			function btnPrint() {
-				if(q_getPara('sys.project')=='pk')
-					q_box("z_getp_pk.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'get', "95%", "95%", m_print);
-				else
-					q_box('z_getstp.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'BD':
+						q_box("z_getbdp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'get', "95%", "95%", m_print);
+						break;
+					case 'PK':
+						q_box("z_getp_pk.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'get', "95%", "95%", m_print);	
+						break;
+					default:
+						q_box('z_getstp.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
+						break;
+				}
+				
 			}
 
 			function wrServer(key_value) {
