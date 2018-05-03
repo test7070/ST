@@ -4661,3 +4661,69 @@ BEGIN
 	EXECUTE sp_executesql @cmd
 END
 ;
+------------********************************************************************************
+------------********************************************************************************
+------------********************************************************************************
+z_ummst03_fp:--z_ummst03_fp榮泉用 
+	SET QUOTED_IDENTIFIER OFF 
+	declare @cmd nvarchar(max)
+	declare @t_bmon nvarchar(10) = case when '#non' = '107/04' then CHAR(255) else '107/04' end 
+	declare @t_emon nvarchar(10) = case when '#non' = '107/04' then CHAR(255) else '107/04' end 
+	declare @t_bcustno nvarchar(20) = case when '#non' = '035' then CHAR(255) else '035' end 
+	declare @t_ecustno nvarchar(20) = case when '#non' = '035' then CHAR(255) else '035' end 
+	declare @t_memo nvarchar(max) = case when '#non' = '#non' then '' else '#non' end 
+	declare @t_proj nvarchar(max) = 'fp' 
+
+	declare @tmp0 table(
+		custno nvarchar(20),
+		cust nvarchar(20),
+		addr_invo nvarchar(max),
+		addr_comp nvarchar(max),
+		tel nvarchar(max),
+		serial nvarchar(8)
+	)insert into @tmp0
+	select noa,comp,addr_invo,addr_comp,tel,serial from cust where (noa between @t_bcustno and @t_ecustno)
+
+	declare @tmp1 table(
+		gno nvarchar(1),
+		custno nvarchar(20),
+		mon nvarchar(20),
+		[money] float,
+		tax float,
+		total float,
+		vcccount float,
+		unpay_t float,
+		pay_t float
+	)
+	insert into @tmp1 (gno,custno,mon,[money],tax,total,vcccount,unpay_t,pay_t)
+	select '0',custno,mon,0,0,0,0,0,0 from vcca where (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon) group by custno,mon
+	update @tmp1 set [money]=(SELECT sum([money]) FROM vcca WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)),
+					 tax=(SELECT sum(tax) FROM vcca WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)),
+					 total=(SELECT sum(total) FROM vcca WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)),
+					 vcccount=(SELECT count(noa) FROM view_vcc WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)), --出貨單量
+					 unpay_t=(SELECT sum(total) FROM vcca WHERE (mon < @t_emon) and (custno between @t_bcustno and @t_ecustno)),   --上期未付
+					 pay_t=(SELECT sum(total) FROM umm where (mon < @t_emon) and (custno between @t_bcustno and @t_ecustno))		--上期已付
+    select * from @tmp1
+-----列印結果------------------------------------------------------
+	declare @tmp table(
+		custno nvarchar(20),
+		cust nvarchar(20),
+		addr_invo nvarchar(max),
+		addr_comp nvarchar(max),
+		tel nvarchar(max),
+		serial nvarchar(8),
+		mon nvarchar(10),
+		da nvarchar(1),
+		[money] float,
+		tax float,
+		total float,
+		vcccount float,
+		unpay float,
+		paytotal float ---應收總計
+	)
+	insert into @tmp
+	select a.custno,a.cust,a.addr_invo,a.addr_comp,a.tel,a.serial,b.mon,'-',b.[money],b.tax,b.total,b.vcccount,ISNULL(b.unpay_t,0)-ISNULL(b.pay_t,0),ISNULL(b.total,0)+(ISNULL(b.unpay_t,0)-ISNULL(b.pay_t,0))
+	from @tmp0 a left join @tmp1 b on a.custno=b.custno
+
+	select * from @tmp
+;
