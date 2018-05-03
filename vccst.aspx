@@ -1319,11 +1319,16 @@
 				sum();
 			}
 			function btnPrint() {
-				if (q_getPara('sys.project').toUpperCase()=='FP'){
-					q_box("z_vccp_FP.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccp_FP', "95%", "95%", q_getMsg('popPrint'));
-				}else{
-					//q_box('z_vccstp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
-					q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'FP':
+						q_box("z_vccp_FP.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccp_FP', "95%", "95%", q_getMsg('popPrint'));
+						break;
+					case 'BD':
+						q_box("z_vccbdp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'vccst', "95%", "95%", m_print);
+						break;
+					default:
+						q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
+						break;
 				}
 			}
 			function wrServer(key_value) {
