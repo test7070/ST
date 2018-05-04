@@ -322,9 +322,13 @@
                 
                 OrdenoAndNo2On_Change();
                 
-                if(q_getPara('sys.project').toUpperCase()=="BDV" || q_getPara('sys.project').toUpperCase()=="RS"){
+                if(q_getPara('sys.project').toUpperCase()=="BDV" 
+                	|| q_getPara('sys.project').toUpperCase()=="RS"){
                 	$('#btnBBTShow').hide();
                 }
+                if(q_getPara('sys.project').toUpperCase()=="BD"){
+                	$('#dbbt').show();
+                } 
             }
             
             function showSizeInfo(e){
@@ -335,6 +339,16 @@
             function q_boxClose(s2) {///   q_boxClose 2/4 /// 查詢視窗、客戶視窗、訂單視窗  關閉時執行
                 var ret;
                 switch (b_pop) {/// 重要：不可以直接 return ，最後需執行 originalClose();
+                	case 'uccy_import':
+                		
+                		q_gridAddRow(bbtHtm, 'tbbt', 'txtNo3,txtUno,txtProduct,txtProductno,txtRadius,txtDime,txtWidth,txtLengthb,txtMount,txtWeight,txtSource', b_ret.length, b_ret, 'no2,uno,product,productno,radius,dime,width,lengthb,emount,eweight,source', 'txtUno,txtProduct,txtProductno', '__');
+                		
+                		$('#dbbt').show();
+                		/*q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,combSpec,txtDime,txtWidth,txtLengthb,txtRadius,txtSize,txtOrdeno,txtNo2,txtPrice,txtMount,txtWeight,txtTotal,txtMemo,txtUnit,txtSource,txtStyle,txtClass'
+	                        	, b_ret.length, b_ret
+								, 'productno,product,spec,spec,dime,width,lengthb,radius,size,noa,no2,price,mount,weight,total,memo,unit,source,style,class', 'txtProductno'); 
+                		*/
+                		break;
                     case 'quats':
                         if (q_cur > 0 && q_cur < 4) {
                             b_ret = getb_ret();
@@ -975,27 +989,49 @@
                             sum();
                         });
                         $('#btnOrdet_' + j).click(function() {
-                            
-                            var n = $(this).attr('id').split('_')[$(this).attr('id').split('_').length - 1];
-                            qBoxNo3id = n;
-							var t_where = ' 1=1 and radius=0 ';
-							var t_productno = trim($('#txtProductno_' + n).val());
-							var t_bdime = dec($('#txtDime_' + n).val())-0.8;
-							var t_edime = dec($('#txtDime_' + n).val())+0.8;
-							var t_width = dec($('#txtWidth_' + n).val());
-							var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
-							var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
-							
-							var t_array = {productno:t_productno
-									,bdime:t_bdime
-									,edime:t_edime
-									,width:t_width
-									,blength:t_blengthb
-									,elength:t_elengthb}
-
-							q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;;" + encodeURIComponent(JSON.stringify(t_array)), 'uccc', "95%", "95%", q_getMsg('popUccc'));
+                        	var n = $(this).attr('id').replace(/^(.*)_(\d+)$/,'$2');
                         	
-                        
+                            if(q_getPara('sys.project').toUpperCase() == 'BD'){
+                            	//隓昊  品號要一樣、厚度正負0.2
+                            	var t_no2 = $.trim($('#txtNo2_'+n).val()); // 重要,沒有就要先產生:  這樣才能知道寫到ORDET的是屬於哪筆明細的
+                            	var t_productno = $.trim($('#txtProductno_'+n).val());
+                            	var t_bdime = dec($('#txtDime_' + n).val())-0.2;
+                            	var t_edime = dec($('#txtDime_' + n).val())+0.2;
+                            	var t_bwidth = dec($('#txtWidth_' + n).val());
+                            	var t_ewidth = dec($('#txtWidth_' + n).val());
+								var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
+								var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
+								
+		                        var t_where = '';
+		                        q_box("uccy_import_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";" + ";" + JSON.stringify({
+		                            productno : t_productno,
+		                            bdime : t_bdime,
+		                            edime : t_edime,
+		                            bwidth : t_bwidth,
+		                            ewidth : t_ewidth,
+		                            blengthb : t_blengthb,
+		                            elengthb : t_elengthb,
+		                            no2 : t_no2
+		                        }), "uccy_import", "95%", "95%", '');
+                            }else{
+	                            qBoxNo3id = n;
+								var t_where = ' 1=1 and radius=0 ';
+								var t_productno = trim($('#txtProductno_' + n).val());
+								var t_bdime = dec($('#txtDime_' + n).val())-0.8;
+								var t_edime = dec($('#txtDime_' + n).val())+0.8;
+								var t_width = dec($('#txtWidth_' + n).val());
+								var t_blengthb = round(dec($('#txtLengthb_' + n).val()) * 0.88, 2);
+								var t_elengthb = round(dec($('#txtLengthb_' + n).val()) * 1.12, 2);
+								
+								var t_array = {productno:t_productno
+										,bdime:t_bdime
+										,edime:t_edime
+										,width:t_width
+										,blength:t_blengthb
+										,elength:t_elengthb}
+	
+								q_box("uccc_chk_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;;" + encodeURIComponent(JSON.stringify(t_array)), 'uccc', "95%", "95%", q_getMsg('popUccc'));
+                            }
                         });
                     }
                 }
@@ -1013,6 +1049,7 @@
 
             function btnIns() {
                 _btnIns();
+                bbsAssign();//產生NO2
                 $('#cmbTaxtype').val(1);
                 Lock(1, {
                     opacity : 0
@@ -1136,6 +1173,10 @@
             ///////////////////////////////////////////////////  以下提供事件程式，有需要時修改
             function refresh(recno) {
                 _refresh(recno);
+                if ( q_getPara('sys.project').toUpperCase()=='BD'){　
+					$('#lblscut_st').text('剪板');
+					$('.BDshow').show();
+				}
                 var obj = $('.control_end2');
                 for(var i=0;i<obj.length;i++){
                     switch(obj.eq(i).html()){
@@ -1824,7 +1865,9 @@
                     <td align="center" style="width:250px;"><a id='lblMemos'> </a></td>
                     <td align="center" style="width:120px;"><a id='lblProductno2_s_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblssale_st'> </a></td>
+                    <td align="center" style="width:40px;display:none;" class="BDshow"><a>分條</a></td>
                     <td align="center" style="width:40px;"><a id='lblscut_st'> </a></td>
+                    
                     <td align="center" style="width:40px;"><a id='lblOrdc_s_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblEnda_st'> </a></td>
                     <td align="center" style="width:40px;"><a id='lblBorn'> </a></td>
@@ -1890,6 +1933,7 @@
 	                    <input type="text" id="txtProductno2.*"  style="width:75px; float:left;"/>
                     </td>
                     <td align="center"><input id="chkSale.*" type="checkbox"/></td>
+                    <td align="center" class="BDshow" style="display:none;"><input id="chkSlit.*" type="checkbox"/></td>
                     <td align="center"><input id="chkCut.*" type="checkbox"/></td>
                     <td align="center"><input id="chkOrdc.*" type="checkbox"/></td>
                     <td align="center"><input id="chkEnda.*" type="checkbox"/></td>

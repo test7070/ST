@@ -30,52 +30,55 @@
 						name : 'accy',
 						value : q_getId()[4]
 					},{
-						type : '1', //[2][3]1
+						type : '1', //[2][3]  1
 						name : 'xdate'
 					},{
-						type : '1', //[4][5]2
+						type : '1', //[4][5]  2
 						name : 'xmon'
 					},{
-						type : '2', //[6][7]4
+						type : '2', //[6][7]  3
 						name : 'xpno',
 						dbf : 'ucc',
 						index : 'noa,product',
 						src : 'ucc_b.aspx'
 					},{
-						type : '2', //[8][9]8
+						type : '2', //[8][9]  4
 						name : 'xcust',	
 						dbf : 'cust',
 						index : 'noa,comp',
 						src : 'cust_b.aspx'
 					},{
-						type : '5', //[10]1
+						type : '5', //[10]    5
 						name : 'xstype',
 						value : [q_getPara('report.all')].concat(q_getPara('vccst.stype').split(','))
 					},{
-						type : '5', //[11]2
+						type : '5', //[11]    6
 						name : 'xtypea',
 						value : q_getPara('vccst.typea')
 					},{
-						type : '6', //[12]4
+						type : '6', //[12]    7
 						name : 'xspec'
 					},{
-						type : '1', //[13][14]8
+						type : '1', //[13][14] 8
 						name : 'xradius'
 					},{
-						type : '1', //[15][16]1
+						type : '1', //[15][16] 9
 						name : 'xwidth'
 					},{
-						type : '1', //[17][18]2
+						type : '1', //[17][18]  10
 						name : 'xdime'
 					},{
-						type : '1', //[19][20]4
+						type : '1', //[19][20]  11
 						name : 'xlengthb'
 					}, {
-						type : '2', //[21][22]8
+						type : '2', //[21][22]  12
 						name : 'xsales',
 						dbf : 'sss',
 						index : 'noa,namea',
 						src : 'sss_b.aspx'
+					},{
+						type : '6', //[23]      13
+						name : 'xrate'
 					}]
 				});
 				q_popAssign();
