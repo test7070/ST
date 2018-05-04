@@ -73,13 +73,13 @@
                     }]
                 });
 
-                $('#Xshowenda').css('width', '300px').css('height', '30px');
+                /*$('#Xshowenda').css('width', '300px').css('height', '30px');
                 $('#Xshowenda .label').css('width', '0px');
                 $('#chkXshowenda').css('width', '220px').css('margin-top', '5px');
                 $('#chkXshowenda span').css('width', '180px')
 
                 $('.q_report .report').css('width', '420px');
-                $('.q_report .report div').css('width', '200px');
+                $('.q_report .report div').css('width', '200px');*/
                 q_popAssign();
                 q_getFormat();
                 q_langShow();
@@ -89,8 +89,8 @@
                 var t_key = q_getHref();
                 if (t_key[1] != undefined) {
                     $('#txtXnoa').val(t_key[1]);
-                    $('#txtXcnoa1').val(t_key[1]);
-                    $('#txtXcnoa2').val(t_key[1]);
+                    /*$('#txtXcnoa1').val(t_key[1]);
+                    $('#txtXcnoa2').val(t_key[1]);*/
                 }
 
                 if(r_len==4){                 
