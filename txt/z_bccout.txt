@@ -201,28 +201,29 @@ declare @gno nvarchar(20)
 declare @bccno nvarchar(20)
 declare @t_bccno nvarchar(20)
 
-declare bcc_table cursor for
-select gno,bccno from @result
-open bcc_table
-fetch next from bcc_table
-into @gno,@bccno
-while(@@FETCH_STATUS <> -1)
-begin
+--2018/05/08  不隱藏第2筆
+--declare bcc_table cursor for
+--select gno,bccno from @result
+--open bcc_table
+--fetch next from bcc_table
+--into @gno,@bccno
+--while(@@FETCH_STATUS <> -1)
+--begin
 
-	if(@t_bccno=@bccno and @gno=0)
-	Begin
-		update @result 
-		set bccname='',bccno=''
-		where current of bcc_table
-	End
+--	if(@t_bccno=@bccno and @gno=0)
+--	Begin
+--		update @result 
+--		set bccname='',bccno=''
+--		where current of bcc_table
+--	End
 	
-	SET @t_bccno=@bccno
-	fetch next from bcc_table
-	into @gno,@bccno
+--	SET @t_bccno=@bccno
+--	fetch next from bcc_table
+--	into @gno,@bccno
 
-end
-close bcc_table
-deallocate bcc_table
+--end
+--close bcc_table
+--deallocate bcc_table
 
 select * from @result;
 
