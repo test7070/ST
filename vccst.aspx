@@ -319,9 +319,15 @@
 						return;
 					btnOrdes();
 				});
-				$('#lblAccno').click(function() {
-					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('btnAccc'), true);
+				
+				$('#lblAccno').click(function(){
+					if($('#txtDatea').val().substring(0, 1)==1){
+						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('btnAccc'), true);
+					}else{
+						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + ($('#txtDatea').val().substring(0, 4)-1911) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('btnAccc'), true);
+					}
 				});
+				
 				$('#btnImportVcce').click(function() {
 					if (q_cur == 1 || q_cur == 2) {
 						var t_custno = $('#txtCustno').val();
@@ -965,11 +971,11 @@
 					Unlock(1);
 					return;
 				}
-				if ($('#txtDatea').val().substring(0, 3) != r_accy) {
+				/*if ($('#txtDatea').val().substring(0, 3) != r_accy) {
 					alert('年度異常錯誤，請切換到【' + $('#txtDatea').val().substring(0, 3) + '】年度再作業。');
 					Unlock(1);
 					return;
-				}
+				}*/
 				//判斷起算日,寫入帳款月份
 				/*if (!check_startdate && emp($('#txtMon').val())) {
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";

@@ -4667,18 +4667,18 @@ END
 z_ummst03_fp:--z_ummst03_fp榮泉用 
 	SET QUOTED_IDENTIFIER OFF 
 	declare @cmd nvarchar(max)
-	declare @t_bmon nvarchar(10) = case when '#non' = '107/04' then CHAR(255) else '107/04' end 
-	declare @t_emon nvarchar(10) = case when '#non' = '107/04' then CHAR(255) else '107/04' end 
-	declare @t_bcustno nvarchar(20) = case when '#non' = '035' then CHAR(255) else '035' end 
-	declare @t_ecustno nvarchar(20) = case when '#non' = '035' then CHAR(255) else '035' end 
-	declare @t_memo nvarchar(max) = case when '#non' = '#non' then '' else '#non' end 
-	declare @t_proj nvarchar(max) = 'fp' 
-
+	declare @t_bmon nvarchar(10) = case when '#non' = [13] then '' else [13] end
+	declare @t_emon nvarchar(10) = case when '#non' = [14] then CHAR(255) else [14] end
+	declare @t_bcustno nvarchar(20) = case when '#non' = [5] then '' else [5] end
+	declare @t_ecustno nvarchar(20) = case when '#non' = [6] then CHAR(255) else [6] end
+	declare @t_memo nvarchar(max) = case when '#non' = [19] then '' else [19] end
+	declare @t_proj nvarchar(max) = '[25]'
+	
 	declare @tmp0 table(
 		custno nvarchar(20),
 		cust nvarchar(20),
-		addr_invo nvarchar(max),
-		addr_comp nvarchar(max),
+		addrinvo nvarchar(max),
+		addrcomp nvarchar(max),
 		tel nvarchar(max),
 		serial nvarchar(8)
 	)insert into @tmp0
@@ -4703,18 +4703,35 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 					 vcccount=(SELECT count(noa) FROM view_vcc WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)), --出貨單量
 					 unpay_t=(SELECT sum(total) FROM vcca WHERE (mon < @t_emon) and (custno between @t_bcustno and @t_ecustno)),   --上期未付
 					 pay_t=(SELECT sum(total) FROM umm where (mon < @t_emon) and (custno between @t_bcustno and @t_ecustno))		--上期已付
-    select * from @tmp1
+
+--前期未付+當月應收=總應收
+
+---找出客戶當月發票資料
+	declare @tmp2 table(
+		custno nvarchar(20),
+		mon nvarchar(20),
+		invono nvarchar(max)
+	)
+	insert into @tmp2
+	SELECT a.custno ,a.mon ,a.noas as noa from
+		(SELECT custno,mon,(SELECT cast(noa AS NVARCHAR )+'　' from vcca where (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)
+		FOR XML PATH('')) as noas
+		from vcca ord where (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)
+		) a group by custno,mon,noas
+	ORDER by a.custno 
+
 -----列印結果------------------------------------------------------
 	declare @tmp table(
-		custno nvarchar(20),
+		gno nvarchar(1),
+		cname nvarchar(20),
 		cust nvarchar(20),
-		addr_invo nvarchar(max),
-		addr_comp nvarchar(max),
+		addrinvo nvarchar(max),
+		addrcomp nvarchar(max),
 		tel nvarchar(max),
 		serial nvarchar(8),
+		invono nvarchar(max),
 		mon nvarchar(10),
-		da nvarchar(1),
-		[money] float,
+		moneya float,
 		tax float,
 		total float,
 		vcccount float,
@@ -4722,8 +4739,11 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 		paytotal float ---應收總計
 	)
 	insert into @tmp
-	select a.custno,a.cust,a.addr_invo,a.addr_comp,a.tel,a.serial,b.mon,'-',b.[money],b.tax,b.total,b.vcccount,ISNULL(b.unpay_t,0)-ISNULL(b.pay_t,0),ISNULL(b.total,0)+(ISNULL(b.unpay_t,0)-ISNULL(b.pay_t,0))
-	from @tmp0 a left join @tmp1 b on a.custno=b.custno
-
+	select b.gno,a.custno,a.cust,a.addrinvo,a.addrcomp,a.tel,a.serial,c.invono,b.mon,b.[money],b.tax,b.total,b.vcccount,ISNULL(b.unpay_t,0)-ISNULL(b.pay_t,0),ISNULL(b.total,0)+(ISNULL(b.unpay_t,0)-ISNULL(b.pay_t,0))
+	from @tmp0 a 
+	left join @tmp1 b on a.custno=b.custno
+	left join @tmp2 c on a.custno=c.custno
+	where (a.custno between @t_bcustno and @t_ecustno) and (b.mon between @t_bmon and @t_emon)
+	order by a.custno
 	select * from @tmp
 ;
