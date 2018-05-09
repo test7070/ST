@@ -26,7 +26,7 @@
 			var bbsMask = [];
 			q_sqlCount = 6;
 			brwCount = 6;
-			brwCount2 = 5;
+			brwCount2 = 20;
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'Noa';
