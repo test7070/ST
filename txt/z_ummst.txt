@@ -4735,11 +4735,10 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 		tax float,
 		total float,
 		vcccount float,
-		unpay float,
 		paytotal float ---應收總計
 	)
 	insert into @tmp
-	select b.gno,a.custno,a.cust,a.addrinvo,a.addrcomp,a.tel,a.serial,c.invono,b.mon,b.[money],b.tax,b.total,b.vcccount,ISNULL(b.unpay_t,0)-ISNULL(b.pay_t,0),ISNULL(b.total,0)+(ISNULL(b.unpay_t,0)-ISNULL(b.pay_t,0))
+	select b.gno,a.custno,a.cust,a.addrinvo,a.addrcomp,a.tel,a.serial,c.invono,b.mon,b.[money],b.tax,b.total,b.vcccount,ISNULL(b.total,0)+(ISNULL(b.unpay_t,0)-ISNULL(b.pay_t,0))
 	from @tmp0 a 
 	left join @tmp1 b on a.custno=b.custno
 	left join @tmp2 c on a.custno=c.custno
