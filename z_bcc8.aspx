@@ -53,22 +53,28 @@
                         type : '0', //重量的小數位數
                         name : 'weight_precision',
                         value : q_getPara('rc2.weightPrecision')
-                    }, {
+                    }, {  //[4][5]     1
                         type : '1',
                         name : 'date'
-                    }, {
+                    }, {  //[6][7]     2 
                         type : '1',
                         name : 'mon'
-                    }, {
+                    }, {  //[8][9]     3
                         type : '2',
                         name : 'tgg',
                         dbf : 'tgg',
                         index : 'noa,comp',
                         src : 'tgg_b.aspx'
-                    }, {/*3*/
+                    }, {  //[10]       4
                         type : '5',
                         name : 'xstore',
                         value : t_store.split(',')
+                    }, {  //[11][12]   5
+                        type : '2',
+                        name : 'xproduct',
+                        dbf : 'bcc',
+                        index : 'noa,product',
+                        src : 'bcc_b.aspx'
                     }]
                 });
                 q_popAssign();

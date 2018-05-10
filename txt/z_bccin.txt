@@ -49,6 +49,7 @@ set @t_bccno = 'wderfff'
 set @t_bccname = 'erwereee'
 set @t_unit = 'ererere'
 
+/* 2018/05/08 品名每筆都顯示,以便轉出EXCEL排序
 declare cursor_table cursor for
 select datea,noa,sbccno,bccno,bccname
 from @tmp 
@@ -70,7 +71,7 @@ fetch next from cursor_table
 into @datea,@noa,@sbccno,@bccno,@bccname
 end
 close cursor_table
-deallocate cursor_table
+deallocate cursor_table*/
 
 insert into @tmp
 select storeno,'2' gno,'','','','',sbccno,'','',0,SUM(mount),SUM(total),''

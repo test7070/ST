@@ -33,7 +33,6 @@
 			brwList = [];
 			brwNowPage = 0;
 			brwKey = 'noa';
-
 			aPop = new Array(['txtTggno', 'lblTgg', 'tgg', 'noa,comp,nick,paytype,tel,trantype,zip_fact,addr_fact', 'txtTggno,txtTgg,txtNick,txtPaytype,txtTel,cmbTrantype,txtPost,txtAddr', 'tgg_b.aspx']
 			, ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
 			, ['txtProductno_', 'btnProduct_', 'ucc', 'noa,product', 'txtProductno_', 'ucc_b.aspx']
@@ -72,8 +71,6 @@
 					return;
 				// 2017/02/21  本幣和外幣分別由  total,totalus存	
 				// 2017/06/22 sprice 單位統一(NTD/KG)
-				
-					
 				$('#cmbTaxtype').val((($('#cmbTaxtype').val()) ? $('#cmbTaxtype').val() : '1'));
 				$('#txtMoney').attr('readonly', true);
 				$('#txtTax').attr('readonly', true);
@@ -93,7 +90,7 @@
 				    t_moneys = 0; 
 				    t_moneyuss = 0;
 				    //---------------------------------------------------------
-					if (!(/[A-Z]/.test(t_kind)) || t_kind == 'A') {
+					if (t_kind == 'A') {
 						q_tr('txtDime_' + j, q_float('textSize1_' + j));
 						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
 						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
@@ -289,9 +286,15 @@
 						q_msg($('#txtMon'), "月份要另外設定，請在"+q_getMsg('lblMemo')+"的第一個字打'*'字");
 				});
 				
-				$('#lblAccno').click(function() {
-					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "95%", q_getMsg('btnAccc'), true);
+				
+				$('#lblAccno').click(function(){
+					if($('#txtDatea').val().substring(0, 1)==1){
+						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "95%", q_getMsg('btnAccc'), true);
+					}else{
+						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + ($('#txtDatea').val().substring(0, 4)-1911) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "95%", q_getMsg('btnAccc'), true);
+					}
 				});
+				
 				
 				$('#lblOrdc').click(function() {
 					if (!(q_cur == 1 || q_cur == 2))
@@ -1459,7 +1462,7 @@
 				//隆昊固定顯示厚、寬、長
 				t_kind = q_getPara('sys.project').toUpperCase()=='BD'?'A':t_kind;
 				
-				if (/[A-Z]/.test(t_kind) || t_kind == 'A') {
+				if (t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					$('#Size').css('width', '220px');
 					for (var j = 0; j < q_bbsCount; j++) {

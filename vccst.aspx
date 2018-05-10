@@ -60,7 +60,8 @@
 				['txtSpec_', '', 'spec', 'noa,product', '0txtSpec_,txtSpec_', 'spec_b.aspx', '95%', '95%'],
 				/*['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'ucc_b.aspx'],*/
 				['txtProductno_', 'btnProductno_', 'ucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucc_b.aspx'],
-				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				['txtUno_', 'btnUno_', 'view_uccc2', 'uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', 'txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],
+				/*['txtUno_', 'btnUno_', 'view_uccc2', 'uno,uno,productno,class,dime,width,lengthb,spec,style,product,emount,eweight', '0txtUno_,txtUno_,txtProductno_,txtClass_,txtDime_,txtWidth_,txtLengthb_,txtSpec_,txtStyle_,txtProduct_,txtMount_,txtWeight_', 'uccc_seek_b2.aspx?;;;1=0', '95%', '60%'],*/
 				['txtStoreno2_', 'btnStoreno2_', 'store', 'noa,store', 'txtStoreno2_,txtStore2_', 'store_b.aspx'],
 				['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
 			);
@@ -94,7 +95,7 @@
 				$('#txtTax').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 				$('#txtTotal').css('background-color', 'rgb(237,237,238)').css('color', 'green');
 				var t_mount = 0, t_price = 0, t_money = 0, t_moneyus = 0, t_weight = 0, t_total = 0, t_tax = 0;
-				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weights = 0;
+				var t_mounts = 0, t_prices = 0, t_moneys = 0, t_weight = 0, t_weights = 0, t_gweights = 0, t_mweights = 0,t_tweight=0;
 				var t_unit = '';
 				var t_unit2 = '';
 				var t_float = q_float('txtFloata');
@@ -232,7 +233,7 @@
                 $('#txtMoney').val(FormatNumber(t_money));
                 $('#txtTax').val(FormatNumber(t_tax));
                 $('#txtTotal').val(FormatNumber(t_total));
-            }
+            } 
 			function mainPost() {// 載入資料完，未 refresh 前
 				q_getFormat();
 				if (q_getPara('sys.project').toUpperCase()=='FP'){
@@ -318,9 +319,15 @@
 						return;
 					btnOrdes();
 				});
-				$('#lblAccno').click(function() {
-					q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('btnAccc'), true);
+				
+				$('#lblAccno').click(function(){
+					if($('#txtDatea').val().substring(0, 1)==1){
+						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtDatea').val().substring(0, 3) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('btnAccc'), true);
+					}else{
+						q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + ($('#txtDatea').val().substring(0, 4)-1911) + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('btnAccc'), true);
+					}
 				});
+				
 				$('#btnImportVcce').click(function() {
 					if (q_cur == 1 || q_cur == 2) {
 						var t_custno = $('#txtCustno').val();
@@ -385,7 +392,7 @@
 				}
 				
 				if(q_getPara('sys.project').toUpperCase()=='BD'){
-					$('#btnOrdeno').hide();
+					//$('#btnOrdeno').hide();
 					$('#btnVcceImport').hide();
 					$('#btnImportVcce').val('發貨匯入').show();//只有發貨匯入
 				}
@@ -576,6 +583,8 @@
 							$('#txtCno').val(as[0].noa);
 							$('#txtAcomp').val(as[0].nick);
 						}
+						var t_where = "where=^^ 1=0^^ stop=100";
+						q_gt('custaddr', t_where, 0, 0, 0, "");
 						Unlock(1);
 						$('#txtNoa').val('AUTO');
 						$('#txtDatea').val(q_date());
@@ -962,11 +971,11 @@
 					Unlock(1);
 					return;
 				}
-				if ($('#txtDatea').val().substring(0, 3) != r_accy) {
+				/*if ($('#txtDatea').val().substring(0, 3) != r_accy) {
 					alert('年度異常錯誤，請切換到【' + $('#txtDatea').val().substring(0, 3) + '】年度再作業。');
 					Unlock(1);
 					return;
-				}
+				}*/
 				//判斷起算日,寫入帳款月份
 				/*if (!check_startdate && emp($('#txtMon').val())) {
 					var t_where = "where=^^ noa='" + $('#txtCustno').val() + "' ^^";
@@ -1288,8 +1297,7 @@
 					opacity : 0
 				});
 				q_gt('acomp', '', 0, 0, 0, 'getAcomp', r_accy);
-				var t_where = "where=^^ 1=0^^ stop=100";
-				q_gt('custaddr', t_where, 0, 0, 0, "");
+				
 			}
 			function btnModi() {
 				if (emp($('#txtNoa').val()))
@@ -1317,11 +1325,16 @@
 				sum();
 			}
 			function btnPrint() {
-				if (q_getPara('sys.project').toUpperCase()=='FP'){
-					q_box("z_vccp_FP.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccp_FP', "95%", "95%", q_getMsg('popPrint'));
-				}else{
-					//q_box('z_vccstp.aspx', '', "95%", "95%", q_getMsg("popPrint"));
-					q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
+				switch(q_getPara('sys.project').toUpperCase()){
+					case 'FP':
+						q_box("z_vccp_FP.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccp_FP', "95%", "95%", q_getMsg('popPrint'));
+						break;
+					case 'BD':
+						q_box("z_vccbdp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + JSON.stringify({noa:trim($('#txtNoa').val())}) + ";" + r_accy + "_" + r_cno, 'vccst', "95%", "95%", m_print);
+						break;
+					default:
+						q_box("z_vccstp.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa=" + $('#txtNoa').val() + ";" + r_accy, 'z_vccstp', "95%", "95%", q_getMsg('popPrint'));
+						break;
 				}
 			}
 			function wrServer(key_value) {
@@ -1963,7 +1976,7 @@
 					<td><input type="text" id="txtStyle.*" style="width:85%;text-align:center;" /></td>
 					<td><input type="text" id="txtProduct.*" style="width:95%;" /></td>
 					<!--<td><input class="txt c1" id="txtSpec.*" type="text"/></td>-->
-					<td class="SizeA"  id="Sizes" >
+					<td class="SizeA" id="Sizes" >
 						<input class="txt num" id="textSize1.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
 						<div id="x1.*" style="float: left;display:block;width:20px;padding-top: 4px;" >x</div>
 						<input class="txt num" id="textSize2.*" type="text" style="float: left;width:55px;" disabled="disabled"/>
