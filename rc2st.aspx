@@ -90,7 +90,7 @@
 				    t_moneys = 0; 
 				    t_moneyuss = 0;
 				    //---------------------------------------------------------
-					if (!(/[A-Z]/.test(t_kind)) || t_kind == 'A') {
+					if (t_kind == 'A') {
 						q_tr('txtDime_' + j, q_float('textSize1_' + j));
 						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
 						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
@@ -610,7 +610,7 @@
 						Unlock(1);
 						$('#txtNoa').val('AUTO');
 						$('#txtDatea').val(q_date());
-						//$('#txtMon').val(q_date().substring(0, 6));
+						$('#txtMon').val(q_date().substring(0, 7));
 						$('#txtDatea').focus();
 						size_change();
 						break;
@@ -801,7 +801,7 @@
 							t_startdate=as[0].startdate;
 						}
 						if(t_startdate.length==0 || ('00'+t_startdate).slice(-2)=='00' || $('#txtDatea').val().substr(7, 2)<('00'+t_startdate).slice(-2)){
-							$('#txtMon').val($('#txtDatea').val().substr(0, 6));
+							$('#txtMon').val($('#txtDatea').val().substr(0, 7));
 						}else{
 							var t_date=$('#txtDatea').val();
 							var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,1);
@@ -1462,7 +1462,7 @@
 				//隆昊固定顯示厚、寬、長
 				t_kind = q_getPara('sys.project').toUpperCase()=='BD'?'A':t_kind;
 				
-				if (/[A-Z]/.test(t_kind) || t_kind == 'A') {
+				if (t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					$('#Size').css('width', '220px');
 					for (var j = 0; j < q_bbsCount; j++) {
