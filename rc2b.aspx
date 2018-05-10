@@ -101,7 +101,7 @@
 				bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm]];
 				q_mask(bbmMask);
 				bbmNum = [['txtMoney', 15, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 15, 0, 1],['txtPrice', 10, q_getPara('rc2.pricePrecision'), 1], ['txtTotalus', 15, 0, 1], ['txtFloata', 10, 2, 1],['txtTranmoney',15,0,1],['txtTranadd',15,q_getPara('rc2.pricePrecision'),1]];
-				bbsNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1], ['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1], ['txtTotal', 15, 0, 1]];
+				bbsNum = [['txtMount', 15, q_getPara('rc2.mountPrecision'), 1], ['txtPrice', 15, q_getPara('rc2.pricePrecision'), 1], ['txtTotal', 15, 0, 1], ['txtWmount', 15, 0, 1], ['txtWvalue', 15, 0, 1]];
 				
 				q_cmbParse("cmbTranstyle", q_getPara('sys.transtyle'));
 				/*if (q_getPara('sys.comp').indexOf('英特瑞') > -1 || q_getPara('sys.comp').indexOf('安美得') > -1)
@@ -716,6 +716,12 @@
 				}else if(returnType=='rack'){
 					return (hasRackComp.toString()=='1');
 				}
+				
+				if(!(q_getPara('sys.project').toUpperCase()=='JO'|| q_getPara('sys.project').toUpperCase()=='AD')){
+					$('.JO').hide();
+				}else{
+					$('.JO').show();
+				}
 			}
 			
 			function stype_chang(){
@@ -1224,6 +1230,7 @@
 					<td align="center" style="width:100px;"><a id='lblStore'> </a></td>
 					<td align="center" style="width:110px;"><a id='lblBkmount'> </a>/<a id='lblBkrea'> </a></td>
 					<td align="center" style="width:110px;"><a id='lblWmount'> </a>/<a id='lblWrea'> </a></td>
+					<td align="center" style="width:110px;" class="JO"><a id='lblWvalues_jo' class="JO">殘值</a><a id='lblMethods_jo' class="JO">/處理方法</a></td>
 					<td align="center" ><a id='lblMemo_s'> </a></td>
 					<td align="center" style="width:90px;"><a id='lblQcworker'> </a> / <a id='lblQctime'> </a></td>
 				</tr>
@@ -1260,6 +1267,10 @@
 					<td>
 						<input id="txtWmount.*" type="text" class="txt num c1" />
 						<input id="txtWrea.*" type="text" class="txt c1" />
+					</td>
+					<td class="JO">
+						<input class="txt c1 num JO" id="txtWvalue.*" type="text"/>
+						<input class="txt c1 JO" id="txtMethod.*" type="text"/>
 					</td>
 					<td>
 						<input id="txtMemo.*" type="text" class="txt c1"/>
