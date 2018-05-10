@@ -90,7 +90,7 @@
 				    t_moneys = 0; 
 				    t_moneyuss = 0;
 				    //---------------------------------------------------------
-					if (!(/[A-Z]/.test(t_kind)) || t_kind == 'A') {
+					if (t_kind == 'A') {
 						q_tr('txtDime_' + j, q_float('textSize1_' + j));
 						q_tr('txtWidth_' + j, q_float('textSize2_' + j));
 						q_tr('txtLengthb_' + j, q_float('textSize3_' + j));
@@ -1462,7 +1462,7 @@
 				//隆昊固定顯示厚、寬、長
 				t_kind = q_getPara('sys.project').toUpperCase()=='BD'?'A':t_kind;
 				
-				if (/[A-Z]/.test(t_kind) || t_kind == 'A') {
+				if (t_kind == 'A') {
 					$('#lblSize_help').text(q_getPara('sys.lblSizea'));
 					$('#Size').css('width', '220px');
 					for (var j = 0; j < q_bbsCount; j++) {
