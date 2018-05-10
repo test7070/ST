@@ -1059,9 +1059,18 @@
 					productno : t_Productno,
 					round : 3
 				};
-				t_theory = theory_st(theory_setting);
+				/*t_theory = theory_st(theory_setting);
 				t_theory = (dec(t_theory) == 0 ? $('#txtWeight_' + b_seq).val() : t_theory);
-				return t_theory;
+				return t_theory;*/
+				if ($('#cmbKind').val().substr(1, 1) == '4') {//鋼胚
+					q_tr('txtTheory_' + b_seq, round(t_Mount * theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), t_Dime, t_Width, t_Lengthb), 0));
+				} else {
+					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
+				}
+				var t_Product = $('#txtProduct_' + b_seq).val();
+				if (t_Product.indexOf('管') > -1 && dec($('#txtWeight_' + b_seq).val()) == 0) {
+					$('#txtWeight_' + b_seq).val($('#txtTheory_' + b_seq).val());
+				}
 			}
 
 			var btnCert_Seq = -1;
@@ -1861,6 +1870,7 @@
 					<td align="center" style="width:80px;"><a id='lblMount_st'> </a></td>
 					<td align="center" style="width:50px;display:none;" class="pk"><a>數量<br>單位</a></td>
 					<td align="center" style="width:80px;"><a id='lblWeights_st2'>重量<BR>實重</a></td>
+					<td align="center" style="width:80px;"><a id='lblTheory'> </a></td>
 					<td align="center" style="width:50px;"><a>計價<br>單位</a></td>
 					<td align="center" style="width:80px;">單價</td>
 					<td align="center" style="width:100px;">小計<br>外幣小計</td>
@@ -1929,6 +1939,7 @@
 						<input id="txtWeight.*" type="text" class="txt num" style="width:95%;"/>
 						<input id="txtGweight.*" type="text" class="txt num" style="width:95%;"/>
 					</td>
+					<td><input id="txtTheory.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td><input id="txtUnit.*" type="text" style="width:95%;"/></td>
 					<td>
 						<input id="txtPrice.*" type="text"  class="txt num" style="width:95%;"/>

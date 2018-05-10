@@ -4,6 +4,7 @@ uccstk_bd: --- uccstk_bd  隆昊 SPRICE 計算
 	declare @t_bdate nvarchar(20) = case when '#non'=[13] then '' else [13] end
 	declare @t_edate nvarchar(20) = case when '#non'=[14] then char(255) else [14] end
 	--------------------------------------------------------------------
+	
 	IF OBJECT_ID('tempdb..#uccstk_bd')is not null
 	BEGIN
 		drop table #uccstk_bd
@@ -103,6 +104,27 @@ z_acx02:--z_acx02
 	declare @t_style nvarchar(max)= case when '#non'=[4] then '' else [4] end
 	declare @t_productno nvarchar(max) = case when '#non'=[16] then '' else [16] end
 	----------------------------------------------------------------------------
+	
+	
+
+declare @tmptt table(
+	producta nvarchar(max),
+	radius nvarchar(10),
+	width nvarchar(10),
+	dime nvarchar(10),
+	lengthb nvarchar(10),
+	d1 nvarchar(1)
+)
+insert into @tmptt (producta,radius,width,dime,lengthb,d1)
+select product,radius,width,dime,lengthb,'*' from view_uccb
+
+
+update @tmptt set radius='' from @tmptt where radius='0'
+update @tmptt set width='',d1='' from @tmptt where width='0'
+update @tmptt set dime='' from @tmptt where dime='0'
+update @tmptt set lengthb='' from @tmptt where lengthb='0'
+
+	----------------------------------------------------------------------------------------------------------
 	----------------------------------------------------------------------------
 	IF OBJECT_ID('tempdb..#z_acx02')is not null
 	BEGIN
@@ -496,38 +518,68 @@ z_acx02:--z_acx02
 	update #z_acx02 set eweight = case when eweight>0 and emount>0 then eweight else 0 end
 		,emount = case when eweight>0 and emount>0 then emount else 0 end	
 	---------------------------------------------------------------------------------------------
-	if exists(select * from acomp where nick=N'裕承隆')
-	begin
-		update #z_acx02 set size= case when c.noa is not null then c.noa+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar)
-			when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end
-			,ranka = isnull(c.recno,99999)
-		from #z_acx02 a
-		left join view_uccb b on a.uno=b.uno
-		left join (select noa,bwidth,ewidth,ROW_NUMBER()over(order by bwidth) recno from beltwidth) c on b.radius between c.bwidth and c.ewidth
-		where b.style = '1' 
+	if exists(select * from acomp where nick=N'裕承隆') 
+		begin 
+			update #z_acx02 set size= case when c.noa is not null then c.noa+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) 
+				when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end 
+				,ranka = isnull(c.recno,99999) 
+			from #z_acx02 a 
+			left join view_uccb b on a.uno=b.uno 
+			left join (select noa,bwidth,ewidth,ROW_NUMBER()over(order by bwidth) recno from beltwidth) c on b.radius between c.bwidth and c.ewidth 
+			where b.style = '1' 
+		end 
+	else 
+
+	begin 
+
+		update #z_acx02 set size=case when len(ISNULL(b.size,''))>0 then b.size else cast(c.radius as nvarchar)+c.d1+ cast(c.width as nvarchar)+'*'+ cast(c.dime as nvarchar)+'*'+ cast(c.lengthb as nvarchar) end
+		from #z_acx02 a 
+			left join view_uccb b on a.uno=b.uno 
+			left join @tmptt c on b.product=c.producta
+		where isnull(b.style,'1') = '1'
+
+		/*
+		update #z_acx02 set size = case when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(b.width as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end 
+		from #z_acx02 a 
+			left join view_uccb b on a.uno=b.uno 
+			where isnull
+		(b.style,'1') = '1' */
 	end
-	else
-	begin
-		update #z_acx02 set size =  case when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(b.width as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end
-		from #z_acx02 a
-		left join view_uccb b on a.uno=b.uno
-		where isnull(b.style,'1') = '1'  
-	end
-	
-	update #z_acx02 set size = case when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(b.width as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end
-	from #z_acx02 a
-	left join view_uccb b on a.uno=b.uno
-	where b.style='2' or b.style='3' 
-	
-	update #z_acx02 set size = case when len(ISNULL(b.dime,0))=0 or len(ISNULL(b.width,0))=0 then b.size else cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+right(SPACE(4)+cast(b.width as nvarchar),4)+'*C' end
-	from #z_acx02 a
-	left join view_uccb b on a.uno=b.uno
+
+	update #z_acx02 set size = case when len(ISNULL(b.size,''))>0 then b.size else cast(c.radius as nvarchar)+'*'+cast(c.width as nvarchar)+'*'+cast(CAST(c.dime as decimal(10,2)) as nvarchar)+'*'+cast(c.lengthb as nvarchar) end 
+	from #z_acx02 a 
+		left join view_uccb b on a.uno=b.uno 
+		left join @tmptt c on b.product=c.producta
+	where b.style='2' or b.style='3'  
+/*
+update #z_acx02 set size = case when len(ISNULL(b.size,''))>0 then b.size else cast(b.radius as nvarchar)+'*'+cast(b.width as nvarchar)+'*'+cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+cast(b.lengthb as nvarchar) end 
+from #z_acx02 a 
+left join view_uccb b on a.uno=b.uno 
+where b.style='2' or b.style='3' */
+
+	update #z_acx02 set size = case when len(ISNULL(b.dime,0))=0 or len(ISNULL(b.width,0))=0 then b.size else cast(CAST(c.dime as decimal(10,2)) as nvarchar)+'*'+right(SPACE(4)+cast(c.width as nvarchar),4)+'*C' end 
+	from #z_acx02 a 
+		left join view_uccb b on a.uno=b.uno 
+		left join @tmptt c on b.product=c.producta
 	where b.style='B' or b.style='C' 
-	
-	update #z_acx02 set size = case when len(ISNULL(b.dime,0))=0 or len(ISNULL(b.width,0))=0 then b.size else cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+right(SPACE(4)+cast(b.width as nvarchar),4)+'*'+cast(b.lengthb as nvarchar) end
-	from #z_acx02 a
-	left join view_uccb b on a.uno=b.uno
+/*
+update #z_acx02 set size = case when len(ISNULL(b.dime,0))=0 or len(ISNULL(b.width,0))=0 then b.size else cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+right(SPACE(4)+cast(b.width as nvarchar),4)+'*C' end 
+from #z_acx02 a 
+left join view_uccb b on a.uno=b.uno 
+where b.style='B' or b.style='C' */
+
+	update #z_acx02 set size = case when len(ISNULL(b.dime,0))=0 or len(ISNULL(b.width,0))=0 then b.size else cast(CAST(c.dime as decimal(10,2)) as nvarchar)+'*'+right(SPACE(4)+cast(c.width as nvarchar),4)+'*'+cast(c.lengthb as nvarchar) end 
+	from #z_acx02 a 
+		left join view_uccb b on a.uno=b.uno 
+		left join @tmptt c on b.product=c.producta
 	where b.style='S' 
+
+/*
+update #z_acx02 set size = case when len(ISNULL(b.dime,0))=0 or len(ISNULL(b.width,0))=0 then b.size else cast(CAST(b.dime as decimal(10,2)) as nvarchar)+'*'+right(SPACE(4)+cast(b.width as nvarchar),4)+'*'+cast(b.lengthb as nvarchar) end 
+from #z_acx02 a 
+left join view_uccb b on a.uno=b.uno 
+where b.style='S' 
+*/
 	
 	declare @tmp table(
 		gno nvarchar(20),
