@@ -911,7 +911,12 @@
 			function btnOrdes() {
 				var t_custno = trim($('#txtCustno').val());
 				var t_kind = $('#cmbKind').val();
-				var t_where = " 1=1 and kind='" + t_kind + "'";
+				var t_comp = $('#txtAcomp').val();
+				if (t_comp=='萱華'){
+					var t_where = " 1=1 ";
+				}else{
+					var t_where = " 1=1 and kind='" + t_kind + "'";
+				}
 				if (t_custno.length > 0) {
 					t_where += (t_custno.length > 0 ? q_sqlPara2("custno", t_custno) : "");
 					//// sql AND 語法，請用 &&
@@ -1409,7 +1414,7 @@
 					case 'txtProductno_':
                         var t_productno = $.trim($('#txtProductno_'+b_seq).val());
 	                	var t_style = $.trim($('#txtStyle_'+b_seq).val());
-	                	var t_comp = q_getPara('sys.comp');          	
+	                	var t_comp = q_getPara('sys.comp');      	
 	                	q_gt('getproduct',"where=^^[N'"+t_productno+"',N'"+t_style+"',N'"+t_comp+"')^^", 0, 0, 0, "getproduct_"+b_seq); 
                         $('#txtStyle_' + b_seq).focus();
                         break;
