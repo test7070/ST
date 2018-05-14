@@ -1841,8 +1841,8 @@
 						<td><input id="txtWorker2"  type="text" class="txt c1"/></td>
 						<td><span> </span><a id="lblAccno" class="lbl btn"> </a></td>
 						<td>
-							<input id="txtAccno" type="text"  class="txt c1"/>
-							<input id="txtOrdeno" type="hidden"  class="txt c1"/>
+							<input id="txtAccno" type="text" class="txt c1"/>
+							<input id="txtOrdeno" type="hidden" class="txt c1"/>
 						</td>
 					</tr>
 				</table>
@@ -1929,10 +1929,10 @@
 						<select id='combSpec.*' style="width:95%;display:none;"> </select>
 					</td>
 					<td class="RK_hide"><input id="txtSize.*" type="text" style="width:95%;"/></td>
-					<td style="display:none;" class="pk"><input  id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td style="display:none;" class="pk"><input  id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td style="display:none;" class="pk"><input  id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
-					<td style="display:none;" class="pk rk bd"><input  id="txtSource.*" type="text" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input id="txtDime2.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input id="txtLengthc.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk"><input id="txtLengthd.*" type="text" class="txt num" style="width:95%;"/></td>
+					<td style="display:none;" class="pk rk bd"><input id="txtSource.*" type="text" style="width:95%;"/></td>
 					<td><input id="txtMount.*" type="text" class="txt num" style="width:95%;"/></td>
 					<td style="display:none;" class="pk"><input id="txtUnit2.*" type="text" style="width:95%;"/></td>
 					<td>
@@ -1959,14 +1959,14 @@
 					<td style="display:none;" class="rk"><input id="txtDescr.*" type="text" style="width:95%;" maxlength="20"/></td>
 					<td ><input id="txtUno2.*" type="text" style="width:90%;"/></td>
 					<td>
-						<input type="text" id="txtStoreno.*"  style="width:95%; float:left;"/>
-						<input type="text" id="txtStore.*"  style="width:95%; float:left;"/>
+						<input type="text" id="txtStoreno.*" style="width:95%; float:left;"/>
+						<input type="text" id="txtStore.*" style="width:95%; float:left;"/>
 						<input id="btnStoreno.*" type="button" style="display:none;" />
 					</td>
 					<td><input id="txtPlace.*" type="text" style="width:95%;"/></td>
 					<td class="Ordctds">
-						<input id="txtOrdeno.*" type="text"  style="width:140px;float:left;"/>
-						<input id="txtNo2.*" type="text"  style="width:40px;float:left;"/>
+						<input id="txtOrdeno.*" type="text" style="width:140px;float:left;"/>
+						<input id="txtNo2.*" type="text" style="width:40px;float:left;"/>
 					</td>
 				</tr>
 			</table>
