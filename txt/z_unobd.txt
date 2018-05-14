@@ -183,6 +183,7 @@ z_unobd05:--z_unobd05 批號履歷
 		ischk bit,
 		[rank] int,
 		uno nvarchar(30),
+		lena nvarchar(2), 
 		tablea nvarchar(20),
 		[action] nvarchar(20),
 		accy nvarchar(10),
@@ -562,7 +563,8 @@ z_unobd05:--z_unobd05 批號履歷
 			 when tablea='vccbk' then '出退'
 			 when tablea='gets' then '領料'
 			 when tablea='cubt_get' then '派令領料'
-			 when tablea='cubu_in' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '包裝入庫'
+			 --when tablea='cubu_in' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '包裝入庫'
+			 when tablea='cubu_in' then '生產入庫'
 			 when tablea='cubt_in' then '派令入庫'			 
 			 when tablea='cngs' then '調撥'
 			 else tablea end
@@ -596,7 +598,8 @@ z_unobd05:--z_unobd05 批號履歷
 			 when tablea='gets' then '領料'
 			 when tablea='cubt_get' then '派令領料'
 			 when tablea='cubt_in' then '派令入庫'
-			 when tablea='cubu_in' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '包裝入庫'
+			 --when tablea='cubu_in' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '包裝入庫'
+			 when tablea='cubu_in' then '生產入庫'
 			 when tablea='cut' and exists(select noa from view_cubs where accy=accy and noa=noa and ordc=1) then '製管入庫'
 			 when tablea='cngs' then '調撥'
 			 else tablea end
@@ -619,7 +622,11 @@ z_unobd05:--z_unobd05 批號履歷
 		,size=REPLACE(size,'~#$',"'")
 	end
 	
-	
+	if (@t_traceback='')
+	begin
+		update #z_unobd05 set lena = len(uno) where uno=uno
+		delete #z_unobd05 where len(uno) <> len(@t_uno)
+	end
 
 	select a.* 
 		,'1' gno
@@ -664,7 +671,7 @@ z_unobd05:--z_unobd05 批號履歷
 	
 	drop table #z_unobd05;
 
-
+----==================================================================================================
 z_unobd01:--z_unobd01          z_uno1
 declare @t_uno nvarchar(50)
 set @t_uno = case when '#non' = [2] then '#non' else [2] end
