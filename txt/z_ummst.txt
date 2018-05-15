@@ -278,8 +278,7 @@ END
 -----------------------------------------------------------------------------------------------------------------
 z_ummst_bd1:
 SET QUOTED_IDENTIFIER OFF 
-	declare @cmd nvarchar(max) 
-
+	declare @cmd nvarchar(max)
 	declare @t_bmon nvarchar(10) = case when '#non' = [13] then '' else [13] end
 	declare @t_emon nvarchar(10) = case when '#non' = [14] then CHAR(255) else [14] end
 	declare @t_bcustno nvarchar(20) = case when '#non' = [5] then '' else [5] end
