@@ -1,0 +1,44 @@
+sprice_se2:--sprice_se2 --bd
+declare @t_uno nvarchar(max)= case when '#non'=[1] then '' else [1] end
+
+set @t_uno=REPLACE(@t_uno,'#',',') --批號請用#號隔開
+
+declare @uno table(
+	uno nvarchar(50),
+	tablea nvarchar(50), --進貨類別
+	noa nvarchar(50), --進貨單號
+	sdate nvarchar(20), --進貨日期
+	sprice float, --進貨單價
+	wprice float, --加工單價
+	tprice float, --運費單價
+	purchase float --單價加總
+)
+
+insert @uno (uno)
+select item from dbo.fnSplit(@t_uno)
+
+--更新成本單價
+update a
+set tablea=isnull(case when b.rnoa is null then 'ina' else 'rc2' end,'')
+,noa=isnull(case when b.rnoa is null then c.inoa else b.rnoa end,'')
+,sdate=isnull(case when b.rnoa is null then c.idatea else b.rdatea end,'')
+,sprice=isnull(case when b.rnoa is null then c.iprice else b.rprice end,0)
+,wprice=isnull(d.wprice,0)
+,tprice=isnull(case when b.rnoa is null then c.itprice else b.rtprice end,'')
+from @uno a
+outer apply (select top 1 rb.noa rnoa,ra.price rprice,rb.datea rdatea
+,case when isnull(rb.price,0)!=0 then isnull(rb.price,0) else case when isnull(rb.weight,0)=0 then 0 else (rb.tranmoney/rb.weight) end end rtprice
+from view_rc2s ra left join view_rc2 rb on ra.noa=rb.noa
+where left(a.uno,len(ra.uno))=ra.uno and isnull(ra.uno,'')!='' order by ra.uno,rb.datea,rb.noa)b
+outer apply (select top 1 ib.noa inoa ,ia.price iprice,ib.datea idatea
+,case when isnull(ib.price,0)!=0 then isnull(ib.price,0) else case when isnull(ib.weight,0)=0 then 0 else (ib.tranmoney/ib.weight) end end itprice
+from view_inas ia left join view_ina ib on ia.noa=ib.noa
+where left(a.uno,len(uno))=uno and isnull(uno,'')!='' order by ia.uno,ib.datea,ib.noa)c
+outer apply (select top 1 noa cnoa,wprice,datea cdatea from view_cuts where left(a.uno,len(bno))=bno and isnull(bno,'')!='' order by bno,datea,noa)d
+where isnull(a.uno,'')!=''
+
+--成本
+update @uno set purchase=(sprice+wprice+tprice)
+
+select * from @uno
+;

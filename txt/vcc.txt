@@ -1,0 +1,1245 @@
+vccfe_save:--vccfe_save
+	SET QUOTED_IDENTIFIER OFF
+	declare @t_accy nvarchar(20) =[1]
+	declare @t_noa nvarchar(20) = [2]
+	declare @t_typea nvarchar(20) = [3]
+	declare @t_custno nvarchar(20) = [4]
+	declare @t_date nvarchar(20) = [5]
+	declare @t_mon nvarchar(20) = [6]
+	declare @t_worker nvarchar(20) = [7]
+	declare @t_total float = case when len([8])=0 then 0 else cast([8] as float) end 
+	-----------------------------------------------------------------------------------------
+	declare @checker nvarchar(max) = '' 
+	declare @memo nvarchar(max) = ''
+	if len(@t_noa)>0
+	begin
+		select top 1 @checker=checker,@memo=memo from sign where zno=@t_noa
+		if exists(select * from sign where zno=@t_noa and enda='Y')
+		begin
+			select top 1 '' msg,checker
+				,case when charindex('#',memo)>0 then left(memo,charindex('#',memo)-1) else @memo end memo 
+				,@t_noa noa
+				from sign where zno=@t_noa and enda='Y'
+			return
+		end
+		if exists(select * from sign where zno=@t_noa and enda!='Y')
+		begin
+			select '尚未核准。' msg,'' checker,'' memo,@t_noa noa
+			return
+		end
+	end
+	------------------------------------------------------------------------------------------
+	declare @string nvarchar(max) = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	declare @n int
+	declare @noq nvarchar(10)
+	select @t_noa = MAX(noa) from sign where LEFT(noa,7) = REPLACE(@t_date,'/','')
+	if LEN(ISNULL(@t_noa,''))=0
+	begin
+		set @t_noa = REPLACE(@t_date,'/','')+'001'
+	end
+	else
+	begin
+		set @n = (charindex(left(RIGHT(@t_noa,3),1),@string)-1)*100 + cast(RIGHT(@t_noa,2) as int)+1
+		set @noq = SUBSTRING(@string,FLOOR(@n/100)+1,1)+right('00'+cast(@n%100 as nvarchar),2)
+		set @t_noa = REPLACE(@t_date,'/','')+@noq
+	end
+	------------------------------------------------------------------------------------------
+	declare @isBack int = 0
+	declare @is35 int = 0
+	declare @isUnpay int = 0
+	
+	declare @nick nvarchar(20)=''
+	select @nick = nick from cust where noa=@t_custno
+	
+	--退貨
+	if(@t_typea != '1')
+	begin
+		set @isBack = 1
+	end
+	
+	--35天未收
+	declare @date date = convert(date, cast(cast(left(@t_date,3) as int)+1911 as nvarchar)+right(@t_date,6))
+	select @date = DATEADD(MM,-1,@date)
+	select @date = DATEADD(DD,-35,@date)
+	declare @bmon nvarchar(20)= right('000'+cast(year(@date)-1911 as nvarchar),3)
+		+'/'+right('00'+cast(month(@date) as nvarchar),2) 
+	declare @total float = 0
+	select @total = SUM(case when typea='1' then 1 else -1 end *isnull(total,0))
+	from view_vcc 
+	where not(accy=@t_accy and noa=@t_noa)
+	and custno=@t_custno
+	and mon=@t_mon
+	
+	declare @money float = 0
+	declare @tax float = 0
+	declare @pay float = 0
+	
+	select @money = SUM(isnull(total,0))
+	from view_vcc
+	where custno=@t_custno 
+	and mon=@bmon
+	and total!=0
+	
+	select @tax = SUM(ISNULL(tax,0))
+	from vcca
+	where custno=@t_custno
+	and left(datea,6)=@bmon
+	
+	select @tax = @tax + SUM(ISNULL(-b.tax,0))
+	from vccb a
+	left join vccbs b on a.noa=b.noa
+	where LEFT(a.datea,6)=@bmon
+	and b.custno = @t_custno
+	
+	select @pay=SUM(ISNULL(paysale,0))
+	from umms 
+	where mon=@bmon
+	and custno=@t_custno
+	
+	if(@money+@tax)>@pay
+	begin
+		set @is35 = 1
+	end
+	--呆帳  
+	set @date = convert(date, cast(cast(left(@t_mon,3) as int)+1911 as nvarchar)+right(@t_mon,3)+'/01')
+	select @date = DATEADD(MM,-3,@date)
+	
+	set @bmon = right('000'+cast(year(@date)-1911 as nvarchar),3)
+		+'/'+right('00'+cast(month(@date) as nvarchar),2)
+	
+	declare @unpay float = 0
+	select top 1 @unpay=sum(isnull(unpay,0)) from cust_2s
+	where noa=@t_custno
+	and mon<=@bmon and unpay!=0
+	
+	if (LEN(@unpay)>0)
+	begin
+		set @isUnpay = 1	                                                                                                                                                                   
+	end
+	-------------------------------------------------------------------------------------------
+	set @memo = case when @isBack=1 then '【退貨】' else '' end
+	if @is35=1
+		set @memo = @memo + case when LEN(@memo)>0 then ',' else '' end + '【35天未收】'
+	if @isUnpay=1
+		set @memo = @memo + case when LEN(@memo)>0 then ',' else '' end + '【呆帳】'
+	-------------------------------------------------------------------------------------------
+	set @checker = ''
+	select @checker = checker from signform where UPPER(noa)='VCCFE_SAVE'
+
+	if LEN(@memo)>0
+	begin
+		select @memo+'需核準，已發送簽核。' msg,'' checker,@memo memo,@t_noa noa
+		
+		set @memo = @memo +'#'+'【客戶】'+@nick+ '【出貨日期】'+@t_date+'【出貨金額】'+dbo.getComma(@t_total,0)
+		insert into sign (noa,datea,timea,enda,memo,form,partno,part
+			,checker,sender,zno,zno2,memochecker 
+			,memoapprovema,memoapprovefi,memoapprovegm,memoapprovebs)
+		select @t_noa,@t_date,substring(CONVERT(nvarchar,GETDATE(),120),12,5),'N',@memo,'出貨單','',''
+			,@checker,@t_worker,@t_noa,'vcc'+char(59)+'noa'+char(59)+@t_accy+char(59),''
+			,'','','',''
+	end
+	else
+	begin
+		select '' msg,'電腦' checker,'' memo,@t_noa noa
+		print @t_noa
+		insert into sign (noa,datea,timea,enda,memo,form,partno,part
+			,checker,sender,zno,zno2,memochecker 
+			,memoapprovema,memoapprovefi,memoapprovegm,memoapprovebs)
+		select @t_noa,@t_date,substring(CONVERT(nvarchar,GETDATE(),120),12,5),'Y',@memo,'出貨單','',''
+			,'電腦核准',@t_worker,@t_noa,'vcc'+char(59)+'noa'+char(59)+@t_accy+char(59),''
+			,'','','',''
+	end
+	return; 
+-----------------------------------------------------------------------------------------------------------------------------------------	
+vcc2cng_rb:--vcc2cng_rb
+	SET QUOTED_IDENTIFIER OFF
+	declare @t_accy nvarchar(20) = [1]
+	declare @t_noa nvarchar(20) = [2]
+	declare @t_worker nvarchar(30) = [3]
+		
+	declare @cmd nvarchar(max)
+	declare @t_err nvarchar(30) 
+	declare @accy nvarchar(30) 
+
+	IF OBJECT_ID('tempdb..#tmp')is not null
+	BEGIN
+		set @cmd = 'drop table #tmp'
+		EXECUTE sp_executesql @cmd
+	END
+	
+	--抓vcc調撥單單號
+	declare @new_cngno nvarchar(30)=isnull((select transtyle from view_vcc where noa=@t_noa),'')
+	declare @cngdate nvarchar(30)=isnull((select datea from view_vcc where noa=@t_noa),'')
+	declare @cng_accy nvarchar(20)=isnull((select accy from view_cng where noa=@new_cngno),@t_accy)
+	
+	--vccs有調撥單單號 或 已產生調撥單號
+	if( (select count(*) from view_vccs a left join view_vcc b on a.noa=b.noa where a.noa=@t_noa and left(a.ordeno,2)='XD' )>0
+	or @new_cngno!='' )
+	BEGIN
+	
+		--產生新的歸還單
+		if(@new_cngno='')
+		begin
+			set @new_cngno=isnull((select MAX(noa) from view_cng where noa like 'XE'+REPLACE(@cngdate,'/','')+'%'),'XE'+REPLACE(@cngdate,'/','')+'000')
+			set @new_cngno=LEFT(@new_cngno,9)+right('000'+cast(cast(RIGHT(@new_cngno,3) as int)+1 as nvarchar(10)),3)
+		end
+		else
+		begin
+			--刪除已產生的歸還單
+			EXEC("delete cng"+@cng_accy+" where noa='"+@new_cngno+"'")
+			EXEC("delete cngs"+@cng_accy+" where noa='"+@new_cngno+"'")
+			
+			set @t_err='modi'
+		end
+		
+		create table #tmp(
+			noa nvarchar(50),
+			noq nvarchar(20),
+			productno nvarchar(50),
+			product nvarchar(100), 
+			unit nvarchar(50),
+			mount float,
+			cngno nvarchar(50),
+			cngnoq nvarchar(50),
+			storeno nvarchar(50),
+			store nvarchar(50),
+			memo nvarchar(MAX)
+		) 
+		
+		insert #tmp
+		select a.noa,a.noq,a.productno,a.product,a.unit,a.mount,a.ordeno,a.no2,b.storeno,b.store,a.memo
+		from view_vccs a left join view_vcc b on a.noa=b.noa 
+		where a.noa=@t_noa and left(a.ordeno,2)='XD' --抓調撥單借出
+		
+		if((select count(*) from #tmp)>0)
+		begin
+			declare @t_sno nvarchar(50)
+			declare @t_sname nvarchar(50)
+			declare @t_sino nvarchar(50)
+			declare @t_siname nvarchar(50) 
+			
+			--抓取原借出倉與入庫倉
+			select top 1 @t_sno=storeinno,@t_sname=storein
+			,@t_sino=storeno,@t_siname=store
+			from view_cng where noa=(select top 1 cngno from #tmp where isnull(cngno,'')!='') 
+			
+			--出貨有倉庫 歸還的入庫倉變成出庫倉
+			if(isnull((select top 1 storeno from #tmp where isnull(cngno,'')!='' and isnull(storeno,'')!=''),'')!='')
+			begin
+				select top 1 @t_sino=storeno,@t_siname=store from #tmp where isnull(cngno,'')!='' and isnull(storeno,'')!=''
+			end
+			
+			set @accy=isnull((select accy from view_vcc where noa=@t_noa),@t_accy)
+			
+			exec("insert cng"+@accy+"(noa,datea,storeno,store,storeinno,storein,memo
+			,typea,custno,comp,addr,tel,transtartno,transtart,worker)
+			select '"+@new_cngno+"','"+@cngdate+"','"+@t_sno+"','"+@t_sname+"','"+@t_sino+"','"+@t_siname+"','由出貨單號"+@t_noa+"轉來'
+			,'5' typea,custno,comp,addr,tel,transtartno,transtart,'"+@t_worker+"'
+			from view_cng where noa=(select top 1 cngno from #tmp where isnull(cngno,'')!='') ")
+			
+			exec("insert cngs"+@accy+"(noa,noq,productno,product,unit,mount,storeno,storeinno,memo,typea,retno,retnoq)
+			select '"+@new_cngno+"',noq,productno,product,unit,mount,'"+@t_sno+"','"+@t_sino+"',memo,'5',cngno,cngnoq from #tmp")
+			
+			exec("update vcc"+@accy+" set transtyle='"+@new_cngno+"' where noa='"+@t_noa+"'")
+			
+			if(len(@t_err)=0)
+				set @t_err='OK'
+		end
+		else
+		begin
+			--修改後 沒有 調撥借出單
+			set @accy=isnull((select accy from view_vcc where noa=@t_noa),@t_accy)
+			exec("update vcc"+@accy+" set transtyle='' where noa='"+@t_noa+"'")
+			if(len(@t_err)=0)
+				set @t_err='dele'
+		end
+		
+	END
+	select @new_cngno cngno,@t_err err
+	
+	IF OBJECT_ID('tempdb..#tmp')is not null
+	BEGIN
+		set @cmd = 'drop table #tmp'
+		EXECUTE sp_executesql @cmd
+	END
+;
+-----------------------------------------------------------------------------------------------------------------------------------------
+changequat_vu:--changequat_vu
+SET QUOTED_IDENTIFIER OFF 
+declare @t_accy nvarchar(50) = [1]
+declare @t_noa nvarchar(50) = [2]
+declare @t_cont1 nvarchar(50) = case when '#non'=[3] then '' else [3] end
+declare @t_cont2 nvarchar(50) = case when '#non'=[4] then '' else [4] end
+
+declare @accy nvarchar(50)
+declare @t_quatno1 nvarchar(50)=(select dbo.split(dbo.split(apvmemo,'##',0),'@',0) from view_vcc where noa=@t_noa)
+declare @t_quatno2 nvarchar(50)=(select dbo.split(dbo.split(apvmemo,'##',1),'@',0) from view_vcc where noa=@t_noa)
+
+set @accy=isnull((select top 1 accy from view_quat where noa=@t_quatno1),@t_accy)
+
+EXEC("
+	update a
+	set gweight=isnull(b.gweight,0),eweight=isnull(weight,0)-isnull(b.gweight,0)
+	,enda=(case when eweight!=0 then 0 else enda end)
+	from quat"+@accy+" a
+	outer apply(select SUM(gweight)gweight from(
+		select (case when typea='2' then -1 else 1 end) * 
+		(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+		+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+		from view_vcc where charindex(a.noa,apvmemo)>0
+	)tmp)b
+	where a.noa='"+@t_quatno1+"'
+")
+
+EXEC("
+	update a
+	set enda=(case when isnull(b.enda,0)=1 then 1 else a.enda end)
+	from quats"+@accy+" a left join quat"+@accy+" b on a.noa=b.noa
+	where a.noa='"+@t_quatno1+"'
+")
+
+set @accy=isnull((select top 1 accy from view_quat where noa=@t_quatno2),@t_accy)
+
+EXEC("
+	update a
+	set gweight=isnull(b.gweight,0),eweight=isnull(weight,0)-isnull(b.gweight,0)
+	,enda=(case when eweight!=0 then 0 else enda end)
+	from quat"+@accy+" a
+	outer apply(select SUM(gweight)gweight from(
+		select (case when typea='2' then -1 else 1 end) *
+		(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+		+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+		from view_vcc where charindex(a.noa,apvmemo)>0
+	)tmp)b
+	where a.noa='"+@t_quatno2+"'
+")
+
+EXEC("
+	update a
+	set enda=(case when isnull(b.enda,0)=1 then 1 else a.enda end)
+	from quats"+@accy+" a left join quat"+@accy+" b on a.noa=b.noa
+	where a.noa='"+@t_quatno2+"'
+")
+
+if(len(@t_cont1)>0)
+begin
+	set @accy=isnull((select top 1 accy from view_quat where noa=@t_cont1),@t_accy)
+
+	EXEC("
+		update a
+		set gweight=isnull(b.gweight,0),eweight=isnull(weight,0)-isnull(b.gweight,0)
+		,enda=(case when eweight!=0 then 0 else enda end)
+		from quat"+@accy+" a
+		outer apply(select SUM(gweight)gweight from(
+			select (case when typea='2' then -1 else 1 end) *
+			(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+			+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+			from view_vcc where charindex(a.noa,apvmemo)>0
+		)tmp)b
+		where a.noa='"+@t_cont1+"'
+	")
+	
+	EXEC("
+		update a
+		set enda=(case when isnull(b.enda,0)=1 then 1 else a.enda end)
+		from quats"+@accy+" a left join quat"+@accy+" b on a.noa=b.noa
+		where a.noa='"+@t_cont1+"'
+	")
+end
+
+if(len(@t_cont2)>0)
+begin
+	set @accy=isnull((select top 1 accy from view_quat where noa=@t_cont2),@t_accy)
+
+	EXEC("
+		update a
+		set gweight=isnull(b.gweight,0),eweight=isnull(weight,0)-isnull(b.gweight,0)
+		,enda=(case when eweight!=0 then 0 else enda end)
+		from quat"+@accy+" a
+		outer apply(select SUM(gweight)gweight from(
+			select (case when typea='2' then -1 else 1 end) * 
+			(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+			+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+			from view_vcc where charindex(a.noa,apvmemo)>0
+		)tmp)b
+		where a.noa='"+@t_cont2+"'
+	")
+	
+	EXEC("
+		update a
+		set enda=(case when isnull(b.enda,0)=1 then 1 else a.enda end)
+		from quats"+@accy+" a left join quat"+@accy+" b on a.noa=b.noa
+		where a.noa='"+@t_cont2+"'
+	")
+end
+;
+-----------------------------------------------------------------------------------------------------------------------------------
+changequat_sf:--changequat_sf
+SET QUOTED_IDENTIFIER OFF 
+declare @t_accy nvarchar(50) = [1]
+declare @t_noa nvarchar(50) = [2]
+declare @t_cont1 nvarchar(50) = case when '#non'=[3] then '' else [3] end
+declare @t_cont2 nvarchar(50) = case when '#non'=[4] then '' else [4] end
+
+declare @accy nvarchar(50)
+declare @t_quatno1 nvarchar(50)=(select dbo.split(dbo.split(apvmemo,'##',0),'@',0) from view_vcc where noa=@t_noa)
+declare @t_quatno2 nvarchar(50)=(select dbo.split(dbo.split(apvmemo,'##',1),'@',0) from view_vcc where noa=@t_noa)
+
+declare @isquat int
+declare @isordh int
+
+-------------------------------------------------------------------
+set @isquat=(select count(*) from view_quat where noa=@t_quatno1)
+set @isordh=(select count(*) from ordh where noa=@t_quatno1)
+
+if(@isquat>0)
+begin
+	set @accy=isnull((select top 1 accy from view_quat where noa=@t_quatno1),@t_accy)
+	
+	EXEC("
+		update a
+		set gweight=isnull(b.gweight,0),eweight=isnull(weight,0)-isnull(b.gweight,0)
+		,enda=(case when eweight!=0 then 0 else enda end)
+		from quat"+@accy+" a
+		outer apply(select SUM(gweight)gweight from(
+			select (case when typea='2' then -1 else 1 end) * 
+			(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+			+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+			from view_vcc where charindex(a.noa,apvmemo)>0
+		)tmp)b
+		where a.noa='"+@t_quatno1+"'
+	")
+	
+	EXEC("
+		update a
+		set enda=(case when isnull(b.enda,0)=1 then 1 else a.enda end)
+		from quats"+@accy+" a left join quat"+@accy+" b on a.noa=b.noa
+		where a.noa='"+@t_quatno1+"'
+	")
+end
+
+if(@isordh>0)
+begin
+	update a
+	set f8=isnull(b.gweight,0),f9=isnull(weight,0)-isnull(b.gweight,0)
+	,enda=(case when f4!=0 abd f9!=0 then 0 else enda end)
+	from ordh a
+	outer apply(select SUM(gweight)gweight from(
+		select (case when typea='2' then -1 else 1 end) * 
+		(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+		+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+		from view_vcc where charindex(a.noa,apvmemo)>0
+	)tmp)b
+	where a.noa=@t_quatno1
+	
+end
+
+-------------------------------------------------------------------
+set @isquat=(select count(*) from view_quat where noa=@t_quatno2)
+set @isordh=(select count(*) from ordh where noa=@t_quatno2)
+
+if(@isquat>0)
+begin
+	set @accy=isnull((select top 1 accy from view_quat where noa=@t_quatno2),@t_accy)
+	
+	EXEC("
+		update a
+		set gweight=isnull(b.gweight,0),eweight=isnull(weight,0)-isnull(b.gweight,0)
+		,enda=(case when eweight!=0 then 0 else enda end)
+		from quat"+@accy+" a
+		outer apply(select SUM(gweight)gweight from(
+			select (case when typea='2' then -1 else 1 end) *
+			(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+			+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+			from view_vcc where charindex(a.noa,apvmemo)>0
+		)tmp)b
+		where a.noa='"+@t_quatno2+"'
+	")
+	
+	EXEC("
+		update a
+		set enda=(case when isnull(b.enda,0)=1 then 1 else a.enda end)
+		from quats"+@accy+" a left join quat"+@accy+" b on a.noa=b.noa
+		where a.noa='"+@t_quatno2+"'
+	")
+end
+
+if(@isordh>0)
+begin
+	update a
+	set f8=isnull(b.gweight,0),f9=isnull(weight,0)-isnull(b.gweight,0)
+	,enda=(case when f4!=0 abd f9!=0 then 0 else enda end)
+	from ordh a
+	outer apply(select SUM(gweight)gweight from(
+		select (case when typea='2' then -1 else 1 end) * 
+		(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+		+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+		from view_vcc where charindex(a.noa,apvmemo)>0
+	)tmp)b
+	where a.noa=@t_quatno2
+	
+end
+-------------------------------------------------------------------
+set @isquat=(select count(*) from view_quat where noa=@t_cont1)
+set @isordh=(select count(*) from ordh where noa=@t_cont1)
+
+if(len(@t_cont1)>0 and @isquat>0)
+begin
+	set @accy=isnull((select top 1 accy from view_quat where noa=@t_cont1),@t_accy)
+
+	EXEC("
+		update a
+		set gweight=isnull(b.gweight,0),eweight=isnull(weight,0)-isnull(b.gweight,0)
+		,enda=(case when eweight!=0 then 0 else enda end)
+		from quat"+@accy+" a
+		outer apply(select SUM(gweight)gweight from(
+			select (case when typea='2' then -1 else 1 end) *
+			(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+			+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+			from view_vcc where charindex(a.noa,apvmemo)>0
+		)tmp)b
+		where a.noa='"+@t_cont1+"'
+	")
+	
+	EXEC("
+		update a
+		set enda=(case when isnull(b.enda,0)=1 then 1 else a.enda end)
+		from quats"+@accy+" a left join quat"+@accy+" b on a.noa=b.noa
+		where a.noa='"+@t_cont1+"'
+	")
+end
+
+if(len(@t_cont1)>0 and @isordh>0)
+begin
+	update a
+	set f8=isnull(b.gweight,0),f9=isnull(weight,0)-isnull(b.gweight,0)
+	,enda=(case when f4!=0 abd f9!=0 then 0 else enda end)
+	from ordh a
+	outer apply(select SUM(gweight)gweight from(
+		select (case when typea='2' then -1 else 1 end) *
+		(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+		+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+		from view_vcc where charindex(a.noa,apvmemo)>0
+	)tmp)b
+	where a.noa=@t_cont1
+end
+-------------------------------------------------------------------
+set @isquat=(select count(*) from view_quat where noa=@t_cont2)
+set @isordh=(select count(*) from ordh where noa=@t_cont2)
+
+if(len(@t_cont2)>0 and @isquat>0)
+begin
+	set @accy=isnull((select top 1 accy from view_quat where noa=@t_cont2),@t_accy)
+
+	EXEC("
+		update a
+		set gweight=isnull(b.gweight,0),eweight=isnull(weight,0)-isnull(b.gweight,0)
+		,enda=(case when eweight!=0 then 0 else enda end)
+		from quat"+@accy+" a
+		outer apply(select SUM(gweight)gweight from(
+			select (case when typea='2' then -1 else 1 end) * 
+			(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+			+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+			from view_vcc where charindex(a.noa,apvmemo)>0
+		)tmp)b
+		where a.noa='"+@t_cont2+"'
+	")
+	
+	EXEC("
+		update a
+		set enda=(case when isnull(b.enda,0)=1 then 1 else a.enda end)
+		from quats"+@accy+" a left join quat"+@accy+" b on a.noa=b.noa
+		where a.noa='"+@t_cont2+"'
+	")
+end
+
+if(len(@t_cont2)>0 and @isordh>0)
+begin
+	update a
+	set f8=isnull(b.gweight,0),f9=isnull(weight,0)-isnull(b.gweight,0)
+	,enda=(case when f4!=0 abd f9!=0 then 0 else enda end)
+	from ordh a
+	outer apply(select SUM(gweight)gweight from(
+		select (case when typea='2' then -1 else 1 end) *
+		(case when dbo.split(dbo.split(apvmemo,'##',0),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',0),'@',1) else 0 end
+		+case when dbo.split(dbo.split(apvmemo,'##',1),'@',0)=a.noa then dbo.split(dbo.split(apvmemo,'##',1),'@',1) else 0 end) gweight
+		from view_vcc where charindex(a.noa,apvmemo)>0
+	)tmp)b
+	where a.noa=@t_cont2
+end
+;
+-----------------------------------------------------------------------------------------------------------------------------------
+changepacking_vu:--changepacking_vu
+SET QUOTED_IDENTIFIER OFF 
+declare @t_accy nvarchar(50) = [1]
+declare @t_noa nvarchar(50) = [2]
+declare @t_worker nvarchar(30) = [3]
+declare @accy nvarchar(50)=@t_accy
+
+--已產生領料單 && vccs
+if((select count(*) from view_get where noa=@t_noa)>0 )
+begin
+	set @accy=isnull((select top 1 accy from view_get where noa=@t_noa),@t_accy)
+	EXEC(" delete get"+@accy+" where noa='"+@t_noa+"'")
+	EXEC(" delete gets"+@accy+" where noa='"+@t_noa+"'")
+	
+	set @accy=isnull((select top 1 accy from view_vcc where noa=@t_noa),@t_accy)
+	EXEC(" delete vccs"+@accy+" where noa='"+@t_noa+"' and item='packing' ")
+end
+
+--產生領料單 && vccs
+if((select count(*) from packing where noa=@t_noa)>0 )
+begin
+	EXEC("
+		insert get"+@accy+" (noa,datea,worker,typea,memo)
+		select noa,datea,'"+@t_worker+"','領料','由Packing轉來' from view_vcc where noa='"+@t_noa+"'
+	")
+	EXEC("
+		insert gets"+@accy+" (noa,noq,datea,uno,mount,weight,typea,memo)
+		select a.noa,b.noq,a.datea,b.uno,b.mount,b.weight,'領料',b.memo
+		from view_vcc a left join packing b on a.noa=b.noa where a.noa='"+@t_noa+"'
+	")
+	
+	EXEC("
+		insert vccs"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,ordeno,no2,item)
+		select '"+@t_noa+"' noa
+		,right('000'+cast(cast(isnull((select noq from view_vccs where noa='"+@t_noa+"'),'000') as int)+ROW_NUMBER()over (order by ordeno,no2) as nvarchar(10)),3) noq
+		,* from (
+			select b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class
+			,sum(a.mount)mount,sum(a.weight)weight,b.price,sum(a.weight)*b.price total,b.noa ordeno,b.no2,'packing'item
+			from packing a left join view_ordes b on left(a.uno,len(b.noa))=b.noa and right(left(a.uno,len(b.noa)+len(b.no2)),len(b.no2))=b.no2
+			where a.noa='"+@t_noa+"' and b.noa!=''
+			group by right(left(a.uno,len(b.noa)+len(b.no2)),len(b.no2))
+			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.price,b.noa,b.no2
+		)tmp
+	")
+end
+;
+-----------------------------------------------------------------------------------------------------------------------------------
+changevcct_vu:--changevcct_vu
+SET QUOTED_IDENTIFIER OFF 
+declare @t_accy nvarchar(50) = [1]
+declare @t_noa nvarchar(50) = [2]
+declare @accy nvarchar(50)=@t_accy
+
+--已產生 vccs
+set @accy=isnull((select top 1 accy from view_vcc where noa=@t_noa),@t_accy)
+EXEC(" delete vccs"+@accy+" where noa='"+@t_noa+"' and item='vcct' ")
+
+--產生 vccs
+if((select count(*) from view_vcct where noa=@t_noa)>0 )
+begin
+	
+	EXEC("
+		insert vccs"+@accy+" (noa,noq,product,ucolor,spec,size,lengthb,class,mount,weight,price,total,ordeno,no2,item)
+		select '"+@t_noa+"' noa
+		,right('000'+cast(cast(isnull((select noq from view_vccs where noa='"+@t_noa+"'),'000') as int)+ROW_NUMBER()over (order by ordeno,no2) as nvarchar(10)),3) noq
+		,* from (
+			select b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class
+			,sum(a.mount)mount,sum(a.weight)weight,b.price,sum(a.weight)*b.price total,b.noa ordeno,b.no2,'vcct' item
+			from view_vcct a left join view_ordes b on left(a.uno,len(b.noa))=b.noa and right(left(a.uno,len(b.noa)+len(b.no2)),len(b.no2))=b.no2
+			where a.noa='"+@t_noa+"' and b.noa!=''
+			group by right(left(a.uno,len(b.noa)+len(b.no2)),len(b.no2))
+			,b.product,b.ucolor,b.spec,b.size,b.lengthb,b.class,b.price,b.noa,b.no2
+		)tmp
+	")
+end
+;
+-----------------------------------------------------------------------------------------------------------------------------------
+changepacking_gu:--changepacking_gu
+SET QUOTED_IDENTIFIER OFF 
+declare @t_accy nvarchar(50) = [1]
+declare @t_noa nvarchar(50) = [2]
+declare @t_worker nvarchar(30) = [3]
+declare @accy nvarchar(50)=@t_accy
+
+--已產生領料單
+if((select count(*) from view_get where noa=@t_noa)>0 )
+begin
+	set @accy=isnull((select top 1 accy from view_get where noa=@t_noa),@t_accy)
+	EXEC(" delete get"+@accy+" where noa='"+@t_noa+"'")
+	EXEC(" delete gets"+@accy+" where noa='"+@t_noa+"'")
+	
+end
+
+--產生領料單 
+if((select count(*) from packing where noa=@t_noa)>0 )
+begin
+	EXEC("
+		insert get"+@accy+" (noa,datea,worker,typea,memo)
+		select noa,datea,'"+@t_worker+"','領料','由Packing轉來' from view_vcc where noa='"+@t_noa+"'
+	")
+	EXEC("
+		insert gets"+@accy+" (noa,noq,datea,productno,product,unit,mount,typea,memo)
+		select a.noa,b.noq,a.datea,b.productno,b.product,b.unit,b.mount,'領料',b.memo
+		from view_vcc a left join packing b on a.noa=b.noa where a.noa='"+@t_noa+"'
+	")
+	
+end
+;
+--------------------------------------------------------------------------------------
+delepackboaj_gu:--delepackboaj_gu_gu
+SET QUOTED_IDENTIFIER OFF 
+declare @t_accy nvarchar(50) = [1]
+declare @t_noa nvarchar(50) = [2]
+
+--刪除packing 與 boat
+delete packing where noa=@t_noa
+delete boaj where noa=@t_noa
+;
+--------------------------------------------------------------------------------------
+vcctost4rc2vcc_r:--vcctost4rc2vcc_r
+SET QUOTED_IDENTIFIER OFF 
+declare @t_noa nvarchar(50) = [1]
+declare @t_accy nvarchar(50) = [2]
+declare @t_datea nvarchar(30) = [3]
+declare @t_worker nvarchar(50) = [4]
+declare @t_len nvarchar(10)=[5]
+declare @q_ip nvarchar(50)=[6]
+declare @q_db nvarchar(50)=[7]
+declare @q_proj nvarchar(50)=[8]
+
+IF OBJECT_ID('tempdb..#tmpa')is not null
+BEGIN
+	drop table #tmpa
+END
+
+IF OBJECT_ID('tempdb..#rc2bbm')is not null
+BEGIN
+	drop table #rc2bbm
+END
+
+IF OBJECT_ID('tempdb..#rc2bbs')is not null
+BEGIN
+	drop table #rc2bbs
+END
+
+IF OBJECT_ID('tempdb..#vccbbm')is not null
+BEGIN
+	drop table #vccbbm
+END
+
+IF OBJECT_ID('tempdb..#vccbbs')is not null
+BEGIN
+	drop table #vccbbs
+END
+
+create table #tmpa(
+	vnoa nvarchar(50),
+	vnoq nvarchar(50),
+	productno nvarchar(100),
+	product nvarchar(MAX),
+	spec nvarchar(MAX),
+	mount float,
+	price float,
+	total float,
+	memo nvarchar(MAX),
+	
+	ip nvarchar(50),
+	db nvarchar(50),
+	
+	tordeno nvarchar(50),
+	tordeno2 nvarchar(50),
+	tordcno nvarchar(50),
+	tordcno2 nvarchar(50),
+	trc2accy nvarchar(50),
+	trc2no nvarchar(50),
+	trc2noq nvarchar(50),
+	tvccaccy nvarchar(50),
+	tvccno nvarchar(50),
+	tvccnoq nvarchar(50)
+)
+
+
+BEGIN TRY
+	--Begin Transaction ----沒有開放DTC所以暫時不使用
+
+	insert #tmpa(vnoa,vnoq,productno,product,spec,mount,price,total,memo,tordeno,tordeno2,ip,db)
+	select a.noa,a.noq,a.productno,a.product,a.spec,a.mount,a.price,a.total,a.memo,b.quatno,b.no3,c.postname,c.postname 
+	from view_vccs a left join view_ordes b on a.ordeno=b.noa and a.no2=b.no2
+	left join view_orde c on b.noa=c.noa where a.noa=@t_noa 
+	and isnull(c.memo2,'')!='' and ISNULL(c.postname,'')!=''
+	and c.memo2=b.quatno
+	
+	create table #rc2bbm(
+		noa nvarchar(20),typea nvarchar(10),stype nvarchar(10),datea nvarchar(10),
+		cno nvarchar(20),acomp nvarchar(90),mon nvarchar(10),invo nvarchar(50),
+		tggno nvarchar(20),tgg nvarchar(100),nick nvarchar(50),tel nvarchar(90),ordcno nvarchar(MAX),
+		post nvarchar(16),addr nvarchar(200),post2 nvarchar(10),addr2 nvarchar(200),
+		lcno nvarchar(50),trantype nvarchar(20),paytype nvarchar(20),
+		cardealno nvarchar(18),cardeal nvarchar(20),price float,
+		transtartno nvarchar(50),transtart nvarchar(100),carno nvarchar(MAX),transtyle nvarchar(50),
+		money float,tax float,total float,atax bit,coin nvarchar(50),floata float,totalus float,
+		tranmoney float,memo nvarchar(MAX),worker nvarchar(50),worker2 nvarchar(50),
+		postname nvarchar(20)--轉來出貨單號
+		,ip nvarchar(20),db nvarchar(20)
+	)
+	
+	create table #rc2bbs(
+		noa nvarchar(20),noq nvarchar(10),datea nvarchar(10),
+		productno nvarchar(30),product nvarchar(255),spec nvarchar(255),
+		unit nvarchar(8),mount float,price float,total float,
+		storeno nvarchar(30),store nvarchar(100),memo nvarchar(MAX),
+		ordeno nvarchar(20),no2 nvarchar(10),tggno nvarchar(10),cno nvarchar(20),
+		source nvarchar(15),zinc nvarchar(15)--轉來出貨單號vccno,vccnoq
+		,ip nvarchar(20),db nvarchar(20)
+	)
+	
+	create table #vccbbm(
+		noa nvarchar(20),typea nvarchar(10),stype nvarchar(10),datea nvarchar(10),
+		cno nvarchar(20),acomp nvarchar(90),mon nvarchar(10),invo nvarchar(50),
+		custno nvarchar(20),comp nvarchar(100),nick nvarchar(50),paytype nvarchar(100),
+		tel nvarchar(90),fax nvarchar(90),trantype nvarchar(20),
+		post nvarchar(16),addr nvarchar(200),post2 nvarchar(10),addr2 nvarchar(200),
+		ordeno nvarchar(50),tranmoney float,cardealno nvarchar(18),cardeal nvarchar(20),price float,
+		carno nvarchar(MAX),transtyle nvarchar(50),transtartno nvarchar(50),transtart nvarchar(100),
+		salesno nvarchar(50),sales nvarchar(50),
+		money float,tax float,total float,atax bit,coin nvarchar(50),floata float,totalus float,
+		custno2 nvarchar(50),comp2 nvarchar(50),memo nvarchar(MAX),worker nvarchar(50),worker2 nvarchar(50),
+		zipcode nvarchar(20)--轉來出貨單號
+		,ip nvarchar(20),db nvarchar(20)
+	)
+	
+	create table #vccbbs(
+		noa nvarchar(20),noq nvarchar(5),datea nvarchar(10),
+		productno nvarchar(30),product nvarchar(255),spec nvarchar(255),
+		unit nvarchar(8),mount float,price float,total float,
+		storeno nvarchar(30),store nvarchar(100),memo nvarchar(MAX),
+		ordeno nvarchar(20),no2 nvarchar(10),custno nvarchar(30),cno nvarchar(20),
+		itemno nvarchar(15),item nvarchar(15)--轉來出貨單號vccno,vccnoq
+		,ip nvarchar(20),db nvarchar(20)
+	)
+	
+	declare @cmd nvarchar(MAX)
+	
+	if((select count(*) from #tmpa)>0)
+	begin	
+		update #tmpa
+		set ip=dbo.split(ip,'##',0),db=dbo.split(db,'##',1)
+		
+		--107/03/31 取消
+		--update #tmpa
+		--set ip=case when ip=@q_ip then '127.0.0.1' else ip end
+		
+		declare @vnoa nvarchar(50)
+		declare @vnoq nvarchar(50)
+		declare @ordeno nvarchar(50)
+		declare @no2 nvarchar(50)
+		declare @ip nvarchar(50)
+		declare @db nvarchar(50)
+		
+		declare @tordcno nvarchar(50)
+		declare @tordcno2 nvarchar(50)
+		declare @trc2no nvarchar(50)
+		declare @trc2noq nvarchar(50)
+		declare @tvccno nvarchar(50)
+		declare @tvccnoq nvarchar(50)
+		
+		declare @delraccy nvarchar(50)
+		declare @delrnoa nvarchar(50)
+		declare @delvaccy nvarchar(50)
+		declare @delvnoa nvarchar(50)
+		
+		declare cursor_table cursor for
+		select vnoa,vnoq,tordeno,tordeno2,ip,db from #tmpa where isnull(ip,'')!='' and isnull(db,'')!=''
+		open cursor_table
+		fetch next from cursor_table
+		into @vnoa,@vnoq,@ordeno,@no2,@ip,@db
+		while(@@FETCH_STATUS <> -1)
+		begin
+			--刪除已產生進貨單
+			set @cmd ="select @delraccy=accy,@delrnoa=noa from ["+@ip+",1799]."+@db+".dbo.view_rc2 where postname='"+@t_noa+"' "
+			execute sp_executesql @cmd,N'@delraccy nvarchar(90) output,@delrnoa nvarchar(90) output'
+			,@delraccy=@delraccy output,@delrnoa=@delrnoa output
+			
+			--select @delraccy,@delrnoa
+			if(LEN(ISNULL(@delrnoa,''))>0)
+			begin
+				--rc2.post.0
+				EXEC("
+					insert into ["+@ip+",1799]."+@db+".dbo.mess(qtime,[tables],usera,datea,data,act)
+					select '"+@db+"'+replace(replace(replace(replace(CONVERT(nvarchar,SYSDATETIME()),'-',''),':',''),'.',''),' ','') qtime
+					,'rc2_post.post' [tables]
+					,'erp' usera
+					,CONVERT(nvarchar,GETDATE(),112) + ' ' +CONVERT(nvarchar,GETDATE(),108) datea
+					,case when '"+@t_len+"'='4' then right('000'+cast(cast(left(datea,'"+@t_len+"') as int)-1911 as nvarchar(10)),3) else left(datea,'"+@t_len+"') end+','+noa+',0' data
+					,'7' act
+					from view_rc2 where noa='"+@delrnoa+"'
+				")
+			
+				--表頭不刪除
+				--EXEC("delete ["+@ip+",1799]."+@db+".dbo.rc2"+@delraccy+" where noa='"+@delrnoa+"'")
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.rc2s"+@delraccy+" where noa='"+@delrnoa+"'")
+				
+				update #tmpa
+				set trc2no=@delrnoa,trc2accy=@delraccy
+				where vnoa=@vnoa and vnoq=@vnoq
+			end
+			
+			--轉進貨(同廠商一張)
+			--找原採購單
+			set @cmd ="select @tordcno=noa,@tordcno2=no2 from ["+@ip+",1799]."+@db+".dbo.view_ordcs where ordbno='"+@ordeno+"' and no3='"+@no2+"' "
+			execute sp_executesql @cmd,N'@tordcno nvarchar(90) output,@tordcno2 nvarchar(90) output'
+			,@tordcno=@tordcno output,@tordcno2=@tordcno2 output
+			
+			update #tmpa set tordcno=@tordcno,tordcno2=@tordcno2 where vnoa=@vnoa and vnoq=@vnoq
+			
+			insert #rc2bbs(noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,tggno,cno,source,zinc,ip,db)
+			EXEC("select '"+@vnoa+"','"+@vnoq+"','"+@t_datea+"',b.productno,b.product,b.spec,b.unit,d.mount,d.price,d.total
+			,isnull(c.noa,''),isnull(c.store,''),d.memo,'"+@tordcno+"','"+@tordcno2+"',a.tggno,a.cno,'"+@vnoa+"','"+@vnoq+"'
+			,'"+@ip+"','"+@db+"'
+			from ["+@ip+",1799]."+@db+".dbo.view_ordc a 
+			left join ["+@ip+",1799]."+@db+".dbo.view_ordcs b on a.noa=b.noa
+			outer apply (select top 1 * from ["+@ip+",1799]."+@db+".dbo.store order by noa) c
+			outer apply (select top 1 * from #tmpa where vnoa='"+@vnoa+"' and vnoq='"+@vnoq+"')d
+			where a.noa='"+@tordcno+"' and b.no2='"+@tordcno2+"'"
+			)
+			
+			if((select count(*) from #rc2bbm where postname=@t_noa and ip=@ip and db=@db)=0)
+			begin
+				insert #rc2bbm (noa,typea,stype,datea,cno,acomp,mon,invo,tggno,tgg,nick,tel,ordcno
+				,post,addr,post2,addr2,lcno,trantype,paytype,cardealno,cardeal,price
+				,transtartno,transtart,carno,transtyle,money,tax,total,atax,coin,floata,totalus
+				,tranmoney,memo,worker,worker2,postname,ip,db)
+				EXEC("select '"+@vnoa+"','1','7','"+@t_datea+"',a.cno,a.acomp,left('"+@t_datea+"',("+@t_len+"+3))
+				,b.invo,a.tggno,a.tgg,a.nick,a.tel,a.noa,a.post,a.addr,a.post2,a.addr2
+				,a.lcno,a.trantype,a.paytype,b.cardealno,b.cardealno,b.price
+				,b.transtartno,b.transtart,b.carno,b.transtyle,b.money,b.tax,b.total,b.atax
+				,b.coin,b.floata,b.totalus,b.tranmoney,'由'+a.nick+'出貨單【"+@t_noa+"】轉來',b.worker,b.worker2,'"+@t_noa+"'
+				,'"+@ip+"','"+@db+"'
+				from ["+@ip+",1799]."+@db+".dbo.view_ordc a
+				outer apply (select top 1 * from view_vcc where noa='"+@t_noa+"') b
+				where a.noa='"+@tordcno+"'")
+			end
+			----------------------------------------------------------------------------------------------
+			--刪除已產生出貨單
+			set @cmd ="select @delvaccy=accy,@delvnoa=noa from ["+@ip+",1799]."+@db+".dbo.view_vcc where zipcode='"+@t_noa+"' "
+			execute sp_executesql @cmd,N'@delvaccy nvarchar(90) output,@delvnoa nvarchar(90) output'
+			,@delvaccy=@delvaccy output,@delvnoa=@delvnoa output
+			
+			--select @delvaccy,@delvnoa
+			if(LEN(ISNULL(@delvnoa,''))>0)
+			begin
+				--vcc.post.0
+				EXEC("
+					insert into ["+@ip+",1799]."+@db+".dbo.mess(qtime,[tables],usera,datea,data,act)
+					select '"+@db+"'+replace(replace(replace(replace(CONVERT(nvarchar,SYSDATETIME()),'-',''),':',''),'.',''),' ','') qtime
+					,'vcc_post.post' [tables]
+					,'erp' usera
+					,CONVERT(nvarchar,GETDATE(),112) + ' ' +CONVERT(nvarchar,GETDATE(),108) datea
+					,case when '"+@t_len+"'='4' then right('000'+cast(cast(left(datea,'"+@t_len+"') as int)-1911 as nvarchar(10)),3) else left(datea,'"+@t_len+"') end+','+noa+',0' data
+					,'7' act
+					from view_vcc where noa='"+@delvnoa+"'
+				")
+				
+				--表頭不刪除
+				--EXEC("delete ["+@ip+",1799]."+@db+".dbo.vcc"+@delvaccy+" where noa='"+@delvnoa+"'")
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.vccs"+@delvaccy+" where noa='"+@delvnoa+"'")
+				
+				update #tmpa
+				set tvccno=@delvnoa,tvccaccy=@delvaccy
+				where vnoa=@vnoa and vnoq=@vnoq
+			end
+			
+			--轉出貨(同客戶一張)
+			--原訂單號 t_ordeno,t_ordeno2
+			insert #vccbbs(noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,custno,cno,itemno,item,ip,db)
+			EXEC("select '"+@vnoa+"','"+@vnoq+"','"+@t_datea+"',b.productno,b.product,b.spec,b.unit,d.mount,b.price,round(d.mount*b.price,4)
+			,isnull(c.noa,''),isnull(c.store,''),d.memo,'"+@ordeno+"','"+@no2+"',a.custno,a.cno,'"+@vnoa+"','"+@vnoq+"','"+@ip+"','"+@db+"'
+			from ["+@ip+",1799]."+@db+".dbo.view_orde a 
+			left join ["+@ip+",1799]."+@db+".dbo.view_ordes b on a.noa=b.noa
+			outer apply (select top 1 * from ["+@ip+",1799]."+@db+".dbo.store order by noa) c
+			outer apply (select top 1 * from #tmpa where vnoa='"+@vnoa+"' and vnoq='"+@vnoq+"')d
+			where a.noa='"+@ordeno+"' and b.no2='"+@no2+"'"
+			)
+			
+			if((select count(*) from #vccbbm where zipcode=@t_noa and ip=@ip and db=@db)=0)
+			begin		
+				insert #vccbbm (noa,typea,stype,datea,cno,acomp,mon,invo,custno,comp,nick,paytype,tel,fax
+				,trantype,post,addr,post2,addr2,ordeno,tranmoney,cardealno,cardeal,price,carno
+				,transtyle,transtartno,transtart,salesno,sales,money,tax,total,atax,coin,floata,totalus
+				,custno2,comp2,memo,worker,worker2,zipcode,ip,db)
+				EXEC("select '"+@vnoa+"','1',a.stype,'"+@t_datea+"',a.cno,a.acomp,left('"+@t_datea+"',("+@t_len+"+3))
+				,b.invo,a.custno,a.comp,a.nick,a.paytype,a.tel,a.fax,a.trantype
+				,a.post,a.addr,a.post2,a.addr2,a.noa,b.tranmoney
+				,b.cardealno,b.cardealno,b.price,b.carno,b.transtyle
+				,b.transtartno,b.transtart,a.salesno,a.sales,b.money,b.tax,b.total,b.atax
+				,b.coin,b.floata,b.totalus,a.custno2,a.cust2,'由'+a.gtime+'出貨單【"+@t_noa+"】轉來',b.worker,b.worker2,'"+@t_noa+"'
+				,'"+@ip+"','"+@db+"'
+				from ["+@ip+",1799]."+@db+".dbo.view_orde a
+				outer apply (select top 1 * from view_vcc where noa='"+@t_noa+"') b
+				where a.noa='"+@ordeno+"'")
+			end
+			
+			update a
+			set money=b.total,total=b.total
+			from #vccbbm a outer apply (select SUM(total)total from #vccbbs where noa=a.noa) b
+			
+			fetch next from cursor_table 
+			into @vnoa,@vnoq,@ordeno,@no2,@ip,@db
+		end 
+		close cursor_table 
+		deallocate cursor_table
+				
+		update a set noa=b.trc2no from #rc2bbm a outer apply (select MAX(trc2no)trc2no from #tmpa where ip=a.ip and db=a.db)b
+		update a set noa=b.trc2no from #rc2bbs a outer apply (select MAX(trc2no)trc2no from #tmpa where ip=a.ip and db=a.db)b
+		update a set noa=b.tvccno from #vccbbm a outer apply (select MAX(tvccno)tvccno from #tmpa where ip=a.ip and db=a.db) b
+		update a set noa=b.tvccno from #vccbbs a outer apply (select MAX(tvccno)tvccno from #tmpa where ip=a.ip and db=a.db) b
+					
+		--根據IP與DB 個別 回寫
+		declare cursor_table cursor for
+		select ip,db from (select ip,db from #rc2bbm union all select ip,db from #vccbbm)tmp 
+		group by ip,db having len(ip)>0 and len(db)>0
+		open cursor_table
+		fetch next from cursor_table
+		into @ip,@db
+		while(@@FETCH_STATUS <> -1)
+		begin
+			set @delrnoa=isnull((select noa from #rc2bbm where ip=@ip and db=@db),'')
+			set @delvnoa=isnull((select noa from #vccbbm where ip=@ip and db=@db),'')
+		
+		
+			if(LEN(ISNULL(@delrnoa,''))>0)
+			begin		
+				--update  b
+				--set trc2no=a.noa,trc2noq=noq
+				--from #rc2bbs a left join #tmpa b on b.vnoa=a.source and b.vnoq=a.zinc
+	
+				--更新rc2bbm
+				EXEC("update a
+				set stype=b.stype,cno=b.cno,acomp=b.acomp,invo=b.invo,tggno=b.tggno,tgg=b.tgg,nick=b.nick
+				,tel=b.tel,ordcno=b.ordcno,post=b.post,addr=b.addr,post2=b.post2,addr2=b.addr2
+				,lcno=b.lcno,trantype=b.trantype,paytype=b.paytype,cardealno=b.cardealno,cardeal=b.cardeal
+				,price=b.price,transtartno=b.transtartno,transtart=b.transtart,carno=b.carno,transtyle=b.transtyle
+				,money=b.money,tax=b.tax,total=b.total,atax=b.atax,coin=b.coin,floata=b.floata,totalus=b.totalus
+				,tranmoney=b.tranmoney,memo=b.memo,worker=b.worker,worker2=b.worker2
+				from ["+@ip+",1799]."+@db+".dbo.rc2"+@delraccy+" a left join #rc2bbm b on a.noa=b.noa
+				where a.noa='"+@delrnoa+"'")
+				
+				--插入rc2bbs
+				
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.rc2s"+@delraccy+"
+					(noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,tggno,cno,source,zinc)
+				select noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,tggno,cno,source,zinc 
+				from #rc2bbs where ip='"+@ip+"' and db='"+@db+"'")
+				
+				--更新表身
+				EXEC("update b set typea=a.typea,datea=a.datea,tggno=a.tggno
+				from ["+@ip+",1799]."+@db+".dbo.rc2"+@delraccy+" a left join 
+				["+@ip+",1799]."+@db+".dbo.rc2s"+@delraccy+" b on a.noa=b.noa
+				where a.noa='"+@delrnoa+"' ")
+	
+			end
+			else
+			begin
+				--取目前進貨最大noa
+				set @delraccy=@t_accy
+				
+				set @cmd ="select @delrnoa=MAX(noa) from ["+@ip+",1799]."+@db+".dbo.view_rc2 where datea='"+@t_datea+"' and noa like 'B"+REPLACE(@t_datea,'/','')+"%' "
+				execute sp_executesql @cmd,N'@delrnoa nvarchar(90) output',@delrnoa=@delrnoa output
+				
+				if(isnull(@delrnoa,'')='')
+				begin
+					set @delrnoa='B'+REPLACE(@t_datea,'/','')+'001'
+				end
+				else
+				begin
+					set @delrnoa=substring(@delrnoa,1,LEN(@delrnoa)-3)+right('000'+cast(cast(RIGHT(@delrnoa,3) as int )+1 as nvarchar(10)),3)
+				end
+				
+				update #rc2bbm set noa=@delrnoa where ip=@ip and db=@db
+				update #rc2bbs set noa=@delrnoa where ip=@ip and db=@db
+				
+				update  b
+				set trc2no=a.noa,trc2noq=noq
+				from #rc2bbs a left join #tmpa b on b.vnoa=a.source and b.vnoq=a.zinc
+				
+				--插入rc2
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.rc2"+@delraccy+"
+						(noa,typea,stype,datea,cno,acomp,mon,invo,tggno,tgg,nick,tel,ordcno
+						,post,addr,post2,addr2,lcno,trantype,paytype,cardealno,cardeal,price
+						,transtartno,transtart,carno,transtyle,money,tax,total,atax,coin,floata,totalus
+						,tranmoney,memo,worker,worker2,postname)
+				select noa,typea,stype,datea,cno,acomp,mon,invo,tggno,tgg,nick,tel,ordcno
+						,post,addr,post2,addr2,lcno,trantype,paytype,cardealno,cardeal,price
+						,transtartno,transtart,carno,transtyle,money,tax,total,atax,coin,floata,totalus
+						,tranmoney,memo,worker,worker2,postname from #rc2bbm
+						where ip='"+@ip+"' and db='"+@db+"'
+						")
+						
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.rc2s"+@delraccy+"
+					(noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,tggno,cno,source,zinc)
+				select noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,tggno,cno,source,zinc 
+				from #rc2bbs where ip='"+@ip+"' and db='"+@db+"' ")
+				
+			end
+			
+			--rc2.post.1
+			EXEC("
+				insert into ["+@ip+",1799]."+@db+".dbo.mess(qtime,[tables],usera,datea,data,act)
+				select '"+@db+"'+replace(replace(replace(replace(CONVERT(nvarchar,SYSDATETIME()),'-',''),':',''),'.',''),' ','') qtime
+				,'rc2_post.post' [tables]
+				,'erp' usera
+				,CONVERT(nvarchar,GETDATE(),112) + ' ' +CONVERT(nvarchar,GETDATE(),108) datea
+				,case when '"+@t_len+"'='4' then right('000'+cast(cast(left(datea,'"+@t_len+"') as int)-1911 as nvarchar(10)),3) else left(datea,'"+@t_len+"') end+','+noa+',1' data
+				,'7' act
+				from ["+@ip+",1799]."+@db+".dbo.view_rc2 where noa='"+@delrnoa+"'
+			")
+	
+			if(LEN(ISNULL(@delvnoa,''))>0)
+			begin
+				
+				--update  b
+				--set tvccno=a.noa,tvccnoq=noq
+				--from #vccbbs a left join #tmpa b on b.vnoa=a.itemno and b.vnoq=a.item
+	
+				--更新vccbbm
+				EXEC("update a
+				set stype=b.stype,cno=b.cno,acomp=b.acomp,invo=b.invo,custno=b.custno,comp=b.comp,nick=b.nick
+				,tel=b.tel,fax=b.fax,ordeno=b.ordeno,post=b.post,addr=b.addr,post2=b.post2,addr2=b.addr2
+				,trantype=b.trantype,paytype=b.paytype,cardealno=b.cardealno,cardeal=b.cardeal
+				,price=b.price,transtartno=b.transtartno,transtart=b.transtart,carno=b.carno,transtyle=b.transtyle
+				,money=b.money,tax=b.tax,total=b.total,atax=b.atax,coin=b.coin,floata=b.floata,totalus=b.totalus
+				,salesno=b.salesno,sales=b.sales,custno2=b.custno2,comp2=b.comp2
+				,tranmoney=b.tranmoney,memo=b.memo,worker=b.worker,worker2=b.worker2
+				from ["+@ip+",1799]."+@db+".dbo.vcc"+@delvaccy+" a left join #vccbbm b on a.noa=b.noa
+				where a.noa='"+@delvnoa+"' ")
+				
+				--插入vcc2bbs
+				
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.vccs"+@delvaccy+"
+					(noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,custno,cno,itemno,item)
+				select noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,custno,cno,itemno,item 
+				from #vccbbs where ip='"+@ip+"' and db='"+@db+"'")
+				
+				--更新表身
+				EXEC("update b set typea=a.typea,datea=a.datea,custno=a.custno
+				from ["+@ip+",1799]."+@db+".dbo.vcc"+@delvaccy+" a left join 
+				["+@ip+",1799]."+@db+".dbo.vccs"+@delvaccy+" b on a.noa=b.noa
+				where a.noa='"+@delvnoa+"' ")
+			end
+			else 
+			begin
+				--取目前出貨最大noa
+				set @delvaccy=@t_accy
+				
+				set @cmd ="select @delvnoa=MAX(noa) from ["+@ip+",1799]."+@db+".dbo.view_vcc where datea='"+@t_datea+"' and noa like 'D"+REPLACE(@t_datea,'/','')+"%' "
+				execute sp_executesql @cmd,N'@delvnoa nvarchar(90) output',@delvnoa=@delvnoa output
+				
+				if(isnull(@delvnoa,'')='')
+				begin
+					set @delvnoa='D'+REPLACE(@t_datea,'/','')+'001'
+				end
+				else
+				begin
+					set @delvnoa=substring(@delvnoa,1,LEN(@delvnoa)-3)+right('000'+cast(cast(RIGHT(@delvnoa,3) as int )+1 as nvarchar(10)),3)
+				end
+				
+				update #vccbbm set noa=@delvnoa where ip=@ip and db=@db
+				update #vccbbs set noa=@delvnoa where ip=@ip and db=@db
+				
+				update  b
+				set tvccno=a.noa,tvccnoq=noq
+				from #vccbbs a left join #tmpa b on b.vnoa=a.itemno and b.vnoq=a.item
+				
+				--插入vcc
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.vcc"+@delvaccy+"
+						(noa,typea,stype,datea,cno,acomp,mon,invo,custno,comp,nick,paytype,tel,fax
+						,trantype,post,addr,post2,addr2,ordeno,tranmoney,cardealno,cardeal,price,carno
+						,transtyle,transtartno,transtart,salesno,sales,money,tax,total,atax,coin,floata,totalus
+						,custno2,comp2,memo,worker,worker2,zipcode)
+				select noa,typea,stype,datea,cno,acomp,mon,invo,custno,comp,nick,paytype,tel,fax
+						,trantype,post,addr,post2,addr2,ordeno,tranmoney,cardealno,cardeal,price,carno
+						,transtyle,transtartno,transtart,salesno,sales,money,tax,total,atax,coin,floata,totalus
+						,custno2,comp2,memo,worker,worker2,zipcode from #vccbbm 
+						where ip='"+@ip+"' and db='"+@db+"' ")
+						
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.vccs"+@delvaccy+"
+					(noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,custno,cno,itemno,item)
+				select noa,noq,datea,productno,product,spec,unit,mount,price,total,storeno,store,memo,ordeno,no2,custno,cno,itemno,item
+				from #vccbbs where ip='"+@ip+"' and db='"+@db+"'")
+			end
+			
+			--vcc.post.1
+			EXEC("
+				insert into ["+@ip+",1799]."+@db+".dbo.mess(qtime,[tables],usera,datea,data,act)
+				select '"+@db+"'+replace(replace(replace(replace(CONVERT(nvarchar,SYSDATETIME()),'-',''),':',''),'.',''),' ','') qtime
+				,'vcc_post.post' [tables]
+				,'erp' usera
+				,CONVERT(nvarchar,GETDATE(),112) + ' ' +CONVERT(nvarchar,GETDATE(),108) datea
+				,case when '"+@t_len+"'='4' then right('000'+cast(cast(left(datea,'"+@t_len+"') as int)-1911 as nvarchar(10)),3) else left(datea,'"+@t_len+"') end+','+noa+',1' data
+				,'7' act
+				from ["+@ip+",1799]."+@db+".dbo.view_vcc where noa='"+@delvnoa+"'
+			")
+			
+			fetch next from cursor_table 
+			into @ip,@db
+		end 
+		close cursor_table 
+		deallocate cursor_table
+	
+		--回寫出貨單
+		set @t_accy=isnull((select top 1 accy from view_vcc where noa=@t_noa),@t_accy)
+	
+		EXEC("update a
+		set zipname=isnull(trc2no,''),zipcode=isnull(tvccno,'')
+		from vcc"+@t_accy+" a outer apply (select top 1 vnoa,trc2no,tvccno from #tmpa group by vnoa,trc2no,tvccno)b 
+		where noa='"+@t_noa+"'")
+	
+		--EXEC("select vnoa,trc2no,tvccno from #tmpa group by vnoa,trc2no,tvccno")
+	end
+
+--Commit Transaction
+END TRY
+BEGIN CATCH
+	--ROLLBACK
+	
+	BEGIN TRY
+		close cursor_table
+		deallocate cursor_table
+	END TRY
+	BEGIN CATCH
+	END CATCH
+END CATCH
+
+EXEC("select vnoa,trc2no,tvccno from #tmpa group by vnoa,trc2no,tvccno")
+
+IF OBJECT_ID('tempdb..#tmpa')is not null
+BEGIN
+	drop table #tmpa
+END
+
+IF OBJECT_ID('tempdb..#rc2bbm')is not null
+BEGIN
+	drop table #rc2bbm
+END
+
+IF OBJECT_ID('tempdb..#rc2bbs')is not null
+BEGIN
+	drop table #rc2bbs
+END
+
+IF OBJECT_ID('tempdb..#vccbbm')is not null
+BEGIN
+	drop table #vccbbm
+END
+
+IF OBJECT_ID('tempdb..#vccbbs')is not null
+BEGIN
+	drop table #vccbbs
+END
+;
+---------------------------------------
+updatememo_yc:--updatememo_yc
+SET QUOTED_IDENTIFIER OFF
+declare @t_noa nvarchar(20) = '[1]'
+declare @t_memo nvarchar(20) = '[2]'
+declare @accy nvarchar(20)
+set @accy=isnull((select accy from view_vcc where noa=@t_noa),'') 
+
+EXEC(" update vcc"+@accy+" 
+set memo='"+@t_memo+"'+'chr(10)'+memo 
+where noa='"+@t_noa+"' ") 
+
+select noa,memo from view_vcc where noa=@t_noa
+;

@@ -1,0 +1,390 @@
+﻿bom:--BOM----------------------------------------------------------------------------------
+declare @productno nvarchar(20) --BBS 要新增的原料
+declare @parent nvarchar(20) --BBM 要產出的成品
+
+set @productno=[1]
+set @parent=[2]
+
+declare @tmp table(
+	productno nvarchar(50),
+	parent nvarchar(50)
+)
+
+insert into @tmp
+select productno,noa from ucas
+
+if(PATINDEX('%.%',@productno)>0)
+begin
+	while(PATINDEX('%.%',@productno)>0)
+	begin
+		insert into @tmp
+		select left(@productno,PATINDEX('%.%',@productno)-1),@parent
+		set @productno=RIGHT(@productno,LEN(@productno)-PATINDEX('%.%',@productno))
+	end
+end
+insert into @tmp 
+select @productno,@parent 
+
+
+BEGIN TRY
+	--遞迴
+	WITH OrdersTable (productno,noa,Level,sortCol) as
+	(
+	 Select productno,parent,0, CONVERT(nvarchar(128),productno)
+	 from @tmp
+	 where parent=@parent
+	 UNION ALL
+	 SELECT a.productno,a.parent,OrdersTable.Level+1,CONVERT(nvarchar(128),OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno))
+	 FROM @tmp a, OrdersTable 
+	 WHERE a.parent=OrdersTable.productno 
+	)
+	Select REPLICATE('       ',Level) + productno productno, Level, SortCol
+	From OrdersTable order by sortCol
+END TRY
+BEGIN CATCH
+	select @@ERROR productno
+END CATCH
+------------------------------------------------------------------------------------------------------------;
+bomcost:--bomcost
+declare @t_pno nvarchar(50)
+set @t_pno = [1]
+
+declare @parent nvarchar(20)
+set @parent='root'
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+	drop table #tmp
+END
+
+create table #tmp(
+	xnoa nvarchar(MAX),
+	productno nvarchar(MAX),
+	product nvarchar(MAX),
+	parent nvarchar(255),
+	unit nvarchar(MAX),
+	mount float,
+	price float,
+	costb float,--人工
+	costc float,--製造費用
+	costd float
+)
+
+declare @tmpa table(
+	gno nvarchar(1),
+	xnoa nvarchar(MAX),
+	sortcol nvarchar(MAX),
+	productno nvarchar(MAX),
+	product nvarchar(MAX),
+	levels int,
+	mount float,
+	unit nvarchar(20),
+	stpr float,----材料單價(子)
+	stmo float,----直接材料(子)
+	famo float,----直接人工(子)
+	price float,---託工費用(子)
+	adpr float,----加扣款(子)
+	mamo float,----製造費用(子)
+	total float---總成本(子)
+)
+
+declare @t_cmon nvarchar(20)=isnull((select MAX(mon) from view_costs),'')
+declare @t_wmon nvarchar(20)=isnull((select MAX(mon) from view_wcost),'')
+
+--106/20/20 costb-d 抓wcost
+insert into #tmp
+select '',a.productno,a.product,a.noa,a.unit
+,(isnull(a.mount,0)*(case when isnull(a.mul,0) =0 then 1 else isnull(a.mul,0) end))
+/(case when isnull(a.dividea,0) =0 then 1 else isnull(a.dividea,0) end)
+,isnull(c.price,0)
+--,isnull(b.wages*((b.minutes+(b.hsec/60))/60),0)
+--,isnull(b.makes*((b.minutes+(b.sec/60))/60),0)
+--,isnull(b.price,0)
+,isnull(d.costb,0),isnull(d.costc,0),isnull(d.costd,0)
+from ucas a --outer apply (select * from uca where noa=a.productno)b
+outer apply (select price from view_costs where productno=a.productno and mon=@t_cmon) c
+outer apply (select SUM(costa)/SUM(mount)costa,SUM(costb)/SUM(mount)costb,SUM(costc)/SUM(mount)costc,SUM(costd)/SUM(mount)costd from view_wcost where productno=a.productno and mon=@t_wmon having SUM(mount)!=0)d
+
+insert into #tmp
+select a.noa,a.noa,a.product,@parent
+,isnull(a.unit,''),1
+,isnull(b.price,0)
+--,isnull(a.wages*((isnull(a.minutes,0)+(isnull(a.hsec,0)/60))/60),10)
+--,isnull(a.makes*((isnull(a.minutes,0)+(isnull(a.sec,0)/60))/60),10)
+--,isnull(a.price,0)
+,isnull(d.costb,0),isnull(d.costc,0),isnull(d.costd,0)
+from uca a outer apply (select price from view_costs where productno=a.noa and mon=@t_cmon)b
+outer apply (select SUM(costa)/SUM(mount)costa,SUM(costb)/SUM(mount)costb,SUM(costc)/SUM(mount)costc,SUM(costd)/SUM(mount)costd from view_wcost where productno=a.noa and mon=@t_wmon having SUM(mount)!=0)d
+where a.noa=@t_pno
+
+CREATE INDEX tmpindex1 ON #tmp (parent)
+
+declare @t_mon nvarchar(20)=isnull((select MAX(mon) from ucap),'')
+
+BEGIN TRY
+--遞迴
+	WITH OrdersTable (xnoa,productno,product,unit,noa,Level,sortCol,mount,price,costb,costc,costd) as (
+		Select xnoa,productno,product,unit,parent,0, CONVERT(nvarchar(128),productno),mount,price,costb,costc,costd
+		from #tmp
+		where parent=@parent
+		UNION ALL
+		SELECT OrdersTable.xnoa,a.productno,a.product,a.unit,a.parent,OrdersTable.Level+1,CONVERT(nvarchar(128)
+		,OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno)),a.mount,a.price,a.costb,a.costc,a.costd
+		FROM #tmp a, OrdersTable
+		WHERE a.parent=OrdersTable.productno
+	)
+
+	insert @tmpa(gno,xnoa,productno,product,unit,levels,sortcol,mount,stpr,stmo,famo,mamo,price,adpr)
+	select '0' gno,xnoa,productno,product,unit, level, sortcol
+	,mount,price,isnull(price*mount,0) costa,costb,costc,costd
+	,isnull((select avg(wages_fee+makes_fee) from ucap where noa=a.productno and left(datea,6)=@t_mon),0) plus
+	From OrdersTable a order by sortCol
+
+END TRY
+BEGIN CATCH
+select @@ERROR productno
+END CATCH
+------------------------------------------------------------------------------------------------------------
+update @tmpa
+set total=stmo+famo+mamo+price+adpr
+
+insert @tmpa (gno,xnoa,sortcol,productno,levels,stmo,famo,price,adpr,mamo,total)
+select '2',xnoa,productno+'ZZZZZZZ',productno,99
+,(select sum(stmo) from @tmpa x where xnoa=a.productno and exists (select noa from ucc where noa=x.productno))
+,(select sum(famo) from @tmpa x where xnoa=a.productno)
+,(select sum(price) from @tmpa x where xnoa=a.productno)
+,(select sum(adpr) from @tmpa x where xnoa=a.productno)
+,(select sum(mamo) from @tmpa x where xnoa=a.productno)
+,0
+from @tmpa a where levels=0
+
+update @tmpa
+set total=(select ISNULL(stmo,0)+ISNULL(famo,0)+ISNULL(price,0)+ISNULL(adpr,0)+ISNULL(mamo,0) from @tmpa where gno='2')
+where gno='2'
+
+update @tmpa set gno='1' where levels=0
+
+select gno,sortcol,productno,product xproduct,cast(levels as nvarchar(20)) levels,unit
+,dbo.getComma(mount,-1) mount
+,dbo.getComma(stpr,-1) stpr
+,dbo.getComma(stmo,-1) costa
+,dbo.getComma(famo,-1) costb
+,dbo.getComma(price,-1) costd
+,dbo.getComma(adpr,-1) adpr
+,dbo.getComma(mamo,-1) costc
+,dbo.getComma(total,-1) total
+from @tmpa order by case when gno='2' then null else 0 end,xnoa,sortcol,levels
+
+IF OBJECT_ID('tempdb..#tmp')is not null
+BEGIN
+	drop table #tmp
+END
+;
+------------------------------------------------------------------------------------------------------
+bomucc:--BOMUCC
+declare @productno nvarchar(20)
+declare @parent nvarchar(20)
+
+set @productno=[1]
+set @parent='root'
+
+declare @tmp table(
+	productno nvarchar(100),
+	parent nvarchar(50),
+	product nvarchar(MAX),
+	spec nvarchar(MAX),
+	style nvarchar(MAX),
+	unit nvarchar(MAX),
+	mount float,
+	loss float,
+	dividea float,
+	mul float,
+	memo nvarchar(MAX)
+)
+
+insert into @tmp
+select productno,noa,product,spec,'',unit,mount,loss,dividea,mul,memo from ucas
+
+if(PATINDEX('%.%',@productno)>0)
+begin
+	while(PATINDEX('%.%',@productno)>0)
+	begin
+		insert into @tmp(productno,parent)
+		select left(@productno,PATINDEX('%.%',@productno)-1),@parent
+		set @productno=RIGHT(@productno,LEN(@productno)-PATINDEX('%.%',@productno))
+	end
+end
+insert into @tmp (productno,parent)
+select @productno,@parent 
+
+
+BEGIN TRY
+	--遞迴
+	WITH OrdersTable (productno,noa,product,spec,style,unit,Level,sortCol,mount,loss,dividea,mul,memo) as
+	(
+		Select productno,parent,product,spec,style,unit,0, CONVERT(nvarchar(128),productno)
+		,mount,loss,dividea,mul,memo
+		from @tmp
+		where parent=@parent
+		UNION ALL
+		SELECT a.productno,a.parent,a.product,a.spec,a.style,a.unit,OrdersTable.Level+1,CONVERT(nvarchar(128),OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno))
+		,a.mount,a.loss,a.dividea,a.mul,a.memo
+		FROM @tmp a, OrdersTable 
+		WHERE a.parent=OrdersTable.productno 
+	)
+	Select SortCol,productno,product,spec,style,unit
+	,mount/case when isnull(dividea,1)=0 then 1 else isnull(dividea,1) end*
+	case when isnull(mul,1)=0 then 1 else isnull(mul,1) end mount
+	,loss,memo,c.price
+	From OrdersTable 
+	outer apply (select noa from ucc where noa=OrdersTable.productno) b
+	outer apply (select top 1 price from view_costs where productno=OrdersTable.productno order by mon desc) c
+	where b.noa is not null
+	order by sortCol
+
+END TRY
+BEGIN CATCH
+	select @@ERROR productno
+END CATCH
+;
+------------------------------------------------------------------------------------------------------
+bomucct:--BOMUCCT
+declare @productno nvarchar(20)
+declare @parent nvarchar(20)
+
+set @productno=[1]
+set @parent='root'
+
+declare @tmp table(
+	productno nvarchar(100),
+	parent nvarchar(50),
+	product nvarchar(MAX),
+	spec nvarchar(MAX),
+	style nvarchar(MAX),
+	unit nvarchar(MAX),
+	mount float,
+	loss float,
+	dividea float,
+	mul float,
+	memo nvarchar(MAX)
+)
+
+insert into @tmp
+select productno,noa,product,spec,'',unit,mount,loss,dividea,mul,memo from ucas
+
+if(PATINDEX('%.%',@productno)>0)
+begin
+	while(PATINDEX('%.%',@productno)>0)
+	begin
+		insert into @tmp(productno,parent)
+		select left(@productno,PATINDEX('%.%',@productno)-1),@parent
+		set @productno=RIGHT(@productno,LEN(@productno)-PATINDEX('%.%',@productno))
+	end
+end
+insert into @tmp (productno,parent)
+select @productno,@parent 
+
+
+BEGIN TRY
+	--遞迴
+	WITH OrdersTable (productno,noa,product,spec,style,unit,Level,sortCol,mount,loss,dividea,mul,memo) as
+	(
+		Select productno,parent,product,spec,style,unit,0, CONVERT(nvarchar(128),productno)
+		,mount,loss,dividea,mul,memo
+		from @tmp
+		where parent=@parent
+		UNION ALL
+		SELECT a.productno,a.parent,a.product,a.spec,a.style,a.unit,OrdersTable.Level+1,CONVERT(nvarchar(128),OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno))
+		,a.mount,a.loss,a.dividea,a.mul,a.memo
+		FROM @tmp a, OrdersTable 
+		WHERE a.parent=OrdersTable.productno 
+	)
+	
+	--Select OrdersTable.SortCol,OrdersTable.productno,OrdersTable.product,OrdersTable.spec,OrdersTable.style,OrdersTable.unit
+	--,OrdersTable.mount/case when isnull(OrdersTable.dividea,1)=0 then 1 else isnull(OrdersTable.dividea,1) end*
+	--case when isnull(OrdersTable.mul,1)=0 then 1 else isnull(OrdersTable.mul,1) end mount
+	--,OrdersTable.loss,OrdersTable.memo
+	--,c.processno,c.process,c.mount,c.loss,c.price
+	--From OrdersTable 
+	--outer apply (select noa from uca where noa=OrdersTable.productno) b
+	--left join ucat c on c.noa=OrdersTable.productno
+	--where b.noa is not null
+	--order by sortCol
+	
+	Select c.processno,c.process,c.mount,c.loss,c.price
+	From OrdersTable 
+	outer apply (select noa from uca where noa=OrdersTable.productno) b
+	left join ucat c on c.noa=OrdersTable.productno
+	where b.noa is not null
+	group by c.processno,c.process,c.mount,c.loss,c.price
+
+END TRY
+BEGIN CATCH
+	select @@ERROR productno
+END CATCH
+;
+------------------------------------------------------------------------------------------------------
+bomucagroupb:--bomucagroupb
+declare @productno nvarchar(20)
+declare @parent nvarchar(20)
+
+set @productno=[1]
+set @parent='root'
+
+declare @tmp table(
+	productno nvarchar(100),
+	parent nvarchar(50),
+	product nvarchar(MAX),
+	spec nvarchar(MAX),
+	style nvarchar(MAX),
+	unit nvarchar(MAX),
+	mount float,
+	loss float,
+	dividea float,
+	mul float,
+	memo nvarchar(MAX)
+)
+
+insert into @tmp
+select productno,noa,product,spec,'',unit,mount,loss,dividea,mul,memo from ucas
+
+if(PATINDEX('%.%',@productno)>0)
+begin
+	while(PATINDEX('%.%',@productno)>0)
+	begin
+		insert into @tmp(productno,parent)
+		select left(@productno,PATINDEX('%.%',@productno)-1),@parent
+		set @productno=RIGHT(@productno,LEN(@productno)-PATINDEX('%.%',@productno))
+	end
+end
+insert into @tmp (productno,parent)
+select @productno,@parent 
+
+
+BEGIN TRY
+	--遞迴
+	WITH OrdersTable (productno,noa,product,spec,style,unit,Level,sortCol,mount,loss,dividea,mul,memo) as
+	(
+		Select productno,parent,product,spec,style,unit,0, CONVERT(nvarchar(128),productno)
+		,mount,loss,dividea,mul,memo
+		from @tmp
+		where parent=@parent
+		UNION ALL
+		SELECT a.productno,a.parent,a.product,a.spec,a.style,a.unit,OrdersTable.Level+1,CONVERT(nvarchar(128),OrdersTable.SortCol+'-'+CONVERT(nvarchar(128),a.productno))
+		,a.mount,a.loss,a.dividea,a.mul,a.memo
+		FROM @tmp a, OrdersTable 
+		WHERE a.parent=OrdersTable.productno 
+	)
+	
+	Select b.groupbno,c.namea
+	From OrdersTable 
+	outer apply (select noa,groupbno from uca where noa=OrdersTable.productno) b
+	left join uccgb c on b.groupbno=c.noa
+	where b.noa is not null
+	group by b.groupbno,c.namea
+
+END TRY
+BEGIN CATCH
+	select @@ERROR productno
+END CATCH
+;

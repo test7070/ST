@@ -1,0 +1,87 @@
+chkorde:--chkorde
+SET QUOTED_IDENTIFIER OFF
+declare @t_qdate nvarchar(10)= [1]
+declare @t_userno nvarchar(max) = 'Z001'
+declare @r_len nvarchar(max) = '4'
+declare @t_rank int = 0
+declare @t_user nvarchar(20) = ''
+select @t_rank=[RANK],@t_user=namea from nhpe where noa=@t_userno
+
+if(LEN(@t_qdate)=8)
+begin 
+	set @t_qdate= convert(nvarchar, cast(cast('20'+left(@t_qdate,2) as int) as nvarchar)+right(@t_qdate,6)) 
+end
+else if(LEN(@t_qdate)=9 and (@r_len='3' or @r_len='4'))
+begin 
+	set @t_qdate= cast(cast(left(@t_qdate,3) as int)+1911 as nvarchar)+right(@t_qdate,6)
+end
+	
+declare @tmp table(
+	accy nvarchar(10),
+	noa nvarchar(100),
+	rr int,
+	datea nvarchar(10),
+	edatea nvarchar(10),   
+	kdate  nvarchar(10),
+	sss nvarchar(max),
+	email nvarchar(max),
+	worker nvarchar(100)
+)
+insert @tmp
+select accy,a.noa,ROW_NUMBER()over(partition by @t_qdate order by noa),datea,@t_qdate,DATEDIFF(day,case when len(odate)='9' then 
+	   cast(cast(left(odate,3) as int)+1911 as nvarchar)+right(odate,6) else odate end,@t_qdate)
+	   ,'','',worker
+from view_orde a
+where case when len(odate)='9' then cast(cast(left(odate,3) as int)+1911 as nvarchar)+right(odate,6) else odate end<@t_qdate 
+and enda='0' and ISNULL(odate,'')!='' and cancel!='1'
+
+declare @namea nvarchar(50)
+declare @email nvarchar(200)
+
+declare cursor_table cursor for
+select namea,email from sss
+open cursor_table
+fetch next from cursor_table
+into @namea,@email
+while(@@FETCH_STATUS <> -1)
+begin		
+	update @tmp
+	set sss=sss+CHAR(59)+@namea,email=case when @email!='' then  email+CHAR(59)+@email else email end
+	
+	fetch next from cursor_table 
+	into @namea,@email
+end
+close cursor_table 
+deallocate cursor_table
+
+update @tmp
+set sss=substring(sss,2,len(sss)),email=substring(email,2,len(email))
+
+Begin Transaction [Trans_Name]
+begin try
+	if not exists(select noa from signform where noa='chkorde')
+	begin
+		insert signform(noa,formname,form,memo,receiver,mailreceiver)
+		select 'chkorde','訂單未交','chkorde','未交超過=days天',sss,email
+		from @tmp a
+		group by sss,email
+	end
+
+	delete [sign] where zno in (select noa from @tmp)
+
+	insert [sign](noa,datea,timea,form,sender,memo,receiver,zno,zno2,enda)
+	select REPLACE(@t_qdate,'/','')+case when @r_len=4 then REPLICATE('0',5-LEN(rr)) + RTRIM(CAST(rr AS CHAR))else REPLICATE('0',3-LEN(rr)) + RTRIM(CAST(rr AS CHAR)) end,
+	   @t_qdate,left(CONVERT(nvarchar,getdate(),108),5), '訂單未交',@t_user,'未交超過'+kdate+'天',sss,noa,'orde'+CHAR(59)+'noa'+CHAR(59)+accy,'N'
+	from @tmp
+
+	update [sign]
+	set checker=b.checker,approvebs=b.approvebs,approvefi=b.approvefi,approvegm=b.approvegm,approvema=b.approvema
+	from [sign] a left join signform b on a.form=b.formname
+	where a.form='訂單未交' and a.datea=@t_qdate
+
+	Commit Transaction [Trans_Name] -- 提交所有操作所造成的變更
+end try
+begin catch
+	Rollback Transaction [Trans_Name] -- 復原所有操作所造成的變更
+end catch
+;
