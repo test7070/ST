@@ -1606,6 +1606,11 @@
 				if (emp($('#txtNoa').val()))
 					return;
 					
+				if($('#chkEnda').prop('checked')){
+					alert('訂單已結案禁止修改!!')//107/05/22
+					return;
+				}
+					
 				modi_mount=0;
 				for(var i=0;i<q_bbsCount;i++){
 					modi_mount=q_add(modi_mount,dec($('#txtMount_'+i).val()));

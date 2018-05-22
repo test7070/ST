@@ -839,6 +839,9 @@ BEGIN TRY
 		declare @delrnoa nvarchar(50)
 		declare @delvaccy nvarchar(50)
 		declare @delvnoa nvarchar(50)
+		declare @deleaccy nvarchar(50) --107/05/22 派車船務packing
+		declare @delenoa nvarchar(50)  --107/05/22 派車船務packing
+		declare @delinoa nvarchar(50)  --107/05/22 invo
 		
 		declare cursor_table cursor for
 		select vnoa,vnoq,tordeno,tordeno2,ip,db from #tmpa where isnull(ip,'')!='' and isnull(db,'')!=''
@@ -974,6 +977,31 @@ BEGIN TRY
 			update a
 			set money=b.total,total=b.total
 			from #vccbbm a outer apply (select SUM(total)total from #vccbbs where noa=a.noa) b
+			
+			if(LEN(ISNULL(@delvnoa,''))>0)
+			begin
+				set @cmd ="select @deleaccy=accy,@delenoa=noa,@delinoa=invo from ["+@ip+",1799]."+@db+".dbo.view_vcce where caseno2='"+@delvnoa+"' "
+				execute sp_executesql @cmd,N'@deleaccy nvarchar(90) output,@delenoa nvarchar(90) output,@delinoa nvarchar(90) output'
+				,@deleaccy=@deleaccy output,@delenoa=@delenoa output,@delinoa=@delinoa output
+			end
+
+			if(LEN(ISNULL(@delenoa,''))>0)
+			begin
+				--派車
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.vcce"+@deleaccy+" where noa='"+@delenoa+"'")
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.vcces"+@deleaccy+" where noa='"+@delenoa+"'")
+				--船務
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.boaj where noa='"+@delenoa+"'")
+				--packing
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.packing where noa='"+@delenoa+"'")
+			end
+
+			if(LEN(ISNULL(@delinoa,''))>0)
+			begin
+				--invo
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.invo where noa='"+@delinoa+"'")
+				EXEC("delete ["+@ip+",1799]."+@db+".dbo.invos where noa='"+@delinoa+"'")
+			end
 			
 			fetch next from cursor_table 
 			into @vnoa,@vnoq,@ordeno,@no2,@ip,@db
@@ -1171,6 +1199,46 @@ BEGIN TRY
 				,'7' act
 				from ["+@ip+",1799]."+@db+".dbo.view_vcc where noa='"+@delvnoa+"'
 			")
+			
+			--107/05/22 寫入vcce 找原vcce
+			set @cmd ="select @deleaccy=accy,@delenoa=noa,@delinoa=invo from view_vcce where caseno2='"+@t_noa+"' "
+			execute sp_executesql @cmd,N'@deleaccy nvarchar(90) output,@delenoa nvarchar(90) output,@delinoa nvarchar(90) output'
+			,@deleaccy=@deleaccy output,@delenoa=@delenoa output,@delinoa=@delinoa output
+
+			if(LEN(ISNULL(@delenoa,''))>0)
+			begin
+				--派車
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.vcce"+@deleaccy+" (noa,datea,kind,cldate,custno,comp,caseno,caseno2,tel,fax,trantype,zip_post,addr_post,stype,deivery_addr,ordeno,weight,cardeal,carno,total,memo,odate,cno,acomp,salesno,sales,lcno,imemo,pmemo,conn,paytype,worker,worker2,nick,invo,cardealno,timea,driverno,driver,bill,co,date1,date2,etcdate,etctime)
+				select a.noa,a.datea,a.kind,a.cldate,a.custno,a.comp,a.caseno,'"+@delvnoa+"',a.tel,a.fax,a.trantype,a.zip_post,a.addr_post,a.stype,a.deivery_addr,a.ordeno,a.weight,a.cardeal,a.carno,a.total,a.memo,a.odate,b.cno,b.acomp,a.salesno,a.sales,a.lcno,a.imemo,a.pmemo,a.conn,a.paytype,a.worker,a.worker2,a.nick,a.invo,a.cardealno,a.timea,a.driverno,a.driver,a.bill,a.co,a.date1,a.date2,a.etcdate,a.etctime
+				from view_vcce a outer apply (select top 1 cno,acomp from #vccbbm where noa='"+@delvnoa+"')b
+				where a.noa='"+@delenoa+"'")
+
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.vcces"+@deleaccy+" (noa,noq,uno,productno,product,unit,dime,width,lengthb,spec,radius,mount,weight,price,enda,eweight,ecount,adjweight,adjcount,memo,class,datea,size,style,ordeno,no2,custno,c1,notv,c2,notv2,rackno,storeno,store,comp,timea,odate,salesno,sales,worker,handle,handle2)
+				select noa,noq,uno,productno,product,unit,dime,width,lengthb,spec,radius,mount,weight,price,enda,eweight,ecount,adjweight,adjcount,memo,class,datea,size,style,ordeno,no2,custno,c1,notv,c2,notv2,rackno,storeno,store,comp,timea,odate,salesno,sales,worker,handle,handle2
+				from view_vcces where noa='"+@delenoa+"'")
+				
+				--船務
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.boaj (noa,exportno,datea,billoflading,deliveryorder,notify,entryno,invoiceno,inspection_compno,inspection_comp,bcompno,bcomp,forwarderno,forwarder,customs,eta,etd,caseno,casesize,caseyard,billmemo,bdock,edock,goal,boatname,ship,sono,onboarddate,shippingdate,cldate,pallet,worker,worker2,saildate,main,side,markno,trancompno,trancomp,deivery_addr,cutoff)
+				select noa,exportno,datea,billoflading,deliveryorder,notify,entryno,invoiceno,inspection_compno,inspection_comp,bcompno,bcomp,forwarderno,forwarder,customs,eta,etd,caseno,casesize,caseyard,billmemo,bdock,edock,goal,boatname,ship,sono,onboarddate,shippingdate,cldate,pallet,worker,worker2,saildate,main,side,markno,trancompno,trancomp,deivery_addr,cutoff
+				from boaj where noa='"+@delenoa+"'")
+
+				--packing
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.packing (noa,noq,uno,productno,product,spec,dime,width,lengthb,mount,weight,gweight,cuft,memo,packway,pack,nweight,height,radius,size,no2,engpro,unit,bctn,ectn,bplt,eplt,ctnno,qtyctn,ordeno)
+				select noa,noq,uno,productno,product,spec,dime,width,lengthb,mount,weight,gweight,cuft,memo,packway,pack,nweight,height,radius,size,no2,engpro,unit,bctn,ectn,bplt,eplt,ctnno,qtyctn,ordeno 
+				from packing where noa='"+@delenoa+"'")
+			end
+
+			if(LEN(ISNULL(@delinoa,''))>0)
+			begin
+				--invo
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.invo (noa,ordeno,vccno,datea,shipped,unit,commodity,contract,froma,toa,lcno,etd,eta,packing,messrsm,invo,invom,lcbauk,shipmentdate,saildate,advancesdate,tggno,tgg,lcdate,dodate,paydate,redeemdate,date_customs,vcceno,vat,typea,taxtype,tax,money,total,totalus,floata,coin,comp,addr,attn,memotitle,memobottom,memo,pno,cno,usd,title,custno,sailing,per,isgenvcc,amount,produceno,closing)
+				select a.noa,a.ordeno,'"+@delvnoa+"',a.datea,a.shipped,a.unit,a.commodity,a.contract,a.froma,a.toa,a.lcno,a.etd,a.eta,a.packing,a.messrsm,a.invo,a.invom,a.lcbauk,a.shipmentdate,a.saildate,a.advancesdate,a.tggno,a.tgg,a.lcdate,a.dodate,a.paydate,a.redeemdate,a.date_customs,a.vcceno,a.vat,a.typea,a.taxtype,a.tax,money,a.total,a.totalus,a.floata,a.coin,a.comp,a.addr,a.attn,a.memotitle,a.memobottom,a.memo,a.pno,b.cno,a.usd,a.title,a.custno,a.sailing,a.per,a.isgenvcc,a.amount,a.produceno,a.closing
+				from invo a outer apply (select top 1 cno,acomp from #vccbbm where noa='"+@delvnoa+"')b
+				where a.noa='"+@delinoa+"'")
+				EXEC("insert ["+@ip+",1799]."+@db+".dbo.invos (noa,noq,marks,description,unit,quantity,price,amount,memo,itemno,productno,uno,weight,ordeno,no2,cost,benifit)
+				select noa,noq,marks,description,unit,quantity,price,amount,memo,itemno,productno,uno,weight,ordeno,no2,cost,benifit
+				from invos where noa='"+@delinoa+"'")
+			end
 			
 			fetch next from cursor_table 
 			into @ip,@db
