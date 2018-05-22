@@ -105,8 +105,13 @@ declare @z int
 declare @bdate nvarchar(10)
 declare @edate nvarchar(10)
 
+--107/05/22 發票號碼直接取第一英文字後10碼,避免特殊符號
+
 declare cursor_table cursor for
-select noa,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y from ztmpxls 
+select noa,a,b,c,d,e
+--,f
+,case when PATINDEX('%[A-Z]%',f)=0 then replace(f,' ','') else substring(replace(f,' ',''),PATINDEX('%[A-Z]%',replace(f,' ','')),10) end
+,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y from ztmpxls 
 where ((isnull(f,'')!='' ) --and len(f)=10 and f like '[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' --106/12/26 為了顯示發票號碼錯誤這裡不先判斷等候面寫入時再處理
 or isnull(o,'')!='') and isnull(f,'')!='發票號碼'
 open cursor_table
