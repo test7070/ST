@@ -41,6 +41,17 @@ begin
 	end
 end
 
+if(@t_table='sss')
+begin
+	set @t_img=(select images from sss where noa=@t_noa)
+	if(charindex(@t_dele,@t_img)>0)
+	begin
+		set @t_img=SUBSTRING(@t_img,charindex(@t_dele+'.',@t_img),charindex(@t_dele+'.',@t_img)+6)
+		update sss
+		set images=replace(images,@t_img,'')
+		where noa=@t_noa
+	end
+end
 ;
 ---------------------------------------------------------------------
 
@@ -70,4 +81,10 @@ begin
 	where noa=@t_noa
 end
 
+if(@t_table='sss')
+begin
+	update sss
+	set images=CHAR(59)
+	where noa=@t_noa
+end
 ;

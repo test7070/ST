@@ -26,42 +26,42 @@
                 });
                 
                 $('#btnDele1').click(function() {
-                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx' || tname=='sss')){
                 		if(confirm('確認刪除圖片1?')){
                 			q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';01');
                 		}
                 	}
 				});
 				$('#btnDele2').click(function() {
-                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx' || tname=='sss')){
                 		if(confirm('確認刪除圖片2?')){
                 			q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';02');
                 		}
                 	}
 				});
 				$('#btnDele3').click(function() {
-                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx' || tname=='sss')){
                 		if(confirm('確認刪除圖片3?')){
 	                		q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';03');
 	                	}
                 	}
 				});
 				$('#btnDele4').click(function() {
-                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx' || tname=='sss')){
                 		if(confirm('確認刪除圖片4?')){
                 			q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';04');
                 		}
                 	}
 				});
 				$('#btnDele5').click(function() {
-                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx' || tname=='sss')){
                 		if(confirm('確認刪除圖片5?')){
                 			q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';05');
                 		}
                 	}
 				});
 				$('#btnDele6').click(function() {
-                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+                	if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx' || tname=='sss')){
                 		if(confirm('確認刪除圖片6?')){
 	                		q_func('qtxt.query.deleimg', 'uploadimg.txt,deleimg,'+ encodeURI(tnoa)+ ';'+encodeURI(tname)+ ';06');
 	                	}
@@ -69,7 +69,7 @@
 				});
 				
 				$('#btnDeleall').click(function() {
-					if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx')){
+					if(tnoa!=undefined && (tname=='ucc' || tname=='uca' || tname=='ucx' || tname=='sss')){
 	                	if(confirm('確認刪除全部圖片?')){
 	                		q_func('qtxt.query.deleimgall', 'uploadimg.txt,deleimgall,'+ encodeURI(tnoa)+ ';'+encodeURI(tname));
 	                	}
