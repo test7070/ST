@@ -2602,9 +2602,7 @@
 					</tr>
 					<tr class="tr8">
 						<td class="td1"><span> </span><a id='lblMoney' class="lbl"> </a></td>
-						<td class="td2" colspan='2'>
-							<input id="txtMoney" type="text" class="txt c1" style="text-align: center;"/>
-						</td>
+						<td class="td2" colspan='2'><input id="txtMoney" type="text" class="txt num c1"/></td>
 						<td class="td4"><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td class="td5"><input id="txtTax" type="text" class="txt num c1"/></td>
 						<td class="td6"><select id="cmbTaxtype" class="txt c1" onchange='sum()' > </select></td>
