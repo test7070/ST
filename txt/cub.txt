@@ -1251,8 +1251,8 @@ begin
 	end
 	else
 	begin
-		EXEC("insert ucx(noa,kdate,product,typea,spec,unit,groupeno,groupfno,ucano,ordeno)
-		select '"+@ucxno+"','"+@datea+"',product,'2',spec,unit,m1,m4,productno,ordeno
+		EXEC("insert ucx(noa,kdate,product,typea,spec,unit,groupeno,groupfno,groupgno,grouphno,groupino,groupjno,groupkno,grouplno,groupmno,ucano,ordeno)
+		select '"+@ucxno+"','"+@datea+"',product,'2',spec,unit,m1,m4,m11,m7,m18,m2,m9,m10,m3,productno,ordeno
 		from view_cub where noa='"+@noa+"'")
 		
 		EXEC("update cub"+@accy+" set issuedate='"+@datea+' '+@timea+"' where noa='"+@noa+"'")
