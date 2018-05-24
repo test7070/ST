@@ -1606,6 +1606,11 @@
 				if (emp($('#txtNoa').val()))
 					return;
 					
+				if($('#chkEnda').prop('checked')){
+					alert('訂單已結案禁止修改!!')//107/05/22
+					return;
+				}
+					
 				modi_mount=0;
 				for(var i=0;i<q_bbsCount;i++){
 					modi_mount=q_add(modi_mount,dec($('#txtMount_'+i).val()));
@@ -2597,9 +2602,7 @@
 					</tr>
 					<tr class="tr8">
 						<td class="td1"><span> </span><a id='lblMoney' class="lbl"> </a></td>
-						<td class="td2" colspan='2'>
-							<input id="txtMoney" type="text" class="txt c1" style="text-align: center;"/>
-						</td>
+						<td class="td2" colspan='2'><input id="txtMoney" type="text" class="txt num c1"/></td>
 						<td class="td4"><span> </span><a id='lblTax' class="lbl"> </a></td>
 						<td class="td5"><input id="txtTax" type="text" class="txt num c1"/></td>
 						<td class="td6"><select id="cmbTaxtype" class="txt c1" onchange='sum()' > </select></td>

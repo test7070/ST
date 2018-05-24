@@ -27,10 +27,22 @@
                 q_langShow();
                 q_popAssign();
                 
+                $('#txtBmon').mask(r_picm);
+                $('#txtEmon').mask(r_picm);
+                
                 if(window.parent.q_getMsg('lblNoa')=='..')
                 	$('#lblNoa').text(window.parent.$('#lblNoa').text());
                 else
                 	$('#lblNoa').text(window.parent.q_getMsg('lblNoa')+'　');
+                	
+                if(window.parent.q_getMsg('lblMon')=='..')
+                	$('#lblMon').text(window.parent.$('#lblMon').text());
+                else
+                	$('#lblMon').text(window.parent.q_getMsg('lblMon')+'　');
+                	
+                if(pq_name=='salchg'){
+                	$('.mon').show();
+                }
                 
                 $('#btnPrint').click(function() {
                 	var value = $('#print_div')[0].innerHTML;
@@ -44,17 +56,17 @@
                 });
                 
                 $('#btnSeek').click(function() {
-                	initprint($('#txtBnoa').val(),$('#txtEnoa').val())
+                	initprint($('#txtBnoa').val(),$('#txtEnoa').val(),$('#txtBmon').val(),$('#txtEmon').val())
 				});
 				
 				$('#btnCopy').click(function(e) {
 					var clipboard = new Clipboard('#btnCopy');
 				});
 				
-				initprint('','');
+				initprint('','','','');
             }
             
-            function initprint(bnoa,enoa) {
+            function initprint(bnoa,enoa,bmon,emon) {
             	if(pq_name=='' || pq_name==q_name){
             		return;
             	}
@@ -137,14 +149,32 @@
                 	t_r_accy=r_accy+'_'+r_cno;
                 }
                 
-                if(bnoa.length>0 || enoa.length>0){
+                
+                //107/05/21 目前只有salchg才有mon查詢 NV
+                if(pq_name=='salchg' && (bnoa.length>0 || enoa.length>0 || bmon.length>0 || emon.length>0)){
+                	var t_where="";
+                	if(enoa.length>0){
+                		t_where="noa between '"+bnoa+"' and '"+enoa+"' "
+                	}else{
+                		t_where="noa between '"+bnoa+"' and char(255) "
+                	}
+                	
+                	if(emon.length>0){
+                		t_where+="and mon between '"+bmon+"' and '"+emon+"' "
+                	}else{
+                		t_where+="and mon between '"+bmon+"' and char(255) "
+                	}
+                	
+                	t_where="where=^^ "+t_where+" ^^";
+                	
+                	q_gt(pq_name, t_where, 0, 0, 0, "getdb",t_r_accy,1);
+                }else if(bnoa.length>0 || enoa.length>0){
                 	var t_where="";
                 	if(enoa.length>0){
                 		t_where="where=^^noa between '"+bnoa+"' and '"+enoa+"' ^^"
                 	}else{
                 		t_where="where=^^noa between '"+bnoa+"' and char(255) ^^"
                 	}
-                	
                 	q_gt(pq_name, t_where, 0, 0, 0, "getdb",t_r_accy,1);
                 }else{
                 	q_gt(pq_name, 'where=^^1=1^^ stop=1000', 0, 0, 0, "getdb",t_r_accy,1);
@@ -327,6 +357,12 @@
 		<a id='lblNoa'> </a>
 		<input id="txtBnoa" type="text" class="txt c1" style="width: 150px;"> ~ 
 		<input id="txtEnoa" type="text" class="txt c1" style="width: 150px;">
+		
+		<BR class="mon" style="display: none;"><BR class="mon" style="display: none;">
+		<a id='lblMon' class="mon" style="display: none;"> </a>
+		<input id="txtBmon" type="text" class="txt c1 mon" style="width: 150px;display: none;"> <a style="display: none;">~</a> 
+		<input id="txtEmon" type="text" class="txt c1 mon" style="width: 150px;display: none;">
+		
 		<input id="btnSeek" type="button" value="查詢"><BR>
 		<input id="btnPrint" type="button" value="列印">
 		<input id="btnCopy" type="button" value="複製到剪貼簿" data-clipboard-target="#print_div"><BR>
