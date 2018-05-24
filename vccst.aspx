@@ -588,7 +588,18 @@
 						Unlock(1);
 						$('#txtNoa').val('AUTO');
 						$('#txtDatea').val(q_date());
-						$('#txtMon').val(q_date().substring(0, 6));
+						//$('#txtMon').val(q_date().substring(0, 6));
+						if($('#txtDatea').val().substr(7, 2)<('00'+t_startdate).slice(-2)){
+                            $('#txtMon').val($('#txtDatea').val().substr(0, 7));
+                        }else{
+                            var t_date=$('#txtDatea').val();
+                            var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,1);
+                            nextdate.setMonth(nextdate.getMonth() +1);
+                            t_date=''+(nextdate.getFullYear()-1911)+'/'+(nextdate.getMonth()<9?'0':'')+(nextdate.getMonth()+1);
+                            $('#txtMon').val(t_date);
+                        }
+						
+						
 						$('#txtDatea').focus();
 						size_change();
 						break;
@@ -1114,8 +1125,12 @@
 					round : 3
 				};
 				if ($('#cmbKind').val().substr(1, 1) == '4') {//鋼胚
-					q_tr('txtTheory_' + b_seq, round(t_Mount * theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), t_Dime, t_Width, t_Lengthb), 0));
-				} else {
+                    q_tr('txtTheory_' + b_seq, round(t_Mount * theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), t_Dime, t_Width, t_Lengthb), 0));
+                } else if ($('#cmbKind').val().substr(1, 1) == '2') {//鋼管
+                   //     q_tr('txtTheory_' + b_seq, round((t_Width - t_Dime)*t_Dime *t_Lengthb * 0.02491 * t_Mount, 0));
+                        q_tr('txtTheory_' + b_seq, round(t_Dime *t_Lengthb * 0.02491 * t_Mount, 0));
+                   
+                } else {
 					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
 				}
 				var t_Product = $('#txtProduct_' + b_seq).val();
