@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 	<head>
 		<title> </title>
@@ -94,11 +93,12 @@
 				
 				$('#btnIn').click(function(){
 					if(!emp($('#txtInnoa').val()) && (q_cur == 1 || q_cur == 2)){
-						//q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");
+						q_gt('modfix', "where=^^noa='"+$('#txtInnoa').val()+"'^^", 0, 0, 0, "ins_modfixs");
 						
 						//1050225 判斷是否已領用 有可能會直接入庫後直接領料不會維修
 						q_gt('modout', "where=^^fixnoa='"+$('#txtInnoa').val()+"' ^^", 0, 0, 0, "check_modout",r_accy,1);
 						var as = _q_appendData("modout", "", true);
+						//console.log(as);
 						if (as[0] != undefined) {
 							alert('模具入庫單【'+$('#txtInnoa').val()+'】已領用【'+as[0].noa+'】!!');
 							return;
@@ -107,15 +107,15 @@
 						var t_where="where=^^a.noa='"+$('#txtInnoa').val()+"' order by a.noa,a.noq^^"
 						var t_where1="where[1]=^^nob=a.nob and noa!='"+$('#txtNoa').val()+"' and datea<'"+$('#txtDatea').val()+"'^^"
 						q_gt('modfixc_modfixs', t_where+t_where1, 0, 0, 0, "modfixc_modfixs",r_accy,1);
-						
+
 						var as = _q_appendData("modfixs", "", true);
+						//console.log(as);
 						//清除表身
 						for(var i=0; i<q_bbsCount; i++){
 							$('#btnMinus_'+i).click();
 						}
 						q_gridAddRow(bbsHtm, 'tbbs', 'txtNob,txtCode,txtDetail,txtFrame,txtMount,txtWeight,txtBottom,txtBebottom,txtBrepair,txtLastloss'
 						, as.length, as, 'nob,code1,detail1,frame1,mount1,weight1,bottom,enbottom,erepair,loss', 'txtNob');
-						
 					}	
 				});
 				
@@ -281,6 +281,7 @@
 			
 			//取前一次圖檔底徑、車修後底徑、磨耗作為本次圖檔底徑、車修前底徑、前次磨耗
 			function getLast(){
+				console.log('getLast()');
 				var btm,ebtm,erep,loss,noa;
 			  	for(var i=0; i<t_data1.length; i++){	
 			  		btm  = '';
@@ -289,17 +290,25 @@
 			  		loss = '';
 			  		noa  = '';		  		  		
 			  		for(var j=0; j<t_data2.length; j++){//從modfixcs找相同nob且noa最大者視為前一次
-			  			if(t_data1[i].nob==t_data2[j].nob && t_data2[j].noa>noa){		  				
-			  				btm  = t_data2[j].bottom;
+			  			if(t_data1[i].nob==t_data2[j].nob && t_data2[j].noa>noa){	
+			  				//btm  = t_data2[j].bottom;	//107/05/21圖檔底徑直接抓模具主檔
 			  				ebtm = t_data2[j].enbottom;
 			  				erep = t_data2[j].erepair;
 			  				loss = t_data2[j].loss;
 			  				noa  = t_data2[j].noa;
+						//console.log('t_data2['+j+'].bottom='+t_data2[j].bottom)
+						//console.log('t_data2['+j+'].enbottom='+t_data2[j].enbottom)
+						//console.log('t_data2['+j+'].erepair='+t_data2[j].erepair)
+						//console.log('t_data2['+j+'].loss='+t_data2[j].loss)
+						//console.log('t_data2['+j+'].noa='+t_data2[j].noa)
 			  			}
 			  		}//j-loop
+					//console.log('圖檔底徑='+btm)
+					//console.log(t_data1)
+					//console.log(t_data3)
 			  		if(btm == ''){//若圖檔底徑為空則取models.bottom
 			  			for(var j=0; j<t_data3.length; j++){
-				  			if(t_data1[i].nob==t_data3[j].productno ){	  				
+				  			if(t_data1[i].nob==t_data3[j].productno ){
 				  				btm  = t_data3[j].bottom;				  				
 				  			}
 				  		}//j-loop	

@@ -217,6 +217,8 @@
             			t_hidea=q_add(t_hidea,240);
             		}else{
             			$('#topbbs .comp-'+ttlbl+'').css('width','600px');
+            			$('.f'+ttlbl+'4').show();
+            			$('.f'+ttlbl+'5').show();
             		}
             	}
             	
