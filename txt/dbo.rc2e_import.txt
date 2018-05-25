@@ -1,6 +1,10 @@
 ﻿CREATE function [dbo].[rc2e_import](
 	@t_noa nvarchar(50)
 	,@t_tggno nvarchar(50)
+	,@t_productno nvarchar(50)
+	,@t_spec nvarchar(50)
+	,@t_dime float
+	,@t_typen nvarchar(1)
 )
 returns @tmpa table(
 	Storeno nvarchar(50)
@@ -22,42 +26,58 @@ returns @tmpa table(
 	,Size nvarchar(50)
 	,Mount float
 	,Unit nvarchar(50)
+	,Price float
+	,Memo nvarchar(max)
 )as
 BEGIN
-	declare @tmp table(
-		 noa nvarchar(50)
-		,tggno nvarchar(50)
+	if @t_typen = '1'  --進貨發貨匯入
+	begin
+		declare @tmp table(
+			 noa nvarchar(50)
+			,tggno nvarchar(50)
 
-		,Storeno nvarchar(50)
-		,Store nvarchar(50)
-		,Ordeno nvarchar(50)
-		,No2 nvarchar(50)
-		,Style nvarchar(50)
-		,Productno nvarchar(50)
-		,Product nvarchar(50)
-		,Uno nvarchar(50)
-		,Spec nvarchar(50)
-		,Width float
-		,Dime float
-		,Lengthb float
-		,Weight float
-		,Gweight float
-		,Class nvarchar(50)
-		,Width2 float
-		,Size nvarchar(50)
-		,Mount float
-		,Unit nvarchar(50)
-		,Price float
-		,Meno nvarchar(max)
-	)
-	INSERT into @tmp
-	SELECT a.noa,a.tggno,b.storeno,b.store,b.descr,b.noq,b.style,b.productno,b.product,b.uno,b.surface,b.width,b.dime,b.lengthb,b.weights,b.weight,b.class,b.widths,b.hand,b.mount,b.unit,b.price,b.memo
-	from rc2e a
-	left join rc2es b on a.noa = b.noa
-	where tggno=@t_tggno
+			,Storeno nvarchar(50)
+			,Store nvarchar(50)
+			,Ordeno nvarchar(50)
+			,No2 nvarchar(50)
+			,Style nvarchar(50)
+			,Productno nvarchar(50)
+			,Product nvarchar(50)
+			,Uno nvarchar(50)
+			,Spec nvarchar(50)
+			,Width float
+			,Dime float
+			,Lengthb float
+			,Weight float
+			,Gweight float
+			,Class nvarchar(50)
+			,Width2 float
+			,Size nvarchar(50)
+			,Mount float
+			,Unit nvarchar(50)
+			,Price float
+			,Memo nvarchar(max)
+		)
+		INSERT into @tmp
+		SELECT a.noa,a.tggno,b.storeno,b.store,b.descr,b.noq,b.style,b.productno,b.product,b.uno,b.surface,b.width,b.dime,b.lengthb,b.weight,b.weights,b.class,b.widths,b.hand,b.mount,b.unit,b.price,b.memo
+		from rc2e a
+		left join rc2es b on a.noa = b.noa
+		where tggno=@t_tggno
 
-	insert into @tmpa
-	SELECT Storeno,Store,Ordeno,No2,Style,Productno,Product,Uno,Spec,Width,Dime,Lengthb,Weight,Gweight,Class,Width2,Size,Mount,Unit,Price,Memo from @tmp 
+		insert into @tmpa
+		SELECT Storeno,Store,Ordeno,No2,Style,Productno,Product,Uno,Spec,Width,Dime,Lengthb,Weight,Gweight,Class,Width2,Size,Mount,Unit,Price,Memo from @tmp
+	end
 	
+	if @t_typen = '2'--進價匯入
+	begin
+		declare @tmp2 table(
+			Price float
+		)
+		insert into @tmp
+		select mins from view_cuds where (productno=@t_productno) and (spec=@t_spec) and (dime=@t_dime)
+
+		insert into @tmpa (Price)
+		SELECT Price from @tmp2
+	end
 	return
 END
