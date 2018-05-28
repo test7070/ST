@@ -4674,7 +4674,7 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	declare @t_proj nvarchar(max) = '[25]'
 
 --------------------------------------------------------
-	declare @tmp1 table(
+	declare @tmp1 table(   ---算出貨單個月分金額 bkmoney = 未繳
 		custno nvarchar(20),
 		mon nvarchar(10),
 		[money] float,
@@ -4690,36 +4690,19 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	where custno between @t_bcustno and @t_ecustno
 	and mon <= @t_emon
 	group by custno,mon
-	
+-----------------------------------
+	--算發票個月分稅額
 	declare @tmp2 table(
 		custno nvarchar(20),
 		mon nvarchar(10),
 		tax float
 	)
-	
-	if((select count(*) from acomp where acomp like '%信屹%')>0)--月結 將折讓單稅額也要付款
-	begin
-		insert into @tmp2(custno,mon,tax)
-		select custno,mon,SUM(tax) from (
-			select custno,mon,ISNULL([tax],0)tax from vcca
-			where custno between @t_bcustno and @t_ecustno
-			and mon<=@t_emon
-			union all
-			select custno,mon,-1*ISNULL([tax],0)tax from vccb
-			where (typea='1' or typea='2') and custno between @t_bcustno and @t_ecustno
-			and mon<=@t_emon
-		)tmp group by custno,mon
-	end
-	else
-	begin
-		insert into @tmp2(custno,mon,tax)
-		select custno,mon,SUM(ISNULL([tax],0))
-		from vcca
-		where custno between @t_bcustno and @t_ecustno
-		and mon <= @t_emon
-		group by custno,mon
-	end
-	
+	insert into @tmp2(custno,mon,tax)
+	select custno,mon,SUM(ISNULL([tax],0)) from vcca
+	where custno between @t_bcustno and @t_ecustno
+	and mon <= @t_emon
+	group by custno,mon
+-----------------------------------
 	declare @tmp3 table(
 		custno nvarchar(20),
 		mon nvarchar(10),
@@ -4737,11 +4720,10 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	and case when isnull(a.paymon,'')!='' then a.paymon else isnull(c.mon,'') end <= @t_emon
 	group by case when isnull(a.custno,'')!='' then a.custno when isnull(c.custno,'')!='' then c.custno else b.custno end
 		,case when isnull(a.paymon,'')!='' then a.paymon else isnull(c.mon,'') end
-		
 	
-	delete @tmp3 where not(custno between @t_bcustno and @t_ecustno)
-	--------------------------------------------------------------------------------------------------
-	declare @tmp table(
+	delete @tmp3 where not(custno between @t_bcustno and @t_ecustno) --刪除不是條件區間的客戶
+-------------------------------------------
+	declare @tmp table(       
 		custno nvarchar(20),
 		[money] float,
 		bkmoney float,
@@ -4756,11 +4738,9 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	from @tmp1
 	where mon between @t_bmon and @t_emon
 	group by custno
-	
-	---------------------------------------------------------------------------------------
+
 	update @tmp set tax = ISNULL(a.tax,0)+ISNULL(b.tax,0)
-	from @tmp a
-	right join @tmp2 b on a.custno=b.custno and b.mon between @t_bmon and @t_emon
+	from @tmp a right join @tmp2 b on a.custno=b.custno and b.mon between @t_bmon and @t_emon
 	
 	insert into @tmp(custno,[money],bkmoney,tax)
 	select custno,0,0,tax
@@ -4769,20 +4749,17 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	and a.mon between @t_bmon and @t_emon
 	----------------------------------------------------------------------------------------
 	update @tmp set total = ISNULL([money],0)-ISNULL(bkmoney,0)+ISNULL(tax,0)
-	
 	----------------------------------------------------------------------------------------
 	update @tmp set payed=isnull(a.payed,0) + isnull(b.paysale,0)
-	from @tmp a
-	right join @tmp3 b on a.custno=b.custno and b.mon between @t_bmon and @t_emon
+	from @tmp a right join @tmp3 b on a.custno=b.custno and b.mon between @t_bmon and @t_emon
 	
-	insert into @tmp(custno,[money],bkmoney,tax,total, payed)
+	insert into @tmp(custno,[money],bkmoney,tax,total,payed)
 	select custno,0,0,0,0,paysale
 	from @tmp3 a
 	where not exists(select * from @tmp where custno=a.custno)
 	and a.mon between @t_bmon and @t_emon
 	------------------------------------------------------------------------------------------
 	--unpay
-	
 	update @tmp set unpay = ISNULL(a.unpay,0)+ISNULL(b.unpay,0)
 	from @tmp a
 	right join (select custno ,SUM(ISNULL([money],0)-ISNULL(bkmoney,0)+isnull(tax,0)) unpay
@@ -4834,6 +4811,8 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	------------------------------------------------------------------------------------------
 	update @tmp set tot = ISNULL([money],0)-ISNULL(bkmoney,0)+ISNULL(tax,0)-ISNULL(payed,0)+ISNULL(unpay,0)
 	
+----=========================
+
 	declare @linecount int --每頁行數
 	declare @endcount int --總計行數
 	set @linecount = 11
@@ -4889,16 +4868,10 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	begin
 		if exists(select top 1 * from @tmp1 where custno=@custno and mon between @t_bmon and @t_emon)
 		begin
-			insert into @result(gno,pno,custno
-				,typea,datea,vccno,productno,product,unit,[weight],mount,price,moneys
-				,size)
+			insert into @result(gno,pno,custno,typea,datea,vccno,productno,product,unit,[weight],mount,price,moneys,size)
 			select '1','1',@custno
 			,case when a.typea='1' then '出' else '退' end
-			,a.datea,a.noa,b.productno,b.product,b.unit
-			,b.weight
-			,b.mount
-			,b.price
-			,b.total
+			,a.datea,a.noa,b.productno,b.product,b.unit,b.weight,b.mount,b.price,b.total
 			,case when len(ISNULL(b.size,''))>0 then b.size else dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) end
 			from view_vcc a
 			left join view_vccs b on a.noa=b.noa
@@ -4920,15 +4893,7 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 			insert into @result(gno,pno,custno,typea,datea,vccno,productno,product,unit,[weight],mount,price,moneys)
 			select '2','2',@custno	,'稅',datea,noa,'稅額','','',0,0,0,tax 
 			from vcca where custno=@custno and mon between @t_bmon and @t_emon
-			
-			if((select count(*) from acomp where acomp like '%信屹%')>0)--月結 將折讓單稅額也要付款
-			begin
-				insert into @result(gno,pno,custno,typea,datea,vccno,productno,product,unit,[weight],mount,price,moneys)
-				select '2','2',@custno	,'折',datea,noa,'稅額','','',0,0,0,tax 
-				from vccb where (typea='1' or typea='2') and custno=@custno and mon between @t_bmon and @t_emon
-			end 
 		end
-		
 		set @endcount = 7
 		set @endcount = @endcount + case when isnull(@payed,0)=0 then -1 else 0 end 
 		set @endcount = @endcount + case when isnull(@unpay,0)=0 then -1 else 0 end
@@ -4952,28 +4917,6 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 			
 			insert into @result(gno,pno,custno,[money],bkmoney,tax,total,payed,unpay,tot)
 			select '5','5',@custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-			insert into @result(gno,pno,custno,[money],bkmoney,tax,total,payed,unpay,tot)
-			select '6','6',@custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-			insert into @result(gno,pno,custno,[money],bkmoney,tax,total,payed,unpay,tot)
-			select '7','7',@custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-			insert into @result(gno,pno,custno,[money],bkmoney,tax,total,payed,unpay,tot)
-			select '8','8',@custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-			if isnull(@payed,0)!=0
-			begin
-				insert into @result(gno,pno,custno,[money],bkmoney,tax,total,payed,unpay,tot)
-				select '9','9',@custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-			end
-			if isnull(@unpay,0)!=0
-			begin
-				insert into @result(gno,pno,custno,[money],bkmoney,tax,total,payed,unpay,tot)
-				select '10','10',@custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-			end
-			if not(isnull(@payed,0)=0 and isnull(@unpay,0)=0)
-			begin
-				insert into @result(gno,pno,custno,[money],bkmoney,tax,total,payed,unpay,tot)
-				select '11','11',@custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-			end
-			
 			select @nn = count(1) from (select vccno from @result where custno=@custno and gno='1' group by vccno)a
 			select @totpage = COUNT(1) from @result where custno=@custno
 			update @result set nn = ISNULL(@nn,0),totpage = @totpage/@linecount where custno=@custno
@@ -4983,31 +4926,22 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	end
 	close cursor_table
 	deallocate cursor_table
-
-	select a.* 
-	,(ROW_NUMBER()over(partition by a.custno order by pno)-1)/@linecount+1 pp
-	,a.totpage qq
-	,a.datea dd
-	,a.typea tt
-	,a.unit uu
-	,a.mount a1
-	,a.[weight] a2
-	,a.price a3
-	,dbo.getComma(a.[moneys],0) a4
-	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+replace(b.comp,'~#$',"'") +'</a>'comp
-	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+b.nick+'</a>' nick
-	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+case when @t_proj!='pe' then b.addr_comp else b.addr_home end+'</a>' addr
-	,dbo.getComma(a.[money],0) b1
-	,dbo.getComma(a.[bkmoney],0) b2
-	,dbo.getComma(a.[tax],0) b3
-	,dbo.getComma(a.[total],0) b4
-	,dbo.getComma(a.[payed],0) b5
-	,dbo.getComma(a.[unpay],0) b6
-	,dbo.getComma(a.[tot],0) b7
-	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+@t_memo+'</a>' memot
-	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+replace(product,'~#$',char(39)) +'</a>' ppt
-	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+replace(size,'~#$',char(39)) +'</a>' csize
-	from @result a
-	left join cust b on a.custno=b.noa
-	order by a.custno,case when len(isnull(a.vccno,''))=0 then 2 else 1 end,isnull(a.vccno,''),a.pno
+	
+	declare @boew_tmp table (
+		moneya float,  --銷貨金額
+		bkmoneya float,  --退貨金額
+		tax float,       ---銷貨稅額
+		total float,    --銷貨總額
+		unpay float,    --前期未收
+		payed float,    --本期已收(折讓)金額
+		vcccount float, ---出貨單張數
+		paytotal float   ---應收總計
+	)
+	insert into @boew_tmp
+	select [money],bkmoney,tax,total,unpay,payed,0,tot from @result
+	delete from @boew_tmp where moneya is null
+	update @boew_tmp set vcccount = @nn
+	update @boew_tmp set payed = 0  where payed is null
+	
+	select * from @boew_tmp
 	;
