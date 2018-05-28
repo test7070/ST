@@ -4688,8 +4688,7 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	,SUM(case when typea='1' then ISNULL([tax],0) else -ISNULL([tax],0) end)
 	from view_vcc 
 	where custno between @t_bcustno and @t_ecustno
-	and mon <= @t_emon
-	group by custno,mon
+	and mon <= @t_emon group by custno,mon
 -----------------------------------
 	--算發票個月分稅額
 	declare @tmp2 table(
@@ -4700,8 +4699,7 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	insert into @tmp2(custno,mon,tax)
 	select custno,mon,SUM(ISNULL([tax],0)) from vcca
 	where custno between @t_bcustno and @t_ecustno
-	and mon <= @t_emon
-	group by custno,mon
+	and mon <= @t_emon group by custno,mon
 -----------------------------------
 	declare @tmp3 table(
 		custno nvarchar(20),
@@ -4715,7 +4713,7 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	from umms a
 	left join umm b on a.noa=b.noa
 	left join view_vcc c on a.accy=c.accy and a.vccno=c.noa
-	where --b.noa is not null and 
+	where
 	ISNULL(a.paysale,0)!=0
 	and case when isnull(a.paymon,'')!='' then a.paymon else isnull(c.mon,'') end <= @t_emon
 	group by case when isnull(a.custno,'')!='' then a.custno when isnull(c.custno,'')!='' then c.custno else b.custno end
@@ -4811,123 +4809,42 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	------------------------------------------------------------------------------------------
 	update @tmp set tot = ISNULL([money],0)-ISNULL(bkmoney,0)+ISNULL(tax,0)-ISNULL(payed,0)+ISNULL(unpay,0)
 	
-----=========================
-
-	declare @linecount int --每頁行數
-	declare @endcount int --總計行數
-	set @linecount = 11
-	--set @endcount = 7
-	
-	declare @custno nvarchar(20)
-	declare @money float
-	declare @bkmoney float
-	declare @tax float
-	declare @total float
-	declare @payed float
-	declare @unpay float
-	declare @tot float
-	declare @nn int
-	declare @mm int
-	declare @totpage int
-	
-	declare @result table(
-		gno nvarchar(10),
-		pno int,
-		totpage int,
+----======================================================================================================================================================
+	declare @cust_tmp table(
 		custno nvarchar(20),
-		[money] float,
-		bkmoney float,
-		tax float,
-		total float,
-		payed float,
-		unpay float,
-		tot float,
+		cust nvarchar(20),
+		addrinvo nvarchar(max),
+		addrcomp nvarchar(max),
+		tel nvarchar(max),
+		serial nvarchar(8)
+	)insert into @cust_tmp
+	select noa,comp,addr_invo,addr_comp,tel,serial from cust where (noa between @t_bcustno and @t_ecustno)
 		
-		nn int,--出貨單張數
-		
-		typea nvarchar(10),
-		datea nvarchar(10),
-		vccno nvarchar(20),
-		productno nvarchar(20),
-		product nvarchar(50),
-		size nvarchar(max),
-		unit nvarchar(20),
-		[weight] float,
-		mount float,
-		price float,
-		moneys float,
-		memo nvarchar(max)
+---找出客戶當月發票資料
+	declare @tmp_invono table(
+		custno nvarchar(20),
+		mon nvarchar(20),
+		invono nvarchar(max)
 	)
+	insert into @tmp_invono
+	SELECT a.custno ,a.mon ,a.noas as noa from
+		(SELECT custno,mon,(SELECT cast(noa AS NVARCHAR )+'　' from vcca where (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)
+		FOR XML PATH('')) as noas
+		from vcca ord where (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)
+		) a group by custno,mon,noas
+	ORDER by a.custno
 	
-	declare cursor_table cursor for
-	select custno,[money],bkmoney,tax,total,payed,unpay,tot from @tmp
-	open cursor_table
-	fetch next from cursor_table
-	into @custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-	while(@@FETCH_STATUS <> -1)
-	begin
-		if exists(select top 1 * from @tmp1 where custno=@custno and mon between @t_bmon and @t_emon)
-		begin
-			insert into @result(gno,pno,custno,typea,datea,vccno,productno,product,unit,[weight],mount,price,moneys,size)
-			select '1','1',@custno
-			,case when a.typea='1' then '出' else '退' end
-			,a.datea,a.noa,b.productno,b.product,b.unit,b.weight,b.mount,b.price,b.total
-			,case when len(ISNULL(b.size,''))>0 then b.size else dbo.csize(a.kind,b.dime,b.width,b.lengthb,b.radius) end
-			from view_vcc a
-			left join view_vccs b on a.noa=b.noa
-			where a.custno=@custno 
-			and a.mon between @t_bmon and @t_emon
-			order by a.datea,a.noa,b.noq
-			
-			insert into @result(gno,pno,custno
-				,typea,datea,vccno,productno,product,unit,[weight],mount,price,moneys)
-			select '2','2',@custno
-			,'稅',datea,noa,'','稅額','',null,null,null,tax
-			from view_vcc 
-			where custno=@custno 
-			and mon between @t_bmon and @t_emon
-			and isnull(tax,0)!=0
-		end
-		if exists(select top 1 * from @tmp2 where custno=@custno and mon between @t_bmon and @t_emon)
-		begin
-			insert into @result(gno,pno,custno,typea,datea,vccno,productno,product,unit,[weight],mount,price,moneys)
-			select '2','2',@custno	,'稅',datea,noa,'稅額','','',0,0,0,tax 
-			from vcca where custno=@custno and mon between @t_bmon and @t_emon
-		end
-		set @endcount = 7
-		set @endcount = @endcount + case when isnull(@payed,0)=0 then -1 else 0 end 
-		set @endcount = @endcount + case when isnull(@unpay,0)=0 then -1 else 0 end
-		set @endcount = @endcount + case when isnull(@payed,0)=0 and isnull(@unpay,0)=0 then -1 else 0 end
-		
-		select @mm = COUNT(1) from @result where custno=@custno
-		if @mm>0 or @money!=0 or @bkmoney !=0 or @tax !=0 or @payed !=0 or @unpay!=0 or @tot!=0
-		begin
-			if(@mm+@endcount)%@linecount != 0
-			begin
-				insert into @result(gno,pno,custno,memo)
-				select '3','3',@custno,'---以下空白---'
-				set @mm = @mm + 1
-				while @linecount-@mm%@linecount!=@endcount
-				begin
-					insert into @result(gno,pno,custno)
-					select '4','4',@custno
-					set @mm = @mm + 1
-				end
-			end
-			
-			insert into @result(gno,pno,custno,[money],bkmoney,tax,total,payed,unpay,tot)
-			select '5','5',@custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-			select @nn = count(1) from (select vccno from @result where custno=@custno and gno='1' group by vccno)a
-			select @totpage = COUNT(1) from @result where custno=@custno
-			update @result set nn = ISNULL(@nn,0),totpage = @totpage/@linecount where custno=@custno
-		end
-		fetch next from cursor_table
-		into @custno,@money,@bkmoney,@tax,@total,@payed,@unpay,@tot
-	end
-	close cursor_table
-	deallocate cursor_table
+	select * from @tmp_invono
 	
 	declare @boew_tmp table (
+		gno nvarchar(1),
+		custno nvarchar(20),
+		cust nvarchar(20),
+		addrinvo nvarchar(max),
+		addrcomp nvarchar(max),
+		tel nvarchar(max),
+		serial nvarchar(8),
+		invono nvarchar(max),
 		moneya float,  --銷貨金額
 		bkmoneya float,  --退貨金額
 		tax float,       ---銷貨稅額
@@ -4938,10 +4855,12 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 		paytotal float   ---應收總計
 	)
 	insert into @boew_tmp
-	select [money],bkmoney,tax,total,unpay,payed,0,tot from @result
+	select '0','','','','','','','',[money],bkmoney,tax,total,unpay,payed,0,tot from @tmp
 	delete from @boew_tmp where moneya is null
-	update @boew_tmp set vcccount = @nn
+	update @boew_tmp set vcccount = (SELECT count(noa) FROM view_vcc WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)) --出貨單量
+	update @boew_tmp set invono = b.invono from @tmp_invono b
+	update @boew_tmp set custno=b.custno, cust=b.cust ,addrinvo=b.addrinvo ,addrcomp=b.addrcomp ,tel=b.tel ,serial=b.serial from @cust_tmp b
 	update @boew_tmp set payed = 0  where payed is null
 	
-	select * from @boew_tmp
+	select gno,custno,cust,addrinvo,addrcomp,tel,serial,invono,moneya,bkmoneya,tax,total,unpay,payed,vcccount,paytotal from @boew_tmp
 	;
