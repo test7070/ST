@@ -4673,194 +4673,83 @@ z_ummst03_fp:--z_ummst03_fp榮泉用
 	declare @t_memo nvarchar(max) = case when '#non' = [19] then '' else [19] end
 	declare @t_proj nvarchar(max) = '[25]'
 
---------------------------------------------------------
-	declare @tmp1 table(   ---算出貨單個月分金額 bkmoney = 未繳
-		custno nvarchar(20),
-		mon nvarchar(10),
-		[money] float,
-		bkmoney float,
-		tax float
-	)
-	insert into @tmp1(custno,mon,[money],bkmoney,tax)
-	select custno,mon
-	,SUM(case when typea='1' then ISNULL([money],0) else 0 end)
-	,SUM(case when typea!='1' then ISNULL([money],0) else 0 end)
-	,SUM(case when typea='1' then ISNULL([tax],0) else -ISNULL([tax],0) end)
-	from view_vcc 
-	where custno between @t_bcustno and @t_ecustno
-	and mon <= @t_emon group by custno,mon
------------------------------------
-	--算發票個月分稅額
-	declare @tmp2 table(
-		custno nvarchar(20),
-		mon nvarchar(10),
-		tax float
-	)
-	insert into @tmp2(custno,mon,tax)
-	select custno,mon,SUM(ISNULL([tax],0)) from vcca
-	where custno between @t_bcustno and @t_ecustno
-	and mon <= @t_emon group by custno,mon
------------------------------------
-	declare @tmp3 table(
-		custno nvarchar(20),
-		mon nvarchar(10),
-		paysale float 
-	)
-	insert into @tmp3(custno,mon,paysale)
-	select case when isnull(a.custno,'')!='' then a.custno when isnull(c.custno,'')!='' then c.custno else b.custno end
-	,case when isnull(a.paymon,'')!='' then a.paymon else isnull(c.mon,'') end
-	,SUM(ISNULL(a.paysale,0))
-	from umms a
-	left join umm b on a.noa=b.noa
-	left join view_vcc c on a.accy=c.accy and a.vccno=c.noa
-	where
-	ISNULL(a.paysale,0)!=0
-	and case when isnull(a.paymon,'')!='' then a.paymon else isnull(c.mon,'') end <= @t_emon
-	group by case when isnull(a.custno,'')!='' then a.custno when isnull(c.custno,'')!='' then c.custno else b.custno end
-		,case when isnull(a.paymon,'')!='' then a.paymon else isnull(c.mon,'') end
-	
-	delete @tmp3 where not(custno between @t_bcustno and @t_ecustno) --刪除不是條件區間的客戶
--------------------------------------------
-	declare @tmp table(       
-		custno nvarchar(20),
-		[money] float,
-		bkmoney float,
-		tax float,
-		total float,
-		payed float,
-		unpay float,
-		tot float
-	)
-	insert into @tmp(custno,[money],bkmoney,tax)
-	select custno,SUM(ISNULL([money],0)),SUM(ISNULL([bkmoney],0)),SUM(ISNULL([tax],0))
-	from @tmp1
-	where mon between @t_bmon and @t_emon
-	group by custno
-
-	update @tmp set tax = ISNULL(a.tax,0)+ISNULL(b.tax,0)
-	from @tmp a right join @tmp2 b on a.custno=b.custno and b.mon between @t_bmon and @t_emon
-	
-	insert into @tmp(custno,[money],bkmoney,tax)
-	select custno,0,0,tax
-	from @tmp2 a
-	where not exists(select * from @tmp where custno=a.custno)
-	and a.mon between @t_bmon and @t_emon
-	----------------------------------------------------------------------------------------
-	update @tmp set total = ISNULL([money],0)-ISNULL(bkmoney,0)+ISNULL(tax,0)
-	----------------------------------------------------------------------------------------
-	update @tmp set payed=isnull(a.payed,0) + isnull(b.paysale,0)
-	from @tmp a right join @tmp3 b on a.custno=b.custno and b.mon between @t_bmon and @t_emon
-	
-	insert into @tmp(custno,[money],bkmoney,tax,total,payed)
-	select custno,0,0,0,0,paysale
-	from @tmp3 a
-	where not exists(select * from @tmp where custno=a.custno)
-	and a.mon between @t_bmon and @t_emon
-	------------------------------------------------------------------------------------------
-	--unpay
-	update @tmp set unpay = ISNULL(a.unpay,0)+ISNULL(b.unpay,0)
-	from @tmp a
-	right join (select custno ,SUM(ISNULL([money],0)-ISNULL(bkmoney,0)+isnull(tax,0)) unpay
-		from @tmp1
-		where mon<@t_bmon
-		group by custno) b on a.custno=b.custno
-	
-	insert into @tmp(custno,[money],bkmoney,tax,total,payed,unpay)
-	select a.custno,0,0,0,0,0,a.unpay
-	from (select custno ,SUM(ISNULL([money],0)-ISNULL(bkmoney,0)+isnull(tax,0)) unpay
-		from @tmp1
-		where mon<@t_bmon
-		group by custno) a
-	where not exists(select * from @tmp where custno=a.custno)
-	and ISNULL(a.unpay,0)!=0
-	
-	
-	update @tmp set unpay = ISNULL(a.unpay,0)+ISNULL(b.unpay,0)
-	from @tmp a
-	right join (select custno ,sum(isnull(tax,0)) unpay
-		from @tmp2
-		where mon<@t_bmon
-		group by custno) b on a.custno=b.custno
-		
-	insert into @tmp(custno,[money],bkmoney,tax,total,payed,unpay)
-	select a.custno,0,0,0,0,0,a.unpay
-	from (select custno ,SUM(isnull(tax,0)) unpay
-		from @tmp2
-		where mon<@t_bmon
-		group by custno) a
-	where not exists(select * from @tmp where custno=a.custno)
-	and ISNULL(a.unpay,0)!=0
-	
-	update @tmp set unpay = ISNULL(a.unpay,0)-ISNULL(b.paysale,0)
-	from @tmp a
-	right join (select custno ,sum(isnull(paysale,0)) paysale
-		from @tmp3
-		where mon<@t_bmon
-		group by custno) b on a.custno=b.custno
-	
-	insert into @tmp(custno,[money],bkmoney,tax,total,payed,unpay)
-	select a.custno,0,0,0,0,0,-a.paysale
-	from (select custno ,sum(isnull(paysale,0)) paysale
-		from @tmp3
-		where mon<@t_bmon
-		group by custno) a
-	where not exists(select * from @tmp where custno=a.custno)
-	and ISNULL(a.paysale,0)!=0
-	------------------------------------------------------------------------------------------
-	update @tmp set tot = ISNULL([money],0)-ISNULL(bkmoney,0)+ISNULL(tax,0)-ISNULL(payed,0)+ISNULL(unpay,0)
-	
-----======================================================================================================================================================
-	declare @cust_tmp table(
+	declare @tmp0 table(  ---客戶資料
 		custno nvarchar(20),
 		cust nvarchar(20),
 		addrinvo nvarchar(max),
 		addrcomp nvarchar(max),
 		tel nvarchar(max),
 		serial nvarchar(8)
-	)insert into @cust_tmp
+	)insert into @tmp0
 	select noa,comp,addr_invo,addr_comp,tel,serial from cust where (noa between @t_bcustno and @t_ecustno)
-		
+
+declare @tmp1 table(
+		gno nvarchar(1),
+		custno nvarchar(20),
+		mon nvarchar(20),
+		[money] float,
+		tax float,
+		total float,
+		vcccount float,
+		unpay_t float,
+		payed_t float,
+		unpaytot float
+	)
+	insert into @tmp1 (gno,custno,mon,[money],tax,total,vcccount,unpay_t,payed_t,unpaytot)
+	select '0',custno,mon,0,0,0,0,0,0,0 from view_vcc where (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon) group by custno,mon
+	update @tmp1 set [money]=(SELECT sum([money]) FROM view_vcc WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)),
+					 tax=(SELECT sum(tax) FROM view_vcc WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)),  ----本期銷貨稅額
+					 total=(SELECT sum(total) FROM view_vcc WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)),  --本期銷貨金
+					 vcccount=(SELECT count(noa) FROM view_vcc WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)), --出貨單量
+					 unpay_t=(SELECT sum(total) FROM view_vcc WHERE (mon < @t_emon) and (custno between @t_bcustno and @t_ecustno))-(SELECT sum(total) FROM umm where (mon < @t_emon) and (custno between @t_bcustno and @t_ecustno))   --上期未收
+					 --payed_t=(SELECT sum(total) FROM umm where (mon < @t_emon) and (custno between @t_bcustno and @t_ecustno))--上期已付
+	update @tmp1 set unpaytot = a.total+a.unpay_t from @tmp1 a
+
 ---找出客戶當月發票資料
-	declare @tmp_invono table(
+	declare @tmp2 table(
 		custno nvarchar(20),
 		mon nvarchar(20),
 		invono nvarchar(max)
 	)
-	insert into @tmp_invono
+	insert into @tmp2
 	SELECT a.custno ,a.mon ,a.noas as noa from
 		(SELECT custno,mon,(SELECT cast(noa AS NVARCHAR )+'　' from vcca where (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)
 		FOR XML PATH('')) as noas
 		from vcca ord where (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)
 		) a group by custno,mon,noas
 	ORDER by a.custno
-	
-	select * from @tmp_invono
-	
-	declare @boew_tmp table (
-		gno nvarchar(1),
+-------結果---------------------------------------------------
+	declare @tmp table(
+		gno nvarchar(1),  
 		custno nvarchar(20),
 		cust nvarchar(20),
 		addrinvo nvarchar(max),
 		addrcomp nvarchar(max),
 		tel nvarchar(max),
 		serial nvarchar(8),
-		invono nvarchar(max),
-		moneya float,  --銷貨金額
-		bkmoneya float,  --退貨金額
-		tax float,       ---銷貨稅額
-		total float,    --銷貨總額
-		unpay float,    --前期未收
-		payed float,    --本期已收(折讓)金額
-		vcccount float, ---出貨單張數
-		paytotal float   ---應收總計
+
+		invono nvarchar(max),  --當月所有發票號碼
+		mon nvarchar(10),
+		
+		moneya float, --本期銷貨
+		bkmoneya float, --本期退貨金額
+		tax float, --本期稅額
+		total float, ---合計應收金額
+
+
+		unpay float, ---上期未收餘額
+		payed float,--本期已收折讓金
+		vcccount float,  --銷(退)貨單張數
+		paytotal float  ---總計應收金額
+		
 	)
-	insert into @boew_tmp
-	select '0','','','','','','','',[money],bkmoney,tax,total,unpay,payed,0,tot from @tmp
-	delete from @boew_tmp where moneya is null
-	update @boew_tmp set vcccount = (SELECT count(noa) FROM view_vcc WHERE (custno between @t_bcustno and @t_ecustno) and (mon between @t_bmon and @t_emon)) --出貨單量
-	update @boew_tmp set invono = b.invono from @tmp_invono b
-	update @boew_tmp set custno=b.custno, cust=b.cust ,addrinvo=b.addrinvo ,addrcomp=b.addrcomp ,tel=b.tel ,serial=b.serial from @cust_tmp b
-	update @boew_tmp set payed = 0  where payed is null
+	insert into @tmp
+	select b.gno,a.custno,a.cust,a.addrinvo,a.addrcomp,a.tel,a.serial,c.invono,b.mon,b.[money],0,b.tax,b.total,b.unpay_t,0,b.vcccount,b.unpaytot
+	from @tmp0 a 
+	left join @tmp1 b on a.custno=b.custno
+	left join @tmp2 c on a.custno=c.custno
+	where (a.custno between @t_bcustno and @t_ecustno) and (b.mon between @t_bmon and @t_emon)
+	order by a.custno
 	
-	select gno,custno,cust,addrinvo,addrcomp,tel,serial,invono,moneya,bkmoneya,tax,total,unpay,payed,vcccount,paytotal from @boew_tmp
-	;
+	select * from @tmp
+;
