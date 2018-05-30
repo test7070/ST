@@ -4721,7 +4721,7 @@ declare @tmp1 table(
 -------結果---------------------------------------------------
 	declare @tmp table(
 		gno nvarchar(1),  
-		custno nvarchar(20),
+		cnoa nvarchar(20),
 		cust nvarchar(20),
 		addrinvo nvarchar(max),
 		addrcomp nvarchar(max),
