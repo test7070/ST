@@ -119,7 +119,8 @@
 					q_readonlys.push('txtUnit');
 					//107/05/23
 					q_readonlys.push('txtProduct');
-					q_readonlys.push('txtSpec');
+					if(r_rank<8)
+						q_readonlys.push('txtSpec');
 				}
 				q_getFormat();
 				bbmMask = [['txtDatea', r_picd], ['txtOdate', r_picd], ['txtTrandate', r_picd], ['txtEtd', r_picd], ['txtEta', r_picd], ['txtOnboarddate', r_picd]];

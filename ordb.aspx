@@ -160,6 +160,8 @@
 						['txtCustno_', 'btnCustno_', 'cust', 'noa,comp', 'txtCustno_,txtComp_', 'cust_b.aspx']
 					);
 					q_readonlys.push('txtUnit');
+					if(r_rank<8)
+						q_readonlys.push('txtSpec');
 				}
 				
 				q_getFormat();
