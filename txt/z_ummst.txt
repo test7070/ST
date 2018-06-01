@@ -4056,10 +4056,14 @@ BEGIN
 END;
 --********************************************************************************
 z_ummst11-1:--z_ummst11-1
-declare @t_bmon nvarchar(7) = case when '#non'=[13] then '' else [13] end
-declare @t_emon nvarchar(7) = case when '#non'=[14] then char(255) else [14] end
-declare @t_bcustno nvarchar(50) = case when '#non'=[5] then '' else [5] end
-declare @t_ecustno nvarchar(50) = case when '#non'=[6] then char(255) else [6] end
+declare @t_bmon nvarchar(7)
+declare @t_emon nvarchar(7)
+declare @t_bcustno nvarchar(50)
+declare @t_ecustno nvarchar(50)
+set @t_bmon = case when '#non'=[13] then '' else [13] end
+set @t_emon = case when '#non'=[14] then char(255) else [14] end
+set @t_bcustno = case when '#non'=[5] then '' else [5] end
+set @t_ecustno = case when '#non'=[6] then char(255) else [6] end
 -------------------------------------------------------------------------------------------------------------
 declare @cmd nvarchar(max) 
 IF OBJECT_ID('tempdb..#result')is not null
@@ -4271,9 +4275,9 @@ from @tmp a left join cust b on a.custno=b.noa where gno='1'
 and exists (select custno from #result where custno=a.custno group by custno) 
 group by custno
 
-insert #result (gno,noa,datea,mon,custno,comp,total1,pay,unpay,total2,salesno)
-select '3','','','',custno,comp,SUM(total1),SUM(pay),SUM(unpay),SUM(total2),'' 
-from #result where gno='1' group by custno,comp
+insert #result (gno,noa,datea,mon,custno,comp,total1,pay,unpay,total2,salesno,money,tax) 
+select '3','','','',custno,comp,SUM(total1),SUM(pay),SUM(unpay),SUM(total2),'',sum(total1),sum(tax)
+from #result where gno='1' group by custno,comp 
 
 --預收
 update a
