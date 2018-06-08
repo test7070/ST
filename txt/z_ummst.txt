@@ -3774,7 +3774,7 @@ select '0' gno,0 pageno,0 totpage,0 orderno, '稅' typea, a.vccno,a.noa, a.datea
 	   0 total, 0 money, 0 back, a.tax, 0 total1, 0 pay, 0 unpay, 0 total2,c.salesno,c.sales
 	   ,'vcca','',''
 from vcca a left join cust c on a.custno=c.noa
-where a.tax > 0 and (a.taxtype='1' or a.taxtype='5') and ([22]!=3) and
+where a.tax > 0 and (a.taxtype='1' or a.taxtype='5') and --([22]!=3) and
 	  ((case when isnull(a.mon,'')='' then left(a.datea,6) else a.mon end) between @t_bmon and @t_emon) and
 	  (a.custno between @t_bcustno and @t_ecustno) 
 	  and not exists(select noa from acomp where nick=N'榮泉鋼鐵') -- 榮泉:出貨單、發票都會有稅額, 所以發票的不要算
@@ -3785,7 +3785,7 @@ select '0' gno,0 pageno,0 totpage,0 orderno, '折' typea, a.vccno,a.noa, a.datea
 	   ,'vccb','',''
 from vccb a left join cust c on a.custno=c.noa
 where (a.typea='1' or a.typea='2') and (select count(*) from acomp where acomp like '%信屹%')>0 and --月結 將折讓單稅額也要付款
-	  a.tax > 0  and ([22]!=3) and
+	  a.tax > 0  and-- ([22]!=3) and
 	  ((case when isnull(a.mon,'')='' then left(a.datea,6) else a.mon end) between @t_bmon and @t_emon) and
 	  (a.custno between @t_bcustno and @t_ecustno) 
 	  and not exists(select noa from acomp where nick=N'榮泉鋼鐵') -- 榮泉:出貨單、發票都會有稅額, 所以發票的不要算
@@ -3873,7 +3873,7 @@ select '1',custno,salesno,SUM(money) from (
 	select  ca.custno,(case when cb.salesno2!='' then cb.salesno2 when cb.salesno !='' then cb.salesno else cc.salesno end) salesno
 	,SUM(isnull(ca.tax,0))-isnull((select sum(ub.paysale) from umms ub left join umm ua on ub.noa=ua.noa where ca.noa=ub.vccno and (ub.paymon<@t_bmon ) and ub.custno=ca.custno),0) 
 	from vcca ca left join view_vcc cb on ca.noa=cb.invono left join cust cc on ca.custno=cc.noa
-	where ((case when ca.mon!='' then ca.mon else LEFT(ca.datea,6) end) < @t_bmon ) and ([22]!=3)
+	where ((case when ca.mon!='' then ca.mon else LEFT(ca.datea,6) end) < @t_bmon )-- and ([22]!=3)
 	and (ca.taxtype='1' or ca.taxtype='5')
 	group by ca.custno,(case when cb.salesno2!='' then cb.salesno2 when cb.salesno !='' then cb.salesno else cc.salesno end),ca.noa
 	having SUM(isnull(ca.tax,0))-isnull((select sum(ub.paysale) from umms ub left join umm ua on ub.noa=ua.noa where ca.noa=ub.vccno and (ub.paymon<@t_bmon ) and ub.custno=ca.custno),0) !=0
@@ -3883,7 +3883,7 @@ select '1',custno,salesno,SUM(money) from (
 	,SUM(isnull(-1*ca.tax,0))-isnull((select sum(ub.paysale) from umms ub left join umm ua on ub.noa=ua.noa where ca.noa=ub.vccno and (ub.paymon<@t_bmon ) and ub.custno=ca.custno),0) 
 	from vccb ca left join cust cc on ca.custno=cc.noa
 	where (ca.typea='1' or ca.typea='2') and (select count(*) from acomp where acomp like '%信屹%')>0 and
-	((case when ca.mon!='' then ca.mon else LEFT(ca.datea,6) end) < @t_bmon) and ([22]!=3)
+	((case when ca.mon!='' then ca.mon else LEFT(ca.datea,6) end) < @t_bmon)-- and ([22]!=3)
 	group by ca.custno,cc.salesno,ca.noa
 	having SUM(isnull(ca.tax,0))-isnull((select sum(ub.paysale) from umms ub left join umm ua on ub.noa=ua.noa where ca.noa=ub.vccno and (ub.paymon<@t_bmon) and ub.custno=ca.custno),0) !=0
 )tmp group by custno,salesno
@@ -3912,9 +3912,12 @@ from @tmp a left join cust b on a.custno=b.noa where gno='1'
 and exists (select custno from #result where custno=a.custno group by custno) 
 group by custno
 
-insert #result (gno,noa,datea,mon,custno,comp,total1,pay,unpay,total2,salesno)
-select '3','','','',custno,comp,SUM(total1),SUM(pay),SUM(unpay),SUM(total2),'' 
-from #result where gno='1' group by custno,comp
+insert #result (gno,noa,datea,mon,custno,comp,total1,pay,unpay,total2,salesno,money,tax) 
+select '3','','','',custno,comp,SUM(total1),SUM(pay),SUM(unpay),SUM(total2),'',0,0
+from #result where gno='1' group by custno,comp 
+
+
+update #result set money=(select sum(total1) from #result where gno='0'),tax=(select sum(tax) from #result where gno='0') where gno='3' and (select count(*) from acomp where acomp like '%榮泉%')>0--and (select noa from acomp where nick='榮泉鋼鐵')
 
 --預收
 update a
@@ -4056,10 +4059,14 @@ BEGIN
 END;
 --********************************************************************************
 z_ummst11-1:--z_ummst11-1
-declare @t_bmon nvarchar(7) = case when '#non'=[13] then '' else [13] end
-declare @t_emon nvarchar(7) = case when '#non'=[14] then char(255) else [14] end
-declare @t_bcustno nvarchar(50) = case when '#non'=[5] then '' else [5] end
-declare @t_ecustno nvarchar(50) = case when '#non'=[6] then char(255) else [6] end
+declare @t_bmon nvarchar(7)
+declare @t_emon nvarchar(7)
+declare @t_bcustno nvarchar(50)
+declare @t_ecustno nvarchar(50)
+set @t_bmon = case when '#non'=[13] then '' else [13] end
+set @t_emon = case when '#non'=[14] then char(255) else [14] end
+set @t_bcustno = case when '#non'=[5] then '' else [5] end
+set @t_ecustno = case when '#non'=[6] then char(255) else [6] end
 -------------------------------------------------------------------------------------------------------------
 declare @cmd nvarchar(max) 
 IF OBJECT_ID('tempdb..#result')is not null
@@ -4271,9 +4278,12 @@ from @tmp a left join cust b on a.custno=b.noa where gno='1'
 and exists (select custno from #result where custno=a.custno group by custno) 
 group by custno
 
-insert #result (gno,noa,datea,mon,custno,comp,total1,pay,unpay,total2,salesno)
-select '3','','','',custno,comp,SUM(total1),SUM(pay),SUM(unpay),SUM(total2),'' 
-from #result where gno='1' group by custno,comp
+insert #result (gno,noa,datea,mon,custno,comp,total1,pay,unpay,total2,salesno,money,tax) 
+select '3','','','',custno,comp,SUM(total1),SUM(pay),SUM(unpay),SUM(total2),'',0,0
+from #result where gno='1' group by custno,comp 
+
+
+update #result set money=(select sum(total1) from #result where gno='0'),tax=(select sum(tax) from #result where gno='0') where gno='3' and (select count(*) from acomp where acomp like '%榮泉%')>0--and (select noa from acomp where nick='榮泉鋼鐵')
 
 --預收
 update a

@@ -45,6 +45,9 @@
 			}
 
 			function mainPost() {
+			    if(q_getPara('sys.project').toUpperCase()=='PS'){
+			        $('#lblProducttype').text('厚=DIME 寬=WIDTH 長=LENGTHB 寬度2=WIDTH2 寬度3=WIDTH3 數量=COUNT 比重=DENSITY')
+			    }
 			}
 
 			function q_boxClose(s2) {
