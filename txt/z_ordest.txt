@@ -977,7 +977,7 @@ z_ordest1:--z_ordest1
 		custno nvarchar(30),
 		comp nvarchar(90),
 		productno nvarchar(30),
-		products nvarchar(90),
+		products nvarchar(300),
 		spec nvarchar(max),
 		cspec nvarchar(max),
 		csize nvarchar(max),
