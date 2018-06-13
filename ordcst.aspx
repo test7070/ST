@@ -193,7 +193,8 @@
 					q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料,3@委外');
 					//ordcst.aspx  z_ordcst.aspx
 				}else{
-					q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料');
+					//q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',2@物料');
+					q_cmbParse("cmbKind", q_getPara('sys.stktype') + ',1@物料');
 				}
 				q_cmbParse("cmbKind2", q_getPara('ordc.kind'));
 				//q_cmbParse("cmbCoin", q_getPara('sys.coin'));
