@@ -2230,9 +2230,16 @@ z_ummst02:--z_ummst02
 	select custno,mon,[money],tax from #tmp1
 	
 	---------------------------------------------------------------------------------------
-	update #tmp4 set tax = isnull(a.tax,0) + isnull(b.tax,0)
-	from #tmp4 a
-	left join #tmp2 b on a.custno=b.custno and a.mon=b.mon
+	if((select count(*) from acomp where acomp <> '榮泉鋼鐵股份有限公司')=0) --榮泉不算稅額 因為出貨單已算稅額
+	begin
+		update #tmp4 set tax = isnull(a.tax,0) + isnull(b.tax,0)
+		from #tmp4 a
+		left join #tmp2 b on a.custno=b.custno and a.mon=b.mon
+	end
+
+	--update #tmp4 set tax = isnull(a.tax,0) + isnull(b.tax,0)
+	--from #tmp4 a
+	--left join #tmp2 b on a.custno=b.custno and a.mon=b.mon
 	
 	insert into #tmp4(custno,mon,[money],tax)
 	select custno,mon,0,tax from #tmp2 a
