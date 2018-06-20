@@ -692,7 +692,8 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 	and a.mon between @t_bmon and @t_emon
 	and ISNULL(a.floata,0) !=0
 
-	update @tmp set conn=b.namea from @tmp a
+	update @tmp set conn=b.namea
+	from @tmp a
 	outer apply(select top 1 * from conn where noa=a.custno and typea='1' order by noq) b
 
 	declare @tmps table(
@@ -864,17 +865,17 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 			end
 		
 			set @tmoney_usd = @tmoney_usd + @money_usd
-			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,datea,product,pvcno,pvc,dime,width,lengthb,radius,price,[money],money_usd,cmount,cmount2,po)
-			select @custno,'1',1,@accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@dime,@width,@lengthb,@radius,@price,@money,
-					(select sum(Totalus) from view_vcc where (mon between @t_bmon and @t_emon) and (custno = @custno)),@cmount,@cmount2,@po
+			insert into @tmpa(custno,gno,pno,vccaccy,vccno,ordeno,datea,product,pvcno,pvc
+				,dime,width,lengthb,radius,price,[money],money_usd,cmount,cmount2,po)
+			select @custno,'1',1,@accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc
+				,@dime,@width,@lengthb,@radius,@price,@money,@money_usd,@cmount,@cmount2
+				,@po
 			fetch next from cursor_table2
 			into @accy,@noa,@ordeno,@datea,@product,@pvcno,@pvc,@dime,@width,@lengthb,@radius,@unit,@price,@mount,@weight,@moneys,@po
 		end
 		close cursor_table2
 		deallocate cursor_table2
 		
-		
-
 		--外銷因匯率不同需先依日期再依品名做小計(數量/金額/備註)
 		--同品項,數量合計
 		declare cursor_table2 cursor for
@@ -906,7 +907,8 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 			end
 			
 			insert into @tmpa(custno,gno,pno,datea,floata,product,cmount,cmount2,[money],money_usd)
-			select @custno,'6',6,@datea,@floata,@product,@cmount,@cmount2,@money,(select sum(Totalus) from view_vcc where (mon between @t_bmon and @t_emon) and (custno = @custno))
+			select @custno,'6',6
+				,@datea,@floata,@product,@cmount,@cmount2,@money,@money_usd
 			
 			fetch next from cursor_table2
 			into @recno,@datea,@floata,@product,@unit,@mount,@weight,@money,@money_usd,@string
@@ -929,11 +931,11 @@ z_umm_rk02:--z_umm_rk02 應收帳款明細表 (外銷)
 			select @money_usd = 0
 			select @money_usd = SUM(money_usd) from @tmpa where custno=@custno and datea=@datea and gno='1' 
 			insert into @tmpa(custno,gno,pno,datea,floata,cmount,cmount2,[money],money_usd)
-			select @custno,'3',3,@datea,@floata,@mount,@weight,@money,(select sum(Totalus) from view_vcc where (mon between @t_bmon and @t_emon) and (custno = @custno))
+			select @custno,'3',3,@datea,@floata,@mount,@weight,@money,@money_usd
 			insert into @tmpa(custno,gno,pno,datea,floata,cmount,cmount2,[money],money_usd)
-			select @custno,'4',4,@datea,@floata,@mount,@weight,@money,(select sum(Totalus) from view_vcc where (mon between @t_bmon and @t_emon) and (custno = @custno))
+			select @custno,'4',4,@datea,@floata,@mount,@weight,@money,@money_usd
 			insert into @tmpa(custno,gno,pno,datea,floata,cmount,cmount2,[money],money_usd)
-			select @custno,'5',5,@datea,@floata,@mount,@weight,@money,(select sum(Totalus) from view_vcc where (mon between @t_bmon and @t_emon) and (custno = @custno))
+			select @custno,'5',5,@datea,@floata,@mount,@weight,@money,@money_usd
 			
 			fetch next from cursor_table2
 			into @recno,@datea,@floata,@mount,@weight,@money
