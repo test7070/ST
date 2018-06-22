@@ -589,7 +589,7 @@
 						$('#txtNoa').val('AUTO');
 						$('#txtDatea').val(q_date());
 						//$('#txtMon').val(q_date().substring(0, 6));
-						if($('#txtDatea').val().substr(7, 2)<('00'+t_startdate).slice(-2)){
+						/*if($('#txtDatea').val().substr(7, 2)<('00'+t_startdate).slice(-2)){
                             $('#txtMon').val($('#txtDatea').val().substr(0, 7));
                         }else{
                             var t_date=$('#txtDatea').val();
@@ -597,9 +597,45 @@
                             nextdate.setMonth(nextdate.getMonth() +1);
                             t_date=''+(nextdate.getFullYear()-1911)+'/'+(nextdate.getMonth()<9?'0':'')+(nextdate.getMonth()+1);
                             $('#txtMon').val(t_date);
+                        }*/
+						///這裡判斷需元年or民國年
+						if($('#txtDatea').val().substr(7, 2)<('00'+t_startdate).slice(-2)){
+                            //$('#txtMon').val($('#txtDatea').val().substr(0, 7));
+							var t_yeara = ($('#txtDatea').val().substr(0, 5));
+							var t_day = ($('#txtDatea').val().substr(8, 10));
+							if (q_getPara('sys.project').toUpperCase() == 'FP') { //榮泉26號帳款月份自動跳下月
+								if (t_day >= 26) {
+									t_mona0=dec(q_date().substring(6, 7))+1
+									var t_mona = (t_mona0 < 9 ? '0' : '') + t_mona0;
+									$('#txtMon').val(t_yeara+t_mona);
+								} else {
+									var t_mona = (q_date().substring(6, 7) < 9 ? '0' : '') + (q_date().substring(6, 7));
+									$('#txtMon').val(t_yeara+t_mona);
+								}
+							} else {
+								t_mona0=dec(q_date().substring(6, 7))
+								var t_mona = (t_mona0 < 9 ? '0' : '') + t_mona0;
+								$('#txtMon').val(t_yeara+t_mona);
+							}
+                        }else{
+							var t_yeara = ($('#txtDatea').val().substr(0, 4));
+							var t_day = ($('#txtDatea').val().substr(7, 9));
+							if (q_getPara('sys.project').toUpperCase() == 'FP') { //榮泉26號帳款月份自動跳下月
+								if (t_day >= 26) {
+									t_mona0=dec(q_date().substring(5, 6))+1
+									var t_mona = (t_mona0 < 9 ? '0' : '') + t_mona0;
+									$('#txtMon').val(t_yeara+t_mona);
+								} else {
+									var t_mona = (q_date().substring(5, 6) < 9 ? '0' : '') + (q_date().substring(5, 6));
+									$('#txtMon').val(t_yeara+t_mona);
+								}
+							} else {
+								t_mona0=dec(q_date().substring(5, 6))
+								var t_mona = (t_mona0 < 9 ? '0' : '') + t_mona0;
+								$('#txtMon').val(t_yeara+t_mona);
+							}
                         }
-						
-						
+						/////////////////////////////////////
 						$('#txtDatea').focus();
 						size_change();
 						break;
@@ -794,10 +830,10 @@
 						if (t_startdate.length == 0 || ('00' + t_startdate).slice(-2) == '00' || $('#txtDatea').val().substr(7, 2) < ('00' + t_startdate).slice(-2)) {
 							$('#txtMon').val($('#txtDatea').val().substr(0, 6));
 						} else {
-							var t_date = $('#txtDatea').val();
-							var nextdate = new Date(dec(t_date.substr(0, 3)) + 1911, dec(t_date.substr(4, 2)) - 1, dec(t_date.substr(7, 2)));
-							nextdate.setMonth(nextdate.getMonth() + 1)
-							t_date = '' + (nextdate.getFullYear() - 1911) + '/' + (nextdate.getMonth() < 9 ? '0' : '') + (nextdate.getMonth() + 1);
+							var t_date = ($('#txtDatea').val().substr(0, 6));
+							t_mona0=dec(q_date().substring(5, 6))
+							var t_mona = (t_mona0 < 9 ? '0' : '') + t_mona0;
+							//$('#txtMon').val(t_yeara+t_mona);
 							$('#txtMon').val(t_date);
 						}
 						check_startdate = true;

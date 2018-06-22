@@ -2073,16 +2073,10 @@ z_ummst03:--z_ummst03
 z_ummst02:--z_ummst02 
 	SET QUOTED_IDENTIFIER OFF 
 	declare @cmd nvarchar(max) 
-
-	declare @t_bmon nvarchar(10) 
-	declare @t_emon nvarchar(10) 
-	declare @t_bcustno nvarchar(20) 
-	declare @t_ecustno nvarchar(20) 
-
-	set @t_bmon = case when '#non' = [13] then '' else [13] end
-	set @t_emon = case when '#non' = [14] then CHAR(255) else [14] end
-	set @t_bcustno = case when '#non' = [5] then '' else [5] end
-	set @t_ecustno = case when '#non' = [6] then CHAR(255) else [6] end
+	declare @t_bmon nvarchar(10) = case when '#non' = [13] then '' else [13] end
+	declare @t_emon nvarchar(10) = case when '#non' = [14] then CHAR(255) else [14] end
+	declare @t_bcustno nvarchar(20) = case when '#non' = [5] then '' else [5] end
+	declare @t_ecustno nvarchar(20) = case when '#non' = [6] then CHAR(255) else [6] end
 	---------------------------------------------------------------------------------
 	---------------------------------------------------------------------------------
 	IF OBJECT_ID('tempdb..#tmp1')is not null
@@ -2236,9 +2230,16 @@ z_ummst02:--z_ummst02
 	select custno,mon,[money],tax from #tmp1
 	
 	---------------------------------------------------------------------------------------
-	update #tmp4 set tax = isnull(a.tax,0) + isnull(b.tax,0)
-	from #tmp4 a
-	left join #tmp2 b on a.custno=b.custno and a.mon=b.mon
+	if((select count(*) from acomp where acomp <> '榮泉鋼鐵股份有限公司')=0) --榮泉不算稅額 因為出貨單已算稅額
+	begin
+		update #tmp4 set tax = isnull(a.tax,0) + isnull(b.tax,0)
+		from #tmp4 a
+		left join #tmp2 b on a.custno=b.custno and a.mon=b.mon
+	end
+
+	--update #tmp4 set tax = isnull(a.tax,0) + isnull(b.tax,0)
+	--from #tmp4 a
+	--left join #tmp2 b on a.custno=b.custno and a.mon=b.mon
 	
 	insert into #tmp4(custno,mon,[money],tax)
 	select custno,mon,0,tax from #tmp2 a

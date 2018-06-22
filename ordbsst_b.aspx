@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="Content-Language" content="en-us" />
@@ -24,8 +24,7 @@
 			});		 /// end ready
 		
 			function main() {
-				if (dataErr)	/// 載入資料錯誤
-				{
+				if (dataErr){	/// 載入資料錯誤
 					dataErr = false;
 					return;
 				}
@@ -44,8 +43,7 @@
 				_bbsAssign();
 			}
 		
-			function q_gtPost() { 
-		
+			function q_gtPost() {
 			}
 			function refresh() {
 				_refresh();
