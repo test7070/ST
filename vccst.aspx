@@ -578,7 +578,6 @@
 						}
 						break;
 					case 'getAcomp':
-						
 						var as = _q_appendData("acomp", "", true);
 						if (as[0] != undefined) {
 							$('#txtCno').val(as[0].noa);
@@ -588,7 +587,11 @@
 						q_gt('custaddr', t_where, 0, 0, 0, "");
 						Unlock(1);
 						$('#txtNoa').val('AUTO');
-						$('#txtDatea').val(q_date());
+                        $('#txtDatea').val(q_date());
+
+
+
+
 						//$('#txtMon').val(q_date().substring(0, 6));
 						if($('#txtDatea').val().substr(7, 2)<('00'+t_startdate).slice(-2)){
                             $('#txtMon').val($('#txtDatea').val().substr(0, 7));
@@ -1958,9 +1961,7 @@
 		<div class='dbbs'>
 			<table id="tbbs" class='tbbs' style=' text-align:center'>
 				<tr style='color:white; background:#003366;' >
-					<td align="center" style="width:30px;">
-						<input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" />
-					</td>
+					<td align="center" style="width:30px;"><input class="btn" id="btnPlus" type="button" value='+' style="font-weight: bold;" /></td>
 					<td align="center" style="width:20px;"> </td>
 					<td align="center" style="width:230px;"><a id="lblUno_st" > </a></td>
 					<td align="center" style="width:120px;"><a id='lblProductno_st'> </a></td>

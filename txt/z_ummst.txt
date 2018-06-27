@@ -3917,7 +3917,6 @@ insert #result (gno,noa,datea,mon,custno,comp,total1,pay,unpay,total2,salesno,mo
 select '3','','','',custno,comp,SUM(total1),SUM(pay),SUM(unpay),SUM(total2),'',0,0
 from #result where gno='1' group by custno,comp 
 
-
 update #result set money=(select sum(total1) from #result where gno='0'),tax=(select sum(tax) from #result where gno='0') where gno='3' and (select count(*) from acomp where acomp like '%榮泉%')>0--and (select noa from acomp where nick='榮泉鋼鐵')
 
 --預收
@@ -4035,6 +4034,13 @@ update #result set fax=b.fax
 			select noa,fax
 			from cust
 		)b on a.custno=b.noa 
+
+if((select count(*) from acomp where acomp = '榮泉鋼鐵股份有限公司')=0)
+	begin
+		update #tmp4 set tax = isnull(a.tax,0) + isnull(b.tax,0)
+		from #tmp4 a
+		left join #tmp2 b on a.custno=b.custno and a.mon=b.mon
+	end
 
 select
 	gno,idno,orderno,pageno,totpage,typea,noa,invoiceno,datea,mon,custno,replace(comp,'~#$',char(39)) comp,addr_invo,serial,tel
