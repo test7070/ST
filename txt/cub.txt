@@ -442,8 +442,8 @@ if((select count(*) from #unotable where enda='0' )>0)
 begin
 	--bbm
 	exec("
-		insert cub"+@accy+" (noa,datea,mechno,mech,memo,worker,kind)
-		select '"+@cubno+"','"+@datea+"','"+@mechno+"','"+@mech+"','條碼領料','"+@namea+"','"+@nowdate+"' 
+		insert cub"+@accy+" (noa,datea,mechno,mech,memo,worker,kind,itype)
+		select '"+@cubno+"','"+@datea+"','"+@mechno+"','"+@mech+"','條碼領料','"+@namea+"','"+@nowdate+"','1' 
 	")
 		
 	--bbs
