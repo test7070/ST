@@ -79,7 +79,8 @@ z_ordhfep01:--z_ordhfep01
 			if @n>0
 			begin
 				set @mm2 = SUBSTRING(@memo,1,@n)
-				set @memo = RIGHT(@memo,LEN(@memo)-@n-7)
+				--set @memo = RIGHT(@memo,LEN(@memo)-@n-7)
+				set @memo = RIGHT(@memo,LEN(@memo)-@n)
 			end
 		end
 		else
