@@ -3694,14 +3694,10 @@ select
 from @tmp;
 --********************************************************************************
 z_ummst11:--z_ummst11
-declare @t_bmon nvarchar(7)
-declare @t_emon nvarchar(7)
-declare @t_bcustno nvarchar(50)
-declare @t_ecustno nvarchar(50)
-set @t_bmon = case when '#non'=[13] then '' else [13] end
-set @t_emon = case when '#non'=[14] then char(255) else [14] end
-set @t_bcustno = case when '#non'=[5] then '' else [5] end
-set @t_ecustno = case when '#non'=[6] then char(255) else [6] end
+declare @t_bmon nvarchar(7) = case when '#non'=[13] then '' else [13] end
+declare @t_emon nvarchar(7) = case when '#non'=[14] then char(255) else [14] end
+declare @t_bcustno nvarchar(50) = case when '#non'=[5] then '' else [5] end
+declare @t_ecustno nvarchar(50) = case when '#non'=[6] then char(255) else [6] end
 -------------------------------------------------------------------------------------------------------------
 declare @cmd nvarchar(max) 
 IF OBJECT_ID('tempdb..#result')is not null
@@ -3928,7 +3924,7 @@ from #result a where gno='3'
 delete #result where gno='1'
 ----------------------------------------------------
 declare @idno int
-declare @pageCount int = 12 --一頁含合計共幾行
+declare @pageCount int = 13 --一頁含合計共幾行
 declare @totalLineCount int = 5 --合計有幾行
 ----------------------------------------------------
 ------>>頁數處理 gno='1' 空白行 gno='2' 跳頁 gno='3' 合計
@@ -4023,9 +4019,7 @@ from #result a
 outer apply(select max(pageno) maxpageno from #result where a.custno=custno) b
 
 insert into #result(gno,orderno,pageno,totpage,custno)
-	select
-		'2',max(orderno)+1,pageno,totpage,custno
-	from #result
+	select'2',max(orderno)+1,pageno,totpage,custno from #result
 	where pageno != totpage
 	group by custno,pageno,totpage
 
@@ -4035,7 +4029,6 @@ update #result set fax=b.fax
 			select noa,fax
 			from cust
 		)b on a.custno=b.noa 
-
 select
 	gno,idno,orderno,pageno,totpage,typea,noa,invoiceno,datea,mon,custno,replace(comp,'~#$',char(39)) comp,addr_invo,serial,tel
 	,(select top 1 saless from #result where custno=a.custno and saless!='' order by datea desc) saless
@@ -4051,7 +4044,6 @@ select
 	,memo,fax
 from #result a
 order by custno,totpage,pageno,orderno,mon,datea,case when noa='前期帳款' then '0' else noa end,idno
-
 
 IF OBJECT_ID('tempdb..#result')is not null
 BEGIN
