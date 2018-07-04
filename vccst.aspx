@@ -22,7 +22,11 @@
 			q_tables = 's';
 			var q_name = "vcc";
 			var q_readonly = ['txtVccatax', 'txtComp', 'txtAccno', 'txtAcomp', 'txtSales', 'txtNoa', 'txtWorker', 'txtWorker2', 'txtMoney', 'txtTotal', 'txtTax', 'txtTotalus','txtBenifit'];
-			var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory','txtNoq','txtUnit2','txtGweight'];
+			if (q_getPara('sys.project').toUpperCase() == 'FP') {
+				var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory', 'txtNoq', 'txtUnit2', 'txtGweight'];
+			} else {
+				var q_readonlys = ['txtTotal', 'txtOrdeno', 'txtNo2', 'txtTheory', 'txtNoq', 'txtGweight'];
+			}
 			var bbmNum = [
 				['txtPrice', 15, 3, 1], ['txtVccatax', 10, 0, 1], ['txtMoney', 10, 0, 1],
 				['txtTranmoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1],
@@ -104,9 +108,9 @@
 				t_kind = t_kind.substr(0, 1);
 				for (var j = 0; j < q_bbsCount; j++) {
 					t_unit = $.trim($('#txtUnit_' + j).val()).toUpperCase();
-					t_unit2 = $.trim($('#txtUnit2_' + j).val()).toUpperCase();
 					t_product = $.trim($('#txtProduct_' + j).val());
-					if (q_getPara('sys.project').toUpperCase()=='FP'){
+					if (q_getPara('sys.project').toUpperCase() == 'FP') {
+						t_unit2 = $.trim($('#txtUnit2_' + j).val()).toUpperCase();
 						if (t_unit2.length == 0 && t_product.length > 0) {
 							if (t_product.indexOf('管') > 0)
 								t_unit2 = '支';
@@ -588,24 +592,7 @@
 						Unlock(1);
 						$('#txtNoa').val('AUTO');
                         $('#txtDatea').val(q_date());
-
-						if (q_getPara('sys.project').toUpperCase()=='FP'){
-							$('#txtMon').val(q_date().substring(0, 6));
-						} else {
-							if($('#txtDatea').val().substr(7, 2)<('00'+t_startdate).slice(-2)){
-								$('#txtMon').val($('#txtDatea').val().substr(0, 7));
-							}else{
-								var t_date=$('#txtDatea').val();
-								var nextdate=new Date(dec(t_date.substr(0,3))+1911,dec(t_date.substr(4,2))-1,1);
-								nextdate.setMonth(nextdate.getMonth() +1);
-								t_date=''+(nextdate.getFullYear()-1911)+'/'+(nextdate.getMonth()<9?'0':'')+(nextdate.getMonth()+1);
-								$('#txtMon').val(t_date);
-							}
-						}
-
-
-						//$('#txtMon').val(q_date().substring(0, 6));
-						
+						$('#txtMon').val(q_date().substring(0, 6));
 						/////////////////////////////////////
 						$('#txtDatea').focus();
 						size_change();
@@ -1134,9 +1121,8 @@
 				if ($('#cmbKind').val().substr(1, 1) == '4') {//鋼胚
                     q_tr('txtTheory_' + b_seq, round(t_Mount * theory_bi(t_spec, $('#txtSpec_' + b_seq).val(), t_Dime, t_Width, t_Lengthb), 0));
                 } else if ($('#cmbKind').val().substr(1, 1) == '2') {//鋼管
-                   //     q_tr('txtTheory_' + b_seq, round((t_Width - t_Dime)*t_Dime *t_Lengthb * 0.02491 * t_Mount, 0));
-                        q_tr('txtTheory_' + b_seq, round(t_Dime *t_Lengthb * 0.02491 * t_Mount, 0));
-                   
+                      q_tr('txtTheory_' + b_seq, round((t_Width - t_Dime)*t_Dime *t_Lengthb * 0.02491 * t_Mount, 0));
+                      //  q_tr('txtTheory_' + b_seq, round(t_Dime *t_Lengthb * 0.02491 * t_Mount, 0));
                 } else {
 					q_tr('txtTheory_' + b_seq, theory_st(theory_setting));
 				}
