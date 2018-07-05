@@ -1833,6 +1833,9 @@ z_uccbd2A:--z_uccbd2A
 	end 
 	close cursor_table
 	deallocate cursor_table
+
+	declare @no_t1 nvarchar(30) =(select a.uno from view_cut a left join #tmp b on a.uno=b.uno and a.Gweight=b.weight where (a.uno=b.uno))
+	delete from #tmp where uno=@no_t1
 	--------尋找原批號 <<End>>
 	
 	update #tmp set csize = replace(csize,'X','*')
@@ -1995,6 +1998,8 @@ z_uccbd2A:--z_uccbd2A
 		EXECUTE sp_executesql @cmd
 	END
 	;
+
+
 ----------************************************************************************-------------------
 z_uccbd3:--z_uccbd3
 z_uccbd3A:--z_uccbd3A
